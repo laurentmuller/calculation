@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Username type.
+ *
+ * @extends AbstractType<TextType>
  */
 class UserNameType extends AbstractType
 {

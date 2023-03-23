@@ -5,9 +5,9 @@ includes:
 parameters:
     level: 7
     paths:
-    - public
     - src
     - tests
+    - public
 
     scanFiles:
     - vendor/twig/twig/src/Extension/CoreExtension.php
@@ -24,3 +24,6 @@ parameters:
         -
             message: '#type mapping mismatch#'
             path: src/Entity/*
+        -
+            message: '#@extends contains generic type#'
+            path: src/Form/*

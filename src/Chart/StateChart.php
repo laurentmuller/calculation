@@ -87,13 +87,13 @@ class StateChart extends BaseChart
     }
 
     /**
-     * @psalm-param array<array{color: string}> $states
+     * @psalm-param QueryCalculation[] $states
      *
      * @return string[]
      */
     private function getColors(array $states): array
     {
-        return \array_map(fn (array $state): string => $state['color'], $states);
+        return \array_map(static fn (array $state): string => $state['color'], $states);
     }
 
     /**

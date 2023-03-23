@@ -481,7 +481,7 @@ class AjaxController extends AbstractController
         try {
             $source = $this->getRequestAll($request, 'calculation');
             $parameters = $service->createGroupsFromData($source);
-            if (false === $parameters['result']) {
+            if (!$parameters['result']) {
                 return $this->json($parameters);
             }
             $parameters['min_margin'] = $service->getMinMargin();

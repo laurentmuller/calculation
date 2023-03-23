@@ -3,8 +3,8 @@
         "php": "^8.2",
         "orklah/psalm-insane-comparison": "^2.0",
         "psalm/plugin-phpunit": "^0.18",
-        "psalm/plugin-symfony": "^4.0",
-        "vimeo/psalm": "^4.0",
+        "psalm/plugin-symfony": "^5.0",
+        "vimeo/psalm": "^5.0",
         "weirdan/doctrine-psalm-plugin": "^2.0"
     },
 	"config": {

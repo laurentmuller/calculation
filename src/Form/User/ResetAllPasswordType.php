@@ -24,6 +24,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Type to clear all requested passwords.
+ *
+ * @extends AbstractType<ChoiceType>
  */
 class ResetAllPasswordType extends AbstractType
 {

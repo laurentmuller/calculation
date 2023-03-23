@@ -26,6 +26,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Abstract parameters type.
+ *
+ * @extends AbstractType<\Symfony\Component\Form\FormTypeInterface>
  */
 abstract class AbstractParametersType extends AbstractType
 {

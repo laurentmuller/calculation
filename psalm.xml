@@ -8,9 +8,10 @@
         findUnusedVariablesAndParams="true"
         findUnusedPsalmSuppress="true"
         findUnusedCode="true"
+        findUnusedBaselineEntry="false"
         resolveFromConfigFile="true"
         strictBinaryOperands="true"
-        phpVersion="8.1"
+        phpVersion="8.2"
         errorLevel="1">
 
     <projectFiles>
@@ -62,6 +63,18 @@
                 <referencedFunction name="App\Twig\FormatExtension::dateTimeFilter"/>
             </errorLevel>
         </UndefinedFunction>
+
+        <InvalidClassConstantType>
+            <errorLevel type="suppress">
+                <referencedConstant name="App\Validator\Captcha::ERROR_NAMES"/>
+            </errorLevel>
+            <errorLevel type="suppress">
+                <referencedConstant name="App\Validator\Password::ERROR_NAMES"/>
+            </errorLevel>
+            <errorLevel type="suppress">
+                <referencedConstant name="App\Validator\Strength::ERROR_NAMES"/>
+            </errorLevel>
+        </InvalidClassConstantType>
     </issueHandlers>
 
     <plugins>

@@ -42,8 +42,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Provides common features needed in controllers.
- *
- * @method User|null getUser() Get the current user from the security token storage.
  */
 abstract class AbstractController extends BaseController
 {
@@ -227,13 +225,14 @@ abstract class AbstractController extends BaseController
      *
      * Override the parent function to allow to use the default type like defined in the <code>FormFactoryInterface</code>.
      *
-     * @param mixed $data the initial data
-     *
      * @template T of \Symfony\Component\Form\FormTypeInterface
      *
-     * @param class-string<T> $type
+     * @param class-string<T> $type    the form class to create
+     * @param mixed           $data    the initial data
+     * @param array           $options the form options
      *
      * @psalm-suppress OverriddenMethodAccess
+     * @psalm-suppress InvalidCast
      */
     protected function createForm(string $type = FormType::class, mixed $data = null, array $options = []): FormInterface
     {

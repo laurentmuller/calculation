@@ -23,6 +23,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Type for the current user password.
+ *
+ * @extends AbstractType<PasswordType>
  */
 class CurrentPasswordType extends AbstractType
 {

@@ -18,6 +18,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Type to reset the user password.
+ *
+ * @extends AbstractType<\Symfony\Component\Form\FormTypeInterface>
  */
 class ResetChangePasswordType extends AbstractType
 {

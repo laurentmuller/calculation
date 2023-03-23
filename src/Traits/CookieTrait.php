@@ -64,6 +64,8 @@ trait CookieTrait
 
     /**
      * @psalm-return ($default is null ? (string|null) : string)
+     *
+     * @psalm-suppress PossiblyInvalidArgument
      */
     protected function getCookieString(Request $request, string $key, string $prefix = '', string|\BackedEnum $default = null): string|null
     {

@@ -28,6 +28,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *
  * This is useful for forms where certain field need to be shown but not editable.
  * If the 'expanded' option is set to true, a div tag is added around the span tag.
+ *
+ * @extends AbstractType<\Symfony\Component\Form\FormTypeInterface>
  */
 class PlainType extends AbstractType implements ServiceSubscriberInterface
 {
@@ -91,6 +93,8 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress InvalidPropertyAssignmentValue
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
@@ -101,15 +105,10 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         $value = $this->getDataValue($data, $options);
         $display_value = $this->getDisplayValue($data, $options) ?? $value;
 
-        $view->vars = \array_replace(
-            $view->vars,
-            [
-                'value' => $value,
-                'display_value' => $display_value,
-                'expanded' => $options['expanded'],
-                'hidden_input' => $options['hidden_input'],
-            ]
-        );
+        $view->vars['value'] = $value;
+        $view->vars['display_value'] = $display_value;
+        $view->vars['expanded'] = $options['expanded'];
+        $view->vars['hidden_input'] = $options['hidden_input'];
     }
 
     /**
@@ -308,7 +307,6 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         }
 
         // error
-
         throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', \get_debug_type($value)));
     }
 

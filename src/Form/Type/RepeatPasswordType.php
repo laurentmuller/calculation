@@ -23,6 +23,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Repeat password type.
+ *
+ * @extends AbstractType<PasswordType>
  */
 class RepeatPasswordType extends AbstractType
 {

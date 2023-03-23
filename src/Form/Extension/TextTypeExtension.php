@@ -20,6 +20,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Extends the text type by allowing to add input groups (prepend or append).
+ *
+ * @extends AbstractTypeExtension<TextType>
  */
 class TextTypeExtension extends AbstractTypeExtension
 {

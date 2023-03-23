@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Type to edit entity permissions.
+ *
+ * @extends AbstractType<FlagBagType>
  */
 class AttributeRightType extends AbstractType
 {

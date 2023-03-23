@@ -20,6 +20,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Base extension for FileType.
+ *
+ * @template T of \Symfony\Component\Form\FormTypeInterface
+ *
+ * @extends AbstractTypeExtension<T>
  */
 abstract class AbstractFileTypeExtension extends AbstractTypeExtension
 {

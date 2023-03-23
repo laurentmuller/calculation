@@ -22,6 +22,8 @@ use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
  * @Annotation
  *
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
+ *
+ * @psalm-suppress InvalidClassConstantType
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Strength extends Constraint

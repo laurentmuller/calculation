@@ -42,8 +42,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Provides common features needed in controllers.
- *
- * @method User|null getUser() Get the current user from the security token storage.
  */
 abstract class AbstractController extends BaseController
 {

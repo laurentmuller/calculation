@@ -25,7 +25,10 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *     city: ?string,
  *     region_name: ?string,
  *     latitude: ?float,
+ *     latitude_dms?: string,
  *     longitude: ?float,
+ *     longitude_dms?: string,
+ *     position_dms?: string,
  *     error?: array{code: ?int, type: ?string, info: ?string}
  * }
  *

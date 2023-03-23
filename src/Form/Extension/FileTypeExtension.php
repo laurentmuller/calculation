@@ -18,6 +18,8 @@ use Symfony\Component\Form\FormInterface;
 
 /**
  * Extends the FileType to use within the FileInput plugin.
+ *
+ * @extends AbstractFileTypeExtension<FileType>
  */
 class FileTypeExtension extends AbstractFileTypeExtension
 {

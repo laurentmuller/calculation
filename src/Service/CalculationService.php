@@ -25,6 +25,23 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to update calculation totals.
+ *
+ * @psalm-type ServiceGroupType = array{
+ *     id: int,
+ *     description: string,
+ *     amount: float,
+ *     margin: float,
+ *     margin_amount: float,
+ *     total: float,
+ *     overall_below?: bool}
+ * @psalm-type ServiceParametersType = array{
+ *     result: true,
+ *     overall_below: bool,
+ *     overall_margin: float,
+ *     overall_total: float,
+ *     min_margin: float,
+ *     user_margin: float,
+ *     groups: array<ServiceGroupType>}
  */
 final class CalculationService implements ServiceSubscriberInterface
 {
@@ -81,20 +98,21 @@ final class CalculationService implements ServiceSubscriberInterface
     /**
      * Adjust the user margin to have the desired overall minimum margin.
      *
-     * @param array $parameters the parameters (rows) to update
+     * @psalm-param ServiceParametersType $parameters
+     *
+     * @psalm-suppress UnsupportedReferenceUsage
      */
     public function adjustUserMargin(array &$parameters): void
     {
         $parameters['overall_below'] = false;
-        /** @psalm-var array<array> $groups */
         $groups = &$parameters['groups'];
         $total_group = &$this->findGroup($groups, self::ROW_TOTAL_GROUP);
         $net_group = &$this->findGroup($groups, self::ROW_TOTAL_NET);
         $user_group = &$this->findGroup($groups, self::ROW_USER_MARGIN);
         $overall_group = &$this->findGroup($groups, self::ROW_OVERALL_TOTAL);
-        $min_margin = (float) $parameters['min_margin'];
-        $total_amount = (float) $total_group['amount'];
-        $net_total = (float) $net_group['total'];
+        $min_margin = $parameters['min_margin'];
+        $total_amount = $total_group['amount'];
+        $net_total = $net_group['total'];
         if ($this->isFloatZero($net_total)) {
             return;
         }
@@ -147,16 +165,24 @@ final class CalculationService implements ServiceSubscriberInterface
      * @return array an array with the computed values used to render the total view
      *
      * @throws \Doctrine\ORM\Exception\ORMException
+     *
+     * @psalm-return ServiceParametersType
      */
     public function createGroupsFromData(array $source): array
     {
+        /** @psalm-var ServiceGroupType[] $groups */
+        $groups = [];
         if (!$source_groups = $this->getArrayByKey($source, 'groups')) {
+            $groups[] = $this->createEmptyGroup();
+
             return [
                 'result' => true,
-                'groups' => [$this->createEmptyGroup()],
                 'overall_below' => false,
-                'overall_margin' => 0,
-                'overall_total' => 0,
+                'overall_margin' => 0.0,
+                'overall_total' => 0.0,
+                'min_margin' => 0.0,
+                'user_margin' => 0.0,
+                'groups' => $groups,
             ];
         }
         /** @psalm-var array<int, float> $item_groups */
@@ -166,24 +192,16 @@ final class CalculationService implements ServiceSubscriberInterface
 
             return $carry;
         }, []);
-        $groups = [];
         foreach ($item_groups as $key => $value) {
             if (empty($value) || null === ($group = $this->getGroup($key))) {
                 continue;
             }
             $id = (int) $group->getId();
             if (!\array_key_exists($id, $groups)) {
-                $groups[$id] = [
-                    'id' => self::ROW_GROUP,
-                    'description' => $group->getCode(),
-                    'amount' => 0,
-                    'margin' => 0,
-                    'margin_amount' => 0,
-                    'total' => 0,
-                ];
+                $groups[$id] = $this->createGroup(self::ROW_GROUP, (string) $group->getCode());
             }
             $current = &$groups[$id];
-            $amount = (float) $current['amount'] + $value;
+            $amount = $current['amount'] + $value;
             $margin = $this->getGroupMargin($group, $amount);
             $total = $this->round($margin * $amount);
             $margin_amount = $total - $amount;
@@ -193,27 +211,33 @@ final class CalculationService implements ServiceSubscriberInterface
             $current['total'] = $total;
         }
         if ([] === $groups) {
+            $groups[] = $this->createEmptyGroup();
+
             return [
                 'result' => true,
-                'groups' => [$this->createEmptyGroup()],
                 'overall_below' => false,
-                'overall_margin' => 0,
-                'overall_total' => 0,
+                'overall_margin' => 0.0,
+                'overall_total' => 0.0,
+                'min_margin' => 0.0,
+                'user_margin' => 0.0,
+                'groups' => $groups,
             ];
         }
         $user_margin = (float) $source['userMargin'] / 100.0;
         $groups = $this->computeGroups(groups: $groups, user_margin: $user_margin);
         $last_group = \end($groups);
-        $overall_total = (float) $last_group['total'];
-        $overall_margin = (float) $last_group['margin'];
+        $overall_total = $last_group['total'];
+        $overall_margin = $last_group['margin'];
         $overall_below = !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
 
         return [
             'result' => true,
-            'groups' => $groups,
             'overall_margin' => $overall_margin,
             'overall_total' => $overall_total,
             'overall_below' => $overall_below,
+            'user_margin' => $user_margin,
+            'min_margin' => 0.0,
+            'groups' => $groups,
         ];
     }
 
@@ -272,6 +296,10 @@ final class CalculationService implements ServiceSubscriberInterface
      * @param int          $id     the identifier to search for
      *
      * @return array the group, if found, a new empty group otherwise
+     *
+     * @psalm-param ServiceGroupType[] $groups
+     *
+     * @psalm-return ServiceGroupType
      */
     private function &findGroup(array &$groups, int $id): array
     {
@@ -280,15 +308,7 @@ final class CalculationService implements ServiceSubscriberInterface
                 return $group;
             }
         }
-        $new_group = [
-            'id' => $id,
-            'amount' => 0.0,
-            'margin' => 0.0,
-            'margin_amount' => 0.0,
-            'total' => 0.0,
-            'description' => $this->trans('common.value_unknown'),
-        ];
-        $groups[] = $new_group;
+        $groups[] = $new_group = $this->createGroup($id, $this->trans('common.value_unknown'));
 
         return $new_group;
     }
@@ -301,22 +321,15 @@ final class CalculationService implements ServiceSubscriberInterface
      * @param ?callable $callback      the function to create a group lines
      * @param ?float    $global_margin the global margin or null to compute new global margin
      *
-     * @return non-empty-array<array> the total groups
+     * @return array the total groups
      *
      * @throws \Doctrine\ORM\Exception\ORMException
+     *
+     * @psalm-return non-empty-array<ServiceGroupType>
      */
     private function computeGroups(array $groups, float $user_margin, ?callable $callback = null, ?float $global_margin = null): array
     {
-        /**
-         * @var array<array{
-         *      id: int,
-         *      description: string,
-         *      amount: float,
-         *      margin: float,
-         *      margin_amount: float,
-         *      total: float
-         * }> $result
-         */
+        /** @psalm-var ServiceGroupType[] $result */
         $result = $callback ? \array_map($callback, $groups) : $groups;
         $groups_amount = $this->round($this->getGroupsAmount($result));
         $groups_margin = $this->round($this->getGroupsMargin($result));
@@ -370,12 +383,26 @@ final class CalculationService implements ServiceSubscriberInterface
 
     /**
      * Creates the group when no data is present.
+     *
+     * @psalm-return ServiceGroupType
      */
     private function createEmptyGroup(): array
     {
+        return $this->createGroup(self::ROW_EMPTY, $this->trans('calculation.edit.empty'));
+    }
+
+    /**
+     * @psalm-return ServiceGroupType
+     */
+    private function createGroup(int $id, string $description): array
+    {
         return [
-            'id' => self::ROW_EMPTY,
-            'description' => $this->trans('calculation.edit.empty'),
+            'id' => $id,
+            'description' => $description,
+            'amount' => 0.0,
+            'margin' => 0.0,
+            'margin_amount' => 0.0,
+            'total' => 0.0,
         ];
     }
 

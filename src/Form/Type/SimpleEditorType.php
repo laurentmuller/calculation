@@ -35,6 +35,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *      class: string,
  *      attributes: array<string, string>,
  *      actions: ?array}
+ *
+ * @extends AbstractType<HiddenType>
  */
 class SimpleEditorType extends AbstractType
 {

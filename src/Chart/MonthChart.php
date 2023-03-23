@@ -179,7 +179,7 @@ class MonthChart extends BaseChart
      */
     private function getDateValues(array $data): array
     {
-        return \array_map(fn (array $item): int => (int) $item['date']->getTimestamp() * 1000, $data);
+        return \array_map(fn (array $item): int => $item['date']->getTimestamp() * 1000, $data);
     }
 
     private function getFormatterExpression(): Expr

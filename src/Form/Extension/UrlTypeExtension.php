@@ -19,6 +19,8 @@ use Symfony\Component\Form\FormView;
 
 /**
  * Extends the URL type by adding the default protocol as data attribute.
+ *
+ * @extends AbstractTypeExtension<UrlType>
  */
 class UrlTypeExtension extends AbstractTypeExtension
 {

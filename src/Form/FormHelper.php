@@ -745,7 +745,10 @@ class FormHelper
     /**
      * Adds a model transformer.
      *
-     * @psalm-param DataTransformerInterface<mixed, mixed> $modelTransformer
+     * @psalm-template TValue
+     * @psalm-template TTransformedValue
+     *
+     * @psalm-param DataTransformerInterface<TValue, TTransformedValue> $modelTransformer
      */
     public function modelTransformer(DataTransformerInterface $modelTransformer): static
     {

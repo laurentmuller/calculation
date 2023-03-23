@@ -27,22 +27,22 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
     /**
      * The image height.
      */
-    protected int $height;
+    private int $height;
 
     /**
      * The original image height.
      */
-    protected int $originalHeight;
+    private int $originalHeight;
 
     /**
      * The original image width.
      */
-    protected int $originalWidth;
+    private int $originalWidth;
 
     /**
      * The image width.
      */
-    protected int $width;
+    private int $width;
 
     /**
      * Constructor.
@@ -53,7 +53,7 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
      * @param ?PdfTextAlignment $alignment the cell alignment
      * @param string|int        $link      the cell link. A URL or identifier returned by AddLink().
      */
-    public function __construct(protected string $path, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, string|int $link = '')
+    public function __construct(private readonly string $path, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, string|int $link = '')
     {
         if (!FileUtils::exists($path)) {
             throw new \InvalidArgumentException("The image '$path' does not exist.");
@@ -96,7 +96,7 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
             y: $y,
             w: $width,
             h: $height,
-            link: $this->link
+            link: $this->getLink()
         );
     }
 

@@ -22,6 +22,6 @@ class PdfDrawColor extends AbstractPdfColor
      */
     public function apply(PdfDocument $doc): void
     {
-        $doc->SetDrawColor($this->red, $this->green, $this->blue);
+        $doc->SetDrawColor($this->getRed(), $this->getGreen(), $this->getBlue());
     }
 }

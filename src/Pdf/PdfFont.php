@@ -118,7 +118,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
      *                                       </ul>
      *                                       or any combination.
      */
-    public function __construct(PdfFontName|string|null $name = PdfFontName::ARIAL, protected float $size = self::DEFAULT_SIZE, string $style = self::DEFAULT_STYLE)
+    public function __construct(PdfFontName|string|null $name = PdfFontName::ARIAL, private float $size = self::DEFAULT_SIZE, string $style = self::DEFAULT_STYLE)
     {
         if ($name instanceof PdfFontName) {
             $name = $name->value;

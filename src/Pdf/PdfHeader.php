@@ -29,12 +29,12 @@ class PdfHeader
     /**
      * The customer information.
      */
-    protected ?CustomerInformation $customer = null;
+    private ?CustomerInformation $customer = null;
 
     /**
      * The document description.
      */
-    protected ?string $description = null;
+    private ?string $description = null;
 
     /**
      * The style for the customer name.

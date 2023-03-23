@@ -20,12 +20,12 @@ class HtmlOlChunk extends HtmlParentChunk
     /**
      * The start counting.
      */
-    protected int $start = 1;
+    private int $start = 1;
 
     /**
      * The numbered type.
      */
-    protected HtmlListType $type = HtmlListType::NUMBER;
+    private HtmlListType $type = HtmlListType::NUMBER;
 
     /**
      * Gets the bullet text for the given child.

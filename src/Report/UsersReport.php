@@ -53,8 +53,19 @@ class UsersReport extends AbstractArrayReport
         $this->setTitleTrans('user.list.title');
         $disabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
         $enabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGreen());
+
         $this->AddPage();
-        $table = PdfTableBuilder::instance($this)
+        $table = $this->createTable();
+        foreach ($entities as $entity) {
+            $this->outputEntity($table, $entity, $enabledStyle, $disabledStyle);
+        }
+
+        return $this->renderCount($entities, 'counters.users');
+    }
+
+    private function createTable(): PdfTableBuilder
+    {
+        return PdfTableBuilder::instance($this)
             ->addColumns(
                 PdfColumn::center($this->trans('user.fields.imageFile'), 18, true),
                 PdfColumn::left($this->trans('user.fields.username'), 25),
@@ -63,23 +74,6 @@ class UsersReport extends AbstractArrayReport
                 PdfColumn::left($this->trans('user.fields.enabled'), 18, true),
                 PdfColumn::left($this->trans('user.fields.lastLogin'), 30, true)
             )->outputHeaders();
-        foreach ($entities as $entity) {
-            $enabled = $entity->isEnabled();
-            $style = $enabled ? $enabledStyle : $disabledStyle;
-            $text = $this->formatBoolean($enabled, 'common.value_enabled', 'common.value_disabled', true);
-            $role = $this->translateRole($entity->getRole());
-            $cell = $this->getImageCell($entity);
-            $table->startRow()
-                ->addCell($cell)
-                ->add($entity->getUserIdentifier())
-                ->add($entity->getEmail())
-                ->add($role)
-                ->add(text: $text, style: $style)
-                ->add($this->formatLastLogin($entity->getLastLogin()))
-                ->endRow();
-        }
-
-        return $this->renderCount($entities, 'counters.users');
     }
 
     /**
@@ -115,5 +109,22 @@ class UsersReport extends AbstractArrayReport
         }
 
         return $cell;
+    }
+
+    private function outputEntity(PdfTableBuilder $table, User $entity, PdfStyle $enabledStyle, PdfStyle $disabledStyle): void
+    {
+        $enabled = $entity->isEnabled();
+        $style = $enabled ? $enabledStyle : $disabledStyle;
+        $text = $this->formatBoolean($enabled, 'common.value_enabled', 'common.value_disabled', true);
+        $role = $this->translateRole($entity->getRole());
+        $cell = $this->getImageCell($entity);
+        $table->startRow()
+            ->addCell($cell)
+            ->add($entity->getUserIdentifier())
+            ->add($entity->getEmail())
+            ->add($role)
+            ->add(text: $text, style: $style)
+            ->add($this->formatLastLogin($entity->getLastLogin()))
+            ->endRow();
     }
 }

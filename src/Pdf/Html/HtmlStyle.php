@@ -23,27 +23,27 @@ class HtmlStyle extends PdfStyle
     /**
      * The alignment.
      */
-    protected PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
+    private PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
 
     /**
      * The bottom margin.
      */
-    protected float $bottomMargin = 0;
+    private float $bottomMargin = 0;
 
     /**
      * The left margin.
      */
-    protected float $leftMargin = 0;
+    private float $leftMargin = 0;
 
     /**
      * The right margin.
      */
-    protected float $rightMargin = 0;
+    private float $rightMargin = 0;
 
     /**
      * The top margin.
      */
-    protected float $topMargin = 0;
+    private float $topMargin = 0;
 
     /**
      * Sets the font style to bold.
@@ -52,7 +52,7 @@ class HtmlStyle extends PdfStyle
      */
     public function bold(bool $add = false): self
     {
-        $this->font->bold($add);
+        $this->getFont()->bold($add);
 
         return $this;
     }
@@ -104,7 +104,7 @@ class HtmlStyle extends PdfStyle
      */
     public function italic(bool $add = false): self
     {
-        $this->font->italic($add);
+        $this->getFont()->italic($add);
 
         return $this;
     }
@@ -114,7 +114,7 @@ class HtmlStyle extends PdfStyle
      */
     public function regular(): self
     {
-        $this->font->regular();
+        $this->getFont()->regular();
 
         return $this;
     }
@@ -223,7 +223,7 @@ class HtmlStyle extends PdfStyle
      */
     public function underline(bool $add = false): self
     {
-        $this->font->underline($add);
+        $this->getFont()->underline($add);
 
         return $this;
     }

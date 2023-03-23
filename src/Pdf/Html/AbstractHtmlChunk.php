@@ -30,32 +30,32 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     /**
      * The bookmark.
      */
-    protected bool $bookmark = false;
-
-    /**
-     * The class name.
-     */
-    protected ?string $className = null;
-
-    /**
-     * The css style.
-     */
-    protected ?string $css = null;
+    private bool $bookmark = false;
 
     /**
      * The bookmark level.
      */
-    protected int $level = 0;
+    private int $bookmarkLevel = 0;
+
+    /**
+     * The class name.
+     */
+    private ?string $className = null;
+
+    /**
+     * The css style.
+     */
+    private ?string $css = null;
 
     /**
      * The parent chunk.
      */
-    protected ?HtmlParentChunk $parent = null;
+    private ?HtmlParentChunk $parent = null;
 
     /**
      * The style.
      */
-    protected ?HtmlStyle $style = null;
+    private ?HtmlStyle $style = null;
 
     /**
      * Constructor.
@@ -63,7 +63,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      * @param string           $name   the tag name
      * @param ?HtmlParentChunk $parent the parent chunk
      */
-    public function __construct(protected string $name, ?HtmlParentChunk $parent = null)
+    public function __construct(private readonly string $name, ?HtmlParentChunk $parent = null)
     {
         $parent?->add($this);
         $this->updateStyle();
@@ -100,6 +100,14 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     public function getAlignment(): PdfTextAlignment
     {
         return $this->style?->getAlignment() ?? PdfTextAlignment::LEFT;
+    }
+
+    /**
+     * Return the bookmark level.
+     */
+    public function getBookmarkLevel(): int
+    {
+        return $this->bookmarkLevel;
     }
 
     /**
@@ -206,6 +214,14 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
         }
 
         return false;
+    }
+
+    /**
+     * Return if the bookmark is set.
+     */
+    public function isBookmark(): bool
+    {
+        return $this->bookmark;
     }
 
     /**
@@ -431,7 +447,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
         $matches = [];
         $regex = '/bookmark-(\d+)/';
         if (\preg_match($regex, $class, $matches)) {
-            $this->level = (int) $matches[1];
+            $this->bookmarkLevel = (int) $matches[1];
         }
 
         return $this;

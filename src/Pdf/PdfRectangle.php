@@ -20,7 +20,7 @@ class PdfRectangle
     /**
      * Constructor.
      */
-    public function __construct(protected float $x, protected float $y, protected float $width, protected float $height)
+    public function __construct(private float $x, private float $y, private float $width, private float $height)
     {
     }
 

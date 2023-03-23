@@ -39,7 +39,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
     /**
      * The text.
      */
-    protected ?string $text = null;
+    private ?string $text = null;
 
     /**
      * Gets the text.
@@ -63,7 +63,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
     public function isNewLine(): bool
     {
         // check if the next chunk is a parent chunk
-        if (null !== ($parent = $this->parent)) {
+        if (null !== ($parent = $this->getParent())) {
             $index = $this->index();
             $count = $parent->count();
             if (-1 !== $index && $index < $count - 1) {
@@ -100,11 +100,10 @@ class HtmlTextChunk extends AbstractHtmlChunk
      */
     protected function outputText(HtmlReport $report, string $text): void
     {
-        $parent = $this->getParent();
-        if (null !== $parent) {
+        if (null !== $parent = $this->getParent()) {
             // bookmark
-            if ($parent->bookmark) {
-                $report->addBookmark($text, true, $parent->level);
+            if ($parent->isBookmark()) {
+                $report->addBookmark($text, true, $parent->getBookmarkLevel());
             }
             // special case when parent contains only this text
             if (1 === $parent->count() && $parent->is(...self::PARENT_MULTI_CELL)) {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Calculation;
+use App\Entity\CalculationGroup;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
@@ -54,42 +55,16 @@ class CalculationTableGroups extends PdfTableBuilder
      */
     public function output(): void
     {
-        $calculation = $this->calculation;
-        $groups = $calculation->getGroups();
+        $groups = $this->calculation->getGroups();
         if ($groups->isEmpty()) {
             return;
         }
-        $style = PdfStyle::getHeaderStyle()->setFontRegular();
-        $columns = [
-            PdfColumn::left($this->trans('report.calculation.resume'), 50),
-            PdfColumn::right($this->trans('report.calculation.amount'), 20, true),
-            PdfColumn::right($this->trans('report.calculation.margin_percent'), 20, true),
-            PdfColumn::right($this->trans('report.calculation.margin_amount'), 20, true),
-            PdfColumn::right($this->trans('report.calculation.total'), 20, true),
-        ];
-        $this->addColumns(...$columns);
-        $this->startHeaderRow()
-            ->add($columns[0]->getText())
-            ->add($columns[1]->getText())
-            ->add(text: $this->trans('report.calculation.margins'), cols: 2, alignment: PdfTextAlignment::CENTER)
-            ->add($columns[4]->getText())
-            ->endRow();
+
+        $this->createColumns();
         foreach ($groups as $group) {
-            $this->startRow()
-                ->add($group->getCode())
-                ->add(FormatUtils::formatAmount($group->getAmount()))
-                ->add(FormatUtils::formatPercent($group->getMargin()))
-                ->add(FormatUtils::formatAmount($group->getMarginAmount()))
-                ->add(FormatUtils::formatAmount($group->getTotal()))
-                ->endRow();
+            $this->outputGroup($group);
         }
-        $this->startHeaderRow()
-            ->add($this->trans('calculation.fields.marginTotal'))
-            ->add(text: FormatUtils::formatAmount($calculation->getGroupsAmount()), style: $style)
-            ->add(text: FormatUtils::formatPercent($calculation->getGroupsMargin()), style: $style)
-            ->add(text: FormatUtils::formatAmount($calculation->getGroupsMarginAmount()), style: $style)
-            ->add(FormatUtils::formatAmount($calculation->getGroupsTotal()))
-            ->endRow();
+        $this->outputTotal($this->calculation);
     }
 
     /**
@@ -101,5 +76,47 @@ class CalculationTableGroups extends PdfTableBuilder
         $table->output();
 
         return $table;
+    }
+
+    private function createColumns(): void
+    {
+        $columns = [
+            PdfColumn::left($this->trans('report.calculation.resume'), 50),
+            PdfColumn::right($this->trans('report.calculation.amount'), 20, true),
+            PdfColumn::right($this->trans('report.calculation.margin_percent'), 20, true),
+            PdfColumn::right($this->trans('report.calculation.margin_amount'), 20, true),
+            PdfColumn::right($this->trans('report.calculation.total'), 20, true),
+        ];
+        $this->addColumns(...$columns);
+
+        $this->startHeaderRow()
+            ->add($columns[0]->getText())
+            ->add($columns[1]->getText())
+            ->add(text: $this->trans('report.calculation.margins'), cols: 2, alignment: PdfTextAlignment::CENTER)
+            ->add($columns[4]->getText())
+            ->endRow();
+    }
+
+    private function outputGroup(CalculationGroup $group): void
+    {
+        $this->startRow()
+            ->add($group->getCode())
+            ->add(FormatUtils::formatAmount($group->getAmount()))
+            ->add(FormatUtils::formatPercent($group->getMargin()))
+            ->add(FormatUtils::formatAmount($group->getMarginAmount()))
+            ->add(FormatUtils::formatAmount($group->getTotal()))
+            ->endRow();
+    }
+
+    private function outputTotal(Calculation $calculation): void
+    {
+        $style = PdfStyle::getHeaderStyle()->setFontRegular();
+        $this->startHeaderRow()
+            ->add($this->trans('calculation.fields.marginTotal'))
+            ->add(text: FormatUtils::formatAmount($calculation->getGroupsAmount()), style: $style)
+            ->add(text: FormatUtils::formatPercent($calculation->getGroupsMargin()), style: $style)
+            ->add(text: FormatUtils::formatAmount($calculation->getGroupsMarginAmount()), style: $style)
+            ->add(FormatUtils::formatAmount($calculation->getGroupsTotal()))
+            ->endRow();
     }
 }

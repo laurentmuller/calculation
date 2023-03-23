@@ -33,7 +33,7 @@ class PhpIniReport extends AbstractReport
     {
         parent::__construct($controller);
         if ($description = \php_ini_loaded_file()) {
-            $this->header->setDescription($description);
+            $this->getHeader()->setDescription($description);
         }
         $version = $this->service->getVersion();
         $this->setTitleTrans('about.php_version', ['%version%' => $version]);

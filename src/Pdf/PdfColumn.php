@@ -28,7 +28,7 @@ class PdfColumn
      * @param bool              $fixed     true if the column width is fixed. This property is used only if the
      *                                     parent's table use all the document width.
      */
-    public function __construct(protected ?string $text, protected float $width = 0.0, protected ?PdfTextAlignment $alignment = PdfTextAlignment::LEFT, protected bool $fixed = false)
+    public function __construct(private ?string $text, private float $width = 0.0, private ?PdfTextAlignment $alignment = PdfTextAlignment::LEFT, private bool $fixed = false)
     {
     }
 

@@ -24,19 +24,19 @@ use App\Util\FormatUtils;
 class PdfFooter
 {
     /**
+     * the top border.
+     */
+    private readonly PdfBorder $border;
+
+    /**
      * The content text.
      */
-    protected ?string $content = null;
+    private ?string $content = null;
 
     /**
      * The content URL.
      */
-    protected ?string $url = null;
-
-    /**
-     * the top border.
-     */
-    private readonly PdfBorder $border;
+    private ?string $url = null;
 
     /**
      * Constructor.

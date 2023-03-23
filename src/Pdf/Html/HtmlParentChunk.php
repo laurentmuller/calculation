@@ -27,18 +27,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
      *
      * @var AbstractHtmlChunk[]
      */
-    protected array $children = [];
-
-    /**
-     * Constructor.
-     *
-     * @param string           $name   the tag name
-     * @param ?HtmlParentChunk $parent the parent chunk
-     */
-    public function __construct(protected string $name, ?self $parent = null)
-    {
-        parent::__construct($name, $parent);
-    }
+    private array $children = [];
 
     /**
      * Adds a child to the collection of children. Do nothing if the child is already in this collection.
@@ -126,7 +115,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
      */
     public function isNewLine(): bool
     {
-        return match ($this->name) {
+        return match ($this->getName()) {
             self::H1,
             self::H2,
             self::H3,

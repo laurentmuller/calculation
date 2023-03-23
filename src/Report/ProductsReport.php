@@ -35,18 +35,19 @@ class ProductsReport extends AbstractArrayReport
         $table = $this->createTable();
         $emptyStyle = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
-        $groupCode = null;
-        $categoryCode = null;
+
+        $groupCode = '';
+        $categoryCode = '';
         foreach ($entities as $entity) {
             if ($groupCode !== $entity->getGroupCode()) {
-                $this->addBookmark((string) $entity->getGroupCode(), true);
-                $groupCode = $entity->getGroupCode();
+                $groupCode = (string) $entity->getGroupCode();
+                $this->addBookmark($groupCode, true);
             }
             if ($categoryCode !== $entity->getCategoryCode()) {
-                $this->addBookmark((string) $entity->getCategoryCode(), true, 1);
-                $categoryCode = $entity->getCategoryCode();
+                $categoryCode = (string) $entity->getCategoryCode();
+                $this->addBookmark($categoryCode, true, 1);
             }
-            $key = \sprintf('%s / %s', (string) $groupCode, (string) $categoryCode);
+            $key = \sprintf('%s / %s', $groupCode, $categoryCode);
             $table->setGroupKey($key);
             $style = empty($entity->getPrice()) ? $emptyStyle : null;
             $table->startRow()

@@ -15,6 +15,7 @@ namespace App\Report;
 use App\Entity\Calculation;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
@@ -57,14 +58,8 @@ class CalculationTableOverall extends PdfTableBuilder
      */
     public function output(): void
     {
+        $parent = $this->getParent();
         $calculation = $this->calculation;
-        $this->addColumns(
-            PdfColumn::left(null, 50),
-            PdfColumn::right(null, 20, true),
-            PdfColumn::right(null, 20, true),
-            PdfColumn::right(null, 20, true),
-            PdfColumn::right(null, 20, true)
-        )->setRepeatHeader(false);
         $totalItems = $calculation->getGroupsAmount();
         $totalMargins = $calculation->getGroupsMarginAmount();
         $totalBrut = $totalItems + $totalMargins;
@@ -73,45 +68,12 @@ class CalculationTableOverall extends PdfTableBuilder
         $totalNet = $totalBrut + $globalAmount;
         $userMargin = $calculation->getUserMargin();
         $userAmount = $totalNet * $userMargin;
-        $this->startRow()
-            ->add($this->trans('calculation.fields.globalMargin'), 2)
-            ->add(FormatUtils::formatPercent($globalMargin))
-            ->add(FormatUtils::formatAmount($globalAmount), 2)
-            ->endRow();
-        if (!empty($userMargin)) {
-            $this->startHeaderRow()
-                ->add($this->trans('calculation.fields.totalNet'), 4)
-                ->add(FormatUtils::formatAmount($totalNet))
-                ->endRow();
-            $this->startRow()
-                ->add($this->trans('calculation.fields.userMargin'), 2)
-                ->add(FormatUtils::formatPercent($userMargin))
-                ->add(FormatUtils::formatAmount($userAmount), 2)
-                ->endRow();
-        }
-        $style = null;
-        if ($calculation->isMarginBelow($this->minMargin)) {
-            $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
-        }
-        $this->startHeaderRow()
-            ->add($this->trans('calculation.fields.overallTotal'))
-            ->add(FormatUtils::formatAmount($totalItems))
-            ->add(text: FormatUtils::formatPercent($calculation->getOverallMargin()), style: $style)
-            ->add(FormatUtils::formatAmount($calculation->getOverallMarginAmount()))
-            ->add(FormatUtils::formatAmount($calculation->getOverallTotal()))
-            ->endRow();
-        $this->parent->Ln(1);
-        $style = PdfStyle::getNoBorderStyle()
-            ->setFontItalic()
-            ->setFontSize(7);
-        $oldMargins = $this->parent->setCellMargin(0);
-        $created = $calculation->getCreatedText($this->translator);
-        $updated = $calculation->getUpdatedText($this->translator);
-        $this->startRow()
-            ->add($created, 1, $style, PdfTextAlignment::LEFT)
-            ->add($updated, 4, $style, PdfTextAlignment::RIGHT)
-            ->endRow();
-        $this->parent->setCellMargin($oldMargins);
+
+        $this->createColumns()
+            ->outputGlobalMargin($globalMargin, $globalAmount)
+            ->outputUserMargin($userMargin, $userAmount, $totalNet)
+            ->outputOverallTotal($parent, $calculation, $totalItems)
+            ->outputTimestampable($parent, $calculation);
     }
 
     /**
@@ -123,5 +85,75 @@ class CalculationTableOverall extends PdfTableBuilder
         $table->output();
 
         return $table;
+    }
+
+    private function createColumns(): self
+    {
+        return $this->addColumns(
+            PdfColumn::left(null, 50),
+            PdfColumn::right(null, 20, true),
+            PdfColumn::right(null, 20, true),
+            PdfColumn::right(null, 20, true),
+            PdfColumn::right(null, 20, true)
+        )->setRepeatHeader(false);
+    }
+
+    private function outputGlobalMargin(float $globalMargin, float $globalAmount): self
+    {
+        return $this->startRow()
+            ->add($this->trans('calculation.fields.globalMargin'), 2)
+            ->add(FormatUtils::formatPercent($globalMargin))
+            ->add(FormatUtils::formatAmount($globalAmount), 2)
+            ->endRow();
+    }
+
+    private function outputOverallTotal(PdfDocument $parent, Calculation $calculation, float $totalItems): self
+    {
+        $style = null;
+        if ($calculation->isMarginBelow($this->minMargin)) {
+            $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
+        }
+        $this->startHeaderRow()
+            ->add($this->trans('calculation.fields.overallTotal'))
+            ->add(FormatUtils::formatAmount($totalItems))
+            ->add(text: FormatUtils::formatPercent($calculation->getOverallMargin()), style: $style)
+            ->add(FormatUtils::formatAmount($calculation->getOverallMarginAmount()))
+            ->add(FormatUtils::formatAmount($calculation->getOverallTotal()))
+            ->endRow();
+        $parent->Ln(1);
+
+        return $this;
+    }
+
+    private function outputTimestampable(PdfDocument $parent, Calculation $calculation): void
+    {
+        $style = PdfStyle::getNoBorderStyle()
+            ->setFontItalic()
+            ->setFontSize(7);
+        $oldMargins = $parent->setCellMargin(0);
+        $created = $calculation->getCreatedText($this->translator);
+        $updated = $calculation->getUpdatedText($this->translator);
+        $this->startRow()
+            ->add($created, 1, $style, PdfTextAlignment::LEFT)
+            ->add($updated, 4, $style, PdfTextAlignment::RIGHT)
+            ->endRow();
+        $parent->setCellMargin($oldMargins);
+    }
+
+    private function outputUserMargin(float $userMargin, float $userAmount, float $totalNet): self
+    {
+        if (!empty($userMargin)) {
+            $this->startHeaderRow()
+                ->add($this->trans('calculation.fields.totalNet'), 4)
+                ->add(FormatUtils::formatAmount($totalNet))
+                ->endRow();
+            $this->startRow()
+                ->add($this->trans('calculation.fields.userMargin'), 2)
+                ->add(FormatUtils::formatPercent($userMargin))
+                ->add(FormatUtils::formatAmount($userAmount), 2)
+                ->endRow();
+        }
+
+        return $this;
     }
 }

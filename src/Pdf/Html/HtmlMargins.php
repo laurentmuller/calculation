@@ -20,22 +20,22 @@ class HtmlMargins
     /**
      * The bottom margin.
      */
-    protected float $bottom = 0.0;
+    private float $bottom = 0.0;
 
     /**
      * The left margin.
      */
-    protected float $left = 0.0;
+    private float $left = 0.0;
 
     /**
      * The right margin.
      */
-    protected float $right = 0.0;
+    private float $right = 0.0;
 
     /**
      * The top margin.
      */
-    protected float $top = 0.0;
+    private float $top = 0.0;
 
     /**
      * Gets the default margins.

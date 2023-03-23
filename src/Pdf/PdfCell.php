@@ -28,7 +28,7 @@ class PdfCell
      * @param ?PdfTextAlignment $alignment the cell alignment
      * @param string|int        $link      the cell link. A URL or identifier returned by AddLink().
      */
-    public function __construct(protected ?string $text = null, protected int $cols = 1, protected ?PdfStyle $style = null, protected ?PdfTextAlignment $alignment = null, protected string|int $link = '')
+    public function __construct(private ?string $text = null, private int $cols = 1, private ?PdfStyle $style = null, private ?PdfTextAlignment $alignment = null, private string|int $link = '')
     {
         $this->setText($text)
             ->setCols($cols)

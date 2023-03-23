@@ -58,7 +58,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
     protected function __construct(AbstractController $controller, array $items, string $title, string $description)
     {
         parent::__construct($controller, $items, PdfDocumentOrientation::LANDSCAPE);
-        $this->header->setDescription($this->trans($description));
+        $this->getHeader()->setDescription($this->trans($description));
         $this->setTitleTrans($title, [], true);
     }
 

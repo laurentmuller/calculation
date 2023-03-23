@@ -85,7 +85,7 @@ class LogReport extends AbstractReport implements PdfDrawCellBorderInterface
         $description = $this->trans('log.list.file', [
             '%file%' => $this->logFile->getFile(),
         ]);
-        $this->header->setDescription($description);
+        $this->getHeader()->setDescription($description);
     }
 
     /**

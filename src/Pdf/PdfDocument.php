@@ -102,29 +102,14 @@ class PdfDocument extends \FPDF
     final public const LINE_HEIGHT = 5.0;
 
     /**
+     * The default index title.
+     */
+    private const INDEX_TITLE = 'Index';
+
+    /**
      * The new line separator.
      */
     private const NEW_LINE = "\n";
-
-    /**
-     * The footer.
-     */
-    protected PdfFooter $footer;
-
-    /**
-     * The header.
-     */
-    protected PdfHeader $header;
-
-    /**
-     * The title.
-     */
-    protected ?string $title = null;
-
-    /**
-     * Indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true).
-     */
-    protected bool $titleUTF8 = false;
 
     /**
      * The bookmark root object number.
@@ -137,6 +122,26 @@ class PdfDocument extends \FPDF
      * @psalm-var array<int, PdfBookmarkType>
      */
     private array $bookmarks = [];
+
+    /**
+     * The footer.
+     */
+    private PdfFooter $footer;
+
+    /**
+     * The header.
+     */
+    private PdfHeader $header;
+
+    /**
+     * The title.
+     */
+    private ?string $title = null;
+
+    /**
+     * Indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true).
+     */
+    private bool $titleUTF8 = false;
 
     /**
      * Constructor.
@@ -233,7 +238,7 @@ class PdfDocument extends \FPDF
         }
 
         // title
-        $title ??= 'Index';
+        $title ??= self::INDEX_TITLE;
         $titleStyle ??= PdfStyle::getBoldCellStyle();
         $contentStyle ??= PdfStyle::getDefaultStyle();
         $this->AddPage();
@@ -493,13 +498,15 @@ class PdfDocument extends \FPDF
         if ($width <= 0) {
             $width = $this->w - $this->rMargin - $this->x;
         }
-        $maxWidth = ($width - 2.0 * $this->cMargin) * 1000.0 / $this->FontSize;
+
         $sep = -1;
         $index = 0;
         $lastIndex = 0;
-        $currentWidth = 0.0;
         $linesCount = 1;
+        $currentWidth = 0.0;
         $cw = $this->CurrentFont['cw'];
+        $maxWidth = ($width - 2.0 * $this->cMargin) * 1000.0 / $this->FontSize;
+
         while ($index < $lenText) {
             $ch = $text[$index];
             // new line?
@@ -959,14 +966,14 @@ class PdfDocument extends \FPDF
     protected function _putBookmark(array $bookmark, int $n): void
     {
         $this->_newobj();
-        $this->_put(\sprintf('<</Title %s', $this->_textstring($bookmark['text'])));
+        $this->_putParams('<</Title %s', $this->_textstring($bookmark['text']));
         foreach (['parent', 'prev', 'next', 'first', 'last'] as $key) {
             if (isset($bookmark[$key])) {
-                $this->_put(\sprintf('/%s %d 0 R', \ucfirst($key), $n + (int) $bookmark[$key]));
+                $this->_putParams('/%s %d 0 R', \ucfirst($key), $n + (int) $bookmark[$key]);
             }
         }
         $pageN = $this->PageInfo[$bookmark['page']]['n'];
-        $this->_put(\sprintf('/Dest [%d 0 R /XYZ 0 %.2F null]', $pageN, $bookmark['y']));
+        $this->_putParams('/Dest [%d 0 R /XYZ 0 %.2F null]', $pageN, $bookmark['y']);
         $this->_put('/Count 0>>');
         $this->_put('endobj');
     }
@@ -1002,8 +1009,8 @@ class PdfDocument extends \FPDF
         }
         $this->_newobj();
         $this->bookmarkRoot = $this->n;
-        $this->_put(\sprintf('<</Type /Outlines /First %d 0 R', $n));
-        $this->_put(\sprintf('/Last %d 0 R>>', $n + $lastUsedReferences[0]));
+        $this->_putParams('<</Type /Outlines /First %d 0 R', $n);
+        $this->_putParams('/Last %d 0 R>>', $n + $lastUsedReferences[0]);
         $this->_put('endobj');
     }
 
@@ -1011,9 +1018,14 @@ class PdfDocument extends \FPDF
     {
         parent::_putcatalog();
         if ([] !== $this->bookmarks) {
-            $this->_put(\sprintf('/Outlines %d 0 R', $this->bookmarkRoot));
+            $this->_putParams('/Outlines %d 0 R', $this->bookmarkRoot);
             $this->_put('/PageMode /UseOutlines');
         }
+    }
+
+    protected function _putParams(string $format, float|int|string ...$values): void
+    {
+        $this->_put(\sprintf($format, ...$values));
     }
 
     protected function _putresources(): void

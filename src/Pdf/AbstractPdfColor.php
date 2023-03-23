@@ -38,21 +38,21 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @psalm-var int<0, 255>
      */
-    protected int $blue = 0;
+    private int $blue = 0;
 
     /**
      * The green component.
      *
      * @psalm-var int<0, 255>
      */
-    protected int $green = 0;
+    private int $green = 0;
 
     /**
      * The red component.
      *
      * @psalm-var int<0, 255>
      */
-    protected int $red = 0;
+    private int $red = 0;
 
     /**
      * Constructor.

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Calculation;
+use App\Entity\CalculationCategory;
 use App\Entity\CalculationItem;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
@@ -35,6 +36,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
     private const INDENT = 4;
 
     private readonly Calculation $calculation;
+
     private readonly TranslatorInterface $translator;
 
     /**
@@ -63,42 +65,25 @@ class CalculationTableItems extends PdfGroupTableBuilder
         $calculation = $this->calculation;
         $groups = $calculation->getGroups();
         $duplicateItems = $calculation->getDuplicateItems();
+
         $groupStyle = $this->findGroupStyle();
         $defaultStyle = PdfStyle::getCellStyle()->setIndent(self::INDENT);
         $errorStyle = (clone $defaultStyle)->setTextColor(PdfTextColor::red());
-        $this->addColumns(
-            PdfColumn::left($this->trans('calculationitem.fields.description'), 50),
-            PdfColumn::left($this->trans('calculationitem.fields.unit'), 20, true),
-            PdfColumn::right($this->trans('calculationitem.fields.price'), 20, true),
-            PdfColumn::right($this->trans('calculationitem.fields.quantity'), 20, true),
-            PdfColumn::right($this->trans('calculationitem.fields.total'), 20, true)
-        )->outputHeaders();
+
+        $this->createColumns();
         foreach ($groups as $group) {
             $this->checkLines(3);
             $groupStyle->resetIndent();
             $this->setGroupKey($group->getCode());
             foreach ($group->getCategories() as $category) {
-                $this->checkLines(2);
-                $groupStyle->setIndent(self::INDENT / 2);
-                $this->setGroupKey($category->getCode());
-
+                $this->outputCategory($category, $groupStyle);
                 foreach ($category->getItems() as $item) {
-                    $this->startRow();
-                    $this->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle);
-                    $this->add($item->getUnit());
-                    $this->addAmount($item->getPrice(), $errorStyle)
-                        ->addAmount($item->getQuantity(), $errorStyle)
-                        ->addAmount($item->getTotal())
-                        ->endRow();
+                    $this->outputItem($item, $duplicateItems, $defaultStyle, $errorStyle);
                 }
             }
         }
         $this->setInProgress(true);
-        $total = $calculation->getItemsTotal();
-        $this->startHeaderRow()
-            ->add($this->trans('calculation.fields.itemsTotal'), 4)
-            ->add(FormatUtils::formatAmount($total))
-            ->endRow();
+        $this->outputTotal($calculation->getItemsTotal());
     }
 
     /**
@@ -152,6 +137,17 @@ class CalculationTableItems extends PdfGroupTableBuilder
         return $result;
     }
 
+    private function createColumns(): self
+    {
+        return $this->addColumns(
+            PdfColumn::left($this->trans('calculationitem.fields.description'), 50),
+            PdfColumn::left($this->trans('calculationitem.fields.unit'), 20, true),
+            PdfColumn::right($this->trans('calculationitem.fields.price'), 20, true),
+            PdfColumn::right($this->trans('calculationitem.fields.quantity'), 20, true),
+            PdfColumn::right($this->trans('calculationitem.fields.total'), 20, true)
+        )->outputHeaders();
+    }
+
     private function findGroupStyle(): PdfStyle
     {
         if (null !== $style = $this->getGroupStyle()) {
@@ -159,5 +155,34 @@ class CalculationTableItems extends PdfGroupTableBuilder
         }
 
         return PdfStyle::getCellStyle()->setFontBold();
+    }
+
+    private function outputCategory(CalculationCategory $category, PdfStyle $groupStyle): void
+    {
+        $this->checkLines(2);
+        $groupStyle->setIndent(self::INDENT / 2);
+        $this->setGroupKey($category->getCode());
+    }
+
+    /**
+     * @psalm-param CalculationItem[] $duplicateItems
+     */
+    private function outputItem(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): void
+    {
+        $this->startRow();
+        $this->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle);
+        $this->add($item->getUnit());
+        $this->addAmount($item->getPrice(), $errorStyle)
+            ->addAmount($item->getQuantity(), $errorStyle)
+            ->addAmount($item->getTotal())
+            ->endRow();
+    }
+
+    private function outputTotal(float $total): void
+    {
+        $this->startHeaderRow()
+            ->add($this->trans('calculation.fields.itemsTotal'), 4)
+            ->add(FormatUtils::formatAmount($total))
+            ->endRow();
     }
 }

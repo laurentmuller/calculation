@@ -29,7 +29,7 @@ class PdfLine implements PdfDocumentUpdaterInterface
      *
      * @param float $width the line width
      */
-    public function __construct(protected float $width = self::DEFAULT_WIDTH)
+    public function __construct(private float $width = self::DEFAULT_WIDTH)
     {
     }
 

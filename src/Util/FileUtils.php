@@ -73,6 +73,8 @@ final class FileUtils
      * @return array|\stdClass the value encoded in json in appropriate PHP type
      *
      * @throws \InvalidArgumentException if the file can not be decoded
+     *
+     * @psalm-return ($assoc is true ? array : \stdClass)
      */
     public static function decodeJson(string|\SplFileInfo $file, bool $assoc = true): array|\stdClass
     {

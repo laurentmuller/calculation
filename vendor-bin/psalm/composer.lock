@@ -1141,16 +1141,16 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v5.0.1",
+            "version": "v5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "e9900d2f0186564a30934a2ebcf60481d916ebf0"
+                "reference": "f017563fa40728a5a40628915774e7d3469a0cbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/e9900d2f0186564a30934a2ebcf60481d916ebf0",
-                "reference": "e9900d2f0186564a30934a2ebcf60481d916ebf0",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/f017563fa40728a5a40628915774e7d3469a0cbd",
+                "reference": "f017563fa40728a5a40628915774e7d3469a0cbd",
                 "shasum": ""
             },
             "require": {
@@ -1200,9 +1200,9 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.0.1"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.0.2"
             },
-            "time": "2023-01-08T18:54:02+00:00"
+            "time": "2023-03-22T20:58:14+00:00"
         },
         {
             "name": "psr/cache",
@@ -1408,16 +1408,16 @@
         },
         {
             "name": "sebastian/diff",
-            "version": "5.0.0",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "70dd1b20bc198da394ad542e988381b44e64e39f"
+                "reference": "aae9a0a43bff37bd5d8d0311426c87bf36153f02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/70dd1b20bc198da394ad542e988381b44e64e39f",
-                "reference": "70dd1b20bc198da394ad542e988381b44e64e39f",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/aae9a0a43bff37bd5d8d0311426c87bf36153f02",
+                "reference": "aae9a0a43bff37bd5d8d0311426c87bf36153f02",
                 "shasum": ""
             },
             "require": {
@@ -1462,7 +1462,8 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/diff/issues",
-                "source": "https://github.com/sebastianbergmann/diff/tree/5.0.0"
+                "security": "https://github.com/sebastianbergmann/diff/security/policy",
+                "source": "https://github.com/sebastianbergmann/diff/tree/5.0.1"
             },
             "funding": [
                 {
@@ -1470,7 +1471,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-02-03T07:00:31+00:00"
+            "time": "2023-03-23T05:12:41+00:00"
         },
         {
             "name": "spatie/array-to-xml",

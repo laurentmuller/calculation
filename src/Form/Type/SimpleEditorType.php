@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * The Simple editor type.
  *
- * @psalm-type SimpleEditorAction = array{
+ * @psalm-type SimpleEditorActionType = array{
  *      title: ?string,
  *      group: ?string,
  *      icon: ?string,
@@ -58,13 +58,14 @@ class SimpleEditorType extends AbstractType
      * {@inheritdoc}
      *
      * @psalm-param array{required:bool} $options
+     *
+     * @psalm-suppress MixedArrayAssignment
+     * @psalm-suppress PropertyTypeCoercion
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        /** @var array{attr: array, groups: array} $vars */
-        $vars = &$view->vars;
         if ($options['required']) {
-            $vars['attr']['class'] = $this->getWidgetClass($view);
+            $view->vars['attr']['class'] = $this->getWidgetClass($view);
         }
         $view->vars['groups'] = $this->getGroupedActions($options);
     }
@@ -95,8 +96,7 @@ class SimpleEditorType extends AbstractType
     {
         if (empty(self::$defaultActions)) {
             try {
-                $file = FileUtils::buildPath($this->actionsPath);
-                self::$defaultActions = (array) FileUtils::decodeJson($file);
+                self::$defaultActions = FileUtils::decodeJson($this->actionsPath);
             } catch (\InvalidArgumentException) {
                 self::$defaultActions = [];
             }
@@ -113,7 +113,7 @@ class SimpleEditorType extends AbstractType
         /** @psalm-var array $existing */
         $existing = $options['actions'] ?? [];
 
-        /** @psalm-var SimpleEditorAction[] $actions */
+        /** @psalm-var SimpleEditorActionType[] $actions */
         $actions = \array_filter($existing, static fn (array $action): bool => !empty($action['exec']) || !empty($action['actions']));
         $this->updateActions($actions);
 
@@ -139,7 +139,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorAction[] $actions
+     * @psalm-param SimpleEditorActionType[] $actions
      */
     private function updateActions(array &$actions, string $class = 'btn btn-outline-secondary'): void
     {
@@ -159,7 +159,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorAction $action
+     * @psalm-param SimpleEditorActionType $action
      */
     private function updateClass(array &$action): self
     {
@@ -171,24 +171,22 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorAction $action
+     * @psalm-param SimpleEditorActionType $action
      */
     private function updateDropDown(array &$action): void
     {
-        if (isset($action['actions']) && !empty($action['actions'])) {
+        /** @psalm-var SimpleEditorActionType[] $actions */
+        $actions = $action['actions'] ?? [];
+        if ([] !== $actions) {
             $action['attributes']['aria-expanded'] = 'false';
             $action['attributes']['data-toggle'] = 'dropdown';
-
             $action['attributes']['class'] .= ' dropdown-toggle';
-
-            /** @psalm-var SimpleEditorAction[] $_children */
-            $_children = &$action['actions'];
-            $this->updateActions($_children, 'dropdown-item');
+            $this->updateActions($actions, 'dropdown-item');
         }
     }
 
     /**
-     * @psalm-param SimpleEditorAction $action
+     * @psalm-param SimpleEditorActionType $action
      */
     private function updateEnabled(array &$action): self
     {
@@ -200,7 +198,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorAction $action
+     * @psalm-param SimpleEditorActionType $action
      */
     private function updateExec(array &$action): self
     {
@@ -212,7 +210,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorAction $action
+     * @psalm-param SimpleEditorActionType $action
      */
     private function updateParameter(array &$action): self
     {
@@ -224,7 +222,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorAction $action
+     * @psalm-param SimpleEditorActionType $action
      */
     private function updateState(array &$action): self
     {
@@ -236,7 +234,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-param SimpleEditorAction $action
+     * @psalm-param SimpleEditorActionType $action
      */
     private function updateText(array &$action): self
     {

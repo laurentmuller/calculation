@@ -21,9 +21,9 @@ class AverageAggregator extends AbstractAggregator
 {
     use MathTrait;
 
-    protected int $count = 0;
+    private int $count = 0;
 
-    protected float $sum = 0.0;
+    private float $sum = 0.0;
 
     /**
      * {@inheritdoc}

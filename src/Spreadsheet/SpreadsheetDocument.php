@@ -64,16 +64,16 @@ class SpreadsheetDocument extends Spreadsheet
     private const FORMAT_INT = '#,##0';
 
     /**
-     * The file title.
-     */
-    protected ?string $title = null;
-
-    /**
      * The boolean formats.
      *
      * @var string[]
      */
     private array $booleanFormats = [];
+
+    /**
+     * The file title.
+     */
+    private ?string $title = null;
 
     /**
      * Constructor.

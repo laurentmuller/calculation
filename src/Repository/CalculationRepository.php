@@ -32,11 +32,6 @@ class CalculationRepository extends AbstractRepository
      */
     final public const STATE_ALIAS = 's';
 
-    /**
-     * Constructor.
-     *
-     * @param ManagerRegistry $registry the connections and entity managers registry
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Calculation::class);

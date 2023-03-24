@@ -33,14 +33,14 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     private const CACHE_TIMEOUT = 60 * 15;
 
     /**
-     * The key to cache language.
-     */
-    protected ?string $cacheKey = null;
-
-    /**
      * The property accessor to get values.
      */
     private ?PropertyAccessorInterface $accessor = null;
+
+    /**
+     * The key to cache language.
+     */
+    private ?string $cacheKey = null;
 
     /**
      * Gets the display name of the language for the given BCP 47 language tag.
@@ -123,7 +123,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     private function doLoadLanguages(): ?array
     {
         $languages = $this->loadLanguages();
-        if (!empty($languages) && null === $this->lastError) {
+        if (!empty($languages) && null === $this->getLastError()) {
             return $languages;
         }
 

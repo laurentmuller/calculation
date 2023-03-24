@@ -87,6 +87,16 @@ class CalculationTableOverall extends PdfTableBuilder
         return $table;
     }
 
+    private function addAmount(float $number, int $cols = 1): self
+    {
+        return $this->add(FormatUtils::formatAmount($number), $cols);
+    }
+
+    private function addPercent(float $number, ?PdfStyle $style = null): self
+    {
+        return $this->add(text: FormatUtils::formatPercent($number), style: $style);
+    }
+
     private function createColumns(): self
     {
         return $this->addColumns(
@@ -102,8 +112,8 @@ class CalculationTableOverall extends PdfTableBuilder
     {
         return $this->startRow()
             ->add($this->trans('calculation.fields.globalMargin'), 2)
-            ->add(FormatUtils::formatPercent($globalMargin))
-            ->add(FormatUtils::formatAmount($globalAmount), 2)
+            ->addPercent($globalMargin)
+            ->addAmount($globalAmount, 2)
             ->endRow();
     }
 
@@ -115,10 +125,10 @@ class CalculationTableOverall extends PdfTableBuilder
         }
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.overallTotal'))
-            ->add(FormatUtils::formatAmount($totalItems))
-            ->add(text: FormatUtils::formatPercent($calculation->getOverallMargin()), style: $style)
-            ->add(FormatUtils::formatAmount($calculation->getOverallMarginAmount()))
-            ->add(FormatUtils::formatAmount($calculation->getOverallTotal()))
+            ->addAmount($totalItems)
+            ->addPercent($calculation->getOverallMargin(), $style)
+            ->addAmount($calculation->getOverallMarginAmount())
+            ->addAmount($calculation->getOverallTotal())
             ->endRow();
         $parent->Ln(1);
 
@@ -145,12 +155,12 @@ class CalculationTableOverall extends PdfTableBuilder
         if (!empty($userMargin)) {
             $this->startHeaderRow()
                 ->add($this->trans('calculation.fields.totalNet'), 4)
-                ->add(FormatUtils::formatAmount($totalNet))
+                ->addAmount($totalNet)
                 ->endRow();
             $this->startRow()
                 ->add($this->trans('calculation.fields.userMargin'), 2)
-                ->add(FormatUtils::formatPercent($userMargin))
-                ->add(FormatUtils::formatAmount($userAmount), 2)
+                ->addPercent($userMargin)
+                ->addAmount($userAmount, 2)
                 ->endRow();
         }
 

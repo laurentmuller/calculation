@@ -1,3 +1,18 @@
+{% macro title(title, target) %}
+<div class="alert alert-primary rounded-0 px-2 py-1 mb-2">
+    <div class="row">
+        <div class="col-9">
+            <h6 class="mb-0">{{ title }}</h6>
+        </div>
+        <div class="col-3 text-right d-print-none">
+            <a href="#" class="alert-link" data-toggle="modal" data-target="#{{ target }}" title="{{ 'dialog_raw_data.tooltip'|trans }}">
+                <i class="fa-solid fa-code"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
 {% macro value_unit(value, unit='', separator=' ') -%}
     {{ (value ~ separator ~ unit)|trim }}
 {%- endmacro %}
@@ -24,4 +39,10 @@
 
 {% macro value_rain(value, unit='') %}
 {{ _self.value_unit(value|number_format(1), unit, ' ') }}
+{% endmacro %}
+
+{% macro value_wind(description, degrees, unit) %}
+<span title="{{ 'openweather.fields.wind_deg_title'|trans({'%degrees%': _self.value_no_sep(degrees, unit)}) }}">
+    <i class="fa-solid fa-location-arrow fa-rotate-by text-success" style="--fa-rotate-angle: {{ degrees - 45 }}deg;"></i> {{ description -}}
+</span>
 {% endmacro %}

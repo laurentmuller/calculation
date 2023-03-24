@@ -20,11 +20,27 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Command to update Javascript and CSS dependencies.
+ *
+ * @psalm-type PluginType = array{
+ *     name: string,
+ *     version: string,
+ *     display?: string,
+ *     source?: string,
+ *     target?: string,
+ *     format?: string,
+ *     disabled?: bool,
+ *     files: array<string>}
+ * @psalm-type ConfigurationType = array{
+ *     source: string,
+ *     target: string,
+ *     format: string,
+ *     prefixes?: array<string, string>,
+ *     suffixes?: array<string, string>,
+ *     renames?: array<string, string>,
+ *     plugins: array<PluginType>}
  */
 #[AsCommand(name: 'app:update-assets', description: 'Update Javascript and CSS dependencies.')]
 class UpdateAssetsCommand extends Command
@@ -73,7 +89,9 @@ class UpdateAssetsCommand extends Command
 
             return Command::INVALID;
         }
-        if (null === ($configuration = $this->loadConfiguration($publicDir))) {
+
+        $configuration = $this->loadConfiguration($publicDir);
+        if (null === $configuration) {
             $this->writeNote('No configuration found.');
 
             return Command::INVALID;
@@ -81,21 +99,17 @@ class UpdateAssetsCommand extends Command
         if (!$this->propertyExists($configuration, ['source', 'target', 'format', 'plugins'], true)) {
             return Command::INVALID;
         }
-        /** @var string $source */
-        $source = $configuration->source;
-        $target = FileUtils::buildPath($publicDir, (string) $configuration->target);
+
+        $source = $configuration['source'];
+        $target = FileUtils::buildPath($publicDir, $configuration['target']);
         if (!$targetTemp = $this->getTargetTemp($publicDir)) {
             return Command::FAILURE;
         }
-        /** @var string $format */
-        $format = $configuration->format;
-        /** @var \stdClass[] $plugins */
-        $plugins = $configuration->plugins;
-        /** @var array<string, string> $prefixes */
+
+        $format = $configuration['format'];
+        $plugins = $configuration['plugins'];
         $prefixes = $this->getConfigArray($configuration, 'prefixes');
-        /** @var array<string, string> $suffixes */
         $suffixes = $this->getConfigArray($configuration, 'suffixes');
-        /** @var array<string, string> $renames */
         $renames = $this->getConfigArray($configuration, 'renames');
 
         $countFiles = 0;
@@ -103,16 +117,15 @@ class UpdateAssetsCommand extends Command
 
         try {
             foreach ($plugins as $plugin) {
-                $name = (string) $plugin->name;
-                $version = (string) $plugin->version;
-                $display = (string) ($plugin->display ?? $plugin->name);
-                if (\property_exists($plugin, 'disabled') && $plugin->disabled) {
+                $name = $plugin['name'];
+                $version = $plugin['version'];
+                $display = $plugin['display'] ?? $name;
+                if ($this->isPluginDisabled($plugin)) {
                     $this->writeVerbose("Skipping   '$display v$version'.", 'fg=gray');
                     continue;
                 }
                 $this->writeVerbose("Installing '$display v$version'.");
-                /** @var string[] $files */
-                $files = $plugin->files;
+                $files = $plugin['files'];
                 foreach ($files as $file) {
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
                     $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
@@ -121,20 +134,14 @@ class UpdateAssetsCommand extends Command
                     }
                 }
                 ++$countPlugins;
-                $versionSource = (string) ($plugin->source ?? $source);
-                if (false !== \stripos($versionSource, 'cdnjs')) {
+                $versionSource = $plugin['source'] ?? $source;
+                if (StringUtils::contains($versionSource, 'cdnjs', true)) {
                     $this->checkVersionCdnjs($name, $version);
-                } elseif (false !== \stripos($versionSource, 'jsdelivr')) {
+                } elseif (StringUtils::contains($versionSource, 'jsdelivr', true)) {
                     $this->checkVersionJsDelivr($name, $version);
                 }
             }
-            $expected = \array_reduce($plugins, function (int $carry, \stdClass $plugin) {
-                if (\property_exists($plugin, 'disabled') && $plugin->disabled) {
-                    return $carry;
-                }
-
-                return $carry + \count((array) $plugin->files);
-            }, 0);
+            $expected = $this->countFiles($plugins);
             if ($expected !== $countFiles) {
                 $this->writeError("Not all files has been loaded! Expected: $expected, Loaded: $countFiles.");
             }
@@ -159,19 +166,19 @@ class UpdateAssetsCommand extends Command
     private function checkVersion(string $url, string $name, string $version, string ...$paths): void
     {
         $content = $this->loadJson($url);
-        if (false === $content) {
+        if (null === $content) {
             $this->write("Unable to find the URL '$url' for the plugin '$name'.");
 
             return;
         }
         foreach ($paths as $path) {
-            if (!isset($content->$path)) {
+            if (!isset($content[$path])) {
                 $this->write("Unable to find the path '$path' for the plugin '$name'.");
 
                 return;
             }
-            /** @var \stdClass $content */
-            $content = $content->$path;
+            /** @psalm-var array $content */
+            $content = $content[$path];
         }
         /** @var string $newVersion */
         $newVersion = $content;
@@ -193,9 +200,9 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @param array<string, string> $prefixes
-     * @param array<string, string> $suffixes
-     * @param array<string, string> $renames
+     * @psalm-param array<string, string> $prefixes
+     * @psalm-param array<string, string> $suffixes
+     * @psalm-param array<string, string> $renames
      */
     private function copyFile(string $sourceFile, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
@@ -223,7 +230,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @param string[] $entries the style entries to copy
+     * @psalm-param string[] $entries the style entries to copy
      */
     private function copyStyleEntries(string $content, string $searchStyle, string $newStyle, array $entries): string
     {
@@ -250,9 +257,24 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @param array<string, string> $prefixes
-     * @param array<string, string> $suffixes
-     * @param array<string, string> $renames
+     * @psalm-param PluginType[] $plugins
+     */
+    private function countFiles(array $plugins): int
+    {
+        return \array_reduce($plugins, function (int $carry, array $plugin) {
+            /** @psalm-var PluginType $plugin */
+            if (!$this->isPluginDisabled($plugin)) {
+                return $carry + \count($plugin['files']);
+            }
+
+            return $carry;
+        }, 0);
+    }
+
+    /**
+     * @psalm-param array<string, string> $prefixes
+     * @psalm-param array<string, string> $suffixes
+     * @psalm-param array<string, string> $renames
      */
     private function dumpFile(string $content, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
     {
@@ -274,16 +296,18 @@ class UpdateAssetsCommand extends Command
         if (\in_array($name, self::BOOTSTRAP_FILES_STYLE, true)) {
             $content = $this->updateStyle($content);
         }
-        $this->writeFile($targetFile, $content);
+        if (!$this->writeFile($targetFile, $content)) {
+            return false;
+        }
         FileUtils::chmod($targetFile, 0o644, false);
 
         return true;
     }
 
     /**
-     * @param string[] $entries
+     * @psalm-param string[] $entries
      *
-     * @return string[]|false
+     * @psalm-return string[]|false
      */
     private function findStyleEntries(string $style, array $entries): array|false
     {
@@ -303,12 +327,12 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @return string[]|false
+     * @psalm-return string[]|false
      */
     private function findStyles(string $content, string $style): array|false
     {
         $matches = [];
-        $pattern = '/^\s{0,2}' . \preg_quote($style, '/') . '\s+\{([^}]+)\}/m';
+        $pattern = '/^\s{0,2}' . \preg_quote($style, '/') . '\s+\{([^}]+)}/m';
         if (!empty(\preg_match_all($pattern, $content, $matches, \PREG_SET_ORDER))) {
             return \array_map(fn (array $value): string => \ltrim($value[0]), $matches);
         }
@@ -316,10 +340,16 @@ class UpdateAssetsCommand extends Command
         return false;
     }
 
-    private function getConfigArray(\stdClass $configuration, string $name): array
+    /**
+     * @psalm-return array<string, string>
+     */
+    private function getConfigArray(array $configuration, string $name): array
     {
         if ($this->propertyExists($configuration, $name)) {
-            return (array) $configuration->{$name};
+            /** @psalm-var array<string, string> $array */
+            $array = $configuration[$name];
+
+            return $array;
         }
 
         return [];
@@ -332,15 +362,18 @@ class UpdateAssetsCommand extends Command
         return FileUtils::exists($publicDir) ? $publicDir : null;
     }
 
-    private function getSourceFile(string $source, string $format, \stdClass $plugin, string $file): string
+    /**
+     * @psalm-param PluginType $plugin
+     */
+    private function getSourceFile(string $source, string $format, array $plugin, string $file): string
     {
-        $name = (string) $plugin->name;
-        $version = (string) $plugin->version;
-        if (\property_exists($plugin, 'source') && null !== $plugin->source) {
-            $source = (string) $plugin->source;
+        $name = $plugin['name'];
+        $version = $plugin['version'];
+        if (!empty($plugin['source'])) {
+            $source = $plugin['source'];
         }
-        if (\property_exists($plugin, 'format') && null !== $plugin->format) {
-            $format = (string) $plugin->format;
+        if (!empty($plugin['format'])) {
+            $format = $plugin['format'];
         }
         $search = ['{source}', '{name}', '{version}', '{file}'];
         $replace = [$source, $name, $version, $file];
@@ -348,16 +381,19 @@ class UpdateAssetsCommand extends Command
         return \str_ireplace($search, $replace, $format);
     }
 
-    private function getTargetFile(string $target, \stdClass $plugin, string $file): string
+    /**
+     * @psalm-param PluginType $plugin
+     */
+    private function getTargetFile(string $target, array $plugin, string $file): string
     {
-        $name = (string) ($plugin->target ?? $plugin->name);
+        $name = $plugin['target'] ?? $plugin['name'];
 
         return FileUtils::buildPath($target, $name, $file);
     }
 
     private function getTargetTemp(string $publicDir): string|false
     {
-        if (!$dir = FileUtils::tempDir($publicDir)) {
+        if (null === $dir = FileUtils::tempDir($publicDir)) {
             $this->writeError('Unable to create a temporary directory.');
 
             return false;
@@ -366,51 +402,61 @@ class UpdateAssetsCommand extends Command
         return $dir . \DIRECTORY_SEPARATOR;
     }
 
-    private function loadConfiguration(string $publicDir): ?\stdClass
+    /**
+     * @psalm-param PluginType $plugin
+     */
+    private function isPluginDisabled(array $plugin): bool
+    {
+        return isset($plugin['disabled']) && $plugin['disabled'];
+    }
+
+    /**
+     * @psalm-return ConfigurationType|null
+     */
+    private function loadConfiguration(string $publicDir): ?array
     {
         $vendorFile = FileUtils::buildPath($publicDir, self::VENDOR_FILE_NAME);
-        if (!FileUtils::exists($publicDir) || !FileUtils::exists($vendorFile)) {
+        if (!FileUtils::exists($vendorFile)) {
             $this->writeVerbose("The file '$vendorFile' does not exist.");
 
             return null;
         }
+
+        /** @psalm-var ConfigurationType|null $configuration */
         $configuration = $this->loadJson($vendorFile);
-        if (!$configuration instanceof \stdClass) {
+
+        return \is_array($configuration) ? $configuration : null;
+    }
+
+    private function loadJson(string $filename): ?array
+    {
+        if (!$content = $this->readFile($filename)) {
             return null;
         }
 
-        return $configuration;
-    }
-
-    private function loadJson(string $filename): \stdClass|false
-    {
-        if (!$content = $this->readFile($filename)) {
-            return false;
-        }
-
         try {
-            /** @psalm-var \stdClass $data */
-            $data = StringUtils::decodeJson($content, false);
+            /** @psalm-var mixed $data */
+            $data = StringUtils::decodeJson($content);
+
+            return \is_array($data) ? $data : null;
         } catch (\InvalidArgumentException $e) {
             $this->writeError($e->getMessage());
             $this->writeError("Unable to decode file '$filename'.");
 
-            return false;
+            return null;
         }
-
-        return $data;
     }
 
     /**
-     * @param string[]|string $properties
+     * @psalm-param string[]|string $properties
      */
-    private function propertyExists(\stdClass $var, array|string $properties, bool $log = false): bool
+    private function propertyExists(array $var, array|string $properties, bool $log = false): bool
     {
         $properties = (array) $properties;
         foreach ($properties as $property) {
-            if (!\property_exists($var, $property) || empty($var->{$property})) {
+            if (empty($var[$property])) {
                 if ($log) {
-                    $this->writeError("Unable to find the '$property' property.");
+                    $this->writeError("Unable to find the property '$property'.");
                 }
 
                 return false;
@@ -429,7 +475,7 @@ class UpdateAssetsCommand extends Command
 
             return false;
         }
-        if (empty($content)) {
+        if ('' === $content) {
             $this->writeError("The content of '$filename' is empty.");
 
             return false;
@@ -449,16 +495,12 @@ class UpdateAssetsCommand extends Command
     private function rename(string $origin, string $target): bool
     {
         $this->writeVeryVerbose("Rename '$origin' to '$target'.");
-
-        try {
-            (new Filesystem())->rename($origin, $target, true);
-
+        if (FileUtils::rename($origin, $target, true)) {
             return true;
-        } catch (IOException $e) {
-            $this->writeError($e->getMessage());
-
-            return false;
         }
+        $this->writeError("Unable to rename the file '$origin' to '$target'.");
+
+        return false;
     }
 
     private function updateStyle(string $content): string
@@ -524,9 +566,14 @@ class UpdateAssetsCommand extends Command
         return $content . self::CSS_COMMENTS . $toAppend;
     }
 
-    private function writeFile(string $filename, string $content): void
+    private function writeFile(string $filename, string $content): bool
     {
         $this->writeVeryVerbose("Save '$filename'");
-        FileUtils::dumpFile($filename, $content);
+        if (FileUtils::dumpFile($filename, $content)) {
+            return true;
+        }
+        $this->writeError("Unable to write content to the file '$filename'.");
+
+        return false;
     }
 }

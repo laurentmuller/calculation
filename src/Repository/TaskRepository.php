@@ -24,11 +24,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TaskRepository extends AbstractCategoryItemRepository
 {
-    /**
-     * Constructor.
-     *
-     * @param ManagerRegistry $registry The connections and entity managers registry
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Task::class);

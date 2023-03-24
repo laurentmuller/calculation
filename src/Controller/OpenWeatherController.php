@@ -41,16 +41,6 @@ use Symfony\Component\Validator\Constraints\Length;
 class OpenWeatherController extends AbstractController
 {
     /**
-     * The number of daily results to return.
-     */
-    private const DEFAULT_COUNT = 5;
-
-    /**
-     * The number of search results to return.
-     */
-    private const DEFAULT_LIMIT = 25;
-
-    /**
      * The count key name.
      */
     private const KEY_COUNT = 'count';
@@ -388,7 +378,7 @@ class OpenWeatherController extends AbstractController
 
     private function getRequestCount(Request $request): int
     {
-        return $this->getRequestInt($request, self::KEY_COUNT, self::DEFAULT_COUNT);
+        return $this->getRequestInt($request, self::KEY_COUNT, OpenWeatherService::DEFAULT_COUNT);
     }
 
     private function getRequestId(Request $request): int
@@ -398,7 +388,7 @@ class OpenWeatherController extends AbstractController
 
     private function getRequestLimit(Request $request): int
     {
-        return $this->getRequestInt($request, self::KEY_LIMIT, self::DEFAULT_LIMIT);
+        return $this->getRequestInt($request, self::KEY_LIMIT, OpenWeatherService::DEFAULT_LIMIT);
     }
 
     private function getRequestQuery(Request $request): string

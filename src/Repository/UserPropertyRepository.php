@@ -23,11 +23,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserPropertyRepository extends AbstractRepository
 {
-    /**
-     * Constructor.
-     *
-     * @param ManagerRegistry $registry The connections and entity managers registry
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UserProperty::class);

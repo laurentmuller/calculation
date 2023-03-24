@@ -23,7 +23,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class TasksDocument extends AbstractArrayDocument
 {
     private bool $writeItem = false;
-
     private bool $writeTask = false;
 
     /**

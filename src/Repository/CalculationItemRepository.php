@@ -22,11 +22,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CalculationItemRepository extends AbstractRepository
 {
-    /**
-     * Constructor.
-     *
-     * @param ManagerRegistry $registry The connections and entity managers registry
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CalculationItem::class);

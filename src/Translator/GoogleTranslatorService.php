@@ -139,11 +139,11 @@ class GoogleTranslatorService extends AbstractTranslatorService
      */
     protected function getDefaultOptions(): array
     {
-        $query = ['key' => $this->key];
-
         return [
             self::BASE_URI => self::HOST_NAME,
-            self::QUERY => $query,
+            self::QUERY => [
+                'key' => $this->key,
+            ],
         ];
     }
 

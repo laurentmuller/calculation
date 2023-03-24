@@ -59,12 +59,12 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     /**
      * The HTTP client.
      */
-    protected ?HttpClientInterface $client = null;
+    private ?HttpClientInterface $client = null;
 
     /**
      * The last client error.
      */
-    protected ?HttpClientError $lastError = null;
+    private ?HttpClientError $lastError = null;
 
     /**
      * Constructor.

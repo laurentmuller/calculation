@@ -29,27 +29,27 @@ trait TimestampableTrait
      * The creation date.
      */
     #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE, nullable: true)]
-    protected ?\DateTimeInterface $createdAt = null;
+    private ?\DateTimeInterface $createdAt = null;
 
     /**
      * The creation username.
      */
     #[Assert\Length(max: User::MAX_USERNAME_LENGTH)]
     #[ORM\Column(length: User::MAX_USERNAME_LENGTH, nullable: true)]
-    protected ?string $createdBy = null;
+    private ?string $createdBy = null;
 
     /**
      * The updated date.
      */
     #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE, nullable: true)]
-    protected ?\DateTimeInterface $updatedAt = null;
+    private ?\DateTimeInterface $updatedAt = null;
 
     /**
      * The updated username.
      */
     #[Assert\Length(max: User::MAX_USERNAME_LENGTH)]
     #[ORM\Column(length: User::MAX_USERNAME_LENGTH, nullable: true)]
-    protected ?string $updatedBy = null;
+    private ?string $updatedBy = null;
 
     public function getCreatedAt(): ?\DateTimeInterface
     {

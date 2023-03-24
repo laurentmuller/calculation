@@ -39,12 +39,12 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * The entity class name.
      */
-    protected string $className;
+    private string $className;
 
     /**
      * The lower case entity class name.
      */
-    protected string $lowerName;
+    private string $lowerName;
 
     /**
      * Constructor.

@@ -38,9 +38,6 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
 {
     use ResetPasswordRequestRepositoryTrait;
 
-    /**
-     * Constructor.
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);

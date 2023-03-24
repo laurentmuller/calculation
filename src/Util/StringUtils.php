@@ -199,15 +199,11 @@ final class StringUtils
     }
 
     /**
-     * Returns if the given variable is a string and not empty.
-     *
-     * @param mixed $var the variable to be tested
-     *
-     * @return bool true if not empty string
+     * Returns if the given string is not null nor is empty.
      */
-    public static function isString(mixed $var): bool
+    public static function isString(?string $str): bool
     {
-        return \is_string($var) && '' !== $var;
+        return null !== $str && '' !== $str;
     }
 
     /**

@@ -28,12 +28,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 abstract class AbstractListEntityType extends AbstractType
 {
     use CheckSubClassTrait;
-    /**
-     * The entity class name.
-     *
-     * @psalm-var class-string<T> $className
-     */
-    protected string $className;
 
     /**
      * Constructor.
@@ -44,10 +38,9 @@ abstract class AbstractListEntityType extends AbstractType
      *
      * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractEntity class
      */
-    public function __construct(string $className)
+    public function __construct(private readonly string $className)
     {
-        $this->checkSubClass($className, AbstractEntity::class);
-        $this->className = $className;
+        $this->checkSubClass($this->className, AbstractEntity::class);
     }
 
     /**

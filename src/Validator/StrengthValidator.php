@@ -104,7 +104,7 @@ class StrengthValidator extends AbstractConstraintValidator
         try {
             return (string) $this->propertyAccessor->getValue($object, $path);
         } catch (NoSuchPropertyException $e) {
-            throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" provided for object "%s".', $path, \get_debug_type($object)), $e->getCode(), $e);
+            throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" for "%s".', $path, \get_debug_type($object)), $e->getCode(), $e);
         }
     }
 }

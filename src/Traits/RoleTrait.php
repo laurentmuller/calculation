@@ -33,7 +33,7 @@ trait RoleTrait
     #[Assert\Length(max: 25)]
     #[Assert\Choice([RoleInterface::ROLE_USER, RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_SUPER_ADMIN])]
     #[ORM\Column(length: 25, nullable: true)]
-    protected ?string $role = null;
+    private ?string $role = null;
 
     /**
      * Gets the role.

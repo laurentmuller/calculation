@@ -26,6 +26,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class CategoryRepository extends AbstractRepository
 {
     use GroupByTrait;
+
     /**
      * The filter type to display all categories.
      */
@@ -46,11 +47,6 @@ class CategoryRepository extends AbstractRepository
      */
     final public const GROUP_ALIAS = 'g';
 
-    /**
-     * Constructor.
-     *
-     * @param ManagerRegistry $registry The connections and entity managers registry
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);

@@ -43,11 +43,6 @@ class CustomerRepository extends AbstractRepository
      */
     final public const ZIP_CITY_FIELDS = ['zipCode', 'city'];
 
-    /**
-     * Constructor.
-     *
-     * @param ManagerRegistry $registry The connections and entity managers registry
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Customer::class);

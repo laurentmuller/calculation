@@ -22,7 +22,7 @@ trait LoggerTrait
     /**
      * The symfony style.
      */
-    protected ?SymfonyStyle $io = null;
+    private ?SymfonyStyle $io = null;
 
     /**
      * Returns whether verbosity is verbose (-v).

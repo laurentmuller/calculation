@@ -35,12 +35,12 @@ class CalculationsReport extends AbstractArrayReport
     /**
      * The minimum margin style.
      */
-    protected ?PdfStyle $marginStyle = null;
+    private ?PdfStyle $marginStyle = null;
 
     /**
      * The minimum margin.
      */
-    protected float $minMargin;
+    private float $minMargin;
 
     /**
      * Constructor.

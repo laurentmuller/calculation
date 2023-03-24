@@ -78,6 +78,16 @@ class CalculationTableGroups extends PdfTableBuilder
         return $table;
     }
 
+    private function addAmount(float $number, ?PdfStyle $style = null): self
+    {
+        return $this->add(text: FormatUtils::formatAmount($number), style: $style);
+    }
+
+    private function addPercent(float $number, ?PdfStyle $style = null): self
+    {
+        return $this->add(text: FormatUtils::formatPercent($number), style: $style);
+    }
+
     private function createColumns(): void
     {
         $columns = [
@@ -101,10 +111,10 @@ class CalculationTableGroups extends PdfTableBuilder
     {
         $this->startRow()
             ->add($group->getCode())
-            ->add(FormatUtils::formatAmount($group->getAmount()))
-            ->add(FormatUtils::formatPercent($group->getMargin()))
-            ->add(FormatUtils::formatAmount($group->getMarginAmount()))
-            ->add(FormatUtils::formatAmount($group->getTotal()))
+            ->addAmount($group->getAmount())
+            ->addPercent($group->getMargin())
+            ->addAmount($group->getMarginAmount())
+            ->addAmount($group->getTotal())
             ->endRow();
     }
 
@@ -113,10 +123,10 @@ class CalculationTableGroups extends PdfTableBuilder
         $style = PdfStyle::getHeaderStyle()->setFontRegular();
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.marginTotal'))
-            ->add(text: FormatUtils::formatAmount($calculation->getGroupsAmount()), style: $style)
-            ->add(text: FormatUtils::formatPercent($calculation->getGroupsMargin()), style: $style)
-            ->add(text: FormatUtils::formatAmount($calculation->getGroupsMarginAmount()), style: $style)
-            ->add(FormatUtils::formatAmount($calculation->getGroupsTotal()))
+            ->addAmount($calculation->getGroupsAmount(), $style)
+            ->addPercent($calculation->getGroupsMargin(), $style)
+            ->addAmount($calculation->getGroupsMarginAmount(), $style)
+            ->addAmount($calculation->getGroupsTotal())
             ->endRow();
     }
 }

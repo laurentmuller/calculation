@@ -85,7 +85,7 @@ class LogService implements ServiceSubscriberInterface
      */
     public function getFileName(): string
     {
-        return \str_replace('\/', \DIRECTORY_SEPARATOR, $this->fileName);
+        return FileUtils::normalizeDirectory($this->fileName);
     }
 
     /**

@@ -97,7 +97,15 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      */
     protected function getDefaultOptions(): array
     {
-        return [self::BASE_URI => self::HOST_NAME];
+        return [
+            self::BASE_URI => self::HOST_NAME,
+            self::QUERY => [
+                'language' => self::getAcceptLanguage(),
+                'access_key' => $this->key,
+                'output' => 'json',
+                'hostname' => 1,
+            ],
+        ];
     }
 
     /**
@@ -108,14 +116,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     private function doGetIpInfo(string $clientIp): ?array
     {
         try {
-            $query = [
-                'output' => 'json',
-                'access_key' => $this->key,
-                'language' => self::getAcceptLanguage(),
-            ];
-            $response = $this->requestGet($clientIp, [
-                self::QUERY => $query,
-            ]);
+            $response = $this->requestGet($clientIp);
             /** @psalm-var IpStackType $result */
             $result = $response->toArray();
             if (!$this->isValidResult($result)) {

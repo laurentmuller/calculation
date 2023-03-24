@@ -273,7 +273,6 @@ common:
   button_search: Rechercher
   button_show: Afficher
   button_table: Mode tabulaire
-  button_raw_data: Données brutes
   clone_description: '%description% - Copie'
   count: 'Nombre d''éléments : %count%'
   add_success: L'objet <b>%name%</b> a été ajouté avec succès.
@@ -695,6 +694,7 @@ openweather:
     position: Position
     position_lat: Latitude
     position_lon: Longitude
+    position_title: Afficher la position sur Google Maps
     pressure: Pression
     rain: Précipitations
     snow: Neige
@@ -710,6 +710,7 @@ openweather:
     temp_night: Température de nuit
     wind: Vent
     wind_deg: Direction
+    wind_deg_title: 'Direction du vent : %degrees%'
     wind_gust: Rafales
     wind_speed: Vitesse
     current_weather: Prévision actuelle
@@ -1413,3 +1414,7 @@ background:
   success: Succès
   warning: Avertissement
   white: Blanc
+dialog_raw_data:
+  title: Données brutes
+  tooltip: Afficher les données brutes
+  empty: Aucune donnée brute à afficher.

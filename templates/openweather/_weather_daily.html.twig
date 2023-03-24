@@ -1,15 +1,7 @@
 {% import 'openweather/_weather_macro.html.twig' as tools %}
 {# title #}
-<div class="row bg-secondary text-white py-1 m-0">
-    <div class="col-lg-10 px-2">
-        <h6 class="mb-0">{{ 'counters.weather_daily'|trans({count: daily.cnt}) }}</h6>
-    </div>
-    <div class="col-lg-2 px-2 text-lg-right d-print-none">
-        <a href="#" class="text-white" data-toggle="modal" data-target="#daily_data_modal" title="{{ 'common.button_raw_data'|trans }}">
-            <i class="fa-solid fa-laptop-code"></i>
-        </a>
-    </div>
-</div>
+{% set title = 'counters.weather_daily'|trans({count: daily.cnt}) %}
+{{- tools.title(title, 'daily_data_modal') -}}
 {# table #}
 <div class="table-responsive">
     <table class="table table-sm mb-0">
@@ -38,7 +30,9 @@
                     <br>
                     <span title={{ 'openweather.fields.wind'|trans }}>{{ tools.value_speed(data.speed, units_speed) }}</span>
                     <span>, </span>
-                    <span title="{{ 'openweather.fields.wind_deg'|trans }}">{{ data.deg_description }}</span><br>
+                    <span title="{{ 'openweather.fields.wind_deg'|trans }}">
+                        {{- tools.value_wind(data.deg_description, data.deg, units_degree) -}}
+                    </span><br>
                     <span title="{{ 'openweather.fields.pressure'|trans }}">{{ tools.value_pressure(data.pressure, units_pressure) }}</span>
                     <span> - </span>
                     <span title="{{ 'openweather.fields.humidity'|trans }}">{{ tools.value_humidity(data.humidity, units_percent) }}</span>
@@ -49,4 +43,4 @@
         </tbody>
     </table>
 </div>
-{% include 'dialog/raw_data_dialog.html.twig' with {'id': 'daily_data_modal', 'raw_data': daily} %}
+{% include 'dialog/dialog_raw_data.html.twig' with {'id': 'daily_data_modal', 'description': title, 'raw_data': daily} %}

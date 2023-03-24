@@ -22,7 +22,7 @@ trait DisableListenerTrait
     /**
      * The enabled state.
      */
-    protected bool $enabled = true;
+    private bool $enabled = true;
 
     /**
      * {@inheritdoc}

@@ -40,7 +40,13 @@ function handleError(response) {
  */
 function translate(form, notification) {
     'use strict';
+    // in progress ?
     const $form = $(form);
+    if ($form.data('changing')) {
+        $form.removeData('changing');
+        return;
+    }
+    const $from = $('#from');
     const $buttonSubmit = $form.find(':submit');
     const $buttonCopy = $('.btn-copy');
     const $labelDetected = $('#detected');
@@ -52,16 +58,24 @@ function translate(form, notification) {
 
     // build parameters
     const data = {
-        'from': $('#from').val(),
+        'from': $from.val(),
         'to': $('#to').val(),
         'text': $('#text').val().trim(),
         'service': $('#service').val()
     };
 
+    // abort
+    if (form.jqXHR) {
+        form.jqXHR.abort();
+        form.jqXHR = null;
+    }
+
     // call
     $.ajaxSetup({global: false});
     const url = $form.data('ajax');
-    $.post(url, data, function (response) {
+    form.jqXHR = $.post(url, data, function (response) {
+        // remove
+        form.jqXHR = null;
         // ok?
         if (response.result) {
             const data = response.data;
@@ -69,11 +83,16 @@ function translate(form, notification) {
             $buttonCopy.toggleDisabled(false);
 
             // update
-            if ($('#from').val()) {
+            if ($from.val()) {
                 $labelDetected.text('');
             } else {
                 const label = $form.data('detected').replace('%name%', data.from.name);
                 $labelDetected.text(label);
+                if (data.from.tag && $from.val() !== data.from.tag) {
+                    $form.data('changing', true);
+                    $from.val(data.from.tag).trigger('change');
+                    handleSelection();
+                }
             }
 
             // message
@@ -245,8 +264,11 @@ function handleService() {
  */
 (function ($) {
     'use strict';
-    // initialize select
+    const $text = $('#text');
+    const $from = $('#from');
     const $fromTo = $('#from, #to');
+
+    // initialize select
     $fromTo.initSelect2();
 
     // clipboard
@@ -269,7 +291,7 @@ function handleService() {
     $fromTo.on('input', function () {
         handleSelection();
     }).on('change', function () {
-        $(this).createTimer(handleTextChange, 250);
+        $(this).createTimer(handleTextChange, 500);
     });
     $('#text, #result').on('focus', function () {
         $(this).trigger('select');
@@ -277,7 +299,7 @@ function handleService() {
     $('#service').on('input', function () {
         handleService();
     });
-    $('#text').on('keydown', function () {
+    $text.on('keydown', function () {
         $(this).createTimer(handleTextChange, 500);
     });
 
@@ -297,5 +319,5 @@ function handleService() {
         }
     };
     $('#edit-form').initValidator(options);
-    $('#text').trigger('focus');
+    $text.trigger('focus');
 }(jQuery));

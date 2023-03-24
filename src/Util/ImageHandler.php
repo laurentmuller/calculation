@@ -27,7 +27,7 @@ class ImageHandler implements ImageExtensionInterface
      *
      * @var int[]
      */
-    protected array $colors = [];
+    private array $colors = [];
 
     /**
      * Constructor.

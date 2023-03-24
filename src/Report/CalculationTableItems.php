@@ -36,7 +36,6 @@ class CalculationTableItems extends PdfGroupTableBuilder
     private const INDENT = 4;
 
     private readonly Calculation $calculation;
-
     private readonly TranslatorInterface $translator;
 
     /**
@@ -103,13 +102,9 @@ class CalculationTableItems extends PdfGroupTableBuilder
      * @param float     $amount     the amount to output
      * @param ?PdfStyle $errorStyle the error style to use when amount is equal to 0
      */
-    protected function addAmount(float $amount, ?PdfStyle $errorStyle = null): self
+    private function addAmount(float $amount, ?PdfStyle $errorStyle = null): self
     {
-        $text = FormatUtils::formatAmount($amount);
-        $style = empty($amount) ? $errorStyle : null;
-        $this->add(text: $text, style: $style);
-
-        return $this;
+        return $this->add(text: FormatUtils::formatAmount($amount), style: empty($amount) ? $errorStyle : null);
     }
 
     /**
@@ -120,7 +115,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
      * @param PdfStyle        $defaultStyle   the style to use if item is not duplicate
      * @param PdfStyle        $errorStyle     the style to use when item is duplicate
      */
-    protected function addDescription(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): self
+    private function addDescription(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): self
     {
         $style = \in_array($item, $duplicateItems, true) ? $errorStyle : $defaultStyle;
         $this->add(text: $item->getDescription(), style: $style);
@@ -169,10 +164,10 @@ class CalculationTableItems extends PdfGroupTableBuilder
      */
     private function outputItem(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): void
     {
-        $this->startRow();
-        $this->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle);
-        $this->add($item->getUnit());
-        $this->addAmount($item->getPrice(), $errorStyle)
+        $this->startRow()
+            ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
+            ->add($item->getUnit())
+            ->addAmount($item->getPrice(), $errorStyle)
             ->addAmount($item->getQuantity(), $errorStyle)
             ->addAmount($item->getTotal())
             ->endRow();
@@ -182,7 +177,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
     {
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.itemsTotal'), 4)
-            ->add(FormatUtils::formatAmount($total))
+            ->addAmount($total)
             ->endRow();
     }
 }

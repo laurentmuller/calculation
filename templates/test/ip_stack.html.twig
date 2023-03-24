@@ -22,8 +22,8 @@
 <div class="row">
     <div class="col-lg-10 mt-1">{{ parent() }}</div>
     <div class="col-lg-2 text-lg-right d-print-none">
-        <a href="#" data-toggle="modal" data-target="#raw_data_modal" title="{{ 'common.button_raw_data'|trans }}">
-            <i class="fa-solid fa-laptop-code"></i>
+        <a href="#" data-toggle="modal" data-target="#raw_data_modal" title="{{ 'common.button_raw_data_title'|trans }}">
+            <i class="fa-solid fa-code"></i>
         </a>
     </div>
 </div>
@@ -43,7 +43,7 @@
     {{ _self.output_row('Position', results.position_dms|default(false)) }}
     </tbody>
 </table>
-{% include 'dialog/raw_data_dialog.html.twig' with {'raw_data': results} %}
+{% include 'dialog/dialog_raw_data.html.twig' with {'raw_data': results, 'description': 'test.ip_stack'|trans} %}
 {% endblock %}
 {# footer #}
 {% block card_footer -%}

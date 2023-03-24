@@ -22,21 +22,21 @@ trait ModelTrait
      *
      * @var class-string<Day>
      */
-    protected string $dayModel = Calendar::DEFAULT_DAY_MODEL;
+    private string $dayModel = Calendar::DEFAULT_DAY_MODEL;
 
     /**
      * The month model class.
      *
      * @var class-string<Month>
      */
-    protected string $monthModel = Calendar::DEFAULT_MONTH_MODEL;
+    private string $monthModel = Calendar::DEFAULT_MONTH_MODEL;
 
     /**
      * The week model class.
      *
      * @var class-string<Week>
      */
-    protected string $weekModel = Calendar::DEFAULT_WEEK_MODEL;
+    private string $weekModel = Calendar::DEFAULT_WEEK_MODEL;
 
     /**
      * Gets the day model class.
@@ -111,7 +111,7 @@ trait ModelTrait
     }
 
     /**
-     * Checks if the model class name.
+     * Checks the model class name.
      *
      * @template T of AbstractCalendarItem
      *
@@ -120,7 +120,7 @@ trait ModelTrait
      *
      * @return class-string<T> the class name if no exception
      *
-     * @throws CalendarException if the given class name does not exist
+     * @throws CalendarException if the given class name does not exist or is not an AbstractCalendarItem class
      */
     protected function checkClass(?string $className, string $defaultClass): string
     {

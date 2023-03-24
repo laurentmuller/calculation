@@ -23,51 +23,48 @@
 {% macro row_no_sep(name, value, unit='') %}
     {{ _self.row_unit(name, value|number_format(1), unit, '') }}
 {% endmacro %}
+{# parameters #}
+{% set main = current.main %}
+{% set wind = current.wind %}
+{% set rain = current.rain|default(false) %}
+{% set snow = current.snow|default(false) %}
+{% set coord = current.coord %}
 {# title #}
-<div class="row bg-secondary text-white py-1 m-0">
-    <div class="col-lg-10 px-2">
-        <h6 class="mb-0">{{ 'openweather.fields.current'|trans }}</h6>
-    </div>
-    <div class="col-lg-2 px-2 text-lg-right d-print-none">
-        <a href="#" class="text-white" data-toggle="modal" data-target="#current_data_modal" title="{{ 'common.button_raw_data'|trans }}">
-            <i class="fa-solid fa-laptop-code"></i>
-        </a>
-    </div>
-</div>
+{%- set title = 'openweather.fields.current'|trans -%}
+{{ tools.title(title, 'current_data_modal') }}
 {# table #}
 <table class="table table-sm mb-0">
     <tbody>
         {{ _self.row_title('openweather.fields.temp') }}
-        {{ _self.row_temp('openweather.fields.temp_current', current.main.temp, units_temp) }}
-        {{ _self.row_temp('openweather.fields.temp_feels_like', current.main.feels_like, units_temp) }}
-        {{ _self.row_temp('openweather.fields.temp_min', current.main.temp_min, units_temp) }}
-        {{ _self.row_temp('openweather.fields.temp_max', current.main.temp_max, units_temp) }}
+        {{ _self.row_temp('openweather.fields.temp_current', main.temp, units_temp) }}
+        {{ _self.row_temp('openweather.fields.temp_feels_like', main.feels_like, units_temp) }}
+        {{ _self.row_temp('openweather.fields.temp_min', main.temp_min, units_temp) }}
+        {{ _self.row_temp('openweather.fields.temp_max', main.temp_max, units_temp) }}
 
         {{ _self.row_title('openweather.fields.wind') }}
-        {{ _self.row_unit('openweather.fields.wind_speed', current.wind.speed, units_speed) }}
-        {{ _self.row_text('openweather.fields.wind_deg', current.wind.deg_description ~ ' (' ~ tools.value_no_sep(current.wind.deg, units_degree) ~ ')') }}
-
-        {% if current.wind.gust|default(false) %}
-            {{ _self.row_unit('openweather.fields.wind_gust', current.wind.gust, units_speed) }}
+        {{ _self.row_unit('openweather.fields.wind_speed', wind.speed, units_speed) }}
+        {{ _self.row_text('openweather.fields.wind_deg', tools.value_wind(wind.deg_description, wind.deg, units_degree)) }}
+        {% if wind.gust|default(false) %}
+            {{ _self.row_unit('openweather.fields.wind_gust', wind.gust, units_speed) }}
         {% endif %}
 
-        {% if current.rain|default(false) %}
+        {% if rain %}
             {{ _self.row_title('openweather.fields.rain') }}
-            {% if current.rain['1h']|default(false) %}
-                {{ _self.row_volume('openweather.fields.last_hour', current.rain['1h'], units_volume) }}
+            {% if rain['1h']|default(false) %}
+                {{ _self.row_volume('openweather.fields.last_hour', rain['1h'], units_volume) }}
             {% endif %}
-            {% if current.rain['3h']|default(false) %}
-                {{ _self.row_volume('openweather.fields.last_3_hours', current.rain['3h'], units_volume) }}
+            {% if rain['3h']|default(false) %}
+                {{ _self.row_volume('openweather.fields.last_3_hours', rain['3h'], units_volume) }}
             {% endif %}
         {% endif %}
 
-        {% if current.snow|default(false) %}
+        {% if snow %}
             {{ _self.row_title('openweather.fields.snow') }}
-            {% if current.snow['1h']|default(false) %}
-                {{ _self.row_volume('openweather.fields.last_hour', current.snow['1h'], units_volume) }}
+            {% if snow['1h']|default(false) %}
+                {{ _self.row_volume('openweather.fields.last_hour', snow['1h'], units_volume) }}
             {% endif %}
-            {% if current.snow['3h']|default(false) %}
-                {{ _self.row_volume('openweather.fields.last_3_hours', current.snow['3h'], units_volume) }}
+            {% if snow['3h']|default(false) %}
+                {{ _self.row_volume('openweather.fields.last_3_hours', snow['3h'], units_volume) }}
             {% endif %}
         {% endif %}
 
@@ -76,15 +73,15 @@
         {{ _self.row_text('openweather.fields.sunset', current.sys.sunset_formatted) }}
 
         {{ _self.row_title('openweather.fields.miscellaneous') }}
-        {{ _self.row_unit('openweather.fields.pressure', current.main.pressure, units_pressure) }}
-        {{ _self.row_no_sep('openweather.fields.humidity', current.main.humidity, units_percent) }}
+        {{ _self.row_unit('openweather.fields.pressure', main.pressure, units_pressure) }}
+        {{ _self.row_no_sep('openweather.fields.humidity', main.humidity, units_percent) }}
         {{ _self.row_no_sep('openweather.fields.clouds', current.clouds.all, units_percent) }}
 
-        {%- set href = 'https://www.google.ch/maps/place/' ~ current.coord.lat ~ ',' ~ current.coord.lon -%}
-        {%- set text = current.coord.lat_dms ~ ' / ' ~ current.coord.lon_dms -%}
-        {%- set raw = '<a href="' ~ href ~ '" target="_blank" rel="noopener noreferrer">' ~ text ~ '</a>' -%}
+        {%- set href = 'https://www.google.ch/maps/place/' ~ coord.lat ~ ',' ~ coord.lon -%}
+        {%- set text = coord.lat_dms ~ ' / ' ~ coord.lon_dms -%}
+        {%- set raw = '<a href="' ~ href ~ '" title="' ~ 'openweather.fields.position_title'|trans ~ '" target="_blank" rel="noopener noreferrer">' ~ text ~ '</a>' -%}
         {{ _self.row_text('openweather.fields.position', raw) }}
         {{ _self.row_text('openweather.fields.locale_date', current.dt_date_time_locale) }}
     </tbody>
 </table>
-{% include 'dialog/raw_data_dialog.html.twig' with {'id': 'current_data_modal', 'raw_data': current} %}
+{% include 'dialog/dialog_raw_data.html.twig' with {'id': 'current_data_modal', 'description': title, 'raw_data': current} %}

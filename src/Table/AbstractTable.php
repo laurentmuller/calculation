@@ -39,7 +39,7 @@ abstract class AbstractTable implements SortModeInterface
      *
      * @var array<Column>
      */
-    protected ?array $columns = null;
+    private ?array $columns = null;
 
     /**
      * The cookie and session prefix.

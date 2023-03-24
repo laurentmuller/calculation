@@ -46,52 +46,52 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      *
      * @var array<int, string>
      */
-    protected ?array $monthNames = null;
+    private ?array $monthNames = null;
 
     /**
      * Array with instances of Month objects.
      *
      * @var Month[]
      */
-    protected array $months;
+    private array $months = [];
 
     /**
      * The short month names.
      *
      * @var array<int, string>
      */
-    protected ?array $monthShortNames = null;
+    private ?array $monthShortNames = null;
 
     /**
      * The today day.
      */
-    protected ?Day $today = null;
+    private ?Day $today = null;
 
     /**
      * The full name of the week days.
      *
      * @var array<int, string>
      */
-    protected ?array $weekNames = null;
+    private ?array $weekNames = null;
 
     /**
      * Array with instances of Week objects.
      *
      * @var Week[]
      */
-    protected array $weeks;
+    private array $weeks = [];
 
     /**
      * The short name of the week days.
      *
      * @var array<int, string>
      */
-    protected ?array $weekShortNames = null;
+    private ?array $weekShortNames = null;
 
     /**
      * Year for calendar.
      */
-    protected ?int $year = null;
+    private ?int $year = null;
 
     /**
      * Constructor.

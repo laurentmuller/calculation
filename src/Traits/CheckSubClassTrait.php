@@ -18,7 +18,7 @@ namespace App\Traits;
 trait CheckSubClassTrait
 {
     /**
-     * Check if the given class name is a subclass of the given target class name.
+     * Check if the given source is a classs or a subclass of the given target class name.
      *
      * @throws \InvalidArgumentException if check failed
      *
@@ -27,7 +27,7 @@ trait CheckSubClassTrait
     public function checkSubClass(string|object $source, string $target): void
     {
         if (!\is_a($source, $target, true) && !\is_subclass_of($source, $target)) {
-            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given', $target, \get_debug_type($source)));
+            throw new \InvalidArgumentException(\sprintf('Expected argument of type "%s", "%s" given.', $target, \get_debug_type($source)));
         }
     }
 }

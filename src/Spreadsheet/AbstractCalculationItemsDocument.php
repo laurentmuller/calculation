@@ -53,7 +53,7 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
     public function __construct(AbstractController $controller, array $entities, string $title)
     {
         parent::__construct($controller, $entities);
-        $this->title = $title;
+        $this->setTitle($title);
     }
 
     /**
@@ -63,7 +63,7 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        $this->start((string) $this->title, true);
+        $this->start((string) $this->getTitle(), true);
         $this->setForeground(6, Color::COLOR_RED)
             ->setWrapText(6);
         $row = $this->setHeaderValues([

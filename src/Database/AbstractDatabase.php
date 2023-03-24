@@ -29,12 +29,12 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      *
      * @var array<string, \SQLite3Stmt>
      */
-    protected array $statements = [];
+    private array $statements = [];
 
     /**
      * The transaction state.
      */
-    protected bool $transaction = false;
+    private bool $transaction = false;
 
     /**
      * Instantiates and opens the database.

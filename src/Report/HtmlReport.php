@@ -19,19 +19,8 @@ use App\Pdf\Html\HtmlParser;
  */
 class HtmlReport extends AbstractReport
 {
-    /**
-     * the HTML content.
-     */
     private ?string $content = null;
-
-    /**
-     * The left margin.
-     */
     private ?float $leftMargin = null;
-
-    /**
-     * The right margin.
-     */
     private ?float $rightMargin = null;
 
     public function Footer(): void

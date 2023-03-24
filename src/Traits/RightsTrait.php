@@ -40,7 +40,7 @@ trait RightsTrait
      * The overwritten rights flag.
      */
     #[ORM\Column(options: ['default' => false])]
-    protected bool $overwrite = false;
+    private bool $overwrite = false;
 
     /**
      * The rights.
@@ -48,7 +48,7 @@ trait RightsTrait
      * @var ?int[]
      */
     #[ORM\Column(type: \Doctrine\DBAL\Types\Types::JSON, nullable: true)]
-    protected ?array $rights = null;
+    private ?array $rights = null;
 
     /**
      * @param string $name the property name

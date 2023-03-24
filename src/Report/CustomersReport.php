@@ -27,9 +27,6 @@ use App\Util\StringUtils;
  */
 class CustomersReport extends AbstractArrayReport
 {
-    /**
-     * The other group name.
-     */
     private readonly string $other;
 
     /**

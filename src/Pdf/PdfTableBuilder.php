@@ -89,7 +89,7 @@ class PdfTableBuilder
      * @param PdfDocument $parent    the parent document to print in
      * @param bool        $fullWidth a value indicating if the table take all the printable width
      */
-    public function __construct(private PdfDocument $parent, private bool $fullWidth = true)
+    public function __construct(private readonly PdfDocument $parent, private readonly bool $fullWidth = true)
     {
         $this->border = PdfBorder::all();
     }

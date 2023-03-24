@@ -26,11 +26,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProductRepository extends AbstractCategoryItemRepository
 {
-    /**
-     * Constructor.
-     *
-     * @param ManagerRegistry $registry The connections and entity managers registry
-     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);

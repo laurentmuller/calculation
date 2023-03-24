@@ -29,9 +29,6 @@ use App\Util\FormatUtils;
  */
 class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface
 {
-    /**
-     * The started page.
-     */
     private bool $started = false;
 
     /**

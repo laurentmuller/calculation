@@ -28,7 +28,7 @@ class CalculationsDocument extends AbstractArrayDocument
      */
     protected function doRender(array $entities): bool
     {
-        $title = $this->title ?? 'calculation.list.title';
+        $title = $this->getTitle() ?? 'calculation.list.title';
         $this->start($title, true);
         $row = $this->setHeaderValues([
             'calculation.fields.id' => Alignment::HORIZONTAL_CENTER,

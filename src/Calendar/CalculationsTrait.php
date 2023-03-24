@@ -22,7 +22,7 @@ trait CalculationsTrait
     /**
      * @var Calculation[]
      */
-    protected array $calculations = [];
+    private array $calculations = [];
 
     /**
      * Add a calculation.

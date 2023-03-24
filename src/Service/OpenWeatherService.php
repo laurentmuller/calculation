@@ -29,6 +29,16 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
 class OpenWeatherService extends AbstractHttpClientService
 {
     /**
+     * The number of daily results to return.
+     */
+    public const DEFAULT_COUNT = 5;
+
+    /**
+     * The number of search results to return.
+     */
+    public const DEFAULT_LIMIT = 15;
+
+    /**
      * The imperial degree.
      */
     final public const DEGREE_IMPERIAL = '°F';
@@ -169,7 +179,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @psalm-return array{current: array|false, forecast: array|false, daily: array|false}
      */
-    public function all(int $id, int $count = -1, string $units = self::UNIT_METRIC): array
+    public function all(int $id, int $count = self::DEFAULT_COUNT, string $units = self::UNIT_METRIC): array
     {
         return [
             'current' => $this->current($id, $units),
@@ -205,7 +215,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|false the current conditions if success; false on error
      */
-    public function daily(int $id, int $count = -1, string $units = self::UNIT_METRIC): array|false
+    public function daily(int $id, int $count = self::DEFAULT_COUNT, string $units = self::UNIT_METRIC): array|false
     {
         $query = [
             'id' => $id,
@@ -227,7 +237,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|false the current conditions if success; false on error
      */
-    public function forecast(int $id, int $count = -1, string $units = self::UNIT_METRIC): array|false
+    public function forecast(int $id, int $count = self::DEFAULT_COUNT, string $units = self::UNIT_METRIC): array|false
     {
         $query = [
             'id' => $id,
@@ -357,7 +367,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @pslam-return array<int, OpenWeatherCityType>
      */
-    public function search(string $name, string $units = self::UNIT_METRIC, int $limit = 25): array
+    public function search(string $name, string $units = self::UNIT_METRIC, int $limit = self::DEFAULT_LIMIT): array
     {
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units, 'limit' => $limit]);
 

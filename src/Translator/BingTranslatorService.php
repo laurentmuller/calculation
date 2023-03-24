@@ -148,16 +148,15 @@ class BingTranslatorService extends AbstractTranslatorService
      */
     protected function getDefaultOptions(): array
     {
-        $headers = [
-            'Accept-language' => self::getAcceptLanguage(),
-            'Ocp-Apim-Subscription-Key' => $this->key,
-        ];
-        $query = ['api-version' => self::API_VERSION];
-
         return [
             self::BASE_URI => self::HOST_NAME,
-            self::HEADERS => $headers,
-            self::QUERY => $query,
+            self::HEADERS => [
+                'Accept-language' => self::getAcceptLanguage(),
+                'Ocp-Apim-Subscription-Key' => $this->key,
+            ],
+            self::QUERY => [
+                'api-version' => self::API_VERSION,
+            ],
         ];
     }
 

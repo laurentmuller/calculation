@@ -98,7 +98,7 @@ final class SymfonyInfoService
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
     ) {
-        $this->projectDir = FileUtils::normalize($projectDir);
+        $this->projectDir = FileUtils::normalizeDirectory($projectDir);
     }
 
     /**
@@ -405,12 +405,12 @@ final class SymfonyInfoService
     {
         if (null !== $baseDir) {
             try {
-                return FileUtils::makePathRelative($path, $baseDir);
+                return FileUtils::makePathRelative($path, $baseDir, true);
             } catch (\InvalidArgumentException) {
             }
         }
 
-        return \str_replace(\DIRECTORY_SEPARATOR, '/', $path);
+        return FileUtils::normalizeDirectory($path);
     }
 
     /**

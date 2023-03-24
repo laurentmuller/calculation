@@ -17,7 +17,7 @@ namespace App\Pivot\Aggregator;
  */
 class CountAggregator extends AbstractAggregator
 {
-    protected int $result = 0;
+    private int $result = 0;
 
     /**
      * {@inheritdoc}

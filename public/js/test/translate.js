@@ -32,6 +32,19 @@ function handleError(response) {
     notify(Toaster.NotificationTypes.DANGER, message);
 }
 
+
+/**
+ * Handle from and to input event.
+ */
+function handleSelection() {
+    'use strict';
+    // update exchange button.
+    const from = $('#from').getSelectedOption().index();
+    const to = $('#to').getSelectedOption().index();
+    const state = from === 0 || from - 1 === to;
+    $('.btn-exchange').toggleDisabled(state);
+}
+
 /**
  * Translate.
  *
@@ -53,8 +66,8 @@ function translate(form, notification) {
     const $textResult = $('#result');
 
     // wait
-    $buttonSubmit.toggleDisabled(true);
     $buttonCopy.toggleDisabled(true);
+    $buttonSubmit.toggleDisabled(true);
 
     // build parameters
     const data = {
@@ -175,18 +188,6 @@ function handleTextChange() {
         $text.data('old-value', newText);
         translate($('#edit-form')[0], false);
     }
-}
-
-/**
- * Handle from and to input event.
- */
-function handleSelection() {
-    'use strict';
-    // update exchange button.
-    const from = $('#from').getSelectedOption().index();
-    const to = $('#to').getSelectedOption().index();
-    const state = from === 0 || from - 1 === to;
-    $('.btn-exchange').toggleDisabled(state);
 }
 
 /**

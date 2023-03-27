@@ -393,11 +393,8 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     {
         $position = 0;
         foreach ($this->categories as $category) {
-            if ($category->getPosition() !== $position) {
-                $category->setPosition($position);
-            }
-            $category->updatePositions();
-            ++$position;
+            $category->setPosition($position++)
+                ->updatePositions();
         }
 
         return $this;

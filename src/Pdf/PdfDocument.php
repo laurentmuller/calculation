@@ -960,6 +960,11 @@ class PdfDocument extends \FPDF
         parent::Write($h, $this->cleanText($txt), $link);
     }
 
+    protected function _endobj(): void
+    {
+        $this->_put('endobj');
+    }
+
     /**
      * @psalm-param PdfBookmarkType $bookmark
      */
@@ -975,7 +980,7 @@ class PdfDocument extends \FPDF
         $pageN = $this->PageInfo[$bookmark['page']]['n'];
         $this->_putParams('/Dest [%d 0 R /XYZ 0 %.2F null]', $pageN, $bookmark['y']);
         $this->_put('/Count 0>>');
-        $this->_put('endobj');
+        $this->_endobj();
     }
 
     protected function _putBookmarks(): void
@@ -1011,7 +1016,7 @@ class PdfDocument extends \FPDF
         $this->bookmarkRoot = $this->n;
         $this->_putParams('<</Type /Outlines /First %d 0 R', $n);
         $this->_putParams('/Last %d 0 R>>', $n + $lastUsedReferences[0]);
-        $this->_put('endobj');
+        $this->_endobj();
     }
 
     protected function _putcatalog(): void
@@ -1052,25 +1057,6 @@ class PdfDocument extends \FPDF
         }
 
         return false;
-    }
-
-    /**
-     * Clean the given text.
-     *
-     * @param ?string $str the text to convert
-     *
-     * @return ?string the converted text
-     */
-    protected function cleanText(?string $str): ?string
-    {
-        try {
-            if (null !== $str && false !== $result = \iconv('UTF-8', 'ISO-8859-1', $str)) {
-                return $result;
-            }
-        } catch (\Exception) {
-        }
-
-        return $str;
     }
 
     private function _outputIndexDot(
@@ -1148,5 +1134,24 @@ class PdfDocument extends \FPDF
         );
 
         return $text_size;
+    }
+
+    /**
+     * Clean the given text.
+     *
+     * @param ?string $str the text to convert
+     *
+     * @return ?string the converted text
+     */
+    private function cleanText(?string $str): ?string
+    {
+        if (null === $str || '' === $str) {
+            return $str;
+        }
+        if (\is_string($result = \iconv('UTF-8', 'ISO-8859-1', $str))) {
+            return $result;
+        }
+
+        return $str;
     }
 }

@@ -40,7 +40,9 @@ trait PositionTrait
      */
     public function setPosition(int $position): static
     {
-        $this->position = $position;
+        if ($this->position !== $position) {
+            $this->position = $position;
+        }
 
         return $this;
     }

@@ -369,12 +369,8 @@ class UpdateAssetsCommand extends Command
     {
         $name = $plugin['name'];
         $version = $plugin['version'];
-        if (!empty($plugin['source'])) {
-            $source = $plugin['source'];
-        }
-        if (!empty($plugin['format'])) {
-            $format = $plugin['format'];
-        }
+        $source = $plugin['source'] ?? $source;
+        $format = $plugin['format'] ?? $format;
         $search = ['{source}', '{name}', '{version}', '{file}'];
         $replace = [$source, $name, $version, $file];
 

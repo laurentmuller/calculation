@@ -201,12 +201,8 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
     public function updatePositions(): self
     {
         $position = 0;
-
         foreach ($this->items as $item) {
-            if ($item->getPosition() !== $position) {
-                $item->setPosition($position);
-            }
-            ++$position;
+            $item->setPosition($position++);
         }
 
         return $this;

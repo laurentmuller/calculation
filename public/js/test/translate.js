@@ -87,8 +87,6 @@ function translate(form, notification) {
     $.ajaxSetup({global: false});
     const url = $form.data('ajax');
     form.jqXHR = $.post(url, data, function (response) {
-        // remove
-        form.jqXHR = null;
         // ok?
         if (response.result) {
             const data = response.data;
@@ -128,6 +126,7 @@ function translate(form, notification) {
     }).always(function () {
         $buttonSubmit.toggleDisabled(false);
         $.ajaxSetup({global: true});
+        form.jqXHR = null;
     });
 }
 
@@ -225,15 +224,12 @@ function handleService() {
     $.post(url, data, function (response) {
         const $to = $('#to');
         const $from = $('#from');
-
         // save values
         const oldTo = $to.val();
         const oldFrom = $from.val();
-
         // clear
         $to.empty();
         $from.find('option').not(':first').remove();
-
         if (response.result) {
             // add options
             let option;

@@ -14,17 +14,18 @@
 {# parameters #}
 {%- set icon = icon|default(ICON_EDIT) -%}
 {%- set form_prefix = form_prefix|default('edit') -%}
+{%- set dialog_id = form_prefix ~ '_modal' -%}
 {%- set add_title = add_title|default('common.button_add'|trans) -%}
 {%- set edit_title = edit_title|default('common.button_edit'|trans) -%}
 {%- set form_attr = form_attr|default({}) -%}
 {# modal #}
-<div id="{{ form_prefix }}_modal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
+<div id="{{ dialog_id }}" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
        <div class="modal-content">
             <form id="{{ form_prefix }}_form" autocomplete="off" data-add="{{ add_title }}" data-edit="{{ edit_title }}"{{ _self.attributes(form_attr) }}>
                 <div class="modal-header cursor-move">
                     <h5 class="modal-title">{{ icon(icon) }}&nbsp;<span class="dialog-title">{{ edit_title }}</span></h5>
-                    {{ button_close_modal() }}
+                    {{- button_close_modal(true, 'common.button_close', dialog_id) -}}
                 </div>
                 <div class="modal-body">
                     {% block modal_body %}{% endblock %}

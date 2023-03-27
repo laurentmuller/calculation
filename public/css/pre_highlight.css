@@ -3,37 +3,33 @@
 /**
  * highlight
  */
+.pre-scrollable.pre-scrollable-highlight {
+    background-color: #18171B;
+    padding: 0.5rem;
+}
+
 pre.highlight {
     margin: 0;
     white-space: pre-wrap;
+    background-color: #18171B;
 }
+
 pre.highlight-small {
     font-size: 12px;
 }
+
 pre.highlight .variable {
-    color: darkgreen;
-}
-pre.highlight .number {
-    color: blue;
-}
-pre.highlight .string {
-    color: green;
-}
-pre.highlight .other {
-    color: #FF8400;
-}
-/**
- * Dark theme
- */
-body.dark pre.highlight {
-    color: white;
-}
-body.dark pre.highlight .variable {
     color: #56DB3A;
 }
-body.dark pre.highlight .number {
+
+pre.highlight .number {
     color: #1299DA;
 }
-body.dark pre.highlight .string {
-    color: #09A63E;
+
+pre.highlight .string {
+    color: #56DB3A;
+}
+
+pre.highlight .other {
+    color: #FF8400;
 }

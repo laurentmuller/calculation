@@ -60,8 +60,8 @@ services:
             - '../src/Pdf'
             - '../src/Report'
             - '../src/Spreadsheet'
-            - '../src/Tests'
             - '../src/Traits'
+            - '../src/Util'
             - '../src/Kernel.php'
 
     # make public to use with vich_uploader

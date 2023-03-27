@@ -1177,7 +1177,7 @@ test:
   recaptcha: reCAPTCHA
   tree_view: Tree View
   use_notification: Utiliser une notification.
-  ip_stack: Addresse IP
+  ip_stack: Adresse IP
 theme:
   title: Thème
   success: Le thème <b>%name%</b> a été sélectionné avec succès.

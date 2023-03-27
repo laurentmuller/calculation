@@ -358,7 +358,8 @@ class BitSet implements \Stringable
     /**
      * Apply a logical operation.
      *
-     * @param callable(int, int): int $callable
+     * @param BitSet                  $other    the other bitset to apply logical operation
+     * @param callable(int, int): int $callable the function to apply for each word
      */
     private function applyLogical(self $other, callable $callable): self
     {
@@ -377,7 +378,9 @@ class BitSet implements \Stringable
     /**
      * Apply  a function to the given range.
      *
-     * @param callable(int): self $callable
+     * @param int                 $fromIndex the start index (inclusive)
+     * @param int                 $toIndex   the end index (exclusive)
+     * @param callable(int): self $callable  the function to apply to each bit
      */
     private function applyRange(int $fromIndex, int $toIndex, callable $callable): self
     {

@@ -80,3 +80,9 @@
 {% block stylesheets %}
 {{ asset_css('css/open_weather.css') }}
 {% endblock %}
+{# javascript #}
+{% block javascripts %}
+    {{ parent() }}
+    {{ asset_js('js/vendor/clipboard/clipboard.js') }}
+    {{ asset_js('js/test/open-weather.js') }}
+{% endblock %}

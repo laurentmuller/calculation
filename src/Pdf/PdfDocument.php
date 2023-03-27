@@ -139,16 +139,11 @@ class PdfDocument extends \FPDF
     private ?string $title = null;
 
     /**
-     * Indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true).
-     */
-    private bool $titleUTF8 = false;
-
-    /**
      * Constructor.
      *
      * @param PdfDocumentOrientation $orientation the page orientation
      * @param PdfDocumentUnit        $unit        the user unit
-     * @param PdfDocumentSize        $size        the document size or an array containing the width and the height (expressed in the user unit)
+     * @param PdfDocumentSize        $size        the document size
      */
     public function __construct(
         PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
@@ -236,7 +231,6 @@ class PdfDocument extends \FPDF
         if ([] === $this->bookmarks) {
             return $this;
         }
-
         // title
         $title ??= self::INDEX_TITLE;
         $titleStyle ??= PdfStyle::getBoldCellStyle();
@@ -417,24 +411,6 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Gets the current page.
-     */
-    public function getCurrentPage(): int
-    {
-        return $this->page;
-    }
-
-    /**
-     * Gets the default page size (width and height) in the user unit.
-     *
-     * @return PdfPageSizeType the current page size
-     */
-    public function getDefaultPageSize(): array
-    {
-        return $this->DefPageSize;
-    }
-
-    /**
      * Gets the current font size in user unit.
      */
     public function getFontSize(): float
@@ -543,16 +519,6 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Gets printable height.
-     *
-     * @return float the printable height
-     */
-    public function getPrintableHeight(): float
-    {
-        return $this->h - $this->tMargin - $this->bMargin + self::FOOTER_OFFSET;
-    }
-
-    /**
      * Gets printable width.
      */
     public function getPrintableWidth(): float
@@ -566,14 +532,6 @@ class PdfDocument extends \FPDF
     public function getRightMargin(): float
     {
         return $this->rMargin;
-    }
-
-    /**
-     * Gets the scale factor (number of points in user unit).
-     */
-    public function getScaleFactor(): float
-    {
-        return $this->k;
     }
 
     /**
@@ -737,18 +695,6 @@ class PdfDocument extends \FPDF
         }
 
         return (string) parent::Output($dest, $name, $isUTF8);
-    }
-
-    /**
-     * Converts the given pixels to millimeters using 72 dot per each (DPI).
-     *
-     * @param float|int $pixels the pixels to convert
-     *
-     * @return float the converted value as millimeters
-     */
-    public function pixels2mm(float|int $pixels): float
-    {
-        return (float) $pixels * 25.4 / 72.0;
     }
 
     /**
@@ -929,7 +875,6 @@ class PdfDocument extends \FPDF
     public function SetTitle($title, $isUTF8 = false): self
     {
         $this->title = $title;
-        $this->titleUTF8 = $isUTF8;
         parent::SetTitle($title, $isUTF8);
 
         return $this;
@@ -1041,24 +986,6 @@ class PdfDocument extends \FPDF
         }
     }
 
-    /**
-     * Add a first level (0) bookmark  with this title as text.
-     *
-     * Do nothing if no title is defined.
-     *
-     * @return bool true if the bookmark is added; false otherwise
-     */
-    protected function addBookmarkTitle(): bool
-    {
-        if (null !== $this->title) {
-            $this->addBookmark($this->title, $this->titleUTF8);
-
-            return true;
-        }
-
-        return false;
-    }
-
     private function _outputIndexDot(
         float $printable_width,
         float $line_height,
@@ -1119,7 +1046,7 @@ class PdfDocument extends \FPDF
         float $space,
         string|int $link
     ): float {
-        $text = (string) \iconv('UTF-8', 'ISO-8859-1', $text);
+        $text = $this->cleanText($text);
         $text_size = $this->GetStringWidth($text);
         $available_size = $printable_width - $page_size - $offset - 2.0 * $space;
         while ($text_size >= $available_size) {
@@ -1142,14 +1069,20 @@ class PdfDocument extends \FPDF
      * @param ?string $str the text to convert
      *
      * @return ?string the converted text
+     *
+     * @psalm-return ($str is null ? null : string)
      */
     private function cleanText(?string $str): ?string
     {
         if (null === $str || '' === $str) {
             return $str;
         }
-        if (\is_string($result = \iconv('UTF-8', 'ISO-8859-1', $str))) {
-            return $result;
+
+        try {
+            if (false !== $encoding = \mb_detect_encoding($str, 'UTF-8, ISO-8859-1, ISO-8859-15', true)) {
+                return \mb_convert_encoding($str, 'ISO-8859-1', $encoding);
+            }
+        } catch (\Exception) {
         }
 
         return $str;

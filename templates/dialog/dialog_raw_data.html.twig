@@ -1,19 +1,22 @@
 {% from 'macros/_icons.html.twig' import button_close_modal %}
 {% set raw_data = raw_data|default(false) %}
+{% set dialog_id = id|default('raw_data_modal') %}
+{% set raw_data_id = dialog_id ~ '_highlight' %}
 {# dialog #}
-<div id="{{ id|default('raw_data_modal') }}" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
+<div id="{{ dialog_id }}" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
     <div class="modal-dialog{% if raw_data %} modal-lg{% endif %}" role="document">
         <div class="modal-content{% if not raw_data %} border-danger{% endif %}">
             <div class="modal-header{% if not raw_data %} text-white bg-danger{% endif %}">
-                <h5 class="modal-title"><i class="fa-solid fa-code"></i> <span class="dialog-title">{{ 'dialog_raw_data.title'|trans }}</span></h5>{{ button_close_modal() }}
+                <h5 class="modal-title"><i class="fa-solid fa-code"></i> <span class="dialog-title">{{ 'dialog_raw_data.title'|trans }}</span></h5>
+                {{- button_close_modal(true, 'common.button_close', dialog_id) -}}
             </div>
             <div class="modal-body">
             {%- if raw_data -%}
                 {% if description is defined and description %}
                 <p class="mb-1">{{ description }}</p>
                 {% endif %}
-                <div class="border pre-scrollable p-2" style="max-height: {{ max_height|default(400) }}px;">
-                    <pre class="highlight highlight-small mb-0">
+                <div class="border pre-scrollable pre-scrollable-highlight" style="max-height: {{ max_height|default(400) }}px;">
+                    <pre id="{{ raw_data_id }}" class="highlight highlight-small">
                         {{- raw_data|var_export_html -}}
                     </pre>
                 </div>
@@ -24,7 +27,12 @@
             {%- endif -%}
             </div>
             <div class="modal-footer">
-                <input type="button" role="button" class="btn btn-form btn-primary" value="{{ 'common.button_close'|trans }}" data-dismiss="modal">
+                {% if raw_data and button_copy is defined and button_copy %}
+                    <button type="button" class="btn btn-form btn-primary btn-copy" data-clipboard-target="#{{ raw_data_id }}">{{ 'common.button_copy'|trans }}</button>
+                    <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal" data-target="#{{ dialog_id }}">{{ 'common.button_close'|trans }}</button>
+                {% else %}
+                    <button type="button" class="btn btn-form btn-primary" data-dismiss="modal" data-target="#{{ dialog_id }}">{{ 'common.button_close'|trans }}</button>
+                {% endif %}
             </div>
         </div>
     </div>

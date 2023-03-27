@@ -145,10 +145,10 @@
 {% if route_name %}{{ _self.link(path(route_name, parameters), '', 'btn btn-secondary', 'table', 'common.button_table') }}{% endif %}
 {%- endmacro %}
 
-{% macro button_close_modal(for_header=true, label='common.button_close') -%}
+{% macro button_close_modal(for_header=true, label='common.button_close', data_target=false) -%}
 {% set text = label|trans %}
 {% if for_header %}
-    <button type="button" role="button" class="close" data-dismiss="modal" aria-label="{{ text }}" title="{{ text }}">
+    <button type="button" role="button" class="close" data-dismiss="modal"{% if data_target %} data-target="#{{ data_target }}"{% endif %} aria-label="{{ text }}" title="{{ text }}">
         <span aria-hidden="true">&times;</span>
     </button>
 {% else %}

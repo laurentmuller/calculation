@@ -91,4 +91,12 @@ trait LoggerTrait
             $this->write($message, $style);
         }
     }
+
+    /**
+     * Writes the given warning message.
+     */
+    protected function writeWarning(string $message): void
+    {
+        $this->io?->warning($message);
+    }
 }

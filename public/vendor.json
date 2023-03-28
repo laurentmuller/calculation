@@ -34,7 +34,7 @@
         },
         {
             "name": "font-awesome",
-            "version": "6.3.0",
+            "version": "6.4.0",
             "files": [
                 "css/all.css",
                 "webfonts/fa-brands-400.ttf",
@@ -175,9 +175,9 @@
             ]
         },
         {
-            "source": "https://cdn.jsdelivr.net/npm/@ttskch/",
+            "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/{file}",
-            "name": "select2-bootstrap4-theme",
+            "name": "@ttskch/select2-bootstrap4-theme",
             "version": "1.5.2",
             "target": "select2/css",
             "files": [
@@ -205,11 +205,11 @@
             ]
         },
         {
-            "source": "https://cdn.jsdelivr.net/npm/@forevolve/",
+            "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/{file}",
-            "name": "bootstrap-dark",
+            "name": "@forevolve/bootstrap-dark",
             "target": "bootstrap",
-            "version": "2.1.1",
+            "version": "4.0.0",
             "files": [
                 "js/bootstrap.bundle.js",
                 "js/bootstrap.bundle.js.map",

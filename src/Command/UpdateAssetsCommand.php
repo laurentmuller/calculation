@@ -183,7 +183,7 @@ class UpdateAssetsCommand extends Command
         /** @var string $newVersion */
         $newVersion = $content;
         if (\version_compare($version, $newVersion, '<')) {
-            $this->write("The plugin '$name' version '$version' can be updated to the version '$newVersion'.");
+            $this->writeWarning("The plugin '$name' version '$version' can be updated to the version '$newVersion'.");
         }
     }
 

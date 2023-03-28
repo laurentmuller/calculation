@@ -1,5 +1,5 @@
 @import 'table.css';
-@import 'pre_highlight.css';
+@import 'highlight.css';
 
 /**! compression tag for ftp-deployment */
 
@@ -130,4 +130,47 @@ td.user {
  */
 .white-space-pre-wrap {
     white-space: pre-wrap;
+}
+
+/**
+ * highlight (SQL)
+ */
+pre.highlight .keyword {
+    color: blue;
+    font-weight: bold;
+}
+pre.highlight .word {
+    color: #222222;
+}
+pre.highlight .variable {
+    color: #916319;
+}
+pre.highlight .symbol {
+    color: #222222;
+}
+pre.highlight .comment {
+    color: #999999;
+}
+pre.highlight .backtick {
+    color: #718C00;
+}
+pre.highlight .string {
+    color: #718C00;
+}
+pre.highlight .number {
+    color: #F5871F;
+    font-weight: bold;
+}
+pre.highlight .error {
+    color: #C82829;
+}
+
+/**
+ * dark theme highlight
+ */
+body.dark pre.highlight .keyword {
+    color: #007bff;
+}
+body.dark pre.highlight .word {
+    color: #d3d3d3;
 }

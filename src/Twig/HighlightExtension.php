@@ -12,32 +12,26 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Util\StringUtils;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
+use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 /**
- * Twig extension to export and highlight expressions.
+ * Twig extension to export and highlight variables.
  */
 class HighlightExtension extends AbstractExtension
 {
-    private const HIGH_LIGHT_REGEX = [
-        // variable
-        '/(\')(\w+)(\')( =>)/' => '$1<samp class="variable">$2</samp>$3$4',
-        // number
-        '/(=> )([+-]?([0-9]*[.])?[0-9]+)/' => '$1<samp class="number">$2</samp>',
-        '/([+-]?([0-9]*[.])?[0-9]+)( =>)/' => '<samp class="number">$1</samp>$2',
-        // string
-        '/(=> \')(.*)(\')/' => '$1<samp class="string">$2</samp>$3',
+    private const PATTERN = [
+        '/title="(.*?)"/i' => '',
+        '/data-depth=\d+\s/i' => '',
+        '/<script>.*<\/script>/i' => '',
+        '/sf-dump/i' => 'dump',
     ];
 
-    private const HIGH_LIGHT_STYLE = [
-        '[' => '<samp class="other">[</samp>',
-        ']' => '<samp class="other">]</samp>',
-        ',' => '<samp class="other">,</samp>',
-        '=>' => '<samp class="other">=></samp>',
-        '\'' => '<samp class="other">\'</samp>',
-    ];
+    private ?VarCloner $cloner = null;
+    private ?HtmlDumper $dumper = null;
 
     /**
      * {@inheritdoc}
@@ -45,17 +39,47 @@ class HighlightExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('var_export', StringUtils::exportVar(...)),
-            new TwigFilter('var_export_html', $this->exportVarHtml(...), ['is_safe' => ['html']]),
+            new TwigFilter('var_export_html', $this->export(...), [
+                'needs_environment' => true,
+                'is_safe' => ['html'],
+            ]),
         ];
     }
 
-    private function exportVarHtml(mixed $expression): string
+    private function export(Environment $env, mixed $variable, int $maxDepth = 1): string
     {
-        $result = StringUtils::exportVar($expression);
-        $result = \preg_replace(\array_keys(self::HIGH_LIGHT_REGEX), \array_values(self::HIGH_LIGHT_REGEX), $result);
-        $result = \strtr($result, self::HIGH_LIGHT_STYLE);
+        $cloner = $this->getCloner();
+        $dumper = $this->getDumper($env, $maxDepth);
+        $data = $cloner->cloneVar($variable);
+        /** @psalm-var resource $output */
+        $output = \fopen('php://memory', 'r+');
+        $dumper->dump($data, $output);
+        $content = (string) \stream_get_contents($output, -1, 0);
+        $content = \preg_replace(\array_keys(self::PATTERN), \array_values(self::PATTERN), $content);
 
-        return \trim($result);
+        return \trim($content);
+    }
+
+    private function getCloner(): VarCloner
+    {
+        if (!isset($this->cloner)) {
+            $this->cloner = new VarCloner();
+        }
+
+        return $this->cloner;
+    }
+
+    private function getDumper(Environment $env, int $maxDepth): HtmlDumper
+    {
+        if (!isset($this->dumper)) {
+            $this->dumper = new HtmlDumper();
+            $this->dumper->setDumpHeader('');
+            $this->dumper->setCharset($env->getCharset());
+        }
+        $this->dumper->setDisplayOptions([
+            'maxDepth' => $maxDepth,
+        ]);
+
+        return $this->dumper;
     }
 }

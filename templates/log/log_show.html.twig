@@ -4,15 +4,25 @@
 {% macro formatArray(name, value) %}
 {%- if value|length -%}
 <tr>
-    <td class="w-25">{{ name|trans }}</td>
-    <td class="w-75"><pre class="highlight text-body mb-0">{{- value|var_export_html -}}</pre></td>
+    <td class="w-25">
+        {{- name|trans -}}
+    </td>
+    <td class="w-75">
+        <div class="border pre-scrollable-dump">
+            {{- value|var_export_html -}}
+        </div>
+    </td>
 </tr>
 {%- endif -%}
 {% endmacro %}
 {% macro formatSql(name, value) %}
 <tr>
-    <td class="w-25">{{ name|trans }}</td>
-    <td class="w-75">{{ value|doctrine_format_sql(true) }}</td>
+    <td class="w-25">
+        {{- name|trans -}}
+    </td>
+    <td class="w-75">
+        {{- value|doctrine_format_sql(true) -}}
+    </td>
 </tr>
 {% endmacro %}
 {% macro cellTemplate(name, value, template) %}

@@ -23,6 +23,18 @@ use Symfony\Component\String\UnicodeString;
  */
 final class StringUtils
 {
+    private const VAR_PATTERN = [
+        "/array \(/" => '[',
+        "/^([ ]*)\)(,?)$/m" => '$1]$2',
+        "/=>[ ]?\n[ ]+\[/" => '=> [',
+        "/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
+    ];
+
+    private const VAR_SEARCH = [
+        '\\\\' => '\\',
+        ',' => '',
+    ];
+
     // prevent instance creation
     private function __construct()
     {
@@ -157,19 +169,9 @@ final class StringUtils
     {
         try {
             $export = \var_export($expression, true);
-            $searches = [
-                '\\\\' => '\\',
-                ',' => '',
-            ];
-            $export = \str_replace(\array_keys($searches), \array_values($searches), $export);
-            $patterns = [
-                "/array \(/" => '[',
-                "/^([ ]*)\)(,?)$/m" => '$1]$2',
-                "/=>[ ]?\n[ ]+\[/" => '=> [',
-                "/([ ]*)(\'[^\']+\') => ([\[\'])/" => '$1$2 => $3',
-            ];
+            $export = \str_replace(\array_keys(self::VAR_SEARCH), \array_values(self::VAR_SEARCH), $export);
 
-            return \preg_replace(\array_keys($patterns), \array_values($patterns), $export);
+            return \preg_replace(\array_keys(self::VAR_PATTERN), \array_values(self::VAR_PATTERN), $export);
         } catch (\Exception) {
             return (string) $expression;
         }

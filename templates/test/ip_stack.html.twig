@@ -43,7 +43,7 @@
     {{ _self.output_row('Position', results.position_dms|default(false)) }}
     </tbody>
 </table>
-{% include 'dialog/dialog_raw_data.html.twig' with {'raw_data': results, 'description': 'test.ip_stack'|trans} %}
+{% include 'dialog/dialog_raw_data.html.twig' with {'raw_data': results, 'description': 'test.ip_stack'|trans, 'allow_copy': true} %}
 {% endblock %}
 {# footer #}
 {% block card_footer -%}
@@ -60,4 +60,10 @@
 {% block stylesheets %}
     {{ parent() }}
     {{- asset_css('css/pre_highlight.css') }}
+{% endblock %}
+{# javascript #}
+{% block javascripts %}
+    {{ parent() }}
+    {{ asset_js('js/vendor/clipboard/clipboard.js') }}
+    {{ asset_js('js/application/dialog_raw_data.js') }}
 {% endblock %}

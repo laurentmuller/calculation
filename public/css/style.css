@@ -702,9 +702,16 @@ body.dark .dropdown-item.disabled, .dropdown-item:disabled {
     width: 8px;
     height: 8px;
 }
-.small-scrollbar::-webkit-scrollbar-thumb:hover {
+.small-scrollbar::-webkit-scrollbar-track {
+    background-color: #e9ecef;
+}
+.small-scrollbar::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.15);
 }
+.small-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(128, 135, 139, .8);
+}
+
 body.dark .small-scrollbar::-webkit-scrollbar-track {
     background-color: #343a40;
 }
@@ -712,7 +719,7 @@ body.dark .small-scrollbar::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, .1);
 }
 body.dark .small-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(128, 135, 139, .8)
+    background-color: rgba(128, 135, 139, .8);
 }
 
 /*

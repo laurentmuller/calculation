@@ -1,0 +1,128 @@
+/**! compression tag for ftp-deployment */
+
+/**
+ * Common to light and dark mode
+ */
+.pre-scrollable-dump {
+    max-height: 400px;
+    padding: 0.5rem;
+}
+
+pre.dump, pre.dump .dump-default {
+    line-height: 1.2em;
+    font: 12px Menlo, Monaco, Consolas, monospace;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    position: relative;
+    word-break: break-all;
+    margin: 0;
+}
+
+pre.dump .dump-num {
+    font-weight: bold;
+    color: #1299DA;
+}
+
+pre.dump .dump-const {
+    font-weight: bold
+}
+
+pre.dump .dump-str {
+    font-weight: bold;
+}
+
+pre.dump .dump-meta {
+    color: #B729D9
+}
+
+pre.dump .dump-index {
+    color: #1299DA
+}
+
+/*
+ * Copied from HtmlDumper (light mode)
+ */
+.pre-scrollable-dump {
+    background-color: initial;
+}
+
+pre.dump, pre.dump .dump-default {
+    background: none;
+    color: #CC7832;
+}
+
+pre.dump .dump-str {
+    color: #629755;
+}
+
+pre.dump .dump-note {
+    color: #6897BB
+}
+
+pre.dump .dump-ref {
+    color: #6E6E6E
+}
+
+pre.dump .dump-public {
+    color: #262626
+}
+
+pre.dump .dump-protected {
+    color: #262626
+}
+
+pre.dump .dump-private {
+    color: #262626
+}
+
+pre.dump .dump-key {
+    color: #789339
+}
+
+pre.dump .dump-ellipsis {
+    color: #CC7832
+}
+
+/*
+ * Copied from HtmlDumper (dark mode)
+ */
+body.dark .pre-scrollable-dump {
+    background-color: #18171B;
+}
+
+body.dark pre.dump, pre.dump .dump-default {
+    background-color: #18171B;
+    color: #FF8400;
+}
+
+body.dark pre.dump .dump-str {
+    color: #56DB3A
+}
+
+body.dark pre.dump .dump-note {
+    color: #1299DA
+}
+
+body.dark pre.dump .dump-ref {
+    color: #A0A0A0
+}
+
+body.dark pre.dump .dump-public {
+    color: #FFFFFF
+}
+
+body.dark pre.dump .dump-protected {
+    color: #FFFFFF
+}
+
+body.dark pre.dump .dump-private {
+    color: #FFFFFF
+}
+
+body.dark pre.dump .dump-key {
+    color: #56DB3A
+}
+
+body.dark pre.dump .dump-ellipsis {
+    color: #FF8400
+}

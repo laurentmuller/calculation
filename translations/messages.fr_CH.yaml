@@ -1418,3 +1418,5 @@ dialog_raw_data:
   title: Données brutes
   tooltip: Afficher les données brutes
   empty: Aucune donnée brute à afficher.
+  copy_success: Les données brutes ont été copiées avec succès dans le presse-papiers.
+  copy_error: Une erreur s'est produite lors de la copie des données brutes dans le presse-papiers.

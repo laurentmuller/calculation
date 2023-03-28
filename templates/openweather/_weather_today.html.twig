@@ -84,4 +84,4 @@
         {{ _self.row_text('openweather.fields.locale_date', current.dt_date_time_locale) }}
     </tbody>
 </table>
-{% include 'dialog/dialog_raw_data.html.twig' with {'id': 'current_data_modal', 'description': title, 'raw_data': current, 'button_copy': true} %}
+{% include 'dialog/dialog_raw_data.html.twig' with {'id': 'current_data_modal', 'description': title, 'raw_data': current, 'allow_copy': true} %}

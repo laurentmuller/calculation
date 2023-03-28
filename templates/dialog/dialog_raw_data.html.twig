@@ -3,22 +3,20 @@
 {% set dialog_id = id|default('raw_data_modal') %}
 {% set raw_data_id = dialog_id ~ '_highlight' %}
 {# dialog #}
-<div id="{{ dialog_id }}" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
+<div id="{{ dialog_id }}" class="modal modal-raw-data fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true" data-copy-success="{{ 'dialog_raw_data.copy_success'|trans }}" data-copy-error="{{ 'dialog_raw_data.copy_error'|trans }}">
     <div class="modal-dialog{% if raw_data %} modal-lg{% endif %}" role="document">
         <div class="modal-content{% if not raw_data %} border-danger{% endif %}">
             <div class="modal-header{% if not raw_data %} text-white bg-danger{% endif %}">
                 <h5 class="modal-title"><i class="fa-solid fa-code"></i> <span class="dialog-title">{{ 'dialog_raw_data.title'|trans }}</span></h5>
-                {{- button_close_modal(true, 'common.button_close', dialog_id) -}}
+                {{- button_close_modal(true, null, dialog_id) -}}
             </div>
             <div class="modal-body">
             {%- if raw_data -%}
                 {% if description is defined and description %}
                 <p class="mb-1">{{ description }}</p>
                 {% endif %}
-                <div class="border pre-scrollable pre-scrollable-highlight" style="max-height: {{ max_height|default(400) }}px;">
-                    <pre id="{{ raw_data_id }}" class="highlight highlight-small">
-                        {{- raw_data|var_export_html -}}
-                    </pre>
+                <div class="border pre-scrollable pre-scrollable-dump small-scrollbar">
+                    {{- raw_data|var_export_html -}}
                 </div>
             {%- else -%}
                 <p class="text-center my-4">
@@ -27,12 +25,10 @@
             {%- endif -%}
             </div>
             <div class="modal-footer">
-                {% if raw_data and button_copy is defined and button_copy %}
+                {% if raw_data and allow_copy is defined and allow_copy %}
                     <button type="button" class="btn btn-form btn-primary btn-copy" data-clipboard-target="#{{ raw_data_id }}">{{ 'common.button_copy'|trans }}</button>
-                    <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal" data-target="#{{ dialog_id }}">{{ 'common.button_close'|trans }}</button>
-                {% else %}
-                    <button type="button" class="btn btn-form btn-primary" data-dismiss="modal" data-target="#{{ dialog_id }}">{{ 'common.button_close'|trans }}</button>
                 {% endif %}
+                {{- button_close_modal(false, null, dialog_id) }}
             </div>
         </div>
     </div>

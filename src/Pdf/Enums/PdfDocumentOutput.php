@@ -12,11 +12,19 @@ declare(strict_types=1);
 
 namespace App\Pdf\Enums;
 
+use App\Interfaces\DefaultEnumInterface;
+use App\Traits\DefaultEnumTrait;
+use Elao\Enum\Attribute\EnumCase;
+
 /**
  * The PDF document output enumeration.
+ *
+ * @implements DefaultEnumInterface<PdfDocumentOutput>
  */
-enum PdfDocumentOutput: string
+enum PdfDocumentOutput: string implements DefaultEnumInterface
 {
+    use DefaultEnumTrait;
+
     /*
      * Send to the browser and force a file download with the given name parameter.
      */
@@ -32,6 +40,7 @@ enum PdfDocumentOutput: string
      *
      * The PDF viewer is used if available.
      */
+    #[EnumCase(extras: ['default' => true])]
     case INLINE = 'I';
 
     /*

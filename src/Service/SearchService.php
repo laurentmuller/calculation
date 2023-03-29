@@ -469,18 +469,15 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function updateSQL(): void
     {
-        $pattern = [];
-        $replacement = [];
+        $values = [];
         $columns = \array_keys(self::COLUMNS);
         foreach ($columns as $index => $name) {
-            $pattern[] = "/AS \\w+[$index]/i";
-            $replacement[] = "AS $name";
+            $values["/AS \\w+[$index]/i"] = "AS $name";
         }
-
         $param = ':' . self::SEARCH_PARAM;
         foreach ($this->queries as &$query) {
             $query = \str_replace('?', $param, $query);
-            $query = \preg_replace($pattern, $replacement, $query);
+            $query = StringUtils::pregReplace($values, $query);
         }
     }
 }

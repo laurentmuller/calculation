@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Pdf\Enums\PdfFontName;
+use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 
 /**
@@ -438,12 +439,9 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      */
     public function setFontBold(bool $add = false): static
     {
-        $style = PdfFont::STYLE_BOLD;
-        if ($add) {
-            $style .= $this->font->getStyle();
-        }
+        $this->font->bold($add);
 
-        return $this->setFontStyle($style);
+        return $this;
     }
 
     /**
@@ -453,29 +451,15 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      */
     public function setFontItalic(bool $add = false): static
     {
-        $style = PdfFont::STYLE_ITALIC;
-        if ($add) {
-            $style .= $this->font->getStyle();
-        }
+        $this->font->italic($add);
 
-        return $this->setFontStyle($style);
+        return $this;
     }
 
     /**
      * Sets the font name.
-     *
-     * @param PdfFontName|string|null $fontName It can be either a font name enumeration, a name defined by AddFont()
-     *                                          or one of the standard families (case-insensitive):
-     *                                          <ul>
-     *                                          <li><b>Courier</b>: Fixed-width.</li>
-     *                                          <li><b>Helvetica</b> or <b>Arial</b>: Synonymous: sans serif.</li>
-     *                                          <li><b>Symbol</b>: Symbolic.</li>
-     *                                          <li><b>ZapfDingbats</b>: Symbolic.</li>
-     *                                          </ul>
-     *                                          It is also possible to pass a null value. In that case, the default name
-     *                                          ('Arial') is used.
      */
-    public function setFontName(PdfFontName|string|null $fontName): static
+    public function setFontName(?PdfFontName $fontName = null): static
     {
         $this->font->setName($fontName);
 
@@ -504,19 +488,10 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font style.
-     *
-     * @param string $fontStyle the font style. Possible values are (case-insensitive):
-     *                          <ul>
-     *                          <li>Empty string: Regular.</li>
-     *                          <li><b>B</b>: Bold.</li>
-     *                          <li><b>I</b>: Italic.</li>
-     *                          <li><b>U</b>: Underline.</li>
-     *                          </ul>
-     *                          or any combination.
      */
-    public function setFontStyle(string $fontStyle): static
+    public function setFontStyle(PdfFontStyle $style): static
     {
-        $this->font->setStyle($fontStyle);
+        $this->font->setStyle($style);
 
         return $this;
     }
@@ -528,12 +503,9 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      */
     public function setFontUnderline(bool $add = false): static
     {
-        $style = PdfFont::STYLE_UNDERLINE;
-        if ($add) {
-            $style .= $this->font->getStyle();
-        }
+        $this->font->underline($add);
 
-        return $this->setFontStyle($style);
+        return $this;
     }
 
     /**

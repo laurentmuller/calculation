@@ -47,9 +47,10 @@ function onCopyError(e) {
  */
 (function ($) {
     'use strict';
-    const $button = $('.modal-raw-data .btn-copy');
+    const selector = '.modal-raw-data .btn-copy';
+    const $button = $(selector);
     if ($button.length && ClipboardJS && ClipboardJS.isSupported('copy')) {
-        const clipboard = new ClipboardJS('.modal-raw-data .btn-copy');
+        const clipboard = new ClipboardJS(selector);
         clipboard.on('success', function (e) {
             onCopySuccess(e);
         }).on('error', function (e) {
@@ -59,6 +60,6 @@ function onCopyError(e) {
         $button.remove();
     }
     $('.modal-raw-data').on('hide.bs.modal', function () {
-        $(this).find('.pre-scrollable-highlight').scrollTop(0);
+        $(this).find('.pre-scrollable').scrollTop(0);
     });
 }(jQuery));

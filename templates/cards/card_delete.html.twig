@@ -11,6 +11,7 @@
 {# body #}
 {% block card_body -%}
 <p class="mb-0">{{ message|default('common.delete_message'|trans)|raw }}</p>
+{{ parent() }}
 {%- endblock %}
 {# javascripts #}
 {% block javascripts -%}

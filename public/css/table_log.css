@@ -21,17 +21,18 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width:5rem;
+    max-width: 5rem;
 }
 
-@media ( min-width : 576px) {
+@media ( min-width: 576px) {
     .message {
-        max-width:5rem;
+        max-width: 5rem;
     }
 }
-@media ( min-width : 768px) {
+
+@media ( min-width: 768px) {
     .message {
-        max-width:10rem;
+        max-width: 10rem;
     }
 }
 
@@ -48,6 +49,7 @@ td.user {
     width: 1.25em;
     text-align: center;
 }
+
 .icon-level:before {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
@@ -55,24 +57,30 @@ td.user {
     padding-right: 4px;
     content: '\f05a';
 }
+
 .icon-level.info {
     color: var(--info);
 }
+
 .icon-level.debug {
     color: var(--secondary);
 }
+
 .icon-level.warning {
     color: var(--warning);
 }
+
 .icon-level.alert,
 .icon-level.critical,
 .icon-level.emergency,
 .icon-level.error {
     color: var(--danger);
 }
+
 .icon-level.all:before {
     content: "\f5fd";
 }
+
 .icon-level.info:before,
 .icon-level.debug:before,
 .icon-level.error:before,
@@ -81,6 +89,7 @@ td.user {
 .icon-level.emergency:before {
     content: "\f06a";
 }
+
 .icon-level.warning:before {
     content: "\f071";
 }
@@ -92,6 +101,7 @@ td.user {
     width: 1.25em;
     text-align: center;
 }
+
 .icon-channel:before {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
@@ -99,78 +109,43 @@ td.user {
     padding-right: 4px;
     content: '\f15b';
 }
+
 .icon-channel.all:before {
     content: '\f7d9';
 }
+
 .icon-channel.application:before {
     content: '\f5fc';
 }
+
 .icon-channel.request:before {
     content: '\e13c';
 }
+
 .icon-channel.doctrine:before {
     content: '\f1c0';
 }
+
 .icon-channel.cache:before {
     content: '\f0a0';
 }
+
 .icon-channel.security:before {
     content: '\f084';
 }
+
 .icon-channel.mailer:before {
     font-weight: 400;
     content: '\f0e0';
 }
+
 .icon-channel.php:before {
     content: '\f121';
 }
 
 /**
- * detail content
+ * PHP array
  */
-.white-space-pre-wrap {
-    white-space: pre-wrap;
-}
-
-/**
- * highlight (SQL)
- */
-pre.highlight .keyword {
-    color: blue;
-    font-weight: bold;
-}
-pre.highlight .word {
-    color: #222222;
-}
-pre.highlight .variable {
-    color: #916319;
-}
-pre.highlight .symbol {
-    color: #222222;
-}
-pre.highlight .comment {
-    color: #999999;
-}
-pre.highlight .backtick {
-    color: #718C00;
-}
-pre.highlight .string {
-    color: #718C00;
-}
-pre.highlight .number {
-    color: #F5871F;
-    font-weight: bold;
-}
-pre.highlight .error {
-    color: #C82829;
-}
-
-/**
- * dark theme highlight
- */
-body.dark pre.highlight .keyword {
-    color: #007bff;
-}
-body.dark pre.highlight .word {
-    color: #d3d3d3;
+pre.highlight-php {
+    background-color: initial !important;
 }

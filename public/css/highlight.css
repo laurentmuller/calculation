@@ -1,16 +1,16 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Common to light and dark mode
+ * Common for PHP light and dark mode.
  */
-.pre-scrollable-dump {
+.pre-scrollable.pre-scrollable-highlight-php {
     max-height: 400px;
     padding: 0.5rem;
 }
 
-pre.dump, pre.dump .dump-default {
+pre.highlight-php {
     line-height: 1.2em;
-    font: 12px Menlo, Monaco, Consolas, monospace;
+    font: 13px Menlo, Monaco, Consolas, monospace;
     word-wrap: break-word;
     white-space: pre-wrap;
     position: relative;
@@ -18,111 +18,182 @@ pre.dump, pre.dump .dump-default {
     margin: 0;
 }
 
-pre.dump .dump-num {
+pre.highlight-php .highlight-php-num {
     font-weight: bold;
     color: #1299DA;
 }
 
-pre.dump .dump-const {
+pre.highlight-php .highlight-php-const {
     font-weight: bold
 }
 
-pre.dump .dump-str {
+pre.highlight-php .highlight-php-str {
     font-weight: bold;
 }
 
-pre.dump .dump-meta {
+pre.highlight-php .highlight-php-meta {
     color: #B729D9
 }
 
-pre.dump .dump-index {
+pre.highlight-php .highlight-php-index {
     color: #1299DA
 }
 
 /*
- * Copied from HtmlDumper (light mode)
+ * PHP light (copied from HtmlDumper light mode).
  */
-.pre-scrollable-dump {
+.pre-scrollable-highlight-php {
     background-color: initial;
 }
 
-pre.dump, pre.dump .dump-default {
+pre.highlight-php {
     background: none;
     color: #CC7832;
 }
 
-pre.dump .dump-str {
+pre.highlight-php .highlight-php-str {
     color: #629755;
 }
 
-pre.dump .dump-note {
+pre.highlight-php .highlight-php-note {
     color: #6897BB
 }
 
-pre.dump .dump-ref {
+pre.highlight-php .highlight-php-ref {
     color: #6E6E6E
 }
 
-pre.dump .dump-public {
+pre.highlight-php .highlight-php-public {
     color: #262626
 }
 
-pre.dump .dump-protected {
+pre.highlight-php .highlight-php-protected {
     color: #262626
 }
 
-pre.dump .dump-private {
+pre.highlight-php .highlight-php-private {
     color: #262626
 }
 
-pre.dump .dump-key {
+pre.highlight-php .highlight-php-key {
     color: #789339
 }
 
-pre.dump .dump-ellipsis {
+pre.highlight-php .highlight-php-ellipsis {
     color: #CC7832
 }
 
 /*
- * Copied from HtmlDumper (dark mode)
+ *  PHP Dark (copied from HtmlDumper dark mode).
  */
-body.dark .pre-scrollable-dump {
+body.dark .pre-scrollable-highlight-php {
     background-color: #18171B;
 }
 
-body.dark pre.dump, pre.dump .dump-default {
+body.dark pre.highlight-php {
     background-color: #18171B;
     color: #FF8400;
 }
 
-body.dark pre.dump .dump-str {
+body.dark pre.highlight-php .highlight-php-str {
     color: #56DB3A
 }
 
-body.dark pre.dump .dump-note {
+body.dark pre.highlight-php .highlight-php-note {
     color: #1299DA
 }
 
-body.dark pre.dump .dump-ref {
+body.dark pre.highlight-php .highlight-php-ref {
     color: #A0A0A0
 }
 
-body.dark pre.dump .dump-public {
+body.dark pre.highlight-php .highlight-php-public {
     color: #FFFFFF
 }
 
-body.dark pre.dump .dump-protected {
+body.dark pre.highlight-php .highlight-php-protected {
     color: #FFFFFF
 }
 
-body.dark pre.dump .dump-private {
+body.dark pre.highlight-php .highlight-php-private {
     color: #FFFFFF
 }
 
-body.dark pre.dump .dump-key {
+body.dark pre.highlight-php .highlight-php-key {
     color: #56DB3A
 }
 
-body.dark pre.dump .dump-ellipsis {
+body.dark pre.highlight-php .highlight-php-ellipsis {
     color: #FF8400
+}
+
+/**
+ * SQL highlight ligth mode.
+ */
+pre.highlight-sql {
+    line-height: 1.2em;
+    font: 13px Menlo, Monaco, Consolas, monospace;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    position: relative;
+    word-break: break-all;
+    margin-bottom: 0;
+}
+
+pre.highlight-sql .highlight-sql-keyword {
+    color: blue;
+    font-weight: bold;
+}
+
+pre.highlight-sql .highlight-sql-word {
+    color: #222222;
+}
+
+pre.highlight-sql .highlight-sql-variable {
+    color: #916319;
+}
+
+pre.highlight-sql .highlight-sql-symbol {
+    color: #222222;
+}
+
+pre.highlight-sql .highlight-sql-comment {
+    color: #999999;
+}
+
+pre.highlight-sql .highlight-sql-backtick {
+    color: #718C00;
+}
+
+pre.highlight-sql .highlight-sql-string {
+    color: #718C00;
+}
+
+pre.highlight-sql .highlight-sql-number {
+    color: #F5871F;
+    font-weight: bold;
+}
+
+pre.highlight-sql .highlight-sql-error {
+    color: #C82829;
+}
+
+/**
+ * SQL highlight dark mode.
+ */
+body.dark pre.highlight-sql .highlight-sql-keyword {
+    color: #1299DA;
+}
+
+body.dark pre.highlight-sql .highlight-sql-word {
+    color: #d3d3d3;
+}
+
+body.dark pre.highlight-sql .highlight-sql-symbol {
+    color: #FF8400;
+}
+
+body.dark pre.highlight-sql .highlight-sql-string,
+body.dark pre.highlight-sql .highlight-sql-variable {
+    color: #56DB3A;
 }

@@ -74,18 +74,21 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Delete an entity.
      *
-     * @param request         $request    the request
-     * @param AbstractEntity  $item       the entity to delete
-     * @param LoggerInterface $logger     the logger to log any exception
-     * @param array           $parameters the optional parameters
+     * @param request         $request the request
+     * @param AbstractEntity  $item    the entity to delete
+     * @param LoggerInterface $logger  the logger to log any exception
      *
      * @psalm-param T $item
      */
     protected function deleteEntity(Request $request, AbstractEntity $item, LoggerInterface $logger, array $parameters = []): Response
     {
         $this->checkPermission(EntityPermission::DELETE);
+        $options = [
+            'csrf_field_name' => 'delete_token',
+            'csrf_token_id' => $this->getDeleteToken($item),
+        ];
         $parameters['item'] = $item;
-        $form = $this->createForm();
+        $form = $this->createForm(options: $options);
         if ($this->handleRequestForm($request, $form)) {
             try {
                 $this->deleteFromDatabase($item);
@@ -294,6 +297,14 @@ abstract class AbstractEntityController extends AbstractController
         if (!empty($id) && !isset($parameters['params']['id'])) {
             $parameters['params']['id'] = $id;
         }
+    }
+
+    /**
+     * Gets delete token identifier for the given entity.
+     */
+    private function getDeleteToken(AbstractEntity $entity): string
+    {
+        return \sprintf('delete_%d', (int) $entity->getId());
     }
 
     private function getMessageId(string $suffix, string $default): string

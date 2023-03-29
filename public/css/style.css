@@ -182,6 +182,9 @@ a.btn-list {
 .pagination {
     margin-bottom: 0;
 }
+body.dark .btn-warning {
+    color: var(--white) !important;
+}
 
 /*
  * exception table

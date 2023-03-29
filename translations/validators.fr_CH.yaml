@@ -73,3 +73,5 @@ username:
   long: Le nom d'utilisateur est trop long.
   not_found: Le nom de l'utilisateur ou l'adresse e-mail est introuvable.
   short: Le nom d'utilisateur est trop court.
+# security
+The CSRF token is invalid. Please try to resubmit the form.: Le jeton de falsification de requête inter-sites (CSRF) est invalide. Veuillez essayer de renvoyer le formulaire.

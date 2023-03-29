@@ -22,6 +22,7 @@ use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
+use App\Util\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -232,7 +233,7 @@ class ArchiveService implements ServiceSubscriberInterface
     {
         $date = $this->getDateMax($sources);
 
-        return $date?->sub(new \DateInterval('P1M'))?->format('Y-m-d');
+        return DateUtils::formatFormDate($date?->sub(new \DateInterval('P1M')));
     }
 
     /**
@@ -262,7 +263,7 @@ class ArchiveService implements ServiceSubscriberInterface
     {
         $date = $this->getDateMin($sources);
 
-        return $date?->format('Y-m-d');
+        return DateUtils::formatFormDate($date);
     }
 
     /**
@@ -281,7 +282,10 @@ class ArchiveService implements ServiceSubscriberInterface
     private function getSources(bool $useSession): array
     {
         /** @var CalculationState[] $sources */
-        $sources = $this->stateRepository->getEditableQueryBuilder()->getQuery()->getResult();
+        $sources = $this->stateRepository
+            ->getEditableQueryBuilder()
+            ->getQuery()
+            ->getResult();
         if ($useSession) {
             /** @var int[] $ids */
             $ids = $this->getSessionValue(self::KEY_SOURCES, []);

@@ -507,13 +507,13 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
                 $style->bold(true);
                 break;
             case 'font-italic':
-                $style->italic(true);
+                $style->setFontItalic(true);
                 break;
             case 'font-weight-normal':
-                $style->regular();
+                $style->setFontRegular();
                 break;
             case 'text-monospace':
-                $style->regular()->getFont()->setName(PdfFontName::COURIER);
+                $style->setFontRegular()->setFontName(PdfFontName::COURIER);
                 break;
         }
 

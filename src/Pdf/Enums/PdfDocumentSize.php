@@ -12,33 +12,44 @@ declare(strict_types=1);
 
 namespace App\Pdf\Enums;
 
+use App\Interfaces\DefaultEnumInterface;
+use App\Traits\DefaultEnumTrait;
+use Elao\Enum\Attribute\EnumCase;
+
 /**
  * The PDF document size enumeration.
+ *
+ * @implements DefaultEnumInterface<PdfDocumentSize>
  */
-enum PdfDocumentSize: string
+enum PdfDocumentSize: string implements DefaultEnumInterface
 {
+    use DefaultEnumTrait;
+
     /*
-     * The A3 document size.
+     * A3 (297 × 420 mm).
      */
     case A3 = 'A3';
 
     /*
-     * The A4 document size.
+     * A4 (210 × 297 mm).
+     *
+     * This is the default value.
      */
+    #[EnumCase(extras: ['default' => true])]
     case A4 = 'A4';
 
     /*
-     * The A5 document size.
+     * A5 (148 × 210 mm).
      */
     case A5 = 'A5';
 
     /*
-     * The Legal document size.
+     * Legal (8.5 x 14 inches))
      */
     case LEGAL = 'Legal';
 
     /*
-     * The Letter document size.
+     * Letter (8.5 x 11 inches).
      */
     case LETTER = 'Letter';
 }

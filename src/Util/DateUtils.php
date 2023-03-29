@@ -94,6 +94,14 @@ final class DateUtils
     }
 
     /**
+     * Format the given date (if any) to use within a form.
+     */
+    public static function formatFormDate(?\DateTimeInterface $date): ?string
+    {
+        return $date?->format('Y-m-d');
+    }
+
+    /**
      * Gets the localized month names.
      * For example with 'fr' as locale, return
      * <pre>

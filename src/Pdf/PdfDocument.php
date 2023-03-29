@@ -19,6 +19,7 @@ use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfDocumentZoom;
 use App\Pdf\Enums\PdfFontName;
+use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\Enums\PdfImageType;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfRectangleStyle;
@@ -407,7 +408,10 @@ class PdfDocument extends \FPDF
      */
     public function getCurrentFont(): PdfFont
     {
-        return new PdfFont($this->FontFamily, $this->FontSizePt, $this->FontStyle);
+        $name = PdfFontName::tryFrom($this->FontFamily) ?? PdfFontName::getDefault();
+        $style = PdfFontStyle::fromStyle($this->FontStyle);
+
+        return new PdfFont($name, $this->FontSizePt, $style);
     }
 
     /**
@@ -836,33 +840,35 @@ class PdfDocument extends \FPDF
     /**
      * Sets the font used to print character strings.
      *
-     * @param PdfFontName|string $family the font family. It can be either a font name enumeration, a name defined by AddFont()
-     *                                   or one of the standard families (case-insensitive):
-     *                                   <ul>
-     *                                   <li>A PdfFontName enumeration.</li>
-     *                                   <li><code>'Courier'</code>: Fixed-width.</li>
-     *                                   <li><code>'Helvetica'</code> or <code>Arial</code>: Synonymous: sans serif.</li>
-     *                                   <li><code>'Symbol'</code>: Symbolic.</li>
-     *                                   <li><code>'ZapfDingbats'</code>: Symbolic.</li>
-     *                                   </ul>
-     *                                   It is also possible to pass an empty string (""). In that case, the current family is kept.
-     * @param string             $style  the font style. Possible values are (case-insensitive):
-     *                                   <ul>
-     *                                   <li>An empty string (''): Regular.</li>
-     *                                   <li><code>'B'</code>: Bold.</li>
-     *                                   <li><code>'I'</code>: Italic.</li>
-     *                                   <li><code>'U'</code>: Underline.</li>
-     *                                   </ul>
-     *                                   or any combination. The default value is regular.
-     * @param float              $size   the font size in points or 0 to use the current size. If no size has been
-     *                                   specified since the beginning of the document, the value is 9.
+     * @param PdfFontName|string  $family the font family. It can be either a font name enumeration, a name defined by AddFont()
+     *                                    or one of the standard families (case-insensitive):
+     *                                    <ul>
+     *                                    <li>A PdfFontName enumeration.</li>
+     *                                    <li><code>'Courier'</code>: Fixed-width.</li>
+     *                                    <li><code>'Helvetica'</code> or <code>Arial</code>: Synonymous: sans serif.</li>
+     *                                    <li><code>'Symbol'</code>: Symbolic.</li>
+     *                                    <li><code>'ZapfDingbats'</code>: Symbolic.</li>
+     *                                    </ul>
+     *                                    It is also possible to pass an empty string (""). In that case, the current family is kept.
+     * @param PdfFontStyle|string $style  the font style. It can be either a font style enumeration or one of the given values (case-insensitive):
+     *                                    <ul>
+     *                                    <li>An empty string (''): Regular.</li>
+     *                                    <li><code>'B'</code>: Bold.</li>
+     *                                    <li><code>'I'</code>: Italic.</li>
+     *                                    <li><code>'U'</code>: Underline.</li>
+     *                                    </ul>
+     *                                    or any combination. The default value is regular.
+     * @param float               $size   the font size in points or 0 to use the current size. If no size has been
+     *                                    specified since the beginning of the document, the value is 9.0.
      */
     public function SetFont($family, $style = '', $size = 0): void
     {
         if ($family instanceof PdfFontName) {
             $family = $family->value;
         }
-
+        if ($style instanceof PdfFontStyle) {
+            $style = $style->value;
+        }
         parent::SetFont($family, $style, $size);
     }
 

@@ -12,28 +12,37 @@ declare(strict_types=1);
 
 namespace App\Pdf\Enums;
 
+use App\Interfaces\DefaultEnumInterface;
+use App\Traits\DefaultEnumTrait;
+use Elao\Enum\Attribute\EnumCase;
+
 /**
  * The PDF document unit enumeration.
+ *
+ * @implements DefaultEnumInterface<PdfDocumentUnit>
  */
-enum PdfDocumentUnit: string
+enum PdfDocumentUnit: string implements DefaultEnumInterface
 {
+    use DefaultEnumTrait;
+
     /*
-     * The centimeter document unit.
+     * Centimeter.
      */
     case CENTIMETER = 'cm';
 
     /*
-     * The inch document unit.
+     * Inch.
      */
     case INCH = 'in';
 
     /*
-     * The millimeter document unit.
+     * Millimeter (default).
      */
+    #[EnumCase(extras: ['default' => true])]
     case MILLIMETER = 'mm';
 
     /*
-     * The point document unit.
+     * Point.
      */
     case POINT = 'pt';
 }

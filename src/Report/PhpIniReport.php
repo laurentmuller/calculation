@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfFont;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
@@ -84,15 +84,15 @@ class PhpIniReport extends AbstractReport
     private function getCellStyle(string $var): ?PdfStyle
     {
         $color = null;
-        $fontStyle = PdfFont::STYLE_REGULAR;
+        $style = PdfFontStyle::REGULAR;
         if (\preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
             $color = PdfTextColor::create($var);
         } elseif (StringUtils::equalIgnoreCase('no value', $var)) {
             $color = PdfTextColor::darkGray();
-            $fontStyle = PdfFont::STYLE_ITALIC;
+            $style = PdfFontStyle::ITALIC;
         }
         if (null !== $color) {
-            return PdfStyle::getCellStyle()->setTextColor($color)->setFontStyle($fontStyle);
+            return PdfStyle::getCellStyle()->setTextColor($color)->setFontStyle($style);
         }
 
         return null;

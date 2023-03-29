@@ -43,6 +43,22 @@ class DateUtilsTest extends TestCase
     }
 
     /**
+     * @return array<array{0:\DateTimeInterface|null, 1: string|null}>
+     */
+    public static function getFormatFormDate(): array
+    {
+        return [
+            [null, null],
+            [new \DateTime('2022-1-1'), '2022-01-01'],
+            [new \DateTime('2022-9-9'), '2022-09-09'],
+            [new \DateTime('2022-01-01'), '2022-01-01'],
+            [new \DateTime('2022-12-31'), '2022-12-31'],
+            [new \DateTime('22-12-31'), '2022-12-31'],
+            [new \DateTime('22-2-1'), '2022-02-01'],
+        ];
+    }
+
+    /**
      * @return array<array{0:string, 1: int}>
      */
     public static function getMonthNames(): array
@@ -162,6 +178,13 @@ class DateUtilsTest extends TestCase
     {
         $year = DateUtils::completYear($value, $change);
         self::assertSame($expected, $year);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getFormatFormDate')]
+    public function testFormatFormDate(?\DateTimeInterface $date, ?string $expected): void
+    {
+        $actual = DateUtils::formatFormDate($date);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getMonthNames')]

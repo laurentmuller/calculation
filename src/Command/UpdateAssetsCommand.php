@@ -285,10 +285,7 @@ class UpdateAssetsCommand extends Command
         if (isset($suffixes[$ext])) {
             $content .= $suffixes[$ext];
         }
-        foreach ($renames as $reg => $replace) {
-            $pattern = "/$reg/";
-            $targetFile = (string) \preg_replace($pattern, $replace, $targetFile);
-        }
+        $targetFile = StringUtils::pregReplace($renames, $targetFile);
         if ('css' === \pathinfo($targetFile, \PATHINFO_EXTENSION)) {
             $content = \str_replace('/*!', '/*', $content);
         }

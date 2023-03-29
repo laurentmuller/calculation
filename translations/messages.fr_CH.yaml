@@ -709,6 +709,7 @@ openweather:
     temp_min: Minimum
     temp_night: Température de nuit
     wind: Vent
+    wind_title: Vitesse du vent
     wind_deg: Direction
     wind_deg_title: 'Direction du vent : %degrees%'
     wind_gust: Rafales

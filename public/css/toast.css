@@ -74,3 +74,7 @@
         transform: none !important;
     }
 }
+
+body.dark .toast-header.toast-header-warning {
+    color: var(--white) !important;
+}

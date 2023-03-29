@@ -98,28 +98,6 @@ class HtmlStyle extends PdfStyle
     }
 
     /**
-     * Sets the font style to italic.
-     *
-     * @param bool $add true to add italic to existing style, false to replace
-     */
-    public function italic(bool $add = false): self
-    {
-        $this->getFont()->italic($add);
-
-        return $this;
-    }
-
-    /**
-     * Sets the font style to italic.
-     */
-    public function regular(): self
-    {
-        $this->getFont()->regular();
-
-        return $this;
-    }
-
-    /**
      * Reset all values to default.
      */
     public function reset(): static
@@ -214,17 +192,5 @@ class HtmlStyle extends PdfStyle
     public function setYMargins(float $margins): self
     {
         return $this->setTopMargin($margins)->setBottomMargin($margins);
-    }
-
-    /**
-     * Sets the font style to underline.
-     *
-     * @param bool $add true to add bold to existing style, false to replace
-     */
-    public function underline(bool $add = false): self
-    {
-        $this->getFont()->underline($add);
-
-        return $this;
     }
 }

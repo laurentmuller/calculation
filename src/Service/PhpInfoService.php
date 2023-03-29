@@ -40,21 +40,26 @@ final class PhpInfoService
     {
         $content = $this->asText($what);
         $content = \strip_tags($content, '<h2><th><td>');
-        $content = (string) \preg_replace('/<th[^>]*>([^<]+)<\/th>/i', '<info>\1</info>', $content);
-        $content = (string) \preg_replace('/<td[^>]*>([^<]+)<\/td>/i', '<info>\1</info>', $content);
-        $array = (array) \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/i', $content, -1, \PREG_SPLIT_DELIM_CAPTURE);
+        $content = StringUtils::pregReplace(
+            [
+                '/<th[^>]*>([^<]+)<\/th>/i' => '<info>\1</info>',
+                '/<td[^>]*>([^<]+)<\/td>/i' => '<info>\1</info>',
+            ],
+            $content
+        );
 
+        $result = [];
+        $matchs = null;
         $regexInfo = '<info>([^<]+)<\/info>';
         $regex3cols = '/' . $regexInfo . '\s*' . $regexInfo . '\s*' . $regexInfo . '/i';
         $regex2cols = '/' . $regexInfo . '\s*' . $regexInfo . '/i';
         $regexLine = '/<h2[^>]*>([^<]+)<\/h2>/i';
-
-        $result = [];
-        $matchs = null;
+        /** @psalm-var array<int, string> $array */
+        $array = (array) \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/i', $content, -1, \PREG_SPLIT_DELIM_CAPTURE);
         foreach ($array as $index => $entry) {
-            if (\preg_match($regexLine, (string) $entry, $matchs)) {
+            if (\preg_match($regexLine, $entry, $matchs)) {
                 $name = \trim($matchs[1]);
-                $vals = \explode("\n", (string) $array[$index + 1]);
+                $vals = \explode("\n", $array[$index + 1]);
                 foreach ($vals as $val) {
                     if (\preg_match($regex3cols, $val, $matchs)) {
                         // 3 columns

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Pdf\Enums\PdfFontName;
+use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfTextColor;
 
@@ -47,8 +48,8 @@ final class HtmlStyleFactory
             'ul', 'ol' => self::doCreate(false, PdfFont::DEFAULT_SIZE, 2, 4),
             'li' => self::default(),
             'b', 'strong' => self::doCreate(true),
-            'i', 'em' => self::default()->italic(true),
-            'u' => self::default()->underline(true),
+            'i', 'em' => self::default()->setFontItalic(true),
+            'u' => self::default()->setFontUnderline(true),
             'code' => self::default()
                 ->setTextColor(PdfTextColor::red())
                 ->setFontName(PdfFontName::COURIER),
@@ -80,7 +81,7 @@ final class HtmlStyleFactory
     private static function doCreate(bool $bold = false, float $size = PdfFont::DEFAULT_SIZE, float $bottomMargin = 0.0, float $leftMargin = 0.0): HtmlStyle
     {
         $font = PdfFont::default()
-            ->setStyle($bold ? PdfFont::STYLE_BOLD : PdfFont::STYLE_REGULAR)
+            ->setStyle($bold ? PdfFontStyle::BOLD : PdfFontStyle::REGULAR)
             ->setSize($size);
 
         $result = self::default();

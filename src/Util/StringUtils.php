@@ -169,9 +169,9 @@ final class StringUtils
     {
         try {
             $export = \var_export($expression, true);
-            $export = \str_replace(\array_keys(self::VAR_SEARCH), \array_values(self::VAR_SEARCH), $export);
+            $export = self::replace(self::VAR_SEARCH, $export);
 
-            return \preg_replace(\array_keys(self::VAR_PATTERN), \array_values(self::VAR_PATTERN), $export);
+            return self::pregReplace(self::VAR_PATTERN, $export);
         } catch (\Exception) {
             return (string) $expression;
         }
@@ -206,6 +206,26 @@ final class StringUtils
     public static function isString(?string $str): bool
     {
         return null !== $str && '' !== $str;
+    }
+
+    /**
+     * Replace all occurrences of the pattern string with the replacement string.
+     *
+     * @param array<string, string> $values an array where key is the pattern and value is the replacement term
+     */
+    public static function pregReplace(array $values, string $subject): string
+    {
+        return \preg_replace(\array_keys($values), \array_values($values), $subject);
+    }
+
+    /**
+     * Replace all occurrences of the search string with the replacement string.
+     *
+     * @param array<string, string> $values an array where key is the search term and value is the replacement term
+     */
+    public static function replace(array $values, string $subject): string
+    {
+        return \str_replace(\array_keys($values), \array_values($values), $subject);
     }
 
     /**

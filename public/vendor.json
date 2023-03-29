@@ -7,7 +7,7 @@
         "css": "/**! compression tag for ftp-deployment */\n\n"
     },
     "renames": {
-        "\\.src\\.": "."
+        "/\\.src\\./": "."
     },
     "plugins": [
         {
@@ -55,12 +55,14 @@
             ]
         },
         {
+            "example": "https://cdn.jsdelivr.net/npm/highcharts@10.3.3/highcharts.js",
             "name": "highcharts",
             "version": "10.3.3",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/{file}",
             "files": [
-                "highcharts.src.js"
+                "highcharts.src.js",
+                "highcharts.js.map"
             ]
         },
         {
@@ -70,7 +72,7 @@
             "format": "{source}{name}@{version}/modules/{file}",
             "target": "highcharts",
             "files": [
-                "accessibility.js",
+                "accessibility.src.js",
                 "accessibility.js.map"
             ]
         },

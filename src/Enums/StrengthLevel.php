@@ -41,7 +41,7 @@ enum StrengthLevel: int implements DefaultEnumInterface, ReadableEnumInterface, 
     /*
      * No validation level (default value).
      */
-    #[EnumCase('none', ['default' => true])]
+    #[EnumCase('none', [DefaultEnumInterface::NAME => true])]
     case NONE = -1;
 
     /*

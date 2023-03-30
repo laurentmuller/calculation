@@ -25,7 +25,7 @@ use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Service\ApplicationService;
 use App\Traits\RoleTranslatorTrait;
-use App\Util\RoleBuilder;
+use App\Utils\RoleBuilder;
 use Elao\Enum\FlagBag;
 
 /**

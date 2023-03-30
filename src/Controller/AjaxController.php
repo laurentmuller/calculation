@@ -32,7 +32,7 @@ use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;

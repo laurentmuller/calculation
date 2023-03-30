@@ -44,17 +44,6 @@ class PdfFont implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Adds the given style, if not present, to this style.
-     */
-    public function addStyle(PdfFontStyle $style): self
-    {
-        $newStyle = $this->style->value . $style->value;
-        $this->style = PdfFontStyle::fromStyle($newStyle);
-
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function apply(PdfDocument $doc): void
@@ -63,19 +52,17 @@ class PdfFont implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the font style to bold.
+     * Sets or add the bold font style.
      *
      * @param bool $add true to add bold style to existing style, false to replace
      */
     public function bold(bool $add = false): self
     {
-        $style = PdfFontStyle::BOLD;
-
-        return $add ? $this->addStyle($style) : $this->setStyle($style);
+        return $this->updateStyle(PdfFontStyle::BOLD, $add);
     }
 
     /**
-     * Gets the default font.
+     * Gets a new instance with default values.
      */
     public static function default(): self
     {
@@ -115,15 +102,13 @@ class PdfFont implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the font style to italic.
+     * Sets or add the italic font style.
      *
      * @param bool $add true to add italic style to existing style, false to replace
      */
     public function italic(bool $add = false): self
     {
-        $style = PdfFontStyle::ITALIC;
-
-        return $add ? $this->addStyle($style) : $this->setStyle($style);
+        return $this->updateStyle(PdfFontStyle::ITALIC, $add);
     }
 
     /**
@@ -131,7 +116,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
      */
     public function regular(): self
     {
-        return $this->setStyle(PdfFontStyle::REGULAR);
+        return $this->updateStyle(PdfFontStyle::REGULAR, false);
     }
 
     /**
@@ -150,6 +135,8 @@ class PdfFont implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font name.
+     *
+     * @param ?PdfFontName $name the font name or null to use the default name ("ARIAL")
      */
     public function setName(?PdfFontName $name = null): self
     {
@@ -174,23 +161,33 @@ class PdfFont implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font style.
+     *
+     * @param ?PdfFontStyle $style the font style or null to use the default style ("Regular")
      */
-    public function setStyle(PdfFontStyle $style): self
+    public function setStyle(?PdfFontStyle $style = null): self
     {
-        $this->style = $style;
-
-        return $this;
+        return $this->updateStyle($style ?? self::DEFAULT_STYLE, false);
     }
 
     /**
-     * Sets the font style to underline.
+     * Sets or add the underline font style.
      *
      * @param bool $add true to add underline style to existing style, false to replace
      */
     public function underline(bool $add = false): self
     {
-        $style = PdfFontStyle::UNDERLINE;
+        return $this->updateStyle(PdfFontStyle::UNDERLINE, $add);
+    }
 
-        return $add ? $this->addStyle($style) : $this->setStyle($style);
+    private function updateStyle(PdfFontStyle $style, bool $add): self
+    {
+        if ($add) {
+            $newStyle = $this->style->value . $style->value;
+            $this->style = PdfFontStyle::fromStyle($newStyle);
+        } else {
+            $this->style = $style;
+        }
+
+        return $this;
     }
 }

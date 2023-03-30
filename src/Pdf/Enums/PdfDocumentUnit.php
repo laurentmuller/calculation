@@ -38,7 +38,7 @@ enum PdfDocumentUnit: string implements DefaultEnumInterface
     /*
      * Millimeter (default).
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
     case MILLIMETER = 'mm';
 
     /*

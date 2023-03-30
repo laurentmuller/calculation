@@ -40,7 +40,7 @@ enum Importance: string implements DefaultEnumInterface, ReadableEnumInterface, 
     /*
      * Low importance (default value).
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
     case LOW = 'low';
 
     /*

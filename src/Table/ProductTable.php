@@ -14,7 +14,7 @@ namespace App\Table;
 
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 
 /**
  * The products table.

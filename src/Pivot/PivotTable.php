@@ -14,7 +14,7 @@ namespace App\Pivot;
 
 use App\Pivot\Aggregator\AbstractAggregator;
 use App\Pivot\Field\PivotField;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * The pivot table.

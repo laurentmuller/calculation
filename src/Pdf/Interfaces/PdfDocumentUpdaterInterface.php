@@ -21,8 +21,6 @@ interface PdfDocumentUpdaterInterface
 {
     /**
      * Apply changes to the given document.
-     *
-     * @param PdfDocument $doc The document to update
      */
     public function apply(PdfDocument $doc): void;
 }

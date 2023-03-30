@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Utils;
 
 use App\Entity\User;
 use App\Enums\EntityName;

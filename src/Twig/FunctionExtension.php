@@ -16,7 +16,7 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Service\NonceService;
 use App\Service\UrlGeneratorService;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;

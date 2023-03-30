@@ -15,7 +15,7 @@ namespace App\Pdf\Html;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
 use App\Report\HtmlReport;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * Represents a text chunk.

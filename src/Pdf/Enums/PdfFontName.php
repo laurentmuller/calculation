@@ -30,7 +30,7 @@ enum PdfFontName: string implements DefaultEnumInterface
      *
      * This is the default font.
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
     case ARIAL = 'Arial';
 
     /*

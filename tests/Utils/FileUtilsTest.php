@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Utils;
 
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(FileUtils::class)]

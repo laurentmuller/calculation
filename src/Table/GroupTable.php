@@ -16,7 +16,7 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Repository\GroupRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;

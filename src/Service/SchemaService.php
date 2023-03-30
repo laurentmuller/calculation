@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\CacheAwareTrait;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;

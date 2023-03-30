@@ -19,7 +19,7 @@ use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Service\HelpService;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 
 /**
  * Report for the help documentation.

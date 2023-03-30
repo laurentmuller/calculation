@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Repository\GlobalMarginRepository;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -46,7 +46,7 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
      * The light theme.
      */
     #[EnumCase(extras: [
-        'default' => true,
+        DefaultEnumInterface::NAME => true,
         'icon' => 'fa-regular fa-sun',
         'title' => 'theme.light.title',
         'success' => 'theme.light.success',

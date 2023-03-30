@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Database;
 
 use App\Entity\Log;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * SQLite database for logs.

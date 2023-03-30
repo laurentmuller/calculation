@@ -22,7 +22,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Traits\LoggerTrait;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeNone;
 use Endroid\QrCode\Writer\PngWriter;

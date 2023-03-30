@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Entity\User;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;

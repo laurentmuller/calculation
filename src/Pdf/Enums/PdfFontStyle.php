@@ -70,7 +70,7 @@ enum PdfFontStyle: string implements DefaultEnumInterface
     /*
      * Regular (default).
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
     case REGULAR = '';
 
     /*
@@ -83,17 +83,26 @@ enum PdfFontStyle: string implements DefaultEnumInterface
      *
      * If no match, the {@link PdfFontStyle::REGULAR} is returned.
      */
-    public static function fromStyle(?string $style): PdfFontStyle
+    public static function fromStyle(?string $style): self
     {
         if (null === $style || '' === $style) {
             return PdfFontStyle::REGULAR;
         }
-        $value = '';
+        /** @psalm-var string[] $values */
+        static $values = [];
+        if ([] === $values) {
+            $values = [
+               self::BOLD->value,
+               self::ITALIC->value,
+               self::UNDERLINE->value,
+        ];
+        }
+        $result = '';
         $style = \strtoupper($style);
-        foreach ([self::BOLD, self::ITALIC, self::UNDERLINE] as $item) {
-            $value .= \str_contains($style, $item->value) ? $item->value : '';
+        foreach ($values as $value) {
+            $result .= \str_contains($style, $value) ? $value : '';
         }
 
-        return self::from($value);
+        return self::from($result);
     }
 }

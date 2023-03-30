@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * Class to parse HTML content.

@@ -18,7 +18,7 @@ use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Traits\MathTrait;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * Class to build a table.

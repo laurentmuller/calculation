@@ -14,7 +14,7 @@ namespace App\Model;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 
 /**
  * Contains parameters to update products.

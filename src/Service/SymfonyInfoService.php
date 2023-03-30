@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;

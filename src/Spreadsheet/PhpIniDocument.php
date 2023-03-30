@@ -14,7 +14,7 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Service\PhpInfoService;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;

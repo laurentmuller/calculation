@@ -40,7 +40,7 @@ enum PdfDocumentOutput: string implements DefaultEnumInterface
      *
      * The PDF viewer is used if available.
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
     case INLINE = 'I';
 
     /*

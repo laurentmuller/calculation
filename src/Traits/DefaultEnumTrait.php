@@ -44,6 +44,6 @@ trait DefaultEnumTrait
      */
     public function isDefault(): bool
     {
-        return $this->getExtraBool('default');
+        return $this->getExtraBool(DefaultEnumInterface::NAME);
     }
 }

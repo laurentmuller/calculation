@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Util\FormatUtils;
-use App\Util\StringUtils;
+use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Psr\Log\LogLevel;

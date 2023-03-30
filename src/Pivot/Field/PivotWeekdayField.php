@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pivot\Field;
 
-use App\Util\DateUtils;
+use App\Utils\DateUtils;
 
 /**
  * Pivot field that map the week day values (1...7) to the wek day names (monday, tuesday, etc...).

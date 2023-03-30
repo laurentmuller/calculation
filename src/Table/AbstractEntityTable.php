@@ -15,7 +15,7 @@ namespace App\Table;
 use App\Entity\AbstractEntity;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;

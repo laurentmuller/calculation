@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Traits\TranslatorTrait;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Error\RuntimeError;

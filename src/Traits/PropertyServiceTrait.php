@@ -14,7 +14,7 @@ namespace App\Traits;
 
 use App\Entity\AbstractProperty;
 use App\Enums\EntityAction;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;

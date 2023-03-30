@@ -1026,31 +1026,33 @@ show:
   name: Nom
   value: Valeur
 simple_editor:
-  bold: Gras
+  titles: Style
   h1: Titre 1
   h2: Titre 2
   h3: Titre 3
   h4: Titre 4
   h5: Titre 5
   h6: Titre 6
+  normal: Normale
+  bold: Gras
+  italic: Italique
+  underline: Souligné
+  strikethrough: Barré
+  removeFormat: Supprimer le format
+  subscript: Indice
+  superscript: Exposant
   indent: Augmenter le retrait
+  outdent: Diminuer le retrait
   insertOrderedList: Liste numérotée
   insertUnorderedList: Liste à puces
-  italic: Italique
+  insertHorizontalRule: Ligne horizontale
   justifyCenter: Centrer
   justifyLeft: Aligner à gauche
   justifyRight: Aligner à droite
   justify_full: Justifier
   line: Ligne horizontale
-  outdent: Diminuer le retrait
-  redo: Rétablir la dernière action
-  removeFormat: Supprimer le format
-  strikethrough: Barré
-  subscript: Indice
-  superscript: Exposant
-  titles: Titres
-  underline: Souligné
   undo: Annuler la dernière action
+  redo: Rétablir la dernière action
 swisspost:
   error:
     mime_type: Le type de fichier sélectionné n'est pas valide.

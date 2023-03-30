@@ -91,9 +91,9 @@ class HtmlReport extends AbstractReport
     }
 
     /**
-     * @param string $orientation
-     * @param mixed  $size
-     * @param int    $rotation
+     * @param string         $orientation
+     * @param string|float[] $size
+     * @param string         $rotation
      */
     protected function _beginpage($orientation, $size, $rotation): void
     {

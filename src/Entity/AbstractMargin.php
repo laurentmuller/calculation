@@ -14,7 +14,7 @@ namespace App\Entity;
 
 use App\Interfaces\MarginInterface;
 use App\Types\FixedFloatType;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 

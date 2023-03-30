@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\SessionAwareTrait;
-use App\Util\ImageHandler;
-use App\Util\StringUtils;
+use App\Utils\ImageHandler;
+use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;

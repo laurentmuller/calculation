@@ -14,7 +14,7 @@ namespace App\Table;
 
 use App\Repository\CategoryRepository;
 use App\Repository\TaskRepository;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 
 /**
  * The tasks table.

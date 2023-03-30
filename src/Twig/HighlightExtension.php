@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Twig\DoctrineExtension;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
@@ -67,13 +67,13 @@ class HighlightExtension extends AbstractExtension
         ];
     }
 
-    private function exportPhp(Environment $env, mixed $variable, string $id = '', int $maxDepth = 1): ?string
+    private function exportPhp(Environment $env, mixed $variable, string $id = ''): ?string
     {
         if (null === $variable || '' === $variable) {
             return null;
         }
         $cloner = $this->getCloner();
-        $dumper = $this->getDumper($env, $maxDepth);
+        $dumper = $this->getDumper($env);
         $data = $cloner->cloneVar($variable);
         /** @psalm-var resource $output */
         $output = \fopen('php://memory', 'r+');
@@ -101,32 +101,21 @@ class HighlightExtension extends AbstractExtension
 
     private function getCloner(): VarCloner
     {
-        if (!isset($this->cloner)) {
-            $this->cloner = new VarCloner();
-        }
-
-        return $this->cloner;
+        return $this->cloner ??= new VarCloner();
     }
 
     private function getDoctrine(Environment $env): DoctrineExtension
     {
-        if (!isset($this->doctrine)) {
-            $this->doctrine = $env->getExtension(DoctrineExtension::class);
-        }
-
-        return $this->doctrine;
+        return $this->doctrine ??= $env->getExtension(DoctrineExtension::class);
     }
 
-    private function getDumper(Environment $env, int $maxDepth): HtmlDumper
+    private function getDumper(Environment $env): HtmlDumper
     {
         if (!isset($this->dumper)) {
             $this->dumper = new HtmlDumper();
             $this->dumper->setDumpHeader('');
             $this->dumper->setCharset($env->getCharset());
         }
-        $this->dumper->setDisplayOptions([
-            'maxDepth' => $maxDepth,
-        ]);
 
         return $this->dumper;
     }

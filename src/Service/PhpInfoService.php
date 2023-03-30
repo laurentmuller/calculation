@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * Utility class to get PHP information.

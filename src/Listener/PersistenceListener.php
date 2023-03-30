@@ -25,7 +25,7 @@ use App\Entity\User;
 use App\Interfaces\DisableListenerInterface;
 use App\Traits\DisableListenerTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;

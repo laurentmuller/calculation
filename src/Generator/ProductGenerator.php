@@ -14,7 +14,7 @@ namespace App\Generator;
 
 use App\Entity\Product;
 use App\Faker\Generator;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 
 /**
  * Class to generate products.

@@ -14,7 +14,7 @@ namespace App\Form\Type;
 
 use App\Entity\AbstractEntity;
 use App\Traits\TranslatorAwareTrait;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\FormInterface;

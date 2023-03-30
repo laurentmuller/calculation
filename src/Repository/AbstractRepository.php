@@ -14,7 +14,7 @@ namespace App\Repository;
 
 use App\Attribute\SortableEntity;
 use App\Entity\AbstractEntity;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query;

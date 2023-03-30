@@ -14,7 +14,7 @@ namespace App\Pivot;
 
 use App\Interfaces\SortModeInterface;
 use App\Pivot\Aggregator\AbstractAggregator;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * Represents a pivot node.

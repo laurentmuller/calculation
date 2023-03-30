@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -39,7 +40,7 @@ class CommentController extends AbstractController
     #[Route(path: '/comment', name: 'user_comment')]
     public function invoke(Request $request, MailerService $service, LoggerInterface $logger): Response
     {
-        /** @var User $from */
+        /** @psalm-var User|Address $from */
         $from = $this->getUser() ?? $this->getAddressFrom();
         $comment = new Comment(false);
         $comment->setSubject($this->getApplicationName())

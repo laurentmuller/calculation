@@ -15,7 +15,7 @@ namespace App\Form\User;
 use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Symfony\Component\Form\FormEvent;
 
 /**

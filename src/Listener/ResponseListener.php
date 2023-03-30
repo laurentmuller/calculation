@@ -14,8 +14,8 @@ namespace App\Listener;
 
 use App\Interfaces\MimeTypeInterface;
 use App\Service\NonceService;
-use App\Util\FileUtils;
-use App\Util\StringUtils;
+use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;

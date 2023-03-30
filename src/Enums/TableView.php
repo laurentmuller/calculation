@@ -41,7 +41,7 @@ enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, S
     /*
      * Show values within a table (default value).
      */
-    #[EnumCase(extras: ['page-size' => 20, 'default' => true])]
+    #[EnumCase(extras: ['page-size' => 20, DefaultEnumInterface::NAME => true])]
     case TABLE = 'table';
 
     /**

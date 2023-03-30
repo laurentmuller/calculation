@@ -22,7 +22,7 @@ use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Traits\TranslatorTrait;
 use App\Twig\FormatExtension;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

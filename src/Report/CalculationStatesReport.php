@@ -20,7 +20,7 @@ use App\Pdf\PdfFillColor;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 
 /**
  * Report for the list of calculation states.

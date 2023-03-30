@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Utils;
 
-use App\Util\BitSet;
+use App\Utils\BitSet;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(BitSet::class)]

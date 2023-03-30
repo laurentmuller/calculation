@@ -22,7 +22,7 @@ use App\Model\Role;
 use App\Service\ClearCacheService;
 use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
-use App\Util\RoleBuilder;
+use App\Utils\RoleBuilder;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

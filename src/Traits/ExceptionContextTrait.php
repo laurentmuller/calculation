@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * Trait to get an exception context.

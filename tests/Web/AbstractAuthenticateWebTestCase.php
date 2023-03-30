@@ -19,7 +19,7 @@ use App\Repository\UserRepository;
 use App\Service\ApplicationService;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
-use App\Util\RoleBuilder;
+use App\Utils\RoleBuilder;
 
 use function PHPUnit\Framework\throwException;
 

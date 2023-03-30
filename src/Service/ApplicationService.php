@@ -27,7 +27,7 @@ use App\Model\CustomerInformation;
 use App\Model\Role;
 use App\Repository\PropertyRepository;
 use App\Traits\PropertyServiceTrait;
-use App\Util\RoleBuilder;
+use App\Utils\RoleBuilder;
 use App\Validator\Password;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;

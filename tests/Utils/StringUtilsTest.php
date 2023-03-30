@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Entity\Calculation;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(StringUtils::class)]

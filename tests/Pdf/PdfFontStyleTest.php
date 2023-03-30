@@ -62,6 +62,9 @@ class PdfFontStyleTest extends TestCase
             [null, PdfFontStyle::REGULAR],
             ['', PdfFontStyle::REGULAR],
             ['z', PdfFontStyle::REGULAR],
+
+            ['BBB', PdfFontStyle::BOLD],
+            ['BIBI', PdfFontStyle::BOLD_ITALIC],
         ];
     }
 

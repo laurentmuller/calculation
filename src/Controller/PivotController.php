@@ -19,7 +19,7 @@ use App\Pivot\PivotTable;
 use App\Pivot\PivotTableFactory;
 use App\Repository\CalculationRepository;
 use App\Response\CsvResponse;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;

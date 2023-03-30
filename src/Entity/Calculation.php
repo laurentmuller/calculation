@@ -16,7 +16,7 @@ use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationRepository;
 use App\Traits\TimestampableTrait;
 use App\Types\FixedFloatType;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;

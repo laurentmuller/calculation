@@ -33,6 +33,6 @@ enum PdfDocumentOrientation: string implements DefaultEnumInterface
     /*
      * Portrait orientation (default).
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
     case PORTRAIT = 'P';
 }

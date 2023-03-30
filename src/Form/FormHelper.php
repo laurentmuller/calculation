@@ -16,7 +16,7 @@ use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
 use App\Interfaces\SortableEnumInterface;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use Elao\Enum\ReadableEnumInterface;
 use Symfony\Component\Form\DataTransformerInterface;

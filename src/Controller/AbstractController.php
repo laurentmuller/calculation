@@ -165,25 +165,20 @@ abstract class AbstractController extends BaseController
      */
     public function getUserEmail(): ?string
     {
+        /** @psalm-var User|null $user */
         $user = $this->getUser();
-        if ($user instanceof User) {
-            return $user->getEmail();
-        }
 
-        return null;
+        return $user?->getEmail();
     }
 
     /**
      * Gets the connected user identifier.
+     *
+     * @return string|null the user identifier or null if not connected
      */
     public function getUserIdentifier(): ?string
     {
-        $user = $this->getUser();
-        if ($user instanceof User) {
-            return $user->getUserIdentifier();
-        }
-
-        return null;
+        return $this->getUser()?->getUserIdentifier();
     }
 
     /**

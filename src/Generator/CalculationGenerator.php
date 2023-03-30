@@ -17,7 +17,7 @@ use App\Entity\CalculationItem;
 use App\Faker\Generator;
 use App\Service\CalculationService;
 use App\Service\FakerService;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**

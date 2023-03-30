@@ -14,7 +14,7 @@ namespace App\Form\Type;
 
 use App\Captcha\AlphaCaptchaInterface;
 use App\Traits\SessionAwareTrait;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;

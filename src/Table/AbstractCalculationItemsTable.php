@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Repository\CalculationRepository;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Doctrine\Common\Collections\Criteria;
 
 /**

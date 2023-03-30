@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\Enums\Importance;
 use App\Interfaces\RoleInterface;
 use App\Mime\CspViolationEmail;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;

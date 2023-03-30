@@ -25,7 +25,7 @@ use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 
 /**
  * PDF document with default header and footer, outline and index capabilities.

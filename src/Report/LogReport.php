@@ -29,8 +29,8 @@ use App\Pdf\PdfLine;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
-use App\Util\FormatUtils;
-use App\Util\StringUtils;
+use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use Psr\Log\LogLevel;
 
 /**

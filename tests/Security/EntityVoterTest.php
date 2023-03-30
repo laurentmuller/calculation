@@ -19,7 +19,7 @@ use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
-use App\Util\RoleBuilder;
+use App\Utils\RoleBuilder;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;

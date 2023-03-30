@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
-use App\Util\FormatUtils;
-use App\Util\StringUtils;
+use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 
 /**
  * Represents a month with a calendar and an array of days.

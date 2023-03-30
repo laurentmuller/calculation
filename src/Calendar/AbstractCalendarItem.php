@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * Base class for calendar objects.

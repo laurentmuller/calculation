@@ -14,7 +14,7 @@ namespace App\Table;
 
 use App\Entity\AbstractEntity;
 use App\Interfaces\SortModeInterface;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 

@@ -17,7 +17,7 @@ use App\Entity\CalculationState;
 use App\Repository\CalculationStateRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;

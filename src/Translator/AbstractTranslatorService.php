@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use App\Service\AbstractHttpClientService;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 

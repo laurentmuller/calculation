@@ -20,7 +20,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Service\SchemaService;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 
 /**
  * Report to display database schema.

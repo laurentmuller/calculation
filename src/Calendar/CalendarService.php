@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
-use App\Util\DateUtils;
+use App\Utils\DateUtils;
 
 /**
  * Creates an instance of calendar suitable for rendering in Twig template.

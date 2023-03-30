@@ -35,7 +35,7 @@ enum PdfDocumentSize: string implements DefaultEnumInterface
      *
      * This is the default value.
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
     case A4 = 'A4';
 
     /*

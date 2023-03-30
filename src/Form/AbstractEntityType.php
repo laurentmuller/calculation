@@ -14,7 +14,7 @@ namespace App\Form;
 
 use App\Entity\AbstractEntity;
 use App\Traits\CheckSubClassTrait;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**

@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
-use App\Util\DateUtils;
-use App\Util\FormatUtils;
-use App\Util\StringUtils;
+use App\Utils\DateUtils;
+use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 
 /**
  * Represents a calendar for a specified year.

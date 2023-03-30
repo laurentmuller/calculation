@@ -20,7 +20,7 @@ use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
 use App\Table\LogTable;
 use App\Traits\TableTrait;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

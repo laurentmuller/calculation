@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;

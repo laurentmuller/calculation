@@ -17,7 +17,7 @@ use App\Interfaces\TimestampableInterface;
 use App\Repository\UserRepository;
 use App\Traits\RoleTrait;
 use App\Traits\TimestampableTrait;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

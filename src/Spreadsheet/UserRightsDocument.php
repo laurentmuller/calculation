@@ -18,7 +18,7 @@ use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Traits\RoleTranslatorTrait;
-use App\Util\RoleBuilder;
+use App\Utils\RoleBuilder;
 use Elao\Enum\FlagBag;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;

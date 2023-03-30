@@ -14,8 +14,8 @@ namespace App\Tests\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Interfaces\RoleInterface;
 use App\Traits\RightsTrait;
-use App\Util\RoleBuilder;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\TestCase;
 
@@ -77,7 +77,7 @@ class RightsTraitTest extends TestCase
     public function testInvalidAttribute(): void
     {
         $attribute = $this->getAttribute('UnknownAttribute');
-        self::assertSame(RoleBuilder::INVALID_VALUE, $attribute);
+        self::assertSame(RoleInterface::INVALID_VALUE, $attribute);
     }
 
     public function testIsNotSet(): void
@@ -112,6 +112,6 @@ class RightsTraitTest extends TestCase
     {
         $permission = EntityPermission::tryFromName($key);
 
-        return $permission instanceof EntityPermission ? $permission->value : RoleBuilder::INVALID_VALUE;
+        return $permission instanceof EntityPermission ? $permission->value : RoleInterface::INVALID_VALUE;
     }
 }

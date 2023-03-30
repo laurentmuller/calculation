@@ -14,7 +14,7 @@ namespace App\Pdf;
 
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Report\AbstractReport;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 
 /**
  * Class to output footer in PDF documents.

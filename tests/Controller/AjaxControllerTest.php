@@ -14,7 +14,7 @@ namespace App\Tests\Controller;
 
 use App\Controller\AjaxController;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;

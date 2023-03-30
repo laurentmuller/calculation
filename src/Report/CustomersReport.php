@@ -18,7 +18,7 @@ use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * Report for the list of customers.

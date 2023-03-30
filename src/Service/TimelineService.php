@@ -15,8 +15,8 @@ namespace App\Service;
 use App\Entity\Calculation;
 use App\Repository\CalculationRepository;
 use App\Traits\GroupByTrait;
-use App\Util\DateUtils;
-use App\Util\FormatUtils;
+use App\Utils\DateUtils;
+use App\Utils\FormatUtils;
 
 /**
  * Service for calculations timeline.

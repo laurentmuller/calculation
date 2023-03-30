@@ -14,7 +14,7 @@ namespace App\Controller;
 
 use App\Interfaces\RoleInterface;
 use App\Service\ExchangeRateService;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -21,7 +21,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
 use App\Traits\RoleTranslatorTrait;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**

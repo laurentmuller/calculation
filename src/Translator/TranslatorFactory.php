@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use App\Traits\SessionAwareTrait;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;

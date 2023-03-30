@@ -38,7 +38,7 @@ enum PdfDocumentLayout: string implements DefaultEnumInterface
     /*
      * Displays one page at once (default).
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
     case SINGLE = 'single';
 
     /*

@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Util\FileUtils;
-use App\Util\StringUtils;
+use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -89,7 +89,6 @@ class UpdateAssetsCommand extends Command
 
             return Command::INVALID;
         }
-
         $configuration = $this->loadConfiguration($publicDir);
         if (null === $configuration) {
             $this->writeNote('No configuration found.');
@@ -173,7 +172,7 @@ class UpdateAssetsCommand extends Command
         }
         foreach ($paths as $path) {
             if (!isset($content[$path])) {
-                $this->write("Unable to find the path '$path' for the plugin '$name'.");
+                $this->write("Unable to find the path '$path' for the plugin '$name'.", 'error');
 
                 return;
             }
@@ -183,7 +182,7 @@ class UpdateAssetsCommand extends Command
         /** @var string $newVersion */
         $newVersion = $content;
         if (\version_compare($version, $newVersion, '<')) {
-            $this->writeWarning("The plugin '$name' version '$version' can be updated to the version '$newVersion'.");
+            $this->write("The plugin '$name' version '$version' can be updated to the version '$newVersion'.", 'error');
         }
     }
 

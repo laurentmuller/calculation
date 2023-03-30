@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\EntityPermission;
-use App\Util\RoleBuilder;
+use App\Interfaces\RoleInterface;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\TestCase;
 
@@ -175,7 +175,7 @@ class EntityPermissionTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindValue')]
-    public function testTryFindValue(string $name, int $expected, int $default = RoleBuilder::INVALID_VALUE): void
+    public function testTryFindValue(string $name, int $expected, int $default = RoleInterface::INVALID_VALUE): void
     {
         $result = EntityPermission::tryFindValue($name, $default);
         self::assertSame($expected, $result);

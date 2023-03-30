@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Utils;
 
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(FormatUtils::class)]

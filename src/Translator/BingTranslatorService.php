@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

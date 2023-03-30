@@ -14,7 +14,7 @@ namespace App\Captcha;
 
 use App\Service\DictionaryService;
 use App\Traits\TranslatorAwareTrait;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 

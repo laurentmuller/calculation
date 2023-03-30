@@ -19,7 +19,7 @@ use App\Entity\Task;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;

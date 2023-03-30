@@ -16,7 +16,7 @@ use App\Entity\User;
 use App\Interfaces\ImageExtensionInterface;
 use App\Service\ImageResizer;
 use App\Service\UserNamer;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\File\File;

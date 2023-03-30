@@ -14,7 +14,7 @@ namespace App\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
-use App\Util\RoleBuilder;
+use App\Interfaces\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Elao\Enum\FlagBag;
 
@@ -149,7 +149,7 @@ trait RightsTrait
     private function getEntityRights(string $entity): ?FlagBag
     {
         $offset = EntityName::tryFindOffset($entity);
-        if (RoleBuilder::INVALID_VALUE === $offset) {
+        if (RoleInterface::INVALID_VALUE === $offset) {
             return null;
         }
         $rights = $this->getRights();
@@ -166,7 +166,7 @@ trait RightsTrait
     private function setEntityRights(string $entity, FlagBag $rights): static
     {
         $offset = EntityName::tryFindOffset($entity);
-        if (RoleBuilder::INVALID_VALUE !== $offset) {
+        if (RoleInterface::INVALID_VALUE !== $offset) {
             $newRights = $this->getRights();
             $newRights[$offset] = $rights->getValue();
 

@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Utils;
 
 /**
  * Class to get the file content on the fly, line by line; in the reverse order (last line first).

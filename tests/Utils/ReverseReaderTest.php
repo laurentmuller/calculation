@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Utils;
 
-use App\Util\ReverseReader;
+use App\Utils\ReverseReader;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ReverseReader::class)]

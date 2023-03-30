@@ -20,7 +20,7 @@ use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationBelowTable;
 use App\Traits\TableTrait;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

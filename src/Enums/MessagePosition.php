@@ -45,7 +45,7 @@ enum MessagePosition: string implements DefaultEnumInterface, ReadableEnumInterf
     /*
      * Bottom right position.
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
     case BOTTOM_RIGHT = 'bottom-right';
 
     /*

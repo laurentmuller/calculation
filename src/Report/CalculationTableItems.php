@@ -21,7 +21,7 @@ use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
 use App\Traits\TranslatorTrait;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

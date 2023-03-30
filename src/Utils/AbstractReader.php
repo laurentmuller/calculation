@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Utils;
 
 /**
  * Abstract class to get the file content on the fly.

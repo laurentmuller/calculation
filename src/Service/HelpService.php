@@ -14,7 +14,7 @@ namespace App\Service;
 
 use App\Traits\CacheAwareTrait;
 use App\Traits\TranslatorAwareTrait;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;

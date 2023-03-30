@@ -19,7 +19,7 @@ use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
 use App\Service\PhpInfoService;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * Report for php.ini.

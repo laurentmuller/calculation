@@ -15,7 +15,7 @@ namespace App\Pdf;
 use App\Interfaces\ImageExtensionInterface;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 
 /**
  * Specialized cell containing an image.

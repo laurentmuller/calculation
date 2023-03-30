@@ -35,7 +35,7 @@ enum EntityAction: string implements DefaultEnumInterface, ReadableEnumInterface
     /*
      * Edit the entity (default value).
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
     case EDIT = 'edit';
 
     /*

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Utils;
 
-use App\Util\DateUtils;
+use App\Utils\DateUtils;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(DateUtils::class)]

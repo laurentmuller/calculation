@@ -14,9 +14,9 @@ namespace App\Table;
 
 use App\Entity\Log;
 use App\Service\LogService;
-use App\Util\FileUtils;
-use App\Util\LogFilter;
-use App\Util\LogSorter;
+use App\Utils\FileUtils;
+use App\Utils\LogFilter;
+use App\Utils\LogSorter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -24,17 +24,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * The Simple editor type.
  *
  * @psalm-type SimpleEditorActionType = array{
- *      title: ?string,
- *      group: ?string,
- *      icon: ?string,
- *      text: string,
+ *      title: string|false|null,
+ *      group: string|null,
+ *      icon: string|null,
+ *      text: string|null,
  *      exec: string,
- *      parameter: string,
- *      state: string,
- *      enabled: string,
- *      class: string,
+ *      parameter: string|null,
+ *      state: string|null,
+ *      enabled: string|null,
+ *      class: string|null,
  *      attributes: array<string, string>,
- *      actions: ?array}
+ *      actions?: array}
  *
  * @extends AbstractType<HiddenType>
  */
@@ -140,32 +140,38 @@ class SimpleEditorType extends AbstractType
 
     /**
      * @psalm-param SimpleEditorActionType[] $actions
+     *
+     * @psalm-return SimpleEditorActionType[]
      */
-    private function updateActions(array &$actions, string $class = 'btn btn-outline-secondary'): void
+    private function updateActions(array &$actions, string $class = 'btn btn-outline-secondary'): array
     {
         foreach ($actions as &$action) {
-            $action['icon'] ??= $action['exec'];
-            $action['attributes']['class'] = $class;
-            $action['attributes']['title'] = 'simple_editor.' . ($action['title'] ?? $action['exec']);
-
-            $this->updateExec($action)
+            $this->updateClass($action, $class)
+                ->updateIcon($action)
+                ->updateTitle($action)
+                ->updateExec($action)
                 ->updateText($action)
                 ->updateState($action)
-                ->updateClass($action)
                 ->updateEnabled($action)
                 ->updateParameter($action)
                 ->updateDropDown($action);
         }
+
+        return $actions;
     }
 
     /**
      * @psalm-param SimpleEditorActionType $action
      */
-    private function updateClass(array &$action): self
+    private function updateClass(array &$action, string $class): self
     {
-        if (!empty($action['class'])) {
-            $action['attributes']['class'] .= ' ' . $action['class'];
+        if (!empty($action['actions'])) {
+            $class .= ' dropdown-toggle';
         }
+        if (!empty($action['class'])) {
+            $class .= ' ' . $action['class'];
+        }
+        $action['attributes']['class'] = $class;
 
         return $this;
     }
@@ -180,8 +186,7 @@ class SimpleEditorType extends AbstractType
         if ([] !== $actions) {
             $action['attributes']['aria-expanded'] = 'false';
             $action['attributes']['data-toggle'] = 'dropdown';
-            $action['attributes']['class'] .= ' dropdown-toggle';
-            $this->updateActions($actions, 'dropdown-item');
+            $action['actions'] = $this->updateActions($actions, 'dropdown-item');
         }
     }
 
@@ -205,6 +210,16 @@ class SimpleEditorType extends AbstractType
         if (!empty($action['exec'])) {
             $action['attributes']['data-exec'] = $action['exec'];
         }
+
+        return $this;
+    }
+
+    /**
+     * @psalm-param SimpleEditorActionType $action
+     */
+    private function updateIcon(array &$action): self
+    {
+        $action['icon'] ??= $action['exec'];
 
         return $this;
     }
@@ -240,6 +255,19 @@ class SimpleEditorType extends AbstractType
     {
         if (!empty($action['text'])) {
             $action['text'] = 'simple_editor.' . $action['text'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @psalm-param SimpleEditorActionType $action
+     */
+    private function updateTitle(array &$action): self
+    {
+        $title = $action['title'] ?? $action['exec'];
+        if (\is_string($title)) {
+            $action['attributes']['title'] = "simple_editor.$title";
         }
 
         return $this;

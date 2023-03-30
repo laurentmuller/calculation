@@ -21,7 +21,7 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\TableTrait;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;

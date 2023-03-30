@@ -22,7 +22,7 @@ use App\Calendar\Week;
 use App\Entity\Calculation;
 use App\Interfaces\RoleInterface;
 use App\Repository\CalculationRepository;
-use App\Util\DateUtils;
+use App\Utils\DateUtils;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

@@ -20,6 +20,11 @@ namespace App\Interfaces;
 interface DefaultEnumInterface
 {
     /**
+     * The default attribute name.
+     */
+    public const NAME = 'default';
+
+    /**
      * Gets the default enumeration.
      *
      * @return T

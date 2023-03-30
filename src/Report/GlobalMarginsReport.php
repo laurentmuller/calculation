@@ -15,7 +15,7 @@ namespace App\Report;
 use App\Entity\GlobalMargin;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfTableBuilder;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 
 /**
  * Report for the list of global margins.

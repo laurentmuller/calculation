@@ -458,10 +458,12 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font name.
+     *
+     * @param ?PdfFontName $name the font name or null to use the default name ("ARIAL")
      */
-    public function setFontName(?PdfFontName $fontName = null): static
+    public function setFontName(?PdfFontName $name = null): static
     {
-        $this->font->setName($fontName);
+        $this->font->setName($name);
 
         return $this;
     }
@@ -488,8 +490,10 @@ class PdfStyle implements PdfDocumentUpdaterInterface
 
     /**
      * Sets the font style.
+     *
+     * @param ?PdfFontStyle $style the font style or null to use the default style ("Regular")
      */
-    public function setFontStyle(PdfFontStyle $style): static
+    public function setFontStyle(?PdfFontStyle $style = null): static
     {
         $this->font->setStyle($style);
 

@@ -36,7 +36,7 @@ use App\Service\SwissPostService;
 use App\Traits\GroupByTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
 use App\Translator\TranslatorFactory;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 use App\Validator\Captcha;
 use App\Validator\Password;
 use App\Validator\Strength;
@@ -102,23 +102,21 @@ class TestController extends AbstractController
             ->notRequired()
             ->addFileType();
         $form = $helper->createForm();
-        if ($this->handleRequestForm($request, $form)) {
-            $user = $this->getUser();
-            if ($user instanceof User) {
-                /** @var array{email: string, message: string, importance: Importance, attachments: UploadedFile[]}  $data */
-                $data = $form->getData();
-                $email = $data['email'];
-                $message = $data['message'];
-                $importance = $data['importance'];
-                $attachments = $data['attachments'];
 
-                try {
-                    $service->sendNotification($email, $user, $message, $importance, $attachments);
+        if ($this->handleRequestForm($request, $form) && ($user = $this->getUser()) instanceof User) {
+            /** @psalm-var array{email: string, message: string, importance: Importance, attachments: UploadedFile[]}  $data */
+            $data = $form->getData();
+            $email = $data['email'];
+            $message = $data['message'];
+            $importance = $data['importance'];
+            $attachments = $data['attachments'];
 
-                    return $this->redirectToHomePage('user.comment.success');
-                } catch (TransportExceptionInterface $e) {
-                    return $this->renderFormException('user.comment.error', $e, $logger);
-                }
+            try {
+                $service->sendNotification($email, $user, $message, $importance, $attachments);
+
+                return $this->redirectToHomePage('user.comment.success');
+            } catch (TransportExceptionInterface $e) {
+                return $this->renderFormException('user.comment.error', $e, $logger);
             }
         }
 
@@ -453,7 +451,7 @@ class TestController extends AbstractController
      */
     private function getCurrencies(): array
     {
-        /** @var array<int, array{code: string, name: string}> $currencies */
+        /** @psalm-var array<int, array{code: string, name: string}> $currencies */
         $currencies = \array_map(function (string $code): array {
             $name = \ucfirst(Currencies::getName($code));
             $symbol = Currencies::getSymbol($code);

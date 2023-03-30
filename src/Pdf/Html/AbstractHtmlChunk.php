@@ -20,7 +20,7 @@ use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfTextColor;
 use App\Report\HtmlReport;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * Represents an HTML chunk.
@@ -513,7 +513,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
                 $style->setFontRegular();
                 break;
             case 'text-monospace':
-                $style->setFontRegular()->setFontName(PdfFontName::COURIER);
+                $style->setFontName(PdfFontName::COURIER);
                 break;
         }
 

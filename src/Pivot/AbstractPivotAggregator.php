@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pivot;
 
 use App\Pivot\Aggregator\AbstractAggregator;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 
 /**
  * Class with an aggregator function.

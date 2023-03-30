@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Database;
 
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 
 /**
  * Extended the SQLite3 database with transaction support and caching SQL statements.

@@ -16,7 +16,7 @@ use App\Interfaces\TableInterface;
 use App\Service\SearchService;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
-use App\Util\FileUtils;
+use App\Utils\FileUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;

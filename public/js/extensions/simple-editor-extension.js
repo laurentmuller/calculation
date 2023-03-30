@@ -70,7 +70,7 @@
                 return document.queryCommandEnabled(command);
             };
             const execCommand = function (command) {
-                const value = arguments.length > 1 && typeof arguments[1] !== 'undefined' ? arguments[1] : null;
+                const value = arguments.length > 1 && typeof arguments[1] !== 'undefined' ? arguments[1] : '';
                 return document.execCommand(command, false, value);
             };
 
@@ -97,7 +97,7 @@
                     if (exec) {
                         $button.on('click', function () {
                             if (queryCommandEnabled(exec)) {
-                                return $content.trigger('focus') && execCommand(exec, data.parameter || null);
+                                return $content.trigger('focus') && execCommand(exec, data.parameter || '');
                             }
                             return $content.trigger('focus');
                         });
@@ -118,7 +118,6 @@
                             $button.toggleDisabled(!queryCommandEnabled(enabled));
                         });
                     }
-
                     // remove attributes
                     // $button.removeAttr('data-exec data-parameter data-state data-enabled');
                 });

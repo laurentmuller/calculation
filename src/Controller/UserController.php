@@ -32,7 +32,7 @@ use App\Service\RoleHierarchyService;
 use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Table\UserTable;
-use App\Util\RoleBuilder;
+use App\Utils\RoleBuilder;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -41,6 +41,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
@@ -130,7 +131,7 @@ class UserController extends AbstractEntityController
 
             return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
         }
-        /** @var User $from */
+        /** @psalm-var User|Address $from */
         $from = $this->getUser() ?? $this->getAddressFrom();
         $comment = new Comment(true);
         $comment->setSubject($this->getApplicationName())

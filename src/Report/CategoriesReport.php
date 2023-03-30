@@ -19,7 +19,7 @@ use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Traits\GroupByTrait;
-use App\Util\FormatUtils;
+use App\Utils\FormatUtils;
 
 /**
  * Report for the list of categories.

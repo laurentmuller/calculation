@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\RoleInterface;
 use App\Interfaces\SortableEnumInterface;
 use App\Traits\ExtendedExtrasTrait;
-use App\Util\RoleBuilder;
-use App\Util\StringUtils;
+use App\Utils\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\ReadableEnumInterface;
@@ -151,7 +151,7 @@ enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
     /**
      * Find an entity name offset for the given subject.
      */
-    public static function tryFindOffset(mixed $subject, int $default = RoleBuilder::INVALID_VALUE): int
+    public static function tryFindOffset(mixed $subject, int $default = RoleInterface::INVALID_VALUE): int
     {
         return EntityName::tryFromMixed($subject)?->offset() ?? $default;
     }

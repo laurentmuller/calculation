@@ -33,7 +33,7 @@ enum PdfDocumentZoom: string implements DefaultEnumInterface
     /*
      * Displays the entire page on screen.
      */
-    #[EnumCase(extras: ['default' => true])]
+    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
     case FULL_PAGE = 'fullpage';
 
     /*

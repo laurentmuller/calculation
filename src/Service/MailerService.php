@@ -20,6 +20,7 @@ use App\Model\Comment;
 use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -49,7 +50,7 @@ class MailerService implements ServiceSubscriberInterface
     /**
      * Send a comment.
      *
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface if an exception occurs while sending the notification
+     * @throws TransportExceptionInterface if an exception occurs while sending the notification
      */
     public function sendComment(Comment $comment): void
     {
@@ -57,15 +58,13 @@ class MailerService implements ServiceSubscriberInterface
         $notification->subject((string) $comment->getSubject())
             ->importance($comment->getImportance())
             ->markdown($this->convert((string) $comment->getMessage()))
-            ->action($this->trans('index.title'), $this->getHomeUrl());
+            ->action($this->trans('index.title'), $this->getHomeUrl())
+            ->attachFromUploadedFiles(...$comment->getAttachments());
         if (null !== $address = $comment->getFromAddress()) {
             $notification->from($address);
         }
         if (null !== $address = $comment->getToAddress()) {
             $notification->to($address);
-        }
-        foreach ($comment->getAttachments() as $attachment) {
-            $notification->attachFromUploadedFile($attachment);
         }
         $this->mailer->send($notification);
     }
@@ -75,7 +74,7 @@ class MailerService implements ServiceSubscriberInterface
      *
      * @param UploadedFile[] $attachments
      *
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface if an exception occurs while sending the notification
+     * @throws TransportExceptionInterface if an exception occurs while sending the notification
      */
     public function sendNotification(string $fromEmail, User $toUser, string $message, Importance $importance = Importance::LOW, array $attachments = []): void
     {

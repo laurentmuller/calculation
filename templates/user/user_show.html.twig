@@ -3,14 +3,13 @@
 {% from 'macros/_properties.html.twig' import property, email %}
 {% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
-{%- set id = item.id -%}
 {%- set title = 'user.show.title' -%}
-{%- set params = route_params(app.request, id) %}
+{%- set params = route_params(app.request, item) %}
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('user_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('user_delete', params) : null -%}
 {%- set rights_path = is_granted(ATTRIBUTE_EDIT, item) ? path('user_rights', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, id, 'user_table') -%}
+{%- set cancel_path = cancel_url(app.request, item, 'user_table') -%}
 {%- if item.userIdentifier == app.user.userIdentifier -%}
     {%- set delete_path = null -%}
 {%- endif -%}

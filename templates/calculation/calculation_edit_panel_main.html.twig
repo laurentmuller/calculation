@@ -51,7 +51,7 @@
                 <div class="col-auto mr-auto">
                     {{ button_ok(cancel_path, 'common.button_close') }}
                     {% if is_granted(ATTRIBUTE_EDIT, ENTITY_CALCULATION) %}
-                        {%- set state_params = route_params(app.request, item.id) -%}
+                        {%- set state_params = route_params(app.request, item) -%}
                         {%- set state_path = path('calculation_state', state_params) -%}
                         {{ link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
                     {% endif %}

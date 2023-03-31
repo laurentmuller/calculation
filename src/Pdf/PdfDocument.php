@@ -93,12 +93,12 @@ class PdfDocument extends \FPDF
     use MathTrait;
 
     /**
-     * The footer offset.
+     * The footer offset in mm.
      */
     final public const FOOTER_OFFSET = -15.0;
 
     /**
-     * The default line height.
+     * The default line height in mm.
      */
     final public const LINE_HEIGHT = 5.0;
 
@@ -699,6 +699,19 @@ class PdfDocument extends \FPDF
         }
 
         return (string) parent::Output($dest, $name, $isUTF8);
+    }
+
+    /**
+     * Converts the given pixels to millimeters using the given dot per each (DPI).
+     *
+     * @param float|int $pixels the pixels to convert
+     * @param float     $dpi    the dot per inch
+     *
+     * @return float the converted value as millimeters
+     */
+    public function pixels2mm(float|int $pixels, float $dpi = 72): float
+    {
+        return $this->safeDivide((float) $pixels * 25.4, $dpi, $pixels);
     }
 
     /**

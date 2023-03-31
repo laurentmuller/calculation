@@ -212,16 +212,12 @@ class CalculationController extends AbstractEntityController
         $oldState = $item->getState();
         $form = $this->createForm(CalculationEditStateType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            // change?
             if ($oldState !== $item->getState()) {
-                // update
                 $manager->flush();
             }
-
-            // message
             $this->successTrans('calculation.state.success', ['%name%' => $item->getDisplay()]);
 
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
+            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
         }
         // parameters
         $parameters = [

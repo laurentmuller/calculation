@@ -43,7 +43,7 @@
                 {% for calculation in calculations %}
                     {%- set id = calculation.id -%}
                     {%- set menu_id = 'dropdownMenuLast_' ~ id -%}
-                    {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
+                    {%- set params = route_params(app.request, calculation)|merge({'caller': caller}) -%}
                     {%- set class_primary = id == selection ? 'table-primary' : '' -%}
                     {%- set class_muted = calculation.editable ? '' : 'text-muted' -%}
                     {%- set class_name = (class_primary ~ ' ' ~ class_muted)|trim -%}

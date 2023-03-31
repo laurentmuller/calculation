@@ -13,10 +13,12 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
+use App\Entity\AbstractEntity;
 use App\Entity\User;
 use App\Service\NonceService;
 use App\Service\UrlGeneratorService;
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -85,6 +87,7 @@ final class FunctionExtension extends AbstractExtension
             new TwigFunction('asset_image', $this->assetImage(...), $options),
             new TwigFunction('asset_versioned', $this->versionedAsset(...), $options),
             new TwigFunction('asset_image_user', $this->assetImageUser(...), $options),
+
             // routes
             new TwigFunction('cancel_url', $this->cancelUrl(...)),
             new TwigFunction('route_params', $this->routeParams(...)),
@@ -104,7 +107,7 @@ final class FunctionExtension extends AbstractExtension
         $parameters = \array_merge([
             'href' => $href,
             'rel' => 'stylesheet',
-            'nonce' => $this->service->getNonce(),
+            'nonce' => $this->getNonce(),
         ], $parameters);
         $attributes = $this->reduceParams($parameters);
 
@@ -120,7 +123,7 @@ final class FunctionExtension extends AbstractExtension
             return false;
         }
 
-        return 0 === \strncmp($this->webDir, $file, \strlen($this->webDir));
+        return StringUtils::startWith($file, $this->webDir, true);
     }
 
     /**
@@ -141,11 +144,10 @@ final class FunctionExtension extends AbstractExtension
     private function assetImage(string $path, array $parameters = [], ?string $packageName = null): string
     {
         [$width, $height] = $this->imageSize($path);
-        $src = $this->versionedAsset($path, $packageName);
         $parameters = \array_merge([
-            'src' => $src,
-            'width' => $width,
+            'src' => $this->versionedAsset($path, $packageName),
             'height' => $height,
+            'width' => $width,
         ], $parameters);
         $attributes = $this->reduceParams($parameters);
 
@@ -185,10 +187,9 @@ final class FunctionExtension extends AbstractExtension
      */
     private function assetJs(string $path, array $parameters = [], ?string $packageName = null): string
     {
-        $src = $this->versionedAsset($path, $packageName);
         $parameters = \array_merge([
-            'src' => $src,
-            'nonce' => $this->service->getNonce(),
+            'src' => $this->versionedAsset($path, $packageName),
+            'nonce' => $this->getNonce(),
         ], $parameters);
         $attributes = $this->reduceParams($parameters);
 
@@ -221,9 +222,14 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Gets the cancel URL.
      */
-    private function cancelUrl(Request $request, int $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
+    private function cancelUrl(Request $request, AbstractEntity|int|null $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
     {
         return $this->generator->cancelUrl($request, $id, $defaultRoute);
+    }
+
+    private function getNonce(): string
+    {
+        return $this->service->getNonce();
     }
 
     /**
@@ -253,9 +259,10 @@ final class FunctionExtension extends AbstractExtension
     private function imageSize(string $path): array
     {
         $full_path = (string) $this->getRealPath($path);
-        [$width, $height] = (array) \getimagesize($full_path);
+        /** @psalm-var array{0: int, 1: int} $size */
+        $size = \getimagesize($full_path);
 
-        return [(int) $width, (int) $height];
+        return [$size[0], $size[1]];
     }
 
     /**
@@ -267,13 +274,13 @@ final class FunctionExtension extends AbstractExtension
     {
         $callback = static fn (string $key, string|int $value): string => \sprintf('%s="%s"', $key, \htmlspecialchars((string) $value));
 
-        return \implode(' ', \array_map($callback, \array_keys($parameters), $parameters));
+        return \implode(' ', \array_map($callback, \array_keys($parameters), \array_values($parameters)));
     }
 
     /**
      * Gets the route parameters.
      */
-    private function routeParams(Request $request, int $id = 0): array
+    private function routeParams(Request $request, AbstractEntity|int|null $id = 0): array
     {
         return $this->generator->routeParams($request, $id);
     }

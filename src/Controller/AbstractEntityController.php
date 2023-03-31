@@ -99,10 +99,9 @@ abstract class AbstractEntityController extends AbstractController
 
                 return $this->renderFormException($id, $e, $logger);
             }
-            $id = 0;
             $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());
 
-            return $this->getUrlGenerator()->redirect($request, $id, $route);
+            return $this->getUrlGenerator()->redirect($request, null, $route);
         }
 
         $parameters['form'] = $form;
@@ -150,10 +149,9 @@ abstract class AbstractEntityController extends AbstractController
                 $message = $this->getMessageTrans($item, '.edit.success', 'common.edit_success');
             }
             $this->success($message);
-            $id = $item->getId();
             $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());
 
-            return $this->getUrlGenerator()->redirect($request, $id, $route);
+            return $this->getUrlGenerator()->redirect($request, $item, $route);
         }
 
         $parameters['new'] = $isNew;

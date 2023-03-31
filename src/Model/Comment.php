@@ -42,7 +42,7 @@ class Comment
      * The importance.
      */
     #[Assert\NotNull]
-    private Importance $importance = Importance::LOW;
+    private Importance $importance;
 
     /**
      * The message.
@@ -67,8 +67,9 @@ class Comment
      *
      * @param bool $mail true to send an email, false to send a comment
      */
-    public function __construct(private readonly bool $mail)
+    public function __construct(private readonly bool $mail = true)
     {
+        $this->importance = Importance::getDefault();
     }
 
     /**
@@ -121,7 +122,7 @@ class Comment
     /**
      * Returns if this is an email or a comment.
      *
-     * @return bool True if email, false if comment
+     * @return bool true if email, false if comment
      */
     public function isMail(): bool
     {

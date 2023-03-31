@@ -7,7 +7,7 @@
 {%- set form_attr = form_attr|default({})|merge({'id': 'edit-form', 'data-save': 'common.save_data'|trans}) -%}
 {%- set cancel_text = cancel_text|default('common.button_cancel') -%}
 {%- if cancel_path is not defined -%}
-    {%- set cancel_path = cancel_url(app.request, item.id|default(0), page_list|default('homepage')) -%}
+    {%- set cancel_path = cancel_url(app.request, item, page_list|default('homepage')) -%}
 {%- endif -%}
 {# container #}
 {% block start_card_container %}

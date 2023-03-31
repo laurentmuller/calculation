@@ -373,7 +373,7 @@ class HelpReport extends AbstractReport
         if (!FileUtils::exists($file)) {
             return;
         }
-        /** @psalm-var int[]|false $size */
+        /** @psalm-var array{0: int, 1: int}|false $size */
         $size = \getimagesize($file);
         if (!\is_array($size)) {
             return;

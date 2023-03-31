@@ -85,7 +85,7 @@ class UserController extends AbstractEntityController
         if ($this->isConnectedUser($item) || $this->isOriginalUser($item, $security)) {
             $this->warningTrans('user.delete.connected');
 
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
+            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -129,11 +129,12 @@ class UserController extends AbstractEntityController
         if ($this->isConnectedUser($user)) {
             $this->warningTrans('user.message.connected');
 
-            return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
+            return $this->getUrlGenerator()->redirect($request, $user, $this->getDefaultRoute());
         }
+
         /** @psalm-var User|Address $from */
         $from = $this->getUser() ?? $this->getAddressFrom();
-        $comment = new Comment(true);
+        $comment = new Comment();
         $comment->setSubject($this->getApplicationName())
             ->setFromAddress($from)
             ->setToAddress($user);
@@ -143,16 +144,14 @@ class UserController extends AbstractEntityController
                 $service->sendComment($comment);
                 $this->successTrans('user.message.success', ['%name%' => $user->getDisplay()]);
 
-                return $this->getUrlGenerator()->redirect($request, $user->getId(), $this->getDefaultRoute());
+                return $this->getUrlGenerator()->redirect($request, $user, $this->getDefaultRoute());
             } catch (TransportExceptionInterface $e) {
                 return $this->renderFormException('user.message.error', $e, $logger);
             }
         }
         $parameters = [
-            'item' => $user,
             'form' => $form,
             'isMail' => $comment->isMail(),
-            'params' => ['id' => $user->getId()],
         ];
 
         return $this->render('user/user_comment.html.twig', $parameters);
@@ -169,7 +168,7 @@ class UserController extends AbstractEntityController
             $this->saveToDatabase($item);
             $this->successTrans('user.change_password.change_success', ['%name%' => $item->getDisplay()]);
 
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
+            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
         }
         $parameters = [
             'item' => $item,
@@ -215,8 +214,7 @@ class UserController extends AbstractEntityController
             return $generator->redirect($request, null, $this->getDefaultRoute());
         }
         if (1 === \count($users)) {
-            $id = \reset($users)->getId();
-            $params = $generator->routeParams($request, $id);
+            $params = $generator->routeParams($request, \reset($users));
 
             return $this->redirectToRoute('user_reset', $params);
         }
@@ -262,7 +260,7 @@ class UserController extends AbstractEntityController
                 $this->warningTrans('user.reset.error', ['%name%' => $identifier]);
             }
 
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
+            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
         }
 
         return $this->render('user/user_reset_password.html.twig', [
@@ -280,14 +278,14 @@ class UserController extends AbstractEntityController
         if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
             $this->warningTrans('user.rights.connected');
 
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
+            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
         }
         $form = $this->createForm(UserRightsType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
             $manager->flush();
             $this->successTrans('user.rights.success', ['%name%' => $item->getDisplay()]);
 
-            return $this->getUrlGenerator()->redirect($request, $item->getId(), $this->getDefaultRoute());
+            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
         }
 
         return $this->render('user/user_rights.html.twig', [

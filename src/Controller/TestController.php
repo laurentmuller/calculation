@@ -103,7 +103,9 @@ class TestController extends AbstractController
             ->addFileType();
         $form = $helper->createForm();
 
-        if ($this->handleRequestForm($request, $form) && ($user = $this->getUser()) instanceof User) {
+        if ($this->handleRequestForm($request, $form)) {
+            /** @psalm-var User $user */
+            $user = $this->getUser();
             /** @psalm-var array{email: string, message: string, importance: Importance, attachments: UploadedFile[]}  $data */
             $data = $form->getData();
             $email = $data['email'];

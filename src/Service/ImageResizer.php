@@ -126,9 +126,10 @@ class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterfac
      */
     private function getImageSize(string $filename): array
     {
-        [$imageWidth, $imageHeight] = (array) \getimagesize($filename);
+        /** @psalm-var array{0: float, 1: float} $size */
+        $size = \getimagesize($filename);
 
-        return [(float) $imageWidth, (float) $imageHeight];
+        return [$size[0], $size[1]];
     }
 
     private function getNewSize(string $filename, float $size): Box

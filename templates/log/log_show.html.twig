@@ -1,11 +1,10 @@
 {% extends 'cards/card_show.html.twig' %}
 {% from 'macros/_properties.html.twig' import property %}
 {# parameters #}
-{%- set id = item.id -%}
 {%- set title = 'log.show.title' -%}
 {%- set route = route|default('log_table') -%}
-{%- set params = route_params(app.request, id) -%}
-{%- set cancel_path = cancel_url(app.request, id, route) -%}
+{%- set params = route_params(app.request, item) -%}
+{%- set cancel_path = cancel_url(app.request, item, route) -%}
 {# classes #}
 {% block card_container_class '' %}
 {% block table_responsive_class '' %}

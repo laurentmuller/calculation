@@ -2,14 +2,13 @@
 {% from 'macros/_properties.html.twig' import property %}
 {% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
-{%- set id = item.id -%}
 {%- set title = 'group.show.title' -%}
-{%- set params = route_params(app.request, id) -%}
+{%- set params = route_params(app.request, item) -%}
 {%- set has_margins = item.hasMargins -%}
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('group_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('group_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, id, 'group_table') -%}
+{%- set cancel_path = cancel_url(app.request, item, 'group_table') -%}
 {# properties #}
 {% block property_body %}
 {{ property('group.fields.code', item.code) }}

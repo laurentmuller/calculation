@@ -34,7 +34,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CommentController extends AbstractController
 {
     /**
-     * Send comment to the webmaster.
+     * Send a comment to the webmaster.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/comment', name: 'user_comment')]
@@ -56,10 +56,11 @@ class CommentController extends AbstractController
                 return $this->renderFormException('user.comment.error', $e, $logger);
             }
         }
-
-        return $this->render('user/user_comment.html.twig', [
+        $parameters = [
             'form' => $form,
             'isMail' => $comment->isMail(),
-        ]);
+        ];
+
+        return $this->render('user/user_comment.html.twig', $parameters);
     }
 }

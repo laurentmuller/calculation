@@ -2,13 +2,12 @@
 {% from 'macros/_properties.html.twig' import property %}
 {% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
-{%- set id = item.id -%}
 {%- set title = 'task.show.title' -%}
-{%- set params = route_params(app.request, id) %}
+{%- set params = route_params(app.request, item) %}
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('task_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('task_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, id, 'task_table') -%}
+{%- set cancel_path = cancel_url(app.request, item, 'task_table') -%}
 {# properties #}
 {% block property_body %}
 {{ property('task.fields.name', item.name) }}

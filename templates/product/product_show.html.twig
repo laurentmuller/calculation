@@ -3,12 +3,11 @@
 {% from 'macros/_timestampable.html.twig' import timestampable_properties as properties %}
 {# parameters #}
 {%- set title = 'product.show.title' -%}
-{%- set id = item.id -%}
-{%- set params = route_params(app.request, id) %}
+{%- set params = route_params(app.request, item) %}
 {# actions #}
 {%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('product_edit', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('product_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, id, 'product_table') -%}
+{%- set cancel_path = cancel_url(app.request, item, 'product_table') -%}
 {# properties #}
 {% block property_body %}
 {{ property('product.fields.description', item.description) }}

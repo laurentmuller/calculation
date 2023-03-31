@@ -14,7 +14,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
-use App\Pdf\Enums\PdfImageType;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
@@ -22,10 +21,9 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Traits\LoggerTrait;
-use App\Utils\FileUtils;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeNone;
-use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Writer\PdfWriter;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -109,13 +107,15 @@ class CalculationReport extends AbstractReport
      */
     private function checkTablesHeight(Calculation $calculation): void
     {
+        // groups, user magin and totalss
         $lines = $calculation->getGroupsCount() + 2;
         if (!empty($calculation->getUserMargin())) {
             $lines += 2;
         }
         $lines += 3;
         $total = 2.0 + self::LINE_HEIGHT * (float) $lines;
-        if (null !== $this->qrcode) {
+        // qr code
+        if ($this->isQrCode()) {
             $total += $this->getQrCodeSize() - 1.0;
         }
         if (!$this->isPrintable($total)) {
@@ -124,31 +124,19 @@ class CalculationReport extends AbstractReport
     }
 
     /**
-     * Gets the QR code link or an empty string if none.
-     */
-    private function getQrCodeLink(): string
-    {
-        if (null !== $this->qrcode) {
-            if (false !== \filter_var($this->qrcode, \FILTER_VALIDATE_EMAIL)) {
-                return 'mailto:' . $this->qrcode;
-            }
-
-            return $this->qrcode;
-        }
-
-        return '';
-    }
-
-    /**
-     * Gets the QR code size.
+     * Gets the QR code size (if any) in millimeters; 0 if none.
      */
     private function getQrCodeSize(): float
     {
-        if (null !== $this->qrcode) {
-            return $this->pixels2UserUnit(100);
-        }
+        return $this->isQrCode() ? 30 : 0;
+    }
 
-        return 0;
+    /**
+     * Return if the QR code must render.
+     */
+    private function isQrCode(): bool
+    {
+        return null !== $this->qrcode &&  '' !== $this->qrcode;
     }
 
     /**
@@ -181,29 +169,26 @@ class CalculationReport extends AbstractReport
      */
     private function renderQrCode(): void
     {
-        if (null === $this->qrcode) {
+        if (!$this->isQrCode()) {
             return;
         }
 
         try {
-            if (null === $path = FileUtils::tempFile('qr_code')) {
-                $this->logWarning($this->trans('report.calculation.error_qr_code'), [
-                    'calculation' => $this->calculation->getDisplay(),
-                ]);
-
-                return;
-            }
+            $size = $this->getQrCodeSize();
+            $options = [
+                PdfWriter::WRITER_OPTION_Y => $this->GetPageHeight() + self::FOOTER_OFFSET - $size - 1.0,
+                PdfWriter::WRITER_OPTION_X => $this->GetPageWidth() - $this->getRightMargin() - $size,
+                PdfWriter::WRITER_OPTION_LINK => $this->qrcode,
+                PdfWriter::WRITER_OPTION_PDF => $this,
+            ];
             Builder::create()
                 ->roundBlockSizeMode(new RoundBlockSizeModeNone())
-                ->writer(new PngWriter())
-                ->data($this->qrcode)
+                ->data((string) $this->qrcode)
+                ->writer(new PdfWriter())
+                ->writerOptions($options)
+                ->size((int) $size)
                 ->margin(0)
-                ->build()
-                ->saveToFile($path);
-            $size = $this->getQrCodeSize();
-            $x = $this->GetPageWidth() - $this->getRightMargin() - $size;
-            $y = $this->GetPageHeight() + self::FOOTER_OFFSET - $size - 1.0;
-            $this->Image($path, $x, $y, $size, $size, PdfImageType::PNG, $this->getQrCodeLink());
+                ->build();
         } catch (\Exception $e) {
             $this->logException($e, $this->trans('report.calculation.error_qr_code'));
         }

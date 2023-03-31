@@ -35,7 +35,9 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
     }
 
     /**
-     * Adds the given uploaded file as attachment. Do nothing if the file is null or not valid.
+     * Adds the given uploaded file as attachment.
+     *
+     * Do nothing if the file is null or not valid.
      */
     public function attachFromUploadedFile(?UploadedFile $file): static
     {
@@ -45,6 +47,20 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
             $type = $file->getClientMimeType();
 
             return $this->attachFromPath($path, $name, $type);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Adds the given uploaded files as attachment.
+     *
+     * @see NotificationEmail::attachFromUploadedFile()
+     */
+    public function attachFromUploadedFiles(?UploadedFile ...$files): static
+    {
+        foreach ($files as $file) {
+            $this->attachFromUploadedFile($file);
         }
 
         return $this;
@@ -115,7 +131,7 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
 
     private function translateImportance(): string
     {
-        $importance = Importance::tryFrom((string) $this->getContext()['importance']) ?? Importance::LOW;
+        $importance = Importance::tryFrom((string) parent::getContext()['importance']) ?? Importance::LOW;
 
         return $this->trans($importance->getReadableFull());
     }

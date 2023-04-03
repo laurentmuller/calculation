@@ -178,6 +178,7 @@ class Column implements \Stringable, SortModeInterface
             'visible' => $this->isVisible(),
             'numeric' => $this->isNumeric(),
             'sortable' => $this->isSortable(),
+            'searchable' => $this->isSearchable(),
         ];
         if ($this->cellFormatter) {
             $result['formatter'] = $this->cellFormatter;

@@ -99,14 +99,8 @@ abstract class AbstractTable implements SortModeInterface
         $query->callback = $request->isXmlHttpRequest();
         $query->id = $this->getParamInt($request, TableInterface::PARAM_ID);
         $query->search = $this->getParamString($request, TableInterface::PARAM_SEARCH, '', '');
-
-        $view = $this->getParamString($request, TableInterface::PARAM_VIEW, '', TableView::TABLE);
-        $tableView = TableView::tryFrom($view) ?? TableView::TABLE;
-        $query->view = $tableView;
-
-        $limit = $this->getParamInt($request, TableInterface::PARAM_LIMIT, $this->getPrefix(), $tableView->getPageSize());
-        $query->limit = $limit;
-
+        $query->view = $this->getTableView($request);
+        $query->limit = $this->getLimit($request, $query->view);
         $query->offset = $this->getParamInt($request, TableInterface::PARAM_OFFSET);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
@@ -337,5 +331,17 @@ abstract class AbstractTable implements SortModeInterface
 
             'custom-view-default-view' => $query->isViewCustom(),
         ], $results->attributes);
+    }
+
+    private function getLimit(Request $request, TableView $view): int
+    {
+        return $this->getParamInt($request, TableInterface::PARAM_LIMIT, $this->getPrefix(), $view->getPageSize());
+    }
+
+    private function getTableView(Request $request): TableView
+    {
+        $view = $this->getParamString($request, TableInterface::PARAM_VIEW, '', TableView::TABLE);
+
+        return TableView::tryFrom($view) ?? TableView::TABLE;
     }
 }

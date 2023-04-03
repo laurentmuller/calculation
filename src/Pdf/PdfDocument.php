@@ -328,16 +328,16 @@ class PdfDocument extends \FPDF
      *                                        <li>A PdfBorder enumeration.</li>
      *                                        <li>A number:
      *                                        <ul>
-     *                                        <li><code>0</code> : No border (default value).</li>
-     *                                        <li><code>1</code> : Frame.</li>
+     *                                        <li><code>0</code>: No border (default value).</li>
+     *                                        <li><code>1</code>: Frame.</li>
      *                                        </ul>
      *                                        </li>
      *                                        <li>A string containing some or all of the following characters (in any order):
      *                                        <ul>
-     *                                        <li><code>'L'</code> : Left.</li>
-     *                                        <li><code>'T'</code> : Top.</li>
-     *                                        <li><code>'R'</code> : Right.</li>
-     *                                        <li><code>'B'</code> : Bottom.</li>
+     *                                        <li><code>'L'</code>: Left border.</li>
+     *                                        <li><code>'T'</code>: Top border.</li>
+     *                                        <li><code>'R'</code>: Right border.</li>
+     *                                        <li><code>'B'</code>: Bottom border.</li>
      *                                        </ul>
      *                                        </li>
      *                                        </ul>
@@ -353,9 +353,9 @@ class PdfDocument extends \FPDF
      * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
      *                                        <li>A PdfTextAlignment enumeration.</li>
-     *                                        <li><code>'L'</code> or an empty string (""): left align (default value).</li>
-     *                                        <li><code>'C'</code> : center.</li>
-     *                                        <li><code>'R'</code> : right align.</li>
+     *                                        <li><code>'L'</code> or an empty string (''): left align (default value).</li>
+     *                                        <li><code>'C'</code>: Center.</li>
+     *                                        <li><code>'R'</code>: Right align.</li>
      *                                        </ul>
      * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false)
      * @param string|int              $link   a URL or an identifier returned by AddLink()
@@ -378,7 +378,7 @@ class PdfDocument extends \FPDF
         } elseif ($align instanceof PdfTextAlignment) {
             $align = $align->value;
         }
-        parent::Cell($w, $h, $this->cleanText($txt), $border, $ln, $align, $fill, $link);
+        parent::Cell($w, $h, $this->_cleanText($txt), $border, $ln, $align, $fill, $link);
     }
 
     /**
@@ -562,7 +562,7 @@ class PdfDocument extends \FPDF
      */
     public function GetStringWidth($s): float
     {
-        return (float) parent::GetStringWidth($this->cleanText($s));
+        return (float) parent::GetStringWidth($this->_cleanText($s));
     }
 
     /**
@@ -677,16 +677,16 @@ class PdfDocument extends \FPDF
      *                                        <li>A PdfBorder enumeration.</li>
      *                                        <li>A number:
      *                                        <ul>
-     *                                        <li><code>0</code> : No border (default value).</li>
-     *                                        <li><code>1</code> : Frame.</li>
+     *                                        <li><code>0</code>: No border (default value).</li>
+     *                                        <li><code>1</code>: Frame.</li>
      *                                        </ul>
      *                                        </li>
      *                                        <li>A string containing some or all of the following characters (in any order):
      *                                        <ul>
-     *                                        <li><code>'L'</code> : Left.</li>
-     *                                        <li><code>'T'</code> : Top.</li>
-     *                                        <li><code>'R'</code> : Right.</li>
-     *                                        <li><code>'B'</code> : Bottom.</li>
+     *                                        <li><code>'L'</code>: Left border.</li>
+     *                                        <li><code>'T'</code>: Top border.</li>
+     *                                        <li><code>'R'</code>: Right border.</li>
+     *                                        <li><code>'B'</code>: Bottom border.</li>
      *                                        </ul>
      *                                        </li>
      *                                        </ul>
@@ -694,9 +694,9 @@ class PdfDocument extends \FPDF
      *                                        <ul>
      *                                        <li>A PdfTextAlignment enumeration.</li>
      *                                        <li><code>'L'</code> or an empty string (""): left align (default value).</li>
-     *                                        <li><code>'C'</code> : center.</li>
-     *                                        <li><code>'R'</code> : right align.</li>
-     *                                        <li><code>'J'</code> : justification (default value).</li>
+     *                                        <li><code>'C'</code>: center.</li>
+     *                                        <li><code>'R'</code>: right align.</li>
+     *                                        <li><code>'J'</code>: justification (default value).</li>
      *                                        </ul>
      * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false)
      *
@@ -712,7 +712,7 @@ class PdfDocument extends \FPDF
         if ($align instanceof PdfTextAlignment) {
             $align = $align->value;
         }
-        parent::MultiCell($w, $h, $this->cleanText($txt), $border, $align, $fill);
+        parent::MultiCell($w, $h, $this->_cleanText($txt), $border, $align, $fill);
     }
 
     /**
@@ -786,9 +786,9 @@ class PdfDocument extends \FPDF
      *                                                  <ul>
      *                                                  <li>A PdfBorder instance.</li>
      *                                                  <li>A PdfRectangleStyle enumeration.</li>
-     *                                                  <li><code>'D'</code> or an empty string (""): draw (default value).</li>
-     *                                                  <li><code>'F'</code> : fill.</li>
-     *                                                  <li><code>'DF'</code> : draw and fill.</li>
+     *                                                  <li><code>'D'</code> or an empty string (""): Draw (default value).</li>
+     *                                                  <li><code>'F'</code>: Fill.</li>
+     *                                                  <li><code>'DF'</code>: Draw and fill.</li>
      *                                                  </ul>
      */
     public function Rect($x, $y, $w, $h, $style = ''): void
@@ -869,14 +869,23 @@ class PdfDocument extends \FPDF
     /**
      * Defines the way the document is to be displayed by the viewer.
      *
-     * The zoom level can be set: pages can be displayed entirely on screen, occupy the
-     * full width of the window, use real size, be scaled by a specific zooming factor
-     * or use viewer default (configured in the Preferences menu of Adobe Reader).
-     * The page layout can be specified too: single at once, continuous display, two
-     * columns or viewer default.
-     *
-     * @param PdfDocumentZoom|string|int $zoom   the zoom to use
-     * @param PdfDocumentLayout|string   $layout the page layout
+     * @param PdfDocumentZoom|string|int $zoom   the zoom to use It can be one of the following values:
+     *                                           <ul>
+     *                                           <li>A PdfDocumentZoom enumeration.</li>
+     *                                           <li><code>'fullpage'</code>: Displays the entire page on screen.</li>
+     *                                           <li><code>'fullwidth'</code>: Uses maximum width of window.</li>
+     *                                           <li><code>'real'</code>: Uses real size (equivalent to 100% zoom).</li>
+     *                                           <li><code>'default'</code>: Uses viewer default mode.</li>
+     *                                           </ul>
+     *                                           or a number indicating the zooming factor to use.
+     * @param PdfDocumentLayout|string   $layout the page layout. Possible values are:
+     *                                           <ul>
+     *                                           <li>A PdfDocumentLayout enumeration.</li>
+     *                                           <li><code>'single'</code>: Displays one page at once.</li>
+     *                                           <li><code>'continuous'</code>: Displays pages continuously.</li>
+     *                                           <li><code>'two'</code>: Displays two pages on two columns.</li>
+     *                                           <li><code>'default'</code>: Uses viewer default mode.</li>
+     *                                           </ul>
      *
      * @psalm-param PdfDocumentZoom|'fullpage'|'fullwidth'|'real'|'default'|int $zoom
      * @psalm-param PdfDocumentLayout|'single'|'continuous'|'two'|'default' $layout
@@ -950,7 +959,7 @@ class PdfDocument extends \FPDF
      */
     public function Text($x, $y, $txt): void
     {
-        parent::Text($x, $y, $this->cleanText($txt));
+        parent::Text($x, $y, $this->_cleanText($txt));
     }
 
     /**
@@ -963,66 +972,7 @@ class PdfDocument extends \FPDF
      */
     public function Write($h, $txt, $link = ''): void
     {
-        parent::Write($h, $this->cleanText($txt), $link);
-    }
-
-    protected function _endobj(): void
-    {
-        $this->_put('endobj');
-    }
-
-    /**
-     * @psalm-param PdfBookmarkType $bookmark
-     */
-    protected function _putBookmark(array $bookmark, int $n): void
-    {
-        $this->_newobj();
-        $this->_putParams('<</Title %s', $this->_textstring($bookmark['text']));
-        foreach (['parent', 'prev', 'next', 'first', 'last'] as $key) {
-            if (isset($bookmark[$key])) {
-                $this->_putParams('/%s %d 0 R', \ucfirst($key), $n + (int) $bookmark[$key]);
-            }
-        }
-        $pageN = $this->PageInfo[$bookmark['page']]['n'];
-        $this->_putParams('/Dest [%d 0 R /XYZ 0 %.2F null]', $pageN, $bookmark['y']);
-        $this->_put('/Count 0>>');
-        $this->_endobj();
-    }
-
-    protected function _putBookmarks(): void
-    {
-        /** @psalm-var array<int, int> $lastUsedReferences */
-        $lastUsedReferences = [];
-        $level = 0;
-        $count = \count($this->bookmarks);
-        foreach ($this->bookmarks as $index => $bookmark) {
-            if ($bookmark['level'] > 0) {
-                $parent = $lastUsedReferences[$bookmark['level'] - 1];
-                $this->bookmarks[$index]['parent'] = $parent;
-                $this->bookmarks[$parent]['last'] = $index;
-                if ($bookmark['level'] > $level) {
-                    $this->bookmarks[$parent]['first'] = $index;
-                }
-            } else {
-                $this->bookmarks[$index]['parent'] = $count;
-            }
-            if ($bookmark['level'] <= $level && $index > 0) {
-                $prev = $lastUsedReferences[$bookmark['level']];
-                $this->bookmarks[$prev]['next'] = $index;
-                $this->bookmarks[$index]['prev'] = $prev;
-            }
-            $lastUsedReferences[$bookmark['level']] = $index;
-            $level = $bookmark['level'];
-        }
-        $n = $this->n + 1;
-        foreach ($this->bookmarks as $bookmark) {
-            $this->_putBookmark($bookmark, $n);
-        }
-        $this->_newobj();
-        $this->bookmarkRoot = $this->n;
-        $this->_putParams('<</Type /Outlines /First %d 0 R', $n);
-        $this->_putParams('/Last %d 0 R>>', $n + $lastUsedReferences[0]);
-        $this->_endobj();
+        parent::Write($h, $this->_cleanText($txt), $link);
     }
 
     protected function _putcatalog(): void
@@ -1034,17 +984,42 @@ class PdfDocument extends \FPDF
         }
     }
 
-    protected function _putParams(string $format, float|int|string ...$values): void
-    {
-        $this->_put(\sprintf($format, ...$values));
-    }
-
     protected function _putresources(): void
     {
         parent::_putresources();
         if ([] !== $this->bookmarks) {
             $this->_putBookmarks();
         }
+    }
+
+    /**
+     * Clean the given text.
+     *
+     * @param ?string $str the text to convert
+     *
+     * @return ?string the converted text
+     *
+     * @psalm-return ($str is null ? null : string)
+     */
+    private function _cleanText(?string $str): ?string
+    {
+        if (null === $str || '' === $str) {
+            return $str;
+        }
+
+        try {
+            if (false !== $encoding = \mb_detect_encoding($str, 'UTF-8, ISO-8859-1, ISO-8859-15', true)) {
+                return \mb_convert_encoding($str, 'ISO-8859-1', $encoding);
+            }
+        } catch (\Exception) {
+        }
+
+        return $str;
+    }
+
+    private function _endobj(): void
+    {
+        $this->_put('endobj');
     }
 
     private function _outputIndexDot(
@@ -1107,7 +1082,7 @@ class PdfDocument extends \FPDF
         float $space,
         string|int $link
     ): float {
-        $text = $this->cleanText($text);
+        $text = $this->_cleanText($text);
         $text_size = $this->GetStringWidth($text);
         $available_size = $printable_width - $page_size - $offset - 2.0 * $space;
         while ($text_size >= $available_size) {
@@ -1125,27 +1100,70 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Clean the given text.
-     *
-     * @param ?string $str the text to convert
-     *
-     * @return ?string the converted text
-     *
-     * @psalm-return ($str is null ? null : string)
+     * @psalm-param PdfBookmarkType $bookmark
      */
-    private function cleanText(?string $str): ?string
+    private function _putBookmark(array $bookmark, int $n): void
     {
-        if (null === $str || '' === $str) {
-            return $str;
-        }
-
-        try {
-            if (false !== $encoding = \mb_detect_encoding($str, 'UTF-8, ISO-8859-1, ISO-8859-15', true)) {
-                return \mb_convert_encoding($str, 'ISO-8859-1', $encoding);
+        $this->_newobj();
+        $this->_putParams('<</Title %s', $this->_textstring($bookmark['text']));
+        foreach (['parent', 'prev', 'next', 'first', 'last'] as $key) {
+            if (isset($bookmark[$key])) {
+                $this->_putParams('/%s %d 0 R', \ucfirst($key), $n + (int) $bookmark[$key]);
             }
-        } catch (\Exception) {
+        }
+        $pageN = $this->PageInfo[$bookmark['page']]['n'];
+        $this->_putParams('/Dest [%d 0 R /XYZ 0 %.2F null]', $pageN, $bookmark['y']);
+        $this->_put('/Count 0>>');
+        $this->_endobj();
+    }
+
+    private function _putBookmarks(): void
+    {
+        $lastReference = $this->_updateBookmarks();
+
+        $n = $this->n + 1;
+        foreach ($this->bookmarks as $bookmark) {
+            $this->_putBookmark($bookmark, $n);
         }
 
-        return $str;
+        $this->_newobj();
+        $this->bookmarkRoot = $this->n;
+        $this->_putParams('<</Type /Outlines /First %d 0 R', $n);
+        $this->_putParams('/Last %d 0 R>>', $n + $lastReference);
+        $this->_endobj();
+    }
+
+    private function _putParams(string $format, float|int|string ...$values): void
+    {
+        $this->_put(\sprintf($format, ...$values));
+    }
+
+    private function _updateBookmarks(): int
+    {
+        $level = 0;
+        $count = \count($this->bookmarks);
+        /** @psalm-var array<int, int> $references */
+        $references = [];
+        foreach ($this->bookmarks as $index => $bookmark) {
+            if ($bookmark['level'] > 0) {
+                $parent = $references[$bookmark['level'] - 1];
+                $this->bookmarks[$index]['parent'] = $parent;
+                $this->bookmarks[$parent]['last'] = $index;
+                if ($bookmark['level'] > $level) {
+                    $this->bookmarks[$parent]['first'] = $index;
+                }
+            } else {
+                $this->bookmarks[$index]['parent'] = $count;
+            }
+            if ($bookmark['level'] <= $level && $index > 0) {
+                $prev = $references[$bookmark['level']];
+                $this->bookmarks[$prev]['next'] = $index;
+                $this->bookmarks[$index]['prev'] = $prev;
+            }
+            $references[$bookmark['level']] = $index;
+            $level = $bookmark['level'];
+        }
+
+        return $references[0];
     }
 }

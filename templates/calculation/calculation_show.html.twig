@@ -129,7 +129,7 @@
 {{ property('calculation.fields.date', item.date|locale_date) }}
 <tr>
     <td class="w-25">{{ 'calculation.fields.state'|trans }}</td>
-    <td class="w-75"><span class="state-color border border-secondary" style="background-color: {{ item.state.color|default('transparent') }};"></span> {{ item.stateCode }}</td>
+    <td class="w-75"><span class="state-color border border-secondary" style="margin-bottom: 0.2rem; background-color: {{ item.state.color|default('transparent') }};"></span> {{ item.stateCode }}</td>
 </tr>
 {{ properties(item) }}
 {% if item.empty %}

@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Calculation;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
@@ -58,7 +56,6 @@ class CalculationTableOverall extends PdfTableBuilder
      */
     public function output(): void
     {
-        $parent = $this->getParent();
         $calculation = $this->calculation;
         $totalItems = $calculation->getGroupsAmount();
         $totalMargins = $calculation->getGroupsMarginAmount();
@@ -72,8 +69,7 @@ class CalculationTableOverall extends PdfTableBuilder
         $this->createColumns()
             ->outputGlobalMargin($globalMargin, $globalAmount)
             ->outputUserMargin($userMargin, $userAmount, $totalNet)
-            ->outputOverallTotal($parent, $calculation, $totalItems)
-            ->outputTimestampable($parent, $calculation);
+            ->outputOverallTotal($calculation, $totalItems);
     }
 
     /**
@@ -117,7 +113,7 @@ class CalculationTableOverall extends PdfTableBuilder
             ->endRow();
     }
 
-    private function outputOverallTotal(PdfDocument $parent, Calculation $calculation, float $totalItems): self
+    private function outputOverallTotal(Calculation $calculation, float $totalItems): self
     {
         $style = null;
         if ($calculation->isMarginBelow($this->minMargin)) {
@@ -130,24 +126,8 @@ class CalculationTableOverall extends PdfTableBuilder
             ->addAmount($calculation->getOverallMarginAmount())
             ->addAmount($calculation->getOverallTotal())
             ->endRow();
-        $parent->Ln(1);
 
         return $this;
-    }
-
-    private function outputTimestampable(PdfDocument $parent, Calculation $calculation): void
-    {
-        $style = PdfStyle::getNoBorderStyle()
-            ->setFontItalic()
-            ->setFontSize(7);
-        $oldMargins = $parent->setCellMargin(0);
-        $created = $calculation->getCreatedText($this->translator);
-        $updated = $calculation->getUpdatedText($this->translator);
-        $this->startRow()
-            ->add($created, 1, $style, PdfTextAlignment::LEFT)
-            ->add($updated, 4, $style, PdfTextAlignment::RIGHT)
-            ->endRow();
-        $parent->setCellMargin($oldMargins);
     }
 
     private function outputUserMargin(float $userMargin, float $userAmount, float $totalNet): self

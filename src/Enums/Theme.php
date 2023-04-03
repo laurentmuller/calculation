@@ -23,8 +23,8 @@ use Elao\Enum\ReadableEnumTrait;
 /**
  * Theme style enumeration.
  *
- * @implements SortableEnumInterface<Theme>
  * @implements DefaultEnumInterface<Theme>
+ * @implements SortableEnumInterface<Theme>
  */
 #[ReadableEnum(prefix: 'theme.', suffix: '.name', useValueAsDefault: true)]
 enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface

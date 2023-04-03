@@ -2,6 +2,8 @@
     "require": {
         "php": "^8.2",
         "orklah/psalm-insane-comparison": "^2.0",
+        "orklah/psalm-not-empty": "^1.1",
+        "orklah/psalm-strict-equality": "^2.1",
         "psalm/plugin-phpunit": "^0.18",
         "psalm/plugin-symfony": "^5.0",
         "vimeo/psalm": "^5.0",

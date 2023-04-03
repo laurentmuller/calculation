@@ -57,7 +57,7 @@ trait CacheAwareTrait
         }
     }
 
-    #[SubscribedService]
+    #[SubscribedService(type: CacheItemPoolInterface::class)]
     public function getCacheAdapter(): CacheItemPoolInterface
     {
         if (null === $this->cacheAdapter) {

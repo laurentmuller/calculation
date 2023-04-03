@@ -52,7 +52,7 @@ class CalculationsReport extends AbstractArrayReport
     public function __construct(AbstractController $controller, array $entities, protected bool $grouped = true)
     {
         parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE);
-        $this->minMargin = $controller->getApplication()->getMinMargin();
+        $this->minMargin = $controller->getMinMargin();
     }
 
     /**

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\EnumConstantsInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\SortableEnumInterface;
 use App\Traits\ExtendedExtrasTrait;
@@ -26,10 +27,11 @@ use function Symfony\Component\String\u;
 /**
  * The entity name enumeration.
  *
- *  @implements SortableEnumInterface<EntityName>
+ * @implements EnumConstantsInterface<EntityName>
+ * @implements SortableEnumInterface<EntityName>
  */
 #[ReadableEnum(suffix: '.name')]
-enum EntityName: string implements ReadableEnumInterface, SortableEnumInterface
+enum EntityName: string implements EnumConstantsInterface, ReadableEnumInterface, SortableEnumInterface
 {
     use ExtendedExtrasTrait;
     use ReadableEnumTrait;

@@ -28,7 +28,7 @@ use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
 
 /**
- * PDF document with default header and footer, outline and index capabilities.
+ * PDF document with default header, footer, outline and index capabilities.
  *
  * @property int                         $page           The current page number.
  * @property PdfPageSizeType             $DefPageSize    The default page size (width and height) in the user unit.
@@ -55,6 +55,7 @@ use App\Utils\FormatUtils;
  * @property float                       $lasth          The height of last printed cell.
  * @property int                         $n              The current object number.
  * @property array<int, PdfPageInfoType> $PageInfo       The page-related data.
+ * @property float                       $LineWidth      the line width.
  *
  * @method float  GetX()                                           Gets the current X position in user unit.
  * @method float  GetY()                                           Gets the current Y position in user unit.
@@ -64,6 +65,8 @@ use App\Utils\FormatUtils;
  * @method string _textstring(string $s)                           Convert the given string.
  * @method int    AddLink()                                        Creates a new internal link and returns its identifier.
  * @method void   SetLink(int $link, float $y = 0, int $page = -1) Defines the page and position a link points to.
+ * @method void   Line(float $x1, float $y1, float $x2, float $y2) Draws a line between two points using the current line width.
+ * @method void   SetLineWidth(float $width)                       Set the line width.
  *
  * @psalm-type PdfFontType = array{
  *      name: string,
@@ -86,6 +89,10 @@ use App\Utils\FormatUtils;
  *     prev?: int,
  *     next?: int,
  *     last?: int}
+ * @psalm-type PdfColorType = array{
+ *      0: int<0, 255>,
+ *      1: int<0, 255>,
+ *      2: int<0, 255>}
  */
 #[\AllowDynamicProperties]
 class PdfDocument extends \FPDF
@@ -201,6 +208,10 @@ class PdfDocument extends \FPDF
      * @param PdfDocumentSize|int[]|string  $size        the page size or an empty string ("") to use the current size
      * @param int                           $rotation    the angle by which to rotate the page or 0 to use the current orientation.
      *                                                   It must be a multiple of 90; positive values mean clockwise rotation.
+     *
+     * @psalm-param PdfDocumentOrientation|'P'|'L'|'' $orientation
+     * @psalm-param PdfDocumentSize|PdfPageSizeType|'' $size
+     * @psalm-param 0|90|180|270 $rotation
      */
     public function AddPage($orientation = '', $size = '', $rotation = 0): void
     {
@@ -342,7 +353,7 @@ class PdfDocument extends \FPDF
      * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
      *                                        <li>A PdfTextAlignment enumeration.</li>
-     *                                        <li><code>'L'</code> or an empty string (''): left align (default value).</li>
+     *                                        <li><code>'L'</code> or an empty string (""): left align (default value).</li>
      *                                        <li><code>'C'</code> : center.</li>
      *                                        <li><code>'R'</code> : right align.</li>
      *                                        </ul>
@@ -350,6 +361,9 @@ class PdfDocument extends \FPDF
      * @param string|int              $link   a URL or an identifier returned by AddLink()
      *
      * @see PdfDocument::MultiCell()
+     *
+     * @psalm-param PdfMove|int<0,2> $ln
+     * @psalm-param PdfTextAlignment|'J'|'L'|'C'|'R' $align
      */
     public function Cell($w = 0, $h = self::LINE_HEIGHT, $txt = '', $border = PdfBorder::NONE, $ln = PdfMove::RIGHT, $align = PdfTextAlignment::LEFT, $fill = false, $link = ''): void
     {
@@ -458,10 +472,11 @@ class PdfDocument extends \FPDF
 
     /**
      * Gets the number of lines to use for the given text and width.
+     *
      * Computes the number of lines a MultiCell of the given width will take.
      *
      * @param ?string $text  the text to compute
-     * @param float   $width the desired width. If 0.0, the width extends up to the right margin.
+     * @param float   $width the desired width. If 0, the width extends up to the right margin.
      *
      * @return int the number of lines
      */
@@ -523,7 +538,7 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Gets printable width.
+     * Gets the printable width.
      */
     public function getPrintableWidth(): float
     {
@@ -581,19 +596,21 @@ class PdfDocument extends \FPDF
     /**
      * Draws a horizontal line with current draw color and line width.
      *
-     * @param float $beforeSpace the verticale space before the line
-     * @param float $afterSpace  the verticale space after the line
+     * @param float    $beforeSpace the verticale space before the line
+     * @param float    $afterSpace  the verticale space after the line
+     * @param ?PdfLine $line        the optional line width to apply
      */
-    public function horizontalLine(float $beforeSpace = 1.0, float $afterSpace = 1.0): self
+    public function horizontalLine(float $beforeSpace = 1.0, float $afterSpace = 1.0, ?PdfLine $line = null): self
     {
         $x = $this->x;
         $y = $this->y + $beforeSpace;
         $w = $this->getPrintableWidth();
-
+        $oldLineWidth = $this->LineWidth;
+        $line?->apply($this);
         $this->Line($x, $y, $x + $w, $y);
-
         $this->x = $x;
         $this->y = $y + $afterSpace;
+        $this->SetLineWidth($oldLineWidth);
 
         return $this;
     }
@@ -606,8 +623,18 @@ class PdfDocument extends \FPDF
      * @param ?float              $y    the ordinate of the upper-left corner. If not specified or equal to null, the current ordinate is used;
      *                                  moreover, a page break is triggered first if necessary (in case automatic page breaking is enabled) and,
      *                                  after the call, the current ordinate is moved to the bottom of the image.
-     * @param float               $w    the width of the image in the page
-     * @param float               $h    the height of the image in the page
+     * @param float               $w    the width of the image in the page. There are three cases:
+     *                                  <ul>
+     *                                  <li>If the value is positive, it represents the width in user unit.</li>
+     *                                  <li>If the value is negative, the absolute value represents the horizontal resolution in dpi.</li>
+     *                                  <li>If the value is not specified or equal to zero, it is automatically calculated.</li>
+     *                                  </ul>
+     * @param float               $h    the height of the image in the page. There are three cases:
+     *                                  <ul>
+     *                                  <li>If the value is positive, it represents the width in user unit.</li>
+     *                                  <li>If the value is negative, the absolute value represents the horizontal resolution in dpi.</li>
+     *                                  <li>If the value is not specified or equal to zero, it is automatically calculated.</li>
+     *                                  </ul>
      * @param PdfImageType|string $type the image format. Possible values are (case insensitive): JPG, JPEG, PNG and GIF.
      *                                  If not specified, the type is inferred from the file extension.
      * @param string|int          $link the URL or an identifier returned by AddLink()
@@ -627,6 +654,8 @@ class PdfDocument extends \FPDF
      *
      * @return bool true if printable within the current page; false if a new page is
      *              needed
+     *
+     * @see PdfDocument::AddPage()
      */
     public function isPrintable(float $height): bool
     {
@@ -634,7 +663,11 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * This method allows printing text with line breaks. They can be automatic (as soon as the text reaches the right border of the cell) or explicit (via the \n character). As many cells as necessary are output, one below the other. Text can be aligned, centered or justified. The cell block can be framed and the background painted.
+     * This method allows printing text with line breaks.
+     *
+     * They can be automatic (as soon as the text reaches the right border of the cell) or explicit (via the \n character).
+     * As many cells as necessary are output, one below the other. Text can be aligned, centered or justified.
+     * The cell block can be framed and the background painted.
      *
      * @param float                   $w      the cell width. If 0, the cell extends up to the right margin.
      * @param float                   $h      the cell height
@@ -660,7 +693,7 @@ class PdfDocument extends \FPDF
      * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
      *                                        <li>A PdfTextAlignment enumeration.</li>
-     *                                        <li><code>'L'</code> or an empty string (''): left align (default value).</li>
+     *                                        <li><code>'L'</code> or an empty string (""): left align (default value).</li>
      *                                        <li><code>'C'</code> : center.</li>
      *                                        <li><code>'R'</code> : right align.</li>
      *                                        <li><code>'J'</code> : justification (default value).</li>
@@ -668,6 +701,8 @@ class PdfDocument extends \FPDF
      * @param bool                    $fill   indicates if the cell background must be painted (true) or transparent (false)
      *
      * @see PdfDocument::Cell()
+     *
+     * @psalm-param PdfTextAlignment|'J'|'L'|'C'|'R' $align
      */
     public function MultiCell($w = 0, $h = self::LINE_HEIGHT, $txt = '', $border = PdfBorder::NONE, $align = PdfTextAlignment::JUSTIFIED, $fill = false): void
     {
@@ -689,6 +724,8 @@ class PdfDocument extends \FPDF
      * @param bool                     $isUTF8 indicates if name is encoded in ISO-8859-1 (false) or UTF-8 (true)
      *
      * @return string the content if the output is string
+     *
+     * @psalm-param PdfDocumentOutput|'D'|'F'|'I'|'S'|'' $dest
      *
      * @noinspection PhpCastIsUnnecessaryInspection
      */
@@ -749,7 +786,7 @@ class PdfDocument extends \FPDF
      *                                                  <ul>
      *                                                  <li>A PdfBorder instance.</li>
      *                                                  <li>A PdfRectangleStyle enumeration.</li>
-     *                                                  <li><code>'D'</code> or an empty string (''): draw (default value).</li>
+     *                                                  <li><code>'D'</code> or an empty string (""): draw (default value).</li>
      *                                                  <li><code>'F'</code> : fill.</li>
      *                                                  <li><code>'DF'</code> : draw and fill.</li>
      *                                                  </ul>
@@ -791,6 +828,8 @@ class PdfDocument extends \FPDF
 
     /**
      * Set this current style to default.
+     *
+     * @see PdfStyle::getDefaultStyle()
      */
     public function resetStyle(): self
     {
@@ -838,6 +877,9 @@ class PdfDocument extends \FPDF
      *
      * @param PdfDocumentZoom|string|int $zoom   the zoom to use
      * @param PdfDocumentLayout|string   $layout the page layout
+     *
+     * @psalm-param PdfDocumentZoom|'fullpage'|'fullwidth'|'real'|'default'|int $zoom
+     * @psalm-param PdfDocumentLayout|'single'|'continuous'|'two'|'default' $layout
      */
     public function SetDisplayMode($zoom = PdfDocumentZoom::FULL_PAGE, $layout = PdfDocumentLayout::SINGLE): void
     {
@@ -865,7 +907,7 @@ class PdfDocument extends \FPDF
      *                                    It is also possible to pass an empty string (""). In that case, the current family is kept.
      * @param PdfFontStyle|string $style  the font style. It can be either a font style enumeration or one of the given values (case-insensitive):
      *                                    <ul>
-     *                                    <li>An empty string (''): Regular.</li>
+     *                                    <li>An empty string (""): Regular.</li>
      *                                    <li><code>'B'</code>: Bold.</li>
      *                                    <li><code>'I'</code>: Italic.</li>
      *                                    <li><code>'U'</code>: Underline.</li>

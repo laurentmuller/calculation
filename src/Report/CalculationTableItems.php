@@ -83,6 +83,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
         }
         $this->setInProgress(true);
         $this->outputTotal($calculation->getItemsTotal());
+        $this->getParent()->Ln(3);
     }
 
     /**

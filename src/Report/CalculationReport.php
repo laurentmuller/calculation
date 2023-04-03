@@ -22,6 +22,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Traits\LoggerTrait;
 use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelMedium;
 use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeNone;
 use Endroid\QrCode\Writer\PdfWriter;
 use Psr\Log\LoggerInterface;
@@ -33,15 +34,21 @@ class CalculationReport extends AbstractReport
 {
     use LoggerTrait;
 
-    private readonly float $minMargin;
+    private const QR_CODE_OFFSET = 1.0;
+
+    private const QR_CODE_SIZE = 35;
 
     /**
      * Constructor.
      */
-    public function __construct(AbstractController $controller, private readonly LoggerInterface $logger, private readonly Calculation $calculation, private readonly ?string $qrcode = null)
-    {
+    public function __construct(
+        AbstractController $controller,
+        private readonly Calculation $calculation,
+        private readonly float $minMargin,
+        private readonly string $qrcode,
+        private readonly LoggerInterface $logger
+    ) {
         parent::__construct($controller);
-        $this->minMargin = $controller->getApplication()->getMinMargin();
     }
 
     /**
@@ -77,46 +84,39 @@ class CalculationReport extends AbstractReport
     public function render(): bool
     {
         $calculation = $this->calculation;
-        if ($calculation->isNew()) {
-            $this->setTitleTrans('calculation.add.title');
-        } else {
-            $id = $calculation->getFormattedId();
-            $this->setTitleTrans('calculation.edit.title', ['%id%' => $id], true);
-        }
+        $this->renderTitle($calculation);
         $this->AddPage();
         if ($calculation->isEmpty()) {
-            $this->resetStyle()->Ln();
-            $message = $this->trans('calculation.edit.empty');
-            $this->Cell(txt: $message, ln: PdfMove::NEW_LINE, align: PdfTextAlignment::CENTER);
-            $this->renderQrCode();
-
-            return true;
+            $this->renderEmpty();
+        } else {
+            CalculationTableItems::render($this);
+            $this->checkEndHeight($calculation);
+            CalculationTableGroups::render($this);
+            CalculationTableOverall::render($this);
         }
-        CalculationTableItems::render($this);
-        $this->Ln(3);
-        $this->checkTablesHeight($calculation);
-        CalculationTableGroups::render($this);
-        CalculationTableOverall::render($this);
+        $this->renderTimestampable($calculation);
         $this->renderQrCode();
 
         return true;
     }
 
     /**
-     * Checks if the groups table, the overall table and the QR code (if any) fit within the current page.
+     * Controls whether the rest of the calculation can be contained on the same page.
      */
-    private function checkTablesHeight(Calculation $calculation): void
+    private function checkEndHeight(Calculation $calculation): void
     {
-        // groups, user magin and totalss
+        // header + groups + footer
         $lines = $calculation->getGroupsCount() + 2;
+        // net total + user margin
         if (!empty($calculation->getUserMargin())) {
             $lines += 2;
         }
+        // global margin + overall total + timestampable
         $lines += 3;
-        $total = 2.0 + self::LINE_HEIGHT * (float) $lines;
-        // qr code
+        $total = self::LINE_HEIGHT * (float) $lines;
+        // QR code
         if ($this->isQrCode()) {
-            $total += $this->getQrCodeSize() - 1.0;
+            $total += $this->getQrCodeSize() - self::QR_CODE_OFFSET;
         }
         if (!$this->isPrintable($total)) {
             $this->AddPage();
@@ -124,11 +124,11 @@ class CalculationReport extends AbstractReport
     }
 
     /**
-     * Gets the QR code size (if any) in millimeters; 0 if none.
+     * Gets the QR code size in millimeters; 0 if none.
      */
     private function getQrCodeSize(): float
     {
-        return $this->isQrCode() ? 30 : 0;
+        return $this->isQrCode() ? self::QR_CODE_SIZE : 0;
     }
 
     /**
@@ -136,7 +136,7 @@ class CalculationReport extends AbstractReport
      */
     private function isQrCode(): bool
     {
-        return null !== $this->qrcode &&  '' !== $this->qrcode;
+        return '' !== $this->qrcode;
     }
 
     /**
@@ -165,6 +165,24 @@ class CalculationReport extends AbstractReport
     }
 
     /**
+     * Render a text when the calculation is empty.
+     */
+    private function renderEmpty(): void
+    {
+        PdfStyle::getHeaderStyle()
+            ->apply($this);
+        $message = $this->trans('calculation.edit.empty');
+        $this->Cell(
+            h: self::LINE_HEIGHT * 1.8,
+            txt: $message,
+            border: PdfBorder::all(),
+            ln: PdfMove::NEW_LINE,
+            align: PdfTextAlignment::CENTER,
+            fill: true
+        );
+    }
+
+    /**
      * Render the QR code (if any).
      */
     private function renderQrCode(): void
@@ -176,21 +194,52 @@ class CalculationReport extends AbstractReport
         try {
             $size = $this->getQrCodeSize();
             $options = [
-                PdfWriter::WRITER_OPTION_Y => $this->GetPageHeight() + self::FOOTER_OFFSET - $size - 1.0,
-                PdfWriter::WRITER_OPTION_X => $this->GetPageWidth() - $this->getRightMargin() - $size,
-                PdfWriter::WRITER_OPTION_LINK => $this->qrcode,
                 PdfWriter::WRITER_OPTION_PDF => $this,
+                PdfWriter::WRITER_OPTION_LINK => $this->qrcode,
+                PdfWriter::WRITER_OPTION_X => $this->GetPageWidth() - $this->getRightMargin() - $size,
+                PdfWriter::WRITER_OPTION_Y => $this->GetPageHeight() + self::FOOTER_OFFSET - $size - self::QR_CODE_OFFSET,
             ];
             Builder::create()
                 ->roundBlockSizeMode(new RoundBlockSizeModeNone())
-                ->data((string) $this->qrcode)
+                ->errorCorrectionLevel(new ErrorCorrectionLevelMedium())
                 ->writer(new PdfWriter())
                 ->writerOptions($options)
+                ->data($this->qrcode)
                 ->size((int) $size)
                 ->margin(0)
                 ->build();
         } catch (\Exception $e) {
             $this->logException($e, $this->trans('report.calculation.error_qr_code'));
+        }
+    }
+
+    private function renderTimestampable(Calculation $calculation): void
+    {
+        PdfStyle::getNoBorderStyle()
+            ->setFontItalic()
+            ->setFontSize(7)
+            ->apply($this);
+        $translator = $this->getTranslator();
+        $oldMargins = $this->setCellMargin(0);
+        $created = $calculation->getCreatedText($translator);
+        $updated = $calculation->getUpdatedText($translator);
+        $width = $this->getPrintableWidth() / 2.0;
+        $this->Cell(w: $width, txt: $created);
+        $this->Cell(w: $width, txt: $updated, align: PdfTextAlignment::RIGHT);
+        $this->setCellMargin($oldMargins);
+        $this->resetStyle();
+    }
+
+    /**
+     * Set the title.
+     */
+    private function renderTitle(Calculation $calculation): void
+    {
+        if ($calculation->isNew()) {
+            $this->setTitleTrans('calculation.add.title');
+        } else {
+            $id = $calculation->getFormattedId();
+            $this->setTitleTrans('calculation.edit.title', ['%id%' => $id], true);
         }
     }
 }

@@ -29,6 +29,7 @@ use App\Service\CalculationService;
 use App\Spreadsheet\CalculationDocument;
 use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationTable;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -133,7 +134,7 @@ class CalculationController extends AbstractEntityController
     #[Route(path: '/excel', name: 'calculation_excel')]
     public function excel(): SpreadsheetResponse
     {
-        $entities = $this->getEntities('id');
+        $entities = $this->getEntities('id', Criteria::DESC);
         if ([] === $entities) {
             $message = $this->trans('calculation.list.empty');
             throw $this->createNotFoundException($message);
@@ -149,7 +150,7 @@ class CalculationController extends AbstractEntityController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => Requirement::DIGITS])]
-    public function excelById(Calculation $calculation): SpreadsheetResponse
+    public function excelOne(Calculation $calculation): SpreadsheetResponse
     {
         $doc = new CalculationDocument($this, $calculation);
 
@@ -165,7 +166,7 @@ class CalculationController extends AbstractEntityController
     #[Route(path: '/pdf', name: 'calculation_pdf')]
     public function pdf(Request $request): PdfResponse
     {
-        $entities = $this->getEntities('id');
+        $entities = $this->getEntities('id', Criteria::DESC);
         if ([] === $entities) {
             $message = $this->trans('calculation.list.empty');
             throw $this->createNotFoundException($message);
@@ -180,10 +181,11 @@ class CalculationController extends AbstractEntityController
      * Export a single calculation to a PDF document.
      */
     #[Route(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: ['id' => Requirement::DIGITS])]
-    public function pdfById(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
+    public function pdfOne(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
     {
+        $minMargin = $this->getMinMargin();
         $qrcode = $this->getQrCode($generator, $calculation);
-        $doc = new CalculationReport($this, $logger, $calculation, $qrcode);
+        $doc = new CalculationReport($this, $calculation, $minMargin, $qrcode, $logger);
 
         return $this->renderPdfDocument($doc);
     }
@@ -195,7 +197,7 @@ class CalculationController extends AbstractEntityController
     public function show(Calculation $item): Response
     {
         $parameters = [
-            'min_margin' => $this->getApplication()->getMinMargin(),
+            'min_margin' => $this->getMinMargin(),
             'duplicate_items' => $item->hasDuplicateItems(),
             'empty_items' => $item->hasEmptyItems(),
         ];
@@ -249,7 +251,7 @@ class CalculationController extends AbstractEntityController
     {
         /* @var Calculation $item */
         $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
-        $parameters['min_margin'] = $this->getApplication()->getMinMargin();
+        $parameters['min_margin'] = $this->getMinMargin();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
         $parameters['empty_items'] = $item->hasEmptyItems();
         if ($parameters['editable'] = $item->isEditable()) {
@@ -288,7 +290,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Gets the QR-code for the given calculation.
      */
-    private function getQrCode(UrlGeneratorInterface $generator, Calculation $calculation): ?string
+    private function getQrCode(UrlGeneratorInterface $generator, Calculation $calculation): string
     {
         if ($this->getUserService()->isQrCode()) {
             $name = 'calculation_show';
@@ -297,7 +299,7 @@ class CalculationController extends AbstractEntityController
             return $generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
         }
 
-        return null;
+        return '';
     }
 
     private function getTasks(): array

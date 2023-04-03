@@ -49,7 +49,7 @@ class CalculationBelowController extends AbstractController
     #[Route(path: '/excel', name: 'below_excel')]
     public function excel(CalculationRepository $repository): Response
     {
-        $minMargin = $this->getApplication()->getMinMargin();
+        $minMargin = $this->getMinMargin();
         if (null !== $response = $this->getEmptyResponse($repository, $minMargin)) {
             return $response;
         }
@@ -69,7 +69,7 @@ class CalculationBelowController extends AbstractController
     #[Route(path: '/pdf', name: 'below_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
-        $minMargin = $this->getApplication()->getMinMargin();
+        $minMargin = $this->getMinMargin();
         if (null !== $response = $this->getEmptyResponse($repository, $minMargin)) {
             return $response;
         }

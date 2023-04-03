@@ -14,16 +14,20 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
+use App\Traits\CalculationDocumentMarginTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Style\Style;
 
 /**
  * Spreadsheet document for a calculation.
  */
 class CalculationDocument extends AbstractDocument
 {
+    use CalculationDocumentMarginTrait;
+
     /**
      * The header background color.
      */
@@ -58,14 +62,9 @@ class CalculationDocument extends AbstractDocument
         $row = 1;
         $this->renderTitle($title, $calculation, $row);
         $this->mergeCells(1, 5, $row);
-        $emptyRows[] = $row;
-        ++$row;
+        $emptyRows[] = $row++;
         if ($calculation->isEmpty()) {
-            $this->mergeCells(1, 5, $row)
-                ->cellText(1, $row, $this->trans('calculation.edit.empty'))
-                ->fillBackground($row);
-
-            return $this->renderEnd($row, $emptyRows);
+            return $this->renderEmpty($calculation, $row, $emptyRows);
         }
         $this->renderItems($calculation, $row);
         $this->mergeCells(1, 5, $row);
@@ -77,7 +76,7 @@ class CalculationDocument extends AbstractDocument
         $this->renderUserMargin($calculation, $row);
         $this->renderOverallTotal($calculation, $row);
 
-        return $this->renderEnd($row, $emptyRows);
+        return $this->renderEnd($calculation, $row, $emptyRows);
     }
 
     private function cell(int $column, int $row, mixed $value, bool $bold = false, int $indent = 0, string $alignment = '', string $format = ''): self
@@ -104,45 +103,79 @@ class CalculationDocument extends AbstractDocument
     private function cellAmount(int $column, int $row, float $value, bool $bold = false): self
     {
         return $this->cell(
-            $column,
-            $row,
-            $value,
-            $bold,
-            0,
-            Alignment::HORIZONTAL_RIGHT,
-            NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1
+            column: $column,
+            row: $row,
+            value: $value,
+            bold: $bold,
+            alignment: Alignment::HORIZONTAL_RIGHT,
+            format: NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1
         );
     }
 
     private function cellBold(int $column, int $row, mixed $value, int $indent = 0, string $alignment = '', string $format = ''): self
     {
-        return $this->cell($column, $row, $value, true, $indent, $alignment, $format);
+        return $this->cell(
+            column: $column,
+            row: $row,
+            value: $value,
+            bold: true,
+            indent: $indent,
+            alignment: $alignment,
+            format: $format
+        );
     }
 
     private function cellPercent(int $row, float $value, bool $bold = false, string $format = NumberFormat::FORMAT_PERCENTAGE): self
     {
-        return $this->cell(3, $row, $value, $bold, 0, Alignment::HORIZONTAL_RIGHT, $format);
+        return $this->cell(
+            column: 3,
+            row: $row,
+            value: $value,
+            bold: $bold,
+            alignment: Alignment::HORIZONTAL_RIGHT,
+            format: $format
+        );
     }
 
     private function cellText(int $column, int $row, ?string $value, int $indent = 0): self
     {
-        return $this->cell($column, $row, $value, false, $indent);
+        return $this->cell(
+            column: $column,
+            row: $row,
+            value: $value,
+            indent: $indent
+        );
     }
 
     private function fillBackground(int $row): void
     {
-        $coordinate = "A$row:E$row";
-        $this->getActiveSheet()->getStyle($coordinate)
+        $this->getRowStyle($row)
             ->getFill()->setFillType(Fill::FILL_SOLID)
             ->getStartColor()->setARGB(self::COLOR_BACKGROUND);
     }
 
-    private function getMarginFormat(): string
+    private function getRowStyle(int $row): Style
     {
-        $minMargin = $this->controller->getApplication()->getMinMargin();
-        $format = NumberFormat::FORMAT_PERCENTAGE;
+        return $this->getActiveSheet()->getStyle("A$row:E$row");
+    }
 
-        return "[Red][<$minMargin]$format;$format";
+    /**
+     * @param int[] $emptyRows the empty rows indexes
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    private function renderEmpty(Calculation $calculation, int $row, array $emptyRows): bool
+    {
+        $this->mergeCells(1, 5, $row)
+            ->cellBold(
+                column: 1,
+                row: $row,
+                value: $this->trans('calculation.edit.empty'),
+                alignment: Alignment::HORIZONTAL_CENTER
+            )
+            ->fillBackground($row);
+
+        return $this->renderEnd($calculation, $row, $emptyRows);
     }
 
     /**
@@ -150,7 +183,7 @@ class CalculationDocument extends AbstractDocument
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
-    private function renderEnd(int $lastRow, array $emptyRows): bool
+    private function renderEnd(Calculation $calculation, int $lastRow, array $emptyRows): bool
     {
         $sheet = $this->getActiveSheet();
         $sheet->getStyle("A1:E$lastRow")
@@ -166,6 +199,8 @@ class CalculationDocument extends AbstractDocument
         foreach (\range('B', 'E') as $column) {
             $sheet->getColumnDimension($column)->setWidth(2.0, 'cm');
         }
+        $this->renderTimestampable($calculation, $lastRow + 1);
+
         $sheet->getPageSetup()
             ->setFitToWidth(1)
             ->setFitToHeight(0)
@@ -247,6 +282,28 @@ class CalculationDocument extends AbstractDocument
             ->cellAmount(4, $row, $calculation->getOverallMarginAmount(), true)
             ->cellAmount(5, $row, $calculation->getOverallTotal(), true)
             ->fillBackground($row);
+    }
+
+    /**
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    private function renderTimestampable(Calculation $calculation, int $row): void
+    {
+        $translator = $this->getTranslator();
+        $created = $calculation->getCreatedText($translator);
+        $updated = $calculation->getUpdatedText($translator);
+        $this->cell(1, $row, $created);
+        $this->mergeCells(2, 5, $row)
+            ->cell(
+                column: 2,
+                row: $row,
+                value: $updated,
+                alignment: Alignment::HORIZONTAL_RIGHT
+            );
+        $this->getRowStyle($row)
+            ->getFont()
+            ->setSize(9)
+            ->setItalic(true);
     }
 
     /**

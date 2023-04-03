@@ -751,7 +751,7 @@ body.dark .small-scrollbar::-webkit-scrollbar-thumb:hover {
 .card-footer hr.card-footer-line {
     margin-left: -1.25rem;
     margin-right: -1.25rem;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.25rem;
 }
 
 .card-header.bg-danger .invalid-feedback {

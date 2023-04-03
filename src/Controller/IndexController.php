@@ -59,11 +59,10 @@ class IndexController extends AbstractController
     public function invoke(Request $request): Response
     {
         $service = $this->getUserService();
-        $application = $this->getApplication();
         $restrict = $this->getParamBoolean($request, self::PARAM_RESTRICT);
         $user = $restrict ? $this->getUser() : null;
         $parameters = [
-            'min_margin' => $application->getMinMargin(),
+            'min_margin' => $this->getMinMargin(),
             'calculations' => $this->getCalculations($service->getPanelCalculation(), $user),
         ];
         if ($restrict) {

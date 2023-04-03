@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\EnumConstantsInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\SortableEnumInterface;
 use App\Utils\StringUtils;
@@ -23,10 +24,11 @@ use Elao\Enum\ReadableEnumTrait;
 /**
  * Entity permission enumeration.
  *
+ * @implements EnumConstantsInterface<EntityPermission>
  * @implements SortableEnumInterface<EntityPermission>
  */
 #[ReadableEnum(prefix: 'rights.')]
-enum EntityPermission: int implements ReadableEnumInterface, SortableEnumInterface
+enum EntityPermission: int implements EnumConstantsInterface, ReadableEnumInterface, SortableEnumInterface
 {
     use ReadableEnumTrait;
 

@@ -106,6 +106,14 @@ abstract class AbstractController extends BaseController
     }
 
     /**
+     * Gets the minimum margin, in percent, for a calculation.
+     */
+    public function getMinMargin(): float
+    {
+        return $this->getApplication()->getMinMargin();
+    }
+
+    /**
      * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedInferredReturnType
      * @psalm-suppress MixedReturnStatement

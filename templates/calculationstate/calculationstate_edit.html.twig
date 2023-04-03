@@ -21,11 +21,8 @@
 {% endblock %}
 
 {% block card_footer -%}
-    {{ parent() }}
-    {% if not item.new %}
-        <hr class="card-footer-line">
-        {{ timestampable(item) }}
-    {% endif %}
+{{ parent() }}
+{{ timestampable(item) }}
 {% endblock %}
 
 {% block javascripts %}

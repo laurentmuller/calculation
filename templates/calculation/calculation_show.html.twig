@@ -11,7 +11,6 @@
 {%- set state_path = is_granted(ATTRIBUTE_EDIT, item) and not item.editable ? path('calculation_state', params) : null -%}
 {%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('calculation_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, item, list_path) -%}
-{%- set pdf_export = is_granted(ATTRIBUTE_EXPORT, item) -%}
 {# class #}
 {% block card_header_class ' d-print-none' %}
 {% block card_container_class '' %}
@@ -78,7 +77,6 @@
                     <td class="text-currency">{{ group.total|amount }}</td>
                 </tr>
             {% endfor %}
-
             {# groups total #}
             <tr>
                 <td class="text-nowrap font-weight-bold">{{ 'calculation.fields.marginTotal'|trans }}</td>
@@ -87,14 +85,12 @@
                 <td class="text-currency">{{ item.groupsMarginAmount|amount }}</td>
                 <td class="font-weight-bold text-currency">{{ item.groupsTotal|amount }}</td>
             </tr>
-
             {# global margin #}
             <tr>
                 <td class="text-nowrap" colspan="2">{{ 'calculation.fields.globalMargin'|trans }}</td>
                 <td class="text-percent">{{ item.globalMargin|percent }}</td>
                 <td class="text-currency" colspan="2">{{ item.globalMarginAmount|amount }}</td>
             </tr>
-
             {# user margin #}
             {% if item.userMargin != 0 %}
                 <tr>
@@ -107,7 +103,6 @@
                     <td class="text-currency" colspan="2">{{ item.userMarginAmount|amount }}</td>
                 </tr>
             {% endif %}
-
             {# overall total #}
             <tr>
                 <td class="text-nowrap font-weight-bold">{{ 'calculation.fields.overallTotal'|trans }}</td>
@@ -126,7 +121,6 @@
 </div>
 {% endif %}
 {% endblock %}
-
 {# properties #}
 {% block property_body %}
 {{ property('calculation.fields.id', item.id|identifier, 'font-weight-bold') }}
@@ -150,9 +144,6 @@
     {% if state_path %}
         {{ link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
     {% endif %}
-    {% if pdf_export %}
-        {{ button_pdf('calculation_pdf_id', {'id': item.id}) }}
-    {%- endif %}
     </div>
     <div class="col-md-4 text-md-right">
         <p id="error-all" class="mb-0" class="d-none">

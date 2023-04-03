@@ -12,15 +12,19 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
+use App\Entity\Calculation;
+use App\Traits\CalculationDocumentMarginTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
  * Spreadsheet document for the list of calculations.
  *
- * @extends AbstractArrayDocument<\App\Entity\Calculation>
+ * @extends AbstractArrayDocument<Calculation>
  */
 class CalculationsDocument extends AbstractArrayDocument
 {
+    use CalculationDocumentMarginTrait;
+
     /**
      * {@inheritdoc}
      *
@@ -60,16 +64,5 @@ class CalculationsDocument extends AbstractArrayDocument
         $this->finish();
 
         return true;
-    }
-
-    /**
-     * Gets the overall margin format.
-     */
-    private function getMarginFormat(): string
-    {
-        $minMargin = $this->controller->getApplication()->getMinMargin();
-        $format = $this->getPercentFormat();
-
-        return "[Red][<$minMargin]$format;$format";
     }
 }

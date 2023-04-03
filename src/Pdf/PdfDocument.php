@@ -993,6 +993,7 @@ class PdfDocument extends \FPDF
     }
 
     /**
+     * Converts the given string from UTF-8, if applicable; to ISO-8859-1.
      * Clean the given text.
      *
      * @param ?string $str the text to convert
@@ -1008,13 +1009,10 @@ class PdfDocument extends \FPDF
         }
 
         try {
-            if (false !== $encoding = \mb_detect_encoding($str, 'UTF-8, ISO-8859-1, ISO-8859-15', true)) {
-                return \mb_convert_encoding($str, 'ISO-8859-1', $encoding);
-            }
+            return \mb_convert_encoding($str, 'ISO-8859-1', 'UTF-8, ISO-8859-1');
         } catch (\Exception) {
+            return $str;
         }
-
-        return $str;
     }
 
     private function _endobj(): void

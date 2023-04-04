@@ -118,7 +118,7 @@ class DataQuery implements SortModeInterface
     }
 
     /**
-     * Returns if the values must be show as custom.
+     * Returns if the values must be shown as custom.
      */
     public function isViewCustom(): bool
     {
@@ -126,7 +126,7 @@ class DataQuery implements SortModeInterface
     }
 
     /**
-     * Returns if the values must be show as table.
+     * Returns if the values must be shown as table.
      */
     public function isViewTable(): bool
     {

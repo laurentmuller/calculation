@@ -12,16 +12,16 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Interfaces\DefaultEnumInterface;
+use App\Interfaces\EnumDefaultInterface;
 
 /**
- * Trait for class implementing {@link DefaultEnumInterface} interface.
+ * Trait for enumeration implementing {@link EnumDefaultInterface} interface.
  *
- * @psalm-require-implements \App\Interfaces\DefaultEnumInterface
+ * @psalm-require-implements EnumDefaultInterface
  */
-trait DefaultEnumTrait
+trait EnumDefaultTrait
 {
-    use ExtendedExtrasTrait;
+    use EnumExtrasTrait;
 
     /**
      * {@inheritdoc}
@@ -44,6 +44,6 @@ trait DefaultEnumTrait
      */
     public function isDefault(): bool
     {
-        return $this->getExtraBool(DefaultEnumInterface::NAME);
+        return $this->getExtraBool(EnumDefaultInterface::NAME);
     }
 }

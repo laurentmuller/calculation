@@ -13,14 +13,16 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * Interface to get the constant enumerations.
+ * Interface to get sorted enumerations.
+ *
+ * @template T of \UnitEnum&EnumSortableInterface
  */
-interface EnumConstantsInterface
+interface EnumSortableInterface
 {
     /**
-     * Gets the constant enumerations.
+     * Gets the sorted enumerations.
      *
-     * @return array<string, mixed>
+     * @return T[]
      */
-    public static function constants(): array;
+    public static function sorted(): array;
 }

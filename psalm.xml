@@ -4,12 +4,10 @@
         xmlns="https://getpsalm.org/schema/config"
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
         allowStringToStandInForClass="true"
-        allowNamedArgumentCalls="true"
         findUnusedVariablesAndParams="true"
+        findUnusedBaselineEntry="true"
         findUnusedPsalmSuppress="true"
         findUnusedCode="true"
-        findUnusedBaselineEntry="false"
-        resolveFromConfigFile="true"
         strictBinaryOperands="true"
         phpVersion="8.2"
         errorLevel="1">

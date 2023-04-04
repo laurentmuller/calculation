@@ -17,7 +17,7 @@ use Elao\Enum\ExtrasTrait;
 /**
  * Extends extras trait with typed values.
  */
-trait ExtendedExtrasTrait
+trait EnumExtrasTrait
 {
     use ExtrasTrait;
 

@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Trait for class implementing the {@link RoleInterface} interface.
  *
- * @psalm-require-implements \App\Interfaces\RoleInterface
+ * @psalm-require-implements RoleInterface
  */
 trait RoleTrait
 {

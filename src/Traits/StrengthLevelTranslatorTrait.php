@@ -58,7 +58,7 @@ trait StrengthLevelTranslatorTrait
      */
     public function translateLevel(StrengthLevel $level): string
     {
-        return $this->trans($level->getReadable());
+        return $this->trans($level);
     }
 
     /**

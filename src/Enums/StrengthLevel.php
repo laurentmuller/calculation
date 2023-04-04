@@ -12,25 +12,25 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\DefaultEnumInterface;
-use App\Interfaces\SortableEnumInterface;
-use App\Traits\DefaultEnumTrait;
+use App\Interfaces\EnumDefaultInterface;
+use App\Interfaces\EnumSortableInterface;
+use App\Interfaces\EnumTranslatableInterface;
+use App\Traits\EnumDefaultTrait;
+use App\Traits\EnumTranslatableTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
-use Elao\Enum\ReadableEnumInterface;
-use Elao\Enum\ReadableEnumTrait;
 
 /**
  * The password strength level.
  *
- * @implements SortableEnumInterface<StrengthLevel>
- * @implements DefaultEnumInterface<StrengthLevel>
+ * @implements EnumDefaultInterface<StrengthLevel>
+ * @implements EnumSortableInterface<StrengthLevel>
  */
 #[ReadableEnum(prefix: 'strength_level.')]
-enum StrengthLevel: int implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
+enum StrengthLevel: int implements EnumDefaultInterface, EnumSortableInterface, EnumTranslatableInterface
 {
-    use DefaultEnumTrait;
-    use ReadableEnumTrait;
+    use EnumDefaultTrait;
+    use EnumTranslatableTrait;
 
     /*
      * Medium level.
@@ -41,7 +41,7 @@ enum StrengthLevel: int implements DefaultEnumInterface, ReadableEnumInterface, 
     /*
      * No validation level (default value).
      */
-    #[EnumCase('none', [DefaultEnumInterface::NAME => true])]
+    #[EnumCase('none', [EnumDefaultInterface::NAME => true])]
     case NONE = -1;
 
     /*

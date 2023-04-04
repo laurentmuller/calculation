@@ -12,18 +12,18 @@ declare(strict_types=1);
 
 namespace App\Pdf\Enums;
 
-use App\Interfaces\DefaultEnumInterface;
-use App\Traits\DefaultEnumTrait;
+use App\Interfaces\EnumDefaultInterface;
+use App\Traits\EnumDefaultTrait;
 use Elao\Enum\Attribute\EnumCase;
 
 /**
  * The PDF font style enumeration.
  *
- * @implements DefaultEnumInterface<PdfFontStyle>
+ * @implements EnumDefaultInterface<PdfFontStyle>
  */
-enum PdfFontStyle: string implements DefaultEnumInterface
+enum PdfFontStyle: string implements EnumDefaultInterface
 {
-    use DefaultEnumTrait;
+    use EnumDefaultTrait;
 
     /*
      * Bold.
@@ -70,7 +70,7 @@ enum PdfFontStyle: string implements DefaultEnumInterface
     /*
      * Regular (default).
      */
-    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
+    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case REGULAR = '';
 
     /*

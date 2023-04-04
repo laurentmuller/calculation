@@ -12,25 +12,25 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\DefaultEnumInterface;
-use App\Interfaces\SortableEnumInterface;
-use App\Traits\DefaultEnumTrait;
+use App\Interfaces\EnumDefaultInterface;
+use App\Interfaces\EnumSortableInterface;
+use App\Interfaces\EnumTranslatableInterface;
+use App\Traits\EnumDefaultTrait;
+use App\Traits\EnumTranslatableTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
-use Elao\Enum\ReadableEnumInterface;
-use Elao\Enum\ReadableEnumTrait;
 
 /**
  * The message position for flash bag.
  *
- * @implements SortableEnumInterface<MessagePosition>
- * @implements DefaultEnumInterface<MessagePosition>
+ * @implements EnumDefaultInterface<MessagePosition>
+ * @implements EnumSortableInterface<MessagePosition>
  */
 #[ReadableEnum(prefix: 'message_position.', useValueAsDefault: true)]
-enum MessagePosition: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
+enum MessagePosition: string implements EnumDefaultInterface, EnumSortableInterface, EnumTranslatableInterface
 {
-    use DefaultEnumTrait;
-    use ReadableEnumTrait;
+    use EnumDefaultTrait;
+    use EnumTranslatableTrait;
 
     /*
      * Bottom center position.
@@ -45,7 +45,7 @@ enum MessagePosition: string implements DefaultEnumInterface, ReadableEnumInterf
     /*
      * Bottom right position.
      */
-    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
+    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case BOTTOM_RIGHT = 'bottom-right';
 
     /*

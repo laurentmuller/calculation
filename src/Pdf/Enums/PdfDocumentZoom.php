@@ -12,18 +12,18 @@ declare(strict_types=1);
 
 namespace App\Pdf\Enums;
 
-use App\Interfaces\DefaultEnumInterface;
-use App\Traits\DefaultEnumTrait;
+use App\Interfaces\EnumDefaultInterface;
+use App\Traits\EnumDefaultTrait;
 use Elao\Enum\Attribute\EnumCase;
 
 /**
  * The PDF document zoom enumeration.
  *
- * @implements DefaultEnumInterface<PdfDocumentZoom>
+ * @implements EnumDefaultInterface<PdfDocumentZoom>
  */
-enum PdfDocumentZoom: string implements DefaultEnumInterface
+enum PdfDocumentZoom: string implements EnumDefaultInterface
 {
-    use DefaultEnumTrait;
+    use EnumDefaultTrait;
 
     /*
      * Uses viewer default mode.
@@ -33,7 +33,7 @@ enum PdfDocumentZoom: string implements DefaultEnumInterface
     /*
      * Displays the entire page on screen.
      */
-    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
+    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case FULL_PAGE = 'fullpage';
 
     /*

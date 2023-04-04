@@ -68,6 +68,8 @@ abstract class AbstractReader implements \Iterator
     }
 
     /**
+     * By default, close the resource file.
+     *
      * @return void
      */
     public function __destruct()

@@ -136,7 +136,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
      *
      * @return Collection<int, TaskItem>
      *
-     * @psalm-param Closure(TaskItem=):bool $p
+     * @psalm-param \Closure(TaskItem=):bool $p
      */
     public function filter(\Closure $p): Collection
     {

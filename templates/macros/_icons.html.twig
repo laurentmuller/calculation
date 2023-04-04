@@ -182,7 +182,7 @@
 {% set theme_dark = enum('App\\Enums\\Theme::DARK') %}
 {% set theme_light = enum('App\\Enums\\Theme::LIGHT') %}
 {% set theme_icon = is_dark ? theme_light.icon : theme_dark.icon %}
-{% set theme_text = is_dark ? theme_light.readable : theme_dark.readable %}
+{% set theme_text = is_dark ? theme_light : theme_dark %}
 {% set theme_title = is_dark ? theme_light.title : theme_dark.title %}
 {% set parameters = parameters|merge({
     'class': (class ~ ' item-theme')|trim,
@@ -191,15 +191,15 @@
     'data-error': 'theme.error'|trans,
     'data-title': 'theme.title'|trans,
     'data-light-css': asset_versioned(theme_light.css),
-    'data-light-text': theme_light.readable|trans,
+    'data-light-text': theme_light|trans,
     'data-light-title': theme_light.title|trans,
     'data-light-icon': theme_light.icon,
     'data-dark-css': asset_versioned(theme_dark.css),
-    'data-dark-text': theme_dark.readable|trans,
+    'data-dark-text': theme_dark|trans,
     'data-dark-title': theme_dark.title|trans,
     'data-dark-icon': theme_dark.icon})
 %}
 <{{ element }}{{ attributes(parameters) }}>
-    {{- _self.icon(theme_icon, theme_text) -}}
+    {{- _self.icon(theme_icon, theme_text|trans) -}}
 </{{ element }}>
 {% endmacro %}

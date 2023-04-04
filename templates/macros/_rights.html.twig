@@ -1,7 +1,7 @@
 {# macros #}
-{% macro header(label, overwrite) %}
+{% macro header(permission, overwrite) %}
 <th>
-    <button type="button" class="btn btn-link btn-col p-0" title="{{ 'user.rights.col_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ label|trans }}</button>
+    <button type="button" class="btn btn-link btn-col p-0" title="{{ 'user.rights.col_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ permission|trans }}</button>
 </th>
 {%- endmacro %}
 
@@ -29,7 +29,7 @@
            <tr class="text-center">
                <th class="text-left text-nowrap font-weight-normal">{{ icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icon('arrow-right') }}</th>
                {% for permission in permissions %}
-                   {{ _self.header(permission.readable, overwrite) }}
+                   {{ _self.header(permission, overwrite) }}
                {% endfor %}
            </tr>
         </thead>

@@ -69,7 +69,7 @@ class RightsType extends AbstractHelperType
     private function addRightType(FormHelper $helper, EntityName $entity): void
     {
         $helper->field($entity->value)
-            ->label($entity->getReadable())
+            ->label($entity)
             ->add(AttributeRightType::class);
     }
 }

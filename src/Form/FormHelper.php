@@ -15,7 +15,7 @@ namespace App\Form;
 use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
-use App\Interfaces\SortableEnumInterface;
+use App\Interfaces\EnumSortableInterface;
 use App\Utils\FormatUtils;
 use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use Elao\Enum\ReadableEnumInterface;
@@ -47,6 +47,7 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
@@ -274,7 +275,7 @@ class FormHelper
     public function addEnumType(string $class): self
     {
         $this->updateOption('class', $class);
-        if (\is_a($class, SortableEnumInterface::class, true)) {
+        if (\is_a($class, EnumSortableInterface::class, true)) {
             $this->updateOption('choices', $class::sorted());
         }
         if (\is_a($class, ReadableEnumInterface::class, true)) {
@@ -607,9 +608,9 @@ class FormHelper
     /**
      * Sets the label property.
      *
-     * @param string|bool $label the label identifier to translate or false to hide
+     * @param TranslatableInterface|string|false $label the translatable, the label identifier to translate or false to hide
      */
-    public function label(string|bool $label): self
+    public function label(string|\Stringable|TranslatableInterface|false $label): self
     {
         if ('' === $label) {
             $label = null;

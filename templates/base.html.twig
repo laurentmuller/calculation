@@ -91,6 +91,7 @@
         {% block back_to_top -%}{{ include('back_to_top.html.twig') }}{%- endblock %}
     </div>
 {# java scripts #}
+<noscript>{{ 'common.no_script_support'|trans }}</noscript>
 {% block javascripts %}
 {% if app.debug %}
     {{- asset_js('js/vendor/jquery/jquery.js') }}
@@ -106,6 +107,5 @@
     {{- asset_js('js/core_common.js') }}
 {% endif %}
 {% endblock %}
-<noscript>{{ 'common.no_script_support'|trans }}</noscript>
 </body>
 </html>

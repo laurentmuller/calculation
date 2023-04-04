@@ -15,11 +15,15 @@ namespace App\Tests\Enums;
 use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use Elao\Enum\FlagBag;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityPermission::class)]
 class EntityPermissionTest extends TestCase
 {
+    private ?TranslatorInterface $translator = null;
+
     /**
      * @return array<array{EntityPermission, string}>
      */
@@ -35,9 +39,6 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<array{EntityPermission, string}>
-     */
     public static function getMatchName(): array
     {
         return [
@@ -56,9 +57,6 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<array{string, int}>
-     */
     public static function getTryFindValue(): array
     {
         return [
@@ -74,9 +72,6 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<array{?EntityPermission, string}>
-     */
     public static function getTryFromName(): array
     {
         return [
@@ -95,9 +90,6 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<array{EntityPermission, int}>
-     */
     public static function getValue(): array
     {
         return [
@@ -174,6 +166,17 @@ class EntityPermissionTest extends TestCase
         self::assertSame(63, $permissions->getValue());
     }
 
+    /**
+     * @throws Exception
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    public function testTranslate(EntityPermission $permission, string $expected): void
+    {
+        $translator = $this->createTranslator();
+        $label = $permission->trans($translator);
+        self::assertSame($expected, $label);
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindValue')]
     public function testTryFindValue(string $name, int $expected, int $default = RoleInterface::INVALID_VALUE): void
     {
@@ -193,5 +196,19 @@ class EntityPermissionTest extends TestCase
     {
         $value = $permission->value;
         self::assertSame($expected, $value);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createTranslator(): TranslatorInterface
+    {
+        if (null === $this->translator) {
+            $this->translator = $this->createMock(TranslatorInterface::class);
+            $this->translator->method('trans')
+                ->willReturnArgument(0);
+        }
+
+        return $this->translator;
     }
 }

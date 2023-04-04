@@ -25,6 +25,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Log extends AbstractEntity
 {
     /**
+     * The user extra field name.
+     */
+    final public const USER_FIELD = 'user';
+
+    /**
      * The application channel.
      */
     private const APP_CHANNEL = 'app';
@@ -45,6 +50,9 @@ class Log extends AbstractEntity
     #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE)]
     private \DateTimeInterface $createdAt;
 
+    /**
+     * @var ?array<string, string>
+     */
     #[ORM\Column(nullable: true)]
     private ?array $extra = null;
 
@@ -206,7 +214,7 @@ class Log extends AbstractEntity
      */
     public function getUser(): ?string
     {
-        return isset($this->extra['user']) ? (string) $this->extra['user'] : null;
+        return $this->extra[self::USER_FIELD] ?? null;
     }
 
     /**
@@ -262,6 +270,8 @@ class Log extends AbstractEntity
 
     /**
      * Sets the extra information.
+     *
+     * @param ?array<string, string> $extra
      */
     public function setExtra(?array $extra): self
     {

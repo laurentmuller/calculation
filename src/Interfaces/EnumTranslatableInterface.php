@@ -12,17 +12,12 @@ declare(strict_types=1);
 
 namespace App\Interfaces;
 
+use Elao\Enum\ReadableEnumInterface;
+use Symfony\Contracts\Translation\TranslatableInterface;
+
 /**
- * Interface to get sorted enumerations.
- *
- * @template T of \UnitEnum&SortableEnumInterface
+ * Interface to get the translatable enumeration value.
  */
-interface SortableEnumInterface
+interface EnumTranslatableInterface extends ReadableEnumInterface, TranslatableInterface
 {
-    /**
-     * Gets the sorted enumerations.
-     *
-     * @return T[]
-     */
-    public static function sorted(): array;
 }

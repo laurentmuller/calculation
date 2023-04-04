@@ -12,25 +12,25 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\DefaultEnumInterface;
-use App\Interfaces\SortableEnumInterface;
-use App\Traits\DefaultEnumTrait;
+use App\Interfaces\EnumDefaultInterface;
+use App\Interfaces\EnumSortableInterface;
+use App\Interfaces\EnumTranslatableInterface;
+use App\Traits\EnumDefaultTrait;
+use App\Traits\EnumTranslatableTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
-use Elao\Enum\ReadableEnumInterface;
-use Elao\Enum\ReadableEnumTrait;
 
 /**
  * Table view enumeration.
  *
- * @implements SortableEnumInterface<TableView>
- * @implements DefaultEnumInterface<TableView>
+ * @implements EnumDefaultInterface<TableView>
+ * @implements EnumSortableInterface<TableView>
  */
 #[ReadableEnum(prefix: 'table_view.', useValueAsDefault: true)]
-enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
+enum TableView: string implements EnumDefaultInterface, EnumSortableInterface, EnumTranslatableInterface
 {
-    use DefaultEnumTrait;
-    use ReadableEnumTrait;
+    use EnumDefaultTrait;
+    use EnumTranslatableTrait;
 
     /*
      * Show values as cards.
@@ -41,7 +41,7 @@ enum TableView: string implements DefaultEnumInterface, ReadableEnumInterface, S
     /*
      * Show values within a table (default value).
      */
-    #[EnumCase(extras: ['page-size' => 20, DefaultEnumInterface::NAME => true])]
+    #[EnumCase(extras: ['page-size' => 20, EnumDefaultInterface::NAME => true])]
     case TABLE = 'table';
 
     /**

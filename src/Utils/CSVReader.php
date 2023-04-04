@@ -18,11 +18,10 @@ namespace App\Utils;
  * Example:
  *
  * <code>
- *      $reader = new CsvReader("path/to/file.csv");
- *
- *      foreach ($reader as $data) {
- *          echo $data[2] ."\n";
- *      }
+ * $reader = new CsvReader("path/to/file.csv");
+ * foreach ($reader as $data) {
+ *    echo $data[2] ."\n";
+ * }
  * </code>
  *
  * @extends AbstractReader<string[]>
@@ -40,7 +39,7 @@ class CSVReader extends AbstractReader
      * @param string                       $enclosure the field enclosure character (one character only)
      * @param string                       $escape    the escape character (one character only)
      *
-     * @psalm-param int<0, max> $length
+     * @psalm-param non-negative-int $length
      */
     public function __construct(
         $file,

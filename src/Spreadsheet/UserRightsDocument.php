@@ -140,9 +140,9 @@ class UserRightsDocument extends AbstractArrayDocument
      *
      * @psalm-param ?FlagBag<\BackedEnum> $rights
      */
-    private function outputRights(string $title, ?FlagBag $rights, int $row): void
+    private function outputRights(EntityName $entity, ?FlagBag $rights, int $row): void
     {
-        $values = [$this->trans($title)];
+        $values = [$this->trans($entity)];
         foreach (EntityPermission::sorted() as $permission) {
             $values[] = $this->getRightText($rights, $permission);
         }
@@ -168,7 +168,7 @@ class UserRightsDocument extends AbstractArrayDocument
                 $value = $entity->value;
                 /** @psalm-var ?FlagBag<\BackedEnum> $rights $rights */
                 $rights = $role->{$value};
-                $this->outputRights($entity->getReadable(), $rights, $row++);
+                $this->outputRights($entity, $rights, $row++);
             }
         }
         $this->writeRights = false;

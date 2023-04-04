@@ -227,6 +227,9 @@ final class FunctionExtension extends AbstractExtension
         return $this->generator->cancelUrl($request, $id, $defaultRoute);
     }
 
+    /**
+     * @throws \Exception
+     */
     private function getNonce(): string
     {
         return $this->service->getNonce();

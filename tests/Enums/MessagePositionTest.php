@@ -14,14 +14,15 @@ namespace App\Tests\Enums;
 
 use App\Enums\MessagePosition;
 use App\Interfaces\PropertyServiceInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(MessagePosition::class)]
 class MessagePositionTest extends TypeTestCase
 {
-    /**
-     * @return array<array{MessagePosition, string}>
-     */
+    private ?TranslatorInterface $translator = null;
+
     public static function getLabel(): array
     {
         return [
@@ -81,10 +82,36 @@ class MessagePositionTest extends TypeTestCase
         self::assertSame($expected, $sorted);
     }
 
+    /**
+     * @throws Exception
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    public function testTranslate(MessagePosition $position, string $value): void
+    {
+        $translator = $this->createTranslator();
+        $result = $position->trans($translator);
+        $expected = 'message_position.' . $value;
+        self::assertSame($expected, $result);
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
     public function testValue(MessagePosition $position, string $expected): void
     {
         $value = $position->value;
         self::assertSame($expected, $value);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createTranslator(): TranslatorInterface
+    {
+        if (null === $this->translator) {
+            $this->translator = $this->createMock(TranslatorInterface::class);
+            $this->translator->method('trans')
+                ->willReturnArgument(0);
+        }
+
+        return $this->translator;
     }
 }

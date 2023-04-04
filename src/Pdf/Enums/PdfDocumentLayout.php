@@ -12,18 +12,18 @@ declare(strict_types=1);
 
 namespace App\Pdf\Enums;
 
-use App\Interfaces\DefaultEnumInterface;
-use App\Traits\DefaultEnumTrait;
+use App\Interfaces\EnumDefaultInterface;
+use App\Traits\EnumDefaultTrait;
 use Elao\Enum\Attribute\EnumCase;
 
 /**
  * The PDF display layout enumeration.
  *
- * @implements DefaultEnumInterface<PdfDocumentLayout>
+ * @implements EnumDefaultInterface<PdfDocumentLayout>
  */
-enum PdfDocumentLayout: string implements DefaultEnumInterface
+enum PdfDocumentLayout: string implements EnumDefaultInterface
 {
-    use DefaultEnumTrait;
+    use EnumDefaultTrait;
 
     /*
      * Displays pages continuously.
@@ -38,7 +38,7 @@ enum PdfDocumentLayout: string implements DefaultEnumInterface
     /*
      * Displays one page at once (default).
      */
-    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
+    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case SINGLE = 'single';
 
     /*

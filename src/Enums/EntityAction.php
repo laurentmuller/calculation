@@ -12,30 +12,30 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\DefaultEnumInterface;
-use App\Interfaces\SortableEnumInterface;
-use App\Traits\DefaultEnumTrait;
+use App\Interfaces\EnumDefaultInterface;
+use App\Interfaces\EnumSortableInterface;
+use App\Interfaces\EnumTranslatableInterface;
+use App\Traits\EnumDefaultTrait;
+use App\Traits\EnumTranslatableTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
-use Elao\Enum\ReadableEnumInterface;
-use Elao\Enum\ReadableEnumTrait;
 
 /**
  * Entity action enumeration.
  *
- * @implements SortableEnumInterface<EntityAction>
- * @implements DefaultEnumInterface<EntityAction>
+ * @implements EnumDefaultInterface<EntityAction>
+ * @implements EnumSortableInterface<EntityAction>
  */
 #[ReadableEnum(prefix: 'entity_action.', useValueAsDefault: true)]
-enum EntityAction: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
+enum EntityAction: string implements EnumDefaultInterface, EnumSortableInterface, EnumTranslatableInterface
 {
-    use DefaultEnumTrait;
-    use ReadableEnumTrait;
+    use EnumDefaultTrait;
+    use EnumTranslatableTrait;
 
     /*
      * Edit the entity (default value).
      */
-    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
+    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case EDIT = 'edit';
 
     /*

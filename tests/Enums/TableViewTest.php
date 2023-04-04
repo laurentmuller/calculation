@@ -14,7 +14,9 @@ namespace App\Tests\Enums;
 
 use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(TableView::class)]
 class TableViewTest extends TypeTestCase
@@ -56,9 +58,31 @@ class TableViewTest extends TypeTestCase
         self::assertSame($expected, $sorted);
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testTranslate(): void
+    {
+        $translator = $this->createTranslator();
+        self::assertSame('table_view.custom', TableView::CUSTOM->trans($translator));
+        self::assertSame('table_view.table', TableView::TABLE->trans($translator));
+    }
+
     public function testValue(): void
     {
         self::assertSame('custom', TableView::CUSTOM->value); // @phpstan-ignore-line
         self::assertSame('table', TableView::TABLE->value); // @phpstan-ignore-line
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createTranslator(): TranslatorInterface
+    {
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')
+            ->willReturnArgument(0);
+
+        return $translator;
     }
 }

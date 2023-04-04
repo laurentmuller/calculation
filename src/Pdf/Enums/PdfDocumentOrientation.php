@@ -12,18 +12,18 @@ declare(strict_types=1);
 
 namespace App\Pdf\Enums;
 
-use App\Interfaces\DefaultEnumInterface;
-use App\Traits\DefaultEnumTrait;
+use App\Interfaces\EnumDefaultInterface;
+use App\Traits\EnumDefaultTrait;
 use Elao\Enum\Attribute\EnumCase;
 
 /**
  * The PDF document orientation enumeration.
  *
- * @implements DefaultEnumInterface<PdfDocumentOrientation>
+ * @implements EnumDefaultInterface<PdfDocumentOrientation>
  */
-enum PdfDocumentOrientation: string implements DefaultEnumInterface
+enum PdfDocumentOrientation: string implements EnumDefaultInterface
 {
-    use DefaultEnumTrait;
+    use EnumDefaultTrait;
 
     /*
      * Landscape orientation.
@@ -33,6 +33,6 @@ enum PdfDocumentOrientation: string implements DefaultEnumInterface
     /*
      * Portrait orientation (default).
      */
-    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
+    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case PORTRAIT = 'P';
 }

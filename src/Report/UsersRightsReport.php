@@ -116,7 +116,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             ->addColumn(PdfColumn::left($this->trans('user.rights.table_title'), 50));
         $permissions = EntityPermission::sorted();
         foreach ($permissions as $permission) {
-            $builder->addColumn(PdfColumn::center($this->trans($permission->getReadable()), 25, true));
+            $builder->addColumn(PdfColumn::center($this->trans($permission), 25, true));
         }
         $builder->outputHeaders();
 
@@ -143,10 +143,10 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      *
      * @param FlagBag<EntityPermission>|null $rights
      */
-    private function outputRights(PdfGroupTableBuilder $builder, string $title, ?FlagBag $rights): self
+    private function outputRights(PdfGroupTableBuilder $builder, EntityName $entity, ?FlagBag $rights): self
     {
         $builder->startRow()
-            ->add(text: $this->trans($title), style: $this->titleStyle);
+            ->add(text: $this->trans($entity), style: $this->titleStyle);
         foreach (EntityPermission::sorted() as $permission) {
             $builder->add(text: $this->getRightText($rights, $permission), style: $this->rightStyle);
         }
@@ -178,7 +178,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
                 $value = $entity->value;
                 /** @psalm-var FlagBag<EntityPermission>|null $rights */
                 $rights = $role->{$value};
-                $this->outputRights($builder, $entity->getReadable(), $rights);
+                $this->outputRights($builder, $entity, $rights);
             }
         }
     }

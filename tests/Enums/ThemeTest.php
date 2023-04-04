@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\Theme;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Theme::class)]
 class ThemeTest extends TypeTestCase
@@ -70,9 +72,31 @@ class ThemeTest extends TypeTestCase
         self::assertSame('theme.light.title', Theme::LIGHT->getTitle());
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testTranslate(): void
+    {
+        $translator = $this->createTranslator();
+        self::assertSame('theme.dark.name', Theme::DARK->trans($translator));
+        self::assertSame('theme.light.name', Theme::LIGHT->trans($translator));
+    }
+
     public function testValue(): void
     {
         self::assertSame('dark', Theme::DARK->value); // @phpstan-ignore-line
         self::assertSame('light', Theme::LIGHT->value); // @phpstan-ignore-line
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createTranslator(): TranslatorInterface
+    {
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')
+            ->willReturnArgument(0);
+
+        return $translator;
     }
 }

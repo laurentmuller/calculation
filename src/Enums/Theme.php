@@ -12,25 +12,25 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\DefaultEnumInterface;
-use App\Interfaces\SortableEnumInterface;
-use App\Traits\DefaultEnumTrait;
+use App\Interfaces\EnumDefaultInterface;
+use App\Interfaces\EnumSortableInterface;
+use App\Interfaces\EnumTranslatableInterface;
+use App\Traits\EnumDefaultTrait;
+use App\Traits\EnumTranslatableTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
-use Elao\Enum\ReadableEnumInterface;
-use Elao\Enum\ReadableEnumTrait;
 
 /**
  * Theme style enumeration.
  *
- * @implements DefaultEnumInterface<Theme>
- * @implements SortableEnumInterface<Theme>
+ * @implements EnumDefaultInterface<Theme>
+ * @implements EnumSortableInterface<Theme>
  */
 #[ReadableEnum(prefix: 'theme.', suffix: '.name', useValueAsDefault: true)]
-enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
+enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumTranslatableInterface
 {
-    use DefaultEnumTrait;
-    use ReadableEnumTrait;
+    use EnumDefaultTrait;
+    use EnumTranslatableTrait;
 
     /*
      * The dark theme.
@@ -46,7 +46,7 @@ enum Theme: string implements DefaultEnumInterface, ReadableEnumInterface, Sorta
      * The light theme.
      */
     #[EnumCase(extras: [
-        DefaultEnumInterface::NAME => true,
+        EnumDefaultInterface::NAME => true,
         'icon' => 'fa-regular fa-sun',
         'title' => 'theme.light.title',
         'success' => 'theme.light.success',

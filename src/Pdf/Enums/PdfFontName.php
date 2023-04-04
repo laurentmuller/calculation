@@ -12,25 +12,25 @@ declare(strict_types=1);
 
 namespace App\Pdf\Enums;
 
-use App\Interfaces\DefaultEnumInterface;
-use App\Traits\DefaultEnumTrait;
+use App\Interfaces\EnumDefaultInterface;
+use App\Traits\EnumDefaultTrait;
 use Elao\Enum\Attribute\EnumCase;
 
 /**
  * The PDF font name enumeration.
  *
- * @implements DefaultEnumInterface<PdfFontName>
+ * @implements EnumDefaultInterface<PdfFontName>
  */
-enum PdfFontName: string implements DefaultEnumInterface
+enum PdfFontName: string implements EnumDefaultInterface
 {
-    use DefaultEnumTrait;
+    use EnumDefaultTrait;
 
     /*
      * The Arial font name (synonymous: sans serif).
      *
      * This is the default font.
      */
-    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
+    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case ARIAL = 'Arial';
 
     /*

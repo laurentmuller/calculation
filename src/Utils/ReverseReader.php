@@ -18,11 +18,10 @@ namespace App\Utils;
  * Example:
  *
  * <code>
- *      $reader = new ReverseReader("path/to/file_name.txt");
- *
- *      foreach ($reader as $data) {
- *          echo $data ."\n";
- *      }
+ * $reader = new ReverseReader("path/to/file_name.txt");
+ * foreach ($reader as $data) {
+ *     echo $data ."\n";
+ * }
  * </code>
  *
  * @extends AbstractReader<string|null>

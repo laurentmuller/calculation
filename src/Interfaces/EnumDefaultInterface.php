@@ -15,9 +15,9 @@ namespace App\Interfaces;
 /**
  * Interface to get the default enumeration value.
  *
- * @template T of \UnitEnum&DefaultEnumInterface
+ * @template T of \UnitEnum&EnumDefaultInterface
  */
-interface DefaultEnumInterface
+interface EnumDefaultInterface
 {
     /**
      * The default attribute name.

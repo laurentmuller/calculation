@@ -12,25 +12,25 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
-use App\Interfaces\DefaultEnumInterface;
-use App\Interfaces\SortableEnumInterface;
-use App\Traits\DefaultEnumTrait;
+use App\Interfaces\EnumDefaultInterface;
+use App\Interfaces\EnumSortableInterface;
+use App\Interfaces\EnumTranslatableInterface;
+use App\Traits\EnumDefaultTrait;
+use App\Traits\EnumTranslatableTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
-use Elao\Enum\ReadableEnumInterface;
-use Elao\Enum\ReadableEnumTrait;
 
 /**
  * The notification email importance enumeration.
  *
- * @implements SortableEnumInterface<Importance>
- * @implements DefaultEnumInterface<Importance>
+ * @implements EnumDefaultInterface<Importance>
+ * @implements EnumSortableInterface<Importance>
  */
 #[ReadableEnum(prefix: 'importance.', useValueAsDefault: true)]
-enum Importance: string implements DefaultEnumInterface, ReadableEnumInterface, SortableEnumInterface
+enum Importance: string implements EnumDefaultInterface, EnumSortableInterface, EnumTranslatableInterface
 {
-    use DefaultEnumTrait;
-    use ReadableEnumTrait;
+    use EnumDefaultTrait;
+    use EnumTranslatableTrait;
 
     /*
      * High importance.
@@ -40,7 +40,7 @@ enum Importance: string implements DefaultEnumInterface, ReadableEnumInterface, 
     /*
      * Low importance (default value).
      */
-    #[EnumCase(extras: [DefaultEnumInterface::NAME => true])]
+    #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case LOW = 'low';
 
     /*

@@ -12,12 +12,13 @@ declare(strict_types=1);
 
 namespace App\Logger;
 
+use App\Entity\Log;
 use Monolog\LogRecord;
 use Monolog\Processor\ProcessorInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**
- * Log record processor to add user identifier to extra data.
+ * Log record processor to add user identifier, if any; to extra data.
  */
 readonly class UserRequestProcessor implements ProcessorInterface
 {
@@ -31,7 +32,7 @@ readonly class UserRequestProcessor implements ProcessorInterface
     public function __invoke(LogRecord $record): LogRecord
     {
         if (null !== $user = $this->security->getUser()) {
-            $record->extra['user'] = $user->getUserIdentifier();
+            $record->extra[Log::USER_FIELD] = $user->getUserIdentifier();
         }
 
         return $record;

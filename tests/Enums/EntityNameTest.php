@@ -24,14 +24,31 @@ use App\Entity\Task;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Model\Role;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityName::class)]
 class EntityNameTest extends TestCase
 {
-    /**
-     * @return array<array{EntityName, string}>
-     */
+    private ?TranslatorInterface $translator = null;
+
+    public static function getLabel(): array
+    {
+        return [
+            ['calculation.name', EntityName::CALCULATION],
+            ['calculationstate.name', EntityName::CALCULATION_STATE],
+            ['category.name', EntityName::CATEGORY],
+            ['customer.name', EntityName::CUSTOMER],
+            ['globalmargin.name', EntityName::GLOBAL_MARGIN],
+            ['group.name', EntityName::GROUP],
+            ['log.name', EntityName::LOG],
+            ['product.name', EntityName::PRODUCT],
+            ['task.name', EntityName::TASK],
+            ['user.name', EntityName::USER],
+        ];
+    }
+
     public static function getMatchValue(): array
     {
         return [
@@ -41,9 +58,6 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<array{EntityName, int}>
-     */
     public static function getOffset(): array
     {
         return [
@@ -60,9 +74,6 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<array{EntityName|string, int}>
-     */
     public static function getTryFindOffset(): array
     {
         return [
@@ -83,9 +94,6 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<array{string|null, string}>
-     */
     public static function getTryFindValue(): array
     {
         return [
@@ -95,9 +103,6 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<array{mixed, EntityName|null}>
-     */
     public static function getTryFromMixed(): array
     {
         return [
@@ -149,9 +154,6 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<array{EntityName, string}>
-     */
     public static function getValue(): array
     {
         return [
@@ -186,18 +188,10 @@ class EntityNameTest extends TestCase
         self::assertCount(10, EntityName::sorted());
     }
 
-    public function testLabel(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    public function testLabel(string $expected, EntityName $entity): void
     {
-        self::assertSame('calculation.name', EntityName::CALCULATION->getReadable());
-        self::assertSame('calculationstate.name', EntityName::CALCULATION_STATE->getReadable());
-        self::assertSame('category.name', EntityName::CATEGORY->getReadable());
-        self::assertSame('customer.name', EntityName::CUSTOMER->getReadable());
-        self::assertSame('globalmargin.name', EntityName::GLOBAL_MARGIN->getReadable());
-        self::assertSame('group.name', EntityName::GROUP->getReadable());
-        self::assertSame('log.name', EntityName::LOG->getReadable());
-        self::assertSame('product.name', EntityName::PRODUCT->getReadable());
-        self::assertSame('task.name', EntityName::TASK->getReadable());
-        self::assertSame('user.name', EntityName::USER->getReadable());
+        self::assertSame($expected, $entity->getReadable());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getMatchValue')]
@@ -232,6 +226,16 @@ class EntityNameTest extends TestCase
         self::assertSame($expected, $sorted);
     }
 
+    /**
+     * @throws Exception
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    public function testTranslate(string $expected, EntityName $entity): void
+    {
+        $translator = $this->createTranslator();
+        self::assertSame($expected, $entity->trans($translator));
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindOffset')]
     public function testTryFindOffset(mixed $e, int $expected): void
     {
@@ -257,5 +261,19 @@ class EntityNameTest extends TestCase
     public function testValue(EntityName $entityName, string $expected): void
     {
         self::assertSame($expected, $entityName->value);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createTranslator(): TranslatorInterface
+    {
+        if (null === $this->translator) {
+            $this->translator = $this->createMock(TranslatorInterface::class);
+            $this->translator->method('trans')
+                ->willReturnArgument(0);
+        }
+
+        return $this->translator;
     }
 }

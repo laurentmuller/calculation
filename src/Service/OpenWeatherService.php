@@ -424,6 +424,7 @@ class OpenWeatherService extends AbstractHttpClientService
 
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     * @throws \Exception
      */
     private function doGet(string $uri, array $query = []): ?array
     {
@@ -527,6 +528,8 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int $offset the timezone offset in seconds from UTC
      *
      * @return \DateTimeZone the timezone offset in +/-HH:MM form
+     *
+     * @throws \Exception
      */
     private function offsetToTimZone(int $offset): \DateTimeZone
     {

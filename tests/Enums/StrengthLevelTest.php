@@ -14,11 +14,27 @@ namespace App\Tests\Enums;
 
 use App\Enums\StrengthLevel;
 use App\Interfaces\PropertyServiceInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(StrengthLevel::class)]
 class StrengthLevelTest extends TypeTestCase
 {
+    private ?TranslatorInterface $translator = null;
+
+    public static function getLabel(): array
+    {
+        return [
+            ['strength_level.medium', StrengthLevel::MEDIUM],
+            ['strength_level.none', StrengthLevel::NONE],
+            ['strength_level.strong', StrengthLevel::STRONG],
+            ['strength_level.very_strong', StrengthLevel::VERY_STRONG],
+            ['strength_level.very_weak', StrengthLevel::VERY_WEAK],
+            ['strength_level.weak', StrengthLevel::WEAK],
+        ];
+    }
+
     public function testCount(): void
     {
         self::assertCount(6, StrengthLevel::cases());
@@ -34,14 +50,10 @@ class StrengthLevelTest extends TypeTestCase
         self::assertSame($expected, $default); // @phpstan-ignore-line
     }
 
-    public function testLabel(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    public function testLabel(string $expected, StrengthLevel $level): void
     {
-        self::assertSame('strength_level.medium', StrengthLevel::MEDIUM->getReadable());
-        self::assertSame('strength_level.none', StrengthLevel::NONE->getReadable());
-        self::assertSame('strength_level.strong', StrengthLevel::STRONG->getReadable());
-        self::assertSame('strength_level.very_strong', StrengthLevel::VERY_STRONG->getReadable());
-        self::assertSame('strength_level.very_weak', StrengthLevel::VERY_WEAK->getReadable());
-        self::assertSame('strength_level.weak', StrengthLevel::WEAK->getReadable());
+        self::assertSame($expected, $level->getReadable());
     }
 
     public function testPercent(): void
@@ -68,6 +80,16 @@ class StrengthLevelTest extends TypeTestCase
         self::assertSame($expected, $sorted);
     }
 
+    /**
+     * @throws Exception
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    public function testTranslate(string $expected, StrengthLevel $level): void
+    {
+        $translator = $this->createTranslator();
+        self::assertSame($expected, $level->trans($translator));
+    }
+
     public function testValue(): void
     {
         self::assertSame(-1, StrengthLevel::NONE->value); // @phpstan-ignore-line
@@ -76,5 +98,19 @@ class StrengthLevelTest extends TypeTestCase
         self::assertSame(2, StrengthLevel::MEDIUM->value); // @phpstan-ignore-line
         self::assertSame(3, StrengthLevel::STRONG->value); // @phpstan-ignore-line
         self::assertSame(4, StrengthLevel::VERY_STRONG->value); // @phpstan-ignore-line
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createTranslator(): TranslatorInterface
+    {
+        if (null === $this->translator) {
+            $this->translator = $this->createMock(TranslatorInterface::class);
+            $this->translator->method('trans')
+                ->willReturnArgument(0);
+        }
+
+        return $this->translator;
     }
 }

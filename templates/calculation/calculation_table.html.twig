@@ -5,16 +5,16 @@
 {%- set title_icon = title_icon|default(ICON_CALCULATION) -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set attributes = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
-{%- set state_id = customData.state.id|default(0) -%}
-{%- set state_editable = customData.editable|default(0) -%}
-{%- set input_value = state_id ? state_id : state_editable -%}
 {# header actions #}
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('calculation_add', params) }}">{{ 'calculation.add.title'|trans }}</a>{% endif %}
 {%- endblock %}
 {# toolbar actions #}
 {% block toolbar_actions -%}
-{% if customData.dropdown is defined and customData.dropdown|length > 1 %}
+{% if customData.dropdown is defined and customData.dropdown|length %}
+    {%- set state_editable = customData.editable|default(0) -%}
+    {%- set state_id = customData.state.id|default(0) -%}
+    {%- set input_value = state_id ? state_id : state_editable -%}
     {%- set data_default = 'calculation.fields.state'|trans -%}
     {%- set text = data_default -%}
     {% if state_id %}
@@ -33,14 +33,11 @@
         ) }}
         <div class="dropdown-menu" aria-labelledby="state">
             {{ _self.output_dropdown('state', 0, input_value, 'calculation.list.state_all_text'|trans, {}, 'filter-circle-xmark') }}
-            {% for editable, states in customData.dropdown %}
-                {% set editable_value = editable == 1 ? 1 : -1 %}
-                {% set editable_icon = editable == 1 ? 'circle-check fa-lg far' : 'circle-xmark fa-lg far' %}
-                {% set editable_text = editable == 1 ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable' %}
+            {% for key, entry in customData.dropdown %}
                 {{ _self.item_separator() }}
-                {{ _self.output_dropdown('editable', editable_value, state_editable, editable_text|trans, {'data-parameter': 'stateEditable'}, editable_icon) }}
-                {% for state in states %}
-                    {{ _self.output_dropdown('state pl-5', state.id, state_id, state.code, {'data-parameter': 'stateId'}, ICON_CALCULATION_STATE) }}
+                {{ _self.output_dropdown('editable', entry.id, state_editable, entry.text|trans, {'data-parameter': 'stateEditable'}, entry.icon) }}
+                {% for code, id in entry.states %}
+                    {{ _self.output_dropdown('state pl-5', id, state_id, code, {'data-parameter': 'stateId'}, ICON_CALCULATION_STATE) }}
                 {% endfor %}
             {% endfor %}
         </div>

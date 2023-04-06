@@ -76,7 +76,7 @@ class CategoryRepository extends AbstractRepository
         $builder = $this->getDropDownQuery()
             ->innerJoin('c.products', 'p');
 
-        return $this->mergeByGroup($builder);
+        return $this->mergeDropDown($builder);
     }
 
     /**
@@ -93,7 +93,7 @@ class CategoryRepository extends AbstractRepository
         $builder = $this->getDropDownQuery()
             ->innerJoin('c.tasks', 't');
 
-        return $this->mergeByGroup($builder);
+        return $this->mergeDropDown($builder);
     }
 
     /**
@@ -164,21 +164,30 @@ class CategoryRepository extends AbstractRepository
     /**
      * @psalm-return DropDownType
      */
-    private function mergeByGroup(QueryBuilder $builder): array
+    private function mergeDropDown(QueryBuilder $builder): array
     {
+        /** @psalm-var array<array{
+         *     group: string,
+         *     groupId: int,
+         *     code: string,
+         *     id: int}> $values
+         */
+        $values = $builder->getQuery()->getArrayResult();
+        if (\count($values) <= 1) {
+            return [];
+        }
+
         /** @psalm-var DropDownType $result */
         $result = [];
-        /** @psalm-var array<array{group: string, groupId: int, code: string, id: int}> $values */
-        $values = $builder->getQuery()->getArrayResult();
         foreach ($values as $value) {
-            $group = $value['group'];
-            if (!\array_key_exists($group, $result)) {
-                $result[$group] = [
+            $key = $value['group'];
+            if (!\array_key_exists($key, $result)) {
+                $result[$key] = [
                     'id' => $value['groupId'],
                     'categories' => [],
                 ];
             }
-            $result[$group]['categories'][$value['code']] = $value['id'];
+            $result[$key]['categories'][$value['code']] = $value['id'];
         }
 
         return $result;

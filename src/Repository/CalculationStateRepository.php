@@ -31,7 +31,11 @@ use Doctrine\Persistence\ManagerRegistry;
  *      total: float,
  *      margin: float,
  *      marginAmount: float}
- * @psalm-type DropDownType = array<int, array{id: int, code: string, editable: bool, color: string}>
+ * @psalm-type DropDownType = array<int, array{
+ *     id: int,
+ *     icon: string,
+ *     text: string,
+ *     states: array<string, int>}>
  *
  * @template-extends AbstractRepository<CalculationState>
  */
@@ -77,7 +81,7 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getDropDown(): array
     {
-        return $this->mergeByEditable($this->getDropDownQuery());
+        return $this->mergeDropDown($this->getDropDownQuery());
     }
 
     /**
@@ -96,7 +100,7 @@ class CalculationStateRepository extends AbstractRepository
         $builder = $this->getDropDownQuery();
         $builder = CalculationRepository::addBelowFilter($builder, $minMargin, 'c');
 
-        return $this->mergeByEditable($builder);
+        return $this->mergeDropDown($builder);
     }
 
     /**
@@ -190,18 +194,44 @@ class CalculationStateRepository extends AbstractRepository
             ->select('s.id')
             ->addSelect('s.code')
             ->addSelect('s.editable')
-            ->addSelect('s.color')
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
             ->orderBy('s.editable', Criteria::DESC)
             ->addOrderBy('s.code', Criteria::ASC);
     }
 
-    private function mergeByEditable(QueryBuilder $builder): array
+    /**
+     * @psalm-return DropDownType
+     */
+    private function mergeDropDown(QueryBuilder $builder): array
     {
+        /**
+         * @psalm-var array<array{
+         *     id: int,
+         *     code: string,
+         *     editable: bool}> $values
+         */
         $values = $builder->getQuery()->getArrayResult();
+        if (\count($values) <= 1) {
+            return [];
+        }
 
-        return $this->groupBy($values, 'editable');
+        /** @psalm-var DropDownType $result */
+        $result = [];
+        foreach ($values as $value) {
+            $key = $value['editable'] ? 1 : -1;
+            if (!\array_key_exists($key, $result)) {
+                $result[$key] = [
+                    'id' => $key,
+                    'icon' => 1 === $key ? 'circle-check fa-lg far' : 'circle-xmark fa-lg far',
+                    'text' => 1 === $key ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable',
+                    'states' => [],
+                ];
+            }
+            $result[$key]['states'][$value['code']] = $value['id'];
+        }
+
+        return $result;
     }
 
     /**

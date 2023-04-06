@@ -4,19 +4,19 @@
 {%- set title = 'category.list.title' -%}
 {%- set title_icon = ICON_CATEGORY -%}
 {%- set object_type = ENTITY_CATEGORY -%}
-{%- set group_id = customData.group.id|default(0) -%}
-{%- set group_param = constant('App\\Table\\CategoryTable::PARAM_GROUP') -%}
 {%- set category_param = constant('App\\Table\\AbstractCategoryItemTable::PARAM_CATEGORY') -%}
-
+{# header actions #}
 {% block header_actions -%}
 {% if allow_add %}
     {{ link(path('category_add', params), 'category.add.title', 'add-link p-0') }}
 {% endif %}
 {%- endblock %}
-
+{# toolbar actions #}
 {% block toolbar_actions -%}
-{% if customData.dropdown|length > 1 %}
-    {% set data_default = 'category.fields.group'|trans %}
+{% if customData.dropdown is defined and customData.dropdown|length %}
+    {%- set group_id = customData.group.id|default(0) -%}
+    {%- set group_param = constant('App\\Table\\CategoryTable::PARAM_GROUP') -%}
+    {%- set data_default = 'category.fields.group'|trans -%}
     {% set text = customData.group ? customData.group.code : data_default %}
     <div class="input-group-append">
         {{ _self.output_dropdown_menu(
@@ -38,29 +38,29 @@
     </div>
 {% endif %}
 {%- endblock %}
-
+{# global actions #}
 {% block global_actions -%}
 {{ _self.item_external(path('category_pdf'), 'category.list.pdf_title', ICON_PDF) }}
 {{ _self.item_external(path('category_excel'), 'category.list.excel_title', ICON_EXCEL) }}
 {%- endblock %}
-
-{% block show_actions -%}
-{{- _self.item_path(path('category_show', params), 'category.show.title', ICON_SHOW, show_class) }}
-{%- endblock %}
-
+{# edit actions #}
 {% block edit_actions -%}
-{{ _self.item_path(path('category_edit', params), 'category.edit.title', ICON_EDIT, edit_class) }}
+    {{ _self.item_path(path('category_edit', params), 'category.edit.title', ICON_EDIT, edit_class) }}
 {%- endblock %}
-
+{#  delete actions #}
 {% block delete_actions -%}
-{{- _self.item_path(path('category_delete', params), 'category.delete.title', ICON_DELETE, 'btn-delete') }}
+    {{- _self.item_path(path('category_delete', params), 'category.delete.title', ICON_DELETE, 'btn-delete') }}
 {%- endblock %}
-
+{# add actions #}
 {% block add_actions -%}
 {{- _self.item_path(path('category_add', params), 'category.add.title', ICON_ADD, 'btn-add') }}
 {{- _self.item_path(path('category_clone', params), 'common.button_clone', ICON_COPY, 'btn-clone') }}
 {%- endblock %}
-
+{# show actions #}
+{% block show_actions -%}
+    {{- _self.item_path(path('category_show', params), 'category.show.title', ICON_SHOW, show_class) }}
+{%- endblock %}
+{# other actions #}
 {% block other_actions -%}
 {{- _self.item_separator() }}
 {% if is_granted_product %}
@@ -70,7 +70,7 @@
     {{- _self.item_path(path('task_table', {category_param: 'id'}), 'category.list.task_title', ICON_TASK, 'btn-show-task') }}
 {% endif %}
 {%- endblock %}
-
+{# custom view header #}
 {% block custom_view_header -%}
 {%- if row_edit -%}
     <a href="{{ path('category_edit', params) }}" class="item-link text-body" title="{{ 'category.edit.title'|trans }}">%code%</a>
@@ -80,7 +80,7 @@
     <span>%code%</span>
 {%- endif -%}
 {%- endblock %}
-
+{# custom view body #}
 {% block custom_view_body -%}
 {{ _self.property_value('%description%') }}
 {{ _self.property_row('category.fields.group', '%group.code%') }}

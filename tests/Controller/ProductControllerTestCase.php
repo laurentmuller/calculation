@@ -67,20 +67,20 @@ class ProductControllerTestCase extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (null === self::$group) {
+        if (!self::$group instanceof Group) {
             self::$group = new Group();
             self::$group->setCode('Test Group');
             $this->addEntity(self::$group);
         }
 
-        if (null === self::$category) {
+        if (!self::$category instanceof Category) {
             self::$category = new Category();
             self::$category->setCode('Test Category')
                 ->setGroup(self::$group);
             $this->addEntity(self::$category);
         }
 
-        if (null === self::$product) {
+        if (!self::$product instanceof Product) {
             self::$product = new Product();
             self::$product->setDescription('Test Product')
                 ->setCategory(self::$category);

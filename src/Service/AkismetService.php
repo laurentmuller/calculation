@@ -130,7 +130,7 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
      */
     public function verifyComment(string $content, array $options = []): bool
     {
-        if (null === $request = $this->getCurrentRequest()) {
+        if (!($request = $this->getCurrentRequest()) instanceof Request) {
             return true;
         }
 
@@ -197,7 +197,7 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
      */
     private function doVerifyKey(): ?bool
     {
-        if (null === $request = $this->getCurrentRequest()) {
+        if (!($request = $this->getCurrentRequest()) instanceof Request) {
             return null;
         }
         $body = [

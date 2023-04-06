@@ -59,7 +59,7 @@ class CalculationStateControllerTestCase extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (null === self::$entity) {
+        if (!self::$entity instanceof CalculationState) {
             self::$entity = new CalculationState();
             self::$entity->setCode('Test Code');
             $this->addEntity(self::$entity);

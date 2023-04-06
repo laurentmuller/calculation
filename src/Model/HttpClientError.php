@@ -78,7 +78,7 @@ class HttpClientError implements \JsonSerializable, \Stringable
             'code' => $this->code,
             'message' => $this->message,
         ];
-        if (null !== $this->exception) {
+        if ($this->exception instanceof \Exception) {
             $result['exception'] = $this->getExceptionContext($this->exception);
         }
 

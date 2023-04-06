@@ -69,9 +69,9 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     /**
      * {@inheritDoc}
      */
-    protected function getCalculationStates(): array
+    protected function getDropDownValues(): array
     {
-        return $this->stateRepository->getDropDownStatesBelow($this->getMinMargin());
+        return $this->stateRepository->getDropDownBelow($this->getMinMargin());
     }
 
     /**

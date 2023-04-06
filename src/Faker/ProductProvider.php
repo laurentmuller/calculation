@@ -52,7 +52,7 @@ class ProductProvider extends EntityProvider
      */
     public function productExist(string $description): bool
     {
-        return null !== $this->getRepository()->findOneBy(['description' => $description]);
+        return $this->getRepository()->findOneBy(['description' => $description]) instanceof Product;
     }
 
     /**

@@ -77,24 +77,24 @@ class TaskControllerTestCase extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (null === self::$group) {
+        if (!self::$group instanceof Group) {
             self::$group = new Group();
             self::$group->setCode('Test Group');
             $this->addEntity(self::$group);
         }
-        if (null === self::$category) {
+        if (!self::$category instanceof Category) {
             self::$category = new Category();
             self::$category->setCode('Test Category')
                 ->setGroup(self::$group);
             $this->addEntity(self::$category);
         }
-        if (null === self::$entity) {
+        if (!self::$entity instanceof Task) {
             self::$entity = new Task();
             self::$entity->setName('Test Task')
                 ->setCategory(self::$category);
             $this->addEntity(self::$entity);
         }
-        if (null === self::$item) {
+        if (!self::$item instanceof TaskItem) {
             self::$item = new TaskItem();
             self::$item->setName('Test Item');
             self::$item->setTask(self::$entity);

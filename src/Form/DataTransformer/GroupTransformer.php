@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Form\DataTransformer;
 
 use App\Entity\Group;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\GroupRepository;
 
 /**
  * Data transformer to convert a group to an identifier.
@@ -25,8 +25,8 @@ class GroupTransformer extends AbstractEntityTransformer
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(GroupRepository $repository)
     {
-        parent::__construct($manager, Group::class);
+        parent::__construct($repository);
     }
 }

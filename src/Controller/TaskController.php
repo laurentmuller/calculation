@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Category;
 use App\Entity\Task;
 use App\Form\Task\TaskServiceType;
 use App\Form\Task\TaskType;
@@ -59,7 +60,7 @@ class TaskController extends AbstractEntityController
     public function add(Request $request): Response
     {
         $item = new Task();
-        if (null !== $category = $this->getApplication()->getDefaultCategory()) {
+        if (($category = $this->getApplication()->getDefaultCategory()) instanceof Category) {
             $item->setCategory($category);
         }
 
@@ -89,7 +90,7 @@ class TaskController extends AbstractEntityController
     {
         /** @var Task[] $tasks */
         $tasks = $service->getSortedTasks();
-        if (null === $task || $task->isEmpty()) {
+        if (!$task instanceof Task || $task->isEmpty()) {
             $task = $tasks[0];
         } else {
             $tasks = [$task];

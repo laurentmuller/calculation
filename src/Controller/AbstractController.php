@@ -120,7 +120,7 @@ abstract class AbstractController extends BaseController
      */
     public function getRequestStack(): RequestStack
     {
-        if (null === $this->requestStack) {
+        if (!$this->requestStack instanceof RequestStack) {
             /* @noinspection PhpUnhandledExceptionInspection */
             $this->requestStack = $this->container->get('request_stack');
         }
@@ -145,7 +145,7 @@ abstract class AbstractController extends BaseController
      */
     public function getTranslator(): TranslatorInterface
     {
-        if (null === $this->translator) {
+        if (!$this->translator instanceof TranslatorInterface) {
             /* @noinspection PhpUnhandledExceptionInspection */
             $this->translator = $this->container->get(TranslatorInterface::class);
         }
@@ -158,7 +158,7 @@ abstract class AbstractController extends BaseController
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
-        if (null === $this->generatorService) {
+        if (!$this->generatorService instanceof UrlGeneratorService) {
             /* @noinspection PhpUnhandledExceptionInspection */
             $this->generatorService = $this->container->get(UrlGeneratorService::class);
         }
@@ -194,7 +194,7 @@ abstract class AbstractController extends BaseController
      */
     public function getUserService(): UserService
     {
-        if (null === $this->userService) {
+        if (!$this->userService instanceof UserService) {
             /* @noinspection PhpUnhandledExceptionInspection */
             $this->userService = $this->container->get(UserService::class);
         }

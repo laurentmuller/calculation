@@ -9,11 +9,11 @@
 {%- set allow_add = false -%}
 {%- set allow_edit = false -%}
 {%- set allow_delete = false -%}
-{# actions #}
+{# header actions #}
 {% block header_actions %}
 <small>{{ 'log.list.file'|trans({'%file%': customData.file}) }}</small>
 {% endblock %}
-
+{# toolbar actions #}
 {% block toolbar_actions -%}
 {% if customData.levels|length > 1 %}
     {% set data_default = 'log.fields.level'|trans %}
@@ -36,6 +36,7 @@
         </div>
     </div>
 {% endif %}
+{# chanels #}
 {% if customData.channels|length > 1 %}
     {% set data_default = 'log.fields.channel'|trans %}
     {% set text = channel|length ? channel|capitalize : data_default %}
@@ -58,7 +59,7 @@
     </div>
 {% endif %}
 {%- endblock %}
-
+{# global actions #}
 {% block global_actions -%}
 {%- set route = app.current_route -%}
 {{- _self.item_global(path('log_refresh', {'route': route}), 'log.list.refresh_title', 'sync-alt') }}

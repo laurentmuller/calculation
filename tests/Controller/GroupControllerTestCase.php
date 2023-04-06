@@ -63,7 +63,7 @@ class GroupControllerTestCase extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (null === self::$entity) {
+        if (!self::$entity instanceof Group) {
             self::$entity = new Group();
             self::$entity->setCode('Test Code');
             $this->addEntity(self::$entity);

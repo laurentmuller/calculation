@@ -59,7 +59,7 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      */
     protected function addEntity(?AbstractEntity $entity): void
     {
-        if (null !== $entity) {
+        if ($entity instanceof AbstractEntity) {
             $em = self::getManager();
             $em->persist($entity);
             $em->flush();
@@ -106,7 +106,7 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      */
     protected function deleteEntity(?AbstractEntity $entity): null
     {
-        if (null !== $entity) {
+        if ($entity instanceof AbstractEntity) {
             $em = self::getManager();
             $em->remove($entity);
             $em->flush();

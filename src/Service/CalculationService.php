@@ -185,7 +185,7 @@ final class CalculationService implements ServiceSubscriberInterface
             return $carry;
         }, []);
         foreach ($item_groups as $key => $value) {
-            if (empty($value) || null === ($group = $this->getGroup($key))) {
+            if (empty($value) || !($group = $this->getGroup($key)) instanceof Group) {
                 continue;
             }
             $id = (int) $group->getId();

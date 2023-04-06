@@ -635,7 +635,7 @@ class PdfDocument extends \FPDF
      *                                  <li>If the value is negative, the absolute value represents the horizontal resolution in dpi.</li>
      *                                  <li>If the value is not specified or equal to zero, it is automatically calculated.</li>
      *                                  </ul>
-     * @param PdfImageType|string $type the image format. Possible values are (case insensitive): JPG, JPEG, PNG and GIF.
+     * @param PdfImageType|string $type the image format. Possible values are (case-insensitive): A PdfImageType enumeration or 'JPG', 'JPEG', 'PNG' and 'GIF'.
      *                                  If not specified, the type is inferred from the file extension.
      * @param string|int          $link the URL or an identifier returned by AddLink()
      */

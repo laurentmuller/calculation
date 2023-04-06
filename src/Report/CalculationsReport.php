@@ -129,7 +129,7 @@ class CalculationsReport extends AbstractArrayReport
     private function getMarginStyle(Calculation $calculation): ?PdfStyle
     {
         if ($calculation->isMarginBelow($this->minMargin)) {
-            if (null === $this->marginStyle) {
+            if (!$this->marginStyle instanceof PdfStyle) {
                 $this->marginStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
             }
 

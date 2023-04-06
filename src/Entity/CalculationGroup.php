@@ -367,7 +367,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
         }
 
         // margin
-        $margin = null !== $this->group ? $this->group->findPercent($amount) : 0.0;
+        $margin = $this->group instanceof Group ? $this->group->findPercent($amount) : 0.0;
 
         return $this->setAmount($amount)->setMargin($margin);
     }
@@ -377,7 +377,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
      */
     public function updateCode(): bool
     {
-        if (null !== $this->group && $this->code !== $this->group->getCode()) {
+        if ($this->group instanceof Group && $this->code !== $this->group->getCode()) {
             $this->code = $this->group->getCode();
 
             return true;

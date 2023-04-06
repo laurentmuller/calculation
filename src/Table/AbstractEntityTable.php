@@ -164,7 +164,7 @@ abstract class AbstractEntityTable extends AbstractTable
         if ($sorting = StringUtils::isString($query->sort) && StringUtils::isString($query->order)) {
             $this->updateOrderBy($orderBy, $query, $alias);
         }
-        if (!$sorting && null !== $column = $this->getDefaultColumn()) {
+        if (!$sorting && ($column = $this->getDefaultColumn()) instanceof Column) {
             $this->updateOrderBy($orderBy, $column, $alias);
         }
         $this->updateOrderBy($orderBy, $this->getDefaultOrder(), $alias);

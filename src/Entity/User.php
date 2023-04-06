@@ -402,7 +402,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
      */
     public function isExpired(): bool
     {
-        return null === $this->expiresAt || $this->expiresAt->getTimestamp() <= \time();
+        return !$this->expiresAt instanceof \DateTimeInterface || $this->expiresAt->getTimestamp() <= \time();
     }
 
     /**

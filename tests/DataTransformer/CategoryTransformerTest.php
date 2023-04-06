@@ -15,6 +15,7 @@ namespace App\Tests\DataTransformer;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Form\DataTransformer\CategoryTransformer;
+use App\Repository\CategoryRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -28,6 +29,7 @@ class CategoryTransformerTest extends KernelTestCase
 
     private ?Category $category = null;
     private ?Group $group = null;
+    private ?CategoryRepository $repository = null;
     private ?CategoryTransformer $transformer = null;
 
     /**
@@ -39,10 +41,9 @@ class CategoryTransformerTest extends KernelTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->group = $this->createGroup();
         $this->category = $this->createCategory($this->group);
-        $this->transformer = new CategoryTransformer($this->getManager());
+        $this->transformer = new CategoryTransformer($this->getRepository());
     }
 
     /**
@@ -56,6 +57,7 @@ class CategoryTransformerTest extends KernelTestCase
         $this->category = $this->deleteCategory();
         $this->group = $this->deleteGroup();
         $this->transformer = null;
+        $this->repository = null;
         parent::tearDown();
     }
 
@@ -111,6 +113,9 @@ class CategoryTransformerTest extends KernelTestCase
         self::assertSame($this->category, $actual);
     }
 
+    /**
+     * @psalm-suppress MixedArgument
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]
     public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
@@ -139,7 +144,7 @@ class CategoryTransformerTest extends KernelTestCase
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function createCategory(Group $group): Category
+    private function createCategory(Group $group): Category
     {
         $category = new Category();
         $category->setCode('Test')
@@ -156,7 +161,7 @@ class CategoryTransformerTest extends KernelTestCase
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function createGroup(): Group
+    private function createGroup(): Group
     {
         $group = new Group();
         $group->setCode('Test');
@@ -172,9 +177,9 @@ class CategoryTransformerTest extends KernelTestCase
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function deleteCategory(): ?Category
+    private function deleteCategory(): null
     {
-        if (null !== $this->category) {
+        if ($this->category instanceof Category) {
             $manager = $this->getManager();
             $manager->remove($this->category);
             $manager->flush();
@@ -188,9 +193,9 @@ class CategoryTransformerTest extends KernelTestCase
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function deleteGroup(): ?Group
+    private function deleteGroup(): null
     {
-        if (null !== $this->group) {
+        if ($this->group instanceof Group) {
             $manager = $this->getManager();
             $manager->remove($this->group);
             $manager->flush();
@@ -198,5 +203,16 @@ class CategoryTransformerTest extends KernelTestCase
         }
 
         return $this->group;
+    }
+
+    private function getRepository(): CategoryRepository
+    {
+        if (!$this->repository instanceof CategoryRepository) {
+            /** @psalm-var CategoryRepository $repository */
+            $repository = $this->getManager()->getRepository(Category::class);
+            $this->repository = $repository;
+        }
+
+        return $this->repository;
     }
 }

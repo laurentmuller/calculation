@@ -4,70 +4,72 @@
 {%- set title = 'task.list.title' -%}
 {%- set title_icon = ICON_TASK -%}
 {%- set object_type = ENTITY_TASK -%}
+{%- set group_id = customData.group.id|default(0) -%}
 {%- set category_id = customData.category.id|default(0) -%}
-{%- set category_param = constant('App\\Table\\AbstractCategoryItemTable::PARAM_CATEGORY') -%}
-
+{%- set input_value = group_id ?? category_id -%}
+{# header #}
 {% block header_actions -%}
 {% if allow_add %}
     {{ link(path('task_add', params), 'task.add.title', 'add-link p-0') }}
 {% endif %}
 {%- endblock %}
-
+{# actions #}
 {% block toolbar_actions -%}
-{% if customData.categories|length > 1 %}
+{% if customData.dropdown|length > 1 %}
     {% set data_default = 'task.fields.category'|trans %}
-    {% set text = customData.category ? customData.category.code : data_default %}
+    {% set text = customData.group ?? customData.category ?? data_default %}
     <div class="input-group-append">
         {{ _self.output_dropdown_menu(
-            category_param,
+            'category',
             ICON_CATEGORY,
             text,
             'task.list.category_help',
-            category_id,
+            input_value,
             data_default
         ) }}
-        <div class="dropdown-menu" aria-labelledby="{{ category_param }}">
-            {{ _self.output_dropdown('category', 0, category_id, 'product.list.category_all_text'|trans, {}, 'filter-circle-xmark') }}
-            {% for group, categories in customData.categories %}
-                {{ _self.output_dropdown_header(group, false, ICON_GROUP) }}
-                {% for category in categories %}
-                    {{ _self.output_dropdown('category pl-5', category.id, category_id, category.code, {}, ICON_CATEGORY) }}
+        <div class="dropdown-menu">
+            {{ _self.output_dropdown('category', 0, input_value, 'product.list.category_all_text'|trans, {}, 'filter-circle-xmark') }}
+            {% for group_code, group in customData.dropdown %}
+                {{ _self.item_separator() }}
+                {{ _self.output_dropdown('group', group.id, input_value, group_code, {'data-parameter': 'groupId'}, ICON_GROUP) }}
+                {% for category_code, category_id in group.categories %}
+                    {{ _self.output_dropdown('category pl-5', category_id, input_value, category_code, {'data-parameter': 'categoryId'}, ICON_CATEGORY) }}
                 {% endfor %}
             {% endfor %}
         </div>
     </div>
 {% endif %}
 {%- endblock %}
-
+{# global actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('task_pdf'), 'task.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('task_excel'), 'task.list.excel_title', ICON_EXCEL) }}
 {%- endblock %}
-
+{# edit actions #}
 {% block edit_actions -%}
 {{- _self.item_path(path('task_edit', params), 'task.edit.title', ICON_EDIT, edit_class) }}
 {%- endblock %}
-
+{#  delete actions #}
 {% block delete_actions -%}
 {{- _self.item_path(path('task_delete', params), 'task.delete.title', ICON_DELETE, 'btn-delete') }}
 {%- endblock %}
-
+{# add actions #}
 {% block add_actions -%}
 {{- _self.item_path(path('task_add', params), 'task.add.title', ICON_ADD, 'btn-add') }}
 {{- _self.item_path(path('task_clone', params), 'common.button_clone', ICON_COPY, 'btn-task-clone') }}
 {%- endblock %}
-
+{# show actions #}
 {% block show_actions -%}
 {{- _self.item_path(path('task_show', params), 'task.show.title', ICON_SHOW, show_class) }}
 {%- endblock %}
-
+{# other actions #}
 {% block other_actions -%}
 {% if allow_show %}
     {{- _self.item_separator('task-compute-divider') }}
     {{- _self.item_path(path('task_compute', params), 'task_compute.title', 'keyboard', 'btn-task-compute') }}
 {% endif %}
 {%- endblock %}
-
+{# custom view header #}
 {% block custom_view_header -%}
 {%- if row_edit -%}
     <a href="{{ path('task_edit', params) }}" class="item-link text-body" title="{{ 'task.edit.title'|trans }}">%name%</a>
@@ -77,7 +79,7 @@
     <span>%name%</span>
 {%- endif -%}
 {%- endblock %}
-
+{# custom view body #}
 {% block custom_view_body -%}
 {{ _self.property_value('%group.code% / %category.code%') }}
 {{ _self.property_row('task.fields.unit', '%unit%') }}

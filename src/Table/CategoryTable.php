@@ -141,10 +141,18 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         parent::updateResults($query, $results);
         if (!$query->callback) {
             $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
-            $results->addCustomData('group', $this->getGroup($groupId));
-            $results->addCustomData('groups', $this->getGroups());
             $results->addParameter(self::PARAM_GROUP, $groupId);
+            $results->addCustomData('group', $this->getGroup($groupId));
+            $results->addCustomData('dropdown', $this->getDropDownValues());
         }
+    }
+
+    /**
+     * Gets drop-down values.
+     */
+    private function getDropDownValues(): array
+    {
+        return $this->groupRepository->getDropDown();
     }
 
     /**
@@ -153,13 +161,5 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     private function getGroup(int $groupId): ?Group
     {
         return 0 !== $groupId ? $this->groupRepository->find($groupId) : null;
-    }
-
-    /**
-     * Gets groupes.
-     */
-    private function getGroups(): array
-    {
-        return $this->groupRepository->getListCountCategories();
     }
 }

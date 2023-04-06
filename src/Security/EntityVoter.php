@@ -44,7 +44,7 @@ class EntityVoter extends Voter
      */
     public function supportsAttribute(string $attribute): bool
     {
-        return null !== EntityPermission::tryFromName($attribute);
+        return EntityPermission::tryFromName($attribute) instanceof EntityPermission;
     }
 
     /**
@@ -65,7 +65,7 @@ class EntityVoter extends Voter
      */
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return $this->supportsAttribute($attribute) && null !== EntityName::tryFromMixed($subject);
+        return $this->supportsAttribute($attribute) && EntityName::tryFromMixed($subject) instanceof EntityName;
     }
 
     /**
@@ -73,7 +73,7 @@ class EntityVoter extends Voter
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-        if (null === $user = $this->getUser($token)) {
+        if (!($user = $this->getUser($token)) instanceof User) {
             return false;
         }
         if ($user->isSuperAdmin()) {

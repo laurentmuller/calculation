@@ -13,10 +13,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\AbstractEntity;
+use App\Entity\User;
 use App\Enums\StrengthLevel;
 use App\Enums\TableView;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
+use App\Model\HttpClientError;
+use App\Model\TaskComputeQuery;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CustomerRepository;
@@ -62,7 +65,7 @@ class AjaxController extends AbstractController
     {
         // find username
         $usernameOrEmail = $this->getRequestString($request, 'user');
-        if (!empty($usernameOrEmail) && null !== $repository->findByUsernameOrEmail($usernameOrEmail)) {
+        if (!empty($usernameOrEmail) && $repository->findByUsernameOrEmail($usernameOrEmail) instanceof User) {
             return $this->json(true);
         }
 
@@ -87,7 +90,7 @@ class AjaxController extends AbstractController
             $message = 'email.long';
         } else {
             $user = $repository->findByEmail($email);
-            if (null !== $user && $id !== $user->getId()) {
+            if ($user instanceof User && $id !== $user->getId()) {
                 $message = 'email.already_used';
             }
         }
@@ -116,7 +119,7 @@ class AjaxController extends AbstractController
             $message = 'username.long';
         } else {
             $user = $repository->findByUsername($username);
-            if (null !== $user && $id !== $user->getId()) {
+            if ($user instanceof User && $id !== $user->getId()) {
                 $message = 'username.already_used';
             }
         }
@@ -134,7 +137,7 @@ class AjaxController extends AbstractController
     #[Route(path: '/task', name: 'ajax_task')]
     public function computeTask(Request $request, TaskService $service): JsonResponse
     {
-        if (null === $query = $service->createQuery($request)) {
+        if (!($query = $service->createQuery($request)) instanceof TaskComputeQuery) {
             return $this->jsonFalse([
                 'message' => $this->trans('task_compute.error.task'),
             ]);
@@ -434,7 +437,7 @@ class AjaxController extends AbstractController
     #[Route(path: '/translate', name: 'ajax_translate')]
     public function translate(Request $request, TranslatorFactory $factory): JsonResponse
     {
-        if (null !== ($response = $this->checkAjaxCall($request))) {
+        if (($response = $this->checkAjaxCall($request)) instanceof JsonResponse) {
             return $response;
         }
         $to = $this->getRequestString($request, 'to', '');
@@ -474,7 +477,7 @@ class AjaxController extends AbstractController
     #[Route(path: '/update', name: 'ajax_update')]
     public function updateCalculation(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
     {
-        if (null !== ($response = $this->checkAjaxCall($request))) {
+        if (($response = $this->checkAjaxCall($request)) instanceof JsonResponse) {
             return $response;
         }
 
@@ -583,7 +586,7 @@ class AjaxController extends AbstractController
 
     private function handleTranslationError(TranslatorServiceInterface $service, string $message): JsonResponse
     {
-        if (null !== $error = $service->getLastError()) {
+        if (($error = $service->getLastError()) instanceof HttpClientError) {
             $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
             if ($this->isTransDefined($id, 'translator')) {
                 $error->setMessage($this->trans($id, [], 'translator'));

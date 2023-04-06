@@ -14,6 +14,7 @@ namespace App\Generator;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationItem;
+use App\Entity\Category;
 use App\Faker\Generator;
 use App\Service\CalculationService;
 use App\Service\FakerService;
@@ -96,7 +97,7 @@ class CalculationGenerator extends AbstractEntityGenerator
                 $item->setPrice($generator->randomFloat(2, 1, 10));
             }
             $category = $product->getCategory();
-            if (null !== $category) {
+            if ($category instanceof Category) {
                 $entity->findCategory($category)->addItem($item);
             }
         }

@@ -13,8 +13,7 @@ declare(strict_types=1);
 namespace App\Form\DataTransformer;
 
 use App\Entity\AbstractEntity;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
+use App\Repository\AbstractRepository;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -28,18 +27,18 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class AbstractEntityTransformer implements DataTransformerInterface
 {
     /**
-     * @var EntityRepository<T>
+     * @var class-string<T>
      */
-    private readonly EntityRepository $repository;
+    private readonly string $className;
 
     /**
      * Constructor.
      *
-     * @param class-string<T> $className
+     * @param AbstractRepository<T> $repository
      */
-    public function __construct(EntityManagerInterface $manager, private readonly string $className)
+    public function __construct(private readonly AbstractRepository $repository)
     {
-        $this->repository = $manager->getRepository($this->className);
+        $this->className = $this->repository->getClassName();
     }
 
     /**

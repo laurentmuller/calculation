@@ -102,7 +102,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
     private function getColorStyle(CalculationState $state): ?PdfStyle
     {
         $color = PdfFillColor::create($state->getColor());
-        if (null !== $color) {
+        if ($color instanceof PdfFillColor) {
             return PdfStyle::getCellStyle()->setFillColor($color);
         }
 

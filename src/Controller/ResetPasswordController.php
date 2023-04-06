@@ -67,7 +67,7 @@ class ResetPasswordController extends AbstractController
     #[Route(path: '/check-email', name: self::ROUTE_CHECK)]
     public function checkEmail(): Response
     {
-        if (null === ($resetToken = $this->getTokenObjectFromSession())) {
+        if (!($resetToken = $this->getTokenObjectFromSession()) instanceof ResetPasswordToken) {
             $resetToken = $this->helper->generateFakeResetToken();
         }
 

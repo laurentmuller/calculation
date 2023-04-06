@@ -161,7 +161,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function clone(?CalculationState $state = null, ?string $description = null): self
     {
         $copy = clone $this;
-        if (null !== $state) {
+        if ($state instanceof CalculationState) {
             $copy->setState($state);
         }
         if (null !== $description) {

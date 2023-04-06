@@ -146,7 +146,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
 
     private function findGroupStyle(): PdfStyle
     {
-        if (null !== $style = $this->getGroupStyle()) {
+        if (($style = $this->getGroupStyle()) instanceof PdfStyle) {
             return $style;
         }
 

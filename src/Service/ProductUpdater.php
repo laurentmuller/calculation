@@ -223,7 +223,7 @@ class ProductUpdater implements ServiceSubscriberInterface
      */
     private function getProducts(?Category $category): array
     {
-        if (null !== $category) {
+        if ($category instanceof Category) {
             return $this->manager->getRepository(Product::class)->findByCategory($category);
         }
 

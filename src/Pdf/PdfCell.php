@@ -39,7 +39,7 @@ class PdfCell
 
     public function __clone()
     {
-        if (null !== $this->style) {
+        if ($this->style instanceof PdfStyle) {
             $this->style = clone $this->style;
         }
     }

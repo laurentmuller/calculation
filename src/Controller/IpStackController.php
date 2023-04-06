@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interfaces\RoleInterface;
+use App\Model\HttpClientError;
 use App\Service\IpStackService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +33,7 @@ class IpStackController extends AbstractController
     public function ipStack(Request $request, IpStackService $service): Response
     {
         $results = $service->getIpInfo($request);
-        if (null !== $error = $service->getLastError()) {
+        if (($error = $service->getLastError()) instanceof HttpClientError) {
             return $this->render('bundles/TwigBundle/Exception/http_client_error.html.twig', [
                 'error' => $error,
             ]);

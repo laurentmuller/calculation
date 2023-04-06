@@ -64,7 +64,7 @@ class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterfac
      */
     public function resize(string $source, string $target, int $size): bool
     {
-        if (null === $this->imagine) {
+        if (!$this->imagine instanceof ImagineInterface) {
             return false;
         }
 

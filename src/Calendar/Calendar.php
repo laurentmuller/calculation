@@ -252,7 +252,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function getToday(): Day
     {
-        if (null === $this->today) {
+        if (!$this->today instanceof Day) {
             $date = new \DateTime('today');
             $this->today = new Day($this, $date);
         }

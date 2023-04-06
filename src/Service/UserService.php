@@ -227,7 +227,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     public function setProperties(array $properties): static
     {
-        if ([] !== $properties && null !== $user = $this->getUser()) {
+        if ([] !== $properties && ($user = $this->getUser()) instanceof User) {
             $defaultValues = $this->service->getProperties();
             /** @psalm-var mixed $value */
             foreach ($properties as $key => $value) {
@@ -242,7 +242,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     protected function updateAdapter(): void
     {
-        if (null !== $user = $this->getUser()) {
+        if (($user = $this->getUser()) instanceof User) {
             $properties = $this->repository->findByUser($user);
             $this->saveProperties($properties);
         }

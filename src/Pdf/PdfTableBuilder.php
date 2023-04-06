@@ -120,7 +120,7 @@ class PdfTableBuilder
         if (!$this->isRowStarted()) {
             throw new \LogicException('No row started.');
         }
-        if (null !== $cell) {
+        if ($cell instanceof PdfCell) {
             $this->cells[] = $cell;
         }
 
@@ -136,7 +136,7 @@ class PdfTableBuilder
      */
     public function addColumn(?PdfColumn $column): static
     {
-        if (null !== $column) {
+        if ($column instanceof PdfColumn) {
             $this->columns[] = $column;
         }
 
@@ -385,7 +385,7 @@ class PdfTableBuilder
      */
     public function isRowStarted(): bool
     {
-        return null !== $this->rowStyle;
+        return $this->rowStyle instanceof PdfStyle;
     }
 
     /**
@@ -573,7 +573,7 @@ class PdfTableBuilder
      */
     protected function drawCellBackground(PdfDocument $parent, int $index, PdfRectangle $bounds): void
     {
-        if (null !== $this->backgroundListener && $this->backgroundListener->drawCellBackground($this, $index, $bounds)) {
+        if ($this->backgroundListener instanceof PdfDrawCellBackgroundInterface && $this->backgroundListener->drawCellBackground($this, $index, $bounds)) {
             return;
         }
         $parent->rectangle($bounds, PdfRectangleStyle::FILL);
@@ -589,7 +589,7 @@ class PdfTableBuilder
      */
     protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfBorder $border): void
     {
-        if (null !== $this->borderListener && $this->borderListener->drawCellBorder($this, $index, $bounds, $border)) {
+        if ($this->borderListener instanceof PdfDrawCellBorderInterface && $this->borderListener->drawCellBorder($this, $index, $bounds, $border)) {
             return;
         }
         $x = $bounds->x();
@@ -639,7 +639,7 @@ class PdfTableBuilder
      */
     protected function drawCellText(PdfDocument $parent, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $alignment, float $height): void
     {
-        if (null !== $this->textListener && $this->textListener->drawCellText($this, $index, $bounds, $text, $alignment, $height)) {
+        if ($this->textListener instanceof PdfDrawCellTextInterface && $this->textListener->drawCellText($this, $index, $bounds, $text, $alignment, $height)) {
             return;
         }
         $parent->MultiCell(w: $bounds->width(), h: $height, txt: $text, align: $alignment);

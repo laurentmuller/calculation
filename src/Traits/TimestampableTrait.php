@@ -121,7 +121,7 @@ trait TimestampableTrait
      */
     private function formatDateAndUser(?\DateTimeInterface $date, ?string $user, TranslatorInterface $translator, string $id): string
     {
-        $date = null !== $date ? FormatUtils::formatDateTime($date) : $translator->trans('common.empty_date');
+        $date = $date instanceof \DateTimeInterface ? FormatUtils::formatDateTime($date) : $translator->trans('common.empty_date');
         if (null === $user || '' === $user) {
             $user = $translator->trans('common.empty_user');
         }

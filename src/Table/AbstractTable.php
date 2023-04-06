@@ -104,7 +104,7 @@ abstract class AbstractTable implements SortModeInterface
         $query->offset = $this->getParamInt($request, TableInterface::PARAM_OFFSET);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
-        if (null !== ($column = $this->getDefaultColumn())) {
+        if (($column = $this->getDefaultColumn()) instanceof Column) {
             $query->sort = $column->getField();
             $query->order = $column->getOrder();
         }

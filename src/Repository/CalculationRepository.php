@@ -558,7 +558,7 @@ class CalculationRepository extends AbstractRepository
             ->addOrderBy('c.date', Criteria::DESC)
             ->addOrderBy('c.id', Criteria::DESC)
             ->setMaxResults($maxResults);
-        if (null !== $user) {
+        if ($user instanceof UserInterface) {
             $identifier = $user->getUserIdentifier();
             $builder->where('c.createdBy = :identifier')
                 ->orWhere('c.updatedBy = :identifier')
@@ -650,6 +650,7 @@ class CalculationRepository extends AbstractRepository
             'state.id' => parent::getSearchFields('id', self::STATE_ALIAS),
             'state.code' => parent::getSearchFields('code', self::STATE_ALIAS),
             'state.color' => parent::getSearchFields('color', self::STATE_ALIAS),
+            'state.editable' => parent::getSearchFields('editable', self::STATE_ALIAS),
             default => parent::getSearchFields($field, $alias),
         };
     }

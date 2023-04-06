@@ -126,7 +126,7 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
     {
         $margin = $this->findMargin($quantity);
 
-        return null !== $margin ? $margin->getValue() : 0;
+        return $margin instanceof TaskItemMargin ? $margin->getValue() : 0;
     }
 
     /**

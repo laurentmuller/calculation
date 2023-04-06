@@ -153,7 +153,7 @@ abstract class AbstractProperty extends AbstractEntity
      */
     public function setDate(?\DateTimeInterface $value): static
     {
-        return $this->setInteger(null !== $value ? $value->getTimestamp() : self::FALSE_VALUE);
+        return $this->setInteger($value instanceof \DateTimeInterface ? $value->getTimestamp() : self::FALSE_VALUE);
     }
 
     /**

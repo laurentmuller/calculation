@@ -331,7 +331,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
      */
     public function updateCode(): bool
     {
-        if (null !== $this->category && $this->code !== $this->category->getCode()) {
+        if ($this->category instanceof Category && $this->code !== $this->category->getCode()) {
             $this->code = $this->category->getCode();
 
             return true;

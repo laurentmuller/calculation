@@ -268,7 +268,7 @@ class EntityNameTest extends TestCase
      */
     private function createTranslator(): TranslatorInterface
     {
-        if (null === $this->translator) {
+        if (!$this->translator instanceof TranslatorInterface) {
             $this->translator = $this->createMock(TranslatorInterface::class);
             $this->translator->method('trans')
                 ->willReturnArgument(0);

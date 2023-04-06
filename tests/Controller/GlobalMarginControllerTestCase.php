@@ -51,7 +51,7 @@ class GlobalMarginControllerTestCase extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (null === self::$entity) {
+        if (!self::$entity instanceof GlobalMargin) {
             self::$entity = new GlobalMargin();
             self::$entity->setMinimum(0)
                 ->setMaximum(100)

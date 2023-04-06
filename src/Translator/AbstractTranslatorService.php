@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
+use App\Model\HttpClientError;
 use App\Service\AbstractHttpClientService;
 use App\Utils\StringUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -123,7 +124,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     private function doLoadLanguages(): ?array
     {
         $languages = $this->loadLanguages();
-        if (!empty($languages) && null === $this->getLastError()) {
+        if (!empty($languages) && !$this->getLastError() instanceof HttpClientError) {
             return $languages;
         }
 
@@ -137,7 +138,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
 
     private function getPropertyAccessor(): PropertyAccessorInterface
     {
-        if (null === $this->accessor) {
+        if (!$this->accessor instanceof PropertyAccessorInterface) {
             $this->accessor = PropertyAccess::createPropertyAccessorBuilder()
                 ->disableExceptionOnInvalidPropertyPath()
                 ->getPropertyAccessor();

@@ -173,7 +173,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         $current = $this;
         /** @psalm-var mixed $key */
         foreach ($keys as $key) {
-            if (null === ($found = $current->find($key))) {
+            if (!($found = $current->find($key)) instanceof self) {
                 return null;
             }
             $current = $found;
@@ -194,7 +194,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         foreach ($this->children as $child) {
             if ($child->equalsKey($key)) {
                 return $child;
-            } elseif (null !== ($found = $child->findRecursive($key))) {
+            } elseif (($found = $child->findRecursive($key)) instanceof self) {
                 return $found;
             }
         }
@@ -274,7 +274,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
         $result = [$this->key];
         $parent = $this->parent;
-        while (null !== $parent && !$parent->isRoot()) {
+        while ($parent instanceof self && !$parent->isRoot()) {
             // put first
             \array_unshift($result, $parent->key);
             $parent = $parent->parent;
@@ -392,7 +392,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
         $result = [(string) $this->getTitle()];
         $parent = $this->parent;
-        while (null !== $parent && !$parent->isRoot()) {
+        while ($parent instanceof self && !$parent->isRoot()) {
             // put first
             \array_unshift($result, (string) $parent->getTitle());
             $parent = $parent->parent;
@@ -408,7 +408,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      */
     public function index(): int
     {
-        if (null !== $this->parent) {
+        if ($this->parent instanceof self) {
             $index = 0;
             foreach ($this->parent->getChildren() as $child) {
                 if ($child === $this) {

@@ -46,7 +46,7 @@ class CalculationDuplicateController extends AbstractController
     #[Route(path: '/excel', name: 'duplicate_excel')]
     public function excel(CalculationRepository $repository): Response
     {
-        if (null !== $response = $this->getEmptyResponse($repository)) {
+        if (($response = $this->getEmptyResponse($repository)) instanceof RedirectResponse) {
             return $response;
         }
         $items = $this->getItems($repository);
@@ -63,7 +63,7 @@ class CalculationDuplicateController extends AbstractController
     #[Route(path: '/pdf', name: 'duplicate_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
-        if (null !== $response = $this->getEmptyResponse($repository)) {
+        if (($response = $this->getEmptyResponse($repository)) instanceof RedirectResponse) {
             return $response;
         }
         $items = $this->getItems($repository);

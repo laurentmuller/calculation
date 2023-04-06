@@ -117,7 +117,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         $result = new SwissPostUpdateResult();
         $result->setOverwrite($overwrite);
-        if (null !== $this->validateInput($result, $sourceFile)) {
+        if ($this->validateInput($result, $sourceFile) instanceof SwissPostUpdateResult) {
             return $result;
         }
         if (null === $temp_name = FileUtils::tempFile('sql')) {
@@ -128,13 +128,13 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         $database = null;
 
         try {
-            if (null === $archive = $this->openArchive($result)) {
+            if (!($archive = $this->openArchive($result)) instanceof \ZipArchive) {
                 return $result;
             }
             if (!$this->validateArchive($result, $archive)) {
                 return $result;
             }
-            if (null === $reader = $this->openReader($result, $archive)) {
+            if (!($reader = $this->openReader($result, $archive)) instanceof CSVReader) {
                 return $result;
             }
             $database = $this->openDatabase($temp_name);
@@ -442,7 +442,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
      */
     private function updateValidity(SwissPostUpdateResult $result): void
     {
-        if ($result->isValid() && null !== $validity = $result->getValidity()) {
+        if ($result->isValid() && ($validity = $result->getValidity()) instanceof \DateTimeInterface) {
             $this->application->setProperty(PropertyServiceInterface::P_DATE_IMPORT, $validity);
         }
     }

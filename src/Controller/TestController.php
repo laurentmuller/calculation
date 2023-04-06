@@ -25,6 +25,7 @@ use App\Form\Type\CaptchaImageType;
 use App\Form\Type\SimpleEditorType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
+use App\Model\HttpClientError;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Service\AbstractHttpClientService;
@@ -314,7 +315,7 @@ class TestController extends AbstractController
     {
         $service = $factory->getSessionService();
         $languages = $service->getLanguages();
-        if (null !== $error = $service->getLastError()) {
+        if (($error = $service->getLastError()) instanceof HttpClientError) {
             $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
             if ($this->isTransDefined($id, 'translator')) {
                 $error->setMessage($this->trans($id, [], 'translator'));

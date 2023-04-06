@@ -34,7 +34,7 @@ enum HtmlBootstrapColors: string
 
     public function getDrawColor(): PdfDrawColor
     {
-        if (null === $color = PdfDrawColor::create($this->value)) {
+        if (!($color = PdfDrawColor::create($this->value)) instanceof PdfDrawColor) {
             throw new \RuntimeException('Unable to create draw color.');
         }
 
@@ -43,7 +43,7 @@ enum HtmlBootstrapColors: string
 
     public function getFillColor(): PdfFillColor
     {
-        if (null === $color = PdfFillColor::create($this->value)) {
+        if (!($color = PdfFillColor::create($this->value)) instanceof PdfFillColor) {
             throw new \RuntimeException('Unable to create fill color.');
         }
 
@@ -52,7 +52,7 @@ enum HtmlBootstrapColors: string
 
     public function getTextColor(): PdfTextColor
     {
-        if (null === $color = PdfTextColor::create($this->value)) {
+        if (!($color = PdfTextColor::create($this->value)) instanceof PdfTextColor) {
             throw new \RuntimeException('Unable to create text color.');
         }
 

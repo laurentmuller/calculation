@@ -135,7 +135,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     private function getRightText(?FlagBag $rights, EntityPermission $permission): ?string
     {
-        return null !== $rights && $rights->hasFlags($permission) ? PdfStyle::BULLET : null;
+        return $rights instanceof FlagBag && $rights->hasFlags($permission) ? PdfStyle::BULLET : null;
     }
 
     /**

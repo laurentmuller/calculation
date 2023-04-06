@@ -63,6 +63,7 @@ class UrlGeneratorService
 
         CategoryTable::PARAM_GROUP,
         CalculationTable::PARAM_STATE,
+        CalculationTable::PARAM_EDITABLE,
         AbstractCategoryItemTable::PARAM_CATEGORY,
 
         SearchTable::PARAM_TYPE,

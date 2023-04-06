@@ -148,7 +148,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      */
     private function getClientIp(?Request $request = null): string
     {
-        if (null === $request) {
+        if (!$request instanceof Request) {
             return self::URI_CHECK;
         }
         $clientIp = $request->getClientIp();

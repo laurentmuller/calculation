@@ -46,7 +46,7 @@ readonly class HtmlParser
         }
 
         // find body
-        if (null === $body = $this->findBody($document)) {
+        if (!($body = $this->findBody($document)) instanceof \DOMNode) {
             return null;
         }
 
@@ -197,7 +197,7 @@ readonly class HtmlParser
         if ($node->hasAttributes()) {
             /** @var \DOMNamedNodeMap $attributes */
             $attributes = $node->attributes;
-            if (null !== ($attribute = $attributes->getNamedItem($name))) {
+            if (($attribute = $attributes->getNamedItem($name)) instanceof \DOMNode) {
                 $value = \trim((string) $attribute->nodeValue);
                 if (StringUtils::isString($value)) {
                     return $value;

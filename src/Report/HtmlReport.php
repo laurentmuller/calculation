@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlParser;
 
 /**
@@ -46,7 +47,7 @@ class HtmlReport extends AbstractReport
             return false;
         }
         $parser = new HtmlParser($this->content);
-        if (null === $root = $parser->parse()) {
+        if (!($root = $parser->parse()) instanceof HtmlParentChunk) {
             return false;
         }
         $this->AddPage();

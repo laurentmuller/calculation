@@ -21,7 +21,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * Repository for calculation state entity.
  *
- * @psalm-type QueryCalculation = array{
+ * @psalm-type QueryCalculationType = array{
  *      id: int,
  *      code: string,
  *      editable: boolean,
@@ -31,6 +31,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *      total: float,
  *      margin: float,
  *      marginAmount: float}
+ * @psalm-type DropDownType = array<int, array{id: int, code: string, editable: bool, color: string}>
  *
  * @template-extends AbstractRepository<CalculationState>
  */
@@ -50,14 +51,14 @@ class CalculationStateRepository extends AbstractRepository
      *
      * @return array the states with the number and the sum of calculations
      *
-     * @psalm-return QueryCalculation[]
+     * @psalm-return QueryCalculationType[]
      */
     public function getCalculations(): array
     {
         $results = $this->getCalculationsQueryBuilder()
             ->getQuery()
             ->getArrayResult();
-        /** @psalm-var QueryCalculation $result */
+        /** @psalm-var QueryCalculationType $result */
         foreach ($results as &$result) {
             $this->updateQueryResult($result);
         }
@@ -72,15 +73,15 @@ class CalculationStateRepository extends AbstractRepository
      *
      * @return array an array grouped by editable with the states
      *
-     * @psalm-return array<int, array{id: int, code: string, editable: int, color: string}>
+     * @psalm-return DropDownType
      */
-    public function getDropDownStates(): array
+    public function getDropDown(): array
     {
         return $this->mergeByEditable($this->getDropDownQuery());
     }
 
     /**
-     * Gets states where calculations have the overall margin below the given margin.
+     * Gets states used for the calculation below table.
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
      *
@@ -88,9 +89,9 @@ class CalculationStateRepository extends AbstractRepository
      *
      * @return array an array grouped by editable with the states
      *
-     * @psalm-return array<int, array{id: int, code: string, editable: int, color: string}>
+     * @psalm-return DropDownType
      */
-    public function getDropDownStatesBelow(float $minMargin): array
+    public function getDropDownBelow(float $minMargin): array
     {
         $builder = $this->getDropDownQuery();
         $builder = CalculationRepository::addBelowFilter($builder, $minMargin, 'c');
@@ -204,7 +205,7 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * @psalm-param QueryCalculation $result
+     * @psalm-param QueryCalculationType $result
      */
     private function updateQueryResult(array &$result): void
     {

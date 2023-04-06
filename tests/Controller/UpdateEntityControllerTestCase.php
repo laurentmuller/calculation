@@ -51,30 +51,29 @@ class UpdateEntityControllerTestCase extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (null === self::$customer) {
+        if (!self::$customer instanceof Customer) {
             self::$customer = new Customer();
             self::$customer->setCompany('Test Company');
             $this->addEntity(self::$customer);
         }
 
-        if (null === self::$state) {
+        if (!self::$state instanceof CalculationState) {
             self::$state = new CalculationState();
             self::$state->setCode('Test Code');
             $this->addEntity(self::$state);
         }
 
-        if (null === self::$group) {
+        if (!self::$group instanceof Group) {
             self::$group = new Group();
             self::$group->setCode('Test Group');
             $this->addEntity(self::$group);
         }
-        if (null === self::$category) {
+        if (!self::$category instanceof Category) {
             self::$category = new Category();
             self::$category->setCode('Test Category')
                 ->setGroup(self::$group);
             $this->addEntity(self::$category);
         }
-
         if (null === self::$products) {
             for ($i = 0; $i < 15; ++$i) {
                 $product = new Product();

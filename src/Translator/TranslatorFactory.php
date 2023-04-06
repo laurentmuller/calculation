@@ -59,7 +59,7 @@ class TranslatorFactory implements ServiceSubscriberInterface
      */
     public function exists(string $classOrName): bool
     {
-        return null !== $this->find($classOrName);
+        return $this->find($classOrName) instanceof TranslatorServiceInterface;
     }
 
     /**

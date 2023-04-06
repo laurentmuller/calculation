@@ -882,7 +882,7 @@ product:
     pdf_title: Télécharger la liste des articles
     excel_title: Exporter la liste des articles
     category_all_text: Toutes les catégorie
-    category_help: Afficher les articles pour la catégorie sélectionnée
+    category_help: Afficher les articles pour le groupe ou la catégorie sélectionné
     empty: Aucun article défini.
   name: Article
   result:
@@ -1124,7 +1124,7 @@ task:
   list:
     add_title: Créer une nouvelle tâche
     category_all_text: Toutes les catégorie
-    category_help: Afficher les tâches pour la catégorie sélectionnée
+    category_help: Afficher les tâches pour le groupe ou la catégorie sélectionné
     empty: Aucune tâche définie.
     excel_title: Exporter la liste des tâche
     pdf_title: Télécharger la liste des tâche
@@ -1184,7 +1184,7 @@ test:
 theme:
   title: Thème
   success: Le thème <b>%name%</b> a été sélectionné avec succès.
-  error: Impossible de sélectionné le thème.
+  error: Impossible de sélectionner le thème.
   dark:
     name: Thème sombre
     title: Appliquer le thème sombre sur le site.
@@ -1225,8 +1225,7 @@ translator:
   translate_error: Une erreur s'est produite lors de la traduction du texte.
   translate_success: La traduction du texte <b>%from%</b> en <b>%to%</b> avec le service <b>%service%</b> a été réalisée avec succès.
 update:
-  description: Cet outil permet de mettre à jour les objets sélectionnés avec des
-    données aléatoires.
+  description: Cet outil permet de mettre à jour les objets sélectionnés avec des données aléatoires.
   fields:
     entity: Objet à mettre à jour
   help:

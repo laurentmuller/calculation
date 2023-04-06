@@ -235,7 +235,7 @@ final class StringUtils
     {
         /** @psalm-var AsciiSlugger|null $slugger */
         static $slugger = null;
-        if (null === $slugger) {
+        if (!$slugger instanceof AsciiSlugger) {
             $slugger = new AsciiSlugger();
         }
 

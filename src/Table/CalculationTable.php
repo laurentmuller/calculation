@@ -30,6 +30,10 @@ use Twig\Environment;
 class CalculationTable extends AbstractEntityTable
 {
     /**
+     * The state editable parameter name (bool).
+     */
+    final public const PARAM_EDITABLE = 'stateEditable';
+    /**
      * The state parameter name (int).
      */
     final public const PARAM_STATE = 'stateId';
@@ -63,18 +67,10 @@ class CalculationTable extends AbstractEntityTable
         $query = parent::getDataQuery($request);
         $stateId = $this->getRequestInt($request, self::PARAM_STATE);
         $query->addCustomData(self::PARAM_STATE, $stateId);
+        $stateEditable = $this->getRequestInt($request, self::PARAM_EDITABLE);
+        $query->addCustomData(self::PARAM_EDITABLE, $stateEditable);
 
         return $query;
-    }
-
-    /**
-     * Gets calculation states.
-     *
-     * @psalm-return array<int, array{id: int, code: string, editable: int, color: string}>
-     */
-    protected function getCalculationStates(): array
-    {
-        return $this->stateRepository->getDropDownStates();
     }
 
     /**
@@ -94,20 +90,38 @@ class CalculationTable extends AbstractEntityTable
     }
 
     /**
+     * Gets drop-down values.
+     */
+    protected function getDropDownValues(): array
+    {
+        return $this->stateRepository->getDropDown();
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::search($query, $builder, $alias);
-        if (0 === $stateId = $query->getCustomData(self::PARAM_STATE, 0)) {
-            return $result;
-        }
-        /** @psalm-var string $field */
-        $field = $this->repository->getSearchFields('state.id', $alias);
-        $builder->andWhere($field . '=:' . self::PARAM_STATE)
-            ->setParameter(self::PARAM_STATE, $stateId, Types::INTEGER);
+        if (0 !== $stateId = $query->getCustomData(self::PARAM_STATE, 0)) {
+            /** @psalm-var string $field */
+            $field = $this->repository->getSearchFields('state.id', $alias);
+            $builder->andWhere($field . '=:' . self::PARAM_STATE)
+                ->setParameter(self::PARAM_STATE, $stateId, Types::INTEGER);
 
-        return true;
+            return true;
+        }
+
+        if (0 !== $stateEditable = $query->getCustomData(self::PARAM_EDITABLE, 0)) {
+            /** @psalm-var string $field */
+            $field = $this->repository->getSearchFields('state.editable', $alias);
+            $builder->andWhere($field . '=:' . self::PARAM_EDITABLE)
+                ->setParameter(self::PARAM_EDITABLE, $this->isEditable($stateEditable), Types::BOOLEAN);
+
+            return true;
+        }
+
+        return $result;
     }
 
     /**
@@ -118,10 +132,16 @@ class CalculationTable extends AbstractEntityTable
         parent::updateResults($query, $results);
         if (!$query->callback) {
             $results->addAttribute('row-style', 'styleTextMuted');
+
             $stateId = $query->getCustomData(self::PARAM_STATE, 0);
-            $results->addCustomData('state', $this->getCalculationState($stateId));
-            $results->addCustomData('states', $this->getCalculationStates());
             $results->addParameter(self::PARAM_STATE, $stateId);
+
+            $stateEditable = $query->getCustomData(self::PARAM_EDITABLE, 0);
+            $results->addParameter(self::PARAM_EDITABLE, $stateEditable);
+
+            $results->addCustomData('dropdown', $this->getDropDownValues());
+            $results->addCustomData('state', $this->getCalculationState($stateId));
+            $results->addCustomData('editable', $stateEditable);
         }
     }
 
@@ -131,5 +151,10 @@ class CalculationTable extends AbstractEntityTable
     private function getCalculationState(int $stateId): ?CalculationState
     {
         return 0 !== $stateId ? $this->stateRepository->find($stateId) : null;
+    }
+
+    private function isEditable(int $stateEditable): bool
+    {
+        return 1 === $stateEditable;
     }
 }

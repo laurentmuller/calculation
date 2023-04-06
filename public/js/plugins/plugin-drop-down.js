@@ -69,6 +69,10 @@
          * @return {string} the identifier attribute.
          */
         getId() {
+            const $item = this.$menu.find('.active');
+            if ($item.length && $item.data('parameter')) {
+                return $item.data('parameter');
+            }
             return this.$element.attr('id');
         }
 

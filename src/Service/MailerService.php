@@ -22,6 +22,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -60,10 +61,10 @@ class MailerService implements ServiceSubscriberInterface
             ->markdown($this->convert((string) $comment->getMessage()))
             ->action($this->trans('index.title'), $this->getHomeUrl())
             ->attachFromUploadedFiles(...$comment->getAttachments());
-        if (null !== $address = $comment->getFromAddress()) {
+        if (($address = $comment->getFromAddress()) instanceof Address) {
             $notification->from($address);
         }
-        if (null !== $address = $comment->getToAddress()) {
+        if (($address = $comment->getToAddress()) instanceof Address) {
             $notification->to($address);
         }
         $this->mailer->send($notification);

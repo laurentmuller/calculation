@@ -120,7 +120,7 @@ class ArchiveService implements ServiceSubscriberInterface
         $calculations = $this->getCalculations($date, $query->getSources());
         foreach ($calculations as $calculation) {
             $oldState = $calculation->getState();
-            if (null !== $oldState && $oldState !== $target) {
+            if ($oldState instanceof CalculationState && $oldState !== $target) {
                 $result->addCalculation($oldState, $calculation);
                 $calculation->setState($target);
             }
@@ -158,7 +158,7 @@ class ArchiveService implements ServiceSubscriberInterface
             $builder->andWhere('c.state IN (:states)')
                 ->setParameter('states', $ids);
         }
-        if (null !== $date) {
+        if ($date instanceof \DateTimeInterface) {
             $builder->andWhere('c.date <= :date')
                 ->setParameter('date', $date, Types::DATE_MUTABLE);
         }
@@ -188,7 +188,7 @@ class ArchiveService implements ServiceSubscriberInterface
     private function getDate(): \DateTimeInterface
     {
         $date = $this->getSessionDate(self::KEY_DATE);
-        if (null !== $date) {
+        if ($date instanceof \DateTimeInterface) {
             return $date;
         }
         $sources = $this->getSources(false);
@@ -199,7 +199,7 @@ class ArchiveService implements ServiceSubscriberInterface
         $interval = new \DateInterval('P1M');
         $minDate->add($interval);
         $maxDate = $this->getDateMax($sources);
-        if (null !== $maxDate && $minDate >= $maxDate) {
+        if ($maxDate instanceof \DateTime && $minDate >= $maxDate) {
             return $maxDate->sub($interval);
         }
 

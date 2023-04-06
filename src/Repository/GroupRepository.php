@@ -40,19 +40,17 @@ class GroupRepository extends AbstractRepository
     }
 
     /**
-     * Gets groups with the number of categories.
+     * Gets groups used by category table.
      *
      * <b>Note:</b> Only groups with at least one category are returned.
      *
-     * @return array an array with the group and the number of categories
+     * @psalm-return array<array{id: int, code: string}>
      */
-    public function getListCountCategories(): array
+    public function getDropDown(): array
     {
         return $this->createQueryBuilder('g')
             ->select('g.id')
             ->addSelect('g.code')
-            ->addSelect('g.description')
-            ->addSelect('COUNT(c.id) as count')
             ->innerJoin('g.categories', 'c')
             ->groupBy('g.id')
             ->orderBy('g.code', Criteria::ASC)

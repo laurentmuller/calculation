@@ -33,7 +33,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(#[CurrentUser] ?User $user, AuthenticationUtils $utils): Response
     {
-        if (null !== $user) {
+        if ($user instanceof User) {
             return $this->redirectToHomePage();
         }
         $form = $this->createForm(UserLoginType::class, [

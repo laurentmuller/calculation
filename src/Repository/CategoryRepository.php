@@ -22,6 +22,8 @@ use Doctrine\Persistence\ManagerRegistry;
  * Repository for category entity.
  *
  * @template-extends AbstractRepository<Category>
+ *
+ * @psalm-type DropDownType = array<string, array{id: int, categories: array<string, int>}>
  */
 class CategoryRepository extends AbstractRepository
 {
@@ -67,9 +69,7 @@ class CategoryRepository extends AbstractRepository
      *
      * <b>Note:</b> Only categories with at least one product are returned.
      *
-     * @return array an array grouped by group name with the categories
-     *
-     * @psalm-return array<string, array{id: int, code: string, group: string}>
+     * @psalm-return DropDownType
      */
     public function getDropDownProducts(): array
     {
@@ -86,7 +86,7 @@ class CategoryRepository extends AbstractRepository
      *
      * @return array an array grouped by group name with the categories
      *
-     * @psalm-return array<string, array{id: int, code: string, group: string}>
+     * @psalm-return DropDownType
      */
     public function getDropDownTasks(): array
     {
@@ -148,21 +148,39 @@ class CategoryRepository extends AbstractRepository
     private function getDropDownQuery(): QueryBuilder
     {
         $group = self::GROUP_ALIAS . '.code';
+        $groupid = self::GROUP_ALIAS . '.id';
 
         return $this->createQueryBuilder('c')
             ->select('c.id')
             ->addSelect('c.code')
             ->addSelect("$group AS group")
+            ->addSelect("$groupid AS groupId")
             ->innerJoin('c.group', self::GROUP_ALIAS)
             ->groupBy('c.id')
             ->orderBy($group, Criteria::ASC)
             ->addOrderBy('c.code', Criteria::ASC);
     }
 
+    /**
+     * @psalm-return DropDownType
+     */
     private function mergeByGroup(QueryBuilder $builder): array
     {
+        /** @psalm-var DropDownType $result */
+        $result = [];
+        /** @psalm-var array<array{group: string, groupId: int, code: string, id: int}> $values */
         $values = $builder->getQuery()->getArrayResult();
+        foreach ($values as $value) {
+            $group = $value['group'];
+            if (!\array_key_exists($group, $result)) {
+                $result[$group] = [
+                    'id' => $value['groupId'],
+                    'categories' => [],
+                ];
+            }
+            $result[$group]['categories'][$value['code']] = $value['id'];
+        }
 
-        return $this->groupBy($values, 'group');
+        return $result;
     }
 }

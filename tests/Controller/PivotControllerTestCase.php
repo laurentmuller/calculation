@@ -43,13 +43,13 @@ class PivotControllerTestCase extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (null === self::$state) {
+        if (!self::$state instanceof CalculationState) {
             self::$state = new CalculationState();
             self::$state->setCode('Test State');
             $this->addEntity(self::$state);
         }
 
-        if (null === self::$group) {
+        if (!self::$group instanceof Group) {
             $margin = new GroupMargin();
             $margin->setMinimum(0)
                 ->setMaximum(1000)
@@ -60,14 +60,14 @@ class PivotControllerTestCase extends AbstractControllerTestCase
             $this->addEntity(self::$group);
         }
 
-        if (null === self::$category) {
+        if (!self::$category instanceof Category) {
             self::$category = new Category();
             self::$category->setCode('Test Category')
                 ->setGroup(self::$group);
             $this->addEntity(self::$category);
         }
 
-        if (null === self::$product) {
+        if (!self::$product instanceof Product) {
             self::$product = new Product();
             self::$product->setDescription('Test Product')
                 ->setPrice(10.0)
@@ -75,7 +75,7 @@ class PivotControllerTestCase extends AbstractControllerTestCase
             $this->addEntity(self::$product);
         }
 
-        if (null === self::$calculation) {
+        if (!self::$calculation instanceof Calculation) {
             self::$calculation = new Calculation();
             self::$calculation->setCustomer('Test Customer')
                 ->setDescription('Test Description')

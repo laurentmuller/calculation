@@ -91,7 +91,7 @@ class PhpIniReport extends AbstractReport
             $color = PdfTextColor::darkGray();
             $style = PdfFontStyle::ITALIC;
         }
-        if (null !== $color) {
+        if ($color instanceof PdfTextColor) {
             return PdfStyle::getCellStyle()->setTextColor($color)->setFontStyle($style);
         }
 

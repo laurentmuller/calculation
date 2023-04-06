@@ -132,7 +132,7 @@ class UserRightsDocument extends AbstractArrayDocument
      */
     private function getRightText(?FlagBag $rights, EntityPermission $permission): ?string
     {
-        return null !== $rights && $rights->hasFlags($permission) ? 'x' : null;
+        return $rights instanceof FlagBag && $rights->hasFlags($permission) ? 'x' : null;
     }
 
     /**

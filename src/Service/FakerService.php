@@ -45,7 +45,7 @@ class FakerService
      */
     public function getGenerator(): Generator
     {
-        if (null === $this->generator) {
+        if (!$this->generator instanceof Generator) {
             $manager = $this->manager;
             $locale = \Locale::getDefault();
             $generator = Factory::create($locale);

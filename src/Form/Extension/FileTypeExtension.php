@@ -40,7 +40,7 @@ class FileTypeExtension extends AbstractFileTypeExtension
     protected function updateAttributes(FormInterface $form, array &$attributes, array &$options): void
     {
         // merge options from parent (VichFileType or VichImageType)
-        if (null !== $parent = $form->getParent()) {
+        if (($parent = $form->getParent()) instanceof FormInterface) {
             $configuration = $parent->getConfig();
             foreach (['placeholder', 'maxfiles', 'maxsize'] as $name) {
                 $this->updateOption($configuration, $options, $name);

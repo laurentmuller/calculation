@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interfaces\RoleInterface;
+use App\Model\HttpClientError;
 use App\Service\AkismetService;
 use App\Service\FakerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -36,7 +37,7 @@ class AskimetController extends AbstractController
     {
         $comment = $faker->getGenerator()->realText(145);
         $results = $service->verifyComment($comment);
-        if (null !== $lastError = $service->getLastError()) {
+        if (($lastError = $service->getLastError()) instanceof HttpClientError) {
             return $this->json($lastError);
         }
 
@@ -50,7 +51,7 @@ class AskimetController extends AbstractController
     public function verifyKey(AkismetService $service): JsonResponse
     {
         $results = $service->verifyKey();
-        if (null !== $lastError = $service->getLastError()) {
+        if (($lastError = $service->getLastError()) instanceof HttpClientError) {
             return $this->json($lastError);
         }
 

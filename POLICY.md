@@ -1,4 +1,5 @@
 # Politique de confidentialité
+
 **bibi.nu** (désigné ci-après par "Fournisseur") exploite le site web **Calculation** (ci-après 
 désigné par le terme "Application").
 
@@ -15,39 +16,43 @@ licence ci-dessus.
 
 ## Définitions
 
-*   **Application** :
-    Par application, nous entendons le site web **Calculation** exploité par **bibi.nu**.
+- **Application** :
+  Par application, nous entendons le site web **Calculation** exploité par **bibi.nu**.
 
-*   **Données à caractère personnel** :
-    Les données à caractère personnel désignent des données concernant un individu vivant qui 
-    peut être identifié à partir de ces données (ou à partir de ces données et d'autres 
-    informations en notre possession ou susceptibles d'entrer en notre possession).
+- **Données à caractère personnel** :
+  Les données à caractère personnel désignent des données concernant un individu vivant qui 
+  peut être identifié à partir de ces données (ou à partir de ces données et d'autres 
+  informations en notre possession ou susceptibles d'entrer en notre possession).
 
-*   **Données d'utilisation** :
-    Les données d'utilisation sont recueillies automatiquement et sont générées soit par 
-    l'utilisation de l'application, soit par l'infrastructure de l'application proprement dite 
-    (par exemple, durée de consultation d'une page).
+- **Données d'utilisation** :
+  Les données d'utilisation sont recueillies automatiquement et sont générées soit par 
+  l'utilisation de l'application, soit par l'infrastructure de l'application proprement dite 
+  (par exemple, durée de consultation d'une page).
 
-*   **Cookies** :
-    Les cookies sont de petits fichiers enregistrés sur votre dispositif (ordinateur, tablette 
-    ou mobile).
+- **Cookies** :
+  Les cookies sont de petits fichiers enregistrés sur votre dispositif (ordinateur, tablette 
+  ou mobile).
 
 ## Collecte et utilisation des données
+
 Nous recueillons plusieurs types de données à différentes fins en vue de vous fournir notre 
 application et de l'améliorer.
 
 ### Types de données recueillies
 
 #### Données à caractère personnel
+
 Lorsque vous utilisez notre application, il est possible que nous vous demandions de nous 
 fournir certaines données personnelles nominatives qui peuvent servir à vous contacter ou à vous 
 identifier ("Données à caractère personnel"). Les données personnelles nominatives peuvent 
 comprendre, mais de manière non limitative :
-*   L'adresse e-mail.
-*   Le nom de famille et le prénom.
-*   Cookies et les données d'utilisation.
+
+- L'adresse e-mail.
+- Le nom de famille et le prénom.
+- Cookies et les données d'utilisation.
 
 #### Données d'utilisation
+
 Nous pouvons également recueillir des informations relatives au mode d'accès et d'utilisation de 
 l'application ("Données d'utilisation"). Ces données d'utilisation peuvent comprendre des 
 informations telles que l'adresse de protocole Internet (c.-à-d. l'adresse IP) de votre 
@@ -56,6 +61,7 @@ vous consultez, la date et l'heure de votre visite, le temps passé sur ces page
 identifiants uniques de dispositifs ainsi que d'autres données de diagnostic.
 
 #### Suivi et données de cookies
+
 Nous avons recours à des cookies et à d'autres technologies de suivi similaires pour effectuer 
 un suivi des activités effectuées dans notre application, et nous conservons certaines informations.
 
@@ -71,25 +77,36 @@ puissiez pas utiliser certains éléments de notre application.
 
 Exemples de cookies que nous utilisons :
 
-*   **Cookies de session.** Nous utilisons des cookies de session pour faire fonctionner notre 
-    application.
-*   **Cookies de préférences.** Nous utilisons des cookies de préférences pour mémoriser vos 
-    préférences et vos différents paramètres.
-*   **Cookies de sécurité.** Nous utilisons des cookies de sécurité pour des raisons de sécurité.
+- **Cookies de session.** Nous utilisons des cookies de session pour faire fonctionner notre 
+  application. 
+
+- **Cookies de préférences.** Nous utilisons des cookies de préférences pour mémoriser vos 
+  préférences et vos différents paramètres.
+  
+- **Cookies de sécurité.** Nous utilisons des cookies de sécurité pour des raisons de sécurité.
 
 ## Utilisation des données
-Le fournisseur utilise les données recueillies à des fins diverses :
-*   Pour fournir et assurer notre application.
-*   Pour vous faire part des changements apportés à notre application.
-*   Pour vous permettre d'utiliser les fonctions interactives de notre application quand vous le 
-    souhaitez.
-*   Pour assurer l'assistance client.
-*   Pour recueillir des données précieuses ou d'analyses qui nous permettront d'améliorer notre 
-    application.
-*   Pour contrôler l'utilisation de notre application.
-*   Pour détecter, prévenir et régler les problèmes techniques.
+
+Le fournisseur utilise les données recueillies à des diverses fins :
+
+- Pour fournir et assurer notre application.
+
+- Pour vous faire part des changements apportés à notre application.
+
+- Pour vous permettre d'utiliser les fonctions interactives de notre application quand vous le 
+  souhaitez.
+  
+- Pour assurer l'assistance client.
+
+- Pour recueillir des données précieuses ou d'analyses qui nous permettront d'améliorer notre 
+  application.
+  
+- Pour contrôler l'utilisation de notre application.
+
+- Pour détecter, prévenir et régler les problèmes techniques.
 
 ## Transfert des données
+
 Les informations vous concernant, notamment vos données à caractère personnel, peuvent être 
 transférées de votre région, province, pays, ou autre division territoriale vers des ordinateurs 
 – et stockées sur ces derniers – situés à un endroit où la législation relative à la protection 
@@ -109,23 +126,32 @@ organisation ni aucun pays à moins que des contrôles adéquats ne soient en pl
 ce qui concerne la sécurité de vos données et d'autres données personnelles.
 
 ## Communication de données
+
 ### Exigences légales
+
 Le fournisseur peut communiquer vos données à caractère personnel si elle estime de bonne foi 
 que cela est nécessaire pour :
-*   S'acquitter d'une obligation légale.
-*   Protéger et défendre les droits ou les biens du fournisseur.
-*   Prévenir d'éventuels actes répréhensibles ou enquêter sur de tels actes dans le cadre de 
-    l'application.
-*   Assurer la sécurité personnelle des utilisateurs, de l'application ou du public.
-*   Se protéger contre la responsabilité civile.
+
+- S'acquitter d'une obligation légale.
+
+- Protéger et défendre les droits ou les biens du fournisseur.
+
+- Prévenir d'éventuels actes répréhensibles ou enquêter sur de tels actes dans le cadre de 
+  l'application.
+
+- Assurer la sécurité personnelle des utilisateurs, de l'application ou du public.
+
+- Se protéger contre la responsabilité civile.
 
 ## Sécurité des données
+
 La sécurité de vos données nous tient à cœur. Toutefois, n'oubliez pas qu'aucune méthode de 
 transmission de données par Internet ou méthode de stockage électronique n'est sûre à 100 %. 
 Bien que nous nous efforcions d'utiliser des méthodes commercialement acceptables pour protéger 
 vos données à caractère personnel, nous ne pouvons pas leur garantir une sécurité absolue.
 
 ## Prestataires de services
+
 Nous pouvons faire appel à des sociétés tierces et à des tierces personnes pour faciliter la 
 prestation de notre service ("Prestataires de services"), assurer l'application en notre nom, 
 assurer des services liés à l'application ou nous aider à analyser la façon dont notre 
@@ -135,6 +161,7 @@ Ces tiers n'ont accès à vos données à caractère personnel que pour effectue
 nom et il leur est interdit de les communiquer ou de les utiliser à quelle qu'autre fin.
 
 ## Liens pointant vers d'autres sites
+
 Il se peut que notre application contienne des liens pointant vers d'autres sites que nous 
 n'exploitons pas. Si vous cliquez sur un lien de tiers, vous serez redirigé vers le site de ce 
 tiers. Nous vous recommandons vivement d'examiner la politique de confidentialité de chacun des 
@@ -144,6 +171,7 @@ Nous n'avons aucun contrôle sur le contenu, les politiques ou pratiques de conf
 sites ou services de tiers et déclinons toute responsabilité en ce qui les concerne.
 
 ## Vie privée des enfants
+
 Notre application ne s'adresse pas aux personnes de moins de 18 ans ("enfants").
 
 Nous ne recueillons pas sciemment de données personnelles nominatives auprès de personnes de 
@@ -153,6 +181,7 @@ nous avons recueilli des données à caractère personnel auprès d'enfants sans
 consentement parental, nous faisons le nécessaire pour supprimer ces informations de nos serveurs.
 
 ## Modifications de la présente politique de confidentialité
+
 Nous nous réservons le droit d'actualiser notre politique de confidentialité de temps à autre. 
 Nous vous informerons de toute modification en publiant la nouvelle politique de confidentialité 
 sur cette page.
@@ -166,5 +195,6 @@ prendre connaissance de toute modification. Les modifications apportées à la p
 de confidentialité prennent effet lorsqu'elles sont publiées sur cette page.
 
 ## Nous contacter
+
 Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter 
 par [courrier électronique](mailto:calculation@bibi.nu?subject=Calculation).

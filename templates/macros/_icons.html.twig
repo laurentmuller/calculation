@@ -178,28 +178,28 @@
 
 {% macro theme_switcher(element='button', class='', parameters=[]) %}
 {% from 'macros/_attributes.html.twig' import attributes %}
-{% set is_dark = theme_dark(app.request) %}
-{% set theme_dark = enum('App\\Enums\\Theme::DARK') %}
-{% set theme_light = enum('App\\Enums\\Theme::LIGHT') %}
-{% set theme_icon = is_dark ? theme_light.icon : theme_dark.icon %}
-{% set theme_text = is_dark ? theme_light : theme_dark %}
-{% set theme_title = is_dark ? theme_light.title : theme_dark.title %}
-{% set parameters = parameters|merge({
-    'class': (class ~ ' item-theme')|trim,
+{%- set is_dark = theme_dark(app.request) -%}
+{%- set theme_dark = enum('App\\Enums\\Theme::DARK') -%}
+{%- set theme_light = enum('App\\Enums\\Theme::LIGHT') -%}
+{%- set theme_icon = is_dark ? theme_light.icon : theme_dark.icon -%}
+{%- set theme_text = is_dark ? theme_light : theme_dark -%}
+{%- set theme_title = is_dark ? theme_light.title : theme_dark.title -%}
+{%- set parameters = parameters|merge({
     'title': theme_title|trans,
+    'class': (class ~ ' item-theme')|trim,
     'data-path': path('theme_save'),
-    'data-error': 'theme.error'|trans,
     'data-title': 'theme.title'|trans,
-    'data-light-css': asset_versioned(theme_light.css),
+    'data-error': 'theme.error'|trans,
+    'data-light-icon': theme_light.icon,
     'data-light-text': theme_light|trans,
     'data-light-title': theme_light.title|trans,
-    'data-light-icon': theme_light.icon,
-    'data-dark-css': asset_versioned(theme_dark.css),
+    'data-light-css': asset_versioned(theme_light.css),
+    'data-dark-icon': theme_dark.icon,
     'data-dark-text': theme_dark|trans,
     'data-dark-title': theme_dark.title|trans,
-    'data-dark-icon': theme_dark.icon})
-%}
+    'data-dark-css': asset_versioned(theme_dark.css)})
+-%}
 <{{ element }}{{ attributes(parameters) }}>
-    {{- _self.icon(theme_icon, theme_text|trans) -}}
+    {{- _self.icon(theme_icon, theme_text) -}}
 </{{ element }}>
 {% endmacro %}

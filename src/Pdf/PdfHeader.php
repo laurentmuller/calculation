@@ -103,7 +103,7 @@ class PdfHeader
 
     private function applyNameStyle(): void
     {
-        if (null === $this->nameStyle) {
+        if (!$this->nameStyle instanceof PdfStyle) {
             $this->nameStyle = PdfStyle::getDefaultStyle()->setFontBold()->setFontSize(8);
         }
         $this->nameStyle->apply($this->parent);
@@ -111,7 +111,7 @@ class PdfHeader
 
     private function applySmallStyle(): void
     {
-        if (null === $this->smallStyle) {
+        if (!$this->smallStyle instanceof PdfStyle) {
             $this->smallStyle = PdfStyle::getDefaultStyle()->setFontSize(8);
         }
         $this->smallStyle->apply($this->parent);
@@ -119,7 +119,7 @@ class PdfHeader
 
     private function applyTitleStyle(): void
     {
-        if (null === $this->titleStyle) {
+        if (!$this->titleStyle instanceof PdfStyle) {
             $this->titleStyle = PdfStyle::getDefaultStyle()->setFontBold()->setFontSize(10);
         }
         $this->titleStyle->apply($this->parent);
@@ -162,7 +162,7 @@ class PdfHeader
 
     private function isPrintAddress(): bool
     {
-        return null !== $this->customer && $this->customer->isPrintAddress();
+        return $this->customer instanceof CustomerInformation && $this->customer->isPrintAddress();
     }
 
     private function line1(float $printableWidth, bool $isAddress): void

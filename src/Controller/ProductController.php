@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\AbstractEntity;
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Form\Product\ProductType;
 use App\Interfaces\RoleInterface;
@@ -55,7 +56,7 @@ class ProductController extends AbstractEntityController
     public function add(Request $request): Response
     {
         $item = new Product();
-        if (null !== ($category = $this->getApplication()->getDefaultCategory())) {
+        if (($category = $this->getApplication()->getDefaultCategory()) instanceof Category) {
             $item->setCategory($category);
         }
 

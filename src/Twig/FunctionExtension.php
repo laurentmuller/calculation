@@ -161,7 +161,7 @@ final class FunctionExtension extends AbstractExtension
      */
     private function assetImageUser(?User $user, ?string $size = null, array $parameters = []): string|false
     {
-        if (null === $user) {
+        if (!$user instanceof User) {
             return false;
         }
         $asset = $this->helper->asset($user);

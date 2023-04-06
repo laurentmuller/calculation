@@ -39,7 +39,7 @@ trait DatabaseTrait
      */
     public static function tearDownAfterClass(): void
     {
-        if (null !== self::$database) {
+        if (self::$database instanceof Database) {
             self::$database->close();
             self::$database = Database::deleteDatabase();
             self::$database = null;

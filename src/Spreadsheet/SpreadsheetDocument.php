@@ -218,7 +218,7 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $title = self::checkSheetTitle($title);
         $this->getActiveSheet()->setTitle($title);
-        if (null !== $controller) {
+        if ($controller instanceof AbstractController) {
             $customer = $controller->getUserService()->getCustomer();
             $this->setHeaderFooter($title, $customer);
         }

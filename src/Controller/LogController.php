@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Log;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Model\LogFile;
@@ -137,7 +138,7 @@ class LogController extends AbstractController
     #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Request $request, int $id, LogService $service): Response
     {
-        if (null === $item = $service->getLog($id)) {
+        if (!($item = $service->getLog($id)) instanceof Log) {
             $this->warningTrans('log.show.not_found');
             $route = $this->getDefaultRoute($request);
 

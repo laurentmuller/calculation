@@ -14,6 +14,8 @@ namespace App\Controller;
 
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
+use App\Entity\CalculationState;
+use App\Entity\Product;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
 use App\Form\Dialog\EditItemDialogType;
@@ -71,10 +73,10 @@ class CalculationController extends AbstractEntityController
         $product = $application->getDefaultProduct();
         $quantity = $application->getDefaultQuantity();
         $item = new Calculation();
-        if (null !== $state) {
+        if ($state instanceof CalculationState) {
             $item->setState($state);
         }
-        if (null !== $product) {
+        if ($product instanceof Product) {
             $item->addProduct($product, $quantity);
             $this->service->updateTotal($item);
         }

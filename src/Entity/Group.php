@@ -190,7 +190,7 @@ class Group extends AbstractEntity implements TimestampableInterface
     {
         $margin = $this->findMargin($amount);
 
-        return null !== $margin ? $margin->getMargin() : 0;
+        return $margin instanceof GroupMargin ? $margin->getMargin() : 0;
     }
 
     /**

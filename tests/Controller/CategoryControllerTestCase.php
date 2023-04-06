@@ -65,12 +65,12 @@ class CategoryControllerTestCase extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (null === self::$group) {
+        if (!self::$group instanceof Group) {
             self::$group = new Group();
             self::$group->setCode('Test Parent');
             $this->addEntity(self::$group);
         }
-        if (null === self::$entity) {
+        if (!self::$entity instanceof Category) {
             self::$entity = new Category();
             self::$entity->setCode('Test Code')
                 ->setGroup(self::$group);

@@ -65,11 +65,12 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
             if ($child->is(...$names)) {
                 return $child;
             }
-            if ($child instanceof self) {
-                $chunk = $child->findChild(...$names);
-                if (null !== $chunk) {
-                    return $chunk;
-                }
+            if (!$child instanceof self) {
+                continue;
+            }
+            $chunk = $child->findChild(...$names);
+            if ($chunk  instanceof AbstractHtmlChunk) {
+                return $chunk;
             }
         }
 

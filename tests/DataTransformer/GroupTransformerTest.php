@@ -14,6 +14,7 @@ namespace App\Tests\DataTransformer;
 
 use App\Entity\Group;
 use App\Form\DataTransformer\GroupTransformer;
+use App\Repository\GroupRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -26,6 +27,7 @@ class GroupTransformerTest extends KernelTestCase
     use ServiceTrait;
 
     private ?Group $group = null;
+    private ?GroupRepository $repository = null;
     private ?GroupTransformer $transformer = null;
 
     /**
@@ -38,7 +40,7 @@ class GroupTransformerTest extends KernelTestCase
     {
         parent::setUp();
         $this->group = $this->createGroup();
-        $this->transformer = new GroupTransformer($this->getManager());
+        $this->transformer = new GroupTransformer($this->getRepository());
     }
 
     /**
@@ -51,6 +53,7 @@ class GroupTransformerTest extends KernelTestCase
     {
         $this->group = $this->deleteGroup();
         $this->transformer = null;
+        $this->repository = null;
         parent::tearDown();
     }
 
@@ -101,6 +104,9 @@ class GroupTransformerTest extends KernelTestCase
         self::assertSame($this->group, $actual);
     }
 
+    /**
+     * @psalm-suppress MixedArgument
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]
     public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
@@ -129,7 +135,7 @@ class GroupTransformerTest extends KernelTestCase
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function createGroup(): Group
+    private function createGroup(): Group
     {
         $group = new Group();
         $group->setCode('Test');
@@ -145,9 +151,9 @@ class GroupTransformerTest extends KernelTestCase
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function deleteGroup(): ?Group
+    private function deleteGroup(): null
     {
-        if (null !== $this->group) {
+        if ($this->group instanceof Group) {
             $manager = $this->getManager();
             $manager->remove($this->group);
             $manager->flush();
@@ -155,5 +161,16 @@ class GroupTransformerTest extends KernelTestCase
         }
 
         return $this->group;
+    }
+
+    private function getRepository(): GroupRepository
+    {
+        if (!$this->repository instanceof GroupRepository) {
+            /** @psalm-var GroupRepository $repository */
+            $repository = $this->getManager()->getRepository(Group::class);
+            $this->repository = $repository;
+        }
+
+        return $this->repository;
     }
 }

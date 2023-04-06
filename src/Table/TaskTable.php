@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Repository\CategoryRepository;
+use App\Repository\GroupRepository;
 use App\Repository\TaskRepository;
 use App\Utils\FileUtils;
 
@@ -26,17 +27,12 @@ class TaskTable extends AbstractCategoryItemTable
     /**
      * Constructor.
      */
-    public function __construct(TaskRepository $repository, CategoryRepository $categoryRepository)
-    {
-        parent::__construct($repository, $categoryRepository);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getCategories(): array
-    {
-        return $this->categoryRepository->getDropDownTasks();
+    public function __construct(
+        TaskRepository $repository,
+        CategoryRepository $categoryRepository,
+        GroupRepository $groupRepository
+    ) {
+        parent::__construct($repository, $categoryRepository, $groupRepository);
     }
 
     /**
@@ -53,5 +49,13 @@ class TaskTable extends AbstractCategoryItemTable
     protected function getDefaultOrder(): array
     {
         return ['name' => self::SORT_ASC];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getDropDownValues(): array
+    {
+        return $this->categoryRepository->getDropDownTasks();
     }
 }

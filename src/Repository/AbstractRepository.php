@@ -36,6 +36,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     /**
      * Add the given entity to the database.
+     *
+     * @param AbstractEntity $entity the entity to make managed and persistent
+     * @param bool           $flush  true to flush change to the database
+     *
+     * @see AbstractRepository::flush()
      */
     public function add(AbstractEntity $entity, bool $flush = true): void
     {
@@ -58,7 +63,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
-     * Flushes all changes to the database.
+     * Flushes all changes to objects that have been queued to the database.
+     *
+     * This effectively synchronizes the in-memory state of managed objects with the
+     * database.
      */
     public function flush(): void
     {
@@ -80,11 +88,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
-     * Gets sorted, distinct and not null values of the given column.
+     * Gets sorted, distinct and not null values for the given column.
      *
      * @param string  $field the field name (column) to get values for
      * @param ?string $value a value to search within the column or <code>null</code> for all
-     * @param int     $limit the maximum number of results to retrieve (the "limit") or <code>-1</code> for all
+     * @param int     $limit the maximum number of results to retrieve (the 'limit') or <code>-1</code> for all
      *
      * @return array an array, maybe empty; of matching values
      */
@@ -115,21 +123,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
-     * Gets the next identifier.
-     *
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
-    public function getNextId(): int
-    {
-        $maxId = (int) $this->createQueryBuilder('e')
-            ->select('MAX(e.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
-
-        return $maxId + 1;
-    }
-
-    /**
      * Gets the database search fields.
      *
      * The default implementation returns the alias and the field separated by a dot ('.') character.
@@ -147,7 +140,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Creates a search query.
      *
-     * @param array<string, string>  $sortedFields the sorted fields where key is the field name and value is the sort mode ("ASC" or "DESC")
+     * @param array<string, string>  $sortedFields the sorted fields where key is the field name and value is the sort mode ('ASC' or 'DESC')
      * @param array<Criteria|string> $criteria     the filter criteria (the where clause)
      * @param string                 $alias        the entity alias
      *
@@ -183,7 +176,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
-     * Gets the name of the single id field. Note that this only works on
+     * Gets the name of the single identifier field. Note that this only works on
      * entity classes that have a single-field primary key.
      *
      * @throws \Doctrine\ORM\Exception\ORMException if the class doesn't have an identifier, or it has a composite primary key

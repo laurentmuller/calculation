@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Form\DataTransformer;
 
 use App\Entity\Category;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\CategoryRepository;
 
 /**
  * Data transformer to convert a category to an identifier.
@@ -25,8 +25,8 @@ class CategoryTransformer extends AbstractEntityTransformer
     /**
      * Constructor.
      */
-    public function __construct(EntityManagerInterface $manager)
+    public function __construct(CategoryRepository $repository)
     {
-        parent::__construct($manager, Category::class);
+        parent::__construct($repository);
     }
 }

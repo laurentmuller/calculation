@@ -259,7 +259,7 @@ class SchemaService implements ServiceSubscriberInterface
 
     private function getConnection(): Connection
     {
-        if (null === $this->connection) {
+        if (!$this->connection instanceof Connection) {
             $this->connection = $this->manager->getConnection();
         }
 
@@ -339,7 +339,7 @@ class SchemaService implements ServiceSubscriberInterface
      */
     private function getSchemaManager(): AbstractSchemaManager
     {
-        if (null === $this->schemaManager) {
+        if (!$this->schemaManager instanceof AbstractSchemaManager) {
             $this->schemaManager = $this->getConnection()->createSchemaManager();
         }
 

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Log;
+use App\Model\LogFile;
 use App\Service\LogService;
 use App\Utils\FileUtils;
 use App\Utils\LogFilter;
@@ -122,7 +123,7 @@ class LogTable extends AbstractTable implements \Countable
     protected function handleQuery(DataQuery $query): DataResults
     {
         $results = parent::handleQuery($query);
-        if (null === $logFile = $this->service->getLogFile()) {
+        if (!($logFile = $this->service->getLogFile()) instanceof LogFile) {
             return $results->setStatus(Response::HTTP_PRECONDITION_FAILED);
         }
         if ($logFile->isEmpty()) {

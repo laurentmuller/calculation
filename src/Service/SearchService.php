@@ -446,7 +446,7 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function getResultSetMapping(): ResultSetMapping
     {
-        if (null === $this->mapping) {
+        if (!$this->mapping instanceof ResultSetMapping) {
             $this->mapping = new ResultSetMapping();
             foreach (self::COLUMNS as $name => $type) {
                 $this->mapping->addScalarResult($name, $name, $type);

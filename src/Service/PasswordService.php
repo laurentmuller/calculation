@@ -153,7 +153,7 @@ class PasswordService
     private function validateScoreResults(array $results): ?array
     {
         $score = $results['score'];
-        if (null === StrengthLevel::tryFrom($score)) {
+        if (!StrengthLevel::tryFrom($score) instanceof StrengthLevel) {
             $message = $this->translateInvalidLevel($score);
 
             return $this->getFalseResult($message, $results);
@@ -164,7 +164,7 @@ class PasswordService
 
     private function validateStrength(int $strength, array $results): ?array
     {
-        if (null === StrengthLevel::tryFrom($strength)) {
+        if (!StrengthLevel::tryFrom($strength) instanceof StrengthLevel) {
             $message = $this->translateInvalidLevel($strength);
 
             return $this->getFalseResult($message, \array_merge(['minimum' => $strength], $results));

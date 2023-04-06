@@ -126,7 +126,7 @@ trait RightsTrait
      */
     private function entityExists(string $name): bool
     {
-        return null !== EntityName::tryFromMixed($name);
+        return EntityName::tryFromMixed($name) instanceof EntityName;
     }
 
     /**

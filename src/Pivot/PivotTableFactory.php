@@ -91,7 +91,7 @@ class PivotTableFactory
         /** @psalm-var array $row */
         foreach ($this->dataset as $row) {
             // key
-            if (null !== $keyField) {
+            if ($keyField instanceof PivotField) {
                 $key = $keyField->getValue($row);
                 if (\in_array($key, $keys, true)) {
                     continue;
@@ -101,7 +101,7 @@ class PivotTableFactory
             $value = $dataField?->getValue($row);
             $currentCol = $this->setNodeValue($columnFields, $row, $table->getColumn(), $value);
             $currentRow = $this->setNodeValue($rowFields, $row, $table->getRow(), $value);
-            if (null !== ($cell = $table->findCellByNode($currentCol, $currentRow))) {
+            if (($cell = $table->findCellByNode($currentCol, $currentRow)) instanceof PivotCell) {
                 $cell->addValue($value);
             } else {
                 $aggregator = $this->createAggregator();
@@ -200,7 +200,7 @@ class PivotTableFactory
      */
     public function isValid(): bool
     {
-        return [] !== $this->dataset && [] !== $this->columnFields && [] !== $this->rowFields && null !== $this->dataField;
+        return [] !== $this->dataset && [] !== $this->columnFields && [] !== $this->rowFields && $this->dataField instanceof PivotField;
     }
 
     /**
@@ -357,7 +357,7 @@ class PivotTableFactory
     {
         foreach ($fields as $field) {
             $key = $field->getValue($row);
-            if (null === ($child = $node->find($key))) {
+            if (!($child = $node->find($key)) instanceof PivotNode) {
                 $aggregator = $this->createAggregator();
                 $title = (string) $field->getDisplayValue($key);
                 $node = $node
@@ -384,7 +384,7 @@ class PivotTableFactory
 
     private function updateDataField(PivotTable $table, ?PivotField $dataField): static
     {
-        if (null !== $dataField) {
+        if ($dataField instanceof PivotField) {
             $table->setDataField($dataField);
         }
 
@@ -393,7 +393,7 @@ class PivotTableFactory
 
     private function updateKeyField(PivotTable $table, ?PivotField $keyField): static
     {
-        if (null !== $keyField) {
+        if ($keyField instanceof PivotField) {
             $table->setKeyField($keyField);
         }
 

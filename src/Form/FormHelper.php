@@ -134,7 +134,7 @@ class FormHelper
     {
         $field = (string) $this->field;
         $this->builder->add($field, $type, $this->getOptions());
-        if (null !== $this->modelTransformer) {
+        if ($this->modelTransformer instanceof DataTransformerInterface) {
             $this->builder->get($field)->addModelTransformer($this->modelTransformer);
         }
 

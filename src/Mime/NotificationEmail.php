@@ -15,6 +15,7 @@ namespace App\Mime;
 use App\Enums\Importance;
 use App\Traits\TranslatorTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Mime\Header\HeaderInterface;
 use Symfony\Component\Mime\Header\Headers;
 use Symfony\Component\Mime\Part\AbstractPart;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -41,7 +42,7 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
      */
     public function attachFromUploadedFile(?UploadedFile $file): static
     {
-        if (null !== $file && $file->isValid()) {
+        if ($file instanceof UploadedFile && $file->isValid()) {
             $path = $file->getPathname();
             $name = $file->getClientOriginalName();
             $type = $file->getClientMimeType();
@@ -81,7 +82,7 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
         $headers = parent::getPreparedHeaders();
         $subject = $headers->get('Subject');
         $text = $this->translateSubject();
-        if (null !== $subject) {
+        if ($subject instanceof HeaderInterface) {
             $subject->setBody($text);
         } else {
             $headers->addTextHeader('Subject', $text);

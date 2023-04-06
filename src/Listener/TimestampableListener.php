@@ -19,6 +19,7 @@ use App\Traits\DisableListenerTrait;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -116,7 +117,7 @@ class TimestampableListener implements DisableListenerInterface
 
     private function getUserName(): string
     {
-        if (null !== ($user = $this->security->getUser())) {
+        if (($user = $this->security->getUser()) instanceof UserInterface) {
             return $user->getUserIdentifier();
         }
 

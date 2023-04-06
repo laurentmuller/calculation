@@ -59,7 +59,7 @@ class CustomerControllerTestCase extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (null === self::$entity) {
+        if (!self::$entity instanceof Customer) {
             self::$entity = new Customer();
             self::$entity->setCompany('Test Company');
             $this->addEntity(self::$entity);

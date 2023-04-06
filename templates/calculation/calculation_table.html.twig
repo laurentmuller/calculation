@@ -5,41 +5,49 @@
 {%- set title_icon = title_icon|default(ICON_CALCULATION) -%}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set attributes = attributes|default({})|merge({'danger-tooltip-selector': 'span.has-tooltip'}) -%}
-
+{%- set state_id = customData.state.id|default(0) -%}
+{%- set state_editable = customData.editable|default(0) -%}
+{%- set input_value = state_id ? state_id : state_editable -%}
+{# header actions #}
 {% block header_actions -%}
 {% if allow_add %}<a class="add-link p-0" href="{{ path('calculation_add', params) }}">{{ 'calculation.add.title'|trans }}</a>{% endif %}
 {%- endblock %}
-
+{# toolbar actions #}
 {% block toolbar_actions -%}
-{% if customData.states is defined and customData.states|length > 1 %}
-    {%- set state_param = constant('App\\Table\\CalculationTable::PARAM_STATE') -%}
-    {%- set state_id = customData.state.id|default(0) -%}
-    {% set data_default = 'calculation.fields.state'|trans %}
-    {% set text = customData.state ? customData.state.code : data_default %}
+{% if customData.dropdown is defined and customData.dropdown|length > 1 %}
+    {%- set data_default = 'calculation.fields.state'|trans -%}
+    {%- set text = data_default -%}
+    {% if state_id %}
+        {% set text = customData.state.code %}
+    {% elseif state_editable %}
+        {% set text = (state_editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable')|trans %}
+    {% endif %}
     <div class="input-group-append">
         {{ _self.output_dropdown_menu(
-            state_param,
+            'state',
             ICON_CALCULATION_STATE,
             text,
             'calculation.list.state_help',
-            state_id,
+            input_value,
             data_default
         ) }}
-        <div class="dropdown-menu" aria-labelledby="{{ state_param }}">
-            {{ _self.output_dropdown('state', 0, state_id, 'calculation.list.state_all_text'|trans, {}, 'filter-circle-xmark') }}
-            {% for editable, states in customData.states %}
-                {% set icon_title = editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable' %}
-                {% set icon_style = editable ? 'circle-check fa-lg far' : 'circle-xmark fa-lg far' %}
-                {{ _self.output_dropdown_header(icon_title, true, icon_style) }}
+        <div class="dropdown-menu" aria-labelledby="state">
+            {{ _self.output_dropdown('state', 0, input_value, 'calculation.list.state_all_text'|trans, {}, 'filter-circle-xmark') }}
+            {% for editable, states in customData.dropdown %}
+                {% set editable_value = editable == 1 ? 1 : -1 %}
+                {% set editable_icon = editable == 1 ? 'circle-check fa-lg far' : 'circle-xmark fa-lg far' %}
+                {% set editable_text = editable == 1 ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable' %}
+                {{ _self.item_separator() }}
+                {{ _self.output_dropdown('editable', editable_value, state_editable, editable_text|trans, {'data-parameter': 'stateEditable'}, editable_icon) }}
                 {% for state in states %}
-                    {{ _self.output_dropdown('state pl-5', state.id, state_id, state.code, {}, ICON_CALCULATION_STATE) }}
+                    {{ _self.output_dropdown('state pl-5', state.id, state_id, state.code, {'data-parameter': 'stateId'}, ICON_CALCULATION_STATE) }}
                 {% endfor %}
             {% endfor %}
         </div>
     </div>
 {% endif %}
 {%- endblock %}
-
+{# global actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('calculation_pdf'), 'calculation.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('calculation_excel'), 'calculation.list.excel_title', ICON_EXCEL) }}
@@ -48,25 +56,25 @@
     {{- _self.item_path(path('admin_archive', {'caller': path('calculation_table')}), 'archive.title', 'calendar-xmark far') }}
 {% endif %}
 {%- endblock %}
-
+{# edit actions #}
 {% block edit_actions -%}
 {{- _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', ICON_EDIT, edit_class ~ ' btn-calculation-edit') }}
 {{- _self.item_path(path('calculation_state', params), 'calculation.list.state_title', ICON_CALCULATION_STATE, 'btn-state') }}
 {%- endblock %}
-
+{#  delete actions #}
 {% block delete_actions -%}
 {{- _self.item_path(path('calculation_delete', params), 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
 {%- endblock %}
-
+{# add actions #}
 {% block add_actions -%}
 {{- _self.item_path(path('calculation_add', params), 'calculation.add.title', ICON_ADD, 'btn-add') }}
 {{- _self.item_path(path('calculation_clone', params), 'common.button_clone', ICON_COPY, 'btn-clone') }}
 {%- endblock %}
-
+{# show actions #}
 {% block show_actions -%}
 {{- _self.item_path(path('calculation_show', params), 'calculation.show.title', ICON_SHOW, show_class) }}
 {%- endblock %}
-
+{# other actions #}
 {% block other_actions -%}
 {% if allow_export %}
     {{- _self.item_separator() }}
@@ -74,7 +82,7 @@
     {{- _self.item_path_external(path('calculation_excel_id', params), 'calculation.list.excel_single_title', ICON_EXCEL, 'btn-calculation-excel') }}
 {% endif %}
 {%- endblock %}
-
+{# custom view header #}
 {% block custom_view_card_class ' text-border' %}
 {% block custom_view_header -%}
 {%- if row_edit -%}
@@ -85,7 +93,7 @@
     <span>%id%</span>
 {%- endif -%}
 {%- endblock %}
-
+{# custom view body #}
 {% block custom_view_body -%}
 {{ _self.property_value('%date% / %state.code%') }}
 {{ _self.property_value('%customer%') }}

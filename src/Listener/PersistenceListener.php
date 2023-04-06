@@ -74,7 +74,7 @@ class PersistenceListener implements DisableListenerInterface, EventSubscriber, 
      */
     public function postPersist(LifecycleEventArgs $args): void
     {
-        if (null !== $entity = $this->getEntity($args)) {
+        if (($entity = $this->getEntity($args)) instanceof AbstractEntity) {
             $id = $this->getId($entity, '.add.success', 'common.add_success');
             $params = $this->getParameters($entity);
             $this->successTrans($id, $params);
@@ -86,7 +86,7 @@ class PersistenceListener implements DisableListenerInterface, EventSubscriber, 
      */
     public function postRemove(LifecycleEventArgs $args): void
     {
-        if (null !== $entity = $this->getEntity($args)) {
+        if (($entity = $this->getEntity($args)) instanceof AbstractEntity) {
             $id = $this->getId($entity, '.delete.success', 'common.delete_success');
             $params = $this->getParameters($entity);
             $this->warningTrans($id, $params);
@@ -98,7 +98,7 @@ class PersistenceListener implements DisableListenerInterface, EventSubscriber, 
      */
     public function postUpdate(LifecycleEventArgs $args): void
     {
-        if (null !== ($entity = $this->getEntity($args)) && !$this->isLastLogin($args, $entity)) {
+        if (($entity = $this->getEntity($args)) instanceof AbstractEntity && !$this->isLastLogin($args, $entity)) {
             $id = $this->getId($entity, '.edit.success', 'common.edit_success');
             $params = $this->getParameters($entity);
             $this->successTrans($id, $params);

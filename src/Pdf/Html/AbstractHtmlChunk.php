@@ -87,7 +87,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     public function findParent(string ...$names): ?HtmlParentChunk
     {
         $parent = $this->parent;
-        while (null !== $parent && !$parent->is(...$names)) {
+        while ($parent instanceof HtmlParentChunk && !$parent->is(...$names)) {
             $parent = $parent->getParent();
         }
 
@@ -187,7 +187,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     public function hasStyle(): bool
     {
-        return null !== $this->style;
+        return $this->style instanceof HtmlStyle;
     }
 
     /**
@@ -299,7 +299,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     protected function applyFont(HtmlReport $report, ?PdfFont $font, callable $callback): void
     {
-        if (null !== $font) {
+        if ($font instanceof PdfFont) {
             $oldFont = $report->applyFont($font);
             $callback($report);
             $report->applyFont($oldFont);
@@ -398,14 +398,14 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
                     switch ($name) {
                         case 'color':
                             $color = PdfTextColor::create($value);
-                            if (null !== $color) {
+                            if ($color instanceof PdfTextColor) {
                                 $style->setTextColor($color);
                                 $update = true;
                             }
                             break;
                         case 'background-color':
                             $color = PdfFillColor::create($value);
-                            if (null !== $color) {
+                            if ($color instanceof PdfFillColor) {
                                 $style->setFillColor($color);
                                 $update = true;
                             }
@@ -493,7 +493,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
             default => null,
         };
 
-        if (null !== $color) {
+        if ($color instanceof PdfTextColor) {
             $style->setTextColor($color);
         }
 

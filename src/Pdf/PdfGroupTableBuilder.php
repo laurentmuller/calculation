@@ -124,7 +124,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     {
         if ($this->group->isKey() && !$this->inProgress) {
             $this->inProgress = true;
-            if (null === $this->groupListener || !$this->groupListener->outputGroup($this, $this->group)) {
+            if (!$this->groupListener instanceof PdfGroupListenerInterface || !$this->groupListener->outputGroup($this, $this->group)) {
                 $this->group->output($this);
             }
             $this->inProgress = false;

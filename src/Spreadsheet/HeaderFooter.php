@@ -19,121 +19,161 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  */
 class HeaderFooter
 {
-    final public const DEFAULT_FONT_SIZE = 11;
+    /**
+     * The center section prefix.
+     */
+    final public const CENTER_SECTION = '&C';
 
-    final public const PART_CENTER = '&C';
-    final public const PART_LEFT = '&L';
-    final public const PART_RIGHT = '&R';
+    /**
+     * The default font size.
+     */
+    final public const DEFAULT_FONT_SIZE = 9;
 
-    private String $textCenter = '';
-    private String $textLeft = '';
-    private String $textRight = '';
+    /**
+     * The left section prefix.
+     */
+    final public const LEFT_SECTION = '&L';
+
+    /**
+     * The right section prefix.
+     */
+    final public const RIGHT_SECTION = '&R';
+
+    private const DATE_AND_TIME = '&D - &T';
+
+    private const INITIAL_FONT_SIZE = 11;
+
+    private const PAGE_AND_PAGES = 'Page &P / &N';
+
+    private String $centerText = '';
+    private String $leftText = '';
+    private String $rightText = '';
 
     /**
      * Constructor.
      *
-     * @param bool $isHeader true to apply to the work sheet header, false to apply to the work sheet footer
+     * @param bool $isHeader true to apply to the worksheet header, false for worksheet footer
      */
-    public function __construct(private readonly bool $isHeader, private readonly int $fontSize = self::DEFAULT_FONT_SIZE)
+    private function __construct(private readonly bool $isHeader, private readonly int $fontSize)
     {
     }
 
     /**
-     * Adds the given text to the center.
+     * Add the given text to the center section.
+     *
+     * @param ?string $text the text to add
+     * @param bool    $bold true to use bold font
      */
-    public function addCenter(string $text, bool $bold = false, bool $clean = true): self
+    public function addCenter(?string $text, bool $bold = false): self
     {
-        return $this->updateText($this->textCenter, $text, $bold, $clean);
+        return $this->updateText($this->centerText, $text, $bold, true);
     }
 
     /**
-     * Add the date and the time to the given part.
+     * Add the current date and time to the given section.
      */
-    public function addDateTime(string $part = self::PART_RIGHT): self
+    public function addDateTime(string $part = self::RIGHT_SECTION): self
     {
-        $text = '&D - &T';
-
         return match ($part) {
-            self::PART_LEFT => $this->addLeft($text, false, false),
-            self::PART_CENTER => $this->addCenter($text, false, false),
-            default => $this->addRight($text, false, false),
+            self::LEFT_SECTION => $this->updateText($this->leftText, self::DATE_AND_TIME),
+            self::CENTER_SECTION => $this->updateText($this->centerText, self::DATE_AND_TIME),
+            default => $this->updateText($this->rightText, self::DATE_AND_TIME),
         };
     }
 
     /**
-     * Adds the given text to the left.
+     * Add the given text to the left section.
+     *
+     * @param ?string $text the text to add
+     * @param bool    $bold true to use bold font
      */
-    public function addLeft(string $text, bool $bold = false, bool $clean = true): self
+    public function addLeft(?string $text, bool $bold = false): self
     {
-        return $this->updateText($this->textLeft, $text, $bold, $clean);
+        return $this->updateText($this->leftText, $text, $bold, true);
     }
 
     /**
-     * Add the current page and the total pages to the given part.
+     * Add the current page and total pages to the given section.
      */
-    public function addPages(string $part = self::PART_LEFT): self
+    public function addPages(string $part = self::LEFT_SECTION): self
     {
-        $text = 'Page &P / &N';
-
         return match ($part) {
-            self::PART_CENTER => $this->addCenter($text, false, false),
-            self::PART_RIGHT => $this->addRight($text, false, false),
-            default => $this->addLeft($text, false, false),
+            self::CENTER_SECTION => $this->updateText($this->centerText, self::PAGE_AND_PAGES),
+            self::RIGHT_SECTION => $this->updateText($this->rightText, self::PAGE_AND_PAGES),
+            default => $this->updateText($this->leftText, self::PAGE_AND_PAGES),
         };
     }
 
     /**
-     * Adds the given text to the right.
+     * Add the given text to the right section.
+     *
+     * @param ?string $text the text to add
+     * @param bool    $bold true to use bold font
      */
-    public function addRight(string $text, bool $bold = false, bool $clean = true): self
+    public function addRight(?string $text, bool $bold = false): self
     {
-        return $this->updateText($this->textRight, $text, $bold, $clean);
+        return $this->updateText($this->rightText, $text, $bold, true);
     }
 
     /**
-     * Apply this content to the given work sheet.
+     * Apply this content to the given worksheet.
      */
     public function apply(Worksheet $sheet): self
     {
-        $content = $this->getContent();
         $headerFooter = $sheet->getHeaderFooter();
         if ($this->isHeader) {
-            $headerFooter->setOddHeader($content);
+            $headerFooter->setOddHeader($this->getContent());
         } else {
-            $headerFooter->setOddFooter($content);
+            $headerFooter->setOddFooter($this->getContent());
         }
 
         return $this;
     }
 
     /**
-     * Gets all content.
+     * Create a footer instance.
      */
-    public function getContent(): string
+    public static function footer(int $fontSize = self::DEFAULT_FONT_SIZE): self
+    {
+        return new self(false, $fontSize);
+    }
+
+    /**
+     * Create a header instance.
+     */
+    public static function header(int $fontSize = self::DEFAULT_FONT_SIZE): self
+    {
+        return new self(true, $fontSize);
+    }
+
+    /**
+     * Gets content of all sections.
+     */
+    private function getContent(): string
     {
         $content = '';
-        if (!empty($this->textLeft)) {
-            $content .= self::PART_LEFT . $this->textLeft;
+        if (!empty($this->leftText)) {
+            $content .= self::LEFT_SECTION . $this->leftText;
         }
-        if (!empty($this->textCenter)) {
-            $content .= self::PART_CENTER . $this->textCenter;
+        if (!empty($this->centerText)) {
+            $content .= self::CENTER_SECTION . $this->centerText;
         }
-        if (!empty($this->textRight)) {
-            $content .= self::PART_RIGHT . $this->textRight;
+        if (!empty($this->rightText)) {
+            $content .= self::RIGHT_SECTION . $this->rightText;
         }
 
         return $content;
     }
 
-    private function updateText(string &$value, string $text, bool $bold, bool $clean): self
+    private function updateText(string &$value, ?string $text, bool $bold = false, bool $clean = false): self
     {
-        if ('' === $text) {
+        if (null === $text || '' === $text) {
             return $this;
         }
-        if (!empty($value)) {
+        if ('' !== $value) {
             $value .= "\n";
         }
-        if (self::DEFAULT_FONT_SIZE !== $this->fontSize) {
+        if (self::INITIAL_FONT_SIZE !== $this->fontSize) {
             $value .= \sprintf('&%d', $this->fontSize);
         }
         if ($bold) {

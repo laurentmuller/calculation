@@ -32,6 +32,9 @@ enum HtmlBootstrapColors: string
     case SUCCESS = '#28A745';
     case WARNING = '#FFC107';
 
+    /**
+     * Gets this value as draw color.
+     */
     public function getDrawColor(): PdfDrawColor
     {
         if (!($color = PdfDrawColor::create($this->value)) instanceof PdfDrawColor) {
@@ -41,6 +44,9 @@ enum HtmlBootstrapColors: string
         return $color;
     }
 
+    /**
+     * Gets this value as fill color.
+     */
     public function getFillColor(): PdfFillColor
     {
         if (!($color = PdfFillColor::create($this->value)) instanceof PdfFillColor) {
@@ -50,6 +56,17 @@ enum HtmlBootstrapColors: string
         return $color;
     }
 
+    /**
+     * Gets this value for spreadsheet.
+     */
+    public function getSpreadsheetColor(): string
+    {
+        return \substr($this->value, 1);
+    }
+
+    /**
+     * Gets this value as text color.
+     */
     public function getTextColor(): PdfTextColor
     {
         if (!($color = PdfTextColor::create($this->value)) instanceof PdfTextColor) {

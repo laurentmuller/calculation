@@ -30,9 +30,9 @@ class ProductsDocument extends AbstractArrayDocument
     {
         $this->start('product.list.title');
         $row = $this->setHeaderValues([
+            'product.fields.description' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.group' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.category' => Alignment::HORIZONTAL_GENERAL,
-            'product.fields.description' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.price' => Alignment::HORIZONTAL_RIGHT,
             'product.fields.unit' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.supplier' => Alignment::HORIZONTAL_GENERAL,
@@ -40,9 +40,9 @@ class ProductsDocument extends AbstractArrayDocument
         $this->setFormatPrice(4);
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
+                $entity->getDescription(),
                 $entity->getGroupCode(),
                 $entity->getCategoryCode(),
-                $entity->getDescription(),
                 $entity->getPrice(),
                 $entity->getUnit(),
                 $entity->getSupplier(),

@@ -30,19 +30,24 @@ class Log extends AbstractEntity
     final public const USER_FIELD = 'user';
 
     /**
-     * The application channel.
+     * The long application channel name.
      */
-    private const APP_CHANNEL = 'app';
+    private const APP_CHANNEL_LONG = 'application';
 
     /**
-     * The doctrine channel.
+     * The short application channel name.
+     */
+    private const APP_CHANNEL_SHORT = 'app';
+
+    /**
+     * The doctrine channel name.
      */
     private const DOCTRINE_CHANNEL = 'doctrine';
 
     #[Assert\NotBlank]
     #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
-    private string $channel = 'application';
+    private string $channel = self::APP_CHANNEL_LONG;
 
     #[ORM\Column(nullable: true)]
     private ?array $context = null;
@@ -210,6 +215,14 @@ class Log extends AbstractEntity
     }
 
     /**
+     * Gets the creation date as the Unix timestamp.
+     */
+    public function getTimestamp(): int
+    {
+        return $this->getCreatedAt()->getTimestamp();
+    }
+
+    /**
      * Gets the user identifier.
      */
     public function getUser(): ?string
@@ -240,8 +253,8 @@ class Log extends AbstractEntity
      */
     public function setChannel(string $channel): self
     {
-        if (self::APP_CHANNEL === $channel) {
-            $channel = 'application';
+        if (self::APP_CHANNEL_SHORT === $channel) {
+            $channel = self::APP_CHANNEL_LONG;
         }
         $this->channel = \strtolower($channel);
 

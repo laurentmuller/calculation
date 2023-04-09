@@ -58,8 +58,6 @@ abstract class AbstractDocument extends SpreadsheetDocument
      */
     protected function start(string $title, bool $landscape = false): static
     {
-        $this->initialize($this->controller, $title, $landscape);
-
-        return $this;
+        return $this->initialize($this->controller, $title, $landscape);
     }
 }

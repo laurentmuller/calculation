@@ -639,7 +639,7 @@ class FormHelper
      *                            listeners with a lower priority.
      *
      * @psalm-param FormEvents::PRE_SUBMIT|FormEvents::SUBMIT|FormEvents::POST_SUBMIT|FormEvents::PRE_SET_DATA|FormEvents::POST_SET_DATA $eventName
-     * @psalm-param callable(PostSetDataEvent): void|callable(PostSubmitEvent): void|callable(PreSetDataEvent): void|callable(PreSubmitEvent): void|callable(SubmitEvent): void $listener
+     * @psalm-param (callable(PostSetDataEvent): void)|(callable(PostSubmitEvent): void)|(callable(PreSetDataEvent): void)|(callable(PreSubmitEvent): void)|(callable(SubmitEvent): void) $listener
      */
     public function listener(string $eventName, callable $listener, int $priority = 0): self
     {

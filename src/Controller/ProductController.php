@@ -105,7 +105,7 @@ class ProductController extends AbstractEntityController
     #[Route(path: '/excel', name: 'product_excel')]
     public function excel(ProductRepository $repository): SpreadsheetResponse
     {
-        $entities = $repository->findAllByGroup();
+        $entities = $repository->findAllByDescription();
         if ([] === $entities) {
             $message = $this->trans('product.list.empty');
             throw $this->createNotFoundException($message);

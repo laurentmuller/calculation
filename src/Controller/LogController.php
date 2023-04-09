@@ -16,7 +16,7 @@ use App\Entity\Log;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Model\LogFile;
-use App\Report\LogReport;
+use App\Report\LogsReport;
 use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
 use App\Table\LogTable;
@@ -115,7 +115,7 @@ class LogController extends AbstractController
         if (!$logFile instanceof LogFile || $logFile->isEmpty()) {
             return $this->getEmptyResponse();
         }
-        $doc = new LogReport($this, $logFile);
+        $doc = new LogsReport($this, $logFile);
 
         return $this->renderPdfDocument($doc);
     }

@@ -66,7 +66,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * The boolean formats.
      *
-     * @var string[]
+     * @var array<string, string>
      */
     private array $booleanFormats = [];
 
@@ -85,26 +85,9 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Validate the spreed sheet title.
+     * Create worksheet, set title and add it to this spreadsheet.
      *
-     * @param string $title the title to validate
-     *
-     * @return string a valid title
-     */
-    public static function checkSheetTitle(string $title): string
-    {
-        /** @var string[] $invalidChars */
-        $invalidChars = Worksheet::getInvalidCharacters();
-        $title = \str_replace($invalidChars, '', $title);
-        if (StringHelper::countCharacters($title) > Worksheet::SHEET_TITLE_MAXIMUM_LENGTH) {
-            return StringHelper::substring($title, 0, Worksheet::SHEET_TITLE_MAXIMUM_LENGTH);
-        }
-
-        return $title;
-    }
-
-    /**
-     * Create worksheet, set title and add it to this workbook. The created sheet is activated.
+     * The created sheet is activated.
      *
      * @param ?string $title      the title of the worksheet
      * @param ?int    $sheetIndex the  index where worksheet should go (0,1,..., or null for last)
@@ -117,7 +100,7 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $sheet = parent::createSheet($sheetIndex);
         if (null !== $title) {
-            $sheet->setTitle(self::checkSheetTitle($title));
+            $sheet->setTitle($this->validateSheetTitle($title));
         }
         $this->setActiveSheetIndex($sheetIndex ?? $this->getSheetCount() - 1);
         $customer = $controller->getUserService()->getCustomer();
@@ -166,37 +149,9 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Initialize this service.
-     *
-     * @param AbstractController $controller the controller to get properties
-     * @param string             $title      the spreadsheet title to translate
-     * @param bool               $landscape  true to set landscape orientation, false for default (portrait)
-     */
-    public function initialize(AbstractController $controller, string $title, bool $landscape = false): static
-    {
-        $customer = $controller->getUserService()->getCustomer();
-        $application = $controller->getApplicationName();
-        $username = $controller->getUserIdentifier();
-        $title = $this->trans($title);
-        $this->setHeaderFooter($title, $customer)
-            ->setTitle($title)
-            ->setActiveTitle($title)
-            ->setCompany($customer->getName())
-            ->setUserName($username)
-            ->setCategory($application)
-            ->setPrintGridlines();
-
-        if ($landscape) {
-            return $this->setPageLandscape();
-        }
-
-        return $this;
-    }
-
-    /**
      * Set merge on a cell range by using cell coordinates.
      *
-     * @param int  $startColumn the index of the first column (A = 1)
+     * @param int  $startColumn the index of the first column ('A' = First column)
      * @param int  $endColumn   the index of the last column
      * @param int  $startRow    the index of first row (1 = First row)
      * @param ?int $endRow      the index of the last cell or null to use the start row
@@ -211,12 +166,13 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the title of the active sheet. If the controller is not null,
-     * the header and footer are also updated.
+     * Sets the title of the active sheet.
+     *
+     * If this parent's controller is not null, the header and footer are also updated.
      */
     public function setActiveTitle(string $title, ?AbstractController $controller = null): static
     {
-        $title = self::checkSheetTitle($title);
+        $title = $this->validateSheetTitle($title);
         $this->getActiveSheet()->setTitle($title);
         if ($controller instanceof AbstractController) {
             $customer = $controller->getUserService()->getCustomer();
@@ -229,7 +185,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Set the auto-size for the given columns.
      *
-     * @param int ...$columnIndexes the columns indexes (A = 1)
+     * @param int ...$columnIndexes the columns indexes ('A' = First column)
      */
     public function setAutoSize(int ...$columnIndexes): static
     {
@@ -295,7 +251,7 @@ class SpreadsheetDocument extends Spreadsheet
      * Sets image at the given coordinate.
      *
      * @param string $path        the image path
-     * @param int    $columnIndex the column index (A = 1)
+     * @param int    $columnIndex the column index ('A' = First column)
      * @param int    $rowIndex    the row index (1 = First row)
      * @param int    $width       the image width
      * @param int    $height      the image height
@@ -312,10 +268,12 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Set a cell value by using numeric cell coordinates.
      *
-     * @param Worksheet $sheet       the active work sheet
-     * @param int       $columnIndex the column index of the cell (A = 1)
-     * @param int       $rowIndex    the row index of the cell (1 = First row)
-     * @param mixed     $value       the value of the cell
+     * Do nothing if the value is null or empty('').
+     *
+     * @param Worksheet $sheet       the work sheet to write value to
+     * @param int       $columnIndex the column index ('A' = First column)
+     * @param int       $rowIndex    the row index (1 = First row)
+     * @param mixed     $value       the value to set
      */
     public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, mixed $value): static
     {
@@ -323,7 +281,7 @@ class SpreadsheetDocument extends Spreadsheet
             if ($value instanceof \DateTimeInterface) {
                 $value = Date::PHPToExcel($value);
             } elseif (\is_bool($value)) {
-                $value = $value ? 1 : 0;
+                $value = (int) $value;
             }
             $sheet->setCellValue([$columnIndex, $rowIndex], $value);
         }
@@ -334,7 +292,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Add conditionals to the given column.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index ('A' = First column)
      */
     public function setColumnConditional(int $columnIndex, Conditional ...$conditionals): static
     {
@@ -350,7 +308,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Set the width for the given column.
      *
-     * @param int  $columnIndex the column index (A = 1)
+     * @param int  $columnIndex the column index ('A' = First column)
      * @param int  $width       the width to set
      * @param bool $wrapText    true to wrap text
      *
@@ -404,7 +362,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the foreground color for the given column.
      *
-     * @param int    $columnIndex   the column index (A = 1)
+     * @param int    $columnIndex   the column index ('A' = First column)
      * @param string $color         the hexadecimal color or an empty string ("") for black color
      * @param bool   $includeHeader true to set color for all rows; false to skip the first row
      */
@@ -429,7 +387,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the format for the given column.
      *
-     * @param int    $columnIndex the column index (A = 1)
+     * @param int    $columnIndex the column index ('A' = First column)
      * @param string $format      the format to set
      */
     public function setFormat(int $columnIndex, string $format): static
@@ -444,7 +402,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the amount format ('#,##0.00') for the given column.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index ('A' = First column)
      */
     public function setFormatAmount(int $columnIndex): static
     {
@@ -454,7 +412,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the boolean format for the given column.
      *
-     * @param int    $columnIndex the column index (A = 1)
+     * @param int    $columnIndex the column index ('A' = First column)
      * @param string $true        the value to display when <code>true</code>
      * @param string $false       the value to display when <code>false</code>
      * @param bool   $translate   <code>true</code> to translate values
@@ -481,7 +439,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the date format ('dd/mm/yyyy') for the given column.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index ('A' = First column)
      */
     public function setFormatDate(int $columnIndex): static
     {
@@ -491,7 +449,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the date time format ('dd/mm/yyyy hh:mm') for the given column.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index ('A' = First column)
      */
     public function setFormatDateTime(int $columnIndex): static
     {
@@ -501,7 +459,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the identifier format ('000000') for the given column.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index ('A' = First column)
      */
     public function setFormatId(int $columnIndex): static
     {
@@ -511,7 +469,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the integer format ('#,##0') for the given column.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index ('A' = First column)
      */
     public function setFormatInt(int $columnIndex): static
     {
@@ -521,7 +479,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the percent format for the given column.
      *
-     * @param int  $columnIndex the column index (A = 1)
+     * @param int  $columnIndex the column index ('A' = First column)
      * @param bool $decimals    true to display 2 decimals ('0.00%'), false if none ('0%').
      */
     public function setFormatPercent(int $columnIndex, bool $decimals = false): static
@@ -530,10 +488,11 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the price format ('#,##0.00') for the given column and with the red color
-     * when value is smaller than or equal to 0.
+     * Sets the price format ('#,##0.00') for the given column.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * The red color is used when values are smaller than or equal to 0.
+     *
+     * @param int $columnIndex the column index ('A' = First column)
      */
     public function setFormatPrice(int $columnIndex): static
     {
@@ -545,42 +504,11 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the translated 'Yes/No' boolean format for the given column.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index ('A' = First column)
      */
     public function setFormatYesNo(int $columnIndex): static
     {
         return $this->setFormatBoolean($columnIndex, 'common.value_true', 'common.value_false', true);
-    }
-
-    /**
-     * Sets the header and footer texts.
-     */
-    public function setHeaderFooter(?string $title, CustomerInformation $customer): static
-    {
-        $sheet = $this->getActiveSheet();
-        $pageMargins = $sheet->getPageMargins();
-        $header = new HeaderFooter(true, 9);
-        if ($customer->isPrintAddress()) {
-            $header->addLeft($customer->getName() ?? '', true)
-                ->addLeft($customer->getAddress() ?? '')
-                ->addLeft($customer->getZipCity() ?? '')
-                ->addCenter($title ?? '', true)
-                ->addRight($customer->getTranslatedPhone($this))
-                ->addRight($customer->getTranslatedFax($this))
-                ->addRight($customer->getEmail() ?? '');
-            $pageMargins->setTop(self::HEADER_CUSTOMER_MARGIN);
-        } else {
-            $header->addLeft($title ?? '', true)
-                ->addRight($customer->getName() ?? '', true);
-            $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
-        }
-        $header->apply($sheet);
-        $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
-        $footer = new HeaderFooter(false, 9);
-        $footer->addPages()->addDateTime()
-            ->apply($sheet);
-
-        return $this;
     }
 
     /**
@@ -589,7 +517,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param array $headers     the headers where key is the text to translate and value is the
      *                           horizontal alignment or if is an array, the horizontal and the vertical
      *                           alignments
-     * @param int   $columnIndex the starting column index (A = 1)
+     * @param int   $columnIndex the starting column index ('A' = First column)
      * @param int   $rowIndex    the row index (1 = First row)
      *
      * @return int this function return always 2
@@ -671,7 +599,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the orientation of the active sheet to landscape.
+     * Sets landscape orientation for the active sheet.
      */
     public function setPageLandscape(): static
     {
@@ -697,7 +625,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the orientation of the active sheet to portrait.
+     * Sets portrait orientation for the active sheet.
      */
     public function setPagePortrait(): static
     {
@@ -741,7 +669,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int   $rowIndex    the row index (1 = First row)
      * @param array $values      the values to set
-     * @param int   $columnIndex the starting column index (A = 1)
+     * @param int   $columnIndex the starting column index ('A' = First column)
      */
     public function setRowValues(int $rowIndex, array $values, int $columnIndex = 1): static
     {
@@ -769,7 +697,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets selected cell of the active sheet.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index (A = First column)
      * @param int $rowIndex    the row index (1 = First row)
      */
     public function setSelectedCellByColumnAndRow(int $columnIndex, int $rowIndex): static
@@ -782,7 +710,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the shrink to fit for the given column.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index ('A' = First column)
      */
     public function setShrinkToFit(int $columnIndex): static
     {
@@ -837,7 +765,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Set wrap text for the given column. The auto-size is automatically disabled.
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index ('A' = First column)
      */
     public function setWrapText(int $columnIndex): static
     {
@@ -852,7 +780,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Get the string coordinate from the given column and row index (eg. 2,10 => 'B10').
      *
-     * @param int $columnIndex the column index (A = 1)
+     * @param int $columnIndex the column index ('A' = First column)
      * @param int $rowIndex    the row index (1 = First row)
      */
     public function stringFromColumnAndRowIndex(int $columnIndex, int $rowIndex): string
@@ -865,10 +793,85 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Get the string from the given column index.
      *
-     * @param int $columnIndex the column index (1 = A)
+     * @param int $columnIndex the column index ('A' = First column)
      */
     public function stringFromColumnIndex(int $columnIndex): string
     {
         return Coordinate::stringFromColumnIndex($columnIndex);
+    }
+
+    /**
+     * Initialize this spreedsheet.
+     *
+     * @param AbstractController $controller the controller to get properties
+     * @param string             $title      the spreadsheet title to translate
+     * @param bool               $landscape  true to set landscape orientation, false for default (portrait)
+     */
+    protected function initialize(AbstractController $controller, string $title, bool $landscape = false): static
+    {
+        $customer = $controller->getUserService()->getCustomer();
+        $application = $controller->getApplicationName();
+        $username = $controller->getUserIdentifier();
+        $title = $this->trans($title);
+        $this->setHeaderFooter($title, $customer)
+            ->setTitle($title)
+            ->setActiveTitle($title)
+            ->setCompany($customer->getName())
+            ->setUserName($username)
+            ->setCategory($application)
+            ->setPrintGridlines();
+
+        if ($landscape) {
+            return $this->setPageLandscape();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets the header and footer texts.
+     */
+    private function setHeaderFooter(?string $title, CustomerInformation $customer): static
+    {
+        $sheet = $this->getActiveSheet();
+        $pageMargins = $sheet->getPageMargins();
+        $header = HeaderFooter::header();
+        if ($customer->isPrintAddress()) {
+            $header->addLeft($customer->getName(), true)
+                ->addLeft($customer->getAddress())
+                ->addLeft($customer->getZipCity())
+                ->addCenter($title, true)
+                ->addRight($customer->getTranslatedPhone($this))
+                ->addRight($customer->getTranslatedFax($this))
+                ->addRight($customer->getEmail());
+            $pageMargins->setTop(self::HEADER_CUSTOMER_MARGIN);
+        } else {
+            $header->addLeft($title, true)
+                ->addRight($customer->getName(), true);
+            $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
+        }
+        $header->apply($sheet);
+        $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
+        HeaderFooter::footer()
+            ->addPages()
+            ->addDateTime()
+            ->apply($sheet);
+
+        return $this;
+    }
+
+    /**
+     * Validate the worksheet title.
+     */
+    private function validateSheetTitle(string $title): string
+    {
+        /** @var string[] $invalidChars */
+        $invalidChars = Worksheet::getInvalidCharacters();
+        $title = \str_replace($invalidChars, '', $title);
+        if (StringHelper::countCharacters($title) > Worksheet::SHEET_TITLE_MAXIMUM_LENGTH) {
+            return StringHelper::substring($title, 0, Worksheet::SHEET_TITLE_MAXIMUM_LENGTH);
+        }
+
+        return $title;
     }
 }

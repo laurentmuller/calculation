@@ -36,7 +36,7 @@ use Psr\Log\LogLevel;
 /**
  * Report for the log.
  */
-class LogReport extends AbstractReport implements PdfDrawCellBorderInterface
+class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
 {
     /**
      * The borderline width.
@@ -56,7 +56,7 @@ class LogReport extends AbstractReport implements PdfDrawCellBorderInterface
     /**
      * The border colors.
      *
-     * @var array<PdfDrawColor|null>
+     * @var array<string, ?PdfDrawColor>
      */
     private array $colors = [];
 
@@ -136,6 +136,13 @@ class LogReport extends AbstractReport implements PdfDrawCellBorderInterface
         return $this->outputLogs($logFile->getLogs());
     }
 
+    private function addDateBookmark(int $date): void
+    {
+        $start_text = FormatUtils::formatDateTime($date + 3600, \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
+        $end_text = FormatUtils::formatTime($date, \IntlDateFormatter::SHORT);
+        $this->addBookmark($start_text . ' - ' . $end_text);
+    }
+
     private function cellTitle(): void
     {
         PdfFont::default()->bold()->apply($this);
@@ -186,6 +193,15 @@ class LogReport extends AbstractReport implements PdfDrawCellBorderInterface
         }
 
         return $this->colors[$level];
+    }
+
+    private function getShortDate(Log $log): int
+    {
+        // remove minutes and seconds
+        $timestamp = $log->getTimestamp();
+        $timestamp -= ($timestamp % 3600);
+
+        return $timestamp - $timestamp % 60;
     }
 
     private function outputCards(): void
@@ -254,6 +270,7 @@ class LogReport extends AbstractReport implements PdfDrawCellBorderInterface
      */
     private function outputLogs(array $logs): bool
     {
+        $date = 0;
         $this->drawCards = false;
         $this->cellTitle();
         $table = PdfTableBuilder::instance($this)
@@ -267,6 +284,11 @@ class LogReport extends AbstractReport implements PdfDrawCellBorderInterface
             )->outputHeaders();
         foreach ($logs as $log) {
             $this->level = $log->getLevel();
+            $newDate = $this->getShortDate($log);
+            if ($date !== $newDate) {
+                $date = $newDate;
+                $this->addDateBookmark($date);
+            }
             $table->addRow(
                 $log->getLevel(true),
                 $log->getChannel(true),

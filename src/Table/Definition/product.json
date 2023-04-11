@@ -10,12 +10,12 @@
         "class": "f-400 text-ellipsis"
     },
     {
-        "field": "group.code",
+        "field": "groupCode",
         "title": "product.fields.group",
         "class": "text-group"
     },
     {
-        "field": "category.code",
+        "field": "categoryCode",
         "title": "product.fields.category",
         "class": "text-category"
     },

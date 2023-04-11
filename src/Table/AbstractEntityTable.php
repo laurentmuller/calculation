@@ -17,6 +17,7 @@ use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
@@ -28,6 +29,11 @@ use Doctrine\ORM\Tools\Pagination\CountWalker;
  */
 abstract class AbstractEntityTable extends AbstractTable
 {
+    /**
+     * The group by part name of the query.
+     */
+    private const GROUP_BY_PART = 'groupBy';
+
     /**
      * The join part name of the query.
      */
@@ -79,12 +85,11 @@ abstract class AbstractEntityTable extends AbstractTable
     protected function countFiltered(QueryBuilder $builder, string $alias): int
     {
         $field = $this->repository->getSingleIdentifierFieldName();
-        $select = "COUNT($alias.$field)";
+        $builder = $this->updateJoin(clone $builder)
+            ->resetDQLPart(self::GROUP_BY_PART)
+            ->select("COUNT($alias.$field)");
 
-        return (int) (clone $builder)
-            ->select($select)
-            ->getQuery()
-            ->getSingleScalarResult();
+        return (int) $builder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -211,23 +216,34 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Add the missing selected entity.
      *
-     * @param AbstractEntity[] $entities the entities to search in or to update
-     * @param DataQuery        $query    the query to get values from
+     * @param AbstractEntity[]|array<array{id: int}> $entities the entities to search in or to update
+     * @param DataQuery                              $query    the query to get values from
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     private function addSelection(array &$entities, DataQuery $query): void
     {
         if (0 === $id = $query->id) {
             return;
         }
+
         foreach ($entities as $entity) {
-            if ($id === $entity->getId()) {
+            $entityId = \is_array($entity) ? $entity['id'] : $entity->getId();
+            if ($id === $entityId) {
                 return;
             }
         }
-        $entity = $this->repository->find($id);
-        if (!$entity instanceof AbstractEntity) {
+
+        /** @psalm-var AbstractEntity|array{id: int}|null $entity */
+        $entity = $this->createDefaultQueryBuilder()
+            ->where('e.id = :id')
+            ->setParameter('id', $id, Types::INTEGER)
+            ->getQuery()
+            ->getOneOrNullResult();
+        if (null === $entity) {
             return;
         }
+
         \array_unshift($entities, $entity);
         if (\count($entities) > $query->limit) {
             \array_pop($entities);
@@ -246,6 +262,23 @@ abstract class AbstractEntityTable extends AbstractTable
                 static fn (Column $c): bool => $c->isSearchable()
             )
         );
+    }
+
+    /**
+     * Remove the left join parts of the given builder.
+     */
+    private function updateJoin(QueryBuilder $builder): QueryBuilder
+    {
+        /** @psalm-var array{e: Join[]} $part */
+        $part = $builder->getDQLPart(self::JOIN_PART);
+        $joins = \array_filter($part['e'], fn (Join $join): bool => Join::LEFT_JOIN !== $join->getJoinType());
+        $builder->resetDQLPart(self::JOIN_PART);
+        foreach ($joins as $join) {
+            // @phpstan-ignore-next-line
+            $builder->join($join->getJoin(), (string) $join->getAlias());
+        }
+
+        return $builder;
     }
 
     /**

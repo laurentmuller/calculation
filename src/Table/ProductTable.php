@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
 use App\Utils\FileUtils;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * The products table.
@@ -33,6 +35,14 @@ class ProductTable extends AbstractCategoryItemTable
         GroupRepository $groupRepository
     ) {
         parent::__construct($repository, $categoryRepository, $groupRepository);
+    }
+
+    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    {
+        /** @psalm-var ProductRepository $repository */
+        $repository = $this->getRepository();
+
+        return $repository->getTableQueryBuilder($alias);
     }
 
     /**

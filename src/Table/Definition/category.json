@@ -15,7 +15,7 @@
         "class": "f-400 text-ellipsis"
     },
     {
-        "field": "group.code",
+        "field": "groupCode",
         "title": "category.fields.group",
         "class": "text-code text-nowrap",
         "sortable": true,

@@ -38,7 +38,7 @@
         'class': ('dropdown-item dropdown-' ~ suffix ~ active)|trim
     }) %}
     <button{{ output_attributes(attributes) }}>
-        {%- if icon %}{{ icon(icon ~ ' fa-fw') }} {% endif %}{{ text|default(value)|capitalize -}}
+        {%- if icon %}{{ icon(icon ~ ' fa-fw') }} {% endif %}{{ text|default(value) -}}
     </button>
 {% endapply %}
 {%- endmacro %}

@@ -122,18 +122,32 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     }
 
     /**
-     * Gets the category code for the given identifier.
+     * Gets the category data for the given identifier.
      */
-    private function getCategory(int $categoryId): ?Category
+    private function getCategory(int $categoryId): ?array
     {
-        return 0 !== $categoryId ? $this->categoryRepository->find($categoryId) : null;
+        if (0 !== $categoryId && ($entity = $this->categoryRepository->find($categoryId)) instanceof Category) {
+            return [
+                'id' => $entity->getId(),
+                'code' => $entity->getCode(),
+            ];
+        }
+
+        return null;
     }
 
     /**
-     * Gets the group code for the given identifier.
+     * Gets the group data for the given identifier.
      */
-    private function getGroup(int $groupId): ?Group
+    private function getGroup(int $groupId): ?array
     {
-        return 0 !== $groupId ? $this->groupRepository->find($groupId) : null;
+        if (0 !== $groupId && ($entity = $this->groupRepository->find($groupId)) instanceof Group) {
+            return [
+                'id' => $entity->getId(),
+                'code' => $entity->getCode(),
+            ];
+        }
+
+        return null;
     }
 }

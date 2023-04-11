@@ -49,6 +49,16 @@ class CategoryRepository extends AbstractRepository
      */
     final public const GROUP_ALIAS = 'g';
 
+    /**
+     * The alias for the product entity.
+     */
+    private const PRODUCT_ALIAS = 'p';
+
+    /**
+     * The alias for the task entity.
+     */
+    private const TASK_ALIAS = 't';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Category::class);
@@ -128,6 +138,7 @@ class CategoryRepository extends AbstractRepository
     {
         return match ($field) {
             'group.id' => parent::getSearchFields('id', self::GROUP_ALIAS),
+            'groupCode',
             'group.code' => parent::getSearchFields('code', self::GROUP_ALIAS),
             default => parent::getSearchFields($field, $alias),
         };
@@ -140,9 +151,30 @@ class CategoryRepository extends AbstractRepository
     {
         return match ($field) {
             'group.id',
+            'groupCode',
             'group.code' => parent::getSortField('code', self::GROUP_ALIAS),
             default => parent::getSortField($field, $alias),
         };
+    }
+
+    /**
+     * Gets the query builder for the table.
+     *
+     * @psalm-param literal-string $alias
+     */
+    public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        return $this->createQueryBuilder($alias)
+            ->select("$alias.id")
+            ->addSelect("$alias.code")
+            ->addSelect("$alias.description")
+            ->addSelect(self::GROUP_ALIAS . '.code as groupCode')
+            ->addSelect($this->getCountDistinct(self::PRODUCT_ALIAS, 'products'))
+            ->addSelect($this->getCountDistinct(self::TASK_ALIAS, 'tasks'))
+            ->innerJoin("$alias.group", self::GROUP_ALIAS)
+            ->leftJoin("$alias.products", self::PRODUCT_ALIAS)
+            ->leftJoin("$alias.tasks", self::TASK_ALIAS)
+            ->groupBy("$alias.id");
     }
 
     private function getDropDownQuery(): QueryBuilder

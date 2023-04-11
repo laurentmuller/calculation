@@ -14,10 +14,12 @@ namespace App\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
+use App\Repository\AbstractRepository;
 use App\Repository\CalculationStateRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\FileUtils;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;
@@ -45,15 +47,19 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
      * Formatter for the calculation column.
      *
      * @throws \Twig\Error\Error
+     *
+     * @psalm-param CalculationState|array{id: int} $state
      */
-    public function formatCalculations(\Countable $calculations, CalculationState $state): string
+    public function formatCalculations(\Countable|int $calculations, CalculationState|array $state): string
     {
+        $id = \is_array($state) ? $state['id'] : $state->getId();
+        $count = $calculations instanceof \Countable ? $calculations->count() : $calculations;
         $context = [
-            'count' => $calculations->count(),
+            'count' => $count,
             'title' => 'calculationstate.list.calculation_title',
             'route' => $this->isGrantedList(Calculation::class) ? 'calculation_table' : false,
             'parameters' => [
-                CalculationTable::PARAM_STATE => $state->getId(),
+                CalculationTable::PARAM_STATE => $id,
             ],
         ];
 
@@ -70,6 +76,17 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
         }
 
         return $this->trans('common.value_false');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    {
+        /** @psalm-var CalculationStateRepository $repository */
+        $repository = $this->getRepository();
+
+        return $repository->getTableQueryBuilder($alias);
     }
 
     /**

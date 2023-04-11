@@ -14,9 +14,11 @@ namespace App\Table;
 
 use App\Entity\Category;
 use App\Entity\Group;
+use App\Repository\AbstractRepository;
 use App\Repository\GroupRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Utils\FileUtils;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;
@@ -43,19 +45,34 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      * Formatter for the category column.
      *
      * @throws \Twig\Error\Error
+     *
+     * @psalm-param Group|array{id: int} $group
      */
-    public function formatCategories(\Countable $categories, Group $group): string
+    public function formatCategories(\Countable|int $categories, Group|array $group): string
     {
+        $id = \is_array($group) ? $group['id'] : $group->getId();
+        $count = $categories instanceof \Countable ? $categories->count() : $categories;
         $context = [
-            'count' => $categories->count(),
+            'count' => $count,
             'title' => 'group.list.category_title',
             'route' => $this->isGrantedList(Category::class) ? 'category_table' : false,
             'parameters' => [
-                CategoryTable::PARAM_GROUP => $group->getId(),
+                CategoryTable::PARAM_GROUP => $id,
             ],
         ];
 
         return $this->twig->render('macros/_cell_table_link.html.twig', $context);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    {
+        /** @psalm-var GroupRepository $repository */
+        $repository = $this->getRepository();
+
+        return $repository->getTableQueryBuilder($alias);
     }
 
     /**

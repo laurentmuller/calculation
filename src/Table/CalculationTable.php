@@ -14,6 +14,7 @@ namespace App\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
+use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Utils\FileUtils;
@@ -50,12 +51,16 @@ class CalculationTable extends AbstractEntityTable
      * Render the overall margin column.
      *
      * @throws \Twig\Error\Error
+     *
+     * @psalm-param Calculation|array{groups: int} $entity
      */
-    public function formatOverallMargin(float $margin, Calculation $entity): string
+    public function formatOverallMargin(float $margin, Calculation|array $entity): string
     {
+        $empty = \is_array($entity) ? 0 === $entity['groups'] : $entity->isEmpty();
+
         return $this->twig->render('macros/_cell_calculation_margin.html.twig', [
-            'empty' => $entity->isEmpty(),
             'margin' => $margin,
+            'empty' => $empty,
         ]);
     }
 
@@ -71,6 +76,17 @@ class CalculationTable extends AbstractEntityTable
         $query->addCustomData(self::PARAM_EDITABLE, $stateEditable);
 
         return $query;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    {
+        /** @psalm-var CalculationRepository $repository */
+        $repository = $this->getRepository();
+
+        return $repository->getTableQueryBuilder($alias);
     }
 
     /**
@@ -148,9 +164,16 @@ class CalculationTable extends AbstractEntityTable
     /**
      * Gets the calculation state for the given identifier.
      */
-    private function getCalculationState(int $stateId): ?CalculationState
+    private function getCalculationState(int $stateId): ?array
     {
-        return 0 !== $stateId ? $this->stateRepository->find($stateId) : null;
+        if (0 !== $stateId && ($entity = $this->stateRepository->find($stateId)) instanceof CalculationState) {
+            return [
+                'id' => $entity->getId(),
+                'code' => $entity->getCode(),
+            ];
+        }
+
+        return null;
     }
 
     private function isEditable(int $stateEditable): bool

@@ -89,6 +89,25 @@ class ProductRepository extends AbstractCategoryItemRepository
     }
 
     /**
+     * Gets the query builder for the table.
+     *
+     * @psalm-param literal-string $alias
+     */
+    public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        return $this->createQueryBuilder($alias)
+            ->select("$alias.id")
+            ->addSelect("$alias.description")
+            ->addSelect("$alias.price")
+            ->addSelect("$alias.unit")
+            ->addSelect("$alias.supplier")
+            ->addSelect(self::CATEGORY_ALIAS . '.code as categoryCode')
+            ->addSelect(self::GROUP_ALIAS . '.code as groupCode')
+            ->innerJoin("$alias.category", self::CATEGORY_ALIAS)
+            ->innerJoin(self::CATEGORY_ALIAS . '.group', self::GROUP_ALIAS);
+    }
+
+    /**
      * Search products (used by calculation to add a new item).
      *
      * @param string $value      the search term

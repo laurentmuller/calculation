@@ -26,6 +26,7 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Model\CustomerInformation;
 use App\Model\Role;
 use App\Repository\PropertyRepository;
+use App\Traits\MathTrait;
 use App\Traits\PropertyServiceTrait;
 use App\Utils\RoleBuilder;
 use App\Validator\Password;
@@ -43,6 +44,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
  */
 class ApplicationService implements PropertyServiceInterface, ServiceSubscriberInterface
 {
+    use MathTrait;
     use PropertyServiceTrait;
 
     public function __construct(
@@ -485,7 +487,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         if ($value instanceof Calculation) {
             return $value->isMarginBelow($this->getMinMargin());
         } else {
-            return $value < $this->getMinMargin();
+            return !$this->isFloatZero($value) && $value < $this->getMinMargin();
         }
     }
 

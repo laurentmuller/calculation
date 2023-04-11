@@ -24,9 +24,28 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TaskRepository extends AbstractCategoryItemRepository
 {
+    /**
+     * The alias for the task item entity.
+     */
+    private const ITEM_ALIAS = 'i';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Task::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
+    {
+        return match ($field) {
+            'categoryCode',
+            'category.code' => parent::getSearchFields('code', self::CATEGORY_ALIAS),
+            'groupCode',
+            'group.code' => parent::getSearchFields('code', self::GROUP_ALIAS),
+            default => parent::getSearchFields($field, $alias),
+        };
     }
 
     /**
@@ -49,5 +68,40 @@ class TaskRepository extends AbstractCategoryItemRepository
         }
 
         return $builder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
+    {
+        return match ($field) {
+            'categoryCode',
+            'category.code' => parent::getSortField('code', self::CATEGORY_ALIAS),
+            'groupCode',
+            'group.code' => parent::getSortField('color', self::GROUP_ALIAS),
+            default => parent::getSortField($field, $alias),
+        };
+    }
+
+    /**
+     * Gets the query builder for the table.
+     *
+     * @psalm-param literal-string $alias
+     */
+    public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        return $this->createQueryBuilder($alias)
+            ->select("$alias.id")
+            ->addSelect("$alias.name")
+            ->addSelect("$alias.unit")
+            ->addSelect("$alias.supplier")
+            ->addSelect(self::CATEGORY_ALIAS . '.code as categoryCode')
+            ->addSelect(self::GROUP_ALIAS . '.code as groupCode')
+            ->addSelect($this->getCountDistinct(self::ITEM_ALIAS, 'items'))
+            ->innerJoin("$alias.category", self::CATEGORY_ALIAS)
+            ->innerJoin(self::CATEGORY_ALIAS . '.group', self::GROUP_ALIAS)
+            ->leftJoin("$alias.items", self::ITEM_ALIAS)
+            ->groupBy("$alias.id");
     }
 }

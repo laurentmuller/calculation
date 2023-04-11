@@ -4,7 +4,7 @@
     {% switch group.id %}
     {% case ROW_EMPTY %}
         {# empty #}
-        <td class="text-muted">{{ group.description }}</td>
+        <td class="text-muted text-center small">{{ group.description }}</td>
     {% case ROW_GROUP %}
         {# group #}
         <td class="text-total text-cell">{{ group.description }}</td>

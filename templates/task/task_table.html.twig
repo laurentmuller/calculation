@@ -15,14 +15,14 @@
 {% if customData.dropdown is defined and customData.dropdown|length %}
     {%- set group_id = customData.group.id|default(0) -%}
     {%- set category_id = customData.category.id|default(0) -%}
-    {%- set input_value = group_id ?? category_id -%}
     {% set data_default = 'task.fields.category'|trans %}
-    {% set text = customData.group ?? customData.category ?? data_default %}
+    {%- set input_value = group_id ? group_id : category_id -%}
+    {%- set input_text = customData.group.code ?? customData.category.code ?? data_default -%}
     <div class="input-group-append">
         {{ _self.output_dropdown_menu(
             'category',
             ICON_CATEGORY,
-            text,
+            input_text,
             'task.list.category_help',
             input_value,
             data_default

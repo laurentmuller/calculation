@@ -24,6 +24,15 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class GroupRepository extends AbstractRepository
 {
+    /**
+     * The alias for the category entity.
+     */
+    private const CATEGORY_ALIAS = AbstractCategoryItemRepository::CATEGORY_ALIAS;
+    /**
+     * The alias for the group margin entity.
+     */
+    private const MARGIN_ALIAS = 'm';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Group::class);
@@ -73,5 +82,23 @@ class GroupRepository extends AbstractRepository
 
         return $this->createQueryBuilder($alias)
             ->orderBy($field, Criteria::ASC);
+    }
+
+    /**
+     * Gets the query builder for the table.
+     *
+     * @psalm-param literal-string $alias
+     */
+    public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        return $this->createQueryBuilder($alias)
+            ->select("$alias.id")
+            ->addSelect("$alias.code")
+            ->addSelect("$alias.description")
+            ->addSelect($this->getCountDistinct(self::MARGIN_ALIAS, 'margins'))
+            ->addSelect($this->getCountDistinct(self::CATEGORY_ALIAS, 'categories'))
+            ->leftJoin("$alias.margins", self::MARGIN_ALIAS)
+            ->leftJoin("$alias.categories", self::CATEGORY_ALIAS)
+            ->groupBy("$alias.id");
     }
 }

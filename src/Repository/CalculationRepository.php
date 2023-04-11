@@ -32,6 +32,11 @@ class CalculationRepository extends AbstractRepository
      */
     final public const STATE_ALIAS = 's';
 
+    /**
+     * The alias for the calculation group entity.
+     */
+    private const GROUP_ALIAS = 'g';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Calculation::class);
@@ -546,26 +551,22 @@ class CalculationRepository extends AbstractRepository
 
     /**
      * Gets the last calculations.
-     *
-     * @return Calculation[] the last calculations
-     *
-     * @psalm-return list<Calculation>
      */
     public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array
     {
-        $builder = $this->createQueryBuilder('c')
-            ->addOrderBy('c.updatedAt', Criteria::DESC)
-            ->addOrderBy('c.date', Criteria::DESC)
-            ->addOrderBy('c.id', Criteria::DESC)
+        $builder = $this->getTableQueryBuilder();
+        $builder->addOrderBy('e.updatedAt', Criteria::DESC)
+            ->addOrderBy('e.date', Criteria::DESC)
+            ->addOrderBy('e.id', Criteria::DESC)
             ->setMaxResults($maxResults);
         if ($user instanceof UserInterface) {
             $identifier = $user->getUserIdentifier();
-            $builder->where('c.createdBy = :identifier')
-                ->orWhere('c.updatedBy = :identifier')
+            $builder->where('e.createdBy = :identifier')
+                ->orWhere('e.updatedBy = :identifier')
                 ->setParameter('identifier', $identifier, Types::STRING);
         }
 
-        return $builder->getQuery()->getResult();
+        return $builder->getQuery()->getArrayResult();
     }
 
     /**
@@ -646,10 +647,13 @@ class CalculationRepository extends AbstractRepository
     {
         return match ($field) {
             'date' => "DATE_FORMAT($alias.$field, '%d.%m.%Y')",
-            'overallMargin' => "IFELSE($alias.itemsTotal != 0, FLOOR(100 * $alias.overallTotal / $alias.itemsTotal), 0)",
+            'overallMargin' => $this->getOverallMargin($alias),
             'state.id' => parent::getSearchFields('id', self::STATE_ALIAS),
+            'stateCode',
             'state.code' => parent::getSearchFields('code', self::STATE_ALIAS),
+            'stateColor',
             'state.color' => parent::getSearchFields('color', self::STATE_ALIAS),
+            'stateEditable',
             'state.editable' => parent::getSearchFields('editable', self::STATE_ALIAS),
             default => parent::getSearchFields($field, $alias),
         };
@@ -661,12 +665,37 @@ class CalculationRepository extends AbstractRepository
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {
-            'overallMargin' => "IFELSE($alias.itemsTotal != 0, $alias.overallTotal / $alias.itemsTotal, 0)",
+            'overallMargin' => $this->getOverallMargin($alias),
             'state.id',
+            'stateCode',
             'state.code' => parent::getSortField('code', self::STATE_ALIAS),
+            'stateColor',
             'state.color' => parent::getSortField('color', self::STATE_ALIAS),
             default => parent::getSortField($field, $alias),
         };
+    }
+
+    /**
+     * Gets the query builder for the table.
+     *
+     * @psalm-param literal-string $alias
+     */
+    public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        return $this->createQueryBuilder($alias)
+            ->select("$alias.id")
+            ->addSelect("$alias.date")
+            ->addSelect("$alias.customer")
+            ->addSelect("$alias.description")
+            ->addSelect("$alias.overallTotal")
+            ->addSelect($this->getOverallMargin($alias, 100) . ' as overallMargin')
+            ->addSelect(self::STATE_ALIAS . '.code as stateCode')
+            ->addSelect(self::STATE_ALIAS . '.color as stateColor')
+            ->addSelect(self::STATE_ALIAS . '.editable as stateEditable')
+            ->addSelect($this->getCountDistinct(self::GROUP_ALIAS, 'groups'))
+            ->innerJoin("$alias.state", self::STATE_ALIAS)
+            ->leftJoin("$alias.groups", self::GROUP_ALIAS)
+            ->groupBy("$alias.id");
     }
 
     /**
@@ -710,6 +739,11 @@ class CalculationRepository extends AbstractRepository
             'state' => 's.code',
             default => 'e.id',
         };
+    }
+
+    private function getOverallMargin(string $alias, float $divide = 1.0): string
+    {
+        return "IFELSE($alias.itemsTotal != 0, ROUND((100 * $alias.overallTotal / $alias.itemsTotal) - 0.5, 0) / $divide, 0)";
     }
 
     /**

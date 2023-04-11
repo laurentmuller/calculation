@@ -51,9 +51,13 @@ abstract class AbstractTable implements SortModeInterface
         return FormatUtils::formatAmount($value);
     }
 
-    public function formatCountable(\Countable $value): string
+    public function formatCountable(\Countable|int $value): string
     {
-        return $this->formatInt($value->count());
+        if ($value instanceof \Countable) {
+            return $this->formatInt($value->count());
+        }
+
+        return $this->formatInt($value);
     }
 
     public function formatDate(\DateTimeInterface $value): string

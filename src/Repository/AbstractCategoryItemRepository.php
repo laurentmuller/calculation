@@ -73,8 +73,10 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     {
         return match ($field) {
             'group.id' => parent::getSearchFields('id', self::GROUP_ALIAS),
+            'groupCode',
             'group.code' => parent::getSearchFields('code', self::GROUP_ALIAS),
             'category.id' => parent::getSearchFields('id', self::CATEGORY_ALIAS),
+            'categoryCode',
             'category.code' => parent::getSearchFields('code', self::CATEGORY_ALIAS),
             default => parent::getSearchFields($field, $alias),
         };
@@ -87,8 +89,10 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
     {
         return match ($field) {
             'group.id',
+            'groupCode',
             'group.code' => parent::getSortField('code', self::GROUP_ALIAS),
             'category.id',
+            'categoryCode',
             'category.code' => parent::getSortField('code', self::CATEGORY_ALIAS),
             default => parent::getSortField($field, $alias),
         };

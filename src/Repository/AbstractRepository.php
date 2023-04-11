@@ -242,4 +242,15 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         return 'CONCAT(' . \implode(', ', $fields) . ')';
     }
+
+    /**
+     * Gets the count distinct clause.
+     *
+     * @param string $alias the table alias
+     * @param string $field the target field name
+     */
+    protected function getCountDistinct(string $alias, string $field): string
+    {
+        return "COUNT(DISTINCT $alias.id) AS $field";
+    }
 }

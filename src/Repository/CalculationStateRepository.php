@@ -43,6 +43,11 @@ class CalculationStateRepository extends AbstractRepository
 {
     use GroupByTrait;
 
+    /**
+     * The alias for the calculation entity.
+     */
+    private const CALCULATION_ALIAS = 'c';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CalculationState::class);
@@ -166,6 +171,24 @@ class CalculationStateRepository extends AbstractRepository
             'editable' => "IFELSE($alias.$field = 1, 0, 1)", // reverse
             default => parent::getSortField($field, $alias),
         };
+    }
+
+    /**
+     * Gets the query builder for the table.
+     *
+     * @psalm-param literal-string $alias
+     */
+    public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        return $this->createQueryBuilder($alias)
+            ->select("$alias.id")
+            ->addSelect("$alias.code")
+            ->addSelect("$alias.description")
+            ->addSelect("$alias.editable")
+            ->addSelect("$alias.color")
+            ->addSelect($this->getCountDistinct(self::CALCULATION_ALIAS, 'calculations'))
+            ->leftJoin("$alias.calculations", self::CALCULATION_ALIAS)
+            ->groupBy("$alias.id");
     }
 
     /**

@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Repository\TaskRepository;
 use App\Utils\FileUtils;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * The tasks table.
@@ -33,6 +35,17 @@ class TaskTable extends AbstractCategoryItemTable
         GroupRepository $groupRepository
     ) {
         parent::__construct($repository, $categoryRepository, $groupRepository);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    {
+        /** @psalm-var TaskRepository $repository */
+        $repository = $this->getRepository();
+
+        return $repository->getTableQueryBuilder($alias);
     }
 
     /**

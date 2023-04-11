@@ -16,6 +16,7 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
+use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
@@ -54,15 +55,19 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      * Formatter for the product column.
      *
      * @throws \Twig\Error\Error
+     *
+     * @psalm-param Category|array{id: int} $category
      */
-    public function formatProducts(\Countable $products, Category $category): string
+    public function formatProducts(\Countable|int $products, Category|array $category): string
     {
+        $id = \is_array($category) ? $category['id'] : $category->getId();
+        $count = $products instanceof \Countable ? $products->count() : $products;
         $context = [
-            'count' => $products->count(),
+            'count' => $count,
             'title' => 'category.list.product_title',
             'route' => $this->isGrantedList(Product::class) ? 'product_table' : false,
             'parameters' => [
-                AbstractCategoryItemTable::PARAM_CATEGORY => $category->getId(),
+                AbstractCategoryItemTable::PARAM_CATEGORY => $id,
             ],
         ];
 
@@ -73,15 +78,19 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      * Formatter for the task column.
      *
      * @throws \Twig\Error\Error
+     *
+     * @psalm-param Category|array{id: int} $category
      */
-    public function formatTasks(\Countable $tasks, Category $category): string
+    public function formatTasks(\Countable|int $tasks, Category|array $category): string
     {
+        $id = \is_array($category) ? $category['id'] : $category->getId();
+        $count = $tasks instanceof \Countable ? $tasks->count() : $tasks;
         $context = [
-            'count' => $tasks->count(),
+            'count' => $count,
             'title' => 'category.list.task_title',
             'route' => $this->isGrantedList(Task::class) ? 'task_table' : false,
             'parameters' => [
-                AbstractCategoryItemTable::PARAM_CATEGORY => $category->getId(),
+                AbstractCategoryItemTable::PARAM_CATEGORY => $id,
             ],
         ];
 
@@ -98,6 +107,17 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         $query->addCustomData(self::PARAM_GROUP, $groupId);
 
         return $query;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    {
+        /** @psalm-var CategoryRepository $repository */
+        $repository = $this->getRepository();
+
+        return $repository->getTableQueryBuilder($alias);
     }
 
     /**

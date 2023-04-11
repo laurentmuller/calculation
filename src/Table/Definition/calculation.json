@@ -17,7 +17,7 @@
         "fieldFormatter": "formatDate"
     },
     {
-        "field": "state.code",
+        "field": "stateCode",
         "title": "calculation.fields.state",
         "class": "text-state"
     },
@@ -46,12 +46,12 @@
         "numeric": true
     },
     {
-        "field": "state.color",
+        "field": "stateColor",
         "alias": "color",
         "visible": false
     },
     {
-        "field": "state.editable",
+        "field": "stateEditable",
         "alias": "textMuted",
         "visible": false
     }

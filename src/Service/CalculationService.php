@@ -351,7 +351,7 @@ final class CalculationService implements ServiceSubscriberInterface
         $overall_total = $total_net + $user_amount;
         $overall_amount = $overall_total - $groups_amount;
         $overall_margin = $this->safeDivide($overall_amount, $groups_amount);
-        $overall_margin = 1.0 + \floor($overall_margin * 100.0) / 100.0;
+        $overall_margin = \floor((1.0 + $overall_margin) * 100.0) / 100.0;
         $overall_below = [] !== $groups && !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
         $result[] = $this->createGroup(
             id: self::ROW_OVERALL_TOTAL,

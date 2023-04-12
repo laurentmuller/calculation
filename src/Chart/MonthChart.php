@@ -20,6 +20,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Chart to display calculations by month.
  */
+#[\AllowDynamicProperties]
 class MonthChart extends BaseChart
 {
     private readonly string $url;
@@ -27,8 +28,11 @@ class MonthChart extends BaseChart
     /**
      * Constructor.
      */
-    public function __construct(ApplicationService $application, private readonly CalculationRepository $repository, UrlGeneratorInterface $generator)
-    {
+    public function __construct(
+        ApplicationService $application,
+        private readonly CalculationRepository $repository,
+        UrlGeneratorInterface $generator
+    ) {
         parent::__construct($application);
         $this->url = $generator->generate('calculation_table');
     }
@@ -197,14 +201,12 @@ class MonthChart extends BaseChart
                 const ptAmount = this.points[1];
                 // start table
                 let html = '<table class="m-1">';
-
                 // month
                 html += '<tr class="border-bottom border-dark">' +
                             '<th>$month</th>' +
                             '<th>$sep</th>' +
                             '<th class="text-calculation">' + Highcharts.dateFormat("%B %Y", this.x) + '</th>' +
                         '</tr>';
-
                 // count (calculations)
                 let value = Highcharts.numberFormat(ptAmount.point.custom.count, 0);
                 html += '<tr>' +
@@ -212,7 +214,6 @@ class MonthChart extends BaseChart
                             '<td>$sep</td>' +
                             '<td class="text-calculation">' + value + '</td>' +
                         '</tr>';
-
                 // amount
                 let color = 'color:' + ptAmount.color + ';';
                 value = Highcharts.numberFormat(ptAmount.y, 0);
@@ -221,7 +222,6 @@ class MonthChart extends BaseChart
                             '<td>$sep</td>' +
                             '<td class="text-calculation">' + value + '</td>' +
                         '</tr>';
-
                 // margin amount
                 color = 'color:' + ptMargin.color + ';';
                 value = Highcharts.numberFormat(ptMargin.y, 0);
@@ -230,7 +230,6 @@ class MonthChart extends BaseChart
                             '<td>$sep</td>' +
                             '<td class="text-calculation">' + value + '</td>' +
                         '</tr>';
-
                 // margin percent
                 value =  Highcharts.numberFormat(100 + Math.floor(ptMargin.y * 100 / ptAmount.y), 0);
                 html += '<tr>' +
@@ -238,7 +237,6 @@ class MonthChart extends BaseChart
                             '<td>$sep</td>' +
                             '<td class="text-calculation">' + value + '</td>' +
                         '</tr>';
-
                 // total
                 value = Highcharts.numberFormat(ptAmount.y + ptMargin.y, 0);
                 html += '<tr class="border-top border-dark">' +
@@ -246,7 +244,6 @@ class MonthChart extends BaseChart
                             '<th>$sep</th>' +
                             '<th class="text-calculation">' + value + '</th>' +
                         '</tr>';
-
                 // end table
                 html += '</table>';
                 return html;

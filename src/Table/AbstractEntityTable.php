@@ -136,7 +136,7 @@ abstract class AbstractEntityTable extends AbstractTable
         if (empty($builder->getDQLPart(self::JOIN_PART))) {
             $q->setHint(CountWalker::HINT_DISTINCT, false);
         }
-        /** @var AbstractEntity[] $entities */
+        /** @var AbstractEntity[]|array<array{id: int}> $entities */
         $entities = $q->getResult();
         $this->addSelection($entities, $query);
         $results->rows = $this->mapEntities($entities);
@@ -214,7 +214,7 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
-     * Add the missing selected entity.
+     * Add selected entity if missing.
      *
      * @param AbstractEntity[]|array<array{id: int}> $entities the entities to search in or to update
      * @param DataQuery                              $query    the query to get values from
@@ -228,15 +228,14 @@ abstract class AbstractEntityTable extends AbstractTable
         }
 
         foreach ($entities as $entity) {
-            $entityId = \is_array($entity) ? $entity['id'] : $entity->getId();
-            if ($id === $entityId) {
+            if ($id === (\is_array($entity) ? $entity['id'] : $entity->getId())) {
                 return;
             }
         }
 
         /** @psalm-var AbstractEntity|array{id: int}|null $entity */
         $entity = $this->createDefaultQueryBuilder()
-            ->where('e.id = :id')
+            ->where(AbstractRepository::DEFAULT_ALIAS . '.id = :id')
             ->setParameter('id', $id, Types::INTEGER)
             ->getQuery()
             ->getOneOrNullResult();

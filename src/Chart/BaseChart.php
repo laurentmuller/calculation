@@ -18,7 +18,6 @@ use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use Laminas\Json\Expr;
-use Ob\HighchartsBundle\Highcharts\ChartOption;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -29,16 +28,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * @method BaseChart style(array $style) set the CSS style.
  * @method BaseChart xAxis(array $xAxis) set the x-axis.
  * @method BaseChart yAxis(array $yAxis) set the y-axis.
- *
- * @property ChartOption $xAxis       the x-axis.
- * @property ChartOption $yAxis       the y-axis.
- * @property ChartOption $chart       the chart.
- * @property ChartOption $credits     the credits.
- * @property ChartOption $legend      the legend.
- * @property ChartOption $tooltip     the tooltip.
- * @property ChartOption $plotOptions the plot options.
- * @property ChartOption $lang        the language.
- * @property ChartOption $title       the language.
  */
 class BaseChart extends Highchart implements ServiceSubscriberInterface
 {
@@ -103,8 +92,6 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
 
     /**
      * Hides the credits text.
-     *
-     * @psalm-suppress MixedMethodCall
      */
     public function hideCredits(): static
     {
@@ -194,8 +181,10 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      */
     public function setXAxisCategories(mixed $categories): self
     {
-        // @phpstan-ignore-next-line
-        $this->xAxis->categories($categories);
+        if (\is_object($this->xAxis)) {
+            // @phpstan-ignore-next-line
+            $this->xAxis->categories($categories);
+        }
 
         return $this;
     }
@@ -207,8 +196,10 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      */
     public function setXAxisTitle(?string $title): self
     {
-        // @phpstan-ignore-next-line
-        $this->xAxis->title(['text' => $title]);
+        if (\is_object($this->xAxis)) {
+            // @phpstan-ignore-next-line
+            $this->xAxis->title(['text' => $title]);
+        }
 
         return $this;
     }
@@ -220,8 +211,10 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      */
     public function setYAxisTitle(?string $title): self
     {
-        // @phpstan-ignore-next-line
-        $this->yAxis->title(['text' => $title]);
+        if (\is_object($this->yAxis)) {
+            // @phpstan-ignore-next-line
+            $this->yAxis->title(['text' => $title]);
+        }
 
         return $this;
     }

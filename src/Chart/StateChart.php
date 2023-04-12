@@ -23,13 +23,17 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @psalm-import-type QueryCalculationType from CalculationStateRepository
  */
+#[\AllowDynamicProperties]
 class StateChart extends BaseChart
 {
     /**
      * Constructor.
      */
-    public function __construct(ApplicationService $application, private readonly CalculationStateRepository $repository, private readonly UrlGeneratorInterface $generator)
-    {
+    public function __construct(
+        ApplicationService $application,
+        private readonly CalculationStateRepository $repository,
+        private readonly UrlGeneratorInterface $generator
+    ) {
         parent::__construct($application);
     }
 

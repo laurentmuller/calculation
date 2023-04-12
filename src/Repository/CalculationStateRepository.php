@@ -64,15 +64,9 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getCalculations(): array
     {
-        $results = $this->getCalculationsQueryBuilder()
+        return $this->getCalculationsQueryBuilder()
             ->getQuery()
             ->getArrayResult();
-        /** @psalm-var QueryCalculationType $result */
-        foreach ($results as &$result) {
-            $this->updateQueryResult($result);
-        }
-
-        return $results;
     }
 
     /**
@@ -255,16 +249,5 @@ class CalculationStateRepository extends AbstractRepository
         }
 
         return $result;
-    }
-
-    /**
-     * @psalm-param QueryCalculationType $result
-     */
-    private function updateQueryResult(array &$result): void
-    {
-        $result['total'] = (float) $result['total'];
-        $result['items'] = (float) $result['items'];
-        $result['margin'] = (float) $result['margin'];
-        $result['marginAmount'] = (float) $result['marginAmount'];
     }
 }

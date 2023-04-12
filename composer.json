@@ -40,13 +40,13 @@
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.6",
         "doctrine/orm": "^2.11",
-        "94noni/highcharts-bundle": "^2.0",
         "elao/enum": "^2.0",
         "endroid/qr-code": "^4.2",
         "erusev/parsedown": "^1.7",
         "fakerphp/faker": "^1.14",
         "google/recaptcha": "^1.2",
         "imagine/imagine": "^1.2",
+        "laurentmuller/highcharts-bundle": "^2.9",
         "phpoffice/phpspreadsheet": "^1.16",
         "robquistnl/simplehtmltotext": "^1.1",
         "setasign/fpdf": "^1.8",
@@ -165,5 +165,11 @@
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         }
+    },
+    "repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/laurentmuller/ObHighchartsBundle"
     }
+]
 }

@@ -31,6 +31,8 @@ class HighlightExtension extends AbstractExtension
         '/data-indent-pad="\s+/i' => '',
         '/<script>.*<\/script>/i' => '',
         '/sf-dump/i' => 'highlight-php',
+        '/<span class=highlight-php-note>array:\d+<\/span>/i' => '',
+        '/ \[/i' => '[',
     ];
 
     private const SQL_REPLACES = [

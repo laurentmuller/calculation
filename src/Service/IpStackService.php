@@ -85,27 +85,12 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      */
     public function getIpInfo(?Request $request = null): ?array
     {
-        $clientIp = $this->getClientIp($request);
+        $url = $this->getUrl($request);
+
         /** @psalm-var IpStackType|null $results */
-        $results = $this->getUrlCacheValue($clientIp, fn () => $this->doGetIpInfo($clientIp));
+        $results = $this->getUrlCacheValue($url, fn () => $this->doGetIpInfo($url));
 
         return $results;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDefaultOptions(): array
-    {
-        return [
-            self::BASE_URI => self::HOST_NAME,
-            self::QUERY => [
-                'language' => self::getAcceptLanguage(),
-                'access_key' => $this->key,
-                'output' => 'json',
-                'hostname' => 1,
-            ],
-        ];
     }
 
     /**
@@ -113,29 +98,15 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    private function doGetIpInfo(string $clientIp): ?array
+    private function doGetIpInfo(string $url): ?array
     {
         try {
-            $response = $this->requestGet($clientIp);
+            $response = $this->requestGet($url);
             /** @psalm-var IpStackType $result */
             $result = $response->toArray();
-            if (!$this->isValidResult($result)) {
-                return null;
+            if ($this->isValidResult($result)) {
+                return $this->updateResult($result);
             }
-            if (isset($result['region_name'])) {
-                $result['region_name'] = \ucfirst($result['region_name']);
-            }
-            if (isset($result['latitude'])) {
-                $result['latitude_dms'] = $this->service->formatLat($result['latitude']);
-            }
-            if (isset($result['longitude'])) {
-                $result['longitude_dms'] = $this->service->formatLng($result['longitude']);
-            }
-            if (isset($result['latitude']) && isset($result['longitude'])) {
-                $result['position_dms'] = $this->service->formatLatLng($result['latitude'], $result['longitude']);
-            }
-
-            return $result;
         } catch (\Exception $e) {
             $this->setLastError(404, $this->translateError('unknown'), $e);
         }
@@ -143,9 +114,6 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         return null;
     }
 
-    /**
-     * Gets the client IP address for the given request.
-     */
     private function getClientIp(?Request $request = null): string
     {
         if (!$request instanceof Request) {
@@ -155,18 +123,25 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         if (null === $clientIp || '127.0.0.1' === $clientIp) {
             return self::URI_CHECK;
         }
-        // for debug purpose
-        $this->logDebug("Client Ip: $clientIp");
 
         return $clientIp;
     }
 
+    private function getUrl(?Request $request = null): string
+    {
+        $clientIp = $this->getClientIp($request);
+        $query = \http_build_query([
+            'language' => self::getAcceptLanguage(),
+            'access_key' => $this->key,
+            'output' => 'json',
+            'hostname' => 1,
+        ]);
+
+        return \sprintf('%s%s?%s', self::HOST_NAME, $clientIp, $query);
+    }
+
     /**
-     * Returns if the given result is valid.
-     *
-     * @param IpStackType $result
-     *
-     * @return bool true if valid; false otherwise
+     * @psalm-param IpStackType $result
      */
     private function isValidResult(array $result): bool
     {
@@ -176,9 +151,6 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
 
             return $this->setLastError($code, $this->translateError($type));
         }
-        if (empty($result['city'] ?? null)) {
-            return $this->setLastError(404, $this->translateError('ip_not_found'));
-        }
 
         return true;
     }
@@ -186,5 +158,28 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     private function translateError(string $id): string
     {
         return $this->trans($id, [], 'ipstack');
+    }
+
+    /**
+     * @psalm-param IpStackType $result
+     *
+     * @psalm-return IpStackType
+     */
+    private function updateResult(array $result): array
+    {
+        if (isset($result['region_name'])) {
+            $result['region_name'] = \ucfirst($result['region_name']);
+        }
+        if (isset($result['latitude'])) {
+            $result['latitude_dms'] = $this->service->formatLat($result['latitude']);
+        }
+        if (isset($result['longitude'])) {
+            $result['longitude_dms'] = $this->service->formatLng($result['longitude']);
+        }
+        if (isset($result['latitude']) && isset($result['longitude'])) {
+            $result['position_dms'] = $this->service->formatLatLng($result['latitude'], $result['longitude']);
+        }
+
+        return $result;
     }
 }

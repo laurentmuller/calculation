@@ -32,8 +32,11 @@
     <div class="col-md-3">
         {{ form_row(form.zipCode, {attr: {'data-msg-zipcode': 'customer.zip_code'|trans([], 'validators')}}) }}
     </div>
-    <div class="col-md-9">
+    <div class="col-md-5">
         {{ form_row(form.city) }}
+    </div>
+    <div class="col-md-4">
+        {{ form_row(form.country) }}
     </div>
 </div>
 {{ form_row(form.email) }}

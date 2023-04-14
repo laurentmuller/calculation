@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\CustomerRepository;
+use App\Service\CountryFlagService;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -73,6 +74,11 @@ class Customer extends AbstractEntity
     #[Assert\Regex(pattern: '/^[1-9]\d{3}$/', message: 'customer.zip_code')]
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $zipCode = null;
+
+    public function __construct()
+    {
+        $this->country = CountryFlagService::getDefaultCode();
+    }
 
     /**
      * Get address.

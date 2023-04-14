@@ -21,6 +21,7 @@ final class PhpInfoService
 {
     /**
      * Gets PHP information as array.
+     *
      * Note:
      * <ul>
      * <li>'yes', 'enabled', 1 and 'on' values are converted to boolean true.</li>

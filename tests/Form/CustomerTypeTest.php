@@ -14,6 +14,9 @@ namespace App\Tests\Form;
 
 use App\Entity\Customer;
 use App\Form\Customer\CustomerType;
+use App\Form\Type\CountryFlagType;
+use App\Service\CountryFlagService;
+use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends AbstractEntityTypeTestCase<Customer, CustomerType>
@@ -29,8 +32,9 @@ class CustomerTypeTest extends AbstractEntityTypeTestCase
             'lastName' => 'lastName',
             'title' => 'title',
             'address' => 'address',
-            'city' => 'city',
             'zipCode' => 'zipCode',
+            'city' => 'city',
+            'country' => 'CH',
             'email' => 'email',
         ];
     }
@@ -38,6 +42,16 @@ class CustomerTypeTest extends AbstractEntityTypeTestCase
     protected function getEntityClass(): string
     {
         return Customer::class;
+    }
+
+    protected function getExtensions(): array
+    {
+        /** @psalm-var \Symfony\Component\Form\FormExtensionInterface[] $extensions */
+        $extensions = parent::getExtensions();
+        $type = new CountryFlagType(new CountryFlagService());
+        $extensions[] = new PreloadedExtension([$type], []);
+
+        return $extensions;
     }
 
     protected function getFormTypeClass(): string

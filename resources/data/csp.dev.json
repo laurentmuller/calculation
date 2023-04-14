@@ -21,7 +21,8 @@
 	],
 	"font-src": [
 		"self",
-		"https://fonts.gstatic.com"
+		"https://fonts.gstatic.com",
+		"https://raw.githack.com"
 	],
 	"style-src": [
 		"self",

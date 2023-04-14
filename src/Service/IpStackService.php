@@ -40,9 +40,9 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     use TranslatorAwareTrait;
 
     /**
-     * The cache timeout (1 minute).
+     * The cache timeout (1 hour).
      */
-    private const CACHE_TIMEOUT = 60;
+    private const CACHE_TIMEOUT = 3600;
 
     /**
      * The host name.
@@ -57,7 +57,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     /**
      * Constructor.
      *
-     * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
+     * @throws \InvalidArgumentException if the API key is not defined, is null or empty
      */
     public function __construct(
         #[\SensitiveParameter]
@@ -101,11 +101,10 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     private function doGetIpInfo(string $url): ?array
     {
         try {
-            $response = $this->requestGet($url);
-            /** @psalm-var IpStackType $result */
-            $result = $response->toArray();
-            if ($this->isValidResult($result)) {
-                return $this->updateResult($result);
+            /** @psalm-var IpStackType $response */
+            $response = $this->requestGet($url)->toArray();
+            if ($this->isValidResponse($response)) {
+                return $this->updateResponse($response);
             }
         } catch (\Exception $e) {
             $this->setLastError(404, $this->translateError('unknown'), $e);
@@ -141,13 +140,13 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     }
 
     /**
-     * @psalm-param IpStackType $result
+     * @psalm-param IpStackType $response
      */
-    private function isValidResult(array $result): bool
+    private function isValidResponse(array $response): bool
     {
-        if (isset($result['error'])) {
-            $code = $result['error']['code'] ?? 404;
-            $type = $result['error']['type'] ?? 'unknown';
+        if (isset($response['error'])) {
+            $code = $response['error']['code'] ?? 404;
+            $type = $response['error']['type'] ?? 'unknown';
 
             return $this->setLastError($code, $this->translateError($type));
         }
@@ -161,25 +160,23 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     }
 
     /**
-     * @psalm-param IpStackType $result
+     * @psalm-param IpStackType $response
      *
      * @psalm-return IpStackType
      */
-    private function updateResult(array $result): array
+    private function updateResponse(array $response): array
     {
-        if (isset($result['region_name'])) {
-            $result['region_name'] = \ucfirst($result['region_name']);
+        if (isset($response['region_name'])) {
+            $response['region_name'] = \ucfirst($response['region_name']);
         }
-        if (isset($result['latitude'])) {
-            $result['latitude_dms'] = $this->service->formatLat($result['latitude']);
-        }
-        if (isset($result['longitude'])) {
-            $result['longitude_dms'] = $this->service->formatLng($result['longitude']);
-        }
-        if (isset($result['latitude']) && isset($result['longitude'])) {
-            $result['position_dms'] = $this->service->formatLatLng($result['latitude'], $result['longitude']);
+        $latitude = $response['latitude'] ?? null;
+        $longitude = $response['longitude'] ?? null;
+        if (null !== $latitude && null !== $longitude) {
+            $response['latitude_dms'] = $this->service->formatLat($latitude);
+            $response['longitude_dms'] = $this->service->formatLng($longitude);
+            $response['position_dms'] = $this->service->formatLatLng($latitude, $longitude);
         }
 
-        return $result;
+        return $response;
     }
 }

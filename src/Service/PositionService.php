@@ -88,8 +88,8 @@ class PositionService
     /**
      * Convert the given latitude and longitude to degrees, minutes and seconds.
      *
-     * @throws \InvalidArgumentException if the latitude is not between -90 to +90 (inclusive)
-     * @throws \InvalidArgumentException if the longitude is not between -180 to +180 (inclusive)
+     * @throws \InvalidArgumentException if the latitude is not between -90 to +90 (inclusive) or
+     *                                   if the longitude is not between -180 to +180 (inclusive)
      */
     public function formatLatLng(float $latitude, float $longitude): string
     {
@@ -134,8 +134,8 @@ class PositionService
         $degrees = \floor($position);
         $position = ($position - $degrees) * 60.0;
         $minutes = \floor($position);
-        $secconds = \floor(($position - $minutes) * 60.0);
+        $seconds = \floor(($position - $minutes) * 60.0);
 
-        return \sprintf("%d° %d' %d\" %s", $degrees, $minutes, $secconds, $suffix);
+        return \sprintf("%d° %d' %d\" %s", $degrees, $minutes, $seconds, $suffix);
     }
 }

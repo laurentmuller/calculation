@@ -14,6 +14,28 @@
         <th colspan="2">{{ name }}</th>
     </tr>
 {%- endmacro %}
+{% macro output_position(lat, lon, text) -%}
+{% if lat and lon %}
+    {%- set href = 'https://www.google.ch/maps/place/%s,%s'|format(lat, lon) -%}
+    <tr>
+        <td>Position</td>
+        <td>
+            <a href="{{ href }}" title="{{ 'openweather.fields.position_title'|trans }}" target="_blank" rel="noopener noreferrer">
+                {{- text -}}
+            </a>
+        </td>
+    </tr>
+{% endif %}
+{%- endmacro %}
+{% macro output_country(country, emoji) -%}
+{% if country %}
+    <tr>
+        <td>Pays</td>
+        <td>{%- if emoji -%}<span class="flag-emoji mr-1">{{ emoji }}</span>{%- endif -%}{{- country -}}</td>
+    </tr>
+{% endif %}
+
+{%- endmacro %}
 {# parameters #}
 {%- set title = 'test.ip_stack' -%}
 {%- set title_icon = 'location-dot' -%}
@@ -37,10 +59,10 @@
     {{ _self.output_row('Type', results.type|default(false)) }}
     {{ _self.output_header('Position') }}
     {{ _self.output_row('Continent', results.continent_name|default(false)) }}
-    {{ _self.output_row('Pays', results.country_name|default(false)) }}
+    {{ _self.output_country(results.country_name|default(false), results.location.country_flag_emoji|default(false)) }}
     {{ _self.output_row('Région', results.region_name|default(false)) }}
     {{ _self.output_row('Ville', results.city|default(false)) }}
-    {{ _self.output_row('Position', results.position_dms|default(false)) }}
+    {{ _self.output_position(results.latitude|default(false), results.longitude|default(false), results.position_dms|default(false)) }}
     </tbody>
 </table>
 {% include 'dialog/dialog_raw_data.html.twig' with {'raw_data': results, 'description': 'test.ip_stack'|trans, 'allow_copy': true} %}
@@ -52,7 +74,7 @@
         {{- homepage() }}
     </div>
     <div class="col-md-6 text-right">
-        {{- linkExternal('"https://ipstack.com', 'common.api_documentation') -}}
+        {{- linkExternal('https://ipstack.com', 'common.api_documentation') -}}
     </div>
 </div>
 {%- endblock %}

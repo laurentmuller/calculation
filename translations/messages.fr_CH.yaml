@@ -348,6 +348,7 @@ customer:
     webSite: Site web
     zipCity: NPA / Localité
     zipCode: NPA
+    country: Pays
   list:
     title: Clients
     add_title: Créer un nouveau client

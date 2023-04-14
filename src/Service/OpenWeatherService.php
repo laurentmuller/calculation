@@ -599,11 +599,11 @@ class OpenWeatherService extends AbstractHttpClientService
                         $value = (array) \reset($value);
                     }
                     break;
-                case 'lon':
-                    $results['lon_dms'] = $this->service->formatLng((float) $value);
-                    break;
                 case 'lat':
                     $results['lat_dms'] = $this->service->formatLat((float) $value);
+                    break;
+                case 'lon':
+                    $results['lon_dms'] = $this->service->formatLng((float) $value);
                     break;
                 case 'deg':
                     $deg = (int) $value;

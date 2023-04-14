@@ -16,6 +16,7 @@ use App\Entity\AbstractEntity;
 use App\Entity\Customer;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
+use App\Form\Type\CountryFlagType;
 
 /**
  * Customer edit type.
@@ -70,14 +71,15 @@ class CustomerType extends AbstractEntityType
         $helper->field('zipCode')
             ->autocomplete('disabled')
             ->maxLength(10)
-            ->notRequired()
             ->addTextType();
 
         $helper->field('city')
             ->autocomplete('disabled')
             ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
-            ->notRequired()
             ->addTextType();
+
+        $helper->field('country')
+            ->add(CountryFlagType::class);
 
         $helper->field('email')
             ->maxLength(100)

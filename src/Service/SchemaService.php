@@ -51,7 +51,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *     table: string}
  * @psalm-type SchemaTableType=array{
  *          name: string,
- *          columns: array<SchemaColumnType>,
+ *          columns: SchemaColumnType[],
  *          records: int,
  *          indexes: SchemaIndexType[],
  *          associations: SchemaAssociationType[]}

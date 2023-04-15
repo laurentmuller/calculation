@@ -134,14 +134,9 @@ final class FormatUtils
     {
         $style = \NumberFormatter::PERCENT;
         $extraHash = $includeSign ? '1' : '0';
-        $hash = self::getNumberHash($style, $decimals, $roundingMode, $extraHash);
-        if (isset(self::$numberFormatters[$hash])) {
-            $formatter = self::$numberFormatters[$hash];
-        } else {
-            $formatter = self::getNumberFormatter($style, $decimals, $roundingMode, $extraHash);
-            if (!$includeSign) {
-                $formatter->setSymbol(\NumberFormatter::PERCENT_SYMBOL, '');
-            }
+        $formatter = self::getNumberFormatter($style, $decimals, $roundingMode, $extraHash);
+        if (!$includeSign) {
+            $formatter->setSymbol(\NumberFormatter::PERCENT_SYMBOL, '');
         }
         $value = self::checkNegativeZero($number);
 
@@ -184,14 +179,8 @@ final class FormatUtils
         $timetype ??= self::getTimeType();
         $locale ??= \Locale::getDefault();
         $pattern ??= '';
-        $hash = \implode('|', [
-            $datetype,
-            $timetype,
-            self::hashTimeZone($timezone),
-            $calendar,
-            $pattern,
-            $locale,
-        ]);
+        $hash = self::getHashCode($locale, $datetype, $timetype, $timezone, $calendar, $pattern);
+
         if (!isset(self::$dateFormatters[$hash])) {
             /** @var \IntlDateFormatter $formatter */
             $formatter = \IntlDateFormatter::create($locale, $datetype, $timetype, $timezone, $calendar, $pattern);
@@ -229,7 +218,7 @@ final class FormatUtils
             $decimal = '.';
         } else {
             /** @var \NumberFormatter $formatter */
-            $formatter = \NumberFormatter::create($locale, \NumberFormatter::DECIMAL);
+            $formatter = \NumberFormatter::create($locale, \NumberFormatter::PATTERN_DECIMAL);
             $decimal = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
         }
 
@@ -251,7 +240,7 @@ final class FormatUtils
             $grouping = '\'';
         } else {
             /** @var \NumberFormatter $formatter */
-            $formatter = \NumberFormatter::create($locale, \NumberFormatter::DECIMAL);
+            $formatter = \NumberFormatter::create($locale, \NumberFormatter::PATTERN_DECIMAL);
             $grouping = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
         }
         if (2 === \strlen($grouping) && 194 === \ord($grouping[0]) && 160 === \ord($grouping[1])) {
@@ -271,7 +260,7 @@ final class FormatUtils
      */
     public static function getNumberFormatter(int $style, int $digits, int $roundingMode = \NumberFormatter::ROUND_HALFEVEN, string $extraHash = ''): \NumberFormatter
     {
-        $hash = self::getNumberHash($style, $digits, $roundingMode, $extraHash);
+        $hash = self::getHashCode($style, $digits, $roundingMode, $extraHash);
         if (!isset(self::$numberFormatters[$hash])) {
             /** @var \NumberFormatter $formatter */
             $formatter = \NumberFormatter::create(\Locale::getDefault(), $style);
@@ -296,7 +285,7 @@ final class FormatUtils
             return $percent;
         }
         /** @var \NumberFormatter $formatter */
-        $formatter = \NumberFormatter::create(\Locale::getDefault(), \NumberFormatter::PERCENT);
+        $formatter = \NumberFormatter::create(\Locale::getDefault(), \NumberFormatter::PATTERN_DECIMAL);
         $percent = $formatter->getSymbol(\NumberFormatter::PERCENT_SYMBOL);
 
         return $percent;
@@ -318,33 +307,18 @@ final class FormatUtils
         return empty($number) ? 0.0 : (float) $number;
     }
 
-    /**
-     * Gets a number formatter hash code for the current locale.
-     */
-    private static function getNumberHash(int $style, int $digits, int $roundingMode, string $extraHash = ''): string
+    private static function getHashCode(\IntlTimeZone|\DateTimeZone|string|int|null ...$values): string
     {
-        return \implode('|', [
-            \Locale::getDefault(),
-            $style,
-            $digits,
-            $roundingMode,
-            $extraHash,
-        ]);
-    }
+        $array = \array_map(function (\IntlTimeZone|\DateTimeZone|string|int|null $value): string {
+            if ($value instanceof \IntlTimeZone) {
+                return $value->getID();
+            } elseif ($value instanceof \DateTimeZone) {
+                return $value->getName();
+            } else {
+                return (string) $value;
+            }
+        }, $values);
 
-    /**
-     * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
-     */
-    private static function hashTimeZone(\IntlTimeZone|\DateTimeZone|string|null $timezone): string
-    {
-        if ($timezone instanceof \IntlTimeZone) {
-            return $timezone->getID();
-        } elseif ($timezone instanceof \DateTimeZone) {
-            return $timezone->getName();
-        } elseif (\is_string($timezone)) {
-            return $timezone;
-        } else {
-            return '';
-        }
+        return \implode('|', $array);
     }
 }

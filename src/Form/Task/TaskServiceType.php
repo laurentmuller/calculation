@@ -27,6 +27,12 @@ class TaskServiceType extends AbstractHelperType
 {
     /**
      * {@inheritdoc}
+     *
+     * @psalm-param FormView<\Symfony\Component\Form\FormTypeInterface> $view
+     * @psalm-param FormInterface<\Symfony\Component\Form\FormTypeInterface> $form
+     *
+     * @phpstan-param FormView<\Symfony\Component\Form\FormTypeInterface<mixed>> $view
+     * @phpstan-param FormInterface<\Symfony\Component\Form\FormTypeInterface<mixed>> $form
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {

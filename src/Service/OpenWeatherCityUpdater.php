@@ -51,6 +51,8 @@ class OpenWeatherCityUpdater
 
     /**
      * Create the import form.
+     *
+     * @return FormInterface<mixed>
      */
     public function createForm(): FormInterface
     {

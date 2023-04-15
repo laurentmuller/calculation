@@ -21,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Base extension for FileType.
  *
- * @template T of \Symfony\Component\Form\FormTypeInterface
+ * @template T
  *
  * @extends AbstractTypeExtension<T>
  */
@@ -30,6 +30,8 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
     /**
      * {@inheritdoc}
      *
+     * @psalm-param FormView<T> $view
+     * @psalm-param FormInterface<T> $form
      * @psalm-param array<array-key, mixed> $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
@@ -62,6 +64,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
     /**
      * Updates attributes.
      *
+     * @psalm-param FormInterface<T> $form
      * @psalm-param array<array-key, mixed> $attributes
      * @psalm-param array<array-key, mixed> $options
      */

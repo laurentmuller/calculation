@@ -57,6 +57,8 @@ class ArchiveService implements ServiceSubscriberInterface
 
     /**
      * Create the edit form.
+     *
+     * @return FormInterface<mixed>
      */
     public function createForm(ArchiveQuery $query): FormInterface
     {

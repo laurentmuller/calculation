@@ -34,6 +34,7 @@ class FileTypeExtension extends AbstractFileTypeExtension
     /**
      * {@inheritdoc}
      *
+     * @psalm-param FormInterface<FileType> $form
      * @psalm-param array<array-key, mixed> $attributes
      * @psalm-param array<array-key, mixed> $options
      */

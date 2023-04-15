@@ -25,6 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 abstract class AbstractEntityType extends AbstractHelperType
 {
     use CheckSubClassTrait;
+
     /**
      * The entity class name.
      *
@@ -35,9 +36,7 @@ abstract class AbstractEntityType extends AbstractHelperType
     /**
      * Constructor.
      *
-     * @param string $className the entity class name
-     *
-     * @psalm-param class-string<T> $className
+     * @param class-string<T> $className the entity class name
      *
      * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractEntity class
      */

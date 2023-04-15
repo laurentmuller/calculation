@@ -31,11 +31,17 @@ class CalculationStateTypeTest extends AbstractEntityTypeTestCase
         ];
     }
 
+    /**
+     * @psalm-return class-string<CalculationState>
+     */
     protected function getEntityClass(): string
     {
         return CalculationState::class;
     }
 
+    /**
+     * @psalm-return class-string<CalculationStateType>
+     */
     protected function getFormTypeClass(): string
     {
         return CalculationStateType::class;

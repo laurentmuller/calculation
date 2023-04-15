@@ -59,6 +59,8 @@ class ProductUpdater implements ServiceSubscriberInterface
 
     /**
      * Creates the edit form.
+     *
+     * @return FormInterface<mixed>
      */
     public function createForm(ProductUpdateQuery $query): FormInterface
     {

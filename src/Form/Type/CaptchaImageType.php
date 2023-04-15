@@ -35,6 +35,9 @@ class CaptchaImageType extends AbstractType
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-param FormView<TextType> $view
+     * @psalm-param FormInterface<TextType> $form
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {

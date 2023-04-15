@@ -228,11 +228,13 @@ abstract class AbstractController extends BaseController
      *
      * Override the parent function to allow to use the default type like defined in the <code>FormFactoryInterface</code>.
      *
-     * @template T of \Symfony\Component\Form\FormTypeInterface
+     * @psalm-param class-string<\Symfony\Component\Form\FormTypeInterface> $type
      *
-     * @param class-string<T> $type    the form class to create
-     * @param mixed           $data    the initial data
-     * @param array           $options the form options
+     * @phpstan-template TData
+     *
+     * @phpstan-param class-string<\Symfony\Component\Form\FormTypeInterface<TData>> $type
+     *
+     * @phpstan-return FormInterface<TData>
      *
      * @psalm-suppress OverriddenMethodAccess
      * @psalm-suppress InvalidCast
@@ -290,10 +292,9 @@ abstract class AbstractController extends BaseController
      * Inspects the given request and calls submit() if the form was submitted, checks whether the given
      * form is submitted and if the form and all children are valid.
      *
-     * @param Request       $request the request to handle
-     * @param FormInterface $form    the form to validate
+     * @template T
      *
-     * @return bool true if the form is submitted and valid
+     * @psalm-param FormInterface<T> $form    the form to validate
      *
      * @see FormInterface::handleRequest()
      * @see FormInterface::isSubmitted()

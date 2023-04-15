@@ -17,7 +17,7 @@
                 <td class="ow-temperature">
                     <span class="ow-temperature-pills ow-temperature-forecast" title="{{ 'openweather.fields.temp'|trans }}">{{ tools.value_temp(data.main.temp, units_temp) }}</span>
                 </td>
-                <td class="w-50">
+                <td class="">
                     {% apply spaceless %}
                     <span>{{ data.weather.description }}</span>{% if data.rain['3h']|default(false) %}<span title="{{ 'openweather.fields.rain'|trans }}">, {{ tools.value_rain(data.rain['3h'], units_volume) }}</span>{% endif %}
                     <br>

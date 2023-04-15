@@ -17,7 +17,6 @@ use App\Form\Extension\FileTypeExtension;
 use App\Form\Extension\TextTypeExtension;
 use App\Form\Extension\UrlTypeExtension;
 use App\Form\Extension\VichImageTypeExtension;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -25,7 +24,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  * Test for entity type class.
  *
  * @template TEntity of AbstractEntity
- * @template TForm of FormTypeInterface
+ * @template TForm of \App\Form\AbstractEntityType<TEntity>
  */
 abstract class AbstractEntityTypeTestCase extends TypeTestCase
 {
@@ -34,11 +33,9 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
      */
     public function testSubmitValidData(): void
     {
-        /** @psalm-var class-string<TEntity> $className */
         $className = $this->getEntityClass();
 
         // create model and form
-        /** @psalm-var TEntity $model */
         $model = new $className();
         $form = $this->factory->create($this->getFormTypeClass(), $model);
 
@@ -80,7 +77,7 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     /**
      * Gets the form type class name.
      *
-     * @return class-string<FormTypeInterface>
+     * @return class-string<TForm>
      */
     abstract protected function getFormTypeClass(): string;
 
@@ -104,7 +101,6 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
      */
     protected function populate(string $className, array $data): mixed
     {
-        /** @psalm-var TEntity $entity */
         $entity = new $className();
         $accessor = PropertyAccess::createPropertyAccessor();
         /** @psalm-var mixed $value */

@@ -94,7 +94,7 @@ class ProfileChangePasswordType extends AbstractEntityType
      */
     private function validate(ExecutionContextInterface $context): void
     {
-        /** @var FormInterface $root */
+        /** @psalm-var FormInterface<mixed> $root */
         $root = $context->getRoot();
 
         // must check password?

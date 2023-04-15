@@ -4,7 +4,7 @@
 /**! compression tag for ftp-deployment */
 
 .ow-date {
-    width: 80px;
+    width: 95px;
     white-space: nowrap;
 }
 
@@ -33,13 +33,15 @@
 }
 
 .ow-temperature {
-    width: 100px;
+    width: 120px;
 }
 
 .ow-temperature-pills {
     font-size: 80%;
+    text-align: center;
     border-radius: 50rem;
     padding: 0.2rem 0.5rem;
+    width: 55px;
 }
 
 .ow-temperature-forecast {

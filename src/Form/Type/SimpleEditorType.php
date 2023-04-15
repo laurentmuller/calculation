@@ -57,6 +57,8 @@ class SimpleEditorType extends AbstractType
     /**
      * {@inheritdoc}
      *
+     * @psalm-param FormView<HiddenType> $view
+     * @psalm-param FormInterface<HiddenType> $form
      * @psalm-param array{required:bool} $options
      *
      * @psalm-suppress MixedArrayAssignment

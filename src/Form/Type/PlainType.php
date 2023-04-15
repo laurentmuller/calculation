@@ -29,7 +29,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * This is useful for forms where certain field need to be shown but not editable.
  * If the 'expanded' option is set to true, a div tag is added around the span tag.
  *
- * @extends AbstractType<\Symfony\Component\Form\FormTypeInterface>
+ * @extends AbstractType<mixed>
  */
 class PlainType extends AbstractType implements ServiceSubscriberInterface
 {
@@ -94,7 +94,13 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      *
+     * @psalm-param FormView<\Symfony\Component\Form\FormTypeInterface> $view
+     * @psalm-param FormInterface<\Symfony\Component\Form\FormTypeInterface> $form
+     *
      * @psalm-suppress InvalidPropertyAssignmentValue
+     *
+     * @phpstan-param FormView<\Symfony\Component\Form\FormTypeInterface<mixed>> $view
+     * @phpstan-param FormInterface<\Symfony\Component\Form\FormTypeInterface<mixed>> $form
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {

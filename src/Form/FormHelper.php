@@ -513,7 +513,7 @@ class FormHelper
     /**
      * Creates the form within the underlying form builder.
      *
-     * @return FormInterface the form
+     * @return FormInterface<mixed> the form
      *
      * @see FormBuilderInterface::getForm()
      * @see FormHelper::createView()

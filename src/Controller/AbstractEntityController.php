@@ -138,7 +138,6 @@ abstract class AbstractEntityController extends AbstractController
         $isNew = $item->isNew();
         $permission = $isNew ? EntityPermission::ADD : EntityPermission::EDIT;
         $this->checkPermission($permission);
-        /** @psalm-var class-string<\Symfony\Component\Form\FormTypeInterface> $type  */
         $type = $this->getEditFormType();
         $form = $this->createForm($type, $item);
         if ($this->handleRequestForm($request, $form)) {
@@ -173,6 +172,10 @@ abstract class AbstractEntityController extends AbstractController
 
     /**
      * Gets the form type (class name) used to edit an entity.
+     *
+     * @return class-string<\Symfony\Component\Form\FormTypeInterface>
+     *
+     * @phpstan-return class-string<\Symfony\Component\Form\FormTypeInterface<T>>
      */
     abstract protected function getEditFormType(): string;
 

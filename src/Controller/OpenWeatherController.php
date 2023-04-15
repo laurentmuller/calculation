@@ -354,6 +354,9 @@ class OpenWeatherController extends AbstractController
         return self::PREFIX_KEY . $key;
     }
 
+    /**
+     * @psalm-return FormInterface<mixed>
+     */
     private function createSearchForm(array $data): FormInterface
     {
         $helper = $this->createFormHelper('openweather.search.', $data);

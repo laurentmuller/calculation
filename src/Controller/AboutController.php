@@ -47,9 +47,8 @@ class AboutController extends AbstractController
             '%app_name%' => $appName,
         ];
         $content = $this->renderView('about/about_content.html.twig', $parameters);
-        $report = new HtmlReport($this);
-        $report->setTitleTrans('index.menu_info', $titleParameters, true)
-            ->setContent($content);
+        $report = new HtmlReport($this, $content);
+        $report->setTitleTrans('index.menu_info', $titleParameters, true);
 
         return $this->renderPdfDocument($report);
     }

@@ -63,9 +63,8 @@ class AboutPolicyController extends AbstractController
             'link' => false,
         ];
         $content = $this->renderView('about/policy_content.html.twig', $parameters);
-        $report = new HtmlReport($this);
-        $report->setTitleTrans('about.policy', [], true)
-            ->setContent($content);
+        $report = new HtmlReport($this, $content);
+        $report->setTitleTrans('about.policy', [], true);
 
         return $this->renderPdfDocument($report);
     }

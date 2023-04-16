@@ -53,9 +53,8 @@ class AboutLicenceController extends AbstractController
             'link' => false,
         ];
         $content = $this->renderView('about/licence_content.html.twig', $parameters);
-        $report = new HtmlReport($this);
-        $report->setTitleTrans('about.licence', [], true)
-            ->setContent($content);
+        $report = new HtmlReport($this, $content);
+        $report->setTitleTrans('about.licence', [], true);
 
         return $this->renderPdfDocument($report);
     }

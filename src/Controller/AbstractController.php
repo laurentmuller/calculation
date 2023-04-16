@@ -232,14 +232,14 @@ abstract class AbstractController extends BaseController
      *
      * @psalm-param class-string<\Symfony\Component\Form\FormTypeInterface> $type
      *
+     * @psalm-suppress OverriddenMethodAccess
+     * @psalm-suppress InvalidCast
+     *
      * @phpstan-template TData
      *
      * @phpstan-param class-string<\Symfony\Component\Form\FormTypeInterface<TData>> $type
      *
      * @phpstan-return FormInterface<TData>
-     *
-     * @psalm-suppress OverriddenMethodAccess
-     * @psalm-suppress InvalidCast
      */
     protected function createForm(string $type = FormType::class, mixed $data = null, array $options = []): FormInterface
     {

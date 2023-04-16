@@ -12,6 +12,10 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Controller\AbstractController;
+use App\Pdf\Enums\PdfDocumentOrientation;
+use App\Pdf\Enums\PdfDocumentSize;
+use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlParser;
 
@@ -20,9 +24,18 @@ use App\Pdf\Html\HtmlParser;
  */
 class HtmlReport extends AbstractReport
 {
-    private ?string $content = null;
     private ?float $leftMargin = null;
     private ?float $rightMargin = null;
+
+    public function __construct(
+        AbstractController $controller,
+        private readonly string $content,
+        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
+        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
+        PdfDocumentSize $size = PdfDocumentSize::A4
+    ) {
+        parent::__construct($controller, $orientation, $unit, $size);
+    }
 
     public function Footer(): void
     {
@@ -43,7 +56,7 @@ class HtmlReport extends AbstractReport
      */
     public function render(): bool
     {
-        if (null === $this->content || '' === $this->content) {
+        if ('' === $this->content) {
             return false;
         }
         $parser = new HtmlParser($this->content);
@@ -54,16 +67,6 @@ class HtmlReport extends AbstractReport
         $root->output($this);
 
         return true;
-    }
-
-    /**
-     * Sets the HTML content.
-     */
-    public function setContent(string $content): self
-    {
-        $this->content = $content;
-
-        return $this;
     }
 
     /**

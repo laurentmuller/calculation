@@ -116,7 +116,7 @@ trait RightsTrait
      */
     public function setRights(?array $rights): static
     {
-        $this->rights = empty($rights) || 0 === \array_sum($rights) ? null : $rights;
+        $this->rights = null === $rights || [] === $rights || 0 === \array_sum($rights) ? null : $rights;
 
         return $this;
     }

@@ -232,7 +232,7 @@ class PdfHeader
         $this->applySmallStyle();
         $text = $this->getEmail();
 
-        $link = empty($text) ? '' : "mailto:$text";
+        $link = '' === $text ? '' : "mailto:$text";
         $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::bottom(), PdfTextAlignment::RIGHT, PdfMove::NEW_LINE, $link);
     }
 

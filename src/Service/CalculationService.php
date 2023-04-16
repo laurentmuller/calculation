@@ -424,7 +424,7 @@ final class CalculationService implements ServiceSubscriberInterface
      */
     private function getGlobalMargin(float $amount): float
     {
-        if (!empty($amount)) {
+        if (0.0 !== $amount) {
             return $this->globalRepository->getMargin($amount);
         }
 
@@ -446,7 +446,7 @@ final class CalculationService implements ServiceSubscriberInterface
      */
     private function getGroupMargin(Group $group, float $amount): float
     {
-        if (!empty($amount)) {
+        if (0.0 !== $amount) {
             return $this->marginRepository->getMargin($group, $amount);
         }
 

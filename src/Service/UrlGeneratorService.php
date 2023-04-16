@@ -125,7 +125,7 @@ class UrlGeneratorService
         if ($id instanceof AbstractEntity) {
             $id = $id->getId();
         }
-        if (!empty($id)) {
+        if (null !== $id && 0 !== $id) {
             $params['id'] = $id;
         }
 

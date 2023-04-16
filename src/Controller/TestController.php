@@ -43,8 +43,8 @@ use App\Validator\Password;
 use App\Validator\Strength;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -162,7 +162,7 @@ class TestController extends AbstractController
         $options = PropertyServiceInterface::PASSWORD_OPTIONS;
         $passwordConstraint = new Password(['all' => true]);
         $strengthConstraint = new Strength(StrengthLevel::MEDIUM);
-        $listener = function (FormEvent $event) use ($options, $passwordConstraint, $strengthConstraint): void {
+        $listener = function (PreSubmitEvent $event) use ($options, $passwordConstraint, $strengthConstraint): void {
             /** @psalm-var array $data */
             $data = $event->getData();
             foreach ($options as $option) {

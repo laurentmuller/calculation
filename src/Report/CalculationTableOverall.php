@@ -132,7 +132,7 @@ class CalculationTableOverall extends PdfTableBuilder
 
     private function outputUserMargin(float $userMargin, float $userAmount, float $totalNet): self
     {
-        if (!empty($userMargin)) {
+        if (0.0 !== $userMargin) {
             $this->startHeaderRow()
                 ->add($this->trans('calculation.fields.totalNet'), 4)
                 ->addAmount($totalNet)

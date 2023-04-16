@@ -74,7 +74,7 @@ trait MimeTypeTrait
      */
     private function validate(string $name): string
     {
-        $name = empty($name) ? 'document' : \basename($name);
+        $name = '' === $name ? 'document' : \basename($name);
         $extension = '.' . $this->getFileExtension();
         if (!\str_ends_with($name, $extension)) {
             return $name . $extension;

@@ -105,7 +105,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
      */
     private function addAmount(float $amount, ?PdfStyle $errorStyle = null): self
     {
-        return $this->add(text: FormatUtils::formatAmount($amount), style: empty($amount) ? $errorStyle : null);
+        return $this->add(text: FormatUtils::formatAmount($amount), style: 0.0 === $amount ? $errorStyle : null);
     }
 
     /**

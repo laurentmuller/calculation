@@ -90,7 +90,7 @@ class LogDatabase extends AbstractDatabase
      */
     private function arrayToString(?array $array): ?string
     {
-        return empty($array) ? null : StringUtils::encodeJson($array);
+        return null === $array || [] === $array ? null : StringUtils::encodeJson($array);
     }
 
     /**

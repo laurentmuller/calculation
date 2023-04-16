@@ -373,7 +373,7 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractReport && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-        if (empty($name) && \is_string($title = $doc->getTitle())) {
+        if ('' === $name && \is_string($title = $doc->getTitle())) {
             $name = $title;
         }
 
@@ -396,7 +396,7 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractDocument && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-        if (empty($name) && \is_string($title = $doc->getTitle())) {
+        if ('' === $name && \is_string($title = $doc->getTitle())) {
             $name = \sprintf('%s.xlsx', $title);
         }
 

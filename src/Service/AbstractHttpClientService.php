@@ -73,7 +73,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      */
     public function __construct(protected readonly string $key)
     {
-        if (empty($key)) {
+        if ('' === $key) {
             throw new \InvalidArgumentException('The API key is empty.');
         }
     }

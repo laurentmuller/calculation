@@ -39,7 +39,7 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      * @param string $method   the request method
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getRoutes')]
-    public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK, string $method = Request::METHOD_GET): void
+    public function testRoutes(string $url, string $username = '', int $expected = Response::HTTP_OK, string $method = Request::METHOD_GET): void
     {
         $this->addEntities();
         $this->checkRoute($url, $username, $expected, $method);
@@ -74,10 +74,10 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      * @param int    $expected the expected result
      * @param string $method   the request method
      */
-    protected function checkRoute(string $url, string $username, int $expected = Response::HTTP_OK, string $method = Request::METHOD_GET): void
+    protected function checkRoute(string $url, string $username, int $expected, string $method): void
     {
         $isExcel = false !== \stripos($url, '/excel');
-        if (!empty($username)) {
+        if ('' !== $username) {
             $this->loginUsername($username);
         }
         if ($isExcel) {

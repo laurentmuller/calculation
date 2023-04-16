@@ -225,7 +225,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
             $query['bgset'] = \sprintf('bg%d', $background);
         }
         $url = 'https://robohash.org/' . \urlencode($this->getUserIdentifier());
-        if (!empty($query)) {
+        if ([] !== $query) {
             return $url . '?' . \http_build_query($query);
         }
 

@@ -137,7 +137,7 @@ abstract class AbstractProperty extends AbstractEntity
      */
     public function setArray(?array $value): static
     {
-        return $this->setString(empty($value) ? null : StringUtils::encodeJson($value));
+        return $this->setString(null === $value || [] === $value ? null : StringUtils::encodeJson($value));
     }
 
     /**

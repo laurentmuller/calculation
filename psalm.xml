@@ -5,8 +5,9 @@
        findUnusedVariablesAndParams="true"
        findUnusedBaselineEntry="true"
        findUnusedPsalmSuppress="true"
-       strictBinaryOperands="true"
        findUnusedCode="true"
+       strictBinaryOperands="true"
+       cacheDirectory=".psalm.cache"
        phpVersion="8.2"
        errorLevel="1">
 

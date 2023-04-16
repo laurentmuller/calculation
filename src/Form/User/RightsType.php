@@ -18,7 +18,7 @@ use App\Form\FormHelper;
 use App\Interfaces\RoleInterface;
 use App\Service\RoleHierarchyService;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\Event\PreSetDataEvent;
 
 /**
  * The access rights type.
@@ -38,7 +38,7 @@ class RightsType extends AbstractHelperType
     /**
      * Handles the preset data event.
      */
-    public function onPreSetData(FormEvent $event): void
+    public function onPreSetData(PreSetDataEvent $event): void
     {
         /** @psalm-var mixed $data */
         $data = $event->getData();

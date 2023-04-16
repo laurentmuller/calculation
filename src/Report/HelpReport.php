@@ -129,7 +129,7 @@ class HelpReport extends AbstractReport
      */
     private function outputActions(array $actions, string $description): void
     {
-        $height = self::LINE_HEIGHT * (empty($description) ? 0.0 : (float) $this->getLinesCount($description, 0.0)) + 3.0 + self::LINE_HEIGHT;
+        $height = self::LINE_HEIGHT * ('' === $description ? 0.0 : (float) $this->getLinesCount($description, 0.0)) + 3.0 + self::LINE_HEIGHT;
         if (!$this->isPrintable($height)) {
             $this->AddPage();
         } else {
@@ -190,7 +190,7 @@ class HelpReport extends AbstractReport
         $text = \array_reduce($details, function (string $carry, string $str): string {
             $str = \strip_tags($this->br2nl($str));
 
-            return empty($carry) ? $str : $carry . ' ' . $str;
+            return '' === $carry ? $str : $carry . ' ' . $str;
         }, '');
         $this->MultiCell(txt: $text, align: PdfTextAlignment::LEFT);
     }
@@ -269,7 +269,7 @@ class HelpReport extends AbstractReport
      */
     private function outputDialogs(?array $dialogs, bool $newPage): bool
     {
-        if (empty($dialogs)) {
+        if (null === $dialogs || [] === $dialogs) {
             return false;
         }
         if ($newPage) {
@@ -294,7 +294,7 @@ class HelpReport extends AbstractReport
      */
     private function outputEntities(?array $entities, bool $newPage): bool
     {
-        if (empty($entities)) {
+        if (null === $entities || [] === $entities) {
             return false;
         }
         if ($newPage) {
@@ -395,7 +395,7 @@ class HelpReport extends AbstractReport
      */
     private function outputMainMenus(?array $menus): bool
     {
-        if (empty($menus)) {
+        if (null === $menus || [] === $menus) {
             return false;
         }
         $this->AddPage();

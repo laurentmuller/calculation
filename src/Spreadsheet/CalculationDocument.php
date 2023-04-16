@@ -89,10 +89,10 @@ class CalculationDocument extends AbstractDocument
         if ($indent > 0) {
             $style->getAlignment()->setIndent($indent);
         }
-        if (!empty($alignment)) {
+        if ('' !== $alignment) {
             $style->getAlignment()->setHorizontal($alignment);
         }
-        if (!empty($format)) {
+        if ('' !== $format) {
             $style->getNumberFormat()->setFormatCode($format);
         }
         $this->setCellValue($sheet, $column, $row, $value);

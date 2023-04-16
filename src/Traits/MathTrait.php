@@ -67,7 +67,7 @@ trait MathTrait
      */
     protected function round(?float $val, int $precision = 2): float
     {
-        return empty($val) ? 0.0 : \round($val, $precision);
+        return null === $val ? 0.0 : \round($val, $precision);
     }
 
     /**
@@ -81,7 +81,7 @@ trait MathTrait
      */
     protected function safeDivide(float $dividend, float $divisor, float $default = 0.0): float
     {
-        return empty($divisor) ? $default : $dividend / $divisor;
+        return 0.0 === $divisor ? $default : $dividend / $divisor;
     }
 
     /**

@@ -295,7 +295,7 @@ abstract class AbstractEntityController extends AbstractController
         $existing = $parameters['params'] ?? [];
         $queryParameters = $request->query->all();
         $parameters['params'] = $existing + $queryParameters;
-        if (!empty($id) && !isset($parameters['params']['id'])) {
+        if (null !== $id && 0 !== $id && !isset($parameters['params']['id'])) {
             $parameters['params']['id'] = $id;
         }
     }

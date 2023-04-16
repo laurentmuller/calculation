@@ -247,7 +247,7 @@ class UpdateAssetsCommand extends Command
                     $result .= "}\n";
                 }
             }
-            if (!empty($result)) {
+            if ('' !== $result) {
                 return "\n/*\n * '$newStyle' (copied from '$searchStyle')  \n */\n" . $result;
             }
         }
@@ -551,7 +551,7 @@ class UpdateAssetsCommand extends Command
             '.simple-editor',
             ['color', 'background-color']
         );
-        if (empty($toAppend)) {
+        if ('' === $toAppend) {
             return $content;
         }
 

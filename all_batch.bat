@@ -1,5 +1,6 @@
 @ECHO OFF
-ECHO -------------------------------------- START BATCH %time% -------------------------------- && ^
+SET STA__TIME=%TIME: =0%
+ECHO -------------------------------------- START BATCH %STA__TIME% --------------------------- && ^
 ECHO -------------------------------------- Symfony ------------------------------------------- && ^
 php bin/console lint:yaml translations config                                                   && ^
 php bin/console lint:twig --env=prod templates                                                  && ^
@@ -17,5 +18,4 @@ ECHO -------------------------------------- PHP-RECTOR -------------------------
 ECHO -------------------------------------- PHP-TWIG-CS --------------------------------------- && ^
 .\vendor-bin\twigcs\vendor\bin\twigcs.bat --severity error --display blocking templates         && ^
 ECHO -------------------------------------- PHP-UNIT ------------------------------------------ && ^
-.\vendor-bin\phpunit\vendor\bin\phpunit.bat                                                     && ^
-ECHO -------------------------------------- END BATCH %time% ----------------------------------
+.\vendor-bin\phpunit\vendor\bin\phpunit.bat

@@ -185,7 +185,7 @@ class LogTable extends AbstractTable implements \Countable
     {
         $sort = $query->sort;
         $ascending = self::SORT_ASC === $query->order;
-        if (!empty($sort) && !LogSorter::isDefaultSort($sort, $ascending)) {
+        if ('' !== $sort && !LogSorter::isDefaultSort($sort, $ascending)) {
             $sorter = new LogSorter($sort, $ascending);
             $sorter->sort($entities);
         }

@@ -16,7 +16,7 @@ use App\Entity\User;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Utils\FormatUtils;
-use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\Event\PreSetDataEvent;
 
 /**
  * User edit type.
@@ -85,7 +85,7 @@ class UserType extends AbstractEntityType
     /**
      * Handles the preset data event.
      */
-    private function onPreSetData(FormEvent $event): void
+    private function onPreSetData(PreSetDataEvent $event): void
     {
         /** @var User $user */
         $user = $event->getData();

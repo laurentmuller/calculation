@@ -66,6 +66,7 @@
             ]
         },
         {
+            "display": "highcharts-accessibility",
             "name": "highcharts",
             "version": "10.3.3",
             "source": "https://cdn.jsdelivr.net/npm/",
@@ -177,6 +178,7 @@
             ]
         },
         {
+            "display": "select2-bootstrap4",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/{file}",
             "name": "@ttskch/select2-bootstrap4-theme",
@@ -207,6 +209,7 @@
             ]
         },
         {
+            "display": "bootstrap-dark",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/{file}",
             "name": "@forevolve/bootstrap-dark",

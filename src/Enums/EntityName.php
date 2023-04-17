@@ -107,11 +107,14 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
      */
     public static function constants(): array
     {
-        $entities = EntityName::cases();
-        $keys = \array_map(static fn (EntityName $e) => 'ENTITY_' . $e->name, $entities);
-        $values = \array_map(static fn (EntityName $e) => $e->value, $entities);
+        /** @psalm-var array<string, string> $result */
+        $result = \array_reduce(
+            self::cases(),
+            static fn (array $choices, self $type) => $choices + ['ENTITY_' . $type->name => $type->value],
+            [],
+        );
 
-        return \array_combine($keys, $values);
+        return $result;
     }
 
     /**

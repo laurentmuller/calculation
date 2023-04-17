@@ -57,9 +57,9 @@ enum HtmlBootstrapColors: string
     }
 
     /**
-     * Gets this value for spreadsheet.
+     * Gets this value for PHP Spreadsheet or PHP Word.
      */
-    public function getSpreadsheetColor(): string
+    public function getPhpOfficeColor(): string
     {
         return \substr($this->value, 1);
     }

@@ -20,6 +20,7 @@ use App\Pdf\PdfDocument;
 use App\Report\AbstractReport;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
+use App\Response\WordResponse;
 use App\Service\ApplicationService;
 use App\Service\UrlGeneratorService;
 use App\Service\UserService;
@@ -28,6 +29,8 @@ use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\ExceptionContextTrait;
 use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
+use App\Word\AbstractWordDocument;
+use App\Word\WordDocument;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -388,7 +391,7 @@ abstract class AbstractController extends BaseController
      *                                    <code>false</code> to send to the browser and force a file download.
      * @param string              $name   the name of the Spreadsheet file or null to use default ('document.xlsx')
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report can not be rendered
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
@@ -397,9 +400,32 @@ abstract class AbstractController extends BaseController
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
         if ('' === $name && \is_string($title = $doc->getTitle())) {
-            $name = \sprintf('%s.xlsx', $title);
+            $name = $title;
         }
 
         return new SpreadsheetResponse($doc, $inline, $name);
+    }
+
+    /**
+     * Render the given Word document and output the response.
+     *
+     * @param WordDocument $doc    the document to render
+     * @param bool         $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if available.
+     *                             <code>false</code> to send to the browser and force a file download with the name given.
+     * @param string       $name   the name of the PDF file or null to use default ('document.pdf')
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     */
+    protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
+    {
+        if ($doc instanceof AbstractWordDocument && !$doc->render()) {
+            throw $this->createNotFoundException($this->trans('errors.render_document'));
+        }
+        if ('' === $name && \is_string($title = $doc->getTitle())) {
+            $name = $title;
+        }
+
+        return new WordResponse($doc, $inline, $name);
     }
 }

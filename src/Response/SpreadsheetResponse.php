@@ -16,6 +16,7 @@ use App\Interfaces\MimeTypeInterface;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\MimeTypeTrait;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -37,12 +38,12 @@ class SpreadsheetResponse extends StreamedResponse implements MimeTypeInterface
      */
     public function __construct(SpreadsheetDocument $doc, bool $inline = true, string $name = '')
     {
-        $headers = $this->buildHeaders($name, $inline);
         $callback = function () use ($doc): void {
             $writer = IOFactory::createWriter($doc, 'Xlsx');
             $writer->save('php://output');
         };
-        parent::__construct($callback, self::HTTP_OK, $headers);
+        $headers = $this->buildHeaders($name, $inline);
+        parent::__construct(callback: $callback, headers: $headers);
     }
 
     public function getFileExtension(): string

@@ -4,21 +4,25 @@
 </p>
 
 <p class="text-justify">Sauf définition contraire, les termes utilisés dans le présent accord de licence ont la même signification que dans
- notre {% if link is defined and link %}<a href="{{ path('about_policy') }}">Politique de confidentialité</a>{% else %}politique de confidentialité{% endif %}.</p>
+ notre {% if link is defined and link %}<a href="{{ path('about_policy') }}">Politique de confidentialité</a>{% else %}politique de confidentialité{% endif %}.
+</p>
 
 <p class="text-justify">L'utilisation de l'application entraîne l'établissement d'un contrat de licence de logiciel entre vous-même (désigné ci-après par
- preneur de licence) et le fournisseur. Ce faisant, vous approuvez les conditions générales explicitées ci-après.</p>
+ preneur de licence) et le fournisseur. Ce faisant, vous approuvez les conditions générales explicitées ci-après.
+</p>
 
 <h4 class="bookmark bookmark-{{ level }}">Objet du contrat</h4>
 <p class="text-justify">Ce contrat a pour but de régler les compétences d'utilisation (licence) de l'application
  dans le cadre de la conclusion d'un abonnement en toutes ses formes. Les contenus du contrat acceptés au moment de la conclusion de
  l'abonnement (description de la prestation, conditions générales et dispositions-cadre de la communication électronique des données)
  sont parties intégrantes de la relation contractuelle. Dans le cas d'utilisations contraires ou divergentes de l'application, les conditions
- de ce contrat de licence priment sur les autres éléments contractuels.</p>
+ de ce contrat de licence priment sur les autres éléments contractuels.
+</p>
 
 <h4 class="bookmark bookmark-{{ level }}">Droits de biens immatériels</h4>
 <p class="text-justify">Le fournisseur détient l'ensemble des droits d'auteur et tous les autres biens immatériels liés
- à l'application. Il n'y a pas de vente de l'application au preneur de licence et aucun droit d'auteur ne lui est cédé.</p>
+ à l'application. Il n'y a pas de vente de l'application au preneur de licence et aucun droit d'auteur ne lui est cédé.
+</p>
 
 <h4 class="bookmark bookmark-{{ level }}">Définition de la licence</h4>
 <p class="text-justify">Pendant la durée de l'abonnement, le preneur de licence et les utilisateurs autorisés ont le
@@ -26,13 +30,15 @@
  de licence et les utilisateurs autorisés peuvent charger autant de fois qu'ils le désirent les éléments de l'application. Aucun droit
  d'utilisation supplémentaire n'est accordé au preneur de contrat et aux utilisateurs autorisés. Ils n'ont en particulier pas le droit de
  modifier cette application, de la corriger, de la développer, de la traduire, de la déchiffrer ou de la décompiler ni de la vendre, la louer,
- la prêter, la transmettre et ni, surtout, de permettre à des tiers de l'utiliser.</p>
+ la prêter, la transmettre et ni, surtout, de permettre à des tiers de l'utiliser.
+</p>
 
 <h4 class="bookmark bookmark-{{ level }}">Mises à jour, développements, assistance technique</h4>
 <p class="text-justify">Le preneur de licence et les utilisateurs autorisés ont le devoir d'installer des mises à jour et
  de nouvelles versions de l'application en temps opportun. La maintenance d'anciennes versions n'est assurée que trois mois au maximum après
  le lancement de la version la plus récente. Pour les questions d'assistance technique, le fournisseur propose une centrale d'appels ainsi
- qu'une aide en ligne selon la description des prestations de l'abonnement.</p>
+ qu'une aide en ligne selon la description des prestations de l'abonnement.
+</p>
 
 <h4 class="bookmark bookmark-{{ level }}">Garantie, responsabilité</h4>
 <p class="text-justify">Le fournisseur fait remarquer qu'en fonction de l'état actuel de la technique, il n'est pas possible
@@ -44,20 +50,27 @@
  immédiatement au cas aucune autre solution ne serait possible. Le preneur de licence ne peut faire valoir aucune autre prétention. Le preneur
  de licence a en permanence le droit de désinstaller l'application et de recourir aux prestations de la plate-forme du fournisseur dans le cadre
  de la description des prestations sans utiliser l'application. Les conditions de responsabilité dans le catalogue des prestations de l'abonnement,
- dans les conditions générales et dans les dispositions-cadre relatives à la communication électronique des données s'appliquent par ailleurs.</p>
+ dans les conditions générales et dans les dispositions-cadre relatives à la communication électronique des données s'appliquent par ailleurs.
+</p>
 
 <h4 class="bookmark bookmark-{{ level }}">Perte du droit d'utilisation</h4>
 <p class="text-justify">En cas de violation de l'une ou de plusieurs dispositions de ce contrat, le preneur de licence et
- les utilisateurs autorisés perdent le droit d'utiliser l'application. Le fournisseur peut refuser toute nouvelle installation de l'application.</p>
+ les utilisateurs autorisés perdent le droit d'utiliser l'application. Le fournisseur peut refuser toute nouvelle installation de l'application.
+</p>
 
 <h4 class="bookmark bookmark-{{ level }}">Résiliation</h4>
 <p class="text-justify">Le preneur de licence et le fournisseur peuvent en tout temps résilier ce contrat avec un délai
  de résiliation d'un mois pour la fin d'un mois civil. L'abonnement n'est pas concerné par une telle résiliation. La résiliation de l'abonnement
- est exclusivement régie par les prescriptions en la matière contenues dans le descriptif des prestations de l'abonnement.</p>
+ est exclusivement régie par les prescriptions en la matière contenues dans le descriptif des prestations de l'abonnement.
+</p>
 
 <h4 class="bookmark bookmark-{{ level }}">For et droit applicable</h4>
 <p class="text-justify">Le droit matériel suisse est applicable sur la présente relation contractuelle. Le siège du
  fournisseur est le for pour tout conflit juridique en lien avec ce contrat. Le fournisseur est autorisé à interpeller le tribunal au
- domicile du preneur de licence ou à son siège.</p>
+ domicile du preneur de licence ou à son siège.
+</p>
 
-<p class="mb-0 text-right">{{ app_owner_city }}, {{ 'now'|locale_date('none', null, null, 'MMMM Y')|capitalize }}</p>
+{% set show_date = show_date is defined ? show_date : true %}
+{% if show_date %}
+ <p class="mb-0 text-right">{{ app_owner_city }}, {{ 'now'|locale_date('none', null, null, 'MMMM Y')|capitalize }}</p>
+{% endif %}

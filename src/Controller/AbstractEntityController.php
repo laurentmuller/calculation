@@ -19,9 +19,11 @@ use App\Pdf\PdfDocument;
 use App\Repository\AbstractRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
+use App\Response\WordResponse;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\TableTrait;
 use App\Utils\StringUtils;
+use App\Word\WordDocument;
 use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -244,6 +246,18 @@ abstract class AbstractEntityController extends AbstractController
         $this->checkPermission(EntityPermission::EXPORT);
 
         return parent::renderSpreadsheetDocument($doc, $inline, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
+     */
+    protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
+    {
+        $this->checkPermission(EntityPermission::EXPORT);
+
+        return parent::renderWordDocument($doc, $inline, $name);
     }
 
     /**

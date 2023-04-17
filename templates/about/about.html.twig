@@ -1,6 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'about/_about_macro.html.twig' as tools %}
-{% from 'macros/_icons.html.twig' import link, homepage, button_pdf %}
+{% from 'macros/_icons.html.twig' import link, homepage, button_pdf, button_word %}
 {# parameters #}
 {%- set title = 'index.menu_info' -%}
 {%- set title_icon = 'info-circle' -%}
@@ -38,8 +38,8 @@
 {% block body %}
 {{ parent() }}
 <div class="accordion" id="accordionAbout">
-{{ tools.aboutCard('licence', 'about_licence_pdf') }}
-{{ tools.aboutCard('policy', 'about_policy_pdf') }}
+{{ tools.aboutCard('licence', 'about_licence_pdf', false, 'about_licence_word') }}
+{{ tools.aboutCard('policy', 'about_policy_pdf', false, 'about_policy_word') }}
 {% if super_admin %}
     {{ tools.aboutCard('symfony', 'about_symfony_pdf', 'about_symfony_excel') }}
     {{ tools.aboutCard('php', 'about_php_pdf', 'about_php_excel') }}
@@ -50,7 +50,8 @@
     <div class="col">
         {{ homepage() }}
         {{ link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
-        {{ button_pdf('about_pdf') }}
+        {{ button_pdf('about_pdf', {}, 'common.button_export_pdf') }}
+        {{ button_word('about_word', {}, 'common.button_export_word') }}
     </div>
 </div>
 {% endblock %}

@@ -124,8 +124,16 @@
 {{- _self.link(href, text, class) -}}
 {%- endmacro %}
 
-{% macro button_pdf(route, parameters=[]) -%}
-{{- _self.linkExternal(path(route, parameters), 'common.button_pdf', 'btn btn-form btn-outline-secondary', ICON_PDF) -}}
+{% macro button_pdf(route, parameters=[], title=null) -%}
+{{- _self.linkExternal(path(route, parameters), 'common.button_pdf', 'btn btn-form btn-outline-secondary', ICON_PDF, title) -}}
+{%- endmacro %}
+
+{% macro button_excel(route, parameters=[], title=null) -%}
+    {{- _self.linkExternal(path(route, parameters), 'common.button_export', 'btn btn-form btn-outline-secondary', ICON_EXCEL, title) -}}
+{%- endmacro %}
+
+{% macro button_word(route, parameters=[], title=null) -%}
+    {{- _self.linkExternal(path(route, parameters), 'common.button_export', 'btn btn-form btn-outline-secondary', ICON_WORD, title) -}}
 {%- endmacro %}
 
 {% macro copyright_link(class=null) -%}

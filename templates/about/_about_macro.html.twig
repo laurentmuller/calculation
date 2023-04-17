@@ -70,7 +70,7 @@
 </tr>
 {%- endmacro %}
 
-{% macro aboutCard(id, pdf_route, excel_route=false) -%}
+{% macro aboutCard(id, pdf_route, excel_route=false, word_route=false) -%}
 {% from 'macros/_icons.html.twig' import linkExternal %}
 {%- set route = path('about_' ~ id ~ '_content') -%}
 {%- set title = ('about.' ~ id)|trans -%}
@@ -83,9 +83,12 @@
                 </a>
             </div>
             <div class="col-auto d-print-none">
-                {{ linkExternal(path(pdf_route), null, null, ICON_PDF, 'common.button_pdf') }}
+                {{ linkExternal(path(pdf_route), null, null, ICON_PDF, 'common.button_export_pdf') }}
                 {% if excel_route %}
-                    {{ linkExternal(path(excel_route), null, null, ICON_EXCEL, 'common.button_export') }}
+                    {{ linkExternal(path(excel_route), null, null, ICON_EXCEL, 'common.button_export_excel') }}
+                {% endif %}
+                {% if word_route %}
+                    {{ linkExternal(path(word_route), null, null, ICON_WORD, 'common.button_export_word') }}
                 {% endif %}
             </div>
         </div>

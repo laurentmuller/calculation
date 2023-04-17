@@ -85,11 +85,11 @@ class LogsDocument extends AbstractDocument
                 LogLevel::ALERT,
                 LogLevel::CRITICAL,
                 LogLevel::EMERGENCY,
-                LogLevel::ERROR => HtmlBootstrapColors::DANGER->getSpreadsheetColor(),
-                LogLevel::WARNING => HtmlBootstrapColors::WARNING->getSpreadsheetColor(),
-                LogLevel::DEBUG => HtmlBootstrapColors::SECONDARY->getSpreadsheetColor(),
+                LogLevel::ERROR => HtmlBootstrapColors::DANGER->getPhpOfficeColor(),
+                LogLevel::WARNING => HtmlBootstrapColors::WARNING->getPhpOfficeColor(),
+                LogLevel::DEBUG => HtmlBootstrapColors::SECONDARY->getPhpOfficeColor(),
                 // info, notice
-                default => HtmlBootstrapColors::INFO->getSpreadsheetColor(),
+                default => HtmlBootstrapColors::INFO->getPhpOfficeColor(),
             };
         }
 

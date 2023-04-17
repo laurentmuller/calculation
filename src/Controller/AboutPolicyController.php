@@ -15,6 +15,8 @@ namespace App\Controller;
 use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
+use App\Response\WordResponse;
+use App\Word\HtmlDocument;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -67,5 +69,20 @@ class AboutPolicyController extends AbstractController
         $report->setTitleTrans('about.policy', [], true);
 
         return $this->renderPdfDocument($report);
+    }
+
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
+    #[Route(path: '/word', name: 'about_policy_word')]
+    public function word(): WordResponse
+    {
+        $parameters = [
+            'comments' => false,
+            'link' => false,
+        ];
+        $content = $this->renderView('about/policy_content.html.twig', $parameters);
+        $doc = new HtmlDocument($this, $content);
+        $doc->setTitleTrans('about.policy');
+
+        return $this->renderWordDocument($doc);
     }
 }

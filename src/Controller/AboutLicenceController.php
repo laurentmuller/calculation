@@ -15,6 +15,8 @@ namespace App\Controller;
 use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
+use App\Response\WordResponse;
+use App\Word\HtmlDocument;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -57,5 +59,19 @@ class AboutLicenceController extends AbstractController
         $report->setTitleTrans('about.licence', [], true);
 
         return $this->renderPdfDocument($report);
+    }
+
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
+    #[Route(path: '/word', name: 'about_licence_word')]
+    public function word(): WordResponse
+    {
+        $parameters = [
+            'link' => false,
+        ];
+        $content = $this->renderView('about/licence_content.html.twig', $parameters);
+        $doc = new HtmlDocument($this, $content);
+        $doc->setTitleTrans('about.licence');
+
+        return $this->renderWordDocument($doc);
     }
 }

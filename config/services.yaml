@@ -62,6 +62,7 @@ services:
             - '../src/Spreadsheet'
             - '../src/Traits'
             - '../src/Util'
+            - '../src/Word'
             - '../src/Kernel.php'
 
     # make public to use with vich_uploader

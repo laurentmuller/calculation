@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import link, homepage, button_pdf %}
+{% from 'macros/_icons.html.twig' import link, homepage, button_pdf, button_word %}
 {# parameters #}
 {%- set title = 'about.licence' -%}
 {%- set title_icon = 'info-circle' -%}
@@ -24,5 +24,6 @@
         {{ link(path('app_login'), 'index.login', 'btn btn-form btn-outline-primary') }}
     {% endif %}
     {{ link(path('about_policy'), 'about.policy', 'btn btn-form btn-outline-info') }}
-    {{ button_pdf('about_licence_pdf') }}
+    {{ button_pdf('about_licence_pdf', {}, 'common.button_export_pdf') }}
+    {{ button_word('about_licence_word', {}, 'common.button_export_word') }}
 {% endblock %}

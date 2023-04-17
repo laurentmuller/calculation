@@ -102,6 +102,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
             // export
             'ICON_PDF' => 'file-pdf far',
             'ICON_EXCEL' => 'file-excel far',
+            'ICON_WORD' => 'file-word far',
         ];
     }
 

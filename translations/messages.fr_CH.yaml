@@ -262,6 +262,9 @@ common:
   button_delete: Supprimer
   button_edit: Modifier
   button_export: Exporter
+  button_export_pdf: Exporter au format PDF
+  button_export_excel: Exporter vers Microsoft® Excel
+  button_export_word: Exporter vers Microsoft® Word
   button_excel_list: Exporter la liste
   button_card: Mode mosaïque
   button_import: Importer

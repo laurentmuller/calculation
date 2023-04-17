@@ -74,11 +74,14 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
      */
     public static function constants(): array
     {
-        $permissions = EntityPermission::cases();
-        $keys = \array_map(static fn (EntityPermission $e) => 'ATTRIBUTE_' . $e->name, $permissions);
-        $values = \array_map(static fn (EntityPermission $e) => $e->name, $permissions);
+        /** @psalm-var array<string, string> $result */
+        $result = \array_reduce(
+            self::cases(),
+            static fn (array $choices, self $type) => $choices + ['ATTRIBUTE_' . $type->name => $type->name],
+            [],
+        );
 
-        return \array_combine($keys, $values);
+        return $result;
     }
 
     /**

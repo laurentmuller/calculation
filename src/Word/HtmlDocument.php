@@ -57,12 +57,12 @@ class HtmlDocument extends AbstractWordDocument
 
     private function addHeaderStyles(): void
     {
-        $this->addTitleStyle(1, ['size' => 20, 'bold' => true]);
-        $this->addTitleStyle(2, ['size' => 18, 'bold' => true]);
-        $this->addTitleStyle(3, ['size' => 16, 'bold' => true]);
-        $this->addTitleStyle(4, ['size' => 14, 'bold' => true]);
-        $this->addTitleStyle(5, ['size' => 12, 'bold' => true]);
-        $this->addTitleStyle(6, ['size' => 10, 'bold' => true]);
+        $fontStyle = ['bold' => true];
+        $paragraphStyle = ['keepNext' => true]; // , 'keepLines' => true];
+        foreach (\range(1, 6) as $index) {
+            $fontStyle['size'] = 20 - 2 * ($index - 1);
+            $this->addTitleStyle($index, $fontStyle, $paragraphStyle);
+        }
     }
 
     private function getBootstrapStyles(): array
@@ -70,12 +70,17 @@ class HtmlDocument extends AbstractWordDocument
         return \array_reduce(
             HtmlBootstrapColors::cases(),
             function (array $carry, HtmlBootstrapColors $color): array {
-                $key = \sprintf('bg-%s', \strtolower($color->name));
-                $value = \sprintf('background-color:%s;', $color->getPhpOfficeColor());
+                $name = \strtolower($color->name);
+                $officeColor = $color->getPhpOfficeColor();
+
+                // background
+                $key = \sprintf('bg-%s', $name);
+                $value = \sprintf('background-color:%s;', $officeColor);
                 $carry += [$key => $value];
 
-                $key = \sprintf('text-%s', \strtolower($color->name));
-                $value = \sprintf('color:%s;', $color->getPhpOfficeColor());
+                // color
+                $key = \sprintf('text-%s', $name);
+                $value = \sprintf('color:%s;', $officeColor);
 
                 return $carry + [$key => $value];
             },
@@ -95,9 +100,15 @@ class HtmlDocument extends AbstractWordDocument
             'text-right' => 'text-align: right;',
             'text-justify' => 'text-align: justify;',
             // font
-            'font-weight-bold' => 'font-weight:bold;',
             'font-italic' => 'font-style:italic;',
+            'font-weight-bold' => 'font-weight:bold;',
             'text-monospace' => 'font-family:Courier New;',
+            // border
+            'border' => 'border: 1px solid #dee2e6',
+            'border-top' => 'border-top: 1px solid #dee2e6',
+            'border-bottom' => 'border-bottom: 1px solid #dee2e6',
+            'border-left' => 'border-left: 1px solid #dee2e6',
+            'border-right' => 'border-right: 1px solid #dee2e6',
             // tag
             'class' => 'style',
         ];

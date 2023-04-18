@@ -120,10 +120,10 @@ class UpdateAssetsCommand extends Command
                 $version = $plugin['version'];
                 $display = $plugin['display'] ?? $name;
                 if ($this->isPluginDisabled($plugin)) {
-                    $this->writeVerbose("Skipping   '$display v$version'.", 'fg=gray');
+                    $this->writeVerbose("Skip   : $display v$version", 'fg=gray');
                     continue;
                 }
-                $this->writeVerbose("Installing '$display v$version'.");
+                $this->writeVerbose("Install: $display v$version");
                 $files = $plugin['files'];
                 foreach ($files as $file) {
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);

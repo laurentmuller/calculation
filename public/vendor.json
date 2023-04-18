@@ -55,7 +55,6 @@
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/highcharts@10.3.3/highcharts.js",
             "name": "highcharts",
             "version": "10.3.3",
             "source": "https://cdn.jsdelivr.net/npm/",
@@ -123,6 +122,7 @@
             ]
         },
         {
+            "display": "iconify",
             "name": "@iconify/iconify",
             "version": "1.0.7",
             "source": "https://cdn.jsdelivr.net/npm/",
@@ -178,7 +178,7 @@
             ]
         },
         {
-            "display": "select2-bootstrap4",
+            "display": "select2-bootstrap4-theme",
             "source": "https://cdn.jsdelivr.net/npm/",
             "format": "{source}{name}@{version}/dist/{file}",
             "name": "@ttskch/select2-bootstrap4-theme",

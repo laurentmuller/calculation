@@ -38,6 +38,7 @@
             <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
                 {{ navItem(path('test_tree'), 'test.tree_view', 'folder-tree') }}
                 {{ navItemExternal(path('test_html'), 'test.html', 'code') }}
+                {{ navItemExternal(path('test_word'), 'common.button_export_word', ICON_WORD) }}
                 {{ navItem(path('schema'), 'schema.index.title', 'table') }}
                 {{ navItem(path('ipstack'), 'test.ip_stack', 'location-dot') }}
             </ul>

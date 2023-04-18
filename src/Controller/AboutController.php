@@ -56,6 +56,10 @@ class AboutController extends AbstractController
         return $this->renderPdfDocument($report);
     }
 
+    /**
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/word', name: 'about_word')]
     public function word(#[Autowire('%app_name%')] string $appName): WordResponse

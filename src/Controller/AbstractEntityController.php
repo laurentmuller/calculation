@@ -252,6 +252,8 @@ abstract class AbstractEntityController extends AbstractController
      * {@inheritdoc}
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse
     {

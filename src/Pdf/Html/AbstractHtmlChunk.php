@@ -28,6 +28,11 @@ use App\Utils\StringUtils;
 abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 {
     /**
+     * The pattern to extract margins.
+     */
+    private const MARGINS_PATTERN = '/^[m|p]([tblrxy])?-(sm-|md-|lg-|xl-)?([012345])/im';
+
+    /**
      * The bookmark.
      */
     private bool $bookmark = false;
@@ -529,10 +534,9 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     private function parseMargins(HtmlStyle $style, string $class): self
     {
         $matches = [];
-        $pattern = '/[m|p]([tblrxy])?.*-([012345])/im';
-        if (\preg_match_all($pattern, $class, $matches, \PREG_SET_ORDER)) {
+        if (\preg_match_all(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
             $match = $matches[0];
-            $value = (float) $match[2];
+            $value = (float) $match[3];
             match ($match[1]) {
                 't' => $style->setTopMargin($value),
                 'b' => $style->setBottomMargin($value),

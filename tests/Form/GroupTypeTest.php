@@ -17,10 +17,10 @@ use App\Form\Group\GroupType;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @extends AbstractEntityTypeTestCase<Group, GroupType>
+ * @extends AbstractTestEntityType<Group, GroupType>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(GroupType::class)]
-class GroupTypeTest extends AbstractEntityTypeTestCase
+class GroupTypeTest extends AbstractTestEntityType
 {
     protected function getData(): array
     {

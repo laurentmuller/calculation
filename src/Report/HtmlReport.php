@@ -59,10 +59,12 @@ class HtmlReport extends AbstractReport
         if ('' === $this->content) {
             return false;
         }
-        $parser = new HtmlParser($this->content);
-        if (!($root = $parser->parse()) instanceof HtmlParentChunk) {
+
+        $root = $this->parseContent();
+        if (!$root instanceof HtmlParentChunk) {
             return false;
         }
+
         $this->AddPage();
         $root->output($this);
 
@@ -140,5 +142,12 @@ class HtmlReport extends AbstractReport
         if ($previousMargins[1] !== $this->rightMargin) {
             $this->rMargin = $previousMargins[1];
         }
+    }
+
+    private function parseContent(): ?HtmlParentChunk
+    {
+        $parser = new HtmlParser($this->content);
+
+        return $parser->parse();
     }
 }

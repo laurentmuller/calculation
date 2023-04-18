@@ -1,14 +1,12 @@
-{%- set level = level is defined ? level : 0 -%}
-<p class="text-justify">
-<strong>{{ app_owner }}</strong> (désigné ci-après par "Fournisseur") détient l'ensemble des droits afférents au site web <strong>{{ app_name }}</strong> (désigné ci-après par le terme "Application").
-</p>
+{%- set level = level|default(0) -%}
+<p class="text-justify"><strong>{{ app_owner }}</strong> (désigné ci-après par "Fournisseur") détient l'ensemble des droits afférents au site web <strong>{{ app_name }}</strong> (désigné ci-après par le terme "Application").</p>
 
 <p class="text-justify">Sauf définition contraire, les termes utilisés dans le présent accord de licence ont la même signification que dans
  notre {% if link is defined and link %}<a href="{{ path('about_policy') }}">Politique de confidentialité</a>{% else %}politique de confidentialité{% endif %}.
 </p>
 
 <p class="text-justify">L'utilisation de l'application entraîne l'établissement d'un contrat de licence de logiciel entre vous-même (désigné ci-après par
- preneur de licence) et le fournisseur. Ce faisant, vous approuvez les conditions générales explicitées ci-après.
+ "Preneur de licence") et le fournisseur. Ce faisant, vous approuvez les conditions générales explicitées ci-après.
 </p>
 
 <h4 class="bookmark bookmark-{{ level }}">Objet du contrat</h4>
@@ -70,7 +68,6 @@
  domicile du preneur de licence ou à son siège.
 </p>
 
-{% set show_date = show_date is defined ? show_date : true %}
-{% if show_date %}
+{% if show_date is defined ? show_date : true %}
  <p class="mb-0 text-right">{{ app_owner_city }}, {{ 'now'|locale_date('none', null, null, 'MMMM Y')|capitalize }}</p>
 {% endif %}

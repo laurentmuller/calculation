@@ -18,7 +18,6 @@ use App\Utils\FormatUtils;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\SimpleType\Jc;
-use PhpOffice\PhpWord\SimpleType\JcTable;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -85,7 +84,7 @@ abstract class AbstractWordDocument extends WordDocument
         // page
         $page = 'Page {PAGE} / {NUMPAGES}';
         $leftCell = $row->addCell(4000);
-        $leftCell->addPreserveText($page, $cellStyle, ['alignment' => JcTable::START, 'spaceBefore' => $spaceBefore]);
+        $leftCell->addPreserveText($page, $cellStyle, ['alignment' => Jc::START, 'spaceBefore' => $spaceBefore]);
 
         // application
         $url = $this->controller->getApplicationOwnerUrl();
@@ -114,7 +113,7 @@ abstract class AbstractWordDocument extends WordDocument
 
         $tableStyle = ['borderBottomSize' => 1];
         $spaceAfter = Converter::pointToTwip(3);
-        $cellStyle = ['size' => 10, 'bold' => true, 'spaceAfter' => Converter::pointToTwip(3)];
+        $cellStyle = ['size' => 10, 'bold' => true, 'spaceAfter' => $spaceAfter];
 
         $header = $section->addHeader();
         $row = $header->addTable($tableStyle)->addRow();
@@ -174,6 +173,9 @@ abstract class AbstractWordDocument extends WordDocument
         }
     }
 
+    /**
+     * @psalm-return ($str is null ? null : string)
+     */
     private function cleanText(?string $str): ?string
     {
         return null !== $str ? \htmlspecialchars($str) : null;

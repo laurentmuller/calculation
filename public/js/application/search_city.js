@@ -5,21 +5,20 @@
  */
 (function ($) {
     'use strict';
-    const $form = $("form");
-    // const $unit = $('#form_units');
-    // const $query = $('#form_query');
-    // // submit form when units change
-    // $unit.data('value', $unit.val()).on('input', function () {
-    //     $unit.createTimer(function () {
-    //         $unit.removeTimer();
-    //         const newValue = $unit.val();
-    //         const oldValue = $unit.data('value');
-    //         if (newValue !== oldValue && $query.val().trim().length >= 2) {
-    //             $form.trigger('submit');
-    //         }
-    //         $unit.data('value', newValue);
-    //     }, 500);
-    // });
+    // submit form when units change
+    const $form = $("#edit-form");
+    const $unit = $('#form_units');
+    const $query = $('#form_query');
+    $unit.data('value', $unit.val()).on('input', function () {
+        $unit.createTimer(function () {
+            $unit.removeTimer();
+            const newValue = $unit.val();
+            const oldValue = $unit.data('value');
+            if (newValue !== oldValue && $query.val().trim().length >= 2) {
+                $form.trigger('submit');
+            }
+        }, 500);
+    });
 
     // validation
     $form.initValidator({

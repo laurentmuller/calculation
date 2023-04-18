@@ -71,6 +71,10 @@ class AboutPolicyController extends AbstractController
         return $this->renderPdfDocument($report);
     }
 
+    /**
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/word', name: 'about_policy_word')]
     public function word(): WordResponse

@@ -15,7 +15,7 @@ namespace App\Tests\Web;
 /**
  * Test class for user's roles.
  */
-class UsersTest extends AbstractAuthenticateWebTestCase
+class UsersTest extends AbstractTestAuthenticateWeb
 {
     /**
      * @return array<int, array<int, bool|string>>

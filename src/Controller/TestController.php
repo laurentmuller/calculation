@@ -28,6 +28,7 @@ use App\Interfaces\RoleInterface;
 use App\Model\HttpClientError;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
+use App\Response\WordResponse;
 use App\Service\AbstractHttpClientService;
 use App\Service\CaptchaImageService;
 use App\Service\MailerService;
@@ -41,6 +42,7 @@ use App\Utils\FormatUtils;
 use App\Validator\Captcha;
 use App\Validator\Password;
 use App\Validator\Strength;
+use App\Word\HtmlDocument;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Event\PreSubmitEvent;
@@ -415,6 +417,22 @@ class TestController extends AbstractController
         ];
 
         return $this->json($data);
+    }
+
+    /**
+     * Export an HTML page to Word.
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     */
+    #[Route(path: '/word', name: 'test_word')]
+    public function word(): WordResponse
+    {
+        $content = $this->renderView('test/html_report.html.twig');
+        $doc = new HtmlDocument($this, $content);
+        $doc->setTitleTrans('test.html');
+
+        return $this->renderWordDocument($doc);
     }
 
     /**

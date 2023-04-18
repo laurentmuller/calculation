@@ -25,7 +25,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Contoller to output licence information.
+ * Controller to output licence information.
  */
 #[AsController]
 #[Route(path: '/about/licence')]
@@ -61,6 +61,10 @@ class AboutLicenceController extends AbstractController
         return $this->renderPdfDocument($report);
     }
 
+    /**
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Route(path: '/word', name: 'about_licence_word')]
     public function word(): WordResponse

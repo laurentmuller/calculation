@@ -141,8 +141,7 @@ readonly class HtmlParser
     {
         /** @var \DOMText $nodeText */
         $nodeText = $node;
-        $value = $nodeText->wholeText;
-        if ('' !== \trim($value)) {
+        if ('' !== $value = \trim($nodeText->wholeText)) {
             $chunk = new HtmlTextChunk($name, $parent);
             $chunk->setClassName($class);
             $chunk->setText($value);

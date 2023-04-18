@@ -21,7 +21,6 @@
     "replace" : {
         "symfony/polyfill-ctype" : "*",
         "symfony/polyfill-iconv" : "*",
-        "symfony/polyfill-php56" : "*",
         "symfony/polyfill-php70" : "*",
         "symfony/polyfill-php71" : "*",
         "symfony/polyfill-php72" : "*",

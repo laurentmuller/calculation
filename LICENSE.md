@@ -4,7 +4,7 @@
 web **Calculation** (ci-après désigné par le terme "Application").
 
 L'utilisation de l'application entraîne l'établissement d'un contrat de licence de logiciel
-entre vous-même (désigné ci-après par preneur de licence) et le fournisseur. Ce faisant, vous
+entre vous-même (désigné ci-après par "Preneur de licence") et le fournisseur. Ce faisant, vous
 approuvez les conditions générales explicitées ci-après.
 
 ## Objet du contrat

@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Unit test for users and routes.
  */
-class RoutesTest extends AbstractAuthenticateWebTestCase
+class RoutesTest extends AbstractTestAuthenticateWeb
 {
     /**
      * @return array<array{0: string, 1: string, 2?: int}>

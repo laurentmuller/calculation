@@ -47,7 +47,7 @@ fournir certaines données personnelles nominatives qui peuvent servir à vous c
 identifier ("Données à caractère personnel"). Les données personnelles nominatives peuvent
 comprendre, mais de manière non limitative :
 
-- L'adresse e-mail.
+- L'adresse électronique (e-mail).
 - Le nom de famille et le prénom.
 - Cookies et les données d'utilisation.
 
@@ -186,9 +186,9 @@ Nous nous réservons le droit d'actualiser notre politique de confidentialité d
 Nous vous informerons de toute modification en publiant la nouvelle politique de confidentialité
 sur cette page.
 
-Avant que la modification ne prenne effet, nous vous en informerons par e-mail et/ou en plaçant
-un avis bien en vue dans notre application et nous actualiserons la "date de prise d'effet" qui
-figure en haut de la présente politique de confidentialité.
+Avant que la modification ne prenne effet, nous vous en informerons par courrier électronique et/ou 
+en plaçant un avis bien en vue dans notre application et nous actualiserons 
+la "date de prise d'effet" qui figure en haut de la présente politique de confidentialité.
 
 Nous vous conseillons de consulter la présente politique de confidentialité périodiquement pour
 prendre connaissance de toute modification. Les modifications apportées à la présente politique

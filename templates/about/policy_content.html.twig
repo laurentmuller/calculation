@@ -1,7 +1,5 @@
-{%- set level = level is defined ? level : 0 -%}
-<p class="text-justify">
-<strong>{{ app_owner }}</strong> (désigné ci-après par "Fournisseur") exploite le site web <strong>{{ app_name }}</strong> (désigné ci-après par le terme "Application").
-</p>
+{%- set level = level|default(0) -%}
+<p class="text-justify"><strong>{{ app_owner }}</strong> (désigné ci-après par "Fournisseur") exploite le site web <strong>{{ app_name }}</strong> (désigné ci-après par le terme "Application").</p>
 
 <p class="text-justify">Cette page vous explique nos politiques en matière de collecte, d'utilisation et de communication des données à caractère
  personnel lorsque vous utilisez notre application ainsi que les choix qui s'offrent à vous en ce qui concerne ces données.
@@ -49,7 +47,7 @@
 </p>
 
 <ul>
-    <li>L'adresse électronique.</li>
+    <li>L'adresse électronique (e-mail).</li>
     <li>Le nom de famille et le prénom.</li>
     <li>Les cookies et les données d'utilisation.</li>
 </ul>
@@ -171,7 +169,7 @@
 <p class="text-justify">Nous nous réservons le droit d'actualiser notre politique de confidentialité de temps à autre. Nous vous informerons de
  toute modification en publiant la nouvelle politique de confidentialité sur cette page.
 </p>
-<p class="text-justify">Avant que la modification ne prenne effet, nous vous en informerons par e-mail et/ ou en plaçant un avis bien en vue dans
+<p class="text-justify">Avant que la modification ne prenne effet, nous vous en informerons par courrier électronique et/ ou en plaçant un avis bien en vue dans
  notre application et nous actualiserons la "date de prise d'effet" qui figure en haut de la présente politique de confidentialité.
 </p>
 <p class="text-justify">Nous vous conseillons de consulter la présente politique de confidentialité périodiquement pour prendre connaissance de toute

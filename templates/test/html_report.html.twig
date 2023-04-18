@@ -75,6 +75,7 @@
     <li>Les cookies sont de petits fichiers enregistrés sur votre dispositif (ordinateur, tablette ou mobile).</li>
 </ol>
 <div class="page-break"></div>
+
 <h6 class="bookmark">List désordonnée</h6>
 <ul>
     <li>Par application, nous entendons le site web https://www.calculation.bibi.nu exploité par {{ app_owner }}.</li>
@@ -93,7 +94,6 @@
 <p class="text-center">Text Center : Nous utilisons vos données pour fournir et améliorer l'application. Nous avons recours à des cookies et à d'autres technologies de suivi similaires pour effectuer un suivi des activités effectuées dans notre application, et nous conservons certaines informations.</p>
 <p class="text-right">Text Right : Nous utilisons vos données pour fournir et améliorer l'application. Nous avons recours à des cookies et à d'autres technologies de suivi similaires pour effectuer un suivi des activités effectuées dans notre application, et nous conservons certaines informations.</p>
 <p class="text-info">This is a text-info class.</p>
-
 <h4 class="bookmark">List désordonnée</h4>
 <ul>
     <li>
@@ -114,6 +114,7 @@
     </li>
 </ul>
 <div class="page-break"></div>
+
 <h4 class="bookmark">Marges</h4>
 <p class="mx-5">MX-5 : Nous vous conseillons de consulter la présente politique de confidentialité périodiquement pour prendre connaissance de toute modification. Les modifications apportées à la présente politique de confidentialité prennent effet lorsqu'elles sont publiées sur cette page.</p>
 <p class="my-5">MY-5 : Nous vous conseillons de consulter la présente politique de confidentialité périodiquement pour prendre connaissance de toute modification. Les modifications apportées à la présente politique de confidentialité prennent effet lorsqu'elles sont publiées sur cette page.</p>
@@ -124,27 +125,29 @@
 <h4 class="bookmark">Borders</h4>
 <p class="border">BORDER: Nous vous conseillons de consulter la présente politique.</p>
 <p class="border-top">BORDER-TOP: Nous vous conseillons de consulter la présente politique.</p>
-
 <div class="page-break"></div>
+
 <h4 class="bookmark">Typography</h4>
 {% for i in 1..6 %}
 <h{{ i }}>h{{ i }}. Bootstrap Heading</h{{ i }}>
 {% endfor %}
+<p><i>This line of text will be rendered as italic</i></p>
 <p><u>This line of text will be rendered as underlined</u></p>
+<p><b>This line of text will be rendered as bold</b></p>
 <p><code>This line of text will be rendered as code</code></p>
 <p><var>This line of text will be rendered as var</var></p>
 <p><kbd>This line of text will be rendered as kbd</kbd></p>
 
 <h6 class="bookmark">Code example</h6>
 <p class="text-monospace text-success">
-{{ _self.spaces(1) }}<samp class="text-danger">[</samp><br>
-{{ _self.spaces(2) }}<samp class="text-danger">"</samp>route<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>_wdt<samp class="text-danger">"</samp><br>
-{{ _self.spaces(2) }}<samp class="text-danger">"</samp>route_parameters<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">[</samp><br>
-{{ _self.spaces(3) }}<samp class="text-danger">"</samp>_controller<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>web_profiler.controller.profiler:toolbarAction<samp class="text-danger">"</samp><br>
-{{ _self.spaces(3) }}<samp class="text-danger">"</samp>token<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>0236e6<samp class="text-danger">"</samp><br>
-{{ _self.spaces(3) }}<samp class="text-danger">"</samp>_route<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>_wdt<samp class="text-danger">"</samp><br>
-{{ _self.spaces(2) }}<samp class="text-danger">]</samp><br>
-{{ _self.spaces(2) }}<samp class="text-danger">"</samp>request_uri<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>http://development/app_dev.php/_wdt/0236e6<samp class="text-danger">"</samp><br>
-{{ _self.spaces(2) }}<samp class="text-danger">"</samp>method<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>GET<samp class="text-danger">"</samp><br>
+{{ _self.spaces(1) }}<samp class="text-danger">[</samp><br/>
+{{ _self.spaces(2) }}<samp class="text-danger">"</samp>route<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>_wdt<samp class="text-danger">"</samp><br/>
+{{ _self.spaces(2) }}<samp class="text-danger">"</samp>route_parameters<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">[</samp><br/>
+{{ _self.spaces(3) }}<samp class="text-danger">"</samp>_controller<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>web_profiler.controller.profiler:toolbarAction<samp class="text-danger">"</samp><br/>
+{{ _self.spaces(3) }}<samp class="text-danger">"</samp>token<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>0236e6<samp class="text-danger">"</samp><br/>
+{{ _self.spaces(3) }}<samp class="text-danger">"</samp>_route<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>_wdt<samp class="text-danger">"</samp><br/>
+{{ _self.spaces(2) }}<samp class="text-danger">]</samp><br/>
+{{ _self.spaces(2) }}<samp class="text-danger">"</samp>request_uri<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>http://development/app_dev.php/_wdt/0236e6<samp class="text-danger">"</samp><br/>
+{{ _self.spaces(2) }}<samp class="text-danger">"</samp>method<samp class="text-danger">"</samp> <samp class="text-danger">=></samp> <samp class="text-danger">"</samp>GET<samp class="text-danger">"</samp><br/>
 {{ _self.spaces(1) }}<samp class="text-danger">]</samp>
 </p>

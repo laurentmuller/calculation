@@ -34,6 +34,12 @@ use Symfony\Component\Validator\Constraints\Length;
  *
  * @see https://openweathermap.org/api
  *
+ * @psalm-type OpenWeatherSearchType = array{
+ *     query: string,
+ *     units: string,
+ *     limit: int,
+ *     count: int}
+ *
  * @psalm-import-type OpenWeatherCityType from \App\Database\OpenWeatherDatabase
  */
 #[AsController]
@@ -278,13 +284,13 @@ class OpenWeatherController extends AbstractController
         $form = $this->createSearchForm($data);
 
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var array{query: string, units: string, limit: int, count: int} $data */
+            /** @psalm-var OpenWeatherSearchType $data */
             $data = $form->getData();
             $query = $data[self::KEY_QUERY];
             $units = $data[self::KEY_UNITS];
             $limit = $data[self::KEY_LIMIT];
             $count = $data[self::KEY_COUNT];
-            /** @psalm-var array<int, array{id: int}> $cities */
+            /** @psalm-var array<int, OpenWeatherCityType> $cities */
             $cities = $this->service->search($query, $units, $limit);
             if ([] !== $cities) {
                 // save
@@ -355,6 +361,8 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
+     * @psalm-param OpenWeatherSearchType $data
+     *
      * @psalm-return FormInterface<mixed>
      */
     private function createSearchForm(array $data): FormInterface

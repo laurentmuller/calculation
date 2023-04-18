@@ -16,7 +16,6 @@ use App\Interfaces\MimeTypeInterface;
 use App\Traits\MimeTypeTrait;
 use App\Word\WordDocument;
 use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\PhpWord;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
@@ -47,14 +46,5 @@ class WordResponse extends StreamedResponse implements MimeTypeInterface
     public function getFileExtension(): string
     {
         return 'docx';
-    }
-
-    /**
-     * @throws \PhpOffice\PhpWord\Exception\Exception
-     */
-    private static function save(PhpWord $doc): void
-    {
-        $writer = IOFactory::createWriter($doc);
-        $writer->save('php://output');
     }
 }

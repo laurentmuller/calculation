@@ -44,7 +44,7 @@ class WordDocument extends PhpWord
     }
 
     /**
-     * @Initialize this document properties.
+     * Initialize settings.
      */
     protected function initialize(): void
     {

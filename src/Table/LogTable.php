@@ -59,15 +59,15 @@ class LogTable extends AbstractTable implements \Countable
      */
     public function formatChannel(string $value, Log $log): string
     {
-        return $this->twig->render('macros/_cell_log_channel.html.twig', ['log' => $log]);
+        return $this->twig->render('macros/_cell_log_channel.html.twig', ['value' => $value, 'log' => $log]);
     }
 
     /**
      * Formats the date.
      */
-    public function formatCreatedAt(\DateTimeInterface $value, Log $log): string
+    public function formatCreatedAt(\DateTimeInterface $value): string
     {
-        return $log->getFormattedDate();
+        return Log::formatDate($value);
     }
 
     /**
@@ -77,7 +77,7 @@ class LogTable extends AbstractTable implements \Countable
      */
     public function formatLevel(string $value, Log $log): string
     {
-        return $this->twig->render('macros/_cell_log_level.html.twig', ['log' => $log]);
+        return $this->twig->render('macros/_cell_log_level.html.twig', ['value' => $value, 'log' => $log]);
     }
 
     /**

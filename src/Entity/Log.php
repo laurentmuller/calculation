@@ -79,6 +79,11 @@ class Log extends AbstractEntity
         $this->createdAt = new \DateTimeImmutable();
     }
 
+    public static function formatDate(\DateTimeInterface $date): string
+    {
+        return FormatUtils::formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM);
+    }
+
     /**
      * Gets the message with the context and extra properties if available.
      */
@@ -161,7 +166,7 @@ class Log extends AbstractEntity
     public function getFormattedDate(): string
     {
         if (null === $this->formattedDate) {
-            $this->formattedDate = FormatUtils::formatDateTime($this->createdAt, \IntlDateFormatter::SHORT, \IntlDateFormatter::MEDIUM);
+            $this->formattedDate = self::formatDate($this->createdAt);
         }
 
         return $this->formattedDate;

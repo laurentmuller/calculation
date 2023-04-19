@@ -18,7 +18,7 @@ use App\Entity\Group;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CategoryController::class)]
-class CategoryControllerTest extends AbstractTestController
+class CategoryControllerTest extends AbstractControllerTestCase
 {
     private static ?Category $entity = null;
     private static ?Group $group = null;

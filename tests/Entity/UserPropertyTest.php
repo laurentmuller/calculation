@@ -17,7 +17,7 @@ use App\Entity\UserProperty;
 use App\Repository\UserPropertyRepository;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(UserProperty::class)]
-class UserPropertyTest extends AbstractTestEntityValidator
+class UserPropertyTest extends AbstractEntityValidatorTestCase
 {
     /**
      * @throws \Doctrine\ORM\Exception\ORMException

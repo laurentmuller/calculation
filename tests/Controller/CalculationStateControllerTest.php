@@ -17,7 +17,7 @@ use App\Entity\CalculationState;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationStateController::class)]
-class CalculationStateControllerTest extends AbstractTestController
+class CalculationStateControllerTest extends AbstractControllerTestCase
 {
     private static ?CalculationState $entity = null;
 

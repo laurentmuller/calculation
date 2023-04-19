@@ -57,6 +57,9 @@ trait CacheAwareTrait
         }
     }
 
+    /**
+     * Get the cache adapter.
+     */
     #[SubscribedService(type: CacheItemPoolInterface::class)]
     public function getCacheAdapter(): CacheItemPoolInterface
     {

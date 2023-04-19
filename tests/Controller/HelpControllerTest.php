@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 use App\Controller\HelpController;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(HelpController::class)]
-class HelpControllerTest extends AbstractTestController
+class HelpControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

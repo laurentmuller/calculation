@@ -16,7 +16,7 @@ use App\Controller\RegistrationController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(RegistrationController::class)]
-class RegistrationControllerTest extends AbstractTestController
+class RegistrationControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

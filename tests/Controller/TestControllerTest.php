@@ -16,7 +16,7 @@ use App\Controller\TestController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(TestController::class)]
-class TestControllerTest extends AbstractTestController
+class TestControllerTest extends AbstractControllerTestCase
 {
     private const ROUTES = [
         'editor',

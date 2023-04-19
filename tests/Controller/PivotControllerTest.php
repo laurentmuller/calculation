@@ -21,7 +21,7 @@ use App\Entity\GroupMargin;
 use App\Entity\Product;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(PivotController::class)]
-class PivotControllerTest extends AbstractTestController
+class PivotControllerTest extends AbstractControllerTestCase
 {
     private static ?Calculation $calculation = null;
     private static ?Category $category = null;

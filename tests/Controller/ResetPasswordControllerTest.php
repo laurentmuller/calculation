@@ -16,7 +16,7 @@ use App\Controller\ResetPasswordController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ResetPasswordController::class)]
-class ResetPasswordControllerTest extends AbstractTestController
+class ResetPasswordControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

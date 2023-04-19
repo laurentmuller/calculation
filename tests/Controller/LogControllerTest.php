@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(LogController::class)]
-class LogControllerTest extends AbstractTestController
+class LogControllerTest extends AbstractControllerTestCase
 {
     use ServiceTrait;
 

@@ -16,7 +16,7 @@ use App\Controller\AdminController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(AdminController::class)]
-class AdminControllerTest extends AbstractTestController
+class AdminControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

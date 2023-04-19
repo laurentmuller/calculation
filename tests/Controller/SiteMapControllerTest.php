@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 use App\Controller\SiteMapController;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(SiteMapController::class)]
-class SiteMapControllerTest extends AbstractTestController
+class SiteMapControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

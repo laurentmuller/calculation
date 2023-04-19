@@ -16,7 +16,7 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(GroupMargin::class)]
-class GroupMarginsTest extends AbstractTestEntityValidator
+class GroupMarginsTest extends AbstractEntityValidatorTestCase
 {
     public function testInvalidMaximum(): void
     {

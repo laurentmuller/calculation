@@ -16,7 +16,7 @@ use App\Controller\SchemaController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(SchemaController::class)]
-class SchemaControllerTest extends AbstractTestController
+class SchemaControllerTest extends AbstractControllerTestCase
 {
     /**
      * {@inheritDoc}

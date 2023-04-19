@@ -65,7 +65,7 @@ class AboutLicenceController extends AbstractController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
-    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/word', name: 'about_licence_word')]
     public function word(): WordResponse
     {

@@ -16,7 +16,7 @@ use App\Entity\Category;
 use App\Entity\Group;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Category::class)]
-class CategoryTest extends AbstractTestEntityValidator
+class CategoryTest extends AbstractEntityValidatorTestCase
 {
     /**
      * @throws \Doctrine\ORM\Exception\ORMException

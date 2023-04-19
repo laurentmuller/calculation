@@ -150,7 +150,11 @@ class ApplicationServiceTest extends KernelTestCase
     public function testSecurity(): void
     {
         $service = $this->getApplicationService();
-        self::assertFalse($service->isDisplayCaptcha());
+        if ($service->isDebug()) {
+            self::assertFalse($service->isDisplayCaptcha());
+        } else {
+            self::assertTrue($service->isDisplayCaptcha());
+        }
         self::assertSame(StrengthLevel::NONE, $service->getStrengthLevel());
     }
 

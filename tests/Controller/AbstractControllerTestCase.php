@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Entity\AbstractEntity;
-use App\Tests\Web\AbstractTestAuthenticateWeb;
+use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Abstract unit test for controllers.
  */
-abstract class AbstractTestController extends AbstractTestAuthenticateWeb
+abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCase
 {
     /**
      * Gets the routes to test. Each entry must contain a URL, a username, an optional expected result and request method.
@@ -76,15 +76,15 @@ abstract class AbstractTestController extends AbstractTestAuthenticateWeb
      */
     protected function checkRoute(string $url, string $username, int $expected, string $method): void
     {
-        $isExcel = false !== \stripos($url, '/excel');
+        $officeDocument = $this->isOfficeDocument($url);
         if ('' !== $username) {
             $this->loginUsername($username);
         }
-        if ($isExcel) {
+        if ($officeDocument) {
             \ob_start();
         }
         $this->client?->request($method, $url);
-        if ($isExcel) {
+        if ($officeDocument) {
             \ob_get_clean();
         }
         $this->checkResponse($url, $username, $expected);
@@ -113,5 +113,10 @@ abstract class AbstractTestController extends AbstractTestAuthenticateWeb
         }
 
         return null;
+    }
+
+    private function isOfficeDocument(string $url): bool
+    {
+        return false !== \stripos($url, '/excel') || false !== \stripos($url, '/word');
     }
 }

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 /**
  * Contains information about the customer.
  */
@@ -74,6 +76,9 @@ class CustomerInformation
         if ('' === $fax = $this->fax ?? '') {
             return $fax;
         }
+        if ($translator instanceof TranslatorInterface) {
+            return $translator->trans('report.phone', ['{0}' => $fax]);
+        }
         if (\method_exists($translator, 'trans')) {
             return (string) $translator->trans('report.fax', ['{0}' => $fax]);
         }
@@ -88,6 +93,9 @@ class CustomerInformation
     {
         if ('' === $phone = $this->phone ?? '') {
             return $phone;
+        }
+        if ($translator instanceof TranslatorInterface) {
+            return $translator->trans('report.phone', ['{0}' => $phone]);
         }
         if (\method_exists($translator, 'trans')) {
             return (string) $translator->trans('report.phone', ['{0}' => $phone]);

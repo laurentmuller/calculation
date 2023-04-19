@@ -28,16 +28,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  */
 #[AsController]
 #[Route(path: '/about')]
+#[IsGranted(RoleInterface::ROLE_USER)]
 class AboutController extends AbstractController
 {
-    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '', name: 'about')]
     public function index(): Response
     {
         return $this->render('about/about.html.twig');
     }
 
-    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/pdf', name: 'about_pdf')]
     public function pdf(#[Autowire('%app_name%')] string $appName): PdfResponse
     {
@@ -60,7 +59,6 @@ class AboutController extends AbstractController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
-    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/word', name: 'about_word')]
     public function word(#[Autowire('%app_name%')] string $appName): WordResponse
     {

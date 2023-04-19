@@ -91,10 +91,10 @@ class DatabaseTest extends KernelTestCase
     public static function getUsers(): array
     {
         return [
-            [AbstractTestAuthenticateWeb::ROLE_USER, RoleInterface::ROLE_USER],
-            [AbstractTestAuthenticateWeb::ROLE_ADMIN, RoleInterface::ROLE_ADMIN],
-            [AbstractTestAuthenticateWeb::ROLE_SUPER_ADMIN, RoleInterface::ROLE_SUPER_ADMIN],
-            [AbstractTestAuthenticateWeb::ROLE_DISABLED, RoleInterface::ROLE_USER],
+            [AbstractAuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER],
+            [AbstractAuthenticateWebTestCase::ROLE_ADMIN, RoleInterface::ROLE_ADMIN],
+            [AbstractAuthenticateWebTestCase::ROLE_SUPER_ADMIN, RoleInterface::ROLE_SUPER_ADMIN],
+            [AbstractAuthenticateWebTestCase::ROLE_DISABLED, RoleInterface::ROLE_USER],
         ];
     }
 

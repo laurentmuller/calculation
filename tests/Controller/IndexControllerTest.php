@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 use App\Controller\IndexController;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(IndexController::class)]
-class IndexControllerTest extends AbstractTestController
+class IndexControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

@@ -19,7 +19,7 @@ use App\Entity\Category;
 use App\Entity\Group;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationController::class)]
-class CalculationControllerTest extends AbstractTestController
+class CalculationControllerTest extends AbstractControllerTestCase
 {
     private static ?Calculation $calculation = null;
     private static ?Category $category = null;

@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 use App\Controller\ChartController;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ChartController::class)]
-class ChartControllerTest extends AbstractTestController
+class ChartControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

@@ -17,7 +17,7 @@ use App\Entity\GlobalMargin;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(GlobalMarginController::class)]
-class GlobalMarginControllerTest extends AbstractTestController
+class GlobalMarginControllerTest extends AbstractControllerTestCase
 {
     private static ?GlobalMargin $entity = null;
 

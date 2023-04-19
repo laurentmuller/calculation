@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\CalculationState;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationState::class)]
-class CalculationStateTest extends AbstractTestEntityValidator
+class CalculationStateTest extends AbstractEntityValidatorTestCase
 {
     /**
      * @throws \Doctrine\ORM\Exception\ORMException

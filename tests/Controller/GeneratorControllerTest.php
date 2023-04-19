@@ -20,7 +20,7 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(GeneratorController::class)]
-class GeneratorControllerTest extends AbstractTestController
+class GeneratorControllerTest extends AbstractControllerTestCase
 {
     private static ?Category $category = null;
     private static ?Group $group = null;

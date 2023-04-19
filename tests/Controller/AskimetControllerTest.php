@@ -16,7 +16,7 @@ use App\Controller\AskimetController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(AskimetController::class)]
-class AskimetControllerTest extends AbstractTestController
+class AskimetControllerTest extends AbstractControllerTestCase
 {
     private const ROUTES = [
         'spam',

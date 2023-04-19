@@ -13,66 +13,45 @@ declare(strict_types=1);
 namespace App\Word;
 
 use App\Utils\FormatUtils;
+use PhpOffice\PhpWord\Element\Row;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\SimpleType\Jc;
 
 /**
- * Footer with pages, date and application name (as link).
+ * Class to output footer in Word documents.
+ *
+ * This footer add the following texts:
+ * <ul>
+ * <li>The current and total pages at the left.</li>
+ * <li>The application name at the center</li>
+ * <li>The date and time at the right.</li>
+ * </ul>
  */
-class WordFooter
+class WordFooter extends AbstractHeaderFooter
 {
     private ?string $name = null;
     private ?string $url = null;
 
-    public function getName(): ?string
+    /**
+     * {@inheritdoc}
+     */
+    public function output(Section $section): void
     {
-        return $this->name;
-    }
-
-    public function getUrl(): ?string
-    {
-        return $this->url;
+        $cellStyle = ['size' => 8];
+        $textStyle = ['spaceBefore' => Converter::pointToTwip(3)];
+        $row = $section->addFooter()
+            ->addTable(['borderTopSize' => 1])
+            ->addRow();
+        $width = self::TOTAL_WIDTH / 3;
+        $this->addPage($row, $width, $cellStyle, $textStyle);
+        $this->addName($row, $width, $cellStyle, $textStyle);
+        $this->addDate($row, $width, $cellStyle, $textStyle);
     }
 
     /**
-     * Add this footer to the given section.
+     * Set the application name.
      */
-    public function output(Section $section): self
-    {
-        if (null === $this->name) {
-            return $this;
-        }
-
-        $cellStyle = ['size' => 8];
-        $tableStyle = ['borderTopSize' => 1];
-        $spaceBefore = Converter::pointToTwip(3);
-
-        $footer = $section->addFooter();
-        $row = $footer->addTable($tableStyle)->addRow();
-
-        // page
-        $page = 'Page {PAGE} / {NUMPAGES}';
-        $leftCell = $row->addCell(4000);
-        $leftCell->addPreserveText($page, $cellStyle, ['alignment' => Jc::START, 'spaceBefore' => $spaceBefore]);
-
-        // application
-        $centerCell = $row->addCell(4000);
-        $name = $this->cleanText($this->name);
-        if (null === $this->url) {
-            $centerCell->addText($name, $cellStyle, ['alignment' => Jc::CENTER, 'spaceBefore' => $spaceBefore]);
-        } else {
-            $centerCell->addLink($this->url, $name, $cellStyle, ['alignment' => Jc::CENTER, 'spaceBefore' => $spaceBefore]);
-        }
-
-        // date
-        $date = FormatUtils::formatDateTime(new \DateTime());
-        $rightCell = $row->addCell(4000);
-        $rightCell->addText($date, $cellStyle, ['alignment' => Jc::END, 'spaceBefore' => $spaceBefore]);
-
-        return $this;
-    }
-
     public function setName(?string $name): self
     {
         $this->name = $name;
@@ -80,6 +59,9 @@ class WordFooter
         return $this;
     }
 
+    /**
+     * Set the application URL.
+     */
     public function setUrl(?string $url): self
     {
         $this->url = $url;
@@ -87,8 +69,31 @@ class WordFooter
         return $this;
     }
 
-    private function cleanText(?string $str): string
+    private function addDate(Row $row, int $width, array $cellStyle, array $textStyle): void
     {
-        return null !== $str ? \htmlspecialchars($str) : '';
+        $textStyle['alignment'] = Jc::END;
+        $cell = $row->addCell($width);
+        $text = FormatUtils::formatDateTime(new \DateTime());
+        $cell->addText($text, $cellStyle, $textStyle);
+    }
+
+    private function addName(Row $row, int $width, array $cellStyle, array $textStyle): void
+    {
+        $textStyle['alignment'] = Jc::CENTER;
+        $cell = $row->addCell($width);
+        $text = $this->name ?? '';
+        if (null === $this->url) {
+            $cell->addText($text, $cellStyle, $textStyle);
+        } else {
+            $cell->addLink($this->url, $text, $cellStyle, $textStyle);
+        }
+    }
+
+    private function addPage(Row $row, int $width, array $cellStyle, array $textStyle): void
+    {
+        $textStyle['alignment'] = Jc::START;
+        $cell = $row->addCell($width);
+        $text = $this->trans('word.footer.page');
+        $cell->addPreserveText($text, $cellStyle, $textStyle);
     }
 }

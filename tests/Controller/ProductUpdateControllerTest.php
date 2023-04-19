@@ -16,7 +16,7 @@ use App\Controller\ProductUpdateController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ProductUpdateController::class)]
-class ProductUpdateControllerTest extends AbstractTestController
+class ProductUpdateControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

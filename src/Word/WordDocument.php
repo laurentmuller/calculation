@@ -14,6 +14,7 @@ namespace App\Word;
 
 use App\Utils\FormatUtils;
 use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\SimpleType\Zoom;
 use PhpOffice\PhpWord\Style\Language;
 
@@ -30,11 +31,17 @@ class WordDocument extends PhpWord
         $this->initialize();
     }
 
+    /**
+     * Get document title.
+     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
+    /**
+     * Set document title.
+     */
     public function setTitle(?string $title): static
     {
         $this->title = $title;
@@ -52,5 +59,6 @@ class WordDocument extends PhpWord
         $settings->setZoom(Zoom::BEST_FIT);
         $settings->setDecimalSymbol(FormatUtils::getDecimal());
         $settings->setThemeFontLang(new Language(\Locale::getDefault()));
+        Settings::setOutputEscapingEnabled(true);
     }
 }

@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 use App\Controller\SearchController;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(SearchController::class)]
-class SearchControllerTest extends AbstractTestController
+class SearchControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

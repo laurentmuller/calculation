@@ -39,7 +39,7 @@ class ThemeTest extends TypeTestCase
 
     public function testIcon(): void
     {
-        self::assertSame('fa-solid fa-moon', Theme::DARK->getIcon());
+        self::assertSame('fa-regular fa-moon', Theme::DARK->getIcon());
         self::assertSame('fa-regular fa-sun', Theme::LIGHT->getIcon());
     }
 

@@ -16,7 +16,7 @@ use App\Controller\ArchiveCalculationController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ArchiveCalculationController::class)]
-class ArchiveCalculationControllerTest extends AbstractTestController
+class ArchiveCalculationControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

@@ -21,7 +21,7 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(UpdateEntityController::class)]
-class UpdateEntityControllerTest extends AbstractTestController
+class UpdateEntityControllerTest extends AbstractControllerTestCase
 {
     private static ?Category $category = null;
     private static ?Customer $customer = null;

@@ -17,7 +17,7 @@ use App\Entity\Group;
 use App\Entity\Task;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Task::class)]
-class TaskTest extends AbstractTestEntityValidator
+class TaskTest extends AbstractEntityValidatorTestCase
 {
     /**
      * @throws \Doctrine\ORM\Exception\ORMException

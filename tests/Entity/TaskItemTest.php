@@ -19,7 +19,7 @@ use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(TaskItem::class)]
-class TaskItemTest extends AbstractTestEntityValidator
+class TaskItemTest extends AbstractEntityValidatorTestCase
 {
     /**
      * @throws \Doctrine\ORM\Exception\ORMException

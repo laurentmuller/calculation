@@ -20,7 +20,7 @@ use App\Entity\TaskItem;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(TaskController::class)]
-class TaskControllerTest extends AbstractTestController
+class TaskControllerTest extends AbstractControllerTestCase
 {
     private static ?Category $category = null;
     private static ?Task $entity = null;

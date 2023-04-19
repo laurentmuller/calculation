@@ -821,7 +821,7 @@ parameters:
     panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
     panel_month: Afficher la liste des calculations regroupées par mois.
     panel_state: Afficher la liste des calculations regroupées par status.
-    print_address: L'adresse du client est imprimée sur les entêtes des documents PDF et Excel®.
+    print_address: L'adresse du client est imprimée sur les entêtes des documents Excel®, Word® et PDF.
     qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
     status_bar: Afficher la barre d'état au bas de l'application.
   placeholders:
@@ -1426,3 +1426,6 @@ dialog_raw_data:
   empty: Aucune donnée brute à afficher.
   copy_success: Les données brutes ont été copiées avec succès dans le presse-papiers.
   copy_error: Une erreur s'est produite lors de la copie des données brutes dans le presse-papiers.
+word:
+  footer:
+    page: Page {PAGE} / {NUMPAGES}

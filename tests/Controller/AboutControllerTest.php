@@ -13,14 +13,25 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\AboutController;
+use App\Controller\AboutLicenceController;
+use App\Controller\AboutMySqlController;
+use App\Controller\AboutPhpController;
+use App\Controller\AboutPolicyController;
+use App\Controller\AboutSymfonyController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(AboutController::class)]
-class AboutControllerTest extends AbstractTestController
+#[\PHPUnit\Framework\Attributes\CoversClass(AboutLicenceController::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(AboutMySqlController::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(AboutPhpController::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(AboutPolicyController::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(AboutSymfonyController::class)]
+class AboutControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {
         return [
+            ['/about', '', Response::HTTP_FOUND], // redirect to login page
             ['/about', self::ROLE_USER],
             ['/about', self::ROLE_ADMIN],
             ['/about', self::ROLE_SUPER_ADMIN],
@@ -47,7 +58,7 @@ class AboutControllerTest extends AbstractTestController
             ['/about/licence/pdf', self::ROLE_ADMIN],
             ['/about/licence/pdf', self::ROLE_SUPER_ADMIN],
 
-            ['/about/licence/word'],
+            ['/about/licence/word', '', Response::HTTP_FOUND], // redirect to login page
             ['/about/licence/word', self::ROLE_USER],
             ['/about/licence/word', self::ROLE_ADMIN],
             ['/about/licence/word', self::ROLE_SUPER_ADMIN],
@@ -90,7 +101,7 @@ class AboutControllerTest extends AbstractTestController
             ['/about/policy/pdf', self::ROLE_ADMIN],
             ['/about/policy/pdf', self::ROLE_SUPER_ADMIN],
 
-            ['/about/policy/word'],
+            ['/about/policy/word', '', Response::HTTP_FOUND], // redirect to login page
             ['/about/policy/word', self::ROLE_USER],
             ['/about/policy/word', self::ROLE_ADMIN],
             ['/about/policy/word', self::ROLE_SUPER_ADMIN],

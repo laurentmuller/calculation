@@ -16,7 +16,7 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Group::class)]
-class GroupTest extends AbstractTestEntityValidator
+class GroupTest extends AbstractEntityValidatorTestCase
 {
     /**
      * @throws \Doctrine\ORM\Exception\ORMException

@@ -16,7 +16,7 @@ use App\Controller\IpStackController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(IpStackController::class)]
-class IpStackControllerTest extends AbstractTestController
+class IpStackControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

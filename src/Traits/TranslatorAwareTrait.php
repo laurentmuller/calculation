@@ -26,6 +26,9 @@ trait TranslatorAwareTrait
 
     private ?TranslatorInterface $translator = null;
 
+    /**
+     * {@inheritDoc}
+     */
     #[SubscribedService]
     public function getTranslator(): TranslatorInterface
     {

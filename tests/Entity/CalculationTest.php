@@ -16,7 +16,7 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Calculation::class)]
-class CalculationTest extends AbstractTestEntityValidator
+class CalculationTest extends AbstractEntityValidatorTestCase
 {
     public function testInvalidAll(): void
     {

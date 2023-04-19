@@ -13,14 +13,14 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\AjaxController;
-use App\Tests\Web\AbstractTestAuthenticateWeb;
+use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(AjaxController::class)]
-class AjaxControllerTest extends AbstractTestAuthenticateWeb
+class AjaxControllerTest extends AbstractAuthenticateWebTestCase
 {
     private ?TranslatorInterface $translator = null;
 
@@ -29,7 +29,7 @@ class AjaxControllerTest extends AbstractTestAuthenticateWeb
      *
      * @throws \Exception
      *
-     * @see AbstractTestAuthenticateWeb::setUp()
+     * @see AbstractAuthenticateWebTestCase::setUp()
      */
     protected function setUp(): void
     {

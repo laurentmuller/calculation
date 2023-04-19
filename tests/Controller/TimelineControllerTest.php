@@ -16,7 +16,7 @@ use App\Controller\TimelineController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(TimelineController::class)]
-class TimelineControllerTest extends AbstractTestController
+class TimelineControllerTest extends AbstractControllerTestCase
 {
     private const ROUTES = [
         '/test/timeline',

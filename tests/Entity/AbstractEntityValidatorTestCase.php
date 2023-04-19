@@ -20,9 +20,9 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Unit test for {@link AbstractEntity} class.
+ * Unit test for validate {@link AbstractEntity} class.
  */
-abstract class AbstractTestEntityValidator extends KernelTestCase
+abstract class AbstractEntityValidatorTestCase extends KernelTestCase
 {
     use DatabaseTrait;
     use ServiceTrait;

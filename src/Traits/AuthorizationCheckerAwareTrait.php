@@ -29,6 +29,9 @@ trait AuthorizationCheckerAwareTrait
     /** @var bool[] */
     private array $rights = [];
 
+    /**
+     * Get the authorization checker.
+     */
     #[SubscribedService]
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
     {

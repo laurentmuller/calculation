@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\Filesystem\Filesystem;
 
 $logfile = \dirname(__DIR__) . '/var/log/test.log';
 
@@ -23,6 +24,9 @@ if (\file_exists($logfile)) {
 }
 
 require \dirname(__DIR__) . '/vendor/autoload.php';
+
+// clear cache
+(new Filesystem())->remove([__DIR__ . '/../var/cache/test']);
 
 // @phpstan-ignore-next-line
 if (\file_exists(\dirname(__DIR__) . '/config/bootstrap.php')) {

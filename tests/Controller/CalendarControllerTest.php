@@ -15,7 +15,7 @@ namespace App\Tests\Controller;
 use App\Controller\CalendarController;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalendarController::class)]
-class CalendarControllerTest extends AbstractTestController
+class CalendarControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

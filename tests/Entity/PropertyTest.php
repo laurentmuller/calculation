@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\Property;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Property::class)]
-class PropertyTest extends AbstractTestEntityValidator
+class PropertyTest extends AbstractEntityValidatorTestCase
 {
     /**
      * @throws \Doctrine\ORM\Exception\ORMException

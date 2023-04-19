@@ -29,7 +29,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Abstract class for authenticate user.
  */
-abstract class AbstractTestAuthenticateWeb extends WebTestCase
+abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 {
     use DatabaseTrait;
     use ServiceTrait;

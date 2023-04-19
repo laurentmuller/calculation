@@ -15,11 +15,8 @@ namespace App\Word;
 use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
 use App\Traits\TranslatorTrait;
-use Doctrine\Inflector\Rules\Word;
-use PhpOffice\PhpWord\Element\Row;
 use PhpOffice\PhpWord\Element\Section;
 use PhpOffice\PhpWord\Shared\Converter;
-use PhpOffice\PhpWord\SimpleType\Jc;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -28,6 +25,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 abstract class AbstractWordDocument extends WordDocument
 {
     use TranslatorTrait;
+
+    private ?CustomerInformation $customer;
+
+    private WordFooter $footer;
+
+    private WordHeader $header;
+
+    private bool $printAddress;
 
     private readonly TranslatorInterface $translator;
 
@@ -40,6 +45,10 @@ abstract class AbstractWordDocument extends WordDocument
     {
         parent::__construct();
         $this->translator = $this->controller->getTranslator();
+        $this->customer = $this->controller->getApplication()->getCustomer();
+        $this->printAddress = $this->controller->getUserService()->isPrintAddress();
+        $this->header = new WordHeader($this);
+        $this->footer = new WordFooter($this);
     }
 
     public function getTranslator(): TranslatorInterface
@@ -55,6 +64,16 @@ abstract class AbstractWordDocument extends WordDocument
      * @throws \PhpOffice\PhpWord\Exception\Exception if an exception occurs
      */
     abstract public function render(): bool;
+
+    /**
+     * Set a value indicating if the customer address is printed.
+     */
+    public function setPrintAddress(bool $printAddress): static
+    {
+        $this->printAddress = $printAddress;
+
+        return $this;
+    }
 
     /**
      * Sets the title to be translated.
@@ -76,8 +95,7 @@ abstract class AbstractWordDocument extends WordDocument
      */
     protected function addDefaultFooter(Section $section): static
     {
-        $footer = new WordFooter();
-        $footer->setUrl($this->controller->getApplicationOwnerUrl())
+        $this->footer->setUrl($this->controller->getApplicationOwnerUrl())
             ->setName($this->controller->getApplicationName())
             ->output($section);
 
@@ -89,19 +107,11 @@ abstract class AbstractWordDocument extends WordDocument
      */
     protected function addDefaultHeader(Section $section): static
     {
-        $customer = $this->controller->getApplication()->getCustomer();
-        if (null === $this->getTitle() && null === $customer->getName()) {
-            return $this;
-        }
+        $this->header->setPrintAddress($this->printAddress)
+            ->setCustomer($this->customer)
+            ->output($section);
 
-        $tableStyle = ['borderBottomSize' => 1];
-        $header = $section->addHeader();
-        $row = $header->addTable($tableStyle)->addRow();
-        if ($this->controller->getUserService()->isPrintAddress()) {
-            return $this->outputAddressHeader($row, $customer);
-        }
-
-        return $this->outputDefaultHeader($row, $customer);
+        return $this;
     }
 
     /**
@@ -133,91 +143,12 @@ abstract class AbstractWordDocument extends WordDocument
     {
         parent::initialize();
         $properties = $this->getDocInfo();
-        $properties->setSubject($this->controller->getApplicationName());
+        $properties->setCategory($this->controller->getApplicationName());
         if (null !== $user = $this->controller->getUserIdentifier()) {
             $properties->setCreator($user);
         }
         if (null !== $customer = $this->controller->getApplication()->getCustomerName()) {
             $properties->setCompany($customer);
         }
-    }
-
-    private function cleanText(?string $str): string
-    {
-        return null !== $str ? \htmlspecialchars($str) : '';
-    }
-
-    private function outputAddressHeader(Row $row, CustomerInformation $customer): static
-    {
-        // style
-        $spaceAfter = Converter::pointToTwip(3);
-        $cellStyle = ['size' => 8, 'bold' => true];
-
-        // customer
-        $url = $customer->getUrl();
-        $name = $this->cleanText($customer->getName());
-        $leftCell = $row->addCell(4000);
-        if (null === $url) {
-            $leftCell->addText($name, $cellStyle, ['alignment' => Jc::START, 'spaceAfter' => 0]);
-        } else {
-            $leftCell->addLink($url, $name, $cellStyle, ['alignment' => Jc::START, 'spaceAfter' => 0]);
-        }
-        // address
-        $cellStyle['bold'] = false;
-        $address = $this->cleanText($customer->getAddress());
-        $leftCell->addText($address, $cellStyle, ['alignment' => Jc::START, 'spaceAfter' => 0]);
-        // zip and city
-        $zipCity = $this->cleanText($customer->getZipCity());
-        $leftCell->addText($zipCity, $cellStyle, ['alignment' => Jc::START, 'spaceAfter' => $spaceAfter]);
-
-        // title
-        $cellStyle['size'] = 10;
-        $cellStyle['bold'] = true;
-        $title = $this->cleanText($this->getTitle());
-        $centerCell = $row->addCell(4000);
-        $centerCell->addText($title, $cellStyle, ['alignment' => Jc::CENTER]);
-
-        // phone
-        $cellStyle['size'] = 8;
-        $cellStyle['bold'] = false;
-        $rightCell = $row->addCell(4000);
-        $phone = $this->cleanText('Tél. : ' . (string) $customer->getPhone());
-        $rightCell->addText($phone, $cellStyle, ['alignment' => Jc::END, 'spaceAfter' => 0]);
-        // fax
-        $fax = $this->cleanText('Fax : ' . (string) $customer->getFax());
-        $rightCell->addText($fax, $cellStyle, ['alignment' => Jc::END, 'spaceAfter' => 0]);
-        // email
-        $email = $this->cleanText($customer->getEmail());
-        if ('' !== $email) {
-            $rightCell->addLink('mailto:' . $email, $email, $cellStyle, ['alignment' => Jc::END, 'spaceAfter' => $spaceAfter]);
-        } else {
-            $rightCell->addText($email, $cellStyle, ['alignment' => Jc::END, 'spaceAfter' => $spaceAfter]);
-        }
-
-        return $this;
-    }
-
-    private function outputDefaultHeader(Row $row, CustomerInformation $customer): static
-    {
-        // style
-        $spaceAfter = Converter::pointToTwip(3);
-        $cellStyle = ['size' => 8, 'bold' => true, 'spaceAfter' => $spaceAfter];
-
-        // title
-        $title = $this->cleanText($this->getTitle());
-        $leftCell = $row->addCell(6000);
-        $leftCell->addText($title, $cellStyle, ['alignment' => Jc::START, 'spaceAfter' => $spaceAfter]);
-
-        // customer
-        $url = $customer->getUrl();
-        $name = $this->cleanText($customer->getName());
-        $rightCell = $row->addCell(6000);
-        if (null === $url) {
-            $rightCell->addText($name, $cellStyle, ['alignment' => Jc::END, 'spaceAfter' => $spaceAfter]);
-        } else {
-            $rightCell->addLink($url, $name, $cellStyle, ['alignment' => Jc::END, 'spaceAfter' => $spaceAfter]);
-        }
-
-        return $this;
     }
 }

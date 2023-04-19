@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\User;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(User::class)]
-class UserTest extends AbstractTestEntityValidator
+class UserTest extends AbstractEntityValidatorTestCase
 {
     /**
      * @throws \Doctrine\ORM\Exception\ORMException

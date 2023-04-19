@@ -16,7 +16,7 @@ use App\Controller\UserController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(UserController::class)]
-class UserControllerTest extends AbstractTestController
+class UserControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

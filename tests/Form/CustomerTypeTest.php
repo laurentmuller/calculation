@@ -19,10 +19,10 @@ use App\Service\CountryFlagService;
 use Symfony\Component\Form\PreloadedExtension;
 
 /**
- * @extends AbstractTestEntityType<Customer, CustomerType>
+ * @extends AbstractEntityTypeTestCase<Customer, CustomerType>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(CustomerType::class)]
-class CustomerTypeTest extends AbstractTestEntityType
+class CustomerTypeTest extends AbstractEntityTypeTestCase
 {
     protected function getData(): array
     {

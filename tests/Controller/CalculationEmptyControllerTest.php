@@ -21,7 +21,7 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationEmptyController::class)]
-class CalculationEmptyControllerTest extends AbstractTestController
+class CalculationEmptyControllerTest extends AbstractControllerTestCase
 {
     private static ?Calculation $calculation = null;
     private static ?Category $category = null;

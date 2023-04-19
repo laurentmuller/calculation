@@ -15,7 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\GlobalMargin;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(GlobalMargin::class)]
-class GlobalMarginTest extends AbstractTestEntityValidator
+class GlobalMarginTest extends AbstractEntityValidatorTestCase
 {
     public function testAllLessZero(): void
     {

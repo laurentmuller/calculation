@@ -26,6 +26,9 @@ trait SessionAwareTrait
 {
     private ?RequestStack $requestStack = null;
 
+    /**
+     * Get the request stack.
+     */
     #[SubscribedService]
     public function getRequestStack(): RequestStack
     {

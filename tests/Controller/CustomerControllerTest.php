@@ -17,7 +17,7 @@ use App\Entity\Customer;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CustomerController::class)]
-class CustomerControllerTest extends AbstractTestController
+class CustomerControllerTest extends AbstractControllerTestCase
 {
     private static ?Customer $entity = null;
 

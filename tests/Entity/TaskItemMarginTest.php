@@ -16,7 +16,7 @@ use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(TaskItemMargin::class)]
-class TaskItemMarginTest extends AbstractTestEntityValidator
+class TaskItemMarginTest extends AbstractEntityValidatorTestCase
 {
     public function testAllLessZero(): void
     {

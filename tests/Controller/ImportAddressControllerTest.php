@@ -16,7 +16,7 @@ use App\Controller\ImportAddressController;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ImportAddressController::class)]
-class ImportAddressControllerTest extends AbstractTestController
+class ImportAddressControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): array
     {

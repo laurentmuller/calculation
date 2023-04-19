@@ -35,22 +35,13 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
     /*
      * The dark theme.
      */
-    #[EnumCase(extras: [
-        'icon' => 'fa-solid fa-moon',
-        'title' => 'theme.dark.title',
-        'success' => 'theme.dark.success',
-        'css' => 'js/vendor/bootstrap/css/bootstrap-dark.css', ])]
+    #[EnumCase(extras: ['icon' => 'fa-regular fa-moon'])]
     case DARK = 'dark';
 
     /*
      * The light theme.
      */
-    #[EnumCase(extras: [
-        EnumDefaultInterface::NAME => true,
-        'icon' => 'fa-regular fa-sun',
-        'title' => 'theme.light.title',
-        'success' => 'theme.light.success',
-        'css' => 'js/vendor/bootstrap/css/bootstrap-light.css', ])]
+    #[EnumCase(extras: ['icon' => 'fa-regular fa-sun', EnumDefaultInterface::NAME => true])]
     case LIGHT = 'light';
 
     /**
@@ -58,7 +49,7 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
      */
     public function getCss(): string
     {
-        return $this->getExtraString('css');
+        return \sprintf('js/vendor/bootstrap/css/bootstrap-%s.css', $this->value);
     }
 
     /**
@@ -74,7 +65,7 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
      */
     public function getSuccess(): string
     {
-        return $this->getExtraString('success');
+        return \sprintf('theme.%s.success', $this->value);
     }
 
     /**
@@ -82,7 +73,7 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
      */
     public function getTitle(): string
     {
-        return $this->getExtraString('title');
+        return \sprintf('theme.%s.title', $this->value);
     }
 
     /**

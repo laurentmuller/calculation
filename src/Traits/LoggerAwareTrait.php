@@ -26,6 +26,9 @@ trait LoggerAwareTrait
 
     private ?LoggerInterface $logger = null;
 
+    /**
+     * {@inheritDoc}
+     */
     #[SubscribedService]
     public function getLogger(): LoggerInterface
     {

@@ -19,7 +19,7 @@ use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ProductController::class)]
-class ProductControllerTest extends AbstractTestController
+class ProductControllerTest extends AbstractControllerTestCase
 {
     private static ?Category $category = null;
     private static ?Group $group = null;

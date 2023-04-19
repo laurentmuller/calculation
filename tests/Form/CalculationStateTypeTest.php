@@ -16,10 +16,10 @@ use App\Entity\CalculationState;
 use App\Form\CalculationState\CalculationStateType;
 
 /**
- * @extends AbstractTestEntityType<CalculationState, CalculationStateType>
+ * @extends AbstractEntityTypeTestCase<CalculationState, CalculationStateType>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationStateType::class)]
-class CalculationStateTypeTest extends AbstractTestEntityType
+class CalculationStateTypeTest extends AbstractEntityTypeTestCase
 {
     protected function getData(): array
     {

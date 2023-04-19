@@ -26,7 +26,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  * @template TEntity of AbstractEntity
  * @template TForm of \App\Form\AbstractEntityType<TEntity>
  */
-abstract class AbstractTestEntityType extends TypeTestCase
+abstract class AbstractEntityTypeTestCase extends TypeTestCase
 {
     /**
      * Test.

@@ -17,7 +17,7 @@ use App\Entity\Group;
 use App\Entity\Product;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Product::class)]
-class ProductTest extends AbstractTestEntityValidator
+class ProductTest extends AbstractEntityValidatorTestCase
 {
     /**
      * @throws \Doctrine\ORM\Exception\ORMException

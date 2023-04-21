@@ -22,6 +22,8 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * The tasks table.
  *
+ * @method TaskRepository getRepository()
+ *
  * @template-extends AbstractCategoryItemTable<\App\Entity\Task>
  */
 class TaskTable extends AbstractCategoryItemTable
@@ -42,10 +44,7 @@ class TaskTable extends AbstractCategoryItemTable
      */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        /** @psalm-var TaskRepository $repository */
-        $repository = $this->getRepository();
-
-        return $repository->getTableQueryBuilder($alias);
+        return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
     /**

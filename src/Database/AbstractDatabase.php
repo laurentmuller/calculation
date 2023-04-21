@@ -213,7 +213,8 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     protected function createIndex(string $table, string ...$columns): bool
     {
         $name = \sprintf('idx_%s_%s', $table, \implode('_', $columns));
-        $query = \sprintf('CREATE INDEX IF NOT EXISTS %s ON %s(%s)', $name, $table, \implode(',', $columns));
+        $indexed_columns = \implode(',', $columns);
+        $query = "CREATE INDEX IF NOT EXISTS $name ON $table($indexed_columns)";
 
         return $this->exec($query);
     }

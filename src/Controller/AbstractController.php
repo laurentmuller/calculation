@@ -231,7 +231,7 @@ abstract class AbstractController extends BaseController
      *
      * Override the parent function to allow to use the default type like defined in the <code>FormFactoryInterface</code>.
      *
-     * @return iterable<mixed>&FormInterface
+     * @return FormInterface<mixed>
      *
      * @psalm-param class-string<\Symfony\Component\Form\FormTypeInterface> $type
      *

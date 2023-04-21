@@ -18,7 +18,7 @@ namespace App\Traits;
 trait CheckSubClassTrait
 {
     /**
-     * Check if the given source is a classs or a subclass of the given target class name.
+     * Check if the given source is a class or a subclass of the given target class name.
      *
      * @throws \InvalidArgumentException if check failed
      *

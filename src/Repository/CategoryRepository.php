@@ -180,13 +180,13 @@ class CategoryRepository extends AbstractRepository
     private function getDropDownQuery(): QueryBuilder
     {
         $group = self::GROUP_ALIAS . '.code';
-        $groupid = self::GROUP_ALIAS . '.id';
+        $groupId = self::GROUP_ALIAS . '.id';
 
         return $this->createQueryBuilder('c')
             ->select('c.id')
             ->addSelect('c.code')
             ->addSelect("$group AS group")
-            ->addSelect("$groupid AS groupId")
+            ->addSelect("$groupId AS groupId")
             ->innerJoin('c.group', self::GROUP_ALIAS)
             ->groupBy('c.id')
             ->orderBy($group, Criteria::ASC)

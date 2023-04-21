@@ -38,12 +38,14 @@ class WordFooter extends AbstractHeaderFooter
      */
     public function output(Section $section): void
     {
+        $width = self::TOTAL_WIDTH / 3;
         $cellStyle = ['size' => 8];
-        $textStyle = ['spaceBefore' => Converter::pointToTwip(3)];
+        $textStyle = ['spaceBefore' => Converter::pointToTwip(6), 'spaceAfter' => 0];
+
         $row = $section->addFooter()
             ->addTable(['borderTopSize' => 1])
             ->addRow();
-        $width = self::TOTAL_WIDTH / 3;
+
         $this->addPage($row, $width, $cellStyle, $textStyle);
         $this->addName($row, $width, $cellStyle, $textStyle);
         $this->addDate($row, $width, $cellStyle, $textStyle);
@@ -93,7 +95,7 @@ class WordFooter extends AbstractHeaderFooter
     {
         $textStyle['alignment'] = Jc::START;
         $cell = $row->addCell($width);
-        $text = $this->trans('word.footer.page');
+        $text = $this->trans('report.page', ['{0}' => '{PAGE}', '{1}' => '{NUMPAGES}']);
         $cell->addPreserveText($text, $cellStyle, $textStyle);
     }
 }

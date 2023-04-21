@@ -185,7 +185,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Set the auto-size for the given columns.
      *
-     * @param int ...$columnIndexes the columns indexes ('A' = First column)
+     * @param int ...$columnIndexes the column indexes ('A' = First column)
      */
     public function setAutoSize(int ...$columnIndexes): static
     {
@@ -801,7 +801,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Initialize this spreedsheet.
+     * Initialize this spreadsheet.
      *
      * @param AbstractController $controller the controller to get properties
      * @param string             $title      the spreadsheet title to translate

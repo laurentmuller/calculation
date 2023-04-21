@@ -114,7 +114,7 @@ class WordHeader extends AbstractHeaderFooter
         $width = self::TOTAL_WIDTH / 3;
         $spaceAfter = Converter::pointToTwip(3);
         $cellStyle = ['size' => 8, 'bold' => true];
-        $textStyle = ['alignment' => Jc::START, 'spaceAfter' => 0];
+        $textStyle = ['spaceBefore' => 0,  'spaceAfter' => 0, 'alignment' => Jc::START];
 
         // name
         $cell = $row->addCell($width);
@@ -153,7 +153,7 @@ class WordHeader extends AbstractHeaderFooter
     {
         $width = self::TOTAL_WIDTH / 2;
         $cellStyle = ['size' => 10, 'bold' => true];
-        $textStyle = ['spaceAfter' => Converter::pointToTwip(3)];
+        $textStyle = ['spaceBefore' => 0, 'spaceAfter' => Converter::pointToTwip(3)];
 
         // title
         $textStyle['alignment'] = Jc::START;

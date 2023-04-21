@@ -31,6 +31,8 @@ use Twig\Environment;
 /**
  * The categories table.
  *
+ * @method CategoryRepository getRepository()
+ *
  * @template-extends AbstractEntityTable<Category>
  */
 class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInterface
@@ -114,10 +116,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        /** @psalm-var CategoryRepository $repository */
-        $repository = $this->getRepository();
-
-        return $repository->getTableQueryBuilder($alias);
+        return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
     /**

@@ -79,6 +79,18 @@ class DateUtilsTest extends TestCase
         ];
     }
 
+    public static function getMonths(): \Generator
+    {
+        // today
+        $date = new \DateTime();
+        $month = (int) $date->format('n');
+        yield [$date, $month];
+
+        foreach (\range(1, 12) as $index) {
+            yield [new \DateTime("2015-$index-01"), $index];
+        }
+    }
+
     /**
      * @return array<array{0:string, 1: int}>
      */
@@ -152,6 +164,30 @@ class DateUtilsTest extends TestCase
         ];
     }
 
+    public static function getWeeks(): \Generator
+    {
+        // today
+        $date = new \DateTime();
+        $week = (int) $date->format('W');
+        yield [$date, $week];
+
+        yield [new \DateTime('2023-04-14'), 15];
+        yield [new \DateTime('2023-04-21'), 16];
+        yield [new \DateTime('2023-04-28'), 17];
+    }
+
+    public static function getYears(): \Generator
+    {
+        // today
+        $date = new \DateTime();
+        $year = (int) $date->format('Y');
+        yield [$date, $year];
+
+        foreach (\range(2000, 2012) as $index) {
+            yield [new \DateTime("$index-01-01"), $index];
+        }
+    }
+
     /**
      * @throws \Exception
      */
@@ -184,6 +220,27 @@ class DateUtilsTest extends TestCase
     public function testFormatFormDate(?\DateTimeInterface $date, ?string $expected): void
     {
         $actual = DateUtils::formatFormDate($date);
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getMonths')]
+    public function testGetMonth(\DateTimeInterface $date, int $expected): void
+    {
+        $actual = DateUtils::getMonth($date);
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getWeeks')]
+    public function testGetWeek(\DateTimeInterface $date, int $expected): void
+    {
+        $actual = DateUtils::getWeek($date);
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getYears')]
+    public function testGetYear(\DateTimeInterface $date, int $expected): void
+    {
+        $actual = DateUtils::getYear($date);
         self::assertSame($expected, $actual);
     }
 

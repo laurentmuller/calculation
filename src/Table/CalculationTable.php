@@ -26,6 +26,8 @@ use Twig\Environment;
 /**
  * The calculations table.
  *
+ * @method CalculationRepository getRepository()
+ *
  * @template-extends AbstractEntityTable<Calculation>
  */
 class CalculationTable extends AbstractEntityTable
@@ -83,10 +85,7 @@ class CalculationTable extends AbstractEntityTable
      */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        /** @psalm-var CalculationRepository $repository */
-        $repository = $this->getRepository();
-
-        return $repository->getTableQueryBuilder($alias);
+        return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
     /**

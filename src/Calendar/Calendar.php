@@ -157,9 +157,9 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
         $interval = new \DateInterval('P1D');
         while ($firstDate <= $lastDate) {
             $day = $this->createDay($firstDate);
-            $monthYear = (int) $firstDate->format('Y');
-            $monthNumber = (int) $firstDate->format('n');
-            $weekNumber = (int) $firstDate->format('W');
+            $monthYear = DateUtils::getYear($firstDate);
+            $monthNumber = DateUtils::getMonth($firstDate);
+            $weekNumber = DateUtils::getWeek($firstDate);
             if ($monthYear === $this->year) {
                 if (!$currentMonth instanceof Month || $currentMonth->getNumber() !== $monthNumber) {
                     $currentMonth = $this->createMonth($monthNumber);

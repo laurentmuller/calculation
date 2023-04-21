@@ -27,6 +27,8 @@ use Twig\Environment;
 /**
  * The calculation states table.
  *
+ * @method CalculationStateRepository getRepository()
+ *
  * @template-extends AbstractEntityTable<CalculationState>
  */
 class CalculationStateTable extends AbstractEntityTable implements ServiceSubscriberInterface
@@ -83,10 +85,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
      */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        /** @psalm-var CalculationStateRepository $repository */
-        $repository = $this->getRepository();
-
-        return $repository->getTableQueryBuilder($alias);
+        return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
     /**

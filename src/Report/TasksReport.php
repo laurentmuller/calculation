@@ -35,7 +35,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     {
         /** @var Task $task */
         $task = $group->getKey();
-        $category = \sprintf('%s / %s', (string) $task->getGroupCode(), (string) $task->getCategoryCode());
+        $category = \sprintf('%s / %s', $task->getGroupCode(), $task->getCategoryCode());
         $parent->startRow()
             ->add(text: $task->getName(), style: $group->getStyle())
             ->add($category)

@@ -19,7 +19,7 @@ use PhpOffice\PhpWord\IOFactory;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * The WordsheetResponse represents an HTTP streamed response within a Word 2007 (.docx) document.
+ * The WordResponse represents an HTTP streamed response within a Word 2007 (.docx) document.
  */
 class WordResponse extends StreamedResponse implements MimeTypeInterface
 {

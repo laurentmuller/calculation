@@ -490,7 +490,7 @@ class TestController extends AbstractController
     private function getProducts(EntityManagerInterface $manager): array
     {
         $products = $manager->getRepository(Product::class)->findAllByGroup();
-        $fn = static fn (Product $p): string => \sprintf('%s - %s', (string) $p->getGroupCode(), (string) $p->getCategoryCode());
+        $fn = static fn (Product $p): string => \sprintf('%s - %s', $p->getGroupCode(), $p->getCategoryCode());
 
         return $this->groupBy($products, $fn);
     }

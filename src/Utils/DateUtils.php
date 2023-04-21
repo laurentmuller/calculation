@@ -102,6 +102,16 @@ final class DateUtils
     }
 
     /**
+     * Gets the numeric representation of a month for the given date.
+     *
+     * @return int a value 1 through 12
+     */
+    public static function getMonth(\DateTimeInterface $date): int
+    {
+        return (int) $date->format('n');
+    }
+
+    /**
      * Gets the localized month names.
      * For example with 'fr' as locale, return
      * <pre>
@@ -174,6 +184,18 @@ final class DateUtils
     }
 
     /**
+     * Gets the ISO 8601 week number of year for the given date.
+     *
+     * The weeks are starting on Monday.
+     *
+     * @return int a value 1 through 53
+     */
+    public static function getWeek(\DateTimeInterface $date): int
+    {
+        return (int) $date->format('W');
+    }
+
+    /**
      * Gets the localized week day names.
      * For example with 'fr' as locale and 'sunday' as first day, return
      * <pre>
@@ -197,6 +219,14 @@ final class DateUtils
         }
 
         return self::$weekNames[$key];
+    }
+
+    /**
+     * Gets the full numeric representation of a year with 4 digit for the given date.
+     */
+    public static function getYear(\DateTimeInterface $date): int
+    {
+        return (int) $date->format('Y');
     }
 
     /**

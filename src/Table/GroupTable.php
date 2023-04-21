@@ -26,6 +26,8 @@ use Twig\Environment;
 /**
  * The groups table.
  *
+ * @method GroupRepository getRepository()
+ *
  * @template-extends AbstractEntityTable<Group>
  */
 class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterface
@@ -69,10 +71,7 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        /** @psalm-var GroupRepository $repository */
-        $repository = $this->getRepository();
-
-        return $repository->getTableQueryBuilder($alias);
+        return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
     /**

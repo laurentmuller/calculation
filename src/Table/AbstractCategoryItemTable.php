@@ -70,7 +70,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     }
 
     /**
-     * Gets dropd-down values.
+     * Gets drop-down values.
      *
      * @psalm-return DropDownType
      */

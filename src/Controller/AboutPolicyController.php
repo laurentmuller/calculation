@@ -25,7 +25,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Contoller to output policy information.
+ * Controller to output policy information.
  */
 #[AsController]
 #[Route(path: '/about/policy')]

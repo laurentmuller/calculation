@@ -39,7 +39,7 @@ class CSVReader extends AbstractReader
      * @param string                       $enclosure the field enclosure character (one character only)
      * @param string                       $escape    the escape character (one character only)
      *
-     * @psalm-param non-negative-int $length
+     * @psalm-param int<0, max> $length
      */
     public function __construct(
         $file,

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Utils\StringUtils;
+
 /**
  * Define a cell border.
  */
@@ -258,7 +260,7 @@ class PdfBorder
     public function isSet(string|int $value): bool
     {
         if (\is_string($value)) {
-            return \str_contains((string) $this->value, $value);
+            return StringUtils::contains((string) $this->value, $value, true);
         }
 
         return $this->value === $value;

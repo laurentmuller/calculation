@@ -14,6 +14,7 @@ namespace App\Entity;
 
 use App\Repository\CustomerRepository;
 use App\Service\CountryFlagService;
+use App\Utils\DateUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -46,7 +47,7 @@ class Customer extends AbstractEntity
 
     #[Assert\Length(max: 100)]
     #[ORM\Column(length: 100, nullable: true)]
-    private ?string $country = null;
+    private ?string $country;
 
     #[Assert\Email]
     #[Assert\Length(max: 100)]
@@ -86,6 +87,26 @@ class Customer extends AbstractEntity
     public function getAddress(): ?string
     {
         return $this->address;
+    }
+
+    /**
+     * Get age or null if birthday is null.
+     */
+    public function getAge(): ?int
+    {
+        if (!$this->birthday instanceof \DateTimeInterface) {
+            return null;
+        }
+
+        /** @psalm-var \DateTime $birthday */
+        $birthday = clone $this->birthday;
+        $currentDate = new \DateTime();
+        $age = DateUtils::getYear($currentDate) - DateUtils::getYear($birthday);
+        if ($currentDate < $birthday->add(new \DateInterval('P1Y'))) {
+            --$age;
+        }
+
+        return $age;
     }
 
     /**

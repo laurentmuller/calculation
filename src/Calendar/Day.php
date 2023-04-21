@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Calendar;
 
+use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 
@@ -85,7 +86,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
      */
     public function getMonth(): int
     {
-        return (int) $this->format('n');
+        return DateUtils::getMonth($this->date);
     }
 
     /**
@@ -138,7 +139,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
      */
     public function getWeek(): int
     {
-        return (int) $this->format('W');
+        return DateUtils::getWeek($this->date);
     }
 
     /**
@@ -156,7 +157,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
      */
     public function getYear(): int
     {
-        return (int) $this->format('Y');
+        return DateUtils::getYear($this->date);
     }
 
     /**

@@ -37,7 +37,7 @@ class SwissDatabase extends AbstractDatabase
      * @var string
      */
     private const CREATE_STATE = <<<'sql'
-        CREATE TABLE IF NOT EXISTS  "state" (
+        CREATE TABLE IF NOT EXISTS state (
             id      TEXT PRIMARY KEY,
             name    TEXT NOT NULL
         )

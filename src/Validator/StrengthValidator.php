@@ -84,7 +84,8 @@ class StrengthValidator extends AbstractConstraintValidator
 
     private function getUserInputs(Strength $constraint): array
     {
-        if (null === $object = $this->context->getObject()) {
+        $object = $this->context->getObject();
+        if (null === $object) {
             return [];
         }
 

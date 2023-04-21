@@ -26,7 +26,12 @@ if (\file_exists($logfile)) {
 require \dirname(__DIR__) . '/vendor/autoload.php';
 
 // clear cache
-(new Filesystem())->remove([__DIR__ . '/../var/cache/test']);
+try {
+    $fs = new Filesystem();
+    $fs->remove([__DIR__ . '/../var/cache/test']);
+} catch (\Exception) {
+    // ignore
+}
 
 // @phpstan-ignore-next-line
 if (\file_exists(\dirname(__DIR__) . '/config/bootstrap.php')) {

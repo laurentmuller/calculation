@@ -16,6 +16,7 @@ use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
+use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfTextColor;
@@ -369,12 +370,20 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 
     /**
      * Output the given text to the report.
-     * By default, call the <code>write</code> method of the report.
      */
     protected function outputText(HtmlReport $report, string $text): void
     {
         $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
-        $report->Write($height, $text);
+        if (($border = $this->getParentBorder()) instanceof PdfBorder) {
+            $required = $report->GetStringWidth($text) + 2.0 * $report->getCellMargin();
+            if ($required > $report->getRemainingWidth()) {
+                $report->MultiCell(0, $height, $text, $border);
+            } else {
+                $report->Cell($required, $height, $text, $border);
+            }
+        } else {
+            $report->Write($height, $text);
+        }
     }
 
     /**
@@ -425,6 +434,21 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
         }
 
         return $this;
+    }
+
+    private function getDefaultBorderColor(): PdfDrawColor
+    {
+        return PdfDrawColor::create('#808080') ?? PdfDrawColor::black();
+    }
+
+    private function getParentBorder(): ?PdfBorder
+    {
+        $border = $this->parent?->style?->getBorder();
+        if (null !== $border && $border->isDrawable()) {
+            return $border;
+        }
+
+        return null;
     }
 
     private function parseAlignment(HtmlStyle $style, string $class): void
@@ -480,7 +504,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
             default => null
         };
         if (null !== $border) {
-            $style->setBorder($border);
+            $style->setDrawColor($this->getDefaultBorderColor())
+                ->setBorder($border);
         }
 
         return $this;
@@ -488,6 +513,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 
     private function parseColor(HtmlStyle $style, string $class): self
     {
+        // text
         $color = match ($class) {
             'text-primary' => HtmlBootstrapColors::PRIMARY->getTextColor(),
             'text-secondary' => HtmlBootstrapColors::SECONDARY->getTextColor(),
@@ -497,9 +523,36 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
             'text-info' => HtmlBootstrapColors::INFO->getTextColor(),
             default => null,
         };
-
         if ($color instanceof PdfTextColor) {
             $style->setTextColor($color);
+        }
+
+        // background
+        $color = match ($class) {
+            'bg-primary' => HtmlBootstrapColors::PRIMARY->getFillColor(),
+            'bg-secondary' => HtmlBootstrapColors::SECONDARY->getFillColor(),
+            'bg-success' => HtmlBootstrapColors::SUCCESS->getFillColor(),
+            'bg-danger' => HtmlBootstrapColors::DANGER->getFillColor(),
+            'bg-warning' => HtmlBootstrapColors::WARNING->getFillColor(),
+            'bg-info' => HtmlBootstrapColors::INFO->getFillColor(),
+            default => null,
+        };
+        if ($color instanceof PdfFillColor) {
+            $style->setFillColor($color);
+        }
+
+        // border
+        $color = match ($class) {
+            'border-primary' => HtmlBootstrapColors::PRIMARY->getDrawColor(),
+            'border-secondary' => HtmlBootstrapColors::SECONDARY->getDrawColor(),
+            'border-success' => HtmlBootstrapColors::SUCCESS->getDrawColor(),
+            'border-danger' => HtmlBootstrapColors::DANGER->getDrawColor(),
+            'border-warning' => HtmlBootstrapColors::WARNING->getDrawColor(),
+            'border-info' => HtmlBootstrapColors::INFO->getDrawColor(),
+            default => null,
+        };
+        if ($color instanceof PdfDrawColor) {
+            $style->setDrawColor($color);
         }
 
         return $this;
@@ -563,7 +616,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
         }
 
         // class
-        if ($this->className) {
+        if (null !== $this->className) {
             $classNames = \explode(' ', $this->className);
             foreach ($classNames as $class) {
                 $this->parseBookmark($class)

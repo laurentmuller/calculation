@@ -402,6 +402,18 @@ class PdfDocument extends \FPDF
         return $id;
     }
 
+    /**
+     * This method is automatically called in case of a fatal error; it simply throws an exception with the provided message.
+     *
+     * @param string $msg
+     *
+     * @throws PdfException
+     */
+    public function Error($msg): void
+    {
+        throw new PdfException($msg);
+    }
+
     public function Footer(): void
     {
         $this->footer->output();
@@ -543,6 +555,16 @@ class PdfDocument extends \FPDF
     public function getPrintableWidth(): float
     {
         return $this->w - $this->lMargin - $this->rMargin;
+    }
+
+    /**
+     * Gets the remaining printable width.
+     *
+     * @return float the value from the current position (x) to the right margin
+     */
+    public function getRemainingWidth(): float
+    {
+        return $this->w - $this->rMargin - $this->x;
     }
 
     /**

@@ -81,7 +81,7 @@ class ProductProvider extends EntityProvider
         }
 
         \usort($products, static function (Product $a, Product $b): int {
-            $result = \strcasecmp((string) $a->getCategoryCode(), (string) $b->getCategoryCode());
+            $result = \strcasecmp($a->getCategoryCode(), $b->getCategoryCode());
             if (0 === $result) {
                 return \strcasecmp((string) $a->getDescription(), (string) $b->getDescription());
             }

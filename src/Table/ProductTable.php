@@ -22,6 +22,8 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * The products table.
  *
+ * @method ProductRepository getRepository()
+ *
  * @template-extends AbstractCategoryItemTable<\App\Entity\Product>
  */
 class ProductTable extends AbstractCategoryItemTable
@@ -39,10 +41,7 @@ class ProductTable extends AbstractCategoryItemTable
 
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        /** @psalm-var ProductRepository $repository */
-        $repository = $this->getRepository();
-
-        return $repository->getTableQueryBuilder($alias);
+        return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
     /**

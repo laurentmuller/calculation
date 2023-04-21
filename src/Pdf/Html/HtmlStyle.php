@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\PdfBorder;
 use App\Pdf\PdfStyle;
 
 /**
@@ -44,6 +45,12 @@ class HtmlStyle extends PdfStyle
      * The top margin.
      */
     private float $topMargin = 0;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setBorder(PdfBorder::NONE);
+    }
 
     /**
      * Sets the font style to bold.

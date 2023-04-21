@@ -40,11 +40,11 @@ class ProductsReport extends AbstractArrayReport
         $categoryCode = '';
         foreach ($entities as $entity) {
             if ($groupCode !== $entity->getGroupCode()) {
-                $groupCode = (string) $entity->getGroupCode();
+                $groupCode = $entity->getGroupCode();
                 $this->addBookmark($groupCode, true);
             }
             if ($categoryCode !== $entity->getCategoryCode()) {
-                $categoryCode = (string) $entity->getCategoryCode();
+                $categoryCode = $entity->getCategoryCode();
                 $this->addBookmark($categoryCode, true, 1);
             }
             $key = \sprintf('%s / %s', $groupCode, $categoryCode);

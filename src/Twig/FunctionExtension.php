@@ -17,6 +17,7 @@ use App\Entity\AbstractEntity;
 use App\Entity\User;
 use App\Service\NonceService;
 use App\Service\UrlGeneratorService;
+use App\Traits\ImageSizeTrait;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
@@ -32,6 +33,7 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
  */
 final class FunctionExtension extends AbstractExtension
 {
+    use ImageSizeTrait;
     /**
      * The default file version.
      */
@@ -262,10 +264,8 @@ final class FunctionExtension extends AbstractExtension
     private function imageSize(string $path): array
     {
         $full_path = (string) $this->getRealPath($path);
-        /** @psalm-var array{0: int, 1: int} $size */
-        $size = \getimagesize($full_path);
 
-        return [$size[0], $size[1]];
+        return $this->getImageSize($full_path);
     }
 
     /**

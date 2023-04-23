@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Interfaces\ImageExtensionInterface;
+use App\Enums\ImageExtension;
+use App\Enums\ImageSize;
+use App\Traits\ImageSizeTrait;
 use App\Traits\LoggerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use Imagine\Gd\Imagine;
@@ -24,18 +26,12 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Service to resize images.
  */
-class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterface
+class ImageResizer implements ServiceSubscriberInterface
 {
+    use ImageSizeTrait;
     use LoggerAwareTrait;
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
-
-    /**
-     * The default options.
-     */
-    private const DEFAULT_OPTIONS = [
-        'format' => self::EXTENSION_PNG,
-    ];
 
     private ?ImagineInterface $imagine = null;
 
@@ -54,25 +50,24 @@ class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterfac
     /**
      * Resize an image with the given size.
      *
-     * @param string $source the source image path
-     * @param string $target the target image path
-     * @param int    $size   the image size
+     * @param string    $source the source image path
+     * @param string    $target the target image path
+     * @param ImageSize $size   the image size
      *
      * @return bool true on success, false on error or if the size is not a positive value
-     *
-     * @psalm-param ImageExtensionInterface::SIZE_* $size
      */
-    public function resize(string $source, string $target, int $size): bool
+    public function resize(string $source, string $target, ImageSize $size): bool
     {
         if (!$this->imagine instanceof ImagineInterface) {
             return false;
         }
 
         try {
-            $size = $this->getNewSize($source, $size);
+            $options = ['format' => ImageExtension::PNG->value];
+            $newSize = $this->getNewSize($source, $size->value);
             $this->imagine->open($source)
-                ->resize($size)
-                ->save($target, self::DEFAULT_OPTIONS);
+                ->resize($newSize)
+                ->save($target, $options);
 
             return true;
         } catch (\Exception $e) {
@@ -92,7 +87,7 @@ class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterfac
      */
     public function resizeDefault(string $source, string $target): bool
     {
-        return $this->resize($source, $target, self::SIZE_DEFAULT);
+        return $this->resize($source, $target, ImageSize::DEFAULT);
     }
 
     /**
@@ -105,7 +100,7 @@ class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterfac
      */
     public function resizeMedium(string $source, string $target): bool
     {
-        return $this->resize($source, $target, self::SIZE_MEDIUM);
+        return $this->resize($source, $target, ImageSize::MEDIUM);
     }
 
     /**
@@ -118,24 +113,13 @@ class ImageResizer implements ImageExtensionInterface, ServiceSubscriberInterfac
      */
     public function resizeSmall(string $source, string $target): bool
     {
-        return $this->resize($source, $target, self::SIZE_SMALL);
-    }
-
-    /**
-     * @return array{0: float, 1: float}
-     */
-    private function getImageSize(string $filename): array
-    {
-        /** @psalm-var array{0: float, 1: float} $size */
-        $size = \getimagesize($filename);
-
-        return [$size[0], $size[1]];
+        return $this->resize($source, $target, ImageSize::SMALL);
     }
 
     private function getNewSize(string $filename, float $size): Box
     {
         [$imageWidth, $imageHeight] = $this->getImageSize($filename);
-        $ratio = $imageWidth / $imageHeight;
+        $ratio = (float) $imageWidth / (float) $imageHeight;
         $width = $size;
         $height = $size;
         if ($width / $height > $ratio) {

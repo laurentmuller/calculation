@@ -12,16 +12,17 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Interfaces\ImageExtensionInterface;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Traits\ImageSizeTrait;
 use App\Traits\MathTrait;
 use App\Utils\FileUtils;
 
 /**
  * Specialized cell containing an image.
  */
-class PdfImageCell extends PdfCell implements ImageExtensionInterface
+class PdfImageCell extends PdfCell
 {
+    use ImageSizeTrait;
     use MathTrait;
 
     /**
@@ -61,8 +62,7 @@ class PdfImageCell extends PdfCell implements ImageExtensionInterface
 
         parent::__construct(cols: $cols, style: $style, alignment: $alignment, link: $link);
 
-        /** @psalm-var array{0: int, 1: int} $size */
-        $size = \getimagesize($path);
+        $size = $this->getImageSize($path);
         $this->width = $this->originalWidth = $size[0];
         $this->height = $this->originalHeight = $size[1];
     }

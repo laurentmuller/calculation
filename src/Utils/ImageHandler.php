@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
-use App\Interfaces\ImageExtensionInterface;
+use App\Enums\ImageExtension;
 
 /**
  * Handler for images.
@@ -20,8 +20,13 @@ use App\Interfaces\ImageExtensionInterface;
  * The underlying image resource and allocated colors are automatically destroyed as soon
  * as there are no other references to this instance.
  */
-class ImageHandler implements ImageExtensionInterface
+class ImageHandler
 {
+    /**
+     * The default image resolution (96) in dot per each (DPI).
+     */
+    final public const DEFAULT_RESOLUTION = 96;
+
     /**
      * The allocated colors.
      *
@@ -216,12 +221,13 @@ class ImageHandler implements ImageExtensionInterface
     {
         $ext = \strtolower(\pathinfo($filename, \PATHINFO_EXTENSION));
 
-        return match ($ext) {
-            self::EXTENSION_BMP => self::fromBmp($filename),
-            self::EXTENSION_GIF => self::fromGif($filename),
-            self::EXTENSION_JPEG, self::EXTENSION_JPG => self::fromJpeg($filename),
-            self::EXTENSION_PNG => self::fromPng($filename),
-            self::EXTENSION_XBM => self::fromXbm($filename),
+        return match (ImageExtension::tryFrom($ext)) {
+            ImageExtension::BMP => self::fromBmp($filename),
+            ImageExtension::GIF => self::fromGif($filename),
+            ImageExtension::JPEG,
+            ImageExtension::JPG => self::fromJpeg($filename),
+            ImageExtension::PNG => self::fromPng($filename),
+            ImageExtension::XBM => self::fromXbm($filename),
             default => null,
         };
     }
@@ -363,8 +369,6 @@ class ImageHandler implements ImageExtensionInterface
      * @param int $default the default resolution to use on failure
      *
      * @return int the resolution
-     *
-     * @see ImageExtensionInterface::DEFAULT_RESOLUTION
      */
     public function resolution(int $default = self::DEFAULT_RESOLUTION): int
     {

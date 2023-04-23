@@ -57,16 +57,22 @@ use App\Utils\FormatUtils;
  * @property array<int, PdfPageInfoType> $PageInfo       The page-related data.
  * @property float                       $LineWidth      the line width.
  *
- * @method float  GetX()                                           Gets the current X position in user unit.
- * @method float  GetY()                                           Gets the current Y position in user unit.
- * @method int    PageNo()                                         Gets the current page number.
- * @method float  GetPageWidth()                                   Gets the width of current page in user unit.
- * @method float  GetPageHeight()                                  Gets the height of current page in user unit.
- * @method string _textstring(string $s)                           Convert the given string.
- * @method int    AddLink()                                        Creates a new internal link and returns its identifier.
- * @method void   SetLink(int $link, float $y = 0, int $page = -1) Defines the page and position a link points to.
- * @method void   Line(float $x1, float $y1, float $x2, float $y2) Draws a line between two points using the current line width.
- * @method void   SetLineWidth(float $width)                       Set the line width.
+ * @method float  GetX()                                                  Gets the current X position in user unit.
+ * @method float  GetY()                                                  Gets the current Y position in user unit.
+ * @method int    PageNo()                                                Gets the current page number.
+ * @method float  GetPageWidth()                                          Gets the width of current page in user unit.
+ * @method float  GetPageHeight()                                         Gets the height of current page in user unit.
+ * @method string _textstring(string $s)                                  Convert the given string.
+ * @method int    AddLink()                                               Creates a new internal link and returns its identifier.
+ * @method void   SetLink(int $link, float $y = 0, int $page = -1)        Defines the page and position a link points to.
+ * @method void   Line(float $x1, float $y1, float $x2, float $y2)        Draws a line between two points using the current line width.
+ * @method void   SetLineWidth(float $width)                              Set the line width.
+ * @method void   SetMargins(float $left, float $top, ?float $right=null) Sets the left, top and right margins. By default, they are equal to 1 cm. If the right value is null, the default value is the left one.
+ * @method void   SetLeftMargin(float $margin)                            Sets the left margin. The method can be called before creating the first page. If the current abscissa gets out of page, it is brought back to the margin.
+ * @method void   SetRightMargin(float $margin)                           Sets the right margin. The method can be called before creating the first page.
+ * @method void   SetTopMargin(float $margin)                             Sets the top margin. The method can be called before creating the first page.
+ * @method void   SetAutoPageBreak(boolean $auto, float $margin = 0)      Enables or disables the automatic page breaking mode. When enabling, the second parameter is the distance from the bottom of the page that defines the triggering limit. By default, the mode is on and the margin is 1.5 cm.
+ * @method bool   AcceptPageBreak()                                       Whenever a page break condition is met, the method is called, and the break is issued or not depending on the returned value. The default implementation returns a value according to the mode selected by SetAutoPageBreak().
  *
  * @psalm-type PdfFontType = array{
  *      name: string,
@@ -102,7 +108,7 @@ class PdfDocument extends \FPDF
     /**
      * The footer offset in mm.
      */
-    final public const FOOTER_OFFSET = -15.0;
+    final public const FOOTER_OFFSET = 15.0;
 
     /**
      * The default line height in mm.
@@ -414,6 +420,15 @@ class PdfDocument extends \FPDF
         throw new PdfException($msg);
     }
 
+    /**
+     * This method is used to render the page footer.
+     *
+     * It is automatically called by AddPage() and Close() and should not be called directly by the application.
+     * The implementation in PdfDocument call the output method of the PdfFooter.
+     *
+     * @see PdfFooter
+     * @see PdfDocument::Header()
+     */
     public function Footer(): void
     {
         $this->footer->output();
@@ -610,6 +625,15 @@ class PdfDocument extends \FPDF
         return [$this->x, $this->y];
     }
 
+    /**
+     * This method is used to render the page header.
+     *
+     * It is automatically called by AddPage() and should not be called directly by the application.
+     * The implementation in PdfDocument  call the output method of the PdfHeader.
+     *
+     * @see PdfHeader
+     * @see PdfDocument::Footer()
+     */
     public function Header(): void
     {
         $this->header->output();
@@ -798,7 +822,9 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
+     * Outputs a rectangle.
+     *
+     * It can be drawn (border only), filled (with no border) or both.
      *
      * @param float                              $x     the abscissa of upper-left corner
      * @param float                              $y     the ordinate of upper-left corner
@@ -832,7 +858,9 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Outputs a rectangle. It can be drawn (border only), filled (with no border) or both.
+     * Outputs a rectangle.
+     *
+     * It can be drawn (border only), filled (with no border) or both.
      *
      * @param PdfRectangle                $bounds the rectangle to output
      * @param PdfBorder|PdfRectangleStyle $border the style of rendering
@@ -862,7 +890,9 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Sets the cell margins. The minimum value allowed is 0.
+     * Sets the cell margins.
+     *
+     * The minimum value allowed is 0.
      *
      * @param float $margin the margins to set
      *
@@ -973,7 +1003,11 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Prints a character string. The origin is on the left of the first character, on the baseline.This method allows to place a string precisely on the page, but it is usually easier to use Cell(), MultiCell() or Write() which are the standard methods to print text.
+     * Prints a character string.
+     *
+     * The origin is on the left of the first character, on the baseline. This method
+     * allows to place a string precisely on the page, but it is usually easier to
+     * use Cell(), MultiCell() or Write() which are the standard methods to print text.
      *
      * @param float  $x   the abscissa of the origin
      * @param float  $y   the ordinate of the origin
@@ -985,7 +1019,12 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * This method prints text from the current position. When the right margin is reached (or the \n character is met) a line break occurs and text continues from the left margin. Upon method exit, the current position is left just at the end of the text.
+     * This method prints text from the current position.
+     *
+     * When the right margin is reached (or the \n character is met) a line break
+     * occurs and text continues from the left margin. Upon method exit, the
+     * current position is left just at the end of the text.
+     *
      * It is possible to put a link on the text.
      *
      * @param float      $h    the line height

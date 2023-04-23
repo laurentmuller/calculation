@@ -14,6 +14,7 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Traits\ImageSizeTrait;
 use App\Traits\RoleTranslatorTrait;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
@@ -29,6 +30,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
  */
 class UsersDocument extends AbstractArrayDocument
 {
+    use ImageSizeTrait;
     use RoleTranslatorTrait;
 
     /**
@@ -70,8 +72,8 @@ class UsersDocument extends AbstractArrayDocument
             ]);
             $path = $this->getImagePath($entity);
             if (!empty($path) && FileUtils::isFile($path)) {
-                [$width, $height] = (array) \getimagesize($path);
-                $this->setCellImage($path, "A$row", (int) $width, (int) $height);
+                [$width, $height] = $this->getImageSize($path);
+                $this->setCellImage($path, "A$row", $width, $height);
             }
             ++$row;
         }

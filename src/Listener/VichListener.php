@@ -13,7 +13,8 @@ declare(strict_types=1);
 namespace App\Listener;
 
 use App\Entity\User;
-use App\Interfaces\ImageExtensionInterface;
+use App\Enums\ImageExtension;
+use App\Enums\ImageSize;
 use App\Service\ImageResizer;
 use App\Service\UserNamer;
 use App\Utils\FileUtils;
@@ -32,7 +33,7 @@ use Vich\UploaderBundle\Naming\Polyfill\FileExtensionTrait;
 #[AsEventListener(event: Events::PRE_UPLOAD, method: 'onPreUpload')]
 #[AsEventListener(event: Events::PRE_REMOVE, method: 'onPreRemove')]
 #[AsEventListener(event: Events::POST_UPLOAD, method: 'onPostUpload')]
-class VichListener implements ImageExtensionInterface
+class VichListener
 {
     use FileExtensionTrait;
 
@@ -62,8 +63,8 @@ class VichListener implements ImageExtensionInterface
         }
 
         $source = FileUtils::realPath($file);
-        $this->resizer->resizeMedium($source, $this->buildPath($user, self::SIZE_MEDIUM, $file));
-        $this->resizer->resizeSmall($source, $this->buildPath($user, self::SIZE_SMALL, $file));
+        $this->resizer->resizeMedium($source, $this->buildPath($user, ImageSize::MEDIUM, $file));
+        $this->resizer->resizeSmall($source, $this->buildPath($user, ImageSize::SMALL, $file));
     }
 
     /**
@@ -79,8 +80,8 @@ class VichListener implements ImageExtensionInterface
         $file = new File(FileUtils::buildPath($path, $name), false);
 
         // delete medium images
-        FileUtils::remove($this->buildPath($user, self::SIZE_MEDIUM, $file));
-        FileUtils::remove($this->buildPath($user, self::SIZE_SMALL, $file));
+        FileUtils::remove($this->buildPath($user, ImageSize::MEDIUM, $file));
+        FileUtils::remove($this->buildPath($user, ImageSize::SMALL, $file));
     }
 
     /**
@@ -106,16 +107,14 @@ class VichListener implements ImageExtensionInterface
         $this->resizer->resizeDefault($source, $source);
 
         // rename if not PNG
-        if (self::EXTENSION_PNG !== $this->getFileExtension($file)) {
-            $newName = Path::changeExtension($name, self::EXTENSION_PNG);
+        $png = ImageExtension::PNG->value;
+        if ($png !== $this->getFileExtension($file)) {
+            $newName = Path::changeExtension($name, $png);
             $mapping->setFileName($user, $newName);
         }
     }
 
-    /**
-     * @psalm-param ImageExtensionInterface::SIZE_* $size
-     */
-    private function buildPath(user $user, int $size, File $file): string
+    private function buildPath(user $user, ImageSize $size, File $file): string
     {
         $path = $file->getPath();
         $ext = $file->getExtension();
@@ -131,12 +130,12 @@ class VichListener implements ImageExtensionInterface
     {
         $extension = $this->getExtension($file);
 
-        return empty($extension) ? self::EXTENSION_PNG : \strtolower($extension);
+        return empty($extension) ? ImageExtension::PNG->value : \strtolower($extension);
     }
 
     private function rename(PropertyMapping $mapping, User $user, File $file): File
     {
-        $name = UserNamer::getBaseName($user, self::SIZE_DEFAULT, $file->getExtension());
+        $name = UserNamer::getBaseName($user, ImageSize::DEFAULT, $file->getExtension());
         $path = FileUtils::buildPath($file->getPath(), $name);
         $newFile = new File($path, false);
 

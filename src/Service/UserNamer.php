@@ -13,7 +13,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
-use App\Interfaces\ImageExtensionInterface;
+use App\Enums\ImageExtension;
+use App\Enums\ImageSize;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\NamerInterface;
 
@@ -22,18 +23,20 @@ use Vich\UploaderBundle\Naming\NamerInterface;
  *
  * @implements NamerInterface<User>
  */
-class UserNamer implements ImageExtensionInterface, NamerInterface
+class UserNamer implements NamerInterface
 {
     /**
      * Gets the base file name.
-     *
-     * @psalm-param ImageExtensionInterface::SIZE_* $size
      */
-    public static function getBaseName(User|int $key, int $size, ?string $ext = null): string
+    public static function getBaseName(User|int $key, ImageSize $size, ImageExtension|string $ext = null): string
     {
         $id = (int) ($key instanceof User ? $key->getId() : $key);
-        $name = \sprintf('USER_%06d_%03d', $id, $size);
+        $name = \sprintf('USER_%06d_%03d', $id, $size->value);
         if (null !== $ext && '' !== $ext) {
+            if ($ext instanceof ImageExtension) {
+                $ext = $ext->value;
+            }
+
             return "$name.$ext";
         }
 
@@ -45,6 +48,6 @@ class UserNamer implements ImageExtensionInterface, NamerInterface
      */
     public function name($object, PropertyMapping $mapping): string
     {
-        return self::getBaseName($object, self::SIZE_DEFAULT, self::EXTENSION_PNG);
+        return self::getBaseName($object, ImageSize::DEFAULT, ImageExtension::PNG);
     }
 }

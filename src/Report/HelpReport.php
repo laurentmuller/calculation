@@ -19,6 +19,7 @@ use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Service\HelpService;
+use App\Traits\ImageSizeTrait;
 use App\Utils\FileUtils;
 
 /**
@@ -32,6 +33,8 @@ use App\Utils\FileUtils;
  */
 class HelpReport extends AbstractReport
 {
+    use ImageSizeTrait;
+
     /**
      * Constructor.
      *
@@ -373,9 +376,8 @@ class HelpReport extends AbstractReport
         if (!FileUtils::exists($file)) {
             return;
         }
-        /** @psalm-var array{0: int, 1: int}|false $size */
-        $size = \getimagesize($file);
-        if (!\is_array($size)) {
+        $size = $this->getImageSize($file);
+        if (0 === $size[0]) {
             return;
         }
         $width = $this->pixels2UserUnit($size[0]);

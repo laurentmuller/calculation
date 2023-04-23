@@ -56,7 +56,7 @@ class PdfFooter
         $margins = $parent->setCellMargin(0);
 
         // position and cells width
-        $parent->SetY(PdfDocument::FOOTER_OFFSET);
+        $parent->SetY(-PdfDocument::FOOTER_OFFSET);
         $cellWidth = $parent->getPrintableWidth() / 3.0;
 
         // style

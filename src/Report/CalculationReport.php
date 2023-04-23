@@ -187,7 +187,7 @@ class CalculationReport extends AbstractReport
                 PdfWriter::WRITER_OPTION_PDF => $this,
                 PdfWriter::WRITER_OPTION_LINK => $this->qrcode,
                 PdfWriter::WRITER_OPTION_X => $this->GetPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE,
-                PdfWriter::WRITER_OPTION_Y => $this->GetPageHeight() + self::FOOTER_OFFSET - self::QR_CODE_SIZE - self::QR_CODE_OFFSET,
+                PdfWriter::WRITER_OPTION_Y => $this->GetPageHeight() - self::FOOTER_OFFSET - self::QR_CODE_SIZE - self::QR_CODE_OFFSET,
             ];
             Builder::create()
                 ->roundBlockSizeMode(new RoundBlockSizeModeNone())

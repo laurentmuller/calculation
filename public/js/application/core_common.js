@@ -200,10 +200,11 @@ function initSwitchTheme() {
 
     });
 }
+
 /**
  * Ready function
  */
-$(function() {
+$(function () {
     'use strict';
     initHorizontalSearch();
     initVerticalSearch();

@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\SessionAwareTrait;
-use App\Utils\ImageHandler;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -100,7 +99,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
         }
         $this->clear();
         $text = $this->generateRandomString($length);
-        if (($image = $this->createImage($text, $width, $height)) instanceof ImageHandler) {
+        if (($image = $this->createImage($text, $width, $height)) instanceof ImageService) {
             $data = $this->encodeImage($image);
             $this->setSessionValues([
                 self::KEY_TEXT => $text,
@@ -141,7 +140,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @throws \Exception
      */
-    private function computeText(ImageHandler $image, float $size, string $font, string $text): array
+    private function computeText(ImageService $image, float $size, string $font, string $text): array
     {
         return \array_map(function (string $char) use ($image, $size, $font): array {
             $angle = \random_int(-8, 8);
@@ -161,9 +160,9 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @throws \Exception
      */
-    private function createImage(string $text, int $width, int $height): ?ImageHandler
+    private function createImage(string $text, int $width, int $height): ?ImageService
     {
-        if (!($image = ImageHandler::fromTrueColor($width, $height)) instanceof ImageHandler) {
+        if (!($image = ImageService::fromTrueColor($width, $height)) instanceof ImageService) {
             return null;
         }
         $this->drawBackground($image)
@@ -177,7 +176,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Draws the white background image.
      */
-    private function drawBackground(ImageHandler $image): self
+    private function drawBackground(ImageService $image): self
     {
         $color = $image->allocateWhite();
         if (\is_int($color)) {
@@ -192,7 +191,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @throws \Exception
      */
-    private function drawLines(ImageHandler $image, int $width, int $height): self
+    private function drawLines(ImageService $image, int $width, int $height): self
     {
         $color = $image->allocate(195, 195, 195);
         if (\is_int($color)) {
@@ -212,7 +211,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @throws \Exception
      */
-    private function drawPoints(ImageHandler $image, int $width, int $height): self
+    private function drawPoints(ImageService $image, int $width, int $height): self
     {
         $color = $image->allocate(0, 0, 255);
         if (\is_int($color)) {
@@ -232,7 +231,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @throws \Exception
      */
-    private function drawText(ImageHandler $image, int $width, int $height, string $text): self
+    private function drawText(ImageService $image, int $width, int $height, string $text): self
     {
         $font = $this->font;
         $color = $image->allocateBlack();
@@ -256,7 +255,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Encodes the image with MIME base64.
      */
-    private function encodeImage(ImageHandler $image): string
+    private function encodeImage(ImageService $image): string
     {
         \ob_start();
         $image->toPng();

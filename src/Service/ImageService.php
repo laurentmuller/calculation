@@ -10,17 +10,17 @@
 
 declare(strict_types=1);
 
-namespace App\Utils;
+namespace App\Service;
 
 use App\Enums\ImageExtension;
 
 /**
- * Handler for images.
+ * Service to manipulate image.
  *
  * The underlying image resource and allocated colors are automatically destroyed as soon
  * as there are no other references to this instance.
  */
-class ImageHandler
+class ImageService
 {
     /**
      * The default image resolution (96) in dot per each (DPI).
@@ -40,7 +40,7 @@ class ImageHandler
      * @param \GdImage $image    the image to handle
      * @param ?string  $filename the file name or null if none
      */
-    public function __construct(private readonly \GdImage $image, private readonly ?string $filename = null)
+    private function __construct(private readonly \GdImage $image, private readonly ?string $filename = null)
     {
     }
 
@@ -65,6 +65,10 @@ class ImageHandler
      * @param int $blue  the value of blue component
      *
      * @return int|false the color identifier on success, false if the allocation failed
+     *
+     * @psalm-param int<0, 255> $red
+     * @psalm-param int<0, 255> $green
+     * @psalm-param int<0, 255> $blue
      */
     public function allocate(int $red, int $green, int $blue): int|false
     {
@@ -131,7 +135,7 @@ class ImageHandler
     /**
      * Copy and resize part of an image with resampling.
      *
-     * @param ImageHandler $dst_image the destination image handler
+     * @param ImageService $dst_image the destination image handler
      * @param int          $dst_x     the x-coordinate of destination point
      * @param int          $dst_y     the y-coordinate of destination point
      * @param int          $src_x     the x-coordinate of source point
@@ -155,7 +159,7 @@ class ImageHandler
      *
      * @return bool true on success or false on failure
      *
-     * @see ImageHandler::allocate()
+     * @see ImageService::allocate()
      */
     public function fill(int $color): bool
     {
@@ -163,11 +167,11 @@ class ImageHandler
     }
 
     /**
-     * Create a new image handler from file or URL.
+     * Create a new bitmap image handler from file or URL.
      *
      * @param string $filename the path to the PNG image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on error
+     * @return ?ImageService an image handler on success, <code>null</code> on error
      */
     public static function fromBmp(string $filename): ?self
     {
@@ -179,11 +183,11 @@ class ImageHandler
     }
 
     /**
-     * Create a new image handler from file or URL.
+     * Create a new GIF image handler from file or URL.
      *
      * @param string $filename the path to the PNG image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on error
+     * @return ?ImageService an image handler on success, <code>null</code> on error
      */
     public static function fromGif(string $filename): ?self
     {
@@ -195,11 +199,11 @@ class ImageHandler
     }
 
     /**
-     * Create a new image handler from file or URL.
+     * Create a new JPEG image handler from file or URL.
      *
      * @param string $filename the path to the PNG image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on error
+     * @return ?ImageService an image handler on success, <code>null</code> on error
      */
     public static function fromJpeg(string $filename): ?self
     {
@@ -211,11 +215,13 @@ class ImageHandler
     }
 
     /**
-     * Create a new image handler from file or URL. This method uses the file extension to create the handler.
+     * Create a new image handler from file or URL.
+     *
+     * This method uses the file extension to create the handler.
      *
      * @param string $filename the path to the image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on error
+     * @return ?ImageService an image handler on success, <code>null</code> on error
      */
     public static function fromName(string $filename): ?self
     {
@@ -233,11 +239,11 @@ class ImageHandler
     }
 
     /**
-     * Create a new image handler from file or URL.
+     * Create a new PNG image handler from file or URL.
      *
      * @param string $filename the path to the PNG image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on error
+     * @return ?ImageService an image handler on success, <code>null</code> on error
      */
     public static function fromPng(string $filename): ?self
     {
@@ -254,7 +260,7 @@ class ImageHandler
      * @param int $width  the image width
      * @param int $height the image height
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on error
+     * @return ?ImageService an image handler on success, <code>null</code> on error
      */
     public static function fromTrueColor(int $width, int $height): ?self
     {
@@ -266,11 +272,11 @@ class ImageHandler
     }
 
     /**
-     * Create a new image handler from file or URL.
+     * Create a new WBMP image handler from file or URL.
      *
      * @param string $filename the path to the WBMP (Wireless Bitmaps) image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on error
+     * @return ?ImageService an image handler on success, <code>null</code> on error
      */
     public static function fromWbmp(string $filename): ?self
     {
@@ -286,7 +292,7 @@ class ImageHandler
      *
      * @param string $filename the path to the WebP image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on error
+     * @return ImageService|null an image handler on success, <code>null</code> on error
      */
     public static function fromWebp(string $filename): ?self
     {
@@ -302,7 +308,7 @@ class ImageHandler
      *
      * @param string $filename the path to the PNG image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on error
+     * @return ImageService|null an image handler on success, <code>null</code> on error
      */
     public static function fromXbm(string $filename): ?self
     {
@@ -318,7 +324,7 @@ class ImageHandler
      *
      * @param string $filename the path to the XPM image
      *
-     * @return ImageHandler|null an image handler on success, <code>null</code> on error
+     * @return ImageService|null an image handler on success, <code>null</code> on error
      */
     public static function fromXpm(string $filename): ?self
     {
@@ -338,7 +344,7 @@ class ImageHandler
     }
 
     /**
-     * Gets the image.
+     * Gets the underlying image.
      */
     public function getImage(): \GdImage
     {
@@ -356,7 +362,7 @@ class ImageHandler
      *
      * @return bool true on success or false on failure
      *
-     * @see ImageHandler::allocate()
+     * @see ImageService::allocate()
      */
     public function line(int $x1, int $y1, int $x2, int $y2, int $color): bool
     {
@@ -372,10 +378,9 @@ class ImageHandler
      */
     public function resolution(int $default = self::DEFAULT_RESOLUTION): int
     {
-        if (\function_exists('imageresolution')) {
-            /** @psalm-var int[] $values */
-            $values = \imageresolution($this->image);
-
+        /** @psalm-var int[]|false $values */
+        $values = \imageresolution($this->image);
+        if (\is_array($values)) {
             return $values[0];
         }
 
@@ -404,7 +409,7 @@ class ImageHandler
      *
      * @return bool true on success or false on failure
      *
-     * @see ImageHandler::allocate()
+     * @see ImageService::allocate()
      */
     public function setPixel(int $x, int $y, int $color): bool
     {
@@ -563,7 +568,7 @@ class ImageHandler
     }
 
     /**
-     * Gets the bounding box of a text using TrueType fonts.
+     * Gets the bounding box of a text using TrueType font.
      *
      * @param float  $size     the font size
      * @param float  $angle    the angle in degrees in which text will be measured
@@ -622,7 +627,7 @@ class ImageHandler
     }
 
     /**
-     * Gets the height of a text using TrueType fonts.
+     * Gets the height of a text using TrueType font.
      *
      * @param float  $size     the font size
      * @param float  $angle    the angle in degrees in which text will be measured
@@ -631,7 +636,7 @@ class ImageHandler
      *
      * @return int the text height or 0 on error
      *
-     * @see ImageHandler::ttfBox()
+     * @see ImageService::ttfBox()
      */
     public function ttfHeight(float $size, float $angle, string $fontFile, string $text): int
     {
@@ -639,7 +644,7 @@ class ImageHandler
     }
 
     /**
-     * Gets the width and the height of a text using TrueType fonts.
+     * Gets the width and the height of a text using TrueType font.
      *
      * @param float  $size     the font size
      * @param float  $angle    the angle in degrees in which text will be measured
@@ -648,7 +653,7 @@ class ImageHandler
      *
      * @return int[] an array with the text width and the text height or an empty array ([0, 0]) on error
      *
-     * @see ImageHandler::ttfBox()
+     * @see ImageService::ttfBox()
      */
     public function ttfSize(float $size, float $angle, string $fontFile, string $text): array
     {
@@ -666,7 +671,7 @@ class ImageHandler
     }
 
     /**
-     * Write text to this image using TrueType fonts.
+     * Write text to this image using TrueType font.
      *
      * @param float  $size     the font size
      * @param float  $angle    The angle in degrees, with 0 degrees being left-to-right reading text.
@@ -741,7 +746,7 @@ class ImageHandler
     }
 
     /**
-     * Gets the width of a text using TrueType fonts.
+     * Gets the width of a text using TrueType font.
      *
      * @param float  $size     the font size
      * @param float  $angle    the angle in degrees in which text will be measured
@@ -750,7 +755,7 @@ class ImageHandler
      *
      * @return int the text width or 0 on error
      *
-     * @see ImageHandler::ttfBox()
+     * @see ImageService::ttfBox()
      */
     public function ttfWidth(float $size, float $angle, string $fontFile, string $text): int
     {

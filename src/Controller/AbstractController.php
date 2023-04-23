@@ -231,18 +231,18 @@ abstract class AbstractController extends BaseController
      *
      * Override the parent function to allow to use the default type like defined in the <code>FormFactoryInterface</code>.
      *
-     * @return FormInterface<mixed>
+     * @template TData
+     *
+     * @return FormInterface<TData>
+     *
+     * @phpstan-param class-string<\Symfony\Component\Form\FormTypeInterface<TData>> $type
+     *
+     * @phpstan-return FormInterface<TData>
      *
      * @psalm-param class-string<\Symfony\Component\Form\FormTypeInterface> $type
      *
      * @psalm-suppress OverriddenMethodAccess
      * @psalm-suppress InvalidCast
-     *
-     * @phpstan-template TData
-     *
-     * @phpstan-param class-string<\Symfony\Component\Form\FormTypeInterface<TData>> $type
-     *
-     * @phpstan-return FormInterface<TData>
      */
     protected function createForm(string $type = FormType::class, mixed $data = null, array $options = []): FormInterface
     {

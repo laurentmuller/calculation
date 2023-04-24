@@ -19,10 +19,12 @@ use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
+use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Traits\MathTrait;
 use App\Traits\ParameterTrait;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -50,6 +52,42 @@ class IndexController extends AbstractController
      */
     public function __construct(private readonly EntityManagerInterface $manager)
     {
+    }
+
+    /**
+     * Hide the catalog panel.
+     */
+    #[Route(path: '/hide/catalog', name: 'homepage_hide_catalog')]
+    public function hideCatalog(): JsonResponse
+    {
+        $this->getUserService()
+            ->setProperty(PropertyServiceInterface::P_PANEL_CATALOG, false);
+
+        return new JsonResponse($this->trans('index.panel_catalog_hide_success'));
+    }
+
+    /**
+     * Hide the month panel.
+     */
+    #[Route(path: '/hide/month', name: 'homepage_hide_month')]
+    public function hideMonth(): JsonResponse
+    {
+        $this->getUserService()
+            ->setProperty(PropertyServiceInterface::P_PANEL_MONTH, false);
+
+        return new JsonResponse($this->trans('index.panel_month_hide_success'));
+    }
+
+    /**
+     * Hide the state panel.
+     */
+    #[Route(path: '/hide/state', name: 'homepage_hide_state')]
+    public function hideState(): JsonResponse
+    {
+        $this->getUserService()
+            ->setProperty(PropertyServiceInterface::P_PANEL_STATE, false);
+
+        return new JsonResponse($this->trans('index.panel_state_hide_success'));
     }
 
     /**

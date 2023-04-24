@@ -1,4 +1,4 @@
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon, link %}
 {% import 'index/_macros.html.twig' as macros %}
 {# macros #}
 {% macro cardEntry(state, table_path, parameters=[], min_margin) -%}
@@ -26,16 +26,19 @@
 {%- set is_states = states|length -%}
 {%- set table_path = is_granted_calculation ? 'calculation_table' : false -%}
 {# content #}
-<div class="card mb-2">
+<div class="card card-state mb-2" data-path="{{ path('homepage_hide_state') }}">
     <div class="card-header">
         <div class="row">
             <div class="col-auto mr-auto">
-                <h1 class="card-title">{{ icons.icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
+                <h1 class="card-title">{{ icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
             </div>
             <div class="col-auto d-print-none">
                 {%- if table_path and is_states -%}
-                    {{- icons.link(path('chart_by_state'), null, null, 'chart-pie', 'index.menu_chart_title') -}}
+                    {{ link(path('chart_by_state'), null, null, 'chart-pie fa-fw', 'index.menu_chart_title') }}
                 {%- endif -%}
+                <a href="#" class="hide-panel" title="{{ 'index.panel_state_hide'|trans }}">
+                    {{- icon('xmark fa-fw') -}}
+                </a>
             </div>
         </div>
     </div>

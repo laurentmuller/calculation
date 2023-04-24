@@ -54,8 +54,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     {
         /** @var Role|User|null $key */
         $key = $group->getKey();
-        $description = $this->trans('user.fields.role') . ' ';
         if ($key instanceof Role) {
+            $description = $this->trans('user.fields.role') . ' ';
             $description .= $this->translateRole($key);
             $parent->singleLine($description, $group->getStyle());
 
@@ -63,11 +63,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         }
         if ($key instanceof User) {
             $text = $key->getUserIdentifier();
-            if ($key->isEnabled()) {
-                $description .= $this->translateRole($key);
-            } else {
-                $description .= $this->trans('common.value_disabled');
-            }
+            $description = $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
             [$x, $y] = $this->GetXY();
             $group->apply($this);
             $this->Cell(border: PdfBorder::all());
@@ -131,7 +127,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * Gets the cell text for the given rights and attribute.
      *
-     * @param FlagBag<EntityPermission>|null $rights
+     * @psalm-param FlagBag<EntityPermission>|null $rights
      */
     private function getRightText(?FlagBag $rights, EntityPermission $permission): ?string
     {
@@ -141,7 +137,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * Output rights.
      *
-     * @param FlagBag<EntityPermission>|null $rights
+     * @psalm-param FlagBag<EntityPermission>|null $rights
      */
     private function outputRights(PdfGroupTableBuilder $builder, EntityName $entity, ?FlagBag $rights): self
     {

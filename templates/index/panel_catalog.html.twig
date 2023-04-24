@@ -1,4 +1,4 @@
-{% import 'macros/_icons.html.twig' as icons %}
+{% from 'macros/_icons.html.twig' import icon, link %}
 {# macros #}
 {% macro cardEntry(entity, count, list_path, icon) -%}
 {% set title = entity ~ '.list.title' %}
@@ -7,7 +7,7 @@
     <div class="card-body p-2">
         <div class="card-text">
             {%- if list_path -%}
-                {{- icons.link(path(list_path), title, 'card-link stretched-link', icon, 'index.panel_title_' ~ entity) -}}
+                {{- link(path(list_path), title, 'card-link stretched-link', icon, 'index.panel_title_' ~ entity) -}}
             {%- else -%}
                 {{- title|trans -}}
             {%- endif -%}
@@ -26,11 +26,20 @@
 {%- set margin_path = is_granted_global_margin ? 'globalmargin_table' : false -%}
 {%- set state_path = is_granted_calculation_state ? 'calculationstate_table' : false -%}
 {# content #}
-<div class="card mb-2">
+<div class="card card-catalog mb-2" data-path="{{ path('homepage_hide_catalog') }}">
     <div class="card-header">
-        <h1 class="card-title">
-            {{ icons.icon('database', 'index.panel_count') }}
-        </h1>
+        <div class="row">
+            <div class="col-auto mr-auto">
+                <h1 class="card-title">
+                    {{ icon('database', 'index.panel_catalog') }}
+                </h1>
+            </div>
+            <div class="col-auto d-print-none">
+                <a href="#" class="hide-panel" title="{{ 'index.panel_catalog_hide'|trans }}">
+                    {{- icon('xmark fa-fw') -}}
+                </a>
+            </div>
+        </div>
     </div>
     <div class="card-body index-parent no-gutters p-1">
         {{ _self.cardEntry('product', product_count, product_path, ICON_PRODUCT) }}

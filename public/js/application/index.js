@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals MenuBuilder  */
+/* globals MenuBuilder, Toaster  */
 
 /**
  * -------------- JQuery extensions --------------
@@ -146,6 +146,26 @@ function createKeydownHandler($table) {
 }
 
 /**
+ * Hide a panel.
+ *
+ * @param {Event} e - the source event.
+ */
+function hidePanel(e) {
+    'use strict';
+    e.preventDefault();
+    const $link = $(e.currentTarget);
+    const title = $link.attr('title');
+    const $card = $link.parents('.card');
+    const url = $card.data('path');
+    $.post(url, function (message) {
+        $card.fadeOut(400, function () {
+            $card.remove();
+            Toaster.info(message, title, $('#flashes').data());
+        });
+    });
+}
+
+/**
  * Ready function
  */
 (function ($) {
@@ -206,4 +226,10 @@ function createKeydownHandler($table) {
             $restrict.updateTimer(onRestrictInput, 450, $restrict);
         });
     }
+
+    // hide panels
+    $('.hide-panel').on('click', function (e) {
+        hidePanel(e);
+    });
+
 }(jQuery));

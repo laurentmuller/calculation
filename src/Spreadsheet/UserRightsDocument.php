@@ -100,24 +100,17 @@ class UserRightsDocument extends AbstractArrayDocument
     }
 
     /**
-     * Gets the name for the given entity.
-     *
-     * RoleInterface $entity the entity
+     * Gets the name for the given role.
      */
     private function getEntityName(RoleInterface $entity): string
     {
         $role = $this->translateRole($entity);
-        $description = $this->trans('user.fields.role') . ' ';
         if ($entity instanceof Role) {
-            return $description . $role;
+            return $this->trans('user.fields.role') . ' ' . $role;
         }
         if ($entity instanceof User) {
             $text = $entity->getUserIdentifier();
-            if ($entity->isEnabled()) {
-                $description .= $role;
-            } else {
-                $description .= $this->trans('common.value_disabled');
-            }
+            $description = $entity->isEnabled() ? $role : $this->trans('common.value_disabled');
 
             return $text . '|' . $description;
         }

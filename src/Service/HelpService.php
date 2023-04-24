@@ -14,7 +14,7 @@ namespace App\Service;
 
 use App\Traits\CacheAwareTrait;
 use App\Traits\TranslatorAwareTrait;
-use App\Utils\StringUtils;
+use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -189,13 +189,13 @@ class HelpService implements ServiceSubscriberInterface
 
     /**
      * Gets the full help content.
+     *
+     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress MixedInferredReturnType
      */
     public function getHelp(): array
     {
-        /** @psalm-var HelpContentType|null $results */
-        $results = $this->getCacheValue(self::CACHE_KEY, fn () => $this->loadHelp());
-
-        return $results ?? [];
+        return $this->getCacheValue(self::CACHE_KEY, fn () => $this->loadHelp()) ?? [];
     }
 
     /**
@@ -267,13 +267,9 @@ class HelpService implements ServiceSubscriberInterface
      */
     private function loadHelp(): ?array
     {
-        if (!\is_string($content = \file_get_contents($this->file))) {
-            return null;
-        }
-
         try {
             /** @psalm-var HelpContentType $help */
-            $help = StringUtils::decodeJson($content);
+            $help = FileUtils::decodeJson($this->file);
             if (!empty($help['dialogs'])) {
                 $this->sortDialogs($help['dialogs']);
             }

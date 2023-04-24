@@ -286,6 +286,8 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      *
      * @see Calculation::hasDuplicateItems()
      * @see Calculation::removeDuplicateItems()
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     public function getDuplicateItems(): array
     {
@@ -302,16 +304,13 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         // merge duplicated items
-        /** @var CalculationItem[] $result */
-        $result = \array_reduce($array, function (array $current, array $items): array {
+        return \array_reduce($array, function (array $current, array $items): array {
             if (\count($items) > 1) {
                 return \array_merge($current, \array_values($items));
             }
 
             return $current;
         }, []);
-
-        return $result;
     }
 
     /**
@@ -331,7 +330,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         $result = [];
-
         foreach ($this->getItems() as $item) {
             if ($item->isEmpty()) {
                 $result[] = $item;

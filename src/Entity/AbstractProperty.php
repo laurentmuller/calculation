@@ -65,10 +65,7 @@ abstract class AbstractProperty extends AbstractEntity
     {
         if (!empty($this->value)) {
             try {
-                /** @psalm-var array $result */
-                $result = StringUtils::decodeJson($this->value);
-
-                return $result;
+                return StringUtils::decodeJson($this->value);
             } catch (\InvalidArgumentException) {
             }
         }

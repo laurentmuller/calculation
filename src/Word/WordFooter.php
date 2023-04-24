@@ -54,7 +54,7 @@ class WordFooter extends AbstractHeaderFooter
     /**
      * Set the application name.
      */
-    public function setName(?string $name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -64,7 +64,7 @@ class WordFooter extends AbstractHeaderFooter
     /**
      * Set the application URL.
      */
-    public function setUrl(?string $url): self
+    public function setUrl(string $url): self
     {
         $this->url = $url;
 

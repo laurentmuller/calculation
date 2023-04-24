@@ -93,10 +93,12 @@ final class StringUtils
      * @throws \InvalidArgumentException if the value can not be decoded
      *
      * @see StringUtils::encodeJson()
+     *
+     * @psalm-return ($assoc is true ? array : \stdClass)
      */
     public static function decodeJson(string $value, bool $assoc = true): mixed
     {
-        /** @psalm-var mixed $result */
+        /** @psalm-var array|\stdClass $result */
         $result = \json_decode($value, $assoc);
         if (\JSON_ERROR_NONE !== $code = \json_last_error()) {
             $message = \json_last_error_msg();
@@ -180,16 +182,14 @@ final class StringUtils
     /**
      * Gets the short class name of the given variable.
      *
-     * @param object|string $objectOrClass either a string containing the name of
-     *                                     the class to reflect, or an object
+     * @template T of object
+     *
+     * @param class-string<T>|T $objectOrClass either a string containing the name of
+     *                                         the class to reflect, or an object
      *
      * @return string the short name or null if the variable is null
-     *
-     * @psalm-template T of object
-     *
-     * @psalm-param class-string<T>|T $objectOrClass
      */
-    public static function getShortName(object|string $objectOrClass): string
+    public static function getShortName(string|object $objectOrClass): string
     {
         try {
             return (new \ReflectionClass($objectOrClass))->getShortName();
@@ -211,9 +211,14 @@ final class StringUtils
     /**
      * Replace all occurrences of the pattern string with the replacement string.
      *
-     * @param array<string, string> $values an array where key is the pattern and value is the replacement term
+     * @param array<string, string> $values  an array where key is the pattern and value is the replacement term
+     * @param string|string[]       $subject the string or array being searched and replaced on
+     *
+     * @return string|string[] returns a string or an array with the replaced values
+     *
+     * @phpstan-return ($subject is string ? string : string[])
      */
-    public static function pregReplace(array $values, string $subject): string
+    public static function pregReplace(array $values, string|array $subject): string|array
     {
         return \preg_replace(\array_keys($values), \array_values($values), $subject);
     }
@@ -221,9 +226,14 @@ final class StringUtils
     /**
      * Replace all occurrences of the search string with the replacement string.
      *
-     * @param array<string, string> $values an array where key is the search term and value is the replacement term
+     * @param array<string, string> $values  an array where key is the search term and value is the replacement term
+     * @param string|string[]       $subject the string or array being searched and replaced on
+     *
+     * @return string|string[] returns a string or an array with the replaced values
+     *
+     * @phpstan-return ($subject is string ? string : string[])
      */
-    public static function replace(array $values, string $subject): string
+    public static function replace(array $values, string|array $subject): string|array
     {
         return \str_replace(\array_keys($values), \array_values($values), $subject);
     }

@@ -210,7 +210,6 @@ class BingTranslatorService extends AbstractTranslatorService
     {
         if (Response::HTTP_OK !== $response->getStatusCode()) {
             $content = $response->getContent(false);
-            /** @psalm-var array $value */
             $value = StringUtils::decodeJson($content);
         } else {
             $value = $response->toArray(false);

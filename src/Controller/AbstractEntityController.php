@@ -204,16 +204,17 @@ abstract class AbstractEntityController extends AbstractController
      * @psalm-return T[]
      *
      * @throws \Doctrine\ORM\Exception\ORMException
+     *
+     * @psalm-suppress InvalidReturnStatement
+     * @psalm-suppress InvalidReturnType
      */
     protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
         $sortedFields = null !== $field ? [$field => $mode] : [];
-        /** @psalm-var T[] $result */
-        $result = $this->repository
+
+        return $this->repository
             ->getSearchQuery($sortedFields, $criteria, $alias)
             ->getResult();
-
-        return $result;
     }
 
     /**

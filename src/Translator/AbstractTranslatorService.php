@@ -69,15 +69,15 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnStatement
      */
     public function getLanguages(): array|false
     {
         $key = $this->getCacheKey();
 
-        /** @psalm-var array<string, string>|null $results */
-        $results = $this->getCacheValue($key, fn () => $this->doLoadLanguages());
-
-        return $results ?? false;
+        return $this->getCacheValue($key, fn () => $this->doLoadLanguages()) ?? false;
     }
 
     protected function getValue(array $values, string $path, bool $error = true): mixed

@@ -84,11 +84,9 @@ final class HtmlStyleFactory
             ->setStyle($bold ? PdfFontStyle::BOLD : PdfFontStyle::REGULAR)
             ->setSize($size);
 
-        $result = self::default();
-        $result->setBottomMargin($bottomMargin)
+        return self::default()
+            ->setBottomMargin($bottomMargin)
             ->setLeftMargin($leftMargin)
             ->setFont($font);
-
-        return $result;
     }
 }

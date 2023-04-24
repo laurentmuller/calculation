@@ -363,6 +363,8 @@ class SearchService implements ServiceSubscriberInterface
      * @param string  $extra  a SQL statement to add to the default native SELECT SQL statement
      *
      * @psalm-return SearchType[]
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     private function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
     {
@@ -376,10 +378,8 @@ class SearchService implements ServiceSubscriberInterface
         $sql = \implode(' UNION ', $queries) . $extra;
         $query = $this->manager->createNativeQuery($sql, $this->getResultSetMapping());
         $query->setParameter(self::SEARCH_PARAM, "%$search%", Types::STRING);
-        /** @psalm-var SearchType[] $result */
-        $result = $query->getArrayResult();
 
-        return $result;
+        return $query->getArrayResult();
     }
 
     /**

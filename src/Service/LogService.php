@@ -98,13 +98,13 @@ class LogService implements ServiceSubscriberInterface
 
     /**
      * Gets the parsed log file.
+     *
+     * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnStatement
      */
     public function getLogFile(): ?LogFile
     {
-        /** @psalm-var LogFile|null $result */
-        $result = $this->getCacheValue(self::KEY_CACHE, fn () => $this->parseFile());
-
-        return $result;
+        return $this->getCacheValue(self::KEY_CACHE, fn () => $this->parseFile());
     }
 
     /**
@@ -164,14 +164,13 @@ class LogService implements ServiceSubscriberInterface
      * Decode the given JSON string.
      *
      * @psalm-return array<string, string>|null
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     private function parseJson(string $value): ?array
     {
         try {
-            /** @psalm-var array<string, string> $result */
-            $result = StringUtils::decodeJson($value);
-
-            return $result;
+            return StringUtils::decodeJson($value);
         } catch (\InvalidArgumentException) {
             return null;
         }

@@ -130,6 +130,8 @@ class OpenWeatherCityUpdater
 
     /**
      * @psalm-return OpenWeatherCityType[]|false
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     private function getFileContent(UploadedFile $file): array|false
     {
@@ -147,10 +149,7 @@ class OpenWeatherCityUpdater
         }
 
         try {
-            /** @psalm-var OpenWeatherCityType[] $result */
-            $result = StringUtils::decodeJson($content);
-
-            return $result;
+            return StringUtils::decodeJson($content);
         } catch (\InvalidArgumentException) {
             return false;
         }

@@ -47,12 +47,13 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
         return self::CACHE_TIMEOUT;
     }
 
+    /**
+     * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnStatement
+     */
     public function getGlobals(): array
     {
-        /** @var array<string, mixed> $results */
-        $results = $this->getCacheValue(self::CACHE_KEY, fn () => $this->loadValues());
-
-        return $results;
+        return $this->getCacheValue(self::CACHE_KEY, fn () => $this->loadValues());
     }
 
     /**
@@ -62,23 +63,20 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      *
      * @param class-string<T> $className
      *
-     * @return array<string, mixed>
-     *
      * @throws \ReflectionException
      */
     private function getConstants(string $className): array
     {
         $reflection = new \ReflectionClass($className);
         $constants = \array_filter($reflection->getReflectionConstants(), static fn (\ReflectionClassConstant $c) => $c->isPublic());
-        $names = \array_map(static fn (\ReflectionClassConstant $c) => $c->getName(), $constants);
-        $values = \array_map(static fn (\ReflectionClassConstant $c) => $c->getValue(), $constants);
 
-        return \array_combine($names, $values);
+        return \array_reduce(
+            $constants,
+            static fn (array $carry, \ReflectionClassConstant $c) => $carry + [$c->getName() => $c->getValue()],
+            []
+        );
     }
 
-    /**
-     * @return array<string, string>
-     */
     private function getIcons(): array
     {
         return [
@@ -107,8 +105,6 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     }
 
     /**
-     * @return array<string, mixed>
-     *
      * @throws \ReflectionException
      */
     private function loadValues(): array

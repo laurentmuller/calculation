@@ -427,10 +427,7 @@ class UpdateAssetsCommand extends Command
         }
 
         try {
-            /** @psalm-var mixed $data */
-            $data = StringUtils::decodeJson($content);
-
-            return \is_array($data) ? $data : null;
+            return StringUtils::decodeJson($content);
         } catch (\InvalidArgumentException $e) {
             $this->writeError($e->getMessage());
             $this->writeError("Unable to decode file '$filename'.");

@@ -27,7 +27,7 @@ class CountryFlagService
      * @param ?string $locale   the locale used to translate country name or null to use default
      * @param bool    $flagOnly true to return flag only; false to return flag and country name
      *
-     * @return array<string, string> an array where key is the country code and value is the flag and the country name (if applicable)
+     * @return array<string, string> an array where key is the flag and the country name (if applicable) and value is the country code
      */
     public function getChoices(string $locale = null, bool $flagOnly = false): array
     {
@@ -35,15 +35,15 @@ class CountryFlagService
         $names = Countries::getNames($locale);
         if ($flagOnly) {
             foreach (\array_keys($names) as $code) {
-                $choices[$code] = self::getFlag($code);
+                $choices[self::getFlag($code, false)] = $code;
             }
         } else {
             foreach ($names as $code => $name) {
-                $choices[$code] = self::getFlag($code) . ' ' . $name;
+                $choices[\sprintf('%s %s', self::getFlag($code, false), $name)] = $code;
             }
         }
 
-        return \array_flip($choices);
+        return $choices;
     }
 
     /**
@@ -57,13 +57,16 @@ class CountryFlagService
     /**
      * Gets the Emoji flag for the given country code.
      *
-     * @throws \InvalidArgumentException if the given country code is invalid
+     * @param string $code     the country code to get Emoji flag for
+     * @param bool   $validate true to validate the given country code
+     *
+     * @throws \InvalidArgumentException if the validate parameter is true and the given country code does not exist
      *
      * @see Countries::exists()
      */
-    public static function getFlag(string $code): string
+    public static function getFlag(string $code, bool $validate = true): string
     {
-        if (!Countries::exists($code)) {
+        if ($validate && !Countries::exists($code)) {
             throw new \InvalidArgumentException("Invalid country code: '$code'.");
         }
 

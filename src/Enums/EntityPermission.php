@@ -71,17 +71,16 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
      * Gets this enumeration as constant.
      *
      * @return array<string, string>
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     public static function constants(): array
     {
-        /** @psalm-var array<string, string> $result */
-        $result = \array_reduce(
+        return \array_reduce(
             self::cases(),
             static fn (array $choices, self $type) => $choices + ['ATTRIBUTE_' . $type->name => $type->name],
             [],
         );
-
-        return $result;
     }
 
     /**

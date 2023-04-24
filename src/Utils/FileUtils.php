@@ -86,10 +86,7 @@ final class FileUtils
             throw new \InvalidArgumentException(\sprintf("Unable to get content of the file '%s'.", $file));
         }
 
-        /** @psalm-var array|\stdClass $result */
-        $result = StringUtils::decodeJson($json, $assoc);
-
-        return $result;
+        return StringUtils::decodeJson($json, $assoc);
     }
 
     /**

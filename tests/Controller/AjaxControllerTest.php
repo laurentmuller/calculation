@@ -124,6 +124,7 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
                 self::assertNotNull($this->translator);
                 $expected = $this->translator->trans($expected, [], 'validators');
             }
+            // @phpstan-ignore-next-line
             self::assertSame($expected, $result);
         } catch (\UnexpectedValueException $e) {
             self::fail($e->getMessage());

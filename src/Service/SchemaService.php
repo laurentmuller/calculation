@@ -98,13 +98,13 @@ class SchemaService implements ServiceSubscriberInterface
      * @param string $name the table's name to get information for
      *
      * @return SchemaTableType
+     *
+     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress MixedInferredReturnType
      */
     public function getTable(string $name): array
     {
-        /** @psalm-var SchemaTableType $results */
-        $results = $this->getCacheValue("schema_service.metadata.table.$name", fn () => $this->loadTable($name));
-
-        return $results;
+        return $this->getCacheValue("schema_service.metadata.table.$name", fn () => $this->loadTable($name));
     }
 
     /**
@@ -311,17 +311,17 @@ class SchemaService implements ServiceSubscriberInterface
 
     /**
      * @return array<string, ClassMetadataInfo<object>>
+     *
+     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress MixedInferredReturnType
      */
     private function getMetaDatas(): array
     {
-        /** @psalm-var array<string, ClassMetadataInfo<object>> $results */
-        $results = $this->getCacheValue(
+        return $this->getCacheValue(
             'schema_service.metadata',
             fn () => $this->loadMetaDatas($this->manager),
             self::CACHE_TIMEOUT
         );
-
-        return $results;
     }
 
     /**

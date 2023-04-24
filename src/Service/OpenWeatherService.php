@@ -307,6 +307,8 @@ class OpenWeatherService extends AbstractHttpClientService
      *      units: array,
      *      list: array<int, array>
      *  }>|false
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     public function group(array $cityIds, string $units = self::UNIT_METRIC): array|false
     {
@@ -317,15 +319,8 @@ class OpenWeatherService extends AbstractHttpClientService
             'id' => \implode(',', $cityIds),
             'units' => $units,
         ];
-        /** @psalm-var false|array<array{
-         *      cnt: int,
-         *      units: array,
-         *      list: array<int, array>
-         *  }> $result
-         */
-        $result = $this->get(self::URI_GROUP, $query);
 
-        return $result;
+        return $this->get(self::URI_GROUP, $query);
     }
 
     /**
@@ -366,15 +361,15 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int    $limit the maximum number of cities to return
      *
      * @pslam-return array<int, OpenWeatherCityType>
+     *
+     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress MixedInferredReturnType
      */
     public function search(string $name, string $units = self::UNIT_METRIC, int $limit = self::DEFAULT_LIMIT): array
     {
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units, 'limit' => $limit]);
 
-        /** @psalm-var array<int, OpenWeatherCityType>|null $results */
-        $results = $this->getCacheValue($key, fn () => $this->doSearch($name, $limit));
-
-        return $results ?? [];
+        return $this->getCacheValue($key, fn () => $this->doSearch($name, $limit)) ?? [];
     }
 
     /**
@@ -490,16 +485,16 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param array  $query an associative array of query string values to add to the request
      *
      * @return array|false the JSON response on success, false on failure
+     *
+     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress MixedInferredReturnType
      */
     private function get(string $uri, array $query = []): array|false
     {
         // find from cache
         $key = $this->getCacheKey($uri, $query);
 
-        /** @psalm-var ?array $results */
-        $results = $this->getCacheValue($key, fn () => $this->doGet($uri, $query));
-
-        return $results ?? false;
+        return $this->getCacheValue($key, fn () => $this->doGet($uri, $query)) ?? false;
     }
 
     /**

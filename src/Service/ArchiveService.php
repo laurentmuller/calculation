@@ -174,6 +174,8 @@ class ArchiveService implements ServiceSubscriberInterface
      * @param CalculationState[] $sources
      *
      * @return Calculation[]
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
      */
     private function getCalculations(\DateTimeInterface $date, array $sources): array
     {
@@ -181,10 +183,8 @@ class ArchiveService implements ServiceSubscriberInterface
             return [];
         }
         $builder = $this->createQueryBuilder($sources, $date);
-        /** @var Calculation[] $result */
-        $result = $builder->getQuery()->getResult();
 
-        return $result;
+        return $builder->getQuery()->getResult();
     }
 
     private function getDate(): \DateTimeInterface

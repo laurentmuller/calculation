@@ -331,8 +331,8 @@ class TestController extends AbstractController
             $error = true;
         }
         $parameters = [
-            'form' => $this->createForm(),
             'service' => $service,
+            'form' => $this->createForm(),
             'translators' => $factory->getTranslators(),
             'language' => AbstractHttpClientService::getAcceptLanguage(),
             'languages' => $languages,

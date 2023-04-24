@@ -109,14 +109,15 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @param string $code the base currency code
      *
      * @return array<string, float> an array with the currency code as key and the currency rate as value or an empty array if an error occurs
+     *
+     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress MixedInferredReturnType
      */
     public function getLatest(string $code): array
     {
         $url = $this->getUrl(self::URI_LATEST, $code);
-        /** @psalm-var array<string, float>|null $results */
-        $results = $this->getUrlCacheValue($url, fn () => $this->doGetLatest($url));
 
-        return $results ?? [];
+        return $this->getUrlCacheValue($url, fn () => $this->doGetLatest($url)) ?? [];
     }
 
     /**
@@ -126,14 +127,15 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @param string $targetCode the target currency code
      *
      * @return float the exchange rate or 0.0 if an error occurs.
+     *
+     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress MixedInferredReturnType
      */
     public function getRate(string $baseCode, string $targetCode): float
     {
         $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
-        /** @psalm-var float|null $results */
-        $results = $this->getUrlCacheValue($url, fn () => $this->doGetRate($url));
 
-        return $results ?? 0.0;
+        return $this->getUrlCacheValue($url, fn () => $this->doGetRate($url)) ?? 0.0;
     }
 
     /**
@@ -145,14 +147,15 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @return ?array the exchange rate, the next update and last update dates or null if an error occurs
      *
      * @psalm-return ExchangeRateAndDateType|null
+     *
+     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress MixedInferredReturnType
      */
     public function getRateAndDates(string $baseCode, string $targetCode): ?array
     {
         $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
-        /** @psalm-var ExchangeRateAndDateType|null $results */
-        $results = $this->getUrlCacheValue($url, fn () => $this->doGetRateAndDates($url));
 
-        return $results;
+        return $this->getUrlCacheValue($url, fn () => $this->doGetRateAndDates($url));
     }
 
     /**
@@ -161,14 +164,15 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * @return array the supported currency codes or an empty array if an error occurs
      *
      * @psalm-return array<string, ExchangeRateType>
+     *
+     * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnStatement
      */
     public function getSupportedCodes(): array
     {
         $url = self::URI_CODES;
-        /** @psalm-var array<string, ExchangeRateType>|null $results */
-        $results = $this->getUrlCacheValue($url, fn () => $this->doGetSupportedCodes($url));
 
-        return $results ?? [];
+        return $this->getUrlCacheValue($url, fn () => $this->doGetSupportedCodes($url)) ?? [];
     }
 
     /**

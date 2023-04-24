@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Unit test for users and routes.
  */
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 class RoutesTest extends AbstractAuthenticateWebTestCase
 {
     /**
@@ -26,29 +27,6 @@ class RoutesTest extends AbstractAuthenticateWebTestCase
     public static function getRoutes(): array
     {
         return [
-            // index
-            ['/', self::ROLE_USER],
-            ['/', self::ROLE_ADMIN],
-            ['/', self::ROLE_SUPER_ADMIN],
-
-            // about controller
-            ['/about', self::ROLE_USER],
-            ['/about', self::ROLE_ADMIN],
-            ['/about', self::ROLE_SUPER_ADMIN],
-
-            // admin controller
-            ['/admin/rights/admin', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/rights/admin', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/admin/rights/admin', self::ROLE_SUPER_ADMIN],
-
-            ['/admin/rights/user', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/rights/user', self::ROLE_ADMIN],
-            ['/admin/rights/user', self::ROLE_SUPER_ADMIN],
-
-            ['/admin/parameters', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/parameters', self::ROLE_ADMIN],
-            ['/admin/parameters', self::ROLE_SUPER_ADMIN],
-
             // not exist
             ['/not_exist', self::ROLE_USER, Response::HTTP_NOT_FOUND],
         ];

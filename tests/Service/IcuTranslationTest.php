@@ -18,6 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Class to test ICU translations.
  */
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 class IcuTranslationTest extends KernelTestCase
 {
     private ?TranslatorInterface $translator = null;

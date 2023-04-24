@@ -16,7 +16,6 @@ use App\Interfaces\MimeTypeInterface;
 use App\Service\NonceService;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +33,15 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class ResponseListener
 {
     /**
+     * The header keys for CSP value.
+     */
+    private const CSP_HEADERS = [
+        'X-WebKit-CSP',
+        'Content-Security-Policy',
+        'X-Content-Security-Policy',
+    ];
+
+    /**
      * The CSP none directive.
      */
     private const CSP_NONE = "'none'";
@@ -47,6 +55,26 @@ class ResponseListener
      * The unsafe inline CSP directive.
      */
     private const CSP_UNSAFE_INLINE = "'unsafe-inline'";
+
+    /**
+     * The default headers to add.
+     *
+     * @see https://www.dareboost.com
+     * @see https://securityheaders.com/
+     * @see https://github.com/aidantwoods/SecureHeaders
+     */
+    private const DEFAULT_HEADERS = [
+        'referrer-policy' => 'same-origin',
+        'X-FRAME-OPTIONS' => 'sameorigin',
+        'X-XSS-Protection' => '1; mode=block',
+        'X-Content-Type-Options' => 'nosniff',
+        'x-permitted-cross-domain-policies' => self::CSP_NONE,
+    ];
+
+    /**
+     * The debug firewall pattern.
+     */
+    private const DEV_PATTERN = '/^\/(_(profiler|wdt)|css|images|js)\//mi';
 
     /**
      * The CSP directives.
@@ -66,11 +94,10 @@ class ResponseListener
         #[Autowire('%kernel.project_dir%/resources/data/csp.%kernel.environment%.json')]
         string $file,
         #[Autowire('%kernel.debug%')]
-        private readonly bool $debug,
-        private readonly Security $security
+        private readonly bool $debug
     ) {
         $nonce = $service->getCspNonce();
-        $report = $router->generate('log_csp', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $report = $router->generate(name: 'log_csp', referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
         $this->csp = $this->loadCSP($file, $nonce, $report);
     }
 
@@ -86,7 +113,7 @@ class ResponseListener
 
         // development firewall ?
         $request = $event->getRequest();
-        if ($this->debug && $this->isDevFirewall($request)) {
+        if ($this->debug && $this->isDevRequest($request)) {
             return;
         }
 
@@ -94,20 +121,13 @@ class ResponseListener
         $response = $event->getResponse();
         $headers = $response->headers;
         if ('' !== $csp = $this->getCSP($response)) {
-            $headers->set('Content-Security-Policy', $csp);
-            $headers->set('X-Content-Security-Policy', $csp);
-            $headers->set('X-WebKit-CSP', $csp);
+            foreach (self::CSP_HEADERS as $key) {
+                $headers->set($key, $csp);
+            }
         }
-
-        // see: https://www.dareboost.com
-        $headers->set('X-FRAME-OPTIONS', 'sameorigin');
-        $headers->set('X-XSS-Protection', '1; mode=block');
-        $headers->set('X-Content-Type-Options', 'nosniff');
-
-        // see: https://securityheaders.com/
-        // see: https://github.com/aidantwoods/SecureHeaders
-        $headers->set('referrer-policy', 'same-origin');
-        $headers->set('x-permitted-cross-domain-policies', self::CSP_NONE);
+        foreach (self::DEFAULT_HEADERS as $key => $value) {
+            $headers->set($key, $value);
+        }
     }
 
     /**
@@ -120,27 +140,28 @@ class ResponseListener
             return '';
         }
 
-        // mime type?
         if ($response instanceof MimeTypeInterface) {
             $csp['object-src'] = [self::CSP_SELF];
             $csp['plugin-types'] = [$response->getInlineMimeType()];
         }
 
-        return \array_reduce(\array_keys($csp), static fn (string $carry, string $key): string => $carry . $key . ' ' . \implode(' ', $csp[$key]) . ';', '');
+        return \array_reduce(
+            \array_keys($csp),
+            fn (string $carry, string $key): string => \sprintf('%s%s %s;', $carry, $key, \implode(' ', $csp[$key])),
+            ''
+        );
     }
 
     /**
-     * Returns if the current firewall is the development.
+     * Returns if the given request is from development.
      */
-    private function isDevFirewall(Request $request): bool
+    private function isDevRequest(Request $request): bool
     {
-        $name = $this->security->getFirewallConfig($request)?->getName();
-
-        return null !== $name && false !== \stripos($name, 'dev');
+        return 1 === \preg_match(self::DEV_PATTERN, $request->getRequestUri());
     }
 
     /**
-     * Load the CSP definition.
+     * Load the CSP definitions.
      *
      * @return array<string, string[]>
      */
@@ -149,39 +170,25 @@ class ResponseListener
         if (!FileUtils::exists($file)) {
             return [];
         }
-        if (false === $content = \file_get_contents($file)) {
-            return [];
-        }
 
         try {
-            /** @psalm-var array<string, string|string[]> $csp */
-            $csp = StringUtils::decodeJson($content);
+            /* @psalm-var array<string, string|string[]> $csp */
+            $csp = FileUtils::decodeJson($file);
         } catch (\InvalidArgumentException) {
             return [];
         }
 
-        // convert each entry to array
+        /** @psalm-var array<string, string[]> $csp */
         $csp = \array_map(static fn (string|array $value): array => (array) $value, $csp);
 
-        // replace
-        $search = [
-            'none',
-            'self',
-            'unsafe-inline',
-            '%nonce%',
-            '%report%',
-        ];
-        $replace = [
-            self::CSP_NONE,
-            self::CSP_SELF,
-            self::CSP_UNSAFE_INLINE,
-            $nonce,
-            $report,
+        $values = [
+            '%nonce%' => $nonce,
+            '%report%' => $report,
+            'none' => self::CSP_NONE,
+            'self' => self::CSP_SELF,
+            'unsafe-inline' => self::CSP_UNSAFE_INLINE,
         ];
 
-        /** @psalm-var array<string, string[]> $result */
-        $result = \array_map(static fn (array $values): array => \str_replace($search, $replace, $values), $csp);
-
-        return $result;
+        return \array_map(static fn (array $subject): array => StringUtils::replace($values, $subject), $csp);
     }
 }

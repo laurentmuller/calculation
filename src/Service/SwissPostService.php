@@ -39,11 +39,7 @@ readonly class SwissPostService
      */
     public function findAll(string $value, int $limit = 25): array
     {
-        $db = $this->getDatabase();
-        $result = $db->findAll($value, $limit);
-        $db->close();
-
-        return $result;
+        return $this->find(fn (SwissDatabase $db) => $db->findAll($value, $limit));
     }
 
     /**
@@ -56,11 +52,7 @@ readonly class SwissPostService
      */
     public function findCity(string $name, int $limit = 25): array
     {
-        $db = $this->getDatabase();
-        $result = $db->findCity($name, $limit);
-        $db->close();
-
-        return $result;
+        return $this->find(fn (SwissDatabase $db) => $db->findCity($name, $limit));
     }
 
     /**
@@ -73,11 +65,7 @@ readonly class SwissPostService
      */
     public function findStreet(string $name, int $limit = 25): array
     {
-        $db = $this->getDatabase();
-        $result = $db->findStreet($name, $limit);
-        $db->close();
-
-        return $result;
+        return $this->find(fn (SwissDatabase $db) => $db->findStreet($name, $limit));
     }
 
     /**
@@ -90,11 +78,7 @@ readonly class SwissPostService
      */
     public function findZip(string $zip, int $limit = 25): array
     {
-        $db = $this->getDatabase();
-        $result = $db->findZip($zip, $limit);
-        $db->close();
-
-        return $result;
+        return $this->find(fn (SwissDatabase $db) => $db->findZip($zip, $limit));
     }
 
     /**
@@ -103,6 +87,18 @@ readonly class SwissPostService
     public function getDatabaseName(): string
     {
         return $this->databaseName;
+    }
+
+    /**
+     * @psalm-param callable(SwissDatabase): array $callback
+     */
+    private function find(callable $callback): array
+    {
+        $db = $this->getDatabase();
+        $result = $callback($db);
+        $db->close();
+
+        return $result;
     }
 
     /**

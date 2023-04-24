@@ -105,28 +105,28 @@ class RoleBuilder
 
     /**
      * @return FlagBag<EntityPermission>
+     *
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
      */
     private static function getAllPermissions(): FlagBag
     {
-        /** @psalm-var FlagBag<EntityPermission> $result */
-        $result = FlagBag::from(...EntityPermission::sorted());
-
-        return $result;
+        return FlagBag::from(...EntityPermission::sorted());
     }
 
     /**
      * @return FlagBag<EntityPermission>
+     *
+     * @psalm-suppress LessSpecificReturnStatement
+     * @psalm-suppress MoreSpecificReturnType
      */
     private static function getDefaultPermissions(): FlagBag
     {
-        /** @psalm-var FlagBag<EntityPermission> $result */
-        $result = FlagBag::from(
+        return FlagBag::from(
             EntityPermission::LIST,
             EntityPermission::EXPORT,
             EntityPermission::SHOW
         );
-
-        return $result;
     }
 
     /**

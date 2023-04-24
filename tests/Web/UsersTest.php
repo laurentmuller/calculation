@@ -15,6 +15,7 @@ namespace App\Tests\Web;
 /**
  * Test class for user's roles.
  */
+#[\PHPUnit\Framework\Attributes\CoversNothing]
 class UsersTest extends AbstractAuthenticateWebTestCase
 {
     /**

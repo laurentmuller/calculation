@@ -82,15 +82,15 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      * @param ?Request $request the request to get client IP address or null for detecting the IP address
      *
      * @return IpStackType|null the current Ip information if success; null on error
+     *
+     * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnStatement
      */
     public function getIpInfo(?Request $request = null): ?array
     {
         $url = $this->getUrl($request);
 
-        /** @psalm-var IpStackType|null $results */
-        $results = $this->getUrlCacheValue($url, fn () => $this->doGetIpInfo($url));
-
-        return $results;
+        return $this->getUrlCacheValue($url, fn () => $this->doGetIpInfo($url));
     }
 
     /**

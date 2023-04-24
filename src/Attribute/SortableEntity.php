@@ -35,21 +35,19 @@ readonly class SortableEntity
     /**
      * Gets the default order of the given object or class.
      *
-     * @param object|string $objectOrClass either a string containing the name of
-     *                                     the class to reflect, or an object
-     * @param bool          $validate      true to validate that the property name exist
+     * @template T of object
+     *
+     * @param class-string<T>|T $objectOrClass either a string containing the name of
+     *                                         the class to reflect, or an object
+     * @param bool              $validate      true to validate that the property name exist
      *
      * @return array<string, string> an array with the field as key and the order as value. An
      *                               empty array is returned if not attribute is found.
      *
-     * @psalm-template T of object
-     *
-     * @psalm-param class-string<T>|T $objectOrClass
-     *
      * @throws \ReflectionException if the class does not exist or if the validate parameter
      *                              is true and a property name is not found
      */
-    public static function getOrder(object|string $objectOrClass, bool $validate = false): array
+    public static function getOrder(string|object $objectOrClass, bool $validate = false): array
     {
         $result = [];
         $class = new \ReflectionClass($objectOrClass);

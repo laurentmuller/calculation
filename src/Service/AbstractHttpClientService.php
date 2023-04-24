@@ -71,7 +71,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      *
      * @throws \InvalidArgumentException if the API key is null or empty
      */
-    public function __construct(protected readonly string $key)
+    public function __construct(#[\SensitiveParameter] protected readonly string $key)
     {
         if ('' === $key) {
             throw new \InvalidArgumentException('The API key is empty.');
@@ -81,7 +81,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     /**
      * Gets the language to use for user interface strings.
      *
-     * @param bool $languageOnly <code>true</code> to returns the language only, <code>false</code> to returns the language and the country
+     * @param bool $languageOnly <code>true</code> to returns language only, <code>false</code> to returns language and the country (if any)
      *
      * @return string the language
      */

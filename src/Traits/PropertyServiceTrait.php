@@ -137,7 +137,6 @@ trait PropertyServiceTrait
         }
 
         try {
-            /** @psalm-var array $result */
             $result = StringUtils::decodeJson($value);
             if (\count($result) === \count($default)) {
                 return $result;

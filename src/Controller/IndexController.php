@@ -122,7 +122,7 @@ class IndexController extends AbstractController
     /**
      * Update the number of displayed calculations.
      */
-    #[Route(path: '/update/calculation', name: 'homepage_calculation')]
+    #[Route(path: '/update/count', name: 'homepage_calculation')]
     public function updateCalculation(Request $request): JsonResponse
     {
         $this->checkAjaxRequest($request);
@@ -133,7 +133,7 @@ class IndexController extends AbstractController
             $service->setProperty(PropertyServiceInterface::P_PANEL_CALCULATION, $count);
         }
 
-        return new JsonResponse($this->trans('index.panel_last_success'));
+        return $this->sendJsonMessage('index.panel_last_success');
     }
 
     protected function getSessionKey(string $key): string
@@ -186,11 +186,16 @@ class IndexController extends AbstractController
         return $results;
     }
 
-    private function hidePanel(Request $request, string $key, string $message): JsonResponse
+    private function hidePanel(Request $request, string $key, string $id): JsonResponse
     {
         $this->checkAjaxRequest($request);
         $this->getUserService()->setProperty($key, false);
 
-        return new JsonResponse($this->trans($message));
+        return $this->sendJsonMessage($id);
+    }
+
+    private function sendJsonMessage(string $id): JsonResponse
+    {
+        return new JsonResponse($this->trans($id));
     }
 }

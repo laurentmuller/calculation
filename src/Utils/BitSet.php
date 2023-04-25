@@ -416,14 +416,14 @@ class BitSet implements \Stringable
     }
 
     /**
-     * Gets the words index for thr given bit.
+     * Gets the words index for the given bit.
      *
      * @throws \InvalidArgumentException If the bit argument is negative
      */
     private function index(int $bit): int
     {
         if ($bit < 0) {
-            throw new \InvalidArgumentException("The bit argument '$bit' is negative");
+            throw new \InvalidArgumentException("The bit value '$bit' is negative.");
         }
 
         return \intdiv($bit, self::WORD_BITS);

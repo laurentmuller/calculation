@@ -4,6 +4,7 @@
 
 /**
  * Gets the active page.
+ *
  * @return {JQuery<HTMLElement>|null} the active page or null if none.
  */
 function getActivePage() {
@@ -13,19 +14,24 @@ function getActivePage() {
 }
 
 /**
- * Reset widgets to default values (if any).
+ * Reset widgets to default values.
+ *
  * @param {JQuery} [$source] the active page or null to reset all values.
  */
 function setDefaultValues($source) {
     'use strict';
     $source = $source || $('#edit-form');
-    $source.find(':input:not(button)[data-default], :checkbox[data-default]').each(function () {
+    $source.find(':input:not(button)[data-default]').each(function () {
         const $this = $(this);
         const value = $this.data('default');
         if ($this.is(':checkbox')) {
-            $this.prop('checked', value);
+            if (value !== $this.isChecked()) {
+                $this.setChecked(value).trigger('input');
+            }
         } else {
-            $this.val(value);
+            if (value.toString() !== $this.val().toString()) {
+                $this.val(value).trigger('input');
+            }
         }
     });
 
@@ -33,7 +39,11 @@ function setDefaultValues($source) {
     $source.find('.form-group[data-default]:has(:radio)').each(function () {
         const $this = $(this);
         const value = $this.data('default');
-        $this.find(`:radio[value="${value}"]`).setChecked(true);
+        const oldValue = $this.find(':radio:checked').val();
+        if (value.toString() !== oldValue.toString()) {
+            const $radio = $this.find(`:radio[value="${value}"]`);
+            $radio.setChecked(true).trigger('input');
+        }
     });
 }
 
@@ -60,7 +70,7 @@ function displayNotification() {
     // get random text
     let title = $('.card-title').text();
     const data = $("#flashes").data();
-    const url = $("form").data("random");
+    const url = $('#edit-form').data("random");
     $.getJSON(url, function (response) {
         if (response.result && response.content) {
             // content
@@ -93,6 +103,8 @@ function displayNotification() {
 }
 
 /**
+ * Handle input change.
+ *
  * @param {string} inputId the input selector.
  * @param {string} groupId the group selector.
  * @param {function} callback the function to call.
@@ -124,6 +136,9 @@ function handleInput(inputId, groupId, callback) {
     }).trigger('input');
 }
 
+/**
+ * Handle the URL input.
+ */
 function handleUrl() {
     'use strict';
     const handler = function (value) {
@@ -132,6 +147,9 @@ function handleUrl() {
     handleInput('#customer_url', '.input-group-url', handler);
 }
 
+/**
+ * Handle the Phone input.
+ */
 function handlePhone() {
     'use strict';
     const handler = function (value) {
@@ -148,6 +166,9 @@ function handlePhone() {
 //     handleInput('#customer_fax', '.input-group-fax', handler);
 // }
 
+/**
+ * Handle the Email input.
+ */
 function handleEmail() {
     'use strict';
     const handler = function (value) {

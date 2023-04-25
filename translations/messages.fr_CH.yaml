@@ -586,6 +586,7 @@ index:
   panel_catalog_hide: Masquer le catalogue
   panel_catalog_hide_success: Le catalogue a été masqué
   panel_last: Dernières calculations
+  panel_last_success: Le nombre de calculations affichées a été mise à jour.
   panel_month: Calculations par mois
   panel_month_title: Afficher les calculations pour %month%
   panel_month_hide: Masquer les calculations par mois

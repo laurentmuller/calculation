@@ -30,7 +30,7 @@ function onRestrictInput($restrict) {
     'use strict';
     const newValue = $restrict.isChecked();
     const oldValue = $restrict.data('value');
-    if (newValue !== oldValue) {
+    if (newValue.toString() !== oldValue.toString()) {
         const param = {
             restrict: +newValue
         };
@@ -153,15 +153,41 @@ function createKeydownHandler($table) {
 function hidePanel(e) {
     'use strict';
     e.preventDefault();
-    const $link = $(e.currentTarget);
-    const title = $link.attr('title');
-    const $card = $link.parents('.card');
+    const $this = $(e.currentTarget);
+    const $card = $this.parents('.card');
+    const title = $card.find('.card-title').text();
     const url = $card.data('path');
     $.post(url, function (message) {
-        $card.fadeOut(400, function () {
+        $card.fadeOut(200, function () {
             $card.remove();
             Toaster.info(message, title, $('#flashes').data());
         });
+    });
+}
+
+/**
+ * Update the displayed calculations.
+ *
+ * @param {Event} e - the source event.
+ */
+function updateCounter(e) {
+    'use strict';
+    const $this = $(e.currentTarget);
+    if ($this.hasClass('active')) {
+        return;
+    }
+
+    const count = $this.data('value');
+    const $parent = $this.parents('.dropdown');
+    const $card = $this.parents('.card');
+    const title = $card.find('.card-title').text();
+    $parent.find('.dropdown-toggle').text(count);
+
+    const url = $parent.data('path');
+    $.post(url, {'count': count}, function (message) {
+        //window.location.assign('/');
+        window.location.reload();
+        Toaster.info(message, title, $('#flashes').data());
     });
 }
 
@@ -228,8 +254,22 @@ function hidePanel(e) {
     }
 
     // hide panels
-    $('.hide-panel').on('click', function (e) {
-        hidePanel(e);
-    });
+    const $panels = $('.hide-panel');
+    if ($panels.length) {
+        $panels.on('click', function (e) {
+            hidePanel(e);
+        });
+    }
 
+    // update displayed calculations
+    const $counters = $('.dropdown-item-counter');
+    if ($counters.length) {
+        $counters.on('click', function (e) {
+            updateCounter(e);
+        });
+        const $parent = $counters.parents('.dropdown');
+        $parent.on('shown.bs.dropdown', function () {
+            $parent.find('.active').trigger('focus');
+        });
+    }
 }(jQuery));

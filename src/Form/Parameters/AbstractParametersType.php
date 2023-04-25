@@ -116,7 +116,7 @@ abstract class AbstractParametersType extends AbstractType
 
         $key = PropertyServiceInterface::P_PANEL_CATALOG;
         $helper->field($key)
-            ->label('index.panel_count')
+            ->label('index.panel_catalog')
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->help('parameters.helps.' . $key)
             ->rowClass('mb-1')
@@ -201,7 +201,7 @@ abstract class AbstractParametersType extends AbstractType
             return $value->value;
         }
         if (\is_bool($value)) {
-            return $value ? 1 : 0;
+            return \json_encode($value);
         }
 
         return $value;

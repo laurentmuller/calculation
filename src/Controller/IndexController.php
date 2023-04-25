@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -58,36 +59,27 @@ class IndexController extends AbstractController
      * Hide the catalog panel.
      */
     #[Route(path: '/hide/catalog', name: 'homepage_hide_catalog')]
-    public function hideCatalog(): JsonResponse
+    public function hideCatalog(Request $request): JsonResponse
     {
-        $this->getUserService()
-            ->setProperty(PropertyServiceInterface::P_PANEL_CATALOG, false);
-
-        return new JsonResponse($this->trans('index.panel_catalog_hide_success'));
+        return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_CATALOG, 'index.panel_catalog_hide_success');
     }
 
     /**
      * Hide the month panel.
      */
     #[Route(path: '/hide/month', name: 'homepage_hide_month')]
-    public function hideMonth(): JsonResponse
+    public function hideMonth(Request $request): JsonResponse
     {
-        $this->getUserService()
-            ->setProperty(PropertyServiceInterface::P_PANEL_MONTH, false);
-
-        return new JsonResponse($this->trans('index.panel_month_hide_success'));
+        return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_MONTH, 'index.panel_month_hide_success');
     }
 
     /**
      * Hide the state panel.
      */
     #[Route(path: '/hide/state', name: 'homepage_hide_state')]
-    public function hideState(): JsonResponse
+    public function hideState(Request $request): JsonResponse
     {
-        $this->getUserService()
-            ->setProperty(PropertyServiceInterface::P_PANEL_STATE, false);
-
-        return new JsonResponse($this->trans('index.panel_state_hide_success'));
+        return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_STATE, 'index.panel_state_hide_success');
     }
 
     /**
@@ -127,9 +119,33 @@ class IndexController extends AbstractController
         return $response;
     }
 
+    /**
+     * Update the number of displayed calculations.
+     */
+    #[Route(path: '/update/calculation', name: 'homepage_calculation')]
+    public function updateCalculation(Request $request): JsonResponse
+    {
+        $this->checkAjaxRequest($request);
+        $service = $this->getUserService();
+        $default = $service->getPanelCalculation();
+        $count = $this->getRequestInt($request, 'count', $default);
+        if ($default !== $count) {
+            $service->setProperty(PropertyServiceInterface::P_PANEL_CALCULATION, $count);
+        }
+
+        return new JsonResponse($this->trans('index.panel_last_success'));
+    }
+
     protected function getSessionKey(string $key): string
     {
         return self::PARAM_RESTRICT === $key ? \strtoupper($key) : $key;
+    }
+
+    private function checkAjaxRequest(Request $request): void
+    {
+        if (!$request->isXmlHttpRequest()) {
+            throw new BadRequestHttpException('Invalid request format.');
+        }
     }
 
     /**
@@ -168,5 +184,13 @@ class IndexController extends AbstractController
         ];
 
         return $results;
+    }
+
+    private function hidePanel(Request $request, string $key, string $message): JsonResponse
+    {
+        $this->checkAjaxRequest($request);
+        $this->getUserService()->setProperty($key, false);
+
+        return new JsonResponse($this->trans($message));
     }
 }

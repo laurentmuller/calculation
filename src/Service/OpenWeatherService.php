@@ -31,12 +31,12 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * The number of daily results to return.
      */
-    public const DEFAULT_COUNT = 5;
+    final public const DEFAULT_COUNT = 5;
 
     /**
      * The number of search results to return.
      */
-    public const DEFAULT_LIMIT = 15;
+    final public const DEFAULT_LIMIT = 15;
 
     /**
      * The imperial degree.

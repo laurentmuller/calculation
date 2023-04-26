@@ -24,7 +24,7 @@ class FormatUtilsTest extends TestCase
 
     private const PERCENT_SIGN = '%';
 
-    private const TIME_STAMP = 1645358399;
+    private const TIME_STAMP = 1_645_358_399;
 
     private const TIME_ZONE = 'Europe/Zurich';
 

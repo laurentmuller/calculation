@@ -107,8 +107,6 @@ class PersistenceListener implements DisableListenerInterface, EventSubscriber, 
 
     /**
      * @param LifecycleEventArgs<EntityManagerInterface> $args
-     *
-     * @return ?AbstractEntity
      */
     private function getEntity(LifecycleEventArgs $args): ?AbstractEntity
     {

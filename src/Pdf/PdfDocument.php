@@ -140,12 +140,12 @@ class PdfDocument extends \FPDF
     /**
      * The footer.
      */
-    private PdfFooter $footer;
+    private readonly PdfFooter $footer;
 
     /**
      * The header.
      */
-    private PdfHeader $header;
+    private readonly PdfHeader $header;
 
     /**
      * The title.
@@ -415,7 +415,7 @@ class PdfDocument extends \FPDF
      *
      * @throws PdfException
      */
-    public function Error($msg): void
+    public function Error($msg): never
     {
         throw new PdfException($msg);
     }

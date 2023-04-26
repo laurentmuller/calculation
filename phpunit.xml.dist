@@ -4,8 +4,6 @@
          cacheDirectory=".phpunit.cache"
          bootstrap="tests/bootstrap.php"
          requireCoverageMetadata="true"
-         backupGlobals="false"
-         cacheResult="false"
          colors="true">
 
     <php>

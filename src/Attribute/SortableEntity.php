@@ -37,7 +37,7 @@ readonly class SortableEntity
      *
      * @template T of object
      *
-     * @param class-string<T>|T $objectOrClass either a string containing the name of
+     * @param T|class-string<T> $objectOrClass either a string containing the name of
      *                                         the class to reflect, or an object
      * @param bool              $validate      true to validate that the property name exist
      *
@@ -47,7 +47,7 @@ readonly class SortableEntity
      * @throws \ReflectionException if the class does not exist or if the validate parameter
      *                              is true and a property name is not found
      */
-    public static function getOrder(string|object $objectOrClass, bool $validate = false): array
+    public static function getOrder(object|string $objectOrClass, bool $validate = false): array
     {
         $result = [];
         $class = new \ReflectionClass($objectOrClass);

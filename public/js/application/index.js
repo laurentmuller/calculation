@@ -24,7 +24,7 @@ $.fn.extend({
 /**
  * Handle the restriction checkbox.
  *
- * @param {JQuery} $restrict - the checkbox to handle.
+ * @param {jQuery} $restrict - the checkbox to handle.
  */
 function onRestrictInput($restrict) {
     'use strict';

@@ -14,7 +14,6 @@ namespace App\Tests\Controller;
 
 use App\Controller\AjaxController;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
-use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -119,12 +118,11 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
         try {
             $content = $response->getContent();
             self::assertIsString($content);
-            $result = StringUtils::decodeJson($content);
+            $result = \json_decode($content);
             if (\is_string($expected)) {
                 self::assertNotNull($this->translator);
                 $expected = $this->translator->trans($expected, [], 'validators');
             }
-            // @phpstan-ignore-next-line
             self::assertSame($expected, $result);
         } catch (\UnexpectedValueException $e) {
             self::fail($e->getMessage());

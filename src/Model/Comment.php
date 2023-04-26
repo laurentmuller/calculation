@@ -29,7 +29,7 @@ class Comment
      * @var ?UploadedFile[]
      */
     #[Assert\Count(max: 3)]
-    #[Assert\All(new Assert\File(maxSize: 10485760))]
+    #[Assert\All(new Assert\File(maxSize: 10_485_760))]
     private ?array $attachments = null;
 
     /**

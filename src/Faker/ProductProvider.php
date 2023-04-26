@@ -75,7 +75,7 @@ class ProductProvider extends EntityProvider
     public function products(int $count = 1, bool $allowDuplicates = false): array
     {
         /** @var Product[] $products */
-        $products = $this->randomElements($this->getEntities(), $count, $allowDuplicates);
+        $products = static::randomElements($this->getEntities(), $count, $allowDuplicates);
         if (\count($products) < 2) {
             return $products;
         }

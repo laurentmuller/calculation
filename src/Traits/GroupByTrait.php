@@ -45,7 +45,7 @@ trait GroupByTrait
         if (\func_num_args() > 2) {
             $args = \func_get_args();
             /** @psalm-var callable(mixed):array-key $callback */
-            $callback = [__CLASS__, __FUNCTION__];
+            $callback = [self::class, __FUNCTION__];
             /** @psalm-param string|int $groupKey */
             foreach ($result as $groupKey => $value) {
                 $params = \array_merge([$value], \array_slice($args, 2, \func_num_args()));

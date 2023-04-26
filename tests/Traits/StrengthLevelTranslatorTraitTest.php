@@ -22,7 +22,7 @@ class StrengthLevelTranslatorTraitTest extends TestCase
 {
     use StrengthLevelTranslatorTrait;
 
-    private ?TranslatorInterface $translator;
+    private ?TranslatorInterface $translator = null;
 
     public static function getTranslateLevels(): array
     {

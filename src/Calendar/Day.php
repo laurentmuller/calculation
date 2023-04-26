@@ -31,7 +31,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     /**
      * The date.
      */
-    private \DateTimeImmutable $date;
+    private readonly \DateTimeImmutable $date;
 
     /**
      * Constructor.

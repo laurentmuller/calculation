@@ -26,11 +26,11 @@ abstract class AbstractWordDocument extends WordDocument
 {
     use TranslatorTrait;
 
-    private ?CustomerInformation $customer;
+    private readonly ?CustomerInformation $customer;
 
-    private WordFooter $footer;
+    private readonly WordFooter $footer;
 
-    private WordHeader $header;
+    private readonly WordHeader $header;
 
     private bool $printAddress;
 

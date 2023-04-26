@@ -85,10 +85,10 @@ class EntityProvider extends Base
         }
 
         if ($allowNull) {
-            return $this->randomElement(\array_merge($this->distinctValues[$field], [null]));
+            return static::randomElement(\array_merge($this->distinctValues[$field], [null]));
         }
 
-        return $this->randomElement($this->distinctValues[$field]);
+        return static::randomElement($this->distinctValues[$field]);
     }
 
     /**
@@ -99,7 +99,7 @@ class EntityProvider extends Base
     protected function entity()
     {
         /** @psalm-var T|null $entity */
-        $entity = $this->randomElement($this->getEntities());
+        $entity = static::randomElement($this->getEntities());
 
         return $entity;
     }

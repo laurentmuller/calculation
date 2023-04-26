@@ -23,7 +23,7 @@ class RoleTranslatorTraitTest extends TestCase
 {
     use RoleTranslatorTrait;
 
-    private ?TranslatorInterface $translator;
+    private ?TranslatorInterface $translator = null;
 
     public static function getTranslateRoles(): array
     {

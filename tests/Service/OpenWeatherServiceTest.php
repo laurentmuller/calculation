@@ -15,7 +15,6 @@ namespace App\Tests\Service;
 use App\Service\OpenWeatherService;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(OpenWeatherService::class)]
 class OpenWeatherServiceTest extends KernelTestCase
@@ -24,7 +23,7 @@ class OpenWeatherServiceTest extends KernelTestCase
 
     private const CITY_INVALID = 0;
 
-    private const CITY_VALID = 2660718;
+    private const CITY_VALID = 2_660_718;
 
     private ?OpenWeatherService $service = null;
 
@@ -34,9 +33,6 @@ class OpenWeatherServiceTest extends KernelTestCase
         $this->service = $this->getService(OpenWeatherService::class);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testCurrent(): void
     {
         self::assertNotNull($this->service);
@@ -48,9 +44,6 @@ class OpenWeatherServiceTest extends KernelTestCase
         $this->validateResult($result, true);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testCurrentInvalid(): void
     {
         self::assertNotNull($this->service);
@@ -58,9 +51,6 @@ class OpenWeatherServiceTest extends KernelTestCase
         self::assertFalse($result);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testDaily(): void
     {
         $count = 5;
@@ -89,9 +79,6 @@ class OpenWeatherServiceTest extends KernelTestCase
         self::assertIsInt($result['sunset']);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testDailyInvalid(): void
     {
         self::assertNotNull($this->service);
@@ -99,9 +86,6 @@ class OpenWeatherServiceTest extends KernelTestCase
         self::assertFalse($result);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testGroup(): void
     {
         self::assertNotNull($this->service);
@@ -127,9 +111,6 @@ class OpenWeatherServiceTest extends KernelTestCase
         $this->validateResult($firstList, false);
     }
 
-    /**
-     * @throws ExceptionInterface
-     */
     public function testGroupInvalidCount(): void
     {
         self::assertNotNull($this->service);

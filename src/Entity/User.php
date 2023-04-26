@@ -81,7 +81,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     /**
      * The image file. NB: This is not a mapped field of entity metadata, just a simple property.
      */
-    #[Assert\Image(maxSize: 10485760)]
+    #[Assert\Image(maxSize: 10_485_760)]
     #[Vich\UploadableField(mapping: 'user_image', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
 

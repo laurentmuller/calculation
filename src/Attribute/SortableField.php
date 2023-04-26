@@ -36,7 +36,7 @@ readonly class SortableField
      *
      * @template T of object
      *
-     * @param class-string<T>|T $objectOrClass either a string containing the name of
+     * @param T|class-string<T> $objectOrClass either a string containing the name of
      *                                         the class to reflect, or an object
      * @param string            $name          the property name to get order for
      *
@@ -44,7 +44,7 @@ readonly class SortableField
      *
      * @throws \ReflectionException if the class does not exist
      */
-    public static function getOrder(string|object $objectOrClass, string $name): ?string
+    public static function getOrder(object|string $objectOrClass, string $name): ?string
     {
         $class = new \ReflectionClass($objectOrClass);
         if ($class->hasProperty($name)) {

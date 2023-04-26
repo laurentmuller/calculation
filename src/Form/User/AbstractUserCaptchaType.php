@@ -28,7 +28,7 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
     /**
      * The display captcha image flag.
      */
-    private bool $displayCaptcha;
+    private readonly bool $displayCaptcha;
 
     /**
      * Constructor.

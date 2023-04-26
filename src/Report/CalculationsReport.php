@@ -40,7 +40,7 @@ class CalculationsReport extends AbstractArrayReport
     /**
      * The minimum margin.
      */
-    private float $minMargin;
+    private readonly float $minMargin;
 
     /**
      * Constructor.

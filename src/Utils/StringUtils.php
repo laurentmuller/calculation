@@ -184,12 +184,12 @@ final class StringUtils
      *
      * @template T of object
      *
-     * @param class-string<T>|T $objectOrClass either a string containing the name of
+     * @param T|class-string<T> $objectOrClass either a string containing the name of
      *                                         the class to reflect, or an object
      *
      * @return string the short name or null if the variable is null
      */
-    public static function getShortName(string|object $objectOrClass): string
+    public static function getShortName(object|string $objectOrClass): string
     {
         try {
             return (new \ReflectionClass($objectOrClass))->getShortName();

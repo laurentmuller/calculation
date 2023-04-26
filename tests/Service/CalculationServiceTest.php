@@ -143,7 +143,7 @@ class CalculationServiceTest extends KernelTestCase
 
         $margin = new GroupMargin();
         $margin->setMinimum(0)
-            ->setMaximum(1000000)
+            ->setMaximum(1_000_000)
             ->setMargin(self::MARGIN_PERCENT);
         $group->addMargin($margin);
 
@@ -168,7 +168,7 @@ class CalculationServiceTest extends KernelTestCase
 
         $margin = new GlobalMargin();
         $margin->setMinimum(0)
-            ->setMaximum(1000000)
+            ->setMaximum(1_000_000)
             ->setMargin(self::MARGIN_PERCENT);
         $manager->persist($margin);
 

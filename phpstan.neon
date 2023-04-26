@@ -26,4 +26,4 @@ parameters:
             path: src/Entity/*
         -
             message: '#@extends contains generic type#'
-            path: src/Form/*
+            path: src/Form/Extension/*

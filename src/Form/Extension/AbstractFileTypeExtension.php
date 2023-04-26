@@ -21,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Base extension for FileType.
  *
- * @template T
+ * @template T of \Symfony\Component\Form\FormTypeInterface
  *
  * @extends AbstractTypeExtension<T>
  */

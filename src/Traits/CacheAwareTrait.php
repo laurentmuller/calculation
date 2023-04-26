@@ -66,7 +66,7 @@ trait CacheAwareTrait
         if (null === $this->cacheAdapter) {
             /* @noinspection PhpUnhandledExceptionInspection */
             /** @psalm-var CacheItemPoolInterface $result */
-            $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
+            $result = $this->container->get(self::class . '::' . __FUNCTION__);
             $this->cacheAdapter = $result;
         }
 

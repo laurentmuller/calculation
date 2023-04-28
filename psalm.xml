@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <psalm xmlns="https://getpsalm.org/schema/config"
-       xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       allowStringToStandInForClass="true"
-       findUnusedVariablesAndParams="true"
-       findUnusedBaselineEntry="true"
-       findUnusedPsalmSuppress="true"
-       findUnusedCode="true"
-       strictBinaryOperands="true"
-       cacheDirectory=".psalm.cache"
+       xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+       errorLevel="1"
        phpVersion="8.2"
-       errorLevel="1">
+       cacheDirectory=".psalm.cache"
+       allowStringToStandInForClass="true"
+       findUnusedBaselineEntry="true"
+       findUnusedCode="true"
+       findUnusedPsalmSuppress="true"
+       findUnusedVariablesAndParams="true"
+       strictBinaryOperands="true">
 
     <projectFiles>
         <directory name="src"/>
@@ -24,23 +24,11 @@
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$charset"/>
-            </errorLevel>
-            <errorLevel type="suppress">
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$content"/>
-            </errorLevel>
-            <errorLevel type="suppress">
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$headers"/>
-            </errorLevel>
-            <errorLevel type="suppress">
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$statusCode"/>
-            </errorLevel>
-            <errorLevel type="suppress">
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$statusText"/>
-            </errorLevel>
-            <errorLevel type="suppress">
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$version"/>
-            </errorLevel>
-            <errorLevel type="suppress">
                 <file name="src/Chart/BaseChart.php" />
                 <file name="src/Chart/MonthChart.php" />
                 <file name="src/Chart/StateChart.php" />
@@ -70,11 +58,7 @@
         <InvalidClassConstantType>
             <errorLevel type="suppress">
                 <referencedConstant name="App\Validator\Captcha::ERROR_NAMES"/>
-            </errorLevel>
-            <errorLevel type="suppress">
                 <referencedConstant name="App\Validator\Password::ERROR_NAMES"/>
-            </errorLevel>
-            <errorLevel type="suppress">
                 <referencedConstant name="App\Validator\Strength::ERROR_NAMES"/>
             </errorLevel>
         </InvalidClassConstantType>

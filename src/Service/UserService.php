@@ -38,9 +38,9 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         private readonly ApplicationService $service,
         private readonly Security $security,
         #[Target('user_cache')]
-        CacheItemPoolInterface $cache
+        CacheItemPoolInterface $cacheItemPool
     ) {
-        $this->setCacheAdapter($cache);
+        $this->setCacheItemPool($cacheItemPool);
     }
 
     /**

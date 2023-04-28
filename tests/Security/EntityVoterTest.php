@@ -19,7 +19,7 @@ use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
-use App\Utils\RoleBuilder;
+use App\Service\RoleBuilderService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -67,7 +67,8 @@ class EntityVoterTest extends TestCase
 
     public function testAdmin(): void
     {
-        $role = RoleBuilder::getRoleAdmin();
+        $builder = new RoleBuilderService();
+        $role = $builder->getRoleAdmin();
         $user = $this->getAdminUser()
             ->setRights($role->getRights())
             ->setOverwrite(true);

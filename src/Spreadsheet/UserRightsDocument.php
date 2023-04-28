@@ -12,13 +12,14 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
+use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
+use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
-use App\Utils\RoleBuilder;
 use Elao\Enum\FlagBag;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -35,6 +36,14 @@ class UserRightsDocument extends AbstractArrayDocument
 
     private ?bool $writeName = null;
     private ?bool $writeRights = null;
+
+    /**
+     * @param User[] $entities
+     */
+    public function __construct(AbstractController $controller, private readonly RoleBuilderService $builder, array $entities)
+    {
+        parent::__construct($controller, $entities);
+    }
 
     /**
      * {@inheritdoc}
@@ -176,7 +185,7 @@ class UserRightsDocument extends AbstractArrayDocument
     private function outputUser(User $user, int &$row): void
     {
         if (!$user->isOverwrite()) {
-            $rights = RoleBuilder::getRole($user)->getRights();
+            $rights = $this->builder->getRole($user)->getRights();
             $user->setRights($rights);
         }
         $this->outputRole($user, $row);

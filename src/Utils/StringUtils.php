@@ -88,31 +88,31 @@ final class StringUtils
      * @param string $value the value to decode
      * @param bool   $assoc when true, returned objects will be converted into associative arrays
      *
-     * @return mixed the decoded value in appropriate PHP type
+     * @return array|\stdClass the decoded value in appropriate PHP type
      *
      * @throws \InvalidArgumentException if the value can not be decoded
      *
      * @see StringUtils::encodeJson()
      *
      * @psalm-return ($assoc is true ? array : \stdClass)
+     *
+     * @psalm-suppress MixedInferredReturnType
+     * @psalm-suppress MixedReturnStatement
      */
-    public static function decodeJson(string $value, bool $assoc = true): mixed
+    public static function decodeJson(string $value, bool $assoc = true): array|\stdClass
     {
-        /** @psalm-var array|\stdClass $result */
-        $result = \json_decode($value, $assoc);
-        if (\JSON_ERROR_NONE !== $code = \json_last_error()) {
-            $message = \json_last_error_msg();
-            throw new \InvalidArgumentException($message, $code);
+        try {
+            return \json_decode(json: $value, associative: $assoc, flags: \JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
-
-        return $result;
     }
 
     /**
      * Returns the JSON representation of a value.
      *
      * @param mixed $value the value being encoded
-     * @param int   $flags a bitmask flag
+     * @param int   $flags a bitmask flag. The <b>JSON_THROW_ON_ERROR</b> flag is always added.
      *
      * @return string a JSON encoded string
      *
@@ -122,13 +122,11 @@ final class StringUtils
      */
     public static function encodeJson(mixed $value, int $flags = 0): string
     {
-        $result = \json_encode($value, $flags);
-        if (\JSON_ERROR_NONE !== $code = \json_last_error()) {
-            $message = \json_last_error_msg();
-            throw new \InvalidArgumentException($message, $code);
+        try {
+            return (string) \json_encode($value, $flags | \JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
-
-        return (string) $result;
     }
 
     /**

@@ -133,7 +133,7 @@ class IndexController extends AbstractController
             $service->setProperty(PropertyServiceInterface::P_PANEL_CALCULATION, $count);
         }
 
-        return $this->sendJsonMessage('index.panel_last_success');
+        return $this->sendJsonMessage('index.panel_table_count_success');
     }
 
     protected function getSessionKey(string $key): string

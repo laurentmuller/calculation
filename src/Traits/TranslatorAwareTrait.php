@@ -28,15 +28,15 @@ trait TranslatorAwareTrait
 
     /**
      * {@inheritDoc}
+     *
+     * @psalm-suppress all
      */
     #[SubscribedService]
     public function getTranslator(): TranslatorInterface
     {
         if (null === $this->translator) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            /** @psalm-var TranslatorInterface $result */
-            $result = $this->container->get(__CLASS__ . '::' . __FUNCTION__);
-            $this->translator = $result;
+            $this->translator = $this->container->get(self::class . '::' . __FUNCTION__);
         }
 
         return $this->translator;

@@ -20,9 +20,9 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\ClearCacheService;
+use App\Service\RoleBuilderService;
 use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
-use App\Utils\RoleBuilder;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -96,11 +96,11 @@ class AdminController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/rights/admin', name: 'admin_rights_admin')]
-    public function rightsAdmin(Request $request): Response
+    public function rightsAdmin(Request $request, RoleBuilderService $builder): Response
     {
         $roleName = RoleInterface::ROLE_ADMIN;
         $rights = $this->getApplication()->getAdminRights();
-        $default = RoleBuilder::getRoleAdmin();
+        $default = $builder->getRoleAdmin();
         $property = PropertyServiceInterface::P_ADMIN_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);
@@ -110,11 +110,11 @@ class AdminController extends AbstractController
      * Edit rights for the user role (@see RoleInterface::ROLE_USER).
      */
     #[Route(path: '/rights/user', name: 'admin_rights_user')]
-    public function rightsUser(Request $request): Response
+    public function rightsUser(Request $request, RoleBuilderService $builder): Response
     {
         $roleName = RoleInterface::ROLE_USER;
         $rights = $this->getApplication()->getUserRights();
-        $default = RoleBuilder::getRoleUser();
+        $default = $builder->getRoleUser();
         $property = PropertyServiceInterface::P_USER_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);

@@ -585,14 +585,15 @@ index:
   panel_catalog: Catalogue
   panel_catalog_hide: Masquer le catalogue
   panel_catalog_hide_success: Le catalogue a été masqué
-  panel_last: Dernières calculations
-  panel_last_success: Le nombre de calculations affichées a été mise à jour.
   panel_month: Calculations par mois
   panel_month_title: Afficher les calculations pour %month%
   panel_month_hide: Masquer les calculations par mois
   panel_month_hide_success: Les calculations par mois ont été masquées
-  panel_month_user: Mes calculations
-  panel_month_user_help: Afficher uniquement les calculations que vous avez créés ou modifiés
+  panel_table_title: Dernières calculations
+  panel_table_count: Nombre de calculations affichées
+  panel_table_count_success: Le nombre de calculations affichées a été mise à jour.
+  panel_table_user: Mes calculations
+  panel_table_user_help: Afficher uniquement les calculations que vous avez créés ou modifiés
   panel_state: Calculations par statut
   panel_state_title: Afficher les calculations pour le statut %code%
   panel_state_title_all: Afficher toutes les calculations

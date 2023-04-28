@@ -117,9 +117,7 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * @psalm-suppress MixedAssignment
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
+     * @psalm-suppress all
      */
     public function getRequestStack(): RequestStack
     {

@@ -474,6 +474,7 @@ function initializeDangerTooltips($table) {
 
             // update pages list and page button
             if ($pageButton.length) {
+                // filter pages
                 let pageList = options.pageList;
                 for (let i = 0; i < pageList.length; i++) {
                     if (pageList[i] >= options.totalRows) {
@@ -484,6 +485,7 @@ function initializeDangerTooltips($table) {
                 if (pageList.length <= 1) {
                     $pageButton.toggleDisabled(true);
                 } else {
+                    // build items
                     const pageSize = $.parseInt(options.pageSize);
                     const $links = pageList.map(function (page) {
                         const $link = $('<button/>', {

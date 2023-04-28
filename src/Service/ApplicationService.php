@@ -28,7 +28,6 @@ use App\Model\Role;
 use App\Repository\PropertyRepository;
 use App\Traits\MathTrait;
 use App\Traits\PropertyServiceTrait;
-use App\Utils\RoleBuilder;
 use App\Validator\Password;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -49,12 +48,13 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     public function __construct(
         private readonly EntityManagerInterface $manager,
+        private readonly RoleBuilderService $builder,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
         #[Target('application_cache')]
-        CacheItemPoolInterface $cache
+        CacheItemPoolInterface $cacheItemPool
     ) {
-        $this->setCacheAdapter($cache);
+        $this->setCacheItemPool($cacheItemPool);
     }
 
     /**
@@ -72,7 +72,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getAdminRole(): Role
     {
-        $role = RoleBuilder::getRoleAdmin();
+        $role = $this->builder->getRoleAdmin();
         $rights = $this->getPropertyArray(self::P_ADMIN_RIGHTS, $role->getRights());
         $role->setRights($rights);
 
@@ -445,7 +445,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getUserRole(): Role
     {
-        $role = RoleBuilder::getRoleUser();
+        $role = $this->builder->getRoleUser();
         $rights = $this->getPropertyArray(self::P_USER_RIGHTS, $role->getRights());
         $role->setRights($rights);
 

@@ -12,10 +12,14 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Model\Role;
+use App\Pdf\Enums\PdfDocumentOrientation;
+use App\Pdf\Enums\PdfDocumentSize;
+use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfBorder;
@@ -24,8 +28,8 @@ use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Service\ApplicationService;
+use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
-use App\Utils\RoleBuilder;
 use Elao\Enum\FlagBag;
 
 /**
@@ -46,6 +50,20 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      * The title cell style.
      */
     private ?PdfStyle $titleStyle = null;
+
+    /**
+     * @param User[] $entities
+     */
+    public function __construct(
+        AbstractController $controller,
+        private readonly RoleBuilderService $builder,
+        array $entities,
+        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
+        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
+        PdfDocumentSize $size = PdfDocumentSize::A4
+    ) {
+        parent::__construct($controller, $entities, $orientation, $unit, $size);
+    }
 
     /**
      * {@inheritdoc}
@@ -222,7 +240,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         }
         foreach ($users as $user) {
             if (!$user->isOverwrite()) {
-                $rights = RoleBuilder::getRole($user)->getRights();
+                $rights = $this->builder->getRole($user)->getRights();
                 $user->setRights($rights);
             }
             $this->outputRole($builder, $user);

@@ -70,7 +70,7 @@ final class FileUtils
      * @param string|\SplFileInfo $file  the path to the file
      * @param bool                $assoc when true, returned objects will be converted into associative arrays
      *
-     * @return array|\stdClass the value encoded in json in appropriate PHP type
+     * @return array|\stdClass the decoded file content in appropriate PHP type
      *
      * @throws \InvalidArgumentException if the file can not be decoded
      *
@@ -82,11 +82,11 @@ final class FileUtils
         if (!self::isFile($file)) {
             throw new \InvalidArgumentException(\sprintf("The file '%s' can not be found.", $file));
         }
-        if (false === $json = \file_get_contents(self::realPath($file))) {
+        if (false === $content = \file_get_contents($file)) {
             throw new \InvalidArgumentException(\sprintf("Unable to get content of the file '%s'.", $file));
         }
 
-        return StringUtils::decodeJson($json, $assoc);
+        return StringUtils::decodeJson($content, $assoc);
     }
 
     /**

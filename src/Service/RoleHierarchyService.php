@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Service to deals with roles and the role's hierarchy.
+ * Service to deals with roles and hierarchy.
  */
 readonly class RoleHierarchyService
 {

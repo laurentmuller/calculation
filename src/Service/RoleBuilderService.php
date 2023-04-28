@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Utils;
+namespace App\Service;
 
 use App\Entity\User;
 use App\Enums\EntityName;
@@ -22,49 +22,43 @@ use Elao\Enum\FlagBag;
 /**
  * Service to build roles with default access rights.
  */
-class RoleBuilder
+class RoleBuilderService
 {
     /**
      * The value returned when attribute or entity offset is not found.
      */
     final public const INVALID_VALUE = -1;
 
-    // prevent instance creation
-    private function __construct()
-    {
-        // no-op
-    }
-
     /**
      * Gets a role with default access rights for the given user.
      */
-    public static function getRole(User $user): Role
+    public function getRole(User $user): Role
     {
         if (!$user->isEnabled()) {
-            return self::getRoleDisabled();
+            return $this->getRoleDisabled();
         }
         if ($user->isSuperAdmin()) {
-            return self::getRoleSuperAdmin();
+            return $this->getRoleSuperAdmin();
         }
         if ($user->isAdmin()) {
-            return self::getRoleAdmin();
+            return $this->getRoleAdmin();
         }
 
-        return self::getRoleUser();
+        return $this->getRoleUser();
     }
 
     /**
      * Gets the admin role ('ROLE_ADMIN') with default access rights.
      */
-    public static function getRoleAdmin(): Role
+    public function getRoleAdmin(): Role
     {
-        return self::getRoleWithAll(RoleInterface::ROLE_ADMIN);
+        return $this->getRoleWithAll(RoleInterface::ROLE_ADMIN);
     }
 
     /**
-     * Gets disabled role with the default access rights.
+     * Gets disabled role with the no access right.
      */
-    public static function getRoleDisabled(): Role
+    public function getRoleDisabled(): Role
     {
         $role = new Role(RoleInterface::ROLE_USER);
         $role->setOverwrite(true);
@@ -75,19 +69,19 @@ class RoleBuilder
     /**
      * Gets the super admin role ('ROLE_SUPER_ADMIN') with default access rights.
      */
-    public static function getRoleSuperAdmin(): Role
+    public function getRoleSuperAdmin(): Role
     {
-        return self::getRoleWithAll(RoleInterface::ROLE_SUPER_ADMIN);
+        return $this->getRoleWithAll(RoleInterface::ROLE_SUPER_ADMIN);
     }
 
     /**
      * Gets the user role ('ROLE_USER') with the default access rights.
      */
-    public static function getRoleUser(): Role
+    public function getRoleUser(): Role
     {
-        $all = self::getAllPermissions();
-        $none = self::getNonePermissions();
-        $default = self::getDefaultPermissions();
+        $all = $this->getAllPermissions();
+        $none = $this->getNonePermissions();
+        $default = $this->getDefaultPermissions();
         $role = new Role(RoleInterface::ROLE_USER);
         $role->EntityCalculation = $all;
         $role->EntityCalculationState = $default;
@@ -106,7 +100,7 @@ class RoleBuilder
     /**
      * @return FlagBag<EntityPermission>
      */
-    private static function getAllPermissions(): FlagBag
+    private function getAllPermissions(): FlagBag
     {
         /** @psalm-var FlagBag<EntityPermission> $result */
         $result = FlagBag::from(...EntityPermission::sorted());
@@ -116,31 +110,32 @@ class RoleBuilder
 
     /**
      * @return FlagBag<EntityPermission>
+     *
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress LessSpecificReturnStatement
      */
-    private static function getDefaultPermissions(): FlagBag
+    private function getDefaultPermissions(): FlagBag
     {
-        /** @psalm-var FlagBag<EntityPermission> $result */
-        $result = FlagBag::from(
+        // @phpstan-ignore-next-line
+        return FlagBag::from(
             EntityPermission::LIST,
             EntityPermission::EXPORT,
             EntityPermission::SHOW
         );
-
-        return $result;
     }
 
     /**
      * @return FlagBag<EntityPermission>
      */
-    private static function getNonePermissions(): FlagBag
+    private function getNonePermissions(): FlagBag
     {
         return new FlagBag(EntityPermission::class, FlagBag::NONE);
     }
 
-    private static function getRoleWithAll(string $roleName): Role
+    private function getRoleWithAll(string $roleName): Role
     {
         $role = new Role($roleName);
-        $value = self::getAllPermissions();
+        $value = $this->getAllPermissions();
         $entities = EntityName::constants();
         foreach ($entities as $entity) {
             $role->$entity = $value;

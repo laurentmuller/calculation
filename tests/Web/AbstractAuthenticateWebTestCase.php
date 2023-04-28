@@ -17,9 +17,9 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
 use App\Service\ApplicationService;
+use App\Service\RoleBuilderService;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
-use App\Utils\RoleBuilder;
 
 use function PHPUnit\Framework\throwException;
 
@@ -56,8 +56,9 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
         $this->client = static::createClient();
 
         // get rights
-        $userRight = RoleBuilder::getRoleUser()->getRights();
-        $adminRight = RoleBuilder::getRoleAdmin()->getRights();
+        $builder = new RoleBuilderService();
+        $userRight = $builder->getRoleUser()->getRights();
+        $adminRight = $builder->getRoleAdmin()->getRights();
 
         $application = $this->getService(ApplicationService::class);
         $application->setProperties([

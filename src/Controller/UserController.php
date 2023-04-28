@@ -28,11 +28,11 @@ use App\Repository\UserRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\MailerService;
+use App\Service\RoleBuilderService;
 use App\Service\RoleHierarchyService;
 use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Table\UserTable;
-use App\Utils\RoleBuilder;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -273,7 +273,7 @@ class UserController extends AbstractEntityController
      * Edit user access rights.
      */
     #[Route(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => Requirement::DIGITS])]
-    public function rights(Request $request, User $item, RoleHierarchyService $service, EntityManagerInterface $manager): Response
+    public function rights(Request $request, User $item, RoleBuilderService $builder, RoleHierarchyService $service, EntityManagerInterface $manager): Response
     {
         if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
             $this->warningTrans('user.rights.connected');
@@ -292,7 +292,7 @@ class UserController extends AbstractEntityController
             'item' => $item,
             'form' => $form,
             'params' => ['id' => $item->getId()],
-            'default' => RoleBuilder::getRole($item),
+            'default' => $builder->getRole($item),
             'permissions' => EntityPermission::sorted(),
         ]);
     }
@@ -305,14 +305,14 @@ class UserController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/rights/excel', name: 'user_rights_excel')]
-    public function rightsExcel(): SpreadsheetResponse
+    public function rightsExcel(RoleBuilderService $builder): SpreadsheetResponse
     {
         $entities = $this->getEntities('username');
         if ([] === $entities) {
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
-        $doc = new UserRightsDocument($this, $entities);
+        $doc = new UserRightsDocument($this, $builder, $entities);
 
         return $this->renderSpreadsheetDocument($doc);
     }
@@ -324,14 +324,14 @@ class UserController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/rights/pdf', name: 'user_rights_pdf')]
-    public function rightsPdf(): PdfResponse
+    public function rightsPdf(RoleBuilderService $builder): PdfResponse
     {
         $entities = $this->getEntities('username');
         if ([] === $entities) {
             $message = $this->trans('user.list.empty');
             throw $this->createNotFoundException($message);
         }
-        $doc = new UsersRightsReport($this, $entities);
+        $doc = new UsersRightsReport($this, $builder, $entities);
 
         return $this->renderPdfDocument($doc);
     }

@@ -27,14 +27,14 @@ trait CacheAwareTrait
     /**
      * The cache.
      */
-    private ?CacheItemPoolInterface $cacheAdapter = null;
+    private ?CacheItemPoolInterface $cacheItemPool = null;
 
     /**
      * Clear this cache adapter.
      */
     public function clearCache(): bool
     {
-        return $this->getCacheAdapter()->clear();
+        return $this->getCacheItemPool()->clear();
     }
 
     /**
@@ -42,7 +42,7 @@ trait CacheAwareTrait
      */
     public function commitDeferredValues(): bool
     {
-        return $this->getCacheAdapter()->commit();
+        return $this->getCacheItemPool()->commit();
     }
 
     /**
@@ -51,26 +51,10 @@ trait CacheAwareTrait
     public function deleteCacheItem(string $key): bool
     {
         try {
-            return $this->getCacheAdapter()->deleteItem(self::cleanKey($key));
+            return $this->getCacheItemPool()->deleteItem(self::cleanKey($key));
         } catch (\Psr\Cache\InvalidArgumentException) {
             return false;
         }
-    }
-
-    /**
-     * Get the cache adapter.
-     */
-    #[SubscribedService(type: CacheItemPoolInterface::class)]
-    public function getCacheAdapter(): CacheItemPoolInterface
-    {
-        if (null === $this->cacheAdapter) {
-            /* @noinspection PhpUnhandledExceptionInspection */
-            /** @psalm-var CacheItemPoolInterface $result */
-            $result = $this->container->get(self::class . '::' . __FUNCTION__);
-            $this->cacheAdapter = $result;
-        }
-
-        return $this->cacheAdapter;
     }
 
     /**
@@ -79,10 +63,26 @@ trait CacheAwareTrait
     public function getCacheItem(string $key): ?CacheItemInterface
     {
         try {
-            return $this->getCacheAdapter()->getItem(self::cleanKey($key));
+            return $this->getCacheItemPool()->getItem(self::cleanKey($key));
         } catch (\Psr\Cache\InvalidArgumentException) {
             return null;
         }
+    }
+
+    /**
+     * Get the cache item pool.
+     *
+     * @psalm-suppress all
+     */
+    #[SubscribedService]
+    public function getCacheItemPool(): CacheItemPoolInterface
+    {
+        if (null === $this->cacheItemPool) {
+            /* @noinspection PhpUnhandledExceptionInspection */
+            $this->cacheItemPool = $this->container->get(self::class . '::' . __FUNCTION__);
+        }
+
+        return $this->cacheItemPool;
     }
 
     /**
@@ -135,7 +135,7 @@ trait CacheAwareTrait
     public function hasCacheItem(string $key): bool
     {
         try {
-            return $this->getCacheAdapter()->hasItem(self::cleanKey($key));
+            return $this->getCacheItemPool()->hasItem(self::cleanKey($key));
         } catch (\Psr\Cache\InvalidArgumentException) {
             return false;
         }
@@ -158,15 +158,15 @@ trait CacheAwareTrait
                 $item->expiresAfter($time);
             }
 
-            return $this->getCacheAdapter()->saveDeferred($item);
+            return $this->getCacheItemPool()->saveDeferred($item);
         }
 
         return false;
     }
 
-    public function setCacheAdapter(CacheItemPoolInterface $cacheAdapter): static
+    public function setCacheItemPool(CacheItemPoolInterface $cacheItemPool): static
     {
-        $this->cacheAdapter = $cacheAdapter;
+        $this->cacheItemPool = $cacheItemPool;
 
         return $this;
     }
@@ -193,7 +193,7 @@ trait CacheAwareTrait
             $item->expiresAfter($time ?? $this->getCacheTimeout())
                 ->set($value);
 
-            return $this->getCacheAdapter()->save($item);
+            return $this->getCacheItemPool()->save($item);
         }
 
         return false;

@@ -6,6 +6,7 @@
  * @property {string} searchText - the search text.
  * @property {number} pageNumber - the current page number.
  * @property {number} totalPages - the total number of pages.
+ * @property {number[]} pageList - the pages list.
  * @property {string} rowClass - the row class.
  * @property {string} rowSelector - the row selector.
  * @property {string} customSelector - the custom view selector.

@@ -110,18 +110,17 @@ class RoleBuilderService
 
     /**
      * @return FlagBag<EntityPermission>
-     *
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress LessSpecificReturnStatement
      */
     private function getDefaultPermissions(): FlagBag
     {
-        // @phpstan-ignore-next-line
-        return FlagBag::from(
+        /** @psalm-var FlagBag<EntityPermission> $result */
+        $result = FlagBag::from(
             EntityPermission::LIST,
             EntityPermission::EXPORT,
             EntityPermission::SHOW
         );
+
+        return $result;
     }
 
     /**

@@ -4,8 +4,10 @@
  * @typedef {Object} Options - the table options
  * @property {number} id - the selected object identifier.
  * @property {string} searchText - the search text.
+ * @property {number} totalRows - the total number of rows.
  * @property {number} pageNumber - the current page number.
  * @property {number} totalPages - the total number of pages.
+ * @property {number} pageSize - the page size.
  * @property {number[]} pageList - the pages list.
  * @property {string} rowClass - the row class.
  * @property {string} rowSelector - the row selector.

@@ -10,8 +10,8 @@
  */
 <!--#include file="vendor/jquery-mark/jquery.mark.js" -->
 <!--#include file="vendor/bootstrap-table/bootstrap-table.js" -->
-<!--#include file="vendor/bootstrap-table/bootstrap-table-defer-url.js" -->
-<!--#include file="vendor/bootstrap-table/bootstrap-table-custom-view.js" -->
+<!--#include file="vendor/bootstrap-table/extensions/defer-url/bootstrap-table-defer-url.js" -->
+<!--#include file="vendor/bootstrap-table/extensions/custom-view/bootstrap-table-custom-view.js" -->
 <!--#include file="vendor/contextmenu/jquery.contextMenu.js" -->
 
 /**

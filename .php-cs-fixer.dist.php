@@ -28,9 +28,8 @@ $rules = [
     // --------------------------------------------------------------
     '@Symfony' => true,
     '@Symfony:risky' => true,
-    '@PHP80Migration' => true,
     '@PHP80Migration:risky' => true,
-    '@PHP81Migration' => true,
+    '@PHP82Migration' => true,
     '@DoctrineAnnotation' => true,
     '@PHPUnit100Migration:risky' => true,
 

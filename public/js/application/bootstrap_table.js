@@ -467,14 +467,10 @@ function initializeDangerTooltips($table) {
         },
 
         onPreBody: function (data) {
-            /**
-             * @type {{pageList: number[], totalRows: number, pageSize: string, sortName: string, sortOrder: string}} options
-             */
-            const options = $table.getOptions();
-
             // update pages list and page button
             if ($pageButton.length) {
                 // filter pages
+                const options = $table.getOptions();
                 let pageList = options.pageList;
                 for (let i = 0; i < pageList.length; i++) {
                     if (pageList[i] >= options.totalRows) {
@@ -486,18 +482,17 @@ function initializeDangerTooltips($table) {
                     $pageButton.toggleDisabled(true);
                 } else {
                     // build items
-                    const pageSize = $.parseInt(options.pageSize);
-                    const $links = pageList.map(function (page) {
-                        const $link = $('<button/>', {
+                    const $pages = pageList.map(function (page) {
+                        const $page = $('<button/>', {
                             'class': 'dropdown-page dropdown-item', 'data-value': page, 'text': page
                         });
-                        if (page === pageSize) {
-                            $link.addClass('active');
+                        if (page === options.pageSize) {
+                            $page.addClass('active');
                         }
-                        return $link;
+                        return $page;
                     });
                     $('.dropdown-page').remove();
-                    $('.dropdown-menu-page').append($links);
+                    $('.dropdown-menu-page').append($pages);
                     $pageButton.toggleDisabled(false);
                 }
             }
@@ -662,6 +657,14 @@ function initializeDangerTooltips($table) {
             $table.refresh({
                 pageSize: value
             });
+        });
+    }
+
+    // focus on dropdown
+    const $dropdowns = $('.card-body .dropdown');
+    if ($dropdowns.length) {
+        $dropdowns.on('shown.bs.dropdown', function () {
+            $(this).find('.active').trigger('focus');
         });
     }
 

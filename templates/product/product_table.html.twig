@@ -18,7 +18,7 @@
     {%- set data_default = 'product.fields.category'|trans -%}
     {%- set input_value = group_id ? group_id : category_id -%}
     {%- set input_text = customData.group.code ?? customData.category.code ?? data_default -%}
-    <div class="input-group-append">
+    <div class="input-group-append dropdown">
         {{ _self.output_dropdown_menu(
             'category',
             ICON_CATEGORY,

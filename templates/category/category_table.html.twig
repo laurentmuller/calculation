@@ -18,7 +18,7 @@
     {%- set group_param = constant('App\\Table\\CategoryTable::PARAM_GROUP') -%}
     {%- set data_default = 'category.fields.group'|trans -%}
     {% set text = customData.group ? customData.group.code : data_default %}
-    <div class="input-group-append">
+    <div class="input-group-append dropdown">
         {{ _self.output_dropdown_menu(
             group_param,
             ICON_GROUP,

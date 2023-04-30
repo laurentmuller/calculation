@@ -18,7 +18,7 @@
 {% if customData.levels|length > 1 %}
     {% set data_default = 'log.fields.level'|trans %}
     {% set text = level|length ? level|capitalize : data_default %}
-    <div class="input-group-append">
+    <div class="input-group-append dropdown">
         {{ _self.output_dropdown_menu(
             'level',
             'layer-group',
@@ -40,7 +40,7 @@
 {% if customData.channels|length > 1 %}
     {% set data_default = 'log.fields.channel'|trans %}
     {% set text = channel|length ? channel|capitalize : data_default %}
-    <div class="input-group-append">
+    <div class="input-group-append dropdown">
         {{ _self.output_dropdown_menu(
             'channel',
             'tools',

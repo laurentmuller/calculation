@@ -105,7 +105,7 @@
          * @return {string} a JSON string representing the given value.
          */
         stringify: function (data) {
-            return JSON.stringify(data, '', '    ');
+            return JSON.stringify(data, null, 4);
         },
 
         /**

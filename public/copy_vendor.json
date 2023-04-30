@@ -1,43 +1,39 @@
 {
-    "source": "https://cdn.jsdelivr.net/npm/",
+    "source": "https://cdnjs.cloudflare.com/ajax/libs/",
     "target": "js/vendor/",
-    "format": "{source}{name}@{version}/{file}",
-    "prefixes": {
-        "js": "/**! compression tag for ftp-deployment */\n\n",
-        "css": "/**! compression tag for ftp-deployment */\n\n"
-    },
+    "format": "{source}{name}/{version}/{file}",
+    "prefix": "/**! compression tag for ftp-deployment */\n\n",
     "renames": {
         "/\\.src\\./": "."
     },
     "plugins": [
         {
+            "example": "https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.js",
             "name": "jquery",
             "version": "3.6.4",
-            "targe": "jquery",
             "files": [
-                "dist/jquery.js",
-                "dist/jquery.min.map"
+                "jquery.js",
+                "jquery.min.map"
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.js",
             "name": "bootstrap",
             "version": "5.3.0-alpha3",
             "disabled": true,
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/{file}",
             "target": "twitter-bootstrap",
             "files": [
-                "dist/js/bootstrap.bundle.js",
-                "dist/js/bootstrap.bundle.js.map",
-                "dist/css/bootstrap.css",
-                "dist/css/bootstrap.css.map"
+                "js/bootstrap.bundle.js",
+                "js/bootstrap.bundle.js.map",
+                "css/bootstrap.css",
+                "css/bootstrap.css.map"
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/webfonts/fa-brands-400.ttf",
-            "name": "@fortawesome/fontawesome-free",
-            "display": "fontawesome-free",
+            "example": "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.css",
+            "name": "font-awesome",
             "version": "6.4.0",
-            "target": "font-awesome",
             "files": [
                 "css/all.css",
                 "webfonts/fa-brands-400.ttf",
@@ -45,58 +41,66 @@
                 "webfonts/fa-regular-400.ttf",
                 "webfonts/fa-regular-400.woff2",
                 "webfonts/fa-solid-900.ttf",
-                "webfonts/fa-solid-900.woff2",
-                "webfonts/fa-v4compatibility.ttf",
-                "webfonts/fa-v4compatibility.woff2"
+                "webfonts/fa-solid-900.woff2"
             ]
         },
         {
             "example": "https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js",
-            "name": "jquery-validation",
+            "name": "jquery-validate",
             "version": "1.19.5",
-            "target": "jquery-validate",
             "files": [
-                "dist/jquery.validate.js",
-                "dist/additional-methods.js",
-                "dist/localization/messages_fr.js"
+                "jquery.validate.js",
+                "additional-methods.js",
+                "localization/messages_fr.js"
             ]
         },
         {
             "name": "highcharts",
             "version": "11.0.0",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/{file}",
             "files": [
                 "highcharts.src.js",
-                "highcharts.js.map",
-                "modules/accessibility.src.js",
-                "modules/accessibility.js.map"
+                "highcharts.js.map"
+            ]
+        },
+        {
+            "display": "highcharts-accessibility",
+            "name": "highcharts",
+            "version": "11.0.0",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/modules/{file}",
+            "target": "highcharts",
+            "files": [
+                "accessibility.src.js",
+                "accessibility.js.map"
             ]
         },
         {
             "example": "https://cdn.jsdelivr.net/npm/html5sortable@0.13.3/dist/html5sortable.js",
             "name": "html5sortable",
             "version": "0.13.3",
-            "target": "html5sortable",
             "files": [
-                "dist/html5sortable.js"
+                "html5sortable.js"
             ]
         },
         {
             "example": "https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/jquery.mark.js",
+            "display": "mark.js-jquery-mark",
             "name": "mark.js",
             "version": "8.11.1",
             "target": "jquery-mark",
             "files": [
-                "dist/jquery.mark.js"
+                "jquery.mark.js"
             ]
         },
         {
             "example": "https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js",
             "name": "zxcvbn",
             "version": "4.4.2",
-            "target": "zxcvbn",
             "files": [
-                "dist/zxcvbn.js",
-                "dist/zxcvbn.js.map"
+                "zxcvbn.js",
+                "zxcvbn.js.map"
             ]
         },
         {
@@ -105,92 +109,123 @@
             "version": "2.9.2",
             "target": "contextmenu",
             "files": [
-                "dist/jquery.contextMenu.css",
-                "dist/jquery.contextMenu.js",
-                "dist/font/context-menu-icons.eot",
-                "dist/font/context-menu-icons.ttf",
-                "dist/font/context-menu-icons.woff",
-                "dist/font/context-menu-icons.woff2"
+                "jquery.contextMenu.css",
+                "jquery.contextMenu.js",
+                "font/context-menu-icons.eot",
+                "font/context-menu-icons.ttf",
+                "font/context-menu-icons.woff",
+                "font/context-menu-icons.woff2"
             ]
         },
         {
             "example": "https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.js",
-            "name": "clipboard",
+            "name": "clipboard.js",
             "version": "2.0.11",
             "target": "clipboard",
             "files": [
-                "dist/clipboard.js"
+                "clipboard.js"
             ]
         },
         {
             "display": "iconify",
             "name": "@iconify/iconify",
             "version": "1.0.7",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/{file}",
             "target": "iconify",
             "disabled": true,
             "files": [
-                "dist/iconify.js"
+                "iconify.js"
             ]
         },
         {
             "name": "bootstrap-table",
             "version": "1.21.4",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/{file}",
             "target": "bootstrap-table",
             "files": [
-                "dist/bootstrap-table.js",
-                "dist/bootstrap-table.css",
-                "dist/extensions/defer-url/bootstrap-table-defer-url.js",
-                "dist/extensions/custom-view/bootstrap-table-custom-view.js"
+                "bootstrap-table.js",
+                "bootstrap-table.css"
             ]
         },
         {
+            "display": "bootstrap-table-defer-url",
+            "name": "bootstrap-table",
+            "version": "1.21.4",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/extensions/defer-url/{file}",
+            "target": "bootstrap-table",
+            "files": [
+                "bootstrap-table-defer-url.js"
+            ]
+        },
+        {
+            "display": "bootstrap-table-custom-view",
+            "name": "bootstrap-table",
+            "version": "1.21.4",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/extensions/custom-view/{file}",
+            "target": "bootstrap-table",
+            "files": [
+                "bootstrap-table-custom-view.js"
+            ]
+        },
+        {
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/{file}",
             "name": "select2",
             "version": "4.1.0-rc.0",
             "files": [
-                "dist/js/select2.js",
-                "dist/js/i18n/fr.js",
-                "dist/css/select2.css"
+                "js/select2.js",
+                "js/i18n/fr.js",
+                "css/select2.css"
             ]
         },
         {
             "display": "select2-bootstrap4-theme",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/{file}",
             "name": "@ttskch/select2-bootstrap4-theme",
             "version": "1.5.2",
             "target": "select2/css",
             "files": [
-                "dist/select2-bootstrap4.css"
+                "select2-bootstrap4.css"
             ]
         },
         {
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/{file}",
             "name": "currency-flags",
             "version": "4.0.7",
             "files": [
-                "dist/currency-flags.css"
+                "currency-flags.css"
             ]
         },
         {
             "example": "https://cdn.jsdelivr.net/npm/font-mfizz@2.4.1/dist/font-mfizz.css",
             "name": "font-mfizz",
             "version": "2.4.1",
-            "target": "font-mfizz",
             "files": [
-                "dist/font-mfizz.css",
-                "dist/font-mfizz.eot",
-                "dist/font-mfizz.svg",
-                "dist/font-mfizz.ttf",
-                "dist/font-mfizz.woff"
+                "font-mfizz.css",
+                "font-mfizz.eot",
+                "font-mfizz.svg",
+                "font-mfizz.ttf",
+                "font-mfizz.woff"
             ]
         },
         {
             "display": "bootstrap-dark",
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/dist/{file}",
             "name": "@forevolve/bootstrap-dark",
             "target": "bootstrap",
             "version": "4.0.0",
             "files": [
-                "dist/js/bootstrap.bundle.js",
-                "dist/js/bootstrap.bundle.js.map",
-                "dist/css/bootstrap-dark.css",
-                "dist/css/bootstrap-light.css"
+                "js/bootstrap.bundle.js",
+                "js/bootstrap.bundle.js.map",
+                "css/bootstrap-dark.css",
+                "css/bootstrap-light.css"
             ]
         }
     ],

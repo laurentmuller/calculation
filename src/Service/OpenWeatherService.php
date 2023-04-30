@@ -427,16 +427,16 @@ class OpenWeatherService extends AbstractHttpClientService
             self::QUERY => $query,
         ]);
 
-        $results = $response->toArray(false);
-        if (!$this->checkErrorCode($results)) {
+        $result = $response->toArray(false);
+        if (!$this->checkErrorCode($result)) {
             return null;
         }
-        $offset = $this->findTimezone($results);
+        $offset = $this->findTimezone($result);
         $timezone = $this->offsetToTimZone($offset);
-        $this->updateResults($results, $timezone);
-        $this->addUnits($results, (string) $query['units']);
+        $this->updateResults($result, $timezone);
+        $this->addUnits($result, (string) $query['units']);
 
-        return $results;
+        return $result;
     }
 
     private function doSearch(string $name, int $limit): ?array

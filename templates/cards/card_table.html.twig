@@ -200,7 +200,7 @@
             {# page size #}
             {% block page_list %}
             {% if pageList is defined and pageList|length > 1 %}
-            <div class="btn-group btn-group-sm" role="group">
+            <div class="btn-group btn-group-sm dropdown" role="group">
                 {# menu is created on the prebody event #}
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_page" data-value="{{ limit }}" data-toggle="dropdown" title="{{ 'list.limit_title'|trans }}" aria-expanded="false">
                     {{- params.limit -}}
@@ -383,8 +383,8 @@
 {{ parent() -}}
 {{ asset_js('js/vendor/jquery-mark/jquery.mark.js') }}
 {{ asset_js('js/vendor/bootstrap-table/bootstrap-table.js') }}
-{{ asset_js('js/vendor/bootstrap-table/bootstrap-table-defer-url.js') }}
-{{ asset_js('js/vendor/bootstrap-table/bootstrap-table-custom-view.js') }}
+{{ asset_js('js/vendor/bootstrap-table/extensions/defer-url/bootstrap-table-defer-url.js') }}
+{{ asset_js('js/vendor/bootstrap-table/extensions/custom-view/bootstrap-table-custom-view.js') }}
 {{ asset_js('js/vendor/contextmenu/jquery.contextMenu.js') }}
 {{ asset_js('js/plugins/plugin-drag-modal.js') }}
 {{ asset_js('js/plugins/plugin-rowlink.js') }}

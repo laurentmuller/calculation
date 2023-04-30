@@ -256,10 +256,10 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
             /** @psalm-var string[]|null $codes */
             $codes = $response['supported_codes'] ?? null;
             if (\is_array($codes)) {
-                $results = $this->mapCodes($codes);
+                $result = $this->mapCodes($codes);
                 $this->timeout = $this->getDeltaTime($response);
 
-                return $results;
+                return $result;
             }
         }
 

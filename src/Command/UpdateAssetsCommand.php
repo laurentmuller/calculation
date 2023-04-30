@@ -32,28 +32,26 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  *     target?: string,
  *     format?: string,
  *     disabled?: bool,
- *     files: array<string>}
+ *     files: string[]}
+ * @psalm-type CopyEntryType = array{
+ *     search: string,
+ *     style: string,
+ *     entries: string[]}
  * @psalm-type ConfigurationType = array{
  *     source: string,
  *     target: string,
  *     format: string,
+ *     plugins: PluginType[],
  *     prefixes?: array<string, string>,
- *     suffixes?: array<string, string>,
  *     renames?: array<string, string>,
- *     plugins: array<PluginType>}
+ *     file-style?: string[],
+ *     copy-style?: array<string, string>,
+ *     copy-entries?: CopyEntryType[]}
  */
 #[AsCommand(name: 'app:update-assets', description: 'Update Javascript and CSS dependencies.')]
 class UpdateAssetsCommand extends Command
 {
     use LoggerTrait;
-
-    /**
-     * The boostrap CSS file name to update.
-     */
-    private const BOOTSTRAP_FILES_STYLE = [
-        'bootstrap-dark.css',
-        'bootstrap-light.css',
-    ];
 
     /**
      * The CSS custom style comments.
@@ -65,6 +63,11 @@ class UpdateAssetsCommand extends Command
          * -----------------------------
          */
         TEXT;
+
+    /**
+     * The distribution file prefix.
+     */
+    private const DIST_PREFIX = 'dist/';
 
     /**
      * The vendor configuration file name.
@@ -84,7 +87,7 @@ class UpdateAssetsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
-        if (!$publicDir = $this->getPublicDir()) {
+        if (null === $publicDir = $this->getPublicDir()) {
             $this->writeNote('No public directory found.');
 
             return Command::INVALID;
@@ -108,7 +111,6 @@ class UpdateAssetsCommand extends Command
         $format = $configuration['format'];
         $plugins = $configuration['plugins'];
         $prefixes = $this->getConfigArray($configuration, 'prefixes');
-        $suffixes = $this->getConfigArray($configuration, 'suffixes');
         $renames = $this->getConfigArray($configuration, 'renames');
 
         $countFiles = 0;
@@ -128,17 +130,12 @@ class UpdateAssetsCommand extends Command
                 foreach ($files as $file) {
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
                     $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
-                    if ($this->copyFile($sourceFile, $targetFile, $prefixes, $suffixes, $renames)) {
+                    if ($this->copyFile($sourceFile, $configuration, $targetFile, $prefixes, $renames)) {
                         ++$countFiles;
                     }
                 }
                 ++$countPlugins;
-                $versionSource = $plugin['source'] ?? $source;
-                if (StringUtils::contains($versionSource, 'cdnjs', true)) {
-                    $this->checkVersionCdnjs($name, $version);
-                } elseif (StringUtils::contains($versionSource, 'jsdelivr', true)) {
-                    $this->checkVersionJsDelivr($name, $version);
-                }
+                $this->checkVersion($name, $version);
             }
             $expected = $this->countFiles($plugins);
             if ($expected !== $countFiles) {
@@ -162,15 +159,16 @@ class UpdateAssetsCommand extends Command
         }
     }
 
-    private function checkVersion(string $url, string $name, string $version, string ...$paths): void
+    private function checkVersion(string $name, string $version): void
     {
+        $url = "https://data.jsdelivr.com/v1/package/npm/$name";
         $content = $this->loadJson($url);
         if (null === $content) {
             $this->write("Unable to find the URL '$url' for the plugin '$name'.");
 
             return;
         }
-        foreach ($paths as $path) {
+        foreach (['tags', 'latest'] as $path) {
             if (!isset($content[$path])) {
                 $this->write("Unable to find the path '$path' for the plugin '$name'.", 'error');
 
@@ -186,27 +184,15 @@ class UpdateAssetsCommand extends Command
         }
     }
 
-    private function checkVersionCdnjs(string $name, string $version): void
-    {
-        $url = "https://api.cdnjs.com/libraries/$name?fields=version";
-        $this->checkVersion($url, $name, $version, 'version');
-    }
-
-    private function checkVersionJsDelivr(string $name, string $version): void
-    {
-        $url = "https://data.jsdelivr.com/v1/package/npm/$name";
-        $this->checkVersion($url, $name, $version, 'tags', 'latest');
-    }
-
     /**
+     * @psalm-param ConfigurationType $configuration
      * @psalm-param array<string, string> $prefixes
-     * @psalm-param array<string, string> $suffixes
      * @psalm-param array<string, string> $renames
      */
-    private function copyFile(string $sourceFile, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
+    private function copyFile(string $sourceFile, array $configuration, string $targetFile, array $prefixes, array $renames): bool
     {
         if (false !== ($content = $this->readFile($sourceFile))) {
-            return $this->dumpFile($content, $targetFile, $prefixes, $suffixes, $renames);
+            return $this->dumpFile($content, $configuration, $targetFile, $prefixes, $renames);
         }
 
         return false;
@@ -216,7 +202,7 @@ class UpdateAssetsCommand extends Command
     {
         $styles = $this->findStyles($content, $searchStyle);
         if (\is_array($styles)) {
-            $result = "\n/*\n * Copied from '$searchStyle'  \n */";
+            $result = "\n/*\n * $newStyle (copied from $searchStyle)  \n */";
             foreach ($styles as $style) {
                 $style = \str_replace(';', ' !important;', $style);
                 $result .= "\n" . \str_replace($searchStyle, $newStyle, $style) . "\n";
@@ -229,7 +215,7 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param string[] $entries the style entries to copy
+     * @psalm-param string[] $entries
      */
     private function copyStyleEntries(string $content, string $searchStyle, string $newStyle, array $entries): string
     {
@@ -248,7 +234,7 @@ class UpdateAssetsCommand extends Command
                 }
             }
             if ('' !== $result) {
-                return "\n/*\n * '$newStyle' (copied from '$searchStyle')  \n */\n" . $result;
+                return "\n/*\n * $newStyle (copied from $searchStyle)  \n */\n" . $result;
             }
         }
 
@@ -271,26 +257,25 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
+     * @psalm-param ConfigurationType $configuration
      * @psalm-param array<string, string> $prefixes
-     * @psalm-param array<string, string> $suffixes
      * @psalm-param array<string, string> $renames
      */
-    private function dumpFile(string $content, string $targetFile, array $prefixes = [], array $suffixes = [], array $renames = []): bool
+    private function dumpFile(string $content, array $configuration, string $targetFile, array $prefixes, array $renames): bool
     {
-        $ext = \pathinfo($targetFile, \PATHINFO_EXTENSION);
-        if (isset($prefixes[$ext])) {
-            $content = $prefixes[$ext] . $content;
+        // prefix file
+        $extension = \pathinfo($targetFile, \PATHINFO_EXTENSION);
+        if (\array_key_exists($extension, $prefixes)) {
+            $content = $prefixes[$extension] . $content;
         }
-        if (isset($suffixes[$ext])) {
-            $content .= $suffixes[$ext];
-        }
+
+        // rename file
         $targetFile = StringUtils::pregReplace($renames, $targetFile);
-        if ('css' === \pathinfo($targetFile, \PATHINFO_EXTENSION)) {
-            $content = \str_replace('/*!', '/*', $content);
-        }
+
+        // update style
         $name = \pathinfo($targetFile, \PATHINFO_BASENAME);
-        if (\in_array($name, self::BOOTSTRAP_FILES_STYLE, true)) {
-            $content = $this->updateStyle($content);
+        if (\in_array($name, $configuration['file-style'] ?? [], true)) {
+            $content = $this->updateStyle($content, $configuration);
         }
         if (!$this->writeFile($targetFile, $content)) {
             return false;
@@ -379,6 +364,9 @@ class UpdateAssetsCommand extends Command
     private function getTargetFile(string $target, array $plugin, string $file): string
     {
         $name = $plugin['target'] ?? $plugin['name'];
+        if (StringUtils::startWith($file, self::DIST_PREFIX, true)) {
+            $file = \substr($file, \strlen(self::DIST_PREFIX));
+        }
 
         return FileUtils::buildPath($target, $name, $file);
     }
@@ -492,67 +480,31 @@ class UpdateAssetsCommand extends Command
         return false;
     }
 
-    private function updateStyle(string $content): string
+    /**
+     * @psalm-param ConfigurationType $configuration
+     */
+    private function updateStyle(string $content, array $configuration): string
     {
-        $styles = [
-            // field
-            '.form-control:focus' => '.field-valid',
-            '.was-validated .form-control:invalid:focus, .form-control.is-invalid:focus' => '.field-invalid',
-
-            // toast
-            '.btn-success' => '.toast-header-success',
-            '.btn-warning' => '.toast-header-warning',
-            '.btn-danger' => '.toast-header-danger',
-            '.btn-info' => '.toast-header-info',
-            '.btn-primary' => '.toast-header-primary',
-            '.btn-secondary' => '.toast-header-secondary',
-            '.btn-dark' => '.toast-header-dark',
-        ];
         $toAppend = '';
-        foreach ($styles as $searchStyle => $newStyle) {
-            $toAppend .= $this->copyStyle($content, $searchStyle, $newStyle);
+        if (!empty($configuration['copy-style'])) {
+            foreach ($configuration['copy-style'] as $key => $value) {
+                $toAppend .= $this->copyStyle($content, $key, $value);
+            }
         }
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.dropdown-menu',
-            '.context-menu-list',
-            ['background', 'background-color', 'border-radius', 'color', 'font-size']
-        );
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.dropdown-item',
-            '.context-menu-item',
-            ['background-color', 'color', 'font-size', 'font-weight', 'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top', 'margin']
-        );
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.dropdown-item:hover, .dropdown-item:focus',
-            '.context-menu-hover',
-            ['background', 'background-color', 'color', 'text-decoration']
-        );
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.dropdown-divider',
-            '.context-menu-separator',
-            ['border-top', 'margin']
-        );
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.dropdown-header',
-            '.context-menu-header',
-            ['color', 'display', 'font-size', 'margin-bottom', 'white-space']
-        );
-        $toAppend .= $this->copyStyleEntries(
-            $content,
-            '.form-control',
-            '.simple-editor',
-            ['color', 'background-color']
-        );
-        if ('' === $toAppend) {
-            return $content;
+        if (!empty($configuration['copy-entries'])) {
+            foreach ($configuration['copy-entries'] as $entry) {
+                $searchStyle = $entry['search'];
+                $newStyle = $entry['style'];
+                $entries = $entry['entries'];
+                $toAppend .= $this->copyStyleEntries($content, $searchStyle, $newStyle, $entries);
+            }
         }
 
-        return $content . self::CSS_COMMENTS . $toAppend;
+        if ('' !== $toAppend) {
+            return $content . self::CSS_COMMENTS . $toAppend;
+        }
+
+        return $content;
     }
 
     private function writeFile(string $filename, string $content): bool

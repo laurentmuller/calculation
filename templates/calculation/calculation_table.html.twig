@@ -22,7 +22,7 @@
     {% elseif state_editable %}
         {% set text = (state_editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable')|trans %}
     {% endif %}
-    <div class="input-group-append">
+    <div class="input-group-append dropdown">
         {{ _self.output_dropdown_menu(
             'state',
             ICON_CALCULATION_STATE,

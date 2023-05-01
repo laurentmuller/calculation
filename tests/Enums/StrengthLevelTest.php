@@ -15,13 +15,21 @@ namespace App\Tests\Enums;
 use App\Enums\StrengthLevel;
 use App\Interfaces\PropertyServiceInterface;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\Test\TypeTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(StrengthLevel::class)]
-class StrengthLevelTest extends TypeTestCase
+class StrengthLevelTest extends TestCase
 {
     private ?TranslatorInterface $translator = null;
+
+    public static function getDefault(): array
+    {
+        return [
+            [StrengthLevel::getDefault(), StrengthLevel::NONE],
+            [PropertyServiceInterface::DEFAULT_STRENGTH_LEVEL, StrengthLevel::NONE],
+        ];
+    }
 
     public static function getLabel(): array
     {
@@ -35,19 +43,28 @@ class StrengthLevelTest extends TypeTestCase
         ];
     }
 
+    public static function getValues(): array
+    {
+        return [
+            [StrengthLevel::NONE, -1],
+            [StrengthLevel::VERY_WEAK, 0],
+            [StrengthLevel::WEAK, 1],
+            [StrengthLevel::MEDIUM, 2],
+            [StrengthLevel::STRONG, 3],
+            [StrengthLevel::VERY_STRONG, 4],
+        ];
+    }
+
     public function testCount(): void
     {
         self::assertCount(6, StrengthLevel::cases());
         self::assertCount(6, StrengthLevel::sorted());
     }
 
-    public function testDefault(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
+    public function testDefault(StrengthLevel $value, StrengthLevel $expected): void
     {
-        $expected = StrengthLevel::NONE;
-        $default = StrengthLevel::getDefault();
-        self::assertSame($expected, $default);
-        $default = PropertyServiceInterface::DEFAULT_STRENGTH_LEVEL;
-        self::assertSame($expected, $default); // @phpstan-ignore-line
+        self::assertSame($expected, $value);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
@@ -90,14 +107,10 @@ class StrengthLevelTest extends TypeTestCase
         self::assertSame($expected, $level->trans($translator));
     }
 
-    public function testValue(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    public function testValue(StrengthLevel $level, int $expected): void
     {
-        self::assertSame(-1, StrengthLevel::NONE->value); // @phpstan-ignore-line
-        self::assertSame(0, StrengthLevel::VERY_WEAK->value); // @phpstan-ignore-line
-        self::assertSame(1, StrengthLevel::WEAK->value); // @phpstan-ignore-line
-        self::assertSame(2, StrengthLevel::MEDIUM->value); // @phpstan-ignore-line
-        self::assertSame(3, StrengthLevel::STRONG->value); // @phpstan-ignore-line
-        self::assertSame(4, StrengthLevel::VERY_STRONG->value); // @phpstan-ignore-line
+        self::assertSame($expected, $level->value);
     }
 
     /**

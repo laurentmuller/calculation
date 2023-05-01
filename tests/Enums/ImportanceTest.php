@@ -14,11 +14,11 @@ namespace App\Tests\Enums;
 
 use App\Enums\Importance;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\Test\TypeTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Importance::class)]
-class ImportanceTest extends TypeTestCase
+class ImportanceTest extends TestCase
 {
     private ?TranslatorInterface $translator = null;
 
@@ -29,6 +29,16 @@ class ImportanceTest extends TypeTestCase
             ['importance.low', Importance::LOW],
             ['importance.medium', Importance::MEDIUM],
             ['importance.urgent', Importance::URGENT],
+        ];
+    }
+
+    public static function getValues(): array
+    {
+        return [
+            [Importance::HIGH, 'high'],
+            [Importance::LOW, 'low'],
+            [Importance::MEDIUM, 'medium'],
+            [Importance::URGENT, 'urgent'],
         ];
     }
 
@@ -73,12 +83,10 @@ class ImportanceTest extends TypeTestCase
         self::assertSame($expected, $importance->trans($translator));
     }
 
-    public function testValue(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    public function testValue(Importance $importance, string $expected): void
     {
-        self::assertSame('high', Importance::HIGH->value); // @phpstan-ignore-line
-        self::assertSame('low', Importance::LOW->value); // @phpstan-ignore-line
-        self::assertSame('medium', Importance::MEDIUM->value); // @phpstan-ignore-line
-        self::assertSame('urgent', Importance::URGENT->value); // @phpstan-ignore-line
+        self::assertSame($expected, $importance->value);
     }
 
     /**

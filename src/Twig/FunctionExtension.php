@@ -125,7 +125,7 @@ final class FunctionExtension extends AbstractExtension
             return false;
         }
 
-        return StringUtils::startWith($file, $this->webDir, true);
+        return StringUtils::startWith($file, $this->webDir);
     }
 
     /**

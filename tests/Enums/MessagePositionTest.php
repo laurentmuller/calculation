@@ -15,13 +15,21 @@ namespace App\Tests\Enums;
 use App\Enums\MessagePosition;
 use App\Interfaces\PropertyServiceInterface;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\Test\TypeTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(MessagePosition::class)]
-class MessagePositionTest extends TypeTestCase
+class MessagePositionTest extends TestCase
 {
     private ?TranslatorInterface $translator = null;
+
+    public static function getDefault(): array
+    {
+        return [
+              [MessagePosition::getDefault(), MessagePosition::BOTTOM_RIGHT],
+              [PropertyServiceInterface::DEFAULT_MESSAGE_POSITION, MessagePosition::BOTTOM_RIGHT],
+        ];
+    }
 
     public static function getLabel(): array
     {
@@ -46,13 +54,10 @@ class MessagePositionTest extends TypeTestCase
         self::assertCount(9, MessagePosition::sorted());
     }
 
-    public function testDefault(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
+    public function testDefault(MessagePosition $value, MessagePosition $expected): void
     {
-        $expected = MessagePosition::BOTTOM_RIGHT;
-        $default = MessagePosition::getDefault();
-        self::assertSame($expected, $default);
-        $default = PropertyServiceInterface::DEFAULT_MESSAGE_POSITION;
-        self::assertSame($expected, $default); // @phpstan-ignore-line
+        self::assertSame($expected, $value);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]

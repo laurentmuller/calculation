@@ -77,7 +77,7 @@ final class StringUtils
      *
      * @return bool true if substring is contained within a string
      */
-    public static function contains(string $haystack, string $needle, bool $ignore_case = false): bool
+    public static function contains(string $haystack, string $needle, bool $ignore_case = true): bool
     {
         return self::getString($haystack, $ignore_case)->containsAny($needle);
     }
@@ -140,7 +140,7 @@ final class StringUtils
      *
      * @return bool true if ends with substring
      */
-    public static function endWith(string $haystack, string $needle, bool $ignore_case = false): bool
+    public static function endWith(string $haystack, string $needle, bool $ignore_case = true): bool
     {
         return self::getString($haystack, $ignore_case)->endsWith($needle);
     }
@@ -261,7 +261,7 @@ final class StringUtils
      *
      * @return bool true if starts with substring
      */
-    public static function startWith(string $haystack, string $needle, bool $ignore_case = false): bool
+    public static function startWith(string $haystack, string $needle, bool $ignore_case = true): bool
     {
         return self::getString($haystack, $ignore_case)->startsWith($needle);
     }

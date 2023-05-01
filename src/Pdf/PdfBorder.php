@@ -260,7 +260,7 @@ class PdfBorder
     public function isSet(string|int $value): bool
     {
         if (\is_string($value)) {
-            return StringUtils::contains((string) $this->value, $value, true);
+            return StringUtils::contains((string) $this->value, $value);
         }
 
         return $this->value === $value;

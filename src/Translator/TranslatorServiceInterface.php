@@ -17,6 +17,15 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
  * Service to detect and translate texts.
+ *
+ * @psalm-type TranslatorDetectType = array{
+ *     tag: string,
+ *     name: string|null}
+ * @psalm-type TranslatorTranslateType = array{
+ *     source: string,
+ *     target: string,
+ *     from: TranslatorDetectType,
+ *     to: TranslatorDetectType}
  */
 #[AutoconfigureTag]
 interface TranslatorServiceInterface
@@ -28,7 +37,7 @@ interface TranslatorServiceInterface
      *
      * @return array|false the detected language; false if not found or if an error occurs
      *
-     * @psalm-return array{tag: string, name: string|null}|false
+     * @psalm-return TranslatorDetectType|false
      */
     public function detect(string $text): array|false;
 
@@ -60,13 +69,13 @@ interface TranslatorServiceInterface
      *
      * @param string  $text the text to translate
      * @param string  $to   the language of the output text
-     * @param ?string $from the language of the input text. If the form parameter is not specified, automatic
+     * @param ?string $from the language of the input text. If the 'from' parameter is not specified, automatic
      *                      language detection is applied to determine the source language.
      * @param bool    $html defines whether the text being translated is HTML text (true) or plain text (false)
      *
      * @return array|false the translated text; false if an error occurs
      *
-     * @psalm-return array{source: string, target: string, from: array{tag: string, name: string|null}, to: array{tag: string, name: string|null}}|false
+     * @psalm-return TranslatorTranslateType|false
      */
     public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false;
 }

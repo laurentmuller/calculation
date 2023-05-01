@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\ImageSize;
-use Monolog\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ImageSize::class)]
 class ImageSizeTest extends TestCase

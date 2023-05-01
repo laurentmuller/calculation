@@ -25,53 +25,31 @@
          * @returns {JQuery} this instance.
          */
         notify: function (type, message, title, options) {
-            // merge options
-            const settings = $.extend({}, this.DEFAULTS, options);
+            // merge and update options
+            const data = this._getDataset(options.dataset);
+            const settings = $.extend({}, this.DEFAULTS, data, options);
             settings.closeButton = settings.closeButton || !settings.autohide;
             settings.position = this._checkPosition(settings.position);
             settings.type = this._checkType(type);
             settings.message = message;
             settings.title = title;
             if (!settings.title && settings.displaySubtitle) {
-                settings.displaySubtitle = false;
                 settings.title = settings.subtitle;
+                settings.displaySubtitle = false;
                 settings.subtitle = null;
             }
 
-            // create DOM
+            // get container and create toast
             const $container = this._getContainer(settings);
-            const $title = this._createTitle(settings);
-            const $message = this._createMessage(settings);
-            const $progress = this._createProgressBar(settings);
             const $toast = this._createToast(settings);
-
-            // save identifier
-            this.id = $container.attr('id');
-
-            // add children
-            if ($title) {
-                $toast.append($title);
-            }
-            $toast.append($message);
-            if ($progress) {
-                $toast.append($progress);
-            }
             if (this._isPrepend(settings.position)) {
                 $container.prepend($toast);
             } else {
                 $container.append($toast);
             }
 
-            // update background color
-            const background = $toast.css('background-color');
-            if (background && background.startsWith('rgba')) {
-                const start = background.indexOf('(');
-                const end = background.indexOf(')', start + 1);
-                if (start !== -1 && end !== -1) {
-                    const rgb = background.substring(start + 1, end).split(',').splice(0, 3).join(',');
-                    $toast.css('background-color', `rgb(${rgb})`);
-                }
-            }
+            //save identifier
+            this.id = $container.attr('id');
 
             // show
             return this._showToast($toast, settings);
@@ -254,7 +232,10 @@
             autohide: true,
 
             // handler when a toast is hidden
-            onHide: null
+            onHide: null,
+
+            // the JQuery selector to get data options from
+            dataset: null
         },
 
         // ------------------------
@@ -542,7 +523,10 @@
          * @private
          */
         _createToast: function (options) {
-            return $('<div/>', {
+            const $title = this._createTitle(options);
+            const $message = this._createMessage(options);
+            const $progress = this._createProgressBar(options);
+            const $toast = $('<div/>', {
                 'role': 'alert',
                 'aria-atomic': 'true',
                 'aria-live': 'assertive',
@@ -554,6 +538,32 @@
                     'border-width': '1px'
                 }
             });
+            this._updateBackground($toast);
+            if ($title) {
+                $toast.append($title);
+            }
+            $toast.append($message);
+            if ($progress) {
+                $toast.append($progress);
+            }
+            return $toast;
+        },
+
+        /**
+         * Update the toast background
+         * @param {jQuery} $toast the toast to update.
+         * @private
+         */
+        _updateBackground($toast) {
+            const background = $toast.css('background-color');
+            if (background && background.startsWith('rgba')) {
+                const start = background.indexOf('(');
+                const end = background.indexOf(')', start + 1);
+                if (start !== -1 && end !== -1) {
+                    const rgb = background.substring(start + 1, end).split(',').splice(0, 3).join(',');
+                    $toast.css('background-color', `rgb(${rgb})`);
+                }
+            }
         },
 
         /**
@@ -638,6 +648,20 @@
             if (percent >= 100) {
                 $progress.parents('.toast').removeInterval();
             }
+        },
+
+        /**
+         * Gets dataset options.
+         *
+         * @param {string} [dataset] - The toast options.
+         * @return {Object}
+         * @private
+         */
+        _getDataset: function (dataset){
+            if (dataset) {
+                return $(dataset).data() || {};
+            }
+            return {};
         }
     };
 }(window, jQuery));

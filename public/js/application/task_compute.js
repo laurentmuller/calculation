@@ -32,7 +32,7 @@ function showError(message) {
     resetValues();
     const title = $('.card-title').text();
     message = message || $('#edit-form').data('failed');
-    Toaster.danger(message, title, $('#flashes').data());
+    Toaster.danger(message, title);
 }
 
 /**

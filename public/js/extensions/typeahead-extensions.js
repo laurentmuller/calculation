@@ -38,7 +38,7 @@
                 onError: function () {
                     const message = options.error;
                     const title = $('#edit-form').data('title');
-                    Toaster.danger(message, title, $('#flashes').data());
+                    Toaster.danger(message, title);
                 }
             };
             const settings = $.extend(true, defaults, options);

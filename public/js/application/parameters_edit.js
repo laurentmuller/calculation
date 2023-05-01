@@ -69,7 +69,6 @@ function displayNotification() {
     'use strict';
     // get random text
     let title = $('.card-title').text();
-    const data = $("#flashes").data();
     const url = $('#edit-form').data("random");
     $.getJSON(url, function (response) {
         if (response.result && response.content) {
@@ -83,22 +82,22 @@ function displayNotification() {
                 title = null;
             }
             // options
-            const options = $.extend({}, data, {
+            const options = {
                 icon: $('#message_icon').isChecked(),
                 position: $("#message_position").val(),
                 timeout: $('#message_timeout').intVal(),
                 progress: $('#message_progress').intVal(),
                 displayClose: $('#message_close').isChecked(),
                 displaySubtitle: $('#message_sub_title').isChecked(),
-            });
+            };
             Toaster.notify(type, content, title, options);
         } else {
             const message = $('form').data('failure');
-            Toaster.danger(message, title, data);
+            Toaster.danger(message, title);
         }
     }).fail(function () {
         const message = $('form').data('failure');
-        Toaster.danger(message, title, data);
+        Toaster.danger(message, title);
     });
 }
 

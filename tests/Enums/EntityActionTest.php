@@ -23,6 +23,14 @@ class EntityActionTest extends TypeTestCase
 {
     private ?TranslatorInterface $translator = null;
 
+    public static function getDefault(): array
+    {
+        return [
+            [EntityAction::getDefault(), EntityAction::EDIT],
+            [PropertyServiceInterface::DEFAULT_ACTION, EntityAction::EDIT],
+        ];
+    }
+
     public static function getLabel(): array
     {
         return [
@@ -32,19 +40,25 @@ class EntityActionTest extends TypeTestCase
         ];
     }
 
+    public static function getValues(): array
+    {
+        return [
+            [EntityAction::NONE, 'none'],
+            [EntityAction::EDIT, 'edit'],
+            [EntityAction::SHOW, 'show'],
+        ];
+    }
+
     public function testCount(): void
     {
         self::assertCount(3, EntityAction::cases());
         self::assertCount(3, EntityAction::sorted());
     }
 
-    public function testDefault(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
+    public function testDefault(EntityAction $value, EntityAction $expected): void
     {
-        $expected = EntityAction::EDIT;
-        $default = EntityAction::getDefault();
-        self::assertSame($expected, $default);
-        $default = PropertyServiceInterface::DEFAULT_ACTION;
-        self::assertSame($expected, $default); // @phpstan-ignore-line
+        self::assertSame($expected, $value);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
@@ -74,11 +88,10 @@ class EntityActionTest extends TypeTestCase
         self::assertSame($expected, $action->trans($translator));
     }
 
-    public function testValue(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    public function testValue(EntityAction $action, string $expected): void
     {
-        self::assertSame('edit', EntityAction::EDIT->value); // @phpstan-ignore-line
-        self::assertSame('show', EntityAction::SHOW->value); // @phpstan-ignore-line
-        self::assertSame('none', EntityAction::NONE->value); // @phpstan-ignore-line
+        self::assertSame($expected, $action->value);
     }
 
     /**

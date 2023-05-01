@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\ImageExtension;
-use Monolog\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ImageExtension::class)]
 class ImageExtensionTest extends TestCase

@@ -364,7 +364,7 @@ class UpdateAssetsCommand extends Command
     private function getTargetFile(string $target, array $plugin, string $file): string
     {
         $name = $plugin['target'] ?? $plugin['name'];
-        if (StringUtils::startWith($file, self::DIST_PREFIX, true)) {
+        if (StringUtils::startWith($file, self::DIST_PREFIX)) {
             $file = \substr($file, \strlen(self::DIST_PREFIX));
         }
 

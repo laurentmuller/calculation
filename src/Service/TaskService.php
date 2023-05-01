@@ -30,27 +30,26 @@ class TaskService
     {
     }
 
+    /**
+     * Compute result for the given query.
+     */
     public function computeQuery(TaskComputeQuery $query): TaskComputeResult
     {
         $task = $query->getTask();
         $quantity = $query->getQuantity();
         $result = new TaskComputeResult($task, $quantity);
-        $items = $query->getItems();
-        $taskItems = $task->getItems();
-        foreach ($taskItems as $taskItem) {
-            $id = (int) $taskItem->getId();
-            $name = (string) $taskItem->getName();
-            if (\in_array($id, $items, true)) {
-                $value = $taskItem->findValue($quantity);
-                $result->addCheckedResult($id, $name, $value);
-            } else {
-                $result->addUncheckedResult($id, $name);
-            }
+        $keys = $query->getItems();
+        $items = $task->getItems();
+        foreach ($items as $item) {
+            $result->addItem($item, \in_array($item->getId(), $keys, true));
         }
 
         return $result;
     }
 
+    /**
+     * Create a query for the given request.
+     */
     public function createQuery(Request $request): ?TaskComputeQuery
     {
         $id = $this->getRequestInt($request, 'id');
@@ -67,6 +66,11 @@ class TaskService
         return $query;
     }
 
+    /**
+     * @return Task[]
+     *
+     * @psalm-suppress MixedReturnTypeCoercion
+     */
     public function getSortedTasks(): array
     {
         return $this->repository->getSortedBuilder(false)

@@ -14,12 +14,20 @@ namespace App\Tests\Enums;
 
 use App\Enums\Theme;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\Test\TypeTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Theme::class)]
-class ThemeTest extends TypeTestCase
+class ThemeTest extends TestCase
 {
+    public static function getValues(): array
+    {
+        return [
+            [Theme::DARK, 'dark'],
+            [Theme::LIGHT, 'light'],
+        ];
+    }
+
     public function testCount(): void
     {
         self::assertCount(2, Theme::cases());
@@ -82,10 +90,10 @@ class ThemeTest extends TypeTestCase
         self::assertSame('theme.light.name', Theme::LIGHT->trans($translator));
     }
 
-    public function testValue(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    public function testValue(Theme $theme, string $expected): void
     {
-        self::assertSame('dark', Theme::DARK->value); // @phpstan-ignore-line
-        self::assertSame('light', Theme::LIGHT->value); // @phpstan-ignore-line
+        self::assertSame($expected, $theme->value);
     }
 
     /**

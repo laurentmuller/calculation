@@ -88,7 +88,6 @@ class TaskController extends AbstractEntityController
     #[Route(path: '/compute/{id?}', name: 'task_compute', requirements: ['id' => Requirement::DIGITS])]
     public function compute(Request $request, TaskService $service, Task $task = null): Response
     {
-        /** @var Task[] $tasks */
         $tasks = $service->getSortedTasks();
         if (!$task instanceof Task || $task->isEmpty()) {
             $task = $tasks[0];

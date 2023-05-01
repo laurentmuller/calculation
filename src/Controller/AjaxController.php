@@ -24,7 +24,6 @@ use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\ProductRepository;
-use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use App\Service\CalculationService;
 use App\Service\FakerService;
@@ -37,6 +36,7 @@ use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -151,7 +151,7 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Translate a text.
+     * Identifies the language of a piece of text.
      *
      * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
      */
@@ -302,27 +302,24 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Search streets, zip codes or cities.
+     * Search address.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/address', name: 'ajax_search_address')]
     public function searchAddress(Request $request, SwissPostService $service): JsonResponse
     {
-        $zip = $this->getRequestString($request, 'zip');
-        $city = $this->getRequestString($request, 'city');
-        $street = $this->getRequestString($request, 'street');
         $limit = $this->getRequestInt($request, 'limit', 25);
-        if ($zip) {
-            $rows = $service->findZip($zip, $limit);
-        } elseif ($city) {
-            $rows = $service->findCity($city, $limit);
-        } elseif ($street) {
-            $rows = $service->findStreet($street, $limit);
-        } else {
-            $rows = [];
+        if (null !== $zip = $this->getRequestString($request, 'zip')) {
+            return $this->json($service->findZip($zip, $limit));
+        }
+        if (null !== $city = $this->getRequestString($request, 'city')) {
+            return $this->json($service->findCity($city, $limit));
+        }
+        if (null !== $street = $this->getRequestString($request, 'street')) {
+            return $this->json($service->findStreet($street, $limit));
         }
 
-        return $this->json($rows);
+        return $this->json([]);
     }
 
     /**
@@ -332,45 +329,7 @@ class AjaxController extends AbstractController
     #[Route(path: '/search/customer', name: 'ajax_search_customer')]
     public function searchCustomer(Request $request, CalculationRepository $repository): JsonResponse
     {
-        return $this->getDistinctValues($request, $repository, 'customer');
-    }
-
-    /**
-     * Gets sorted, distinct and not null values.
-     *
-     * The request must have the following fields:
-     * <ul>
-     * <li><b>entity</b>: the entity class name without the namespace.</li>
-     * <li><b>field</b>: the field name (column) to get values for.</li>
-     * <li><b>query</b>: the value to search.</li>
-     * <li><b>limit</b>: the number of results to retrieve (default = 15).</li>
-     * </ul>
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/distinct', name: 'ajax_search_distinct')]
-    public function searchDistinct(Request $request, EntityManagerInterface $manager): JsonResponse
-    {
-        $className = 'App\\Entity\\' . \ucfirst($this->getRequestString($request, 'entity', ''));
-        if (!\class_exists($className)) {
-            return $this->jsonFalse([
-                'values' => [],
-            ]);
-        }
-        $field = $this->getRequestString($request, 'field');
-        if (!StringUtils::isString($field)) {
-            return $this->jsonFalse([
-                'values' => [],
-            ]);
-        }
-
-        try {
-            /** @psalm-var AbstractRepository<AbstractEntity> $repository */
-            $repository = $manager->getRepository($className);
-
-            return $this->getDistinctValues($request, $repository, (string) $field);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
+        return $this->getDistinctValuesFromRepository($request, $repository, 'customer');
     }
 
     /**
@@ -403,9 +362,9 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/supplier', name: 'ajax_search_supplier')]
-    public function searchSupplier(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository): JsonResponse
+    public function searchSupplier(Request $request, EntityManagerInterface $manager): JsonResponse
     {
-        return $this->getDistinctValuesForCategoryItem($request, $productRepository, $taskRepository, 'supplier');
+        return $this->getDistinctValuesFromManager($request, $manager, 'supplier');
     }
 
     /**
@@ -415,7 +374,7 @@ class AjaxController extends AbstractController
     #[Route(path: '/search/title', name: 'ajax_search_title')]
     public function searchTitle(Request $request, CustomerRepository $repository): JsonResponse
     {
-        return $this->getDistinctValues($request, $repository, 'title');
+        return $this->getDistinctValuesFromRepository($request, $repository, 'title');
     }
 
     /**
@@ -423,9 +382,9 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/search/unit', name: 'ajax_search_unit')]
-    public function searchUnit(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository): JsonResponse
+    public function searchUnit(Request $request, EntityManagerInterface $manager): JsonResponse
     {
-        return $this->getDistinctValuesForCategoryItem($request, $productRepository, $taskRepository, 'unit');
+        return $this->getDistinctValuesFromManager($request, $manager, 'unit');
     }
 
     /**
@@ -527,6 +486,41 @@ class AjaxController extends AbstractController
         return null;
     }
 
+    private function getDistinctSql(string $field, string $query, int $limit): string
+    {
+        return <<<SQL
+                SELECT DISTINCT
+                    p.$field
+                FROM
+                    sy_Product as p
+                WHERE
+                    p.$field LIKE '%$query%'
+                UNION
+                SELECT DISTINCT
+                    t.$field
+                FROM
+                    sy_Task as t
+                WHERE
+                    t.$field LIKE '%$query%'
+                ORDER BY
+                    $field
+                LIMIT $limit
+            SQL;
+    }
+
+    /**
+     * Search distinct values from products and tasks.
+     */
+    private function getDistinctValuesFromManager(Request $request, EntityManagerInterface $manager, string $field): JsonResponse
+    {
+        return $this->getDistinctValuesFromRequest($request, function (string $query, int $limit) use ($manager, $field): array {
+            $sql = $this->getDistinctSql($field, $query, $limit);
+
+            return $manager->createNativeQuery($sql, new ResultSetMapping())
+                ->getSingleColumnResult();
+        });
+    }
+
     /**
      * Search distinct values.
      *
@@ -536,49 +530,29 @@ class AjaxController extends AbstractController
      * @param AbstractRepository<T> $repository the entity repository to search from
      * @param string                $field      the field name (column) to get values for
      */
-    private function getDistinctValues(Request $request, AbstractRepository $repository, string $field): JsonResponse
+    private function getDistinctValuesFromRepository(Request $request, AbstractRepository $repository, string $field): JsonResponse
     {
-        try {
-            $search = $this->getRequestString($request, 'query', '');
-            if (StringUtils::isString($search)) {
-                $limit = $this->getRequestInt($request, 'limit', 15);
-                $values = $repository->getDistinctValues($field, $search, $limit);
-                if ([] !== $values) {
-                    return $this->json($values);
-                }
-            }
-
-            // empty
-            return $this->jsonFalse([
-                'values' => [],
-            ]);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
+        return $this->getDistinctValuesFromRequest($request, fn (string $query, int $limit): array => $repository->getDistinctValues($field, $query, $limit));
     }
 
     /**
-     * Search distinct values from products and tasks.
+     * @psalm-param callable(string, int): array $callback
      */
-    private function getDistinctValuesForCategoryItem(Request $request, ProductRepository $productRepository, TaskRepository $taskRepository, string $field): JsonResponse
+    private function getDistinctValuesFromRequest(Request $request, callable $callback): JsonResponse
     {
+        $query = \trim($this->getRequestString($request, 'query', ''));
+        if ('' === $query) {
+            return $this->jsonFalse(['values' => []]);
+        }
+
         try {
-            $search = $this->getRequestString($request, 'query', '');
-            if (StringUtils::isString($search)) {
-                $limit = $this->getRequestInt($request, 'limit', 15);
-                $productValues = $productRepository->getDistinctValues($field, $search);
-                $taskValues = $taskRepository->getDistinctValues($field, $search);
-                $values = \array_unique(\array_merge($productValues, $taskValues));
-                \sort($values, \SORT_LOCALE_STRING);
-                $values = \array_slice($values, 0, $limit);
-                if ([] !== $values) {
-                    return $this->json($values);
-                }
+            $limit = $this->getRequestInt($request, 'limit', 15);
+            $values = $callback($query, $limit);
+            if ([] !== $values) {
+                return $this->json($values);
             }
 
-            return $this->jsonFalse([
-                'values' => [],
-            ]);
+            return $this->jsonFalse(['values' => []]);
         } catch (\Exception $e) {
             return $this->jsonException($e);
         }

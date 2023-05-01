@@ -160,7 +160,7 @@ function hidePanel(e) {
     $.post(url, function (message) {
         $card.fadeOut(200, function () {
             $card.remove();
-            Toaster.info(message, title, $('#flashes').data());
+            Toaster.info(message, title);
         });
     });
 }
@@ -185,9 +185,8 @@ function updateCounter(e) {
 
     const url = $parent.data('path');
     $.post(url, {'count': count}, function (message) {
-        //window.location.assign('/');
         window.location.reload();
-        Toaster.info(message, title, $('#flashes').data());
+        Toaster.info(message, title);
     });
 }
 

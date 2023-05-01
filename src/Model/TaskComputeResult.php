@@ -13,16 +13,19 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Entity\Task;
+use App\Entity\TaskItem;
 
 /**
  * Contains result of a computed task.
+ *
+ * @psalm-type ResultType array{id: int, name: string, value: float, amount: float, checked: bool}
  */
 class TaskComputeResult implements \JsonSerializable
 {
     private float $overall = 0;
 
     /**
-     * @psalm-var array<array{id: int, name: string, value: float, amount: float, checked: bool}>
+     * @psalm-var ResultType[]
      */
     private array $results = [];
 
@@ -30,14 +33,22 @@ class TaskComputeResult implements \JsonSerializable
     {
     }
 
-    public function addCheckedResult(int $id, string $name, float $value): self
+    public function addItem(TaskItem $item, bool $checked): self
     {
-        return $this->addResult($id, $name, $value, true);
-    }
+        $id = (int) $item->getId();
+        $name = (string) $item->getName();
+        $value = $item->findValue($this->quantity);
+        $amount = $checked ? $this->quantity * $value : 0.0;
+        $this->results[] = [
+            'id' => $id,
+            'name' => $name,
+            'value' => $value,
+            'amount' => $amount,
+            'checked' => $checked,
+        ];
+        $this->overall += $amount;
 
-    public function addUncheckedResult(int $id, string $name): self
-    {
-        return $this->addResult($id, $name, 0, false);
+        return $this;
     }
 
     public function getOverall(): float
@@ -51,7 +62,7 @@ class TaskComputeResult implements \JsonSerializable
     }
 
     /**
-     * @psalm-return array<array{id: int, name: string, value: float, amount: float, checked: bool}>
+     * @psalm-return ResultType[]
      */
     public function getResults(): array
     {
@@ -76,20 +87,5 @@ class TaskComputeResult implements \JsonSerializable
             'overall' => $this->overall,
             'results' => $this->results,
         ];
-    }
-
-    private function addResult(int $id, string $name, float $value, bool $checked): self
-    {
-        $amount = $this->quantity * $value;
-        $this->results[] = [
-            'id' => $id,
-            'name' => $name,
-            'value' => $value,
-            'amount' => $amount,
-            'checked' => $checked,
-        ];
-        $this->overall += $amount;
-
-        return $this;
     }
 }

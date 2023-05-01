@@ -483,12 +483,12 @@ const Application = {
         const $form = $('#edit-form');
         const title = $form.data('title');
         message = message || $form.data('error-update');
-        const options = $.extend({}, $('#flashes').data(), {
+        const options = {
             onHide: function () {
                 const html = message.replace('<br><br>', ' ');
                 $('#error-all > p').addClass('text-danger text-center').html(html);
             }
-        });
+        };
         Toaster.danger(message, title, options);
 
         return this;

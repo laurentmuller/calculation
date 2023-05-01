@@ -610,7 +610,7 @@ function initializeDangerTooltips($table) {
             if ('abort' !== jqXHR.statusText) {
                 const title = $('.card-title').text();
                 const message = $table.data('errorMessage');
-                Toaster.danger(message, title, $('#flashes').data());
+                Toaster.danger(message, title);
             }
         },
 

@@ -15,25 +15,38 @@ namespace App\Tests\Enums;
 use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\Test\TypeTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(TableView::class)]
-class TableViewTest extends TypeTestCase
+class TableViewTest extends TestCase
 {
+    public static function getDefault(): array
+    {
+        return [
+            [TableView::getDefault(), TableView::TABLE],
+            [PropertyServiceInterface::DEFAULT_DISPLAY_MODE, TableView::TABLE],
+        ];
+    }
+
+    public static function getValues(): array
+    {
+        return [
+            [TableView::TABLE, 'table'],
+            [TableView::CUSTOM, 'custom'],
+        ];
+    }
+
     public function testCount(): void
     {
         self::assertCount(2, TableView::cases());
         self::assertCount(2, TableView::sorted());
     }
 
-    public function testDefault(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
+    public function testDefault(TableView $value, TableView $expected): void
     {
-        $expected = TableView::TABLE;
-        $default = TableView::getDefault();
-        self::assertSame($expected, $default);
-        $default = PropertyServiceInterface::DEFAULT_DISPLAY_MODE;
-        self::assertSame($expected, $default); // @phpstan-ignore-line
+        self::assertSame($expected, $value);
     }
 
     public function testLabel(): void
@@ -68,10 +81,10 @@ class TableViewTest extends TypeTestCase
         self::assertSame('table_view.table', TableView::TABLE->trans($translator));
     }
 
-    public function testValue(): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    public function testValue(TableView $view, string $expected): void
     {
-        self::assertSame('custom', TableView::CUSTOM->value); // @phpstan-ignore-line
-        self::assertSame('table', TableView::TABLE->value); // @phpstan-ignore-line
+        self::assertSame($expected, $view->value);
     }
 
     /**

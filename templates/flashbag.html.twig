@@ -1,15 +1,13 @@
 {% from 'macros/_attributes.html.twig' import attributes %}
 {# add a single flash message #}
 {% macro addFlashbag(key, message) -%}
-    {% set values = message|split('|') %}
-    {% set title = (values|length == 2) ? values[0] : ('flashbag.' ~ key)|trans %}
-    {% set content = (values|length == 2) ? values[1] : message %}
-    <p class="flash" data-type="{{ key }}" data-title="{{ title }}">{{ content }}</p>
+    <p class="flash" data-type="{{ key }}" data-title="{{ ('flashbag.' ~ key)|trans }}">{{ message }}</p>
 {%- endmacro %}
 {# add all flash messages #}
 {% apply spaceless %}
     {% set is_logout = app.request.get('logout', '') == 'success' %}
     {% set flash_attributes = user_service.messageAttributes|merge({
+        'dataset': '#flashes',
         'target': '.page-content',
         'subtitle': app_name_version,
         'close-title': 'common.button_close'|trans,

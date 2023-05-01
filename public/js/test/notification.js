@@ -43,9 +43,10 @@ function random() {
 (function ($) {
     'use strict';
     // default options
-    const options = $('#flashes').data();
-    options.onHide = function (settings) {
-        window.console.log(JSON.stringify(settings, null, 4));
+    const options = {
+        onHide: function (settings) {
+            window.console.log(JSON.stringify(settings, null, 4));
+        }
     };
 
     // handle notify button click

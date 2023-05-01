@@ -90,13 +90,13 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Gets sorted, distinct and not null values for the given column.
      *
-     * @param string  $field the field name (column) to get values for
-     * @param ?string $value a value to search within the column or <code>null</code> for all
-     * @param int     $limit the maximum number of results to retrieve (the 'limit') or <code>-1</code> for all
+     * @param string $field the field name (column) to get values for
+     * @param string $value a value to search within the column or an empty string for all
+     * @param int    $limit the maximum number of results to retrieve (the 'limit') or <code>-1</code> for all
      *
      * @return array an array, maybe empty; of matching values
      */
-    public function getDistinctValues(string $field, ?string $value = null, int $limit = -1): array
+    public function getDistinctValues(string $field, string $value = '', int $limit = -1): array
     {
         $name = self::DEFAULT_ALIAS . '.' . $field;
         $builder = $this->createQueryBuilder(self::DEFAULT_ALIAS)

@@ -11,7 +11,7 @@
 }
 
 /*
- * Custom control checked
+ * Custom control checked. Can be copied from .btn-xxx
  */
 .custom-control-primary:checked ~ .custom-control-label::before {
     border-color: var(--primary);

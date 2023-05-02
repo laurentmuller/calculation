@@ -8,9 +8,9 @@
 /**
  * Vendor Files
  */
-<!--#include file="vendor/jquery-validate/jquery.validate.js" -->
-<!--#include file="vendor/jquery-validate/additional-methods.js" -->
-<!--#include file="vendor/jquery-validate/localization/messages_fr.js" -->
+<!--#include file="vendor/jquery-validation/jquery.validate.js" -->
+<!--#include file="vendor/jquery-validation/additional-methods.js" -->
+<!--#include file="vendor/jquery-validation/localization/messages_fr.js" -->
 
 /**
  * Extensions

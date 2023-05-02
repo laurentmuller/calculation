@@ -34,8 +34,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  *     disabled?: bool,
  *     files: string[]}
  * @psalm-type CopyEntryType = array{
- *     search: string,
- *     style: string,
+ *     source: string,
+ *     target: string,
  *     entries: string[]}
  * @psalm-type ConfigurationType = array{
  *     source: string,
@@ -43,7 +43,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  *     format: string,
  *     plugins: PluginType[],
  *     prefixes?: array<string, string>,
- *     renames?: array<string, string>,
  *     file-style?: string[],
  *     copy-style?: array<string, string>,
  *     copy-entries?: CopyEntryType[]}
@@ -65,12 +64,12 @@ class UpdateAssetsCommand extends Command
         TEXT;
 
     /**
-     * The distribution file prefix.
+     * The distribution directory prefix.
      */
     private const DIST_PREFIX = 'dist/';
 
     /**
-     * The vendor configuration file name.
+     * The configuration file name.
      */
     private const VENDOR_FILE_NAME = 'vendor.json';
 
@@ -88,33 +87,26 @@ class UpdateAssetsCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
         if (null === $publicDir = $this->getPublicDir()) {
-            $this->writeNote('No public directory found.');
-
             return Command::INVALID;
         }
         $configuration = $this->loadConfiguration($publicDir);
         if (null === $configuration) {
-            $this->writeNote('No configuration found.');
-
             return Command::INVALID;
         }
         if (!$this->propertyExists($configuration, ['source', 'target', 'format', 'plugins'], true)) {
             return Command::INVALID;
         }
-
         $source = $configuration['source'];
         $target = FileUtils::buildPath($publicDir, $configuration['target']);
         if (!$targetTemp = $this->getTargetTemp($publicDir)) {
             return Command::FAILURE;
         }
 
+        $countFiles = 0;
+        $countPlugins = 0;
         $format = $configuration['format'];
         $plugins = $configuration['plugins'];
         $prefixes = $this->getConfigArray($configuration, 'prefixes');
-        $renames = $this->getConfigArray($configuration, 'renames');
-
-        $countFiles = 0;
-        $countPlugins = 0;
 
         try {
             foreach ($plugins as $plugin) {
@@ -122,15 +114,19 @@ class UpdateAssetsCommand extends Command
                 $version = $plugin['version'];
                 $display = $plugin['display'] ?? $name;
                 if ($this->isPluginDisabled($plugin)) {
-                    $this->writeVerbose("Skip   : $display v$version", 'fg=gray');
+                    $this->writeVerbose(\sprintf('Skip   : %s v%s', $display, $version), 'fg=gray');
                     continue;
                 }
-                $this->writeVerbose("Install: $display v$version");
                 $files = $plugin['files'];
+                if ([] === $files) {
+                    $this->writeVerbose(\sprintf('Skip   : %s v%s (No file)', $display, $version), 'fg=gray');
+                    continue;
+                }
+                $this->writeVerbose(\sprintf('Install: %s v%s', $display, $version));
                 foreach ($files as $file) {
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
                     $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
-                    if ($this->copyFile($sourceFile, $configuration, $targetFile, $prefixes, $renames)) {
+                    if ($this->copyFile($sourceFile, $configuration, $targetFile, $prefixes)) {
                         ++$countFiles;
                     }
                 }
@@ -187,12 +183,11 @@ class UpdateAssetsCommand extends Command
     /**
      * @psalm-param ConfigurationType $configuration
      * @psalm-param array<string, string> $prefixes
-     * @psalm-param array<string, string> $renames
      */
-    private function copyFile(string $sourceFile, array $configuration, string $targetFile, array $prefixes, array $renames): bool
+    private function copyFile(string $sourceFile, array $configuration, string $targetFile, array $prefixes): bool
     {
         if (false !== ($content = $this->readFile($sourceFile))) {
-            return $this->dumpFile($content, $configuration, $targetFile, $prefixes, $renames);
+            return $this->dumpFile($content, $configuration, $targetFile, $prefixes);
         }
 
         return false;
@@ -217,15 +212,15 @@ class UpdateAssetsCommand extends Command
     /**
      * @psalm-param string[] $entries
      */
-    private function copyStyleEntries(string $content, string $searchStyle, string $newStyle, array $entries): string
+    private function copyStyleEntries(string $content, string $source, string $target, array $entries): string
     {
-        $styles = $this->findStyles($content, $searchStyle);
+        $styles = $this->findStyles($content, $source);
         if (\is_array($styles)) {
             $result = '';
             foreach ($styles as $style) {
                 $styleEntries = $this->findStyleEntries($style, $entries);
                 if (\is_array($styleEntries)) {
-                    $result .= "$newStyle {\n";
+                    $result .= "$target {\n";
                     foreach ($styleEntries as $styleEntry) {
                         $styleEntry = \str_replace(';', ' !important;', $styleEntry);
                         $result .= "  $styleEntry\n";
@@ -234,7 +229,7 @@ class UpdateAssetsCommand extends Command
                 }
             }
             if ('' !== $result) {
-                return "\n/*\n * $newStyle (copied from $searchStyle)  \n */\n" . $result;
+                return "\n/*\n * $target (copied from $source)  \n */\n" . $result;
             }
         }
 
@@ -246,7 +241,7 @@ class UpdateAssetsCommand extends Command
      */
     private function countFiles(array $plugins): int
     {
-        return \array_reduce($plugins, function (int $carry, array $plugin) {
+        return \array_reduce($plugins, function (int $carry, array $plugin): int {
             /** @psalm-var PluginType $plugin */
             if (!$this->isPluginDisabled($plugin)) {
                 return $carry + \count($plugin['files']);
@@ -259,18 +254,14 @@ class UpdateAssetsCommand extends Command
     /**
      * @psalm-param ConfigurationType $configuration
      * @psalm-param array<string, string> $prefixes
-     * @psalm-param array<string, string> $renames
      */
-    private function dumpFile(string $content, array $configuration, string $targetFile, array $prefixes, array $renames): bool
+    private function dumpFile(string $content, array $configuration, string $targetFile, array $prefixes): bool
     {
         // prefix file
         $extension = \pathinfo($targetFile, \PATHINFO_EXTENSION);
         if (\array_key_exists($extension, $prefixes)) {
             $content = $prefixes[$extension] . $content;
         }
-
-        // rename file
-        $targetFile = StringUtils::pregReplace($renames, $targetFile);
 
         // update style
         $name = \pathinfo($targetFile, \PATHINFO_BASENAME);
@@ -339,8 +330,13 @@ class UpdateAssetsCommand extends Command
     private function getPublicDir(): ?string
     {
         $publicDir = FileUtils::buildPath($this->projectDir, 'public');
+        if (!FileUtils::exists($publicDir)) {
+            $this->writeNote('No public directory found.');
 
-        return FileUtils::exists($publicDir) ? $publicDir : null;
+            return null;
+        }
+
+        return $publicDir;
     }
 
     /**
@@ -405,7 +401,13 @@ class UpdateAssetsCommand extends Command
         /** @psalm-var ConfigurationType|null $configuration */
         $configuration = $this->loadJson($vendorFile);
 
-        return \is_array($configuration) ? $configuration : null;
+        if (!\is_array($configuration)) {
+            $this->writeNote('No configuration found.');
+
+            return null;
+        }
+
+        return $configuration;
     }
 
     private function loadJson(string $filename): ?array
@@ -493,10 +495,10 @@ class UpdateAssetsCommand extends Command
         }
         if (!empty($configuration['copy-entries'])) {
             foreach ($configuration['copy-entries'] as $entry) {
-                $searchStyle = $entry['search'];
-                $newStyle = $entry['style'];
+                $source = $entry['source'];
+                $target = $entry['target'];
                 $entries = $entry['entries'];
-                $toAppend .= $this->copyStyleEntries($content, $searchStyle, $newStyle, $entries);
+                $toAppend .= $this->copyStyleEntries($content, $source, $target, $entries);
             }
         }
 

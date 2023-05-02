@@ -9,7 +9,7 @@
  * Vendor Files
  */
 <!--#include file="vendor/html5sortable/html5sortable.js" -->
-<!--#include file="vendor/contextmenu/jquery.contextMenu.js" -->
+<!--#include file="vendor/jquery-contextmenu/jquery.contextMenu.js" -->
 
 /**
  * Extensions files

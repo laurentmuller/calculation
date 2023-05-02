@@ -538,7 +538,6 @@
                     'border-width': '1px'
                 }
             });
-            this._updateBackground($toast);
             if ($title) {
                 $toast.append($title);
             }
@@ -547,23 +546,6 @@
                 $toast.append($progress);
             }
             return $toast;
-        },
-
-        /**
-         * Update the toast background
-         * @param {jQuery} $toast the toast to update.
-         * @private
-         */
-        _updateBackground($toast) {
-            const background = $toast.css('background-color');
-            if (background && background.startsWith('rgba')) {
-                const start = background.indexOf('(');
-                const end = background.indexOf(')', start + 1);
-                if (start !== -1 && end !== -1) {
-                    const rgb = background.substring(start + 1, end).split(',').splice(0, 3).join(',');
-                    $toast.css('background-color', `rgb(${rgb})`);
-                }
-            }
         },
 
         /**
@@ -657,7 +639,7 @@
          * @return {Object}
          * @private
          */
-        _getDataset: function (dataset){
+        _getDataset: function (dataset) {
             if (dataset) {
                 return $(dataset).data() || {};
             }

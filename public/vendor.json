@@ -6,21 +6,15 @@
         "js": "/**! compression tag for ftp-deployment */\n\n",
         "css": "/**! compression tag for ftp-deployment */\n\n"
     },
-    "renames": {
-        "/\\.src\\./": "."
-    },
     "plugins": [
         {
             "name": "jquery",
             "version": "3.6.4",
-            "targe": "jquery",
             "files": [
-                "dist/jquery.js",
-                "dist/jquery.min.map"
+                "dist/jquery.js"
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.js",
             "name": "bootstrap",
             "version": "5.3.0-alpha3",
             "disabled": true,
@@ -33,7 +27,6 @@
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/webfonts/fa-brands-400.ttf",
             "name": "@fortawesome/fontawesome-free",
             "display": "fontawesome-free",
             "version": "6.4.0",
@@ -51,10 +44,8 @@
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js",
             "name": "jquery-validation",
             "version": "1.19.5",
-            "target": "jquery-validate",
             "files": [
                 "dist/jquery.validate.js",
                 "dist/additional-methods.js",
@@ -62,26 +53,24 @@
             ]
         },
         {
+            "example": "https://cdn.jsdelivr.net/npm/highcharts@11.0.0/highcharts.js",
             "name": "highcharts",
             "version": "11.0.0",
             "files": [
-                "highcharts.src.js",
+                "highcharts.js",
                 "highcharts.js.map",
-                "modules/accessibility.src.js",
+                "modules/accessibility.js",
                 "modules/accessibility.js.map"
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/html5sortable@0.13.3/dist/html5sortable.js",
             "name": "html5sortable",
             "version": "0.13.3",
-            "target": "html5sortable",
             "files": [
                 "dist/html5sortable.js"
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/mark.js@8.11.1/dist/jquery.mark.js",
             "name": "mark.js",
             "version": "8.11.1",
             "target": "jquery-mark",
@@ -90,20 +79,16 @@
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js",
             "name": "zxcvbn",
             "version": "4.4.2",
-            "target": "zxcvbn",
             "files": [
                 "dist/zxcvbn.js",
                 "dist/zxcvbn.js.map"
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/jquery-contextmenu@2.9.2/dist/jquery.contextMenu.js",
             "name": "jquery-contextmenu",
             "version": "2.9.2",
-            "target": "contextmenu",
             "files": [
                 "dist/jquery.contextMenu.css",
                 "dist/jquery.contextMenu.js",
@@ -114,10 +99,8 @@
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.js",
             "name": "clipboard",
             "version": "2.0.11",
-            "target": "clipboard",
             "files": [
                 "dist/clipboard.js"
             ]
@@ -126,7 +109,6 @@
             "display": "iconify",
             "name": "@iconify/iconify",
             "version": "1.0.7",
-            "target": "iconify",
             "disabled": true,
             "files": [
                 "dist/iconify.js"
@@ -135,7 +117,6 @@
         {
             "name": "bootstrap-table",
             "version": "1.21.4",
-            "target": "bootstrap-table",
             "files": [
                 "dist/bootstrap-table.js",
                 "dist/bootstrap-table.css",
@@ -169,10 +150,8 @@
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/font-mfizz@2.4.1/dist/font-mfizz.css",
             "name": "font-mfizz",
             "version": "2.4.1",
-            "target": "font-mfizz",
             "files": [
                 "dist/font-mfizz.css",
                 "dist/font-mfizz.eot",
@@ -211,8 +190,8 @@
     },
     "copy-entries": [
         {
-            "search": ".dropdown-menu",
-            "style": ".context-menu-list",
+            "source": ".dropdown-menu",
+            "target": ".context-menu-list",
             "entries": [
                 "background",
                 "background-color",
@@ -222,8 +201,8 @@
             ]
         },
         {
-            "search": ".dropdown-item",
-            "style": ".context-menu-item",
+            "source": ".dropdown-item",
+            "target": ".context-menu-item",
             "entries": [
                 "background-color",
                 "color",
@@ -238,8 +217,8 @@
             ]
         },
         {
-            "search": ".dropdown-item:hover, .dropdown-item:focus",
-            "style": ".context-menu-hover",
+            "source": ".dropdown-item:hover, .dropdown-item:focus",
+            "target": ".context-menu-hover",
             "entries": [
                 "background",
                 "background-color",
@@ -248,16 +227,16 @@
             ]
         },
         {
-            "search": ".dropdown-divider",
-            "style": ".context-menu-separator",
+            "source": ".dropdown-divider",
+            "target": ".context-menu-separator",
             "entries": [
                 "border-top",
                 "margin"
             ]
         },
         {
-            "search": ".dropdown-header",
-            "style": ".context-menu-header",
+            "source": ".dropdown-header",
+            "target": ".context-menu-header",
             "entries": [
                 "color",
                 "display",
@@ -267,8 +246,8 @@
             ]
         },
         {
-            "search": ".form-control",
-            "style": ".simple-editor",
+            "source": ".form-control",
+            "target": ".simple-editor",
             "entries": [
                 "color",
                 "background-color"

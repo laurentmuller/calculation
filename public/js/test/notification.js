@@ -44,6 +44,7 @@ function random() {
     'use strict';
     // default options
     const options = {
+        dataset: '#flashes',
         onHide: function (settings) {
             window.console.log(JSON.stringify(settings, null, 4));
         }
@@ -51,7 +52,7 @@ function random() {
 
     // handle notify button click
     $('.btn-notify').on('click', function () {
-        // options
+        // update options
         options.icon = $('#icon').isChecked();
         options.title = $('#title').isChecked();
         options.position = $('#position').val();

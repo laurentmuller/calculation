@@ -78,3 +78,30 @@
 body.dark .toast-header.toast-header-warning {
     color: var(--white) !important;
 }
+
+.toast-plugin .toast {
+    background-color: rgb(255, 255, 255);
+}
+
+body.dark .toast-plugin .toast {
+    background-color: rgb(0, 0, 0);
+}
+
+.page-content.sidebar-hide .toast-plugin.top-left,
+.page-content.sidebar-hide .toast-plugin.top-center,
+.page-content.sidebar-hide .toast-plugin.top-right {
+    margin-top: 80px !important;
+}
+
+.page-content:not(.sidebar-hide) .toast-plugin.top-left,
+.page-content:not(.sidebar-hide) .toast-plugin.center-left,
+.page-content:not(.sidebar-hide) .toast-plugin.bottom-left {
+    margin-left: 292px !important;
+}
+
+.page-content:not(.sidebar-hide) .modal,
+.page-content:not(.sidebar-hide) .toast-plugin.top-center,
+.page-content:not(.sidebar-hide) .toast-plugin.center-center,
+.page-content:not(.sidebar-hide) .toast-plugin.bottom-center {
+    margin-left: 136px !important;
+}

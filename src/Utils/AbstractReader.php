@@ -132,7 +132,8 @@ abstract class AbstractReader implements \Iterator
     public function rewind(): void
     {
         try {
-            if ($this->canRewind && \is_resource($this->stream) && \rewind($this->stream)) {
+            if ($this->canRewind && 0 !== $this->key
+                    && \is_resource($this->stream) && \rewind($this->stream)) {
                 $this->key = 0;
                 $this->parseNextLine();
             }

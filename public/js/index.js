@@ -8,7 +8,7 @@
 /**
  * Vendor Files
  */
-<!--#include file="vendor/contextmenu/jquery.contextMenu.js" -->
+<!--#include file="vendor/jquery-contextmenu/jquery.contextMenu.js" -->
 
 /**
  * Plugins files

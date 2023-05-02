@@ -83,6 +83,7 @@ function displayNotification() {
             }
             // options
             const options = {
+                dataset: '#flashes',
                 icon: $('#message_icon').isChecked(),
                 position: $("#message_position").val(),
                 timeout: $('#message_timeout').intVal(),

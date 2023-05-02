@@ -28,6 +28,7 @@ class GroupRepository extends AbstractRepository
      * The alias for the category entity.
      */
     private const CATEGORY_ALIAS = AbstractCategoryItemRepository::CATEGORY_ALIAS;
+
     /**
      * The alias for the group margin entity.
      */

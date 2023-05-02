@@ -25,11 +25,7 @@ trait RequestTrait
      */
     protected function getRequestAll(Request $request, string $key, array $default = []): array
     {
-        if (null !== $input = $this->getRequestBag($request, $key)) {
-            return $input->all($key);
-        }
-
-        return $default;
+        return $this->getRequestBag($request, $key)?->all($key) ?? $default;
     }
 
     /**
@@ -37,11 +33,7 @@ trait RequestTrait
      */
     protected function getRequestBoolean(Request $request, string $key, bool $default = false): bool
     {
-        if (null !== $input = $this->getRequestBag($request, $key)) {
-            return $input->getBoolean($key, $default);
-        }
-
-        return $default;
+        return $this->getRequestBag($request, $key)?->getBoolean($key, $default) ?? $default;
     }
 
     /**
@@ -49,11 +41,7 @@ trait RequestTrait
      */
     protected function getRequestFloat(Request $request, string $key, float $default = 0): float
     {
-        if (null !== $input = $this->getRequestBag($request, $key)) {
-            return (float) $input->get($key, $default);
-        }
-
-        return $default;
+        return (float) ($this->getRequestBag($request, $key)?->get($key, $default) ?? $default);
     }
 
     /**
@@ -64,11 +52,8 @@ trait RequestTrait
         if ($default instanceof \BackedEnum) {
             $default = (int) $default->value;
         }
-        if (null !== $input = $this->getRequestBag($request, $key)) {
-            return $input->getInt($key, $default);
-        }
 
-        return $default;
+        return $this->getRequestBag($request, $key)?->getInt($key, $default) ?? $default;
     }
 
     /**
@@ -81,12 +66,10 @@ trait RequestTrait
         if ($default instanceof \BackedEnum) {
             $default = (string) $default->value;
         }
-        if (null !== $input = $this->getRequestBag($request, $key)) {
-            /** @psalm-var ?string $default */
-            $default = $input->get($key, $default);
-        }
+        /** @psalm-var ?string $value */
+        $value = $this->getRequestBag($request, $key)?->get($key, $default) ?? $default;
 
-        return $default;
+        return $value;
     }
 
     /**
@@ -96,12 +79,10 @@ trait RequestTrait
      */
     protected function getRequestValue(Request $request, string $key, string|int|float|bool|null $default = null): string|int|float|bool|null
     {
-        if (null !== $input = $this->getRequestBag($request, $key)) {
-            /** @psalm-var scalar $default */
-            $default = $input->get($key, $default);
-        }
+        /** @psalm-var scalar $value */
+        $value = $this->getRequestBag($request, $key)?->get($key, $default) ?? $default;
 
-        return $default;
+        return $value;
     }
 
     private function getRequestBag(Request $request, string $key): ?ParameterBag

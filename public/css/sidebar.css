@@ -21,12 +21,11 @@
     margin-left: -17rem;
 }
 
-/* content */
+/* page-content */
 .page-content {
     width: calc(100% - 17rem);
     margin-top: 20px;
     margin-left: 17rem;
-    transition: margin-left .35s;
 }
 .page-content.sidebar-hide {
     width: 100%;

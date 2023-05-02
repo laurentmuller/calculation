@@ -62,7 +62,7 @@ class SimpleEditorType extends AbstractType
      * @psalm-param array{required:bool} $options
      *
      * @psalm-suppress MixedArrayAssignment
-     * @psalm-suppress PropertyTypeCoercion
+     * @psalm-suppress MixedPropertyTypeCoercion
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {

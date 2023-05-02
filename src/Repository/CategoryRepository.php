@@ -84,7 +84,7 @@ class CategoryRepository extends AbstractRepository
     public function getDropDownProducts(): array
     {
         $builder = $this->getDropDownQuery()
-            ->innerJoin('c.products', 'p');
+            ->innerJoin('c.products', self::PRODUCT_ALIAS);
 
         return $this->mergeDropDown($builder);
     }
@@ -101,7 +101,7 @@ class CategoryRepository extends AbstractRepository
     public function getDropDownTasks(): array
     {
         $builder = $this->getDropDownQuery()
-            ->innerJoin('c.tasks', 't');
+            ->innerJoin('c.tasks', self::TASK_ALIAS);
 
         return $this->mergeDropDown($builder);
     }

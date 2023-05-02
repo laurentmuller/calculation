@@ -5,7 +5,6 @@
  */
 .toast-plugin {
     position: fixed;
-    transition: all 0.35s ease;
 }
 
 .toast-plugin.top-left {

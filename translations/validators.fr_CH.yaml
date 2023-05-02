@@ -69,7 +69,7 @@ task_item:
   unique_name: Ce nom est déjà utilisé par une autre opération.
 username:
   already_used: Le nom d'utilisateur est déjà utilisé.
-  blank: Entrez un nom d'utilisateur s'il vous plait.
+  blank: Le nom d'utilisateur est requis.
   long: Le nom d'utilisateur est trop long.
   not_found: Le nom de l'utilisateur ou l'adresse e-mail est introuvable.
   short: Le nom d'utilisateur est trop court.

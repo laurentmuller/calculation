@@ -40,6 +40,8 @@ abstract class AbstractEntityController extends AbstractController
 
     /**
      * The entity class name.
+     *
+     * @var class-string<T>
      */
     private readonly string $className;
 
@@ -67,9 +69,10 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function checkPermission(EntityPermission ...$permissions): void
     {
-        $subject = EntityName::tryFindValue($this->className);
-        foreach ($permissions as $permission) {
-            $this->denyAccessUnlessGranted($permission, $subject);
+        if (null !== $subject = EntityName::tryFindValue($this->className)) {
+            foreach ($permissions as $permission) {
+                $this->denyAccessUnlessGranted($permission, $subject);
+            }
         }
     }
 

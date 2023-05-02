@@ -986,7 +986,7 @@ schema:
     tooltip: Afficher la définition de la table %name%
   table:
     title: Table %name%
-    description: Liste des colonnes et des associations de la base de données.
+    description: Liste des colonnes, des indexes et des associations de la table.
     empty: Aucune colonne n'est définie.
     error: La table '%name%' n'existe pas ou est introuvable.
     one_to_many: Un à plusieurs.

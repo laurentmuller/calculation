@@ -196,7 +196,7 @@ class TestController extends AbstractController
                 ->addCheckboxType();
         }
         $helper->field('level')
-            ->label('password.strength_level')
+            ->label('password.security_strength_level')
             ->addEnumType(StrengthLevel::class);
         $helper->field('captcha')
             ->label('captcha.label')
@@ -206,6 +206,7 @@ class TestController extends AbstractController
         $helper->field('alpha')
             ->label('captcha.label')
             ->add(AlphaCaptchaType::class);
+
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
@@ -221,7 +222,7 @@ class TestController extends AbstractController
             $level = $data['level'];
             if (StrengthLevel::NONE !== $level) {
                 $message .= '<li>';
-                $message .= $this->trans('password.strength_level');
+                $message .= $this->trans('password.security_strength_level');
                 $message .= ' : ';
                 $message .= $this->translateLevel($level);
                 $message .= '</li>';
@@ -271,6 +272,36 @@ class TestController extends AbstractController
             'key' => $service->getSiteKey(),
             'form' => $form,
         ]);
+    }
+
+    #[Route(path: '/search', name: 'test_search')]
+    public function search(Request $request, SearchService $service): JsonResponse
+    {
+        $query = $this->getRequestString($request, 'query');
+        $entity = $this->getRequestString($request, 'entity');
+        $limit = $this->getRequestInt($request, 'limit', 25);
+        $offset = $this->getRequestInt($request, 'offset');
+        $count = $service->count($query, $entity);
+        $results = $service->search($query, $entity, $limit, $offset);
+        foreach ($results as &$row) {
+            $type = $row[SearchService::COLUMN_TYPE];
+            $field = $row[SearchService::COLUMN_FIELD];
+            $lowerType = \strtolower($type);
+            $row[SearchService::COLUMN_ENTITY_NAME] = $this->trans("$lowerType.name");
+            $row[SearchService::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
+            $row[SearchService::COLUMN_CONTENT] = $service->formatContent("$type.$field", $row[SearchService::COLUMN_CONTENT]);
+        }
+        $data = [
+            'query' => $query,
+            'entity' => $entity,
+            'offset' => $offset,
+            'limit' => $limit,
+            'total' => $count,
+            'filtered' => \count($results),
+            'results' => $results,
+        ];
+
+        return $this->json($data);
     }
 
     /**
@@ -380,43 +411,13 @@ class TestController extends AbstractController
             return $this->json([$root]);
         }
 
-        return $this->render('test/treeview.html.twig', [
+        return $this->render('test/tree_view.html.twig', [
             'categories' => $this->getCategories($manager),
             'products' => $this->getProducts($manager),
             'states' => $this->getStates($manager),
             'currencies' => $this->getCurrencies(),
             'countries' => Countries::getNames(),
         ]);
-    }
-
-    #[Route(path: '/union', name: 'test_union')]
-    public function union(Request $request, SearchService $service): JsonResponse
-    {
-        $query = $this->getRequestString($request, 'query');
-        $entity = $this->getRequestString($request, 'entity');
-        $limit = $this->getRequestInt($request, 'limit', 25);
-        $offset = $this->getRequestInt($request, 'offset');
-        $count = $service->count($query, $entity);
-        $results = $service->search($query, $entity, $limit, $offset);
-        foreach ($results as &$row) {
-            $type = $row[SearchService::COLUMN_TYPE];
-            $field = $row[SearchService::COLUMN_FIELD];
-            $lowerType = \strtolower($type);
-            $row[SearchService::COLUMN_ENTITY_NAME] = $this->trans("$lowerType.name");
-            $row[SearchService::COLUMN_FIELD_NAME] = $this->trans("$lowerType.fields.$field");
-            $row[SearchService::COLUMN_CONTENT] = $service->formatContent("$type.$field", $row[SearchService::COLUMN_CONTENT]);
-        }
-        $data = [
-            'query' => $query,
-            'entity' => $entity,
-            'offset' => $offset,
-            'limit' => $limit,
-            'total' => $count,
-            'filtered' => \count($results),
-            'results' => $results,
-        ];
-
-        return $this->json($data);
     }
 
     /**

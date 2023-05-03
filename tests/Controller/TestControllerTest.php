@@ -24,10 +24,10 @@ class TestControllerTest extends AbstractControllerTestCase
         'notifications',
         'password',
         'recaptcha',
+        'search',
         'swiss',
         'translate',
         'tree',
-        'union',
         'word',
         ];
 

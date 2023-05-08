@@ -52,12 +52,12 @@ class CalculationEditStateType extends AbstractEntityType
             ->label('calculation.fields.margin')
             ->updateOption('number_pattern', PlainType::NUMBER_PERCENT)
             ->updateOption('percent_decimals', 0)
-            ->widgetClass('text-right')
+            ->widgetClass('text-end')
             ->addPlainType(true);
 
         $helper->field('overallTotal')
             ->updateOption('number_pattern', PlainType::NUMBER_AMOUNT)
-            ->widgetClass('text-right')
+            ->widgetClass('text-end')
             ->addPlainType(true);
 
         $helper->field('customer')

@@ -16,7 +16,7 @@
                 <span>{{ text }}</span>
             {%- endif -%}
         </div>
-        <div class="h4 font-weight-normal my-1">
+        <div class="h4 fw-normal my-1">
             <span title="{{ 'index.panel_title_total'|trans }}">{{- month.total|integer }}</span> {{ macros.margin(month.margin, min_margin) -}}
         </div>
         <p class="card-text" title="{{ 'index.panel_title_count'|trans }}">
@@ -32,7 +32,7 @@
 <div class="card card-month mb-2" data-path="{{ path('homepage_hide_month') }}">
     <div class="card-header">
         <div class="row">
-            <div class="col-auto mr-auto">
+            <div class="col-auto me-auto">
                 <h1 class="card-title">{{ icon('calendar-alt far', 'index.panel_month') }}</h1>
             </div>
             <div class="col-auto d-print-none">

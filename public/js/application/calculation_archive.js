@@ -9,7 +9,7 @@
     $form.simulate().initValidator({
         rules: {
             'form[sources][]': {
-                require_from_group: [1, '.form-check-inline .custom-control-input'],
+                require_from_group: [1, '#form_sources .form-check-input'],
             }
         },
         messages: {
@@ -19,5 +19,5 @@
             text: $('.card-title').text() + '...'
         }
     });
-    $('#form_sources .custom-switch').addClass('mr-4');
+    $('#form_sources .custom-switch').addClass('me-4');
 }(jQuery));

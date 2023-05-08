@@ -156,24 +156,23 @@ function initSidebar() {
  */
 function initSwitchTheme() {
     'use strict';
-    const $theme = $('#theme');
     const $button = $('.item-theme');
-    if ($theme.length === 0 || $button.length === 0) {
+    if ($button.length === 0) {
         return;
     }
     $button.on('click', function (e) {
         // get values
         e.preventDefault();
+        const $body = $('body');
         const options = $button.data();
-        const wasDark = $theme.attr('href') === options.darkCss;
-        const href = wasDark ? options.lightCss : options.darkCss;
+        const wasDark = $body.attr('data-bs-theme') === options.darkValue;
+        const value = wasDark ? options.lightValue : options.darkValue;
         const text = wasDark ? options.darkText : options.lightText;
         const icon = wasDark ? options.darkIcon : options.lightIcon;
         const themeTitle = wasDark ? options.darkTitle : options.lightTitle;
 
         // update
-        $theme.attr('href', href);
-        $('body').toggleClass('light dark');
+        $body.attr('data-bs-theme', value);
         $button.attr('title', themeTitle).text(' ' + text).prepend($('<i/>', {
             'class': icon
         }));

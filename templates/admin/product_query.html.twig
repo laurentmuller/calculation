@@ -12,11 +12,9 @@
 {%- endmacro %}
 {% block _form_percent_widget -%}
 <div class="input-group">
-    <div class="input-group-prepend">
-        <div class="input-group-text">
-            <input type="radio" id="form_type_percent" name="form_type" class="mr-1"{% if options.is_percent %} checked="checked"{% endif %}>
-            <label class="form-check-label" for="form_type_percent">{{ 'product.update.percent'|trans }}</label>
-        </div>
+    <div class="input-group-text">
+        <input type="radio" id="form_type_percent" name="form_type" class="me-1"{% if options.is_percent %} checked="checked"{% endif %}>
+        <label class="form-check-label" for="form_type_percent">{{ 'product.update.percent'|trans }}</label>
     </div>
     {{ block('form_widget_simple') }}
 </div>
@@ -25,11 +23,9 @@
 {%- endblock %}
 {% block _form_fixed_widget -%}
 <div class="input-group">
-    <div class="input-group-prepend">
-        <div class="input-group-text">
-            <input type="radio" id="form_type_fixed" name="form_type" class="mr-1"{% if not options.is_percent %} checked="checked"{% endif %}>
-            <label class="form-check-label" for="form_type_fixed">{{ 'product.update.fixed'|trans }}</label>
-        </div>
+    <div class="input-group-text">
+        <input type="radio" id="form_type_fixed" name="form_type" class="me-1"{% if not options.is_percent %} checked="checked"{% endif %}>
+        <label class="form-check-label" for="form_type_fixed">{{ 'product.update.fixed'|trans }}</label>
     </div>
     {{ block('form_widget_simple') }}
 </div>
@@ -52,7 +48,7 @@
     <div class="col-md-6">
         {{ form_row(form.allProducts) }}
     </div>
-    <div class="col-md-6 text-md-right d-print-none">
+    <div class="col-md-6 text-md-end d-print-none">
         <div class="btn-group btn-group-sm" role="group">
             <button type="button" id="btn-all" class="btn btn-outline-secondary" disabled="disabled" title="{{ 'product.update.check_all'|trans }}">
                 <i class="fa-fw fa-solid fa-check-circle"></i>
@@ -69,7 +65,7 @@
 <div id="overflow-table" class="overflow-auto table-fixed-header small-scrollbar border mb-3">
     <table class="table table-hover table-fixed-header table-sm mb-0" id="form_products">
         <thead>
-            <tr class="bg-themed">
+            <tr>
                 <th class="text-nowrap">{{ 'product.fields.description'|trans }}</th>
                 <th class="text-currency">{{ 'product.result.old_price'|trans }}</th>
                 <th class="text-currency">{{ 'product.result.new_price'|trans }}</th>
@@ -85,8 +81,8 @@
 <div id="alert" class="alert alert-warning small p-2" role="alert" style="display: none;">
     {{- 'product.update.products_empty'|trans|raw -}}
 </div>
-<label class="required">{{ 'product.update.type'|trans }}</label>
-<div class="row">
+<label class="form-label required">{{ 'product.update.type'|trans }}</label>
+<div class="row mb-3">
     <div class="col-md-6">
         <div class="form-group">
             {{ form_widget(form.percent, {'attr': percent_attr, 'options': {'is_percent': is_percent}}) }}
@@ -102,7 +98,7 @@
     {% if last_update is defined and last_update %}
     {%- set date = last_update|locale_datetime('long', 'short') -%}
     <hr class="my-2">
-    <p class="mb-0 text-right text-muted small">{{ 'product.update.last_update'|trans({'%date%': date}) }}</p>
+    <p class="mb-0 text-end text-muted small">{{ 'product.update.last_update'|trans({'%date%': date}) }}</p>
 {% endif %}
 {% endblock %}
 {# javascripts #}

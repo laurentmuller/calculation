@@ -9,7 +9,7 @@
     <div class="col-md-6 offset-md-2">
         <h1>{{- icon(title_icon, title) }}</h1>
     </div>
-    <div class="col-md-2 text-right mt-3">
+    <div class="col-md-2 text-end mt-3">
         <div class="btn-group btn-group-sm" role="group" aria-label="Toolbar">
         <button type="button" class="btn btn-outline-secondary btn-expand-all" title="Expand All">
                 <i class="fa-solid fa-plus"></i>
@@ -28,12 +28,12 @@
 </div>
 <div class="row">
     <div class="col-md-8 offset-md-2">
-        <div id="tree" class="list-group" role="tree" data-url="{{ path('test_tree') }}" data-loading-text="{{ 'about.loading'|trans }}" data-badge-class="badge-secondary" data-badge-count="true"></div>
+        <div id="tree" class="list-group" role="tree" data-url="{{ path('test_tree') }}" data-loading-text="{{ 'about.loading'|trans }}" data-badge-class="bg-secondary" data-badge-count="true"></div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="form-group">
             <label for="country">Pays</label>
-            <select id="country" class="form-control" data-url="{{ asset('images/flags/flag_blank.png') }}">
+            <select id="country" class="form-select" data-url="{{ asset('images/flags/flag_blank.png') }}">
                 {% for key, value in countries -%}
                 <option value="{{ key }}">{{ value }}</option>
                 {%- endfor %}
@@ -42,8 +42,8 @@
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="form-group">
-            <label for="currency">Monnaie</label>
-            <select id="currency" class="form-control">
+            <label class="form-label" for="currency">Monnaie</label>
+            <select id="currency" class="form-select">
                 {% for currency in currencies -%}
                 <option value="{{ currency.code }}">{{ currency.name }}</option>
                 {%- endfor %}
@@ -52,8 +52,8 @@
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="form-group">
-            <label for="state_single">Status (simple)</label>
-            <select id="state_single" class="form-control">
+            <label class="form-label" for="state_single">Status (simple)</label>
+            <select id="state_single" class="form-select">
             {% for key, group in states -%}
                 <optgroup label="{{ key|trans }}">
                     {% for state in group -%}
@@ -66,9 +66,9 @@
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="form-group">
-            <label for="state">Status (multiple)</label>
+            <label class="form-label" for="state">Status (multiple)</label>
             <div class="input-group">
-                <select id="state" class="form-control" multiple="multiple" data-delete="Supprimer le statut">
+                <select id="state" class="form-select" multiple="multiple" data-delete="Supprimer le statut">
                 {% for key, group in states -%}
                     <optgroup label="{{ key|trans }}">
                         {% for state in group -%}
@@ -77,25 +77,21 @@
                     </optgroup>
                 {%- endfor %}
                 </select>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un statut">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                    <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les statuts">
-                        <i class="fa-regular fa-trash-alt"></i>
-                    </button>
-                </div>
+                <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un statut">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les statuts">
+                    <i class="fa-regular fa-trash-alt"></i>
+                </button>
             </div>
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="form-group">
-            <label for="category">Catégorie</label>
+            <label class="form-label" for="category">Catégorie</label>
             <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">@</span>
-                </div>
-                <select id="category" class="form-control" multiple="multiple" data-delete="Supprimer la catégorie">
+                <span class="input-group-text">@</span>
+                <select id="category" class="form-select" multiple="multiple" data-delete="Supprimer la catégorie">
                     {% for key, group in categories -%}
                         <optgroup label="{{ key }}">
                         {% for category in group -%}
@@ -104,21 +100,19 @@
                         </optgroup>
                     {%- endfor %}
                 </select>
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter une catégorie">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                    <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer toutes les catégories">
-                        <i class="fa-regular fa-trash-alt"></i>
-                    </button>
-                </div>
+                <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter une catégorie">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer toutes les catégories">
+                    <i class="fa-regular fa-trash-alt"></i>
+                </button>
             </div>
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="form-group">
-            <label for="product">Article</label>
-            <select id="product" class="form-control">
+            <label class="form-label" for="product">Article</label>
+            <select id="product" class="form-select">
                 {% for key, group in products -%}
                     <optgroup label="{{ key }}">
                     {% for product in group -%}
@@ -130,7 +124,7 @@
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#dragModal">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#dragModal">
             Launch modal
         </button>
     </div>
@@ -140,20 +134,18 @@
         <div class="modal-content">
             <div class="modal-header cursor-move">
                 <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" title="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="text">Text</label>
+                    <label class="form-label" for="text">Text</label>
                     <input type="text" class="form-control" id="text" aria-describedby="textHelp">
                     <small id="textHelp" class="form-text text-muted">We'll never share your text with anyone else.</small>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-form btn-primary" data-dismiss="modal">Save changes</button>
-                <button type="button" class="btn btn-form btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-form btn-primary" data-bs-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-form btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

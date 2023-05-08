@@ -33,12 +33,6 @@ class ThemeTest extends TestCase
         self::assertCount(2, Theme::cases());
     }
 
-    public function testCss(): void
-    {
-        self::assertSame('js/vendor/bootstrap/css/bootstrap-dark.css', Theme::DARK->getCss());
-        self::assertSame('js/vendor/bootstrap/css/bootstrap-light.css', Theme::LIGHT->getCss());
-    }
-
     public function testDefault(): void
     {
         $default = Theme::getDefault();

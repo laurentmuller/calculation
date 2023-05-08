@@ -8,8 +8,6 @@
 /**
  * Plugin Files
  */
-<!--#include file="plugins/plugin-input-file.js" -->
-<!--#include file="extensions/file-input-extensions.js" -->
 <!--#include file="extensions/simple-editor-extension.js" -->
 
 /**

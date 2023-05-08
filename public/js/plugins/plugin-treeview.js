@@ -623,8 +623,8 @@
         },
         templates: {
             item: '<button type="button" role="treeitem" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-2 border-top-0" />',
-            stateIcon: '<i class="state-icon mr-1" />',
-            itemIcon: '<i class="item-icon mr-1" />',
+            stateIcon: '<i class="state-icon me-1" />',
+            itemIcon: '<i class="item-icon me-1" />',
             itemText: '<span class="item-text w-100" />',
             itemBadge: '<span class="badge" />',
             groupItem: '<div role="group" class="group-item list-group rounded-0" />'

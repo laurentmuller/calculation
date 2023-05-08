@@ -17,7 +17,6 @@
         {
             "name": "bootstrap",
             "version": "5.3.0-alpha3",
-            "disabled": true,
             "target": "twitter-bootstrap",
             "files": [
                 "dist/js/bootstrap.bundle.js",
@@ -55,7 +54,7 @@
         {
             "example": "https://cdn.jsdelivr.net/npm/highcharts@11.0.0/highcharts.js",
             "name": "highcharts",
-            "version": "11.0.0",
+            "version": "11.0.1",
             "files": [
                 "highcharts.js",
                 "highcharts.js.map",
@@ -134,12 +133,13 @@
             ]
         },
         {
-            "display": "select2-bootstrap4-theme",
-            "name": "@ttskch/select2-bootstrap4-theme",
-            "version": "1.5.2",
+            "see": "https://apalfrey.github.io/select2-bootstrap-5-theme",
+            "example": "https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.css",
+            "name": "select2-bootstrap-5-theme",
+            "version": "1.3.0",
             "target": "select2/css",
             "files": [
-                "dist/select2-bootstrap4.css"
+                "dist/select2-bootstrap-5-theme.css"
             ]
         },
         {
@@ -159,23 +159,10 @@
                 "dist/font-mfizz.ttf",
                 "dist/font-mfizz.woff"
             ]
-        },
-        {
-            "display": "bootstrap-dark",
-            "name": "@forevolve/bootstrap-dark",
-            "target": "bootstrap",
-            "version": "4.0.0",
-            "files": [
-                "dist/js/bootstrap.bundle.js",
-                "dist/js/bootstrap.bundle.js.map",
-                "dist/css/bootstrap-dark.css",
-                "dist/css/bootstrap-light.css"
-            ]
         }
     ],
     "file-style": [
-        "bootstrap-dark.css",
-        "bootstrap-light.css"
+        "bootstrap.css2"
     ],
     "copy-style": {
         ".form-control:focus": ".field-valid",
@@ -193,9 +180,9 @@
             "source": ".dropdown-menu",
             "target": ".context-menu-list",
             "entries": [
-                "background",
+                "--bs-dropdown-background",
                 "background-color",
-                "border-radius",
+                "--bs-dropdown-border-radius",
                 "color",
                 "font-size"
             ]

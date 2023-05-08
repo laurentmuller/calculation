@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster, MenuBuilder */
+/* globals Toaster, MenuBuilder, bootstrap */
 
 /**
  * Formatter for the custom view.
@@ -396,7 +396,9 @@ function initializeDangerTooltips($table) {
     const selector = $table.data('danger-tooltip-selector');
     if (selector) {
         $table.parents('.bootstrap-table').tooltip({
-            customClass: 'tooltip-danger', selector: selector
+            customClass: 'tooltip-danger',
+            selector: selector,
+            html: true
         });
     }
 }

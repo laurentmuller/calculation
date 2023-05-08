@@ -15,7 +15,7 @@
     <div class="col-md-4 text-md-center">
         <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
     </div>
-    <div class="col-md-4 text-md-right">
+    <div class="col-md-4 text-md-end">
         <div class="btn-group btn-group-sm" role="group">
             {# today week #}
             {% if today %}
@@ -50,11 +50,11 @@
 <div class="row">
     <div class="col">
     {% for day in week.days|filter(day => not day.empty and day.inWeek(week)) -%}
-        <table class="table table-sm table-borderless position-relative border-bottom border-right">
+        <table class="table table-sm table-borderless position-relative border-bottom border-end">
             <thead>
                 <tr class="bg-secondary text-white">
                     <td colspan="5" class="week-head"><span>{{ day.date|locale_date('long') }}</span><span class="small"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span> </td>
-                    <td class="text-right">
+                    <td class="text-end">
                         {% if not day.empty -%}
                             <span>{{ helper.linkCalculations(day.date|locale_date('short'), day.date|locale_date('long'), day.count, 'text-white stretched-link', 'counters.calculations_day') }}</span>
                         {%- endif %}

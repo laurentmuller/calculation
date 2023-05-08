@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Toast plugin
+ * positions
  */
 .toast-plugin {
     position: fixed;
@@ -57,6 +57,9 @@
     right: 0;
 }
 
+/**
+ * center of small size
+ */
 @media only screen and (max-width: 576px) {
     .toast-plugin {
         left: 0 !important;
@@ -66,6 +69,7 @@
         margin-right: auto !important;
         transform: none !important;
     }
+
     .toast-plugin .toast {
         width: auto !important;
         margin-left: auto !important;
@@ -74,18 +78,29 @@
     }
 }
 
-body.dark .toast-header.toast-header-warning {
-    color: var(--white) !important;
+/**
+  * colors
+  */
+.toast-plugin .toast-body {
+    background-color: var(--bs-body-bg);
 }
 
-.toast-plugin .toast {
-    background-color: rgb(255, 255, 255);
+[data-bs-theme=light] .toast-plugin .toast.border-primary .btn-close,
+[data-bs-theme=light] .toast-plugin .toast.border-success .btn-close,
+[data-bs-theme=light] .toast-plugin .toast.border-danger .btn-close,
+[data-bs-theme=light] .toast-plugin .toast.border-dark .btn-close {
+    filter: var(--bs-btn-close-white-filter);
 }
 
-body.dark .toast-plugin .toast {
-    background-color: rgb(0, 0, 0);
+[data-bs-theme=light] .toast-plugin .toast.border-info .btn-close,
+[data-bs-theme=dark] .toast-plugin .toast.border-warning .btn-close,
+[data-bs-theme=dark] .toast-plugin .toast.border-info .btn-close {
+    filter: invert(1) brightness(0);
 }
 
+/**
+  * margins
+  */
 .page-content.sidebar-hide .toast-plugin.top-left,
 .page-content.sidebar-hide .toast-plugin.top-center,
 .page-content.sidebar-hide .toast-plugin.top-right {

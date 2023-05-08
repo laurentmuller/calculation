@@ -106,7 +106,7 @@ class FormHelper
      *
      * @var array<string, mixed>
      */
-    private array $rowAttributes = [];
+    private array $rowAttributes = ['class' => 'mb-3 form-group'];
 
     /**
      * Constructor.
@@ -166,7 +166,7 @@ class FormHelper
         return $this->field('simulate')
             ->label('simulate.label')
             ->help('simulate.help')
-            ->helpClass('ml-4')
+            ->helpClass('ms-4')
             ->notRequired()
             ->addCheckboxType();
     }
@@ -179,7 +179,7 @@ class FormHelper
     public function addCheckboxType(bool $switchStyle = true): self
     {
         if ($switchStyle) {
-            $this->labelClass('switch-custom');
+            $this->labelClass('checkbox-switch');
         }
 
         return $this->add(CheckboxType::class);
@@ -321,7 +321,7 @@ class FormHelper
     {
         $input_mode = $scale > 0 ? 'decimal' : 'numeric';
 
-        return $this->widgetClass('text-right')
+        return $this->widgetClass('text-end')
             ->updateAttribute('inputmode', $input_mode)
             ->updateAttribute('scale', $scale)
             ->updateOption('html5', true)
@@ -337,7 +337,7 @@ class FormHelper
      */
     public function addPercentType(int $min = \PHP_INT_MIN, int $max = \PHP_INT_MAX, float $step = 1.0): self
     {
-        $this->widgetClass('text-right')
+        $this->widgetClass('text-end')
             ->updateAttribute('inputmode', 'decimal')
             ->updateOption('html5', true)
             ->autocomplete('off');
@@ -811,7 +811,7 @@ class FormHelper
     {
         $this->options = [];
         $this->attributes = [];
-        $this->rowAttributes = [];
+        $this->rowAttributes = ['class' => 'mb-3 form-group'];
         $this->helpAttributes = [];
         $this->labelAttributes = [];
         $this->modelTransformer = null;

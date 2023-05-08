@@ -185,8 +185,8 @@
 }
 
 .text-hover {
-    background-color: var(--primary) !important;
-    color: var(--white) !important;
+    background-color: var(--bs-primary) !important;
+    color: var(--bs-white) !important;
 }
 
 .thead-light th.text-border {

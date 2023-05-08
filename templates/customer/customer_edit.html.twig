@@ -10,14 +10,14 @@
                      'data-search-address': url('ajax_search_address'),
                      'data-error': 'customer.edit.error_search'|trans}) -%}
 {% block card_body %}
-<div class="form-row">
+<div class="row">
     <div class="col-md-6">
         <div class="form-group">
             {{ form_row(form.title) }}
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="row">
     <div class="col-md-6">
         {{ form_row(form.firstName) }}
     </div>
@@ -27,7 +27,7 @@
 </div>
 {{ form_row(form.company) }}
 {{ form_row(form.address) }}
-<div class="form-row">
+<div class="row">
     <div class="col-md-3">
         {{ form_row(form.zipCode, {attr: {'data-msg-zipcode': 'customer.zip_code'|trans([], 'validators')}}) }}
     </div>

@@ -7,8 +7,8 @@
 <thead>
     <tr>
         <td class="h position-relative" colspan="{{ colspan }}">
-            <a data-toggle="collapse" href="#{{ target }}" class="drop-down-icon-left stretched-link ml-1" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
-            <span class="badge badge-pill badge-secondary float-right">{{ countable|length|integer }}</span>
+            <a data-bs-toggle="collapse" href="#{{ target }}" class="drop-down-icon-left stretched-link ms-1" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
+            <span class="badge bg-secondary rounded-pill float-end">{{ countable|length|integer }}</span>
         </td>
     </tr>
 </thead>
@@ -44,7 +44,7 @@
 <tr>
     <td class="e">{{ name }}</td>
     <td class="v">
-        <span class="font-weight-bold text-{{ check_class }}">{{ check_text }}</span> <span>{{ value }}</span>
+        <span class="fw-bold text-{{ check_class }}">{{ check_text }}</span> <span>{{ value }}</span>
     </td>
 </tr>
 {%- endmacro %}
@@ -52,7 +52,7 @@
 {% macro rowBundle(bundle) -%}
 {% from 'macros/_icons.html.twig' import linkExternal %}
 <tr>
-    <td class="e pl-3">
+    <td class="e ps-3">
         {{- bundle.name -}}{%- if bundle.homepage|default(false) %}&nbsp;{{- linkExternal(bundle.homepage, '', 'd-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
     </td>
     <td class="v">{{ bundle.path }}</td>
@@ -62,7 +62,7 @@
 {% macro rowPackage(package) -%}
 {% from 'macros/_icons.html.twig' import linkExternal %}
 <tr>
-    <td class="e pl-3">
+    <td class="e ps-3">
         {{- package.name -}}{%- if package.homepage %}&nbsp;{{- linkExternal(package.homepage, '', 'd-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
     </td>
     <td class="f text-nowrap">{{ package.version }}</td>
@@ -74,29 +74,27 @@
 {% from 'macros/_icons.html.twig' import linkExternal %}
 {%- set route = path('about_' ~ id ~ '_content') -%}
 {%- set title = ('about.' ~ id)|trans -%}
-<div class="card">
-    <div class="card-header" id="{{ id }}-header">
-        <div class="row no-gutters">
-            <div class="col mr-auto">
-                <a data-toggle="collapse" role="button" href="#{{ id }}" class="drop-down-icon-left card-link stretched-link" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'about.expand'|trans }}">
-                    {{- title -}}
-                </a>
-            </div>
-            <div class="col-auto d-print-none">
-                {{ linkExternal(path(pdf_route), null, null, ICON_PDF, 'common.button_export_pdf') }}
-                {% if excel_route %}
-                    {{ linkExternal(path(excel_route), null, null, ICON_EXCEL, 'common.button_export_excel') }}
-                {% endif %}
-                {% if word_route %}
-                    {{ linkExternal(path(word_route), null, null, ICON_WORD, 'common.button_export_word') }}
-                {% endif %}
-            </div>
+{%- set width = 43 + (excel_route ? 20 : 0) + (word_route ? 20 : 0) -%}
+<div class="accordion-item">
+    <div class="accordion-header" id="{{ id }}-header">
+        <div class="d-flex align-items-center">
+            <button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'about.expand'|trans }}" style="width: calc(100% - {{ width }}px)">
+                {{- title -}}
+            </button>
+            {{ linkExternal(path(pdf_route), null, 'ms-2', ICON_PDF, 'common.button_export_pdf') }}
+            {% if excel_route %}
+                {{ linkExternal(path(excel_route), null, 'ms-2', ICON_EXCEL, 'common.button_export_excel') }}
+            {% endif %}
+            {% if word_route %}
+                {{ linkExternal(path(word_route), null, 'ms-2', ICON_WORD, 'common.button_export_word') }}
+            {% endif %}
         </div>
     </div>
-    <div id="{{ id }}" class="card-body collapse" aria-labelledby="{{ id }}-header" aria-expanded="false" data-parent="#accordionAbout" data-url="{{ route }}">
-        <div class="alert mb-0" role="alert">
-            <span class="spinner-border spinner-border-sm text-secondary" role="status"></span>
-            <span>{{ 'about.loading'|trans }}</span>
+    <div class="accordion-collapse collapse" id="{{ id }}" aria-labelledby="{{ id }}-header" data-bs-parent="#parent_accordion">
+        <div class="accordion-body" data-url="{{ route }}">
+            <div class="alert mb-0" role="alert">
+                <span class="spinner-border spinner-border-sm text-secondary me-2" role="status"></span><span>{{ 'about.loading'|trans }}</span>
+            </div>
         </div>
     </div>
 </div>

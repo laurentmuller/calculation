@@ -94,9 +94,9 @@ function togglePopover($source, $selector, save) {
                 html: true,
                 trigger: 'hover',
                 placement: 'auto',
-                customClass: 'popover-w-100',
-                content: function () {
-                    const content = $(this).data('html');
+                customClass: 'popover-light popover-w-100',
+                content: function (e) {
+                    const content = $(e).data('bs-html');
                     return $(content);
                 }
             });
@@ -128,7 +128,7 @@ function togglePopover($source, $selector, save) {
     const $table = $('#pivot');
     const $popover = $('#popover');
     const $highlight = $('#highlight');
-    const $selector = $('[data-toggle="popover"]');
+    const $selector = $('[data-bs-toggle="popover"]');
 
     // popover
     if ($popover.isChecked()) {

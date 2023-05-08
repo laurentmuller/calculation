@@ -89,7 +89,7 @@ function formatCurrency(currency) {
         return text;
     }
     const $flag = $('<span/>', {
-        'class': 'mr-1 currency-flag currency-flag-' + id.toLowerCase(),
+        'class': 'me-1 currency-flag currency-flag-' + id.toLowerCase(),
     });
     const $text = $('<span/>', {
         'class': 'text-truncate',

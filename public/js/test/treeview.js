@@ -15,7 +15,7 @@ function formatCountry(country) {
     }
 
     const $img = $('<img/>', {
-        'class': 'mr-1 flag flag-' + id.toLowerCase(),
+        'class': 'me-1 flag flag-' + id.toLowerCase(),
         'src': $('#country').data('url'),
         'alt': 'Country'
     });
@@ -35,7 +35,7 @@ function formatState(state) {
     }
     const color = $(state.element).data('color');
     const $color = $('<span/>', {
-        'class': 'border border-secondary mr-1',
+        'class': 'border border-secondary me-1',
         'css': {
             'background-color': color,
             'display': 'inline-block',
@@ -59,7 +59,7 @@ function formatStateSelection(state) {
     }
     const color = $(state.element).data('color');
     const $color = $('<span/>', {
-        'class': 'border border-secondary mr-1',
+        'class': 'border border-secondary me-1',
         'css': {
             'background-color': color,
             'display': 'inline-block',
@@ -82,7 +82,7 @@ function formatCurrency(currency) {
         return text;
     }
     const $flag = $('<span/>', {
-        'class': 'mr-1 currency-flag currency-flag-' + id.toLowerCase(),
+        'class': 'me-1 currency-flag currency-flag-' + id.toLowerCase(),
     });
     const $text = $('<span/>', {
         'class': 'text-truncate',

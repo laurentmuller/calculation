@@ -17,7 +17,7 @@
     height: 3px;
 }
 .simple-editor .simple-editor-toolbar::-webkit-scrollbar-thumb {
-    background-color: var(--secondary);
+    background-color: var(--bs-secondary);
 }
 .simple-editor .simple-editor-toolbar button {
     border-radius: 0;

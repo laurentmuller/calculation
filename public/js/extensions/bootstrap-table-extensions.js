@@ -40,7 +40,7 @@
  */
 function loadingTemplate(message) {
     'use strict';
-    return `<div class="alert alert-info text-center loading-message" role="alert"><i class="fa-solid fa-spinner fa-spin mr-2"></i>${message}</div>`;
+    return `<div class="alert alert-info text-center loading-message" role="alert"><i class="fa-solid fa-spinner fa-spin me-2"></i>${message}</div>`;
 }
 
 /**
@@ -182,7 +182,7 @@ function loadingTemplate(message) {
 
                     // update action buttons
                     const title = $this.data('no-action-title');
-                    $this.find('td.actions button[data-toggle="dropdown"]').each(function () {
+                    $this.find('td.actions button[data-bs-toggle="dropdown"]').each(function () {
                         const $button = $(this);
                         if ($button.siblings('.dropdown-menu').children().length === 0) {
                             $button.attr('title', title).toggleDisabled(true);

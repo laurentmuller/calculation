@@ -30,24 +30,20 @@
 
         showError: function () {
             const content = $configuration.data("error");
-            const html = "<i class='fas fa-lg fa-exclamation-triangle mr-2'></i>" + content;
+            const html = "<i class='fas fa-lg fa-exclamation-triangle me-2'></i>" + content;
             $(this).find(".alert:first").addClass("alert-danger").html(html);
         }
     });
 
     // update link title on toggle
-    const $collapse = $('.card-body.collapse');
-    $collapse.on('shown.bs.collapse', function () {
-        const $link = $(this).parents('.card').find('.stretched-link');
-        $link.attr('title', $configuration.data('collapse'));
+    $('#parent_accordion .accordion-item').on('shown.bs.collapse', function () {
+        $(this).find('.accordion-button').attr('title', $configuration.data('collapse'));
     }).on('hidden.bs.collapse', function () {
-        const $link = $(this).parents('.card').find('.stretched-link');
-        $link.attr('title', $configuration.data('expand'));
+        $(this).find('.accordion-button').attr('title', $configuration.data('expand'));
     });
 
     // load content on first show
-    $collapse.one('show.bs.collapse', function () {
-        $(this).loadContent();
+    $('#parent_accordion .accordion-item').one('show.bs.collapse', function () {
+        $(this).find('.accordion-body').loadContent();
     });
-
 }(jQuery));

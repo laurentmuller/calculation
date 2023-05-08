@@ -84,7 +84,7 @@
             {{ tools.headerLinkInfo('Routes', 'application-routes', runtime_routes) }}
             <tbody class="collapse" id="application-routes" data-parent="#symfonyAccordion">
             {% for route in runtime_routes %}
-                {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
+                {{ tools.rowInfo(route.name, route.path, 'ps-3') }}
             {% endfor %}
             </tbody>
         </table>
@@ -95,7 +95,7 @@
             {{ tools.headerLinkInfo('Debug Routes', 'symfony-routes', debug_routes) }}
             <tbody class="collapse" id="symfony-routes" data-parent="#symfonyAccordion">
             {% for route in debug_routes %}
-                {{ tools.rowInfo(route.name, route.path, 'pl-3') }}
+                {{ tools.rowInfo(route.name, route.path, 'ps-3') }}
             {% endfor %}
             </tbody>
         </table>

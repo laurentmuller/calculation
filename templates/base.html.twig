@@ -61,12 +61,12 @@
 <link rel="apple-touch-icon" sizes="152x152" href="{{ asset_icon(152) }}">
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset_icon(180) }}">
 {# stylesheets #}
-{{ asset_css('js/vendor/bootstrap/css/bootstrap-' ~ theme_class ~ '.css', {'id': 'theme'}) }}
+{{ asset_css('js/vendor/twitter-bootstrap/css/bootstrap.css') }}
 {% block stylesheets %}
 {{- asset_css('css/style.css') }}
 {% endblock %}
 </head>
-<body class="{{ theme_class }}{% if status_bar %} status-bar{% endif %}">
+<body data-bs-theme="{{ theme_class }}" class="{% if status_bar %} status-bar{% endif %}">
     {# vertical navigation #}
     {%- block navigation_vertical -%}
         {{- include('navigation_vertical/navigation.html.twig') }}
@@ -95,7 +95,7 @@
 {% block javascripts %}
 {% if app.debug %}
     {{- asset_js('js/vendor/jquery/jquery.js') }}
-    {{- asset_js('js/vendor/bootstrap/js/bootstrap.bundle.js') }}
+    {{- asset_js('js/vendor/twitter-bootstrap/js/bootstrap.bundle.js') }}
     {{- asset_js('js/extensions/array-extensions.js') }}
     {{- asset_js('js/extensions/jquery-extensions.js') }}
     {{- asset_js('js/extensions/params-extensions.js') }}

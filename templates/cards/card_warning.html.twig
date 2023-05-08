@@ -23,7 +23,7 @@
 {% endif %}
 {# items #}
 {%- if items|default(false) and items|length -%}
-<ul class="mt-2 ml-5">
+<ul class="mt-2 ms-5">
     {% for item in items -%}
     <li>{{ item|raw }}</li>
     {%- endfor %}

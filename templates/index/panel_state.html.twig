@@ -13,7 +13,7 @@
                 <span>{{ state.code }}</span>
             {%- endif -%}
         </div>
-        <div class="h4 font-weight-normal my-1">
+        <div class="h4 fw-normal my-1">
             <span title="{{ 'index.panel_title_total'|trans }}">{{- state.total|integer }}</span> {{ macros.margin(state.margin, min_margin) -}}
         </div>
         <p class="card-text" title="{{ 'index.panel_title_count'|trans }}">
@@ -29,7 +29,7 @@
 <div class="card card-state mb-2" data-path="{{ path('homepage_hide_state') }}">
     <div class="card-header">
         <div class="row">
-            <div class="col-auto mr-auto">
+            <div class="col-auto me-auto">
                 <h1 class="card-title">{{ icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
             </div>
             <div class="col-auto d-print-none">

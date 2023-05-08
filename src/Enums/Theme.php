@@ -45,14 +45,6 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
     case LIGHT = 'light';
 
     /**
-     * Gets the CSS style sheet.
-     */
-    public function getCss(): string
-    {
-        return \sprintf('js/vendor/bootstrap/css/bootstrap-%s.css', $this->value);
-    }
-
-    /**
      * Gets the icon.
      */
     public function getIcon(): string

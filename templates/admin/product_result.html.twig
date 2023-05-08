@@ -23,7 +23,7 @@
         <tr>
             <td class="w-30 text-nowrap">{{ 'product.result.updated'|trans }}</td>
             <td>
-                <a href="#" class="stretched-link text-decoration-none text-reset" data-toggle="modal" data-target="#resultModal" title="{{ 'product.result.updated'|trans }}">
+                <a href="#" class="stretched-link text-decoration-none text-reset" data-bs-toggle="modal" data-bs-target="#resultModal" title="{{ 'product.result.updated'|trans }}">
                     {{- result.count|integer -}}
                 </a>
             </td>
@@ -32,7 +32,7 @@
 </table>
 {% if result.valid %}
     {% if result.simulate %}
-        <p class="mb-0 text-right text-muted small">{{ 'simulate.message'|trans }}</p>
+        <p class="mb-0 text-end text-muted small">{{ 'simulate.message'|trans }}</p>
     {% endif %}
 {% else %}
     <div class="alert alert-warning mb-0" role="alert">
@@ -45,15 +45,14 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ 'product.update.title'|trans }}</h5>
-                {{ button_close_modal() }}
+                <h5 class="modal-title">{{ 'product.update.title'|trans }}</h5>{{ button_close_modal() }}
             </div>
             <div class="modal-body">
-                <p class="mb-2 font-weight-bold">{{ 'product.result.updated'|trans }}</p>
+                <p class="mb-2 fw-bold">{{ 'product.result.updated'|trans }}</p>
                 <div class="overflow-auto table-fixed-header small-scrollbar border">
                     <table class="table table-hover table-fixed-header table-sm mb-0">
                         <thead>
-                            <tr class="bg-themed">
+                            <tr>
                                 <th class="text-nowrap">{{ 'product.fields.description'|trans }}</th>
                                 <th class="text-currency">{{ 'product.result.old_price'|trans }}</th>
                                 <th class="text-currency">{{ 'product.result.new_price'|trans }}</th>
@@ -69,7 +68,7 @@
                         {% endfor %}
                         </tbody>
                         <tfoot>
-                            <tr class="bg-themed">
+                            <tr>
                                 <th class="text-nowrap" colspan="2">{{ 'product.result.total'|trans }}</th>
                                 <th class="text-currency">{{- 'counters.products'|trans({'count': result.count}) -}}</th>
                             </tr>
@@ -80,7 +79,7 @@
             <div class="modal-footer">
                 <div class="row align-items-center no-gutters w-100">
                     <div class="col">
-                        {{ button_close_modal(false) }}
+                        {{- button_close_modal(false) -}}
                     </div>
                 </div>
             </div>

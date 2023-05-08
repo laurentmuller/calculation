@@ -23,7 +23,7 @@
 <div class="card mb-2">
     <div class="card-header">
         <div class="row">
-            <div class="col-auto mr-auto">
+            <div class="col-auto me-auto">
                 <h1 class="card-title">{{ icon(ICON_CALCULATION, 'index.panel_table_title') }}</h1>
             </div>
             {%- if add_page -%}
@@ -68,9 +68,9 @@
                         <td class="text-currency user-select-none">{{ calculation.overallTotal|amount }}</td>
                         {%- if is_drop_down -%}
                             <td class="actions rowlink-skip d-print-none">
-                                <div class="dropdown dropleft text-right">
+                                <div class="dropdown dropleft text-end">
                                     {{ dropdownEllipsis(menu_id) }}
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
                                     {%- if edit_page -%}
                                         {{- dropdownSeparator() }}
                                         {%- set path = path(edit_page, params) -%}
@@ -118,19 +118,23 @@
         {%- endif -%}
     </div>
     <div class="card-footer d-print-none p-2 d-flex">
-        <div class="ml-auto form-inline mr-2">
-            <div class="form-control-sm custom-control custom-switch" title="{{ 'index.panel_table_user_help'|trans }}">
-                <input type="checkbox" class="custom-control-input" id="restrict" data-url="{{ url('homepage') }}" data-value="{{ restrict }}"{% if restrict %} checked="checked"{% endif %}>
-                <label class="custom-control-label" for="restrict">{{ 'index.panel_table_user'|trans }}</label>
-            </div>
-            {% set counter = user_service.panelCalculation %}
-            <div class="dropdown dropdown-counter" title="{{ 'index.panel_table_count'|trans }}" data-path="{{ path('homepage_calculation') }}" data-value="{{ counter }}">
-                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">{{ counter }}</button>
-                <div class="dropdown-menu">
-                    {% for index in range(5, 25, 5) %}
-                        <button class="dropdown-item dropdown-item-counter{% if counter == index %} active{% endif %}" data-value="{{ index }}" >{{ 'counters.calculations'|trans({'count': index}) }}</button>
-                    {% endfor %}
+        <div class="row row-cols-lg-auto align-items-center g-2 w-100">
+            <div class="col-12 ms-auto">
+                <div class="form-control-sm form-check form-switch" title="{{ 'index.panel_table_user_help'|trans }}">
+                    <input type="checkbox" class="form-check-input" id="restrict" data-url="{{ url('homepage') }}" data-value="{{ restrict }}"{% if restrict %} checked="checked"{% endif %}>
+                    <label class="form-check-label" for="restrict">{{ 'index.panel_table_user'|trans }}</label>
                 </div>
+            </div>
+           <div class="col-12">
+               {% set counter = user_service.panelCalculation %}
+               <div class="dropdown dropdown-counter" title="{{ 'index.panel_table_count'|trans }}" data-path="{{ path('homepage_calculation') }}" data-value="{{ counter }}">
+                   <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ counter }}</button>
+                   <div class="dropdown-menu">
+                       {% for index in range(5, 25, 5) %}
+                           <button class="dropdown-item dropdown-item-counter{% if counter == index %} active{% endif %}" data-value="{{ index }}" >{{ 'counters.calculations'|trans({'count': index}) }}</button>
+                       {% endfor %}
+                   </div>
+               </div>
             </div>
         </div>
     </div>

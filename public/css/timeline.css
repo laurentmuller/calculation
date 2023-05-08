@@ -19,65 +19,71 @@ ul.timeline:before {
     margin-top: 3px;
 }
 
-ul.timeline>li {
+ul.timeline > li {
     margin-bottom: 20px;
 }
 
-ul.timeline>li:last-child {
+ul.timeline > li:last-child {
     margin-bottom: 0;
 }
 
-ul.timeline>li:before {
+ul.timeline > li:before {
     content: ' ';
-    background-color: var(--white);
+    background-color: var(--bs-white);
     display: inline-block;
     position: absolute;
     border-radius: 50%;
-    border: 3px solid var(--primary);
+    border: 3px solid var(--bs-primary);
     left: 0;
     width: 20px;
     height: 20px;
     margin-top: 3px;
 }
 
-ul.timeline-square>li:before {
+ul.timeline-square > li:before {
     border-radius: initial;
 }
-ul.timeline-fill>li:before {
+
+ul.timeline-fill > li:before {
     border: initial;
 }
 
-ul.timeline>li.secondary:before {
-    border: 3px solid var(--secondary);
-}
-ul.timeline-fill>li.secondary:before {
-    background-color: var(--secondary);
+ul.timeline > li.secondary:before {
+    border: 3px solid var(--bs-secondary);
 }
 
-ul.timeline>li.success:before {
-    border: 3px solid var(--success);
-}
-ul.timeline-fill>li.success:before {
-    background-color: var(--success);
+ul.timeline-fill > li.secondary:before {
+    background-color: var(--bs-secondary);
 }
 
-ul.timeline>li.info:before {
-    border: 3px solid var(--info);
-}
-ul.timeline-fill>li.info:before {
-    background-color: var(--info);
+ul.timeline > li.success:before {
+    border: 3px solid var(--bs-success);
 }
 
-ul.timeline>li.danger:before {
-    border: 3px solid var(--danger);
-}
-ul.timeline-fill>li.danger:before {
-    background-color: var(--danger);
+ul.timeline-fill > li.success:before {
+    background-color: var(--bs-success);
 }
 
-ul.timeline>li.warning:before {
-    border: 3px solid var(--warning);
+ul.timeline > li.info:before {
+    border: 3px solid var(--bs-info);
 }
-ul.timeline-fill>li.warning:before {
-    background-color: var(--warning);
+
+ul.timeline-fill > li.info:before {
+    background-color: var(--bs-info);
+}
+
+ul.timeline > li.danger:before {
+    border: 3px solid var(--bs-danger);
+}
+
+ul.timeline-fill > li.danger:before {
+    background-color: var(--bs-danger);
+}
+
+ul.timeline > li.warning:before {
+    border: 3px solid var(--bs-warning);
+}
+
+ul.timeline-fill > li.warning:before {
+    background-color: var(--bs-warning);
 }

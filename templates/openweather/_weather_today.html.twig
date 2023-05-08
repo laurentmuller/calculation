@@ -7,7 +7,7 @@
 {% endmacro %}
 {% macro row_text(name, value) %}
 <tr>
-    <td class="pl-4 w-35">{{ name|trans }}</td>
+    <td class="ps-4 w-35">{{ name|trans }}</td>
     <td>{{ value|raw }}</td>
 </tr>
 {% endmacro %}
@@ -33,7 +33,7 @@
 {%- set title = 'openweather.fields.current'|trans -%}
 {{ tools.title(title, 'current_data_modal') }}
 {# table #}
-<table class="table table-sm mb-0">
+<table class="table table-no-end-line table-sm mb-0">
     <tbody>
         {{ _self.row_title('openweather.fields.temp') }}
         {{ _self.row_temp('openweather.fields.temp_current', main.temp, units_temp) }}

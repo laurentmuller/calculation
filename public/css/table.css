@@ -10,9 +10,11 @@
 .bootstrap-table .fixed-table-container .fixed-table-body .table {
     table-layout: fixed !important;
 }
+
 .bootstrap-table .fixed-table-container .fixed-table-body .table td {
     vertical-align: top !important;
 }
+
 .bootstrap-table .fixed-table-container .fixed-table-body .fixed-table-loading {
     background: initial;
 }
@@ -23,6 +25,7 @@
 .bootstrap-table .fixed-table-container .fixed-table-body .table tbody tr .card-views {
     cursor: pointer;
 }
+
 .bootstrap-table .fixed-table-container .fixed-table-body .table tbody tr .card-view .card-view-title {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -30,6 +33,7 @@
     overflow: hidden;
     min-width: 10rem;
 }
+
 .bootstrap-table .fixed-table-container .fixed-table-body .table tbody tr .card-view .card-view-value {
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -50,24 +54,29 @@
 .bootstrap-table .fixed-table-container .table thead th .sortable {
     padding-right: 0 !important;
 }
+
 .bootstrap-table .fixed-table-container .table thead th .both,
 .bootstrap-table .fixed-table-container .table thead th .asc,
 .bootstrap-table .fixed-table-container .table thead th .desc {
     background-image: none;
 }
+
 .bootstrap-table .fixed-table-container .table thead th .sortable:after {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     padding-left: 0.35rem;
     opacity: 0.3;
 }
+
 .bootstrap-table .fixed-table-container .table thead th .both:after {
     content: "\f0dc";
 }
+
 .bootstrap-table .fixed-table-container .table thead th .asc:after {
     content: "\f0d8";
     opacity: 1;
 }
+
 .bootstrap-table .fixed-table-container .table thead th .desc:after {
     content: "\f0d7";
     opacity: 1;
@@ -109,6 +118,7 @@ tr.text-muted td .text-danger {
 .dropdown-menu-checked {
     min-width: 13rem;
 }
+
 .dropdown-item-checked::after {
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
@@ -123,11 +133,13 @@ tr.text-muted td .text-danger {
 .loading-message {
     width: 50%;
 }
+
 @media (max-width: 992px) {
     .loading-message {
         width: 70%;
     }
 }
+
 @media (max-width: 768px) {
     .loading-message {
         width: 100%;
@@ -137,17 +149,25 @@ tr.text-muted td .text-danger {
 /**
  * dark theme
  */
-/*
-body.dark .bootstrap-table .custom-item hr {
-    border-color: #343a40;
-}
-*/
-body.dark .bootstrap-table .custom-item.table-primary hr {
+[data-bs-theme=dark] body .bootstrap-table .custom-item.table-primary hr {
     border-color: #adb5bd;
 }
-body.dark .bootstrap-table .table-primary a:not(.dropdown-item) {
+
+[data-bs-theme=dark] body .bootstrap-table .table-primary a:not(.dropdown-item) {
     color: #007bff;
 }
-body.dark .bootstrap-table .custom-item.table-primary a.text-body {
+
+[data-bs-theme=dark] body .bootstrap-table .custom-item.table-primary a.text-body {
     color: initial !important;
+}
+
+/**
+ * pagination (float)
+ */
+.fixed-table-pagination .float-left {
+    float: left !important;
+}
+
+.fixed-table-pagination .float-right {
+    float: right !important;
 }

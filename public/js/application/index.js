@@ -208,8 +208,9 @@ function updateCounter(e) {
 
         // enable tooltips
         $table.tooltip({
+            customClass: 'tooltip-danger',
             selector: '.has-tooltip',
-            customClass: 'tooltip-danger'
+            html: true
         });
 
         // function to select a row from children
@@ -220,7 +221,7 @@ function updateCounter(e) {
         };
 
         // select row when drop-down menu is displayed
-        $table.on('click', '[data-toggle="dropdown"]', selectRow);
+        $table.on('click', '[data-bs-toggle="dropdown"]', selectRow);
 
         // initialize context menu
         $table.initContextMenu('#calculations tbody tr td:not(.d-print-none)', selectRow);
@@ -240,8 +241,9 @@ function updateCounter(e) {
 
     // enable tooltips for calculations by state or by month
     $('.card-body-tooltip').tooltip({
+        customClass: 'tooltip-danger',
         selector: '.has-tooltip',
-        customClass: 'tooltip-danger'
+        html: true
     });
 
     // handle user restrict checkbox

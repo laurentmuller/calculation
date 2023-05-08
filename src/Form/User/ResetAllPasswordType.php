@@ -50,7 +50,7 @@ class ResetAllPasswordType extends AbstractType
             'expanded' => true,
             'multiple' => true,
             'label' => 'user.list.title',
-            'label_attr' => ['class' => 'ml-n4'],
+            'label_attr' => ['class' => 'ms-n4'],
             'choice_value' => 'id',
             'choice_label' => 'NameAndEmail',
             'choice_translation_domain' => false,

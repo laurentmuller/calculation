@@ -22,25 +22,23 @@
     {% elseif state_editable %}
         {% set text = (state_editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable')|trans %}
     {% endif %}
-    <div class="input-group-append dropdown">
-        {{ _self.output_dropdown_menu(
-            'state',
-            ICON_CALCULATION_STATE,
-            text,
-            'calculation.list.state_help',
-            input_value,
-            data_default
-        ) }}
-        <div class="dropdown-menu" aria-labelledby="state">
-            {{ _self.output_dropdown('state', 0, input_value, 'calculation.list.state_all_text'|trans, {}, 'filter-circle-xmark') }}
-            {% for key, entry in customData.dropdown %}
-                {{ _self.item_separator() }}
-                {{ _self.output_dropdown('editable', entry.id, state_editable, entry.text|trans, {'data-parameter': 'stateEditable'}, entry.icon) }}
-                {% for code, id in entry.states %}
-                    {{ _self.output_dropdown('state pl-5', id, state_id, code, {'data-parameter': 'stateId'}, ICON_CALCULATION_STATE) }}
-                {% endfor %}
+    {{ _self.output_dropdown_menu(
+        'state',
+        ICON_CALCULATION_STATE,
+        text,
+        'calculation.list.state_help',
+        input_value,
+        data_default
+    ) }}
+    <div class="dropdown-menu" aria-labelledby="state">
+        {{ _self.output_dropdown('state', 0, input_value, 'calculation.list.state_all_text'|trans, {}, 'filter-circle-xmark') }}
+        {% for key, entry in customData.dropdown %}
+            {{ _self.item_separator() }}
+            {{ _self.output_dropdown('editable', entry.id, state_editable, entry.text|trans, {'data-parameter': 'stateEditable'}, entry.icon) }}
+            {% for code, id in entry.states %}
+                {{ _self.output_dropdown('state ps-5', id, state_id, code, {'data-parameter': 'stateId'}, ICON_CALCULATION_STATE) }}
             {% endfor %}
-        </div>
+        {% endfor %}
     </div>
 {% endif %}
 {%- endblock %}
@@ -96,5 +94,5 @@
 {{ _self.property_value('%customer%') }}
 {{ _self.property_value('%description%') }}
 {{ _self.property_line() }}
-{{ _self.property_both('%overallMargin%', '%overallTotal%', '', 'text-right') }}
+{{ _self.property_both('%overallMargin%', '%overallTotal%', '', 'text-end') }}
 {%- endblock %}

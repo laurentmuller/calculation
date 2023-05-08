@@ -95,7 +95,7 @@
                 that.$dropdownToggle = $('<button/>', {
                     'type': 'button',
                     'class': 'dropdown-toggle ' + (options.dropdownToggleClass || ''),
-                    'data-toggle': 'dropdown',
+                    'data-bs-toggle': 'dropdown',
                     'aria-haspopup': 'true',
                     'aria-expanded': 'false'
                 }).appendTo(that.$dropdown);
@@ -150,9 +150,9 @@
                 'class': 'border btn btn-color',
             };
             if (display) {
-                buttonOptions['data-toggle'] = 'tooltip';
-                buttonOptions['data-trigger'] = options.tooltipTrigger;
-                buttonOptions['data-placement'] = options.tooltipPlacement;
+                buttonOptions['data-bs-toggle'] = 'tooltip';
+                buttonOptions['data-bs-trigger'] = options.tooltipTrigger;
+                buttonOptions['data-bs-placement'] = options.tooltipPlacement;
             }
 
             // palette

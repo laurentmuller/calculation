@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* globals bootstrap */
+
 /**
  * -------------- jQuery Extensions --------------
  */
@@ -563,6 +565,20 @@
                         }
                     });
                 }
+            });
+        },
+
+        tooltip: function (options = {}) {
+            return this.each(function () {
+                const data = new bootstrap.Tooltip(this, options);
+                return data;
+            });
+        },
+
+        popover: function (options = {}) {
+            return this.each(function () {
+                const data = new bootstrap.Popover(this, options);
+                return data;
             });
         }
     });

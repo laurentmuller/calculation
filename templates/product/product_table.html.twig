@@ -18,25 +18,23 @@
     {%- set data_default = 'product.fields.category'|trans -%}
     {%- set input_value = group_id ? group_id : category_id -%}
     {%- set input_text = customData.group.code ?? customData.category.code ?? data_default -%}
-    <div class="input-group-append dropdown">
-        {{ _self.output_dropdown_menu(
-            'category',
-            ICON_CATEGORY,
-            input_text,
-            'product.list.category_help',
-            input_value,
-            data_default
-        ) }}
-        <div class="dropdown-menu">
-            {{ _self.output_dropdown('category', 0, input_value, 'product.list.category_all_text'|trans, {}, 'filter-circle-xmark') }}
-            {% for key, entry in customData.dropdown %}
-                {{ _self.item_separator() }}
-                {{ _self.output_dropdown('group', entry.id, group_id, key, {'data-parameter': 'groupId'}, ICON_GROUP) }}
-                {% for code, code_id in entry.categories %}
-                    {{ _self.output_dropdown('category pl-5', code_id, category_id, code, {'data-parameter': 'categoryId'}, ICON_CATEGORY) }}
-                {% endfor %}
+    {{ _self.output_dropdown_menu(
+        'category',
+        ICON_CATEGORY,
+        input_text,
+        'product.list.category_help',
+        input_value,
+        data_default
+    ) }}
+    <div class="dropdown-menu">
+        {{ _self.output_dropdown('category', 0, input_value, 'product.list.category_all_text'|trans, {}, 'filter-circle-xmark') }}
+        {% for key, entry in customData.dropdown %}
+            {{ _self.item_separator() }}
+            {{ _self.output_dropdown('group', entry.id, group_id, key, {'data-parameter': 'groupId'}, ICON_GROUP) }}
+            {% for code, code_id in entry.categories %}
+                {{ _self.output_dropdown('category ps-5', code_id, category_id, code, {'data-parameter': 'categoryId'}, ICON_CATEGORY) }}
             {% endfor %}
-        </div>
+        {% endfor %}
     </div>
 {% endif %}
 {%- endblock %}
@@ -81,5 +79,5 @@
 {{ _self.property_value('%groupCode% / %categoryCode%') }}
 {{ _self.property_value('%supplier%') }}
 {{ _self.property_line() }}
-{{ _self.property_row('product.fields.price', '<span class="JavaScript:formatProductClass">%price%</span>JavaScript:formatProductUnit', 'text-right') }}
+{{ _self.property_row('product.fields.price', '<span class="JavaScript:formatProductClass">%price%</span>JavaScript:formatProductUnit', 'text-end') }}
 {%- endblock %}

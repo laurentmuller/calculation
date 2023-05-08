@@ -85,7 +85,7 @@
          * @private
          */
         _init() {
-            this.$menu = this.$element.siblings('.dropdown-menu');
+            this.$menu = this.$element.next('.dropdown-menu');
             if (this.$menu.length) {
                 this.menuShowProxy = () => this._menuShow();
                 this.menuClickProxy = (e) => this._menuClick(e);

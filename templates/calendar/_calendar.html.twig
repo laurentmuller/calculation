@@ -7,7 +7,7 @@
 
 {% macro dataContent(calculations) -%}
 {% import 'macros/_properties.html.twig' as properties %}
-<table class="table table-popover table-sm bg-themed mb-0">
+<table class="table table-popover table-sm mb-0">
     <tbody>
     {% for calculation in calculations -%}
         {{ _self.dataRow(calculation) }}
@@ -46,10 +46,10 @@
     {%- elseif day.current -%}
         {%- set class = class ~ ' bg-primary text-white' -%}
     {% elseif day.weekEnd %}
-        {%- set class = class ~ ' bg-themed text-themed' -%}
+        {%- set class = class ~ ' text-muted' -%}
     {%- endif %}
 {% elseif day.weekEnd %}
-    {%- set class = class ~ ' bg-themed text-themed' -%}
+    {%- set class = class ~ ' text-muted' -%}
     {%- set text = '&nbsp;' -%}
 {% else %}
     {%- set text = '&nbsp;' -%}
@@ -58,7 +58,7 @@
 <td class="{{ class }}"{% if title %} title="{{ title }}"{% endif %}>
     <a href="{{ href }}" class="text-white">
         <span>{{ text }}</span>
-        <span class="badge badge-light" data-toggle="popover" data-html="{{ content|e }}"{% if title %} title="{{ title }}"{% endif %}>{{ count }}</span>
+        <span class="badge text-bg-light" data-bs-toggle="popover" data-html="{{ content|e }}"{% if title %} title="{{ title }}"{% endif %}>{{ count }}</span>
     </a>
 </td>
 {% else %}

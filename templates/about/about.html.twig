@@ -37,7 +37,7 @@
 {# body #}
 {% block body %}
 {{ parent() }}
-<div class="accordion" id="accordionAbout">
+<div class="accordion" id="parent_accordion">
 {{ tools.aboutCard('licence', 'about_licence_pdf', false, 'about_licence_word') }}
 {{ tools.aboutCard('policy', 'about_policy_pdf', false, 'about_policy_word') }}
 {% if super_admin %}

@@ -99,7 +99,7 @@ class ApplicationParametersType extends AbstractParametersType
             ->addNumberType();
 
         $key = PropertyServiceInterface::P_DEFAULT_PRODUCT_EDIT;
-        $this->addCheckBox($helper, $key, '');
+        $this->addCheckBox($helper, $key);
     }
 
     private function addDefaultValueSection(FormHelper $helper): void

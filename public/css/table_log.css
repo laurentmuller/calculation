@@ -59,22 +59,22 @@ td.user {
 }
 
 .icon-level.info {
-    color: var(--info);
+    color: var(--bs-info);
 }
 
 .icon-level.debug {
-    color: var(--secondary);
+    color: var(--bs-secondary);
 }
 
 .icon-level.warning {
-    color: var(--warning);
+    color: var(--bs-warning);
 }
 
 .icon-level.alert,
 .icon-level.critical,
 .icon-level.emergency,
 .icon-level.error {
-    color: var(--danger);
+    color: var(--bs-danger);
 }
 
 .icon-level.all:before {

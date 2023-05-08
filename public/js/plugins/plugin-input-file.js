@@ -132,12 +132,12 @@
             const files = $.isUndefined(e.target.files) ? e.target && e.target.value ? [{name: e.target.value.replace(/^.+\\/, '')}] : [] : e.target.files;
             if (files.length === 0) {
                 this._clear(e);
-                return;
+                return this;
             }
             if (!this._verifySizes(files)) {
                 this.$element.trigger('max_size.bs.file-input');
                 this._clear(e);
-                return;
+                return this;
             }
             this.$hidden.val('');
             this.$hidden.attr('name', '');
@@ -173,7 +173,6 @@
             if (e) {
                 e.preventDefault();
             }
-
             this.$hidden.val('');
             this.$hidden.attr('name', this.name);
             if (this.options.clearName) {

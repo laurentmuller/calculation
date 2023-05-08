@@ -35,6 +35,28 @@
         },
 
         /**
+         * Initialize simple file input.
+         *
+         * @return {JQuery} the caller for chaining.
+         */
+        initSimpleFileInput() {
+            return this.each(function () {
+                const $this = $(this);
+                const $delete = $this.parent().find('.btn-file-delete');
+                if ($this.length && $delete.length) {
+                    $this.trigger('change');
+                    $delete.on('click', function () {
+                        $this.val('').trigger('change').trigger('focus');
+                    });
+                    $this.on('change', function () {
+                        $delete.toggleClass('d-none', $this.val().length === 0);
+                        $this.valid();
+                    });
+                }
+            });
+        },
+
+        /**
          * Gets password strength score or -1 if not found.
          *
          * @return {number}
@@ -379,19 +401,21 @@
          * @return {JQuery} this form for chaining.
          */
         showSubmit: function (options) {
+            //position-absolute top-50 start-50 translate-middle
             const $this = $(this);
             const settings = $.extend(true, {
                 parent: $this,
                 text: $this.data('save') || 'Saving data...',
-                alertClass: 'alert alert-primary text-center',
-                iconClass: 'fa-solid fa-spinner fa-spin mr-2',
+                //alertClass: 'alert alert-primary text-center',
+                alertClass: 'alert alert-primary text-center position-absolute top-50 start-50 translate-middle',
+                iconClass: 'fa-solid fa-spinner fa-spin me-2',
                 css: {
-                    top: '50%',
-                    left: '50%',
+                    // top: '50%',
+                    // left: '50%',
                     width: '90%',
-                    position: 'absolute',
-                    transform: 'translate(-50%, -50%)',
-                    display: 'none',
+                    // position: 'absolute',
+                    // transform: 'translate(-50%, -50%)',
+                    // display: 'none',
                     zIndex: 2
                 },
                 maxWidth: 600,

@@ -7,16 +7,16 @@
 
 {% macro row(data, default, overwrite) -%}
 <tr class="text-center">
-    <td class="text-left">
+    <td class="text-start">
         <button type="button" class="btn btn-link btn-row p-0" title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ data.vars.label|trans }}</button>
     </td>
     {% for entry in data %}
         {%- set checked = default.hasBits(entry.vars.value) -%}
-        {%- set attr = {'data-default': checked|json_encode} -%}
+        {%- set attr = {'data-default': checked|json_encode, 'class': 'form-check-no-label'} -%}
         {%- if not overwrite -%}
             {%- set attr = attr|merge({'disabled': 'disabled', 'checked': checked}) -%}
         {%- endif -%}
-        <td>{{ form_widget(entry, {label_attr: {class: 'checkbox-custom'}, attr: attr}) }}</td>
+        <td>{{ form_widget(entry, {attr: attr}) }}</td>
     {% endfor %}
 </tr>
 {%- endmacro %}
@@ -27,7 +27,7 @@
     <table class="table table-bordered table-list" id="table-edit">
         <thead>
            <tr class="text-center">
-               <th class="text-left text-nowrap font-weight-normal">{{ icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icon('arrow-right') }}</th>
+               <th class="text-start text-nowrap fw-normal">{{ icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icon('arrow-right') }}</th>
                {% for permission in permissions %}
                    {{ _self.header(permission, overwrite) }}
                {% endfor %}

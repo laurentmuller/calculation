@@ -18,7 +18,11 @@
             if (label) {
                 return label;
             }
-            const $parent = $element.parents('.form-group');
+            let $label = $element.siblings('.form-label');
+            if ($label.length) {
+                return $label.text();
+            }
+            const $parent = $element.parents('.mb-3:first');
             if ($parent.length) {
                 let $label = $parent.find('label:first');
                 if ($label.length) {

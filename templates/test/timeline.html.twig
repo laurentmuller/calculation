@@ -29,18 +29,18 @@
 {% block body -%}
 <form name="search" id="search" action="{{ path('timeline') }}">
     <div class="row align-items-center">
-        <div class="col-auto mr-auto">
+        <div class="col-auto me-auto">
             <div class="form-inline">
                 <h4>{{ icon(title_icon, title) }}</h4><br>
             </div>
         </div>
         <div class="col-auto form-inline">
             {# date #}
-            <label for="date" class="mr-sm-1">{{ 'timeline.date'|trans }}</label>
-            <input id="date" name="date" type="date" class="form-control form-control-sm mr-2" min="{{ min_date_locale }}" max="{{ max_date_locale }}" value="{{ date }}">
+            <label for="date" class="form-label me-sm-1">{{ 'timeline.date'|trans }}</label>
+            <input id="date" name="date" type="date" class="form-control form-control-sm me-2" min="{{ min_date_locale }}" max="{{ max_date_locale }}" value="{{ date }}">
             {# interval #}
-            <label for="interval" class="mr-sm-1 mt-sm-0 mt-2">{{ 'timeline.interval'|trans }}</label>
-            <select id="interval" name="interval" class="form-control form-control-sm custom-select custom-select-sm mr-2">
+            <label for="interval" class="form-label me-sm-1 mt-sm-0 mt-2">{{ 'timeline.interval'|trans }}</label>
+            <select id="interval" name="interval" class="form-control form-select-sm me-2">
                 {{ _self.addInterval('P3D', 3, 'counters.days', interval) }}
                 {{ _self.addInterval('P5D', 5, 'counters.days', interval) }}
                 {{ _self.addInterval('P1W', 1, 'counters.weeks', interval) }}
@@ -77,7 +77,7 @@
     <div class="col">
         {{- from|locale_date('long') }} - {{ to|locale_date('long') -}}
     </div>
-    <div class="col-auto text-right">
+    <div class="col-auto text-end">
         {{- 'counters.calculations'|trans({'count': count}) -}}
     </div>
 </div>
@@ -91,14 +91,14 @@
             {%- set query = calculations[0].date|locale_date('short') -%}
             {%- set title = 'counters.calculations_day'|trans({'count': count, 'date': key}) -%}
             <li class="success">
-                <div class="position-relative ml-2">
+                <div class="position-relative ms-2">
                     <table class="table table-sm table-borderless">
                         <tbody>
                             <tr>
-                                <td colspan="4" class="py-0 pl-0">
+                                <td colspan="4" class="py-0 ps-0">
                                     <a class="text-decoration-none stretched-link" href="{{ path(route, {'search': query}) }}" title="{{ title }}">{{ key }}</a>
                                 </td>
-                                <td colspan="2" class="py-0 text-right">
+                                <td colspan="2" class="py-0 text-end">
                                     <small class="text-muted">{{ 'counters.calculations'|trans({'count': count}) }}</small>
                                 </td>
                             </tr>

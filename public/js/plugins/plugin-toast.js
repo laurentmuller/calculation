@@ -338,7 +338,7 @@
             const $div = $('#' + id);
 
             // class
-            const className = 'toast-plugin ' + options.position;
+            const className = 'toast-container toast-plugin ' + options.position;
 
             // style
             const css = {
@@ -362,6 +362,7 @@
                 }).appendTo($target);
             }
 
+            // update
             return $div.css(css).attr('class', className);
         },
 
@@ -375,7 +376,16 @@
         _createTitle: function (options) {
             if (options.title || options.icon !== false || options.closeButton || options.displayClose || options.subtitle && options.displaySubtitle) {
                 // header
-                const clazz = 'toast-header toast-header-' + options.type;
+                let clazz = 'toast-header bg-' + options.type;
+                switch (options.type) {
+                    case this.NotificationTypes.INFO:
+                    case this.NotificationTypes.WARNING:
+                        clazz += ' text-dark';
+                        break;
+                    default:
+                        clazz += ' text-white';
+                        break;
+                }
                 const $div = $('<div/>', {
                     'class': clazz
                 });
@@ -388,7 +398,7 @@
 
                 // title
                 const $title = $('<span/>', {
-                    'class': 'mr-auto',
+                    'class': 'me-auto',
                     'html': options.title || ''
                 });
                 $div.append($title);
@@ -425,7 +435,7 @@
             }
 
 
-            let clazz = 'mr-2 mt-1 fas fa-lg fa-';
+            let clazz = 'me-2 fas fa-lg fa-';// mt-1
             switch (options.type) {
                 case this.NotificationTypes.INFO:
                     clazz += 'info-circle';
@@ -446,7 +456,7 @@
 
             // icon only ?
             if (!options.title && !options.displayClose && !options.displaySubtitle) {
-                clazz += ' py-2';
+                //clazz += ' py-2';
             }
 
             // create
@@ -466,7 +476,7 @@
         _createSubtitle: function (options) {
             if (options.displaySubtitle && options.subtitle) {
                 return $('<small/>', {
-                    'class': 'ml-2',
+                    //'class': 'ms-2',
                     'html': options.subtitle
                 });
             }
@@ -483,21 +493,13 @@
         _createCloseButton: function (options) {
             if (options.displayClose) {
                 const title = options.closeTitle || 'Close';
-                const $button = $('<button/>', {
-                    'class': 'close ml-2 mb-1',
-                    'data-dismiss': 'toast',
+                return $('<button/>', {
+                    'data-bs-dismiss': 'toast',
                     'aria-label': title,
+                    'class': 'btn-close',
                     'type': 'button',
-                    'title': title,
-                    'css': {
-                        'color': 'inherit'
-                    }
+                    'title': title
                 });
-                const $span = $('<span />', {
-                    'aria-hidden': 'true',
-                    'html': '&times;'
-                });
-                return $button.append($span);
             }
             return null;
         },
@@ -510,10 +512,13 @@
          * @private
          */
         _createMessage: function (options) {
-            return $('<div/>', {
+            const $body = $('<div/>', {
                 'class': 'toast-body',
+            });
+            const $message = $('<div/>', {
                 'html': options.message
             });
+            return $body.append($message);
         },
 
         /**

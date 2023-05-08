@@ -11,7 +11,7 @@
 {% else %}
     {{ form_row(form.fromAddress) }}
 {% endif %}
-<div class="form-row">
+<div class="row">
     <div class="col-md-8">
         {{ form_row(form.subject) }}
     </div>
@@ -30,8 +30,6 @@
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/plugins/plugin-input-file.js') }}
-{{ asset_js('js/extensions/file-input-extensions.js') }}
 {{ asset_js('js/extensions/simple-editor-extension.js') }}
 {{ asset_js('js/application/user_comment.js') }}
 {% else %}

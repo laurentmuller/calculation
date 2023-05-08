@@ -474,7 +474,7 @@ const Application = {
         $('#data-table-edit a.btn-delete-item').removeClass('btn-delete-item');
         $('#data-table-edit a.btn-delete-group').removeClass('btn-delete-group');
         $('#data-table-edit a.btn-sort-group').removeClass('btn-sort-group');
-        $('#error-all > p').html('<br>').addClass('small').removeClass('text-right');
+        $('#error-all > p').html('<br>').addClass('small').removeClass('text-end');
 
         $.contextMenu('destroy');
         sortable('#data-table-edit tbody', 'destroy');
@@ -1716,7 +1716,7 @@ const MoveHandler = {
             'autoEdit': true,
             'autoDispose': true,
             'useNumberFormat': true,
-            'inputClass': 'form-control form-control-sm text-right my-n1 mx-0',
+            'inputClass': 'form-control form-control-sm text-end my-n1 mx-0',
             'attributes': {
                 'inputmode': 'decimal',
                 'scale': '2'
@@ -1755,9 +1755,9 @@ const MoveHandler = {
     $form.initValidator({
         spinner: {
             parent: $('#main-content'),
-            css: {
-                top: '30%'
-            }
+            // css: {
+            //     top: '30%'
+            // }
         }
     });
 

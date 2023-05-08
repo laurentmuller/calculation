@@ -5,13 +5,13 @@
  */
 (function ($) {
     'use strict';
-    $('[data-toggle="popover"]').popover({
+    $('[data-bs-toggle="popover"]').popover({
         html: true,
         trigger: 'hover',
         placement: 'auto',
-        customClass: 'popover-light popover-w-100 bg-themed',
-        content: function () {
-            const content = $(this).data("html");
+        customClass: 'popover-primary popover-w-100',
+        content: function (e) {
+            const content = $(e).data("html");
             return $(content);
         },
     });

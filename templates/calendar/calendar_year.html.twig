@@ -27,7 +27,7 @@
 {% endmacro %}
 
 {% macro monthTable(month) %}
-{%- set class = 'text-white font-weight-normal' ~ (month.current ? ' bg-primary' : ' bg-secondary') -%}
+{%- set class = 'text-white fw-normal' ~ (month.current ? ' bg-primary' : ' bg-secondary') -%}
 <div class="col-lg-4 col-md-6 mb-4">
     <table class="border w-100 calendar">
         <thead>
@@ -43,7 +43,7 @@
                 <th colspan="6" class="{{ class }} text-center">
                     <a class="text-white" href="{{ path('calendar_month', {'year': month.year, 'month': month.number}) }}" title="{{ 'calendar.month_show'|trans({'%month%': month.name, '%year%': month.year}) }}">{{ month.Name }}</a>
                 </th>
-                <th class="{{ class }} text-right pr-2">
+                <th class="{{ class }} text-end pe-2">
                     {{ helper.linkCalculations('%02d.%d'|format(month.number, month.year), month.name ~ ' ' ~ month.year, month.count, 'text-white') }}
                 </th>
                 {% endif %}
@@ -51,8 +51,8 @@
             <tr>
                 <th class="border bg-secondary">&nbsp;</th>
                 {% for name in month.calendar.weekShortNames %}
-                    {%- set class = 'border text-center font-weight-normal' -%}
-                    {% if loop.index in [6, 7] %}{%- set class = class ~ ' bg-themed text-themed' -%}{% endif %}
+                    {%- set class = 'border text-center fw-normal' -%}
+                    {% if loop.index in [6, 7] %}{%- set class = class ~ ' text-muted' -%}{% endif %}
                     <th class="{{ class }}">{{ name }}</th>
                 {% endfor %}
             </tr>
@@ -79,7 +79,7 @@
     <div class="col-md-4 text-md-center">
         <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
     </div>
-    <div class="col-md-4 align-self-center text-md-right">
+    <div class="col-md-4 align-self-center text-md-end">
         <div class="btn-group btn-group-sm" role="group">
             {# today year #}
             {% if today %}

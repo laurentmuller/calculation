@@ -45,7 +45,7 @@
                     {%- set menu_id = 'dropdownMenuLast_' ~ id -%}
                     {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
                     {%- set class_primary = id == selection ? 'table-primary' : '' -%}
-                    {%- set class_muted = calculation.stateEditable ? '' : 'text-muted' -%}
+                    {%- set class_muted = calculation.stateEditable ? '' : 'text-body-secondary' -%}
                     {%- set class_name = (class_primary ~ ' ' ~ class_muted)|trim -%}
                     <tr data-id="{{ id }}" {% if class_name %} class="{{ class_name }}"{% endif %}>
                         <td class="text-id text-border user-select-none" style="{{ properties.stateCss(calculation.stateColor) }}">

@@ -104,7 +104,7 @@
 /*
  * Calculation overall margin below
  */
-tr.text-muted td .text-danger {
+tr.text-body-secondary td .text-danger {
     opacity: 0.75;
 }
 

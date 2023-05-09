@@ -382,7 +382,7 @@ const Application = {
                     'id': 'user-margin-row'
                 });
                 const $td = $('<td>', {
-                    'class': 'text-muted',
+                    'class': 'text-body-secondary',
                     'text': $form.data('error-margin')
                 });
                 $tr.append($td);

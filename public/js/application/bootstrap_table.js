@@ -120,7 +120,7 @@ function styleTextMuted(row, index) {
     'use strict';
     if ($.parseInt(row.textMuted) === 0) {
         const $row = $('#table-edit tbody tr:eq(' + index + ')');
-        const classes = ($row.attr('class') || '') + ' text-muted';
+        const classes = ($row.attr('class') || '') + ' text-body-secondary';
         return {
             classes: classes.trim()
         };
@@ -556,7 +556,7 @@ function initializeDangerTooltips($table) {
             if (typeof row.textMuted !== 'undefined') {
                 const value = $.parseInt(row.textMuted);
                 if (value === 0) {
-                    $item.addClass('text-muted');
+                    $item.addClass('text-body-secondary');
                 }
             }
 

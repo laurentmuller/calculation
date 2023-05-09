@@ -22,17 +22,13 @@
         {{ parent() }}
     </div>
     <div class="col-auto">
-        <div class="row row-cols-lg-auto align-items-center g-2">
-            <div class="col-12">
-                <label for="months">{{ 'last_month.period'|trans }}</label>
-            </div>
-            <div class="col-12">
-                <select id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_by_month') }}" class="form-select form-select-sm">
-                    {% for current in allowed_months %}
-                        {{ _self.month(current, current == months) }}
-                    {% endfor %}
-                </select>
-            </div>
+        <div class="hstack">
+            <label class="form-label pe-2 mb-0" for="months">{{ 'last_month.period'|trans }}</label>
+            <select  class="form-select form-select-sm" id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_by_month') }}">
+            {% for current in allowed_months %}
+                {{ _self.month(current, current == months) }}
+            {% endfor %}
+            </select>
         </div>
     </div>
 </div>

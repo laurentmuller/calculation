@@ -73,7 +73,7 @@
         </div>
     </div>
 </form>
-<div class="row align-content-center my-1 text-muted">
+<div class="row align-content-center my-1 text-body-secondary">
     <div class="col">
         {{- from|locale_date('long') }} - {{ to|locale_date('long') -}}
     </div>
@@ -99,7 +99,7 @@
                                     <a class="text-decoration-none stretched-link" href="{{ path(route, {'search': query}) }}" title="{{ title }}">{{ key }}</a>
                                 </td>
                                 <td colspan="2" class="py-0 text-end">
-                                    <small class="text-muted">{{ 'counters.calculations'|trans({'count': count}) }}</small>
+                                    <small class="text-body-secondary">{{ 'counters.calculations'|trans({'count': count}) }}</small>
                                 </td>
                             </tr>
                             <tr>

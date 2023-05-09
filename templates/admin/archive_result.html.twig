@@ -10,7 +10,7 @@
 {# body #}
 {% block card_body %}
 <div class="table-responsive position-relative">
-    <table class="table table-no-bottom table-sm mb-0">
+    <table class="table table-no-bottom table-sm">
         <tr>
             <td class="text-nowrap">{{ 'archive.result.date'|trans }}</td>
             <td class="text-end">{{ result.date|locale_date('full') }}</td>
@@ -41,8 +41,7 @@
 </div>
 {% if result.valid %}
     {% if result.simulate %}
-        <hr class="mt-0"/>
-        <p class="mb-0 text-end text-muted small">{{ 'simulate.message'|trans }}</p>
+        <p class="mb-0 text-end text-body-secondary small">{{ 'simulate.message'|trans }}</p>
     {% endif %}
     {# results dialog #}
     <div class="modal fade" id="modal-result" tabindex="-1">
@@ -86,11 +85,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="row align-items-center no-gutters w-100">
-                        <div class="col">
-                            {{ button_close_modal(false) }}
-                        </div>
-                    </div>
+                    {{ button_close_modal(false) }}
                 </div>
             </div>
         </div>

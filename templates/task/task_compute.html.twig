@@ -29,7 +29,7 @@
     {% include 'task/_task_table.html.twig' with tasks %}
 </div>
 <div class="row row-empty{% if tasks_count != 0 %} d-none{% endif %}">
-    <p class="small text-muted">{{ 'task.edit.empty_items'|trans }}</p>
+    <p class="small text-body-secondary">{{ 'task.edit.empty_items'|trans }}</p>
 </div>
 {% endblock %}
 {# actions #}

@@ -46,10 +46,10 @@
     {%- elseif day.current -%}
         {%- set class = class ~ ' bg-primary text-white' -%}
     {% elseif day.weekEnd %}
-        {%- set class = class ~ ' text-muted' -%}
+        {%- set class = class ~ ' text-body-secondary' -%}
     {%- endif %}
 {% elseif day.weekEnd %}
-    {%- set class = class ~ ' text-muted' -%}
+    {%- set class = class ~ ' text-body-secondary' -%}
     {%- set text = '&nbsp;' -%}
 {% else %}
     {%- set text = '&nbsp;' -%}

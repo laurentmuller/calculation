@@ -94,7 +94,7 @@
                 {% endfor -%}
                 </tbody>
             </table>
-            <small class="text-muted text-end empty-margins{% if count > 0 %} d-none{% endif %}">{{- 'taskitem.edit.empty_items'|trans -}}</small>
+            <small class="text-body-secondary text-end empty-margins{% if count > 0 %} d-none{% endif %}">{{- 'taskitem.edit.empty_items'|trans -}}</small>
         </div>
     </div>
 </div>
@@ -138,7 +138,7 @@
         {{ _self.printTaskItem(item, loop.index == 1) }}
     {% endfor -%}
 </div>
-<small class="text-muted empty-items{% if form.vars.value.count > 0 %} d-none{% endif %}">{{- 'task.edit.empty_items'|trans -}}</small>
+<small class="text-body-secondary empty-items{% if form.vars.value.count > 0 %} d-none{% endif %}">{{- 'task.edit.empty_items'|trans -}}</small>
 {% endblock %}
 {# footer #}
 

@@ -1,5 +1,6 @@
 @import '../js/vendor/font-awesome/css/all.css';
 @import 'custom_control.css';
+@import 'context_menu.css';
 @import 'tooltips.css';
 @import 'popover.css';
 @import 'toast.css';
@@ -182,6 +183,7 @@ a.btn-list {
 .pagination {
     margin-bottom: 0;
 }
+
 /*
 [data-bs-theme=dark] body .btn-warning {
     color: var(--bs-white) !important;
@@ -407,6 +409,7 @@ input[type="number"] {
     background-image: none !important;
     padding-right: 0.75rem !important;
 }
+
 .was-validated .custom-select:valid, .custom-select.is-valid {
     background-image: none !important;
     padding-right: 1.75rem !important;
@@ -594,52 +597,6 @@ input[type="number"] {
 }
 
 /**
- * Context menu
- */
-.context-menu-list {
-    background-color: inherit !important;
-    -webkit-box-shadow: inherit !important;
-    -moz-box-shadow: inherit !important;
-    -o-box-shadow: inherit !important;
-    box-shadow: inherit !important;
-    border: var(--bs-border-width) solid var(--bs-border-color-translucent) !important;
-}
-
-.context-menu-item {
-    color: var(--bs-dropdown-link-color) !important;
-    background-color: transparent !important;
-    padding: 0.25rem 1rem !important;
-}
-
-.context-menu-item.context-menu-hover {
-    color: var(--bs-body-color) !important;
-    background-color: var(--bs-tertiary-bg) !important;
-}
-
-.context-menu-separator {
-    height: 0;
-    margin: 0.25rem 0 !important;
-    overflow: hidden;
-    border-bottom: 1px solid var(--bs-border-color-translucent) !important;
-    opacity: 1;
-}
-
-.context-menu-item.context-menu-disabled {
-    color: var(--bs-tertiary-color);
-    pointer-events: none;
-    background-color: transparent;
-}
-
-.context-menu-icon.context-menu-icon--fa5 i,
-.context-menu-icon.context-menu-icon--fa5 svg {
-    position: inherit !important;
-    color: inherit !important;
-    left: inherit !important;
-    top: inherit !important;
-    margin-right: 0.3rem;
-}
-
-/**
  * Reset the table hover row.
  */
 .table-hover tbody tr.not-hover:hover {
@@ -687,9 +644,10 @@ table.table-fixed-header th {
 }
 
 table.table-fixed-header th {
-    background-color:  var(--bs-light-bg-subtle) !important;
+    background-color: var(--bs-light-bg-subtle) !important;
     border-bottom-width: 1px !important;;
 }
+
 /**
  * Cards in index page.
  */
@@ -759,6 +717,7 @@ table.table-fixed-header th {
 .small-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: var(--bs-gray-700);
 }
+
 /*
 [data-bs-theme=dark] body .small-scrollbar::-webkit-scrollbar-track {
     background-color: #343a40;
@@ -825,4 +784,25 @@ table.table-no-end-line tbody tr:last-child td {
 .form-check .form-check-input.form-check-no-label {
     float: none;
     margin-left: 0;
+}
+
+/*
+ * field validation
+ */
+
+.field-valid {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.field-invalid {
+    border-color: var(--bs-form-invalid-border-color);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-danger-rgb), 0.25);
+}
+
+.text-justify {
+    text-align: justify !important
 }

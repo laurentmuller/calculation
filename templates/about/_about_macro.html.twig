@@ -1,17 +1,19 @@
 {# macros #}
 {% macro headerInfo(name) -%}
-<tr class="h"><th colspan="2">{{ name }}</th></tr>
+<tr class="h">
+    <th colspan="2">{{ name }}</th>
+</tr>
 {%- endmacro %}
 
-{% macro headerLinkInfo(name, target, countable, colspan=2) -%}
-<thead>
-    <tr>
-        <td class="h position-relative" colspan="{{ colspan }}">
-            <a data-bs-toggle="collapse" href="#{{ target }}" class="drop-down-icon-left stretched-link ms-1" aria-expanded="false" aria-controls="{{ target }}">{{ name }}</a>
-            <span class="badge bg-secondary rounded-pill float-end">{{ countable|length|integer }}</span>
-        </td>
-    </tr>
-</thead>
+{% macro headerLinkInfo(title, id, countable) -%}
+<div class="accordion-header position-relative" id="{{ id }}-header">
+    <button class="accordion-button collapsed ps-1 py-1 position-relative" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" aria-controls="{{ id }}">
+        {{- title -}}
+        <span class="badge bg-secondary rounded-pill position-absolute top-50 end-0 translate-middle" style="margin-right:35px;">
+            {{- countable|length|integer -}}
+        </span>
+    </button>
+</div>
 {%- endmacro %}
 
 {% macro rowInfo(name, value, name_class='', value_class='') -%}
@@ -74,21 +76,21 @@
 {% from 'macros/_icons.html.twig' import linkExternal %}
 {%- set route = path('about_' ~ id ~ '_content') -%}
 {%- set title = ('about.' ~ id)|trans -%}
-{%- set width = 43 + (excel_route ? 20 : 0) + (word_route ? 20 : 0) -%}
+{%- set margin_right = 30 - (excel_route ? 10 : 0) - (word_route ? 10 : 0) -%}
 <div class="accordion-item">
     <div class="accordion-header" id="{{ id }}-header">
-        <div class="d-flex align-items-center">
-            <button class="accordion-button collapsed float-left" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'about.expand'|trans }}" style="width: calc(100% - {{ width }}px)">
-                {{- title -}}
-            </button>
-            {{ linkExternal(path(pdf_route), null, 'ms-2', ICON_PDF, 'common.button_export_pdf') }}
-            {% if excel_route %}
-                {{ linkExternal(path(excel_route), null, 'ms-2', ICON_EXCEL, 'common.button_export_excel') }}
-            {% endif %}
-            {% if word_route %}
-                {{ linkExternal(path(word_route), null, 'ms-2', ICON_WORD, 'common.button_export_word') }}
-            {% endif %}
-        </div>
+        <button class="accordion-button collapsed py-2 position-relative" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'about.expand'|trans }}">
+            {{- title -}}
+            <div class="position-absolute top-50 end-0 translate-middle" style="margin-right: {{ margin_right }}px">
+                {{ linkExternal(path(pdf_route), null, '', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
+                {% if excel_route %}
+                    {{ linkExternal(path(excel_route), null, '', ICON_EXCEL ~ ' fa-fw', 'common.button_export_excel') }}
+                {% endif %}
+                {% if word_route %}
+                    {{ linkExternal(path(word_route), null, '', ICON_WORD ~ ' fa-fw', 'common.button_export_word') }}
+                {% endif %}
+            </div>
+        </button>
     </div>
     <div class="accordion-collapse collapse" id="{{ id }}" aria-labelledby="{{ id }}-header" data-bs-parent="#parent_accordion">
         <div class="accordion-body" data-url="{{ route }}">

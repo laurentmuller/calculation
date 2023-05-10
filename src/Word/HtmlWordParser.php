@@ -30,20 +30,20 @@ class HtmlWordParser
      */
     private const CLASSES_TO_STYLES = [
         // alignment
-        'text-left' => 'text-align: left;',
-        'text-center' => 'text-align: center;',
-        'text-right' => 'text-align: right;',
-        'text-justify' => 'text-align: justify;',
+        'text-start' => 'text-align:left;',
+        'text-center' => 'text-align:center;',
+        'text-end' => 'text-align:right;',
+        'text-justify' => 'text-align:justify;',
         // font
-        'font-italic' => 'font-style:italic;',
-        'font-weight-bold' => 'font-weight:bold;',
-        'text-monospace' => 'font-family:Courier New;',
+        'fw-bold' => 'font-weight:bold;',
+        'fst-italic' => 'font-style:italic;',
+        'font-monospace' => 'font-family:Courier New;',
     ];
 
     /**
      * The pattern to extract margins.
      */
-    private const MARGINS_PATTERN = '/^[m|p]([tblrxy])?-(sm-|md-|lg-|xl-)?([012345])/im';
+    private const MARGINS_PATTERN = '/^[m|p]([tbsexy])?-(sm-|md-|lg-|xl-|xxl-)?([012345])/im';
 
     /**
      * The mapping between class name and style.
@@ -85,6 +85,7 @@ class HtmlWordParser
                     "text-$name" => "color:$value;",
                     "border-$name" => "border-color:$value;",
                     "bg-$name" => "background-color:$value;",
+                    "text-bg-$name" => "background-color:$value;",
                 ];
             },
             []
@@ -133,33 +134,33 @@ class HtmlWordParser
             'border' => ["border:$borderSolid"],
             'border-top' => ["border-top:$borderSolid"],
             'border-bottom' => ["border-bottom:$borderSolid"],
-            'border-left' => ["border-left:$borderSolid"],
-            'border-right' => ["border-right:$borderSolid"],
+            'border-start' => ["border-left:$borderSolid"],
+            'border-end' => ["border-right:$borderSolid"],
 
             'border-0' => ["border:$borderNone"],
             'border-top-0' => [
                 "border-top:$borderNone",
                 "border-bottom:$borderSolid",
-                "border-left:$borderSolid",
-                "border-right:$borderSolid",
+                "border-start:$borderSolid",
+                "border-end:$borderSolid",
             ],
             'border-left-0' => [
                 "border-top:$borderSolid",
                 "border-bottom:$borderSolid",
-                "border-left:$borderNone",
-                "border-right:$borderSolid",
+                "border-start:$borderNone",
+                "border-end:$borderSolid",
             ],
             'border-right-0' => [
                 "border-top:$borderSolid",
                 "border-bottom:$borderSolid",
-                "border-left:$borderSolid",
-                "border-right:$borderNone",
+                "border-start:$borderSolid",
+                "border-end:$borderNone",
             ],
             'border-bottom-0' => [
                 "border-top:$borderSolid",
                 "border-bottom:$borderNone",
-                "border-left:$borderSolid",
-                "border-right:$borderSolid",
+                "border-start:$borderSolid",
+                "border-end:$borderSolid",
             ],
             default => []
         };
@@ -189,8 +190,8 @@ class HtmlWordParser
             return match ($matches[0][1]) {
                 't' => \sprintf('margin-top:%s;', $value),
                 'b' => \sprintf('margin-bottom:%s;', $value),
-                'l' => \sprintf('margin-left:%s;', $value),
-                'r' => \sprintf('margin-right:%s;', $value),
+                's' => \sprintf('margin-left:%s;', $value),
+                'e' => \sprintf('margin-right:%s;', $value),
                 'x' => \sprintf('margin-left:%1$s;margin-right:%1$s;', $value),
                 'y' => \sprintf('margin-top:%1$s;margin-bottom:%1$s;', $value),
                 default => \sprintf('margin:%s;', $value),

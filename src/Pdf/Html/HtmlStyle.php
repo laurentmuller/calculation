@@ -53,18 +53,6 @@ class HtmlStyle extends PdfStyle
     }
 
     /**
-     * Sets the font style to bold.
-     *
-     * @param bool $add true to add bold to existing style, false to replace
-     */
-    public function bold(bool $add = false): self
-    {
-        $this->getFont()->bold($add);
-
-        return $this;
-    }
-
-    /**
      * Gets the alignment.
      */
     public function getAlignment(): PdfTextAlignment

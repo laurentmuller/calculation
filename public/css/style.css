@@ -39,42 +39,25 @@ body.status-bar {
     margin-bottom: 30px;
 }
 
+/**
+ * footer
+ */
 footer a,
 footer span {
     padding: 0 0.5rem !important;
 }
 
-/*
-
-[data-bs-theme=dark] body footer .border-left,
-[data-bs-theme=dark] body footer .border-right,
-[data-bs-theme=dark] body .navbar-vertical .dropdown-divider {
-    border-color: #6c757d !important;
+body[data-bs-theme=dark]:has(.sidebar-hide) footer {
+    border-top: var(--bs-border-width) solid var(--bs-border-color);
 }
-    var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
-    var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important
 
-[data-bs-theme=light] body footer:before {
+body[data-bs-theme=dark]:not(:has(.sidebar-hide)) footer:before {
     content: "";
     position: absolute;
-    left: 17rem;
     top: 0;
-    width: calc(100% - 17rem);;
-    border-bottom: 1px solid #dee2e6;
-}
-
-[data-bs-theme=light] body .page-content.sidebar-hide footer:before {
-    left: 0;
-    width: 100%;
-}
- */
-
-/*
- * Example button for theme example
- */
-.btn-example.disabled {
-    opacity: 1;
-    pointer-events: none;
+    left: 17rem;
+    width: calc(100% - 17rem);
+    border-top: var(--bs-border-width) solid var(--bs-border-color);
 }
 
 /*
@@ -789,7 +772,6 @@ table.table-no-end-line tbody tr:last-child td {
 /*
  * field validation
  */
-
 .field-valid {
     color: var(--bs-body-color);
     background-color: var(--bs-body-bg);
@@ -803,6 +785,9 @@ table.table-no-end-line tbody tr:last-child td {
     box-shadow: 0 0 0 0.25rem rgba(var(--bs-danger-rgb), 0.25);
 }
 
+/**
+ * Re-implement text justify
+ */
 .text-justify {
     text-align: justify !important
 }

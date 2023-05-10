@@ -133,14 +133,30 @@ class TestController extends AbstractController
     /**
      * Export a HTML page to PDF.
      */
-    #[Route(path: '/html', name: 'test_html')]
-    public function html(): PdfResponse
+    #[Route(path: '/pdf', name: 'test_pdf')]
+    public function exportPdf(): PdfResponse
     {
         $content = $this->renderView('test/html_report.html.twig');
         $report = new HtmlReport($this, $content);
         $report->SetTitle($this->trans('test.html'), true);
 
         return $this->renderPdfDocument($report);
+    }
+
+    /**
+     * Export an HTML page to Word.
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \PhpOffice\PhpWord\Exception\Exception
+     */
+    #[Route(path: '/word', name: 'test_word')]
+    public function exportWord(): WordResponse
+    {
+        $content = $this->renderView('test/html_report.html.twig');
+        $doc = new HtmlDocument($this, $content);
+        $doc->setTitleTrans('test.html');
+
+        return $this->renderWordDocument($doc);
     }
 
     /**
@@ -418,22 +434,6 @@ class TestController extends AbstractController
             'currencies' => $this->getCurrencies(),
             'countries' => Countries::getNames(),
         ]);
-    }
-
-    /**
-     * Export an HTML page to Word.
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \PhpOffice\PhpWord\Exception\Exception
-     */
-    #[Route(path: '/word', name: 'test_word')]
-    public function word(): WordResponse
-    {
-        $content = $this->renderView('test/html_report.html.twig');
-        $doc = new HtmlDocument($this, $content);
-        $doc->setTitleTrans('test.html');
-
-        return $this->renderWordDocument($doc);
     }
 
     /**

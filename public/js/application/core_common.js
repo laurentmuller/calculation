@@ -196,7 +196,6 @@ function initSwitchTheme() {
                 Toaster.danger(options.error, title, flashBag);
             });
         }
-
     });
 }
 

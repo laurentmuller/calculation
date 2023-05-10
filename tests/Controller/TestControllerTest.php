@@ -20,7 +20,6 @@ class TestControllerTest extends AbstractControllerTestCase
 {
     private const ROUTES = [
         'editor',
-        'html',
         'notifications',
         'password',
         'recaptcha',
@@ -28,6 +27,7 @@ class TestControllerTest extends AbstractControllerTestCase
         'swiss',
         'translate',
         'tree',
+        'pdf',
         'word',
         ];
 

@@ -149,11 +149,18 @@
                         const $elements = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
 
                         // display if parent's accordion
+                        // .collapse:not(.show), .accordion-collapse.collapse:not(.show)
+                        // .collapse:not(.show)'
                         const $collapse = $elements.parents('.collapse:not(.show)');
-                        const $accordion = $elements.parents('.accordion');
-                        if ($collapse.length && $accordion.length) {
+                        if ($collapse.length ) {
                             $collapse.collapse('show');
                         }
+                        // const $accordion = $elements.parents('.accordion');
+                        // if ($collapse.length && $accordion.length) {
+                        //     $collapse.collapse('show');
+                        // } else if ($collapse.length ) {
+                        //     $collapse.collapse('show');
+                        // }
 
                         // simple editor
                         if (simpleEditor) {
@@ -236,6 +243,7 @@
             // default options
             let defaults = {
                 focus: true,
+                focusInvalid: true,
                 showModification: true,
                 errorElement: 'small',
                 errorClass: 'is-invalid d-inline-block',

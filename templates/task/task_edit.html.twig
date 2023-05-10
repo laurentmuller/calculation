@@ -1,6 +1,6 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% from 'macros/_timestampable.html.twig' import timestampable %}
-{% from 'macros/_icons.html.twig' import link %}
+{% from 'macros/_icons.html.twig' import icon %}
 {% form_theme form with _self %}
 {# item label #}
 {% block _task_items_entry_name_label -%}
@@ -11,7 +11,7 @@
         <div class="col-auto">
             <div class="btn-group btn-group-sm" role="group">
                 <button class="btn btn-edit btn-outline-secondary btn-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id_content }}" title="{{ title|trans }}">
-                    <i class="d-print-none fa-solid fa-caret-{% if show %}down{% else %}right{% endif %}"></i>
+                    <i class="d-print-none fa-solid fa-caret-{% if show %}up{% else %}down{% endif %}"></i>
                 </button>
                 <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'task.edit.move_up_item'|trans }}" disabled="disabled">
                     <i class="fa-solid fa-angle-up"></i>
@@ -48,7 +48,9 @@
         </div>
     </td>
     <td class="actions px-0 py-2 d-print-none">
-        {{- link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete-margin d-print-none', ICON_DELETE, 'taskitem.edit.delete_item') -}}
+        <button type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'taskitem.edit.delete_item'|trans }}">
+            {{- icon(ICON_DELETE) -}}
+        </button>
     </td>
 </tr>
 {% endmacro -%}
@@ -60,8 +62,8 @@
 {%- set count = item.vars.value.count|default(0) -%}
 {%- set name = item.vars.value.name|default('taskitem.fields.name'|trans) -%}
 {%- set title = show ? 'taskitem.edit.items_hide' : 'taskitem.edit.items_show' %}
-<div class="item card">
-    <div class="card-header card-header-item bg-transparent px-3 pb-1" id="{{ id_header }}">
+<div class="item list-group-item px-0">
+    <div class="item-header card-header-item bg-transparent px-3 pb-1" id="{{ id_header }}">
         <div class="form-group">
             {{ form_row(item.name, {id_content: id_content, title: title, show: show}) }}
         </div>
@@ -133,7 +135,7 @@
         {{ form_row(form.supplier) }}
     </div>
 </div>
-<div class="items accordion" id="items" data-item-index="{{ item_index }}" data-margin-index="{{ margin_index }}" data-prototype="{{ _self.printTaskItem(form.items.vars.prototype, true)|e('html_attr') }}">
+<div class="items list-group" id="items" data-item-index="{{ item_index }}" data-margin-index="{{ margin_index }}" data-prototype="{{ _self.printTaskItem(form.items.vars.prototype, true)|e('html_attr') }}">
     {% for item in form.items -%}
         {{ _self.printTaskItem(item, loop.index == 1) }}
     {% endfor -%}

@@ -52,8 +52,10 @@ function startDragItems() {
     // items?
     if ($items.find('.item').length > 1) {
         sortable($items, {
-            items: '.item', //handle: '.stretched-link',
-            handle: '.card-header-item', forcePlaceholderSize: true, placeholderClass: 'border border-primary rounded'
+            items: '.item',
+            handle: '.item-header',
+            forcePlaceholderSize: true,
+            placeholderClass: 'border border-primary'
         });
         $items.on('sortupdate', updateUI);
         $items.data('sortable', true);
@@ -276,12 +278,39 @@ function sortMargins($caller) {
     }).appendTo($body);
 }
 
+/**
+ * Update the toggle button.
+ *
+ * @param {JQuery} $caller - the caller
+ * @param {boolean} show - true if shown, false if hidden.
+ */
 function updateToggle($caller, show) {
     'use strict';
     const $form = $('#edit-form');
     const $link = $caller.parents('.item').find('.btn-toggle');
     const title = show ? $form.data('show') : $form.data('hide');
-    $link.attr('title', title).find('i').toggleClass('fa-caret-down fa-caret-right');
+    $link.attr('title', title).find('i').toggleClass('fa-caret-down fa-caret-up');
+}
+
+/**
+ * Collapse all shown margins.
+ */
+function collapseAll() {
+    'use strict';
+    $('#items .collapse.show').collapse('hide');
+}
+
+/**
+ * Expand margins.
+ *
+ * @param $caller {JQuery} $caller - the caller
+ */
+function expand($caller) {
+    'use strict';
+    const $collapse = $caller.parents('.item').children('.collapse');
+    if ($collapse.length && !$collapse.is('.show')) {
+        $collapse.collapse('show');
+    }
 }
 
 /**
@@ -314,11 +343,13 @@ function updateToggle($caller, show) {
         e.preventDefault();
         sortMargins($(this));
     }).on('show.bs.collapse', '.collapse', function () {
+        collapseAll();
+    }).on('shown.bs.collapse', '.collapse', function () {
         updateToggle($(this), false);
     }).on('hide.bs.collapse', '.collapse', function () {
         updateToggle($(this), true);
     }).on('focus', '.unique-name', function () {
-        $(this).parents('.card').children('.collapse').collapse('show');
+        expand($(this));
     });
     // initialize search
     const $form = $("#edit-form");

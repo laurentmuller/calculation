@@ -1,155 +1,46 @@
 /**! compression tag for ftp-deployment */
 
-/*
- * -------------------------------------------------
- * Switch radio and checkbox with custom colors
- * -------------------------------------------------
+/**
+ * form-check-input checked
  */
-
-.custom-switch label.custom-control-label.required:after {
-    content: ""
-}
-
-/*
- * Custom control checked. Can be copied from .btn-xxx
- */
-.custom-control-primary:checked ~ .custom-control-label::before {
+.form-check.form-primary .form-check-input:checked {
+    background-color: var(--bs-primary);
     border-color: var(--bs-primary);
-    background-color: var(--bs-primary);
 }
-.custom-control-secondary:checked ~ .custom-control-label::before {
+
+.form-check.form-secondary .form-check-input:checked {
+    background-color: var(--bs-secondary);
     border-color: var(--bs-secondary);
-    background-color: var(--bs-secondary);
 }
-.custom-control-success:checked ~ .custom-control-label::before {
+
+.form-check.form-success .form-check-input:checked {
+    background-color: var(--bs-success);
     border-color: var(--bs-success);
-    background-color: var(--bs-success);
 }
-.custom-control-info:checked ~ .custom-control-label::before {
+
+.form-check.form-info .form-check-input:checked {
+    background-color: var(--bs-info);
     border-color: var(--bs-info);
-    background-color: var(--bs-info);
 }
-.custom-control-warning:checked ~ .custom-control-label::before {
+
+.form-check.form-warning .form-check-input:checked {
+    background-color: var(--bs-warning);
     border-color: var(--bs-warning);
-    background-color: var(--bs-warning);
 }
-.custom-control-danger:checked ~ .custom-control-label::before {
+
+.form-check.form-danger .form-check-input:checked {
+    background-color: var(--bs-danger);
     border-color: var(--bs-danger);
-    background-color: var(--bs-danger);
 }
-.custom-control-light:checked ~ .custom-control-label::before {
-    border-color: var(--bs-light);
-    background-color: var(--bs-light);
-}
-.custom-control-dark:checked ~ .custom-control-label::before {
+
+.form-check.form-dark .form-check-input:checked {
+    background-color: var(--bs-dark);
     border-color: var(--bs-dark);
-    background-color: var(--bs-dark);
 }
 
-/*
- * Switch checked and disabled
+/**
+ * special case for dark theme and dark mode
  */
-.custom-switch .custom-control-input.custom-control-primary:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-primary);
-    opacity: 0.5;
-}
-.custom-switch .custom-control-input.custom-control-secondary:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-secondary);
-    opacity: 0.5;
-}
-.custom-switch .custom-control-input.custom-control-success:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-success);
-    opacity: 0.5;
-}
-.custom-switch .custom-control-input.custom-control-info:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-info);
-    opacity: 0.5;
-}
-.custom-switch .custom-control-input.custom-control-warning:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-warning);
-    opacity: 0.5;
-}
-.custom-switch .custom-control-input.custom-control-danger:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-danger);
-    opacity: 0.5;
-}
-.custom-switch .custom-control-input.custom-control-light:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-light);
-    opacity: 0.5;
-}
-.custom-switch .custom-control-input.custom-control-dark:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-dark);
-    opacity: 0.5;
-}
-
-/*
- * Checkbox checked and disabled
- */
-.custom-checkbox .custom-control-input.custom-control-primary:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-primary);
-    opacity: 0.5;
-}
-.custom-checkbox .custom-control-input.custom-control-secondary:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-secondary);
-    opacity: 0.5;
-}
-.custom-checkbox .custom-control-input.custom-control-success:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-success);
-    opacity: 0.5;
-}
-.custom-checkbox .custom-control-input.custom-control-info:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-info);
-    opacity: 0.5;
-}
-.custom-checkbox .custom-control-input.custom-control-warning:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-warning);
-    opacity: 0.5;
-}
-.custom-checkbox .custom-control-input.custom-control-danger:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-danger);
-    opacity: 0.5;
-}
-.custom-checkbox .custom-control-input.custom-control-light:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-light);
-    opacity: 0.5;
-}
-.custom-checkbox .custom-control-input.custom-control-dark:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-dark);
-    opacity: 0.5;
-}
-
-/*
- * Radio checked and disabled
- */
-.custom-radio .custom-control-input.custom-control-primary:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-primary);
-    opacity: 0.5;
-}
-.custom-radio .custom-control-input.custom-control-secondary:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-secondary);
-    opacity: 0.5;
-}
-.custom-radio .custom-control-input.custom-control-success:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-success);
-    opacity: 0.5;
-}
-.custom-radio .custom-control-input.custom-control-info:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-info);
-    opacity: 0.5;
-}
-.custom-radio .custom-control-input.custom-control-warning:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-warning);
-    opacity: 0.5;
-}
-.custom-radio .custom-control-input.custom-control-danger:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-danger);
-    opacity: 0.5;
-}
-.custom-radio .custom-control-input.custom-control-light:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-light);
-    opacity: 0.5;
-}
-.custom-radio .custom-control-input.custom-control-dark:disabled:checked~.custom-control-label::before {
-    background-color: var(--bs-dark);
-    opacity: 0.5;
+body[data-bs-theme=dark] .form-check.form-dark .form-check-input:checked {
+    border-color: var(--bs-border-color);
 }

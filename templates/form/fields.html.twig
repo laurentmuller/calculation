@@ -118,9 +118,12 @@
     </div>
 {%- else -%}
     <div class="input-group">
-        {% set attr = {'class': (value ? '' : 'rounded-end')} %}
+        {%- set is_empty = not value -%}
+        {% if is_empty %}
+            {% set attr = attr|merge({class: (attr.class|default('') ~ ' rounded-end')|trim}) %}
+        {% endif %}
         {{- block('form_widget_simple') }}
-        <button class="btn btn-file-delete btn-outline-secondary{% if not value %} d-none{% endif %}" type="button" title="{{ 'common.button_delete'|trans }}">
+        <button class="btn btn-file-delete btn-outline-secondary{% if is_empty %} d-none{% endif %}" type="button" title="{{ 'common.button_delete'|trans }}">
             <i class="fa-solid fa-times"></i>
         </button>
     </div>

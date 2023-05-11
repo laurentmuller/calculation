@@ -136,10 +136,10 @@ function addItem() {
     updateUI();
     // focus
     $item.find('input[name$="[name]"]:last').selectFocus().scrollInViewport();
-    // hide others
-    $items.find('.collapse:not(:last)').collapse('hide');
+    // hide all except last
+    $items.find('.collapse.show:not(:last)').collapse('hide');
     // expand
-    $items.find('.collapse:last').addClass('show');
+    $items.find('.collapse:last').collapse('show');
     // drag and drop
     startDragItems();
     return $item;

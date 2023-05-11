@@ -1,14 +1,14 @@
 {# macros #}
 {% macro header(permission, overwrite) %}
 <th>
-    <button type="button" class="btn btn-link btn-col p-0" title="{{ 'user.rights.col_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ permission|trans }}</button>
+    <a href="#" class="link-col link-underline link-underline-opacity-0 fw-normal" title="{{ 'user.rights.col_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ permission|trans }}</a>
 </th>
 {%- endmacro %}
 
 {% macro row(data, default, overwrite) -%}
 <tr class="text-center">
     <td class="text-start">
-        <button type="button" class="btn btn-link btn-row p-0" title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ data.vars.label|trans }}</button>
+        <a href="#" class="link-row link-underline link-underline-opacity-0" title="{{ 'user.rights.row_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>{{ data.vars.label|trans }}</a>
     </td>
     {% for entry in data %}
         {%- set checked = default.hasBits(entry.vars.value) -%}

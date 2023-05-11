@@ -20,6 +20,7 @@ use App\Utils\StringUtils;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -40,6 +41,11 @@ class OpenWeatherCityUpdater
     use TranslatorTrait;
 
     /**
+     * The import file extension.
+     */
+    private const FILE_EXTENSION = 'gz';
+
+    /**
      * Constructor.
      */
     public function __construct(
@@ -57,14 +63,14 @@ class OpenWeatherCityUpdater
     public function createForm(): FormInterface
     {
         $constraint = new File([
-            'mimeTypes' => 'application/gzip',
+            'extensions' => [self::FILE_EXTENSION],
             'mimeTypesMessage' => $this->trans('openweather.error.mime_type'),
         ]);
         $builder = $this->factory->createBuilder();
         $helper = new FormHelper($builder, 'openweather.import.');
 
         return $helper->field('file')
-            ->updateAttribute('accept', 'application/x-gzip')
+            ->updateAttribute('accept', $this->getMimeTypes())
             ->constraints($constraint)
             ->addFileType()
             ->createForm();
@@ -153,6 +159,14 @@ class OpenWeatherCityUpdater
         } catch (\InvalidArgumentException) {
             return false;
         }
+    }
+
+    private function getMimeTypes(): string
+    {
+        $default = MimeTypes::getDefault();
+        $mimeTypes = $default->getMimeTypes(self::FILE_EXTENSION);
+
+        return \implode(',', $mimeTypes);
     }
 
     /**

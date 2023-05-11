@@ -67,6 +67,7 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
             ->updateOption('value_transformer', $this->translateEnabled(...))
             ->addPlainType(true);
         $helper->field('overwrite')
+            ->rowClass('mt-3')
             ->notRequired()
             ->addCheckboxType();
     }

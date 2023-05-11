@@ -34,10 +34,6 @@
                     if (typeof callback === 'function') {
                         callback($that);
                     }
-                    if (!isThumbnail) {
-                        const isFiles = $that.getInputFiles().length !== 0;
-                        $that.parent().toggleClass('rounded-end', !isFiles).css('border-right', isFiles  ? '' : '0');
-                    }
                 });
 
                 // find group

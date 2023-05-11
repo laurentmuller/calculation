@@ -165,10 +165,12 @@ function defaultValues() {
     $("#default").on("click", function () {
         defaultValues();
     });
-    $(".btn-col").on("click", function () {
+    $(".link-col").on("click", function (e) {
+        e.preventDefault();
         onColumnClick($(this));
     });
-    $(".btn-row").on("click", function () {
+    $(".link-row").on("click", function (e) {
+        e.preventDefault();
         onRowClick($(this));
     });
     $('#user_rights_overwrite').on("click", function () {

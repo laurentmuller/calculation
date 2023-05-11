@@ -117,25 +117,21 @@
             {{ macros.empty() }}
         {%- endif -%}
     </div>
-    <div class="card-footer d-print-none p-2 d-flex">
-        <div class="row row-cols-lg-auto align-items-center g-2 w-100">
-            <div class="col-12 ms-auto">
-                <div class="form-control-sm form-check form-switch" title="{{ 'index.panel_table_user_help'|trans }}">
-                    <input type="checkbox" class="form-check-input" id="restrict" data-url="{{ url('homepage') }}" data-value="{{ restrict }}"{% if restrict %} checked="checked"{% endif %}>
-                    <label class="form-check-label" for="restrict">{{ 'index.panel_table_user'|trans }}</label>
-                </div>
+    <div class="card-footer d-print-none p-2">
+        <div class="hstack w-100">
+            <div class="ms-auto form-control-sm form-check form-switch" title="{{ 'index.panel_table_user_help'|trans }}">
+                <input type="checkbox" class="form-check-input" id="restrict" data-url="{{ url('homepage') }}" data-value="{{ restrict }}"{% if restrict %} checked="checked"{% endif %}>
+                <label class="form-check-label" for="restrict">{{ 'index.panel_table_user'|trans }}</label>
             </div>
-           <div class="col-12">
-               {% set counter = user_service.panelCalculation %}
-               <div class="dropdown dropdown-counter" title="{{ 'index.panel_table_count'|trans }}" data-path="{{ path('homepage_calculation') }}" data-value="{{ counter }}">
-                   <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ counter }}</button>
-                   <div class="dropdown-menu">
-                       {% for index in range(5, 25, 5) %}
-                           <button class="dropdown-item dropdown-item-counter{% if counter == index %} active{% endif %}" data-value="{{ index }}" >{{ 'counters.calculations'|trans({'count': index}) }}</button>
-                       {% endfor %}
-                   </div>
+           {% set counter = user_service.panelCalculation %}
+           <div class="dropdown dropdown-counter" title="{{ 'index.panel_table_count'|trans }}" data-path="{{ path('homepage_calculation') }}" data-value="{{ counter }}">
+               <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ counter }}</button>
+               <div class="dropdown-menu">
+               {% for index in range(5, 25, 5) %}
+                   <button class="dropdown-item dropdown-item-counter{% if counter == index %} active{% endif %}" data-value="{{ index }}" >{{ 'counters.calculations'|trans({'count': index}) }}</button>
+               {% endfor %}
                </div>
-            </div>
+           </div>
         </div>
     </div>
 </div>

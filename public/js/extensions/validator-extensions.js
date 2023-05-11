@@ -151,11 +151,11 @@
                         // get invalid elements
                         const $elements = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
 
-                        // display if parent's accordion
-                        const $collapse = $elements.parents('.collapse:not(.show)');
-                        if ($collapse.length) {
-                            $collapse.collapse('show');
-                        }
+                        // display if parent is collapsed
+                        // const $collapse = $elements.parents('.collapse:not(.show)');
+                        // if ($collapse.length) {
+                        //     $collapse.collapse('show');
+                        // }
 
                         // simple editor
                         if (simpleEditor) {
@@ -281,16 +281,14 @@
                 },
             };
 
-            // options.invalidHandler = function (e, validator) {
-            // validator.errorList.every(function (entry) {
-            //     const $collapse = $(entry.element).parents('.collapse:not(.show)');
-            //     if ($collapse.length) {
-            //         $collapse.collapse('show');
-            //         return false;
-            //     }
-            //     return true;
-            // });
-            // };
+            options.invalidHandler = function (e, validator) {
+                // expand collapsed parent (if any)
+                const $element = $(validator.findLastActive() || (validator.errorList.length && validator.errorList[0].element));
+                const $collapse = $element.parents('.collapse:not(.show)');
+                if ($collapse.length) {
+                    $collapse.collapse('show');
+                }
+            };
 
             if (!options.submitHandler) {
                 defaults.submitHandler = function (form) {

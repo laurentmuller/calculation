@@ -769,6 +769,10 @@ table.table-no-end-line tbody tr:last-child td {
     margin-left: 0;
 }
 
+.form-check:has(.form-check-input.form-check-no-label) .form-check-label {
+    display: none;
+}
+
 /*
  * field validation
  */

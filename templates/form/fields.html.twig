@@ -113,12 +113,13 @@
                 {%- set attr = attr|merge({'aria-label': thumbnail_alt|trans}) -%}
                 {{- block('form_widget_simple') -}}
             </span>
-            <button type="button" class="btn btn-sm btn-form-sm btn-outline-danger file-input-exists" data-bs-dismiss="file-input">{{ 'common.button_delete'|trans }}</button>
+            <button type="button" class="btn btn-sm btn-form-sm btn-outline-danger file-input-exists" data-dismiss="file-input">{{ 'common.button_delete'|trans }}</button>
         </div>
     </div>
 {%- else -%}
     <div class="input-group">
-        {{- block('form_widget_simple') -}}
+        {% set attr = {'class': (value ? '' : 'rounded-end')} %}
+        {{- block('form_widget_simple') }}
         <button class="btn btn-file-delete btn-outline-secondary{% if not value %} d-none{% endif %}" type="button" title="{{ 'common.button_delete'|trans }}">
             <i class="fa-solid fa-times"></i>
         </button>

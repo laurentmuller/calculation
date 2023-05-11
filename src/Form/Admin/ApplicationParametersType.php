@@ -54,6 +54,7 @@ class ApplicationParametersType extends AbstractParametersType
     {
         $helper->field(PropertyServiceInterface::P_CUSTOMER_NAME)
             ->updateAttribute('spellcheck', 'false')
+            ->widgetClass('must-validate')
             ->addTextType();
 
         $helper->field(PropertyServiceInterface::P_CUSTOMER_ADDRESS)
@@ -89,6 +90,7 @@ class ApplicationParametersType extends AbstractParametersType
         $key = PropertyServiceInterface::P_DEFAULT_PRODUCT;
         $helper->field($key)
             ->notRequired()
+            ->widgetClass('must-validate')
             ->updateOption('placeholder', 'parameters.placeholders.' . $key)
             ->updateAttribute('data-default', '')
             ->add(ProductListType::class);

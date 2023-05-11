@@ -49,7 +49,9 @@
                         $this.val('').trigger('change').trigger('focus');
                     });
                     $this.on('change', function () {
-                        $delete.toggleClass('d-none', $this.val().length === 0);
+                        const empty = $this.val().length === 0;
+                        $delete.toggleClass('d-none', empty);
+                        $this.toggleClass('rounded-end', empty);
                         $this.valid();
                     });
                 }
@@ -118,6 +120,7 @@
          * @param {Object} [options.rules]
          * @param {function} [options.highlight]
          * @param {function} [options.unhighlight]
+         * @param {function} [options.invalidHandler]
          * @returns the validator.
          */
         initValidator: function (options) {
@@ -149,18 +152,10 @@
                         const $elements = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
 
                         // display if parent's accordion
-                        // .collapse:not(.show), .accordion-collapse.collapse:not(.show)
-                        // .collapse:not(.show)'
                         const $collapse = $elements.parents('.collapse:not(.show)');
-                        if ($collapse.length ) {
+                        if ($collapse.length) {
                             $collapse.collapse('show');
                         }
-                        // const $accordion = $elements.parents('.accordion');
-                        // if ($collapse.length && $accordion.length) {
-                        //     $collapse.collapse('show');
-                        // } else if ($collapse.length ) {
-                        //     $collapse.collapse('show');
-                        // }
 
                         // simple editor
                         if (simpleEditor) {
@@ -284,8 +279,18 @@
                         }
                     }
                 },
-
             };
+
+            // options.invalidHandler = function (e, validator) {
+            // validator.errorList.every(function (entry) {
+            //     const $collapse = $(entry.element).parents('.collapse:not(.show)');
+            //     if ($collapse.length) {
+            //         $collapse.collapse('show');
+            //         return false;
+            //     }
+            //     return true;
+            // });
+            // };
 
             if (!options.submitHandler) {
                 defaults.submitHandler = function (form) {

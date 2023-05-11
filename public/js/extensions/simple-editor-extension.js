@@ -90,7 +90,7 @@
                     const enabled = exec && data.enabled || false;
 
                     if (index === 0) {
-                        $button.addClass('rounded-left');
+                        $button.addClass('rounded-start');
                     }
 
                     // exec

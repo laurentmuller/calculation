@@ -58,7 +58,7 @@
 <td class="{{ class }}"{% if title %} title="{{ title }}"{% endif %}>
     <a href="{{ href }}" class="text-white">
         <span>{{ text }}</span>
-        <span class="badge text-bg-light" data-bs-toggle="popover" data-html="{{ content|e }}"{% if title %} title="{{ title }}"{% endif %}>{{ count }}</span>
+        <span class="badge text-bg-light" data-bs-toggle="popover" data-content="{{ content|e }}"{% if title %} title="{{ title }}"{% endif %}>{{ count }}</span>
     </a>
 </td>
 {% else %}

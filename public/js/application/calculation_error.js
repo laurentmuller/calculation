@@ -86,8 +86,9 @@
 
     // tooltip
     $('body').tooltip({
+        customClass: 'tooltip-danger',
         selector: '.has-tooltip',
-        customClass: 'tooltip-danger overall-cell'
+        html: true
     });
 
     // errors

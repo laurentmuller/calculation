@@ -12,7 +12,7 @@
 {%- endmacro %}
 
 {% macro add_entity_entry(prefix, icon, is_list, is_add, is_export, parameters=[]) -%}
-{% if is_list  %}
+{% if is_list %}
 <li>{{ _self.link(prefix ~ '_table', prefix ~ '.list.title', icon) }}
     {% if is_add or is_export %}
     <ul>

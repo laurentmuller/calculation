@@ -18,14 +18,7 @@
     {%- set group_param = constant('App\\Table\\CategoryTable::PARAM_GROUP') -%}
     {%- set data_default = 'category.fields.group'|trans -%}
     {% set text = customData.group ? customData.group.code : data_default %}
-    {{ _self.output_dropdown_menu(
-        group_param,
-        ICON_GROUP,
-        text,
-        'category.list.group_help',
-        group_id,
-        data_default
-    ) }}
+    {{ _self.output_dropdown_menu(group_param, ICON_GROUP, text, 'category.list.group_help', group_id, data_default) }}
     {% set group = '' %}
     <div class="dropdown-menu" aria-labelledby="{{ group_param }}">
         {{ _self.output_dropdown('group', 0, group_id, 'category.list.group_all_text'|trans, {}, 'filter-circle-xmark') }}

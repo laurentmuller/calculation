@@ -28,18 +28,14 @@
 {# content #}
 <div class="card card-state mb-2" data-path="{{ path('homepage_hide_state') }}">
     <div class="card-header">
-        <div class="row">
-            <div class="col-auto me-auto">
-                <h1 class="card-title">{{ icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
-            </div>
-            <div class="col-auto d-print-none">
-                {%- if table_path and is_states -%}
-                    {{ link(path('chart_by_state'), null, null, 'chart-pie fa-fw', 'index.menu_chart_title') }}
-                {%- endif -%}
-                <a href="#" class="hide-panel" title="{{ 'index.panel_state_hide'|trans }}">
-                    {{- icon('xmark fa-fw') -}}
-                </a>
-            </div>
+        <div class="d-flex flex-wrap align-items-center gap-1">
+            <h1 class="card-title flex-fill">{{ icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
+            {%- if table_path and is_states -%}
+                {{ link(path('chart_by_state'), null, 'd-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}
+            {%- endif -%}
+            <a href="#" class="hide-panel d-print-none" title="{{ 'index.panel_state_hide'|trans }}">
+                {{- icon('xmark fa-fw') -}}
+            </a>
         </div>
     </div>
     {% if is_states %}

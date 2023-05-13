@@ -18,14 +18,7 @@
     {% set data_default = 'task.fields.category'|trans %}
     {%- set input_value = group_id ? group_id : category_id -%}
     {%- set input_text = customData.group.code ?? customData.category.code ?? data_default -%}
-    {{ _self.output_dropdown_menu(
-        'category',
-        ICON_CATEGORY,
-        input_text,
-        'task.list.category_help',
-        input_value,
-        data_default
-    ) }}
+    {{ _self.output_dropdown_menu('category', ICON_CATEGORY, input_text, 'task.list.category_help', input_value, data_default) }}
     <div class="dropdown-menu">
         {{ _self.output_dropdown('category', 0, input_value, 'product.list.category_all_text'|trans, {}, 'filter-circle-xmark') }}
         {% for key, entry in customData.dropdown %}

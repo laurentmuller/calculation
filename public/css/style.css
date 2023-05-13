@@ -47,17 +47,19 @@ footer span {
     padding: 0 0.5rem !important;
 }
 
-body[data-bs-theme=dark]:has(.sidebar-hide) footer {
+body[data-bs-theme=dark] footer:before {
+    top: 0;
+    left: 0;
+    content: "";
+    width: 100%;
+    position: absolute;
     border-top: var(--bs-border-width) solid var(--bs-border-color);
+    transition: left 0.35s ease
 }
 
 body[data-bs-theme=dark]:not(:has(.sidebar-hide)) footer:before {
-    content: "";
-    position: absolute;
-    top: 0;
     left: 17rem;
     width: calc(100% - 17rem);
-    border-top: var(--bs-border-width) solid var(--bs-border-color);
 }
 
 /*
@@ -74,11 +76,11 @@ body[data-bs-theme=dark]:not(:has(.sidebar-hide)) footer:before {
 /*
  * required
  */
-span.required:after,
-label.required:not(.form-check-label):after,
-legend.required:after,
 th.required:after,
-td.required:after {
+td.required:after,
+span.required:after,
+legend.required:after,
+label.required:not(.form-check-label):after {
     content: "*";
     color: var(--bs-danger);
 }
@@ -490,21 +492,6 @@ input[type="number"] {
 }
 
 /**
- * Calculation overall margin tooltip
- */
-.overall-card.tooltip .arrow {
-    left: 150px !important;
-}
-
-.overall-datatable.tooltip .arrow {
-    left: 120px !important;
-}
-
-.overall-cell.tooltip .arrow {
-    left: 110px !important;
-}
-
-/**
  * horizontal line on the right of a label or a link
  */
 .horizontal-line {
@@ -716,9 +703,7 @@ table.table-fixed-header th {
 */
 
 .card-footer hr.card-footer-line {
-    margin-left: -1.25rem;
-    margin-right: -1.25rem;
-    margin-bottom: 0.25rem;
+    margin: 0.5rem calc(-1 * var(--bs-card-cap-padding-x)) 0.25rem;
 }
 
 .card-header.bg-danger .invalid-feedback {
@@ -794,4 +779,11 @@ table.table-no-end-line tbody tr:last-child td {
  */
 .text-justify {
     text-align: justify !important
+}
+
+/**
+ * Override default behavior
+ */
+a {
+    text-decoration: none;
 }

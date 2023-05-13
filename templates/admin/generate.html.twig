@@ -22,16 +22,12 @@
 {{ form_row(form.simulate) }}
 {{ form_row(form.confirm) }}
 {# results message #}
-<div id="message-result" class="alert alert-primary mb-0" style="display: none;">
-    <div class="row position-relative">
-        <div class="col-auto me-auto">
-            <p id="message" class="mb-0">{{ 'generate.error.empty'|trans }}</p>
-        </div>
-        <div class="col-auto text-end position-static">
-            <a href="#" class="alert-link stretched-link" data-bs-toggle="modal" data-bs-target="#modal-result" title="{{ 'generate.result_link'|trans }}">
-                <i class="fa-fw fa-solid fa-eye"></i>
-            </a>
-        </div>
+<div id="message-result" class="alert alert-success mb-0" style="display: none;">
+    <div class="hstack">
+        <p id="message" class="mb-0 me-auto">{{ 'generate.error.empty'|trans }}</p>
+        <a href="#" class="alert-link stretched-link" data-bs-toggle="modal" data-bs-target="#modal-result" title="{{ 'generate.result_link'|trans }}">
+            <i class="fa-fw fa-solid fa-eye"></i>
+        </a>
     </div>
 </div>
 {# results dialog #}

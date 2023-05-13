@@ -363,7 +363,7 @@ function formatActions(value, _row) {
  */
 function initializeKeyHandler($table) {
     'use strict';
-    const selector = 'a, input, select, .btn, .dropdown-item, .rowlink-skip';
+    const selector = 'a, input:not(.form-control-search), select, .btn, .dropdown-item, .rowlink-skip';
     $('body').on('focus', selector, function () {
         $table.disableKeys();
     }).on('blur', selector, function () {
@@ -409,7 +409,6 @@ function initializeDangerTooltips($table) {
 
 (function ($) {
     'use strict';
-
     $.fn.extend({
         /**
          * Gets the context menu items for the selected cell.
@@ -649,7 +648,7 @@ function initializeDangerTooltips($table) {
             } else if (isQueryParams) {
                 $table.refresh();
             }
-            $('input.search-input').trigger('focus');
+            $('input.form-control-search').trigger('focus');
         });
     }
 
@@ -706,17 +705,12 @@ function initializeDangerTooltips($table) {
     // update UI
     $('.card .dropdown-menu').removeSeparators();
     $('.fixed-table-pagination').addClass('small').appendTo('.card-footer');
-    $('.fixed-table-toolbar input.search-input').prependTo('.input-group-search')
-        .attr('type', 'text').css('width', 130);
-    $('.fixed-table-toolbar').appendTo('.col-search');
-    $('.fixed-table-toolbar .search').remove();
-    $('.btn-group-search').appendTo('.fixed-table-toolbar');
     if ($searchMinimum.length) {
         $searchMinimum.toggleClass('d-none', $table.isSearchText());
     }
 
     if ($table.isEmpty()) {
-        $('input.search-input').trigger('focus');
+        $('input.form-control-search').trigger('focus');
     } else {
         $table.showSelection();
     }

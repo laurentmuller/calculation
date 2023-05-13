@@ -19,8 +19,7 @@
         'data-bs-toggle': 'dropdown',
         'data-value': value,
         'data-icon': icon(icon ~ ' fa-fw')|raw,
-        'data-default': default
-    }) %}
+        'data-default': default}) %}
     {% set attributes = attributes|filter(v => v is not empty) %}
     <button{{ output_attributes(attributes) }}>{{- icon(icon ~ ' fa-fw') }} {{ text -}}</button>
 {% endapply %}
@@ -33,8 +32,7 @@
         'type': 'button',
         'role': 'button',
         'data-value': value,
-        'class': ('dropdown-item dropdown-' ~ suffix ~ active)|trim
-    }) %}
+        'class': ('dropdown-item dropdown-' ~ suffix ~ active)|trim}) %}
     <button{{ output_attributes(attributes) }}>
         {%- if icon %}{{ icon(icon ~ ' fa-fw') }} {% endif %}{{ text|default(value) -}}
     </button>
@@ -136,6 +134,7 @@
     'classes': 'table table-hover table-list table-no-end-line table-sm',
     'row-selector': 'tbody .' ~ row_selector,
     'custom-selector': '.custom-item.' ~ row_selector,
+    'search-selector': '.form-control-search',
     'row-class': row_selector,
     'single-select': true,
     'toggle-selector': '#toggle',
@@ -163,7 +162,7 @@
 }) -%}
 {# classes #}
 {% block card_container_class '' %}
-{% block card_body_class ' px-3 pt-0 pb-2' %}
+{% block card_body_class ' px-3 pt-0 pb-1' %}
 {# header #}
 {% block card_header -%}
 <div class="row">
@@ -179,6 +178,7 @@
     <div class="col-auto col-search align-self-center me-auto">
     {% if allow_search %}
         <div class="input-group input-group-sm input-group-search search">
+            <input class="form-control form-control-search" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" autocomplete="off" type="text" style="width: 130px;">
             {% block toolbar_actions -%}{%- endblock %}
             <button id="clear_search" name="clear_search" type="button" class="btn btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
                 <i class="fa-solid fa-eraser"></i>

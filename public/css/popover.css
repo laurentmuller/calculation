@@ -62,3 +62,9 @@
     --bs-popover-header-bg: var(--bs-light);
     --bs-popover-header-color: var(--bs-dark);
 }
+
+.popover-light-subtle {
+    --bs-popover-border-color: var(--bs-light-bg-subtle);
+    --bs-popover-header-bg: var(--bs-light-bg-subtle);
+    --bs-popover-header-color: var(--bs-dark);
+}

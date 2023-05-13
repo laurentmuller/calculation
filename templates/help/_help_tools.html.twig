@@ -2,7 +2,7 @@
 {% macro output_type(field) -%}
 {%- set type = ('help.types.' ~ field.type|default('text'))|trans -%}
 {%- set length = field.length|default(false) -%}
-{{ type }}{% if length  %} ({{ length }}){% endif %}
+{{ type }}{% if length %} ({{ length }}){% endif %}
 {%- endmacro %}
 
 {% macro output_required(field) -%}

@@ -14,14 +14,13 @@ $.fn.extend({
      */
     toggleCell(oldClass, newClass) {
         'use strict';
-
-         return $(this).each(function () {
-             const $that = $(this);
-             const firstClass = oldClass.split(' ')[0];
-             if ($that.hasClass(firstClass)) {
-                 $that.toggleClass(oldClass + ' ' + newClass);
-             }
-         });
+        return $(this).each(function () {
+            const $that = $(this);
+            const firstClass = oldClass.split(' ')[0];
+            if ($that.hasClass(firstClass)) {
+                $that.toggleClass(oldClass + ' ' + newClass);
+            }
+        });
     }
 });
 
@@ -36,7 +35,7 @@ $.fn.extend({
 function toggleHighlight($source, $table, save) {
     'use strict';
     const checked = $source.isChecked();
-    const highlight = $table.data('cellhighlight');
+    const highlight = $table.data('cell-highlight');
     if (checked) {
         if (!highlight) {
             $table.cellhighlight({
@@ -44,12 +43,11 @@ function toggleHighlight($source, $table, save) {
                 cellSelector: 'td:not(.not-hover), th:not(.not-hover)',
                 highlightHorizontal: 'table-primary',
                 highlightVertical: 'table-primary'
-
-            }).on('cellhighlight.mouseenter', function (_e, { horizontal, vertical}) {
+            }).on('cellhighlight.mouseenter', function (_e, {horizontal, vertical}) {
                 $.each($.merge(horizontal, vertical), function () {
                     $(this).toggleCell('bg-success text-white', 'table-cell');
                 });
-            }).on('cellhighlight.mouseleave', function (_e, { horizontal, vertical}) {
+            }).on('cellhighlight.mouseleave', function (_e, {horizontal, vertical}) {
                 $.each($.merge(horizontal, vertical), function () {
                     $(this).toggleCell('table-cell', 'bg-success text-white');
                 });
@@ -62,10 +60,11 @@ function toggleHighlight($source, $table, save) {
             highlight.disable();
         }
     }
+
     // save to session
     if (save) {
         const url = $('#pivot').data('session');
-        const data =  {
+        const data = {
             name: 'highlight',
             value: checked
         };
@@ -85,31 +84,34 @@ function toggleHighlight($source, $table, save) {
 function togglePopover($source, $selector, save) {
     'use strict';
     const checked = $source.isChecked();
-    const popover = $selector.data('bs.popover');
+    const enabled = $source.data('enabled');
     if (checked) {
-        if (popover) {
+        if (enabled) {
             $selector.popover('enable');
         } else {
             $selector.popover({
                 html: true,
                 trigger: 'hover',
-                placement: 'auto',
-                customClass: 'popover-light popover-w-100',
+                placement: 'top',
+                customClass: 'popover-primary popover-w-100',
+                fallbackPlacements: ['top', 'bottom', 'right', 'left'],
                 content: function (e) {
                     const content = $(e).data('bs-html');
                     return $(content);
                 }
             });
+            $source.data('enabled', true);
         }
     } else {
-        if (popover) {
+        if (enabled) {
             $selector.popover('disable');
         }
     }
+
     // save to session
     if (save) {
         const url = $('#pivot').data('session');
-        const data =  {
+        const data = {
             name: 'popover',
             value: checked
         };

@@ -1,13 +1,13 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * jQuery Validation Plugin extensions.
+ * JQuery Validation Plugin extensions.
  */
 (function ($) {
     'use strict';
 
     /**
-     * -------------- jQuery Extensions --------------
+     * -------------- JQuery Extensions --------------
      */
     $.fn.extend({
 
@@ -151,12 +151,6 @@
                         // get invalid elements
                         const $elements = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
 
-                        // display if parent is collapsed
-                        // const $collapse = $elements.parents('.collapse:not(.show)');
-                        // if ($collapse.length) {
-                        //     $collapse.collapse('show');
-                        // }
-
                         // simple editor
                         if (simpleEditor) {
                             if ($elements.focusSimpleEditor()) {
@@ -225,7 +219,7 @@
              * @return {{JQuery[]}|{JQuery}} the elements, if found; the argument element otherwise.
              */
             $.validator.prototype.findNamedElements = function ($element) {
-                const name = $element.attr('name');
+                const name = $element.attr('name') || '';
                 if (name.endsWith('[]')) {
                     const $elements = $element.closest('form').find(`[name="${name}"]`);
                     if ($elements.length) {
@@ -279,14 +273,14 @@
                         }
                     }
                 },
-            };
 
-            options.invalidHandler = function (e, validator) {
-                // expand collapsed parent (if any)
-                const $element = $(validator.findLastActive() || (validator.errorList.length && validator.errorList[0].element));
-                const $collapse = $element.parents('.collapse:not(.show)');
-                if ($collapse.length) {
-                    $collapse.collapse('show');
+                invalidHandler: function (e, validator) {
+                    // expand collapsed parent (if any)
+                    const $element = $(validator.findLastActive() || (validator.errorList.length && validator.errorList[0].element));
+                    const $collapse = $element.parents('.collapse:not(.show)');
+                    if ($collapse.length) {
+                        $collapse.collapse('show');
+                    }
                 }
             };
 
@@ -417,16 +411,10 @@
             const settings = $.extend(true, {
                 parent: $this,
                 text: $this.data('save') || 'Saving data...',
-                //alertClass: 'alert alert-primary text-center',
-                alertClass: 'alert alert-primary text-center position-absolute top-50 start-50 translate-middle',
+                alertClass: 'alert alert-primary text-center position-absolute top-50 start-50 translate-middle z-3',
                 iconClass: 'fa-solid fa-spinner fa-spin me-2',
                 css: {
-                    // top: '50%',
-                    // left: '50%',
                     width: '90%',
-                    // position: 'absolute',
-                    // transform: 'translate(-50%, -50%)',
-                    // display: 'none',
                     zIndex: 2
                 },
                 maxWidth: 600,
@@ -458,6 +446,7 @@
                 });
                 $alert.prepend($icon);
             }
+            settings.parent.addClass('position-relative');
             $alert.appendTo($(settings.parent)).show(settings.show);
 
             return $this;
@@ -650,4 +639,4 @@
         return this.optional(element) || /\S+@\S+\.\S{2,}/.test(value);
     };
 
-}(jQuery));
+}(jquery));

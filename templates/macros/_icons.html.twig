@@ -52,11 +52,11 @@
 {%- endmacro %}
 
 {% macro navItem(href, text, icon, domain=null, parameters=[]) -%}
-<li class="nav-item">{{ _self.link(href, text, 'nav-link', icon, null, domain, parameters) }}</li>
+{{ _self.link(href, text, 'nav-link', icon, null, domain, parameters) }}
 {%- endmacro %}
 
 {% macro navItemExternal(href, text, icon, domain=null, parameters=[]) -%}
-    <li class="nav-item">{{ _self.linkExternal(href, text, 'nav-link', icon, null, domain, parameters) }}</li>
+{{ _self.linkExternal(href, text, 'nav-link', icon, null, domain, parameters) }}
 {%- endmacro %}
 
 {% macro dropdownItem(href, text, icon, domain=null, parameters=[]) -%}

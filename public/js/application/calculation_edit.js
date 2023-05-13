@@ -1754,10 +1754,7 @@ const MoveHandler = {
     const $form = $('#edit-form');
     $form.initValidator({
         spinner: {
-            parent: $('#main-content'),
-            // css: {
-            //     top: '30%'
-            // }
+            parent: $('#main-content')
         }
     });
 

@@ -236,9 +236,7 @@ function loadingTemplate(message) {
                     $this.saveParameters();
                 },
 
-
                 onSearch: function (searchText) {
-                    // update data
                     $this.data('search-text', searchText);
                 }
             };
@@ -285,8 +283,9 @@ function loadingTemplate(message) {
                     }
                 }
             });
+
             // search focus
-            $('input.search-input').on('focus', function () {
+            $this.getSearchInput().on('focus', function () {
                 $(this).trigger('select');
             });
 
@@ -338,7 +337,20 @@ function loadingTemplate(message) {
          * @return {string} the search text.
          */
         getSearchText: function () {
-            return String($(this).data('search-text'));
+            return String($(this).data('search-text') || '');
+        },
+
+        /**
+         * Gets the search input.
+         *
+         * @return {jquery} the search input.
+         */
+        getSearchInput: function () {
+            const options = $(this).getOptions();
+            if (typeof options.searchSelector === 'string') {
+                return $(options.searchSelector);
+            }
+            return $('.bootstrap-table .search-input');
         },
 
         /**

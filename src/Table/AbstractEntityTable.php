@@ -268,9 +268,15 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     private function updateJoin(QueryBuilder $builder): QueryBuilder
     {
-        /** @psalm-var array{e: Join[]} $part */
+        /** @psalm-var array{e: ?Join[]} $part */
         $part = $builder->getDQLPart(self::JOIN_PART);
-        $joins = \array_filter($part['e'], fn (Join $join): bool => Join::LEFT_JOIN !== $join->getJoinType());
+        if (!isset($part['e'])) {
+            return $builder;
+        }
+        $joins = \array_filter($part['e'], static fn (Join $join): bool => Join::LEFT_JOIN !== $join->getJoinType());
+        if ([] === $joins) {
+            return $builder;
+        }
         $builder->resetDQLPart(self::JOIN_PART);
         foreach ($joins as $join) {
             // @phpstan-ignore-next-line

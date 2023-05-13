@@ -22,16 +22,12 @@
 {# content #}
 <div class="card mb-2">
     <div class="card-header">
-        <div class="row">
-            <div class="col-auto me-auto">
-                <h1 class="card-title">{{ icon(ICON_CALCULATION, 'index.panel_table_title') }}</h1>
-            </div>
+        <div class="d-flex flex-wrap align-items-center gap-1">
+            <h1 class="card-title flex-fill">{{ icon(ICON_CALCULATION, 'index.panel_table_title') }}</h1>
             {%- if add_page -%}
-            <div class="col-auto d-print-none">
                 {%- set params = route_params(app.request)|merge({'caller': caller}) -%}
                 {%- set path = path(add_page, params) -%}
-                <a href="{{ path }}" class="p-0">{{ 'calculation.add.title'|trans }}</a>
-            </div>
+                <a href="{{ path }}" class="d-print-none">{{ 'calculation.add.title'|trans }}</a>
             {%- endif -%}
         </div>
     </div>
@@ -118,8 +114,8 @@
         {%- endif -%}
     </div>
     <div class="card-footer d-print-none p-2">
-        <div class="hstack w-100">
-            <div class="ms-auto form-control-sm form-check form-switch" title="{{ 'index.panel_table_user_help'|trans }}">
+        <div class="d-flex flex-wrap align-items-center gap-1">
+            <div class="ms-sm-auto form-control-sm form-check form-switch" title="{{ 'index.panel_table_user_help'|trans }}">
                 <input type="checkbox" class="form-check-input" id="restrict" data-url="{{ url('homepage') }}" data-value="{{ restrict }}"{% if restrict %} checked="checked"{% endif %}>
                 <label class="form-check-label" for="restrict">{{ 'index.panel_table_user'|trans }}</label>
             </div>

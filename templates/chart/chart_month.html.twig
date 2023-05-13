@@ -17,19 +17,15 @@
 {% block card_container_class '' -%}
 
 {% block card_header %}
-<div class="row">
-    <div class="col-auto me-auto">
-        {{ parent() }}
-    </div>
-    <div class="col-auto">
-        <div class="hstack">
-            <label class="form-label pe-2 mb-0" for="months">{{ 'last_month.period'|trans }}</label>
-            <select  class="form-select form-select-sm" id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_by_month') }}">
+<div class="d-flex flex-wrap align-items-center gap-2">
+    {{ parent() }}
+    <div class="d-flex flex-fill align-items-center d-print-none gap-2">
+        <label class="form-label ms-sm-auto mb-0" for="months">{{ 'last_month.period'|trans }}</label>
+        <select class="form-select form-select-sm w-auto d-print-none" id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_by_month') }}">
             {% for current in allowed_months %}
                 {{ _self.month(current, current == months) }}
             {% endfor %}
-            </select>
-        </div>
+        </select>
     </div>
 </div>
 {%- endblock %}

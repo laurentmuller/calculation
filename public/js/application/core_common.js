@@ -9,7 +9,7 @@ function showFlashBag() {
     'use strict';
     const $element = $('.flash:first');
     if ($element.length) {
-        const options = $("#flashes").data();
+        const options = $('#flashes').data();
         const title = options.title ? $element.data('title') : null;
         const text = $element.text();
         const type = $element.data('type');
@@ -30,17 +30,17 @@ function showFlashBag() {
  */
 function initHorizontalSearch() {
     'use strict';
-    const $form = $("#search-form-horizontal");
+    const $form = $('#search-form-horizontal');
     if ($form.length === 0) {
         return;
     }
     const $button = $('#search-button-horizontal');
     const $input = $('#search-form-horizontal #search');
     const hideInvalid = function () {
-        $input.removeClass('is-invalid').tooltip('dispose');
+        $input.removeClass('is-invalid').data('display', false).tooltip('hide');
     };
     const hideForm = function () {
-        $input.val("");
+        $input.val('');
         hideInvalid();
         $form.animate({
             width: 0
@@ -49,7 +49,8 @@ function initHorizontalSearch() {
             $button.show().trigger('focus');
         });
     };
-    $button.on("click", function () {
+
+    $button.on('click', function () {
         $button.hide();
         $form.show().animate({
             width: 200
@@ -57,19 +58,20 @@ function initHorizontalSearch() {
             $input.trigger('focus');
         });
     });
-    $input.on("keyup", function (e) {
+    $input.on('keyup', function (e) {
         if (e.which === 27) { // escape
             hideForm();
         } else {
             if ($input.val().trim().length < 2) {
-                $input.addClass('is-invalid').tooltip({
-                    customClass: 'tooltip-danger'
-                }).tooltip('show');
+                $input.addClass('is-invalid');
+                if (!$input.data('display')) {
+                    $input.data('display', true).tooltip('show');
+                }
             } else {
                 hideInvalid();
             }
         }
-    }).on("blur", function () {
+    }).on('blur', function () {
         hideForm();
     });
     $form.on('submit', function (e) {
@@ -84,11 +86,12 @@ function initHorizontalSearch() {
  */
 function initVerticalSearch() {
     'use strict';
-    const $form = $("#search-form-vertical");
+    const $form = $('#search-form-vertical');
     if ($form.length === 0) {
         return;
     }
     const $input = $('#search-form-vertical #search');
+    const $button = $('#search-form-vertical #button');
     const $label = $('#search-form-vertical #invalid');
     const hideInvalid = function () {
         $input.removeClass('is-invalid');
@@ -96,23 +99,27 @@ function initVerticalSearch() {
     };
     const showInvalid = function () {
         $input.addClass('is-invalid');
+        $button.addClass('disabled');
         $label.show();
     };
-    $input.on("input", function () {
+    $input.on('input', function () {
         if ($input.val().trim().length < 2) {
+            $button.addClass('disabled');
             showInvalid();
         } else {
+            $button.removeClass('disabled');
             hideInvalid();
         }
-    }).on("blur", function () {
-        $input.val("");
+    }).on('blur', function () {
+        $button.addClass('disabled');
+        $input.val('');
         hideInvalid();
     });
     $form.on('submit', function (e) {
         if ($input.val().trim().length < 2) {
-            showInvalid();
-            $input.trigger('select').trigger('focus');
             e.preventDefault();
+            $input.trigger('select').trigger('focus');
+            showInvalid();
         }
     });
 }
@@ -182,7 +189,7 @@ function initSwitchTheme() {
 
         // save
         if (options.path) {
-            const flashBag = $("#flashes").data();
+            const flashBag = $('#flashes').data();
             const title = flashBag.title ? options.title : '';
             $.getJSON(options.path, {
                 dark: !wasDark
@@ -202,12 +209,19 @@ function initSwitchTheme() {
 /**
  * Ready function
  */
-$(function () {
+(function ($) {
     'use strict';
     initHorizontalSearch();
     initVerticalSearch();
     initSwitchTheme();
     initBackToTop();
     initSidebar();
+}(jQuery));
+
+/**
+ * Must be called after content loaded.
+ */
+document.addEventListener("DOMContentLoaded", function () {
+    'use strict';
     showFlashBag();
 });

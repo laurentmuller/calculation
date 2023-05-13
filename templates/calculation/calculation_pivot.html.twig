@@ -122,21 +122,15 @@
 {% block container_class 'container-fluid' %}
 {# body #}
 {% block body %}
-<div class="row mb-2">
-    <div class="col-auto me-auto">
-        <h4>{{ icon(title_icon, title) }}</h4>
+<div class="d-flex flex-wrap align-items-center gap-1 mb-2">
+    <h4 class="flex-grow-1">{{ icon(title_icon, title) }}</h4>
+    <div class="form-check form-switch d-print-none">
+        <input type="checkbox" class="form-check-input" id="popover" name="popover"{% if popover %} checked="checked"{% endif %}>
+        <label class="form-check-label" for="popover">{{ 'pivot.popover'|trans }}</label>
     </div>
-    <div class="col-auto d-print-none">
-        <div class="form-inline">
-            <div class="form-check form-switch me-2">
-                <input type="checkbox" class="form-check-input" id="popover" name="popover"{% if popover %} checked="checked"{% endif %}>
-                <label class="form-check-label" for="popover">{{ 'pivot.popover'|trans }}</label>
-            </div>
-            <div class="form-check form-switch">
-                <input type="checkbox" class="form-check-input" id="highlight" name="highlight"{% if highlight %} checked="checked"{% endif %}>
-                <label class="form-check-label" for="highlight">{{ 'pivot.highlight'|trans }}</label>
-            </div>
-       </div>
+    <div class="form-check form-switch d-print-none">
+        <input type="checkbox" class="form-check-input" id="highlight" name="highlight"{% if highlight %} checked="checked"{% endif %}>
+        <label class="form-check-label" for="highlight">{{ 'pivot.highlight'|trans }}</label>
     </div>
 </div>
 <div class="table-responsive small-scrollbar">
@@ -144,7 +138,7 @@
         <thead>
             {%- for i in 1..col_level -%}
             <tr>
-                {%- if i == 1 -%}<td  class="text-nowrap not-hover p-0"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table, col_level) }}</td>{%- endif -%}
+                {%- if i == 1 -%}<td class="text-nowrap not-hover p-0"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table, col_level) }}</td>{%- endif -%}
                 {{ _self.outputHeaders(table.column.childrenAtLevel(i), separator) }}
                 {%- if i == 1 -%}<td{{ _self.rowspan(col_level) }} class="text-currency bg-success text-white not-hover align-bottom">{{ total_title }}</td>{%- endif -%}
             </tr>

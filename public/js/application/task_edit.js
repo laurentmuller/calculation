@@ -134,12 +134,12 @@ function addItem() {
     $items.append($item);
     // update UI
     updateUI();
+    // hide all except last
+    $('#items .collapse.show:not(:last)').collapse('hide');
+    // expand
+    $('#items .collapse:last').collapse('show');
     // focus
     $item.find('input[name$="[name]"]:last').selectFocus().scrollInViewport();
-    // hide all except last
-    $items.find('.collapse.show:not(:last)').collapse('hide');
-    // expand
-    $items.find('.collapse:last').collapse('show');
     // drag and drop
     startDragItems();
     return $item;
@@ -350,6 +350,8 @@ function expand($caller) {
         updateToggle($(this), true);
     }).on('focus', '.unique-name', function () {
         expand($(this));
+    }).on('dblclick', '.item-header', function () {
+        $(this).parents('.item').find('.collapse').collapse('toggle');
     });
     // initialize search
     const $form = $("#edit-form");

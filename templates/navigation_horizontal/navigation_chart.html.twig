@@ -3,7 +3,7 @@
 {% set id = 'dropdown_chart' %}
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        {{ icon('chart-area', 'menu_graphics', 'chart') }}
+        {{- icon('chart-area', 'menu_graphics', 'chart') -}}
     </a>
     <div class="dropdown-menu" aria-labelledby="{{ id }}">
         {{ dropdownItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') }}

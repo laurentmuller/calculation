@@ -181,14 +181,6 @@
                 try {
                     if (!$this.isInViewport(bottomMargin)) {
                         let top = $this.offset().top;
-                        // const bottom = top + $this.outerHeight();
-                        // const windowTop = $window.scrollTop();
-                        // const windowBottom = windowTop + $window.height() - bottomMargin;
-                        // const block = top <= windowTop ? 'start' : 'end';
-                        // $this[0].scrollIntoView({
-                        //     block: block,
-                        //     behavior: "smooth"
-                        // });
                         if (delay) {
                             $target.animate({
                                 scrollTop: top
@@ -532,7 +524,7 @@
          */
         hasAttr: function (name) {
             const attr = $(this).attr(name);
-            return typeof attr !== "undefined" && attr !== false && attr !== null;
+            return typeof attr !== 'undefined' && attr !== false && attr !== null;
         },
 
         /**
@@ -568,20 +560,40 @@
             });
         },
 
-        tooltip: function (options = {}) {
-            return this.each(function () {
-                const data = new bootstrap.Tooltip(this, options);
-                return data;
-            });
-        },
+        // toast: function (options = {}) {
+        //     return this.each(function () {
+        //         const data = new bootstrap.Toast(this, options);
+        //         return this;
+        //     });
+        // },
+    });
 
-        popover: function (options = {}) {
+    if (!$.fn.popover) {
+        $.fn.popover = function (options = {}) {
             return this.each(function () {
                 const data = new bootstrap.Popover(this, options);
                 return data;
             });
-        }
-    });
+        };
+    }
+
+    if (!$.fn.tooltip) {
+        $.fn.tooltip = function (options = {}) {
+            return this.each(function () {
+                const data = new bootstrap.Tooltip(this, options);
+                return data;
+            });
+        };
+    }
+
+    // if (!$.fn.toast) {
+    //     $.fn.toast = function (options = {}) {
+    //         return this.each(function () {
+    //             const data = new bootstrap.Toast(this, options);
+    //             return data;
+    //         });
+    //     };
+    // }
 
     /**
      * -------------- Global Ajax functions --------------

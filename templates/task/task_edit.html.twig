@@ -4,25 +4,21 @@
 {% form_theme form with _self %}
 {# item label #}
 {% block _task_items_entry_name_label -%}
-    <div class="row">
-        <div class="col-auto me-auto">
-            {{- form_label(form) -}}
-        </div>
-        <div class="col-auto">
-            <div class="btn-group btn-group-sm" role="group">
-                <button class="btn btn-edit btn-outline-secondary btn-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id_content }}" title="{{ title|trans }}">
-                    <i class="d-print-none fa-solid fa-caret-{% if show %}up{% else %}down{% endif %}"></i>
-                </button>
-                <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'task.edit.move_up_item'|trans }}" disabled="disabled">
-                    <i class="fa-solid fa-angle-up"></i>
-                </button>
-                <button type="button" class="btn btn-edit btn-outline-secondary btn-down-item" title="{{ 'task.edit.move_down_item'|trans }}" disabled="disabled">
-                    <i class="fa-solid fa-angle-down"></i>
-                </button>
-                <button type="button" class="btn btn-edit btn-outline-danger btn-delete-item" title="{{ 'task.edit.delete_item'|trans }}">
-                    <i class="fa-solid fa-times"></i>
-                </button>
-            </div>
+    <div class="d-flex flex-wrap align-items-center gap-1">
+        {{- form_label(form) -}}
+        <div class="ms-sm-auto btn-group btn-group-sm mb-2 d-print-none" role="group">
+            <button class="btn btn-edit btn-outline-secondary btn-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id_content }}" title="{{ title|trans }}">
+                <i class="d-print-none fa-solid fa-caret-{% if show %}up{% else %}down{% endif %}"></i>
+            </button>
+            <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'task.edit.move_up_item'|trans }}" disabled="disabled">
+                <i class="fa-solid fa-angle-up"></i>
+            </button>
+            <button type="button" class="btn btn-edit btn-outline-secondary btn-down-item" title="{{ 'task.edit.move_down_item'|trans }}" disabled="disabled">
+                <i class="fa-solid fa-angle-down"></i>
+            </button>
+            <button type="button" class="btn btn-edit btn-outline-danger btn-delete-item" title="{{ 'task.edit.delete_item'|trans }}">
+                <i class="fa-solid fa-times"></i>
+            </button>
         </div>
     </div>
 {% endblock %}

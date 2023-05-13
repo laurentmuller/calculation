@@ -28,19 +28,15 @@
 {# footer #}
 {% block card_footer -%}
     {%- set show_required = show_required is defined ? show_required : true -%}
-    <div class="row align-items-center no-gutters">
-        <div class="col-auto me-auto">
-            {% block actions_form -%}
-                {{ button_submit(submit_text, submit_class, submit_params) }}
-                {% if cancel_path|default(false) -%}
-                    {{ button_cancel(cancel_path, cancel_text) }}
-                {%- endif %}
-            {%- endblock %}
-        </div>
+    <div class="d-flex flex-wrap align-items-center gap-1">
+        {% block actions_form -%}
+            {{ button_submit(submit_text, submit_class, submit_params) }}
+            {% if cancel_path|default(false) -%}
+                {{ button_cancel(cancel_path, cancel_text) }}
+            {%- endif %}
+        {%- endblock %}
         {% if show_required -%}
-            <div class="col-auto">
-                {% block required_form -%}<small>{{ 'common.required'|trans|raw }}</small>{%- endblock %}
-            </div>
+            <small class="flex-grow-1 align-self-start text-sm-end">{{ 'common.required'|trans|raw }}</small>
         {%- endif %}
     </div>
 {%- endblock %}

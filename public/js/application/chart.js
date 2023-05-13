@@ -23,8 +23,9 @@ function onMonthsChange($months) {
     'use strict';
     // tooltip
     $('#data').tooltip({
+        customClass: 'tooltip-danger',
         selector: '.has-tooltip',
-        customClass: 'tooltip-danger'
+        html: true
     });
 
     // handle months change

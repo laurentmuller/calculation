@@ -3,20 +3,20 @@
 {# macros #}
 {% macro cardEntry(state, table_path, parameters=[], min_margin) -%}
 {% import 'macros/_properties.html.twig' as properties %}
-<div class="card index-child m-1 {% if state.color %} text-border{% endif %}"{% if state.color %} style="{{ properties.stateCss(state.color) }}"{% endif %}>
-    <div class="card-body card-body-tooltip p-2">
-        <div class="card-text mb-0">
-            {%- if table_path -%}
-                {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
-                <a href="{{ path(table_path, parameters) }}" class="card-link stretched-link" title="{{ list_title }}">{{ state.code }}</a>
-            {%- else -%}
-                <span>{{ state.code }}</span>
-            {%- endif -%}
-        </div>
+<div class="border index-child m-1 {% if state.color %} text-border{% endif %}"{% if state.color %} style="{{ properties.stateCss(state.color) }}"{% endif %}>
+    <div class="position-relative body-tooltip p-2">
+        {%- if table_path -%}
+            {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
+            <a href="{{ path(table_path, parameters) }}" class="stretched-link" title="{{ list_title }}">
+                {{- state.code -}}
+            </a>
+        {%- else -%}
+            <span>{{ state.code }}</span>
+        {%- endif -%}
         <div class="h4 fw-normal my-1">
             <span title="{{ 'index.panel_title_total'|trans }}">{{- state.total|integer }}</span> {{ macros.margin(state.margin, min_margin) -}}
         </div>
-        <p class="card-text" title="{{ 'index.panel_title_count'|trans }}">
+        <p class="mb-0" title="{{ 'index.panel_title_count'|trans }}">
             {{- 'counters.calculations'|trans({'count': state.count}) -}}
         </p>
     </div>

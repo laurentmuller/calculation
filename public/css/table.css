@@ -149,7 +149,11 @@ tr.text-body-secondary td .text-danger {
 /*
  * selection
  */
-body .bootstrap-table .custom-item.table-primary {
+.bootstrap-table tr.table-primary.text-body-secondary {
+    color: var(--bs-table-color) !important;
+}
+
+.bootstrap-table .custom-item.table-primary {
     background-color: var(--bs-table-bg) !important;
 }
 
@@ -160,6 +164,7 @@ body[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary hr {
 body[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body {
     color: var(--bs-table-color) !important;
 }
+
 .bootstrap-table .custom-item.table-primary.text-body-secondary {
     color: var(--bs-table-color) !important;
 }

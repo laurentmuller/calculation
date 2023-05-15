@@ -3,15 +3,13 @@
 {% macro cardEntry(entity, count, list_path, icon) -%}
 {% set title = entity ~ '.list.title' %}
 {% set counter = 'index.panel_count_' ~ entity %}
-<div class="card index-child m-1">
-    <div class="card-body p-2">
-        <div class="card-text">
-            {%- if list_path -%}
-                {{- link(path(list_path), title, 'card-link stretched-link', icon, 'index.panel_title_' ~ entity) -}}
-            {%- else -%}
-                {{- title|trans -}}
-            {%- endif -%}
-        </div>
+<div class="border index-child m-1">
+    <div class="position-relative p-2">
+        {%- if list_path -%}
+            {{- link(path(list_path), title, 'stretched-link', icon, 'index.panel_title_' ~ entity) -}}
+        {%- else -%}
+            {{- title|trans -}}
+        {%- endif -%}
         <div class="h4 fw-normal my-1">
             <span title="{{ counter|trans }}">{{- count|integer -}}</span>
         </div>

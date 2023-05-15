@@ -135,7 +135,7 @@
          * Hide the drop-down menus.
          */
         hideDropDownMenus: function () {
-            $('.dropdown-menu.show').removeClass('show');
+            $('.show[data-bs-toggle="dropdown"], .dropdown-menu.show').removeClass('show');
         }
     });
 

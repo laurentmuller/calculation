@@ -35,7 +35,7 @@
         {% if is_calculations %}
         <div class="table-responsive">
             <table id="calculations" class="table table-hover table-sm m-0">
-                <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
+                <tbody{% if row_link %} data-link="row" class="rowlink" data-target="a.btn-default"{% endif %}>
                 {% for calculation in calculations %}
                     {%- set id = calculation.id -%}
                     {%- set menu_id = 'dropdownMenuLast_' ~ id -%}
@@ -43,13 +43,9 @@
                     {%- set class_primary = id == selection ? 'table-primary' : '' -%}
                     {%- set class_muted = calculation.stateEditable ? '' : 'text-body-secondary' -%}
                     {%- set class_name = (class_primary ~ ' ' ~ class_muted)|trim -%}
-                    <tr data-id="{{ id }}" {% if class_name %} class="{{ class_name }}"{% endif %}>
+                    <tr data-id="{{ id }}"{% if class_name %} class="{{ class_name }}"{% endif %}>
                         <td class="text-id text-border user-select-none" style="{{ properties.stateCss(calculation.stateColor) }}">
-                        {%- if row_link and default_page -%}
-                            <a href="{{ path(default_page, params) }}">{{ calculation.id|identifier }}</a>
-                        {%- else -%}
                             {{- calculation.id|identifier -}}
-                         {%- endif -%}
                         </td>
                         <td class="text-date user-select-none">{{ calculation.date|locale_date }}</td>
                         <td class="text-state user-select-none">{{ calculation.stateCode }}</td>
@@ -57,50 +53,47 @@
                         <td class="text-description text-cell user-select-none">{{ calculation.description }}</td>
                         {%- if user_service.application.marginBelow(calculation.overallMargin) -%}
                             {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
-                            <td class="text-percent user-select-none text-danger has-tooltip" data-html="true" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
+                            <td class="text-percent user-select-none text-danger has-tooltip" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
                         {%- else -%}
                             <td class="text-percent user-select-none">{{ calculation.overallMargin|percent }}</td>
                         {%- endif -%}
                         <td class="text-currency user-select-none">{{ calculation.overallTotal|amount }}</td>
                         {%- if is_drop_down -%}
                             <td class="actions rowlink-skip d-print-none">
-                                <div class="dropdown dropleft text-end">
-                                    {{ dropdownEllipsis(menu_id) }}
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
-                                    {%- if edit_page -%}
-                                        {{- dropdownSeparator() }}
-                                        {%- set path = path(edit_page, params) -%}
-                                        {{ dropdownItemWithClass(path, 'calculation.edit.title_short', ICON_EDIT, 'btn-default') }}
-                                    {%- endif -%}
-                                    {%- if state_page -%}
-                                        {%- set path = path(state_page, params) -%}
-                                        {{ dropdownItem(path, 'calculation.list.state_title', ICON_CALCULATION_STATE) }}
-                                    {%- endif -%}
-                                    {%- if delete_page -%}
-                                        {{- dropdownSeparator() }}
-                                        {%- set path = path(delete_page, params) -%}
-                                        {{ dropdownItemWithClass(path, 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
-                                    {%- endif -%}
-                                    {%- if add_page -%}
-                                        {{- dropdownSeparator() }}
-                                        {%- set path = path(add_page, params) -%}
-                                        {{ dropdownItem(path, 'calculation.add.title', ICON_ADD) }}
-                                        {%- set path = path(clone_page, params) -%}
-                                        {{ dropdownItem(path, 'common.button_clone', ICON_COPY) }}
-                                    {%- endif -%}
-                                    {%- if show_page -%}
-                                        {{- dropdownSeparator() }}
-                                        {%- set path = path(show_page, params) -%}
-                                        {{ dropdownItem(path, 'calculation.show.title', ICON_SHOW) }}
-                                    {%- endif -%}
-                                    {%- if single_page_pdf -%}
-                                        {{- dropdownSeparator() }}
-                                        {%- set path = path(single_page_pdf, {'id': id}) -%}
-                                        {{ dropdownItemExternal(path, 'calculation.list.pdf_single_title', ICON_PDF) }}
-                                        {%- set path = path(single_page_excel, {'id': id}) -%}
-                                        {{ dropdownItemExternal(path, 'calculation.list.excel_single_title', ICON_EXCEL) }}
-                                    {%- endif -%}
-                                    </div>
+                                {{ dropdownEllipsis() }}
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
+                                {%- if edit_page -%}
+                                    {%- set path = path(edit_page, params) -%}
+                                    {{ dropdownItemWithClass(path, 'calculation.edit.title_short', ICON_EDIT, 'btn-default') }}
+                                {%- endif -%}
+                                {%- if state_page -%}
+                                    {%- set path = path(state_page, params) -%}
+                                    {{ dropdownItem(path, 'calculation.list.state_title', ICON_CALCULATION_STATE) }}
+                                {%- endif -%}
+                                {%- if delete_page -%}
+                                    {{- dropdownSeparator() }}
+                                    {%- set path = path(delete_page, params) -%}
+                                    {{ dropdownItemWithClass(path, 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
+                                {%- endif -%}
+                                {%- if add_page -%}
+                                    {{- dropdownSeparator() }}
+                                    {%- set path = path(add_page, params) -%}
+                                    {{ dropdownItem(path, 'calculation.add.title', ICON_ADD) }}
+                                    {%- set path = path(clone_page, params) -%}
+                                    {{ dropdownItem(path, 'common.button_clone', ICON_COPY) }}
+                                {%- endif -%}
+                                {%- if show_page -%}
+                                    {{- dropdownSeparator() }}
+                                    {%- set path = path(show_page, params) -%}
+                                    {{ dropdownItem(path, 'calculation.show.title', ICON_SHOW) }}
+                                {%- endif -%}
+                                {%- if single_page_pdf -%}
+                                    {{- dropdownSeparator() }}
+                                    {%- set path = path(single_page_pdf, {'id': id}) -%}
+                                    {{ dropdownItemExternal(path, 'calculation.list.pdf_single_title', ICON_PDF) }}
+                                    {%- set path = path(single_page_excel, {'id': id}) -%}
+                                    {{ dropdownItemExternal(path, 'calculation.list.excel_single_title', ICON_EXCEL) }}
+                                {%- endif -%}
                                 </div>
                             </td>
                         {% endif %}

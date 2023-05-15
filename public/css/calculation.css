@@ -30,3 +30,7 @@
         max-width: 66.666667%;
     }
 }
+
+#calculations .table-primary.text-body-secondary {
+    color: var(--bs-table-color) !important;
+}

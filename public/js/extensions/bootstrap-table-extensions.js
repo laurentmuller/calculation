@@ -208,7 +208,7 @@ function loadingTemplate(message) {
                         const params = $this.getParameters();
                         const selector = '.custom-view-actions:eq(%index%)';
                         const callback = typeof options.onRenderCustomView === 'function' ? options.onRenderCustomView : false;
-                        $this.find('tbody tr .actions').each(function (index, element) {
+                        $this.find('tbody tr[data-index] .actions').each(function (index, element) {
                             // copy actions
                             const $rowActions = $(element).children();
                             const rowSelector = selector.replace('%index%', '' + index);
@@ -246,7 +246,7 @@ function loadingTemplate(message) {
             $this.enableKeys().highlight();
 
             // select row on right click
-            $this.find('tbody').on('mousedown', 'tr', function (e) {
+            $this.find('tbody').on('mousedown', 'tr[data-index]', function (e) {
                 if (e.button === 2) {
                     $(this).updateRow($this);
                 }
@@ -255,7 +255,7 @@ function loadingTemplate(message) {
             // handle items in custom view
             $this.parents('.bootstrap-table').on('mousedown', '.custom-item', function () {
                 const index = $(this).parent().index();
-                const $row = $this.find('tbody tr:eq(' + index + ')');
+                const $row = $this.find('tbody tr[data-index]:eq(' + index + ')');
                 if ($row.length) {
                     $row.updateRow($this);
                 }
@@ -478,7 +478,7 @@ function loadingTemplate(message) {
             const onRenderAction = typeof options.onRenderAction === 'function' ? options.onRenderAction : false;
 
             // run over rows
-            $this.find('tbody tr').each(function () {
+            $this.find('tbody tr[data-index]').each(function () {
                 const $row = $(this);
                 const row = rows[$row.index()];
                 const $paths = $(this).find('.dropdown-item-path');
@@ -669,7 +669,7 @@ function loadingTemplate(message) {
         selectFirstRow: function () {
             const $this = $(this);
             const $row = $this.getSelection();
-            const $first = $this.find('tbody tr:first');
+            const $first = $this.find('tbody tr[data-index]:first');
             if ($first.length && $first !== $row) {
                 return $first.updateRow($this);
             }
@@ -684,7 +684,7 @@ function loadingTemplate(message) {
         selectLastRow: function () {
             const $this = $(this);
             const $row = $this.getSelection();
-            const $last = $this.find('tbody tr:last');
+            const $last = $this.find('tbody tr[data-index]:last');
             if ($last.length && $last !== $row) {
                 return $last.updateRow($this);
             }
@@ -699,7 +699,7 @@ function loadingTemplate(message) {
         selectPreviousRow: function () {
             const $this = $(this);
             const $row = $this.getSelection();
-            const $prev = $row.prev('tr');
+            const $prev = $row.prev('tr[data-index]');
             if ($row.length && $prev.length) {
                 return $prev.updateRow($this);
             }
@@ -715,7 +715,7 @@ function loadingTemplate(message) {
         selectNextRow: function () {
             const $this = $(this);
             const $row = $this.getSelection();
-            const $next = $row.next('tr');
+            const $next = $row.next('tr[data-index]');
             if ($row.length && $next.length) {
                 return $next.updateRow($this);
             }

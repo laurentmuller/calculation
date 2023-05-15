@@ -9,7 +9,7 @@
     "plugins": [
         {
             "name": "jquery",
-            "version": "3.6.4",
+            "version": "3.7.0",
             "files": [
                 "dist/jquery.js"
             ]

@@ -47,29 +47,25 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col">
-    {% for day in week.days|filter(day => not day.empty and day.inWeek(week)) -%}
-        <table class="table table-sm table-borderless position-relative border-bottom border-end">
-            <thead>
-                <tr class="bg-secondary text-white">
-                    <td colspan="5" class="week-head"><span>{{ day.date|locale_date('long') }}</span><span class="small"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span> </td>
-                    <td class="text-end">
-                        {% if not day.empty -%}
-                            <span>{{ helper.linkCalculations(day.date|locale_date('short'), day.date|locale_date('long'), day.count, 'text-white stretched-link', 'counters.calculations_day') }}</span>
-                        {%- endif %}
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-            {% for calculation in day.calculations -%}
-                 {{ helper.dataRow(calculation) -}}
-            {%- endfor %}
-            </tbody>
-        </table>
-    {%- endfor %}
-    </div>
-</div>
+{% for day in week.days|filter(day => not day.empty and day.inWeek(week)) -%}
+    <table class="table table-sm table-borderless position-relative border-bottom border-end">
+        <thead>
+        <tr class="bg-secondary text-white">
+            <td colspan="5" class="week-head"><span>{{ day.date|locale_date('long') }}</span><span class="small"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span> </td>
+            <td class="text-end">
+                {% if not day.empty -%}
+                    <span class="me-1">{{ helper.linkCalculations(day.date|locale_date('short'), day.date|locale_date('long'), day.count, 'text-white stretched-link', 'counters.calculations_day') }}</span>
+                {%- endif %}
+            </td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for calculation in day.calculations -%}
+            {{ helper.dataRow(calculation) -}}
+        {%- endfor %}
+        </tbody>
+    </table>
+{%- endfor %}
 {% endblock %}
 
 {% block stylesheets -%}

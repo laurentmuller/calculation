@@ -84,7 +84,9 @@
 .toast-plugin .toast-body {
     background-color: var(--bs-body-bg);
 }
-
+/*
+ * close button
+ */
 [data-bs-theme=light] .toast-plugin .toast.border-primary .btn-close,
 [data-bs-theme=light] .toast-plugin .toast.border-success .btn-close,
 [data-bs-theme=light] .toast-plugin .toast.border-danger .btn-close,

@@ -694,7 +694,6 @@ openweather:
     W: Ouest
   error:
     empty_city: Aucune localité n'a été importée.
-    mime_type: Le type de fichier est invalide.
   fields:
     clouds: Nébulosité
     current: Valeurs actuelles
@@ -1067,7 +1066,6 @@ simple_editor:
   redo: Rétablir la dernière action
 swisspost:
   error:
-    mime_type: Le type de fichier sélectionné n'est pas valide.
     file_temp: Impossible de créer un fichier temporaire.
     file_empty: Aucun fichier à importer n'a été défini.
     file_not_exist: Le fichier à importer est introuvable ou n'existe pas.

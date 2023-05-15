@@ -168,7 +168,7 @@
         /**
          * Update the cell content.
          * @param {Event} e - the event.
-         * @param {JQuery} $input - the input.
+         * @param {jQuery} $input - the input.
          * @param {String} [content] - the input content.
          * @private
          */

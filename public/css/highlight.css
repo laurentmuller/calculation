@@ -86,44 +86,44 @@ pre.highlight-php .highlight-php-ellipsis {
 /*
  *  PHP Dark (copied from HtmlDumper dark mode).
  */
-[data-bs-theme=dark] body .pre-scrollable-highlight-php {
+body[data-bs-theme=dark] .pre-scrollable-highlight-php {
     background-color: #18171B;
 }
 
-[data-bs-theme=dark] body pre.highlight-php {
+body[data-bs-theme=dark] pre.highlight-php {
     background-color: #18171B;
     color: #FF8400;
 }
 
-[data-bs-theme=dark] body pre.highlight-php .highlight-php-str {
+body[data-bs-theme=dark] pre.highlight-php .highlight-php-str {
     color: #56DB3A
 }
 
-[data-bs-theme=dark] body pre.highlight-php .highlight-php-note {
+body[data-bs-theme=dark] pre.highlight-php .highlight-php-note {
     color: #1299DA
 }
 
-[data-bs-theme=dark] body pre.highlight-php .highlight-php-ref {
+body[data-bs-theme=dark] pre.highlight-php .highlight-php-ref {
     color: #A0A0A0
 }
 
-[data-bs-theme=dark] body pre.highlight-php .highlight-php-public {
+body[data-bs-theme=dark] pre.highlight-php .highlight-php-public {
     color: #FFFFFF
 }
 
-[data-bs-theme=dark] body pre.highlight-php .highlight-php-protected {
+body[data-bs-theme=dark] pre.highlight-php .highlight-php-protected {
     color: #FFFFFF
 }
 
-[data-bs-theme=dark] body pre.highlight-php .highlight-php-private {
+body[data-bs-theme=dark] pre.highlight-php .highlight-php-private {
     color: #FFFFFF
 }
 
-[data-bs-theme=dark] body pre.highlight-php .highlight-php-key {
+body[data-bs-theme=dark] pre.highlight-php .highlight-php-key {
     color: #56DB3A
 }
 
-[data-bs-theme=dark] body pre.highlight-php .highlight-php-ellipsis {
+body[data-bs-theme=dark] pre.highlight-php .highlight-php-ellipsis {
     color: #FF8400
 }
 
@@ -181,19 +181,19 @@ pre.highlight-sql .highlight-sql-error {
 /**
  * SQL highlight dark mode.
  */
-[data-bs-theme=dark] body pre.highlight-sql .highlight-sql-keyword {
+body[data-bs-theme=dark] pre.highlight-sql .highlight-sql-keyword {
     color: #1299DA;
 }
 
-[data-bs-theme=dark] body pre.highlight-sql .highlight-sql-word {
+body[data-bs-theme=dark] pre.highlight-sql .highlight-sql-word {
     color: #d3d3d3;
 }
 
-[data-bs-theme=dark] body pre.highlight-sql .highlight-sql-symbol {
+body[data-bs-theme=dark] pre.highlight-sql .highlight-sql-symbol {
     color: #FF8400;
 }
 
-[data-bs-theme=dark] body pre.highlight-sql .highlight-sql-string,
-[data-bs-theme=dark] body pre.highlight-sql .highlight-sql-variable {
+body[data-bs-theme=dark] pre.highlight-sql .highlight-sql-string,
+body[data-bs-theme=dark] pre.highlight-sql .highlight-sql-variable {
     color: #56DB3A;
 }

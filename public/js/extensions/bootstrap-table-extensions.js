@@ -24,12 +24,12 @@
  * @property {string} view - the display mode ('table' or 'custom').
  * @property {string} searchText - the search text.
  *
- * @typedef {JQuery} JQueryTable - the bootstrap table.
+ * @typedef {jQuery} jQueryTable - the bootstrap table.
  * @property {Options} getOptions - the options.
  * @property {boolean} isCustomView - true if custom view is displayed.
- * @property {JQuery} getCustomView - get the custom view.
- * @property {JQueryTable} enableKeys - enable the key handler.
- * @property {JQueryTable} disableKeys - disable the key handler.
+ * @property {jQuery} getCustomView - get the custom view.
+ * @property {jQueryTable} enableKeys - enable the key handler.
+ * @property {jQueryTable} disableKeys - disable the key handler.
  */
 
 /**
@@ -44,7 +44,7 @@ function loadingTemplate(message) {
 }
 
 /**
- * JQuery's extension for Bootstrap tables, rows and cells.
+ * jQuery's extension for Bootstrap tables, rows and cells.
  */
 (function ($) {
     'use strict';
@@ -78,7 +78,7 @@ function loadingTemplate(message) {
         /**
          * Update the selected row.
          *
-         * @param {JQueryTable} $table - the bootstrap table.
+         * @param {jQueryTable} $table - the bootstrap table.
          * @return {boolean} this function returns always true.
          */
         updateRow: function ($table) {
@@ -122,10 +122,10 @@ function loadingTemplate(message) {
          * Initialize the table-boostrap.
          *
          * @param {object} options - the options to merge with default.
-         * @return {JQueryTable} this instance for chaining.
+         * @return {jQueryTable} this instance for chaining.
          */
         initBootstrapTable: function (options) {
-            /** @var JQueryTable $this */
+            /** @var jQueryTable $this */
             const $this = $(this);
 
             // settings
@@ -205,7 +205,6 @@ function loadingTemplate(message) {
                     if (data.length !== 0) {
                         // hide empty data message
                         $this.hideCustomViewMessage();
-
                         const params = $this.getParameters();
                         const selector = '.custom-view-actions:eq(%index%)';
                         const callback = typeof options.onRenderCustomView === 'function' ? options.onRenderCustomView : false;
@@ -402,7 +401,7 @@ function loadingTemplate(message) {
         /**
          * Gets the selected row.
          *
-         * @return {JQuery} the selected row, if any; null otherwise.
+         * @return {jQuery} the selected row, if any; null otherwise.
          */
         getSelection: function () {
             const $this = $(this);
@@ -413,7 +412,7 @@ function loadingTemplate(message) {
         /**
          * Scroll the selected row, if any, into the visible area of the browser window.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         showSelection: function () {
             const $this = $(this);
@@ -440,7 +439,7 @@ function loadingTemplate(message) {
         /**
          * Gets the custom view container.
          *
-         * @return {JQuery} the custom view container, if displayed, null otherwise.
+         * @return {jQuery} the custom view container, if displayed, null otherwise.
          */
         getCustomView: function () {
             const $this = $(this);
@@ -454,7 +453,7 @@ function loadingTemplate(message) {
         /**
          * Save parameters to the session.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         saveParameters: function () {
             const $this = $(this);
@@ -469,7 +468,7 @@ function loadingTemplate(message) {
          * Update the href attribute of the actions.
          *
          * @param {array} rows - the rendered data.
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         updateHref: function (rows) {
             const $this = $(this);
@@ -506,7 +505,7 @@ function loadingTemplate(message) {
          * Refresh/reload the remote server data.
          *
          * @param {object} [options] - the refresh options.
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         refresh: function (options) {
             return $(this).bootstrapTable('refresh', options || {});
@@ -516,7 +515,7 @@ function loadingTemplate(message) {
          * Reset the search text.
          *
          * @param {string} [text] - the optional search text.
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         resetSearch: function (text) {
             return $(this).bootstrapTable('resetSearch', text || '');
@@ -526,7 +525,7 @@ function loadingTemplate(message) {
          * Refresh the table options.
          *
          * @param {Object} [options] - the options to refresh.
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         refreshOptions: function (options) {
             return $(this).bootstrapTable('refreshOptions', options || {});
@@ -535,7 +534,7 @@ function loadingTemplate(message) {
         /**
          * Toggles the view between the table and the custom view.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         toggleCustomView: function () {
             return $(this).bootstrapTable('toggleCustomView');
@@ -545,7 +544,7 @@ function loadingTemplate(message) {
          * Toggles the display mode.
          *
          * @param {string} mode - the display mode to set ('table' or 'custom').
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         setDisplayMode: function (mode) {
             const $this = $(this);
@@ -569,7 +568,7 @@ function loadingTemplate(message) {
         /**
          * Highlight matching text.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         highlight: function () {
             const $this = $(this);
@@ -651,7 +650,7 @@ function loadingTemplate(message) {
          * @param {string} sortName - the sort field.
          * @param {string} sortOrder - the sort order ('asc' or 'desc').
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         sort: function (sortName, sortOrder) {
             const data = this.getBootstrapTable();
@@ -728,7 +727,7 @@ function loadingTemplate(message) {
          * Finds an action for the given selector
          *
          * @param {string} actionSelector - the action selector.
-         * @return {JQuery} the action, if found; null otherwise.
+         * @return {jQuery} the action, if found; null otherwise.
          */
         findAction: function (actionSelector) {
             let $link;
@@ -777,7 +776,7 @@ function loadingTemplate(message) {
         /**
          * Enable the key handler.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         enableKeys: function () {
             const $this = $(this);
@@ -845,7 +844,7 @@ function loadingTemplate(message) {
         /**
          * Disable the key handler.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         disableKeys: function () {
             const $this = $(this);

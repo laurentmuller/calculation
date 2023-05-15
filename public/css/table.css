@@ -146,20 +146,24 @@ tr.text-body-secondary td .text-danger {
     }
 }
 
-/**
- * dark theme
+/*
+ * selection
  */
-[data-bs-theme=dark] body .bootstrap-table .custom-item.table-primary hr {
-    border-color: #adb5bd;
+body .bootstrap-table .custom-item.table-primary {
+    background-color: var(--bs-table-bg) !important;
 }
 
-[data-bs-theme=dark] body .bootstrap-table .table-primary a:not(.dropdown-item) {
-    color: #007bff;
+body[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary hr {
+    color: var(--bs-table-color) !important;
 }
 
-[data-bs-theme=dark] body .bootstrap-table .custom-item.table-primary a.text-body {
-    color: initial !important;
+body[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body {
+    color: var(--bs-table-color) !important;
 }
+.bootstrap-table .custom-item.table-primary.text-body-secondary {
+    color: var(--bs-table-color) !important;
+}
+
 
 /**
  * pagination (float)

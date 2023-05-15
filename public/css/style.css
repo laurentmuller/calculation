@@ -170,11 +170,6 @@ a.btn-list {
 }
 
 /*
-[data-bs-theme=dark] body .btn-warning {
-    color: var(--bs-white) !important;
-}
-*/
-/*
  * exception table
  */
 .table-exception td {
@@ -687,20 +682,6 @@ table.table-fixed-header th {
 .small-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: var(--bs-gray-700);
 }
-
-/*
-[data-bs-theme=dark] body .small-scrollbar::-webkit-scrollbar-track {
-    background-color: #343a40;
-}
-
-[data-bs-theme=dark] body .small-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, .1);
-}
-
-[data-bs-theme=dark] body .small-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(128, 135, 139, .8);
-}
-*/
 
 .card-footer hr.card-footer-line {
     margin: 0.5rem calc(-1 * var(--bs-card-cap-padding-x)) 0.25rem;

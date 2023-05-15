@@ -50,7 +50,7 @@
         /**
          * Gets the input element.
          *
-         * @return {JQuery|null|JQuery<HTMLElement>}
+         * @return {jQuery|null|jQuery<HTMLElement>}
          */
         getInput() {
             return this.$input;

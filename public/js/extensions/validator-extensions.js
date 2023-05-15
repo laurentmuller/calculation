@@ -1,20 +1,20 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * JQuery Validation Plugin extensions.
+ * jQuery Validation Plugin extensions.
  */
 (function ($) {
     'use strict';
 
     /**
-     * -------------- JQuery Extensions --------------
+     * -------------- jQuery Extensions --------------
      */
     $.fn.extend({
 
         /**
          * Initialize captcha.
          *
-         * @return {JQuery} the caller for chaining.
+         * @return {jQuery} the caller for chaining.
          */
         initCaptcha() {
             return this.each(function () {
@@ -37,14 +37,13 @@
         /**
          * Initialize simple file input.
          *
-         * @return {JQuery} the caller for chaining.
+         * @return {jQuery} the caller for chaining.
          */
         initSimpleFileInput() {
             return this.each(function () {
                 const $this = $(this);
                 const $delete = $this.parent().find('.btn-file-delete');
-                if ($this.length && $delete.length) {
-                    $this.trigger('change');
+                if ($delete.length) {
                     $delete.on('click', function () {
                         $this.val('').trigger('change').trigger('focus');
                     });
@@ -75,7 +74,7 @@
         /**
          * Finds the reCaptcha frame within the current element.
          *
-         * @return {JQuery} the frame.
+         * @return {jQuery} the frame.
          */
         findReCaptcha: function () {
             const $element = $(this);
@@ -85,7 +84,7 @@
         /**
          * Finds the color-picker drop-down
          *
-         * @return {JQuery}.
+         * @return {jQuery}.
          */
         findColorPicker() {
             const $element = $(this);
@@ -96,7 +95,7 @@
         /**
          * Remove validation class and error
          *
-         * @return {JQuery} the caller for chaining.
+         * @return {jQuery} the caller for chaining.
          */
         removeValidation: function () {
             return this.each(function () {
@@ -193,7 +192,7 @@
             /**
              * Finds the container of the given element.
              *
-             * @param {JQuery} $element - the element to update.
+             * @param {jQuery} $element - the element to update.
              */
             $.validator.prototype.findElement = function ($element) {
                 let $toUpdate = false;
@@ -215,8 +214,8 @@
             /**
              * Find elements with the same name attribute.
              *
-             * @param {JQuery} $element the element to search same name for.
-             * @return {{JQuery[]}|{JQuery}} the elements, if found; the argument element otherwise.
+             * @param {jQuery} $element the element to search same name for.
+             * @return {{jQuery[]}|{jQuery}} the elements, if found; the argument element otherwise.
              */
             $.validator.prototype.findNamedElements = function ($element) {
                 const name = $element.attr('name') || '';
@@ -386,7 +385,7 @@
         /**
          * Reset the form content and the validator (if any).
          *
-         * @return {JQuery} the caller for chaining.
+         * @return {jQuery} the caller for chaining.
          */
         resetValidator: function () {
             const $that = $(this);
@@ -403,7 +402,7 @@
          * Display an information alert while the form is submitted.
          *
          * @param {Object} [options] - the alert options.
-         * @return {JQuery} this form for chaining.
+         * @return {jQuery} this form for chaining.
          */
         showSubmit: function (options) {
             //position-absolute top-50 start-50 translate-middle
@@ -639,4 +638,4 @@
         return this.optional(element) || /\S+@\S+\.\S{2,}/.test(value);
     };
 
-}(jquery));
+}(jQuery));

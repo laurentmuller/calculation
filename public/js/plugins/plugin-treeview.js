@@ -270,7 +270,7 @@
 
         /**
          * Build nodes.
-         * @param {JQuery} $parent -the parent element.
+         * @param {jQuery} $parent -the parent element.
          * @param {Node[]} nodes - the children nodes.
          * @param {number} depth - the node depth.
          * @return {BoostrapTreeView} this instance for chaining.
@@ -493,7 +493,7 @@
         /**
          * Toggle the visibility of the given group.
          *
-         * @param {JQuery} $group - the group to toggle.
+         * @param {jQuery} $group - the group to toggle.
          * @return {BoostrapTreeView} this instance for chaining.
          * @private
          */
@@ -549,7 +549,7 @@
         /**
          * Gets the selected item.
          *
-         * @return {JQuery} the selected item, if any; null otherwise.
+         * @return {jQuery} the selected item, if any; null otherwise.
          * @private
          */
         _getSelection() {
@@ -563,7 +563,7 @@
         /**
          * Select the given element.
          *
-         * @param {JQuery} $selection - the item to select.
+         * @param {jQuery} $selection - the item to select.
          * @return {BoostrapTreeView} this instance for chaining.
          * @private
          */

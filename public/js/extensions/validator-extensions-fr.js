@@ -229,10 +229,10 @@
         /*
          * specialchar
          */
-        specialcharFallback: 'Ce champ doit contenir un caractère spécial.',
-        specialcharLabel: 'Le champ \"{0}\" doit contenir un caractère spécial.',
+        specialCharFallback: 'Ce champ doit contenir un caractère spécial.',
+        specialCharLabel: 'Le champ \"{0}\" doit contenir un caractère spécial.',
         specialchar: function (_parameters, element) {
-            return $.validator.formatLabel(element, $.validator.messages.specialcharLabel, $.validator.messages.specialcharFallback);
+            return $.validator.formatLabel(element, $.validator.messages.specialCharLabel, $.validator.messages.specialCharFallback);
         },
 
         /*

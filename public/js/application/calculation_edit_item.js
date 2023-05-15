@@ -35,7 +35,7 @@ class EditItemDialog extends EditDialog {
     /**
      * Initialize the dialog add.
      *
-     * @param {JQuery} $row - the selected row.
+     * @param {jQuery} $row - the selected row.
      *
      * @return {this} This instance for chaining.
      * @private
@@ -62,7 +62,7 @@ class EditItemDialog extends EditDialog {
     /**
      * Initialize the dialog edit.
      *
-     * @param {JQuery} $row - the selected row.
+     * @param {jQuery} $row - the selected row.
      *
      * @return {this} This instance for chaining.
      * @private

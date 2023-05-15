@@ -31,8 +31,3 @@
 .table-popover tr:first-child th {
     border-top-style: hidden;
 }
-
-[data-bs-theme=dark] body .bg-themed.text-themed {
-    color: #d3d3d3 !important;
-    background-color: #343A404C !important;
-}

@@ -249,7 +249,7 @@
 
         /**
          * Collapse expanded sibling menus
-         * @param {JQuery} $menu - the selected menu.
+         * @param {jQuery} $menu - the selected menu.
          * @private
          */
         _collapseSiblingMenus($menu) {
@@ -267,7 +267,7 @@
 
         /**
          * Collapse expanded children menus.
-         * @param {JQuery} $menu - the selected menu.
+         * @param {jQuery} $menu - the selected menu.
          * @private
          */
         _collapseChildrenMenus($menu) {
@@ -278,8 +278,8 @@
 
         /**
          * Hide the given menus.
-         * @param {JQuery} $links - the menu links to update.
-         * @param {JQuery} $menus - the menus to hide.
+         * @param {jQuery} $links - the menu links to update.
+         * @param {jQuery} $menus - the menus to hide.
          * @private
          */
         _hideMenus($links, $menus) {

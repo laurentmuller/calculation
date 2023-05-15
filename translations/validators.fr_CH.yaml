@@ -75,3 +75,10 @@ username:
   short: Le nom d'utilisateur est trop court.
 # security
 The CSRF token is invalid. Please try to resubmit the form.: Le jeton de falsification de requête inter-sites (CSRF) est invalide. Veuillez essayer de renvoyer le formulaire.
+# Symfony\Component\Validator\Constraints\File
+"The file could not be found.": Le fichier est introuvable.
+"The file is not readable.": Le fichier est en lecture seule.
+"The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}": Le fichier est trop volumineux ({{ size }} {{ suffix }}). La taille maximale autorisée est {{ limit }} {{ suffix }}.
+"The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}.": Le type de fichier n'est pas valide ({{ type }}). Les types autorisés sont {{ types }}.
+"The extension of the file is invalid ({{ extension }}). Allowed extensions are {{ extensions }}.": L'extension du fichier n'est pas valide ({{ extension }}). Les extensions autorisées sont {{ extensions }}.
+"An empty file is not allowed.": Un fichier vide n'est pas autorisé.

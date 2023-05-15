@@ -10,7 +10,7 @@
         trigger: 'hover',
         placement: 'top',
         fallbackPlacements: ['top', 'bottom', 'right', 'left'],
-        customClass: 'popover-primary popover-w-100',
+        customClass: 'popover-primary popover-table popover-w-100',
         content: function (e) {
             const content = $(e).data("content");
             return $(content);

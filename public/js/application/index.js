@@ -3,7 +3,7 @@
 /* globals MenuBuilder, Toaster  */
 
 /**
- * -------------- JQuery extensions --------------
+ * -------------- jQuery extensions --------------
  */
 $.fn.extend({
     /**
@@ -46,7 +46,7 @@ function onRestrictInput($restrict) {
 /**
  * Creates the key down handler for the calculation table.
  *
- * @param {JQuery} $table - the table to handle.
+ * @param {jQuery} $table - the table to handle.
  * @return {(function(*): void)|*}
  */
 function createKeydownHandler($table) {

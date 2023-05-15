@@ -399,7 +399,7 @@
         /**
          * Gets the selected color button.
          *
-         * @param {JQuery} $button - the clicked button element.
+         * @param {jQuery} $button - the clicked button element.
          * @returns {Object} the row and column index of the selected button.
          * @private
          */
@@ -430,7 +430,7 @@
          * Finds color buttons for the given selector.
          *
          * @param {string} selector - the button selector.
-         * @returns {JQuery} the buttons, if found; null otherwise.
+         * @returns {jQuery} the buttons, if found; null otherwise.
          * @private
          */
         _findButton(selector) {
@@ -442,7 +442,7 @@
          * Sets the selected (focus) color button.
          *
          * @param {Object} selection - the selection to set (must contain a 'row' and a 'col' fields).
-         * @returns {JQuery} the button, if found; null otherwise.
+         * @returns {jQuery} the button, if found; null otherwise.
          * @private
          */
         _setSelection(selection) {

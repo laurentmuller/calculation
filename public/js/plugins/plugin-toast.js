@@ -235,7 +235,7 @@
             // handler when a toast is hidden
             onHide: null,
 
-            // the JQuery selector to get data options from
+            // the jQuery selector to get data options from
             dataset: null
         },
 
@@ -317,7 +317,7 @@
          * Gets target container.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery} The target container.
+         * @returns {jQuery} The target container.
          * @private
          */
         _getTarget: function (options) {
@@ -329,7 +329,7 @@
          * Gets or creates the toast container div.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery} The toasts container.
+         * @returns {jQuery} The toasts container.
          * @private
          */
         _getContainer: function (options) {
@@ -370,7 +370,7 @@
          * Creates the div title.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery|undefined} The div title or null if no title.
+         * @returns {jQuery|undefined} The div title or null if no title.
          * @private
          */
         _createTitle: function (options) {
@@ -424,7 +424,7 @@
          * Creates the icon title.
          *
          * @param {Object} options - The options.
-         * @returns {JQuery|undefined} The icon or null if no icon.
+         * @returns {jQuery|undefined} The icon or null if no icon.
          * @private
          */
         _createIcon: function (options) {
@@ -470,7 +470,7 @@
          * Creates the subtitle.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery|undefined} The subtitle or null if no subtitle defined.
+         * @returns {jQuery|undefined} The subtitle or null if no subtitle defined.
          * @private
          */
         _createSubtitle: function (options) {
@@ -487,7 +487,7 @@
          * Creates the close button.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery|undefined} The close button or null if no button.
+         * @returns {jQuery|undefined} The close button or null if no button.
          * @private
          */
         _createCloseButton: function (options) {
@@ -508,7 +508,7 @@
          * Creates the div message.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery} The div message.
+         * @returns {jQuery} The div message.
          * @private
          */
         _createMessage: function (options) {
@@ -525,7 +525,7 @@
          * Creates the div toast.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery} The div toast.
+         * @returns {jQuery} The div toast.
          * @private
          */
         _createToast: function (options) {
@@ -558,7 +558,7 @@
          * Creates the progress bar.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery|undefined} The progress bar or null if no progress.
+         * @returns {jQuery|undefined} The progress bar or null if no progress.
          * @private
          */
         _createProgressBar: function (options) {
@@ -586,7 +586,7 @@
         /**
          * Show the toast.
          *
-         * @param {JQuery} $toast - The toast to show.
+         * @param {jQuery} $toast - The toast to show.
          * @param {Object} options - The toast options.
          * @return {Object} This instance.
          * @private
@@ -621,7 +621,7 @@
         /**
          * Update the progress bar.
          *
-         * @param {JQuery} $progress - The progress bar to update.
+         * @param {jQuery} $progress - The progress bar to update.
          * @param {Number} endTime - The end time.
          * @param {Number} timeout - The timeout in milliseconds.
          * @private

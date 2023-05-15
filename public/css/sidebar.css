@@ -90,12 +90,12 @@
     background-color: rgba(0, 0, 0, 0.15);
 }
 /* dark mode */
-[data-bs-theme=dark] body .navbar-vertical::-webkit-scrollbar-track {
+body[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-track {
     background-color: #343a40;
 }
-[data-bs-theme=dark] body .navbar-vertical::-webkit-scrollbar-thumb {
+body[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, .1);
 }
-[data-bs-theme=dark] body .navbar-vertical::-webkit-scrollbar-thumb:hover {
+body[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb:hover {
     background-color: rgba(128, 135, 139, .8)
 }

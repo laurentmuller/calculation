@@ -321,7 +321,7 @@ class EditTaskDialog extends EditDialog {
     /**
      * Gets the checked items.
      *
-     * @return {JQuery} the checked items.
+     * @return {jQuery} the checked items.
      * @private
      */
     _getCheckedItems() {

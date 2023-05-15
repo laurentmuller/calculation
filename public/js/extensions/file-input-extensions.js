@@ -1,13 +1,13 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * JQuery file input extensions.
+ * jQuery file input extensions.
  */
 (function ($) {
     'use strict';
 
     /**
-     * -------------- JQuery Extensions --------------
+     * -------------- jQuery Extensions --------------
      */
     $.fn.extend({
 
@@ -51,7 +51,7 @@
                     });
 
                     // focus when select file
-                    $group.find('.fileinput-filename,.fileinput-exists').on('click', function () {
+                    $group.find('.file-input-filename,.file-input-exists').on('click', function () {
                         $that.trigger('focus');
                     });
                 }

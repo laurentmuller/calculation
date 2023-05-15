@@ -65,7 +65,7 @@ function startDragItems() {
 /**
  * Gets the maximum of the maximum column.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {jQuery} $table - the parent table.
  * @returns {number} - the maximum.
  */
 function getMaxValue($table) {
@@ -80,7 +80,7 @@ function getMaxValue($table) {
 /**
  * Gets the minimum of the value column.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {jQuery} $table - the parent table.
  * @returns {number} - the minimum.
  */
 function getMinValue($table) {
@@ -121,7 +121,7 @@ function getNextMarginIndex() {
 /**
  * Adds a new item.
  *
- * @return {JQuery} the newly created item for chaining.
+ * @return {jQuery} the newly created item for chaining.
  */
 function addItem() {
     'use strict';
@@ -148,7 +148,7 @@ function addItem() {
 /**
  * Remove an item.
  *
- * @param {JQuery} $caller - the caller (normally a button).
+ * @param {jQuery} $caller - the caller (normally a button).
  */
 function removeItem($caller) {
     'use strict';
@@ -162,8 +162,8 @@ function removeItem($caller) {
 /**
  * Move up an item.
  *
- * @param {JQuery} $caller - the caller (normally a button).
- * @return {JQuery} the item for chaining.
+ * @param {jQuery} $caller - the caller (normally a button).
+ * @return {jQuery} the item for chaining.
  */
 function moveUpItem($caller) {
     'use strict';
@@ -186,8 +186,8 @@ function moveUpItem($caller) {
 /**
  * Move down an item.
  *
- * @param {JQuery} $caller - the caller (normally a button).
- * @return {JQuery} the item for chaining.
+ * @param {jQuery} $caller - the caller (normally a button).
+ * @return {jQuery} the item for chaining.
  */
 function moveDownItem($caller) {
     'use strict';
@@ -210,7 +210,7 @@ function moveDownItem($caller) {
 /**
  * Adds a new margin.
  *
- * @param {JQuery} $caller - the caller (normally a button).
+ * @param {jQuery} $caller - the caller (normally a button).
  */
 function addMargin($caller) {
     'use strict';
@@ -239,7 +239,7 @@ function addMargin($caller) {
 /**
  * Remove a margin (row).
  *
- * @param {JQuery} $caller - the caller.
+ * @param {jQuery} $caller - the caller.
  */
 function removeMargin($caller) {
     'use strict';
@@ -252,7 +252,7 @@ function removeMargin($caller) {
 /**
  * Sort margins.
  *
- * @param {JQuery} $caller - the caller.
+ * @param {jQuery} $caller - the caller.
  */
 function sortMargins($caller) {
     'use strict';
@@ -281,7 +281,7 @@ function sortMargins($caller) {
 /**
  * Update the toggle button.
  *
- * @param {JQuery} $caller - the caller
+ * @param {jQuery} $caller - the caller
  * @param {boolean} show - true if shown, false if hidden.
  */
 function updateToggle($caller, show) {
@@ -303,7 +303,7 @@ function collapseAll() {
 /**
  * Expand margins.
  *
- * @param $caller {JQuery} $caller - the caller
+ * @param $caller {jQuery} $caller - the caller
  */
 function expand($caller) {
     'use strict';

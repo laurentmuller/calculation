@@ -45,7 +45,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -298,9 +300,16 @@ class FormHelper
 
     /**
      * Add a file type to the builder and reset all values to default.
+     *
+     * @param string $extension the allowed file extension
      */
-    public function addFileType(): self
+    public function addFileType(string $extension = ''): self
     {
+        if ('' !== $extension) {
+            $this->updateAttribute('accept', $this->getMimeTypes($extension))
+                ->constraints(new File(extensions: $extension));
+        }
+
         return $this->add(FileType::class);
     }
 
@@ -934,6 +943,14 @@ class FormHelper
         }
 
         return $this;
+    }
+
+    private function getMimeTypes(string $extension): string
+    {
+        $default = MimeTypes::getDefault();
+        $types = $default->getMimeTypes($extension);
+
+        return \implode(',', $types);
     }
 
     /**

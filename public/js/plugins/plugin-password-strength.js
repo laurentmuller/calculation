@@ -182,7 +182,7 @@
          * Gets the UI container.
          *
          * @param {Object} options - the plugin options.
-         * @return {JQuery} the UI container.
+         * @return {jQuery} the UI container.
          * @private
          */
         _getContainer(options) {
@@ -204,7 +204,7 @@
          * Gets or create the progress bars container.
          *
          * @param {Object} options - the plugin options.
-         * @return {JQuery|null} the progress bar container or null if none.
+         * @return {jQuery|null} the progress bar container or null if none.
          * @private
          */
         _getProgress(options) {
@@ -249,7 +249,7 @@
          * Gets or create the verdict label
          *
          * @param {Object} options - the plugin options.
-         * @return {JQuery|null} the verdict label or null if none.
+         * @return {jQuery|null} the verdict label or null if none.
          * @private
          */
         _getLabel(options) {
@@ -282,7 +282,7 @@
          *
          * @param {string} type - the tag type.
          * @param {string} [className] - the class name
-         * @return {JQuery} the newly created element.
+         * @return {jQuery} the newly created element.
          * @private
          */
         _createControl(type, className) {

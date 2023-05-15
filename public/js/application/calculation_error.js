@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * -------------- JQuery functions extensions --------------
+ * -------------- jQuery functions extensions --------------
  */
 (function ($) {
     'use strict';

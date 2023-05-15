@@ -18,7 +18,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Adds an item entry.
      *
-     * @param {JQuery} $link - the element to add.
+     * @param {jQuery} $link - the element to add.
      * @return {MenuBuilder} This instance for chaining.
      */
     addItem($link) {
@@ -157,7 +157,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Fills the given elements.
      *
-     * @param {JQuery} $elements the elements to add.
+     * @param {jQuery} $elements the elements to add.
      * @return {MenuBuilder} This instance for chaining.
      */
     fill($elements) {
@@ -177,11 +177,11 @@ const MenuBuilder = class { /* exported MenuBuilder */
 };
 
 /**
- * -------------- JQuery extensions --------------
+ * -------------- jQuery extensions --------------
  */
 
 /**
- * JQuery's extension for Bootstrap tables, rows and cells.
+ * jQuery's extension for Bootstrap tables, rows and cells.
  */
 (function ($) {
     'use strict';
@@ -204,7 +204,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
          * @param {function} [fnShow] - the function called when the context menu is shown.
          * @param {function} [fnHide] - the function called when the context menu is hidden.
          * @param {Object} [options] - the context menu options to override.
-         * @return {JQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         initContextMenu: function (selector, fnShow, fnHide, options) {
             return this.each(function () {

@@ -275,7 +275,7 @@
         /**
          * Load the image.
          *
-         * @param {JQuery} $image - the target image element.
+         * @param {jQuery} $image - the target image element.
          * @param {File} file - the file to load.
          * @private
          */
@@ -334,7 +334,7 @@
         /**
          * Reset the image orientation.
          *
-         * @param {JQuery} $image - the image element.
+         * @param {jQuery} $image - the image element.
          * @param {number} transform - the transform value.
          * @private
          */

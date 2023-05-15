@@ -5,7 +5,7 @@
 /**
  * Gets the active page.
  *
- * @return {JQuery<HTMLElement>|null} the active page or null if none.
+ * @return {jQuery<HTMLElement>|null} the active page or null if none.
  */
 function getActivePage() {
     'use strict';
@@ -16,7 +16,7 @@ function getActivePage() {
 /**
  * Reset widgets to default values.
  *
- * @param {JQuery} [$source] the active page or null to reset all values.
+ * @param {jQuery} [$source] the active page or null to reset all values.
  */
 function setDefaultValues($source) {
     'use strict';

@@ -20,8 +20,6 @@ use App\Utils\StringUtils;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Mime\MimeTypes;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -62,18 +60,12 @@ class OpenWeatherCityUpdater
      */
     public function createForm(): FormInterface
     {
-        $constraint = new File([
-            'extensions' => [self::FILE_EXTENSION],
-            'mimeTypesMessage' => $this->trans('openweather.error.mime_type'),
-        ]);
         $builder = $this->factory->createBuilder();
         $helper = new FormHelper($builder, 'openweather.import.');
+        $helper->field('file')
+            ->addFileType(self::FILE_EXTENSION);
 
-        return $helper->field('file')
-            ->updateAttribute('accept', $this->getMimeTypes())
-            ->constraints($constraint)
-            ->addFileType()
-            ->createForm();
+        return $helper->createForm();
     }
 
     public function getTranslator(): TranslatorInterface
@@ -159,14 +151,6 @@ class OpenWeatherCityUpdater
         } catch (\InvalidArgumentException) {
             return false;
         }
-    }
-
-    private function getMimeTypes(): string
-    {
-        $default = MimeTypes::getDefault();
-        $mimeTypes = $default->getMimeTypes(self::FILE_EXTENSION);
-
-        return \implode(',', $mimeTypes);
     }
 
     /**

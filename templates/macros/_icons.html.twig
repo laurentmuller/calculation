@@ -53,13 +53,13 @@
 
 {% macro navItem(href, text, icon, domain=null, parameters=[]) -%}
 <li class="nav-item">
-    {{- _self.link(href, text, 'nav-link text-nowrap', icon, null, domain, parameters) -}}
+    {{- _self.link(href, text, 'nav-link', icon, null, domain, parameters) -}}
 </li>
 {%- endmacro %}
 
 {% macro navItemExternal(href, text, icon, domain=null, parameters=[]) -%}
 <li class="nav-item">
-    {{- _self.linkExternal(href, text, 'nav-link text-nowrap', icon, null, domain, parameters) -}}
+    {{- _self.linkExternal(href, text, 'nav-link', icon, null, domain, parameters) -}}
 </li>
 {%- endmacro %}
 

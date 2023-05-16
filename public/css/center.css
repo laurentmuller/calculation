@@ -22,16 +22,6 @@ html {
     height: 100%;
 }
 
-.mx-n3 {
-    margin-left: -1rem !important;
-    margin-right: -1rem !important;
-}
-
-.mx-n4 {
-    margin-left: -1.5rem !important;
-    margin-right: -1.5rem !important;
-}
-
 ::-webkit-scrollbar {
     width: 0;
     background-color: transparent;

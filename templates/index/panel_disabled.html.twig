@@ -1,10 +1,10 @@
 {# user disabled panel #}
 <div class="alert alert-danger" role="alert">
-    <div class="media">
-        <span class="me-3">
+    <div class="d-flex">
+        <div class="flex-shrink-0">
             <i class="fa-solid fa-circle-exclamation fa-3x"></i>
-        </span>
-        <div class="media-body">
+        </div>
+        <div class="flex-grow-1 ms-4">
             {{- 'index.disabled'|trans({'%username%': app.user.userIdentifier})|raw -}}
         </div>
     </div>

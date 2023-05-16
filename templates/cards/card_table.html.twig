@@ -178,7 +178,7 @@
     <div class="col-auto col-search align-self-center me-auto">
     {% if allow_search %}
         <div class="input-group input-group-sm input-group-search search">
-            <input class="form-control form-control-search" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" autocomplete="off" type="text" style="width: 130px;">
+            <input class="form-control form-control-search" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" autocomplete="off" type="text">
             {% block toolbar_actions -%}{%- endblock %}
             <button id="clear_search" name="clear_search" type="button" class="btn btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
                 <i class="fa-solid fa-eraser"></i>
@@ -186,8 +186,8 @@
          </div>
     {% endif %}
     </div>
-    {# right toolbar #}
-    <div class="col-auto col-toolbar align-self-center mt-1 mt-md-0">
+    {# toolbar #}
+    <div class="col-auto col-toolbar align-self-center">
         <div class="btn-group btn-group-sm btn-group-toolbar" role="group">
             {# page size #}
             {% block page_list %}
@@ -274,7 +274,7 @@
 {# custom view template #}
 <div id="custom-view" class="d-none">
     <div class="col mb-2 px-1">
-        <div class="custom-item border rounded h-100 px-3 py-1{% block custom_view_card_class %}{%- endblock %}">
+        <div class="custom-item border h-100 px-3 py-1{% block custom_view_card_class %}{%- endblock %}">
             <div class="row rowlink-skip">
                 <div class="col-11 text-truncate fw-bold{% if row_edit or row_show %} rowlink-skip{% endif %}">
                     {%- apply spaceless %}

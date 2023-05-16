@@ -169,7 +169,6 @@ body[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body
     color: var(--bs-table-color) !important;
 }
 
-
 /**
  * pagination (float)
  */
@@ -179,4 +178,11 @@ body[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body
 
 .fixed-table-pagination .float-right {
     float: right !important;
+}
+
+/**
+ * search control
+ */
+.form-control.form-control-search {
+    width: 130px;
 }

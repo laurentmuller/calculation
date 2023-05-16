@@ -768,3 +768,31 @@ table.table-no-end-line tbody tr:last-child td {
 a {
     text-decoration: none;
 }
+
+/**
+ * Negative margins
+ */
+.mx-n1 {
+    margin-left: -0.25rem !important;
+    margin-right: -0.25rem !important;
+}
+
+.mx-n2 {
+    margin-left: -0.5rem !important;
+    margin-right: -0.5rem !important;
+}
+
+.mx-n3 {
+    margin-left: -1rem !important;
+    margin-right: -1rem !important;
+}
+
+.mx-n4 {
+    margin-left: -1.5rem !important;
+    margin-right: -1.5rem !important;
+}
+
+.mx-n5 {
+    margin-left: -3rem !important;
+    margin-right: -3rem !important;
+}

@@ -3,7 +3,7 @@
     {% if not empty and user_service.application.isMarginBelow(margin) %}
         {% set minimum_text = user_service.application.minMargin|percent %}
         {% set title = 'calculation.list.margin_below'|trans({'%margin%': margin_text, '%minimum%': minimum_text}) %}
-        <span class="has-tooltip text-danger" title="{{ title }}" data-html="true">{{- margin_text -}}</span>
+        <span class="has-tooltip text-danger" title="{{ title }}">{{- margin_text -}}</span>
     {% else -%}
         {{ margin_text }}
     {% endif %}

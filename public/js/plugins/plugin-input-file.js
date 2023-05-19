@@ -132,12 +132,12 @@
             const files = $.isUndefined(e.target.files) ? e.target && e.target.value ? [{name: e.target.value.replace(/^.+\\/, '')}] : [] : e.target.files;
             if (files.length === 0) {
                 this._clear(e);
-                return;
+                return this;
             }
             if (!this._verifySizes(files)) {
                 this.$element.trigger('max_size.bs.file-input');
                 this._clear(e);
-                return;
+                return this;
             }
             this.$hidden.val('');
             this.$hidden.attr('name', '');
@@ -173,7 +173,6 @@
             if (e) {
                 e.preventDefault();
             }
-
             this.$hidden.val('');
             this.$hidden.attr('name', this.name);
             if (this.options.clearName) {
@@ -276,7 +275,7 @@
         /**
          * Load the image.
          *
-         * @param {JQuery} $image - the target image element.
+         * @param {jQuery} $image - the target image element.
          * @param {File} file - the file to load.
          * @private
          */
@@ -335,7 +334,7 @@
         /**
          * Reset the image orientation.
          *
-         * @param {JQuery} $image - the image element.
+         * @param {jQuery} $image - the image element.
          * @param {number} transform - the transform value.
          * @private
          */

@@ -1,20 +1,20 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * JQuery Simple-Editor extensions.
+ * jQuery Simple-Editor extensions.
  */
 (function ($) {
     'use strict';
 
     /**
-     * -------------- JQuery Extensions --------------
+     * -------------- jQuery Extensions --------------
      */
     $.fn.extend({
 
         /**
          * Finds the simple editor container within the current element.
          *
-         * @return {JQuery} the editor or null if not found.
+         * @return {jQuery} the editor or null if not found.
          */
         findSimpleEditor: function () {
             const $editor = $(this).parents('div.simple-editor');
@@ -60,7 +60,7 @@
          * Initialize a simple editor.
          *
          * @param {Object} options - the initialisation options.
-         * @return {JQuery} the input for chaining.
+         * @return {jQuery} the input for chaining.
          */
         initSimpleEditor: function (options) {
             const queryCommandState = function (command) {
@@ -90,7 +90,7 @@
                     const enabled = exec && data.enabled || false;
 
                     if (index === 0) {
-                        $button.addClass('rounded-left');
+                        $button.addClass('rounded-start');
                     }
 
                     // exec

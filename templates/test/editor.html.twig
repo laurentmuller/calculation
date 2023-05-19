@@ -6,8 +6,12 @@
 {# body #}
 {% block card_body %}
 <div class="row">
-    <div class="col-md-8">{{ form_row(form.email) }}</div>
-    <div class="col-md-4">{{ form_row(form.importance) }}</div>
+    <div class="col-md-8">
+        {{ form_row(form.email) }}
+    </div>
+    <div class="col-md-4">
+        {{ form_row(form.importance) }}
+    </div>
 </div>
 {{ form_row(form.message) }}
 {{ form_row(form.attachments) }}
@@ -20,8 +24,6 @@
 {# javascripts #}
 {% block javascripts -%}
 {{ parent() }}
-{{ asset_js('js/plugins/plugin-input-file.js') }}
-{{ asset_js('js/extensions/file-input-extensions.js') }}
 {{ asset_js('js/extensions/simple-editor-extension.js') }}
 {{ asset_js('js/test/simple-editor.js') }}
 {% endblock %}

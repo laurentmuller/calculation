@@ -50,6 +50,7 @@ class Product extends AbstractCategoryItemEntity implements TimestampableInterfa
     /**
      * The price.
      */
+    #[Assert\NotBlank]
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $price = 0.0;
 

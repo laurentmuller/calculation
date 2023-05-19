@@ -185,6 +185,7 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
         }
         $name = u($name)
             ->afterLast('\\')
+            ->title()
             ->ensureStart(self::ENTITY_PREFIX)
             ->toString();
 

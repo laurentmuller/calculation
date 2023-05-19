@@ -6,10 +6,8 @@
 (function ($) {
     'use strict';
     // initialize attachements
-    $("#form_file").initFileInput();
+    $("#form_file").initSimpleFileInput();
 
     // initialize validator
-    $("#edit-form").initValidator({
-        fileInput: true,
-    });
+    $("#edit-form").initValidator();
 }(jQuery));

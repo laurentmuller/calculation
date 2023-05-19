@@ -8,10 +8,10 @@
     $('#form_message').initSimpleEditor({
         focus: true
     });
-    $("#form_attachments").initFileInput();
+    $('#form_attachments').initSimpleFileInput();
+
     $("#edit-form").initValidator({
         simpleEditor: true,
-        fileInput: true,
         focus: false
     });
 }(jQuery));

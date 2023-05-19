@@ -1,28 +1,24 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% from 'macros/_timestampable.html.twig' import timestampable %}
-{% from 'macros/_icons.html.twig' import link %}
+{% from 'macros/_icons.html.twig' import icon %}
 {% form_theme form with _self %}
 {# item label #}
 {% block _task_items_entry_name_label -%}
-    <div class="row">
-        <div class="col-auto mr-auto">
-            {{- form_label(form) -}}
-        </div>
-        <div class="col-auto">
-            <div class="btn-group btn-group-sm" role="group">
-                <button class="btn btn-edit btn-outline-secondary btn-toggle" type="button" data-toggle="collapse" data-target="#{{ id_content }}" title="{{ title|trans }}">
-                    <i class="d-print-none fa-solid fa-caret-{% if show %}down{% else %}right{% endif %}"></i>
-                </button>
-                <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'task.edit.move_up_item'|trans }}" disabled="disabled">
-                    <i class="fa-solid fa-angle-up"></i>
-                </button>
-                <button type="button" class="btn btn-edit btn-outline-secondary btn-down-item" title="{{ 'task.edit.move_down_item'|trans }}" disabled="disabled">
-                    <i class="fa-solid fa-angle-down"></i>
-                </button>
-                <button type="button" class="btn btn-edit btn-outline-danger btn-delete-item" title="{{ 'task.edit.delete_item'|trans }}">
-                    <i class="fa-solid fa-times"></i>
-                </button>
-            </div>
+    <div class="d-flex flex-wrap align-items-center gap-1 mb-2">
+        {{ form_label(form, null, {'label_attr': {'class': 'flex-fill mb-0'}}) }}
+        <div class="btn-group btn-group-sm d-print-none" role="group">
+            <button class="btn btn-edit btn-outline-secondary btn-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id_content }}" title="{{ title|trans }}">
+                <i class="d-print-none fa-solid fa-caret-{% if show %}up{% else %}down{% endif %}"></i>
+            </button>
+            <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'task.edit.move_up_item'|trans }}" disabled="disabled">
+                <i class="fa-solid fa-angle-up"></i>
+            </button>
+            <button type="button" class="btn btn-edit btn-outline-secondary btn-down-item" title="{{ 'task.edit.move_down_item'|trans }}" disabled="disabled">
+                <i class="fa-solid fa-angle-down"></i>
+            </button>
+            <button type="button" class="btn btn-edit btn-outline-danger btn-delete-item" title="{{ 'task.edit.delete_item'|trans }}">
+                <i class="fa-solid fa-times"></i>
+            </button>
         </div>
     </div>
 {% endblock %}
@@ -47,8 +43,10 @@
             <em>{{ form_errors(margin.value) }}</em>
         </div>
     </td>
-    <td class="actions align-middle px-0 d-print-none">
-        {{- link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete-margin d-print-none', ICON_DELETE, 'taskitem.edit.delete_item') -}}
+    <td class="actions px-0 py-2 d-print-none">
+        <button type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'taskitem.edit.delete_item'|trans }}">
+            {{- icon(ICON_DELETE) -}}
+        </button>
     </td>
 </tr>
 {% endmacro -%}
@@ -60,18 +58,18 @@
 {%- set count = item.vars.value.count|default(0) -%}
 {%- set name = item.vars.value.name|default('taskitem.fields.name'|trans) -%}
 {%- set title = show ? 'taskitem.edit.items_hide' : 'taskitem.edit.items_show' %}
-<div class="item card">
-    <div class="card-header card-header-item bg-transparent px-3 pb-1" id="{{ id_header }}">
+<div class="item list-group-item px-0">
+    <div class="item-header card-header-item bg-transparent px-3 pb-1" id="{{ id_header }}">
         <div class="form-group">
             {{ form_row(item.name, {id_content: id_content, title: title, show: show}) }}
         </div>
         {{ form_widget(item.position) }}
     </div>
-    <div id="{{ id_content }}" class="collapse{% if show %} show{% endif %}" aria-labelledby="{{ id_header }}" data-parent="#items">
+    <div id="{{ id_content }}" class="collapse{% if show %} show{% endif %}" aria-labelledby="{{ id_header }}" data-bs-parent="#items">
         <div class="card-body p-3">
             <div class="row">
-                <div class="col-auto mr-auto">
-                    <label class="control-label">{{ 'taskitem.fields.margins'|trans }}</label>
+                <div class="col-auto me-auto">
+                    <label class="form-label control-label">{{ 'taskitem.fields.margins'|trans }}</label>
                 </div>
                 <div class="col-auto d-print-none">
                     <a href="#" type="button" class="p-0 btn-add-margin btn btn-link">{{ 'taskitem.edit.add_item'|trans }}</a>
@@ -82,9 +80,9 @@
             <table class="table table-borderless table-sm table-edit{% if count == 0 %} d-none{% endif %}" data-prototype="{{ _self.printTaskItemMargin(item.margins.vars.prototype)|e('html_attr') }}">
                 <thead>
                     <tr>
-                        <th class="vertical-middle text-right font-weight-normal required">{{ 'taskitemmargin.fields.minimum'|trans }}</th>
-                        <th class="vertical-middle text-right font-weight-normal required">{{ 'taskitemmargin.fields.maximum'|trans }}</th>
-                        <th class="vertical-middle text-right font-weight-normal required">{{ 'taskitemmargin.fields.value'|trans }}</th>
+                        <th class="vertical-middle text-end fw-normal required">{{ 'taskitemmargin.fields.minimum'|trans }}</th>
+                        <th class="vertical-middle text-end fw-normal required">{{ 'taskitemmargin.fields.maximum'|trans }}</th>
+                        <th class="vertical-middle text-end fw-normal required">{{ 'taskitemmargin.fields.value'|trans }}</th>
                         <th class="actions d-print-none">&nbsp;</th>
                     </tr>
                 </thead>
@@ -94,7 +92,7 @@
                 {% endfor -%}
                 </tbody>
             </table>
-            <small class="text-muted text-right empty-margins{% if count > 0 %} d-none{% endif %}">{{- 'taskitem.edit.empty_items'|trans -}}</small>
+            <small class="text-body-secondary text-end empty-margins{% if count > 0 %} d-none{% endif %}">{{- 'taskitem.edit.empty_items'|trans -}}</small>
         </div>
     </div>
 </div>
@@ -115,14 +113,14 @@
 {# header #}
 {% block card_header %}
 <div class="row">
-    <div class="col-auto mr-auto">{{ parent() }}</div>
+    <div class="col-auto me-auto">{{ parent() }}</div>
     <div class="col-auto d-print-none"><a href="#" class="btn-add-item p-0" role="button">{{ 'task.edit.add_item'|trans }}</a></div>
 </div>
 {% endblock %}
 {# body #}
 {% block card_body %}
 {{ form_row(form.name) }}
-<div class="form-row">
+<div class="row">
     <div class="col-md-5">
         {{ form_row(form.category) }}
     </div>
@@ -133,12 +131,12 @@
         {{ form_row(form.supplier) }}
     </div>
 </div>
-<div class="items accordion" id="items" data-item-index="{{ item_index }}" data-margin-index="{{ margin_index }}" data-prototype="{{ _self.printTaskItem(form.items.vars.prototype, true)|e('html_attr') }}">
+<div class="items list-group" id="items" data-item-index="{{ item_index }}" data-margin-index="{{ margin_index }}" data-prototype="{{ _self.printTaskItem(form.items.vars.prototype, true)|e('html_attr') }}">
     {% for item in form.items -%}
         {{ _self.printTaskItem(item, loop.index == 1) }}
     {% endfor -%}
 </div>
-<small class="text-muted empty-items{% if form.vars.value.count > 0 %} d-none{% endif %}">{{- 'task.edit.empty_items'|trans -}}</small>
+<small class="text-body-secondary empty-items{% if form.vars.value.count > 0 %} d-none{% endif %}">{{- 'task.edit.empty_items'|trans -}}</small>
 {% endblock %}
 {# footer #}
 

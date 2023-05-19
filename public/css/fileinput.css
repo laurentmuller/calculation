@@ -8,7 +8,7 @@
     vertical-align: middle;
 }
 
-.btn-file>input {
+.btn-file > input {
     position: absolute;
     top: 0;
     right: 0;
@@ -17,12 +17,12 @@
     margin: 0;
     font-size: 23px;
     cursor: pointer;
-    filter: alpha(opacity = 0);
+    filter: alpha(opacity=0);
     opacity: 0;
     direction: ltr;
 }
 
-.btn-file>input::-webkit-file-upload-button {
+.btn-file > input::-webkit-file-upload-button {
     cursor: pointer;
 }
 
@@ -40,6 +40,7 @@
     cursor: pointer;
     border: 0;
 }
+
 .file-input .img-thumbnail {
     display: inline-block;
     margin-bottom: 5px;
@@ -48,6 +49,7 @@
     width: 200px;
     height: 180px;
     line-height: 166px;
+    background-color: var(--bs-white);
 }
 
 .file-input .img-thumbnail > img {
@@ -113,12 +115,12 @@
     display: flex;
 }
 
-.file-input.input-group>* {
+.file-input.input-group > * {
     position: relative;
     z-index: 2;
 }
 
-.file-input.input-group>.btn-file {
+.file-input.input-group > .btn-file {
     z-index: 1;
 }
 
@@ -126,7 +128,8 @@
     border-top: inherit;
     border-bottom: inherit;
 }
-.file-input .input-group-append .input-group-text.file-input-exists  {
+
+.file-input .input-group-append .input-group-text.file-input-exists {
     border-right: inherit;
 }
 
@@ -140,27 +143,27 @@
 }
 
 .form-group.has-warning .file-input .file-input-preview {
-    color: var(--warning);
+    color: var(--bs-warning);
 }
 
 .form-group.has-warning .file-input .img-thumbnail {
-    border-color: var(--warning);
+    border-color: var(--bs-warning);
 }
 
 .form-group.has-error .file-input .file-input-preview {
-    color: var(--danger);
+    color: var(--bs-danger);
 }
 
 .form-group.has-error .file-input .img-thumbnail {
-    border-color: var(--danger);
+    border-color: var(--bs-danger);
 }
 
 .form-group.has-success .file-input .file-input-preview {
-    color: var(--success);
+    color: var(--bs-success);
 }
 
 .form-group.has-success .file-input .img-thumbnail {
-    border-color: var(--success);
+    border-color: var(--bs-success);
 }
 
 .input-group-addon:not(:first-child ) {

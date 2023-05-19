@@ -3,7 +3,7 @@
 /* globals MenuBuilder, Toaster  */
 
 /**
- * -------------- JQuery extensions --------------
+ * -------------- jQuery extensions --------------
  */
 $.fn.extend({
     /**
@@ -46,7 +46,7 @@ function onRestrictInput($restrict) {
 /**
  * Creates the key down handler for the calculation table.
  *
- * @param {JQuery} $table - the table to handle.
+ * @param {jQuery} $table - the table to handle.
  * @return {(function(*): void)|*}
  */
 function createKeydownHandler($table) {
@@ -191,6 +191,21 @@ function updateCounter(e) {
 }
 
 /**
+ * Select a row.
+ *
+ * @param {jQuery} $source - the source to find row to select.
+ * @param {boolean} hideMenus - true to hide displayed drop-down menus.
+ */
+function selectRow($source, hideMenus) {
+    'use strict';
+    $('#calculations tr.table-primary').removeClass('table-primary');
+    $source.closest('tr').addClass('table-primary');
+    if (hideMenus) {
+        $.hideDropDownMenus();
+    }
+}
+
+/**
  * Ready function
  */
 (function ($) {
@@ -208,40 +223,41 @@ function updateCounter(e) {
 
         // enable tooltips
         $table.tooltip({
+            customClass: 'tooltip-danger',
             selector: '.has-tooltip',
-            customClass: 'tooltip-danger'
+            html: true
         });
 
-        // function to select a row from children
-        const selectRow = function () {
-            $.hideDropDownMenus();
-            $table.find('tr.table-primary').removeClass('table-primary');
-            $(this).parents('tr').addClass('table-primary');
+        // function to select the row
+        const contextMenuShow = function () {
+            selectRow($(this), true);
         };
-
-        // select row when drop-down menu is displayed
-        $table.on('click', '[data-toggle="dropdown"]', selectRow);
+        $table.on('click', '[data-bs-toggle="dropdown"]', function () {
+            selectRow($(this), false);
+        });
 
         // initialize context menu
-        $table.initContextMenu('#calculations tbody tr td:not(.d-print-none)', selectRow);
+        $table.initContextMenu('#calculations tbody tr td:not(.d-print-none)', contextMenuShow);
 
         // remove separators
         $('#calculations .dropdown-menu').removeSeparators();
 
         // handle key down event
+        const $body = $('body');
         const handler = createKeydownHandler($table);
-        $(document).on('keydown', handler);
-        $(':input').on('focus', function () {
-            $(document).off('keydown', handler);
-        }).on('blur', function () {
-            $(document).on('keydown', handler);
-        });
+        const selector = ':input, .btn, .dropdown-item, .rowlink-skip';
+        $body.on('focus', selector, function () {
+            $body.off('keydown', handler);
+        }).on('blur', selector, function () {
+            $body.on('keydown', handler);
+        }).on('keydown', handler);
     }
 
     // enable tooltips for calculations by state or by month
-    $('.card-body-tooltip').tooltip({
+    $('.body-tooltip').tooltip({
+        customClass: 'tooltip-danger',
         selector: '.has-tooltip',
-        customClass: 'tooltip-danger'
+        html: true
     });
 
     // handle user restrict checkbox

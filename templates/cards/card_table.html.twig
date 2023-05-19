@@ -16,15 +16,12 @@
         'type': 'button',
         'class': 'btn btn-outline-secondary dropdown-toggle dropdown-input',
         'aria-expanded': 'false',
-        'data-toggle': 'dropdown',
+        'data-bs-toggle': 'dropdown',
         'data-value': value,
         'data-icon': icon(icon ~ ' fa-fw')|raw,
-        'data-default': default
-    }) %}
+        'data-default': default}) %}
     {% set attributes = attributes|filter(v => v is not empty) %}
-    <button{{ output_attributes(attributes) }}>
-        {{- icon(icon ~ ' fa-fw') }} {{ text -}}
-    </button>
+    <button{{ output_attributes(attributes) }}>{{- icon(icon ~ ' fa-fw') }} {{ text -}}</button>
 {% endapply %}
 {% endmacro %}
 {# output a drop-down item #}
@@ -35,8 +32,7 @@
         'type': 'button',
         'role': 'button',
         'data-value': value,
-        'class': ('dropdown-item dropdown-' ~ suffix ~ active)|trim
-    }) %}
+        'class': ('dropdown-item dropdown-' ~ suffix ~ active)|trim}) %}
     <button{{ output_attributes(attributes) }}>
         {%- if icon %}{{ icon(icon ~ ' fa-fw') }} {% endif %}{{ text|default(value) -}}
     </button>
@@ -135,9 +131,10 @@
 {%- set id = params.id|default(0) -%}
 {%- set limit = params.limit|default(20) -%}
 {%- set attributes = attributes|default({})|merge({
-    'classes': 'table table-hover table-list table-sm',
+    'classes': 'table table-hover table-list table-no-end-line table-sm',
     'row-selector': 'tbody .' ~ row_selector,
     'custom-selector': '.custom-item.' ~ row_selector,
+    'search-selector': '.form-control-search',
     'row-class': row_selector,
     'single-select': true,
     'toggle-selector': '#toggle',
@@ -165,12 +162,12 @@
 }) -%}
 {# classes #}
 {% block card_container_class '' %}
-{% block card_body_class ' px-3 pt-0 pb-2' %}
+{% block card_body_class ' px-3 pt-0 pb-1' %}
 {# header #}
 {% block card_header -%}
 <div class="row">
     <div class="col-md-4">{{ parent() }}</div>
-    <div class="col-md-8 d-print-none text-md-right">{% block header_actions -%}{%- endblock %}</div>
+    <div class="col-md-8 d-print-none text-md-end">{% block header_actions -%}{%- endblock %}</div>
 </div>
 {%- endblock %}
 {# body #}
@@ -178,31 +175,26 @@
 {# toolbar #}
 <div class="row my-2 d-print-none">
     {# search #}
-    <div class="col-auto col-search align-self-center mr-auto">
-        {% if allow_search %}
-        <div class="form-inline">
-            <div class="btn-group btn-group-sm btn-group-search" role="group">
-                <div class="input-group input-group-sm input-group-search search">
-                    {% block toolbar_actions -%}{%- endblock %}
-                    <div class="input-group-append">
-                        <button id="clear_search" name="clear_search" type="button" class="btn btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
-                            <i class="fa-solid fa-eraser"></i>
-                        </button>
-                    </div>
-                 </div>
-            </div>
-        </div>
-        {% endif %}
+    <div class="col-auto col-search align-self-center me-auto">
+    {% if allow_search %}
+        <div class="input-group input-group-sm input-group-search search">
+            <input class="form-control form-control-search" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" autocomplete="off" type="text">
+            {% block toolbar_actions -%}{%- endblock %}
+            <button id="clear_search" name="clear_search" type="button" class="btn btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
+                <i class="fa-solid fa-eraser"></i>
+            </button>
+         </div>
+    {% endif %}
     </div>
-    {# right toolbar #}
-    <div class="col-auto col-toolbar align-self-center mt-1 mt-md-0">
+    {# toolbar #}
+    <div class="col-auto col-toolbar align-self-center">
         <div class="btn-group btn-group-sm btn-group-toolbar" role="group">
             {# page size #}
             {% block page_list %}
             {% if pageList is defined and pageList|length > 1 %}
             <div class="btn-group btn-group-sm dropdown" role="group">
                 {# menu is created on the prebody event #}
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_page" data-value="{{ limit }}" data-toggle="dropdown" title="{{ 'list.limit_title'|trans }}" aria-expanded="false">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_page" data-value="{{ limit }}" data-bs-toggle="dropdown" title="{{ 'list.limit_title'|trans }}" aria-expanded="false">
                     {{- params.limit -}}
                 </button>
                 <div class="dropdown-menu dropdown-menu-page" aria-labelledby="button_page"></div>
@@ -210,10 +202,10 @@
             {% endif %}
             {% endblock %}
             <div class="btn-group btn-group-sm" role="group">
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-toggle="dropdown" title="{{ 'common.other_actions'|trans }}" aria-expanded="false">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-bs-toggle="dropdown" title="{{ 'common.other_actions'|trans }}" aria-expanded="false">
                     <i class="fa-solid fa-bars"></i>
                 </button>
-                <div class="dropdown-menu dropdown-menu-checked dropdown-menu-right" aria-labelledby="button_other_actions">
+                <div class="dropdown-menu dropdown-menu-checked dropdown-menu-end" aria-labelledby="button_other_actions">
                 {# display mode #}
                 {% block display_mode %}
                 {{ _self.button_view('table_view.table', 'table', 'table', params.view) }}
@@ -256,10 +248,10 @@
         {% endfor %}
     </tbody>
 </table>
-{# dropdown actions #}
+{# dropdown actions template #}
 <div id="dropdown-actions" class="dropdown d-print-none d-none">
     {{ dropdownEllipsis() }}
-    <div class="dropdown-menu dropdown-menu-right dropdown-menu-actions">
+    <div class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
         {% if allow_edit %}
             {{- _self.item_separator('edit-divider') }}
             {% block edit_actions -%}{%- endblock %}
@@ -282,12 +274,12 @@
 {# custom view template #}
 <div id="custom-view" class="d-none">
     <div class="col mb-2 px-1">
-        <div class="custom-item border rounded h-100 px-2 py-1{% block custom_view_card_class %}{%- endblock %}">
-            <div class="row rowlink-skip no-gutters">
-                <div class="col-11 text-truncate font-weight-bold text-themed{% if row_edit or row_show %} rowlink-skip{% endif %}">
-                    {%- apply spaceless %}{% block custom_view_header -%}{%- endblock %}{% endapply -%}
+        <div class="custom-item border h-100 px-3 py-1{% block custom_view_card_class %}{%- endblock %}">
+            <div class="row rowlink-skip">
+                <div class="col-11 text-truncate fw-bold">
+                    {% block custom_view_header -%}{%- endblock %}
                 </div>
-                <div class="col-1 text-right rowlink-skip d-print-none custom-view-actions"></div>
+                <div class="col-1 rowlink-skip d-print-none custom-view-actions"></div>
             </div>
             {% block custom_view_body -%}{%- endblock %}
         </div>
@@ -298,16 +290,13 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header cursor-move">
-                <h5 class="modal-title">
-                    {{- icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}
-                </h5>
-                {{ button_close_modal() }}
+                <h5 class="modal-title">{{- icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}</h5>{{ button_close_modal() }}
             </div>
             <div class="modal-body">
-                <label id="dialog-page-title">{{ 'datatable.dialog_message'|trans }}</label>
-                <div class="form-row align-items-center">
-                    <input id="page-range" type="range" class="col custom-range" min="1" max="100" step="1" value="1">
-                    <label id="page-label" for="page-range" class="col-auto mb-1 small">&nbsp;</label>
+                <label id="dialog-page-title" class="form-label mb-2">{{ 'datatable.dialog_message'|trans }}</label>
+                <div class="d-flex align-items-center">
+                    <input id="page-range" type="range" class="form-range border rounded-pill py-1 px-2" min="1" max="100" step="1" value="1">
+                    <label id="page-label" for="page-range" class="form-label text-nowrap ms-2">&nbsp;</label>
                 </div>
             </div>
             <div class="modal-footer">
@@ -331,9 +320,9 @@
                 {{ button_close_modal() }}
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="sort-name">{{ 'list.sort_column'|trans }}</label>
-                    <select class="form-control" id="sort-name" name="sort-name">
+                <div class="mb-3">
+                    <label class="form-label" for="sort-name">{{ 'list.sort_column'|trans }}</label>
+                    <select class="form-select" id="sort-name" name="sort-name">
                         {% for column in sortable_columns -%}
                             <option value="{{ column.field }}" data-sort="{{ column.order }}" data-default="{{ column.default|json_encode }}">
                                 {{- column.title|trans -}}
@@ -341,15 +330,15 @@
                         {%- endfor %}
                     </select>
                 </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="sort-order-asc" name="sort-order" class="custom-control-input" value="asc">
-                    <label class="custom-control-label" for="sort-order-asc">
+                <div class="form-check form-check-inline">
+                    <input type="radio" id="sort-order-asc" name="sort-order" class="form-check-input" value="asc">
+                    <label class="form-check-label" for="sort-order-asc">
                         {{- icon('arrow-down-a-z fa-solid fa-fw', 'list.sort_ascending') -}}
                     </label>
                 </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="sort-order-desc" name="sort-order" class="custom-control-input" value="desc">
-                    <label class="custom-control-label" for="sort-order-desc">
+                <div class="form-check form-check-inline">
+                    <input type="radio" id="sort-order-desc" name="sort-order" class="form-check-input" value="desc">
+                    <label class="form-check-label" for="sort-order-desc">
                         {{- icon('arrow-down-z-a fa-solid fa-fw', 'list.sort_descending') -}}
                     </label>
                 </div>

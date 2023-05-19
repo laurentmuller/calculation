@@ -14,7 +14,7 @@
         /**
          * Initialize captcha.
          *
-         * @return {JQuery} the caller for chaining.
+         * @return {jQuery} the caller for chaining.
          */
         initCaptcha() {
             return this.each(function () {
@@ -35,6 +35,29 @@
         },
 
         /**
+         * Initialize simple file input.
+         *
+         * @return {jQuery} the caller for chaining.
+         */
+        initSimpleFileInput() {
+            return this.each(function () {
+                const $this = $(this);
+                const $delete = $this.parent().find('.btn-file-delete');
+                if ($delete.length) {
+                    $delete.on('click', function () {
+                        $this.val('').trigger('change').trigger('focus');
+                    });
+                    $this.on('change', function () {
+                        const empty = $this.val().length === 0;
+                        $delete.toggleClass('d-none', empty);
+                        $this.toggleClass('rounded-end', empty);
+                        $this.valid();
+                    });
+                }
+            });
+        },
+
+        /**
          * Gets password strength score or -1 if not found.
          *
          * @return {number}
@@ -51,7 +74,7 @@
         /**
          * Finds the reCaptcha frame within the current element.
          *
-         * @return {JQuery} the frame.
+         * @return {jQuery} the frame.
          */
         findReCaptcha: function () {
             const $element = $(this);
@@ -61,7 +84,7 @@
         /**
          * Finds the color-picker drop-down
          *
-         * @return {JQuery}.
+         * @return {jQuery}.
          */
         findColorPicker() {
             const $element = $(this);
@@ -72,7 +95,7 @@
         /**
          * Remove validation class and error
          *
-         * @return {JQuery} the caller for chaining.
+         * @return {jQuery} the caller for chaining.
          */
         removeValidation: function () {
             return this.each(function () {
@@ -96,6 +119,7 @@
          * @param {Object} [options.rules]
          * @param {function} [options.highlight]
          * @param {function} [options.unhighlight]
+         * @param {function} [options.invalidHandler]
          * @returns the validator.
          */
         initValidator: function (options) {
@@ -125,13 +149,6 @@
                     if (this.settings.focusInvalid) {
                         // get invalid elements
                         const $elements = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
-
-                        // display if parent's accordion
-                        const $collapse = $elements.parents('.collapse:not(.show)');
-                        const $accordion = $elements.parents('.accordion');
-                        if ($collapse.length && $accordion.length) {
-                            $collapse.collapse('show');
-                        }
 
                         // simple editor
                         if (simpleEditor) {
@@ -175,7 +192,7 @@
             /**
              * Finds the container of the given element.
              *
-             * @param {JQuery} $element - the element to update.
+             * @param {jQuery} $element - the element to update.
              */
             $.validator.prototype.findElement = function ($element) {
                 let $toUpdate = false;
@@ -197,11 +214,11 @@
             /**
              * Find elements with the same name attribute.
              *
-             * @param {JQuery} $element the element to search same name for.
-             * @return {{JQuery[]}|{JQuery}} the elements, if found; the argument element otherwise.
+             * @param {jQuery} $element the element to search same name for.
+             * @return {{jQuery[]}|{jQuery}} the elements, if found; the argument element otherwise.
              */
             $.validator.prototype.findNamedElements = function ($element) {
-                const name = $element.attr('name');
+                const name = $element.attr('name') || '';
                 if (name.endsWith('[]')) {
                     const $elements = $element.closest('form').find(`[name="${name}"]`);
                     if ($elements.length) {
@@ -214,6 +231,7 @@
             // default options
             let defaults = {
                 focus: true,
+                focusInvalid: true,
                 showModification: true,
                 errorElement: 'small',
                 errorClass: 'is-invalid d-inline-block',
@@ -255,6 +273,14 @@
                     }
                 },
 
+                invalidHandler: function (e, validator) {
+                    // expand collapsed parent (if any)
+                    const $element = $(validator.findLastActive() || (validator.errorList.length && validator.errorList[0].element));
+                    const $collapse = $element.parents('.collapse:not(.show)');
+                    if ($collapse.length) {
+                        $collapse.collapse('show');
+                    }
+                }
             };
 
             if (!options.submitHandler) {
@@ -359,7 +385,7 @@
         /**
          * Reset the form content and the validator (if any).
          *
-         * @return {JQuery} the caller for chaining.
+         * @return {jQuery} the caller for chaining.
          */
         resetValidator: function () {
             const $that = $(this);
@@ -376,22 +402,18 @@
          * Display an information alert while the form is submitted.
          *
          * @param {Object} [options] - the alert options.
-         * @return {JQuery} this form for chaining.
+         * @return {jQuery} this form for chaining.
          */
         showSubmit: function (options) {
+            //position-absolute top-50 start-50 translate-middle
             const $this = $(this);
             const settings = $.extend(true, {
                 parent: $this,
                 text: $this.data('save') || 'Saving data...',
-                alertClass: 'alert alert-primary text-center',
-                iconClass: 'fa-solid fa-spinner fa-spin mr-2',
+                alertClass: 'alert bg-body-secondary border border-secondary-subtle text-center position-absolute top-50 start-50 translate-middle z-3',
+                iconClass: 'fa-solid fa-spinner fa-spin me-2',
                 css: {
-                    top: '50%',
-                    left: '50%',
                     width: '90%',
-                    position: 'absolute',
-                    transform: 'translate(-50%, -50%)',
-                    display: 'none',
                     zIndex: 2
                 },
                 maxWidth: 600,
@@ -423,6 +445,7 @@
                 });
                 $alert.prepend($icon);
             }
+            settings.parent.addClass('position-relative');
             $alert.appendTo($(settings.parent)).show(settings.show);
 
             return $this;

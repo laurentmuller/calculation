@@ -23,7 +23,6 @@
             {% endif -%}
         {% endif %}
         {% if is_test and is_granted_data and show_navigation_search ?? false -%}
-            {{ dropdownSeparator() }}
             {{ include('navigation_vertical/navigation_search.html.twig') }}
         {% endif %}
     </ul>

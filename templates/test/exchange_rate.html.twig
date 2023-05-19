@@ -22,18 +22,18 @@
 {# body #}
 {% block card_body %}
 {{ parent() }}
-<div class="row">
+<div class="row mb-3">
     <div class="col-md-5">
         <div class="form-group">
-            <label class="required" for="baseCode">{{ 'exchange_rate.source'|trans }}</label>
-            <select class="form-control" id="baseCode" name="baseCode" required="required" style="width: 100% !important;">
+            <label class="form-label required" for="baseCode">{{ 'exchange_rate.source'|trans }}</label>
+            <select class="form-select" id="baseCode" name="baseCode" required="required" style="width: 100% !important;">
                 {{ _self.fillCodes(codes, 'CHF') }}
             </select>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group text-md-center">
-            <label>{{ 'exchange_rate.swap_label'|trans }}</label>
+            <label class="form-label">{{ 'exchange_rate.swap_label'|trans }}</label>
             <button type="button" class="btn btn-swap btn-secondary form-control" title="{{ 'exchange_rate.swap_label'|trans }}">
                 <i class="fa-solid fa-exchange-alt"></i>
             </button>
@@ -41,34 +41,34 @@
     </div>
     <div class="col-md-5">
         <div class="form-group">
-            <label class="required" for="targetCode">{{ 'exchange_rate.target'|trans }}</label>
-            <select class="form-control" id="targetCode" name="targetCode" required="required" style="width: 100% !important;">
+            <label class="form-label required" for="targetCode">{{ 'exchange_rate.target'|trans }}</label>
+            <select class="form-select" id="targetCode" name="targetCode" required="required" style="width: 100% !important;">
                 {{ _self.fillCodes(codes, 'EUR') }}
             </select>
         </div>
     </div>
 </div>
-<p class="text-center mb-0" id="rate">&nbsp;</p>
-<div class="row">
+<p class="text-center mb-3" id="rate">&nbsp;</p>
+<div class="row mb-3">
     <div class="col-md-5">
         <div class="form-group">
-            <label class="required" for="amount">{{ 'exchange_rate.amount'|trans }}</label>
-            <input type="number" class="form-control text-right" id="amount" name="amount" value="100" required="required">
+            <label class="form-label required" for="amount">{{ 'exchange_rate.amount'|trans }}</label>
+            <input type="number" class="form-control text-end" id="amount" name="amount" value="100" required="required">
         </div>
     </div>
     <div class="col-md-2 d-none d-lg-block">&nbsp;</div>
     <div class="col-md-5">
         <div class="form-group">
-            <label for="result">{{ 'exchange_rate.result'|trans }}</label>
-            <input type="number" class="form-control text-right font-weight-bold" id="result" name="result" value="1.00" disabled="disabled">
+            <label class="form-label" for="result">{{ 'exchange_rate.result'|trans }}</label>
+            <input type="number" class="form-control text-end fw-bold" id="result" name="result" value="1.00" disabled="disabled">
         </div>
     </div>
 </div>
-<div class="row small text-muted">
+<div class="row small text-body-secondary">
     <div class="col-md-6" id="last-update" data-text="{{ 'exchange_rate.last_update'|trans }}">
         {{- 'exchange_rate.last_update'|trans({'%date%': 'common.empty_date'|trans}) -}}
     </div>
-    <div class="col-md-6 text-md-right" id="next-update" data-text="{{ 'exchange_rate.next_update'|trans }}">
+    <div class="col-md-6 text-md-end" id="next-update" data-text="{{ 'exchange_rate.next_update'|trans }}">
         {{- 'exchange_rate.next_update'|trans({'%date%': 'common.empty_date'|trans}) -}}
     </div>
 </div>

@@ -18,44 +18,26 @@
 {% if customData.levels|length > 1 %}
     {% set data_default = 'log.fields.level'|trans %}
     {% set text = level|length ? level|capitalize : data_default %}
-    <div class="input-group-append dropdown">
-        {{ _self.output_dropdown_menu(
-            'level',
-            'layer-group',
-            text,
-            'log.list.level_help',
-            level,
-            data_default
-        ) }}
-        <div class="dropdown-menu" aria-labelledby="level">
-            {{ _self.output_dropdown('level', '', level, 'log.list.level_all'|trans, false, 'filter-circle-xmark') }}
-            {{ _self.item_separator() }}
-            {% for key in customData.levels %}
-                {{ _self.output_dropdown('level', key, level, key|capitalize, {}, ' icon-level ' ~ key) }}
-            {% endfor %}
-        </div>
+    {{ _self.output_dropdown_menu('level', 'layer-group', text, 'log.list.level_help', level, data_default) }}
+    <div class="dropdown-menu" aria-labelledby="level">
+        {{ _self.output_dropdown('level', '', level, 'log.list.level_all'|trans, false, 'filter-circle-xmark') }}
+        {{ _self.item_separator() }}
+        {% for key in customData.levels %}
+            {{ _self.output_dropdown('level', key, level, key|capitalize, {}, ' icon-level ' ~ key) }}
+        {% endfor %}
     </div>
 {% endif %}
 {# chanels #}
 {% if customData.channels|length > 1 %}
     {% set data_default = 'log.fields.channel'|trans %}
     {% set text = channel|length ? channel|capitalize : data_default %}
-    <div class="input-group-append dropdown">
-        {{ _self.output_dropdown_menu(
-            'channel',
-            'tools',
-            text,
-            'log.list.channel_help',
-            channel,
-            data_default
-        ) }}
-        <div class="dropdown-menu" aria-labelledby="channel">
-            {{ _self.output_dropdown('channel', '', channel, 'log.list.channel_all'|trans, false, 'filter-circle-xmark') }}
-            {{ _self.item_separator() }}
-            {% for key in customData.channels %}
-                {{ _self.output_dropdown('channel', key, channel, key|capitalize, {}, ' icon-channel ' ~ key) }}
-            {% endfor %}
-        </div>
+    {{ _self.output_dropdown_menu('channel', 'tools', text, 'log.list.channel_help', channel, data_default) }}
+    <div class="dropdown-menu" aria-labelledby="channel">
+        {{ _self.output_dropdown('channel', '', channel, 'log.list.channel_all'|trans, false, 'filter-circle-xmark') }}
+        {{ _self.item_separator() }}
+        {% for key in customData.channels %}
+            {{ _self.output_dropdown('channel', key, channel, key|capitalize, {}, ' icon-channel ' ~ key) }}
+        {% endfor %}
     </div>
 {% endif %}
 {%- endblock %}

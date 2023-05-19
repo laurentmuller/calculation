@@ -582,6 +582,9 @@ index:
   menu_theme: Thème (%name%)
   menu_tools: Outils
   menu_admin: Administration
+  menu_graphics: Statistiques
+  menu_graphics_month: Calculations par mois
+  menu_graphics_state: Calculations par statut
   panel_catalog: Catalogue
   panel_catalog_hide: Masquer le catalogue
   panel_catalog_hide_success: Le catalogue a été masqué
@@ -694,7 +697,6 @@ openweather:
     W: Ouest
   error:
     empty_city: Aucune localité n'a été importée.
-    mime_type: Le type de fichier est invalide.
   fields:
     clouds: Nébulosité
     current: Valeurs actuelles
@@ -1067,7 +1069,6 @@ simple_editor:
   redo: Rétablir la dernière action
 swisspost:
   error:
-    mime_type: Le type de fichier sélectionné n'est pas valide.
     file_temp: Impossible de créer un fichier temporaire.
     file_empty: Aucun fichier à importer n'a été défini.
     file_not_exist: Le fichier à importer est introuvable ou n'existe pas.
@@ -1195,8 +1196,13 @@ test:
   ip_stack: Adresse IP
 theme:
   title: Thème
+  description: Appliquer un thème sur le site.
   success: Le thème <b>%name%</b> a été sélectionné avec succès.
   error: Impossible de sélectionner le thème.
+  auto:
+    name: Thème système
+    title: Appliquer le thème système sur le site.
+    success: Le <b>thème système </b> a été sélectionné avec succès.
   dark:
     name: Thème sombre
     title: Appliquer le thème sombre sur le site.

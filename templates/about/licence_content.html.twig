@@ -69,5 +69,5 @@
 </p>
 
 {% if show_date is defined ? show_date : true %}
- <p class="mb-0 text-right">{{ app_owner_city }}, {{ 'now'|locale_date('none', null, null, 'MMMM Y')|capitalize }}</p>
+ <p class="mb-0 text-end">{{ app_owner_city }}, {{ 'now'|locale_date('none', null, null, 'MMMM Y')|capitalize }}</p>
 {% endif %}

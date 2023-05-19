@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * -------------- JQuery extensions --------------
+ * -------------- jQuery extensions --------------
  */
 $.fn.extend({
 
@@ -10,33 +10,32 @@ $.fn.extend({
      *
      * @param {string} oldClass the old class.
      * @param {string} newClass the new class.
-     * @return {JQuery} The JQuery element for chaining.
+     * @return {jQuery} The jQuery element for chaining.
      */
     toggleCell(oldClass, newClass) {
         'use strict';
-
-         return $(this).each(function () {
-             const $that = $(this);
-             const firstClass = oldClass.split(' ')[0];
-             if ($that.hasClass(firstClass)) {
-                 $that.toggleClass(oldClass + ' ' + newClass);
-             }
-         });
+        return $(this).each(function () {
+            const $that = $(this);
+            const firstClass = oldClass.split(' ')[0];
+            if ($that.hasClass(firstClass)) {
+                $that.toggleClass(oldClass + ' ' + newClass);
+            }
+        });
     }
 });
 
 /**
  * Toggle the cell highlight enablement.
  *
- * @param {JQuery} $source - The highlight checkbox.
- * @param {JQuery} $table - The table to update.
+ * @param {jQuery} $source - The highlight checkbox.
+ * @param {jQuery} $table - The table to update.
  * @param {boolean} save - true to save value to the session.
- * @return {JQuery} The JQuery source element for chaining.
+ * @return {jQuery} The jQuery source element for chaining.
  */
 function toggleHighlight($source, $table, save) {
     'use strict';
     const checked = $source.isChecked();
-    const highlight = $table.data('cellhighlight');
+    const highlight = $table.data('cell-highlight');
     if (checked) {
         if (!highlight) {
             $table.cellhighlight({
@@ -44,12 +43,11 @@ function toggleHighlight($source, $table, save) {
                 cellSelector: 'td:not(.not-hover), th:not(.not-hover)',
                 highlightHorizontal: 'table-primary',
                 highlightVertical: 'table-primary'
-
-            }).on('cellhighlight.mouseenter', function (_e, { horizontal, vertical}) {
+            }).on('cellhighlight.mouseenter', function (_e, {horizontal, vertical}) {
                 $.each($.merge(horizontal, vertical), function () {
                     $(this).toggleCell('bg-success text-white', 'table-cell');
                 });
-            }).on('cellhighlight.mouseleave', function (_e, { horizontal, vertical}) {
+            }).on('cellhighlight.mouseleave', function (_e, {horizontal, vertical}) {
                 $.each($.merge(horizontal, vertical), function () {
                     $(this).toggleCell('table-cell', 'bg-success text-white');
                 });
@@ -62,10 +60,11 @@ function toggleHighlight($source, $table, save) {
             highlight.disable();
         }
     }
+
     // save to session
     if (save) {
         const url = $('#pivot').data('session');
-        const data =  {
+        const data = {
             name: 'highlight',
             value: checked
         };
@@ -77,39 +76,42 @@ function toggleHighlight($source, $table, save) {
 /**
  * Toggle the popover enablement.
  *
- * @param {JQuery} $source - The popover checkbox.
- * @param {JQuery} $selector - The popover elements.
+ * @param {jQuery} $source - The popover checkbox.
+ * @param {jQuery} $selector - The popover elements.
  * @param {boolean} save - true to save value to the session.
- * @return {JQuery} The JQuery source element for chaining.
+ * @return {jQuery} The jQuery source element for chaining.
  */
 function togglePopover($source, $selector, save) {
     'use strict';
     const checked = $source.isChecked();
-    const popover = $selector.data('bs.popover');
+    const enabled = $source.data('enabled');
     if (checked) {
-        if (popover) {
+        if (enabled) {
             $selector.popover('enable');
         } else {
             $selector.popover({
                 html: true,
                 trigger: 'hover',
-                placement: 'auto',
-                customClass: 'popover-w-100',
-                content: function () {
-                    const content = $(this).data('html');
+                placement: 'top',
+                customClass: 'popover-primary popover-w-100',
+                fallbackPlacements: ['top', 'bottom', 'right', 'left'],
+                content: function (e) {
+                    const content = $(e).data('bs-html');
                     return $(content);
                 }
             });
+            $source.data('enabled', true);
         }
     } else {
-        if (popover) {
+        if (enabled) {
             $selector.popover('disable');
         }
     }
+
     // save to session
     if (save) {
         const url = $('#pivot').data('session');
-        const data =  {
+        const data = {
             name: 'popover',
             value: checked
         };
@@ -128,7 +130,7 @@ function togglePopover($source, $selector, save) {
     const $table = $('#pivot');
     const $popover = $('#popover');
     const $highlight = $('#highlight');
-    const $selector = $('[data-toggle="popover"]');
+    const $selector = $('[data-bs-toggle="popover"]');
 
     // popover
     if ($popover.isChecked()) {

@@ -24,11 +24,11 @@
 {% block card_container_class '' %}
 
 {% block card_body %}
-<div class="form-row">
+<div class="row">
     <div class="col-md-5">
         <div class="form-group">
-            <label for="from" class="required">{{ 'translator.from_label'|trans }}</label>
-            <select id="from" name="from" class="form-control">
+            <label for="from" class="form-label required">{{ 'translator.from_label'|trans }}</label>
+            <select id="from" name="from" class="form-select">
                 <option value="">{{ 'translator.auto_detect'|trans }}</option>
                 {{ _self.fillLanguages(languages) }}
             </select>
@@ -36,7 +36,7 @@
     </div>
     <div class="col-md-1">
         <div class="form-group text-md-center">
-            <label>{{ 'translator.swap_label'|trans }}</label>
+            <label class="form-label">{{ 'translator.swap_label'|trans }}</label>
             <button type="button" class="btn btn-secondary btn-exchange w-100" disabled="disabled">
                 <i class="fa-solid fa-exchange-alt"></i>
             </button>
@@ -44,16 +44,16 @@
     </div>
     <div class="col-md-4">
         <div class="form-group">
-            <label for="to" class="required">{{ 'translator.to_label'|trans }}</label>
-            <select id="to" name="to" class="form-control" required="required" notEqualTo="#from">
+            <label for="to" class="form-label required">{{ 'translator.to_label'|trans }}</label>
+            <select id="to" name="to" class="form-select" required="required" notEqualTo="#from">
                 {{ _self.fillLanguages(languages, language) }}
             </select>
         </div>
     </div>
     <div class="col-md-2">
         <div class="form-group">
-            <label for="service" class="required">{{ 'translator.service_label'|trans }}</label>
-            <select id="service" name="service" class="form-control" data-languages="{{ path('ajax_languages') }}">
+            <label for="service" class="form-label required">{{ 'translator.service_label'|trans }}</label>
+            <select id="service" name="service" class="form-select" data-languages="{{ path('ajax_languages') }}">
             {% for translator in translators -%}
                 <option data-api="{{ translator.apiUrl }}"{% if translator.name == service.name %} selected="selected"{% endif %}>{{ translator.name }}</option>
             {% endfor -%}
@@ -61,25 +61,25 @@
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label for="text" class="required">{{ 'translator.text_label'|trans }}</label>
+            <label for="text" class="form-label required">{{ 'translator.text_label'|trans }}</label>
             <textarea id="text" name="text" maxlength="4000" class="form-control fixed" rows="12" required="required" dir="auto" placeholder="{{ 'translator.placeholder'|trans }}"></textarea>
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            <label for="result">{{ 'translator.result_label'|trans }}</label>
+            <label class="form-label" for="result">{{ 'translator.result_label'|trans }}</label>
             <textarea id="result" name="result" class="form-control fixed" rows="12" readonly="readonly" dir="auto"></textarea>
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="row">
     <div class="col-md-6">
-        <span id="detected" class="text-muted"></span>
+        <span id="detected" class="text-body-secondary"></span>
     </div>
-    <div class="col-md-6 text-md-right d-print-none">
+    <div class="col-md-6 text-md-end d-print-none">
         <a class="small" id="api-url" href="{{ service.apiUrl }}" target="_blank" rel="noopener noreferrer">{{ 'common.api_documentation'|trans }}</a>
     </div>
 </div>

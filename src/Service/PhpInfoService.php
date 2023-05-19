@@ -99,7 +99,7 @@ final class PhpInfoService
         $info = $this->asText($what);
         $info = (string) \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
         $info = (string) \preg_replace('/<a\s(.+?)>(.+?)<\/a>/is', '<p>$2</p>', $info);
-        $info = \str_ireplace('<i>no value</i>', '<i class="text-muted">No value</i>', $info);
+        $info = \str_ireplace('<i>no value</i>', '<i class="text-body-secondary">No value</i>', $info);
         $info = \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
 
         return (string) \preg_replace('/<table\s(.+?)>(.+?)<\/table>/is', '', $info, 1);

@@ -8,7 +8,7 @@
     height: 100vh;
     min-width: 17rem;
     max-width: 17rem;
-    padding-right: 8px;
+    padding: 1rem;
     transition: margin-left 0.35s ease;
     overflow-y: auto;
     flex-direction: column !important;
@@ -44,6 +44,10 @@
     font-weight: bold;
     padding-left: 0;
     padding-right: 0;
+}
+
+.navbar-vertical.bg-dark .dropdown-divider {
+    border-top: 1px solid var(--bs-border-color-translucent);
 }
 
 .navbar-vertical ul ul {
@@ -86,12 +90,12 @@
     background-color: rgba(0, 0, 0, 0.15);
 }
 /* dark mode */
-body.dark .navbar-vertical::-webkit-scrollbar-track {
+body[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-track {
     background-color: #343a40;
 }
-body.dark .navbar-vertical::-webkit-scrollbar-thumb {
+body[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, .1);
 }
-body.dark .navbar-vertical::-webkit-scrollbar-thumb:hover {
+body[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb:hover {
     background-color: rgba(128, 135, 139, .8)
 }

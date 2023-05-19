@@ -235,7 +235,7 @@
             // handler when a toast is hidden
             onHide: null,
 
-            // the JQuery selector to get data options from
+            // the jQuery selector to get data options from
             dataset: null
         },
 
@@ -317,7 +317,7 @@
          * Gets target container.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery} The target container.
+         * @returns {jQuery} The target container.
          * @private
          */
         _getTarget: function (options) {
@@ -329,7 +329,7 @@
          * Gets or creates the toast container div.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery} The toasts container.
+         * @returns {jQuery} The toasts container.
          * @private
          */
         _getContainer: function (options) {
@@ -338,7 +338,7 @@
             const $div = $('#' + id);
 
             // class
-            const className = 'toast-plugin ' + options.position;
+            const className = 'toast-container toast-plugin ' + options.position;
 
             // style
             const css = {
@@ -362,6 +362,7 @@
                 }).appendTo($target);
             }
 
+            // update
             return $div.css(css).attr('class', className);
         },
 
@@ -369,13 +370,22 @@
          * Creates the div title.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery|undefined} The div title or null if no title.
+         * @returns {jQuery|undefined} The div title or null if no title.
          * @private
          */
         _createTitle: function (options) {
             if (options.title || options.icon !== false || options.closeButton || options.displayClose || options.subtitle && options.displaySubtitle) {
                 // header
-                const clazz = 'toast-header toast-header-' + options.type;
+                let clazz = 'toast-header bg-' + options.type;
+                switch (options.type) {
+                    case this.NotificationTypes.INFO:
+                    case this.NotificationTypes.WARNING:
+                        clazz += ' text-dark';
+                        break;
+                    default:
+                        clazz += ' text-white';
+                        break;
+                }
                 const $div = $('<div/>', {
                     'class': clazz
                 });
@@ -388,7 +398,7 @@
 
                 // title
                 const $title = $('<span/>', {
-                    'class': 'mr-auto',
+                    'class': 'me-auto',
                     'html': options.title || ''
                 });
                 $div.append($title);
@@ -414,7 +424,7 @@
          * Creates the icon title.
          *
          * @param {Object} options - The options.
-         * @returns {JQuery|undefined} The icon or null if no icon.
+         * @returns {jQuery|undefined} The icon or null if no icon.
          * @private
          */
         _createIcon: function (options) {
@@ -425,7 +435,7 @@
             }
 
 
-            let clazz = 'mr-2 mt-1 fas fa-lg fa-';
+            let clazz = 'me-2 fas fa-lg fa-';// mt-1
             switch (options.type) {
                 case this.NotificationTypes.INFO:
                     clazz += 'info-circle';
@@ -446,7 +456,7 @@
 
             // icon only ?
             if (!options.title && !options.displayClose && !options.displaySubtitle) {
-                clazz += ' py-2';
+                //clazz += ' py-2';
             }
 
             // create
@@ -460,13 +470,13 @@
          * Creates the subtitle.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery|undefined} The subtitle or null if no subtitle defined.
+         * @returns {jQuery|undefined} The subtitle or null if no subtitle defined.
          * @private
          */
         _createSubtitle: function (options) {
             if (options.displaySubtitle && options.subtitle) {
                 return $('<small/>', {
-                    'class': 'ml-2',
+                    //'class': 'ms-2',
                     'html': options.subtitle
                 });
             }
@@ -477,27 +487,19 @@
          * Creates the close button.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery|undefined} The close button or null if no button.
+         * @returns {jQuery|undefined} The close button or null if no button.
          * @private
          */
         _createCloseButton: function (options) {
             if (options.displayClose) {
                 const title = options.closeTitle || 'Close';
-                const $button = $('<button/>', {
-                    'class': 'close ml-2 mb-1',
-                    'data-dismiss': 'toast',
+                return $('<button/>', {
+                    'data-bs-dismiss': 'toast',
                     'aria-label': title,
+                    'class': 'btn-close',
                     'type': 'button',
-                    'title': title,
-                    'css': {
-                        'color': 'inherit'
-                    }
+                    'title': title
                 });
-                const $span = $('<span />', {
-                    'aria-hidden': 'true',
-                    'html': '&times;'
-                });
-                return $button.append($span);
             }
             return null;
         },
@@ -506,21 +508,24 @@
          * Creates the div message.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery} The div message.
+         * @returns {jQuery} The div message.
          * @private
          */
         _createMessage: function (options) {
-            return $('<div/>', {
+            const $body = $('<div/>', {
                 'class': 'toast-body',
+            });
+            const $message = $('<div/>', {
                 'html': options.message
             });
+            return $body.append($message);
         },
 
         /**
          * Creates the div toast.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery} The div toast.
+         * @returns {jQuery} The div toast.
          * @private
          */
         _createToast: function (options) {
@@ -553,7 +558,7 @@
          * Creates the progress bar.
          *
          * @param {Object} options - The toast options.
-         * @returns {JQuery|undefined} The progress bar or null if no progress.
+         * @returns {jQuery|undefined} The progress bar or null if no progress.
          * @private
          */
         _createProgressBar: function (options) {
@@ -581,7 +586,7 @@
         /**
          * Show the toast.
          *
-         * @param {JQuery} $toast - The toast to show.
+         * @param {jQuery} $toast - The toast to show.
          * @param {Object} options - The toast options.
          * @return {Object} This instance.
          * @private
@@ -616,7 +621,7 @@
         /**
          * Update the progress bar.
          *
-         * @param {JQuery} $progress - The progress bar to update.
+         * @param {jQuery} $progress - The progress bar to update.
          * @param {Number} endTime - The end time.
          * @param {Number} timeout - The timeout in milliseconds.
          * @private

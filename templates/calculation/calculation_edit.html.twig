@@ -5,18 +5,14 @@
     {%- set type = type|default('number') -%}
     <div class="input-group">
         {%- if not disabled -%}
-            <div class="input-group-prepend d-print-none">
-                {%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': min_margin|percent}) -%}
-                {%- set template = '<div class="tooltip tooltip-success" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' -%}
-                <button class="btn btn-outline-secondary btn-adjust has-tooltip{% if not overall_below %} cursor-default{% endif %}" type="button" aria-label="{{ title }}" data-html="true" data-toggle="tooltip" data-template="{{ template }}" data-title="{{ title }}"{% if not overall_below %} disabled="disabled"{% endif %}>
-                    <i class="fa-solid fa-compress-arrows-alt"></i>
-                </button>
-            </div>
+            {%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': min_margin|percent}) -%}
+            {%- set template = '<div class="tooltip tooltip-success" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' -%}
+            <button type="button" class="btn btn-outline-secondary d-print-none btn-adjust has-tooltip{% if not overall_below %} cursor-default{% endif %}" aria-label="{{ title }}" data-bs-html="true" data-bs-toggle="tooltip" data-bs-template="{{ template }}" data-bs-title="{{ title }}"{% if not overall_below %} disabled="disabled"{% endif %}>
+                <i class="fa-solid fa-compress-arrows-alt"></i>
+            </button>
         {%- endif -%}
         {{- block('form_widget_simple') -}}
-        <div class="input-group-append">
-            <span class="input-group-text">%</span>
-        </div>
+        <span class="input-group-text">%</span>
     </div>
 {%- endblock %}
 {# parameters #}
@@ -48,7 +44,7 @@
 {# form #}
 {{ form_start(form, {attr: form_attr}) }}
 <div id="main-content" class="row">
-    <div class="col-xl-5 pr-xl-0">
+    <div class="col-xl-5 pe-xl-0">
         {{ include('calculation/calculation_edit_panel_main.html.twig') }}
         {{ include('calculation/calculation_edit_panel_totals.html.twig') }}
     </div>

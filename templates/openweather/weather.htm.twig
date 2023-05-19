@@ -40,7 +40,7 @@
             {{ parent() }}
             <small>{{ 'openweather.current.date_calculation'|trans({'%date%': current.dt_date_time_medium}) }}</small>
         </div>
-        <div class="col-md-4 text-md-right small d-print-none">
+        <div class="col-md-4 text-md-end small d-print-none">
             {{ _self.system('metric', units_system, route, id, count) }}
             <span> / </span>
             {{ _self.system('imperial', units_system, route, id, count) }}
@@ -56,9 +56,9 @@
 {% block card_body %}
 {% if id %}
     <h2>
-        <span class="flag-emoji mr-1" title="{{ current.sys.country_name }}">{{ current.sys.country|flag_emoji }}</span>{{- current.name }}, {{ current.sys.country_name -}}
+        <span class="flag-emoji me-1" title="{{ current.sys.country_name }}">{{ current.sys.country|flag_emoji }}</span>{{- current.name }}, {{ current.sys.country_name -}}
     </h2>
-    <h3 class="font-weight-normal">
+    <h3 class="fw-normal">
         <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="{{ 'openweather.fields.current_weather'|trans }}" title="{{ current.weather.description }}">{{ value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
     </h3>
     <div class="row">
@@ -74,7 +74,7 @@
     <p class="mb-0 text-center">{{ 'openweather.current.empty'|trans|replace({'#': path('openweather_search')})|raw }}</p>
 {% endif %}
 <hr class="my-1 d-print-none">
-<p class="small text-right mt-1 mb-0 d-print-none">
+<p class="small text-end mt-1 mb-0 d-print-none">
     {{- linkExternal(api_url, 'common.api_documentation') -}}
 </p>
 {% endblock %}

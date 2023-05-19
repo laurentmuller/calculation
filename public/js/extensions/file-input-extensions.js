@@ -1,13 +1,13 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * JQuery file input extensions.
+ * jQuery file input extensions.
  */
 (function ($) {
     'use strict';
 
     /**
-     * -------------- JQuery Extensions --------------
+     * -------------- jQuery Extensions --------------
      */
     $.fn.extend({
 
@@ -34,10 +34,6 @@
                     if (typeof callback === 'function') {
                         callback($that);
                     }
-                    if (!isThumbnail) {
-                        const isFiles = $that.getInputFiles().length !== 0;
-                        $that.parent().toggleClass('rounded-right', !isFiles).css('border-right', isFiles  ? '' : '0');
-                    }
                 });
 
                 // find group
@@ -55,7 +51,7 @@
                     });
 
                     // focus when select file
-                    $group.find('.fileinput-filename,.fileinput-exists').on('click', function () {
+                    $group.find('.file-input-filename,.file-input-exists').on('click', function () {
                         $that.trigger('focus');
                     });
                 }

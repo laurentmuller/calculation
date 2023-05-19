@@ -14,7 +14,7 @@
 {{ form_row(form.email) }}
 {% if new %}
 {{ form_row(form.plainPassword) }}
-<div class="form-row">
+<div class="row">
     <div class="col-md-9">
         {{ form_row(form.role) }}
     </div>
@@ -23,7 +23,7 @@
     </div>
 </div>
 {% else %}
-<div class="form-row">
+<div class="row">
     <div class="col-md-6">
         {{ form_row(form.role) }}
     </div>

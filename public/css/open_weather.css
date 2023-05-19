@@ -23,6 +23,7 @@
 .ow-flag {
     margin-left: 0.25rem;
 }
+
 .ow-image-search {
     margin-top: -5px !important;
 }
@@ -45,24 +46,20 @@
 }
 
 .ow-temperature-forecast {
-    color: var(--white);
-    background-color: var(--primary);
+    color: var(--bs-white);
+    background-color: var(--bs-primary);
 }
 
 .ow-temperature-day {
-    color: var(--white);
-    background-color: var(--danger);
+    color: var(--bs-white);
+    background-color: var(--bs-danger);
 }
 
 .ow-temperature-night {
-    color: var(--white);
-    background-color: var(--secondary);
+    color: var(--bs-white);
+    background-color: var(--bs-secondary);
 }
 
 .ow-table-responsive {
-    /*
-    max-height: 285px;
-    overflow-y: auto;
-    */
     margin: 0;
 }

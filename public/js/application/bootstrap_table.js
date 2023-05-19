@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster, MenuBuilder */
+/* globals Toaster, MenuBuilder, bootstrap */
 
 /**
  * Formatter for the custom view.
@@ -120,7 +120,7 @@ function styleTextMuted(row, index) {
     'use strict';
     if ($.parseInt(row.textMuted) === 0) {
         const $row = $('#table-edit tbody tr:eq(' + index + ')');
-        const classes = ($row.attr('class') || '') + ' text-muted';
+        const classes = ($row.attr('class') || '') + ' text-body-secondary';
         return {
             classes: classes.trim()
         };
@@ -131,7 +131,7 @@ function styleTextMuted(row, index) {
 /**
  * Returns if the current row is rendered for the connected user
  *
- * @param {JQueryTable} $table - the parent table.
+ * @param {jQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
  * @returns {boolean} true if connected user
  */
@@ -145,7 +145,7 @@ function isConnectedUser($table, row) {
 /**
  * Returns if the current row is rendered for the original connected user
  *
- * @param {JQueryTable} $table - the parent table.
+ * @param {jQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
  * @returns {boolean} true if connected user
  */
@@ -159,10 +159,10 @@ function isOrignalUser($table, row) {
 /**
  * Update the user message action.
  *
- * @param {JQueryTable} $table - the parent table.
+ * @param {jQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateUserMessageAction($table, row, _$element, $action) {
     'use strict';
@@ -175,10 +175,10 @@ function updateUserMessageAction($table, row, _$element, $action) {
 /**
  * Update the user delete action.
  *
- * @param {JQueryTable} $table - the parent table.
+ * @param {jQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateUserDeleteAction($table, row, _$element, $action) {
     'use strict';
@@ -191,10 +191,10 @@ function updateUserDeleteAction($table, row, _$element, $action) {
 /**
  * Update the switch user action.
  *
- * @param {JQueryTable} $table - the parent table.
+ * @param {jQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateUserSwitchAction($table, row, _$element, $action) {
     'use strict';
@@ -214,11 +214,11 @@ function updateUserSwitchAction($table, row, _$element, $action) {
 /**
  * Update the reset request password user action.
  *
- * @param {JQueryTable} $table - the parent table.
+ * @param {jQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {string} row.resetPassword - the reset password value
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateUserResetAction($table, row, _$element, $action) {
     'use strict';
@@ -231,15 +231,15 @@ function updateUserResetAction($table, row, _$element, $action) {
 /**
  * Update the search action.
  *
- * @param {JQueryTable} $table - the parent table.
+ * @param {jQueryTable} $table - the parent table.
  * @param {Object} row - the row data.
  * @param {string} row.id - the row identifier.
  * @param {string} row.type - the entity type.
  * @param {boolean} row.allowShow - the show granted.
  * @param {boolean} row.allowEdit - the  edit granted.
  * @param {boolean} row.allowDelete - the deleted granted.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateSearchAction($table, row, _$element, $action) {
     'use strict';
@@ -266,10 +266,10 @@ function updateSearchAction($table, row, _$element, $action) {
 /**
  * Update the edit calculation action.
  *
- * @param {JQuery} _$table - the parent table.
+ * @param {jQuery} _$table - the parent table.
  * @param {Object} row - the row data.
- * @param {JQuery} $element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} $element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateCalculationEditAction(_$table, row, $element, $action) {
     'use strict';
@@ -288,10 +288,10 @@ function updateCalculationEditAction(_$table, row, $element, $action) {
 /**
  * Update the export calculation action.
  *
- * @param {JQuery} _$table - the parent table.
+ * @param {jQuery} _$table - the parent table.
  * @param {Object} _row - the row data.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateCalculationAction(_$table, _row, _$element, $action) {
     'use strict';
@@ -302,10 +302,10 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
 /**
  * Update the task compute action.
  *
- * @param {JQueryTable} _$table - the parent table.
+ * @param {jQueryTable} _$table - the parent table.
  * @param {Object} row - the row data.
- * @param {JQuery} _$element - the table row.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} _$element - the table row.
+ * @param {jQuery} $action - the action to update
  */
 function updateTaskComputeAction(_$table, row, _$element, $action) {
     'use strict';
@@ -319,7 +319,7 @@ function updateTaskComputeAction(_$table, row, _$element, $action) {
  * Update the show entity action.
  *
  * @param {Object} row - the row data.
- * @param {JQuery} $action - the action to update
+ * @param {jQuery} $action - the action to update
  * @param {string} propertyName -  the property name to get from row.
  */
 function updateShowEntityAction(row, $action, propertyName) {
@@ -359,11 +359,11 @@ function formatActions(value, _row) {
 /**
  * Initialize keys enablement.
  *
- * @param {JQueryTable} $table the parent table.
+ * @param {jQueryTable} $table the parent table.
  */
 function initializeKeyHandler($table) {
     'use strict';
-    const selector = 'a, input, select, .btn, .dropdown-item, .rowlink-skip';
+    const selector = 'a, input:not(.form-control-search), select, .btn, .dropdown-item, .rowlink-skip';
     $('body').on('focus', selector, function () {
         $table.disableKeys();
     }).on('blur', selector, function () {
@@ -374,7 +374,7 @@ function initializeKeyHandler($table) {
 /**
  * Initialize context menus.
  *
- * @param {JQueryTable} $table the parent table.
+ * @param {jQueryTable} $table the parent table.
  */
 function initializeContextMenus($table) {
     'use strict';
@@ -389,14 +389,16 @@ function initializeContextMenus($table) {
 /**
  * Initialize danger tooltips.
  *
- * @param {JQueryTable} $table the parent table.
+ * @param {jQueryTable} $table the parent table.
  */
 function initializeDangerTooltips($table) {
     'use strict';
     const selector = $table.data('danger-tooltip-selector');
     if (selector) {
         $table.parents('.bootstrap-table').tooltip({
-            customClass: 'tooltip-danger', selector: selector
+            customClass: 'tooltip-danger',
+            selector: selector,
+            html: true
         });
     }
 }
@@ -407,7 +409,6 @@ function initializeDangerTooltips($table) {
 
 (function ($) {
     'use strict';
-
     $.fn.extend({
         /**
          * Gets the context menu items for the selected cell.
@@ -554,7 +555,7 @@ function initializeDangerTooltips($table) {
             if (typeof row.textMuted !== 'undefined') {
                 const value = $.parseInt(row.textMuted);
                 if (value === 0) {
-                    $item.addClass('text-muted');
+                    $item.addClass('text-body-secondary');
                 }
             }
 
@@ -647,7 +648,7 @@ function initializeDangerTooltips($table) {
             } else if (isQueryParams) {
                 $table.refresh();
             }
-            $('input.search-input').trigger('focus');
+            $('input.form-control-search').trigger('focus');
         });
     }
 
@@ -704,17 +705,12 @@ function initializeDangerTooltips($table) {
     // update UI
     $('.card .dropdown-menu').removeSeparators();
     $('.fixed-table-pagination').addClass('small').appendTo('.card-footer');
-    $('.fixed-table-toolbar input.search-input').prependTo('.input-group-search')
-        .attr('type', 'text').css('width', 130);
-    $('.fixed-table-toolbar').appendTo('.col-search');
-    $('.fixed-table-toolbar .search').remove();
-    $('.btn-group-search').appendTo('.fixed-table-toolbar');
     if ($searchMinimum.length) {
         $searchMinimum.toggleClass('d-none', $table.isSearchText());
     }
 
     if ($table.isEmpty()) {
-        $('input.search-input').trigger('focus');
+        $('input.form-control-search').trigger('focus');
     } else {
         $table.showSelection();
     }

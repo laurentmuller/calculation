@@ -52,8 +52,10 @@ function startDragItems() {
     // items?
     if ($items.find('.item').length > 1) {
         sortable($items, {
-            items: '.item', //handle: '.stretched-link',
-            handle: '.card-header-item', forcePlaceholderSize: true, placeholderClass: 'border border-primary rounded'
+            items: '.item',
+            handle: '.item-header',
+            forcePlaceholderSize: true,
+            placeholderClass: 'border border-primary'
         });
         $items.on('sortupdate', updateUI);
         $items.data('sortable', true);
@@ -63,7 +65,7 @@ function startDragItems() {
 /**
  * Gets the maximum of the maximum column.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {jQuery} $table - the parent table.
  * @returns {number} - the maximum.
  */
 function getMaxValue($table) {
@@ -78,7 +80,7 @@ function getMaxValue($table) {
 /**
  * Gets the minimum of the value column.
  *
- * @param {JQuery} $table - the parent table.
+ * @param {jQuery} $table - the parent table.
  * @returns {number} - the minimum.
  */
 function getMinValue($table) {
@@ -119,7 +121,7 @@ function getNextMarginIndex() {
 /**
  * Adds a new item.
  *
- * @return {JQuery} the newly created item for chaining.
+ * @return {jQuery} the newly created item for chaining.
  */
 function addItem() {
     'use strict';
@@ -132,12 +134,12 @@ function addItem() {
     $items.append($item);
     // update UI
     updateUI();
+    // hide all except last
+    $('#items .collapse.show:not(:last)').collapse('hide');
+    // expand
+    $('#items .collapse:last').collapse('show');
     // focus
     $item.find('input[name$="[name]"]:last').selectFocus().scrollInViewport();
-    // hide others
-    $items.find('.collapse:not(:last)').collapse('hide');
-    // expand
-    $items.find('.collapse:last').addClass('show');
     // drag and drop
     startDragItems();
     return $item;
@@ -146,7 +148,7 @@ function addItem() {
 /**
  * Remove an item.
  *
- * @param {JQuery} $caller - the caller (normally a button).
+ * @param {jQuery} $caller - the caller (normally a button).
  */
 function removeItem($caller) {
     'use strict';
@@ -160,8 +162,8 @@ function removeItem($caller) {
 /**
  * Move up an item.
  *
- * @param {JQuery} $caller - the caller (normally a button).
- * @return {JQuery} the item for chaining.
+ * @param {jQuery} $caller - the caller (normally a button).
+ * @return {jQuery} the item for chaining.
  */
 function moveUpItem($caller) {
     'use strict';
@@ -184,8 +186,8 @@ function moveUpItem($caller) {
 /**
  * Move down an item.
  *
- * @param {JQuery} $caller - the caller (normally a button).
- * @return {JQuery} the item for chaining.
+ * @param {jQuery} $caller - the caller (normally a button).
+ * @return {jQuery} the item for chaining.
  */
 function moveDownItem($caller) {
     'use strict';
@@ -208,7 +210,7 @@ function moveDownItem($caller) {
 /**
  * Adds a new margin.
  *
- * @param {JQuery} $caller - the caller (normally a button).
+ * @param {jQuery} $caller - the caller (normally a button).
  */
 function addMargin($caller) {
     'use strict';
@@ -237,7 +239,7 @@ function addMargin($caller) {
 /**
  * Remove a margin (row).
  *
- * @param {JQuery} $caller - the caller.
+ * @param {jQuery} $caller - the caller.
  */
 function removeMargin($caller) {
     'use strict';
@@ -250,7 +252,7 @@ function removeMargin($caller) {
 /**
  * Sort margins.
  *
- * @param {JQuery} $caller - the caller.
+ * @param {jQuery} $caller - the caller.
  */
 function sortMargins($caller) {
     'use strict';
@@ -276,12 +278,39 @@ function sortMargins($caller) {
     }).appendTo($body);
 }
 
+/**
+ * Update the toggle button.
+ *
+ * @param {jQuery} $caller - the caller
+ * @param {boolean} show - true if shown, false if hidden.
+ */
 function updateToggle($caller, show) {
     'use strict';
     const $form = $('#edit-form');
     const $link = $caller.parents('.item').find('.btn-toggle');
     const title = show ? $form.data('show') : $form.data('hide');
-    $link.attr('title', title).find('i').toggleClass('fa-caret-down fa-caret-right');
+    $link.attr('title', title).find('i').toggleClass('fa-caret-down fa-caret-up');
+}
+
+/**
+ * Collapse all shown margins.
+ */
+function collapseAll() {
+    'use strict';
+    $('#items .collapse.show').collapse('hide');
+}
+
+/**
+ * Expand margins.
+ *
+ * @param $caller {jQuery} $caller - the caller
+ */
+function expand($caller) {
+    'use strict';
+    const $collapse = $caller.parents('.item').children('.collapse');
+    if ($collapse.length && !$collapse.is('.show')) {
+        $collapse.collapse('show');
+    }
 }
 
 /**
@@ -314,11 +343,15 @@ function updateToggle($caller, show) {
         e.preventDefault();
         sortMargins($(this));
     }).on('show.bs.collapse', '.collapse', function () {
+        collapseAll();
+    }).on('shown.bs.collapse', '.collapse', function () {
         updateToggle($(this), false);
     }).on('hide.bs.collapse', '.collapse', function () {
         updateToggle($(this), true);
     }).on('focus', '.unique-name', function () {
-        $(this).parents('.card').children('.collapse').collapse('show');
+        expand($(this));
+    }).on('dblclick', '.item-header', function () {
+        $(this).parents('.item').find('.collapse').collapse('toggle');
     });
     // initialize search
     const $form = $("#edit-form");

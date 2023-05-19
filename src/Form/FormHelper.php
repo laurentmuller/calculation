@@ -45,7 +45,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Symfony\Contracts\Translation\TranslatableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -106,7 +108,7 @@ class FormHelper
      *
      * @var array<string, mixed>
      */
-    private array $rowAttributes = [];
+    private array $rowAttributes = ['class' => 'mb-3 form-group'];
 
     /**
      * Constructor.
@@ -166,7 +168,7 @@ class FormHelper
         return $this->field('simulate')
             ->label('simulate.label')
             ->help('simulate.help')
-            ->helpClass('ml-4')
+            ->helpClass('ms-4')
             ->notRequired()
             ->addCheckboxType();
     }
@@ -179,7 +181,7 @@ class FormHelper
     public function addCheckboxType(bool $switchStyle = true): self
     {
         if ($switchStyle) {
-            $this->labelClass('switch-custom');
+            $this->labelClass('checkbox-switch');
         }
 
         return $this->add(CheckboxType::class);
@@ -298,9 +300,16 @@ class FormHelper
 
     /**
      * Add a file type to the builder and reset all values to default.
+     *
+     * @param string $extension the allowed file extension
      */
-    public function addFileType(): self
+    public function addFileType(string $extension = ''): self
     {
+        if ('' !== $extension) {
+            $this->updateAttribute('accept', $this->getMimeTypes($extension))
+                ->constraints(new File(extensions: $extension));
+        }
+
         return $this->add(FileType::class);
     }
 
@@ -321,7 +330,7 @@ class FormHelper
     {
         $input_mode = $scale > 0 ? 'decimal' : 'numeric';
 
-        return $this->widgetClass('text-right')
+        return $this->widgetClass('text-end')
             ->updateAttribute('inputmode', $input_mode)
             ->updateAttribute('scale', $scale)
             ->updateOption('html5', true)
@@ -337,7 +346,7 @@ class FormHelper
      */
     public function addPercentType(int $min = \PHP_INT_MIN, int $max = \PHP_INT_MAX, float $step = 1.0): self
     {
-        $this->widgetClass('text-right')
+        $this->widgetClass('text-end')
             ->updateAttribute('inputmode', 'decimal')
             ->updateOption('html5', true)
             ->autocomplete('off');
@@ -811,7 +820,7 @@ class FormHelper
     {
         $this->options = [];
         $this->attributes = [];
-        $this->rowAttributes = [];
+        $this->rowAttributes = ['class' => 'mb-3 form-group'];
         $this->helpAttributes = [];
         $this->labelAttributes = [];
         $this->modelTransformer = null;
@@ -934,6 +943,14 @@ class FormHelper
         }
 
         return $this;
+    }
+
+    private function getMimeTypes(string $extension): string
+    {
+        $default = MimeTypes::getDefault();
+        $types = $default->getMimeTypes($extension);
+
+        return \implode(',', $types);
     }
 
     /**

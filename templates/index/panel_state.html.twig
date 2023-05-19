@@ -3,20 +3,20 @@
 {# macros #}
 {% macro cardEntry(state, table_path, parameters=[], min_margin) -%}
 {% import 'macros/_properties.html.twig' as properties %}
-<div class="card index-child m-1 {% if state.color %} text-border{% endif %}"{% if state.color %} style="{{ properties.stateCss(state.color) }}"{% endif %}>
-    <div class="card-body card-body-tooltip p-2">
-        <div class="card-text mb-0">
-            {%- if table_path -%}
-                {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
-                <a href="{{ path(table_path, parameters) }}" class="card-link stretched-link" title="{{ list_title }}">{{ state.code }}</a>
-            {%- else -%}
-                <span>{{ state.code }}</span>
-            {%- endif -%}
-        </div>
-        <div class="h4 font-weight-normal my-1">
+<div class="border index-child m-1 {% if state.color %} text-border{% endif %}"{% if state.color %} style="{{ properties.stateCss(state.color) }}"{% endif %}>
+    <div class="position-relative body-tooltip p-2">
+        {%- if table_path -%}
+            {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
+            <a href="{{ path(table_path, parameters) }}" class="stretched-link" title="{{ list_title }}">
+                {{- state.code -}}
+            </a>
+        {%- else -%}
+            <span>{{ state.code }}</span>
+        {%- endif -%}
+        <div class="h4 fw-normal my-1">
             <span title="{{ 'index.panel_title_total'|trans }}">{{- state.total|integer }}</span> {{ macros.margin(state.margin, min_margin) -}}
         </div>
-        <p class="card-text" title="{{ 'index.panel_title_count'|trans }}">
+        <p class="mb-0" title="{{ 'index.panel_title_count'|trans }}">
             {{- 'counters.calculations'|trans({'count': state.count}) -}}
         </p>
     </div>
@@ -28,18 +28,14 @@
 {# content #}
 <div class="card card-state mb-2" data-path="{{ path('homepage_hide_state') }}">
     <div class="card-header">
-        <div class="row">
-            <div class="col-auto mr-auto">
-                <h1 class="card-title">{{ icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
-            </div>
-            <div class="col-auto d-print-none">
-                {%- if table_path and is_states -%}
-                    {{ link(path('chart_by_state'), null, null, 'chart-pie fa-fw', 'index.menu_chart_title') }}
-                {%- endif -%}
-                <a href="#" class="hide-panel" title="{{ 'index.panel_state_hide'|trans }}">
-                    {{- icon('xmark fa-fw') -}}
-                </a>
-            </div>
+        <div class="d-flex flex-wrap align-items-center gap-1">
+            <h1 class="card-title flex-fill">{{ icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
+            {%- if table_path and is_states -%}
+                {{ link(path('chart_by_state'), null, 'd-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}
+            {%- endif -%}
+            <a href="#" class="hide-panel d-print-none" title="{{ 'index.panel_state_hide'|trans }}">
+                {{- icon('xmark fa-fw') -}}
+            </a>
         </div>
     </div>
     {% if is_states %}

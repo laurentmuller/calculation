@@ -1,163 +1,73 @@
 {% extends 'base.html.twig' %}
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
 {# macros #}
-{% macro link(route, text, icon, domain=null, parameters=[]) -%}
-{% set href = path(route, parameters) %}
-{{ link(href, text, '', icon ~ ' fa-fw', '', domain, parameters) }}
+{% macro entry(entry, entity=null, role=null) %}
+{% set role = entry.role is defined ? ('role_' ~ entry.role)|upper : role %}
+{% if not role or is_granted(role) %}
+    {% set entity = entry.entity|default(entity) %}
+    <li{% if entry.class|default(false) %} class="{{ entry.class }}"{% endif %}>
+        {{ _self.entry_content(entry, entity) }}
+        {% if entry.entries|default({})|length %}
+            <ul>
+                {% for child in entry.entries %}
+                    {{ _self.entry(child, entity, role) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endif %}
 {%- endmacro %}
 
-{% macro linkExternal(route, text, icon, domain=null, parameters=[]) -%}
-{% set href = path(route, parameters) %}
-{{ linkExternal(href, text, '', icon ~ ' fa-fw', '', domain, parameters) }}
-{%- endmacro %}
-
-{% macro add_entity_entry(prefix, icon, is_list, is_add, is_export, parameters=[]) -%}
-{% if is_list  %}
-<li>{{ _self.link(prefix ~ '_table', prefix ~ '.list.title', icon) }}
-    {% if is_add or is_export %}
-    <ul>
-        {% if is_add %}
-        <li>{{ _self.link(prefix ~ '_add', prefix ~ '.add.title', ICON_ADD, null, parameters) }}</li>
-        {% endif %}
-        {% if is_export %}
-        <li>{{ _self.linkExternal(prefix ~ '_pdf', prefix ~ '.list.pdf_title', ICON_PDF) }}</li>
-        <li>{{ _self.linkExternal(prefix ~ '_excel', prefix ~ '.list.excel_title', ICON_EXCEL) }}</li>
-        {% endif %}
-    </ul>
+{% macro entry_content(entry, entity=null, role=null) %}
+{% set role = entry.role is defined ? ('role_' ~ entry.role)|upper : role %}
+{% if not role or is_granted(role) %}
+    {% set route = entry.route|default(false) %}
+    {% set entity = entry.entity|default(entity) %}
+    {% set permission = entry.permission|default(false) %}
+    {% if route and entity and permission %}
+        {% set route = is_granted(permission, entity) ? route : false %}
     {% endif %}
-</li>
+    {% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : null %}
+    {% if route %}
+        {% if entry.external|default(false) %}
+            {{ linkExternal(path(route), entry.text, null, icon) }}
+        {% else %}
+            {{ link(path(route, {'caller': path('site_map')}), entry.text, null, icon) }}
+        {% endif %}
+    {% elseif icon %}
+        <span>{{- icon(icon, entry.text) -}}</span>
+    {% else %}
+        <span>{{ entry.text|trans }}</span>
+    {% endif %}
 {% endif %}
 {%- endmacro %}
 {# parameters #}
 {%- set title = 'index.menu_site_map' -%}
 {%- set title_icon = 'sitemap' -%}
-{%- set is_dev = app.debug or is_env_dev -%}
-{%- set is_admin = is_granted('ROLE_ADMIN') -%}
-{%- set is_super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
-{%- set is_remembered = is_granted('IS_AUTHENTICATED_REMEMBERED') -%}
-{%- set is_test = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
 {%- set route_params = {'caller': path('site_map')} -%}
-{# rights #}
-{%- set is_add_calculation = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION) -%}
-{%- set is_export_calculation = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) -%}
-{%- set is_add_product = is_granted(ATTRIBUTE_ADD, ENTITY_PRODUCT) -%}
-{%- set is_export_product = is_granted(ATTRIBUTE_EXPORT, ENTITY_PRODUCT) -%}
-{%- set is_add_task = is_granted(ATTRIBUTE_ADD, ENTITY_TASK) -%}
-{%- set is_export_task = is_granted(ATTRIBUTE_EXPORT, ENTITY_TASK) -%}
-{%- set is_add_category = is_granted(ATTRIBUTE_ADD, ENTITY_CATEGORY) -%}
-{%- set is_export_category = is_granted(ATTRIBUTE_EXPORT, ENTITY_CATEGORY) -%}
-{%- set is_add_group = is_granted(ATTRIBUTE_ADD, ENTITY_GROUP) -%}
-{%- set is_export_group = is_granted(ATTRIBUTE_EXPORT, ENTITY_GROUP) -%}
-{%- set is_add_state = is_granted(ATTRIBUTE_ADD, ENTITY_CALCULATION_STATE) -%}
-{%- set is_export_state = is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION_STATE) -%}
-{%- set is_add_margin = is_granted(ATTRIBUTE_ADD, ENTITY_GLOBAL_MARGIN) -%}
-{%- set is_export_margin = is_granted(ATTRIBUTE_EXPORT, ENTITY_GLOBAL_MARGIN) -%}
-{%- set is_add_customer = is_granted(ATTRIBUTE_ADD, ENTITY_CUSTOMER) and is_test -%}
-{%- set is_export_customer = is_granted(ATTRIBUTE_EXPORT, ENTITY_CUSTOMER) and is_test -%}
 {# class #}
 {% block container_class 'container-fluid' %}
 {# body #}
 {% block body -%}
 <div class="sitemap">
-    <nav class="utilityNav">
+{% if content.utility|default({})|length %}
+    <nav class="utility-nav">
         <ul>
-            <li>{{ _self.link('user_parameters', 'user.parameters.title', 'user-gear') }}</li>
-            <li>{{ _self.link('user_profile_edit', 'profile.edit.title', ICON_EDIT) }}</li>
-            {% if is_remembered %}
-            <li>{{ _self.link('app_logout', 'index.logout', 'sign-out-alt') }}</li>
-            {% else %}
-            <li>{{ _self.link('app_login', 'index.login', 'sign-in-alt') }}</li>
-            {% endif %}
+        {% for entry in content.utility %}
+            {{ _self.entry(entry) }}
+        {% endfor %}
         </ul>
     </nav>
-    <nav class="primaryNav">
+{% endif %}
+{% if content.primary|default({})|length %}
+    <nav class="primary-nav">
         <ul>
-            {% if is_granted_calculation %}
-            <li id="home">{{ _self.link('homepage', 'index.title', 'home') }}</li>
-            <li>
-                <ul>{{ _self.link('calculation_table', 'calculation.list.title', ICON_CALCULATION) }}
-                    {% if is_add_calculation or is_export_calculation %}
-                    <li>
-                        <ul>
-                            {% if is_add_calculation %}
-                            <li>{{ _self.link('calculation_add', 'calculation.add.title', ICON_ADD, null, route_params) }}</li>
-                            {% endif %}
-                            {% if is_export_calculation %}
-                            <li>{{ _self.linkExternal('calculation_pdf', 'calculation.list.pdf_title', ICON_PDF) }}</li>
-                            <li>{{ _self.linkExternal('calculation_excel', 'calculation.list.excel_title', ICON_EXCEL) }}</li>
-                            {% endif %}
-                        </ul>
-                    </li>
-                    {% endif %}
-                </ul>
-            </li>
-            {% endif %}
-            {%- if is_granted_data -%}
-            <li>
-                <span>{{- icon('database', 'index.menu_data') -}}</span>
-                <ul>
-                    {{ _self.add_entity_entry('product', ICON_PRODUCT, is_granted_product, is_add_product, is_export_product, route_params) }}
-                    {{ _self.add_entity_entry('task', ICON_TASK, is_granted_task, is_add_task, is_export_task, route_params) }}
-                    {{ _self.add_entity_entry('category', ICON_CATEGORY, is_granted_category, is_add_category, is_export_category, route_params) }}
-                    {{ _self.add_entity_entry('group', ICON_GROUP, is_granted_group, is_add_group, is_export_group, route_params) }}
-                    {{ _self.add_entity_entry('calculationstate', ICON_CALCULATION_STATE, is_granted_calculation_state, is_add_state, is_export_state, route_params) }}
-                    {{ _self.add_entity_entry('globalmargin', ICON_GLOBAL_MARGIN, is_granted_global_margin, false, is_export_margin, route_params) }}
-                </ul>
-            </li>
-            {% endif %}
-            <li>
-                <span>{{- icon('tools', 'index.menu_tools') -}}</span>
-                <ul>
-                    <li>{{ _self.link('search', 'search.title', 'search') }}</li>
-                    <li>{{ _self.link('below_table', 'below.title', ICON_GLOBAL_MARGIN) }}</li>
-                    <li>{{ _self.link('duplicate_table', 'duplicate.title', ICON_COPY) }}</li>
-                    <li>{{ _self.link('empty_table', 'empty.title', 'file-code far') }}</li>
-                    {% if is_granted_task %}
-                    <li>{{ _self.link('task_compute', 'task_compute.title', 'keyboard') }}</li>
-                    {% endif %}
-                </ul>
-            </li>
-            {%- if is_granted_calculation -%}
-            <li>
-                <span>{{- icon('chart-area', 'menu_graphics', 'chart') -}}</span>
-                <ul>
-                    <li>{{ _self.link('chart_by_month', 'title_by_month', 'calendar-alt far', 'chart') }}</li>
-                    <li>{{ _self.link('chart_by_state', 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}</li>
-                    {% if is_test -%}
-                    <li>{{ _self.link('calculation_pivot', 'pivot.title', 'table') }}</li>
-                    {% endif %}
-                </ul>
-            {% endif %}
-            {% if is_admin %}
-            <li>
-                <span>{{- icon('gear', 'index.menu_admin') -}}</span>
-                <ul>
-                    <li>{{ _self.link('admin_product', 'product.update.title', ICON_PRODUCT) }}</li>
-                    <li>{{ _self.link('admin_archive', 'archive.title', 'calendar-xmark far') }}</li>
-                    <li>{{ _self.link('user_table', 'user.list.title', ICON_USER) -}}</li>
-                    <li>{{ _self.link('admin_rights_user', 'index.menu_rights_user', 'user-check') }}</li>
-                    {% if is_super_admin -%}
-                    <li>{{ _self.link('admin_rights_admin', 'index.menu_rights_admin', 'user-shield') }}</li>
-                    {% endif %}
-                    <li>{{ _self.link('admin_parameters', 'parameters.title', 'cogs') }}</li>
-                    <li>{{ _self.link('log_table', 'log.title', ICON_LOG) }}</li>
-                    <li>{{ _self.link('admin_clear', 'clear_cache.title', ICON_DELETE) }}</li>
-                    {% if is_super_admin %}
-                    <li>{{ _self.link('user_register', 'registration.register.title', 'user-plus') }}</li>
-                    {% endif %}
-                </ul>
-            </li>
-            {% endif %}
-            <li>
-                {{ _self.link('about', 'about.title', 'info-circle') }}
-                <ul>
-                    <li>{{ _self.link('about_licence', 'about.licence', 'info-circle') }}</li>
-                    <li>{{ _self.link('about_policy', 'about.policy', 'info-circle') }}</li>
-                    <li>{{ _self.link('user_comment', 'user.comment.title', 'envelope far') }}</li>
-                </ul>
-            </li>
+        {% for entry in content.primary %}
+            {{ _self.entry(entry) }}
+        {% endfor %}
         </ul>
     </nav>
+{% endif %}
 </div>
 {%- endblock %}
 {# stylesheets #}

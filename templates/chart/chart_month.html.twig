@@ -17,19 +17,15 @@
 {% block card_container_class '' -%}
 
 {% block card_header %}
-<div class="row">
-    <div class="col-auto mr-auto">
-        {{ parent() }}
-    </div>
-    <div class="col-auto">
-        <div class="form-inline">
-            <label for="months" class="mr-2">{{ 'last_month.period'|trans }}</label>
-            <select id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_by_month') }}" class="form-control form-control-sm custom-select custom-select-sm">
-                {% for current in allowed_months %}
-                    {{ _self.month(current, current == months) }}
-                {% endfor %}
-            </select>
-        </div>
+<div class="d-flex flex-wrap align-items-center gap-2">
+    {{ parent() }}
+    <div class="d-flex flex-fill align-items-center d-print-none gap-2">
+        <label class="form-label ms-sm-auto mb-0" for="months">{{ 'last_month.period'|trans }}</label>
+        <select class="form-select form-select-sm w-auto d-print-none" id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_by_month') }}">
+            {% for current in allowed_months %}
+                {{ _self.month(current, current == months) }}
+            {% endfor %}
+        </select>
     </div>
 </div>
 {%- endblock %}
@@ -63,14 +59,14 @@
             </tr>
             {% endfor -%}
             <tr title="{{ 'row_show_all'|trans }}">
-                <td class="font-weight-bold text-nowrap">
+                <td class="fw-bold text-nowrap">
                     <a href="{{ path(list_path) }}">{{ 'fields.total'|trans }}</a>
                 </td>
-                <td class="font-weight-bold text-currency">{{ count|integer }}</td>
-                <td class="font-weight-bold text-currency">{{ items|integer }}</td>
-                <td class="font-weight-bold text-currency">{{ marginAmount|integer }}</td>
-                <td class="font-weight-bold text-percent{{ _self.margin_below_class(marginPercent, min_margin) }}"{{ _self.margin_below_tooltip(marginPercent, min_margin) }}>{{ marginPercent|percent(false) }}</td>
-                <td class="font-weight-bold text-currency">{{ total|integer }}</td>
+                <td class="fw-bold text-currency">{{ count|integer }}</td>
+                <td class="fw-bold text-currency">{{ items|integer }}</td>
+                <td class="fw-bold text-currency">{{ marginAmount|integer }}</td>
+                <td class="fw-bold text-percent{{ _self.margin_below_class(marginPercent, min_margin) }}"{{ _self.margin_below_tooltip(marginPercent, min_margin) }}>{{ marginPercent|percent(false) }}</td>
+                <td class="fw-bold text-currency">{{ total|integer }}</td>
             </tr>
         </tbody>
     </table>

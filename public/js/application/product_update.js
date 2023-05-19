@@ -3,7 +3,7 @@
 /**
  * Gets the product's checkboxes for the selected category.
  * @param {number} [id] - the selected category.
- * @returns {JQuery} - the checkboxes.
+ * @returns {jQuery} - the checkboxes.
  */
 function getProducts(id) {
     'use strict';
@@ -34,7 +34,7 @@ function isPercent() {
 /**
  * Gets the product's checked checkboxes.
  *
- * @return {JQuery} - the checked checkboxes.
+ * @return {jQuery} - the checked checkboxes.
  */
 function getSelectedProducts() {
     'use strict';
@@ -45,7 +45,7 @@ function getSelectedProducts() {
 /**
  * Gets the selectable product's checkboxes.
  *
- * @return {JQuery} - the selectable checkboxes.
+ * @return {jQuery} - the selectable checkboxes.
  */
 function getSelectableProducts() {
     'use strict';

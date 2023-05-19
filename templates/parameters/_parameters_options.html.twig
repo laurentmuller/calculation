@@ -1,7 +1,3 @@
-<div class="toggle-icon collapse{% if expanded %} show{% endif %}" id="options" data-parent="#parent_accordion">
-    <div class="mt-2">
-        <small class="mb-2 form-text text-muted">{{ 'parameters.group_options_help'|trans }}</small>
-        {{ form_row(form.qr_code) }}
-        {{ form_row(form.print_address) }}
-    </div>
-</div>
+<p class="mb-2 form-text text-body-secondary">{{ 'parameters.group_options_help'|trans }}</p>
+{{ form_row(form.qr_code) }}
+{{ form_row(form.print_address) }}

@@ -28,9 +28,9 @@
         },
         spinner: {
             text: $('.card-title').text() + '...',
-            css: {
-                top: '20%',
-            }
+            // css: {
+            //     top: '20%',
+            // }
         }
     };
     $form.initValidator(options);

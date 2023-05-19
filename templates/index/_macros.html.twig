@@ -7,7 +7,7 @@
     {%- set margin_title = 'calculation.fields.globalMargin'|trans -%}
     {%- set class_name = '' -%}
 {%- endif -%}
-<sup title="{{ margin_title }}" class="{{ class_name }}" data-html="true"><small>{{ margin|percent }}</small></sup>
+<sup title="{{ margin_title }}" class="{{ class_name }}"><small>{{ margin|percent }}</small></sup>
 {%- endmacro %}
 
 {% macro empty() %}

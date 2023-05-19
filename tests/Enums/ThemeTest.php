@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\Theme;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -20,9 +21,46 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(Theme::class)]
 class ThemeTest extends TestCase
 {
+    public static function getLabels(): array
+    {
+        return [
+            [Theme::AUTO, 'theme.auto.name'],
+            [Theme::DARK, 'theme.dark.name'],
+            [Theme::LIGHT, 'theme.light.name'],
+        ];
+    }
+
+    public static function getSuccess(): array
+    {
+        return [
+            [Theme::AUTO, 'theme.auto.success'],
+            [Theme::DARK, 'theme.dark.success'],
+            [Theme::LIGHT, 'theme.light.success'],
+        ];
+    }
+
+    public static function getTitles(): array
+    {
+        return [
+            [Theme::AUTO, 'theme.auto.title'],
+            [Theme::DARK, 'theme.dark.title'],
+            [Theme::LIGHT, 'theme.light.title'],
+        ];
+    }
+
+    public static function getTranslates(): array
+    {
+        return [
+            [Theme::AUTO, 'theme.auto.name'],
+            [Theme::DARK, 'theme.dark.name'],
+            [Theme::LIGHT, 'theme.light.name'],
+        ];
+    }
+
     public static function getValues(): array
     {
         return [
+            [Theme::AUTO, 'auto'],
             [Theme::DARK, 'dark'],
             [Theme::LIGHT, 'light'],
         ];
@@ -30,67 +68,63 @@ class ThemeTest extends TestCase
 
     public function testCount(): void
     {
-        self::assertCount(2, Theme::cases());
-    }
-
-    public function testCss(): void
-    {
-        self::assertSame('js/vendor/bootstrap/css/bootstrap-dark.css', Theme::DARK->getCss());
-        self::assertSame('js/vendor/bootstrap/css/bootstrap-light.css', Theme::LIGHT->getCss());
+        self::assertCount(3, Theme::cases());
     }
 
     public function testDefault(): void
     {
         $default = Theme::getDefault();
-        self::assertSame(Theme::LIGHT, $default);
+        self::assertSame(Theme::AUTO, $default);
     }
 
     public function testIcon(): void
     {
-        self::assertSame('fa-regular fa-moon', Theme::DARK->getIcon());
-        self::assertSame('fa-regular fa-sun', Theme::LIGHT->getIcon());
+        self::assertSame('fa-solid fa-circle-half-stroke', Theme::AUTO->getIcon());
+        self::assertSame('fa-solid fa-moon', Theme::DARK->getIcon());
+        self::assertSame('fa-solid fa-sun', Theme::LIGHT->getIcon());
     }
 
-    public function testLabel(): void
+    #[DataProvider('getLabels')]
+    public function testLabel(Theme $theme, string $expected): void
     {
-        self::assertSame('theme.dark.name', Theme::DARK->getReadable());
-        self::assertSame('theme.light.name', Theme::LIGHT->getReadable());
+        self::assertSame($expected, $theme->getReadable());
     }
 
     public function testSorted(): void
     {
         $expected = [
+            Theme::AUTO,
             Theme::LIGHT,
             Theme::DARK,
         ];
         $sorted = Theme::sorted();
-        self::assertCount(2, $sorted);
+        self::assertCount(3, $sorted);
         self::assertSame($expected, $sorted);
     }
 
-    public function testSuccess(): void
+    #[DataProvider('getSuccess')]
+    public function testSuccess(Theme $theme, string $expected): void
     {
-        self::assertSame('theme.dark.success', Theme::DARK->getSuccess());
-        self::assertSame('theme.light.success', Theme::LIGHT->getSuccess());
+        self::assertSame($expected, $theme->getSuccess());
     }
 
-    public function testTitle(): void
+    #[DataProvider('getTitles')]
+    public function testTitle(Theme $theme, string $expected): void
     {
-        self::assertSame('theme.dark.title', Theme::DARK->getTitle());
-        self::assertSame('theme.light.title', Theme::LIGHT->getTitle());
+        self::assertSame($expected, $theme->getTitle());
     }
 
     /**
      * @throws Exception
      */
-    public function testTranslate(): void
+    #[DataProvider('getTranslates')]
+    public function testTranslate(Theme $theme, string $expected): void
     {
         $translator = $this->createTranslator();
-        self::assertSame('theme.dark.name', Theme::DARK->trans($translator));
-        self::assertSame('theme.light.name', Theme::LIGHT->trans($translator));
+        self::assertSame($expected, $theme->trans($translator));
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    #[DataProvider('getValues')]
     public function testValue(Theme $theme, string $expected): void
     {
         self::assertSame($expected, $theme->value);

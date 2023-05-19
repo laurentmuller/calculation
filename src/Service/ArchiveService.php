@@ -78,8 +78,7 @@ class ArchiveService implements ServiceSubscriberInterface
                 'group_by' => fn () => null,
                 'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getEditableQueryBuilder(),
             ])
-            ->labelClass('switch-custom')
-            ->widgetClass('form-check form-check-inline')
+            ->labelClass('checkbox-inline checkbox-switch')
             ->add(CalculationStateListType::class);
         $helper->field('target')
             ->updateOptions([

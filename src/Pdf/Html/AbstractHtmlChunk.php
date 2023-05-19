@@ -31,7 +31,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     /**
      * The pattern to extract margins.
      */
-    private const MARGINS_PATTERN = '/^[m|p]([tblrxy])?-(sm-|md-|lg-|xl-)?([012345])/im';
+    private const MARGINS_PATTERN = '/^[m|p]([tbsexy])?-(sm-|md-|lg-|xl-|xxl-)?([012345])/im';
 
     /**
      * The bookmark.
@@ -454,8 +454,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     private function parseAlignment(HtmlStyle $style, string $class): void
     {
         $alignment = match ($class) {
-            'text-left' => PdfTextAlignment::LEFT,
-            'text-right' => PdfTextAlignment::RIGHT,
+            'text-start' => PdfTextAlignment::LEFT,
+            'text-end' => PdfTextAlignment::RIGHT,
             'text-center' => PdfTextAlignment::CENTER,
             'text-justify' => PdfTextAlignment::JUSTIFIED,
             default => null,
@@ -494,12 +494,12 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
             'border' => PdfBorder::ALL,
             'border-top' => PdfBorder::TOP,
             'border-bottom' => PdfBorder::BOTTOM,
-            'border-left' => PdfBorder::LEFT,
-            'border-right' => PdfBorder::RIGHT,
+            'border-start' => PdfBorder::LEFT,
+            'border-end' => PdfBorder::RIGHT,
             'border-0' => PdfBorder::NONE,
             'border-top-0' => PdfBorder::LEFT . PdfBorder::RIGHT . PdfBorder::BOTTOM,
-            'border-left-0' => PdfBorder::RIGHT . PdfBorder::TOP . PdfBorder::BOTTOM,
-            'border-right-0' => PdfBorder::LEFT . PdfBorder::TOP . PdfBorder::BOTTOM,
+            'border-start-0' => PdfBorder::RIGHT . PdfBorder::TOP . PdfBorder::BOTTOM,
+            'border-end-0' => PdfBorder::LEFT . PdfBorder::TOP . PdfBorder::BOTTOM,
             'border-bottom-0' => PdfBorder::LEFT . PdfBorder::RIGHT . PdfBorder::TOP,
             default => null
         };
@@ -521,6 +521,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
             'text-danger' => HtmlBootstrapColors::DANGER->getTextColor(),
             'text-warning' => HtmlBootstrapColors::WARNING->getTextColor(),
             'text-info' => HtmlBootstrapColors::INFO->getTextColor(),
+            'text-light' => HtmlBootstrapColors::LIGHT->getTextColor(),
+            'text-dark' => HtmlBootstrapColors::DARK->getTextColor(),
             default => null,
         };
         if ($color instanceof PdfTextColor) {
@@ -529,12 +531,22 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 
         // background
         $color = match ($class) {
-            'bg-primary' => HtmlBootstrapColors::PRIMARY->getFillColor(),
-            'bg-secondary' => HtmlBootstrapColors::SECONDARY->getFillColor(),
-            'bg-success' => HtmlBootstrapColors::SUCCESS->getFillColor(),
-            'bg-danger' => HtmlBootstrapColors::DANGER->getFillColor(),
-            'bg-warning' => HtmlBootstrapColors::WARNING->getFillColor(),
-            'bg-info' => HtmlBootstrapColors::INFO->getFillColor(),
+            'bg-primary',
+            'text-bg-primary' => HtmlBootstrapColors::PRIMARY->getFillColor(),
+            'bg-secondary',
+            'text-bg-secondary' => HtmlBootstrapColors::SECONDARY->getFillColor(),
+            'bg-success',
+            'text-bg-success' => HtmlBootstrapColors::SUCCESS->getFillColor(),
+            'bg-danger',
+            'text-bg-danger' => HtmlBootstrapColors::DANGER->getFillColor(),
+            'bg-warning',
+            'text-bg-warning' => HtmlBootstrapColors::WARNING->getFillColor(),
+            'bg-info',
+            'text-bg-info' => HtmlBootstrapColors::INFO->getFillColor(),
+            'bg-light',
+            'text-bg-light' => HtmlBootstrapColors::LIGHT->getFillColor(),
+            'bg-dark',
+            'text-bg-dark' => HtmlBootstrapColors::DARK->getFillColor(),
             default => null,
         };
         if ($color instanceof PdfFillColor) {
@@ -549,6 +561,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
             'border-danger' => HtmlBootstrapColors::DANGER->getDrawColor(),
             'border-warning' => HtmlBootstrapColors::WARNING->getDrawColor(),
             'border-info' => HtmlBootstrapColors::INFO->getDrawColor(),
+            'border-light' => HtmlBootstrapColors::LIGHT->getDrawColor(),
+            'border-dark' => HtmlBootstrapColors::DARK->getDrawColor(),
             default => null,
         };
         if ($color instanceof PdfDrawColor) {
@@ -561,16 +575,16 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     private function parseFont(HtmlStyle $style, string $class): self
     {
         switch ($class) {
-            case 'font-weight-bold':
-                $style->bold(true);
+            case 'fw-bold':
+                $style->setFontBold(true);
                 break;
-            case 'font-italic':
+            case 'fst-italic':
                 $style->setFontItalic(true);
                 break;
-            case 'font-weight-normal':
+            case 'fst-normal':
                 $style->setFontRegular();
                 break;
-            case 'text-monospace':
+            case 'font-monospace':
                 $style->setFontName(PdfFontName::COURIER);
                 break;
         }
@@ -593,8 +607,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
             match ($match[1]) {
                 't' => $style->setTopMargin($value),
                 'b' => $style->setBottomMargin($value),
-                'l' => $style->setLeftMargin($value),
-                'r' => $style->setRightMargin($value),
+                's' => $style->setLeftMargin($value),
+                'e' => $style->setRightMargin($value),
                 'x' => $style->setXMargins($value),
                 'y' => $style->setYMargins($value),
                 default => $style->setMargins($value) // all

@@ -25,7 +25,6 @@ use App\Utils\StringUtils;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -52,6 +51,11 @@ class SwissPostUpdater implements ServiceSubscriberInterface
      * The pattern to parse validity date.
      */
     private const DATE_PATTERN = 'Ymd';
+
+    /**
+     * The import file extension.
+     */
+    private const FILE_EXTENSION = 'zip';
 
     /**
      * The record identifier containing the validity date.
@@ -94,16 +98,9 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         $builder = $this->factory->createBuilder(data: $data);
         $helper = new FormHelper($builder, 'swisspost.fields.');
-        $types = ['application/zip', 'application/x-zip-compressed'];
-        $constraint = new File([
-            'mimeTypes' => $types,
-            'mimeTypesMessage' => $this->trans('swisspost.error.mime_type'),
-        ]);
         $helper->field('file')
             ->help('swisspost.helps.file')
-            ->constraints($constraint)
-            ->updateAttribute('accept', \implode(',', $types))
-            ->addFileType();
+            ->addFileType(self::FILE_EXTENSION);
         $helper->field('overwrite')
             ->help('swisspost.helps.overwrite')
             ->notRequired()

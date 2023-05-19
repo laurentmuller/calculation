@@ -12,12 +12,11 @@
     });
 
     // initialize attachements
-    $("#user_comment_attachments").initFileInput();
+    $('#user_comment_attachments').initSimpleFileInput();
 
     // initialize validator
     $("form").initValidator({
         simpleEditor: true,
-        fileInput: true,
         focus: false
     });
 }(jQuery));

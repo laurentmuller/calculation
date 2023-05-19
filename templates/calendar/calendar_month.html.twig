@@ -34,7 +34,7 @@
     <div class="col-md-4 text-md-center">
         <h3>{{ 'counters.calculations'|trans({count: calculations|length}) }}</h3>
     </div>
-    <div class="col-md-4 align-self-center text-md-right">
+    <div class="col-md-4 align-self-center text-md-end">
         <div class="btn-group btn-group-sm" role="group">
             {# today month #}
             {% if today %}
@@ -59,21 +59,17 @@
         </div>
     </div>
 </div>
-<div class="row popover-w-100">
-    <div class="col">
-        <table class="table table-bordered w-100 month">
-            <tr>
-                <th class="border bg-secondary text-white text-center week font-weight-normal">{{ 'calendar.week_short'|trans }}</th>
-                {% for name in calendar.weekShortNames %}
-                    <th class="border bg-secondary text-white text-center font-weight-normal">{{ name }}</th>
-                {% endfor %}
-            </tr>
-            {% for week in month.weeks -%}
-                {{ _self.weekRow(month, week) }}
-            {%- endfor %}
-        </table>
-    </div>
-</div>
+<table class="table table-bordered w-100 month">
+    <tr>
+        <th class="border bg-secondary text-white text-center week fw-normal">{{ 'calendar.week_short'|trans }}</th>
+        {% for name in calendar.weekShortNames %}
+            <th class="border bg-secondary text-white text-center fw-normal">{{ name }}</th>
+        {% endfor %}
+    </tr>
+    {% for week in month.weeks -%}
+        {{ _self.weekRow(month, week) }}
+    {%- endfor %}
+</table>
 {% endblock %}
 
 {% block stylesheets -%}

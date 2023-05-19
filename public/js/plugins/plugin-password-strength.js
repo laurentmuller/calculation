@@ -122,7 +122,7 @@
             const $progress = that._getProgress(options);
             if ($progress) {
                 updateUI = true;
-                $progress.find('.progress-bar').each(function (index, element) {
+                $progress.find('.progress').each(function (index, element) {
                     $(element).toggleClass('d-none', index > verdict.score);
                 });
             }
@@ -131,15 +131,12 @@
                 updateUI = true;
                 $label.text(verdict.text);
             }
-            if (options.hideOnEmpty) {
-                const $container = that._getContainer(options);
-                if ($container) {
-                    updateUI = true;
-                    if (result) {
-                        $container.show();
-                    } else {
-                        $container.hide();
-                    }
+            if (options.hideOnEmpty && $progress) {
+                updateUI = true;
+                if (result) {
+                    $progress.show();
+                } else {
+                    $progress.hide();
                 }
             }
 
@@ -167,9 +164,7 @@
             // value?
             if (!result) {
                 return {
-                    score: 0,
-                    percent: 0,
-                    text: ''
+                    score: 0, percent: 0, text: ''
                 };
             }
 
@@ -179,9 +174,7 @@
             const text = typeof options.translate === 'function' ? options.translate(key) : key;
 
             return {
-                score: score,
-                percent: (score + 1) * 20,
-                text: text
+                score: score, percent: (score + 1) * 20, text: text
             };
         }
 
@@ -189,7 +182,7 @@
          * Gets the UI container.
          *
          * @param {Object} options - the plugin options.
-         * @return {JQuery} the UI container.
+         * @return {jQuery} the UI container.
          * @private
          */
         _getContainer(options) {
@@ -201,7 +194,7 @@
             // find
             this.$container = $(options.container);
             if (!this.$container || this.$container.length === 0) {
-                this.$container = this.$element.parent();
+                this.$container = this.$element.parents('.mb-3:first');
             }
 
             return this.$container;
@@ -211,7 +204,7 @@
          * Gets or create the progress bars container.
          *
          * @param {Object} options - the plugin options.
-         * @return {JQuery|null} the progress bar container or null if none.
+         * @return {jQuery|null} the progress bar container or null if none.
          * @private
          */
         _getProgress(options) {
@@ -228,24 +221,25 @@
             }
 
             // get the progress container
-            const $progressContainer = $container.findExists(options.progressContainer) || options.progressContainer;
-            if (!($progressContainer && $progressContainer.length === 1)) {
+            const $progressContainer = $container.findExists(options.progressContainer) || $container.findExists('div.password-strength-container') || options.progressContainer;
+            if (!$progressContainer || $progressContainer.length === 0) {
                 return null;
             }
 
             // create progress
-            that.$progress = that._createControl('div', 'progress bg-transparent').css({
-                'height': options.height,
-                'border-radius': 0
+            that.$progress = that._createControl('div', 'progress-stacked bg-transparent').css({
+                'height': options.height, 'border-radius': 0
             }).appendTo($progressContainer);
 
             // create progress bars
             for (let i = 0; i < 5; i++) {
-                const className = 'progress-bar d-none ' + options.progressClasses[i];
-                that._createControl('div', className).css({
-                    'width': '20%',
-                    'margin-right': i < 4 ? 2 : 0
-                }).appendTo(that.$progress);
+                const className = 'progress-bar ' + options.progressClasses[i];
+                that._createControl('div', 'progress d-none').css({
+                    'width': 'calc(20% - 2px)',
+                    'margin-right': 2,
+                    //'margin-right': i < 4 ? 2 : 0
+                }).append(that._createControl('div', className))
+                    .appendTo(that.$progress);
             }
 
             return that.$progress;
@@ -255,7 +249,7 @@
          * Gets or create the verdict label
          *
          * @param {Object} options - the plugin options.
-         * @return {JQuery|null} the verdict label or null if none.
+         * @return {jQuery|null} the verdict label or null if none.
          * @private
          */
         _getLabel(options) {
@@ -288,7 +282,7 @@
          *
          * @param {string} type - the tag type.
          * @param {string} [className] - the class name
-         * @return {JQuery} the newly created element.
+         * @return {jQuery} the newly created element.
          * @private
          */
         _createControl(type, className) {

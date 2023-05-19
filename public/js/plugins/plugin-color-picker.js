@@ -95,7 +95,7 @@
                 that.$dropdownToggle = $('<button/>', {
                     'type': 'button',
                     'class': 'dropdown-toggle ' + (options.dropdownToggleClass || ''),
-                    'data-toggle': 'dropdown',
+                    'data-bs-toggle': 'dropdown',
                     'aria-haspopup': 'true',
                     'aria-expanded': 'false'
                 }).appendTo(that.$dropdown);
@@ -150,9 +150,9 @@
                 'class': 'border btn btn-color',
             };
             if (display) {
-                buttonOptions['data-toggle'] = 'tooltip';
-                buttonOptions['data-trigger'] = options.tooltipTrigger;
-                buttonOptions['data-placement'] = options.tooltipPlacement;
+                buttonOptions['data-bs-toggle'] = 'tooltip';
+                buttonOptions['data-bs-trigger'] = options.tooltipTrigger;
+                buttonOptions['data-bs-placement'] = options.tooltipPlacement;
             }
 
             // palette
@@ -399,7 +399,7 @@
         /**
          * Gets the selected color button.
          *
-         * @param {JQuery} $button - the clicked button element.
+         * @param {jQuery} $button - the clicked button element.
          * @returns {Object} the row and column index of the selected button.
          * @private
          */
@@ -430,7 +430,7 @@
          * Finds color buttons for the given selector.
          *
          * @param {string} selector - the button selector.
-         * @returns {JQuery} the buttons, if found; null otherwise.
+         * @returns {jQuery} the buttons, if found; null otherwise.
          * @private
          */
         _findButton(selector) {
@@ -442,7 +442,7 @@
          * Sets the selected (focus) color button.
          *
          * @param {Object} selection - the selection to set (must contain a 'row' and a 'col' fields).
-         * @returns {JQuery} the button, if found; null otherwise.
+         * @returns {jQuery} the button, if found; null otherwise.
          * @private
          */
         _setSelection(selection) {

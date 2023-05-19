@@ -85,7 +85,7 @@
          * @private
          */
         _init() {
-            this.$menu = this.$element.siblings('.dropdown-menu');
+            this.$menu = this.$element.next('.dropdown-menu');
             if (this.$menu.length) {
                 this.menuShowProxy = () => this._menuShow();
                 this.menuClickProxy = (e) => this._menuClick(e);
@@ -121,7 +121,7 @@
         /**
          * Sets the selected value.
          * @param {any} [value] - the value to set.
-         * @param {JQuery} [$selection] - the selected drop-down item.
+         * @param {jQuery} [$selection] - the selected drop-down item.
          * @private
          */
         _updateValue(value, $selection) {
@@ -130,7 +130,7 @@
             const $items = this.$menu.find('.dropdown-item').removeClass('active');
 
             // default values
-            /** @type {JQuery} */
+            /** @type {jQuery} */
             let $icon = $element.find(':first-child');
             if ($icon.length === 0 && $element.data('icon')) {
                 $icon = $($element.data('icon'));

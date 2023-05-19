@@ -4,14 +4,14 @@
 {# macro #}
 {% macro output_dialog(item) -%}
 {% set href = path('help_dialog', {'id': item.id}) %}
-<dt class="font-weight-normal"><a href="{{ href }}">{{ item.name|default(item.id)|trans }}</a></dt>
+<dt class="fw-normal"><a href="{{ href }}">{{ item.name|default(item.id)|trans }}</a></dt>
 <dd>{{ item.description }}</dd>
 {%- endmacro %}
 
 {% macro output_entity(item) -%}
 {%- set entity_name = item.id ~ '.name' -%}
 {% set href = path('help_entity', {'id': item.id}) %}
-<dt class="font-weight-normal"><a href="{{ href }}">{{ entity_name|trans }}</a></dt>
+<dt class="fw-normal"><a href="{{ href }}">{{ entity_name|trans }}</a></dt>
 <dd>{{ item.description }}</dd>
 {%- endmacro %}
 
@@ -35,10 +35,10 @@
 {%- endif -%}
 
 {%- set menus = menu.menus|default(false) -%}
-<dt class="font-weight-normal">
+<dt class="fw-normal">
 {%- if href -%}
     {{- tools.output_icon(menu.icon|default(false), null) -}}
-    <a class="ml-1" href="{{ href }}">{{ menu.id|trans }}</a>
+    <a class="ms-1" href="{{ href }}">{{ menu.id|trans }}</a>
 {%- else -%}
     {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
 {%- endif -%}

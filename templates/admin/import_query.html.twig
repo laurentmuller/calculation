@@ -15,7 +15,7 @@
 {% if last_import|default(false) -%}
 <hr />
 {%- set date = last_import|locale_date('long') -%}
-<p class="mb-0 text-right text-muted small">{{ 'swisspost.import.last_import'|trans({'%date%': date}) }}</p>
+<p class="mb-0 text-end text-body-secondary small">{{ 'swisspost.import.last_import'|trans({'%date%': date}) }}</p>
 {%- endif %}
 {% endblock %}
 {# stylesheets #}
@@ -27,8 +27,6 @@
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}
-{{ asset_js('js/plugins/plugin-input-file.js') }}
-{{ asset_js('js/extensions/file-input-extensions.js') }}
 {{ asset_js('js/application/import_file.js') }}
 {% else %}
 {{ asset_js('js/import_file.js') }}

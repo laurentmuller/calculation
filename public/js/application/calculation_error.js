@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * -------------- JQuery functions extensions --------------
+ * -------------- jQuery functions extensions --------------
  */
 (function ($) {
     'use strict';
@@ -86,8 +86,9 @@
 
     // tooltip
     $('body').tooltip({
+        customClass: 'tooltip-danger',
         selector: '.has-tooltip',
-        customClass: 'tooltip-danger overall-cell'
+        html: true
     });
 
     // errors

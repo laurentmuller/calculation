@@ -24,7 +24,7 @@ class EditTaskDialog extends EditDialog {
 
         return that._getCheckedItems().map(function () {
             const $row = $(this).parents('.task-item-row');
-            const text = $row.find('.custom-control-label').text();
+            const text = $row.find('.form-check-label').text();
             const price = $.parseFloat($row.find('.task_value').data('value'));
             const total = $.roundValue(price * quantity);
             const description = task + ' - ' + text;
@@ -321,7 +321,7 @@ class EditTaskDialog extends EditDialog {
     /**
      * Gets the checked items.
      *
-     * @return {JQuery} the checked items.
+     * @return {jQuery} the checked items.
      * @private
      */
     _getCheckedItems() {

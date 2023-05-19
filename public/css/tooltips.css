@@ -6,164 +6,38 @@
  * ---------------------------------------
  */
 
-/*
- * danger
- */
-.tooltip-danger.tooltip.show {
-    opacity: 1;
-}
-.tooltip-danger.tooltip.bs-tooltip-top .arrow::before,
-.tooltip-danger.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
-    border-top-color: var(--danger);
-}
-.tooltip-danger.tooltip.bs-tooltip-right .arrow::before,
-.tooltip-danger.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
-    border-right-color: var(--danger);
-}
-.tooltip-danger.tooltip.bs-tooltip-bottom .arrow::before,
-.tooltip-danger.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
-    border-bottom-color: var(--danger);
-}
-.tooltip-danger.tooltip.bs-tooltip-left .arrow::before,
-.tooltip-danger.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
-    border-left-color: var(--danger);
-}
-.tooltip-danger .tooltip-inner {
-    color: var(--white);
-    background-color: var(--danger);
+.tooltip-danger {
+    --bs-tooltip-bg: var(--bs-danger);
+    --bs-tooltip-color: var(--bs-white);
+    --bs-tooltip-opacity: 1;
 }
 
-/*
- * warning
- */
-.tooltip-warning.tooltip.show {
-    opacity: 1;
-}
-.tooltip-warning.tooltip.bs-tooltip-top .arrow::before,
-.tooltip-warning.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
-    border-top-color: var(--warning);
-}
-.tooltip-warning.tooltip.bs-tooltip-right .arrow::before,
-.tooltip-warning.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
-    border-right-color: var(--warning);
-}
-.tooltip-warning.tooltip.bs-tooltip-bottom .arrow::before,
-.tooltip-warning.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
-    border-bottom-color: var(--warning);
-}
-.tooltip-warning.tooltip.bs-tooltip-left .arrow::before,
-.tooltip-warning.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
-    border-left-color: var(--warning);
-}
-.tooltip-warning .tooltip-inner {
-    background-color: var(--warning);
-    color: var(--dark);
+.tooltip-warning {
+    --bs-tooltip-bg: var(--bs-warning);
+    --bs-tooltip-color: var(--bs-dark);
+    --bs-tooltip-opacity: 1;
 }
 
-/*
- * success
- */
-.tooltip-success.tooltip.show {
-    opacity: 1;
-}
-.tooltip-success.tooltip.bs-tooltip-top .arrow::before,
-.tooltip-success.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
-    border-top-color: var(--success);
-}
-.tooltip-success.tooltip.bs-tooltip-right .arrow::before,
-.tooltip-success.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
-    border-right-color: var(--success);
-}
-.tooltip-success.tooltip.bs-tooltip-bottom .arrow::before,
-.tooltip-success.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
-    border-bottom-color: var(--success);
-}
-.tooltip-success.tooltip.bs-tooltip-left .arrow::before,
-.tooltip-success.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
-    border-left-color: var(--success);
-}
-.tooltip-success .tooltip-inner {
-    background-color: var(--success);
-    color: var(--white);
+.tooltip-success {
+    --bs-tooltip-bg: var(--bs-success);
+    --bs-tooltip-color: var(--bs-white);
+    --bs-tooltip-opacity: 1;
 }
 
-/*
- * info
- */
-.tooltip-info.tooltip.show {
-    opacity: 1;
-}
-.tooltip-info.tooltip.bs-tooltip-top .arrow::before,
-.tooltip-info.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
-    border-top-color: var(--info);
-}
-.tooltip-info.tooltip.bs-tooltip-right .arrow::before,
-.tooltip-info.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
-    border-right-color: var(--info);
-}
-.tooltip-info.tooltip.bs-tooltip-bottom .arrow::before,
-.tooltip-info.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
-    border-bottom-color: var(--info);
-}
-.tooltip-info.tooltip.bs-tooltip-left .arrow::before,
-.tooltip-info.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
-    border-left-color: var(--info);
-}
-.tooltip-info .tooltip-inner {
-    background-color: var(--info);
-    color: var(--white);
+.tooltip-info {
+    --bs-tooltip-bg: var(--bs-info);
+    --bs-tooltip-color: var(--bs-dark);
+    --bs-tooltip-opacity: 1;
 }
 
-/*
- * primary
- */
-.tooltip-primary.tooltip.show {
-    opacity: 1;
-}
-.tooltip-primary.tooltip.bs-tooltip-top .arrow::before,
-.tooltip-primary.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
-    border-top-color: var(--primary);
-}
-.tooltip-primary.tooltip.bs-tooltip-right .arrow::before,
-.tooltip-primary.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
-    border-right-color: var(--primary);
-}
-.tooltip-primary.tooltip.bs-tooltip-bottom .arrow::before,
-.tooltip-primary.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
-    border-bottom-color: var(--primary);
-}
-.tooltip-primary.tooltip.bs-tooltip-left .arrow::before,
-.tooltip-primary.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
-    border-left-color: var(--primary);
-}
-.tooltip-primary .tooltip-inner {
-    background-color: var(--primary);
-    color: var(--white);
+.tooltip-primary {
+    --bs-tooltip-bg: var(--bs-primary);
+    --bs-tooltip-color: var(--bs-white);
+    --bs-tooltip-opacity: 1;
 }
 
-/*
- * secondary
- */
-.tooltip-secondary.tooltip.show {
-    opacity: 1;
-}
-.tooltip-secondary.tooltip.bs-tooltip-top .arrow::before,
-.tooltip-secondary.tooltip.bs-tooltip-auto[x-placement^="top"] .arrow::before {
-    border-top-color: var(--secondary);
-}
-.tooltip-secondary.tooltip.bs-tooltip-right .arrow::before,
-.tooltip-secondary.tooltip.bs-tooltip-auto[x-placement^="right"] .arrow::before {
-    border-right-color: var(--secondary);
-}
-.tooltip-secondary.tooltip.bs-tooltip-bottom .arrow::before,
-.tooltip-secondary.tooltip.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
-    border-bottom-color: var(--secondary);
-}
-.tooltip-secondary.tooltip.bs-tooltip-left .arrow::before,
-.tooltip-secondary.tooltip.bs-tooltip-auto[x-placement^="left"] .arrow::before {
-    border-left-color: var(--secondary);
-}
-.tooltip-secondary .tooltip-inner {
-    background-color: var(--secondary);
-    color: var(--white);
+.tooltip-secondary {
+    --bs-tooltip-bg: var(--bs-secondary);
+    --bs-tooltip-color: var(--bs-white);
+    --bs-tooltip-opacity: 1;
 }

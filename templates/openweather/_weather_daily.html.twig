@@ -4,7 +4,7 @@
 {{- tools.title(title, 'daily_data_modal') -}}
 {# table #}
 <div class="table-responsive">
-    <table class="table table-sm mb-0">
+    <table class="table table-no-end-line table-sm mb-0">
         <tbody>
             {% for data in daily.list %}
             <tr>
@@ -14,7 +14,7 @@
                     {%- else -%}
                         {{- data.dt|locale_date(pattern='eeee')|capitalize }}
                     {%- endif -%}
-                    <br><span class="small text-muted">{{ data.dt_date }}</span>
+                    <br><span class="small text-body-secondary">{{ data.dt_date }}</span>
                 </td>
                 <td class="ow-icon">
                     <img src="{{ data.weather.icon_small }}" class="ow-image" alt="{{ 'openweather.fields.daily_weather'|trans }}" title="{{ data.weather.description }}">

@@ -24,9 +24,9 @@
 {%- endmacro %}
 
 {% macro checkbox(id, text, checked=true) -%}
-<div class="custom-control custom-switch custom-control-inline">
-  <input type="checkbox" class="custom-control-input control-option" name="{{ id }}" id="{{ id }}" data-default="{{ checked|json_encode }}"{% if checked %} checked="checked"{% endif %}>
-  <label class="custom-control-label" for="{{ id }}">{{ text|trans }}</label>
+<div class="form-check form-check-inline form-switch">
+  <input type="checkbox" class="form-check-input control-option" name="{{ id }}" id="{{ id }}" data-default="{{ checked|json_encode }}"{% if checked %} checked="checked"{% endif %}>
+  <label class="form-check-label" for="{{ id }}">{{ text|trans }}</label>
 </div>
 {%- endmacro %}
 {# parameters #}
@@ -37,65 +37,51 @@
 {%- set progress = user_service.messageProgress %}
 {# body #}
 {% block card_body %}
-<div class="form-row">
+<label class="form-label horizontal-line">Type de message</label>
+<div class="row justify-content-center">
     <div class="col">
-        <label class="horizontal-line">Type de message</label>
+        {{ _self.button('success') }}
+        {{ _self.button('warning') }}
+        {{ _self.button('danger') }}
+        {{ _self.button('info') }}
+        {{ _self.button('primary') }}
+        {{ _self.button('secondary') }}
+        {{ _self.button('dark') }}
     </div>
 </div>
-<div class="form-row justify-content-center">
-    {{ _self.button('success') }}
-    {{ _self.button('warning') }}
-    {{ _self.button('danger') }}
-    {{ _self.button('info') }}
-    {{ _self.button('primary') }}
-    {{ _self.button('secondary') }}
-    {{ _self.button('dark') }}
-</div>
 <hr>
-<div class="form-row">
+<div class="row mb-3">
     <div class="col-md-4">
-        <div class="form-group">
-            <label for="position">{{ 'parameters.fields.message_position'|trans }}</label>
-            <select id="position" name="position" class="form-control" data-failure="{{ 'parameters.failure'|trans }}" data-default="{{ position.value }}" data-position="{{ position.value }}" data-random="{{ url('ajax_random_text') }}">
+            <label class="form-label" for="position">{{ 'parameters.fields.message_position'|trans }}</label>
+            <select id="position" name="position" class="form-select" data-failure="{{ 'parameters.failure'|trans }}" data-default="{{ position.value }}" data-position="{{ position.value }}" data-random="{{ url('ajax_random_text') }}">
             {% for current in positions %}
                 {{ _self.position(current, position) }}
             {% endfor %}
             </select>
-        </div>
     </div>
     <div class="col-md-4">
-        <div class="form-group">
-            <label for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
-            <select id="timeout" name="timeout" data-default="{{ timeout }}" class="form-control">
+            <label class="form-label" for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
+            <select id="timeout" name="timeout" data-default="{{ timeout }}" class="form-select">
                 {% for seconds in 1..5 %}
                     {{ _self.timeout(seconds, timeout) }}
                 {% endfor %}
             </select>
-        </div>
     </div>
     <div class="col-md-4">
-        <div class="form-group">
-            <label for="progress">{{ 'parameters.fields.message_progress'|trans }}</label>
-            <select id="progress" name="progress" data-default="{{ progress }}" class="form-control">
+            <label class="form-label" for="progress">{{ 'parameters.fields.message_progress'|trans }}</label>
+            <select id="progress" name="progress" data-default="{{ progress }}" class="form-select">
                 {% for i in 0..5 %}
                     {{ _self.progress(i, progress) }}
                 {% endfor %}
             </select>
-        </div>
     </div>
 </div>
-<div class="form-row">
-    <div class="col">
-        <label class="horizontal-line">{{ 'parameters.group_options'|trans }}</label>
-    </div>
-</div>
-<div class="form-row flex-column flex-md-row justify-content-start px-2">
-    {{ _self.checkbox('title', 'parameters.fields.message_title', user_service.messageTitle) }}
-    {{ _self.checkbox('icon', 'parameters.fields.message_icon', user_service.messageIcon) }}
-    {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_service.messageSubTitle) }}
-    {{ _self.checkbox('close', 'parameters.fields.message_close', user_service.messageClose) }}
-    {{ _self.checkbox('autohide', 'parameters.fields.message_auto_close') }}
-</div>
+<label class="form-label horizontal-line">{{ 'parameters.group_options'|trans }}</label>
+{{ _self.checkbox('title', 'parameters.fields.message_title', user_service.messageTitle) }}
+{{ _self.checkbox('icon', 'parameters.fields.message_icon', user_service.messageIcon) }}
+{{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_service.messageSubTitle) }}
+{{ _self.checkbox('close', 'parameters.fields.message_close', user_service.messageClose) }}
+{{ _self.checkbox('autohide', 'parameters.fields.message_auto_close') }}
 {% endblock %}
 {# footer #}
 {% block card_footer %}

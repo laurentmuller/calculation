@@ -5,7 +5,7 @@
 /**
  * Show an error message
  *
- * @param {JQuery} $form - the edit form.
+ * @param {jQuery} $form - the edit form.
  * @param {string} [message]- the message to display or null to use default.
  */
 function showError($form, message) {
@@ -18,9 +18,9 @@ function showError($form, message) {
 /**
  * Update the text of the given element.
  *
- * @param {JQuery} $element - the element to update.
+ * @param {jQuery} $element - the element to update.
  * @param {String} date - the new date.
- * @returns {JQuery} the element for chaining.
+ * @returns {jQuery} the element for chaining.
  */
 function updateDate($element, date) {
     'use strict';
@@ -89,7 +89,7 @@ function formatCurrency(currency) {
         return text;
     }
     const $flag = $('<span/>', {
-        'class': 'mr-1 currency-flag currency-flag-' + id.toLowerCase(),
+        'class': 'me-1 currency-flag currency-flag-' + id.toLowerCase(),
     });
     const $text = $('<span/>', {
         'class': 'text-truncate',

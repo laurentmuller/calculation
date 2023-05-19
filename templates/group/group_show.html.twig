@@ -29,19 +29,19 @@
     <table class="table table-sm table-hover table-list">
         <thead>
             <tr>
-                <th class="font-weight-normal w-25">{{ 'group.fields.margins'|trans }}</th>
-                <th class="font-weight-normal text-right w-25">{{ 'groupmargin.fields.minimum'|trans }}</th>
-                <th class="font-weight-normal text-right w-25">{{ 'groupmargin.fields.maximum'|trans }}</th>
-                <th class="font-weight-normal text-right w-25">{{ 'groupmargin.fields.margin'|trans }}</th>
+                <th class="fw-normal w-25">{{ 'group.fields.margins'|trans }}</th>
+                <th class="fw-normal text-end w-25">{{ 'groupmargin.fields.minimum'|trans }}</th>
+                <th class="fw-normal text-end w-25">{{ 'groupmargin.fields.maximum'|trans }}</th>
+                <th class="fw-normal text-end w-25">{{ 'groupmargin.fields.margin'|trans }}</th>
             </tr>
         </thead>
         <tbody>
         {% for margin in item.margins -%}
             <tr>
                 <td class="w-25">&nbsp;</td>
-                <td class="text-right w-25">{{ margin.minimum|amount }}</td>
-                <td class="text-right w-25">{{ margin.maximum|amount }}</td>
-                <td class="text-right w-25">{{ margin.margin|percent }}</td>
+                <td class="text-end w-25">{{ margin.minimum|amount }}</td>
+                <td class="text-end w-25">{{ margin.maximum|amount }}</td>
+                <td class="text-end w-25">{{ margin.margin|percent }}</td>
             </tr>
         {% endfor %}
         </tbody>

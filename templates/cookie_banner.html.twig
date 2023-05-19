@@ -1,7 +1,7 @@
 {% if app.user and not app.request.cookies.get(constant('App\\Controller\\PolicyController::POLICY_ACCEPTED')) %}
 {% from 'macros/_icons.html.twig' import link %}
-<div class="navbar navbar-themed p-1 align-items-center fixed-bottom small d-print-none" style="z-index: 1031;">
-    <div class="flex-fill text-left">
+<div class="navbar bg-body-tertiary p-1 align-items-center fixed-bottom small d-print-none" style="z-index: 1031;">
+    <div class="flex-fill text-start">
         {{- 'cookie_banner.message'|trans }}{{ link(path('about_policy'), 'cookie_banner.link', 'mx-1', null, 'cookie_banner.link_title') }}
     </div>
     {{ link(path('policy_accept'), 'cookie_banner.accept', 'mx-2', null, 'cookie_banner.accept_title') }}

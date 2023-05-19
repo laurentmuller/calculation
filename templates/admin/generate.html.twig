@@ -11,7 +11,7 @@
 }) -%}
 {# body #}
 {% block card_body %}
-<div class="form-row">
+<div class="row">
     <div class="col-md-8">
         {{ form_row(form.entity) }}
     </div>
@@ -22,16 +22,12 @@
 {{ form_row(form.simulate) }}
 {{ form_row(form.confirm) }}
 {# results message #}
-<div id="message-result" class="alert alert-primary mb-0" style="display: none;">
-    <div class="row position-relative">
-        <div class="col-auto mr-auto">
-            <p id="message" class="mb-0">{{ 'generate.error.empty'|trans }}</p>
-        </div>
-        <div class="col-auto text-right position-static">
-            <a href="#" class="alert-link stretched-link" data-toggle="modal" data-target="#modal-result" title="{{ 'generate.result_link'|trans }}">
-                <i class="fa-fw fa-solid fa-eye"></i>
-            </a>
-        </div>
+<div id="message-result" class="alert alert-success mb-0" style="display: none;">
+    <div class="hstack">
+        <p id="message" class="mb-0 me-auto">{{ 'generate.error.empty'|trans }}</p>
+        <a href="#" class="alert-link stretched-link" data-bs-toggle="modal" data-bs-target="#modal-result" title="{{ 'generate.result_link'|trans }}">
+            <i class="fa-fw fa-solid fa-eye"></i>
+        </a>
     </div>
 </div>
 {# results dialog #}
@@ -42,7 +38,7 @@
                 <h5 class="modal-title">{{ title|trans }}</h5>{{ button_close_modal() }}
             </div>
             <div class="modal-body">
-                <label class="font-weight-bold">{{ 'generate.result_text'|trans }}</label>
+                <label class="form-label fw-bold">{{ 'generate.result_text'|trans }}</label>
                 <div id="overflow" class="overflow-auto table-fixed-header small-scrollbar border">
                     <table id="table-result" class="table table-hover table-fixed-header table-sm">
                         <tbody></tbody>
@@ -54,7 +50,7 @@
                     <div class="col-md-3">
                         {{ button_close_modal(false) }}
                     </div>
-                    <div class="col-md-9 text-md-right">
+                    <div class="col-md-9 text-md-end">
                         <p id="simulated" class="small mb-0 d-none">{{ 'simulate.message'|trans }}</p>
                     </div>
                 </div>

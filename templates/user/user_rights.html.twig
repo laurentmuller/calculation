@@ -13,7 +13,7 @@
 {% block card_header %}
 <div class="row">
     <div class="col-lg-5 mt-1">{{ parent() }}</div>
-    <div class="col-lg-7 text-lg-right d-print-none">{{ rights.actions(overwrite) }}</div>
+    <div class="col-lg-7 text-lg-end d-print-none">{{ rights.actions(overwrite) }}</div>
 </div>
 {%- endblock %}
 
@@ -30,7 +30,7 @@
     </div>
 </div>
 {{ rights.table(form, default, permissions, overwrite) }}
-{{ form_row(form.overwrite, {label_attr: {class: 'switch-custom mt-3'}, attr: {'data-default': default.overwrite|json_encode}}) }}
+{{ form_row(form.overwrite, {attr: {'data-default': default.overwrite|json_encode}}) }}
 {% endblock %}
 
 {% block javascripts -%}

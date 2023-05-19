@@ -20,7 +20,6 @@ use App\Utils\StringUtils;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -40,6 +39,11 @@ class OpenWeatherCityUpdater
     use TranslatorTrait;
 
     /**
+     * The import file extension.
+     */
+    private const FILE_EXTENSION = 'gz';
+
+    /**
      * Constructor.
      */
     public function __construct(
@@ -56,18 +60,12 @@ class OpenWeatherCityUpdater
      */
     public function createForm(): FormInterface
     {
-        $constraint = new File([
-            'mimeTypes' => 'application/gzip',
-            'mimeTypesMessage' => $this->trans('openweather.error.mime_type'),
-        ]);
         $builder = $this->factory->createBuilder();
         $helper = new FormHelper($builder, 'openweather.import.');
+        $helper->field('file')
+            ->addFileType(self::FILE_EXTENSION);
 
-        return $helper->field('file')
-            ->updateAttribute('accept', 'application/x-gzip')
-            ->constraints($constraint)
-            ->addFileType()
-            ->createForm();
+        return $helper->createForm();
     }
 
     public function getTranslator(): TranslatorInterface

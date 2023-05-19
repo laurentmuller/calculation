@@ -13,10 +13,10 @@
         <thead>
             <tr>
                 <th class="w-100 text-nowrap">{{ 'schema.fields.name'|trans }}</th>
-                <th class="text-right">{{ 'schema.fields.columns'|trans }}</th>
-                <th class="text-right">{{ 'schema.fields.records'|trans }}</th>
-                <th class="text-right">{{ 'schema.fields.indexes'|trans }}</th>
-                <th class="text-right">{{ 'schema.fields.associations'|trans }}</th>
+                <th class="text-end">{{ 'schema.fields.columns'|trans }}</th>
+                <th class="text-end">{{ 'schema.fields.records'|trans }}</th>
+                <th class="text-end">{{ 'schema.fields.indexes'|trans }}</th>
+                <th class="text-end">{{ 'schema.fields.associations'|trans }}</th>
             </tr>
         </thead>
         <tbody data-link="row" class="rowlink">
@@ -24,10 +24,10 @@
             {% set name = table.name %}
             <tr title="{{ 'schema.index.tooltip'|trans({'%name%': name}) }}">
                 <td class="w-100 text-nowrap"><a href="{{ path('schema_table', {'name': name}) }}">{{ name }}</a></td>
-                <td class="text-right">{{ table.columns|integer }}</td>
-                <td class="text-right">{{ table.records|integer }}</td>
-                <td class="text-right">{{ table.indexes|integer }}</td>
-                <td class="text-right">{{ table.associations|integer }}</td>
+                <td class="text-end">{{ table.columns|integer }}</td>
+                <td class="text-end">{{ table.records|integer }}</td>
+                <td class="text-end">{{ table.indexes|integer }}</td>
+                <td class="text-end">{{ table.associations|integer }}</td>
             </tr>
         {% endfor %}
         </tbody>

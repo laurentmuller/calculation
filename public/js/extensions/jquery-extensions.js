@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* globals bootstrap */
+
 /**
  * -------------- jQuery Extensions --------------
  */
@@ -133,7 +135,7 @@
          * Hide the drop-down menus.
          */
         hideDropDownMenus: function () {
-            $('.dropdown-menu.show').removeClass('show');
+            $('.show[data-bs-toggle="dropdown"], .dropdown-menu.show').removeClass('show');
         }
     });
 
@@ -169,7 +171,7 @@
          *
          * @param {int} delay - The scroll animation delay in milliseconds (default to 400).
          * @param {number} bottomMargin - The bottom margin (default to 50).
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         scrollInViewport: function (delay = 400, bottomMargin = 50) {
             // const $window = $(window);
@@ -179,14 +181,6 @@
                 try {
                     if (!$this.isInViewport(bottomMargin)) {
                         let top = $this.offset().top;
-                        // const bottom = top + $this.outerHeight();
-                        // const windowTop = $window.scrollTop();
-                        // const windowBottom = windowTop + $window.height() - bottomMargin;
-                        // const block = top <= windowTop ? 'start' : 'end';
-                        // $this[0].scrollIntoView({
-                        //     block: block,
-                        //     behavior: "smooth"
-                        // });
                         if (delay) {
                             $target.animate({
                                 scrollTop: top
@@ -207,7 +201,7 @@
          *
          * @param {string} className - The class name to toggle.
          * @param {function} [callback] - The function to call after the class has been removed.
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         timeoutToggle: function (className, callback) {
             const $this = $(this);
@@ -226,7 +220,7 @@
          * Sets the given attribute class name to the element.
          *
          * @param {string} className - The class name to set.
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         setClass: function (className) {
             return $(this).each(function () {
@@ -240,7 +234,7 @@
          *
          * @param {function} callback - The callback function that will be executed after the timer expires.
          * @param {int} timeout - The number of milliseconds to wait before executing the callback.
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         createTimer: function (callback, timeout) {
             const $element = $(this);
@@ -252,7 +246,7 @@
         /**
          * Clear the timer (if any) of the element.
          *
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         removeTimer: function () {
             return $(this).each(function () {
@@ -272,7 +266,7 @@
          *
          * @param {function} _callback - The callback function that will be executed after the timer expires.
          * @param {int} _timeout - The number of milliseconds to wait before executing the callback.
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         updateTimer: function (_callback, _timeout) {
             const args = Array.prototype.slice.call(arguments, 2);
@@ -285,7 +279,7 @@
          *
          * @param {function} callback - The callback function that will be executed.
          * @param {int} timeout - The intervals (in milliseconds) on how often to execute the callback.
-         * @return {JQuery} The JQuery element for chaining.
+         * @return {jQuery} The jQuery element for chaining.
          */
         createInterval: function (callback, timeout) {
             const $element = $(this);
@@ -297,7 +291,7 @@
         /**
          * Clear the timer interval (if any) of the element.
          *
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         removeInterval: function () {
             return $(this).each(function () {
@@ -317,7 +311,7 @@
          *
          * @param {function} _callback - The callback function that will be executed.
          * @param {int} _timeout - The intervals (in milliseconds) on how often to execute the callback.
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         updateInterval: function (_callback, _timeout) {
             const args = Array.prototype.slice.call(arguments, 2);
@@ -328,7 +322,7 @@
          * Sets or gets the value as integer.
          *
          * @param {number|string} [value] - if present the value to set; otherwise return the value.
-         * @return {JQuery|number} The value if the value parameter is not set.
+         * @return {jQuery|number} The value if the value parameter is not set.
          */
         intVal: function (value) {
             // get?
@@ -371,7 +365,7 @@
          * Sets the checkbox checked value.
          *
          * @param {boolean} checked - the checked value to set.
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         setChecked: function (checked) {
             return $(this).each(function () {
@@ -382,7 +376,7 @@
         /**
          * Toggle the checkbox checked value
          *
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         toggleChecked: function () {
             return $(this).each(function () {
@@ -437,7 +431,7 @@
         /**
          * Select content and set focus.
          *
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         selectFocus: function () {
             $(this).focus().select();
@@ -447,7 +441,7 @@
         /**
          * Select the first option in the list.
          *
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         selectFirstOption: function () {
             const value = $(this).find(':first').val();
@@ -457,7 +451,7 @@
         /**
          * Gets select option in the list.
          *
-         * @return {?JQuery} the selected element, if any; null otherwise.
+         * @return {?jQuery} the selected element, if any; null otherwise.
          */
         getSelectedOption: function () {
             return $(this).find(':selected');
@@ -465,10 +459,10 @@
 
         /**
          * Get the descendants of each element in the current set of matched
-         * elements, filtered by a selector, JQuery object, or element.
+         * elements, filtered by a selector, jQuery object, or element.
          *
          * @param {string} selector - a string containing a selector expression to match elements against.
-         * @return {?JQuery} the selected element or null if matching element's length is equal to 0.
+         * @return {?jQuery} the selected element or null if matching element's length is equal to 0.
          */
         findExists: function (selector) {
             const $elements = $(this).find(selector);
@@ -478,7 +472,7 @@
         /**
          * Remove all 'data' attributes.
          *
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         removeDataAttributes: function () {
             return $(this).each(function () {
@@ -492,7 +486,7 @@
         /**
          * Remove duplicate classes.
          *
-         * @return {JQuery} The element for chaining.
+         * @return {jQuery} The element for chaining.
          */
         removeDuplicateClasses: function () {
             return this.each(function (_index, element) {
@@ -530,13 +524,13 @@
          */
         hasAttr: function (name) {
             const attr = $(this).attr(name);
-            return typeof attr !== "undefined" && attr !== false && attr !== null;
+            return typeof attr !== 'undefined' && attr !== false && attr !== null;
         },
 
         /**
          * Drop first, last and all 2 consecutive separators in a drop-down menu.
          *
-         * @return {JQuery} - the element for chaining.
+         * @return {jQuery} - the element for chaining.
          */
         removeSeparators: function () {
             const selector = '.dropdown-divider';
@@ -564,8 +558,42 @@
                     });
                 }
             });
-        }
+        },
+
+        // toast: function (options = {}) {
+        //     return this.each(function () {
+        //         const data = new bootstrap.Toast(this, options);
+        //         return this;
+        //     });
+        // },
     });
+
+    if (!$.fn.popover) {
+        $.fn.popover = function (options = {}) {
+            return this.each(function () {
+                const data = new bootstrap.Popover(this, options);
+                return data;
+            });
+        };
+    }
+
+    if (!$.fn.tooltip) {
+        $.fn.tooltip = function (options = {}) {
+            return this.each(function () {
+                const data = new bootstrap.Tooltip(this, options);
+                return data;
+            });
+        };
+    }
+
+    // if (!$.fn.toast) {
+    //     $.fn.toast = function (options = {}) {
+    //         return this.each(function () {
+    //             const data = new bootstrap.Toast(this, options);
+    //             return data;
+    //         });
+    //     };
+    // }
 
     /**
      * -------------- Global Ajax functions --------------

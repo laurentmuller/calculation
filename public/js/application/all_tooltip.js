@@ -5,5 +5,5 @@
  */
 (function ($) {
     'use strict';
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-bs-toggle="tooltip"]').tooltip();
 }(jQuery));

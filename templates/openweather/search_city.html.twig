@@ -10,7 +10,7 @@
 {%- set cancel_path = city ? path('openweather_weather', {'city': city, 'units': units}) : null -%}
 {# body #}
 {% block card_body %}
-<div class="form-row">
+<div class="row">
     <div class="col-md-7">
         {{ form_row(form.query) }}
     </div>
@@ -20,7 +20,7 @@
 </div>
 {% if cities is defined %}
     {%- set cities_length = cities|length -%}
-    <p class="{{ cities_length ? 'text-muted' : 'mb-0 text-danger' }}">{{ 'counters.weather_cities'|trans({count: cities_length}) }}</p>
+    <p class="{{ cities_length ? 'text-body-secondary' : 'mb-0 text-danger' }}">{{ 'counters.weather_cities'|trans({count: cities_length}) }}</p>
     {% if cities_length %}
     <table class="table table-hover table-sm mb-0">
         <tbody data-link="row" class="rowlink">
@@ -35,7 +35,7 @@
                     <span class="small" title="{{ 'openweather.fields.temp'|trans }}">{{ value_temp(current.main.temp, city.units.temperature) }}</span><span class="small">, {{ current.weather.description }}</span>
                 </td>
                 <td class="w-25">
-                    <span class="flag-emoji mr-1" title="{{ city.country_name -}}">{{ city.country|flag_emoji }}</span>{{- city.country_name }}
+                    <span class="flag-emoji me-1" title="{{ city.country_name -}}">{{ city.country|flag_emoji }}</span>{{- city.country_name }}
                 </td>
             <td>
         {% endfor %}

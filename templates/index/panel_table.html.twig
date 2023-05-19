@@ -22,16 +22,12 @@
 {# content #}
 <div class="card mb-2">
     <div class="card-header">
-        <div class="row">
-            <div class="col-auto mr-auto">
-                <h1 class="card-title">{{ icon(ICON_CALCULATION, 'index.panel_table_title') }}</h1>
-            </div>
+        <div class="d-flex flex-wrap align-items-center gap-1">
+            <h1 class="card-title flex-fill">{{ icon(ICON_CALCULATION, 'index.panel_table_title') }}</h1>
             {%- if add_page -%}
-            <div class="col-auto d-print-none">
                 {%- set params = route_params(app.request)|merge({'caller': caller}) -%}
                 {%- set path = path(add_page, params) -%}
-                <a href="{{ path }}" class="p-0">{{ 'calculation.add.title'|trans }}</a>
-            </div>
+                <a href="{{ path }}" class="d-print-none">{{ 'calculation.add.title'|trans }}</a>
             {%- endif -%}
         </div>
     </div>
@@ -39,21 +35,17 @@
         {% if is_calculations %}
         <div class="table-responsive">
             <table id="calculations" class="table table-hover table-sm m-0">
-                <tbody{% if row_link %} data-link="row" class="rowlink"{% endif %}>
+                <tbody{% if row_link %} data-link="row" class="rowlink" data-target="a.btn-default"{% endif %}>
                 {% for calculation in calculations %}
                     {%- set id = calculation.id -%}
                     {%- set menu_id = 'dropdownMenuLast_' ~ id -%}
                     {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
                     {%- set class_primary = id == selection ? 'table-primary' : '' -%}
-                    {%- set class_muted = calculation.stateEditable ? '' : 'text-muted' -%}
+                    {%- set class_muted = calculation.stateEditable ? '' : 'text-body-secondary' -%}
                     {%- set class_name = (class_primary ~ ' ' ~ class_muted)|trim -%}
-                    <tr data-id="{{ id }}" {% if class_name %} class="{{ class_name }}"{% endif %}>
+                    <tr data-id="{{ id }}"{% if class_name %} class="{{ class_name }}"{% endif %}>
                         <td class="text-id text-border user-select-none" style="{{ properties.stateCss(calculation.stateColor) }}">
-                        {%- if row_link and default_page -%}
-                            <a href="{{ path(default_page, params) }}">{{ calculation.id|identifier }}</a>
-                        {%- else -%}
                             {{- calculation.id|identifier -}}
-                         {%- endif -%}
                         </td>
                         <td class="text-date user-select-none">{{ calculation.date|locale_date }}</td>
                         <td class="text-state user-select-none">{{ calculation.stateCode }}</td>
@@ -61,50 +53,47 @@
                         <td class="text-description text-cell user-select-none">{{ calculation.description }}</td>
                         {%- if user_service.application.marginBelow(calculation.overallMargin) -%}
                             {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
-                            <td class="text-percent user-select-none text-danger has-tooltip" data-html="true" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
+                            <td class="text-percent user-select-none text-danger has-tooltip" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
                         {%- else -%}
                             <td class="text-percent user-select-none">{{ calculation.overallMargin|percent }}</td>
                         {%- endif -%}
                         <td class="text-currency user-select-none">{{ calculation.overallTotal|amount }}</td>
                         {%- if is_drop_down -%}
                             <td class="actions rowlink-skip d-print-none">
-                                <div class="dropdown dropleft text-right">
-                                    {{ dropdownEllipsis(menu_id) }}
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="{{ menu_id }}">
-                                    {%- if edit_page -%}
-                                        {{- dropdownSeparator() }}
-                                        {%- set path = path(edit_page, params) -%}
-                                        {{ dropdownItemWithClass(path, 'calculation.edit.title_short', ICON_EDIT, 'btn-default') }}
-                                    {%- endif -%}
-                                    {%- if state_page -%}
-                                        {%- set path = path(state_page, params) -%}
-                                        {{ dropdownItem(path, 'calculation.list.state_title', ICON_CALCULATION_STATE) }}
-                                    {%- endif -%}
-                                    {%- if delete_page -%}
-                                        {{- dropdownSeparator() }}
-                                        {%- set path = path(delete_page, params) -%}
-                                        {{ dropdownItemWithClass(path, 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
-                                    {%- endif -%}
-                                    {%- if add_page -%}
-                                        {{- dropdownSeparator() }}
-                                        {%- set path = path(add_page, params) -%}
-                                        {{ dropdownItem(path, 'calculation.add.title', ICON_ADD) }}
-                                        {%- set path = path(clone_page, params) -%}
-                                        {{ dropdownItem(path, 'common.button_clone', ICON_COPY) }}
-                                    {%- endif -%}
-                                    {%- if show_page -%}
-                                        {{- dropdownSeparator() }}
-                                        {%- set path = path(show_page, params) -%}
-                                        {{ dropdownItem(path, 'calculation.show.title', ICON_SHOW) }}
-                                    {%- endif -%}
-                                    {%- if single_page_pdf -%}
-                                        {{- dropdownSeparator() }}
-                                        {%- set path = path(single_page_pdf, {'id': id}) -%}
-                                        {{ dropdownItemExternal(path, 'calculation.list.pdf_single_title', ICON_PDF) }}
-                                        {%- set path = path(single_page_excel, {'id': id}) -%}
-                                        {{ dropdownItemExternal(path, 'calculation.list.excel_single_title', ICON_EXCEL) }}
-                                    {%- endif -%}
-                                    </div>
+                                {{ dropdownEllipsis() }}
+                                <div class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
+                                {%- if edit_page -%}
+                                    {%- set path = path(edit_page, params) -%}
+                                    {{ dropdownItemWithClass(path, 'calculation.edit.title_short', ICON_EDIT, 'btn-default') }}
+                                {%- endif -%}
+                                {%- if state_page -%}
+                                    {%- set path = path(state_page, params) -%}
+                                    {{ dropdownItem(path, 'calculation.list.state_title', ICON_CALCULATION_STATE) }}
+                                {%- endif -%}
+                                {%- if delete_page -%}
+                                    {{- dropdownSeparator() }}
+                                    {%- set path = path(delete_page, params) -%}
+                                    {{ dropdownItemWithClass(path, 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
+                                {%- endif -%}
+                                {%- if add_page -%}
+                                    {{- dropdownSeparator() }}
+                                    {%- set path = path(add_page, params) -%}
+                                    {{ dropdownItem(path, 'calculation.add.title', ICON_ADD) }}
+                                    {%- set path = path(clone_page, params) -%}
+                                    {{ dropdownItem(path, 'common.button_clone', ICON_COPY) }}
+                                {%- endif -%}
+                                {%- if show_page -%}
+                                    {{- dropdownSeparator() }}
+                                    {%- set path = path(show_page, params) -%}
+                                    {{ dropdownItem(path, 'calculation.show.title', ICON_SHOW) }}
+                                {%- endif -%}
+                                {%- if single_page_pdf -%}
+                                    {{- dropdownSeparator() }}
+                                    {%- set path = path(single_page_pdf, {'id': id}) -%}
+                                    {{ dropdownItemExternal(path, 'calculation.list.pdf_single_title', ICON_PDF) }}
+                                    {%- set path = path(single_page_excel, {'id': id}) -%}
+                                    {{ dropdownItemExternal(path, 'calculation.list.excel_single_title', ICON_EXCEL) }}
+                                {%- endif -%}
                                 </div>
                             </td>
                         {% endif %}
@@ -117,21 +106,21 @@
             {{ macros.empty() }}
         {%- endif -%}
     </div>
-    <div class="card-footer d-print-none p-2 d-flex">
-        <div class="ml-auto form-inline mr-2">
-            <div class="form-control-sm custom-control custom-switch" title="{{ 'index.panel_table_user_help'|trans }}">
-                <input type="checkbox" class="custom-control-input" id="restrict" data-url="{{ url('homepage') }}" data-value="{{ restrict }}"{% if restrict %} checked="checked"{% endif %}>
-                <label class="custom-control-label" for="restrict">{{ 'index.panel_table_user'|trans }}</label>
+    <div class="card-footer d-print-none p-2">
+        <div class="d-flex flex-wrap align-items-center gap-1">
+            <div class="ms-sm-auto form-control-sm form-check form-switch" title="{{ 'index.panel_table_user_help'|trans }}">
+                <input type="checkbox" class="form-check-input" id="restrict" data-url="{{ url('homepage') }}" data-value="{{ restrict }}"{% if restrict %} checked="checked"{% endif %}>
+                <label class="form-check-label" for="restrict">{{ 'index.panel_table_user'|trans }}</label>
             </div>
-            {% set counter = user_service.panelCalculation %}
-            <div class="dropdown dropdown-counter" title="{{ 'index.panel_table_count'|trans }}" data-path="{{ path('homepage_calculation') }}" data-value="{{ counter }}">
-                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">{{ counter }}</button>
-                <div class="dropdown-menu">
-                    {% for index in range(5, 25, 5) %}
-                        <button class="dropdown-item dropdown-item-counter{% if counter == index %} active{% endif %}" data-value="{{ index }}" >{{ 'counters.calculations'|trans({'count': index}) }}</button>
-                    {% endfor %}
-                </div>
-            </div>
+           {% set counter = user_service.panelCalculation %}
+           <div class="dropdown dropdown-counter" title="{{ 'index.panel_table_count'|trans }}" data-path="{{ path('homepage_calculation') }}" data-value="{{ counter }}">
+               <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ counter }}</button>
+               <div class="dropdown-menu">
+               {% for index in range(5, 25, 5) %}
+                   <button class="dropdown-item dropdown-item-counter{% if counter == index %} active{% endif %}" data-value="{{ index }}" >{{ 'counters.calculations'|trans({'count': index}) }}</button>
+               {% endfor %}
+               </div>
+           </div>
         </div>
     </div>
 </div>

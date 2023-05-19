@@ -15,9 +15,9 @@
             showModification: false,
             spinner: {
                 text: $('.card-title').text() + '...',
-                css: {
-                    top: '25%',
-                }
+                // css: {
+                //     top: '25%',
+                // }
             }
         }
     );

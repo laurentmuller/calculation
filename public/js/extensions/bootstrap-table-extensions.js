@@ -24,12 +24,12 @@
  * @property {string} view - the display mode ('table' or 'custom').
  * @property {string} searchText - the search text.
  *
- * @typedef {JQuery} JQueryTable - the bootstrap table.
+ * @typedef {jQuery} jQueryTable - the bootstrap table.
  * @property {Options} getOptions - the options.
  * @property {boolean} isCustomView - true if custom view is displayed.
- * @property {JQuery} getCustomView - get the custom view.
- * @property {JQueryTable} enableKeys - enable the key handler.
- * @property {JQueryTable} disableKeys - disable the key handler.
+ * @property {jQuery} getCustomView - get the custom view.
+ * @property {jQueryTable} enableKeys - enable the key handler.
+ * @property {jQueryTable} disableKeys - disable the key handler.
  */
 
 /**
@@ -40,11 +40,11 @@
  */
 function loadingTemplate(message) {
     'use strict';
-    return `<div class="alert alert-info text-center loading-message" role="alert"><i class="fa-solid fa-spinner fa-spin mr-2"></i>${message}</div>`;
+    return `<div class="alert bg-body-secondary border border-secondary-subtle text-center loading-message" role="alert"><i class="fa-solid fa-spinner fa-spin me-2"></i>${message}</div>`;
 }
 
 /**
- * JQuery's extension for Bootstrap tables, rows and cells.
+ * jQuery's extension for Bootstrap tables, rows and cells.
  */
 (function ($) {
     'use strict';
@@ -78,7 +78,7 @@ function loadingTemplate(message) {
         /**
          * Update the selected row.
          *
-         * @param {JQueryTable} $table - the bootstrap table.
+         * @param {jQueryTable} $table - the bootstrap table.
          * @return {boolean} this function returns always true.
          */
         updateRow: function ($table) {
@@ -122,10 +122,10 @@ function loadingTemplate(message) {
          * Initialize the table-boostrap.
          *
          * @param {object} options - the options to merge with default.
-         * @return {JQueryTable} this instance for chaining.
+         * @return {jQueryTable} this instance for chaining.
          */
         initBootstrapTable: function (options) {
-            /** @var JQueryTable $this */
+            /** @var jQueryTable $this */
             const $this = $(this);
 
             // settings
@@ -182,7 +182,7 @@ function loadingTemplate(message) {
 
                     // update action buttons
                     const title = $this.data('no-action-title');
-                    $this.find('td.actions button[data-toggle="dropdown"]').each(function () {
+                    $this.find('td.actions button[data-bs-toggle="dropdown"]').each(function () {
                         const $button = $(this);
                         if ($button.siblings('.dropdown-menu').children().length === 0) {
                             $button.attr('title', title).toggleDisabled(true);
@@ -205,11 +205,10 @@ function loadingTemplate(message) {
                     if (data.length !== 0) {
                         // hide empty data message
                         $this.hideCustomViewMessage();
-
                         const params = $this.getParameters();
                         const selector = '.custom-view-actions:eq(%index%)';
                         const callback = typeof options.onRenderCustomView === 'function' ? options.onRenderCustomView : false;
-                        $this.find('tbody tr .actions').each(function (index, element) {
+                        $this.find('tbody tr[data-index] .actions').each(function (index, element) {
                             // copy actions
                             const $rowActions = $(element).children();
                             const rowSelector = selector.replace('%index%', '' + index);
@@ -236,9 +235,7 @@ function loadingTemplate(message) {
                     $this.saveParameters();
                 },
 
-
                 onSearch: function (searchText) {
-                    // update data
                     $this.data('search-text', searchText);
                 }
             };
@@ -249,7 +246,7 @@ function loadingTemplate(message) {
             $this.enableKeys().highlight();
 
             // select row on right click
-            $this.find('tbody').on('mousedown', 'tr', function (e) {
+            $this.find('tbody').on('mousedown', 'tr[data-index]', function (e) {
                 if (e.button === 2) {
                     $(this).updateRow($this);
                 }
@@ -258,7 +255,7 @@ function loadingTemplate(message) {
             // handle items in custom view
             $this.parents('.bootstrap-table').on('mousedown', '.custom-item', function () {
                 const index = $(this).parent().index();
-                const $row = $this.find('tbody tr:eq(' + index + ')');
+                const $row = $this.find('tbody tr[data-index]:eq(' + index + ')');
                 if ($row.length) {
                     $row.updateRow($this);
                 }
@@ -285,8 +282,9 @@ function loadingTemplate(message) {
                     }
                 }
             });
+
             // search focus
-            $('input.search-input').on('focus', function () {
+            $this.getSearchInput().on('focus', function () {
                 $(this).trigger('select');
             });
 
@@ -338,7 +336,20 @@ function loadingTemplate(message) {
          * @return {string} the search text.
          */
         getSearchText: function () {
-            return String($(this).data('search-text'));
+            return String($(this).data('search-text') || '');
+        },
+
+        /**
+         * Gets the search input.
+         *
+         * @return {jquery} the search input.
+         */
+        getSearchInput: function () {
+            const options = $(this).getOptions();
+            if (typeof options.searchSelector === 'string') {
+                return $(options.searchSelector);
+            }
+            return $('.bootstrap-table .search-input');
         },
 
         /**
@@ -390,7 +401,7 @@ function loadingTemplate(message) {
         /**
          * Gets the selected row.
          *
-         * @return {JQuery} the selected row, if any; null otherwise.
+         * @return {jQuery} the selected row, if any; null otherwise.
          */
         getSelection: function () {
             const $this = $(this);
@@ -401,7 +412,7 @@ function loadingTemplate(message) {
         /**
          * Scroll the selected row, if any, into the visible area of the browser window.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         showSelection: function () {
             const $this = $(this);
@@ -428,7 +439,7 @@ function loadingTemplate(message) {
         /**
          * Gets the custom view container.
          *
-         * @return {JQuery} the custom view container, if displayed, null otherwise.
+         * @return {jQuery} the custom view container, if displayed, null otherwise.
          */
         getCustomView: function () {
             const $this = $(this);
@@ -442,7 +453,7 @@ function loadingTemplate(message) {
         /**
          * Save parameters to the session.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         saveParameters: function () {
             const $this = $(this);
@@ -457,7 +468,7 @@ function loadingTemplate(message) {
          * Update the href attribute of the actions.
          *
          * @param {array} rows - the rendered data.
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         updateHref: function (rows) {
             const $this = $(this);
@@ -467,7 +478,7 @@ function loadingTemplate(message) {
             const onRenderAction = typeof options.onRenderAction === 'function' ? options.onRenderAction : false;
 
             // run over rows
-            $this.find('tbody tr').each(function () {
+            $this.find('tbody tr[data-index]').each(function () {
                 const $row = $(this);
                 const row = rows[$row.index()];
                 const $paths = $(this).find('.dropdown-item-path');
@@ -494,7 +505,7 @@ function loadingTemplate(message) {
          * Refresh/reload the remote server data.
          *
          * @param {object} [options] - the refresh options.
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         refresh: function (options) {
             return $(this).bootstrapTable('refresh', options || {});
@@ -504,7 +515,7 @@ function loadingTemplate(message) {
          * Reset the search text.
          *
          * @param {string} [text] - the optional search text.
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         resetSearch: function (text) {
             return $(this).bootstrapTable('resetSearch', text || '');
@@ -514,7 +525,7 @@ function loadingTemplate(message) {
          * Refresh the table options.
          *
          * @param {Object} [options] - the options to refresh.
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         refreshOptions: function (options) {
             return $(this).bootstrapTable('refreshOptions', options || {});
@@ -523,7 +534,7 @@ function loadingTemplate(message) {
         /**
          * Toggles the view between the table and the custom view.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         toggleCustomView: function () {
             return $(this).bootstrapTable('toggleCustomView');
@@ -533,7 +544,7 @@ function loadingTemplate(message) {
          * Toggles the display mode.
          *
          * @param {string} mode - the display mode to set ('table' or 'custom').
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         setDisplayMode: function (mode) {
             const $this = $(this);
@@ -557,7 +568,7 @@ function loadingTemplate(message) {
         /**
          * Highlight matching text.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         highlight: function () {
             const $this = $(this);
@@ -639,7 +650,7 @@ function loadingTemplate(message) {
          * @param {string} sortName - the sort field.
          * @param {string} sortOrder - the sort order ('asc' or 'desc').
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         sort: function (sortName, sortOrder) {
             const data = this.getBootstrapTable();
@@ -658,7 +669,7 @@ function loadingTemplate(message) {
         selectFirstRow: function () {
             const $this = $(this);
             const $row = $this.getSelection();
-            const $first = $this.find('tbody tr:first');
+            const $first = $this.find('tbody tr[data-index]:first');
             if ($first.length && $first !== $row) {
                 return $first.updateRow($this);
             }
@@ -673,7 +684,7 @@ function loadingTemplate(message) {
         selectLastRow: function () {
             const $this = $(this);
             const $row = $this.getSelection();
-            const $last = $this.find('tbody tr:last');
+            const $last = $this.find('tbody tr[data-index]:last');
             if ($last.length && $last !== $row) {
                 return $last.updateRow($this);
             }
@@ -688,7 +699,7 @@ function loadingTemplate(message) {
         selectPreviousRow: function () {
             const $this = $(this);
             const $row = $this.getSelection();
-            const $prev = $row.prev('tr');
+            const $prev = $row.prev('tr[data-index]');
             if ($row.length && $prev.length) {
                 return $prev.updateRow($this);
             }
@@ -704,7 +715,7 @@ function loadingTemplate(message) {
         selectNextRow: function () {
             const $this = $(this);
             const $row = $this.getSelection();
-            const $next = $row.next('tr');
+            const $next = $row.next('tr[data-index]');
             if ($row.length && $next.length) {
                 return $next.updateRow($this);
             }
@@ -716,7 +727,7 @@ function loadingTemplate(message) {
          * Finds an action for the given selector
          *
          * @param {string} actionSelector - the action selector.
-         * @return {JQuery} the action, if found; null otherwise.
+         * @return {jQuery} the action, if found; null otherwise.
          */
         findAction: function (actionSelector) {
             let $link;
@@ -765,7 +776,7 @@ function loadingTemplate(message) {
         /**
          * Enable the key handler.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         enableKeys: function () {
             const $this = $(this);
@@ -833,7 +844,7 @@ function loadingTemplate(message) {
         /**
          * Disable the key handler.
          *
-         * @return {JQuery} this instance for chaining.
+         * @return {jQuery} this instance for chaining.
          */
         disableKeys: function () {
             const $this = $(this);

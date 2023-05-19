@@ -4,7 +4,7 @@
 {%- set submit_text = submit_text|default('common.button_ok') -%}
 {%- set submit_class = submit_class|default('btn btn-form btn-primary') -%}
 {%- set submit_params = submit_params|default({}) -%}
-{%- set form_attr = form_attr|default({})|merge({'id': 'edit-form', 'data-save': 'common.save_data'|trans}) -%}
+{%- set form_attr = form_attr|default({})|merge({'id': 'edit-form', 'data-save': 'common.save_data'|trans, 'class': 'position-relative'}) -%}
 {%- set cancel_text = cancel_text|default('common.button_cancel') -%}
 {%- if cancel_path is not defined -%}
     {%- set cancel_path = cancel_url(app.request, item|default(null), page_list|default('homepage')) -%}
@@ -28,19 +28,15 @@
 {# footer #}
 {% block card_footer -%}
     {%- set show_required = show_required is defined ? show_required : true -%}
-    <div class="row align-items-center no-gutters">
-        <div class="col-auto mr-auto">
-            {% block actions_form -%}
-                {{ button_submit(submit_text, submit_class, submit_params) }}
-                {% if cancel_path|default(false) -%}
-                    {{ button_cancel(cancel_path, cancel_text) }}
-                {%- endif %}
-            {%- endblock %}
-        </div>
+    <div class="d-flex flex-wrap align-items-center gap-1">
+        {% block actions_form -%}
+            {{ button_submit(submit_text, submit_class, submit_params) }}
+            {% if cancel_path|default(false) -%}
+                {{ button_cancel(cancel_path, cancel_text) }}
+            {%- endif %}
+        {%- endblock %}
         {% if show_required -%}
-            <div class="col-auto">
-                {% block required_form -%}<small>{{ 'common.required'|trans|raw }}</small>{%- endblock %}
-            </div>
+            <small class="flex-grow-1 align-self-start text-sm-end">{{ 'common.required'|trans|raw }}</small>
         {%- endif %}
     </div>
 {%- endblock %}
@@ -51,14 +47,14 @@
 {%- endblock %}
 {# javascript #}
 {% block javascripts -%}
-    {% if app.debug %}
-        {{- parent() -}}
-        {{- asset_js('js/vendor/jquery-validation/jquery.validate.js') }}
-        {{- asset_js('js/vendor/jquery-validation/additional-methods.js') }}
-        {{- asset_js('js/vendor/jquery-validation/localization/messages_fr.js') }}
-        {{- asset_js('js/extensions/validator-extensions.js') }}
-        {{- asset_js('js/extensions/validator-extensions-fr.js') -}}
-    {% else %}
-        {{- asset_js('js/core_edit.js') }}
-    {% endif %}
+{% if app.debug %}
+    {{- parent() -}}
+    {{- asset_js('js/vendor/jquery-validation/jquery.validate.js') }}
+    {{- asset_js('js/vendor/jquery-validation/additional-methods.js') }}
+    {{- asset_js('js/vendor/jquery-validation/localization/messages_fr.js') }}
+    {{- asset_js('js/extensions/validator-extensions.js') }}
+    {{- asset_js('js/extensions/validator-extensions-fr.js') -}}
+{% else %}
+    {{- asset_js('js/core_edit.js') }}
+{% endif %}
 {%- endblock %}

@@ -33,24 +33,22 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
     use EnumTranslatableTrait;
 
     /*
+    * The light theme.
+    */
+    #[EnumCase(extras: ['icon' => 'fa-solid fa-circle-half-stroke', EnumDefaultInterface::NAME => true])]
+    case AUTO = 'auto';
+
+    /*
      * The dark theme.
      */
-    #[EnumCase(extras: ['icon' => 'fa-regular fa-moon'])]
+    #[EnumCase(extras: ['icon' => 'fa-solid fa-moon'])]
     case DARK = 'dark';
 
     /*
      * The light theme.
      */
-    #[EnumCase(extras: ['icon' => 'fa-regular fa-sun', EnumDefaultInterface::NAME => true])]
+    #[EnumCase(extras: ['icon' => 'fa-solid fa-sun'])]
     case LIGHT = 'light';
-
-    /**
-     * Gets the CSS style sheet.
-     */
-    public function getCss(): string
-    {
-        return \sprintf('js/vendor/bootstrap/css/bootstrap-%s.css', $this->value);
-    }
 
     /**
      * Gets the icon.
@@ -82,6 +80,7 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
     public static function sorted(): array
     {
         return [
+            Theme::AUTO,
             Theme::LIGHT,
             Theme::DARK,
         ];

@@ -50,7 +50,7 @@
         /**
          * Gets the input element.
          *
-         * @return {JQuery|null|JQuery<HTMLElement>}
+         * @return {jQuery|null|jQuery<HTMLElement>}
          */
         getInput() {
             return this.$input;
@@ -71,9 +71,8 @@
             options.onStartEdit = this._checkFunction(options.onStartEdit);
             options.onCancelEdit = this._checkFunction(options.onCancelEdit);
             options.onEndEdit = this._checkFunction(options.onEndEdit);
-
-            options.parser = this._checkFunction(options.parser);
             options.formatter = this._checkFunction(options.formatter);
+            options.parser = this._checkFunction(options.parser);
 
             // proxies
             this.clickProxy = (e) => this._click(e);
@@ -109,12 +108,14 @@
             const title = valid ? options.tooltipEdit : options.tooltipError;
 
             const attributes = $.extend(true, {
-                'data-custom-class': customClass,
+                'data-bs-custom-class': customClass,
+                'data-bs-toggle': 'tooltip',
+                'data-bs-trigger': 'manual',
+                'data-bs-title': title,
                 'type': options.type,
                 'required': required,
                 'value': this.value,
-                'class': className,
-                'title': title
+                'class': className
             }, options.attributes);
             this.$input = $('<input>', attributes);
 
@@ -149,18 +150,17 @@
             const required = options.required;
             const valid = !required || this.$input.val();
             const title = valid ? options.tooltipEdit : options.tooltipError;
-            if (this.$input.attr('data-original-title') === title) {
+            const customClass = valid ? options.tooltipEditClass : options.tooltipErrorClass;
+            if (this.$input.attr('data-bs-title') === title) {
                 return;
             }
-            if (valid) {
-                this.$input.removeClass('is-invalid');
-                this.$input.data('customClass', options.tooltipEditClass);
-            } else {
-                this.$input.addClass('is-invalid');
-                this.$input.data('customClass', options.tooltipErrorClass);
-            }
+            this.$input.attr( {
+                'data-bs-custom-class': customClass,
+                'data-bs-title': title,
+                'data-bs-html': true
+            }).toggleClass('is-invalid', !valid);
             if (title) {
-                this.$input.attr('title', title).tooltip('dispose').tooltip('toggle');
+                this.$input.tooltip('dispose').tooltip('show');
             }
 
             return this;
@@ -218,8 +218,8 @@
                     this.$input.data('bs.input-number-format').destroy();
                 }
                 this.$input.off('blur', this.blurProxy)
-                    .off('input', this.inputProxy)
                     .off('keydown', this.keydownProxy)
+                    .off('input', this.inputProxy)
                     .tooltip('dispose');
                 this.$input.remove();
                 this.$input = null;

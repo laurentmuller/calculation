@@ -99,7 +99,7 @@ class ProductUpdater implements ServiceSubscriberInterface
             ->addNumberType();
         $helper->field('round')
             ->help('product.update.round_help')
-            ->helpClass('ml-4')
+            ->helpClass('ms-4')
             ->notRequired()
             ->addCheckboxType();
         $helper->addCheckboxSimulate()

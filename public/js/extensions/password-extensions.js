@@ -102,7 +102,7 @@
     });
 
     // update password types
-    // $('[data-toggle='password']').password();
+    // $('[data-bs-toggle='password']').password();
     $('input:password').togglePassword();
 
 }(jQuery));

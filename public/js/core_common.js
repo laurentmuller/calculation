@@ -23,4 +23,5 @@
 /**
  * Common Files
  */
+<!--#include file="application/theme.js" -->
 <!--#include file="application/core_common.js" -->

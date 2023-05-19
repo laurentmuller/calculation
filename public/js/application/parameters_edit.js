@@ -5,18 +5,18 @@
 /**
  * Gets the active page.
  *
- * @return {JQuery<HTMLElement>|null} the active page or null if none.
+ * @return {jQuery<HTMLElement>|null} the active page or null if none.
  */
 function getActivePage() {
     'use strict';
-    const $source = $('#parent_accordion .collapse.show');
+    const $source = $('#parent_accordion .accordion-collapse.collapse.show');
     return $source.length ? $source : null;
 }
 
 /**
  * Reset widgets to default values.
  *
- * @param {JQuery} [$source] the active page or null to reset all values.
+ * @param {jQuery} [$source] the active page or null to reset all values.
  */
 function setDefaultValues($source) {
     'use strict';
@@ -211,18 +211,19 @@ function handleEmail() {
         displayNotification();
     });
 
-    // toggle titles
-    $('.toggle-icon').on('show.bs.collapse', function () {
-        const $link = $(this).prev();
-        $link.attr('title', $link.data('hide'));
-    }).on('hide.bs.collapse', function () {
-        const $link = $(this).prev();
-        $link.attr('title', $link.data('show'));
-    }).on('shown.bs.collapse', function () {
+    $('#parent_accordion .accordion-item').on('shown.bs.collapse', function () {
         const $this = $(this);
-        if ($this.find('.is-invalid').length === 0) {
-            $this.find(':input:first').trigger('focus');
+        const $button= $this.find('.accordion-button');
+        $button.attr('title', $button.data('hide'));
+        const $page = getActivePage();
+        if ($page && $page.find('.is-invalid').length === 0) {
+            $page.find(':input:first').trigger('focus');
         }
+        updateVisibleButton();
+    }).on('hidden.bs.collapse', function () {
+        const $this = $(this);
+        const $button= $this.find('.accordion-button');
+        $button.attr('title', $button.data('show'));
         updateVisibleButton();
     });
     updateVisibleButton();

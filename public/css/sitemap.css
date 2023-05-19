@@ -129,7 +129,7 @@
 .primary-nav ul ul ul {
     margin-top: .6em;
     padding-top: .6em;
-    padding-bottom: .625em;
+    /*padding-bottom: .625em;*/
 }
 
 .primary-nav ul ul ul li {
@@ -193,7 +193,7 @@
     display: block;
     position: absolute;
     border-width: 0;
-    border-color: #e3e3e3;
+    border-color: var(--bs-dark-border-subtle);
     border-style: solid;
     z-index: -1;
 }
@@ -400,4 +400,4 @@ that you don't need, and your sitemap layout will work perfectly. */
 @media screen and (min-width: 119em) {
 	.primary-nav > ul > li {	max-width: 10%; }
 }
- */
+*/

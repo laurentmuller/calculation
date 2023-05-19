@@ -226,9 +226,6 @@
             // the progress bar height or 0 for none
             progress: 1,
 
-            // the toast z-index
-            zIndex: 3,
-
             // auto hide after delay
             autohide: true,
 
@@ -341,9 +338,7 @@
             const className = 'toast-container toast-plugin ' + options.position;
 
             // style
-            const css = {
-                'z-index': options.zIndex
-            };
+            const css = {};
             options.position.split('-').forEach(function (edge) {
                 const key = 'margin-' + edge;
                 const value = options[key.camelize()];
@@ -454,9 +449,9 @@
                     break;
             }
 
-            // icon only ?
+            // icon only
             if (!options.title && !options.displayClose && !options.displaySubtitle) {
-                //clazz += ' py-2';
+               clazz += ' py-2';
             }
 
             // create

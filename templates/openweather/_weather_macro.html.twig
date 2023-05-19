@@ -1,15 +1,9 @@
 {% macro title(title, target) %}
-<div class="bg-secondary-subtle border px-2 py-1 mb-2">
-    <div class="row">
-        <div class="col-9">
-            <h6 class="mb-0">{{ title }}</h6>
-        </div>
-        <div class="col-3 text-end d-print-none">
-            <a href="#" class="alert-link" data-bs-toggle="modal" data-bs-target="#{{ target }}" title="{{ 'dialog_raw_data.tooltip'|trans }}">
-                <i class="fa-solid fa-code"></i>
-            </a>
-        </div>
-    </div>
+<div class="bg-body-secondary border d-flex align-items-center gap-1 px-2 py-1 mb-2">
+    <span class="flex-fill fw-bold">{{ title }}</span>
+    <a href="#" class="alert-link d-print-none" data-bs-toggle="modal" data-bs-target="#{{ target }}" title="{{ 'dialog_raw_data.tooltip'|trans }}">
+        <i class="fa-solid fa-code"></i>
+    </a>
 </div>
 {% endmacro %}
 

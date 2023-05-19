@@ -39,7 +39,7 @@
         </div>
     </div>
     {% if is_states %}
-        <div class="card-body index-parent no-gutters p-1">
+        <div class="card-body index-parent g-0 p-1">
             {% for state in states %}
                 {% set parameters = state.id ? {'stateId': state.id} : {} %}
                 {{ _self.cardEntry(state, table_path, parameters, min_margin) }}

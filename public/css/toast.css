@@ -3,10 +3,6 @@
 /**
  * positions
  */
-.toast-plugin {
-    position: fixed;
-}
-
 .toast-plugin.top-left {
     top: 0;
     left: 0;
@@ -84,6 +80,7 @@
 .toast-plugin .toast-body {
     background-color: var(--bs-body-bg);
 }
+
 /*
  * close button
  */

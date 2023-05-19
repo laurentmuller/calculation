@@ -9,7 +9,7 @@
 <div class="accordion-header position-relative" id="{{ id }}-header">
     <button class="accordion-button collapsed ps-1 py-1 position-relative" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" aria-controls="{{ id }}">
         {{- title -}}
-        <span class="badge bg-secondary rounded-pill position-absolute top-50 end-0 translate-middle" style="width: 45px;margin-right:25px;">
+        <span class="badge text-bg-secondary rounded-pill position-absolute top-50 end-0 translate-middle" style="width: 45px;margin-right:25px;">
             {{- countable|length|integer -}}
         </span>
     </button>
@@ -93,6 +93,7 @@
         </button>
     </div>
     <div class="accordion-collapse collapse" id="{{ id }}" aria-labelledby="{{ id }}-header" data-bs-parent="#parent_accordion">
+
         <div class="accordion-body" data-url="{{ route }}">
             <div class="alert mb-0" role="alert">
                 <span class="spinner-border spinner-border-sm text-secondary me-2" role="status"></span><span>{{ 'about.loading'|trans }}</span>

@@ -59,7 +59,7 @@
 {%- set name = item.vars.value.name|default('taskitem.fields.name'|trans) -%}
 {%- set title = show ? 'taskitem.edit.items_hide' : 'taskitem.edit.items_show' %}
 <div class="item list-group-item px-0">
-    <div class="item-header card-header-item bg-transparent px-3 pb-1" id="{{ id_header }}">
+        <div class="item-header card-header-item px-3 pb-1" id="{{ id_header }}">
         <div class="form-group">
             {{ form_row(item.name, {id_content: id_content, title: title, show: show}) }}
         </div>

@@ -9,7 +9,7 @@
 {% if result.valid %}{{ parent() }}{% else %} border-danger{% endif %}
 {%- endblock %}
 {% block card_header_class -%}
-{% if result.valid %}{{ parent() }}{% else %} text-white bg-danger{% endif %}
+{% if result.valid %}{{ parent() }}{% else %} text-bg-danger{% endif %}
 {%- endblock %}
 {# body #}
 {% block card_body %}

@@ -50,7 +50,7 @@
 {%- endmacro %}
 
 {% macro outputPopoverTotal(cell, separator) -%}
-<td class="bg-success text-white text-currency" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(cell, separator)|e }}">
+<td class="text-bg-success text-currency" data-bs-toggle="popover" data-bs-html="{{ _self.outputPopoverTitle(cell, separator)|e }}">
     {{- _self.format(cell.value) -}}
 </td>
 {%- endmacro %}
@@ -140,7 +140,7 @@
             <tr>
                 {%- if i == 1 -%}<td class="text-nowrap not-hover p-0"{{ _self.rowspan(col_level) }}{{ _self.colspan(row_level) }}>{{ _self.outputTitle(table, col_level) }}</td>{%- endif -%}
                 {{ _self.outputHeaders(table.column.childrenAtLevel(i), separator) }}
-                {%- if i == 1 -%}<td{{ _self.rowspan(col_level) }} class="text-currency bg-success text-white not-hover align-bottom">{{ total_title }}</td>{%- endif -%}
+                {%- if i == 1 -%}<td{{ _self.rowspan(col_level) }} class="text-currency text-bg-success not-hover align-bottom">{{ total_title }}</td>{%- endif -%}
             </tr>
             {%- endfor -%}
         </thead>
@@ -152,7 +152,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td class="text-nowrap not-hover bg-success text-white"{{ _self.colspan(row_level) }}>{{ total_title }}</td>
+                <td class="text-nowrap not-hover text-bg-success"{{ _self.colspan(row_level) }}>{{ total_title }}</td>
                 {%- for cell in table.column.childrenAtLevel(col_level) -%}
                     {{ _self.outputPopoverTotal(cell, separator) }}
                 {%- endfor -%}

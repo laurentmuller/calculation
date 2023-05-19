@@ -7,7 +7,7 @@
 {%- set show_required = false -%}
 {# class #}
 {% block card_class ' border-danger' %}
-{% block card_header_class ' text-white bg-danger' %}
+{% block card_header_class ' text-bg-danger' %}
 {# body #}
 {% block card_body -%}
 <p class="mb-0">{{ message|default('common.delete_message'|trans)|raw }}</p>

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Controller\ThemeController;
 use App\Enums\Theme;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Extension\AbstractExtension;
@@ -24,29 +23,37 @@ use Twig\TwigFunction;
 class ThemeExtension extends AbstractExtension
 {
     /**
+     * The key name for selected theme cookie.
+     */
+    private const KEY_THEME = 'THEME';
+
+    /**
      * {@inheritdoc}
      */
     public function getFunctions(): array
     {
         return [
             new TwigFunction('theme', $this->getTheme(...)),
-            new TwigFunction('theme_dark', $this->isDarkTheme(...)),
+            new TwigFunction('theme_value', $this->getThemeValue(...)),
         ];
     }
 
+    /**
+     * Gets the selected theme.
+     */
     private function getTheme(Request $request): Theme
     {
         $default = Theme::getDefault();
-        $value = $request->cookies->get(ThemeController::KEY_THEME, $default->value);
+        $value = $request->cookies->get(self::KEY_THEME, $default->value);
 
         return Theme::tryFrom($value) ?? $default;
     }
 
     /**
-     * Returns if the selected theme is dark.
+     * Returns the selected theme value.
      */
-    private function isDarkTheme(Request $request): bool
+    private function getThemeValue(Request $request): string
     {
-        return $request->cookies->getBoolean(ThemeController::KEY_DARK);
+        return $this->getTheme($request)->value;
     }
 }

@@ -4,11 +4,11 @@
 {% import 'calendar/_calendar.html.twig' as helper %}
 {# macros #}
 {% macro weekRow(month, week) %}
-{%- set class = 'border text-center text-white p-2 week' -%}
+{%- set class = 'border text-center p-2 week' -%}
 {% if week.current -%}
-    {%- set class = class ~ ' bg-primary' -%}
+    {%- set class = class ~ ' text-bg-primary' -%}
 {%- else -%}
-    {%- set class = class ~ ' bg-secondary' -%}
+    {%- set class = class ~ ' text-bg-secondary' -%}
 {%- endif %}
 {%- set week_title = 'calendar.week_show'|trans({'%week%': week.number, '%year%': week.year}) -%}
 <tr>
@@ -27,7 +27,7 @@
 {% endmacro %}
 
 {% macro monthTable(month) %}
-{%- set class = 'text-white fw-normal' ~ (month.current ? ' bg-primary' : ' bg-secondary') -%}
+{%- set class = 'fw-normal ' ~ (month.current ? 'text-bg-primary' : 'text-bg-secondary') -%}
 <div class="col-lg-4 col-md-6 mb-4">
     <table class="border w-100 calendar">
         <thead>

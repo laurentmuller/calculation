@@ -118,8 +118,7 @@
     function initThemeListener() {
         /** @param {CustomEvent<string>} e */
         window.addEventListener('theme', (e) => {
-            const selector = `[data-bs-theme-value="${e.detail}"]:first`;
-            const $link = $(selector);
+            const $link = $(`[data-bs-theme-value="${e.detail}"]:first`);
             if ($link.length) {
                 const message = $link.data('message');
                 const title = $link.data('title');

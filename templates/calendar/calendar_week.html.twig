@@ -50,7 +50,7 @@
 {% for day in week.days|filter(day => not day.empty and day.inWeek(week)) -%}
     <table class="table table-sm table-borderless position-relative border-bottom border-end">
         <thead>
-        <tr class="bg-secondary text-white">
+        <tr class="text-bg-secondary">
             <td colspan="5" class="week-head"><span>{{ day.date|locale_date('long') }}</span><span class="small"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span> </td>
             <td class="text-end">
                 {% if not day.empty -%}

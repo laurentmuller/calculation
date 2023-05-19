@@ -6,9 +6,10 @@
     const THEME_AUTO = 'auto';
     const THEME_LIGHT = 'light';
     const THEME_DARK = 'dark';
+    const COOKIE_NAME = "THEME";
 
-    const getCookie = function (name) {
-        name = name + "=";
+    const getCookieValue = function () {
+        const name = COOKIE_NAME + "=";
         const decodedCookie = decodeURIComponent(document.cookie);
         const entries = decodedCookie.split(';');
         for (let i = 0; i < entries.length; i++) {
@@ -20,18 +21,18 @@
         return '';
     };
 
-    const setCookie = function (name, value, days = 365) {
+    const setCookieValue = function (value, days = 365) {
         const date = new Date();
         date.setTime(date.getTime() + (days * 24 * 3600 * 1000));
         const path = document.body.dataset.cookiePath || '/';
-        let entry = name + '=' + encodeURIComponent(value) + ';';
+        let entry = COOKIE_NAME + '=' + encodeURIComponent(value) + ';';
         entry += 'expires=' + date.toUTCString() + ';';
         entry += 'path=' + path + ';';
         entry += 'samesite=lax;';
         document.cookie = entry;
     };
 
-    const storedTheme = getCookie('THEME');
+    const storedTheme = getCookieValue();
 
     const isMediaDark = () => {
         return window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -65,18 +66,16 @@
         const linkIcon = link.querySelector('.theme-icon');
         const linkText = link.querySelector('.theme-text');
 
-        themeSwitchers.forEach(element => {
+        themeSwitchers.forEach((element) => {
             element.querySelector('.theme-icon').textContent = linkIcon.textContent;
             element.querySelector('.theme-text').textContent = linkText.textContent;
         });
 
-        document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+        document.querySelectorAll('[data-bs-theme-value]').forEach((element) => {
             element.classList.remove('dropdown-item-checked', 'disabled');
-            element.setAttribute('aria-pressed', 'false');
         });
-        document.querySelectorAll(selector).forEach(element => {
+        document.querySelectorAll(selector).forEach((element) => {
             element.classList.add('dropdown-item-checked', 'disabled');
-            element.setAttribute('aria-pressed', 'true');
         });
 
         if (notify) {
@@ -96,7 +95,7 @@
     };
 
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        if (storedTheme !== 'light' || storedTheme !== 'dark') {
+        if (storedTheme !== THEME_LIGHT || storedTheme !== THEME_DARK) {
             setTheme(getPreferredTheme());
         }
     });
@@ -106,8 +105,8 @@
         document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
             element.addEventListener('click', () => {
                 const theme = element.getAttribute('data-bs-theme-value');
-                if (theme !== getCookie('THEME')) {
-                    setCookie('THEME', theme);
+                if (theme !== getCookieValue()) {
+                    setCookieValue(theme);
                     setTheme(theme);
                 }
                 showActiveTheme(theme, true);

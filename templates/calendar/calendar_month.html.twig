@@ -5,8 +5,8 @@
 {# macros #}
 {% macro weekRow(month, week) %}
 {%- set week_title = 'calendar.week_show'|trans({'%week%': week.number, '%year%': week.year}) -%}
-{%- set class = 'bg-secondary text-white text-center align-middle week' -%}
-{% if week.current -%}{%- set class = 'bg-primary text-center align-middle text-white week' -%}{%- endif %}
+{%- set class = 'text-bg-secondary text-center align-middle week' -%}
+{% if week.current -%}{%- set class = 'text-bg-primary text-center align-middle week' -%}{%- endif %}
 <tr>
     <td class="{{ class }}" title="{{ week_title }}">
     {% if week.empty %}
@@ -61,9 +61,9 @@
 </div>
 <table class="table table-bordered w-100 month">
     <tr>
-        <th class="border bg-secondary text-white text-center week fw-normal">{{ 'calendar.week_short'|trans }}</th>
+        <th class="border text-bg-secondary text-center week fw-normal">{{ 'calendar.week_short'|trans }}</th>
         {% for name in calendar.weekShortNames %}
-            <th class="border bg-secondary text-white text-center fw-normal">{{ name }}</th>
+            <th class="border text-bg-secondary text-center fw-normal">{{ name }}</th>
         {% endfor %}
     </tr>
     {% for week in month.weeks -%}

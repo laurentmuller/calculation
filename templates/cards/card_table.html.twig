@@ -71,7 +71,7 @@
 {# output a property row #}
 {% macro property_row(field, value, class='') -%}
 {% set class = ('col-8 text-truncate user-select-none ' ~ class)|trim %}
-<div class="row rowlink-skip no-gutters">
+<div class="row rowlink-skip g-0">
     <div class="col-4 user-select-none">{{ field|trans }}</div>
     <div class="{{ class }}">{{ value|raw }}</div>
 </div>
@@ -85,7 +85,7 @@
 {% macro property_both(left_value, right_value, left_class='', right_class='') -%}
 {% set left_class = ('col-4 user-select-none ' ~ left_class)|trim %}
 {% set right_class = ('col-8 user-select-none ' ~ right_class)|trim %}
-<div class="row rowlink-skip no-gutters">
+<div class="row rowlink-skip g-0">
     <div class="{{ left_class }}">{{ left_value|raw }}</div>
     <div class="{{ right_class }}">{{ right_value|raw }}</div>
 </div>

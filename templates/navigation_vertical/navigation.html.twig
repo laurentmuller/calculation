@@ -8,14 +8,14 @@
 } -%}
 <div id="sidebar" data-bs-theme="dark" class="navbar navbar-vertical bg-dark border-end d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}>
     {# logo
-    <div class="p-2 mb-1">
-        <div class="media position-relative d-flex align-items-center">
-            <img src="{{ asset('/images/logo/logo-customer-148x148.png') }}" alt="{{ user_service.application.customerName }}" width="65" class="me-3 rounded-circle shadow-sm">
-            <div class="media-body">
-                <h4 class="m-0 text-white">{{ user_service.application.customerName }}</h4>
-                <p class="fw-light text-body-secondary small mb-0">PUB PROD & PRINT</p>
-                <a href="{{ user_service.application.customerUrl }}" rel="noopener noreferrer" class="stretched-link" target="_blank"></a>
-            </div>
+    <div class="d-flex position-relative mb-1">
+        <div class="flex-shrink-0">
+            <img src="{{ asset('/images/logo/logo-customer-148x148.png') }}" alt="{{ user_service.application.customerName }}" width="65" class="rounded-circle">
+        </div>
+        <div class="flex-grow-1 ms-2">
+            <h4 class="p-0 m-0 text-white">{{ user_service.application.customerName }}</h4>
+            <p class="fw-light text-body-secondary small mb-0">PUB PROD & PRINT</p>
+            <a href="{{ user_service.application.customerUrl }}" rel="noopener noreferrer" class="stretched-link" target="_blank"></a>
         </div>
     </div>
     #}
@@ -23,18 +23,17 @@
         <i class="fa-solid fa-angle-left"></i>
     </button>
     {% if not status_bar %}
-    {# logo #}
-    <div class="mb-1">
-        <div class="media position-relative" style="margin-right: 35px;">
-            <img src="{{ asset_icon(57) }}" width="57" height="57" alt="{{ app_name }}" class="rounded-lg me-2 align-self-end">
-            <div class="media-body">
+        <div class="d-flex position-relative mb-1" style="margin-right: 28px">
+            <div class="flex-shrink-0">
+                <img class="rounded-1" src="{{ asset_icon(57) }}" width="57" height="57" alt="{{ app_name }}">
+            </div>
+            <div class="flex-grow-1 ms-2">
                 <p class="navbar-brand p-0 m-0" style="font-size: 1.5rem">{{ app_name }}</p>
                 <p class="text-body-secondary p-0 m-0">{{ 'about.version'|trans({'%version%': app_version}) }}</p>
                 <a href="{{ path('about') }}" class="stretched-link" title="{{ 'footer.about_title'|trans }}"></a>
             </div>
         </div>
-        {{ dropdownSeparator(false, 'mt-3 mb-2') }}
-    </div>
+        {{ dropdownSeparator(false, 'my-2') }}
     {% endif %}
 
     {# home page #}

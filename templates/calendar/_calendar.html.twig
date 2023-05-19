@@ -40,11 +40,11 @@
     {% if calculations %}
         {%- set link = true -%}
         {%- set count = calculations|length -%}
-        {%- set class = class ~ (small ? ' small' : '') ~ ' text-white' ~ (day.current ? ' bg-primary' : ' bg-success') -%}
+        {%- set class = class ~ (small ? ' small' : '') ~ (day.current ? ' text-bg-primary' : ' text-bg-success') -%}
         {%- set href = path('calculation_table', {'search': day.date|locale_date('short')}) -%}
         {%- set content = _self.dataContent(calculations) -%}
     {%- elseif day.current -%}
-        {%- set class = class ~ ' bg-primary text-white' -%}
+        {%- set class = class ~ ' text-bg-primary' -%}
     {% elseif day.weekEnd %}
         {%- set class = class ~ ' text-body-secondary' -%}
     {%- endif %}

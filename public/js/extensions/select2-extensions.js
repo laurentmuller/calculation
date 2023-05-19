@@ -102,8 +102,7 @@
                     theme: 'bootstrap-5',
                     placeholder: $select.data('placeholder'),
                     allowClear: Boolean($select.data('allow-clear')),
-                    width: $select.data('width') ? $select.data('width') : $select.hasClass('w-100') ? '100%' : 'style',
-                    dropdownParent: $select.parent(),
+                    width: $select.data('width') ? $select.data('width') : $select.hasClass('w-100') ? '100%' : 'style'
                 }, options);
                 $select.select2(settings).on('select2:opening', function () {
                     $('.select2-hidden-accessible').each(function () {

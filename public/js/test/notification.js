@@ -66,6 +66,9 @@ function random() {
         const type = $(this).data('type');
         const title = options.title ? $(this).text() : null;
         notify(type, title, options);
+
+        // update options
+        $('.form-switch:has(.control-option)').attr('class', 'form-check form-check-inline form-switch form-' + type);
     });
 
     // set default values

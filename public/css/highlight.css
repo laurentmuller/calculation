@@ -10,7 +10,7 @@
 
 pre.highlight-php {
     line-height: 1.2em;
-    font: 13px Menlo, Monaco, Consolas, monospace;
+    font-size: 13px;
     word-wrap: break-word;
     white-space: pre-wrap;
     position: relative;

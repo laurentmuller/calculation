@@ -30,7 +30,7 @@
 {# class #}
 {%- block card_container_class id ? '' : parent() -%}
 {%- block card_class id ? parent() : ' border-danger' -%}
-{%- block card_header_class id ? parent() : ' bg-danger text-white' -%}
+{%- block card_header_class id ? parent() : ' text-bg-danger' -%}
 {%- block card_footer_class ' d-none' -%}
 {# header #}
 {% block card_header %}
@@ -73,7 +73,7 @@
 {% else %}
     <p class="mb-0 text-center">{{ 'openweather.current.empty'|trans|replace({'#': path('openweather_search')})|raw }}</p>
 {% endif %}
-<hr class="my-1 d-print-none">
+<hr class="d-print-none">
 <p class="small text-end mt-1 mb-0 d-print-none">
     {{- linkExternal(api_url, 'common.api_documentation') -}}
 </p>

@@ -15,7 +15,7 @@
 {%- set is_exception = exception is defined and exception -%}
 {# class #}
 {% block card_class ' border-danger' %}
-{% block card_header_class ' text-white bg-danger' %}
+{% block card_header_class ' text-bg-danger' %}
 {% block card_container_class is_exception ? '' : ' col-xl-8 offset-xl-2' %}
 {# body #}
 {% block card_body %}
@@ -38,7 +38,7 @@
 <div id="exception-detail" class="collapse mt-3" aria-expanded="false">
     <table id="exception-table" class="table table-bordered table-exception table-sm mb-0">
         <thead class="d-print-none">
-            <tr class="bg-danger text-white">
+            <tr class="text-bg-danger">
                 <th class="border-danger fw-normal property">{{ 'error_page.property'|trans }}</th>
                 <th class="border-danger fw-normal value">{{ 'error_page.value'|trans }}</th>
             </tr>

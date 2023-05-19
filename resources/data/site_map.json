@@ -1,0 +1,364 @@
+{
+    "primary": [
+        {
+            "route": "homepage",
+            "class": "home",
+            "text": "index.title",
+            "icon": "home"
+        },
+        {
+            "route": "calculation_table",
+            "entity": "Calculation",
+            "permission": "list",
+            "text": "calculation.list.title",
+            "icon": "calculator",
+            "entries": [
+                {
+                    "route": "calculation_add",
+                    "permission": "add",
+                    "text": "calculation.add.title",
+                    "icon": "file"
+                },
+                {
+                    "route": "calculation_pdf",
+                    "permission": "export",
+                    "external": true,
+                    "text": "calculation.list.pdf_title",
+                    "icon": "file-pdf"
+                },
+                {
+                    "route": "calculation_excel",
+                    "permission": "export",
+                    "external": true,
+                    "text": "calculation.list.excel_title",
+                    "icon": "file-excel"
+                }
+            ]
+        },
+        {
+            "text": "index.menu_data",
+            "icon": "database",
+            "entries": [
+                {
+                    "route": "product_table",
+                    "entity": "Product",
+                    "permission": "list",
+                    "text": "product.list.title",
+                    "icon": "file-alt",
+                    "entries": [
+                        {
+                            "route": "product_add",
+                            "permission": "add",
+                            "text": "product.add.title",
+                            "icon": "file"
+                        },
+                        {
+                            "route": "product_pdf",
+                            "permission": "export",
+                            "external": true,
+                            "text": "product.list.pdf_title",
+                            "icon": "file-pdf"
+                        },
+                        {
+                            "route": "product_excel",
+                            "permission": "export",
+                            "external": true,
+                            "text": "product.list.excel_title",
+                            "icon": "file-excel"
+                        }
+                    ]
+                },
+                {
+                    "route": "task_table",
+                    "entity": "Task",
+                    "permission": "list",
+                    "text": "task.list.title",
+                    "icon": "tasks",
+                    "entries": [
+                        {
+                            "route": "task_add",
+                            "permission": "add",
+                            "text": "task.add.title",
+                            "icon": "file"
+                        },
+                        {
+                            "route": "task_pdf",
+                            "permission": "export",
+                            "external": true,
+                            "text": "task.list.pdf_title",
+                            "icon": "file-pdf"
+                        },
+                        {
+                            "route": "task_excel",
+                            "permission": "export",
+                            "external": true,
+                            "text": "task.list.excel_title",
+                            "icon": "file-excel"
+                        }
+                    ]
+                },
+                {
+                    "route": "category_table",
+                    "entity": "Category",
+                    "permission": "list",
+                    "text": "category.list.title",
+                    "icon": "folder",
+                    "entries": [
+                        {
+                            "route": "category_add",
+                            "permission": "add",
+                            "text": "category.add.title",
+                            "icon": "file"
+                        },
+                        {
+                            "route": "category_pdf",
+                            "permission": "export",
+                            "external": true,
+                            "text": "category.list.pdf_title",
+                            "icon": "file-pdf"
+                        },
+                        {
+                            "route": "category_excel",
+                            "permission": "export",
+                            "external": true,
+                            "text": "category.list.excel_title",
+                            "icon": "file-excel"
+                        }
+                    ]
+                },
+                {
+                    "route": "group_table",
+                    "entity": "Group",
+                    "permission": "list",
+                    "text": "group.list.title",
+                    "icon": "code-branch",
+                    "entries": [
+                        {
+                            "route": "group_add",
+                            "permission": "add",
+                            "text": "group.add.title",
+                            "icon": "file"
+                        },
+                        {
+                            "route": "group_pdf",
+                            "permission": "export",
+                            "external": true,
+                            "text": "group.list.pdf_title",
+                            "icon": "file-pdf"
+                        },
+                        {
+                            "route": "group_excel",
+                            "permission": "export",
+                            "external": true,
+                            "text": "group.list.excel_title",
+                            "icon": "file-excel"
+                        }
+                    ]
+                },
+                {
+                    "route": "calculationstate_table",
+                    "entity": "CalculationState",
+                    "permission": "list",
+                    "text": "calculationstate.list.title",
+                    "icon": "flag",
+                    "entries": [
+                        {
+                            "route": "calculationstate_add",
+                            "permission": "add",
+                            "text": "calculationstate.add.title",
+                            "icon": "file"
+                        },
+                        {
+                            "route": "calculationstate_pdf",
+                            "permission": "export",
+                            "external": true,
+                            "text": "calculationstate.list.pdf_title",
+                            "icon": "file-pdf"
+                        },
+                        {
+                            "route": "calculationstate_excel",
+                            "permission": "export",
+                            "external": true,
+                            "text": "calculationstate.list.excel_title",
+                            "icon": "file-excel"
+                        }
+                    ]
+                },
+                {
+                    "route": "globalmargin_table",
+                    "entity": "GlobalMargin",
+                    "permission": "list",
+                    "text": "globalmargin.list.title",
+                    "icon": "percent",
+                    "entries": [
+                        {
+                            "route": "globalmargin_pdf",
+                            "permission": "export",
+                            "external": true,
+                            "text": "globalmargin.list.pdf_title",
+                            "icon": "file-pdf"
+                        },
+                        {
+                            "route": "globalmargin_excel",
+                            "permission": "export",
+                            "external": true,
+                            "text": "globalmargin.list.excel_title",
+                            "icon": "file-excel"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "text": "index.menu_tools",
+            "icon": "tools",
+            "entries": [
+                {
+                    "route": "search",
+                    "text": "search.title",
+                    "icon": "search"
+                },
+                {
+                    "route": "below_table",
+                    "text": "below.title",
+                    "icon": "percent"
+                },
+                {
+                    "route": "duplicate_table",
+                    "text": "duplicate.title",
+                    "icon": "copy far"
+                },
+                {
+                    "route": "empty_table",
+                    "text": "empty.title",
+                    "icon": "file-code far"
+                },
+                {
+                    "entity": "Task",
+                    "route": "task_compute",
+                    "permission": "list",
+                    "text": "task_compute.title",
+                    "icon": "keyboard"
+                }
+            ]
+        },
+        {
+            "text": "index.menu_graphics",
+            "entity": "Calculation",
+            "permission": "list",
+            "icon": "chart-area",
+            "entries": [
+                {
+                    "route": "chart_by_month",
+                    "text": "index.menu_graphics_month",
+                    "icon": "calendar-alt far"
+                },
+                {
+                    "route": "chart_by_state",
+                    "text": "index.menu_graphics_state",
+                    "icon": "flag"
+                },
+                {
+                    "route": "calculation_pivot",
+                    "text": "pivot.title",
+                    "icon": "table"
+                }
+            ]
+        },
+        {
+            "text": "index.menu_admin",
+            "role": "admin",
+            "icon": "gear",
+            "entries": [
+                {
+                    "route": "admin_product",
+                    "text": "product.update.title",
+                    "icon": "file-alt"
+                },
+                {
+                    "route": "admin_archive",
+                    "text": "archive.title",
+                    "icon": "calendar-xmark far"
+                },
+                {
+                    "route": "user_table",
+                    "entity": "User",
+                    "permission": "list",
+                    "text": "user.list.title",
+                    "icon": "user far"
+                },
+                {
+                    "route": "admin_rights_user",
+                    "text": "index.menu_rights_user",
+                    "icon": "user-check"
+                },
+                {
+                    "route": "admin_rights_admin",
+                    "role": "super_admin",
+                    "text": "index.menu_rights_admin",
+                    "icon": "user-shield"
+                },
+                {
+                    "route": "user_register",
+                    "role": "super_admin",
+                    "text": "registration.register.title",
+                    "icon": "user-plus"
+                },
+                {
+                    "route": "admin_parameters",
+                    "text": "parameters.title",
+                    "icon": "cogs"
+                },
+                {
+                    "route": "log_table",
+                    "text": "log.title",
+                    "icon": "book"
+                },
+                {
+                    "route": "admin_clear",
+                    "text": "clear_cache.title",
+                    "icon": "times"
+                }
+            ]
+        },
+        {
+            "route": "about",
+            "text": "about.title",
+            "icon": "info-circle",
+            "entries": [
+                {
+                    "route": "about_licence",
+                    "text": "about.licence",
+                    "icon": "info-circle"
+                },
+                {
+                    "route": "about_policy",
+                    "text": "about.policy",
+                    "icon": "info-circle"
+                },
+                {
+                    "route": "user_comment",
+                    "text": "user.comment.title",
+                    "icon": "envelope far"
+                }
+            ]
+        }
+    ],
+    "utility": [
+        {
+            "route": "user_parameters",
+            "text": "user.parameters.title",
+            "icon": "user-gear"
+        },
+        {
+            "route": "user_profile_edit",
+            "text": "profile.edit.title",
+            "icon": "pencil"
+        },
+        {
+            "route": "app_logout",
+            "text": "index.logout",
+            "icon": "sign-out-alt"
+        }
+    ]
+}

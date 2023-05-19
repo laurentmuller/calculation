@@ -187,30 +187,10 @@
 </h6>
 {% endmacro %}
 
-{% macro theme_switcher(element='button', class='', parameters=[]) %}
-{% from 'macros/_attributes.html.twig' import attributes %}
-{%- set is_dark = theme_dark(app.request) -%}
-{%- set theme_dark = enum('App\\Enums\\Theme::DARK') -%}
-{%- set theme_light = enum('App\\Enums\\Theme::LIGHT') -%}
-{%- set theme_icon = is_dark ? theme_light.icon : theme_dark.icon -%}
-{%- set theme_text = is_dark ? theme_light : theme_dark -%}
-{%- set theme_title = is_dark ? theme_light.title : theme_dark.title -%}
-{%- set parameters = parameters|merge({
-    'title': theme_title|trans,
-    'class': (class ~ ' item-theme')|trim,
-    'data-path': path('theme_save'),
-    'data-title': 'theme.title'|trans,
-    'data-error': 'theme.error'|trans,
-    'data-light-icon': theme_light.icon,
-    'data-light-text': theme_light|trans,
-    'data-light-title': theme_light.title|trans,
-    'data-light-value': theme_light.value,
-    'data-dark-icon': theme_dark.icon,
-    'data-dark-text': theme_dark|trans,
-    'data-dark-title': theme_dark.title|trans,
-    'data-dark-value': theme_dark.value})
--%}
-<{{ element }}{{ attributes(parameters) }}>
-    {{- _self.icon(theme_icon, theme_text) -}}
-</{{ element }}>
+{% macro theme_entry(theme) %}
+<li>
+    <a class="dropdown-item" href="#" data-bs-theme-value="{{ theme.value }}" title="{{ theme.title|trans }}" data-message="{{ theme.success|trans }}" data-title="{{ 'theme.title'|trans }}">
+        <i class="theme-icon me-1 {{ theme.icon }}"></i><span class="theme-text">{{ theme|trans }}</span>
+    </a>
+</li>
 {% endmacro %}

@@ -410,7 +410,7 @@
             const settings = $.extend(true, {
                 parent: $this,
                 text: $this.data('save') || 'Saving data...',
-                alertClass: 'alert alert-primary text-center position-absolute top-50 start-50 translate-middle z-3',
+                alertClass: 'alert bg-body-secondary border border-secondary-subtle text-center position-absolute top-50 start-50 translate-middle z-3',
                 iconClass: 'fa-solid fa-spinner fa-spin me-2',
                 css: {
                     width: '90%',

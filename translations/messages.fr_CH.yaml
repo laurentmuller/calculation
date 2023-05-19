@@ -582,6 +582,9 @@ index:
   menu_theme: Thème (%name%)
   menu_tools: Outils
   menu_admin: Administration
+  menu_graphics: Statistiques
+  menu_graphics_month: Calculations par mois
+  menu_graphics_state: Calculations par statut
   panel_catalog: Catalogue
   panel_catalog_hide: Masquer le catalogue
   panel_catalog_hide_success: Le catalogue a été masqué
@@ -1193,8 +1196,13 @@ test:
   ip_stack: Adresse IP
 theme:
   title: Thème
+  description: Appliquer un thème sur le site.
   success: Le thème <b>%name%</b> a été sélectionné avec succès.
   error: Impossible de sélectionner le thème.
+  auto:
+    name: Thème système
+    title: Appliquer le thème système sur le site.
+    success: Le <b>thème système </b> a été sélectionné avec succès.
   dark:
     name: Thème sombre
     title: Appliquer le thème sombre sur le site.

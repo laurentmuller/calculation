@@ -36,6 +36,11 @@ class ThemeController extends AbstractController
     final public const KEY_DARK = 'THEME_DARK';
 
     /**
+     * The key name for selected theme cookie.
+     */
+    final public const KEY_THEME = 'THEME';
+
+    /**
      * Save the theme preference to cookies.
      */
     #[Route(path: '/save', name: 'theme_save')]

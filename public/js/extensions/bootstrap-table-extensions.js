@@ -40,7 +40,7 @@
  */
 function loadingTemplate(message) {
     'use strict';
-    return `<div class="alert alert-info text-center loading-message" role="alert"><i class="fa-solid fa-spinner fa-spin me-2"></i>${message}</div>`;
+    return `<div class="alert bg-body-secondary border border-secondary-subtle text-center loading-message" role="alert"><i class="fa-solid fa-spinner fa-spin me-2"></i>${message}</div>`;
 }
 
 /**

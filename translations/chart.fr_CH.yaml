@@ -21,7 +21,6 @@ fields:
 last_month:
   period: Période
 loading: Chargement en cours...
-menu_graphics: Statistiques
 noData: Aucune donnée à afficher
 printButtonTitle: Imprimer le graphique
 printChart: Imprimer le graphique

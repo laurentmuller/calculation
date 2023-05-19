@@ -22,13 +22,11 @@
 /* ------------------------------------------------------------
 	Root Styles
 ------------------------------------------------------------ */
-.sitemap ul,
-.sitemap {
-    /*font-family: "Proxima Nova", Helvetica, Arial, sans-serif;
-    font-size: 16px;
-     */
+.sitemap,
+.sitemap ul {
+    /*font-family: "Proxima Nova", Helvetica, Arial, sans-serif;*/
+    /*font-size: 16px;*/
     line-height: 1;
-
 }
 
 /* ------------------------------------------------------------
@@ -37,13 +35,13 @@
 
 /* -------- Top Level --------- */
 
-.primaryNav {
+.primary-nav {
     clear: both;
     width: 100%;
     margin-top: 3em;
 }
 
-.primaryNav #home {
+.primary-nav .home {
     position: absolute;
     margin-top: -3em;
     margin-bottom: 0;
@@ -51,52 +49,52 @@
     width: 100%;
 }
 
-.primaryNav #home:before {
+.primary-nav .home:before {
     display: none;
 }
 
-.primaryNav ul {
+.primary-nav ul {
     display: flex;
     flex-wrap: wrap;
     list-style: none;
     position: relative;
 }
 
-.primaryNav li {
+.primary-nav li {
     flex: 1;
     flex-basis: 11.5em;
     padding-right: 1.25em;
     position: relative;
 }
 
-.primaryNav li:last-child {
+.primary-nav li:last-child {
     padding-right: 0;
 }
 
-.primaryNav > ul > li {
+.primary-nav > ul > li {
     margin-top: 3em;
 }
 
-.primaryNav li a {
+.primary-nav li a {
     margin: 0;
     padding: .875em .9375em .9375em .9375em;
     display: block;
-    font-size: .9375em;
+    /*font-size: .9375em;*/
     color: white;
     background-color: #0090ff;
     border: 2px solid rgba(0, 0, 0, .025);
     text-decoration: none;
 }
 
-.primaryNav li a:hover {
+.primary-nav li a:hover {
     background-color: #0070f9;
 }
 
-.primaryNav li span {
+.primary-nav li span {
     margin: 0;
     padding: .875em .9375em .9375em .9375em;
     display: block;
-    font-size: .95em;
+    /*font-size: .9375em;*/
     color: white;
     background-color: #0090ff;
     border: 2px solid rgba(0, 0, 0, .025);
@@ -105,92 +103,92 @@
 
 /* -------- Second Level --------- */
 
-.primaryNav ul ul {
+.primary-nav ul ul {
     display: block;
 }
 
-.primaryNav ul ul li {
+.primary-nav ul ul li {
     padding-top: .6875em;
     padding-right: 0;
 }
 
-.primaryNav ul ul li a {
+.primary-nav ul ul li a {
     background-color: #28bf5e;
 }
 
-.primaryNav ul ul li a:hover {
+.primary-nav ul ul li a:hover {
     background-color: #09a63e;
 }
 
-.primaryNav ul ul li:first-child {
+.primary-nav ul ul li:first-child {
     padding-top: 2em;
 }
 
 /* -------- Third Level --------- */
 
-.primaryNav ul ul ul {
+.primary-nav ul ul ul {
     margin-top: .6em;
     padding-top: .6em;
     padding-bottom: .625em;
 }
 
-.primaryNav ul ul ul li {
+.primary-nav ul ul ul li {
     padding-top: .3125em;
     padding-bottom: .3125em;
 }
 
-.primaryNav ul ul ul li a {
+.primary-nav ul ul ul li a {
     background-color: #ff9d00;
-    font-size: .9em;
+    /*font-size: .9em;*/
     padding: .75em;
     width: 90%;
     margin-right: 0;
     margin-left: auto;
 }
 
-.primaryNav ul ul ul li a:hover {
+.primary-nav ul ul ul li a:hover {
     background-color: #ff831b;
 }
 
-.primaryNav ul ul ul li:first-child {
+.primary-nav ul ul ul li:first-child {
     padding-top: 1em;
 }
 
-.primaryNav ul ul ul li a:link:after,
-.primaryNav ul ul ul li a:visited:after {
-    font-size: .75em;
+.primary-nav ul ul ul li a:link:after,
+.primary-nav ul ul ul li a:visited:after {
+    /*font-size: .75em;*/
 }
 
 /* --------	Fourth Level --------- */
 
-.primaryNav ul ul ul ul {
+.primary-nav ul ul ul ul {
     margin-top: 0;
     padding-top: .3125em;
     padding-bottom: .3125em;
 }
 
-.primaryNav ul ul ul ul li a {
+.primary-nav ul ul ul ul li a {
     background-color: #de003a;
     padding: .75em;
     width: 80%;
 }
 
-.primaryNav ul ul ul ul li a:hover {
+.primary-nav ul ul ul ul li a:hover {
     background-color: #c20035;
 }
 
-.primaryNav ul ul ul ul li a:link:after,
-.primaryNav ul ul ul ul li a:visited:after {
+.primary-nav ul ul ul ul li a:link:after,
+.primary-nav ul ul ul ul li a:visited:after {
     display: none;
 }
 
 /* ------------------------------------------------------------
 	Connecting Lines:
 ------------------------------------------------------------ */
-.primaryNav ul:before,
-.primaryNav ul:after,
-.primaryNav ul li:before,
-.primaryNav ul li:after {
+.primary-nav ul:before,
+.primary-nav ul:after,
+.primary-nav ul li:before,
+.primary-nav ul li:after {
     content: '';
     display: block;
     position: absolute;
@@ -200,7 +198,7 @@
     z-index: -1;
 }
 
-.primaryNav > ul > li:before {
+.primary-nav > ul > li:before {
     height: 1.375em;
     top: -1.375em;;
     right: calc(50% + .625em);
@@ -209,13 +207,13 @@
     border-right-width: 2px;
 }
 
-.primaryNav > ul > li:first-child + li:before {
+.primary-nav > ul > li:first-child + li:before {
     border-top-width: 0;
     height: 5em;
     top: -5em;
 }
 
-.primaryNav ul ul li:after {
+.primary-nav ul ul li:after {
     width: 50%;
     height: .6875em;
     top: 0;
@@ -223,7 +221,7 @@
     border-left-width: 2px;
 }
 
-.primaryNav ul ul li:first-child:before {
+.primary-nav ul ul li:first-child:before {
     width: 50%;
     height: 1.3125em;
     top: .6875em;
@@ -231,11 +229,11 @@
     border-left-width: 2px;
 }
 
-.primaryNav > ul > li:last-child:after {
+.primary-nav > ul > li:last-child:after {
     border-bottom-width: 0;
 }
 
-.primaryNav ul ul ul li:before {
+.primary-nav ul ul ul li:before {
     width: calc(50% - 5px);
     height: 100%;
     top: -50%;
@@ -244,30 +242,30 @@
     border-bottom-width: 2px;
 }
 
-.primaryNav ul ul ul li:first-child:before {
+.primary-nav ul ul ul li:first-child:before {
     height: 2.125em;
     top: -2px;
     border-top-width: 2px;
 }
 
-.primaryNav ul ul ul:before {
+.primary-nav ul ul ul:before {
     width: 50%;
     height: 1.25em;
-    top: -10px;
+    top: -11px;
     right: 2px;
     border-left-width: 2px;
 }
 
-.primaryNav ul ul ul li:after {
+.primary-nav ul ul ul li:after {
     border-width: 0;
 }
 
-.primaryNav ul ul ul ul li:before,
-.primaryNav ul ul ul ul li:first-child:before {
+.primary-nav ul ul ul ul li:before,
+.primary-nav ul ul ul ul li:first-child:before {
     display: none;
 }
 
-.primaryNav ul ul ul ul:before {
+.primary-nav ul ul ul ul:before {
     width: 2px;
     height: calc(100% + 2.5em);
     top: -2.5em;
@@ -279,7 +277,7 @@
 /* ------------------------------------------------------------
 	Utility Navigation
 ------------------------------------------------------------ */
-.utilityNav {
+.utility-nav {
     float: right;
     margin-top: 0;
     margin-bottom: -.25em;
@@ -287,14 +285,14 @@
     list-style-type: none;
 }
 
-.utilityNav li {
+.utility-nav li {
     padding: 0 0 .625em .625em;
     display: inline-block;
 }
 
-.utilityNav li a {
+.utility-nav li a {
     display: block;
-    font-size: .75em;
+    /*font-size: .75em;*/
     padding: .75em 1em;
     text-align: left;
     color: white;
@@ -303,14 +301,14 @@
     text-decoration: none;
 }
 
-.utilityNav li a:hover {
+.utility-nav li a:hover {
     background-color: #ff831b;
 }
 
-.utilityNav li a:link:after,
-.utilityNav li a:visited:after {
+.utility-nav li a:link:after,
+.utility-nav li a:visited:after {
     color: rgba(255, 255, 255, .75);
-    font-size: .75em;
+    /*font-size: .75em;*/
     margin-top: .25em;
 }
 
@@ -318,23 +316,23 @@
 	Responsive Styles
 ------------------------------------------------------------ */
 @media screen and (max-width: 30em) {
-    .primaryNav ul {
+    .primary-nav ul {
         display: block;
     }
 
-    .primaryNav li {
+    .primary-nav li {
         width: 100%;
         padding-right: 0;
     }
 
-    .primaryNav #home {
+    .primary-nav .home {
         width: 100%;
         position: relative;
         margin-bottom: -1em;
         margin-top: 0;
     }
 
-    .utilityNav {
+    .utility-nav {
         float: none;
         display: block;
         width: 100%;
@@ -352,54 +350,54 @@ that you don't need, and your sitemap layout will work perfectly. */
 
 /* two column */
 @media screen and (min-width: 30em) {
-    .primaryNav > ul > li {
+    .primary-nav > ul > li {
         max-width: 50%;
     }
 }
 
 /* three column */
 @media screen and (min-width: 38.5em) {
-    .primaryNav > ul > li {
-        max-width: 33%;
+    .primary-nav > ul > li {
+        max-width: 33.3333%;
     }
 }
 
 /* four column */
 @media screen and (min-width: 50em) {
-    .primaryNav > ul > li {
+    .primary-nav > ul > li {
         max-width: 25%;
     }
 }
 
 /* five column */
 @media screen and (min-width: 61em) {
-    .primaryNav > ul > li {
+    .primary-nav > ul > li {
         max-width: 20%;
     }
 }
 
 /* six column
 @media screen and (min-width: 73em) {
-	.primaryNav > ul > li {	max-width: 16.66%;	}
+	.primary-nav > ul > li {	max-width: 16.66%;	}
 }
  */
 /* seven column
 @media screen and (min-width: 84.5em) {
-	.primaryNav > ul > li {	max-width: 14.285%;	}
+	.primary-nav > ul > li {	max-width: 14.285%;	}
 }
  */
 /* eight column
 @media screen and (min-width: 96em) {
-	.primaryNav > ul > li {	max-width: 12.5%; }
+	.primary-nav > ul > li {	max-width: 12.5%; }
 }
  */
 /* nine column
 @media screen and (min-width: 107.5em) {
-	.primaryNav > ul > li {	max-width: 11.11%; }
+	.primary-nav > ul > li {	max-width: 11.11%; }
 }
  */
 /* ten column
 @media screen and (min-width: 119em) {
-	.primaryNav > ul > li {	max-width: 10%; }
+	.primary-nav > ul > li {	max-width: 10%; }
 }
  */

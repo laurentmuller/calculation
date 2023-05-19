@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, navItem, theme_switcher %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, navItem, theme_entry %}
 {% set id = 'menu_user' %}
 {% set expanded = app.session.get(id, false) %}
 {% set toggle_class = expanded ? ' active' : '' %}
@@ -22,7 +22,15 @@
         {{ navItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
         {{ dropdownSeparator() }}
         <li class="nav-item">
-            {{ theme_switcher('a', 'nav-link', {'href': '#'}) }}
+            {% set theme = theme(app.request) %}
+            <a class="nav-link drop-down-caret-right dropdown-item theme-switcher" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ 'theme.description'|trans }}">
+                <i class="theme-icon me-1 {{ theme.icon }}"></i><span class="theme-text">{{ theme|trans }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-checked ps-0">
+                {{ theme_entry(enum('App\\Enums\\Theme::AUTO')) }}
+                {{ theme_entry(enum('App\\Enums\\Theme::LIGHT')) }}
+                {{ theme_entry(enum('App\\Enums\\Theme::DARK')) }}
+            </ul>
         </li>
         {{ navItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
         {% if is_previous_admin -%}

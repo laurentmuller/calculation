@@ -23,7 +23,7 @@
         {{ dropdownSeparator() }}
         <li class="nav-item">
             {% set theme = theme(app.request) %}
-            <a class="nav-link drop-down-caret-right dropdown-item theme-switcher" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ 'theme.description'|trans }}">
+            <a class="nav-link drop-down-caret-right dropdown-item theme-switcher theme-switcher-click" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ 'theme.description'|trans }}">
                 <i class="theme-icon me-1 {{ theme.icon }}"></i><span class="theme-text">{{ theme|trans }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-checked ps-0">

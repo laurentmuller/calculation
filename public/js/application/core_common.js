@@ -115,6 +115,9 @@
         });
     }
 
+    /**
+     * Handle theme change.
+     */
     function initThemeListener() {
         /** @param {CustomEvent<string>} e */
         window.addEventListener('theme', (e) => {
@@ -175,6 +178,9 @@
         }
     }
 
+    /**
+     * Handle sub-menu.
+     */
     function handleSubMenus() {
         // prevent closing from click inside dropdown
         document.querySelectorAll('.dropdown-menu').forEach(function (element) {

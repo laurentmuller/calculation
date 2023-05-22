@@ -90,7 +90,7 @@
             const that = this;
             const timeout = this.options.timeout;
             const removeTimer = () => that.$element.removeTimer();
-            that.$showSidebarButton.hover((e) => {
+            that.$showSidebarButton.on('mouseenter', function (e) {
                 if (that._isSideBarHidden()) {
                     that.$element.createTimer(function () {
                         removeTimer();
@@ -99,8 +99,8 @@
                         }
                     }, timeout);
                 }
-            }, removeTimer);
-            that.$hideSidebarButton.hover((e) => {
+            }).on('mouseleave', removeTimer);
+            that.$hideSidebarButton.on('mouseenter', function (e) {
                 if (!that._isSideBarHidden()) {
                     that.$element.createTimer(function () {
                         removeTimer();
@@ -109,7 +109,7 @@
                         }
                     }, timeout);
                 }
-            }, removeTimer);
+            }).on('mouseleave', removeTimer);
         }
 
         /**
@@ -325,9 +325,8 @@
             const url = this.options.url;
             if (url) {
                 $.ajaxSetup({global: false});
-                $.post(url, this._getState()).always(function () {
-                    $.ajaxSetup({global: true});
-                });
+                $.post(url, this._getState())
+                    .always(() => $.ajaxSetup({global: true}));
             }
         }
     };

@@ -52,6 +52,7 @@ services:
     App\:
         resource: '../src/*'
         exclude:
+            - '../src/Calendar'
             - '../src/Entity'
             - '../src/Enums'
             - '../src/Faker'

@@ -635,6 +635,7 @@ list:
   search_title: Effacer les critères de recherche
   sort_title: Trier les données
   sort_column: Colonne
+  sort_label: Ordre de tri
   sort_default_title: Tri par défaut
   sort_ascending: Tri croissant
   sort_ascending_title: 'Ordre de tri par défaut : %name% croissant'

@@ -21,9 +21,9 @@
         return '';
     };
 
-    const setCookieValue = function (value, days = 365) {
+    const setCookieValue = function (value) {
         const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 3600 * 1000));
+        date.setFullYear(date.getFullYear() + 1);
         const path = document.body.dataset.cookiePath || '/';
         let entry = COOKIE_NAME + '=' + encodeURIComponent(value) + ';';
         entry += 'expires=' + date.toUTCString() + ';';
@@ -85,12 +85,18 @@
                 cancelable: false,
                 detail: theme
             }));
-            const themeSwitcher = document.querySelector('.theme-switcher');
-            themeSwitcher.dispatchEvent(new MouseEvent('click', {
-                view: window,
-                bubbles: true,
-                cancelable: true,
-            }));
+            themeSwitchers.forEach((element) => {
+                if (element.classList.contains('theme-switcher-click')) {
+                    element.dispatchEvent(new MouseEvent('click', {
+                        view: window,
+                        bubbles: true,
+                        cancelable: true,
+                    }));
+                    if (element.hasAttribute('aria-expanded')) {
+                        element.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            });
         }
     };
 

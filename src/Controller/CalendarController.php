@@ -38,31 +38,34 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CalendarController extends AbstractController
 {
+    public function __construct(private readonly CalculationRepository $repository)
+    {
+    }
+
     /**
      * Display a month of a calendar.
      *
-     * @param CalendarService       $service    the service to generate the calendar
-     * @param CalculationRepository $repository the repository to query calculations
-     * @param ?int                  $year       the year to search for or <code>null</code> for the current
-     *                                          year
-     * @param ?int                  $month      the month to search for or <code>null</code> for the current
-     *                                          month
+     * @param ?int $year  the year to search for or <code>null</code> for the current year
+     * @param ?int $month the month to search for or <code>null</code> for the current month
      *
      * @throws \App\Calendar\CalendarException
      */
     #[Route(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => Requirement::DIGITS, 'month' => Requirement::DIGITS])]
-    public function month(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $month = null): Response
+    public function month(?int $year = null, ?int $month = null): Response
     {
         $year = $this->validateYear($year);
         $month = $this->validateMonth($month);
-        $calendar = $this->generate($service, $year);
-        $calculations = $repository->getForMonth($year, $month);
+        $calendar = $this->generate($year);
+
+        $calculations = $this->repository->getForMonth($year, $month);
         $this->merge($calendar, $calculations);
-        $yearsMonths = $repository->getCalendarYearsMonths();
+
+        $yearsMonths = $this->repository->getCalendarYearsMonths();
         $today = $this->todayMonth($yearsMonths, $year, $month);
         $previous = $this->previousMonth($yearsMonths, $year, $month);
         $next = $this->nextMonth($yearsMonths, $year, $month);
         $currentMonth = $calendar->getMonth(Month::formatKey($year, $month));
+
         $parameters = [
             'calendar' => $calendar,
             'month' => $currentMonth,
@@ -78,24 +81,22 @@ class CalendarController extends AbstractController
     /**
      * Display a week of a calendar.
      *
-     * @param CalendarService       $service    the service to generate the calendar
-     * @param CalculationRepository $repository the repository to query calculations
-     * @param ?int                  $year       the year to search for or <code>null</code> for the current
-     *                                          year
-     * @param ?int                  $week       the week to search for or <code>null</code> for the current
-     *                                          week
+     * @param ?int $year the year to search for or <code>null</code> for the current year
+     * @param ?int $week the week to search for or <code>null</code> for the current week
      *
      * @throws \App\Calendar\CalendarException
      */
     #[Route(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => Requirement::DIGITS, 'week' => Requirement::DIGITS])]
-    public function week(CalendarService $service, CalculationRepository $repository, ?int $year = null, ?int $week = null): Response
+    public function week(?int $year = null, ?int $week = null): Response
     {
         $year = $this->validateYear($year);
         $week = $this->validateWeek($week);
-        $calendar = $this->generate($service, $year);
-        $calculations = $repository->getForWeek($year, $week);
+        $calendar = $this->generate($year);
+
+        $calculations = $this->repository->getForWeek($year, $week);
         $this->merge($calendar, $calculations);
-        $yearsWeeks = $repository->getCalendarYearsWeeks();
+
+        $yearsWeeks = $this->repository->getCalendarYearsWeeks();
         $today = $this->todayWeek($yearsWeeks, $year, $week);
         $previous = $this->previousWeek($yearsWeeks, $year, $week);
         $next = $this->nextWeek($yearsWeeks, $year, $week);
@@ -104,6 +105,7 @@ class CalendarController extends AbstractController
         $startDate->setISODate($year, $week);
         $endDate = clone $startDate;
         $endDate = $endDate->add(new \DateInterval('P6D'));
+
         $parameters = [
             'calendar' => $calendar,
             'week' => $currentWeek,
@@ -121,24 +123,24 @@ class CalendarController extends AbstractController
     /**
      * Display a calendar.
      *
-     * @param CalendarService       $service    the service to generate the calendar
-     * @param CalculationRepository $repository the repository to query calculations
-     * @param ?int                  $year       the year to search for or <code>null</code> for the current
-     *                                          year
+     * @param ?int $year the year to search for or <code>null</code> for the current year
      *
      * @throws \App\Calendar\CalendarException
      */
     #[Route(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => Requirement::DIGITS])]
-    public function year(CalendarService $service, CalculationRepository $repository, ?int $year = null): Response
+    public function year(?int $year = null): Response
     {
         $year = $this->validateYear($year);
-        $calendar = $this->generate($service, $year);
-        $calculations = $repository->getForYear($year);
+        $calendar = $this->generate($year);
+
+        $calculations = $this->repository->getForYear($year);
         $this->merge($calendar, $calculations);
-        $years = $repository->getCalendarYears();
+
+        $years = $this->repository->getCalendarYears();
         $today = $this->todayYear($years, $year);
         $previous = $this->previousYear($years, $year);
         $next = $this->nextYear($years, $year);
+
         $parameters = [
             'calendar' => $calendar,
             'calculations' => $calculations,
@@ -154,13 +156,13 @@ class CalendarController extends AbstractController
     /**
      * Generate a calendar for the given year.
      *
-     * @param CalendarService $service the service
-     * @param int             $year    the year to generate
+     * @param int $year the year to generate
      *
      * @throws \App\Calendar\CalendarException
      */
-    private function generate(CalendarService $service, int $year): Calendar
+    private function generate(int $year): Calendar
     {
+        $service = new CalendarService();
         $service->setMonthModel(CalculationsMonth::class)
             ->setWeekModel(CalculationsWeek::class)
             ->setDayModel(CalculationsDay::class);

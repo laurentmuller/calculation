@@ -767,7 +767,8 @@ table.table-no-end-line tfoot tr:last-child td {
 /**
  * Override default behavior
  */
-a {
+a,
+.btn-link {
     text-decoration: none;
 }
 

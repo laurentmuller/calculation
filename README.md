@@ -10,7 +10,7 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une 
 
 Versions
 --------
-[![Application](https://img.shields.io/badge/Application-2.6.0-blue)](https://github.com/laurentmuller/calculation) 
+[![Application](https://img.shields.io/badge/Application-2.7.0-blue)](https://github.com/laurentmuller/calculation) 
 [![Symfony](https://img.shields.io/badge/Symfony-6.2.10-informational?logo=symfony)](https://symfony.com) 
 [![PHP](https://img.shields.io/badge/PHP-8.2.5-informational?logo=php)](https://www.php.net) 
 [![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)](https://www.mysql.com)
@@ -34,4 +34,4 @@ Actions
 
 Contributions
 -------
-<img src="https://streak-stats.demolab.com?user=laurentmuller&locale=fr&type=png"/>
+<img src="https://streak-stats.demolab.com?user=laurentmuller&locale=fr&type=png" alt="Contributions"/>

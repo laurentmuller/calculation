@@ -125,6 +125,8 @@
                 const options = $('#flashes').data();
                 Toaster.success(message, title, options);
             }
+            // notify for the sidebar
+            window.dispatchEvent(new Event('resize'));
         });
     }
 

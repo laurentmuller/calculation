@@ -41,7 +41,7 @@
 {%- if 'color-picker' in attr.class|default('') -%}
     {%- set type = type|default('color') -%}
     {%- set attr = attr|merge({'class': 'd-none' ~ (required ? ' must-validate' : ''), 'data-custom-text': 'color_picker.custom_text'|trans, 'data-advanced-text': 'color_picker.advanced_text'|trans}) -%}
-    <div class="color-picker dropdown form-control">
+    <div class="color-picker dropdown form-control" tabindex="0">
         {{ block('form_widget_simple') }}
         <button type="button" class="dropdown-toggle btn" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="dropdown-color border" style="background-color: {{ value|default('#000000') }};"></span>
@@ -192,7 +192,7 @@
 {%- set type = type|default('hidden') -%}
 {%- set editor_id = form.vars.id ~ '_editor' -%}
 {%- set actions = form.vars.actions|default([]) -%}
-<div class="simple-editor border rounded" id="{{ editor_id }}">
+<div class="simple-editor form-control p-0" id="{{ editor_id }}">
     {% if groups|default([])|length -%}
     <div class="simple-editor-toolbar btn-toolbar rounded-top d-print-none" role="toolbar">
         {% for group, actions in groups %}

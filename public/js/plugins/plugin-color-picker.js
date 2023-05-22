@@ -89,6 +89,7 @@
             } else {
                 // create
                 that.$dropdown = $('<div/>', {
+                    'tabindex': '0',
                     'class': 'dropdown color-picker ' + (options.dropdownClass || '')
                 });
 
@@ -125,7 +126,10 @@
             that.$dropdown.on('shown.bs.dropdown', function () {
                 that._onDropdownAfterVisible($(this));
             });
-            that.$dropdown.parents('.form-group').find('label').on('click', function () {
+            that.$dropdown.on('click', () => that.$dropdown.trigger('focus'));
+            that.$dropdown.parents('.form-group').find('.form-label').on('click', function (e) {
+                e.stopPropagation();
+                e.preventDefault();
                 that._setFocus();
             });
         }
@@ -375,11 +379,11 @@
         // -----------------------------
 
         /**
-         * Sets focus to the dropdown toggle.
+         * Sets focus to the dropdown.
          * @private
          */
         _setFocus() {
-            this.$dropdownToggle.trigger('focus');
+            this.$dropdown.trigger('focus');
         }
 
         /**

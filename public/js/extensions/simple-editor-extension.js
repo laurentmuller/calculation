@@ -164,6 +164,11 @@
                     $content.html(value);
                 }
 
+                // label
+                $editor.parents('.form-group').find('.form-label').on('click', function () {
+                    $this.focusSimpleEditor();
+                });
+
                 // focus
                 if (options.focus) {
                     $this.focusSimpleEditor();

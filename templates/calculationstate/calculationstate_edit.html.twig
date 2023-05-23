@@ -4,33 +4,33 @@
 {%- set title = new ? 'calculationstate.add.title' : 'calculationstate.edit.title' -%}
 {%- set title_icon = ICON_CALCULATION_STATE -%}
 {%- set page_list = 'calculationstate_table' -%}
-
+{# body #}
 {% block card_body %}
-<div class="row">
-    <div class="col-md-5">
-        {{ form_row(form.code) }}
+    <div class="row">
+        <div class="col-md-5">
+            {{ form_row(form.code) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.editable) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_row(form.color) }}
+        </div>
     </div>
-    <div class="col-md-3">
-        {{ form_row(form.editable) }}
-    </div>
-    <div class="col-md-4">
-        {{ form_row(form.color) }}
-    </div>
-</div>
-{{ form_row(form.description) }}
+    {{ form_row(form.description) }}
 {% endblock %}
-
+{# footer #}
 {% block card_footer -%}
-{{ parent() }}
-{{ timestampable(item) }}
+    {{ parent() }}
+    {{ timestampable(item) }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
-{% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/plugins/plugin-color-picker.js') }}
-{{ asset_js('js/application/calculationstate_edit.js') }}
-{% else %}
-{{ asset_js('js/calculationstate_edit.js') }}
-{% endif %}
+    {% if app.debug %}
+        {{ parent() }}
+        {{ asset_js('js/plugins/plugin-color-picker.js') }}
+        {{ asset_js('js/application/calculationstate_edit.js') }}
+    {% else %}
+        {{ asset_js('js/calculationstate_edit.js') }}
+    {% endif %}
 {% endblock %}

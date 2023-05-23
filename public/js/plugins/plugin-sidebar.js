@@ -172,10 +172,10 @@
                 e.preventDefault();
             }
             $.hideDropDownMenus();
-            // const duration = this.options.duration;
+            const duration = this.options.duration;
             this.$element.add(this.$pageContent).toggleClass('sidebar-hide');
             if (this._isSideBarHidden()) {
-                this.$navbarHorizontal.show(); // duration
+                this.$navbarHorizontal.show(duration); // duration
             } else {
                 this.$navbarHorizontal.hide(); // duration
             }

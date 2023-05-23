@@ -31,7 +31,9 @@
          * Destructor.
          */
         destroy() {
-            this.$dropdown.before(this.$dropdown).remove();
+            if (this.$parent) {
+                this.$parent.before(this.$parent).remove();
+            }
             this.$element.removeClass('d-none').removeData(ColorPicker.NAME);
             this.$element.off('input', () => this._onElementInput());
         }
@@ -48,14 +50,10 @@
             const that = this;
             const $element = that.$element;
             const focused = $element.is(':focus');
-
-            $element.removeDataAttributes();
-            const length = Object.keys(that.options.colors).length;
+            // $element.removeDataAttributes();
+            that.length = Object.keys(that.options.colors).length;
             that.cols = that.options.columns;
-            that.rows = Math.trunc(length / that.cols);
-            if (length % that.cols !== 0) {
-                that.rows++;
-            }
+            that.rows = Math.ceil(that.length / that.cols);
 
             // drop-down
             that._createDropDown();
@@ -79,59 +77,51 @@
             const options = that.options;
 
             // already created?
-            if (that.$element.parents('.dropdown').length) {
-                // find elements
-                that.$dropdown = that.$element.parents('.dropdown');
-                that.$dropdownToggle = that.$dropdown.find('.dropdown-toggle');
-                that.$spanColor = that.$dropdown.find('.dropdown-color');
-                that.$spanText = that.$dropdown.find('.dropdown-text');
-                that.$dropdownMenu = that.$dropdown.find('.dropdown-menu');
+            const $existing = that.$element.siblings('[data-bs-toggle="dropdown"]');
+            if ($existing.length) {
+                that.$dropdown = $existing;
+                that.$spanColor = $existing.children('.dropdown-color:first');
+                that.$spanText = $existing.children('.dropdown-text:first');
+                that.$dropdownMenu = $existing.siblings('.dropdown-menu:first');
             } else {
-                // create
-                that.$dropdown = $('<div/>', {
-                    'tabindex': '0',
-                    'class': 'dropdown color-picker ' + (options.dropdownClass || '')
+                // parent
+                that.$parent = $('<div/>', {
+                    'class': 'color-picker-parent'
                 });
 
-                that.$dropdownToggle = $('<button/>', {
+                // button
+                that.$dropdown = $('<button/>', {
                     'type': 'button',
-                    'class': 'dropdown-toggle ' + (options.dropdownToggleClass || ''),
+                    'class': 'color-picker dropdown-toggle form-control d-flex align-items-center ' + (options.dropdownToggleClass || ''),
                     'data-bs-toggle': 'dropdown',
-                    'aria-haspopup': 'true',
                     'aria-expanded': 'false'
-                }).appendTo(that.$dropdown);
+                }).appendTo(that.$parent);
 
+                // button color
                 that.$spanColor = $('<span/>', {
                     'class': 'dropdown-color border'
-                }).appendTo(that.$dropdownToggle);
-
-                if (options.displayText) {
-                    that.$spanText = $('<span/>', {
-                        'class': 'dropdown-text'
-                    }).appendTo(that.$dropdownToggle);
-                }
-
-                that.$dropdownMenu = $('<div/>', {
-                    'class': 'dropdown-menu d-print-none'
                 }).appendTo(that.$dropdown);
 
+                // button text
+                if (options.displayText) {
+                    that.$spanText = $('<span/>', {
+                        'class': 'dropdown-text flex-fill text-start'
+                    }).appendTo(that.$dropdown);
+                }
+
+                // menu
+                that.$dropdownMenu = $('<div/>', {
+                    'class': 'color-picker dropdown-menu text-center p-2'
+                }).appendTo(that.$parent);
+
                 // hide element and add dropdown
-                that.$element.addClass('d-none').after(that.$dropdown).prependTo(that.$dropdown);
+                that.$element.addClass('d-none').after(that.$parent).prependTo(that.$parent);
             }
 
             // add handlers
-            that.$dropdown.on('show.bs.dropdown', function () {
-                that._onDropdownBeforeVisible($(this));
-            });
-            that.$dropdown.on('shown.bs.dropdown', function () {
-                that._onDropdownAfterVisible($(this));
-            });
-            that.$dropdown.on('click', () => that.$dropdown.trigger('focus'));
-            that.$dropdown.parents('.form-group').find('.form-label').on('click', function (e) {
-                e.stopPropagation();
-                e.preventDefault();
-                that._setFocus();
-            });
+            that.$dropdown.on('show.bs.dropdown', () => that._onDropdownShow());
+            that.$dropdown.on('shown.bs.dropdown', () => that._onDropdownVisible());
+            that.$dropdownMenu.parents('.form-group').find('.form-label').on('click', (e) => that._onLabelClick(e));
         }
 
         /**
@@ -140,48 +130,41 @@
          */
         _createPalette() {
             const that = this;
+            if (that.$dropdownMenu.children().length) {
+                return;
+            }
+
+            // options
             const options = that.options;
             const colors = options.colors;
             const columns = options.columns;
 
-            // get tooltip options
-            const display = options.tooltipDisplay;
-            const content = options.tooltipContent;
-
             // default buttons options
             let buttonOptions = {
                 'type': 'button',
-                'class': 'border btn btn-color',
+                'class': 'btn btn-color border'
             };
-            if (display) {
+            if (options.tooltipDisplay) {
                 buttonOptions['data-bs-toggle'] = 'tooltip';
                 buttonOptions['data-bs-trigger'] = options.tooltipTrigger;
                 buttonOptions['data-bs-placement'] = options.tooltipPlacement;
             }
 
-            // palette
-            that.$palette = $('<div/>', {
-                'class': 'color-palette'
-            });
-
             // colors
-            let $row;
             Object.keys(colors).forEach(function (name, index) {
-                // row
-                if (index % columns === 0) {
-                    $row = $('<div/>', {
-                        'class': 'color-row'
-                    });
-                    $row.appendTo(that.$palette);
-                }
-                // button
                 const color = colors[name];
                 buttonOptions.css = {
                     'background-color': color
                 };
+                buttonOptions['data-index'] = index;
                 buttonOptions['data-value'] = color;
-                buttonOptions.title = content.replace('{name}', name).replace('{color}', color);
-                $('<button/>', buttonOptions).appendTo($row);
+                buttonOptions.title = options.tooltipContent.replace('{name}', name).replace('{color}', color);
+                $('<button/>', buttonOptions).appendTo(that.$dropdownMenu);
+
+                // separator
+                if ((index + 1) % columns === 0) {
+                    $('<br/>').appendTo(that.$dropdownMenu);
+                }
             });
 
             // custom button
@@ -189,26 +172,17 @@
                 'type': 'button',
                 'text': options.advancedText,
                 'class': 'btn btn-sm btn-outline-secondary mt-1 w-100'
-            }).appendTo(that.$palette);
-
-            // append
-            that.$palette.appendTo(that.$dropdownMenu);
+            }).appendTo(that.$dropdownMenu);
 
             // tooltip
-            if (display) {
+            if (options.tooltipDisplay) {
                 that._findButton('.btn-color').tooltip();
             }
 
             // add handlers
-            that.$customButton.on('click', function (e) {
-                that._onCustomButtonClick(e);
-            });
-            that.$palette.on('click', '.btn-color', function (e) {
-                that._onColorButtonClick(e);
-            });
-            that.$palette.on('keydown', '.btn-color', function (e) {
-                that._onColorButtonKeyDown(e);
-            });
+            that.$customButton.on('click', (e) => that._onCustomButtonClick(e));
+            that.$dropdownMenu.on('click', '.btn-color', (e) => that._onColorButtonClick(e));
+            that.$dropdownMenu.on('keydown', '.btn-color', (e) => that._onColorButtonKeyDown(e));
         }
 
         // -----------------------------
@@ -228,22 +202,17 @@
          * Handles the dropdown before show event.
          * @private
          */
-        _onDropdownBeforeVisible() {
-            if (!this.$palette) {
-                this._createPalette();
-            }
+        _onDropdownShow() {
+            this._createPalette();
         }
 
         /**
          * Handles the dropdown after show event.
          * @private
          */
-        _onDropdownAfterVisible() {
-            // get value
+        _onDropdownVisible() {
             const value = (this.$element.val() || '').toUpperCase();
-
-            // find button
-            const $button = this._findButton('.btn-color[data-value="' + value + '"]:first');
+            const $button = this._findButton(`.btn-color[data-value="${value}"]:first`);
             if ($button) {
                 $button.trigger('focus');
             } else {
@@ -295,14 +264,14 @@
             const lastRow = this.rows - 1;
             const $button = $(e.target);
             const selection = this._getSelection($button);
-            const count = this.$palette.find('.btn-color').length;
+            const length = this.length;
             let index = selection.row * this.cols + selection.col;
 
             switch (e.which) {
                 case 35: // end
                     selection.col = lastCol;
-                    if (e.ctrlKey || selection.row * cols + selection.col >= count) {
-                        index = count - 1;
+                    if (e.ctrlKey || selection.row * cols + selection.col >= length) {
+                        index = length - 1;
                         selection.row = Math.trunc(index / cols);
                         selection.col = index % this.cols;
                     }
@@ -317,8 +286,8 @@
 
                 case 37: // left arrow
                     selection.col = selection.col > 0 ? selection.col - 1 : lastCol;
-                    if (selection.row * cols + selection.col >= count) {
-                        index = count - 1;
+                    if (selection.row * cols + selection.col >= length) {
+                        index = length - 1;
                         selection.row = Math.trunc(index / cols);
                         selection.col = index % this.cols;
                     }
@@ -326,27 +295,27 @@
 
                 case 38: // up arrow
                     selection.row = selection.row > 0 ? selection.row - 1 : lastRow;
-                    if (selection.row * cols + selection.col >= count) {
+                    if (selection.row * cols + selection.col >= length) {
                         selection.row = lastRow - 1;
                     }
                     break;
 
                 case 39: // right arrow
                     selection.col = selection.col < lastCol ? selection.col + 1 : 0;
-                    if (selection.row * cols + selection.col >= count) {
+                    if (selection.row * cols + selection.col >= length) {
                         selection.col = 0;
                     }
                     break;
 
                 case 40: // down arrow
                     selection.row = selection.row < lastRow ? selection.row + 1 : 0;
-                    if (selection.row * cols + selection.col >= count) {
+                    if (selection.row * cols + selection.col >= length) {
                         selection.row = 0;
                     }
                     break;
 
                 case 107: // add
-                    if (index < count - 1) {
+                    if (index < length - 1) {
                         index++;
                         selection.row = Math.trunc(index / cols);
                         selection.col = index % cols;
@@ -359,7 +328,7 @@
                     if (index > 0) {
                         index--;
                     } else {
-                        index = count - 1;
+                        index = length - 1;
                     }
                     selection.row = Math.trunc(index / cols);
                     selection.col = index % cols;
@@ -372,6 +341,18 @@
             // update
             this._setSelection(selection);
             e.preventDefault();
+        }
+
+        /**
+         * Handles the label click event.
+         *
+         * @param {Event} e - the event.
+         * @private
+         */
+        _onLabelClick(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            this._setFocus();
         }
 
         // -----------------------------
@@ -408,26 +389,20 @@
          * @private
          */
         _getSelection($button) {
-            // find focus
-            const $focused = this._findButton('.btn-color:focus');
-            if ($focused) {
+            // find button
+            const $selection = this._findButton('.btn-color:focus') || $button;
+            if ($selection && $selection.length) {
+                const index = $selection.data('index');
                 return {
-                    col: $focused.index(),
-                    row: $focused.parent().index()
-
-                };
-            } else if ($button && $button.length) {
-                return {
-                    col: $button.index(),
-                    row: $button.parent().index()
-                };
-            } else {
-                // first button
-                return {
-                    col: 0,
-                    row: 0
+                    col: index % this.cols,
+                    row: Math.trunc(index / this.cols)
                 };
             }
+            // first button
+            return {
+                col: 0,
+                row: 0
+            };
         }
 
         /**
@@ -438,7 +413,7 @@
          * @private
          */
         _findButton(selector) {
-            const $button = this.$palette.find(selector);
+            const $button = this.$dropdownMenu.find(selector);
             return $button.length ? $button : null;
         }
 
@@ -450,7 +425,8 @@
          * @private
          */
         _setSelection(selection) {
-            const selector = '.color-row:eq(' + selection.row + ') .btn-color:eq(' + selection.col + ')';
+            const index = selection.row * this.cols + selection.col;
+            const selector = `.btn-color[data-index="${index}"]`;
             const $button = this._findButton(selector);
             if ($button) {
                 return $button.trigger('focus');

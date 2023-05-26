@@ -122,17 +122,17 @@
             });
         });
 
-        const toggleTheme = document.querySelector('#toggleTheme');
-        if (toggleTheme) {
-            toggleTheme.checked = getPreferredTheme() === THEME_DARK;
-            toggleTheme.addEventListener('input', () => {
-                const theme = toggleTheme.checked ? THEME_DARK : THEME_LIGHT;
-                if (theme !== getCookieValue()) {
-                    setCookieValue(theme);
-                    setTheme(theme);
-                }
-                showActiveTheme(theme, true);
-            });
-        }
+        // const toggleTheme = document.querySelector('#toggleTheme');
+        // if (toggleTheme) {
+        //     toggleTheme.checked = getPreferredTheme() === THEME_DARK;
+        //     toggleTheme.addEventListener('input', () => {
+        //         const theme = toggleTheme.checked ? THEME_DARK : THEME_LIGHT;
+        //         if (theme !== getCookieValue()) {
+        //             setCookieValue(theme);
+        //             setTheme(theme);
+        //         }
+        //         showActiveTheme(theme, true);
+        //     });
+        // }
     });
 })();

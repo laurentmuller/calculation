@@ -17,6 +17,7 @@ use App\Interfaces\RoleInterface;
 use App\Traits\CookieTrait;
 use App\Twig\ThemeExtension;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -32,6 +33,19 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ThemeController extends AbstractController
 {
     use CookieTrait;
+
+    #[Route(path: '/theme/dialog', name: 'user_theme_dialog')]
+    public function dialog(Request $request, ThemeExtension $extension): JsonResponse
+    {
+        $theme = $extension->getTheme($request);
+        $is_dark = $extension->isDarkTheme($request);
+        $result = $this->renderView('dialog/dialog_theme.html.twig', [
+            'theme_selection' => $theme,
+            'is_dark' => $is_dark,
+        ]);
+
+        return $this->json($result);
+    }
 
     #[Route(path: '/theme', name: 'user_theme')]
     public function theme(Request $request, ThemeExtension $extension): Response

@@ -31,6 +31,7 @@ class ThemeExtension extends AbstractExtension
     {
         return [
             new TwigFunction('theme', $this->getTheme(...)),
+            new TwigFunction('themes', $this->getThemes(...)),
             new TwigFunction('theme_value', $this->getThemeValue(...)),
             new TwigFunction('is_dark_theme', $this->isDarkTheme(...)),
         ];
@@ -45,6 +46,14 @@ class ThemeExtension extends AbstractExtension
         $value = $request->cookies->get(self::KEY_THEME, $default->value);
 
         return Theme::tryFrom($value) ?? $default;
+    }
+
+    /**
+     * @return Theme[]
+     */
+    public function getThemes(): array
+    {
+        return Theme::sorted();
     }
 
     /**

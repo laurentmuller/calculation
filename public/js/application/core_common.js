@@ -134,6 +134,88 @@
     }
 
     /**
+     * Handle theme dialog.
+     */
+    function initThemeDialog() {
+        // window.console.log(bootstrap.Modal.getOrCreateInstance('#theme_modal'));
+        const $dialog = $('#theme_modal');
+        if ($dialog.length === 0) {
+            return;
+        }
+
+        const getCookieValue = function () {
+            const name = "THEME=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const entries = decodedCookie.split(';');
+            for (let i = 0; i < entries.length; i++) {
+                const entry = entries[i].trimStart();
+                if (entry.indexOf(name) === 0) {
+                    return entry.substring(name.length, entry.length);
+                }
+            }
+            return 'auto';
+        };
+
+        const setCookieValue = function (value) {
+            const date = new Date();
+            date.setFullYear(date.getFullYear() + 1);
+            const path = document.body.dataset.cookiePath || '/';
+            let entry = 'THEME=' + encodeURIComponent(value) + ';';
+            entry += 'expires=' + date.toUTCString() + ';';
+            entry += 'path=' + path + ';';
+            entry += 'samesite=lax;';
+            document.cookie = entry;
+        };
+
+        $dialog.on('show.bs.modal', () => {
+            $dialog.data('theme', false);
+            const theme = getCookieValue();
+            document.querySelectorAll('#theme_modal .form-check-input').forEach(e => {
+                e.checked = e.value === theme;
+            });
+            $(window).trigger('resize');
+        });
+        $dialog.on('shown.bs.modal', () => {
+            $('#theme_modal .form-check-input:checked').trigger('focus');
+        });
+        $dialog.on('hidden.bs.modal', () => {
+            const theme = $dialog.data('theme');
+            if (theme) {
+                document.body.setAttribute('data-bs-theme', theme);
+                setCookieValue(theme);
+            }
+        });
+
+        const $btnOk = $('#theme_modal .btn-ok');
+        $btnOk.on('click', () => {
+            const input = document.querySelector('#theme_modal .form-check-input:checked');
+            if (input) {
+                $dialog.data('theme', input.value);
+                const label = input.parentElement.querySelector('label');
+                const link = document.querySelector('.nav-link-modal');
+                if (label && link) {
+                    link.querySelector('.theme-icon').textContent = label.querySelector('.theme-icon').textContent;
+                    link.querySelector('.theme-text').textContent = label.querySelector('.theme-text').textContent;
+                }
+            }
+            $dialog.modal('hide');
+        });
+
+        $('#theme_modal .help-text').on('click', function () {
+            $(this).parent().children('.form-check-input').trigger('click');
+        });
+
+        $('#theme_modal .form-check').on('dblclick', () => $btnOk.trigger('click'));
+        $dialog.on('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                e.stopPropagation();
+                $btnOk.trigger('click');
+            }
+        });
+    }
+
+    /**
      * Handle back to top button.
      */
     function initBackToTop() {
@@ -230,5 +312,6 @@
         showFlashBag();
         handleSubMenus();
         initThemeListener();
+        initThemeDialog();
     });
 }(jQuery));

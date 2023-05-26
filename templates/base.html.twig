@@ -66,7 +66,7 @@
 {{- asset_css('css/style.css') }}
 {% endblock %}
 </head>
-<body data-bs-theme="{{ theme_class }}"{% if status_bar %} class="status-bar"{% endif %} data-cookie-path="{{ cookie_path }}">
+<body data-bs-theme="{{ theme_class }}"{% if status_bar %} class="status-bar"{% endif %} data-cookie-path="{{ cookie_path }}" data-theme-dialog="{{ path('user_theme_dialog') }}">
     {# vertical navigation #}
     {%- block navigation_vertical -%}
         {{- include('navigation_vertical/navigation.html.twig') }}
@@ -89,6 +89,8 @@
         {% block cookie_banner -%}{{ include('cookie_banner.html.twig') }}{%- endblock %}
         {# back to top #}
         {% block back_to_top -%}{{ include('back_to_top.html.twig') }}{%- endblock %}
+        {# dialog theme #}
+        {{ include('dialog/dialog_theme.html.twig') }}
     </div>
 {# java scripts #}
 <noscript>{{ 'common.no_script_support'|trans }}</noscript>

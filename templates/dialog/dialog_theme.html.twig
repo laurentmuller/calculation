@@ -1,0 +1,46 @@
+{% from 'macros/_icons.html.twig' import button_ok, button_close_modal %}
+{% macro output_theme(theme, is_dark, selection) -%}
+    {% from 'macros/_attributes.html.twig' import attributes as output_attributes %}
+    {% set id = 'form_theme_' ~ theme.value %}
+    {% set id_help = id ~ '_help' %}
+    {% set attributes = {
+        'type': 'radio',
+        'class': 'form-check-input',
+        'name': 'form_theme',
+        'value': theme.value,
+        'aria-describedby': id_help,
+        'data-success': theme.success|trans,
+        'data-icon-light': theme.iconLight,
+        'data-icon-dark': theme.iconDark} %}
+    <div class="form-check mb-3">
+        <input id="{{ id }}"{{ output_attributes(attributes) }}{% if selection == theme %} checked="checked"{% endif %}>
+        <label class="form-check-label user-select-none" for="{{ id }}">
+            <i class="theme-icon me-1 {{ is_dark ? theme.iconLight : theme.iconDark }}"></i><span class="theme-text">{{ theme|trans }}</span>
+        </label>
+        <div id="{{ id_help }}" class="form-text help-text user-select-none">{{- theme.help|trans|raw -}}</div>
+    </div>
+{%- endmacro %}
+{# parameters #}
+{% set dialog_id = 'theme_modal' %}
+{% set theme_selection = theme_selection|default(theme(app.request)) %}
+{% set is_dark = is_dark is defined ? is_dark : is_dark_theme(app.request) %}
+<div id="{{ dialog_id }}" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fa-solid fa-image me-1"></i><span class="dialog-title">{{ 'theme.title'|trans }}</span></h5>
+                {{- button_close_modal(true, null, dialog_id) -}}
+            </div>
+            <div class="modal-body mx-3">
+                <p class="mb-3">{{ 'theme.description'|trans }}</p>
+                {% for theme in themes() %}
+                    {{ _self.output_theme(theme, is_dark, theme_selection) }}
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                {{ button_ok() }}
+                {{ button_close_modal(false, 'common.button_cancel', dialog_id) }}
+            </div>
+        </div>
+    </div>
+</div>

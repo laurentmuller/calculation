@@ -246,7 +246,7 @@ function selectRow($source, hideMenus) {
         // handle key down event
         const $body = $('body');
         const handler = createKeydownHandler($table);
-        const selector = ':input, .btn, .dropdown-item, .rowlink-skip';
+        const selector = ':input, .btn, .dropdown-item, .rowlink-skip, .modal';
         $body.on('focus', selector, function () {
             $body.off('keydown', handler);
         }).on('blur', selector, function () {

@@ -8,9 +8,10 @@
     {%- else -%}
         {%- set class = 'fa-solid fa-' ~ icon -%}
     {%- endif -%}
+    {%- if text -%}{%- set class = class ~ ' me-1' -%}{%- endif -%}
     <i class="{{ class }}"></i>
 {%- endif %}
-{%- if text %}{% if icon %} {% endif %}{{ text|trans(parameters, domain) -}}{%- endif -%}
+{{- text|trans(parameters, domain) -}}
 {%- endmacro %}
 
 {# iconify version
@@ -190,9 +191,9 @@
 {% macro navItemThemeSwitcher(class) %}
 {% set class = (class|default('') ~ ' rowlink-skip theme-switcher')|trim %}
 {% set theme = theme(app.request) %}
-    <a href="{{ path('user_theme') }}" class="{{ class }}" title="{{ 'theme.description'|trans }}">
-        <i class="theme-icon me-1 {{ theme.icon }}"></i><span class="theme-text">{{ theme|trans }}</span>
-    </a>
+<a href="{{ path('user_theme') }}" class="{{ class }}" title="{{ 'theme.description'|trans }}">
+    <i class="theme-icon me-1 {{ theme.icon }}"></i><span class="theme-text">{{ theme|trans }}</span>
+</a>
 {% endmacro %}
 
 {% macro theme_entry(theme) %}

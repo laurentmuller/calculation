@@ -37,17 +37,11 @@ class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSub
         parent::__construct($service, $application);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', User::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')
@@ -71,9 +65,6 @@ class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSub
             ->addCheckboxType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getLabelPrefix(): ?string
     {
         return 'user.fields.';

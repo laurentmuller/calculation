@@ -27,8 +27,6 @@ trait TranslatorAwareTrait
     private ?TranslatorInterface $translator = null;
 
     /**
-     * {@inheritDoc}
-     *
      * @psalm-suppress all
      */
     #[SubscribedService]

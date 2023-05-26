@@ -39,33 +39,21 @@ class TaskTable extends AbstractCategoryItemTable
         parent::__construct($repository, $categoryRepository, $groupRepository);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'task.json');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOrder(): array
     {
         return ['name' => self::SORT_ASC];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getDropDownValues(): array
     {
         return $this->categoryRepository->getDropDownTasks();

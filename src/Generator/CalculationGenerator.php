@@ -37,8 +37,6 @@ class CalculationGenerator extends AbstractEntityGenerator
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function createEntities(int $count, bool $simulate, Generator $generator): array

@@ -24,10 +24,10 @@ trait CookieTrait
     /**
      * Clears a cookie in the browser.
      */
-    protected function clearCookie(Response $response, string $key, string $prefix = '', string $path = '/'): void
+    protected function clearCookie(Response $response, string $key, string $prefix = '', string $path = '/', bool $httpOnly = true): void
     {
         $name = $this->getCookieName($key, $prefix);
-        $response->headers->clearCookie($name, $path);
+        $response->headers->clearCookie(name: $name, path: $path, httpOnly: $httpOnly);
     }
 
     protected function getCookieBoolean(Request $request, string $key, string $prefix = '', bool $default = false): bool
@@ -78,23 +78,23 @@ trait CookieTrait
     /**
      * Sets a cookie in the browser.
      */
-    protected function setCookie(Response $response, string $key, mixed $value, string $prefix = '', string $path = '/', string $modify = '+1 year'): void
+    protected function setCookie(Response $response, string $key, mixed $value, string $prefix = '', string $path = '/', string $modify = '+1 year', bool $httpOnly = true): void
     {
         $name = $this->getCookieName($key, $prefix);
         $expire = (new \DateTime())->modify($modify);
-        $cookie = new Cookie($name, (string) $value, $expire, $path);
+        $cookie = new Cookie(name: $name, value: (string) $value, expire: $expire, path: $path, httpOnly: $httpOnly);
         $response->headers->setCookie($cookie);
     }
 
     /**
      * Add or remove a cookie depending on the value. If value is null or empty ('') the cookie is removed.
      */
-    protected function updateCookie(Response $response, string $key, mixed $value, string $prefix = '', string $path = '/', string $modify = '+1 year'): void
+    protected function updateCookie(Response $response, string $key, mixed $value, string $prefix = '', string $path = '/', string $modify = '+1 year', bool $httpOnly = true): void
     {
         if (null === $value || '' === (string) $value) {
-            $this->clearCookie($response, $key, $prefix, $path);
+            $this->clearCookie($response, $key, $prefix, $path, $httpOnly);
         } else {
-            $this->setCookie($response, $key, $value, $prefix, $path, $modify);
+            $this->setCookie($response, $key, $value, $prefix, $path, $modify, $httpOnly);
         }
     }
 }

@@ -28,9 +28,6 @@ class VichImageTypeExtension extends AbstractFileTypeExtension
         $resolver->setDefault('placeholder', null);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getExtendedTypes(): iterable
     {
         return [VichImageType::class];

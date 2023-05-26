@@ -51,7 +51,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @return QueryBuilder the updated query builder
      */
-    public static function addBelowFilter(QueryBuilder $builder, float $minMargin, ?string $alias = null): QueryBuilder
+    public static function addBelowFilter(QueryBuilder $builder, float $minMargin, string $alias = null): QueryBuilder
     {
         $param = 'minMargin';
         $alias ??= $builder->getRootAliases()[0];
@@ -165,9 +165,6 @@ class CalculationRepository extends AbstractRepository
             ->getSingleScalarResult();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
@@ -552,7 +549,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets the last calculations.
      */
-    public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array
+    public function getLastCalculations(int $maxResults, UserInterface $user = null): array
     {
         $builder = $this->getTableQueryBuilder();
         $builder->addOrderBy('e.updatedAt', Criteria::DESC)
@@ -640,9 +637,6 @@ class CalculationRepository extends AbstractRepository
         return $builder->getQuery()->getArrayResult();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         return match ($field) {
@@ -659,9 +653,6 @@ class CalculationRepository extends AbstractRepository
         };
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {

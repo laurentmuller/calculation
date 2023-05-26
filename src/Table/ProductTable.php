@@ -44,25 +44,16 @@ class ProductTable extends AbstractCategoryItemTable
         return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'product.json');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOrder(): array
     {
         return ['description' => self::SORT_ASC];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getDropDownValues(): array
     {
         return $this->categoryRepository->getDropDownProducts();

@@ -39,9 +39,6 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
      */
     private const CACHE_TIMEOUT = 86_400;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheTimeout(): int
     {
         return self::CACHE_TIMEOUT;

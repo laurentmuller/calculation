@@ -34,25 +34,16 @@ class ConsonantCaptcha extends AbstractAlphaCaptcha
         return 'ConsonantCaptcha';
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getAnswer(string $word, int $letterIndex): string
     {
         return $this->findAnswer($word, $letterIndex, self::CONSONANT);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getLetterIndex(): int
     {
         return \array_rand(self::INDEX_MAPPING);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getQuestion(string $word, int $letterIndex): string
     {
         $params = [

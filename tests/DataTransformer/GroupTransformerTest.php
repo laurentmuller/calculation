@@ -31,8 +31,6 @@ class GroupTransformerTest extends KernelTestCase
     private ?GroupTransformer $transformer = null;
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -44,8 +42,6 @@ class GroupTransformerTest extends KernelTestCase
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */

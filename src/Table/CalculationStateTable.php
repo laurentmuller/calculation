@@ -80,33 +80,21 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
         return $this->trans('common.value_false');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'calculation_state.json');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOrder(): array
     {
         return ['code' => self::SORT_ASC];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

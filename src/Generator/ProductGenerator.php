@@ -23,9 +23,6 @@ use App\Utils\FormatUtils;
  */
 class ProductGenerator extends AbstractEntityGenerator
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function createEntities(int $count, bool $simulate, Generator $generator): array
     {
         $entities = [];

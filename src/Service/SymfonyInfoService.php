@@ -401,7 +401,7 @@ final class SymfonyInfoService
      *
      * @return string the relative path
      */
-    private function formatPath(string $path, ?string $baseDir = null): string
+    private function formatPath(string $path, string $baseDir = null): string
     {
         if (null !== $baseDir) {
             try {

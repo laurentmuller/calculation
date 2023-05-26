@@ -60,7 +60,7 @@ class Column implements \Stringable, SortModeInterface
      *
      * @psalm-var string|callable(mixed, AbstractEntity|array): string|null
      */
-    private $fieldFormatter = null;
+    private $fieldFormatter;
 
     /**
      * The value indicating if this column is displayed as a numeric value.

@@ -72,9 +72,6 @@ class LogService implements ServiceSubscriberInterface
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheTimeout(): int
     {
         return self::CACHE_TIMEOUT;

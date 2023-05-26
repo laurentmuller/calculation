@@ -29,9 +29,6 @@ class EntityVoterTest extends TestCase
 {
     private ?EntityVoter $voter = null;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
         $this->voter = $this->getEntityVoter();

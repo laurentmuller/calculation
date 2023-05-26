@@ -33,17 +33,11 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface, ServiceSub
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function checkAnswer(string $givenAnswer, string $expectedAnswer): bool
     {
         return StringUtils::equalIgnoreCase($givenAnswer, $expectedAnswer);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getChallenge(): array
     {
         $word = $this->getRandomWord();

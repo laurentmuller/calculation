@@ -105,7 +105,6 @@ class UserController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'user_excel')]
     public function excel(StorageInterface $storage): SpreadsheetResponse
@@ -301,7 +300,6 @@ class UserController extends AbstractEntityController
      * Export the user access rights to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/rights/excel', name: 'user_rights_excel')]
@@ -354,18 +352,12 @@ class UserController extends AbstractEntityController
         return $this->handleTableRequest($request, $table, 'user/user_table.html.twig', $logger);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return UserType::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
+    protected function getEntities(string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
         if (!$this->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
             /** @psalm-var UserRepository $repository */

@@ -428,7 +428,7 @@ class ImageService
      *
      * @return bool true on success or false on failure
      */
-    public function toBmp(?string $to = null): bool
+    public function toBmp(string $to = null): bool
     {
         return \imagebmp($this->image, $to);
     }
@@ -445,7 +445,7 @@ class ImageService
      *
      * @return bool true on success or false on failure
      */
-    public function toGif(?string $to = null): bool
+    public function toGif(string $to = null): bool
     {
         return \imagegif($this->image, $to);
     }
@@ -465,7 +465,7 @@ class ImageService
      *
      * @return bool true on success or false on failure
      */
-    public function toJpeg(?string $to = null, int $quality = -1): bool
+    public function toJpeg(string $to = null, int $quality = -1): bool
     {
         return \imagejpeg($this->image, $to, $quality);
     }
@@ -486,7 +486,7 @@ class ImageService
      *
      * @return bool true on success or false on failure
      */
-    public function toPng(?string $to = null, int $quality = -1, int $filters = -1): bool
+    public function toPng(string $to = null, int $quality = -1, int $filters = -1): bool
     {
         return \imagepng($this->image, $to, $quality, $filters);
     }
@@ -506,7 +506,7 @@ class ImageService
      *
      * @return bool true on success or false on failure
      */
-    public function toWbmp(?string $to = null, ?int $foreground = null): bool
+    public function toWbmp(string $to = null, int $foreground = null): bool
     {
         if ($foreground) {
             return \imagewbmp($this->image, $to, $foreground);
@@ -528,7 +528,7 @@ class ImageService
      *
      * @return bool true on success or false on failure
      */
-    public function toWebp(?string $to = null, int $quality = 80): bool
+    public function toWebp(string $to = null, int $quality = 80): bool
     {
         return \imagewebp($this->image, $to, $quality);
     }
@@ -546,7 +546,7 @@ class ImageService
      *
      * @return bool true on success or false on failure
      */
-    public function toXbm(?string $to = null, ?int $foreground = null): bool
+    public function toXbm(string $to = null, int $foreground = null): bool
     {
         if ($foreground) {
             return \imagexbm($this->image, $to, $foreground);

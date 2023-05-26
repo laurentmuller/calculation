@@ -45,9 +45,6 @@ abstract class AbstractParametersType extends AbstractType
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
@@ -55,17 +52,11 @@ abstract class AbstractParametersType extends AbstractType
         $this->addSections($helper);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getBlockPrefix(): string
     {
         return '';
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

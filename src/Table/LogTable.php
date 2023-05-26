@@ -44,9 +44,6 @@ class LogTable extends AbstractTable implements \Countable
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function count(): int
     {
         return $this->service->getLogFile()?->count() ?? 0;
@@ -80,9 +77,6 @@ class LogTable extends AbstractTable implements \Countable
         return $this->twig->render('macros/_cell_log_level.html.twig', ['value' => $value, 'log' => $log]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDataQuery(Request $request): DataQuery
     {
         $level = $this->getRequestString($request, self::PARAM_LEVEL, '');
@@ -93,33 +87,21 @@ class LogTable extends AbstractTable implements \Countable
             ->addCustomData(self::PARAM_LEVEL, $level);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getEmptyMessage(): ?string
     {
         return 0 === $this->count() ? 'log.list.empty' : null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getEntityClassName(): ?string
     {
         return Log::class;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'log.json');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function handleQuery(DataQuery $query): DataResults
     {
         $results = parent::handleQuery($query);

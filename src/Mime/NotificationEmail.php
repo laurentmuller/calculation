@@ -91,9 +91,6 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
         return $headers;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

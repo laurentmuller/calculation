@@ -100,7 +100,6 @@ class ProductController extends AbstractEntityController
      * Export the products to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'product_excel')]
     public function excel(ProductRepository $repository): SpreadsheetResponse
@@ -152,8 +151,6 @@ class ProductController extends AbstractEntityController
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @psalm-param Product $item
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
@@ -162,9 +159,6 @@ class ProductController extends AbstractEntityController
         parent::deleteFromDatabase($item);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return ProductType::class;

@@ -114,7 +114,6 @@ class CalculationStateController extends AbstractEntityController
      * Export the calculation states to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'calculationstate_excel')]
@@ -168,8 +167,6 @@ class CalculationStateController extends AbstractEntityController
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-param CalculationState $item
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
@@ -178,9 +175,6 @@ class CalculationStateController extends AbstractEntityController
         parent::deleteFromDatabase($item);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return CalculationStateType::class;

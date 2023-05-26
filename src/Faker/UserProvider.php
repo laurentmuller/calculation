@@ -56,9 +56,6 @@ class UserProvider extends EntityProvider
         return $this->count();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getCriteria(): array
     {
         return ['enabled' => true];

@@ -211,7 +211,7 @@ abstract class AbstractEntityController extends AbstractController
      * @psalm-suppress InvalidReturnStatement
      * @psalm-suppress InvalidReturnType
      */
-    protected function getEntities(?string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
+    protected function getEntities(string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
         $sortedFields = null !== $field ? [$field => $mode] : [];
 
@@ -229,8 +229,6 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
      */
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
@@ -241,8 +239,6 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
      */
     protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
@@ -253,8 +249,6 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpWord\Exception\Exception

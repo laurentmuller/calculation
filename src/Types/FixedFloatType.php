@@ -22,25 +22,16 @@ class FixedFloatType extends Type
 {
     final public const NAME = 'fixed_float';
 
-    /**
-     * {@inheritdoc}
-     */
     public function convertToPHPValue($value, AbstractPlatform $platform): float
     {
         return null === $value ? 0.0 : (float) $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return self::NAME;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         $column['scale'] = 2;

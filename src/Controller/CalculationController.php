@@ -130,7 +130,6 @@ class CalculationController extends AbstractEntityController
      * Export the calculations to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'calculation_excel')]
@@ -148,8 +147,6 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Export a single calculation to a Spreadsheet document.
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => Requirement::DIGITS])]
     public function excelOne(Calculation $calculation): SpreadsheetResponse
@@ -243,8 +240,6 @@ class CalculationController extends AbstractEntityController
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Calculation $item
      *
      * @throws \Doctrine\ORM\Exception\ORMException
@@ -268,17 +263,12 @@ class CalculationController extends AbstractEntityController
         return parent::editEntity($request, $item, $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return CalculationType::class;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-param Calculation $item
      *
      * @throws \Doctrine\ORM\Exception\ORMException

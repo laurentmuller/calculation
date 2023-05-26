@@ -29,9 +29,6 @@ class CalculationEmptyControllerTest extends AbstractControllerTestCase
     private static ?Product $product = null;
     private static ?CalculationState $state = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getRoutes(): array
     {
         return [
@@ -50,8 +47,6 @@ class CalculationEmptyControllerTest extends AbstractControllerTestCase
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function addEntities(): void
@@ -90,8 +85,6 @@ class CalculationEmptyControllerTest extends AbstractControllerTestCase
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function deleteEntities(): void

@@ -57,9 +57,6 @@ class CalculationEmptyReport extends AbstractCalculationItemsReport
         $this->quantityLabel = $this->trans('calculationitem.fields.quantity');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function computeItemsCount(array $items): int
     {
         return \array_reduce($items, fn (int $carry, array $item) => $carry + \count((array) $item['items']), 0);
@@ -75,9 +72,6 @@ class CalculationEmptyReport extends AbstractCalculationItemsReport
         return $this->quantityLabel;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function transCount(array $parameters): string
     {
         return $this->trans('empty.count', $parameters);

@@ -47,8 +47,6 @@ class CalculationDuplicateControllerTest extends AbstractControllerTestCase
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function addEntities(): void
@@ -88,8 +86,6 @@ class CalculationDuplicateControllerTest extends AbstractControllerTestCase
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function deleteEntities(): void

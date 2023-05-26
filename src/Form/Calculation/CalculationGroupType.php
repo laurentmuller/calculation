@@ -32,9 +32,6 @@ class CalculationGroupType extends AbstractEntityType
         parent::__construct(CalculationGroup::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('group')

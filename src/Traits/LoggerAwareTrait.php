@@ -27,8 +27,6 @@ trait LoggerAwareTrait
     private ?LoggerInterface $logger = null;
 
     /**
-     * {@inheritDoc}
-     *
      * @psalm-suppress all
      */
     #[SubscribedService]

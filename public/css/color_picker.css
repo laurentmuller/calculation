@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 .color-picker .btn-color {
-    height: 1.5rem;
+    height: 1.25rem;
     width: 1.5rem;
     margin: 2px;
     border-radius: 0;
@@ -9,16 +9,9 @@
 
 .color-picker .btn-color:focus {
     outline: solid var(--bs-link-color) 2px;
-    /*
-    outline: solid #86b7fe 2px;
-    --bs-accordion-btn-focus-border-color
-    */
 }
 
 .color-picker .btn-color:hover {
-    /* --bs-link-hover-color
-    outline: solid var(--bs-primary) 2px;
-    */
     outline: solid var(--bs-link-hover-color) 2px;
 }
 

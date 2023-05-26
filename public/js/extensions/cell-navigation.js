@@ -11,16 +11,19 @@ $.fn.extend({
         'use strict';
 
         const arrow = {
-            left: 37,
-            up: 38,
-            right: 39,
-            down: 40
+            left: 'ArrowLeft',
+            up: 'ArrowUp',
+            right: 'ArrowRight',
+            down: 'ArrowDown'
         };
 
+        /**
+         * @param {KeyboardEvent} e - the event.
+         */
         this.on('keydown', 'input', function (e) {
             // this.find('input').keydown(function (e) {
             // shortcut for key other than arrow keys
-            if ($.inArray(e.which, [arrow.left, arrow.up, arrow.right, arrow.down]) < 0) {
+            if ($.inArray(e.key, [arrow.left, arrow.up, arrow.right, arrow.down]) < 0) {
                 return;
             }
 
@@ -28,7 +31,7 @@ $.fn.extend({
             const input = e.target;
             const $cell = $(e.target).closest('td');
 
-            switch (e.which) {
+            switch (e.key) {
             case arrow.left:
                 if (input.selectionStart || 0 === 0) {
                     $moveTo = $cell.prev('td:has(input)');
@@ -46,9 +49,9 @@ $.fn.extend({
                 let $moveToRow = null;
                 const $row = $cell.closest('tr');
                 const pos = $cell[0].cellIndex;
-                if (e.which === arrow.down) {
+                if (e.key === arrow.down) {
                     $moveToRow = $row.next('tr');
-                } else if (e.which === arrow.up) {
+                } else if (e.key === arrow.up) {
                     $moveToRow = $row.prev('tr');
                 }
                 if ($moveToRow && $moveToRow.length) {

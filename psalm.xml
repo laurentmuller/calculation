@@ -62,6 +62,13 @@
                 <referencedConstant name="App\Validator\Strength::ERROR_NAMES"/>
             </errorLevel>
         </InvalidClassConstantType>
+
+        <UnsupportedPropertyReferenceUsage>
+            <errorLevel type="suppress">
+                <file name="src/Form/Extension/AbstractFileTypeExtension.php"/>
+                <file name="src/Form/Extension/UrlTypeExtension.php"/>
+            </errorLevel>
+        </UnsupportedPropertyReferenceUsage>
     </issueHandlers>
 
     <plugins>

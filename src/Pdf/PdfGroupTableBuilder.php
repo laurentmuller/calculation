@@ -51,9 +51,6 @@ class PdfGroupTableBuilder extends PdfTableBuilder
         $this->group = new PdfGroup();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function checkNewPage(float $height): bool
     {
         if ($this->groupBeforeHeader && $this->isRepeatHeader()) {

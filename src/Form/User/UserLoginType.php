@@ -29,9 +29,6 @@ class UserLoginType extends AbstractUserCaptchaType
         parent::__construct($service, $application);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')
@@ -48,9 +45,6 @@ class UserLoginType extends AbstractUserCaptchaType
             ->addCheckboxType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getLabelPrefix(): ?string
     {
         return 'security.login.';

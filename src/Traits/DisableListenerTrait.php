@@ -24,17 +24,11 @@ trait DisableListenerTrait
      */
     private bool $enabled = true;
 
-    /**
-     * {@inheritdoc}
-     */
     public function isEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setEnabled(bool $enabled): static
     {
         $this->enabled = $enabled;

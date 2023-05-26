@@ -49,7 +49,7 @@ class PasswordService
      *
      * @return array the validation result where the 'result' is boolean indicate, when true; the success
      */
-    public function validate(string $password, int $strength, ?string $email = null, ?string $user = null): array
+    public function validate(string $password, int $strength, string $email = null, string $user = null): array
     {
         if (null !== $response = $this->validatePassword($password)) {
             return $response;

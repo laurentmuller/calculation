@@ -24,8 +24,6 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     private ?TranslatorInterface $translator = null;
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Exception
      *
      * @see AbstractAuthenticateWebTestCase::setUp()

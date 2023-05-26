@@ -34,9 +34,6 @@ class TaskRepository extends AbstractCategoryItemRepository
         parent::__construct($registry, Task::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         return match ($field) {
@@ -70,9 +67,6 @@ class TaskRepository extends AbstractCategoryItemRepository
         return $builder;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {

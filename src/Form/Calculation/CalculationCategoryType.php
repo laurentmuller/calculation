@@ -32,9 +32,6 @@ class CalculationCategoryType extends AbstractEntityType
         parent::__construct(CalculationCategory::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('category')

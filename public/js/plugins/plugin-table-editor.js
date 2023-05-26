@@ -111,17 +111,17 @@
         /**
          * Handles the key down event.
          *
-         * @param {Event} e - the event.
+         * @param {KeyboardEvent} e - the event.
          * @private
          */
         _keydown(e) {
             const $input = $(e.currentTarget);
-            switch (e.which) {
-                case 13: // enter
+            switch (e.key) {
+                case 'Enter':
                     e.preventDefault();
                     this._save(e, $input);
                     break;
-                case 27:// escape
+                case 'Escape':
                     e.preventDefault();
                     this._update(e, $input);
                     break;

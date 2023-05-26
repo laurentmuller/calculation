@@ -21,8 +21,6 @@ class NonceExtensionTest extends KernelTestCase
     private ?NonceExtension $extension = null;
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Exception
      *
      * @psalm-suppress RedundantCondition

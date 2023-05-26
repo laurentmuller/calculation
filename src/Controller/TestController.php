@@ -35,6 +35,7 @@ use App\Service\MailerService;
 use App\Service\RecaptchaService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
+use App\Traits\CookieTrait;
 use App\Traits\GroupByTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
 use App\Translator\TranslatorFactory;
@@ -74,6 +75,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TestController extends AbstractController
 {
+    use CookieTrait;
     use GroupByTrait;
     use StrengthLevelTranslatorTrait;
 

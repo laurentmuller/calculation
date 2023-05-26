@@ -67,9 +67,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
         $this->items = new ArrayCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __clone()
     {
         parent::__clone();
@@ -96,7 +93,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
      *
      * @param ?string $name the new name
      */
-    public function clone(?string $name = null): self
+    public function clone(string $name = null): self
     {
         $copy = clone $this;
         if (null !== $name) {
@@ -107,8 +104,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return int the number of items
      */
     public function count(): int
@@ -143,9 +138,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
         return $this->items->filter($p);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplay(): string
     {
         return (string) $this->name;

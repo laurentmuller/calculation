@@ -33,9 +33,6 @@ class ProductType extends AbstractEntityType
         parent::__construct(Product::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('description')

@@ -33,9 +33,6 @@ class UserExceptionServiceTest extends TestCase
     private ?Request $request = null;
     private ?UserExceptionService $service = null;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp(): void
     {
         $this->service = new UserExceptionService();

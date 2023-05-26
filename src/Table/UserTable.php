@@ -84,17 +84,11 @@ class UserTable extends AbstractEntityTable
         return $this->translateRole($role);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         $query = parent::createDefaultQueryBuilder($alias);
@@ -109,25 +103,16 @@ class UserTable extends AbstractEntityTable
         return $query;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'user.json');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOrder(): array
     {
         return ['username' => self::SORT_ASC];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

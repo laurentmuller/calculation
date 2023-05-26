@@ -218,7 +218,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     /**
      * Sets the last error and log it.
      */
-    protected function setLastError(int $code, string $message, ?\Exception $exception = null): false
+    protected function setLastError(int $code, string $message, \Exception $exception = null): false
     {
         $this->lastError = new HttpClientError($code, $message, $exception);
         if ($exception instanceof \Exception) {

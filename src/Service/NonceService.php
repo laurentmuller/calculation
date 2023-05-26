@@ -38,7 +38,7 @@ class NonceService
      *
      * @throws \Exception
      */
-    public function getCspNonce(?int $length = null): string
+    public function getCspNonce(int $length = null): string
     {
         return \sprintf("'nonce-%s'", $this->getNonce($length));
     }
@@ -50,7 +50,7 @@ class NonceService
      *
      * @throws \Exception
      */
-    public function getNonce(?int $length = null): string
+    public function getNonce(int $length = null): string
     {
         if (null === $this->nonce) {
             $this->nonce = \bin2hex(\random_bytes($length ?? $this->length));

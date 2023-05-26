@@ -25,9 +25,6 @@ class TasksDocument extends AbstractArrayDocument
     private bool $writeItem = false;
     private bool $writeTask = false;
 
-    /**
-     * {@inheritdoc}
-     */
     public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): static
     {
         parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
@@ -45,8 +42,6 @@ class TasksDocument extends AbstractArrayDocument
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool

@@ -129,9 +129,6 @@ abstract class AbstractController extends BaseController
         return $this->requestStack;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedServices(): array
     {
         return \array_merge(parent::getSubscribedServices(), [
@@ -214,7 +211,7 @@ abstract class AbstractController extends BaseController
      *
      * @return RedirectResponse the response
      */
-    public function redirectToHomePage(string $message = '', array $parameters = [], FlashType $type = FlashType::SUCCESS, ?string $domain = null, ?string $locale = null): RedirectResponse
+    public function redirectToHomePage(string $message = '', array $parameters = [], FlashType $type = FlashType::SUCCESS, string $domain = null, string $locale = null): RedirectResponse
     {
         if ('' !== $message) {
             $message = $this->trans($message, $parameters, $domain, $locale);
@@ -311,7 +308,7 @@ abstract class AbstractController extends BaseController
      * @param \Exception $e       the exception to serialize
      * @param ?string    $message the optional error message
      */
-    protected function jsonException(\Exception $e, ?string $message = null): JsonResponse
+    protected function jsonException(\Exception $e, string $message = null): JsonResponse
     {
         return $this->jsonFalse([
             'message' => $message ?? $e->getMessage(),

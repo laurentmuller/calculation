@@ -90,8 +90,6 @@ abstract class AbstractReader implements \Iterator
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return TValue
      */
     public function current(): mixed
@@ -107,17 +105,11 @@ abstract class AbstractReader implements \Iterator
         return \is_resource($this->stream);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function key(): int
     {
         return $this->key;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next(): void
     {
         $this->parseNextLine();
@@ -126,9 +118,6 @@ abstract class AbstractReader implements \Iterator
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind(): void
     {
         try {
@@ -142,9 +131,6 @@ abstract class AbstractReader implements \Iterator
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function valid(): bool
     {
         return null !== $this->data;

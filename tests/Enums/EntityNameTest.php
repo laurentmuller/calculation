@@ -244,7 +244,7 @@ class EntityNameTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindValue')]
-    public function testTryFindValue(mixed $subject, ?string $expected, ?string $default = null): void
+    public function testTryFindValue(mixed $subject, ?string $expected, string $default = null): void
     {
         $result = EntityName::tryFindValue($subject, $default);
         self::assertSame($expected, $result);

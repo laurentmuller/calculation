@@ -41,23 +41,18 @@ class StrengthValidator extends AbstractConstraintValidator
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly ZxcvbnFactoryInterface $factory,
-        ?PropertyAccessorInterface $propertyAccessor = null
+        PropertyAccessorInterface $propertyAccessor = null
     ) {
         parent::__construct(Strength::class);
         $this->propertyAccessor = $propertyAccessor ?? PropertyAccess::createPropertyAccessor();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Strength $constraint
      */
     protected function doValidate(string $value, Constraint $constraint): void

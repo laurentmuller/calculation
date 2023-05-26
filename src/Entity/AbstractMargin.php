@@ -46,17 +46,11 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $minimum = 0.0;
 
-    /**
-     * {@inheritdoc}
-     */
     public function contains(float $value): bool
     {
         return $value >= $this->minimum && $value < $this->maximum;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplay(): string
     {
         return FormatUtils::formatAmount($this->getMinimum()) . ' - ' . FormatUtils::formatAmount($this->getMaximum());
@@ -78,17 +72,11 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
         return $this->margin * $amount;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMaximum(): float
     {
         return $this->maximum;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMinimum(): float
     {
         return $this->minimum;

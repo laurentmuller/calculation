@@ -48,9 +48,6 @@ abstract class AbstractEntityTable extends AbstractTable
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getEntityClassName(): ?string
     {
         return $this->repository->getClassName();
@@ -117,8 +114,6 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function handleQuery(DataQuery $query): DataResults

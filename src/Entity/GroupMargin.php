@@ -34,8 +34,6 @@ class GroupMargin extends AbstractMargin implements ParentTimestampableInterface
     private ?Group $group = null;
 
     /**
-     * {@inheritDoc}
-     *
      * @return Group|null
      */
     public function getParentTimestampable(): ?TimestampableInterface

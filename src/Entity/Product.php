@@ -59,7 +59,7 @@ class Product extends AbstractCategoryItemEntity implements TimestampableInterfa
      *
      * @param ?string $description the new description
      */
-    public function clone(?string $description = null): self
+    public function clone(string $description = null): self
     {
         $copy = clone $this;
         if ($description) {
@@ -77,9 +77,6 @@ class Product extends AbstractCategoryItemEntity implements TimestampableInterfa
         return $this->description;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplay(): string
     {
         return (string) $this->getDescription();

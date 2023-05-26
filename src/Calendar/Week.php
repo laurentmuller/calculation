@@ -46,9 +46,6 @@ class Week extends AbstractCalendarItem
         parent::__construct($calendar, $key);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
         $name = StringUtils::getShortName($this);
@@ -103,9 +100,6 @@ class Week extends AbstractCalendarItem
         return $this->number;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isCurrent(): bool
     {
         $today = $this->getToday();
@@ -135,8 +129,6 @@ class Week extends AbstractCalendarItem
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return array<string, mixed>
      */
     public function jsonSerialize(): array
@@ -149,9 +141,6 @@ class Week extends AbstractCalendarItem
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function reset(): void
     {
         parent::reset();

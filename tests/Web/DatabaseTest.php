@@ -37,9 +37,6 @@ class DatabaseTest extends KernelTestCase
     use DatabaseTrait;
     use ServiceTrait;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
         self::bootKernel();

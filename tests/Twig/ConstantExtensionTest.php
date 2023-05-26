@@ -21,8 +21,6 @@ class ConstantExtensionTest extends KernelTestCase
     private ?ConstantExtension $extension = null;
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Exception
      *
      * @psalm-suppress RedundantCondition

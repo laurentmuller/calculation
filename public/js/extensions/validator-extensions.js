@@ -89,7 +89,7 @@
         findColorPicker() {
             const $element = $(this);
             const $parent = $element.parents('.form-group');
-            return $parent.findExists('.dropdown.color-picker');
+            return $parent.findExists('button.color-picker');
         },
 
         /**

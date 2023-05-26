@@ -250,9 +250,6 @@ class OpenWeatherService extends AbstractHttpClientService
         return $this->get(self::URI_FORECAST, $query);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheTimeout(): int
     {
         return self::CACHE_TIMEOUT;
@@ -372,9 +369,6 @@ class OpenWeatherService extends AbstractHttpClientService
         return $this->getCacheValue($key, fn () => $this->doSearch($name, $limit)) ?? [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOptions(): array
     {
         return [

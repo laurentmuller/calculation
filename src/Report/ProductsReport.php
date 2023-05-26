@@ -25,9 +25,6 @@ use App\Utils\FormatUtils;
  */
 class ProductsReport extends AbstractArrayReport
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('product.list.title');

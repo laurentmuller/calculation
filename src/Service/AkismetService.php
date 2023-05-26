@@ -80,9 +80,6 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheTimeout(): int
     {
         return self::CACHE_TIMEOUT;
@@ -161,9 +158,6 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
         return $this->getUrlCacheValue(self::URI_VERIFY, fn () => $this->doVerifyKey()) ?? false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOptions(): array
     {
         return [self::BASE_URI => $this->endpoint];

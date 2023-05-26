@@ -28,9 +28,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class CurrentPasswordType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -50,9 +47,6 @@ class CurrentPasswordType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): ?string
     {
         return PasswordType::class;

@@ -42,9 +42,6 @@ class CalculationTableGroups extends PdfTableBuilder
         $this->calculation = $parent->getCalculation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -78,12 +75,12 @@ class CalculationTableGroups extends PdfTableBuilder
         return $table;
     }
 
-    private function addAmount(float $number, ?PdfStyle $style = null): self
+    private function addAmount(float $number, PdfStyle $style = null): self
     {
         return $this->add(text: FormatUtils::formatAmount($number), style: $style);
     }
 
-    private function addPercent(float $number, ?PdfStyle $style = null): self
+    private function addPercent(float $number, PdfStyle $style = null): self
     {
         return $this->add(text: FormatUtils::formatPercent($number), style: $style);
     }

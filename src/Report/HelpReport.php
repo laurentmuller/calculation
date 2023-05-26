@@ -47,9 +47,6 @@ class HelpReport extends AbstractReport
         $this->setTitleTrans('help.title');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(): bool
     {
         $service = $this->service;

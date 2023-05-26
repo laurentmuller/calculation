@@ -25,8 +25,6 @@ use App\Utils\FormatUtils;
 class GlobalMarginsReport extends AbstractArrayReport
 {
     /**
-     * {@inheritdoc}
-     *
      * @param GlobalMargin[] $entities
      */
     protected function doRender(array $entities): bool

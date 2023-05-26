@@ -22,8 +22,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 class ProductsDocument extends AbstractArrayDocument
 {
     /**
-     * {@inheritdoc}
-     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool

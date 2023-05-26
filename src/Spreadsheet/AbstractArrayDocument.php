@@ -32,9 +32,6 @@ abstract class AbstractArrayDocument extends AbstractDocument
         parent::__construct($controller);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(): bool
     {
         if ([] !== $this->entities) {

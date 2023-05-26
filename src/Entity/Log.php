@@ -144,9 +144,6 @@ class Log extends AbstractEntity
         return $this->createdAt;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplay(): string
     {
         return $this->getMessage();

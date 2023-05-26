@@ -43,9 +43,6 @@ abstract class AbstractListEntityType extends AbstractType
         $this->checkSubClass($this->className, AbstractEntity::class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -54,9 +51,6 @@ abstract class AbstractListEntityType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): ?string
     {
         return EntityType::class;

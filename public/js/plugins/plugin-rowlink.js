@@ -75,7 +75,7 @@
         /**
          * Handle the click event.
          *
-         * @param {Event} e - the event.
+         * @param {MouseEvent} e - the event.
          * @param {boolean} [ctrlKey] - the control key value.
          * @private
          */
@@ -86,7 +86,7 @@
             }
 
             e.preventDefault();
-            ctrlKey = ctrlKey || e.ctrlKey || e.type === 'mouseup' && e.which === 1;
+            ctrlKey = ctrlKey || e.ctrlKey || e.type === 'mouseup' && e.button === 0;
             if (!ctrlKey && target.click) {
                 target.click();
             } else if (document.createEvent) {
@@ -136,9 +136,10 @@
     // ------------------------------------
     // Rowlink data-api
     // ------------------------------------
+    /** @param {MouseEvent} e */
     $(document).on('click.bs.rowlink.data-api', '[data-link="row"]', function (e) {
         // check event
-        if (e.type === 'mouseup' && e.which !== 1) {
+        if (e.type === 'mouseup' && e.button !== 0) {
             return;
         }
         if ($(e.target).closest('.rowlink-skip').length !== 0) {
@@ -153,8 +154,7 @@
 
         // initialize
         $this.rowlink($this.data());
-        const ctrlKey = e.ctrlKey || e.which === 2;
-        $(e.target).trigger('click.bs.rowlink', [ctrlKey]);
+        $(e.target).trigger('click.bs.rowlink', [e.ctrlKey]);
     });
 
 }(jQuery));

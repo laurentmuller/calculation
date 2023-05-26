@@ -33,9 +33,6 @@ class CustomerType extends AbstractEntityType
         parent::__construct(Customer::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('title')

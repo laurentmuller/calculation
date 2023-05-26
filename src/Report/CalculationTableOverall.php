@@ -43,9 +43,6 @@ class CalculationTableOverall extends PdfTableBuilder
         $this->minMargin = $parent->getMinMargin();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -88,7 +85,7 @@ class CalculationTableOverall extends PdfTableBuilder
         return $this->add(FormatUtils::formatAmount($number), $cols);
     }
 
-    private function addPercent(float $number, ?PdfStyle $style = null): self
+    private function addPercent(float $number, PdfStyle $style = null): self
     {
         return $this->add(text: FormatUtils::formatPercent($number), style: $style);
     }

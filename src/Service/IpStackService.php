@@ -68,9 +68,6 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         parent::__construct($key);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheTimeout(): int
     {
         return self::CACHE_TIMEOUT;
@@ -86,7 +83,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
      * @psalm-suppress MixedInferredReturnType
      * @psalm-suppress MixedReturnStatement
      */
-    public function getIpInfo(?Request $request = null): ?array
+    public function getIpInfo(Request $request = null): ?array
     {
         $url = $this->getUrl($request);
 
@@ -113,7 +110,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         return null;
     }
 
-    private function getClientIp(?Request $request = null): string
+    private function getClientIp(Request $request = null): string
     {
         if (!$request instanceof Request) {
             return self::URI_CHECK;
@@ -126,7 +123,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         return $clientIp;
     }
 
-    private function getUrl(?Request $request = null): string
+    private function getUrl(Request $request = null): string
     {
         $clientIp = $this->getClientIp($request);
         $query = \http_build_query([

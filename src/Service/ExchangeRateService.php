@@ -95,9 +95,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheTimeout(): ?int
     {
         return $this->timeout;
@@ -175,9 +172,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         return $this->getUrlCacheValue($url, fn () => $this->doGetSupportedCodes($url)) ?? [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOptions(): array
     {
         return [self::BASE_URI => $this->endpoint];

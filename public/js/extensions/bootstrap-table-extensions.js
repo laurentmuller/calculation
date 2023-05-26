@@ -268,7 +268,7 @@ function loadingTemplate(message) {
             // handle page item click
             $('.fixed-table-pagination').on('keydown mousedown', '.page-link', function (e) {
                 const $that = $(this);
-                const isKeyEnter = e.type === 'keydown' && e.which === 13;
+                const isKeyEnter = e.type === 'keydown' && e.key === 'Enter';
                 const isActive = $that.parents('.page-item').hasClass('active');
                 const isMouseDown = e.type === 'mousedown' && e.button === 0 && !isActive;
                 if (isKeyEnter || isMouseDown) {
@@ -928,7 +928,7 @@ function loadingTemplate(message) {
             const $button = $('#page-button');
 
             $dialog.on('keydown', function (e) {
-                if (e.which === 13) { // enter
+                if (e.key === 'Enter') {
                     e.preventDefault();
                     e.stopPropagation();
                     $button.trigger('click');
@@ -986,7 +986,7 @@ function loadingTemplate(message) {
             const $default = $('#sort-default-button');
 
             $dialog.on('keydown', function (e) {
-                if (e.which === 13) { // enter
+                if (e.key === 'Enter') {
                     e.preventDefault();
                     e.stopPropagation();
                     $button.trigger('click');

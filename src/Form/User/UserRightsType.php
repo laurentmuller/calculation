@@ -29,9 +29,6 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -52,9 +49,6 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
         return $this->trans($enabled ? 'common.value_enabled' : 'common.value_disabled');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         parent::addFormFields($helper);
@@ -72,9 +66,6 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
             ->addCheckboxType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getLabelPrefix(): ?string
     {
         return 'user.fields.';

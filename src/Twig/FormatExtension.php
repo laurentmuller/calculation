@@ -55,7 +55,7 @@ final class FormatExtension extends AbstractExtension
      * @param ?string $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
      * @param bool    $translate <code>true</code> to translate texts
      */
-    public function formatBoolean(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
+    public function formatBoolean(bool $value, string $true = null, string $false = null, bool $translate = false): string
     {
         if ($value) {
             if (null !== $true) {
@@ -71,9 +71,6 @@ final class FormatExtension extends AbstractExtension
         return $this->trans('common.value_false');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters(): array
     {
         $options = ['needs_environment' => true];
@@ -91,9 +88,6 @@ final class FormatExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -113,7 +107,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the date format or the calendar is invalid
      */
-    private function dateFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
+    private function dateFilter(Environment $env, \DateTimeInterface|string|null $date, string $dateFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
     {
         return $this->dateTimeFilter($env, $date, $dateFormat, 'none', $timezone, $calendar, $pattern);
     }
@@ -133,7 +127,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the date format, the time format or the calendar is invalid
      */
-    private function dateTimeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $dateFormat = null, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
+    private function dateTimeFilter(Environment $env, \DateTimeInterface|string|null $date, string $dateFormat = null, string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
     {
         // check types and calendar
         $date_type = $this->validateDateFormat($dateFormat);
@@ -162,7 +156,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the time format or the calendar is invalid
      */
-    private function timeFilter(Environment $env, \DateTimeInterface|string|null $date, ?string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', ?string $pattern = null): string
+    private function timeFilter(Environment $env, \DateTimeInterface|string|null $date, string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
     {
         return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $timezone, $calendar, $pattern);
     }

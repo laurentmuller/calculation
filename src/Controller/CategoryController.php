@@ -129,7 +129,6 @@ class CategoryController extends AbstractEntityController
      * Export the categories to a Spreadsheet document.
      *
      * @throws NotFoundHttpException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'category_excel')]
@@ -183,8 +182,6 @@ class CategoryController extends AbstractEntityController
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-param Category $item
      */
     protected function deleteFromDatabase(AbstractEntity $item): void
@@ -193,9 +190,6 @@ class CategoryController extends AbstractEntityController
         parent::deleteFromDatabase($item);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return CategoryType::class;

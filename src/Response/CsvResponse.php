@@ -37,9 +37,6 @@ class CsvResponse extends StreamedResponse implements MimeTypeInterface
         parent::__construct($callback, self::HTTP_OK, $headers);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getFileExtension(): string
     {
         return 'csv';

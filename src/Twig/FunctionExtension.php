@@ -73,9 +73,6 @@ final class FunctionExtension extends AbstractExtension
         $this->webDir = FileUtils::normalize($webDir);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         $options = ['is_safe' => ['html']];
@@ -103,7 +100,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @throws \Exception
      */
-    private function assetCss(string $path, array $parameters = [], ?string $packageName = null): string
+    private function assetCss(string $path, array $parameters = [], string $packageName = null): string
     {
         $href = $this->versionedAsset($path, $packageName);
         $parameters = \array_merge([
@@ -131,7 +128,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Gets an application icon.
      */
-    private function assetIcon(int $size, ?string $packageName = null): string
+    private function assetIcon(int $size, string $packageName = null): string
     {
         $path = \sprintf('images/icons/favicon-%1$dx%1$d.png', $size);
 
@@ -143,7 +140,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @param array<string, string|int> $parameters
      */
-    private function assetImage(string $path, array $parameters = [], ?string $packageName = null): string
+    private function assetImage(string $path, array $parameters = [], string $packageName = null): string
     {
         [$width, $height] = $this->imageSize($path);
         $parameters = \array_merge([
@@ -161,7 +158,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @psalm-param array<string, string|int> $parameters
      */
-    private function assetImageUser(?User $user, ?string $size = null, array $parameters = []): string|false
+    private function assetImageUser(?User $user, string $size = null, array $parameters = []): string|false
     {
         if (!$user instanceof User) {
             return false;
@@ -187,7 +184,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @throws \Exception
      */
-    private function assetJs(string $path, array $parameters = [], ?string $packageName = null): string
+    private function assetJs(string $path, array $parameters = [], string $packageName = null): string
     {
         $parameters = \array_merge([
             'src' => $this->versionedAsset($path, $packageName),
@@ -201,7 +198,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Returns the public url/path of an asset.
      */
-    private function assetUrl(string $path, ?string $packageName = null): string
+    private function assetUrl(string $path, string $packageName = null): string
     {
         return $this->extension->getAssetUrl($path, $packageName);
     }
@@ -291,7 +288,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Gets an asset with version.
      */
-    private function versionedAsset(string $path, ?string $packageName = null): string
+    private function versionedAsset(string $path, string $packageName = null): string
     {
         $url = $this->assetUrl($path, $packageName);
         $version = $this->assetVersion($path);

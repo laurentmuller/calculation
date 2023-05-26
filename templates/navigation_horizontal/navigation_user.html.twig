@@ -1,5 +1,5 @@
 {# user menu #}
-{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, navItem, theme_entry %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, navItem, theme_entry, navItemThemeSwitcher %}
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {% apply spaceless %}
@@ -16,17 +16,7 @@
         {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}
         {{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
         {{ dropdownSeparator() }}
-        <li>
-            {% set theme = theme(app.request) %}
-            <a class="dropdown-item dropdown-item-submenu theme-switcher" href="#">
-                <i class="theme-icon me-1 {{ theme.icon }}"></i><span class="theme-text">{{ theme|trans }}</span>
-            </a>
-            <ul class="submenu submenu-left dropdown-menu dropdown-menu-checked" style="display: none">
-                {{ theme_entry(enum('App\\Enums\\Theme::AUTO')) }}
-                {{ theme_entry(enum('App\\Enums\\Theme::LIGHT')) }}
-                {{ theme_entry(enum('App\\Enums\\Theme::DARK')) }}
-            </ul>
-        </li>
+        {{ navItemThemeSwitcher('dropdown-item') }}
         {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
         {% if is_previous_admin -%}
             {{ dropdownSeparator() }}
@@ -52,7 +42,5 @@
             {{ dropdownSeparator() }}
             {{ dropdownItem(path('about'), 'index.menu_info', 'info-circle', null, {'%app_name%': app_name}) }}
         {% endif %}
-
-
     </ul>
 </li>

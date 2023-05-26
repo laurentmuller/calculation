@@ -65,9 +65,6 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
         $this->margins = new ArrayCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __clone()
     {
         parent::__clone();
@@ -90,8 +87,6 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return int the number of margins
      */
     public function count(): int
@@ -129,9 +124,6 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
         return $margin instanceof TaskItemMargin ? $margin->getValue() : 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplay(): string
     {
         return (string) $this->name;
@@ -154,8 +146,6 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return Task|null
      */
     public function getParentTimestampable(): ?TimestampableInterface

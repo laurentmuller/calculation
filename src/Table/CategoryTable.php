@@ -99,9 +99,6 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         return $this->twig->render('macros/_cell_table_link.html.twig', $context);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
@@ -111,33 +108,21 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         return $query;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'category.json');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOrder(): array
     {
         return ['code' => self::SORT_ASC];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::search($query, $builder, $alias);
@@ -152,9 +137,6 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

@@ -536,25 +536,24 @@
         /**
          * Handle the key event.
          *
-         * @param {Event} e - the event.
+         * @param {KeyboardEvent} e - the event.
          * @private
          */
         _move(e) {
-            const that = this;
-            if (!that.visible) {
+            if (!this.visible) {
                 return;
             }
-            switch (e.which || e.keyCode) {
-                case 9: // tab
-                case 13: // enter
-                case 27: // escape
+            switch (e.key) {
+                case 'Tab':
+                case 'Enter':
+                case 'Escape':
                     e.preventDefault();
                     break;
-                case 38: // up arrow
+                case 'ArrowUp':
                     e.preventDefault();
                     that._prev();
                     break;
-                case 40: // down arrow
+                case 'ArrowDown':
                     e.preventDefault();
                     that._next();
                     break;
@@ -565,63 +564,59 @@
         /**
          * Handle the key down event.
          *
-         * @param {Event} e - the event.
+         * @param {KeyboardEvent} e - the event.
          * @private
          */
         _keydown(e) {
-            const key = e.which || e.keyCode;
-            this.suppressKeyPressRepeat = $.inArray(key, [40, 38, 9, 13, 27]) !== -1;
+            this.suppressKeyPressRepeat = $.inArray(e.key, ['Tab', 'Enter', 'Escape', 'ArrowUp', 'ArrowDown']) !== -1;
             this._move(e);
         }
 
         /**
          * Handle the key press event.
          *
-         * @param {Event} e - the event.
+         * @param {KeyboardEvent} e - the event.
          * @private
          */
         _keypress(e) {
-            if (this.suppressKeyPressRepeat) {
-                return;
+            if (!this.suppressKeyPressRepeat) {
+                this._move(e);
             }
-            this._move(e);
         }
 
         /**
          * Handle the key up event.
          *
-         * @param {Event} e - the event.
+         * @param {KeyboardEvent} e - the event.
          * @private
          */
         _keyup(e) {
-            const key = e.which || e.keyCode;
-            switch (key) {
-                case 40: // down arrow
+            switch (e.key) {
+                case 'ArrowDown':
                     if (e.ctrlKey && !this.visible && this.query !== '') {
                         this.show();
                     }
                     break;
-                case 38: // up arrow
-                case 16: // shift
-                case 17: // ctrl
-                case 18: // alt
+                case 'ArrowUp':
                     break;
-                case 9: // tab
-                case 13: // enter
+                case 'Tab':
+                case 'Enter':
                     if (this.visible) {
                         this._select();
                     }
                     break;
-                case 27: // escape
+                case 'Escape':
                     if (this.visible) {
                         this.hide();
                     }
                     break;
                 default:
-                    if (this.ajax) {
-                        this._ajaxLookup();
-                    } else {
-                        this.lookup();
+                    if (!e.shiftKey && !e.ctrlKey && !e.altKey) {
+                        if (this.ajax) {
+                            this._ajaxLookup();
+                        } else {
+                            this.lookup();
+                        }
                     }
                     break;
             }

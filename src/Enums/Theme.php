@@ -33,7 +33,7 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
     use EnumTranslatableTrait;
 
     /*
-    * The light theme.
+    * The auto (system) theme.
     */
     #[EnumCase(extras: ['icon' => 'fa-solid fa-circle-half-stroke', EnumDefaultInterface::NAME => true])]
     case AUTO = 'auto';
@@ -41,14 +41,22 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
     /*
      * The dark theme.
      */
-    #[EnumCase(extras: ['icon' => 'fa-solid fa-moon'])]
+    #[EnumCase(extras: ['icon' => 'fa-solid fa-moon', 'light-icon' => 'fa-regular fa-moon'])]
     case DARK = 'dark';
 
     /*
      * The light theme.
      */
-    #[EnumCase(extras: ['icon' => 'fa-solid fa-sun'])]
+    #[EnumCase(extras: ['icon' => 'fa-solid fa-sun', 'light-icon' => 'fa-regular fa-sun'])]
     case LIGHT = 'light';
+
+    /**
+     * Gets the help message (to be translated).
+     */
+    public function getHelp(): string
+    {
+        return \sprintf('theme.%s.help', $this->value);
+    }
 
     /**
      * Gets the icon.
@@ -56,6 +64,22 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
     public function getIcon(): string
     {
         return $this->getExtraString('icon');
+    }
+
+    /**
+     * Gets the icon for dark mode.
+     */
+    public function getIconDark(): string
+    {
+        return $this->getIcon();
+    }
+
+    /**
+     * Gets the icon for light mode.
+     */
+    public function getIconLight(): string
+    {
+        return $this->getExtraString('light-icon', $this->getIcon());
     }
 
     /**
@@ -80,9 +104,9 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
     public static function sorted(): array
     {
         return [
-            Theme::AUTO,
             Theme::LIGHT,
             Theme::DARK,
+            Theme::AUTO,
         ];
     }
 }

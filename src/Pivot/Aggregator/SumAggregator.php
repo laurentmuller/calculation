@@ -19,9 +19,6 @@ class SumAggregator extends AbstractAggregator
 {
     private float $result = 0.0;
 
-    /**
-     * {@inheritdoc}
-     */
     public function add(mixed $value): static
     {
         if ($value instanceof self) {
@@ -33,25 +30,16 @@ class SumAggregator extends AbstractAggregator
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFormattedResult(): float
     {
         return \round($this->getResult(), 2);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getResult(): float
     {
         return $this->result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function init(): static
     {
         $this->result = 0;

@@ -38,9 +38,6 @@ abstract class AbstractUserCaptchaType extends AbstractHelperType
         $this->displayCaptcha = $application->isDisplayCaptcha();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return '';

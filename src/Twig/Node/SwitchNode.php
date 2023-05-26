@@ -25,9 +25,6 @@ use Twig\Node\Node;
  */
 final class SwitchNode extends Node
 {
-    /**
-     * {@inheritdoc}
-     */
     public function compile(Compiler $compiler): void
     {
         $compiler

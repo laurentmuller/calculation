@@ -106,9 +106,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         $this->groups = new ArrayCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __clone()
     {
         parent::__clone();
@@ -158,7 +155,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @param ?CalculationState $state       the new state
      * @param ?string           $description the new description
      */
-    public function clone(?CalculationState $state = null, ?string $description = null): self
+    public function clone(CalculationState $state = null, string $description = null): self
     {
         $copy = clone $this;
         if ($state instanceof CalculationState) {
@@ -269,9 +266,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         return $this->description;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplay(): string
     {
         return $this->getFormattedId();

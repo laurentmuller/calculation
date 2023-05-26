@@ -55,8 +55,6 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-param FormView<HiddenType> $view
      * @psalm-param FormInterface<HiddenType> $form
      * @psalm-param array{required:bool} $options
@@ -72,9 +70,6 @@ class SimpleEditorType extends AbstractType
         $view->vars['groups'] = $this->getGroupedActions($options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -83,9 +78,6 @@ class SimpleEditorType extends AbstractType
         ])->setAllowedTypes('actions', ['array', 'null']);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getParent(): ?string
     {
         return HiddenType::class;

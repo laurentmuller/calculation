@@ -85,7 +85,6 @@ class GlobalMarginController extends AbstractEntityController
      * Export the global margins to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'globalmargin_excel')]
@@ -138,9 +137,6 @@ class GlobalMarginController extends AbstractEntityController
         return $this->handleTableRequest($request, $table, 'globalmargin/globalmargin_table.html.twig', $logger);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return GlobalMarginType::class;

@@ -31,8 +31,6 @@ class CategoriesReport extends AbstractArrayReport
     use GroupByTrait;
 
     /**
-     * {@inheritdoc}
-     *
      * @param Category[] $entities
      */
     protected function doRender(array $entities): bool

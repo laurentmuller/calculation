@@ -244,7 +244,7 @@ class PdfDocument extends \FPDF
      *
      * @see PdfDocument::addBookmark()
      */
-    public function addPageIndex(?string $title = null, ?PdfStyle $titleStyle = null, ?PdfStyle $contentStyle = null, bool $addBookmark = true): self
+    public function addPageIndex(string $title = null, PdfStyle $titleStyle = null, PdfStyle $contentStyle = null, bool $addBookmark = true): self
     {
         if ([] === $this->bookmarks) {
             return $this;
@@ -646,7 +646,7 @@ class PdfDocument extends \FPDF
      * @param float    $afterSpace  the verticale space after the line
      * @param ?PdfLine $line        the optional line width to apply
      */
-    public function horizontalLine(float $beforeSpace = 1.0, float $afterSpace = 1.0, ?PdfLine $line = null): self
+    public function horizontalLine(float $beforeSpace = 1.0, float $afterSpace = 1.0, PdfLine $line = null): self
     {
         $x = $this->x;
         $y = $this->y + $beforeSpace;

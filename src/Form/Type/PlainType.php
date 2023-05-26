@@ -92,8 +92,6 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
     final public const NUMBER_PERCENT = 'percent';
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-param FormView<\Symfony\Component\Form\FormTypeInterface> $view
      * @psalm-param FormInterface<\Symfony\Component\Form\FormTypeInterface> $form
      *
@@ -117,9 +115,6 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         $view->vars['hidden_input'] = $options['hidden_input'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -337,7 +332,7 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
     /**
      * @psalm-return ($defaultValue is null ? (string|null) : string)
      */
-    private function getOptionString(array $options, string $name, ?string $defaultValue = null, bool $translate = false): ?string
+    private function getOptionString(array $options, string $name, string $defaultValue = null, bool $translate = false): ?string
     {
         $value = isset($options[$name]) && \is_string($options[$name]) ? $options[$name] : $defaultValue;
 

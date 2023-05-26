@@ -22,9 +22,6 @@ class LogControllerTest extends AbstractControllerTestCase
 {
     use ServiceTrait;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp(): void
     {
         parent::setUp();

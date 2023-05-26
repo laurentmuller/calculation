@@ -24,9 +24,6 @@ class RightsTraitTest extends TestCase
 {
     use RightsTrait;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
         $this->rights = null;

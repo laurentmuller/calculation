@@ -43,9 +43,6 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
         $this->generator = $fakerService->getGenerator();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function generate(int $count, bool $simulate): JsonResponse
     {
         if ($count <= 0) {

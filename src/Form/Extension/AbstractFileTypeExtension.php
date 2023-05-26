@@ -28,8 +28,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 abstract class AbstractFileTypeExtension extends AbstractTypeExtension
 {
     /**
-     * {@inheritdoc}
-     *
      * @psalm-param FormView<T> $view
      * @psalm-param FormInterface<T> $form
      * @psalm-param array<array-key, mixed> $options

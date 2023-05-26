@@ -101,9 +101,6 @@ class PivotField implements \JsonSerializable
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function jsonSerialize(): array
     {
         return \array_filter([

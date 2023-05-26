@@ -31,17 +31,11 @@ class ProfileEditType extends AbstractEntityType
         parent::__construct(User::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         // username

@@ -406,7 +406,7 @@
         /**
          * Handle item key down event
          *
-         * @param {Event} e - the source event.
+         * @param {KeyboardEvent} e - the source event.
          * @return {BoostrapTreeView} this instance for chaining.
          * @private
          */
@@ -416,20 +416,20 @@
             }
 
             const $target = $(e.currentTarget);
-            switch (e.which) {
-                case 35: { // end => last
+            switch (e.key) {
+                case 'End': { //  => last
                     const $item = this.$element.find('.list-group-item:visible:last');
                     this._setSelection($item);
                     break;
                 }
 
-                case 36: { // home => first
+                case 'Home': { // => first
                     const $item = this.$element.find('.list-group-item:visible:first');
                     this._setSelection($item);
                     break;
                 }
 
-                case 37: { // arrow left => collapse or parent
+                case 'ArrowLeft': { // => collapse or parent
                     const $group = $target.next('.list-group:visible');
                     if ($group.length) {
                         this._toggleGroup($group);
@@ -440,7 +440,7 @@
                     break;
                 }
 
-                case 38: { // arrow up => select previous
+                case 'ArrowUp': { // => select previous
                     const $items = this.$element.find('.list-group-item:visible');
                     const index = $items.index($target);
                     if (index > 0) {
@@ -450,7 +450,7 @@
                     break;
                 }
 
-                case 39: { // arrow right => expand or select first child
+                case 'ArrowRight': { // => expand or select first child
                     const $group = $target.next('.list-group:first:not(:visible)');
                     if ($group.length) {
                         this._toggleGroup($group);
@@ -461,7 +461,7 @@
                     break;
                 }
 
-                case 40: {  // arrow down => select next
+                case 'ArrowDown': {  // => select next
                     const $items = this.$element.find('.list-group-item:visible');
                     const index = $items.index($target);
                     const length = $items.length;
@@ -472,15 +472,13 @@
                     break;
                 }
 
-                case 49:
-                case 107: { // + => expand
+                case '+': { // => expand
                     const $group = $target.next('.list-group:first:not(:visible)');
                     this._toggleGroup($group);
                     break;
                 }
 
-                case 109:
-                case 189: { // - => collapse
+                case '-': { // => collapse
                     const $group = $target.next('.list-group:first:visible');
                     this._toggleGroup($group);
                     break;

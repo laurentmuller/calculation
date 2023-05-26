@@ -87,9 +87,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return $this->getPropertyDate(self::P_DATE_CALCULATION);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getCustomer(): CustomerInformation
     {
         $info = new CustomerInformation();
@@ -286,9 +283,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return $properties;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDisplayMode(): TableView
     {
         $default = self::DEFAULT_DISPLAY_MODE;
@@ -297,9 +291,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return TableView::tryFrom($value) ?? $default;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getEditAction(): EntityAction
     {
         $default = self::DEFAULT_ACTION;
@@ -316,9 +307,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return $this->getPropertyDate(self::P_DATE_IMPORT);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMessagePosition(): MessagePosition
     {
         $default = self::DEFAULT_MESSAGE_POSITION;
@@ -327,17 +315,11 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return MessagePosition::tryFrom($value) ?? $default;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMessageProgress(): int
     {
         return $this->getPropertyInteger(self::P_MESSAGE_PROGRESS, self::DEFAULT_MESSAGE_PROGRESS);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMessageTimeout(): int
     {
         return $this->getPropertyInteger(self::P_MESSAGE_TIMEOUT, self::DEFAULT_MESSAGE_TIMEOUT);
@@ -351,9 +333,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return $this->getPropertyFloat(self::P_MIN_MARGIN, self::DEFAULT_MIN_MARGIN);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getPanelCalculation(): int
     {
         return $this->getPropertyInteger(self::P_PANEL_CALCULATION, self::DEFAULT_PANEL_CALCULATION);
@@ -491,81 +470,51 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isMessageClose(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_CLOSE, self::DEFAULT_MESSAGE_CLOSE);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isMessageIcon(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_ICON, self::DEFAULT_MESSAGE_ICON);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isMessageSubTitle(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_SUB_TITLE, self::DEFAULT_MESSAGE_SUB_TITLE);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isMessageTitle(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_TITLE, self::DEFAULT_MESSAGE_TITLE);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isPanelCatalog(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_CATALOG, true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isPanelMonth(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_MONTH, true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isPanelState(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_STATE, true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isPrintAddress(): bool
     {
         return $this->getPropertyBoolean(self::P_PRINT_ADDRESS, self::DEFAULT_PRINT_ADDRESS);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isQrCode(): bool
     {
         return $this->getPropertyBoolean(self::P_QR_CODE, self::DEFAULT_QR_CODE);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isStatusBar(): bool
     {
         return $this->getPropertyBoolean(self::P_STATUS_BAR, true);
@@ -586,7 +535,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return $this;
     }
 
-    public function setProperties(array $properties, ?array $defaultValues = null): static
+    public function setProperties(array $properties, array $defaultValues = null): static
     {
         if ([] !== $properties) {
             $repository = $this->manager->getRepository(Property::class);

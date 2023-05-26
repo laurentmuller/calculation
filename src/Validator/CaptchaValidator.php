@@ -31,8 +31,6 @@ class CaptchaValidator extends AbstractConstraintValidator
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Captcha $constraint
      */
     protected function doValidate(string $value, Constraint $constraint): void

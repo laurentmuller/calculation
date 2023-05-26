@@ -136,9 +136,6 @@ class DataResults implements \JsonSerializable
         return $this->params[$name] ?? $default;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function jsonSerialize(): array
     {
         return [

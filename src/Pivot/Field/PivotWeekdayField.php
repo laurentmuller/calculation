@@ -37,13 +37,10 @@ class PivotWeekdayField extends PivotDateField
     {
         parent::__construct($name, self::PART_WEEK_DAY, $title);
 
-        $firstDay = \strtolower((string) \date('l', \strtotime('this week')));
+        $firstDay = \strtolower(\date('l', \strtotime('this week')));
         $this->names = $short ? DateUtils::getShortWeekdays($firstDay) : DateUtils::getWeekdays($firstDay);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplayValue($value): mixed
     {
         if (\is_int($value) && \array_key_exists($value, $this->names)) {

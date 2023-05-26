@@ -63,6 +63,9 @@
 
         const selector = `[data-bs-theme-value="${theme}"]`;
         const link = document.querySelector(selector);
+        if (!link) {
+            return;
+        }
         const linkIcon = link.querySelector('.theme-icon');
         const linkText = link.querySelector('.theme-text');
 
@@ -118,5 +121,18 @@
                 showActiveTheme(theme, true);
             });
         });
+
+        const toggleTheme = document.querySelector('#toggleTheme');
+        if (toggleTheme) {
+            toggleTheme.checked = getPreferredTheme() === THEME_DARK;
+            toggleTheme.addEventListener('input', () => {
+                const theme = toggleTheme.checked ? THEME_DARK : THEME_LIGHT;
+                if (theme !== getCookieValue()) {
+                    setCookieValue(theme);
+                    setTheme(theme);
+                }
+                showActiveTheme(theme, true);
+            });
+        }
     });
 })();

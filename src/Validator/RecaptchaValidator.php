@@ -37,8 +37,6 @@ class RecaptchaValidator extends AbstractConstraintValidator
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Recaptcha $constraint
      */
     protected function doValidate(string $value, Constraint $constraint): void

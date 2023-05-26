@@ -26,17 +26,11 @@ trait DatabaseTrait
      */
     protected static ?Database $database = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public static function setUpBeforeClass(): void
     {
         self::$database = Database::createDatabase();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function tearDownAfterClass(): void
     {
         if (self::$database instanceof Database) {

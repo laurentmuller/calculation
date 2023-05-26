@@ -77,5 +77,5 @@ interface TranslatorServiceInterface
      *
      * @psalm-return TranslatorTranslateType|false
      */
-    public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false;
+    public function translate(string $text, string $to, string $from = null, bool $html = false): array|false;
 }

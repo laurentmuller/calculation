@@ -23,9 +23,6 @@ use Faker\Provider\Person;
  */
 class CustomerGenerator extends AbstractEntityGenerator
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function createEntities(int $count, bool $simulate, Generator $generator): array
     {
         $entities = [];

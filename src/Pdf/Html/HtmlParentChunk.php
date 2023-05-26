@@ -45,8 +45,6 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return int the number of children
      */
     public function count(): int
@@ -111,9 +109,6 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
         return [] === $this->children;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isNewLine(): bool
     {
         return match ($this->getName()) {
@@ -129,9 +124,6 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
         };
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function output(HtmlReport $report): void
     {
         // update margins

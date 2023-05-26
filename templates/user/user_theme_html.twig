@@ -1,0 +1,39 @@
+{% extends 'cards/card_edit.html.twig' %}
+{# custom render #}
+{% form_theme form _self %}
+{% block choice_widget_expanded %}
+    {%- set dark_mode = is_dark_theme(app.request) -%}
+    <div {{ block('widget_container_attributes') }}>
+        {%- for child in form %}
+            {{- form_widget(child, {
+                parent_label_class: label_attr.class|default(''),
+                translation_domain: choice_translation_domain,
+                valid: valid,
+            }) -}}
+            <div class="ms-4 form-text help-text{% if not loop.last %} mb-3{% endif %}">
+                <i class="{{ child.vars.attr['data-icon'] }} me-2"></i>{{ child.vars.attr['data-help']|raw }}
+            </div>
+        {% endfor -%}
+    </div>
+{% endblock %}
+{# parameters #}
+{%- set title = 'theme.title' -%}
+{%- set title_icon = 'image' -%}
+{%- set title_description = 'theme.description' -%}
+{% block card_container_class ' col-md-8 offset-md-2 col-xl-6 offset-xl-3' %}
+{# body #}
+{% block card_body %}
+<div class="d-flex justify-content-center mx-4 mt-3">
+    {{ form_row(form.theme) }}
+</div>
+{% endblock %}
+
+{# javascript #}
+{% block javascripts -%}
+{% if app.debug %}
+    {{ parent() }}
+    {{ asset_js('js/application/validation_edit.js') }}
+{% else %}
+    {{ asset_js('js/validation_edit.js') }}
+{% endif %}
+{% endblock %}

@@ -28,9 +28,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getEntityClassName(): ?string
     {
         return $this->repository->getClassName();
@@ -59,9 +56,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      */
     abstract protected function formatItems(array $items): string;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'calculation_items.json');
@@ -113,9 +107,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      */
     abstract protected function getItemsCount(array $items): int;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function handleQuery(DataQuery $query): DataResults
     {
         $results = parent::handleQuery($query);
@@ -133,9 +124,6 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
         return $results;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

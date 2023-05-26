@@ -78,9 +78,6 @@ class CalculationReport extends AbstractReport
         $this->renderCalculation();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(): bool
     {
         $calculation = $this->calculation;

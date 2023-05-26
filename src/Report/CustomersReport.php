@@ -43,8 +43,6 @@ class CustomersReport extends AbstractArrayReport
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Customer[] $entities
      */
     protected function doRender(array $entities): bool

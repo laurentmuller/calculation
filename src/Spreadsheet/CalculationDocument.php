@@ -49,9 +49,6 @@ class CalculationDocument extends AbstractDocument
         parent::__construct($controller);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function render(): bool
     {
         $emptyRows = [];

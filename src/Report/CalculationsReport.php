@@ -56,8 +56,6 @@ class CalculationsReport extends AbstractArrayReport
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Calculation[] $entities
      */
     protected function doRender(array $entities): bool

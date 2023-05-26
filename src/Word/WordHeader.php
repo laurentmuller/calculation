@@ -37,9 +37,6 @@ class WordHeader extends AbstractHeaderFooter
 
     private bool $printAddress = false;
 
-    /**
-     * {@inheritdoc}
-     */
     public function output(Section $section): void
     {
         $title = $this->getTitle() ?? '';

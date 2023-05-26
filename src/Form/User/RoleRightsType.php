@@ -19,9 +19,6 @@ use App\Form\FormHelper;
  */
 class RoleRightsType extends RightsType
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         parent::addFormFields($helper);

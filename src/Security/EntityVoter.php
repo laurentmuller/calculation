@@ -39,17 +39,11 @@ class EntityVoter extends Voter
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function supportsAttribute(string $attribute): bool
     {
         return EntityPermission::tryFromName($attribute) instanceof EntityPermission;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
         if ($subject instanceof EntityName) {
@@ -60,17 +54,11 @@ class EntityVoter extends Voter
         return parent::vote($token, $subject, $attributes);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function supports(string $attribute, mixed $subject): bool
     {
         return $this->supportsAttribute($attribute) && EntityName::tryFromMixed($subject) instanceof EntityName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         if (!($user = $this->getUser($token)) instanceof User) {

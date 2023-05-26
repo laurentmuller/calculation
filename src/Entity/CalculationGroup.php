@@ -86,9 +86,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
         $this->categories = new ArrayCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __clone()
     {
         parent::__clone();
@@ -121,8 +118,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return int the number of categories
      */
     public function count(): int
@@ -168,9 +163,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
         return $this->code;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplay(): string
     {
         return (string) $this->getCode();
@@ -201,8 +193,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return Calculation|null
      */
     public function getParentTimestampable(): ?TimestampableInterface

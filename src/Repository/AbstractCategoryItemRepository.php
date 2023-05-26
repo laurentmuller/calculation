@@ -54,9 +54,6 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
             ->getSingleScalarResult();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
@@ -66,9 +63,6 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
             ->addSelect(self::GROUP_ALIAS);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         return match ($field) {
@@ -82,9 +76,6 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
         };
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {

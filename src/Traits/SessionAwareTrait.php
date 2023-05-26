@@ -141,7 +141,7 @@ trait SessionAwareTrait
      *
      * @psalm-return ($default is null ? (string|null) : string)
      */
-    protected function getSessionString(string $key, ?string $default = null): ?string
+    protected function getSessionString(string $key, string $default = null): ?string
     {
         /** @psalm-var string|null $value */
         $value = $this->getSessionValue($key, $default);

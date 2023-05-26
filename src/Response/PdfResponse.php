@@ -42,9 +42,6 @@ class PdfResponse extends Response implements MimeTypeInterface
         parent::__construct($content, self::HTTP_OK, $headers);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getFileExtension(): string
     {
         return 'pdf';

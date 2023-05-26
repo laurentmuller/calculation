@@ -31,8 +31,6 @@ class PasswordValidator extends AbstractConstraintValidator
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Password $constraint
      */
     protected function doValidate(string $value, Constraint $constraint): void

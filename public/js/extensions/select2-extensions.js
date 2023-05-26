@@ -19,11 +19,13 @@
             if ($this.hasAttr('multiple')) {
                 return;
             }
+
+            /* @param {KeyboardEvent} e - the event. */
             $this.data('select2').on('keypress', function (e) {
                 if (this.isOpen()) {
                     return;
                 }
-                if (e.ctrlKey || e.altKey || e.shiftKey || e.which <= 32) {
+                if (e.ctrlKey || e.altKey || e.shiftKey) {
                     return;
                 }
 
@@ -33,37 +35,30 @@
                 const oldIndex = options.indexOf(selection);
                 const lastIndex = options.length - 1;
 
-                switch (e.which) {
-                    case 33:
-                        // page up
+                switch (e.key) {
+                    case 'PageUp':
                         newIndex = Math.max(oldIndex - 5, 0);
                         break;
-                    case 34:
-                        // page down
+                    case 'PageDown':
                         newIndex = Math.min(oldIndex + 5, lastIndex);
                         break;
-                    case 35:
-                        // end
+                    case 'End':
                         newIndex = lastIndex;
                         break;
-                    case 36:
-                        // home
+                    case 'Home':
                         newIndex = 0;
                         break;
-                    case 38:
-                        // arrow up
+                    case 'ArrowUp':
                         newIndex = Math.max(oldIndex - 1, 0);
                         break;
-                    case 40:
-                        // arrow down
+                    case 'ArrowDown':
                         newIndex = Math.min(oldIndex + 1, lastIndex);
                         break;
                     default:
-                        const toFind = e.key || String.fromCharCode(e.which);
                         // find from after index to end
                         if (newIndex === -1) {
                             for (let i = oldIndex + 1; i <= lastIndex; i++) {
-                                if (options[i].text.startsWithIgnoreCase(toFind)) {
+                                if (options[i].text.startsWithIgnoreCase(e.key)) {
                                     newIndex = i;
                                     break;
                                 }
@@ -72,7 +67,7 @@
                         // find from start to before index
                         if (newIndex === -1) {
                             for (let i = 0; i < oldIndex; i++) {
-                                if (options[i].text.startsWithIgnoreCase(toFind)) {
+                                if (options[i].text.startsWithIgnoreCase(e.key)) {
                                     newIndex = i;
                                     break;
                                 }

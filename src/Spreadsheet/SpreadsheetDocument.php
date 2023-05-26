@@ -140,9 +140,6 @@ class SpreadsheetDocument extends Spreadsheet
         return $this->title;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -158,7 +155,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
-    public function mergeCells(int $startColumn, int $endColumn, int $startRow, ?int $endRow = null): static
+    public function mergeCells(int $startColumn, int $endColumn, int $startRow, int $endRow = null): static
     {
         $this->getActiveSheet()->mergeCells([$startColumn, $startRow, $endColumn, $endRow ?? $startRow]);
 
@@ -170,7 +167,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * If this parent's controller is not null, the header and footer are also updated.
      */
-    public function setActiveTitle(string $title, ?AbstractController $controller = null): static
+    public function setActiveTitle(string $title, AbstractController $controller = null): static
     {
         $title = $this->validateSheetTitle($title);
         $this->getActiveSheet()->setTitle($title);

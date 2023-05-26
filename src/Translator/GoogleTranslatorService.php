@@ -55,8 +55,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function detect(string $text): array|false
@@ -77,28 +75,20 @@ class GoogleTranslatorService extends AbstractTranslatorService
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getApiUrl(): string
     {
         return 'https://cloud.google.com/translate/docs/translating-text';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getName(): string
     {
         return 'Google';
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false
+    public function translate(string $text, string $to, string $from = null, bool $html = false): array|false
     {
         $query = [
             'q' => $text,
@@ -134,9 +124,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOptions(): array
     {
         return [
@@ -148,8 +135,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     protected function loadLanguages(): array|false

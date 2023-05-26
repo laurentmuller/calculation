@@ -31,11 +31,14 @@
          * Destructor.
          */
         destroy() {
+            this.$dropdown.off('shown.bs.dropdown', () => this._onDropdownVisible());
+            this.$dropdown.off('show.bs.dropdown', () => this._onDropdownShow());
+            this.$label.off('click', (e) => this._onLabelClick(e));
             if (this.$parent) {
                 this.$parent.before(this.$parent).remove();
             }
-            this.$element.removeClass('d-none').removeData(ColorPicker.NAME);
             this.$element.off('input', () => this._onElementInput());
+            this.$element.css('display', 'block').removeData(ColorPicker.NAME);
         }
 
         // -----------------------------
@@ -80,8 +83,8 @@
             const $existing = that.$element.siblings('[data-bs-toggle="dropdown"]');
             if ($existing.length) {
                 that.$dropdown = $existing;
-                that.$spanColor = $existing.children('.dropdown-color:first');
                 that.$spanText = $existing.children('.dropdown-text:first');
+                that.$spanColor = $existing.children('.dropdown-color:first');
                 that.$dropdownMenu = $existing.siblings('.dropdown-menu:first');
             } else {
                 // parent
@@ -92,17 +95,18 @@
                 // button
                 that.$dropdown = $('<button/>', {
                     'type': 'button',
-                    'class': 'color-picker dropdown-toggle form-control d-flex align-items-center ' + (options.dropdownToggleClass || ''),
+                    'role': 'combobox',
+                    'aria-expanded': 'false',
                     'data-bs-toggle': 'dropdown',
-                    'aria-expanded': 'false'
+                    'class': 'color-picker dropdown-toggle form-control d-flex align-items-center'
                 }).appendTo(that.$parent);
 
-                // button color
+                // span color
                 that.$spanColor = $('<span/>', {
                     'class': 'dropdown-color border'
                 }).appendTo(that.$dropdown);
 
-                // button text
+                // span text
                 if (options.displayText) {
                     that.$spanText = $('<span/>', {
                         'class': 'dropdown-text flex-fill text-start'
@@ -114,14 +118,16 @@
                     'class': 'color-picker dropdown-menu text-center p-2'
                 }).appendTo(that.$parent);
 
-                // hide element and add dropdown
-                that.$element.addClass('d-none').after(that.$parent).prependTo(that.$parent);
+                // hide element and add parent
+                that.$element.css('display', 'table-column').after(that.$parent).prependTo(that.$parent);
             }
+
+            that.$label = that.$dropdownMenu.parents('.form-group').children('.form-label:first');
 
             // add handlers
             that.$dropdown.on('show.bs.dropdown', () => that._onDropdownShow());
             that.$dropdown.on('shown.bs.dropdown', () => that._onDropdownVisible());
-            that.$dropdownMenu.parents('.form-group').find('.form-label').on('click', (e) => that._onLabelClick(e));
+            that.$label.on('click', (e) => that._onLabelClick(e));
         }
 
         /**
@@ -129,6 +135,7 @@
          * @private
          */
         _createPalette() {
+            // already created?
             const that = this;
             if (that.$dropdownMenu.children().length) {
                 return;
@@ -182,7 +189,7 @@
             // add handlers
             that.$customButton.on('click', (e) => that._onCustomButtonClick(e));
             that.$dropdownMenu.on('click', '.btn-color', (e) => that._onColorButtonClick(e));
-            that.$dropdownMenu.on('keydown', '.btn-color', (e) => that._onColorButtonKeyDown(e));
+            that.$dropdownMenu.on('keyup', '.btn-color', (e) => that._onColorButtonKeyUp(e));
         }
 
         // -----------------------------
@@ -212,7 +219,7 @@
          */
         _onDropdownVisible() {
             const value = (this.$element.val() || '').toUpperCase();
-            const $button = this._findButton(`.btn-color[data-value="${value}"]:first`);
+            const $button = this._findButton(`.btn-color[data-value="${value}"]`);
             if ($button) {
                 $button.trigger('focus');
             } else {
@@ -258,7 +265,7 @@
          * @param {KeyboardEvent} e - the event.
          * @private
          */
-        _onColorButtonKeyDown(e) {
+        _onColorButtonKeyUp(e) {
             const cols = this.cols;
             const lastCol = this.cols - 1;
             const lastRow = this.rows - 1;
@@ -267,8 +274,15 @@
             const length = this.length;
             let index = selection.row * this.cols + selection.col;
 
-            switch (e.which) {
-                case 35: // end
+            switch (e.key) {
+                case 'Home':
+                    selection.col = 0;
+                    if (e.ctrlKey) {
+                        selection.row = 0;
+                    }
+                    break;
+
+                case 'End':
                     selection.col = lastCol;
                     if (e.ctrlKey || selection.row * cols + selection.col >= length) {
                         index = length - 1;
@@ -277,14 +291,7 @@
                     }
                     break;
 
-                case 36: // home
-                    selection.col = 0;
-                    if (e.ctrlKey) {
-                        selection.row = 0;
-                    }
-                    break;
-
-                case 37: // left arrow
+                case 'ArrowLeft':
                     selection.col = selection.col > 0 ? selection.col - 1 : lastCol;
                     if (selection.row * cols + selection.col >= length) {
                         index = length - 1;
@@ -293,28 +300,28 @@
                     }
                     break;
 
-                case 38: // up arrow
+                case 'ArrowUp': // up arrow
                     selection.row = selection.row > 0 ? selection.row - 1 : lastRow;
                     if (selection.row * cols + selection.col >= length) {
                         selection.row = lastRow - 1;
                     }
                     break;
 
-                case 39: // right arrow
+                case 'ArrowRight':
                     selection.col = selection.col < lastCol ? selection.col + 1 : 0;
                     if (selection.row * cols + selection.col >= length) {
                         selection.col = 0;
                     }
                     break;
 
-                case 40: // down arrow
+                case 'ArrowDown':
                     selection.row = selection.row < lastRow ? selection.row + 1 : 0;
                     if (selection.row * cols + selection.col >= length) {
                         selection.row = 0;
                     }
                     break;
 
-                case 107: // add
+                case '+':
                     if (index < length - 1) {
                         index++;
                         selection.row = Math.trunc(index / cols);
@@ -324,7 +331,7 @@
                     }
                     break;
 
-                case 109: // subtract
+                case '-':
                     if (index > 0) {
                         index--;
                     } else {
@@ -352,6 +359,9 @@
         _onLabelClick(e) {
             e.stopPropagation();
             e.preventDefault();
+            if (this.$dropdown.hasClass('show')) {
+                this.$dropdown.dropdown('hide');
+            }
             this._setFocus();
         }
 
@@ -460,10 +470,6 @@
     // -----------------------------------
     ColorPicker.DEFAULTS = {
         focus: false, // set focus to the control
-
-        // classes
-        dropdownClass: 'form-control',
-        dropdownToggleClass: 'btn',
 
         columns: 8, // the number of columns
         displayText: true, // false to hide text

@@ -75,12 +75,19 @@
                 {{ navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
             </ul>
         </li>
-
         {{ dropdownSeparator() }}
         {{ navItem(path('test_notifications'), 'test.notification', 'bell far') }}
         {{ navItem(path('test_editor'), 'test.editor', 'edit') }}
         {{ navItem(path('test_password'), 'password.title', 'lock') }}
         {{ navItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') }}
         {{ navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
+        <li class="nav-item mb-2">
+            <div class="form-check form-switch" title="{{ 'theme.dark.title'|trans }}">
+                <input type="checkbox" class="form-check-input form-check-dark" id="toggleTheme"{% if is_dark_theme(app.request) %} checked="checked"{% endif %}>
+                <label class="form-check-label nav-link py-0" for="toggleTheme">
+                    {{- 'theme.dark.name'|trans -}}
+                </label>
+            </div>
+        </li>
     </ul>
 </li>

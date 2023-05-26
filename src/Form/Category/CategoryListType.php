@@ -33,9 +33,6 @@ class CategoryListType extends AbstractListEntityType
         parent::__construct(Category::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

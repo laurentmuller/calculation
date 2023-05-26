@@ -71,9 +71,6 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
      */
     abstract protected function computeItemsCount(array $items): int;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function doRender(array $entities): bool
     {
         $this->AddPage();

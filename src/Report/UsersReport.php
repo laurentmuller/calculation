@@ -44,8 +44,6 @@ class UsersReport extends AbstractArrayReport
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param User[] $entities
      */
     protected function doRender(array $entities): bool

@@ -141,9 +141,6 @@ class HelpService implements ServiceSubscriberInterface
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheTimeout(): int
     {
         return self::CACHE_TIMEOUT;

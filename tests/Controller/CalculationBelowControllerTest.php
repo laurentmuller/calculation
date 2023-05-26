@@ -46,9 +46,6 @@ class CalculationBelowControllerTest extends AbstractControllerTestCase
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addEntities(): void
     {
         if (!self::$state instanceof CalculationState) {
@@ -88,9 +85,6 @@ class CalculationBelowControllerTest extends AbstractControllerTestCase
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function deleteEntities(): void
     {
         self::$calculation = $this->deleteEntity(self::$calculation);

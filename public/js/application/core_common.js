@@ -42,7 +42,7 @@
             });
         });
         $input.on('keyup', function (e) {
-            if (e.which === 27) { // escape
+            if (e.key === 'Escape') {
                 hideForm();
             } else {
                 if ($input.val().trim().length < 2) {

@@ -57,9 +57,6 @@ class HtmlTextChunk extends AbstractHtmlChunk
         return !StringUtils::isString($this->text);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isNewLine(): bool
     {
         // check if the next chunk is a parent chunk
@@ -87,17 +84,11 @@ class HtmlTextChunk extends AbstractHtmlChunk
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getOutputText(): ?string
     {
         return $this->getText();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function outputText(HtmlReport $report, string $text): void
     {
         if (($parent = $this->getParent()) instanceof HtmlParentChunk) {

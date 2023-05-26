@@ -220,9 +220,10 @@ function updatePrices() {
     });
     $category.trigger('input');
 
+    /** @param {MouseEvent} e */
     $('#form_products tbody').on('mousedown', 'td', function (e) {
         const $target = $(e.target);
-        if (e.which === 1 && !$target.is(':checkbox') && !$target.is('label') && !isAllProducts()) {
+        if (e.button === 0 && !$target.is(':checkbox') && !$target.is('label') && !isAllProducts()) {
             $(this).closest('tr').find(':checkbox').toggleChecked().trigger('focus');
             validateProducts();
         }

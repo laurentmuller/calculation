@@ -46,9 +46,6 @@ class CalculationStateProvider extends EntityProvider
         return $this->count();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getCriteria(): array
     {
         return ['editable' => true];

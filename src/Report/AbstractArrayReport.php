@@ -43,9 +43,6 @@ abstract class AbstractArrayReport extends AbstractReport
         parent::__construct($controller, $orientation, $unit, $size);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(): bool
     {
         if ([] !== $this->entities) {

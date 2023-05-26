@@ -182,8 +182,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see UserInterface
      */
     public function eraseCredentials(): void
@@ -232,9 +230,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         return $url;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplay(): string
     {
         return $this->getUserIdentifier();
@@ -257,8 +252,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see ResetPasswordRequestInterface
      */
     public function getExpiresAt(): \DateTimeInterface
@@ -267,8 +260,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see ResetPasswordRequestInterface
      */
     public function getHashedToken(): string
@@ -330,8 +321,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see PasswordAuthenticatedUserInterface
      */
     public function getPassword(): ?string
@@ -350,8 +339,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see ResetPasswordRequestInterface
      */
     public function getRequestedAt(): \DateTimeInterface
@@ -360,8 +347,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see ResetPasswordRequestInterface
      */
     public function getUser(): object
@@ -396,8 +381,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see ResetPasswordRequestInterface
      */
     public function isExpired(): bool
@@ -465,7 +448,7 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
      * @param ?File $imageFile the file
      * @param bool  $update    true to update the modification date
      */
-    public function setImageFile(?File $imageFile = null, bool $update = true): self
+    public function setImageFile(File $imageFile = null, bool $update = true): self
     {
         $this->imageFile = $imageFile;
         if ($update) {

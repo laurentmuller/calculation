@@ -46,9 +46,6 @@ class Month extends AbstractCalendarItem implements \Stringable
         parent::__construct($calendar, $key);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
         $name = StringUtils::getShortName($this);
@@ -120,9 +117,6 @@ class Month extends AbstractCalendarItem implements \Stringable
         });
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isCurrent(): bool
     {
         $today = $this->getToday();
@@ -152,8 +146,6 @@ class Month extends AbstractCalendarItem implements \Stringable
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return array<string, mixed>
      */
     public function jsonSerialize(): array
@@ -167,9 +159,6 @@ class Month extends AbstractCalendarItem implements \Stringable
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function reset(): void
     {
         parent::reset();

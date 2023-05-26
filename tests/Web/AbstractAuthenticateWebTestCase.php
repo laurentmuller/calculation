@@ -46,9 +46,6 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 
     protected ?KernelBrowser $client = null;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
         parent::setUp();

@@ -63,9 +63,6 @@ class CustomerRepository extends AbstractRepository
             ->getResult();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         return match ($field) {
@@ -75,9 +72,6 @@ class CustomerRepository extends AbstractRepository
         };
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {

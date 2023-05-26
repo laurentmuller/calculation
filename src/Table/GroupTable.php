@@ -66,25 +66,16 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
         return $this->twig->render('macros/_cell_table_link.html.twig', $context);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'group.json');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOrder(): array
     {
         return ['code' => self::SORT_ASC];

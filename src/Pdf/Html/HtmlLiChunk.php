@@ -22,9 +22,6 @@ use App\Report\HtmlReport;
  */
 class HtmlLiChunk extends HtmlParentChunk
 {
-    /**
-     * {@inheritdoc}
-     */
     public function outputChildren(HtmlReport $report): void
     {
         $margin = $this->getBulletMargin($report);
@@ -33,9 +30,6 @@ class HtmlLiChunk extends HtmlParentChunk
         });
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getOutputText(): ?string
     {
         if (($parent = $this->getParentList()) instanceof HtmlParentChunk) {
@@ -49,9 +43,6 @@ class HtmlLiChunk extends HtmlParentChunk
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function outputText(HtmlReport $report, string $text): void
     {
         $this->applyFont($report, $this->findFont(), function (HtmlReport $report) use ($text): void {

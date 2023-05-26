@@ -51,6 +51,7 @@ function onRestrictInput($restrict) {
  */
 function createKeydownHandler($table) {
     'use strict';
+    /** @param {KeyboardEvent} e */
     return function (e) {
         // special key?
         if ((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
@@ -64,8 +65,8 @@ function createKeydownHandler($table) {
         }
 
         const $selection = $table.find('tr.table-primary');
-        switch (e.which) {
-            case 13:  // enter (edit selected row)
+        switch (e.key) {
+            case 'Enter':  // edit selected row
             {
                 const $link = $selection.find('.btn-default');
                 if ($link.length) {
@@ -74,7 +75,7 @@ function createKeydownHandler($table) {
                 }
                 break;
             }
-            case 35:// end (select last row)
+            case 'End':// select last row
             {
                 const $last = $table.find('tr:last');
                 if (!$selection.is($last)) {
@@ -84,7 +85,7 @@ function createKeydownHandler($table) {
                 }
                 break;
             }
-            case 36: // home (select first row)
+            case 'Home': // select first row
             {
                 const $first = $table.find('tr:first');
                 if (!$selection.is($first)) {
@@ -94,8 +95,8 @@ function createKeydownHandler($table) {
                 }
                 break;
             }
-            case 37: // left arrow (select previous row or first if no selection)
-            case 38: // up arrow
+            case 'ArrowLeft':
+            case 'ArrowUp': // select previous row or first if no selection
             {
                 const $prev = $selection.prev();
                 const $last = $table.find('tr:last');
@@ -113,8 +114,8 @@ function createKeydownHandler($table) {
                 }
                 break;
             }
-            case 39: // right arrow (select next row or first if no selection)
-            case 40: // down arrow
+            case 'ArrowRight':
+            case 'ArrowDown': // select next row or first if no selection
             {
                 const $next = $selection.next();
                 const $first = $table.find('tr:first');
@@ -132,7 +133,7 @@ function createKeydownHandler($table) {
                 }
                 break;
             }
-            case 46: // delete (delete selected row)
+            case 'Delete': // delete selected row
             {
                 const $link = $selection.find('.btn-delete');
                 if ($link.length) {

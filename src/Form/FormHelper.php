@@ -118,7 +118,7 @@ class FormHelper
      *                                          the label is automatically added when the field property is
      *                                          set.
      */
-    public function __construct(private readonly FormBuilderInterface $builder, ?string $labelPrefix = null)
+    public function __construct(private readonly FormBuilderInterface $builder, string $labelPrefix = null)
     {
         $this->labelPrefix = empty($labelPrefix) ? null : $labelPrefix;
     }

@@ -55,9 +55,6 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         parent::__construct($repository);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
@@ -76,9 +73,6 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
      */
     abstract protected function getDropDownValues(): array;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::search($query, $builder, $alias);
@@ -102,9 +96,6 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         return $result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

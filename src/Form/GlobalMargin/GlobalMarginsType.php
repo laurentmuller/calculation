@@ -20,9 +20,6 @@ use App\Form\FormHelper;
  */
 class GlobalMarginsType extends AbstractHelperType
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('margins')->addCollectionType(GlobalMarginType::class);

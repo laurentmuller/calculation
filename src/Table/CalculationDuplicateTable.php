@@ -23,8 +23,6 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     use DuplicateItemsTrait;
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function count(): int
@@ -34,8 +32,6 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function getEmptyMessage(): ?string
@@ -43,17 +39,11 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
         return 0 === $this->count() ? 'duplicate.empty' : null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
         return $this->repository->getItemsDuplicate($orderColumn, $orderDirection);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getItemsCount(array $items): int
     {
         return \array_reduce($items, function (int $carry, array $item) {

@@ -34,9 +34,6 @@ class LetterCaptcha extends AbstractAlphaCaptcha
         return 'LetterCaptcha';
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getAnswer(string $word, int $letterIndex): string
     {
         if (0 > $letterIndex) {
@@ -47,17 +44,11 @@ class LetterCaptcha extends AbstractAlphaCaptcha
         return $word[$letterIndex];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getLetterIndex(): int
     {
         return \array_rand(self::INDEX_MAPPING);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getQuestion(string $word, int $letterIndex): string
     {
         $params = [

@@ -32,9 +32,6 @@ class MySqlReport extends AbstractReport
         $this->setTitleTrans('about.mysql_version', ['%version%' => $this->service->getVersion()]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function render(): bool
     {
         $database = $this->service->getDatabase();

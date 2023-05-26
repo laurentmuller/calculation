@@ -161,9 +161,6 @@ class OpenWeatherDatabase extends AbstractDatabase
         return false !== $stmt->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createSchema(): void
     {
         $this->exec(self::CREATE_CITY);

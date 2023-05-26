@@ -80,7 +80,6 @@ class CustomerController extends AbstractEntityController
      * Export the customers to a Spreadsheet document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'customer_excel')]
     public function excel(CustomerRepository $repository): SpreadsheetResponse
@@ -132,9 +131,6 @@ class CustomerController extends AbstractEntityController
         return $this->handleTableRequest($request, $table, 'customer/customer_table.html.twig', $logger);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return CustomerType::class;

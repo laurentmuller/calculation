@@ -49,9 +49,6 @@ class PivotDateField extends PivotField
         parent::__construct($name, $title);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getValue(array $row): float|int|string|\DateTimeInterface|null
     {
         /** @psalm-var mixed $value */

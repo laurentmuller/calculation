@@ -31,18 +31,12 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
 {
     private bool $started = false;
 
-    /**
-     * {@inheritdoc}
-     */
     public function AddPage($orientation = '', $size = '', $rotation = 0): void
     {
         parent::AddPage($orientation, $size, $rotation);
         $this->started = false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function drawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool
     {
         if (3 === $index) {
@@ -62,8 +56,6 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @param CalculationState[] $entities
      */
     protected function doRender(array $entities): bool

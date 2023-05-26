@@ -45,8 +45,6 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function count(): int
@@ -56,8 +54,6 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function getEmptyMessage(): ?string
@@ -65,17 +61,11 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
         return 0 === $this->count() ? 'empty.empty' : null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
         return $this->repository->getItemsEmpty($orderColumn, $orderDirection);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getItemsCount(array $items): int
     {
         return \array_reduce($items, fn (int $carry, array $item) => $carry + \count((array) $item['items']), 0);

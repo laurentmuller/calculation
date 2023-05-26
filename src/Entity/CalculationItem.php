@@ -99,8 +99,6 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see AbstractEntity::getDisplay()
      */
     public function getDisplay(): string
@@ -109,8 +107,6 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return Calculation|null
      */
     public function getParentTimestampable(): ?TimestampableInterface

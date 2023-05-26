@@ -38,9 +38,6 @@ class RepeatPasswordType extends AbstractType
      */
     final public const PASSWORD_LABEL = 'user.password.label';
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -70,9 +67,6 @@ class RepeatPasswordType extends AbstractType
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): ?string
     {
         return RepeatedType::class;

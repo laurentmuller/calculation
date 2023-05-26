@@ -25,23 +25,21 @@ class ThemeExtension extends AbstractExtension
     /**
      * The key name for selected theme cookie.
      */
-    private const KEY_THEME = 'THEME';
+    public const KEY_THEME = 'THEME';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [
             new TwigFunction('theme', $this->getTheme(...)),
             new TwigFunction('theme_value', $this->getThemeValue(...)),
+            new TwigFunction('is_dark_theme', $this->isDarkTheme(...)),
         ];
     }
 
     /**
      * Gets the selected theme.
      */
-    private function getTheme(Request $request): Theme
+    public function getTheme(Request $request): Theme
     {
         $default = Theme::getDefault();
         $value = $request->cookies->get(self::KEY_THEME, $default->value);
@@ -52,8 +50,13 @@ class ThemeExtension extends AbstractExtension
     /**
      * Returns the selected theme value.
      */
-    private function getThemeValue(Request $request): string
+    public function getThemeValue(Request $request): string
     {
         return $this->getTheme($request)->value;
+    }
+
+    public function isDarkTheme(Request $request): bool
+    {
+        return Theme::DARK === $this->getTheme($request);
     }
 }

@@ -29,9 +29,6 @@ abstract class AbstractEntityValidatorTestCase extends KernelTestCase
 
     protected ?ValidatorInterface $validator = null;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
         parent::setUp();

@@ -37,9 +37,6 @@ class SymfonyReport extends AbstractReport
         $this->setTitleTrans('about.symfony_version', ['%version%' => $this->service->getVersion()]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function render(): bool
     {
         $info = $this->service;

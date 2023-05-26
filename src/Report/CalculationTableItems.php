@@ -48,9 +48,6 @@ class CalculationTableItems extends PdfGroupTableBuilder
         $this->calculation = $parent->getCalculation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -103,7 +100,7 @@ class CalculationTableItems extends PdfGroupTableBuilder
      * @param float     $amount     the amount to output
      * @param ?PdfStyle $errorStyle the error style to use when amount is equal to 0
      */
-    private function addAmount(float $amount, ?PdfStyle $errorStyle = null): self
+    private function addAmount(float $amount, PdfStyle $errorStyle = null): self
     {
         return $this->add(text: FormatUtils::formatAmount($amount), style: 0.0 === $amount ? $errorStyle : null);
     }

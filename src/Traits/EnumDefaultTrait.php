@@ -23,9 +23,6 @@ trait EnumDefaultTrait
 {
     use EnumExtrasTrait;
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getDefault(): self
     {
         /** @var self[] $values */
@@ -39,9 +36,6 @@ trait EnumDefaultTrait
         throw new \LogicException('Unable to find the default value.');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isDefault(): bool
     {
         return $this->getExtraBool(EnumDefaultInterface::NAME);

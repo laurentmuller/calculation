@@ -43,9 +43,6 @@ class CalculationDuplicateReport extends AbstractCalculationItemsReport
         parent::__construct($controller, $items, 'duplicate.title', 'duplicate.description');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function computeItemsCount(array $items): int
     {
         return \array_reduce($items, function (int $carry, array $item) {
@@ -58,9 +55,6 @@ class CalculationDuplicateReport extends AbstractCalculationItemsReport
         }, 0);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function transCount(array $parameters): string
     {
         return $this->trans('duplicate.count', $parameters);

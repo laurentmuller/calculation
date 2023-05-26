@@ -66,9 +66,6 @@ class CalculationTable extends AbstractEntityTable
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
@@ -80,25 +77,16 @@ class CalculationTable extends AbstractEntityTable
         return $query;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'calculation.json');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOrder(): array
     {
         return ['id' => self::SORT_DESC];
@@ -112,9 +100,6 @@ class CalculationTable extends AbstractEntityTable
         return $this->stateRepository->getDropDown();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::search($query, $builder, $alias);
@@ -139,9 +124,6 @@ class CalculationTable extends AbstractEntityTable
         return $result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

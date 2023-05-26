@@ -64,8 +64,6 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     public function detect(string $text): array|false
@@ -86,28 +84,20 @@ class BingTranslatorService extends AbstractTranslatorService
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getApiUrl(): string
     {
         return 'https://docs.microsoft.com/en-us/azure/cognitive-services/translator/translator-info-overview';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getName(): string
     {
         return 'Bing';
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    public function translate(string $text, string $to, ?string $from = null, bool $html = false): array|false
+    public function translate(string $text, string $to, string $from = null, bool $html = false): array|false
     {
         $query = [
             'to' => $to,
@@ -143,9 +133,6 @@ class BingTranslatorService extends AbstractTranslatorService
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOptions(): array
     {
         return [
@@ -161,8 +148,6 @@ class BingTranslatorService extends AbstractTranslatorService
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
     protected function loadLanguages(): array|false

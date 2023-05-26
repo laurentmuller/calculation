@@ -56,9 +56,6 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         $this->captcha = $captchas[\array_rand($captchas)];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         [$this->question, $nextAnswer] = $this->captcha->getChallenge();
@@ -67,8 +64,6 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @psalm-param FormView<TextType> $view
      * @psalm-param FormInterface<TextType> $form
      */
@@ -77,9 +72,6 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         $view->vars['question'] = $this->question;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -105,9 +97,6 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getParent(): ?string
     {
         return TextType::class;

@@ -34,9 +34,6 @@ class UserNameType extends AbstractType
         ])->setDefault('prepend_icon', 'fa-fw fa-regular fa-user');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): ?string
     {
         return TextType::class;

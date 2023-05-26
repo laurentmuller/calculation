@@ -21,8 +21,6 @@ class NonceServiceTest extends KernelTestCase
     private ?NonceService $service = null;
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Exception
      */
     protected function setUp(): void

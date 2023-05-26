@@ -51,9 +51,6 @@ class HtmlReport extends AbstractReport
         $this->applyPreviousMargins($previousMargins);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(): bool
     {
         if ('' === $this->content) {

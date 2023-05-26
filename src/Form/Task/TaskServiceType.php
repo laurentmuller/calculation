@@ -26,8 +26,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class TaskServiceType extends AbstractHelperType
 {
     /**
-     * {@inheritdoc}
-     *
      * @psalm-param FormView<\Symfony\Component\Form\FormTypeInterface> $view
      * @psalm-param FormInterface<\Symfony\Component\Form\FormTypeInterface> $form
      *
@@ -44,9 +42,6 @@ class TaskServiceType extends AbstractHelperType
         $view->vars['simple_widget'] = $options['simple_widget'];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -54,17 +49,11 @@ class TaskServiceType extends AbstractHelperType
             ->setAllowedTypes('simple_widget', 'bool');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('task')
@@ -74,9 +63,6 @@ class TaskServiceType extends AbstractHelperType
             ->addNumberType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getLabelPrefix(): string
     {
         return 'task_compute.fields.';

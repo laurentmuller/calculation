@@ -39,9 +39,6 @@ class PhpIniReport extends AbstractReport
         $this->setTitleTrans('about.php_version', ['%version%' => $version]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(): bool
     {
         $this->AddPage();

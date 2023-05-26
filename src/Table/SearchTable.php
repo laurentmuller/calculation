@@ -58,9 +58,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
@@ -70,25 +67,16 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
         return $query;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getAllowedPageList(int $totalNotFiltered): array
     {
         return TableInterface::PAGE_LIST;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'search.json');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function handleQuery(DataQuery $query): DataResults
     {
         /** @psalm-var SearchType[] $items */

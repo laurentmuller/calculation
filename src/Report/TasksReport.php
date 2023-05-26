@@ -28,9 +28,6 @@ use App\Utils\FormatUtils;
  */
 class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function outputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool
     {
         /** @var Task $task */
@@ -48,9 +45,6 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('task.list.title', [], true);

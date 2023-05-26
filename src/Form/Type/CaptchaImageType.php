@@ -34,8 +34,6 @@ class CaptchaImageType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-param FormView<TextType> $view
      * @psalm-param FormInterface<TextType> $form
      */
@@ -50,9 +48,6 @@ class CaptchaImageType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -74,9 +69,6 @@ class CaptchaImageType extends AbstractType
             ->setAllowedTypes('refresh', ['null', 'string']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParent(): ?string
     {
         return TextType::class;

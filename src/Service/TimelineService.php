@@ -35,7 +35,7 @@ class TimelineService
      *
      * @throws \Exception
      */
-    public function current(?string $date = null, ?string $interval = null): array
+    public function current(string $date = null, string $interval = null): array
     {
         $interval ??= 'P1W';
         [$today, $min_date, $max_date] = $this->getDates();
@@ -50,7 +50,7 @@ class TimelineService
      *
      * @throws \Exception
      */
-    public function first(?string $interval = null): array
+    public function first(string $interval = null): array
     {
         $interval ??= 'P1W';
         [$today, $min_date, $max_date] = $this->getDates();
@@ -65,7 +65,7 @@ class TimelineService
      *
      * @throws \Exception
      */
-    public function last(?string $interval = null): array
+    public function last(string $interval = null): array
     {
         $interval ??= 'P1W';
         [$today, $min_date, $max_date] = $this->getDates();

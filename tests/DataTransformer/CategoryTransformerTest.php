@@ -33,8 +33,6 @@ class CategoryTransformerTest extends KernelTestCase
     private ?CategoryTransformer $transformer = null;
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -47,8 +45,6 @@ class CategoryTransformerTest extends KernelTestCase
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */

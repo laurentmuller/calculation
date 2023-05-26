@@ -65,7 +65,7 @@ abstract class AbstractHeaderFooter
      *
      * @return string the translated string
      */
-    protected function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
+    protected function trans(string $id, array $parameters = [], string $domain = null, string $locale = null): string
     {
         return $this->parent->trans($id, $parameters, $domain, $locale);
     }

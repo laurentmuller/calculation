@@ -42,8 +42,6 @@ class AbstractEntityTransformer implements DataTransformerInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param int|string|null $value
      *
      * @return T|null
@@ -69,8 +67,6 @@ class AbstractEntityTransformer implements DataTransformerInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param AbstractEntity|null $value
      */
     public function transform(mixed $value): ?int

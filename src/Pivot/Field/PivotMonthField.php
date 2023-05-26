@@ -39,9 +39,6 @@ class PivotMonthField extends PivotDateField
         $this->names = $short ? DateUtils::getShortMonths() : DateUtils::getMonths();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplayValue(mixed $value): mixed
     {
         if (\is_int($value) && \array_key_exists($value, $this->names)) {

@@ -53,7 +53,7 @@ abstract class AbstractProperty extends AbstractEntity
      *
      * @param ?string $name the optional name
      */
-    public function __construct(?string $name = null)
+    public function __construct(string $name = null)
     {
         $this->name = $name;
     }
@@ -97,9 +97,6 @@ abstract class AbstractProperty extends AbstractEntity
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplay(): string
     {
         return $this->name ?? parent::getDisplay();

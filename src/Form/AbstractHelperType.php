@@ -22,9 +22,6 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 abstract class AbstractHelperType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);

@@ -23,9 +23,6 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class ResetChangePasswordType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $helper = new FormHelper($builder);
@@ -33,9 +30,6 @@ class ResetChangePasswordType extends AbstractType
             ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return '';

@@ -31,9 +31,6 @@ class TaskItemMarginType extends AbstractEntityType
         parent::__construct(TaskItemMargin::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('minimum')

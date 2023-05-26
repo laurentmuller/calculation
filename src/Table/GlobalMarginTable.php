@@ -31,9 +31,6 @@ class GlobalMarginTable extends AbstractEntityTable
         parent::__construct($repository);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDataQuery(Request $request): DataQuery
     {
         $query = parent::getDataQuery($request);
@@ -42,25 +39,16 @@ class GlobalMarginTable extends AbstractEntityTable
         return $query;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'global_margin.json');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getDefaultOrder(): array
     {
         return ['minimum' => self::SORT_ASC];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

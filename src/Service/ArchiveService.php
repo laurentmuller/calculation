@@ -150,7 +150,7 @@ class ArchiveService implements ServiceSubscriberInterface
     /**
      * @param CalculationState[] $sources
      */
-    private function createQueryBuilder(array $sources, ?\DateTimeInterface $date = null): QueryBuilder
+    private function createQueryBuilder(array $sources, \DateTimeInterface $date = null): QueryBuilder
     {
         $builder = $this->calculationRepository
             ->createQueryBuilder('c');

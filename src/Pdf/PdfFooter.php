@@ -76,7 +76,7 @@ class PdfFooter
      *
      * The given text (if any) is output to the center.
      */
-    public function setContent(string $content, ?string $url = null): self
+    public function setContent(string $content, string $url = null): self
     {
         $this->content = $content;
         $this->url = $url;

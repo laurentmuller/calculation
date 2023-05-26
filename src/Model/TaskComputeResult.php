@@ -74,9 +74,6 @@ class TaskComputeResult implements \JsonSerializable
         return $this->task;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function jsonSerialize(): array
     {
         return [

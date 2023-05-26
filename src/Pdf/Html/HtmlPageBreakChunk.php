@@ -19,9 +19,6 @@ use App\Report\HtmlReport;
  */
 class HtmlPageBreakChunk extends AbstractHtmlChunk
 {
-    /**
-     * {@inheritdoc}
-     */
     public function output(HtmlReport $report): void
     {
         $report->AddPage();

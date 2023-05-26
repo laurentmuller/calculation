@@ -57,33 +57,22 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTi
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $value = 0.0;
 
-    /**
-     * {@inheritdoc}
-     */
     public function contains(float $value): bool
     {
         return $value >= $this->minimum && $value < $this->maximum;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMaximum(): float
     {
         return $this->maximum;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMinimum(): float
     {
         return $this->minimum;
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return Task|null
      */
     public function getParentTimestampable(): ?TimestampableInterface

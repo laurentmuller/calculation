@@ -124,7 +124,6 @@ class GroupController extends AbstractEntityController
      * Export the groups to a Spreadsheet document.
      *
      * @throws NotFoundHttpException
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'group_excel')]
@@ -177,9 +176,6 @@ class GroupController extends AbstractEntityController
         return $this->handleTableRequest($request, $table, 'group/group_table.html.twig', $logger);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return GroupType::class;

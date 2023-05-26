@@ -45,9 +45,6 @@ class UserRightsDocument extends AbstractArrayDocument
         parent::__construct($controller, $entities);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): static
     {
         if (1 === $columnIndex && $this->writeName) {
@@ -78,8 +75,6 @@ class UserRightsDocument extends AbstractArrayDocument
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool

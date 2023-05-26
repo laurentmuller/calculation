@@ -57,9 +57,6 @@ class PersistenceListener implements DisableListenerInterface, EventSubscriber, 
         User::class,
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSubscribedEvents(): array
     {
         return [

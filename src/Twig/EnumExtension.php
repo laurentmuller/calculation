@@ -20,9 +20,6 @@ use Twig\TwigFunction;
  */
 class EnumExtension extends AbstractExtension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getFunctions(): array
     {
         return [

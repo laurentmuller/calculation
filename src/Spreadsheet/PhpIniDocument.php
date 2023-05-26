@@ -36,9 +36,6 @@ class PhpIniDocument extends AbstractDocument
         parent::__construct($controller);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(): bool
     {
         $content = $this->service->asArray();

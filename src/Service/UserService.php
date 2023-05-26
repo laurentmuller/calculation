@@ -51,9 +51,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return $this->service;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getCustomer(): CustomerInformation
     {
         $customer = $this->service->getCustomer();
@@ -62,9 +59,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return $customer;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDisplayMode(): TableView
     {
         $default = $this->service->getDisplayMode();
@@ -73,9 +67,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return TableView::tryFrom($value) ?? $default;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getEditAction(): EntityAction
     {
         $default = $this->service->getEditAction();
@@ -100,9 +91,6 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMessagePosition(): MessagePosition
     {
         $default = $this->service->getMessagePosition();
@@ -111,25 +99,16 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return MessagePosition::tryFrom($value) ?? $default;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMessageProgress(): int
     {
         return $this->getPropertyInteger(self::P_MESSAGE_PROGRESS, $this->service->getMessageProgress());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getMessageTimeout(): int
     {
         return $this->getPropertyInteger(self::P_MESSAGE_TIMEOUT, $this->service->getMessageTimeout());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getPanelCalculation(): int
     {
         return $this->getPropertyInteger(self::P_PANEL_CALCULATION, $this->service->getPanelCalculation());
@@ -145,81 +124,51 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return $this->loadProperties();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isMessageClose(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_CLOSE, $this->service->isMessageClose());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isMessageIcon(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_ICON, $this->service->isMessageIcon());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isMessageSubTitle(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_SUB_TITLE, $this->service->isMessageSubTitle());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isMessageTitle(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_TITLE, $this->service->isMessageTitle());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isPanelCatalog(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_CATALOG, $this->service->isPanelCatalog());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isPanelMonth(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_MONTH, $this->service->isPanelMonth());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isPanelState(): bool
     {
         return $this->getPropertyBoolean(self::P_PANEL_STATE, $this->service->isPanelState());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isPrintAddress(): bool
     {
         return $this->getPropertyBoolean(self::P_PRINT_ADDRESS, $this->service->isPrintAddress());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isQrCode(): bool
     {
         return $this->getPropertyBoolean(self::P_QR_CODE, $this->service->isQrCode());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function isStatusBar(): bool
     {
         return $this->getPropertyBoolean(self::P_STATUS_BAR, $this->service->isStatusBar());

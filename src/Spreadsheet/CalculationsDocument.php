@@ -26,8 +26,6 @@ class CalculationsDocument extends AbstractArrayDocument
     use CalculationDocumentMarginTrait;
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool

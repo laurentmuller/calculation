@@ -30,9 +30,6 @@ class PivotQuarterField extends PivotDateField
         parent::__construct($name, self::PART_MONTH, $title);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplayValue(mixed $value): string
     {
         return $this->formatQuarter((int) $value);
@@ -64,9 +61,6 @@ class PivotQuarterField extends PivotDateField
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function doGetValue(\DateTimeInterface $date): int
     {
         $value = parent::doGetValue($date);

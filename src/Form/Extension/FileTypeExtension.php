@@ -23,17 +23,12 @@ use Symfony\Component\Form\FormInterface;
  */
 class FileTypeExtension extends AbstractFileTypeExtension
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getExtendedTypes(): iterable
     {
         return [FileType::class];
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-param FormInterface<FileType> $form
      * @psalm-param array<array-key, mixed> $attributes
      * @psalm-param array<array-key, mixed> $options

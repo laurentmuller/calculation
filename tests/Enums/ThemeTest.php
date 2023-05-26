@@ -21,6 +21,24 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(Theme::class)]
 class ThemeTest extends TestCase
 {
+    public static function getHelps(): array
+    {
+        return [
+            [Theme::AUTO, 'theme.auto.help'],
+            [Theme::DARK, 'theme.dark.help'],
+            [Theme::LIGHT, 'theme.light.help'],
+        ];
+    }
+
+    public static function getIcons(): array
+    {
+        return [
+            [Theme::AUTO, 'fa-solid fa-circle-half-stroke'],
+            [Theme::DARK, 'fa-solid fa-moon'],
+            [Theme::LIGHT, 'fa-solid fa-sun'],
+        ];
+    }
+
     public static function getLabels(): array
     {
         return [
@@ -77,11 +95,16 @@ class ThemeTest extends TestCase
         self::assertSame(Theme::AUTO, $default);
     }
 
-    public function testIcon(): void
+    #[DataProvider('getHelps')]
+    public function testHelp(Theme $theme, string $expected): void
     {
-        self::assertSame('fa-solid fa-circle-half-stroke', Theme::AUTO->getIcon());
-        self::assertSame('fa-solid fa-moon', Theme::DARK->getIcon());
-        self::assertSame('fa-solid fa-sun', Theme::LIGHT->getIcon());
+        self::assertSame($expected, $theme->getHelp());
+    }
+
+    #[DataProvider('getIcons')]
+    public function testIcon(Theme $theme, string $expected): void
+    {
+        self::assertSame($expected, $theme->getIcon());
     }
 
     #[DataProvider('getLabels')]
@@ -93,9 +116,9 @@ class ThemeTest extends TestCase
     public function testSorted(): void
     {
         $expected = [
-            Theme::AUTO,
             Theme::LIGHT,
             Theme::DARK,
+            Theme::AUTO,
         ];
         $sorted = Theme::sorted();
         self::assertCount(3, $sorted);

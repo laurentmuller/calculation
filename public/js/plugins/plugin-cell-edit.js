@@ -154,7 +154,7 @@
             if (this.$input.attr('data-bs-title') === title) {
                 return;
             }
-            this.$input.attr( {
+            this.$input.attr({
                 'data-bs-custom-class': customClass,
                 'data-bs-title': title,
                 'data-bs-html': true
@@ -167,15 +167,16 @@
         }
 
         _keydown(e) {
-            if (e) {
-                switch (e.which) {
-                    case 13: // enter
-                        return this._update(e);
-                    case 27: // escape
-                        return this._cancel(e, true);
-                    default:
-                        return this;
-                }
+            if (!e) {
+                return this;
+            }
+            switch (e.key) {
+                case 'Enter':
+                    return this._update(e);
+                case 'Escape':
+                    return this._cancel(e, true);
+                default:
+                    return this;
             }
         }
 

@@ -218,7 +218,7 @@ class FormatUtilsTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getDateFormatterPatterns')]
-    public function testDateFormatterPattern(string $pattern, string $expected, ?int $datetype = null, ?int $timetype = null): void
+    public function testDateFormatterPattern(string $pattern, string $expected, int $datetype = null, int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -247,7 +247,7 @@ class FormatUtilsTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getDates')]
-    public function testFormatDate(\DateTimeInterface|int|null $date, string|null $expected, ?int $datetype = null): void
+    public function testFormatDate(\DateTimeInterface|int|null $date, string|null $expected, int $datetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -256,7 +256,7 @@ class FormatUtilsTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getDateTimes')]
-    public function testFormatDateTime(\DateTimeInterface|int|null $date, string|null $expected, ?int $datetype = null, ?int $timetype = null): void
+    public function testFormatDateTime(\DateTimeInterface|int|null $date, string|null $expected, int $datetype = null, int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);
@@ -294,7 +294,7 @@ class FormatUtilsTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTimes')]
-    public function testFormatTime(\DateTimeInterface|int|null $date, string|null $expected, ?int $timetype = null): void
+    public function testFormatTime(\DateTimeInterface|int|null $date, string|null $expected, int $timetype = null): void
     {
         \Locale::setDefault(self::LOCALE_FR_CH);
         \setlocale(\LC_TIME, self::LOCALE_FR_CH);

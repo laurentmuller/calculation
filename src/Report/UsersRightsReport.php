@@ -65,9 +65,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         parent::__construct($controller, $entities, $orientation, $unit, $size);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function outputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool
     {
         /** @var Role|User|null $key */
@@ -98,8 +95,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param User[] $entities
      */
     protected function doRender(array $entities): bool

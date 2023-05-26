@@ -88,18 +88,12 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $this->getHeader()->setDescription($description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function AddPage($orientation = '', $size = '', $rotation = 0): void
     {
         parent::AddPage($orientation, $size, $rotation);
         $this->started = false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function drawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, PdfBorder $border): bool
     {
         if (!$this->started) {
@@ -119,9 +113,6 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         return (0 === $index) && $this->drawBorder($builder, $this->level, $bounds, $border);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(): bool
     {
         $logFile = $this->logFile;

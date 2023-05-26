@@ -32,9 +32,6 @@ class HttpClientError implements \JsonSerializable, \Stringable
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __toString(): string
     {
         return \sprintf('%d. %s', $this->code, $this->message);
@@ -56,8 +53,6 @@ class HttpClientError implements \JsonSerializable, \Stringable
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-return array{
      *      result: false,
      *      code: int,

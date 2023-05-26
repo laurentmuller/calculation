@@ -31,9 +31,6 @@ class RoleExtension extends AbstractExtension
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters(): array
     {
         return [
@@ -41,9 +38,6 @@ class RoleExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;

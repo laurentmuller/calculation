@@ -129,7 +129,6 @@ class TaskController extends AbstractEntityController
      * Export tasks to a Spreadsheet document.
      *
      * @throws NotFoundHttpException                if no category is found
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Route(path: '/excel', name: 'task_excel')]
@@ -183,8 +182,6 @@ class TaskController extends AbstractEntityController
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Task $item
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
@@ -195,9 +192,6 @@ class TaskController extends AbstractEntityController
         return parent::editEntity($request, $item, $parameters);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getEditFormType(): string
     {
         return TaskType::class;

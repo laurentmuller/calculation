@@ -19,9 +19,6 @@ use App\Form\FormHelper;
  */
 class RequestChangePasswordType extends AbstractUserCaptchaType
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('user')

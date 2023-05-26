@@ -33,9 +33,6 @@ class CategoryType extends AbstractEntityType
         parent::__construct(Category::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('code')

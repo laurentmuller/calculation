@@ -21,9 +21,6 @@ namespace App\Form;
  */
 abstract class AbstractMarginType extends AbstractEntityType
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('minimum')
@@ -37,9 +34,6 @@ abstract class AbstractMarginType extends AbstractEntityType
             ->addPercentType(0);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getLabelPrefix(): string
     {
         return 'groupmargin.fields.';

@@ -19,9 +19,6 @@ class CountAggregator extends AbstractAggregator
 {
     private int $result = 0;
 
-    /**
-     * {@inheritdoc}
-     */
     public function add(mixed $value): static
     {
         if ($value instanceof self) {
@@ -33,17 +30,11 @@ class CountAggregator extends AbstractAggregator
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getResult(): int
     {
         return $this->result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function init(): static
     {
         $this->result = 0;

@@ -53,9 +53,6 @@ class LogFile implements \Countable
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function count(): int
     {
         return \count($this->logs);

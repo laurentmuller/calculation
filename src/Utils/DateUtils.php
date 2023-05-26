@@ -124,7 +124,7 @@ final class DateUtils
      *
      * @return array<int, string>
      */
-    public static function getMonths(?string $locale = null): array
+    public static function getMonths(string $locale = null): array
     {
         $locale ??= \Locale::getDefault();
         if (empty(self::$monthNames[$locale])) {
@@ -147,7 +147,7 @@ final class DateUtils
      *
      * @return array<int, string>
      */
-    public static function getShortMonths(?string $locale = null): array
+    public static function getShortMonths(string $locale = null): array
     {
         $locale ??= \Locale::getDefault();
         if (empty(self::$shortMonthNames[$locale])) {
@@ -172,7 +172,7 @@ final class DateUtils
      *
      * @return array<int, string>
      */
-    public static function getShortWeekdays(string $firstDay = 'monday', ?string $locale = null): array
+    public static function getShortWeekdays(string $firstDay = 'monday', string $locale = null): array
     {
         $locale ??= \Locale::getDefault();
         $key = "$firstDay|$locale";
@@ -210,7 +210,7 @@ final class DateUtils
      *
      * @return array<int, string>
      */
-    public static function getWeekdays(string $firstDay = 'monday', ?string $locale = null): array
+    public static function getWeekdays(string $firstDay = 'monday', string $locale = null): array
     {
         $locale ??= \Locale::getDefault();
         $key = "$firstDay|$locale";

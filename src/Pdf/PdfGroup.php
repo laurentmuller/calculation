@@ -41,15 +41,12 @@ class PdfGroup implements PdfDocumentUpdaterInterface
      * @param ?PdfBorder       $border    the group border or null to use default
      * @param ?PdfStyle        $style     the group style or null to use default
      */
-    public function __construct(private mixed $key = null, private PdfTextAlignment $alignment = PdfTextAlignment::LEFT, ?PdfBorder $border = null, ?PdfStyle $style = null)
+    public function __construct(private mixed $key = null, private PdfTextAlignment $alignment = PdfTextAlignment::LEFT, PdfBorder $border = null, PdfStyle $style = null)
     {
         $this->border = $border ?? PdfBorder::all();
         $this->style = $style ?? PdfStyle::getCellStyle()->setFontBold();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function apply(PdfDocument $doc): void
     {
         $this->style?->apply($doc);

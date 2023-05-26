@@ -26,9 +26,6 @@ use App\Utils\FormatUtils;
  */
 class GroupsReport extends AbstractArrayReport
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('group.list.title', [], true);

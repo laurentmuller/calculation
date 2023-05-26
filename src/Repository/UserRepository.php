@@ -44,8 +44,6 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see ResetPasswordRequestRepositoryInterface
      *
      * @throws UnsupportedUserException
@@ -89,8 +87,6 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see ResetPasswordRequestRepositoryInterface
      */
     public function getMostRecentNonExpiredRequestDate(object $user): ?\DateTimeInterface
@@ -131,9 +127,6 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
             ->orderBy($field, Criteria::ASC);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {
@@ -168,8 +161,6 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see ResetPasswordRequestRepositoryInterface
      */
     public function removeExpiredResetPasswordRequests(): int
@@ -189,8 +180,6 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see ResetPasswordRequestRepositoryInterface
      *
      * @throws UnsupportedUserException
@@ -221,8 +210,6 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see PasswordUpgraderInterface
      *
      * @throws UnsupportedUserException

@@ -95,9 +95,6 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function close(): bool
     {
         // close statements

@@ -21,17 +21,11 @@ use App\Form\FormHelper;
  */
 class EditItemDialogType extends AbstractHelperType
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return 'item';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('description')
@@ -52,9 +46,6 @@ class EditItemDialogType extends AbstractHelperType
             ->addNumberType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getLabelPrefix(): string
     {
         return 'calculationitem.fields.';

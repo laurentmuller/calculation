@@ -37,9 +37,6 @@ class ProfileChangePasswordType extends AbstractEntityType
         parent::__construct(User::class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -52,17 +49,11 @@ class ProfileChangePasswordType extends AbstractEntityType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix(): string
     {
         return '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('currentPassword')
@@ -81,9 +72,6 @@ class ProfileChangePasswordType extends AbstractEntityType
         $helper->field('username')->addHiddenType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getLabelPrefix(): ?string
     {
         return null;

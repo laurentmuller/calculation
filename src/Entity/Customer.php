@@ -141,9 +141,6 @@ class Customer extends AbstractEntity
         return $this->country;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplay(): string
     {
         if ($this->firstName || $this->lastName || $this->company) {

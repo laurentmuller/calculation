@@ -23,9 +23,6 @@ use Twig\TwigFilter;
  */
 class EmojiFlagExtension extends AbstractExtension
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters(): array
     {
         return [

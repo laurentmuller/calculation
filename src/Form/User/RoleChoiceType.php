@@ -28,9 +28,6 @@ class RoleChoiceType extends AbstractChoiceType
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getChoices(): array
     {
         $choices = [

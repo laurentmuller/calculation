@@ -53,9 +53,6 @@ class HighlightExtension extends AbstractExtension
     private ?DoctrineExtension $doctrine = null;
     private ?HtmlDumper $dumper = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFilters(): array
     {
         $options = [

@@ -44,9 +44,6 @@ class LogsDocument extends AbstractDocument
         $this->setDescription($description);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function render(): bool
     {
         $logFile = $this->logFile;

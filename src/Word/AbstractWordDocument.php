@@ -83,7 +83,7 @@ abstract class AbstractWordDocument extends WordDocument
      * @param ?string $domain     the domain for the message or null to use the default
      * @param ?string $locale     the locale or null to use the default
      */
-    public function setTitleTrans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): static
+    public function setTitleTrans(string $id, array $parameters = [], string $domain = null, string $locale = null): static
     {
         $title = $this->trans($id, $parameters, $domain, $locale);
 
@@ -136,9 +136,6 @@ abstract class AbstractWordDocument extends WordDocument
         return $section;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function initialize(): void
     {
         parent::initialize();

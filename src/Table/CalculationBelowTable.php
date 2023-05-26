@@ -33,8 +33,6 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function count(): int
@@ -47,8 +45,6 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function getEmptyMessage(): ?string
@@ -56,9 +52,6 @@ class CalculationBelowTable extends CalculationTable implements \Countable
         return 0 === $this->count() ? 'below.empty' : null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         $builder = parent::createDefaultQueryBuilder($alias);
@@ -66,17 +59,11 @@ class CalculationBelowTable extends CalculationTable implements \Countable
         return CalculationRepository::addBelowFilter($builder, $this->getMinMargin(), $alias);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function getDropDownValues(): array
     {
         return $this->stateRepository->getDropDownBelow($this->getMinMargin());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);

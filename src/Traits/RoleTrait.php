@@ -48,8 +48,6 @@ trait RoleTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string[]
      *
      * @see UserInterface
@@ -62,8 +60,6 @@ trait RoleTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see RoleInterface
      *
      * @psalm-param RoleInterface::ROLE_* $role
@@ -74,8 +70,6 @@ trait RoleTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see RoleInterface
      */
     public function isAdmin(): bool
@@ -84,8 +78,6 @@ trait RoleTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @see RoleInterface
      */
     public function isSuperAdmin(): bool

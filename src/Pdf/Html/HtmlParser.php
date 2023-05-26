@@ -191,7 +191,7 @@ readonly class HtmlParser
      *
      * @psalm-return ($default is null ? (string|null) : string)
      */
-    private function getAttribute(\DOMNode $node, string $name, ?string $default = null): ?string
+    private function getAttribute(\DOMNode $node, string $name, string $default = null): ?string
     {
         if ($node->hasAttributes()) {
             /** @var \DOMNamedNodeMap $attributes */

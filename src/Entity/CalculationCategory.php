@@ -80,9 +80,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
         $this->items = new ArrayCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __clone()
     {
         parent::__clone();
@@ -115,8 +112,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return int the number of items
      */
     public function count(): int
@@ -160,9 +155,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
         return $this->code;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDisplay(): string
     {
         return (string) $this->getCode();
@@ -187,8 +179,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return Calculation|null
      */
     public function getParentTimestampable(): ?TimestampableInterface

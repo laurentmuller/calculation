@@ -102,7 +102,7 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[Route(path: '/reset/{token}', name: self::ROUTE_RESET)]
-    public function reset(Request $request, ?string $token = null): Response
+    public function reset(Request $request, string $token = null): Response
     {
         if (null !== $token) {
             $this->storeTokenInSession($token);

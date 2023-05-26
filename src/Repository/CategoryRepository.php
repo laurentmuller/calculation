@@ -64,9 +64,6 @@ class CategoryRepository extends AbstractRepository
         parent::__construct($registry, Category::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
         return parent::createDefaultQueryBuilder($alias)
@@ -131,9 +128,6 @@ class CategoryRepository extends AbstractRepository
         };
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSearchFields(string $field, string $alias = self::DEFAULT_ALIAS): array|string
     {
         return match ($field) {
@@ -144,9 +138,6 @@ class CategoryRepository extends AbstractRepository
         };
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {

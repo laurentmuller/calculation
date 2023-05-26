@@ -23,17 +23,11 @@ use Symfony\Component\Mime\MimeTypes;
  */
 trait MimeTypeTrait
 {
-    /**
-     * {@inheritDoc}
-     */
     public function getAttachmentMimeType(): string
     {
         return 'application/x-download';
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getInlineMimeType(): string
     {
         /** @psalm-var string|null $mimeType */

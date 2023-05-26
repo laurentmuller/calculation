@@ -1203,15 +1203,18 @@ theme:
   auto:
     name: Thème système
     title: Appliquer le thème système sur le site.
-    success: Le <b>thème système </b> a été sélectionné avec succès.
+    success: Le <b>thème système</b> a été sélectionné avec succès.
+    help: "Le thème système fait passer l'apparence de claire à sombre en fonction des préférences de l'utilisateur dans le système d'exploitation.<br>Sur Windows 11, il se trouve dans les paramètres de la section : <br><i>Personalisation</i> &gt; <i>Couleurs</i> &gt; <i>Choisissez votre mode</i>."
   dark:
     name: Thème sombre
     title: Appliquer le thème sombre sur le site.
     success: Le <b>thème sombre</b> a été sélectionné avec succès.
+    help: Le thème sombre affiche un arrière-plan foncé avec un premier plan clair contrastant.<br>En mode sombre, vous verrez généralement du texte blanc ou clair sur des arrière-plans noirs ou foncés.
   light:
     name: Thème claire
     title: Appliquer le thème claire sur le site.
     success: Le <b>thème claire</b> a été sélectionné avec succès.
+    help: Le thème claire affiche un arrière-plan clair avec un premier plan foncé contrastant.<br>En mode clair, vous verrez généralement du texte noir ou foncé sur des arrière-plans blancs ou clairs.
 timeline:
   title: Chronologie
   date: Date

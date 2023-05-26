@@ -59,17 +59,12 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getCacheTimeout(): int
     {
         return self::CACHE_TIMEOUT;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @psalm-suppress MixedInferredReturnType
      * @psalm-suppress MixedReturnStatement
      */

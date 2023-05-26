@@ -57,9 +57,6 @@ class Database extends AbstractDatabase
         return __DIR__ . '/db_test.sqlite';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createSchema(): void
     {
         // load script

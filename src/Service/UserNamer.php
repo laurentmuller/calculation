@@ -43,9 +43,6 @@ class UserNamer implements NamerInterface
         return $name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function name($object, PropertyMapping $mapping): string
     {
         return self::getBaseName($object, ImageSize::DEFAULT, ImageExtension::PNG);

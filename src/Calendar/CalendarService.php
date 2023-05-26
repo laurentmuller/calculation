@@ -42,7 +42,7 @@ class CalendarService
      *
      * @throws CalendarException
      */
-    public function generate(?int $year = null): Calendar
+    public function generate(int $year = null): Calendar
     {
         $year = DateUtils::completYear($year ?? (int) \date('Y'));
 

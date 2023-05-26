@@ -33,9 +33,6 @@ class TaskListType extends AbstractListEntityType
         parent::__construct(Task::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

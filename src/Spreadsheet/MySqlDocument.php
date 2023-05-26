@@ -29,9 +29,6 @@ class MySqlDocument extends AbstractDocument
         parent::__construct($controller);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function render(): bool
     {
         $database = $this->service->getDatabase();

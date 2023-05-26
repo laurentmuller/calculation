@@ -35,9 +35,6 @@ class ProductUpdateResult implements \Countable
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function count(): int
     {
         return \count($this->products);

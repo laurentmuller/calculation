@@ -178,7 +178,7 @@
     <div class="col-auto col-search align-self-center me-auto">
     {% if allow_search %}
         <div class="input-group input-group-sm input-group-search search">
-            <input class="form-control form-control-search" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" autocomplete="off" type="text">
+            <input class="form-control form-control-search" id="control-search" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" autocomplete="off" type="text">
             {% block toolbar_actions -%}{%- endblock %}
             <button id="clear_search" name="clear_search" type="button" class="btn btn-outline-secondary" title="{{ 'datatable.clear'|trans }}">
                 <i class="fa-solid fa-eraser"></i>
@@ -293,7 +293,7 @@
                 <h5 class="modal-title">{{- icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}</h5>{{ button_close_modal() }}
             </div>
             <div class="modal-body">
-                <label id="dialog-page-title" class="form-label mb-2">{{ 'datatable.dialog_message'|trans }}</label>
+                <span id="dialog-page-title" class="form-label d-inline-block">{{ 'datatable.dialog_message'|trans }}</span>
                 <div class="d-flex align-items-center">
                     <input id="page-range" type="range" class="form-range border rounded-pill py-1 px-2" min="1" max="100" step="1" value="1">
                     <label id="page-label" for="page-range" class="form-label text-nowrap ms-2">&nbsp;</label>
@@ -331,7 +331,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="form-label required" for="sort-order">{{ 'list.sort_label'|trans }}</label>
+                    <span class="form-label d-inline-block required">{{ 'list.sort_label'|trans }}</span>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="sort-order-asc" name="sort-order" value="asc">

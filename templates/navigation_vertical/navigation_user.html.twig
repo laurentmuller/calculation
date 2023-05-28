@@ -21,7 +21,9 @@
         {{ navItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}
         {{ navItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
         {{ dropdownSeparator() }}
-        {{ navItemThemeSwitcher('nav-link') }}
+        <li class="nav-item">
+            {{- navItemThemeSwitcher('nav-link') -}}
+        </li>
         {{ navItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
         {% if is_previous_admin -%}
             {{ dropdownSeparator() }}

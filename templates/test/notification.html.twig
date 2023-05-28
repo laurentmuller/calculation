@@ -37,7 +37,7 @@
 {%- set progress = user_service.messageProgress %}
 {# body #}
 {% block card_body %}
-<label class="form-label horizontal-line">Type de message</label>
+<span class="form-label horizontal-line">Type de message</span>
 <div class="row justify-content-center">
     <div class="col">
         {{ _self.button('success') }}
@@ -76,7 +76,7 @@
             </select>
     </div>
 </div>
-<label class="form-label horizontal-line">{{ 'parameters.group_options'|trans }}</label>
+<span class="form-label horizontal-line">{{ 'parameters.group_options'|trans }}</span>
 {{ _self.checkbox('title', 'parameters.fields.message_title', user_service.messageTitle) }}
 {{ _self.checkbox('icon', 'parameters.fields.message_icon', user_service.messageIcon) }}
 {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_service.messageSubTitle) }}

@@ -20,9 +20,9 @@ class ThemeControllerTest extends AbstractControllerTestCase
     public static function getRoutes(): array
     {
         return [
-            ['/user/theme', self::ROLE_USER],
-            ['/user/theme', self::ROLE_ADMIN],
-            ['/user/theme', self::ROLE_SUPER_ADMIN],
+            ['/theme/dialog', self::ROLE_USER],
+            ['/theme/dialog', self::ROLE_ADMIN],
+            ['/theme/dialog', self::ROLE_SUPER_ADMIN],
         ];
     }
 }

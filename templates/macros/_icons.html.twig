@@ -189,17 +189,9 @@
 {% endmacro %}
 
 {% macro navItemThemeSwitcher(class) %}
-{% set class = (class|default('') ~ ' rowlink-skip theme-switcher')|trim %}
+{% set class = (class|default('') ~ ' rowlink-skip theme-link')|trim %}
 {% set theme = theme(app.request) %}
-<a href="{{ path('user_theme') }}" class="{{ class }}" title="{{ 'theme.description'|trans }}">
-    <i class="theme-icon me-1 {{ theme.icon }}"></i><span class="theme-text">{{ theme|trans }}</span>
-</a>
-{% endmacro %}
-
-{% macro theme_entry(theme) %}
-<li>
-    <a class="dropdown-item" href="#" data-bs-theme-value="{{ theme.value }}" title="{{ theme.title|trans }}" data-message="{{ theme.success|trans }}" data-title="{{ 'theme.title'|trans }}">
-        <i class="theme-icon me-1 {{ theme.icon }}"></i><span class="theme-text">{{ theme|trans }}</span>
-    </a>
-</li>
+<button class="{{ class }}" title="{{ 'theme.description'|trans }}"  data-url="{{ path('theme_dialog') }}">
+    <i class="theme-icon me-1 {{ theme.iconLight }}"></i><span class="theme-text">{{ theme|trans }}</span>
+</button >
 {% endmacro %}

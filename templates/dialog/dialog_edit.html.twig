@@ -20,7 +20,7 @@
 {%- set form_attr = form_attr|default({}) -%}
 {# modal #}
 <div id="{{ dialog_id }}" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg">
        <div class="modal-content">
             <form id="{{ form_prefix }}_form" autocomplete="off" data-add="{{ add_title }}" data-edit="{{ edit_title }}"{{ _self.attributes(form_attr) }}>
                 <div class="modal-header cursor-move">
@@ -31,13 +31,9 @@
                     {% block modal_body %}{% endblock %}
                 </div>
                 <div class="modal-footer">
-                    <div class="row g-0 w-100">
-                        <div class="col-7">
-                            {% block modal_buttons %}{% endblock %}
-                        </div>
-                        <div class="col-5 text-end mt-1">
-                            <small>{{ 'common.required'|trans|raw }}</small>
-                        </div>
+                    <div class="d-flex flex-wrap align-items-start gap-1 w-100">
+                        {% block modal_buttons %}{% endblock %}
+                        <small class="flex-grow-1 text-sm-end">{{ 'common.required'|trans|raw }}</small>
                     </div>
                 </div>
             </form>

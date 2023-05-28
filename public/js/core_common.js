@@ -17,11 +17,11 @@
 /**
  * Plugin files
  */
-<!--#include file="plugins/plugin-toast.js" -->
 <!--#include file="plugins/plugin-sidebar.js" -->
+<!--#include file="plugins/plugin-toast.js" -->
+<!--#include file="plugins/plugin-theme.js" -->
 
 /**
  * Common Files
  */
-<!--#include file="application/theme.js" -->
 <!--#include file="application/core_common.js" -->

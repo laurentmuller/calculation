@@ -26,7 +26,7 @@
          */
         notify: function (type, message, title, options) {
             // merge and update options
-            const data = this._getDataset(options.dataset);
+            const data = this._getDataset(options);
             const settings = $.extend({}, this.DEFAULTS, data, options);
             settings.closeButton = settings.closeButton || !settings.autohide;
             settings.displayClose = settings.displayClose || settings.closeButton;
@@ -634,13 +634,13 @@
         /**
          * Gets dataset options.
          *
-         * @param {string} [dataset] - The toast options.
+         * @param {Object} [options] - The toast options.
          * @return {Object}
          * @private
          */
-        _getDataset: function (dataset) {
-            if (dataset) {
-                return $(dataset).data() || {};
+        _getDataset: function (options) {
+            if (options && options.dataset) {
+                return $(options.dataset).data() || {};
             }
             return {};
         }

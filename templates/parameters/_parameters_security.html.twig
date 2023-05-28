@@ -7,7 +7,7 @@
         {{ form_row(form.security_strength_level) }}
     </div>
 </div>
-<label class="form-label">{{ 'user.fields.password'|trans }}</label>
+<span class="form-label d-inline-block">{{ 'user.fields.password'|trans }}</span>
 {% for option in options %}
     {{ form_row(form[option]) }}
 {% endfor %}

@@ -28,7 +28,7 @@
 {# footer #}
 {% block card_footer -%}
     {%- set show_required = show_required is defined ? show_required : true -%}
-    <div class="d-flex flex-wrap align-items-center gap-1">
+    <div class="d-flex flex-wrap align-items-start gap-1">
         {% block actions_form -%}
             {{ button_submit(submit_text, submit_class, submit_params) }}
             {% if cancel_path|default(false) -%}
@@ -36,7 +36,7 @@
             {%- endif %}
         {%- endblock %}
         {% if show_required -%}
-            <small class="flex-grow-1 align-self-start text-sm-end">{{ 'common.required'|trans|raw }}</small>
+            <small class="flex-grow-1 text-sm-end">{{ 'common.required'|trans|raw }}</small>
         {%- endif %}
     </div>
 {%- endblock %}

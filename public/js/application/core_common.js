@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster */
+/* globals Toaster, bootstrap */
 
 
 /**
@@ -115,104 +115,8 @@
         });
     }
 
-    /**
-     * Handle theme change.
-     */
-    function initThemeListener() {
-        /** @param {CustomEvent<string>} e */
-        window.addEventListener('theme', (e) => {
-            const $link = $(`[data-bs-theme-value="${e.detail}"]:first`);
-            if ($link.length) {
-                const message = $link.data('message');
-                const title = $link.data('title');
-                const options = $('#flashes').data();
-                Toaster.success(message, title, options);
-            }
-            // notify for the sidebar
-            window.dispatchEvent(new Event('resize'));
-        });
-    }
-
-    /**
-     * Handle theme dialog.
-     */
-    function initThemeDialog() {
-        // window.console.log(bootstrap.Modal.getOrCreateInstance('#theme_modal'));
-        const $dialog = $('#theme_modal');
-        if ($dialog.length === 0) {
-            return;
-        }
-
-        const getCookieValue = function () {
-            const name = "THEME=";
-            const decodedCookie = decodeURIComponent(document.cookie);
-            const entries = decodedCookie.split(';');
-            for (let i = 0; i < entries.length; i++) {
-                const entry = entries[i].trimStart();
-                if (entry.indexOf(name) === 0) {
-                    return entry.substring(name.length, entry.length);
-                }
-            }
-            return 'auto';
-        };
-
-        const setCookieValue = function (value) {
-            const date = new Date();
-            date.setFullYear(date.getFullYear() + 1);
-            const path = document.body.dataset.cookiePath || '/';
-            let entry = 'THEME=' + encodeURIComponent(value) + ';';
-            entry += 'expires=' + date.toUTCString() + ';';
-            entry += 'path=' + path + ';';
-            entry += 'samesite=lax;';
-            document.cookie = entry;
-        };
-
-        $dialog.on('show.bs.modal', () => {
-            $dialog.data('theme', false);
-            const theme = getCookieValue();
-            document.querySelectorAll('#theme_modal .form-check-input').forEach(e => {
-                e.checked = e.value === theme;
-            });
-            $(window).trigger('resize');
-        });
-        $dialog.on('shown.bs.modal', () => {
-            $('#theme_modal .form-check-input:checked').trigger('focus');
-        });
-        $dialog.on('hidden.bs.modal', () => {
-            const theme = $dialog.data('theme');
-            if (theme) {
-                document.body.setAttribute('data-bs-theme', theme);
-                setCookieValue(theme);
-            }
-        });
-
-        const $btnOk = $('#theme_modal .btn-ok');
-        $btnOk.on('click', () => {
-            const input = document.querySelector('#theme_modal .form-check-input:checked');
-            if (input) {
-                $dialog.data('theme', input.value);
-                const label = input.parentElement.querySelector('label');
-                const link = document.querySelector('.nav-link-modal');
-                if (label && link) {
-                    link.querySelector('.theme-icon').textContent = label.querySelector('.theme-icon').textContent;
-                    link.querySelector('.theme-text').textContent = label.querySelector('.theme-text').textContent;
-                }
-            }
-            $dialog.modal('hide');
-        });
-
-        $('#theme_modal .help-text').on('click', function () {
-            $(this).parent().children('.form-check-input').trigger('click');
-        });
-
-        $('#theme_modal .form-check').on('dblclick', () => $btnOk.trigger('click'));
-        $dialog.on('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                e.stopPropagation();
-                $btnOk.trigger('click');
-            }
-        });
+    function initThemeLinks() {
+        $('.theme-link').themeListener();
     }
 
     /**
@@ -311,7 +215,6 @@
     window.addEventListener("DOMContentLoaded", function () {
         showFlashBag();
         handleSubMenus();
-        initThemeListener();
-        initThemeDialog();
+        initThemeLinks();
     });
 }(jQuery));

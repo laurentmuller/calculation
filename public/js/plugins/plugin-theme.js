@@ -8,6 +8,31 @@
 (function ($) {
     'use strict';
 
+    /**
+     * The cookie entry name.
+     * @type {string}
+     */
+    const COOKIE_ENTRY = 'THEME=';
+
+
+    /**
+     * The auto theme.
+     * @type {string}
+     */
+    const THEME_AUTO = 'auto';
+
+    /**
+     * The light theme.
+     * @type {string}
+     */
+    const THEME_LIGHT = 'light';
+
+    /**
+     * The dark theme.
+     * @type {string}
+     */
+    const THEME_DARK = 'dark';
+
     // ------------------------------------
     // Theme public class definition
     // ------------------------------------
@@ -340,30 +365,6 @@
      * The plugin name.
      */
     ThemeListener.NAME = 'bs.theme-listener';
-
-    /**
-     * The cookie entry name.
-     * @type {string}
-     */
-    const COOKIE_ENTRY = 'THEME=';
-
-    /**
-     * The auto theme.
-     * @type {string}
-     */
-    const THEME_AUTO = 'auto';
-
-    /**
-     * The light theme.
-     * @type {string}
-     */
-    const THEME_LIGHT = 'light';
-
-    /**
-     * The dark theme.
-     * @type {string}
-     */
-    const THEME_DARK = 'dark';
 
     // ------------------------------------
     // ThemeListener plugin definition

@@ -814,6 +814,10 @@ a,
     float: right;
 }
 
+span.form-label {
+    display: inline-block;
+}
+
 /**
  * sub-menu
  */

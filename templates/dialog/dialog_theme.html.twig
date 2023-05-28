@@ -32,7 +32,7 @@
                 {{- button_close_modal(true, null, dialog_id) -}}
             </div>
             <div class="modal-body mx-3">
-                <span class="mb-3 d-inline-block required">{{ 'theme.description'|trans }}</span>
+                <span class="form-label required mb-3">{{ 'theme.description'|trans }}</span>
                 {% for theme in themes() %}
                     {{ _self.output_theme(theme, is_dark, theme_selection) }}
                 {% endfor %}

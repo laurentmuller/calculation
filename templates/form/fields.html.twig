@@ -24,7 +24,6 @@
 {# plain widget text #}
 {% block plain_label -%}
 {% set element = 'span' %}
-{% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' d-inline-block')|trim}) %}
 {{ block('form_label') }}
 {%- endblock %}
 
@@ -198,9 +197,8 @@
 
 {% block simple_editor_label -%}
 {% set element = 'span' %}
-{% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' d-inline-block')|trim}) %}
 {{ block('form_label') }}
-{%-gi endblock %}
+{%- endblock %}
 
 {% block simple_editor_widget -%}
 {%- set type = type|default('hidden') -%}

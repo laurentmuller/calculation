@@ -116,7 +116,9 @@
     }
 
     function initThemeLinks() {
-        $('.theme-link').themeListener();
+        $('.theme-link').themeListener({
+            targetId: '.page-content'
+        });
     }
 
     /**

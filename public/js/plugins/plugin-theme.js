@@ -79,7 +79,7 @@
         }
 
         /**
-         * Handle the link click event.
+         * Handle the input radio click event.
          * @private
          */
         _click() {
@@ -107,14 +107,15 @@
          */
         _loadDialog() {
             const that = this;
-            const url = that.$element.data('url');
+            const options = that.options;
+            const url = options.url || that.$element.data('url');
             if (!url) {
                 return;
             }
             $.get(url, function (data) {
                 if (data) {
                     const $dialog = $(data);
-                    $dialog.appendTo($('.page-content'));
+                    $dialog.appendTo($(options.targetId));
                     that._initDialog();
                     that._showDialog();
                 }
@@ -127,25 +128,44 @@
          * @private
          */
         _getDialog() {
-            const $dialog = $('#theme_modal');
+            const $dialog = $(this._getDialogId());
             return $dialog.length ? $dialog : null;
         }
 
         /**
-         * Show the dialog.
+         * Gets the dialog identifier.
+         * @return {string}
          * @private
          */
-        _showDialog() {
-            bootstrap.Modal.getOrCreateInstance('#theme_modal').show();
+        _getDialogId() {
+            return this.options.dialogId;
         }
 
         /**
-         * Hide the dialog.
+         * Show the modal dialog.
+         * @private
+         */
+        _showDialog() {
+            this._getModal().show();
+        }
+
+        /**
+         * Hide the modal dialog.
          * @private
          */
         _hideDialog() {
-            bootstrap.Modal.getOrCreateInstance('#theme_modal').hide();
-            $('.page-content').trigger('focus');
+            this._getModal().hide();
+            $(this.options.targetId).trigger('focus');
+        }
+
+        /**
+         * Gets the modal instance.
+         * @return Modal
+         * @private
+         */
+        _getModal() {
+            const id = this._getDialogId();
+            return bootstrap.Modal.getOrCreateInstance(id);
         }
 
         /**
@@ -158,35 +178,37 @@
                 return;
             }
             $dialog.data('theme', false);
+            const options = this.options;
             const theme = this._getCookieValue();
-            $('#theme_modal .form-check-input').each(function () {
+            const selector = this._getInputSelector();
+            const iconSelector = `label ${options.labelIcon}`;
+            $(selector).each(function () {
                 const $this = $(this);
                 $this.attr('checked', $this.val() === theme);
-                const $icon = $this.parent().find('label .theme-icon');
+                const $icon = $this.parent().find(iconSelector);
                 if (theme === THEME_LIGHT) {
-                    $icon.removeClass($this.data('icon-light'))
-                        .addClass($this.data('icon-dark'));
+                    $icon.removeClass($this.data(options.iconLight))
+                        .addClass($this.data(options.iconDark));
                 } else {
-                    $icon.removeClass($this.data('icon-dark'))
-                        .addClass($this.data('icon-light'));
+                    $icon.removeClass($this.data(options.iconDark))
+                        .addClass($this.data(options.iconLight));
                 }
             });
-            if (document.querySelectorAll('#theme_modal .form-check-input:checked').length === 0) {
-                document.querySelector('#theme_modal .form-check-input').checked = true;
+            if (document.querySelectorAll(this._getInputCheckedSelector()).length === 0) {
+                document.querySelector(selector).checked = true;
             }
             $(window).trigger('resize');
         }
 
         /**
-         * Handle the dialog visible event.
+         * Handle the dialog visible (shown) event.
          * @private
          */
         _onDialogVisible() {
             const $dialog = this._getDialog();
-            if (!$dialog) {
-                return;
+            if ($dialog) {
+                $(this._getInputCheckedSelector()).trigger('focus');
             }
-            $('#theme_modal .form-check-input:checked').trigger('focus');
         }
 
         /**
@@ -204,10 +226,10 @@
             }
             this._setTheme(theme);
             this._setCookieValue(theme);
-            const $link = $('#theme_modal .form-check-input:checked');
+            const $link = $(this._getInputCheckedSelector());
             if ($link.length) {
-                const message = $link.data('success');
-                const title = $('#theme_modal .modal-title').text();
+                const message = $link.data(this.options.success);
+                const title = $(this._getTitleSelector()).text();
                 Toaster.success(message, title, {dataset: '#flashes'});
             }
         }
@@ -215,14 +237,13 @@
         /**
          * Handle the dialog key down event.
          * @param {KeyboardEvent} e
-         * @param {jQuery} $button
          * @private
          */
-        _onDialogKeyDown(e, $button) {
+        _onDialogKeyDown(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 e.stopPropagation();
-                $button.trigger('click');
+                this._onDialogAccept();
             }
         }
 
@@ -230,18 +251,19 @@
          * Handle the OK button click event.
          * @private
          */
-        _onDialogOk() {
+        _onDialogAccept() {
             const $dialog = this._getDialog();
-            const $input = $('#theme_modal .form-check-input:checked');
+            const $input = $(this._getInputCheckedSelector());
+            const options = this.options;
             if ($input.length) {
                 $dialog.data('theme', $input.val());
-                const $label = $input.parent().find('label');
+                const $label = $input.siblings('label');
                 if ($label.length) {
-                    const icon = $input.data('icon-light');
-                    const text = $label.children('.theme-text').text();
-                    $('.theme-link').each(function () {
-                        $(this).children('.theme-icon').attr('class', icon);
-                        $(this).children('.theme-text').text(text);
+                    const icon = $input.data(options.iconLight);
+                    const text = $label.children(options.labelText).text();
+                    $(options.label).each(function () {
+                        $(this).children(options.labelIcon).attr('class', icon);
+                        $(this).children(options.labelText).text(text);
                     });
                 }
             }
@@ -258,19 +280,31 @@
                 return;
             }
 
-            const $btnOk = $('#theme_modal .btn-ok')
-                .on('click', () => this._onDialogOk());
+            const options = this.options;
+            $(`${options.dialogId} ${options.ok}`)
+                .on('click', () => this._onDialogAccept());
 
             $dialog.on('show.bs.modal', () => this._onDialogShow())
                 .on('shown.bs.modal', () => this._onDialogVisible())
                 .on('hidden.bs.modal', () => this._onDialogHidden())
-                .on('keydown', (e) => this._onDialogKeyDown(e, $btnOk));
+                .on('keydown', (e) => this._onDialogKeyDown(e));
 
-            $('#theme_modal .help-text').on('click', function () {
-                $(this).parent().children('.form-check-input').trigger('click');
+            $(`${options.dialogId} ${options.help}`).on('click', function () {
+                const $input = $(this).siblings(options.input);
+                if ($input.length) {
+                    $input.trigger('click');
+                }
             });
 
-            $('#theme_modal .form-check').on('dblclick', () => $btnOk.trigger('click'));
+            // const that = this;
+            // $(`${options.dialogId} ${options.input}`).on('click', function () {
+            //      const theme = $(this).val();
+            //      if (theme) {
+            //          that._setTheme(theme);
+            //      }
+            // });
+
+            $('#theme_modal .form-check').on('dblclick', () => this._onDialogAccept());
         }
 
         /**
@@ -342,22 +376,53 @@
             entry += 'samesite=lax;';
             document.cookie = entry;
         }
+
+        _getInputSelector() {
+            const options = this.options;
+            return `${options.dialogId} ${options.input}`;
+        }
+
+        _getInputCheckedSelector() {
+            return `${this._getInputSelector()}:checked`;
+        }
+
+        _getTitleSelector() {
+            const options = this.options;
+            return `${options.dialogId} ${options.title}`;
+        }
     };
 
     /**
      * The default options.
      */
     ThemeListener.DEFAULTS = {
+        // the Ajax URL to get dialog
+        url: null,
         // the dialog identifier
         dialogId: '#theme_modal',
         // the target where to add dialog
-        targetId: '.page-content',
+        targetId: 'body',
         // the radio inputs selector
         input: '.form-check-input',
-        // the label icon selector
-        labelIcon: '.theme-text',
+        // the label selector
+        label: '.theme-link',
+        // the label icon class selector
+        labelIcon: '.theme-icon',
         // the label text selector
         labelText: '.theme-text',
+        // the title message selector
+        title: '.modal-title',
+        // the success data message selector
+        success: 'success',
+        // the OK button selector
+        ok: '.btn-ok',
+        // the light icon data key
+        'iconLight': 'icon-light',
+        // the dark icon data key
+        'iconDark': 'icon-dark',
+        // the help text selector
+        help: '.help-text'
+
     };
 
 

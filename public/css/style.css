@@ -1,3 +1,4 @@
+@import '../js/vendor/bootstrap/css/bootstrap.css';
 @import '../js/vendor/font-awesome/css/all.css';
 @import 'custom_control.css';
 @import 'context_menu.css';

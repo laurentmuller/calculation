@@ -14,7 +14,7 @@
 {{ property('product.fields.category', item.categoryCode) }}
 {{ property('product.fields.group', item.groupCode) }}
 {{ property('product.fields.supplier', item.supplier) }}
-{{ property('product.fields.price', item.price|amount) }}
+{{ property('product.fields.price', item.price|amount, item.price ? '' : 'text-danger') }}
 {{ property('product.fields.unit', item.unit) }}
 {{ properties(item) }}
 {% endblock %}

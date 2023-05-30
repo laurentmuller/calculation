@@ -59,14 +59,12 @@
 {%- set name = item.vars.value.name|default('taskitem.fields.name'|trans) -%}
 {%- set title = show ? 'taskitem.edit.items_hide' : 'taskitem.edit.items_show' %}
 <div class="item list-group-item px-0">
-        <div class="item-header card-header-item px-3 pb-1" id="{{ id_header }}">
-        <div class="form-group">
-            {{ form_row(item.name, {id_content: id_content, title: title, show: show}) }}
-        </div>
+        <div class="item-header card-header-item px-3" id="{{ id_header }}">
+        {{ form_row(item.name, {id_content: id_content, title: title, show: show}) }}
         {{ form_widget(item.position) }}
     </div>
     <div id="{{ id_content }}" class="collapse{% if show %} show{% endif %}" aria-labelledby="{{ id_header }}" data-bs-parent="#items">
-        <div class="card-body p-3">
+        <div class="card-body pt-0">
             <div class="row">
                 <div class="col-auto me-auto">
                     <span class="form-label control-label">{{ 'taskitem.fields.margins'|trans }}</span>

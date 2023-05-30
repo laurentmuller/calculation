@@ -89,6 +89,7 @@ abstract class AbstractEntityController extends AbstractController
     {
         $this->checkPermission(EntityPermission::DELETE);
         $options = [
+            'method' => Request::METHOD_DELETE,
             'csrf_field_name' => 'delete_token',
             'csrf_token_id' => $this->getDeleteToken($item),
         ];

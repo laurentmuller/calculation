@@ -8,17 +8,15 @@
     {%- if enabled -%}{{ parent() }}{% endif %}
 {%- endblock %}
 {% block navigation_horizontal -%}
-{%- if enabled -%}
-    {{ parent() }}
-{%- endif -%}
+    {%- if enabled -%}{{ parent() }}{%- endif -%}
 {%- endblock %}
 {# show footer #}
 {% block footer -%}
-{%- if enabled -%}{{- parent() -}}{%- endif -%}
+    {%- if enabled -%}{{- parent() -}}{%- endif -%}
 {%- endblock %}
 {# show body #}
 {% block body -%}
-<div class="row g-0">
+<div class="row">
 {% if enabled %}
     <div class="col">
         {{- include('index/panel_table.html.twig') }}
@@ -48,14 +46,14 @@
 {# javascripts #}
 {% block javascripts %}
 {% if enabled %}
-{% if app.debug %}
-{{ parent() -}}
-{{ asset_js('js/vendor/jquery-contextmenu/jquery.contextMenu.js') }}
-{{ asset_js('js/plugins/plugin-rowlink.js') }}
-{{ asset_js('js/extensions/contextmenu-extensions.js') }}
-{{ asset_js('js/application/index.js') }}
-{% else %}
-{{ asset_js('js/index.js') }}
-{% endif %}
+    {% if app.debug %}
+        {{ parent() -}}
+        {{ asset_js('js/vendor/jquery-contextmenu/jquery.contextMenu.js') }}
+        {{ asset_js('js/plugins/plugin-rowlink.js') }}
+        {{ asset_js('js/extensions/contextmenu-extensions.js') }}
+        {{ asset_js('js/application/index.js') }}
+    {% else %}
+        {{ asset_js('js/index.js') }}
+    {% endif %}
 {% endif %}
 {% endblock %}

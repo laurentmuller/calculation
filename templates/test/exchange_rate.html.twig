@@ -24,7 +24,7 @@
 {{ parent() }}
 <div class="row mb-3">
     <div class="col-md-5">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label class="form-label required" for="baseCode">{{ 'exchange_rate.source'|trans }}</label>
             <select class="form-select" id="baseCode" name="baseCode" required="required" style="width: 100% !important;">
                 {{ _self.fillCodes(codes, 'CHF') }}
@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="col-md-2">
-        <div class="form-group text-md-center">
+        <div class="form-group mb-3 text-md-center">
             <span class="form-label">{{ 'exchange_rate.swap_label'|trans }}</span>
             <button type="button" class="btn btn-swap btn-secondary form-control" title="{{ 'exchange_rate.swap_label'|trans }}">
                 <i class="fa-solid fa-exchange-alt"></i>
@@ -40,7 +40,7 @@
         </div>
     </div>
     <div class="col-md-5">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label class="form-label required" for="targetCode">{{ 'exchange_rate.target'|trans }}</label>
             <select class="form-select" id="targetCode" name="targetCode" required="required" style="width: 100% !important;">
                 {{ _self.fillCodes(codes, 'EUR') }}
@@ -51,14 +51,14 @@
 <p class="text-center mb-3" id="rate">&nbsp;</p>
 <div class="row mb-3">
     <div class="col-md-5">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label class="form-label required" for="amount">{{ 'exchange_rate.amount'|trans }}</label>
             <input type="number" class="form-control text-end" id="amount" name="amount" value="100" required="required">
         </div>
     </div>
     <div class="col-md-2 d-none d-lg-block">&nbsp;</div>
     <div class="col-md-5">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label class="form-label" for="result">{{ 'exchange_rate.result'|trans }}</label>
             <input type="number" class="form-control text-end fw-bold" id="result" name="result" value="1.00" disabled="disabled">
         </div>

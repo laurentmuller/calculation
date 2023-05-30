@@ -177,21 +177,23 @@
             if (!$dialog) {
                 return;
             }
-            $dialog.data('theme', false);
-            const options = this.options;
             const theme = this._getCookieValue();
+            const isMediaDark = this._isMediaDark();
+            $dialog.data('old-theme', theme);
+            $dialog.data('new-theme', false);
+            const options = this.options;
             const selector = this._getInputSelector();
             const iconSelector = `label ${options.labelIcon}`;
             $(selector).each(function () {
                 const $this = $(this);
-                $this.attr('checked', $this.val() === theme);
+                $this.prop('checked', $this.val() === theme);
                 const $icon = $this.parent().find(iconSelector);
-                if (theme === THEME_LIGHT) {
-                    $icon.removeClass($this.data(options.iconLight))
-                        .addClass($this.data(options.iconDark));
-                } else {
+                if (theme === THEME_DARK || isMediaDark) {
                     $icon.removeClass($this.data(options.iconDark))
                         .addClass($this.data(options.iconLight));
+                } else {
+                    $icon.removeClass($this.data(options.iconLight))
+                        .addClass($this.data(options.iconDark));
                 }
             });
             if (document.querySelectorAll(this._getInputCheckedSelector()).length === 0) {
@@ -220,12 +222,19 @@
             if (!$dialog) {
                 return;
             }
-            const theme = $dialog.data('theme');
-            if (!theme) {
+            const oldTheme = $dialog.data('old-theme');
+            const newTheme = $dialog.data('new-theme');
+            if (oldTheme === newTheme) {
                 return;
             }
-            this._setTheme(theme);
-            this._setCookieValue(theme);
+            if (!newTheme) {
+                if (oldTheme !== this._getTheme()) {
+                    this._setTheme(oldTheme);
+                }
+                return;
+            }
+            this._setTheme(newTheme);
+            this._setCookieValue(newTheme);
             const $link = $(this._getInputCheckedSelector());
             if ($link.length) {
                 const message = $link.data(this.options.success);
@@ -256,7 +265,7 @@
             const $input = $(this._getInputCheckedSelector());
             const options = this.options;
             if ($input.length) {
-                $dialog.data('theme', $input.val());
+                $dialog.data('new-theme', $input.val());
                 const $label = $input.siblings('label');
                 if ($label.length) {
                     const icon = $input.data(options.iconLight);
@@ -290,21 +299,16 @@
                 .on('keydown', (e) => this._onDialogKeyDown(e));
 
             $(`${options.dialogId} ${options.help}`).on('click', function () {
-                const $input = $(this).siblings(options.input);
-                if ($input.length) {
-                    $input.trigger('click');
-                }
+                $(this).siblings(options.input).trigger('click');
             });
 
-            // const that = this;
-            // $(`${options.dialogId} ${options.input}`).on('click', function () {
-            //      const theme = $(this).val();
-            //      if (theme) {
-            //          that._setTheme(theme);
-            //      }
-            // });
-
-            $('#theme_modal .form-check').on('dblclick', () => this._onDialogAccept());
+            const that = this;
+            $(`${options.dialogId} ${options.input}`).on('input', function () {
+                const theme = $(this).val();
+                if (theme) {
+                    that._setTheme(theme);
+                }
+            });
         }
 
         /**
@@ -341,6 +345,15 @@
             } else {
                 document.body.setAttribute('data-bs-theme', theme);
             }
+        }
+
+        /**
+         * Gets the body theme.
+         * @return {string} the selected theme.
+         * @private
+         */
+        _getTheme() {
+            return document.body.getAttribute('data-bs-theme') || THEME_AUTO;
         }
 
         /**

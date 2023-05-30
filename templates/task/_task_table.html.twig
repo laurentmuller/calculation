@@ -1,36 +1,34 @@
 {# add a plain text input #}
 {% macro plain_text_input(id, class='') %}
 {%- set class = ('form-control-plaintext form-control-readonly text-end ' ~ class)|trim -%}
-<div id="{{ id }}" class="{{ class }}">{{ 0|amount }}</div>
+<span id="{{ id }}" class="{{ class }}">{{ 0|amount }}</span>
 {% endmacro %}
-{# add a task item input #}
+{# add a task item #}
 {% macro task_item_input(task, item, visible=false, disabled=false) %}
 {% set task_item_id = item.id %}
-<tr data-id="{{ task.id }}" data-unit="{{ task.unit }}" class="task-item-row{% if not visible %} d-none{% endif %}">
-    <td class="align-middle">
+<div class="row align-items-center mb-2 task-item-row{% if not visible %} d-none{% endif %}" data-id="{{ task.id }}" data-unit="{{ task.unit }}">
+    <div class="col-sm-6">
         <div class="form-check form-switch">
             <input type="checkbox" class="form-check-input item-input" id="item_{{ task_item_id }}" name="items[]" value="{{ task_item_id }}" checked="checked"{% if disabled %} disabled="disabled"{% endif %}>
             <label class="form-check-label" for="item_{{ task_item_id }}">{{ item.name }}</label>
         </div>
-    </td>
-    <td class="text-end w-25">
+    </div>
+    <div class="col-sm-3">
         {{ _self.plain_text_input('task_value_' ~ task_item_id, 'task_value') }}
-    </td>
-    <td class="text-end w-25">
+    </div>
+    <div class="col-sm-3">
         {{ _self.plain_text_input('task_total_' ~ task_item_id, 'task_total') }}
-    </td>
-</tr>
+    </div>
+</div>
 {% endmacro %}
-{# output the tasks table #}
-<table class="table table-sm table-borderless mb-0" id="table-task-edit">
-    <thead>
-    <tr>
-        <td class="required">{{ 'task.fields.items'|trans }}</td>
-        <td class="w-25">{{ 'task_compute.fields.price'|trans }}</td>
-        <td class="w-25">{{ 'task_compute.fields.total'|trans }}</td>
-    </tr>
-    </thead>
-    <tbody>
+<div id="table-task-edit">
+    {# header row #}
+    <div class="row mb-2">
+        <div class="col-sm-6"><span class="required">{{ 'task.fields.items'|trans }}</span></div>
+        <div class="col-sm-3">{{ 'task_compute.fields.price'|trans }}</div>
+        <div class="col-sm-3">{{ 'task_compute.fields.total'|trans }}</div>
+    </div>
+    {# items #}
     {% for task in tasks %}
         {% set visible = loop.index == 1 %}
         {% set items = task.items|filter(item => item.count > 0) %}
@@ -39,15 +37,17 @@
             {{ _self.task_item_input(task, item, visible, disabled) }}
         {% endfor %}
     {% endfor %}
-    </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="3"><hr class="my-1"></td>
-        </tr>
-        <tr>
-            <td class="align-middle"><span class="task-items-empty text-danger small d-none">{{ 'task_compute.error.items'|trans }}</span></td>
-            <td class="text-end align-middle">{{ 'task_compute.fields.overall_total'|trans }}</td>
-            <td class="text-end">{{ _self.plain_text_input('task_overall') }}</td>
-        </tr>
-    </tfoot>
-</table>
+    {# error and total #}
+    <hr>
+    <div class="row align-items-center">
+        <div class="col-sm-6">
+            <span class="task-items-empty text-danger small d-none">{{ 'task_compute.error.items'|trans }}</span>
+        </div>
+        <div class="col-sm-3 text-end">
+            {{- 'task_compute.fields.overall_total'|trans -}}
+        </div>
+        <div class="col-sm-3">
+            {{- _self.plain_text_input('task_overall') -}}
+        </div>
+    </div>
+</div>

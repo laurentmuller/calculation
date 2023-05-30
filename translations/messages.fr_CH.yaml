@@ -288,9 +288,11 @@ common:
   empty_date: Inconnue
   empty_user: Système
   entity_created: 'Création : %date% - %user%'
+  entity_created_empty: 'Création : Système'
   entity_created_short: '%date% - %user%'
   entity_created_tooltip: Date de création et nom de l'utilisateur
   entity_updated: 'Mise à jour : %date% - %user%'
+  entity_updated_empty: 'Mise à jour : Système         '
   entity_updated_short: '%date% - %user%'
   entity_updated_tooltip: Date de mise à jour et nom de l'utilisateur
   hide_password: Masquer le mot de passe

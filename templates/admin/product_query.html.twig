@@ -84,14 +84,10 @@
 <span class="form-label required">{{ 'product.update.type'|trans }}</span>
 <div class="row mb-3">
     <div class="col-md-6">
-        <div class="form-group">
-            {{ form_widget(form.percent, {'attr': percent_attr, 'options': {'is_percent': is_percent}}) }}
-        </div>
+        {{ form_widget(form.percent, {'attr': percent_attr, 'options': {'is_percent': is_percent}}) }}
     </div>
     <div class="col-md-6">
-        <div class="form-group">
-            {{ form_widget(form.fixed, {'attr': fixed_attr, 'options': {'is_percent': is_percent}}) }}
-        </div>
+        {{ form_widget(form.fixed, {'attr': fixed_attr, 'options': {'is_percent': is_percent}}) }}
     </div>
 </div>
 {{ form_rest(form) }}

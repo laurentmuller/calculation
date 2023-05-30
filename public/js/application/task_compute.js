@@ -54,12 +54,12 @@ function submitForm(form) {
     // get items
     const id = $('#task').intVal();
     const $itemsEmpty = $('.task-items-empty');
-    const selector = '#table-task-edit tr[data-id="' + id + '"] .item-input:checked';
+    const selector = `#table-task-edit .task-item-row[data-id="${id}"] .item-input:checked`;
     const items = $(selector).map(function () {
         return $(this).intVal();
     }).get();
     if (items.length === 0) {
-        const selector = '#table-task-edit tr[data-id="' + id + '"] .item-input:first';
+        const selector = `#table-task-edit .task-item-row[data-id="${id}"] .item-input:first`;
         $(selector).trigger('focus');
         $itemsEmpty.removeClass('d-none');
         resetValues();
@@ -126,9 +126,8 @@ function onTaskChanged() {
     // toggle rows visibility
     const $task = $('#task');
     const id = $task.intVal();
-    const selector = '[data-id="' + id + '"]';
-    $('.task-item-row:not(' + selector + ')').addClass('d-none');
-    const $rows = $('.task-item-row' + selector).removeClass('d-none');
+    $(`.task-item-row:not([data-id="${id}"])`).addClass('d-none');
+    const $rows = $(`.task-item-row[data-id="${id}"]`).removeClass('d-none');
 
     // task items?
     const empty = $rows.length === 0;
@@ -157,7 +156,7 @@ function onTaskChanged() {
     $('#quantity').on('input', () => {
         $(this).updateTimer(onInputChanged, 250);
     }).inputNumberFormat();
-    $('.item-input').on('change', () => {
+    $('.item-input').on('input', () => {
         $(this).updateTimer(onInputChanged, 250);
     });
 

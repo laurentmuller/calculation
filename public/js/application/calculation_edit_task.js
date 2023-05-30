@@ -296,12 +296,11 @@ class EditTaskDialog extends EditDialog {
         'use strict';
         // toggle rows visibility
         const id = this.$task.intVal();
-        const selector = '[data-id="' + id + '"]';
-        $('.task-item-row' + selector).removeClass('d-none');
-        $('.task-item-row:not(' + selector + ')').addClass('d-none');
+        $(`.task-item-row:not([data-id="${id}"])`).addClass('d-none');
+        const $rows = $(`.task-item-row[data-id="${id}"]`).removeClass('d-none');
 
         // task items?
-        const empty = $('.task-item-row:not(.d-none)').length === 0;
+        const empty = $rows.length === 0;
         $('.task-row-table').toggleClass('d-none', empty);
         $('.task-row-empty').toggleClass('d-none', !empty);
 
@@ -326,7 +325,7 @@ class EditTaskDialog extends EditDialog {
      */
     _getCheckedItems() {
         const id = this.$task.intVal();
-        const selector = '#table-task-edit tr[data-id="' + id + '"] .item-input:checked';
+        const selector = `#table-task-edit .task-item-row[data-id="${id}"] .item-input:checked`;
         return $(selector);
     }
 }

@@ -12,7 +12,7 @@
         {% if editable -%}
         <th class="rowlink-skip actions d-print-none">
             {# menu #}
-            <div class="dropdown">
+            <div class="dropdown position-static">
                 {%- set menu_id = 'dropdownMenuCategory_' ~ category.vars.id -%}
                 {{ dropdownEllipsis(menu_id) }}
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">

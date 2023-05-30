@@ -101,7 +101,7 @@ function styleProductPrice(value) {
     if ($.parseFloat(value) === 0) {
         return {
             css: {
-                color: 'var(--danger)'
+                color: 'var(--bs-danger)'
             }
         };
     }

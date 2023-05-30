@@ -28,10 +28,10 @@
 </div>
 <div class="row">
     <div class="col-md-8 offset-md-2">
-        <div id="tree" class="list-group" role="tree" data-url="{{ path('test_tree') }}" data-loading-text="{{ 'about.loading'|trans }}" data-badge-class="bg-secondary" data-badge-count="true"></div>
+        <div id="tree" class="list-group mb-3" role="tree" data-url="{{ path('test_tree') }}" data-loading-text="{{ 'about.loading'|trans }}" data-badge-class="bg-secondary" data-badge-count="true"></div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label class="form-label" for="country">Pays</label>
             <select id="country" class="form-select" data-url="{{ asset('images/flags/flag_blank.png') }}">
                 {% for key, value in countries -%}
@@ -41,7 +41,7 @@
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label class="form-label required" for="currency">Monnaie</label>
             <select id="currency" class="form-select" required="required">
                 {% for currency in currencies -%}
@@ -51,7 +51,7 @@
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label class="form-label" for="state_single">Status (simple)</label>
             <select id="state_single" class="form-select">
             {% for key, group in states -%}
@@ -65,7 +65,7 @@
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label class="form-label" for="state">Status (multiple)</label>
             <div class="input-group">
                 <select id="state" class="form-select" multiple="multiple" data-delete="Supprimer le statut">
@@ -87,7 +87,7 @@
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label class="form-label" for="category">Catégorie</label>
             <div class="input-group">
                 <span class="input-group-text">@</span>
@@ -110,7 +110,7 @@
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label class="form-label" for="product">Article</label>
             <select id="product" class="form-select">
                 {% for key, group in products -%}
@@ -135,7 +135,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label class="form-label" for="text">Text</label>
                     <input type="text" class="form-control" id="text" aria-describedby="textHelp">
                     <small id="textHelp" class="form-text text-body-secondary">We'll never share your text with anyone else.</small>

@@ -2,26 +2,30 @@
 {% macro timestampable(item, separator=true) %}
 {% if not item.new %}
     {# created date and user #}
-    {% set date = item.createdAt ? item.createdAt|locale_datetime : 'common.empty_date'|trans %}
-    {% set user = item.createdBy|default('common.empty_user'|trans) %}
-    {% set created = 'common.entity_created'|trans({'%date%': date, '%user%': user}) %}
+    {% if not item.createdAt and not item.createdBy %}
+        {% set created = 'common.entity_created_empty'|trans %}
+    {% else %}
+        {% set date = item.createdAt ? item.createdAt|locale_datetime : 'common.empty_date'|trans %}
+        {% set user = item.createdBy|default('common.empty_user'|trans) %}
+        {% set created = 'common.entity_created'|trans({'%date%': date, '%user%': user}) %}
+    {% endif %}
     {# updated date and user #}
-    {% set date = item.updatedAt ? item.updatedAt|locale_datetime : 'common.empty_date'|trans %}
-    {% set user = item.updatedBy|default('common.empty_user'|trans) %}
-    {% set updated = 'common.entity_updated'|trans({'%date%': date, '%user%': user}) %}
+    {% if not item.updatedAt and not item.updatedBy %}
+        {% set updated = 'common.entity_updated_empty'|trans %}
+    {% else %}
+        {% set date = item.updatedAt ? item.updatedAt|locale_datetime : 'common.empty_date'|trans %}
+        {% set user = item.updatedBy|default('common.empty_user'|trans) %}
+        {% set updated = 'common.entity_updated'|trans({'%date%': date, '%user%': user}) %}
+    {% endif %}
     {% if separator %}
         <hr class="card-footer-line">
     {% endif %}
     <div class="row small text-body-secondary">
         <div class="col-sm-6 my-0">
-            <span>
-                {{- created -}}
-            </span>
+            <span>{{- created -}}</span>
         </div>
         <div class="col-sm-6 my-0 text-sm-end">
-            <span>
-                {{- updated -}}
-            </span>
+            <span>{{- updated -}}</span>
         </div>
     </div>
 {% endif %}
@@ -30,11 +34,19 @@
 {% macro timestampable_properties(item) -%}
 {# created #}
 {% from 'macros/_properties.html.twig' import property %}
-{% set date = item.createdAt ? item.createdAt|locale_datetime : 'common.empty_date'|trans %}
-{% set user = item.createdBy|default('common.empty_user'|trans) -%}
-{{ property('calculation.fields.created', date ~ ' - ' ~ user) }}
+{% if not item.createdAt and not item.createdBy %}
+    {{ property('calculation.fields.created', 'common.empty_user'|trans) }}
+{% else %}
+    {% set date = item.createdAt ? item.createdAt|locale_datetime : 'common.empty_date'|trans %}
+    {% set user = item.createdBy|default('common.empty_user'|trans) -%}
+    {{ property('calculation.fields.created', date ~ ' - ' ~ user) }}
+{% endif %}
 {# updated #}
-{% set date = item.updatedAt ? item.updatedAt|locale_datetime : 'common.empty_date'|trans %}
-{% set user = item.updatedBy|default('common.empty_user'|trans) -%}
-{{ property('calculation.fields.updated', date ~ ' - ' ~ user) }}
+{% if not item.updatedAt and not item.updatedBy %}
+    {{ property('calculation.fields.updated', 'common.empty_user'|trans) }}
+{% else %}
+    {% set date = item.updatedAt ? item.updatedAt|locale_datetime : 'common.empty_date'|trans %}
+    {% set user = item.updatedBy|default('common.empty_user'|trans) -%}
+    {{ property('calculation.fields.updated', date ~ ' - ' ~ user) }}
+{% endif %}
 {%- endmacro %}

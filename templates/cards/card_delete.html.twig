@@ -10,7 +10,7 @@
 {% block card_header_class ' text-bg-danger' %}
 {# body #}
 {% block card_body -%}
-<p class="mb-0">{{ message|default('common.delete_message'|trans)|raw }}</p>
+<p class="my-3">{{ message|default('common.delete_message'|trans({'%name%': item}))|raw }}</p>
 {{ parent() }}
 {%- endblock %}
 {# javascripts #}

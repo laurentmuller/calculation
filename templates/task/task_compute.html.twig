@@ -16,19 +16,17 @@
         {{ form_row(form.task) }}
     </div>
     <div class="col-md-3">
-        <div class="form-group">
-            <span class="form-label">{{ 'task.fields.unit'|trans }}</span>
-            <span id="unit" class="form-control-plaintext form-control-readonly skip-reset">{{ task.unit|default('&nbsp;')|raw }}</span>
-        </div>
+        <span class="form-label">{{ 'task.fields.unit'|trans }}</span>
+        <span id="unit" class="form-control-plaintext form-control-readonly skip-reset">{{ task.unit|default('&nbsp;')|raw }}</span>
     </div>
     <div class="col-md-3">
         {{ form_row(form.quantity) }}
     </div>
 </div>
-<div class="row row-table{% if tasks_count == 0 %} d-none{% endif %}">
+<div class="row-table{% if tasks_count == 0 %} d-none{% endif %}">
     {% include 'task/_task_table.html.twig' with tasks %}
 </div>
-<div class="row row-empty{% if tasks_count != 0 %} d-none{% endif %}">
+<div class="row-empty{% if tasks_count != 0 %} d-none{% endif %}">
     <p class="small text-body-secondary">{{ 'task.edit.empty_items'|trans }}</p>
 </div>
 {% endblock %}

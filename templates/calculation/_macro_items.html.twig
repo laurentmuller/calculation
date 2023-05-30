@@ -21,7 +21,7 @@
     </td>
     <td class="text-currency">{{ item.total.vars.value|amount }}</td>
     <td class="actions d-print-none rowlink-skip">
-        <div class="dropdown">
+        <div class="dropdown position-static">
             {%- set menu_id = 'dropdownMenuItem_' ~ item.vars.id -%}
             {{ dropdownEllipsis(menu_id) }}
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">

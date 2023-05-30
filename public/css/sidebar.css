@@ -61,7 +61,7 @@
     content: "";
     float: right;
     margin-top: 0.5em;
-    margin-left: 0.25em;
+    vertical-align: 0.255em;
     transition: all 0.35s ease;
     /* left arrow */
     border-right: 0.3em solid;

@@ -731,16 +731,16 @@
         },
         {
             "name": "doctrine/deprecations",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/deprecations.git",
-                "reference": "0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de"
+                "reference": "8cffffb2218e01f3b370bf763e00e81697725259"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de",
-                "reference": "0e2a4f1f8cdfc7a92ec3b01c9334898c806b30de",
+                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/8cffffb2218e01f3b370bf763e00e81697725259",
+                "reference": "8cffffb2218e01f3b370bf763e00e81697725259",
                 "shasum": ""
             },
             "require": {
@@ -768,9 +768,9 @@
             "homepage": "https://www.doctrine-project.org/",
             "support": {
                 "issues": "https://github.com/doctrine/deprecations/issues",
-                "source": "https://github.com/doctrine/deprecations/tree/v1.0.0"
+                "source": "https://github.com/doctrine/deprecations/tree/v1.1.0"
             },
-            "time": "2022-05-02T15:47:09+00:00"
+            "time": "2023-05-29T18:55:17+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -2749,16 +2749,16 @@
         },
         {
             "name": "phpoffice/phpword",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PHPWord.git",
-                "reference": "8521612b39edeec9055d3688ad555342a40857dd"
+                "reference": "90a55955e6a772bb4cd9b1ef6a7e88c8976c2561"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/8521612b39edeec9055d3688ad555342a40857dd",
-                "reference": "8521612b39edeec9055d3688ad555342a40857dd",
+                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/90a55955e6a772bb4cd9b1ef6a7e88c8976c2561",
+                "reference": "90a55955e6a772bb4cd9b1ef6a7e88c8976c2561",
                 "shasum": ""
             },
             "require": {
@@ -2773,8 +2773,8 @@
                 "ext-gd": "*",
                 "ext-libxml": "*",
                 "ext-zip": "*",
+                "friendsofphp/php-cs-fixer": "^3.3",
                 "mpdf/mpdf": "^8.1",
-                "php-coveralls/php-coveralls": "^2.5",
                 "phpmd/phpmd": "^2.13",
                 "phpunit/phpunit": ">=7.0",
                 "symfony/process": "^4.4",
@@ -2788,11 +2788,6 @@
                 "ext-zip": "Allows writing OOXML and ODF"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-develop": "0.19-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "PhpOffice\\PhpWord\\": "src/PhpWord"
@@ -2856,9 +2851,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PHPWord/issues",
-                "source": "https://github.com/PHPOffice/PHPWord/tree/1.0.0"
+                "source": "https://github.com/PHPOffice/PHPWord/tree/1.1.0"
             },
-            "time": "2022-11-15T20:24:50+00:00"
+            "time": "2023-05-30T07:59:14+00:00"
         },
         {
             "name": "psr/cache",
@@ -8944,16 +8939,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.21.2",
+            "version": "1.21.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "a8094fafabf0d7c7b7337a9c6496f4d8fbc718f1"
+                "reference": "b0c366dd2cea79407d635839d25423ba07c55dd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/a8094fafabf0d7c7b7337a9c6496f4d8fbc718f1",
-                "reference": "a8094fafabf0d7c7b7337a9c6496f4d8fbc718f1",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/b0c366dd2cea79407d635839d25423ba07c55dd6",
+                "reference": "b0c366dd2cea79407d635839d25423ba07c55dd6",
                 "shasum": ""
             },
             "require": {
@@ -8984,9 +8979,9 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.21.2"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.21.3"
             },
-            "time": "2023-05-29T15:20:08+00:00"
+            "time": "2023-05-29T19:31:28+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

@@ -1,7 +1,7 @@
 {% if is_granted('IS_IMPERSONATOR') %}
 {% from 'macros/_icons.html.twig' import link %}
 <div class="alert alert-warning my-2" role="alert">
-    <div class="d-flex flex-wrap align-items-center gap-1">
+    <div class="d-flex flex-wrap align-items-center gap-2">
         <span class="flex-fill">{{- 'user.switch.connected'|trans({'%original%': app.token.originalToken.userIdentifier, '%current%': app.user.userIdentifier})|raw -}}</span>
         {{- link(impersonation_exit_path(path('user_table', {'id': app.user.id|default(0)})), 'user.switch.exit.title', 'alert-link fw-normal', 'user-slash') -}}
     </div>

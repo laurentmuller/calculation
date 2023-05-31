@@ -4,7 +4,7 @@
 {% form_theme form with _self %}
 {# item label #}
 {% block _task_items_entry_name_label -%}
-    <div class="d-flex flex-wrap align-items-center gap-1 mb-2">
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
         {{ form_label(form, null, {'label_attr': {'class': 'flex-fill mb-0'}}) }}
         <div class="btn-group btn-group-sm d-print-none" role="group">
             <button class="btn btn-edit btn-outline-secondary btn-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id_content }}" title="{{ title|trans }}">

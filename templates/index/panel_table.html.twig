@@ -22,7 +22,7 @@
 {# content #}
 <div class="card mb-2">
     <div class="card-header">
-        <div class="d-flex flex-wrap align-items-center gap-1">
+        <div class="d-flex flex-wrap align-items-center gap-2">
             <h1 class="card-title flex-fill">{{ icon(ICON_CALCULATION, 'index.panel_table_title') }}</h1>
             {%- if add_page -%}
                 {%- set params = route_params(app.request)|merge({'caller': caller}) -%}
@@ -107,7 +107,7 @@
         {%- endif -%}
     </div>
     <div class="card-footer d-print-none p-2">
-        <div class="d-flex flex-wrap align-items-center gap-1">
+        <div class="d-flex flex-wrap align-items-center gap-2">
             <div class="ms-sm-auto form-control-sm form-check form-switch" title="{{ 'index.panel_table_user_help'|trans }}">
                 <input type="checkbox" class="form-check-input" id="restrict" data-url="{{ url('homepage') }}" data-value="{{ restrict }}"{% if restrict %} checked="checked"{% endif %}>
                 <label class="form-check-label" for="restrict">{{ 'index.panel_table_user'|trans }}</label>

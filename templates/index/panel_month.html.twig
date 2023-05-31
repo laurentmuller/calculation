@@ -29,7 +29,7 @@
 {# content #}
 <div class="card card-month mb-2" data-path="{{ path('homepage_hide_month') }}">
     <div class="card-header">
-        <div class="d-flex flex-wrap align-items-center gap-1">
+        <div class="d-flex flex-wrap align-items-center gap-2">
             <h1 class="card-title flex-fill">{{ icon('calendar-alt far', 'index.panel_month') }}</h1>
             {%- if list_path and is_months -%}
                 {{ link(path('chart_by_month'), null, 'd-print-none', 'chart-column fa-fw', 'index.menu_chart_title') }}

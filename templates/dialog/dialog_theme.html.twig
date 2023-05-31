@@ -12,7 +12,7 @@
         'data-success': theme.success|trans,
         'data-icon-light': theme.iconLight ~ ' me-1',
         'data-icon-dark': theme.iconDark ~ ' me-1'} %}
-    <div class="form-check mb-3">
+    <div class="form-check mb-3" title="{{ theme.title|trans }}">
         <input id="{{ id }}"{{ output_attributes(attributes) }}{% if selection == theme %} checked="checked"{% endif %}>
         <label class="form-check-label user-select-none" for="{{ id }}">
             <i class="theme-icon me-1 {{ is_dark ? theme.iconLight : theme.iconDark }}"></i><span class="theme-text">{{ theme|trans }}</span>
@@ -32,13 +32,13 @@
                 {{- button_close_modal(true, null, dialog_id) -}}
             </div>
             <div class="modal-body mx-3">
-                <span class="form-label required mb-3">{{ 'theme.description'|trans }}</span>
+                <span class="form-label required mb-3">{{ 'theme.help'|trans }}</span>
                 {% for theme in themes() %}
                     {{ _self.output_theme(theme, is_dark, theme_selection) }}
                 {% endfor %}
             </div>
             <div class="modal-footer">
-                <div class="d-flex flex-wrap align-items-start gap-1 w-100">
+                <div class="d-flex flex-wrap align-items-start gap-2 w-100">
                     {{ button_ok() }}
                     {{ button_close_modal(false, 'common.button_cancel', dialog_id) }}
                     <small class="flex-grow-1 text-sm-end">{{ 'common.required'|trans|raw }}</small>

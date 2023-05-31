@@ -14,7 +14,6 @@
      */
     const COOKIE_ENTRY = 'THEME=';
 
-
     /**
      * The auto theme.
      * @type {string}
@@ -177,18 +176,17 @@
             if (!$dialog) {
                 return;
             }
-            const theme = this._getCookieValue();
-            const isMediaDark = this._isMediaDark();
-            $dialog.data('old-theme', theme);
-            $dialog.data('new-theme', false);
             const options = this.options;
+            const theme = this._getCookieValue();
             const selector = this._getInputSelector();
             const iconSelector = `label ${options.labelIcon}`;
+            const is_dark = theme === THEME_DARK || this._isMediaDark();
+            $dialog.data('old-theme', theme).data('new-theme', false);
             $(selector).each(function () {
                 const $this = $(this);
                 $this.prop('checked', $this.val() === theme);
                 const $icon = $this.parent().find(iconSelector);
-                if (theme === THEME_DARK || isMediaDark) {
+                if (is_dark) {
                     $icon.removeClass($this.data(options.iconDark))
                         .addClass($this.data(options.iconLight));
                 } else {
@@ -302,18 +300,18 @@
                 $(this).siblings(options.input).trigger('click');
             });
 
-            const that = this;
-            $(`${options.dialogId} ${options.input}`).on('input', function () {
-                const theme = $(this).val();
-                if (theme) {
-                    that._setTheme(theme);
-                }
-            });
+            // const that = this;
+            // $(`${options.dialogId} ${options.input}`).on('input', function () {
+            //     const theme = $(this).val();
+            //     if (theme) {
+            //         that._setTheme(theme);
+            //     }
+            // });
         }
 
         /**
-         * Return if the media color scheme is dark.
-         * @return {boolean} true if selected.
+         * Return if prefers color scheme color is dark.
+         * @return {boolean} true if dark.
          * @private
          */
         _isMediaDark() {

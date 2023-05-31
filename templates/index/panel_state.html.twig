@@ -28,7 +28,7 @@
 {# content #}
 <div class="card card-state mb-2" data-path="{{ path('homepage_hide_state') }}">
     <div class="card-header">
-        <div class="d-flex flex-wrap align-items-center gap-1">
+        <div class="d-flex flex-wrap align-items-center gap-2">
             <h1 class="card-title flex-fill">{{ icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
             {%- if table_path and is_states -%}
                 {{ link(path('chart_by_state'), null, 'd-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}

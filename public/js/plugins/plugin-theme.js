@@ -180,13 +180,13 @@
             const theme = this._getCookieValue();
             const selector = this._getInputSelector();
             const iconSelector = `label ${options.labelIcon}`;
-            const is_dark = theme === THEME_DARK || this._isMediaDark();
+            const isDark = theme === THEME_DARK || this._isMediaDark();
             $dialog.data('old-theme', theme).data('new-theme', false);
             $(selector).each(function () {
                 const $this = $(this);
                 $this.prop('checked', $this.val() === theme);
                 const $icon = $this.parent().find(iconSelector);
-                if (is_dark) {
+                if (isDark) {
                     $icon.removeClass($this.data(options.iconDark))
                         .addClass($this.data(options.iconLight));
                 } else {

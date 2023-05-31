@@ -69,6 +69,18 @@
                 <file name="src/Form/Extension/UrlTypeExtension.php"/>
             </errorLevel>
         </UnsupportedPropertyReferenceUsage>
+
+        <InvalidReturnType>
+            <errorLevel type="suppress">
+                <file name="src/Table/Column.php"/>
+            </errorLevel>
+        </InvalidReturnType>
+        <InvalidReturnStatement>
+            <errorLevel type="suppress">
+                <file name="src/Table/Column.php"/>
+            </errorLevel>
+        </InvalidReturnStatement>
+
     </issueHandlers>
 
     <plugins>

@@ -22,16 +22,16 @@
 {%- set class = item.enabled ? 'text-success' : 'text-danger' -%}
 {{ property('user.fields.enabled', value, class) }}
 {{ property('user.fields.lastLogin', item.lastLogin ? item.lastLogin|locale_datetime : 'common.value_none'|trans) }}
-{%- set image = asset_image_user(item, '096', {'alt': 'user.fields.imageFile'|trans, 'title': 'user.image.title'|trans, 'class': 'img-thumbnail avatar-lg'}) -%}
+{%- set image = asset_image_user(item, '096', {'alt': 'user.fields.imageFile'|trans, 'title': 'user.image.title'|trans, 'class': 'border avatar-lg'}) -%}
 {%- if image -%}
     {{ property('user.fields.imageFile', image) }}
 {%- endif -%}
 {{ properties(item) }}
 {% endblock %}
-
-{% block card_footer %}
+{# actions #}
+{% block actions_form %}
 {{ parent() -}}
 {% if rights_path %}
-{{ link(rights_path, 'user.rights.title', 'btn btn-form btn-outline-secondary') }}
+    {{ link(rights_path, 'user.rights.title', 'btn btn-form btn-outline-secondary') }}
 {% endif %}
 {% endblock %}

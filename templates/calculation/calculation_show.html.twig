@@ -24,33 +24,33 @@
 <div class="{{ block('table_responsive_class') }}">
     <table class="table table-hover table-sm table-list mt-3" id="data-table-edit">
         <tbody>
-            {# groups #}
-            {% for group in item.groups %}
+        {# groups #}
+        {% for group in item.groups %}
             <tr>
                 <th colspan="5">{{ group.code }}</th>
             </tr>
             {# categories #}
             {% for category in group.categories %}
-            <tr>
-                <th class="ps-3" colspan="5">{{ category.code }}</th>
-            </tr>
-            {# items #}
-            {% for product in category.items %}
-            <tr class="item">
-                <td class="text-nowrap ps-3">{{ product.description }}</td>
-                <td class="text-unit">{{ product.unit }}</td>
-                <td class="text-currency">{{ product.price|amount }}</td>
-                <td class="text-currency">{{ product.quantity|amount }}</td>
-                <td class="text-currency">{{ product.total|amount }}</td>
-            </tr>
+                <tr>
+                    <th class="ps-3" colspan="5">{{ category.code }}</th>
+                </tr>
+                {# items #}
+                {% for product in category.items %}
+                    <tr class="item">
+                        <td class="text-nowrap ps-3">{{ product.description }}</td>
+                        <td class="text-unit">{{ product.unit }}</td>
+                        <td class="text-currency">{{ product.price|amount }}</td>
+                        <td class="text-currency">{{ product.quantity|amount }}</td>
+                        <td class="text-currency">{{ product.total|amount }}</td>
+                    </tr>
+                {% endfor %}
             {% endfor %}
-            {% endfor %}
-            {% endfor %}
-            {# items total #}
-            <tr>
-                <td class="fw-bold" colspan="4">{{ 'calculation.fields.itemsTotal'|trans }}</td>
-                <td class="fw-bold text-currency">{{ item.groupsAmount|amount }}</td>
-            </tr>
+        {% endfor %}
+        {# items total #}
+        <tr>
+            <td class="fw-bold" colspan="4">{{ 'calculation.fields.itemsTotal'|trans }}</td>
+            <td class="fw-bold text-currency">{{ item.groupsAmount|amount }}</td>
+        </tr>
         </tbody>
     </table>
 </div>
@@ -129,29 +129,23 @@
 {{ property('calculation.fields.date', item.date|locale_date) }}
 <tr>
     <td class="w-25">{{ 'calculation.fields.state'|trans }}</td>
-    <td class="w-75"><span class="state-color border border-secondary" style="margin-bottom: 0.2rem; background-color: {{ item.state.color|default('transparent') }};"></span> {{ item.stateCode }}</td>
+    <td class="w-75"><span class="state-color me-2 mb-1" style="background-color: {{ item.state.color|default('transparent') }};"></span>{{ item.stateCode }}</td>
 </tr>
 {{ properties(item) }}
 {% if item.empty %}
     {{ property('calculation.edit.panel_items', 'calculation.edit.empty'|trans) }}
 {% endif %}
 {% endblock %}
-{# footer #}
-{% block card_footer %}
-<div class="row">
-    <div class="col-md-8">
-    {{ parent() }}
-    {% if state_path %}
-        {{ link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
-    {% endif %}
-    </div>
-    <div class="col-md-4 text-md-end">
-        <p id="error-all" class="mb-0" class="d-none">
-            <span id="error-duplicate" class="d-none"><span class="duplicate-cell"></span>{{ 'duplicate.title'|trans }}</span>
-            <span id="error-empty" class="d-none ms-1"><span class="empty-cell"></span>{{ 'empty.title'|trans }}</span>
-        </p>
-    </div>
-</div>
+{# actions #}
+{% block actions_form %}
+{{ parent() }}
+{% if state_path %}
+    {{ link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}
+{% endif %}
+<p id="error-all" class="ms-md-auto" class="d-none">
+    <span id="error-duplicate" class="d-none"><span class="duplicate-cell"></span>{{ 'duplicate.title'|trans }}</span>
+    <span id="error-empty" class="d-none ms-1"><span class="empty-cell"></span>{{ 'empty.title'|trans }}</span>
+</p>
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}

@@ -73,7 +73,6 @@
             return;
         }
         const $input = $('#search-form-vertical #search');
-        const $button = $('#search-form-vertical #button');
         const $label = $('#search-form-vertical #invalid');
         const hideInvalid = function () {
             $input.removeClass('is-invalid');
@@ -81,19 +80,15 @@
         };
         const showInvalid = function () {
             $input.addClass('is-invalid');
-            $button.addClass('disabled');
             $label.show();
         };
         $input.on('input', function () {
             if ($input.val().trim().length < 2) {
-                $button.addClass('disabled');
                 showInvalid();
             } else {
-                $button.removeClass('disabled');
                 hideInvalid();
             }
         }).on('blur', function () {
-            $button.addClass('disabled');
             $input.val('');
             hideInvalid();
         });

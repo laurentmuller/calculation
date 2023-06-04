@@ -24,7 +24,7 @@ class RequestChangePasswordType extends AbstractUserCaptchaType
         $helper->field('user')
             ->label('resetting.request.user')
             ->widgetClass('user-name')
-            ->add(UserNameType::class);
+            ->addUserNameType();
 
         parent::addFormFields($helper);
     }

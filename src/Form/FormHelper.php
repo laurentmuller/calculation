@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form;
 
+use App\Entity\User;
 use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
@@ -463,6 +464,20 @@ class FormHelper
             ->updateOption('prepend_class', 'input-group-url')
             ->updateAttribute('inputmode', 'url')
             ->add(UrlType::class);
+    }
+
+    /**
+     * Add a username type.
+     */
+    public function addUserNameType(string|bool $autocomplete = 'username'): self
+    {
+        return $this->updateOption('prepend_icon', 'fa-fw fa-regular fa-user')
+            ->autocomplete($autocomplete)
+            ->updateAttributes([
+                'minLength' => User::MIN_USERNAME_LENGTH,
+                'maxLength' => User::MAX_USERNAME_LENGTH,
+            ])
+            ->addTextType();
     }
 
     /**

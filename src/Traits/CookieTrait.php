@@ -37,6 +37,23 @@ trait CookieTrait
         return $request->cookies->getBoolean($name, $default);
     }
 
+    /**
+     * Returns the cookie value converted to an enum.
+     *
+     * @template E of \BackedEnum
+     *
+     * @psalm-param class-string<E> $class
+     * @psalm-param E|null          $default
+     *
+     * @psalm-return ($default is null ? (E|null) : E)
+     */
+    protected function getCookieEnum(Request $request, string $key, string $prefix, string $class, \BackedEnum $default = null): ?\BackedEnum
+    {
+        $name = $this->getCookieName($key, $prefix);
+
+        return $request->cookies->getEnum($name, $class, $default);
+    }
+
     protected function getCookieFloat(Request $request, string $key, string $prefix = '', float $default = 0): float
     {
         $name = $this->getCookieName($key, $prefix);
@@ -44,12 +61,9 @@ trait CookieTrait
         return (float) $request->cookies->get($name, (string) $default);
     }
 
-    protected function getCookieInt(Request $request, string $key, string $prefix = '', int|\BackedEnum $default = 0): int
+    protected function getCookieInt(Request $request, string $key, string $prefix = '', int $default = 0): int
     {
         $name = $this->getCookieName($key, $prefix);
-        if ($default instanceof \BackedEnum) {
-            $default = (int) $default->value;
-        }
 
         return $request->cookies->getInt($name, $default);
     }
@@ -65,12 +79,9 @@ trait CookieTrait
     /**
      * @psalm-return ($default is null ? (string|null) : string)
      */
-    protected function getCookieString(Request $request, string $key, string $prefix = '', string|\BackedEnum $default = null): string|null
+    protected function getCookieString(Request $request, string $key, string $prefix = '', string $default = null): string|null
     {
         $name = $this->getCookieName($key, $prefix);
-        if ($default instanceof \BackedEnum) {
-            $default = (string) $default->value;
-        }
 
         return $request->cookies->get($name, $default);
     }

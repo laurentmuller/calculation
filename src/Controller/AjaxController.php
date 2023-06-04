@@ -79,14 +79,14 @@ class AjaxController extends AbstractController
     #[Route(path: '/check/user/email', name: 'ajax_check_user_email')]
     public function checkUserEmail(Request $request, UserRepository $repository): JsonResponse
     {
+        $message = null;
         $id = $this->getRequestInt($request, 'id');
         $email = $this->getRequestString($request, 'email');
-        $message = null;
         if (empty($email)) {
             $message = 'email.blank';
-        } elseif (\strlen($email) < 2) {
+        } elseif (\strlen($email) < User::MIN_USERNAME_LENGTH) {
             $message = 'email.short';
-        } elseif (\strlen($email) > 180) {
+        } elseif (\strlen($email) > user::MAX_USERNAME_LENGTH) {
             $message = 'email.long';
         } else {
             $user = $repository->findByEmail($email);
@@ -95,7 +95,7 @@ class AjaxController extends AbstractController
             }
         }
         if (null !== $message) {
-            return $this->json($this->trans($message, [], 'validators'));
+            return $this->json($this->trans(id: $message, domain: 'validators'));
         }
 
         return $this->json(true);
@@ -108,14 +108,14 @@ class AjaxController extends AbstractController
     #[Route(path: '/check/user/name', name: 'ajax_check_user_name')]
     public function checkUsername(Request $request, UserRepository $repository): JsonResponse
     {
+        $message = null;
         $id = $this->getRequestInt($request, 'id');
         $username = $this->getRequestString($request, 'username');
-        $message = null;
         if (empty($username)) {
             $message = 'username.blank';
-        } elseif (\strlen($username) < 2) {
+        } elseif (\strlen($username) < User::MIN_USERNAME_LENGTH) {
             $message = 'username.short';
-        } elseif (\strlen($username) > 180) {
+        } elseif (\strlen($username) > User::MAX_USERNAME_LENGTH) {
             $message = 'username.long';
         } else {
             $user = $repository->findByUsername($username);
@@ -210,7 +210,7 @@ class AjaxController extends AbstractController
     public function password(Request $request, PasswordService $service, #[Autowire('%kernel.debug')] bool $debug): JsonResponse
     {
         $password = $this->getRequestString($request, 'password', '');
-        $strength = $this->getRequestInt($request, 'strength', StrengthLevel::NONE);
+        $strength = $this->getRequestInt($request, 'strength', StrengthLevel::NONE->value);
         $email = $this->getRequestString($request, 'email');
         $user = $this->getRequestString($request, 'user');
         $results = $service->validate($password, $strength, $email, $user);
@@ -292,11 +292,9 @@ class AjaxController extends AbstractController
     #[Route(path: '/save', name: 'ajax_save_table')]
     public function saveTable(Request $request): JsonResponse
     {
-        $requestView = $this->getRequestString($request, TableInterface::PARAM_VIEW, TableView::TABLE);
-        $view = TableView::tryFrom($requestView) ?? TableView::TABLE;
+        $view = $this->getRequestEnum($request, TableInterface::PARAM_VIEW, TableView::class, TableView::TABLE);
         $response = $this->json(true);
-        $path = $this->getCookiePath();
-        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view->value, '', $path);
+        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view->value, '', $this->getCookiePath());
 
         return $response;
     }

@@ -14,23 +14,20 @@
     const url = $form.data('check-user');
     const options = {
         showModification: false,
-        rules: {
-            'user': {
-                remote: {
-                    url: url,
-                    data: {
-                        user: function () {
-                            return $('#user').val();
-                        }
-                    }
-                }
-            }
-        },
+        // rules: {
+        //     'user': {
+        //         remote: {
+        //             url: url,
+        //             data: {
+        //                 user: function () {
+        //                     return $('#user').val();
+        //                 }
+        //             }
+        //         }
+        //     }
+        // },
         spinner: {
-            text: $('.card-title').text() + '...',
-            // css: {
-            //     top: '20%',
-            // }
+            text: $('.card-title').text() + '...'
         }
     };
     $form.initValidator(options);

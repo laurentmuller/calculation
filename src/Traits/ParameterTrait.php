@@ -29,6 +29,23 @@ trait ParameterTrait
         return $this->getRequestBoolean($request, $key, $default);
     }
 
+    /**
+     * Returns the parameter value converted to an enum.
+     *
+     * @template E of \BackedEnum
+     *
+     * @psalm-param class-string<E> $class
+     * @psalm-param E|null          $default
+     *
+     * @psalm-return ($default is null ? (E|null) : E)
+     */
+    protected function getParamEnum(Request $request, string $key, string $prefix, string $class, \BackedEnum $default = null): ?\BackedEnum
+    {
+        $default = $this->getCookieEnum($request, $key, $prefix, $class, $default);
+
+        return $this->getRequestEnum($request, $key, $class, $default);
+    }
+
     protected function getParamFloat(Request $request, string $key, string $prefix = '', float $default = 0): float
     {
         $default = $this->getCookieFloat($request, $key, $prefix, $default);
@@ -36,7 +53,7 @@ trait ParameterTrait
         return $this->getRequestFloat($request, $key, $default);
     }
 
-    protected function getParamInt(Request $request, string $key, string $prefix = '', int|\BackedEnum $default = 0): int
+    protected function getParamInt(Request $request, string $key, string $prefix = '', int $default = 0): int
     {
         $default = $this->getCookieInt($request, $key, $prefix, $default);
 
@@ -46,7 +63,7 @@ trait ParameterTrait
     /**
      * @psalm-return ($default is null ? (string|null) : string)
      */
-    protected function getParamString(Request $request, string $key, string $prefix = '', string|\BackedEnum $default = null): string|null
+    protected function getParamString(Request $request, string $key, string $prefix = '', string $default = null): string|null
     {
         $default = $this->getCookieString($request, $key, $prefix, $default);
 

@@ -37,6 +37,23 @@ trait RequestTrait
     }
 
     /**
+     * Returns the parameter value converted to an enum.
+     *
+     * @psalm-template E of \BackedEnum
+     *
+     * @psalm-param class-string<E> $class
+     * @psalm-param E|null          $default
+     *
+     * @psalm-return ($default is null ? (E|null) : E)
+     *
+     * @psalm-suppress ImplementedReturnTypeMismatch
+     */
+    protected function getRequestEnum(Request $request, string $key, string $class, \BackedEnum $default = null): ?\BackedEnum
+    {
+        return $this->getRequestBag($request, $key)?->getEnum($key, $class, $default) ?? $default;
+    }
+
+    /**
      * Returns the request parameter value converted to float.
      */
     protected function getRequestFloat(Request $request, string $key, float $default = 0): float
@@ -47,12 +64,8 @@ trait RequestTrait
     /**
      * Returns the request parameter value converted to integer.
      */
-    protected function getRequestInt(Request $request, string $key, int|\BackedEnum $default = 0): int
+    protected function getRequestInt(Request $request, string $key, int $default = 0): int
     {
-        if ($default instanceof \BackedEnum) {
-            $default = (int) $default->value;
-        }
-
         return $this->getRequestBag($request, $key)?->getInt($key, $default) ?? $default;
     }
 
@@ -61,15 +74,9 @@ trait RequestTrait
      *
      * @psalm-return ($default is null ? (string|null) : string)
      */
-    protected function getRequestString(Request $request, string $key, string|\BackedEnum $default = null): ?string
+    protected function getRequestString(Request $request, string $key, string $default = null): ?string
     {
-        if ($default instanceof \BackedEnum) {
-            $default = (string) $default->value;
-        }
-        /** @psalm-var ?string $value */
-        $value = $this->getRequestBag($request, $key)?->get($key, $default) ?? $default;
-
-        return $value;
+        return $this->getRequestBag($request, $key)?->getString($key, $default ?? '') ?? $default;
     }
 
     /**

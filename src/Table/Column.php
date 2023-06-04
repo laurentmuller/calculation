@@ -132,18 +132,23 @@ class Column implements \Stringable, SortModeInterface
      * @param string        $path   the path to the JSON file definitions
      *
      * @return Column[] the column definitions
+     *
+     * @throws \InvalidArgumentException if a property cannot be set
      */
     public static function fromJson(AbstractTable $parent, string $path): array
     {
-        /** @var array<array<string, string|bool>> $definitions */
+        /** @var array<array<string, mixed>> $definitions */
         $definitions = FileUtils::decodeJson($path);
         if ([] === $definitions) {
             throw new \InvalidArgumentException("The file '$path' does not contain any definition.");
         }
+
         $accessor = PropertyAccess::createPropertyAccessor();
 
         return \array_map(function (array $definition) use ($parent, $accessor): self {
             $column = new self();
+
+            /** @psalm-var mixed $value */
             foreach ($definition as $key => $value) {
                 // special case for the field formatter
                 if (self::FIELD_FORMATTER === $key) {
@@ -151,13 +156,17 @@ class Column implements \Stringable, SortModeInterface
                 }
 
                 try {
+                    /*
+                     * @param Column $column
+                     * @param-out Column $column
+                     */
                     $accessor->setValue($column, $key, $value);
                 } catch (\Exception $e) {
                     throw new \InvalidArgumentException(\sprintf("Cannot set the property '%s'.", $key), (int) $e->getCode(), $e);
                 }
             }
 
-            return $column;
+            return $column instanceof self ? $column : new self();
         }, $definitions);
     }
 

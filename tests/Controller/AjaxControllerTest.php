@@ -24,17 +24,6 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
     private ?TranslatorInterface $translator = null;
 
     /**
-     * @throws \Exception
-     *
-     * @see AbstractAuthenticateWebTestCase::setUp()
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->translator = $this->getService(TranslatorInterface::class);
-    }
-
-    /**
      * @return array<array{0: string|bool, 1?: string|null, 2?: int|null}>
      */
     public static function getUserEmails(): array
@@ -109,6 +98,15 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
         $this->validateResponse($response, $expected);
     }
 
+    private function getTranslator(): TranslatorInterface
+    {
+        if (!$this->translator instanceof TranslatorInterface) {
+            $this->translator = $this->getService(TranslatorInterface::class);
+        }
+
+        return $this->translator;
+    }
+
     private function validateResponse(Response $response, string|bool $expected): void
     {
         self::assertTrue($response->isOk());
@@ -116,13 +114,12 @@ class AjaxControllerTest extends AbstractAuthenticateWebTestCase
         try {
             $content = $response->getContent();
             self::assertIsString($content);
-            $result = \json_decode($content);
+            $result = \json_decode(json: $content, flags: \JSON_THROW_ON_ERROR);
             if (\is_string($expected)) {
-                self::assertNotNull($this->translator);
-                $expected = $this->translator->trans($expected, [], 'validators');
+                $expected = $this->getTranslator()->trans(id: $expected, domain: 'validators');
             }
             self::assertSame($expected, $result);
-        } catch (\UnexpectedValueException $e) {
+        } catch (\UnexpectedValueException|\JsonException $e) {
             self::fail($e->getMessage());
         }
     }

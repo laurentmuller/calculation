@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Listener;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Traits\TranslatorFlashMessageAwareTrait;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -35,7 +35,7 @@ class LoginListener implements ServiceSubscriberInterface
      * Constructor.
      */
     public function __construct(
-        private readonly EntityManagerInterface $manager,
+        private readonly UserRepository $repository,
         #[Autowire('%app_version%')]
         private readonly string $appVersion,
         #[Autowire('%app_name%')]
@@ -73,7 +73,7 @@ class LoginListener implements ServiceSubscriberInterface
     {
         if ($user instanceof User) {
             $user->updateLastLogin();
-            $this->manager->flush();
+            $this->repository->flush();
         }
     }
 }

@@ -1023,7 +1023,7 @@ search:
     field: Champ
     query: Rechercher
   minimum: Saisir 2 caractères au minimum.
-  placeholder: Tapez un texte à rechercher
+  placeholder: Rechercher
   link: Afficher la page de recherche
   search: Lancer la recherche
 security:

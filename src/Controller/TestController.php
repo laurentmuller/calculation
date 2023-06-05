@@ -27,6 +27,9 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\HttpClientError;
 use App\Report\HtmlReport;
+use App\Repository\CalculationStateRepository;
+use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
 use App\Service\AbstractHttpClientService;
@@ -397,6 +400,7 @@ class TestController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $count = 0;
             $nodes = [];
+            /** @psalm-var Group[] $groups */
             $groups = $manager->getRepository(Group::class)->findAllByCode();
             foreach ($groups as $group) {
                 $node = [
@@ -459,8 +463,11 @@ class TestController extends AbstractController
 
     private function getCategories(EntityManagerInterface $manager): array
     {
+        /** @psalm-var CategoryRepository $repository */
+        $repository = $manager->getRepository(Category::class);
+
         /** @psalm-var array<int, Category> $categories */
-        $categories = $manager->getRepository(Category::class)
+        $categories = $repository
             ->getQueryBuilderByGroup()
             ->getQuery()
             ->getResult();
@@ -492,7 +499,9 @@ class TestController extends AbstractController
 
     private function getProducts(EntityManagerInterface $manager): array
     {
-        $products = $manager->getRepository(Product::class)->findAllByGroup();
+        /** @psalm-var ProductRepository $repository */
+        $repository = $manager->getRepository(Product::class);
+        $products = $repository->findAllByGroup();
         $fn = static fn (Product $p): string => \sprintf('%s - %s', $p->getGroupCode(), $p->getCategoryCode());
 
         return $this->groupBy($products, $fn);
@@ -500,8 +509,11 @@ class TestController extends AbstractController
 
     private function getStates(EntityManagerInterface $manager): array
     {
+        /** @psalm-var CalculationStateRepository $repository */
+        $repository = $manager->getRepository(CalculationState::class);
+
         /** @psalm-var array<int, CalculationState> $states */
-        $states = $manager->getRepository(CalculationState::class)
+        $states = $repository
             ->getQueryBuilderByEditable()
             ->getQuery()
             ->getResult();

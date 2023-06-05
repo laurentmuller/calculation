@@ -12,29 +12,21 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Enums\StrengthLevel;
 use App\Enums\TableView;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
 use App\Model\HttpClientError;
 use App\Model\TaskComputeQuery;
-use App\Repository\AbstractRepository;
-use App\Repository\CalculationRepository;
-use App\Repository\CustomerRepository;
-use App\Repository\ProductRepository;
 use App\Service\CalculationService;
 use App\Service\FakerService;
 use App\Service\PasswordService;
-use App\Service\SwissPostService;
 use App\Service\TaskService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use App\Utils\StringUtils;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\ResultSetMapping;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -223,92 +215,6 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Search address.
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/address', name: 'ajax_search_address')]
-    public function searchAddress(Request $request, SwissPostService $service): JsonResponse
-    {
-        $limit = $this->getRequestInt($request, 'limit', 25);
-        if (null !== $zip = $this->getRequestString($request, 'zip')) {
-            return $this->json($service->findZip($zip, $limit));
-        }
-        if (null !== $city = $this->getRequestString($request, 'city')) {
-            return $this->json($service->findCity($city, $limit));
-        }
-        if (null !== $street = $this->getRequestString($request, 'street')) {
-            return $this->json($service->findStreet($street, $limit));
-        }
-
-        return $this->json([]);
-    }
-
-    /**
-     * Search distinct calculation's customers in existing calculations.
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/customer', name: 'ajax_search_customer')]
-    public function searchCustomer(Request $request, CalculationRepository $repository): JsonResponse
-    {
-        return $this->getDistinctValuesFromRepository($request, $repository, 'customer');
-    }
-
-    /**
-     * Search products.
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/product', name: 'ajax_search_product')]
-    public function searchProduct(Request $request, ProductRepository $repository): JsonResponse
-    {
-        try {
-            $search = $this->getRequestString($request, 'query', '');
-            if (StringUtils::isString($search)) {
-                $maxResults = $this->getRequestInt($request, 'limit', 15);
-                $products = $repository->search($search, $maxResults);
-                if ([] !== $products) {
-                    return $this->json($products);
-                }
-            }
-
-            return $this->jsonFalse([
-                'products' => [],
-            ]);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
-    }
-
-    /**
-     * Search distinct product and task suppliers.
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/supplier', name: 'ajax_search_supplier')]
-    public function searchSupplier(Request $request, EntityManagerInterface $manager): JsonResponse
-    {
-        return $this->getDistinctValuesFromManager($request, $manager, 'supplier');
-    }
-
-    /**
-     * Search distinct customer's titles.
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/title', name: 'ajax_search_title')]
-    public function searchTitle(Request $request, CustomerRepository $repository): JsonResponse
-    {
-        return $this->getDistinctValuesFromRepository($request, $repository, 'title');
-    }
-
-    /**
-     * Search distinct units from products and tasks.
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/unit', name: 'ajax_search_unit')]
-    public function searchUnit(Request $request, EntityManagerInterface $manager): JsonResponse
-    {
-        return $this->getDistinctValuesFromManager($request, $manager, 'unit');
-    }
-
-    /**
      * Translate a text.
      *
      * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
@@ -405,78 +311,6 @@ class AjaxController extends AbstractController
         }
 
         return null;
-    }
-
-    private function getDistinctSql(string $field, string $query, int $limit): string
-    {
-        return <<<SQL
-                SELECT DISTINCT
-                    p.$field
-                FROM
-                    sy_Product as p
-                WHERE
-                    p.$field LIKE '%$query%'
-                UNION
-                SELECT DISTINCT
-                    t.$field
-                FROM
-                    sy_Task as t
-                WHERE
-                    t.$field LIKE '%$query%'
-                ORDER BY
-                    $field
-                LIMIT $limit
-            SQL;
-    }
-
-    /**
-     * Search distinct values from products and tasks.
-     */
-    private function getDistinctValuesFromManager(Request $request, EntityManagerInterface $manager, string $field): JsonResponse
-    {
-        return $this->getDistinctValuesFromRequest($request, function (string $query, int $limit) use ($manager, $field): array {
-            $sql = $this->getDistinctSql($field, $query, $limit);
-
-            return $manager->createNativeQuery($sql, new ResultSetMapping())
-                ->getSingleColumnResult();
-        });
-    }
-
-    /**
-     * Search distinct values.
-     *
-     * @template T of AbstractEntity
-     *
-     * @param Request               $request    the request to get query value
-     * @param AbstractRepository<T> $repository the entity repository to search from
-     * @param string                $field      the field name (column) to get values for
-     */
-    private function getDistinctValuesFromRepository(Request $request, AbstractRepository $repository, string $field): JsonResponse
-    {
-        return $this->getDistinctValuesFromRequest($request, fn (string $query, int $limit): array => $repository->getDistinctValues($field, $query, $limit));
-    }
-
-    /**
-     * @psalm-param callable(string, int): array $callback
-     */
-    private function getDistinctValuesFromRequest(Request $request, callable $callback): JsonResponse
-    {
-        $query = \trim($this->getRequestString($request, 'query', ''));
-        if ('' === $query) {
-            return $this->jsonFalse(['values' => []]);
-        }
-
-        try {
-            $limit = $this->getRequestInt($request, 'limit', 15);
-            $values = $callback($query, $limit);
-            if ([] !== $values) {
-                return $this->json($values);
-            }
-
-            return $this->jsonFalse(['values' => []]);
-        } catch (\Exception $e) {
-            return $this->jsonException($e);
-        }
     }
 
     private function handleTranslationError(TranslatorServiceInterface $service, string $message): JsonResponse

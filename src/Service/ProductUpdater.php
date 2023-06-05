@@ -19,11 +19,11 @@ use App\Form\FormHelper;
 use App\Model\ProductUpdateQuery;
 use App\Model\ProductUpdateResult;
 use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use App\Traits\LoggerAwareTrait;
 use App\Traits\MathTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -53,8 +53,11 @@ class ProductUpdater implements ServiceSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(private readonly EntityManagerInterface $manager, private readonly FormFactoryInterface $factory)
-    {
+    public function __construct(
+        private readonly ProductRepository $productRepository,
+        private readonly CategoryRepository $categoryRepository,
+        private readonly FormFactoryInterface $factory
+    ) {
     }
 
     /**
@@ -174,7 +177,7 @@ class ProductUpdater implements ServiceSubscriberInterface
             }
         }
         if (!$query->isSimulate() && $result->isValid()) {
-            $this->manager->flush();
+            $this->productRepository->flush();
             $this->logResult($query, $result);
         }
 
@@ -201,7 +204,7 @@ class ProductUpdater implements ServiceSubscriberInterface
      */
     private function getAllProducts(): array
     {
-        return $this->manager->getRepository(Product::class)->findAllByDescription();
+        return $this->productRepository->findAllByDescription();
     }
 
     /**
@@ -212,7 +215,7 @@ class ProductUpdater implements ServiceSubscriberInterface
     private function getCategory(int $id): ?Category
     {
         if (0 !== $id) {
-            return $this->manager->getRepository(Category::class)->find($id);
+            return $this->categoryRepository->find($id);
         }
 
         return null;
@@ -226,7 +229,7 @@ class ProductUpdater implements ServiceSubscriberInterface
     private function getProducts(?Category $category): array
     {
         if ($category instanceof Category) {
-            return $this->manager->getRepository(Product::class)->findByCategory($category);
+            return $this->productRepository->findByCategory($category);
         }
 
         return [];

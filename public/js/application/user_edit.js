@@ -26,38 +26,38 @@
 
     // options
     const $form = $("#edit-form");
-    // const urlName = $form.data('check-name');
-    // const urlEmail = $form.data('check-email');
+    const urlName = $form.data('check-name');
+    const urlEmail = $form.data('check-email');
     let options = {
         fileInput: true,
-        // rules: {
-            // 'user[username]': {
-            //     remote: {
-            //         url: urlName,
-            //         data: {
-            //             id: function () {
-            //                 return $('#user_id').val();
-            //             },
-            //             username: function () {
-            //                 return $('#user_username').val();
-            //             }
-            //         }
-            //     }
-            // },
-            // 'user[email]': {
-            //     remote: {
-            //         url: urlEmail,
-            //         data: {
-            //             id: function () {
-            //                 return $('#user_id').val();
-            //             },
-            //             email: function () {
-            //                 return $('#user_email').val();
-            //             }
-            //         }
-            //     }
-            // }
-        // }
+        rules: {
+            'user[username]': {
+                remote: {
+                    url: urlName,
+                    data: {
+                        id: function () {
+                            return $('#user_id').val();
+                        },
+                        username: function () {
+                            return $('#user_username').val();
+                        }
+                    }
+                }
+            },
+            'user[email]': {
+                remote: {
+                    url: urlEmail,
+                    data: {
+                        id: function () {
+                            return $('#user_id').val();
+                        },
+                        email: function () {
+                            return $('#user_email').val();
+                        }
+                    }
+                }
+            }
+        }
     };
 
     // new user?

@@ -40,8 +40,8 @@ class AjaxUserController extends AbstractController
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/check/user/email', name: 'ajax_check_user_email', methods: Request::METHOD_GET)]
     public function checkEmail(
-        #[MapQueryParameter] int $id = null,
         #[MapQueryParameter] string $email = null,
+        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)] int $id = null,
     ): JsonResponse {
         $message = null;
         if (empty($email)) {
@@ -56,11 +56,8 @@ class AjaxUserController extends AbstractController
                 $message = 'email.already_used';
             }
         }
-        if (null !== $message) {
-            return $this->getJsonResponse($message);
-        }
 
-        return $this->json(true);
+        return $this->getJsonResponse($message);
     }
 
     /**
@@ -69,8 +66,8 @@ class AjaxUserController extends AbstractController
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/check/user/name', name: 'ajax_check_user_name', methods: Request::METHOD_GET)]
     public function checkName(
-        #[MapQueryParameter] int $id = null,
         #[MapQueryParameter] string $username = null,
+        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)] int $id = null,
     ): JsonResponse {
         $message = null;
         if (empty($username)) {
@@ -85,11 +82,8 @@ class AjaxUserController extends AbstractController
                 $message = 'username.already_used';
             }
         }
-        if (null !== $message) {
-            return $this->getJsonResponse($message);
-        }
 
-        return $this->json(true);
+        return $this->getJsonResponse($message);
     }
 
     /**
@@ -99,11 +93,14 @@ class AjaxUserController extends AbstractController
     #[Route(path: '/check/user', name: 'ajax_check_user', methods: Request::METHOD_GET)]
     public function checkUser(#[MapQueryParameter] string $user = null): JsonResponse
     {
-        if (empty($user) || !$this->findByUsernameOrEmail($user) instanceof User) {
-            return $this->getJsonResponse('username.not_found');
+        $message = null;
+        if (empty($user)) {
+            $message = 'username.blank';
+        } elseif (!$this->findByUsernameOrEmail($user) instanceof User) {
+            $message = 'username.not_found';
         }
 
-        return $this->json(true);
+        return $this->getJsonResponse($message);
     }
 
     private function findByEmail(string $email): ?User
@@ -121,8 +118,12 @@ class AjaxUserController extends AbstractController
         return $this->repository->findByUsernameOrEmail($usernameOrEmail);
     }
 
-    private function getJsonResponse(string $id): JsonResponse
+    private function getJsonResponse(string $id = null): JsonResponse
     {
-        return $this->json($this->trans($id, [], 'validators'));
+        if (null !== $id) {
+            return $this->json($this->trans($id, [], 'validators'));
+        }
+
+        return $this->json(true);
     }
 }

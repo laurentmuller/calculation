@@ -37,7 +37,6 @@
         "ext-zlib": "*",
         "beberlei/doctrineextensions": "dev-master",
         "createnl/zxcvbn-bundle": "^3.0",
-        "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.6",
         "doctrine/orm": "^2.11",
         "elao/enum": "^2.0",

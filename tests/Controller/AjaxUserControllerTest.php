@@ -26,7 +26,7 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
     /**
      * @return array<array{0: string|bool, 1?: string|null, 2?: int|null}>
      */
-    public static function getUserEmails(): array
+    public static function getEmails(): array
     {
         return [
             [true, 'myemail_fake_zz@myemail.com'],
@@ -41,7 +41,7 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
     /**
      * @return array<array{0: string|bool, 1?: string, 2?: int}>
      */
-    public static function getUserNames(): array
+    public static function getNames(): array
     {
         return [
             [true, 'myEmail_fake_zz'],
@@ -54,11 +54,12 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
     }
 
     /**
-     * @return array<array{0: bool|string, 1: string}>
+     * @return array<array{0: bool|string, 1?: string}>
      */
     public static function getUsers(): array
     {
         return [
+            ['username.blank'],
             [true, 'ROLE_SUPER_ADMIN'],
             [true, 'ROLE_SUPER_ADMIN@TEST.COM'],
             ['username.not_found', 'USER_XXX_INVALID'],
@@ -66,18 +67,8 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
         ];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getUsers')]
-    public function testCheckUser(string|bool $expected, string $user = null): void
-    {
-        $parameters = ['user' => $user];
-        self::assertNotNull($this->client);
-        $this->client->request(Request::METHOD_GET, '/ajax/check/user', $parameters);
-        $response = $this->client->getResponse();
-        $this->validateResponse($response, $expected);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('getUserEmails')]
-    public function testCheckUserEmail(string|bool $expected, string $email = null, int $id = null): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getEmails')]
+    public function testCheckEmail(string|bool $expected, string $email = null, int $id = null): void
     {
         $this->loginUsername('ROLE_SUPER_ADMIN');
         $parameters = ['email' => $email, 'id' => $id];
@@ -87,13 +78,23 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
         $this->validateResponse($response, $expected);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getUserNames')]
-    public function testCheckUserName(string|bool $expected, string $username = null, int $id = null): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getNames')]
+    public function testCheckName(string|bool $expected, string $username = null, int $id = null): void
     {
         $this->loginUsername('ROLE_SUPER_ADMIN');
         $parameters = ['username' => $username, 'id' => $id];
         self::assertNotNull($this->client);
         $this->client->request(Request::METHOD_GET, '/ajax/check/user/name', $parameters);
+        $response = $this->client->getResponse();
+        $this->validateResponse($response, $expected);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getUsers')]
+    public function testCheckUser(string|bool $expected, string $user = null): void
+    {
+        $parameters = ['user' => $user];
+        self::assertNotNull($this->client);
+        $this->client->request(Request::METHOD_GET, '/ajax/check/user', $parameters);
         $response = $this->client->getResponse();
         $this->validateResponse($response, $expected);
     }
@@ -119,7 +120,7 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
                 $expected = $this->getTranslator()->trans(id: $expected, domain: 'validators');
             }
             self::assertSame($expected, $result);
-        } catch (\UnexpectedValueException|\JsonException $e) {
+        } catch (\JsonException $e) {
             self::fail($e->getMessage());
         }
     }

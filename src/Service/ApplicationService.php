@@ -525,9 +525,10 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function removeProperty(string $name): self
     {
+        /** @psalm-var PropertyRepository $repository */
         $repository = $this->manager->getRepository(Property::class);
         $property = $repository->findOneByName($name);
-        if (null !== $property) {
+        if ($property instanceof Property) {
             $repository->remove($property);
             $this->updateAdapter();
         }
@@ -538,6 +539,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     public function setProperties(array $properties, array $defaultValues = null): static
     {
         if ([] !== $properties) {
+            /** @psalm-var PropertyRepository $repository */
             $repository = $this->manager->getRepository(Property::class);
             $defaultValues ??= $this->getDefaultValues();
             /** @psalm-var mixed $value */

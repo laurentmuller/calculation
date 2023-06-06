@@ -2108,7 +2108,7 @@
             "version": "2.9.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laurentmuller/ObHighchartsBundle.git",
+                "url": "git@github.com:laurentmuller/ObHighchartsBundle.git",
                 "reference": "add127781bdd68c080cb55d3e9ffe1a9dae11fc1"
             },
             "dist": {
@@ -2165,9 +2165,6 @@
                 "ob",
                 "symfony"
             ],
-            "support": {
-                "source": "https://github.com/laurentmuller/ObHighchartsBundle/tree/2.9.2"
-            },
             "time": "2023-04-12T15:24:07+00:00"
         },
         {

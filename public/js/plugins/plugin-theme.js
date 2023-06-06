@@ -237,7 +237,7 @@
             if ($link.length) {
                 const message = $link.data(this.options.success);
                 const title = $(this._getTitleSelector()).text();
-                Toaster.success(message, title, {dataset: '#flashes'});
+                Toaster.success(message, title);
             }
         }
 

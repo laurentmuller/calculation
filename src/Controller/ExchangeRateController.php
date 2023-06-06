@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -85,11 +86,11 @@ class ExchangeRateController extends AbstractController
     /**
      * Gets the exchange rate from the base currency code to the target currency code.
      */
-    #[Route(path: '/rate', name: 'exchange_rate')]
-    public function getRate(Request $request): JsonResponse
-    {
-        $baseCode = $this->getRequestString($request, 'baseCode', '');
-        $targetCode = $this->getRequestString($request, 'targetCode', '');
+    #[Route(path: '/rate', name: 'exchange_rate', methods: Request::METHOD_GET)]
+    public function getRate(
+        #[MapQueryParameter] string $baseCode = '',
+        #[MapQueryParameter] string $targetCode = ''
+    ): JsonResponse {
         $result = $this->service->getRateAndDates($baseCode, $targetCode);
         if (($lastError = $this->service->getLastError()) instanceof HttpClientError) {
             return $this->json($lastError);

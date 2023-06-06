@@ -94,8 +94,8 @@
         /**
          * Rounds the given value with 2 decimals.
          *
-         * @param {Number} value - the value to round.
-         * @returns {Number} the rounded value.
+         * @param {number} value - the value to round.
+         * @returns {number} the rounded value.
          */
         roundValue: function (value) {
             return Math.round((value + Number.EPSILON) * 100) / 100;
@@ -104,7 +104,7 @@
         /**
          * Format a value with 0 decimal and grouping separator.
          *
-         * @param {Number} value - the value to format.
+         * @param {number} value - the value to format.
          * @returns {string} the formatted value.
          */
         formatInt: function (value) {
@@ -117,7 +117,7 @@
         /**
          * Parse and format a value with 2 decimals and grouping separator.
          *
-         * @param {Number} value - the value to format.
+         * @param {number} value - the value to format.
          * @returns {string} the formatted value.
          */
         formatFloat: function (value) {

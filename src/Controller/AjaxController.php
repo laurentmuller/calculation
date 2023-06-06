@@ -16,16 +16,12 @@ use App\Enums\StrengthLevel;
 use App\Enums\TableView;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
-use App\Model\HttpClientError;
 use App\Model\TaskComputeQuery;
 use App\Service\FakerService;
 use App\Service\PasswordService;
 use App\Service\TaskService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
-use App\Translator\TranslatorFactory;
-use App\Translator\TranslatorServiceInterface;
-use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,58 +57,6 @@ class AjaxController extends AbstractController
         ]);
 
         return $this->jsonTrue($data);
-    }
-
-    /**
-     * Identifies the language of a piece of text.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/detect', name: 'ajax_detect')]
-    public function detect(Request $request, TranslatorFactory $factory): JsonResponse
-    {
-        $text = $this->getRequestString($request, 'text', '');
-        $class = $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
-        $service = $factory->getService($class);
-        if (!StringUtils::isString($text)) {
-            return $this->jsonFalse([
-                'message' => $this->trans('translator.text_error'),
-            ]);
-        }
-
-        try {
-            if ($result = $service->detect($text)) {
-                return $this->jsonTrue([
-                    'service' => $service::getName(),
-                    'data' => $result,
-                ]);
-            }
-
-            return $this->handleTranslationError($service, 'translator.detect_error');
-        } catch (\Exception $e) {
-            return $this->jsonException($e, $this->trans('translator.detect_error'));
-        }
-    }
-
-    /**
-     * Gets the list of translate languages.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/languages', name: 'ajax_languages')]
-    public function languages(Request $request, TranslatorFactory $factory): JsonResponse
-    {
-        $class = $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
-        $service = $factory->getService($class);
-        if ($languages = $service->getLanguages()) {
-            return $this->jsonTrue([
-                'languages' => $languages,
-            ]);
-        }
-        // error
-        return $this->handleTranslationError($service, 'translator.languages_error');
     }
 
     /**
@@ -210,82 +154,5 @@ class AjaxController extends AbstractController
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view->value, '', $this->getCookiePath());
 
         return $response;
-    }
-
-    /**
-     * Translate a text.
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/translate', name: 'ajax_translate')]
-    public function translate(Request $request, TranslatorFactory $factory): JsonResponse
-    {
-        if (($response = $this->checkAjaxCall($request)) instanceof JsonResponse) {
-            return $response;
-        }
-        $to = $this->getRequestString($request, 'to', '');
-        $from = $this->getRequestString($request, 'from');
-        $text = $this->getRequestString($request, 'text', '');
-        $class = $this->getRequestString($request, 'service', TranslatorFactory::DEFAULT_SERVICE);
-        $service = $factory->getService($class);
-        if (!StringUtils::isString($text)) {
-            return $this->jsonFalse([
-                'message' => $this->trans('translator.text_error'),
-            ]);
-        }
-        if (!StringUtils::isString($to)) {
-            return $this->jsonFalse([
-                'message' => $this->trans('translator.to_error'),
-            ]);
-        }
-
-        try {
-            if ($result = $service->translate($text, $to, $from)) {
-                return $this->jsonTrue([
-                    'service' => $service::getName(),
-                    'data' => $result,
-                ]);
-            }
-
-            return $this->handleTranslationError($service, 'translator.translate_error');
-        } catch (\Exception $e) {
-            return $this->jsonException($e, $this->trans('translator.translate_error'));
-        }
-    }
-
-    /**
-     * Checks if the given request is a XMLHttpRequest (ajax) call.
-     *
-     * @return JsonResponse|null null if the request is a XMLHttpRequest call, a JSON error response otherwise
-     */
-    private function checkAjaxCall(Request $request): ?JsonResponse
-    {
-        if (!$request->isXmlHttpRequest()) {
-            return $this->jsonFalse([
-                'message' => $this->trans('errors.invalid_request'),
-            ]);
-        }
-
-        return null;
-    }
-
-    private function handleTranslationError(TranslatorServiceInterface $service, string $message): JsonResponse
-    {
-        if (($error = $service->getLastError()) instanceof HttpClientError) {
-            $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
-            if ($this->isTransDefined($id, 'translator')) {
-                $error->setMessage($this->trans($id, [], 'translator'));
-            }
-
-            return $this->jsonFalse([
-                'message' => $this->trans($message),
-                'exception' => $error,
-            ]);
-        }
-
-        return $this->jsonFalse([
-            'message' => $this->trans($message),
-        ]);
     }
 }

@@ -233,7 +233,7 @@
             onHide: null,
 
             // the jQuery selector to get data options from
-            dataset: null
+            dataset: '#flashes'
         },
 
         // ------------------------
@@ -642,7 +642,7 @@
             if (options && options.dataset) {
                 return $(options.dataset).data() || {};
             }
-            return {};
+            return $(this.DEFAULTS.dataset).data() || {};
         }
     };
 }(window, jQuery));

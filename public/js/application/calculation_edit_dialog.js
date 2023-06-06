@@ -8,6 +8,7 @@
  * @property {jQuery} $category
  */
 class EditDialog {
+
     /**
      * Constructor.
      *
@@ -19,7 +20,7 @@ class EditDialog {
             throw new TypeError('Abstract class "EditDialog" cannot be instantiated directly.');
         }
         this.application = application;
-        this._init();
+        // this._init();
     }
 
     /**
@@ -30,6 +31,12 @@ class EditDialog {
      */
     showAdd($row) {
         'use strict';
+        // loaded?
+        if (!this._isDialogLoaded()) {
+            this._loadDialog('showAdd', $row);
+            return this;
+        }
+
         // initialize
         this.$editingRow = null;
         this._resetValidator();
@@ -49,6 +56,12 @@ class EditDialog {
      */
     showEdit($row) {
         'use strict';
+        // loaded?
+        if (!this._isDialogLoaded()) {
+            this._loadDialog('showEdit', $row);
+            return this;
+        }
+
         // initialize
         this.$editingRow = $row;
         this._resetValidator();
@@ -121,6 +134,8 @@ class EditDialog {
      */
     _init() {
         'use strict';
+        // handle dialog events
+        this._initDialog(this.$modal);
         return this;
     }
 
@@ -230,12 +245,13 @@ class EditDialog {
     /**
      * Load the modal dialog.
      *
-     * @param {string} url - the URL to get dialog content.
-     * @param {function} [callback] - the function to call after dialog is loaded.
+     * @param {string} callback - the function name to call after dialog is loaded.
+     * @param {jQuery} $row - the editing row.
      * @protected
      */
-    _loadDialog(url, callback) {
+    _loadDialog(callback, $row) {
         'use strict';
+        const url = this._getDialogUrl();
         if (!url) {
             return;
         }
@@ -245,6 +261,45 @@ class EditDialog {
             //$dialog.appendTo('div[role="main"]');
             $dialog.appendTo('.page-content');
             that._init();
+            that[callback]($row);
+        });
+    }
+
+    /**
+     * Gets the URL to load dialog content.
+     *
+     * @return {string} - the URL.
+     * @protected
+     */
+    _getDialogUrl() {
+        'use strict';
+        throw new Error("Method must be implemented by derived class.");
+    }
+
+    /**
+     * Returns if the dialog is loaded.
+     *
+     * @return {boolean} true if loaded; false otherwise.
+     * @protected
+     */
+    _isDialogLoaded() {
+        'use strict';
+        throw new Error("Method must be implemented by derived class.");
+    }
+
+    /**
+     * Initialize the type ahead search units.
+     *
+     * @param {string} selector - the input selector.
+     * @protected
+     */
+    _initSearchUnits(selector) {
+        //task_unit
+        'use strict';
+        const $form = $('#edit-form');
+        $(selector).initTypeahead({
+            url: $form.data('search-unit'),
+            error: $form.data('error-unit')
         });
     }
 }

@@ -55,11 +55,6 @@
     </div>
 </div>
 {{ form_end(form) }}
-{# dialogs #}
-{% if editable -%}
-    {{ include('dialog/dialog_edit_item.html.twig', {'form': item_dialog}, with_context=false) }}
-    {{ include('dialog/dialog_edit_task.html.twig', {'form': task_dialog, 'tasks': tasks}, with_context=false) }}
-{%- endif %}
 {%- endblock %}
 {# stylesheets #}
 {% block stylesheets %}

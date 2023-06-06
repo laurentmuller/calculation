@@ -3,105 +3,6 @@
 /* globals sortable, Toaster, MenuBuilder, EditTaskDialog, EditItemDialog  */
 
 /**
- * -------------- The type ahead search helper --------------
- */
-const SearchHelper = {
-
-    /**
-     * Initialize type ahead searches.
-     *
-     * @return {SearchHelper} this instance for chaining.
-     */
-    init: function () {
-        'use strict';
-        const $form = $('#edit-form');
-        this.initSearchCustomer($form);
-        this.initSearchProduct($form);
-        this.initSearchUnits($form);
-
-        return this;
-    },
-
-    /**
-     * Initialize the type ahead search customers.
-     *
-     * @param {jQuery} $form - the parent form.
-     * @return {Typeahead} The type ahead instance.
-     */
-    initSearchCustomer: function ($form) {
-        'use strict';
-
-        return $('#calculation_customer').initTypeahead({
-            url: $form.data('search-customer'),
-            error: $form.data('error-customer')
-        });
-    },
-
-    /**
-     * Initialize the type ahead search products.
-     *
-     * @param {jQuery} $form - the parent form.
-     *
-     * @return {Typeahead} The type ahead instance.
-     */
-    initSearchProduct: function ($form) {
-        'use strict';
-
-        const $element = $('#item_search_input');
-        const $price = $('#item_price');
-        return $element.initTypeahead({
-            alignWidth: false,
-            valueField: 'description',
-            displayField: 'description',
-            url: $form.data('search-product'),
-            error: $form.data('error-product'),
-            empty: $form.data('item-empty'),
-            /**
-             * @param {Object} item
-             * @param {string} item.description
-             * @param {string} item.unit
-             * @param {int} item.categoryId
-             * @param {number} item.price
-             */
-            onSelect: function (item) {
-                // copy values
-                $('#item_description').val(item.description);
-                $('#item_unit').val(item.unit);
-                $('#item_category').val(item.categoryId);
-                $price.floatVal(item.price);
-                $price.trigger('input');
-
-                // clear
-                $element.val('');
-
-                // select
-                if (item.price) {
-                    $('#item_quantity').selectFocus();
-                } else {
-                    $price.selectFocus();
-                }
-            }
-        });
-    },
-
-    /**
-     * Initialize the type ahead search product units.
-     *
-     * @param {jQuery} $form - the parent form.
-     *
-     * @return {Typeahead} The type ahead instance.
-     */
-    initSearchUnits: function ($form) {
-        'use strict';
-
-        return $('#item_unit').initTypeahead({
-            url: $form.data('search-unit'),
-            error: $form.data('error-unit')
-        });
-    }
-};
-
-/**
  * -------------- The Application handler --------------
  */
 const Application = {
@@ -1705,10 +1606,6 @@ const MoveHandler = {
  */
 (function ($) {
     'use strict';
-
-    // searches
-    SearchHelper.init();
-
     // move rows
     MoveHandler.init();
 
@@ -1776,6 +1673,12 @@ const MoveHandler = {
         spinner: {
             parent: $('#main-content')
         }
+    });
+
+    // initialize the type ahead search customer
+    $('#calculation_customer').initTypeahead({
+        url: $form.data('search-customer'),
+        error: $form.data('error-customer')
     });
 
     // edit the default product if new calculation

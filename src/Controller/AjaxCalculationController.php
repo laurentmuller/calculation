@@ -12,7 +12,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Form\Dialog\EditItemDialogType;
+use App\Form\Dialog\EditTaskDialogType;
 use App\Interfaces\RoleInterface;
+use App\Repository\TaskRepository;
 use App\Service\CalculationService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,16 +38,25 @@ class AjaxCalculationController extends AbstractController
     #[Route(path: '/dialog/item', name: 'ajax_dialog_item', methods: Request::METHOD_GET)]
     public function itemDialog(Request $request): JsonResponse
     {
-        return $this->renderDialog($request, 'dialog/dialog_edit_item.html.twig');
+        $parameters = [
+            'form' => $this->createForm(EditItemDialogType::class),
+        ];
+
+        return $this->renderDialog($request, 'dialog/dialog_edit_item.html.twig', $parameters);
     }
 
     /**
      * Return the edit task dialog template.
      */
     #[Route(path: '/dialog/task', name: 'ajax_dialog_task', methods: Request::METHOD_GET)]
-    public function taskDialog(Request $request): JsonResponse
+    public function taskDialog(Request $request, TaskRepository $repository): JsonResponse
     {
-        return $this->renderDialog($request, 'dialog/dialog_edit_task.html.twig');
+        $parameters = [
+            'form' => $this->createForm(EditTaskDialogType::class),
+            'tasks' => $repository->getSortedBuilder(false)->getQuery()->getResult(),
+        ];
+
+        return $this->renderDialog($request, 'dialog/dialog_edit_task.html.twig', $parameters);
     }
 
     /**
@@ -53,10 +65,6 @@ class AjaxCalculationController extends AbstractController
     #[Route(path: '/update', name: 'ajax_update', methods: Request::METHOD_POST)]
     public function update(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
     {
-        if (($response = $this->checkAjaxCall($request)) instanceof JsonResponse) {
-            return $response;
-        }
-
         try {
             $source = $this->getRequestAll($request, 'calculation');
             $parameters = $service->createGroupsFromData($source);
@@ -87,28 +95,8 @@ class AjaxCalculationController extends AbstractController
         }
     }
 
-    /**
-     * Checks if the given request is a XMLHttpRequest (ajax) call.
-     *
-     * @return JsonResponse|null null if the request is a XMLHttpRequest call, a JSON error response otherwise
-     */
-    private function checkAjaxCall(Request $request): ?JsonResponse
+    private function renderDialog(Request $request, string $view, array $parameters): JsonResponse
     {
-        if (!$request->isXmlHttpRequest()) {
-            return $this->jsonFalse([
-                'message' => $this->trans('errors.invalid_request'),
-            ]);
-        }
-
-        return null;
-    }
-
-    private function renderDialog(Request $request, string $view): JsonResponse
-    {
-        if (($response = $this->checkAjaxCall($request)) instanceof JsonResponse) {
-            return $response;
-        }
-
-        return $this->json($this->renderView($view));
+        return $this->json($this->renderView($view, $parameters));
     }
 }

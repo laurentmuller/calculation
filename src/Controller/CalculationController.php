@@ -18,13 +18,10 @@ use App\Entity\CalculationState;
 use App\Entity\Product;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
-use App\Form\Dialog\EditItemDialogType;
-use App\Form\Dialog\EditTaskDialogType;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
-use App\Repository\TaskRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\CalculationService;
@@ -55,7 +52,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository, private readonly CalculationService $service, private readonly TaskRepository $taskRepository)
+    public function __construct(CalculationRepository $repository, private readonly CalculationService $service)
     {
         parent::__construct($repository);
     }
@@ -249,15 +246,12 @@ class CalculationController extends AbstractEntityController
         /* @var Calculation $item */
         $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
         $parameters['min_margin'] = $this->getMinMargin();
-        $parameters['duplicate_items'] = $item->hasDuplicateItems();
         $parameters['empty_items'] = $item->hasEmptyItems();
+        $parameters['duplicate_items'] = $item->hasDuplicateItems();
         if ($parameters['editable'] = $item->isEditable()) {
             $parameters['group_index'] = $item->getGroupsCount();
             $parameters['category_index'] = $item->getCategoriesCount();
             $parameters['item_index'] = $item->getLinesCount();
-            $parameters['tasks'] = $this->getTasks();
-            $parameters['item_dialog'] = $this->createForm(EditItemDialogType::class);
-            $parameters['task_dialog'] = $this->createForm(EditTaskDialogType::class);
         }
 
         return parent::editEntity($request, $item, $parameters);
@@ -292,13 +286,6 @@ class CalculationController extends AbstractEntityController
         }
 
         return '';
-    }
-
-    private function getTasks(): array
-    {
-        return $this->taskRepository->getSortedBuilder(false)
-            ->getQuery()
-            ->getResult();
     }
 
     private function isMarginBelow(Calculation $calculation): bool

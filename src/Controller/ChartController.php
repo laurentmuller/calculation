@@ -38,7 +38,7 @@ class ChartController extends AbstractController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Exception
      */
-    #[Route(path: '/month', name: 'chart_by_month')]
+    #[Route(path: '/month', name: 'chart_by_month', methods: Request::METHOD_GET)]
     public function month(Request $request, MonthChart $chart): Response
     {
         $key = 'chart_by_month';

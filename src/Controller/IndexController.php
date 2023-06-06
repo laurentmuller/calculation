@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -90,10 +91,9 @@ class IndexController extends AbstractController
      * @throws \Exception
      */
     #[Route(path: '/', name: 'homepage')]
-    public function invoke(Request $request): Response
+    public function invoke(#[MapQueryParameter] bool $restrict = false): Response
     {
         $service = $this->getUserService();
-        $restrict = $this->getParamBoolean($request, self::PARAM_RESTRICT);
         $user = $restrict ? $this->getUser() : null;
         $parameters = [
             'min_margin' => $this->getMinMargin(),

@@ -11,7 +11,7 @@
  */
 function notify(type, message, title) {
     'use strict';
-    Toaster.notify(type, message, title, {dataset: '#flashes'});
+    Toaster.notify(type, message, title);
 }
 
 /**

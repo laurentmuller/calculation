@@ -18,7 +18,6 @@ use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
 use App\Model\HttpClientError;
 use App\Model\TaskComputeQuery;
-use App\Service\CalculationService;
 use App\Service\FakerService;
 use App\Service\PasswordService;
 use App\Service\TaskService;
@@ -27,7 +26,6 @@ use App\Traits\MathTrait;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use App\Utils\StringUtils;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -253,47 +251,6 @@ class AjaxController extends AbstractController
             return $this->handleTranslationError($service, 'translator.translate_error');
         } catch (\Exception $e) {
             return $this->jsonException($e, $this->trans('translator.translate_error'));
-        }
-    }
-
-    /**
-     * Update the calculation's totals.
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/update', name: 'ajax_update')]
-    public function updateCalculation(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
-    {
-        if (($response = $this->checkAjaxCall($request)) instanceof JsonResponse) {
-            return $response;
-        }
-
-        try {
-            $source = $this->getRequestAll($request, 'calculation');
-            $parameters = $service->createGroupsFromData($source);
-            if (!$parameters['result']) {
-                return $this->json($parameters);
-            }
-            $parameters['min_margin'] = $service->getMinMargin();
-            if ($this->getRequestBoolean($request, 'adjust') && $parameters['overall_below']) {
-                $service->adjustUserMargin($parameters);
-            }
-            $body = $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters);
-            $result = [
-                'result' => true,
-                'body' => $body,
-                'user_margin' => $parameters['user_margin'] ?? 0,
-                'overall_margin' => $parameters['overall_margin'],
-                'overall_total' => $parameters['overall_total'],
-                'overall_below' => $parameters['overall_below'],
-            ];
-
-            return $this->json($result);
-        } catch (\Exception $e) {
-            $message = $this->trans('calculation.edit.error.update_total');
-            $context = $this->getExceptionContext($e);
-            $logger->error($message, $context);
-
-            return $this->jsonException($e, $message);
         }
     }
 

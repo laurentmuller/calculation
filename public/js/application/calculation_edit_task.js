@@ -328,4 +328,15 @@ class EditTaskDialog extends EditDialog {
         const selector = `#table-task-edit .task-item-row[data-id="${id}"] .item-input:checked`;
         return $(selector);
     }
+
+    /**
+     * Returns if the dialog is loaded.
+     *
+     * @return {boolean} true if loaded; false otherwise.
+     * @private
+     */
+    _isDialogLoaded() {
+        'use strict';
+        return $('#task_modal').length !== 0;
+    }
 }

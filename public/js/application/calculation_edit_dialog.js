@@ -226,4 +226,25 @@ class EditDialog {
         this.$form.resetValidator();
         return this;
     }
+
+    /**
+     * Load the modal dialog.
+     *
+     * @param {string} url - the URL to get dialog content.
+     * @param {function} [callback] - the function to call after dialog is loaded.
+     * @protected
+     */
+    _loadDialog(url, callback) {
+        'use strict';
+        if (!url) {
+            return;
+        }
+        const that = this;
+        $.get(url, function (data) {
+            const $dialog = $(data);
+            //$dialog.appendTo('div[role="main"]');
+            $dialog.appendTo('.page-content');
+            that._init();
+        });
+    }
 }

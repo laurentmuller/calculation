@@ -184,6 +184,16 @@ const Application = {
     },
 
     /**
+     * Gets the URL used to load the item dialog.
+     *
+     * @return {string}
+     */
+    getItemDialogUrl() {
+        'use strict';
+        return $('#edit-form').data('dialog-item');
+    },
+
+    /**
      * Gets the edit task dialog.
      *
      * @return {EditTaskDialog} the dialog.
@@ -194,6 +204,16 @@ const Application = {
             this.taskDialog = new EditTaskDialog(this);
         }
         return this.taskDialog;
+    },
+
+    /**
+     * Gets the URL used to load the task dialog.
+     *
+     * @return {string}
+     */
+    getTaskDialogUrl() {
+        'use strict';
+        return $('#edit-form').data('dialog-task');
     },
 
     /**

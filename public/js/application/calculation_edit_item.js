@@ -42,6 +42,11 @@ class EditItemDialog extends EditDialog {
      */
     _initAdd($row) {
         'use strict';
+        // loaded?
+        if (!this._isDialogLoaded()) {
+            const url = this.application.getItemDialogUrl();
+            this._loadDialog(url);
+        }
 
         // update values
         if ($row) {
@@ -69,6 +74,11 @@ class EditItemDialog extends EditDialog {
      */
     _initEdit($row) {
         'use strict';
+        // loaded?
+        if (!this._isDialogLoaded()) {
+            const url = this.application.getItemDialogUrl();
+            this._loadDialog(url);
+        }
 
         // copy values
         this.$description.val($row.findNamedInput('description').val());
@@ -200,5 +210,16 @@ class EditItemDialog extends EditDialog {
             this.$search.selectFocus();
         }
         return super._onDialogVisible();
+    }
+
+    /**
+     * Returns if the dialog is loaded.
+     *
+     * @return {boolean} true if loaded; false otherwise.
+     * @private
+     */
+    _isDialogLoaded() {
+        'use strict';
+        return $('#item_modal').length !== 0;
     }
 }

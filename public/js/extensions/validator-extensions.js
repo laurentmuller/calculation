@@ -84,7 +84,7 @@
         /**
          * Finds the color-picker drop-down
          *
-         * @return {jQuery}.
+         * @return {jQuery} the color-picker drop-down, if found; null otherwise.
          */
         findColorPicker() {
             const $element = $(this);
@@ -238,14 +238,7 @@
                 ignore: ':hidden:not(".must-validate")',
 
                 errorPlacement: function (error, element) {
-                    let $parent = $(element).closest('.form-group').find('.passwordstrength');
-                    if (0 === $parent.length) {
-                        if (inline) {
-                            $parent = $(element).closest('div');
-                        } else {
-                            $parent = $(element).closest('.form-group');
-                        }
-                    }
+                    const $parent = $(element).closest('.form-group, .mb-3');
                     error.addClass('invalid-feedback').appendTo($parent);
                 },
 

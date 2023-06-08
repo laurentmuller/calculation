@@ -17,6 +17,7 @@ use App\Service\TimelineService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -28,15 +29,19 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TimelineController extends AbstractController
 {
+    public function __construct(private readonly TimelineService $service)
+    {
+    }
+
     /**
      * @throws \Exception
      */
-    #[Route(path: '', name: 'timeline')]
-    public function current(Request $request, TimelineService $service): Response
-    {
-        $date = $this->getRequestString($request, 'date');
-        $interval = $this->getRequestString($request, 'interval');
-        $parameters = $service->current($date, $interval);
+    #[Route(path: '', name: 'timeline', methods: Request::METHOD_GET)]
+    public function current(
+        #[MapQueryParameter] string $date = null,
+        #[MapQueryParameter] string $interval = null
+    ): Response {
+        $parameters = $this->service->current($date, $interval);
 
         return $this->renderTimeline($parameters);
     }
@@ -44,11 +49,10 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: '/first', name: 'timeline_first')]
-    public function first(Request $request, TimelineService $service): Response
+    #[Route(path: '/first', name: 'timeline_first', methods: Request::METHOD_GET)]
+    public function first(#[MapQueryParameter] string $interval = null): Response
     {
-        $interval = $this->getRequestString($request, 'interval');
-        $parameters = $service->first($interval);
+        $parameters = $this->service->first($interval);
 
         return $this->renderTimeline($parameters);
     }
@@ -56,11 +60,10 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: '/last', name: 'timeline_last')]
-    public function last(Request $request, TimelineService $service): Response
+    #[Route(path: '/last', name: 'timeline_last', methods: Request::METHOD_GET)]
+    public function last(#[MapQueryParameter] string $interval = null): Response
     {
-        $interval = $this->getRequestString($request, 'interval');
-        $parameters = $service->last($interval);
+        $parameters = $this->service->last($interval);
 
         return $this->renderTimeline($parameters);
     }

@@ -42,14 +42,14 @@ class PasswordService
     /**
      * Validate the given password.
      *
-     * @param string  $password the password to validate
-     * @param int     $strength the minimum level
-     * @param ?string $email    the optional user's email
-     * @param ?string $user     the optional user's name
+     * @param string            $password the password to validate
+     * @param StrengthLevel|int $strength the minimum level
+     * @param ?string           $email    the optional user's email
+     * @param ?string           $user     the optional user's name
      *
      * @return array the validation result where the 'result' is boolean indicate, when true; the success
      */
-    public function validate(string $password, int $strength, string $email = null, string $user = null): array
+    public function validate(string $password, StrengthLevel|int $strength, string $email = null, string $user = null): array
     {
         if (null !== $response = $this->validatePassword($password)) {
             return $response;
@@ -69,7 +69,8 @@ class PasswordService
         if (null !== $response = $this->validateStrength($strength, $results)) {
             return $response;
         }
-        $minimumLevel = StrengthLevel::from($strength);
+
+        $minimumLevel = \is_int($strength) ? StrengthLevel::from($strength) : $strength;
         $results = \array_merge($results, [
             'minimum' => [
                 'value' => $minimumLevel->value,
@@ -162,9 +163,9 @@ class PasswordService
         return null;
     }
 
-    private function validateStrength(int $strength, array $results): ?array
+    private function validateStrength(StrengthLevel|int $strength, array $results): ?array
     {
-        if (!StrengthLevel::tryFrom($strength) instanceof StrengthLevel) {
+        if (\is_int($strength) && !StrengthLevel::tryFrom($strength) instanceof StrengthLevel) {
             $message = $this->translateInvalidLevel($strength);
 
             return $this->getFalseResult($message, \array_merge(['minimum' => $strength], $results));

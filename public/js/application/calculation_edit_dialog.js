@@ -258,7 +258,6 @@ class EditDialog {
         const that = this;
         $.get(url, function (data) {
             const $dialog = $(data);
-            //$dialog.appendTo('div[role="main"]');
             $dialog.appendTo('.page-content');
             that._init();
             that[callback]($row);

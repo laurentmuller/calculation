@@ -61,6 +61,8 @@
 <link rel="apple-touch-icon" sizes="152x152" href="{{ asset_icon(152) }}">
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset_icon(180) }}">
 {# stylesheets #}
+{{- asset_css('js/vendor/bootstrap/css/bootstrap.css') }}
+{{- asset_css('js/vendor/font-awesome/css/all.css') }}
 {% block stylesheets %}
 {{- asset_css('css/style.css') }}
 {% endblock %}

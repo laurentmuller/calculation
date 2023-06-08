@@ -26,6 +26,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -64,12 +65,14 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/password', name: 'ajax_password')]
-    public function password(Request $request, PasswordService $service, #[Autowire('%kernel.debug')] bool $debug): JsonResponse
-    {
-        $password = $this->getRequestString($request, 'password', '');
-        $strength = $this->getRequestInt($request, 'strength', StrengthLevel::NONE->value);
-        $email = $this->getRequestString($request, 'email');
-        $user = $this->getRequestString($request, 'user');
+    public function password(
+        PasswordService $service,
+        #[Autowire('%kernel.debug')] bool $debug,
+        #[MapQueryString] string $password = '',
+        #[MapQueryString] string $email = null,
+        #[MapQueryString] string $user = null,
+        #[MapQueryString] StrengthLevel $strength = StrengthLevel::NONE
+    ): JsonResponse {
         $results = $service->validate($password, $strength, $email, $user);
         if ($debug) {
             \ksort($results);

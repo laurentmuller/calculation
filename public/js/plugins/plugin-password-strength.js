@@ -53,7 +53,7 @@
          * @private
          */
         _init() {
-            this.keyupProxy = (e) => this._onKeyup();
+            this.keyupProxy = () => this._onKeyup();
             this.$element.on('keyup', this.keyupProxy);
             if (this.$element.val()) {
                 this._onKeyup();
@@ -83,10 +83,11 @@
 
                 // const url = that.$element.data('url');
                 // if (url) {
+                //     let strength = that.$element.data('strength') || 0;
                 //     // request values
                 //     const request = {
                 //         password: text,
-                //         strength: that.$element.data('strength') || 1
+                //         strength: Math.max(strength, 0)
                 //     };
                 //     if (user) {
                 //         request.user = user;
@@ -97,12 +98,15 @@
                 //     /**
                 //      * @param {{result: boolean, score: number, scoreText: string, percent: number}} data
                 //      */
+                //     $.ajaxSetup({global: false});
                 //     $.post(url, request, function (data) {
                 //         window.console.log(data);
                 //         // data.text = data.scoreText;
                 //         // if (options.debug && window.console) {
                 //         //
                 //         // }
+                //     }).always(function () {
+                //         $.ajaxSetup({global: true});
                 //     });
                 // }
 

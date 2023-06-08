@@ -486,7 +486,7 @@ input[type="number"] {
  * horizontal line on the right of a label or a link
  */
 .horizontal-line {
-    display: flex;
+    display: flex !important;
     flex-direction: row;
 }
 

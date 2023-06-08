@@ -25,7 +25,7 @@ class TaskComputeQuery
      */
     private array $items = [];
 
-    private float $quantity = 1;
+    private float $quantity = 1.0;
 
     public function __construct(private readonly Task $task, bool $selectAll = false)
     {
@@ -76,6 +76,6 @@ class TaskComputeQuery
 
     private function updateItems(): void
     {
-        $this->items = $this->task->getItems()->map(fn (TaskItem $item) => (int) $item->getId())->toArray();
+        $this->items = $this->task->getItems()->map(static fn (TaskItem $item) => (int) $item->getId())->toArray();
     }
 }

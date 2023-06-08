@@ -52,13 +52,15 @@ class TaskService
      */
     public function createQuery(Request $request): ?TaskComputeQuery
     {
-        $id = $this->getRequestInt($request, 'id');
+        $payload = $request->getPayload();
+        $id = $payload->getInt('id');
         $task = $this->repository->find($id);
         if (!$task instanceof Task) {
             return null;
         }
-        $quantity = $this->getRequestFloat($request, 'quantity');
-        $items = \array_map('intval', $this->getRequestAll($request, 'items'));
+
+        $quantity = (float) $payload->getString('quantity', '1.0');
+        $items = \array_map('intval', $payload->all('items'));
         $query = new TaskComputeQuery($task);
         $query->setQuantity($quantity)
             ->setItems($items);

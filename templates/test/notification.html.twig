@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import homepage %}
 {# macros #}
 {% macro button(type, icon) -%}
-<button type="button" data-type="{{ type }}" class="mx-2 mb-2 btn btn-notify btn-form btn-{{ type }}">
+<button type="button" data-type="{{ type }}" class="btn btn-notify btn-{{ type }}" style="min-width: 105px;">
     {{- ('background.' ~ type)|trans -}}
 </button>
 {%- endmacro %}
@@ -38,50 +38,58 @@
 {# body #}
 {% block card_body %}
 <span class="form-label horizontal-line">Type de message</span>
-<div class="row justify-content-center">
-    <div class="col">
-        {{ _self.button('success') }}
-        {{ _self.button('warning') }}
-        {{ _self.button('danger') }}
-        {{ _self.button('info') }}
-        {{ _self.button('primary') }}
-        {{ _self.button('secondary') }}
-        {{ _self.button('dark') }}
-    </div>
+<div class="d-flex flex-wrap gap-2">
+    {{ _self.button('success') }}
+    {{ _self.button('warning') }}
+    {{ _self.button('danger') }}
+    {{ _self.button('info') }}
+    {{ _self.button('primary') }}
+    {{ _self.button('secondary') }}
+    {{ _self.button('dark') }}
 </div>
 <hr>
-<div class="row mb-3">
-    <div class="col-md-4">
-            <label class="form-label" for="position">{{ 'parameters.fields.message_position'|trans }}</label>
-            <select id="position" name="position" class="form-select" data-failure="{{ 'parameters.failure'|trans }}" data-default="{{ position.value }}" data-position="{{ position.value }}" data-random="{{ url('ajax_random_text') }}">
-            {% for current in positions %}
-                {{ _self.position(current, position) }}
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <label class="form-label" for="position">{{ 'parameters.fields.message_position'|trans }}</label>
+        <select id="position" name="position" class="form-select" data-failure="{{ 'parameters.failure'|trans }}" data-default="{{ position.value }}" data-position="{{ position.value }}" data-random="{{ url('ajax_random_text') }}">
+        {% for current in positions %}
+            {{ _self.position(current, position) }}
+        {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-3 mb-3">
+        <label class="form-label" for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
+        <select id="timeout" name="timeout" data-default="{{ timeout }}" class="form-select">
+            {% for seconds in 1..5 %}
+                {{ _self.timeout(seconds, timeout) }}
             {% endfor %}
-            </select>
+        </select>
     </div>
-    <div class="col-md-4">
-            <label class="form-label" for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
-            <select id="timeout" name="timeout" data-default="{{ timeout }}" class="form-select">
-                {% for seconds in 1..5 %}
-                    {{ _self.timeout(seconds, timeout) }}
-                {% endfor %}
-            </select>
+    <div class="col-md-3 mb-3">
+        <label class="form-label" for="progress">{{ 'parameters.fields.message_progress'|trans }}</label>
+        <select id="progress" name="progress" data-default="{{ progress }}" class="form-select">
+            {% for i in 0..5 %}
+                {{ _self.progress(i, progress) }}
+            {% endfor %}
+        </select>
     </div>
-    <div class="col-md-4">
-            <label class="form-label" for="progress">{{ 'parameters.fields.message_progress'|trans }}</label>
-            <select id="progress" name="progress" data-default="{{ progress }}" class="form-select">
-                {% for i in 0..5 %}
-                    {{ _self.progress(i, progress) }}
-                {% endfor %}
-            </select>
+    <div class="col-md-3 mb-3">
+        <label class="form-label" for="maxNbChars">Nombre de charactères</label>
+        <select id="maxNbChars" name="maxNbChars" data-default="{{ 150 }}" class="form-select">
+            {% for i in range(50, 500, 50) %}
+                <option value="{{ i }}"{% if i == 150 %} selected="selected"{% endif %}>{{ i }}</option>
+            {% endfor %}
+        </select>
     </div>
 </div>
 <span class="form-label horizontal-line">{{ 'parameters.group_options'|trans }}</span>
-{{ _self.checkbox('title', 'parameters.fields.message_title', user_service.messageTitle) }}
-{{ _self.checkbox('icon', 'parameters.fields.message_icon', user_service.messageIcon) }}
-{{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_service.messageSubTitle) }}
-{{ _self.checkbox('close', 'parameters.fields.message_close', user_service.messageClose) }}
-{{ _self.checkbox('autohide', 'parameters.fields.message_auto_close') }}
+<div class="d-flex flex-wrap gap-2">
+    {{ _self.checkbox('title', 'parameters.fields.message_title', user_service.messageTitle) }}
+    {{ _self.checkbox('icon', 'parameters.fields.message_icon', user_service.messageIcon) }}
+    {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_service.messageSubTitle) }}
+    {{ _self.checkbox('close', 'parameters.fields.message_close', user_service.messageClose) }}
+    {{ _self.checkbox('autohide', 'parameters.fields.message_auto_close') }}
+</div>
 {% endblock %}
 {# footer #}
 {% block card_footer %}

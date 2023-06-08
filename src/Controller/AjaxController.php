@@ -12,21 +12,21 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Enums\StrengthLevel;
 use App\Enums\TableView;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
+use App\Model\PasswordQuery;
 use App\Model\TaskComputeQuery;
 use App\Service\FakerService;
 use App\Service\PasswordService;
 use App\Service\TaskService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -44,7 +44,7 @@ class AjaxController extends AbstractController
      * Compute a task.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/task', name: 'ajax_task')]
+    #[Route(path: '/task', name: 'ajax_task', methods: Request::METHOD_POST)]
     public function computeTask(Request $request, TaskService $service): JsonResponse
     {
         if (!($query = $service->createQuery($request)) instanceof TaskComputeQuery) {
@@ -64,19 +64,12 @@ class AjaxController extends AbstractController
      * Validate a strength password.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/password', name: 'ajax_password')]
+    #[Route(path: '/password', name: 'ajax_password', methods: Request::METHOD_POST)]
     public function password(
-        PasswordService $service,
-        #[Autowire('%kernel.debug')] bool $debug,
-        #[MapQueryString] string $password = '',
-        #[MapQueryString] string $email = null,
-        #[MapQueryString] string $user = null,
-        #[MapQueryString] StrengthLevel $strength = StrengthLevel::NONE
+        #[MapRequestPayload] PasswordQuery $query,
+        PasswordService $service
     ): JsonResponse {
-        $results = $service->validate($password, $strength, $email, $user);
-        if ($debug) {
-            \ksort($results);
-        }
+        $results = $service->validate($query);
 
         return $this->json($results);
     }
@@ -85,16 +78,16 @@ class AjaxController extends AbstractController
      * Gets random text used to display notifications.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/random/text', name: 'ajax_random_text')]
-    public function randomText(Request $request, FakerService $service): JsonResponse
-    {
-        $maxNbChars = $this->getRequestInt($request, 'maxNbChars', 145);
-        $indexSize = $this->getRequestInt($request, 'indexSize', 2);
+    #[Route(path: '/random/text', name: 'ajax_random_text', methods: Request::METHOD_GET)]
+    public function randomText(
+        FakerService $service,
+        #[MapQueryParameter] int $maxNbChars = 150
+    ): JsonResponse {
         $generator = $service->getGenerator();
-        $text = $generator->realText($maxNbChars, $indexSize);
+        $content = $generator->realText(\max($maxNbChars, 50));
 
         return $this->jsonTrue([
-            'content' => $text,
+            'content' => $content,
         ]);
     }
 

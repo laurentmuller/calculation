@@ -335,7 +335,7 @@
             const $div = $('#' + id);
 
             // class
-            const className = 'toast-container toast-plugin ' + options.position;
+            const className = 'toast-container toast-plugin position-fixed ' + options.position;
 
             // style
             const css = {};

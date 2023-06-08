@@ -65,7 +65,7 @@
             </button>
         </div>
     </div>
-    <hr class="mb-1" />
+    <hr class="my-1" />
 </form>
 <div class="row align-content-center my-1 text-body-secondary">
     <div class="col">
@@ -89,7 +89,7 @@
                     <table class="table table-sm table-borderless">
                         <tbody>
                             <tr>
-                                <td colspan="4" class="py-0 ps-0">
+                                <td colspan="4" class="pt-0 ps-0">
                                     <a class="text-decoration-none stretched-link" href="{{ path(route, {'search': query}) }}" title="{{ title }}">{{ key }}</a>
                                 </td>
                                 <td colspan="2" class="py-0 text-end">
@@ -102,6 +102,9 @@
                             {% for calculation in calculations %}
                                 {{ helper.dataRow(calculation, 'text-cell') -}}
                             {% endfor %}
+                            <tr>
+                                <td colspan="6" class="p-0"><hr class="my-0"></td>                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

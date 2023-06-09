@@ -18,7 +18,6 @@ use App\Enums\Importance;
 use App\Mime\NotificationEmail;
 use App\Model\Comment;
 use App\Traits\TranslatorAwareTrait;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -42,9 +41,7 @@ class MailerService implements ServiceSubscriberInterface
     public function __construct(
         private readonly UrlGeneratorInterface $generator,
         private readonly MarkdownInterface $markdown,
-        private readonly MailerInterface $mailer,
-        #[Autowire('%app_name% v%app_version%')]
-        private readonly string $appName
+        private readonly MailerInterface $mailer
     ) {
     }
 
@@ -55,9 +52,8 @@ class MailerService implements ServiceSubscriberInterface
      */
     public function sendComment(Comment $comment): void
     {
-        $notification = $this->createNotification();
+        $notification = $this->createNotification($comment->getImportance());
         $notification->subject((string) $comment->getSubject())
-            ->importance($comment->getImportance())
             ->markdown($this->convert((string) $comment->getMessage()))
             ->action($this->trans('index.title'), $this->getHomeUrl())
             ->attachFromUploadedFiles(...$comment->getAttachments());
@@ -79,12 +75,11 @@ class MailerService implements ServiceSubscriberInterface
      */
     public function sendNotification(string $fromEmail, User $toUser, string $message, Importance $importance = Importance::LOW, array $attachments = []): void
     {
-        $notification = $this->createNotification()
+        $notification = $this->createNotification($importance)
             ->from($fromEmail)
             ->to($toUser->getEmailAddress())
             ->subject($this->trans('user.comment.title'))
-            ->markdown($this->convert($message))
-            ->importance($importance);
+            ->markdown($this->convert($message));
         foreach ($attachments as $attachment) {
             $notification->attachFromUploadedFile($attachment);
         }
@@ -96,13 +91,11 @@ class MailerService implements ServiceSubscriberInterface
         return $this->markdown->convert($message);
     }
 
-    private function createNotification(): NotificationEmail
+    private function createNotification(Importance $importance): NotificationEmail
     {
-        $email = new NotificationEmail($this->getTranslator());
-        $email->updateFooterText($this->appName)
-            ->action($this->trans('index.title'), $this->getHomeUrl());
-
-        return $email;
+        return (new NotificationEmail())
+            ->action($this->trans('index.title'), $this->getHomeUrl())
+            ->update($importance, $this->getTranslator());
     }
 
     private function getHomeUrl(): string

@@ -42,26 +42,12 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  *     target: string,
  *     format: string,
  *     plugins: PluginType[],
- *     prefixes?: array<string, string>,
- *     file-style?: string[],
- *     copy-style?: array<string, string>,
- *     copy-entries?: CopyEntryType[]}
+ *     prefixes?: array<string, string>}
  */
 #[AsCommand(name: 'app:update-assets', description: 'Update Javascript and CSS dependencies.')]
 class UpdateAssetsCommand extends Command
 {
     use LoggerTrait;
-
-    /**
-     * The CSS custom style comments.
-     */
-    private const CSS_COMMENTS = <<<'TEXT'
-        /*
-         * -----------------------------
-         *         Custom styles
-         * -----------------------------
-         */
-        TEXT;
 
     /**
      * The distribution directory prefix.
@@ -73,10 +59,8 @@ class UpdateAssetsCommand extends Command
      */
     private const VENDOR_FILE_NAME = 'vendor.json';
 
-    public function __construct(
-        #[Autowire('%kernel.project_dir%')]
-        private readonly string $projectDir
-    ) {
+    public function __construct(#[Autowire('%kernel.project_dir%')] private readonly string $projectDir)
+    {
         parent::__construct();
     }
 
@@ -123,7 +107,7 @@ class UpdateAssetsCommand extends Command
                 foreach ($files as $file) {
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
                     $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
-                    if ($this->copyFile($sourceFile, $configuration, $targetFile, $prefixes)) {
+                    if ($this->copyFile($sourceFile, $targetFile, $prefixes)) {
                         ++$countFiles;
                     }
                 }
@@ -178,59 +162,15 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param ConfigurationType $configuration
      * @psalm-param array<string, string> $prefixes
      */
-    private function copyFile(string $sourceFile, array $configuration, string $targetFile, array $prefixes): bool
+    private function copyFile(string $sourceFile, string $targetFile, array $prefixes): bool
     {
         if (false !== ($content = $this->readFile($sourceFile))) {
-            return $this->dumpFile($content, $configuration, $targetFile, $prefixes);
+            return $this->dumpFile($content, $targetFile, $prefixes);
         }
 
         return false;
-    }
-
-    private function copyStyle(string $content, string $searchStyle, string $newStyle): string
-    {
-        $styles = $this->findStyles($content, $searchStyle);
-        if (\is_array($styles)) {
-            $result = "\n/*\n * $newStyle (copied from $searchStyle)  \n */";
-            foreach ($styles as $style) {
-                $style = \str_replace(';', ' !important;', $style);
-                $result .= "\n" . \str_replace($searchStyle, $newStyle, $style) . "\n";
-            }
-
-            return $result;
-        }
-
-        return '';
-    }
-
-    /**
-     * @psalm-param string[] $entries
-     */
-    private function copyStyleEntries(string $content, string $source, string $target, array $entries): string
-    {
-        $styles = $this->findStyles($content, $source);
-        if (\is_array($styles)) {
-            $result = '';
-            foreach ($styles as $style) {
-                $styleEntries = $this->findStyleEntries($style, $entries);
-                if (\is_array($styleEntries)) {
-                    $result .= "$target {\n";
-                    foreach ($styleEntries as $styleEntry) {
-                        $styleEntry = \str_replace(';', ' !important;', $styleEntry);
-                        $result .= "  $styleEntry\n";
-                    }
-                    $result .= "}\n";
-                }
-            }
-            if ('' !== $result) {
-                return "\n/*\n * $target (copied from $source)  \n */\n" . $result;
-            }
-        }
-
-        return '';
     }
 
     /**
@@ -249,10 +189,9 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param ConfigurationType $configuration
      * @psalm-param array<string, string> $prefixes
      */
-    private function dumpFile(string $content, array $configuration, string $targetFile, array $prefixes): bool
+    private function dumpFile(string $content, string $targetFile, array $prefixes): bool
     {
         // prefix file
         $extension = \pathinfo($targetFile, \PATHINFO_EXTENSION);
@@ -260,53 +199,13 @@ class UpdateAssetsCommand extends Command
             $content = $prefixes[$extension] . $content;
         }
 
-        // update style
-        $name = \pathinfo($targetFile, \PATHINFO_BASENAME);
-        if (\in_array($name, $configuration['file-style'] ?? [], true)) {
-            $content = $this->updateStyle($content, $configuration);
-        }
+        // save
         if (!$this->writeFile($targetFile, $content)) {
             return false;
         }
         FileUtils::chmod($targetFile, 0o644, false);
 
         return true;
-    }
-
-    /**
-     * @psalm-param string[] $entries
-     *
-     * @psalm-return string[]|false
-     */
-    private function findStyleEntries(string $style, array $entries): array|false
-    {
-        $result = [];
-        $matches = [];
-        foreach ($entries as $entry) {
-            $pattern = '/^\s*' . \preg_quote($entry, '/') . '\s*:\s*.*;/m';
-            if (!empty(\preg_match_all($pattern, $style, $matches, \PREG_SET_ORDER))) {
-                /** @var string $match */
-                foreach ($matches as $match) {
-                    $result[] = $match[0];
-                }
-            }
-        }
-
-        return [] === $result ? false : $result;
-    }
-
-    /**
-     * @psalm-return string[]|false
-     */
-    private function findStyles(string $content, string $style): array|false
-    {
-        $matches = [];
-        $pattern = '/^\s{0,2}' . \preg_quote($style, '/') . '\s+\{([^}]+)}/m';
-        if (!empty(\preg_match_all($pattern, $content, $matches, \PREG_SET_ORDER))) {
-            return \array_map(fn (array $value): string => \ltrim($value[0]), $matches);
-        }
-
-        return false;
     }
 
     /**
@@ -477,33 +376,6 @@ class UpdateAssetsCommand extends Command
         $this->writeError("Unable to rename the file '$origin' to '$target'.");
 
         return false;
-    }
-
-    /**
-     * @psalm-param ConfigurationType $configuration
-     */
-    private function updateStyle(string $content, array $configuration): string
-    {
-        $toAppend = '';
-        if (!empty($configuration['copy-style'])) {
-            foreach ($configuration['copy-style'] as $key => $value) {
-                $toAppend .= $this->copyStyle($content, $key, $value);
-            }
-        }
-        if (!empty($configuration['copy-entries'])) {
-            foreach ($configuration['copy-entries'] as $entry) {
-                $source = $entry['source'];
-                $target = $entry['target'];
-                $entries = $entry['entries'];
-                $toAppend .= $this->copyStyleEntries($content, $source, $target, $entries);
-            }
-        }
-
-        if ('' !== $toAppend) {
-            return $content . self::CSS_COMMENTS . $toAppend;
-        }
-
-        return $content;
     }
 
     private function writeFile(string $filename, string $content): bool

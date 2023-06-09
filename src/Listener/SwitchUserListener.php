@@ -86,7 +86,7 @@ class SwitchUserListener implements ServiceSubscriberInterface
         if ($request->hasSession()) {
             $session = $request->getSession();
             $values = \array_filter($session->all(), $this->filterKey(...), \ARRAY_FILTER_USE_KEY);
-            /** @var string $key */
+            /** @psalm-var string $key */
             foreach (\array_keys($values) as $key) {
                 $session->remove($key);
             }

@@ -65,10 +65,8 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/password', name: 'ajax_password', methods: Request::METHOD_POST)]
-    public function password(
-        #[MapRequestPayload] PasswordQuery $query,
-        PasswordService $service
-    ): JsonResponse {
+    public function password(#[MapRequestPayload] PasswordQuery $query, PasswordService $service): JsonResponse
+    {
         $results = $service->validate($query);
 
         return $this->json($results);
@@ -79,10 +77,8 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/random/text', name: 'ajax_random_text', methods: Request::METHOD_GET)]
-    public function randomText(
-        FakerService $service,
-        #[MapQueryParameter] int $maxNbChars = 150
-    ): JsonResponse {
+    public function randomText(FakerService $service, #[MapQueryParameter] int $maxNbChars = 150): JsonResponse
+    {
         $generator = $service->getGenerator();
         $content = $generator->realText(\max($maxNbChars, 50));
 
@@ -124,28 +120,29 @@ class AjaxController extends AbstractController
      * The request must contains 'name' and 'value' parameters.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/session/set', name: 'ajax_session_set')]
+    #[Route(path: '/session/set', name: 'ajax_session_set', methods: Request::METHOD_POST)]
     public function saveSession(Request $request): JsonResponse
     {
-        $result = false;
-        $name = $this->getRequestString($request, 'name');
-        $value = $this->getRequestString($request, 'value');
-        if (null !== $name && null !== $value) {
+        $name = $request->request->getString('name');
+        $value = $request->request->getString('value');
+        if ('' !== $name && '' !== $value) {
             $this->setSessionValue($name, \json_decode($value));
-            $result = true;
+
+            return $this->json(true);
         }
 
-        return $this->json($result);
+        return $this->json(false);
     }
 
     /**
      * Save table parameters.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/save', name: 'ajax_save_table')]
+    #[Route(path: '/save', name: 'ajax_save_table', methods: Request::METHOD_POST)]
     public function saveTable(Request $request): JsonResponse
     {
-        $view = $this->getRequestEnum($request, TableInterface::PARAM_VIEW, TableView::class, TableView::TABLE);
+        /** @psalm-var TableView $view */
+        $view = $request->getPayload()->getEnum(TableInterface::PARAM_VIEW, TableView::class, TableView::TABLE);
         $response = $this->json(true);
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view->value, '', $this->getCookiePath());
 

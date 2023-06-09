@@ -14,16 +14,15 @@ namespace App\Mime;
 
 use Symfony\Component\Mime\Header\Headers;
 use Symfony\Component\Mime\Part\AbstractPart;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Notification email to confirm user registration.
  */
 class RegistrationEmail extends NotificationEmail
 {
-    public function __construct(TranslatorInterface $translator, Headers $headers = null, AbstractPart $body = null)
+    public function __construct(Headers $headers = null, AbstractPart $body = null)
     {
-        parent::__construct($translator, $headers, $body);
+        parent::__construct($headers, $body);
         $this->htmlTemplate('notification/registration.html.twig');
     }
 }

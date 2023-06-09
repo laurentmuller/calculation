@@ -31,7 +31,7 @@ class StrengthLevelTest extends TestCase
         ];
     }
 
-    public static function getLabel(): array
+    public static function getLabels(): array
     {
         return [
             ['strength_level.medium', StrengthLevel::MEDIUM],
@@ -67,7 +67,7 @@ class StrengthLevelTest extends TestCase
         self::assertSame($expected, $value);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
     public function testLabel(string $expected, StrengthLevel $level): void
     {
         self::assertSame($expected, $level->getReadable());
@@ -100,7 +100,7 @@ class StrengthLevelTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
     public function testTranslate(string $expected, StrengthLevel $level): void
     {
         $translator = $this->createTranslator();

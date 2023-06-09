@@ -12,20 +12,17 @@ declare(strict_types=1);
 
 namespace App\Mime;
 
-use App\Enums\Importance;
 use Symfony\Component\Mime\Header\Headers;
 use Symfony\Component\Mime\Part\AbstractPart;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Notification email to reset password.
  */
 class ResetPasswordEmail extends NotificationEmail
 {
-    public function __construct(TranslatorInterface $translator, Headers $headers = null, AbstractPart $body = null)
+    public function __construct(Headers $headers = null, AbstractPart $body = null)
     {
-        parent::__construct($translator, $headers, $body);
+        parent::__construct($headers, $body);
         $this->htmlTemplate('notification/reset_password.html.twig');
-        $this->importance(Importance::HIGH);
     }
 }

@@ -94,16 +94,14 @@ class CspController extends AbstractController
      */
     private function sendNotification(string $title, array $context, MailerInterface $mailer): void
     {
-        $notification = new CspViolationEmail($this->getTranslator());
-        $notification->subject($title)
+        $notification = (new CspViolationEmail())
+            ->subject($title)
             ->to($this->getAddressFrom())
             ->from($this->getAddressFrom())
-            ->importance(Importance::HIGH)
-            ->updateFooterText($this->getApplicationName())
+            ->context(['context' => $context])
             ->action($this->trans('index.title'), $this->getActionUrl())
-            ->context([
-                'context' => $context,
-            ]);
+            ->update(Importance::HIGH, $this->getTranslator());
+
         $mailer->send($notification);
     }
 }

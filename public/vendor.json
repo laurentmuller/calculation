@@ -53,7 +53,7 @@
         {
             "example": "https://cdn.jsdelivr.net/npm/highcharts@11.0.0/highcharts.js",
             "name": "highcharts",
-            "version": "11.0.1",
+            "version": "11.1.0",
             "files": [
                 "highcharts.js",
                 "highcharts.js.map",
@@ -157,86 +157,6 @@
                 "dist/font-mfizz.svg",
                 "dist/font-mfizz.ttf",
                 "dist/font-mfizz.woff"
-            ]
-        }
-    ],
-    "file-style": [
-        "bootstrap.css2"
-    ],
-    "copy-style": {
-        ".form-control:focus": ".field-valid",
-        ".was-validated .form-control:invalid:focus, .form-control.is-invalid:focus": ".field-invalid",
-        ".btn-success": ".toast-header-success",
-        ".btn-warning": ".toast-header-warning",
-        ".btn-danger": ".toast-header-danger",
-        ".btn-info": ".toast-header-info",
-        ".btn-primary": ".toast-header-primary",
-        ".btn-secondary": ".toast-header-secondary",
-        ".btn-dark": ".toast-header-dark"
-    },
-    "copy-entries": [
-        {
-            "source": ".dropdown-menu",
-            "target": ".context-menu-list",
-            "entries": [
-                "--bs-dropdown-background",
-                "background-color",
-                "--bs-dropdown-border-radius",
-                "color",
-                "font-size"
-            ]
-        },
-        {
-            "source": ".dropdown-item",
-            "target": ".context-menu-item",
-            "entries": [
-                "background-color",
-                "color",
-                "font-size",
-                "font-weight",
-                "padding",
-                "padding-bottom",
-                "padding-left",
-                "padding-right",
-                "padding-top",
-                "margin"
-            ]
-        },
-        {
-            "source": ".dropdown-item:hover, .dropdown-item:focus",
-            "target": ".context-menu-hover",
-            "entries": [
-                "background",
-                "background-color",
-                "color",
-                "text-decoration"
-            ]
-        },
-        {
-            "source": ".dropdown-divider",
-            "target": ".context-menu-separator",
-            "entries": [
-                "border-top",
-                "margin"
-            ]
-        },
-        {
-            "source": ".dropdown-header",
-            "target": ".context-menu-header",
-            "entries": [
-                "color",
-                "display",
-                "font-size",
-                "margin-bottom",
-                "white-space"
-            ]
-        },
-        {
-            "source": ".form-control",
-            "target": ".simple-editor",
-            "entries": [
-                "color",
-                "background-color"
             ]
         }
     ]

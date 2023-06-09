@@ -53,7 +53,7 @@
          * @private
          */
         _init() {
-            this.keyupProxy = (e) => this._onKeyup();
+            this.keyupProxy = () => this._onKeyup();
             this.$element.on('keyup', this.keyupProxy);
             if (this.$element.val()) {
                 this._onKeyup();
@@ -83,10 +83,11 @@
 
                 // const url = that.$element.data('url');
                 // if (url) {
+                //     let strength = that.$element.data('strength') || 0;
                 //     // request values
                 //     const request = {
                 //         password: text,
-                //         strength: that.$element.data('strength') || 0
+                //         strength: Math.max(strength, 0)
                 //     };
                 //     if (user) {
                 //         request.user = user;
@@ -97,11 +98,15 @@
                 //     /**
                 //      * @param {{result: boolean, score: number, scoreText: string, percent: number}} data
                 //      */
+                //     $.ajaxSetup({global: false});
                 //     $.post(url, request, function (data) {
-                //         data.text = data.scoreText;
-                //         if (options.debug && window.console) {
-                //             window.console.log(data);
-                //         }
+                //         window.console.log(data);
+                //         // data.text = data.scoreText;
+                //         // if (options.debug && window.console) {
+                //         //
+                //         // }
+                //     }).always(function () {
+                //         $.ajaxSetup({global: true});
                 //     });
                 // }
 
@@ -227,18 +232,14 @@
             }
 
             // create progress
-            that.$progress = that._createControl('div', 'progress-stacked bg-transparent').css({
-                'height': options.height, 'border-radius': 0
-            }).appendTo($progressContainer);
+            that.$progress = that._createControl('div', 'progress-stacked gap-1 bg-transparent', {'height': options.height})
+                .appendTo($progressContainer);
 
             // create progress bars
             for (let i = 0; i < 5; i++) {
-                const className = 'progress-bar ' + options.progressClasses[i];
-                that._createControl('div', 'progress d-none').css({
-                    'width': 'calc(20% - 2px)',
-                    'margin-right': 2,
-                    //'margin-right': i < 4 ? 2 : 0
-                }).append(that._createControl('div', className))
+                const className = `progress-bar ${options.progressClasses[i]}`;
+                that._createControl('div', 'progress w-20 d-none')
+                    .append(that._createControl('div', className))
                     .appendTo(that.$progress);
             }
 
@@ -281,14 +282,18 @@
          * Creates an HTML element.
          *
          * @param {string} type - the tag type.
-         * @param {string} [className] - the class name
+         * @param {string} [className] - the class name.
+         * @param {Object} [css] - the css style.
          * @return {jQuery} the newly created element.
          * @private
          */
-        _createControl(type, className) {
-            const $element = $('<' + type + '/>');
+        _createControl(type, className, css = {}) {
+            const $element = $(`<${type}/>`);
             if (className) {
                 $element.addClass(className);
+            }
+            if (css) {
+                $element.css(css);
             }
             return $element;
         }
@@ -342,7 +347,7 @@
         // hide container on empty password
         hideOnEmpty: true,
 
-        // progress height
+        // progress height in pixels
         height: 4,
 
         // verdict keys

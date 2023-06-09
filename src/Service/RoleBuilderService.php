@@ -25,11 +25,6 @@ use Elao\Enum\FlagBag;
 class RoleBuilderService
 {
     /**
-     * The value returned when attribute or entity offset is not found.
-     */
-    final public const INVALID_VALUE = -1;
-
-    /**
      * Gets a role with default access rights for the given user.
      */
     public function getRole(User $user): Role
@@ -99,28 +94,32 @@ class RoleBuilderService
 
     /**
      * @return FlagBag<EntityPermission>
+     *
+     * @psalm-suppress InvalidArgument
      */
     private function getAllPermissions(): FlagBag
     {
-        /** @psalm-var FlagBag<EntityPermission> $result */
-        $result = FlagBag::from(...EntityPermission::sorted());
+        /** @psalm-var FlagBag<EntityPermission> $permissions */
+        $permissions = FlagBag::from(...EntityPermission::sorted());
 
-        return $result;
+        return $permissions;
     }
 
     /**
      * @return FlagBag<EntityPermission>
+     *
+     * @psalm-suppress InvalidArgument
      */
     private function getDefaultPermissions(): FlagBag
     {
-        /** @psalm-var FlagBag<EntityPermission> $result */
-        $result = FlagBag::from(
+        /** @psalm-var FlagBag<EntityPermission> $permissions */
+        $permissions = FlagBag::from(
             EntityPermission::LIST,
             EntityPermission::EXPORT,
             EntityPermission::SHOW
         );
 
-        return $result;
+        return $permissions;
     }
 
     /**

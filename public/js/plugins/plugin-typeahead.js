@@ -551,11 +551,11 @@
                     break;
                 case 'ArrowUp':
                     e.preventDefault();
-                    that._prev();
+                    this._prev();
                     break;
                 case 'ArrowDown':
                     e.preventDefault();
-                    that._next();
+                    this._next();
                     break;
             }
             e.stopPropagation();

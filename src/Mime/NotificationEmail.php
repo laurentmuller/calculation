@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Mime;
 
 use App\Enums\Importance;
-use App\Traits\TranslatorTrait;
+use Symfony\Bridge\Twig\Mime\NotificationEmail as BaseNotificationEmail;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Header\HeaderInterface;
 use Symfony\Component\Mime\Header\Headers;
@@ -23,13 +23,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Extends the NotificationEmail class with translated subject and custom footer.
  */
-class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
+class NotificationEmail extends BaseNotificationEmail
 {
-    use TranslatorTrait;
+    private ?string $importance = null;
 
-    private ?string $footerText = null;
-
-    public function __construct(private readonly TranslatorInterface $translator, Headers $headers = null, AbstractPart $body = null)
+    public function __construct(Headers $headers = null, AbstractPart $body = null)
     {
         parent::__construct($headers, $body);
         $this->htmlTemplate('notification/notification.html.twig');
@@ -70,8 +68,8 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
     public function getContext(): array
     {
         $context = parent::getContext();
-        if (!empty($this->footerText)) {
-            $context['footer_text'] = $this->footerText;
+        if (null !== $this->importance) {
+            $context['importance_text'] = $this->importance;
         }
 
         return $context;
@@ -79,66 +77,28 @@ class NotificationEmail extends \Symfony\Bridge\Twig\Mime\NotificationEmail
 
     public function getPreparedHeaders(): Headers
     {
+        $subject = $this->getSubject();
         $headers = parent::getPreparedHeaders();
-        $subject = $headers->get('Subject');
-        $text = $this->translateSubject();
-        if ($subject instanceof HeaderInterface) {
-            $subject->setBody($text);
-        } else {
-            $headers->addTextHeader('Subject', $text);
+        if (null !== $subject && null !== $this->importance) {
+            $header = $headers->get('Subject');
+            $content = \sprintf('%s - %s', $subject, $this->importance);
+            if ($header instanceof HeaderInterface) {
+                $header->setBody($content);
+            } else {
+                $headers->addTextHeader('Subject', $content);
+            }
         }
 
         return $headers;
     }
 
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
-    }
-
-    public function importance(string|Importance $importance): static
-    {
-        if ($importance instanceof Importance) {
-            $importance = $importance->value;
-        }
-
-        return parent::importance($importance);
-    }
-
     /**
-     * Sets the footer text.
+     * Update the importance and footer text.
      */
-    public function setFooterText(string $footerText): static
+    public function update(Importance $importance, TranslatorInterface $translator): static
     {
-        $this->footerText = $footerText;
+        $this->importance = $translator->trans($importance->getReadableFull());
 
-        return $this;
-    }
-
-    /**
-     * Update the footer text.
-     *
-     * @param string $appName the application name and version
-     */
-    public function updateFooterText(string $appName): static
-    {
-        $text = $this->trans('notification.footer', ['%app_name%' => $appName]);
-
-        return $this->setFooterText($text);
-    }
-
-    private function translateImportance(): string
-    {
-        $importance = Importance::tryFrom((string) parent::getContext()['importance']) ?? Importance::LOW;
-
-        return $this->trans($importance->getReadableFull());
-    }
-
-    private function translateSubject(): string
-    {
-        $subject = (string) $this->getSubject();
-        $importance = $this->translateImportance();
-
-        return \sprintf('%s - %s', $subject, $importance);
+        return parent::importance($importance->value);
     }
 }

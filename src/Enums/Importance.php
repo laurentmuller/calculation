@@ -54,7 +54,7 @@ enum Importance: string implements EnumDefaultInterface, EnumSortableInterface, 
     case URGENT = 'urgent';
 
     /**
-     * Gets the full human representation of the value.
+     * Gets the full human representation of the value (to be translated).
      */
     public function getReadableFull(): string
     {

@@ -21,6 +21,8 @@ use App\Entity\Product;
 use App\Entity\Task;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
+use App\Repository\CalculationRepository;
+use App\Repository\CalculationStateRepository;
 use App\Traits\MathTrait;
 use App\Traits\ParameterTrait;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,6 +30,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -83,13 +86,14 @@ class IndexController extends AbstractController
     }
 
     /**
-     *  Display the home page.
+     * Display the home page.
+     *
+     * @throws \Exception
      */
     #[Route(path: '/', name: 'homepage')]
-    public function invoke(Request $request): Response
+    public function invoke(#[MapQueryParameter] bool $restrict = false): Response
     {
         $service = $this->getUserService();
-        $restrict = $this->getParamBoolean($request, self::PARAM_RESTRICT);
         $user = $restrict ? $this->getUser() : null;
         $parameters = [
             'min_margin' => $this->getMinMargin(),
@@ -158,17 +162,29 @@ class IndexController extends AbstractController
 
     private function getCalculations(int $maxResults, ?UserInterface $user): array
     {
-        return $this->manager->getRepository(Calculation::class)->getLastCalculations($maxResults, $user);
+        /** @psalm-var CalculationRepository $repository */
+        $repository = $this->manager->getRepository(Calculation::class);
+
+        return $repository->getLastCalculations($maxResults, $user);
     }
 
+    /**
+     * @throws \Exception
+     */
     private function getMonths(): array
     {
-        return $this->manager->getRepository(Calculation::class)->getByMonth();
+        /** @psalm-var CalculationRepository $repository */
+        $repository = $this->manager->getRepository(Calculation::class);
+
+        return $repository->getByMonth();
     }
 
     private function getStates(): array
     {
-        $results = $this->manager->getRepository(CalculationState::class)->getCalculations();
+        /** @psalm-var CalculationStateRepository $repository */
+        $repository = $this->manager->getRepository(CalculationState::class);
+
+        $results = $repository->getCalculations();
         $count = \array_sum(\array_column($results, 'count'));
         $total = \array_sum(\array_column($results, 'total'));
         $items = \array_sum(\array_column($results, 'items'));

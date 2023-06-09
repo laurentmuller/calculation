@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Enums\FlashType;
+use App\Enums\Importance;
 use App\Form\User\RequestChangePasswordType;
 use App\Form\User\ResetChangePasswordType;
 use App\Mime\ResetPasswordEmail;
 use App\Repository\UserRepository;
 use App\Service\UserExceptionService;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,7 +58,8 @@ class ResetPasswordController extends AbstractController
     public function __construct(
         private readonly ResetPasswordHelperInterface $helper,
         private readonly UserRepository $repository,
-        private readonly UserExceptionService $service
+        private readonly UserExceptionService $service,
+        private readonly Security $security
     ) {
     }
 
@@ -122,13 +124,14 @@ class ResetPasswordController extends AbstractController
 
             return $this->redirectToRoute(self::ROUTE_FORGET);
         }
+
         $form = $this->createForm(ResetChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
             $this->helper->removeResetRequest($token);
             $this->repository->flush();
             $this->cleanSessionAfterReset();
 
-            return $this->redirectToHomePage('resetting.success', ['%username%' => $user->getUserIdentifier()], FlashType::INFO);
+            return $this->redirectAfterReset($user);
         }
 
         return $this->render('reset_password/reset.html.twig', [
@@ -138,22 +141,22 @@ class ResetPasswordController extends AbstractController
 
     private function createEmail(User $user, ResetPasswordToken $resetToken): ResetPasswordEmail
     {
-        $email = new ResetPasswordEmail($this->getTranslator());
-        $email->to($user->getEmailAddress())
-            ->from($this->getAddressFrom())
-            ->updateFooterText($this->getApplicationName())
-            ->subject($this->trans('resetting.request.title'))
-            ->action($this->trans('resetting.request.submit'), $this->getResetAction($resetToken))
-            ->context([
-                'token' => $resetToken->getToken(),
-                'username' => $user->getUserIdentifier(),
-                'expires_date' => $resetToken->getExpiresAt(),
-                'expires_life_time' => $this->getExpiresLifeTime($resetToken),
-                'throttle_date' => $this->getThrottleAt($resetToken),
-                'throttle_life_time' => $this->getThrottleLifeTime(),
-            ]);
+        $context = [
+            'token' => $resetToken->getToken(),
+            'username' => $user->getUserIdentifier(),
+            'expires_date' => $resetToken->getExpiresAt(),
+            'expires_life_time' => $this->getExpiresLifeTime($resetToken),
+            'throttle_date' => $this->getThrottleAt($resetToken),
+            'throttle_life_time' => $this->getThrottleLifeTime(),
+        ];
 
-        return $email;
+        return (new ResetPasswordEmail())
+            ->to($user->getEmailAddress())
+            ->from($this->getAddressFrom())
+            ->subject($this->trans('resetting.request.title'))
+            ->update(Importance::HIGH, $this->getTranslator())
+            ->action($this->trans('resetting.request.submit'), $this->getResetAction($resetToken))
+            ->context($context);
     }
 
     private function getExpiresLifeTime(ResetPasswordToken $resetToken): string
@@ -182,6 +185,19 @@ class ResetPasswordController extends AbstractController
     private function getThrottleLifeTime(): string
     {
         return $this->trans('%count% minute|%count% minutes', ['%count%' => self::THROTTLE_MINUTES], 'ResetPasswordBundle');
+    }
+
+    private function redirectAfterReset(User $user): Response
+    {
+        try {
+            if (($response = $this->security->login($user, 'form_login')) instanceof Response) {
+                return $response;
+            }
+        } catch (\Exception) {
+            // ignore
+        }
+
+        return $this->redirectToHomePage('resetting.success', ['%username%' => $user->getUserIdentifier()]);
     }
 
     /**

@@ -1,28 +1,30 @@
 {% extends '@email/default/notification/body.html.twig' %}
 {# style #}
 {% block style %}
-{{ parent() }}
-{{ source("@css/email.css") }}
+    {{ parent() }}
+    {{ source("@css/email.css") }}
 {% endblock %}
 {# lead #}
 {% block lead %}
-<container>
-    <row>
-        <columns large="1" small="2" valign="middle">
-            <img src="{{ email.image('@images/icons/favicon-36x36.png') }}" alt="{{ app_description }}">
-        </columns>
-        <columns large="11" small="10" valign="middle">
-            {% if importance is not null %}<small><strong>{{ ('importance.' ~ importance ~ '_full')|trans }}</strong></small>{% endif %}
-            <p class="lead">
-                {{- email.subject -}}
-            </p>
-        </columns>
-    </row>
-</container>
+    <container>
+        <row>
+            <columns large="1" small="2" valign="middle">
+                <img src="{{ email.image('@images/icons/favicon-36x36.png') }}" alt="{{ app_description }}">
+            </columns>
+            <columns large="11" small="10" valign="middle">
+                {% if importance_text is defined and importance_text %}<small>
+                    <strong>{{ importance_text }}</strong></small>
+                {% endif %}
+                <p class="lead">
+                    {{- email.subject -}}
+                </p>
+            </columns>
+        </row>
+    </container>
 {% endblock %}
 {# footer #}
 {% block footer_content %}
-    <p><small class="footer-text">{{ footer_text }}</small></p>
+    <p><small class="footer-text">{{ 'notification.footer'|trans({'%app_name%': app_name_version}) }}</small></p>
 {% endblock %}
 {# exception #}
 {% block exception %}

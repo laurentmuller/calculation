@@ -589,7 +589,7 @@
 				]
 			},
 			{
-				"id": "menu_graphics|chart",
+				"id": "index.menu_graphics",
 				"icon": "chart-area",
 				"description": "Menu d'accès aux statistiques.",
 				"menus": [

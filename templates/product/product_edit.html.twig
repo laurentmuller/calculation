@@ -10,6 +10,7 @@
                      'data-unit-error': 'product.edit.error_search_unit'|trans,
                      'data-supplier-search': url('ajax_search_supplier'),
                      'data-supplier-error': 'product.edit.error_search_supplier'|trans}) -%}
+{# body #}
 {% block card_body %}
 {{ form_row(form.description) }}
 <div class="row">
@@ -25,12 +26,12 @@
 </div>
 {{ form_row(form.supplier) }}
 {% endblock %}
-
+{# footer #}
 {% block card_footer -%}
 {{ parent() }}
 {{ timestampable(item) }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
 {{ parent() }}

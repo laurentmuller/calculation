@@ -101,19 +101,19 @@ abstract class AbstractTable implements SortModeInterface
     {
         $query = new DataQuery();
         $query->callback = $request->isXmlHttpRequest();
-        $query->id = $this->getParamInt($request, TableInterface::PARAM_ID);
-        $query->search = $this->getParamString($request, TableInterface::PARAM_SEARCH, '', '');
-        $query->view = $this->getTableView($request);
-        $query->limit = $this->getLimit($request, $query->view);
-        $query->offset = $this->getParamInt($request, TableInterface::PARAM_OFFSET);
+        $query->id = $this->getParamId($request);
+        $query->view = $this->getParamView($request);
+        $query->search = $this->getParamSearch($request);
+        $query->offset = $this->getParamOffset($request);
+        $query->limit = $this->getParamLimit($request, $query->view);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
         if (($column = $this->getDefaultColumn()) instanceof Column) {
             $query->sort = $column->getField();
             $query->order = $column->getOrder();
         }
-        $query->sort = $this->getParamString($request, TableInterface::PARAM_SORT, '', $query->sort);
-        $query->setOrder($this->getParamString($request, TableInterface::PARAM_ORDER, '', $query->order));
+        $query->sort = $this->getParamSort($request, $query->sort);
+        $query->setOrder($this->getParamOrder($request, $query->order));
 
         return $query;
     }
@@ -158,16 +158,6 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Returns a value indicating if the column action is added at the end of the columns.
-     *
-     * @see Column::createColumnAction()
-     */
-    protected function addColumnAction(): bool
-    {
-        return true;
-    }
-
-    /**
      * Create the columns.
      *
      * @return Column[] the columns
@@ -176,7 +166,7 @@ abstract class AbstractTable implements SortModeInterface
     {
         $path = $this->getColumnDefinitions();
         $columns = Column::fromJson($this, $path);
-        if ($this->addColumnAction()) {
+        if ($this->isColumnAction()) {
             $columns[] = Column::createColumnAction();
         }
 
@@ -259,6 +249,16 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
+     * Returns a value indicating if the column action is added at the end of the columns.
+     *
+     * @see Column::createColumnAction()
+     */
+    protected function isColumnAction(): bool
+    {
+        return true;
+    }
+
+    /**
      * Maps the given entities.
      *
      * @param array<AbstractEntity|array> $entities the entities to map
@@ -337,15 +337,38 @@ abstract class AbstractTable implements SortModeInterface
         ], $results->attributes);
     }
 
-    private function getLimit(Request $request, TableView $view): int
+    private function getParamId(Request $request): int
+    {
+        return $this->getParamInt($request, TableInterface::PARAM_ID);
+    }
+
+    private function getParamLimit(Request $request, TableView $view): int
     {
         return $this->getParamInt($request, TableInterface::PARAM_LIMIT, $this->getPrefix(), $view->getPageSize());
     }
 
-    private function getTableView(Request $request): TableView
+    private function getParamOffset(Request $request): int
     {
-        $view = $this->getParamString($request, TableInterface::PARAM_VIEW, '', TableView::TABLE);
+        return $this->getParamInt($request, TableInterface::PARAM_OFFSET);
+    }
 
-        return TableView::tryFrom($view) ?? TableView::TABLE;
+    private function getParamOrder(Request $request, string $default): string
+    {
+        return $this->getParamString($request, TableInterface::PARAM_ORDER, '', $default);
+    }
+
+    private function getParamSearch(Request $request): string
+    {
+        return $this->getParamString($request, TableInterface::PARAM_SEARCH, '', '');
+    }
+
+    private function getParamSort(Request $request, string $default): string
+    {
+        return $this->getParamString($request, TableInterface::PARAM_SORT, '', $default);
+    }
+
+    private function getParamView(Request $request): TableView
+    {
+        return $this->getParamEnum($request, TableInterface::PARAM_VIEW, '', TableView::class, TableView::TABLE);
     }
 }

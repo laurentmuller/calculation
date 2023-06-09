@@ -42,7 +42,7 @@ class EditTaskDialog extends EditDialog {
      * Initialize.
      *
      * @return {this} This instance for chaining.
-     * @private
+     * @protected
      */
     _init() {
         'use strict';
@@ -57,16 +57,12 @@ class EditTaskDialog extends EditDialog {
         that.$submit = $('#task_submit_button');
         that.$itemsEmpty = $('.task-items-empty');
 
-        // handle dialog events
-        that._initDialog(that.$modal);
+        // handle type ahead search
+        that._initSearchUnits('#task_unit');
 
         // handle input events
-        that.taskProxy = function () {
-            that._onTaskChanged();
-        };
-        that.updateProxy = function () {
-            that._update();
-        };
+        that.taskProxy = () => that._onTaskChanged();
+        that.updateProxy = () => that._update();
         that.$task.on('input', function () {
             $(this).updateTimer(that.taskProxy, 250);
         });
@@ -327,5 +323,26 @@ class EditTaskDialog extends EditDialog {
         const id = this.$task.intVal();
         const selector = `#table-task-edit .task-item-row[data-id="${id}"] .item-input:checked`;
         return $(selector);
+    }
+
+    /**
+     * Returns if the dialog is loaded.
+     *
+     * @return {boolean} true if loaded; false otherwise.
+     * @protected
+     */
+    _isDialogLoaded() {
+        'use strict';
+        return $('#task_modal').length !== 0;
+    }
+
+    /**
+     * Gets the URL to load dialog content.
+     *
+     * @return {string} - the URL.
+     * @protected
+     */
+    _getDialogUrl() {
+        return this.application.getTaskDialogUrl();
     }
 }

@@ -82,3 +82,10 @@ The CSRF token is invalid. Please try to resubmit the form.: Le jeton de falsifi
 "The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}.": Le type de fichier n'est pas valide ({{ type }}). Les types autorisés sont {{ types }}.
 "The extension of the file is invalid ({{ extension }}). Allowed extensions are {{ extensions }}.": L'extension du fichier n'est pas valide ({{ extension }}). Les extensions autorisées sont {{ extensions }}.
 "An empty file is not allowed.": Un fichier vide n'est pas autorisé.
+# Symfony\Component\Validator\Constraints\PasswordStrength
+The password strength is too low. Please use a stronger password.: La force du mot de passe est trop faible.
+# Symfony\Component\Validator\Constraints\NoSuspiciousCharacters
+This value contains characters that are not allowed by the current restriction-level.: Des caractères ne sont pas autorisés par le niveau de restriction.
+Using invisible characters is not allowed.: L'utilisation de caractères invisibles n’est pas autorisée.
+Mixing numbers from different scripts is not allowed.: Le mélange de différents scripts n’est pas autorisé.
+Using hidden overlay characters is not allowed.: L'utilisation de caractères superposés masqués n'est pas autorisée.

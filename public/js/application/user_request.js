@@ -27,10 +27,7 @@
             }
         },
         spinner: {
-            text: $('.card-title').text() + '...',
-            // css: {
-            //     top: '20%',
-            // }
+            text: $('.card-title').text() + '...'
         }
     };
     $form.initValidator(options);

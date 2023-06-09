@@ -17,6 +17,7 @@
         <directory name="tests"/>
         <ignoreFiles>
             <directory name="vendor"/>
+            <directory name="vendor-bin"/>
         </ignoreFiles>
     </projectFiles>
 
@@ -29,6 +30,7 @@
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$statusCode"/>
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$statusText"/>
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$version"/>
+                <referencedProperty name="Symfony\Component\Validator\Constraint::$groups"/>
                 <file name="src/Chart/BaseChart.php" />
                 <file name="src/Chart/MonthChart.php" />
                 <file name="src/Chart/StateChart.php" />
@@ -69,6 +71,7 @@
                 <file name="src/Form/Extension/UrlTypeExtension.php"/>
             </errorLevel>
         </UnsupportedPropertyReferenceUsage>
+
     </issueHandlers>
 
     <plugins>

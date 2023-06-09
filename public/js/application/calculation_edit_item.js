@@ -17,15 +17,12 @@ class EditItemDialog extends EditDialog {
      */
     getItem() {
         'use strict';
-        const that = this;
-        const price = that.$price.floatVal();
-        const quantity = that.$quantity.floatVal();
+        const price = this.$price.floatVal();
+        const quantity = this.$quantity.floatVal();
         const total = $.roundValue(price * quantity);
-        const description = that.$description.val();
-        const unit = that.$unit.val();
         return {
-            description: description,
-            unit: unit,
+            description: this.$description.val(),
+            unit: this.$unit.val(),
             price: price,
             quantity: quantity,
             total: total
@@ -42,7 +39,6 @@ class EditItemDialog extends EditDialog {
      */
     _initAdd($row) {
         'use strict';
-
         // update values
         if ($row) {
             const $input = $row.siblings(':first').findNamedInput('category');
@@ -85,11 +81,10 @@ class EditItemDialog extends EditDialog {
      * Initialize.
      *
      * @return {this} This instance for chaining.
-     * @private
+     * @protected
      */
     _init() {
         'use strict';
-
         // get elements
         const that = this;
         that.$form = $('#item_form');
@@ -105,21 +100,16 @@ class EditItemDialog extends EditDialog {
         that.$cancelButton = $('#item_cancel_button');
         that.$deleteButton = $('#item_delete_button');
 
-        // handle dialog events
-        that._initDialog(that.$modal);
+        // handle type ahead search
+        that._initSearchProduct();
+        that._initSearchUnits('#item_unit');
 
         // handle input events
-        that.updateProxy = function () {
-            that._updateTotal();
-        };
-        that.$price.on('input', that.updateProxy);
-        that.$quantity.on('input', that.updateProxy);
+        that.$price.on('input', () => that._updateTotal());
+        that.$quantity.on('input', () => that._updateTotal());
 
         // handle delete button
-        that.deleteProxy = function () {
-            that._onDelete();
-        };
-        that.$deleteButton.on('click', that.deleteProxy);
+        that.$deleteButton.on('click', () => that._onDelete());
 
         // init validator
         const options = {
@@ -200,5 +190,70 @@ class EditItemDialog extends EditDialog {
             this.$search.selectFocus();
         }
         return super._onDialogVisible();
+    }
+
+    /**
+     * Returns if the dialog is loaded.
+     *
+     * @return {boolean} true if loaded; false otherwise.
+     * @protected
+     */
+    _isDialogLoaded() {
+        'use strict';
+        return $('#item_modal').length !== 0;
+    }
+
+    /**
+     * Gets the URL to load dialog content.
+     *
+     * @return {string} - the URL.
+     * @protected
+     */
+    _getDialogUrl() {
+        return this.application.getItemDialogUrl();
+    }
+
+    /**
+     * Initialize the type ahead search products.
+     * @private
+     */
+    _initSearchProduct() {
+        'use strict';
+        const $form = $('#edit-form');
+        const $element = $('#item_search_input');
+        const $price = $('#item_price');
+        $element.initTypeahead({
+            alignWidth: false,
+            valueField: 'description',
+            displayField: 'description',
+            url: $form.data('search-product'),
+            error: $form.data('error-product'),
+            empty: $form.data('item-empty'),
+            /**
+             * @param {Object} item
+             * @param {string} item.description
+             * @param {string} item.unit
+             * @param {int} item.categoryId
+             * @param {number} item.price
+             */
+            onSelect: function (item) {
+                // copy values
+                $('#item_description').val(item.description);
+                $('#item_unit').val(item.unit);
+                $('#item_category').val(item.categoryId);
+                $price.floatVal(item.price);
+                $price.trigger('input');
+
+                // clear
+                $element.val('');
+
+                // select
+                if (item.price) {
+                    $('#item_quantity').selectFocus();
+                } else {
+                    $price.selectFocus();
+                }
+            }
+        });
     }
 }

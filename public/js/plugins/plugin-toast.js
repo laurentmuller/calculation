@@ -233,7 +233,7 @@
             onHide: null,
 
             // the jQuery selector to get data options from
-            dataset: null
+            dataset: '#flashes'
         },
 
         // ------------------------
@@ -335,7 +335,7 @@
             const $div = $('#' + id);
 
             // class
-            const className = 'toast-container toast-plugin ' + options.position;
+            const className = 'toast-container toast-plugin position-fixed ' + options.position;
 
             // style
             const css = {};
@@ -642,7 +642,7 @@
             if (options && options.dataset) {
                 return $(options.dataset).data() || {};
             }
-            return {};
+            return $(this.DEFAULTS.dataset).data() || {};
         }
     };
 }(window, jQuery));

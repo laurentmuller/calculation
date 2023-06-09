@@ -426,7 +426,7 @@ filetype:
   multiple: '{0} fichiers'
   placeholder: Aucun fichier choisi
   sizes: Bytes,Kb,Mb,Gb,Tb
-flashbag:
+flash_bag:
   danger: Erreur
   info: Information
   success: Confirmation
@@ -512,7 +512,7 @@ help:
     sort: Trier
     toggle: Affichage
   back_menu: Retourner à page principale de l'aide
-  description: Bienvenue dans le système d'aide de l'application <b>%appname%</b>.
+  description: Bienvenue dans le système d'aide de l'application <b>%app_name%</b>.
   dialog_menu: Pages
   entity_menu: Objets de la base de données
   fields:
@@ -807,7 +807,6 @@ parameters:
     message_title: Titre
     message_height: Barre de progression
     minimum_margin: Marge minimum
-    mintrength: Force minimum
     panel_calculation: Calculations
     print_address: Imprimer l'adresse
     qr_code: Code QR sur les calculations
@@ -1023,7 +1022,7 @@ search:
     field: Champ
     query: Rechercher
   minimum: Saisir 2 caractères au minimum.
-  placeholder: Tapez un texte à rechercher
+  placeholder: Rechercher
   link: Afficher la page de recherche
   search: Lancer la recherche
 security:
@@ -1038,7 +1037,7 @@ security:
     success: Bienvenue <b>%user_name%</b>. Vous vous êtes connecté à l'application <b>%app_name% v%app_version%</b> avec succès.
     error: Le nom de l'utilisateur ou le mot de passe est invalide.
   logout:
-    success: Vous vous êtes déconnecté de l'application <b>%appname%</b> avec succès.
+    success: Vous vous êtes déconnecté de l'application <b>%app_name%</b> avec succès.
 show:
   name: Nom
   value: Valeur

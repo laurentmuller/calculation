@@ -85,7 +85,7 @@ function translate(form, notification) {
     // call
     $.ajaxSetup({global: false});
     const url = $form.data('ajax');
-    form.jqXHR = $.post(url, data, function (response) {
+    form.jqXHR = $.get(url, data, function (response) {
         // ok?
         if (response.result) {
             const data = response.data;
@@ -220,7 +220,7 @@ function handleService() {
     const data = {
         'service': $service.val()
     };
-    $.post(url, data, function (response) {
+    $.get(url, data, function (response) {
         const $to = $('#to');
         const $from = $('#from');
         // save values

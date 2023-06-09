@@ -27,6 +27,7 @@
     margin-top: 20px;
     margin-left: 17rem;
 }
+
 .page-content.sidebar-hide {
     width: 100%;
     margin: 0;
@@ -53,25 +54,23 @@
 .navbar-vertical ul ul {
     padding-left: 1.5rem;
 }
+
 /*
- * Arrow for menus
+ * Toggle menu arrow
  */
 .navbar-vertical .nav-link-toggle::after {
-    display: inline-block;
     content: "";
     float: right;
-    margin-top: 0.5em;
-    vertical-align: 0.255em;
-    transition: all 0.35s ease;
-    /* left arrow */
-    border-right: 0.3em solid;
-    border-top: 0.3em solid transparent;
-    border-bottom: 0.3em solid transparent;
-    border-left: 0;
+    font-weight: 900;
+    font-family: "Font Awesome 6 Free";
+    transition: transform 0.2s ease-in-out;
+    /* angle down (collapsed) */
+    content: "\f107";
 }
+
 .navbar-vertical .nav-link-toggle[aria-expanded="true"]::after {
-    /* down arrow */
-    transform: rotate(-90deg);
+    /* angle up (expanded) */
+    transform: rotate(-180deg);
 }
 
 @media print {
@@ -85,17 +84,21 @@
 .navbar-vertical::-webkit-scrollbar {
     width: 8px;
 }
+
 /* light mode */
 .navbar-vertical::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.15);
 }
+
 /* dark mode */
 body[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-track {
     background-color: #343a40;
 }
+
 body[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, .1);
 }
+
 body[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb:hover {
     background-color: rgba(128, 135, 139, .8)
 }

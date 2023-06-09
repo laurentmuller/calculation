@@ -14,7 +14,10 @@ function notify(type, title, options) {
     // get random text
     const $position = $('#position');
     const url = $position.data('random');
-    $.getJSON(url, function (response) {
+    const data = {
+        'maxNbChars': $('#maxNbChars').intVal()
+    };
+    $.getJSON(url, data, function (response) {
         if (response.result) {
             const message = '<p class="m-0 p-0">{0}</p>'.format(response.content);
             Toaster.notify(type, message, title, options);
@@ -95,7 +98,7 @@ function random() {
     });
 
     // display a notification when a value change
-    $('#position, #timeout, #progress, .control-option').on('input', function () {
+    $('#position, #timeout, #progress, #maxNbChars, .control-option').on('input', function () {
         random();
         const $this = $(this);
         if ($this.is(('#autohide'))) {

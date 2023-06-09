@@ -27,7 +27,7 @@
 {%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
 {%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin -%}
 <!DOCTYPE html>
-<html lang="{{ app.request.locale|replace({'_': '-'}) }}">
+<html lang="{{ app.locale|replace({'_': '-'}) }}">
 {# head #}
 <head>
 <meta charset="utf-8" />
@@ -61,6 +61,8 @@
 <link rel="apple-touch-icon" sizes="152x152" href="{{ asset_icon(152) }}">
 <link rel="apple-touch-icon" sizes="180x180" href="{{ asset_icon(180) }}">
 {# stylesheets #}
+{{- asset_css('js/vendor/bootstrap/css/bootstrap.css') }}
+{{- asset_css('js/vendor/font-awesome/css/all.css') }}
 {% block stylesheets %}
 {{- asset_css('css/style.css') }}
 {% endblock %}
@@ -81,7 +83,7 @@
             {% block body -%}{%- endblock %}
         </div>
         {# messages #}
-        {% block flashbag -%}{{ include('flashbag.html.twig') }}{%- endblock %}
+        {% block flashbag -%}{{ include('flash_bag.html.twig') }}{%- endblock %}
         {# footer #}
         {% block footer -%}{% if status_bar %}{{ include('footer.html.twig') }}{% endif %}{%- endblock %}
         {# cookie_banner #}

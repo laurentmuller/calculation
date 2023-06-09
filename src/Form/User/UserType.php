@@ -39,8 +39,7 @@ class UserType extends AbstractEntityType
             ->addHiddenType();
 
         $helper->field('username')
-            ->autocomplete(false)
-            ->add(UserNameType::class);
+            ->addUserNameType(false);
 
         $helper->field('email')
             ->addEmailType();

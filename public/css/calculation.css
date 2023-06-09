@@ -31,6 +31,6 @@
     }
 }
 
-#calculations .table-primary.text-body-secondary {
-    color: var(--bs-table-color) !important;
+#data-table-edit tbody:last-child tr:last-child td {
+    border-bottom-width: 0 !important;
 }

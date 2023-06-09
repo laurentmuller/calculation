@@ -32,7 +32,7 @@ class UserLoginType extends AbstractUserCaptchaType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')
-            ->add(UserNameType::class);
+            ->addUserNameType();
 
         $helper->field('password')
             ->addCurrentPasswordType();

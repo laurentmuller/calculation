@@ -12,11 +12,20 @@ declare(strict_types=1);
 
 namespace App\Enums;
 
+use App\Interfaces\EnumTranslatableInterface;
+use App\Traits\EnumTranslatableTrait;
+use Elao\Enum\Attribute\ReadableEnum;
+use Elao\Enum\ExtrasTrait;
+
 /**
  * Flash bag type enumeration.
  */
-enum FlashType: string
+#[ReadableEnum(prefix: 'flash_bag.', useValueAsDefault: true)]
+enum FlashType: string implements EnumTranslatableInterface
 {
+    use EnumTranslatableTrait;
+    use ExtrasTrait;
+
     /*
      * Danger flash bag.
      */

@@ -17,6 +17,7 @@ use App\Service\CaptchaImageService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -53,12 +54,14 @@ class CaptchaController extends AbstractController
     /**
      * Validate a captcha image.
      */
-    #[Route(path: '/validate', name: 'captcha_validate')]
-    public function validate(Request $request, CaptchaImageService $service): JsonResponse
-    {
+    #[Route(path: '/validate', name: 'captcha_validate', methods: Request::METHOD_GET)]
+    public function validate(
+        CaptchaImageService $service,
+        #[MapQueryParameter] string $captcha = null
+    ): JsonResponse {
         if (!$service->validateTimeout()) {
             $response = $this->trans('captcha.timeout', [], 'validators');
-        } elseif (!$service->validateToken($this->getRequestString($request, 'captcha'))) {
+        } elseif (!$service->validateToken($captcha)) {
             $response = $this->trans('captcha.invalid', [], 'validators');
         } else {
             $response = true;

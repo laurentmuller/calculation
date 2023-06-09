@@ -23,6 +23,7 @@ use App\Table\LogTable;
 use App\Traits\TableTrait;
 use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,7 +53,7 @@ class LogController extends AbstractController
             return $this->getEmptyResponse();
         }
         $file = $logFile->getFile();
-        $form = $this->createForm();
+        $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
             try {
                 FileUtils::remove($file);

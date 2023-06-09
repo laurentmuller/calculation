@@ -16,6 +16,7 @@ use App\Interfaces\RoleInterface;
 use App\Model\HttpClientError;
 use App\Service\ExchangeRateService;
 use App\Utils\FormatUtils;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +49,7 @@ class ExchangeRateController extends AbstractController
     public function display(): Response
     {
         return $this->render('test/exchange_rate.html.twig', [
-            'form' => $this->createForm(),
+            'form' => $this->createForm(FormType::class),
             'codes' => $this->service->getSupportedCodes(),
         ]);
     }

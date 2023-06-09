@@ -36,27 +36,27 @@ class AjaxCalculationController extends AbstractController
      * Return the edit item dialog template.
      */
     #[Route(path: '/dialog/item', name: 'ajax_dialog_item', methods: Request::METHOD_GET)]
-    public function itemDialog(Request $request): JsonResponse
+    public function renderItemDialog(): JsonResponse
     {
         $parameters = [
             'form' => $this->createForm(EditItemDialogType::class),
         ];
 
-        return $this->renderDialog($request, 'dialog/dialog_edit_item.html.twig', $parameters);
+        return $this->renderDialog('dialog/dialog_edit_item.html.twig', $parameters);
     }
 
     /**
      * Return the edit task dialog template.
      */
     #[Route(path: '/dialog/task', name: 'ajax_dialog_task', methods: Request::METHOD_GET)]
-    public function taskDialog(Request $request, TaskRepository $repository): JsonResponse
+    public function renderTaskDialog(TaskRepository $repository): JsonResponse
     {
         $parameters = [
             'form' => $this->createForm(EditTaskDialogType::class),
             'tasks' => $repository->getSortedBuilder(false)->getQuery()->getResult(),
         ];
 
-        return $this->renderDialog($request, 'dialog/dialog_edit_task.html.twig', $parameters);
+        return $this->renderDialog('dialog/dialog_edit_task.html.twig', $parameters);
     }
 
     /**
@@ -95,7 +95,7 @@ class AjaxCalculationController extends AbstractController
         }
     }
 
-    private function renderDialog(Request $request, string $view, array $parameters): JsonResponse
+    private function renderDialog(string $view, array $parameters): JsonResponse
     {
         return $this->json($this->renderView($view, $parameters));
     }

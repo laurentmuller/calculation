@@ -50,6 +50,7 @@ use App\Word\HtmlDocument;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Event\PreSubmitEvent;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -384,7 +385,7 @@ class TestController extends AbstractController
         }
         $parameters = [
             'service' => $service,
-            'form' => $this->createForm(),
+            'form' => $this->createForm(FormType::class),
             'translators' => $factory->getTranslators(),
             'language' => AbstractHttpClientService::getAcceptLanguage(),
             'languages' => $languages,

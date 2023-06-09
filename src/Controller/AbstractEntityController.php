@@ -26,6 +26,7 @@ use App\Utils\StringUtils;
 use App\Word\WordDocument;
 use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -94,7 +95,7 @@ abstract class AbstractEntityController extends AbstractController
             'csrf_token_id' => $this->getDeleteToken($item),
         ];
         $parameters['item'] = $item;
-        $form = $this->createForm(options: $options);
+        $form = $this->createForm(FormType::class, [], $options);
         if ($this->handleRequestForm($request, $form)) {
             try {
                 $this->deleteFromDatabase($item);

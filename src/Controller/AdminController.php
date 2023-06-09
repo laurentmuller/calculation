@@ -24,6 +24,7 @@ use App\Service\RoleBuilderService;
 use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -46,7 +47,7 @@ class AdminController extends AbstractController
     #[Route(path: '/clear', name: 'admin_clear')]
     public function clearCache(Request $request, SymfonyInfoService $info, ClearCacheService $service, LoggerInterface $logger): Response
     {
-        $form = $this->createForm();
+        $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
             $this->getUserService()->clearCache();
             $this->getApplication()->clearCache();

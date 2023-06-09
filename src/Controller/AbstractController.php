@@ -33,7 +33,6 @@ use App\Word\AbstractWordDocument;
 use App\Word\WordDocument;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -219,24 +218,6 @@ abstract class AbstractController extends BaseController
         }
 
         return $this->redirectToRoute(self::HOME_PAGE);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * Override the parent function to allow to use the default type like defined in the <code>FormFactoryInterface</code>.
-     *
-     * @template TData
-     *
-     * @return FormInterface<TData>
-     *
-     * @phpstan-param class-string<\Symfony\Component\Form\FormTypeInterface<TData>> $type
-     *
-     * @psalm-param class-string<\Symfony\Component\Form\FormTypeInterface> $type
-     */
-    protected function createForm(string $type = FormType::class, mixed $data = null, array $options = []): FormInterface
-    {
-        return parent::createForm($type, $data, $options);
     }
 
     /**

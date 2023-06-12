@@ -134,23 +134,15 @@ tr.text-body-secondary td .text-danger {
 /*
  * selection
  */
-.bootstrap-table tr.table-primary.text-body-secondary {
-    color: var(--bs-table-color) !important;
-}
 
 .bootstrap-table .custom-item.table-primary {
     background-color: var(--bs-table-bg) !important;
 }
 
-body[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary hr {
-    color: var(--bs-table-color) !important;
-}
-
+.bootstrap-table tr.table-primary.text-body-secondary,
+.bootstrap-table .custom-item.table-primary.text-body-secondary,
+body[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary hr,
 body[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body {
-    color: var(--bs-table-color) !important;
-}
-
-.bootstrap-table .custom-item.table-primary.text-body-secondary {
     color: var(--bs-table-color) !important;
 }
 

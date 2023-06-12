@@ -85,7 +85,7 @@ function translate(form, notification) {
     // call
     $.ajaxSetup({global: false});
     const url = $form.data('ajax');
-    form.jqXHR = $.get(url, data, function (response) {
+    form.jqXHR = $.post(url, data, function (response) {
         // ok?
         if (response.result) {
             const data = response.data;

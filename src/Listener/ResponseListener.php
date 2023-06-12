@@ -16,6 +16,7 @@ use App\Interfaces\MimeTypeInterface;
 use App\Service\NonceService;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Request;
@@ -89,16 +90,15 @@ class ResponseListener
      * @throws \Exception
      */
     public function __construct(
-        NonceService $service,
-        UrlGeneratorInterface $router,
         #[Autowire('%kernel.project_dir%/resources/data/csp.%kernel.environment%.json')]
         string $file,
+        NonceService $service,
+        UrlGeneratorInterface $generator,
         #[Autowire('%kernel.debug%')]
-        private readonly bool $debug
+        private readonly bool $debug,
+        private readonly CacheItemPoolInterface $cache
     ) {
-        $nonce = $service->getCspNonce();
-        $report = $router->generate(name: 'log_csp', referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
-        $this->csp = $this->loadCSP($file, $nonce, $report);
+        $this->csp = $this->loadCSP($file, $service, $generator);
     }
 
     /**
@@ -165,30 +165,52 @@ class ResponseListener
      *
      * @return array<string, string[]>
      */
-    private function loadCSP(string $file, string $nonce, string $report): array
+    private function loadCSP(string $file, NonceService $service, UrlGeneratorInterface $generator): array
     {
-        if (!FileUtils::exists($file)) {
-            return [];
-        }
-
         try {
+            $item = $this->cache->getItem('csp_file');
+            if ($item->isHit()) {
+                return $this->replaceNonce($service, $item->get());
+            }
+
+            if (!FileUtils::exists($file)) {
+                return [];
+            }
+
             /* @psalm-var array<string, string|string[]> $csp */
             $csp = FileUtils::decodeJson($file);
-        } catch (\InvalidArgumentException) {
+
+            /** @psalm-var array<string, string[]> $csp */
+            $csp = \array_map(static fn (string|array $value): array => (array) $value, $csp);
+
+            $values = [
+                '%report%' => $generator->generate(name: 'log_csp', referenceType: UrlGeneratorInterface::ABSOLUTE_URL),
+                'unsafe-inline' => self::CSP_UNSAFE_INLINE,
+                'none' => self::CSP_NONE,
+                'self' => self::CSP_SELF,
+            ];
+            $value = \array_map(static fn (array $subject): array => StringUtils::replace($values, $subject), $csp);
+            $item->set($value);
+            $this->cache->save($item);
+
+            return $this->replaceNonce($service, $value);
+        } catch (\Psr\Cache\InvalidArgumentException|\InvalidArgumentException|\Exception) {
             return [];
         }
+    }
 
-        /** @psalm-var array<string, string[]> $csp */
-        $csp = \array_map(static fn (string|array $value): array => (array) $value, $csp);
+    /**
+     * @return array<string, string[]>
+     *
+     * @throws \Exception
+     */
+    private function replaceNonce(NonceService $service, mixed $value): array
+    {
+        $nonce = $service->getCspNonce();
+        $encoded = \str_replace('%nonce%', $nonce, (string) \json_encode($value));
+        /** @psalm-var array<string, string[]> $decoded */
+        $decoded = \json_decode($encoded, true);
 
-        $values = [
-            '%nonce%' => $nonce,
-            '%report%' => $report,
-            'none' => self::CSP_NONE,
-            'self' => self::CSP_SELF,
-            'unsafe-inline' => self::CSP_UNSAFE_INLINE,
-        ];
-
-        return \array_map(static fn (array $subject): array => StringUtils::replace($values, $subject), $csp);
+        return $decoded;
     }
 }

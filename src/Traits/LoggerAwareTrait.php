@@ -26,15 +26,14 @@ trait LoggerAwareTrait
 
     private ?LoggerInterface $logger = null;
 
-    /**
-     * @psalm-suppress all
-     */
     #[SubscribedService]
     public function getLogger(): LoggerInterface
     {
         if (null === $this->logger) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            $this->logger = $this->container->get(self::class . '::' . __FUNCTION__);
+            /** @psalm-var LoggerInterface $logger */
+            $logger = $this->container->get(self::class . '::' . __FUNCTION__);
+            $this->logger = $logger;
         }
 
         return $this->logger;

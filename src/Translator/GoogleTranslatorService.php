@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
+use App\Model\TranslateQuery;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -88,40 +89,31 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    public function translate(string $text, string $to, string $from = null, bool $html = false): array|false
+    public function translate(TranslateQuery $query): array|false
     {
-        $query = [
-            'q' => $text,
-            'target' => $to,
-            'source' => $from ?? '',
-            'format' => $html ? 'html' : 'text',
+        $params = [
+            'source' => $query->from,
+            'target' => $query->to,
+            'q' => $query->text,
+            'format' => $query->html ? 'html' : 'text',
         ];
-        if (!$response = $this->call(uri: self::URI_TRANSLATE, query: $query)) {
+        if (!$response = $this->call(self::URI_TRANSLATE, $params)) {
             return false;
         }
+
         /** @psalm-var string|null $target */
         $target = $this->getValue($response, '[data][translations][0][translatedText]');
         if (!\is_string($target)) {
             return false;
         }
+
         /** @psalm-var string|null $language */
         $language = $this->getValue($response, '[data][translations][0][detectedSourceLanguage]', false);
         if (\is_string($language)) {
-            $from = $language;
+            $query->from = $language;
         }
 
-        return [
-            'source' => $text,
-            'target' => $target,
-            'from' => [
-                'tag' => $from ?? '',
-                'name' => $this->findLanguage($from),
-            ],
-            'to' => [
-                'tag' => $to,
-                'name' => $this->findLanguage($to),
-            ],
-        ];
+        return $this->createTranslateResults($query, $target);
     }
 
     protected function getDefaultOptions(): array

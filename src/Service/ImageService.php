@@ -617,12 +617,13 @@ class ImageService
      *                     <td>The upper left corner, Y position.</td>
      *                     </tr>
      *                     </table>
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     public function ttfBox(float $size, float $angle, string $fontFile, string $text): array|false
     {
-        return \imagettfbbox($size, $angle, $fontFile, $text);
+        /** @psalm-var int[]|false $result */
+        $result = \imagettfbbox($size, $angle, $fontFile, $text);
+
+        return $result;
     }
 
     /**

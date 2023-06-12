@@ -67,7 +67,7 @@ final class FileUtils
     /**
      * Decode the given file as JSON.
      *
-     * @param string|\SplFileInfo $file  the path to the file
+     * @param string|\SplFileInfo $file  the path or URL to the file
      * @param bool                $assoc when true, returned objects will be converted into associative arrays
      *
      * @return array|\stdClass the decoded file content in appropriate PHP type
@@ -79,7 +79,9 @@ final class FileUtils
     public static function decodeJson(string|\SplFileInfo $file, bool $assoc = true): array|\stdClass
     {
         $file = self::realPath($file);
-        if (!self::isFile($file)) {
+
+        // file or url?
+        if (!self::isFile($file) && false === \filter_var($file, \FILTER_VALIDATE_URL)) {
             throw new \InvalidArgumentException(\sprintf("The file '%s' can not be found.", $file));
         }
         if (false === $content = \file_get_contents($file)) {

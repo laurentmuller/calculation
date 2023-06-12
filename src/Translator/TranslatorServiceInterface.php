@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use App\Model\HttpClientError;
+use App\Model\TranslateQuery;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
@@ -67,15 +68,11 @@ interface TranslatorServiceInterface
     /**
      * Translates a text.
      *
-     * @param string  $text the text to translate
-     * @param string  $to   the language of the output text
-     * @param ?string $from the language of the input text. If the 'from' parameter is not specified, automatic
-     *                      language detection is applied to determine the source language.
-     * @param bool    $html defines whether the text being translated is HTML text (true) or plain text (false)
+     * @param TranslateQuery $query the query to translate
      *
      * @return array|false the translated text; false if an error occurs
      *
      * @psalm-return TranslatorTranslateType|false
      */
-    public function translate(string $text, string $to, string $from = null, bool $html = false): array|false;
+    public function translate(TranslateQuery $query): array|false;
 }

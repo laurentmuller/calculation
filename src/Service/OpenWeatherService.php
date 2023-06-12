@@ -25,6 +25,12 @@ use Symfony\Component\Intl\Exception\MissingResourceException;
  * @see https://openweathermap.org/api
  *
  * @psalm-import-type OpenWeatherCityType from OpenWeatherDatabase
+ *
+ * @psalm-type OpenWeatherGroupType = array<array{
+ *      cnt: int,
+ *      units: array,
+ *      list: array<int, array>
+ *  }>
  */
 class OpenWeatherService extends AbstractHttpClientService
 {
@@ -299,13 +305,7 @@ class OpenWeatherService extends AbstractHttpClientService
      *
      * @return array|bool the conditions for the given cities if success; false on error
      *
-     * @psalm-return array<array{
-     *      cnt: int,
-     *      units: array,
-     *      list: array<int, array>
-     *  }>|false
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
+     * @psalm-return OpenWeatherGroupType|false
      */
     public function group(array $cityIds, string $units = self::UNIT_METRIC): array|false
     {
@@ -317,7 +317,10 @@ class OpenWeatherService extends AbstractHttpClientService
             'units' => $units,
         ];
 
-        return $this->get(self::URI_GROUP, $query);
+        /** @psalm-var  OpenWeatherGroupType|false $result */
+        $result = $this->get(self::URI_GROUP, $query);
+
+        return $result;
     }
 
     /**
@@ -358,15 +361,12 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int    $limit the maximum number of cities to return
      *
      * @pslam-return array<int, OpenWeatherCityType>
-     *
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
      */
     public function search(string $name, string $units = self::UNIT_METRIC, int $limit = self::DEFAULT_LIMIT): array
     {
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units, 'limit' => $limit]);
 
-        return $this->getCacheValue($key, fn () => $this->doSearch($name, $limit)) ?? [];
+        return (array) ($this->getCacheValue($key, fn () => $this->doSearch($name, $limit)) ?? []);
     }
 
     protected function getDefaultOptions(): array
@@ -479,16 +479,16 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param array  $query an associative array of query string values to add to the request
      *
      * @return array|false the JSON response on success, false on failure
-     *
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
      */
     private function get(string $uri, array $query = []): array|false
     {
         // find from cache
         $key = $this->getCacheKey($uri, $query);
 
-        return $this->getCacheValue($key, fn () => $this->doGet($uri, $query)) ?? false;
+        /** @psalm-var array|false $result */
+        $result = $this->getCacheValue($key, fn () => $this->doGet($uri, $query)) ?? false;
+
+        return $result;
     }
 
     /**

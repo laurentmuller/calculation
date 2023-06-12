@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
+use App\Model\TranslateQuery;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
@@ -97,40 +98,31 @@ class BingTranslatorService extends AbstractTranslatorService
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    public function translate(string $text, string $to, string $from = null, bool $html = false): array|false
+    public function translate(TranslateQuery $query): array|false
     {
-        $query = [
-            'to' => $to,
-            'from' => $from ?? '',
-            'textType' => $html ? 'html' : 'plain',
+        $params = [
+            'from' => $query->from,
+            'to' => $query->to,
+            'textType' => $query->html ? 'html' : 'plain',
         ];
-        $json = [['Text' => $text]];
-        if (!$response = $this->call(uri: self::URI_TRANSLATE, query: $query, json: $json)) {
+        $json = [['Text' => $query->text]];
+        if (!$response = $this->call(self::URI_TRANSLATE, $params, $json)) {
             return false;
         }
+
         /** @psalm-var string|null $target */
         $target = $this->getValue($response, '[0][translations][0][text]');
         if (!\is_string($target)) {
             return false;
         }
+
         /** @psalm-var string|null $language */
         $language = $this->getValue($response, '[0][detectedLanguage][language]', false);
         if (\is_string($language)) {
-            $from = $language;
+            $query->from = $language;
         }
 
-        return [
-            'source' => $text,
-            'target' => $target,
-            'from' => [
-                'tag' => $from ?? '',
-                'name' => $this->findLanguage($from),
-            ],
-            'to' => [
-                'tag' => $to,
-                'name' => $this->findLanguage($to),
-            ],
-        ];
+        return $this->createTranslateResults($query, $target);
     }
 
     protected function getDefaultOptions(): array

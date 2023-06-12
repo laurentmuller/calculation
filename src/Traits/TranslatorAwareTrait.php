@@ -26,15 +26,14 @@ trait TranslatorAwareTrait
 
     private ?TranslatorInterface $translator = null;
 
-    /**
-     * @psalm-suppress all
-     */
     #[SubscribedService]
     public function getTranslator(): TranslatorInterface
     {
         if (null === $this->translator) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            $this->translator = $this->container->get(self::class . '::' . __FUNCTION__);
+            /** @psalm-var TranslatorInterface $translator */
+            $translator = $this->container->get(self::class . '::' . __FUNCTION__);
+            $this->translator = $translator;
         }
 
         return $this->translator;

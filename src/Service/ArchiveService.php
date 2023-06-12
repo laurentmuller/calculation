@@ -173,17 +173,18 @@ class ArchiveService implements ServiceSubscriberInterface
      * @param CalculationState[] $sources
      *
      * @return Calculation[]
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     private function getCalculations(\DateTimeInterface $date, array $sources): array
     {
         if ([] === $sources) {
             return [];
         }
-        $builder = $this->createQueryBuilder($sources, $date);
 
-        return $builder->getQuery()->getResult();
+        /** @psalm-var \Doctrine\ORM\Query<int, Calculation> $query */
+        $query = $this->createQueryBuilder($sources, $date)
+            ->getQuery();
+
+        return $query->getResult();
     }
 
     private function getDate(): \DateTimeInterface

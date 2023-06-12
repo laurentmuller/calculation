@@ -44,13 +44,12 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
         return self::CACHE_TIMEOUT;
     }
 
-    /**
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
-     */
     public function getGlobals(): array
     {
-        return $this->getCacheValue(self::CACHE_KEY, fn () => $this->loadValues());
+        /** @psalm-var array<string, mixed> $globals */
+        $globals = $this->getCacheValue(self::CACHE_KEY, fn () => $this->loadValues());
+
+        return $globals;
     }
 
     /**

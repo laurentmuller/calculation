@@ -64,7 +64,7 @@ class CalculationEditStateType extends AbstractEntityType
             ->addPlainType(true);
 
         $helper->field('state')
-            ->label('calculation.state.newstate')
+            ->label('calculation.state.new_state')
             ->add(CalculationStateListType::class);
     }
 }

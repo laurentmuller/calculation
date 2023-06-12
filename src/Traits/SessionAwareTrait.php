@@ -28,15 +28,15 @@ trait SessionAwareTrait
 
     /**
      * Get the request stack.
-     *
-     * @psalm-suppress all
      */
     #[SubscribedService]
     public function getRequestStack(): RequestStack
     {
         if (null === $this->requestStack) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            $this->requestStack = $this->container->get(self::class . '::' . __FUNCTION__);
+            /** @psalm-var RequestStack $requestStack */
+            $requestStack = $this->container->get(self::class . '::' . __FUNCTION__);
+            $this->requestStack = $requestStack;
         }
 
         return $this->requestStack;

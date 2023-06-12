@@ -206,13 +206,11 @@ class CalendarController extends AbstractController
      * @param int   $month       the current month
      *
      * @return int[]|false the next year and month, if found; false otherwise
-     *
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
      */
     private function nextMonth(array $yearsMonths, int $year, int $month): array|false
     {
         $yearMonth = $year * 1000 + $month;
+        /** @psalm-var array<int[]> $filtered */
         $filtered = \array_filter($yearsMonths, fn (array $current): bool => $current['year_month'] > $yearMonth);
 
         return \reset($filtered);
@@ -226,13 +224,11 @@ class CalendarController extends AbstractController
      * @param int   $week       the current week
      *
      * @return int[]|false the next year and week, if found; false otherwise
-     *
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
      */
     private function nextWeek(array $yearsWeeks, int $year, int $week): array|false
     {
         $yearWeek = $year * 1000 + $week;
+        /** @psalm-var array<int[]> $filtered */
         $filtered = \array_filter($yearsWeeks, fn (array $current): bool => $current['year_week'] > $yearWeek);
 
         return \reset($filtered);
@@ -261,13 +257,11 @@ class CalendarController extends AbstractController
      * @param int   $month       the current month
      *
      * @return int[]|false the previous year and month, if found; false otherwise
-     *
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
      */
     private function previousMonth(array $yearsMonths, int $year, int $month): array|false
     {
         $yearMonth = $year * 1000 + $month;
+        /** @psalm-var array<int[]> $filtered */
         $filtered = \array_filter($yearsMonths, fn (array $current): bool => $current['year_month'] < $yearMonth);
 
         return \reset($filtered);
@@ -281,13 +275,11 @@ class CalendarController extends AbstractController
      * @param int   $week       the current week
      *
      * @return int[]|false the previous year and week, if found; false otherwise
-     *
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
      */
     private function previousWeek(array $yearsWeeks, int $year, int $week): array|false
     {
         $yearWeek = $year * 1000 + $week;
+        /** @psalm-var array<int[]> $filtered */
         $filtered = \array_filter($yearsWeeks, fn (array $current): bool => $current['year_week'] < $yearWeek);
 
         return \reset($filtered);
@@ -316,9 +308,6 @@ class CalendarController extends AbstractController
      * @param int   $month       the current month
      *
      * @return int[]|false the today year and month, if found; null otherwise
-     *
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
      */
     private function todayMonth(array $yearsMonths, int $year, int $month): array|false
     {
@@ -326,6 +315,7 @@ class CalendarController extends AbstractController
         $todayMonth = (int) \date('n');
         if ($year !== $todayYear || $month !== $todayMonth) {
             $yearMonth = $todayYear * 1000 + $todayMonth;
+            /** @psalm-var array<int[]> $filtered */
             $filtered = \array_filter($yearsMonths, fn (array $current): bool => $current['year_month'] === $yearMonth);
 
             return \reset($filtered);
@@ -342,9 +332,6 @@ class CalendarController extends AbstractController
      * @param int   $week       the current week
      *
      * @return int[]|false the today year and weak, if found; null otherwise
-     *
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
      */
     private function todayWeek(array $yearsWeeks, int $year, int $week): array|false
     {
@@ -352,6 +339,7 @@ class CalendarController extends AbstractController
         $todayWeek = (int) \date('W');
         if ($year !== $todayYear || $week !== $todayWeek) {
             $yearWeek = $year * 1000 + $week;
+            /** @psalm-var array<int[]> $filtered */
             $filtered = \array_filter($yearsWeeks, fn (array $current): bool => $current['year_week'] === $yearWeek);
 
             return \reset($filtered);

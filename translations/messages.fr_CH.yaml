@@ -135,7 +135,7 @@ calculation:
   show:
     title: Propriétés de la calculation
   state:
-    newstate: Nouveau statut
+    new_state: Nouveau statut
     success: Le statut de la calculation Nº <b>%name%</b> a été mis à jour avec succès.
 calculationgroup:
   fields:

@@ -186,13 +186,10 @@ class HelpService implements ServiceSubscriberInterface
 
     /**
      * Gets the full help content.
-     *
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
      */
     public function getHelp(): array
     {
-        return $this->getCacheValue(self::CACHE_KEY, fn () => $this->loadHelp()) ?? [];
+        return (array) ($this->getCacheValue(self::CACHE_KEY, fn () => $this->loadHelp()) ?? []);
     }
 
     /**

@@ -149,13 +149,10 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
      * Verify that API key is valid.
      *
      * @return bool true if valid; false otherwise
-     *
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
      */
     public function verifyKey(): bool
     {
-        return $this->getUrlCacheValue(self::URI_VERIFY, fn () => $this->doVerifyKey()) ?? false;
+        return (bool) ($this->getUrlCacheValue(self::URI_VERIFY, fn () => $this->doVerifyKey()) ?? false);
     }
 
     protected function getDefaultOptions(): array

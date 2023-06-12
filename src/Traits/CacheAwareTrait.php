@@ -71,15 +71,15 @@ trait CacheAwareTrait
 
     /**
      * Get the cache item pool.
-     *
-     * @psalm-suppress all
      */
     #[SubscribedService]
     public function getCacheItemPool(): CacheItemPoolInterface
     {
         if (null === $this->cacheItemPool) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            $this->cacheItemPool = $this->container->get(self::class . '::' . __FUNCTION__);
+            /** @psalm-var CacheItemPoolInterface $cacheItemPool */
+            $cacheItemPool = $this->container->get(self::class . '::' . __FUNCTION__);
+            $this->cacheItemPool = $cacheItemPool;
         }
 
         return $this->cacheItemPool;

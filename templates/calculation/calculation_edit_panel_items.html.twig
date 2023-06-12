@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col">
                 <div class="table-responsive">
-                    <table id="data-table-edit" class="table table-edit table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ group_index }}" data-category-index="{{ category_index }}" data-item-index="{{ item_index }}" data-prototype="{{ printGroupRow(form.groups.vars.prototype, editable)|e('html_attr') }}"{% endif -%}>
+                    <table id="data-table-edit" class="table table-edit table-no-end-line table-list{{ editable ? ' table-hover' : '' -}}"{% if editable %} data-group-index="{{ group_index }}" data-category-index="{{ category_index }}" data-item-index="{{ item_index }}" data-prototype="{{ printGroupRow(form.groups.vars.prototype, editable)|e('html_attr') }}"{% endif -%}>
                     {% for group in form.groups %}
                         {{ printGroupRow(group, editable, loop.first, loop.last) }}
                     {% endfor %}

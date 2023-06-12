@@ -14,12 +14,14 @@ namespace App\Controller;
 
 use App\Interfaces\RoleInterface;
 use App\Model\HttpClientError;
+use App\Model\TranslateQuery;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -95,27 +97,23 @@ class AjaxTranslateController extends AbstractController
      * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/translate', name: 'ajax_translate', methods: Request::METHOD_GET)]
-    public function translate(
-        #[MapQueryParameter] string $text = null,
-        #[MapQueryParameter] string $from = '',
-        #[MapQueryParameter] string $to = '',
-        #[MapQueryParameter(name: 'service')] string $class = null
-    ): JsonResponse {
-        if (empty($text)) {
+    #[Route(path: '/translate', name: 'ajax_translate', methods: Request::METHOD_POST)]
+    public function translate(#[MapRequestPayload] TranslateQuery $query): JsonResponse
+    {
+        if (empty($query->text)) {
             return $this->jsonFalse([
                 'message' => $this->trans('translator.text_error'),
             ]);
         }
-        if (empty($to)) {
+        if (empty($query->to)) {
             return $this->jsonFalse([
                 'message' => $this->trans('translator.to_error'),
             ]);
         }
 
         try {
-            $service = $this->getService($class);
-            if ($result = $service->translate($text, $to, $from)) {
+            $service = $this->getService($query->service);
+            if ($result = $service->translate($query)) {
                 return $this->jsonTrue([
                     'service' => $service::getName(),
                     'data' => $result,
@@ -131,9 +129,9 @@ class AjaxTranslateController extends AbstractController
     /**
      * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
      */
-    private function getService(?string $class): TranslatorServiceInterface
+    private function getService(string $class = null): TranslatorServiceInterface
     {
-        return $this->factory->getService($class ?: TranslatorFactory::DEFAULT_SERVICE);
+        return $this->factory->getService($class ?? TranslatorFactory::DEFAULT_SERVICE);
     }
 
     private function handleError(TranslatorServiceInterface $service, string $message): JsonResponse

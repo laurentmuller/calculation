@@ -115,14 +115,13 @@ abstract class AbstractController extends BaseController
         return $this->getApplication()->getMinMargin();
     }
 
-    /**
-     * @psalm-suppress all
-     */
     public function getRequestStack(): RequestStack
     {
         if (!$this->requestStack instanceof RequestStack) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            $this->requestStack = $this->container->get('request_stack');
+            /** @psalm-var RequestStack $requestStack */
+            $requestStack = $this->container->get('request_stack');
+            $this->requestStack = $requestStack;
         }
 
         return $this->requestStack;

@@ -38,6 +38,7 @@
                 <tbody{% if row_link %} data-link="row" class="rowlink" data-target="a.btn-default"{% endif %}>
                 {% for calculation in calculations %}
                     {%- set id = calculation.id -%}
+                    {%- set is_editable = calculation.stateEditable -%}
                     {%- set menu_id = 'dropdownMenuLast_' ~ id -%}
                     {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
                     {%- set class_primary = id == selection ? 'table-primary' : '' -%}
@@ -64,11 +65,11 @@
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
                                 {%- if edit_page -%}
                                     {%- set path = path(edit_page, params) -%}
-                                    {{ dropdownItemWithClass(path, 'calculation.edit.title_short', ICON_EDIT, 'btn-default') }}
+                                    {{ dropdownItemWithClass(path, 'calculation.edit.title_short', ICON_EDIT, is_editable ? 'btn-default' : '') }}
                                 {%- endif -%}
                                 {%- if state_page -%}
                                     {%- set path = path(state_page, params) -%}
-                                    {{ dropdownItem(path, 'calculation.list.state_title', ICON_CALCULATION_STATE) }}
+                                    {{ dropdownItemWithClass(path, 'calculation.list.state_title', ICON_CALCULATION_STATE, is_editable ? '' : 'btn-default') }}
                                 {%- endif -%}
                                 {%- if delete_page -%}
                                     {{- dropdownSeparator() }}

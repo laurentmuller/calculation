@@ -31,15 +31,15 @@ trait AuthorizationCheckerAwareTrait
 
     /**
      * Get the authorization checker.
-     *
-     * @psalm-suppress all
      */
     #[SubscribedService]
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
     {
         if (null === $this->authorizationChecker) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            $this->authorizationChecker = $this->container->get(self::class . '::' . __FUNCTION__);
+            /** @psalm-var AuthorizationCheckerInterface $authorizationChecker */
+            $authorizationChecker = $this->container->get(self::class . '::' . __FUNCTION__);
+            $this->authorizationChecker = $authorizationChecker;
         }
 
         return $this->authorizationChecker;

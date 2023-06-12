@@ -95,13 +95,13 @@ class LogService implements ServiceSubscriberInterface
 
     /**
      * Gets the parsed log file.
-     *
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
      */
     public function getLogFile(): ?LogFile
     {
-        return $this->getCacheValue(self::KEY_CACHE, fn () => $this->parseFile());
+        /** @psalm-var LogFile|null $file */
+        $file = $this->getCacheValue(self::KEY_CACHE, fn () => $this->parseFile());
+
+        return $file;
     }
 
     /**

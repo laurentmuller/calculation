@@ -59,10 +59,9 @@
  * Toggle menu arrow
  */
 .navbar-vertical .nav-link-toggle::after {
-    content: "";
-    float: right;
-    font-weight: 900;
     font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    float: right;
     transition: transform 0.2s ease-in-out;
     /* angle down (collapsed) */
     content: "\f107";

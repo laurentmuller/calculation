@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Utils\FileUtils;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -58,6 +59,11 @@ final class SymfonyInfoService
     ];
 
     /**
+     * The unknown label.
+     */
+    private const UNKNOWN = 'Unknown';
+
+    /**
      * The bundles.
      *
      * @var array<string, BundleType>|null
@@ -95,6 +101,7 @@ final class SymfonyInfoService
     public function __construct(
         private readonly KernelInterface $kernel,
         private readonly RouterInterface $router,
+        private readonly CacheItemPoolInterface $cache,
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
     ) {
@@ -168,7 +175,7 @@ final class SymfonyInfoService
      */
     public function getEndOfLife(): string
     {
-        return $this->formatExpired(Kernel::END_OF_LIFE);
+        return $this->formatMonthYear(Kernel::END_OF_LIFE);
     }
 
     /**
@@ -176,7 +183,7 @@ final class SymfonyInfoService
      */
     public function getEndOfMaintenance(): string
     {
-        return $this->formatExpired(Kernel::END_OF_MAINTENANCE);
+        return $this->formatMonthYear(Kernel::END_OF_MAINTENANCE);
     }
 
     /**
@@ -229,7 +236,7 @@ final class SymfonyInfoService
             }
         }
 
-        return 'Unknown';
+        return self::UNKNOWN;
     }
 
     /**
@@ -272,6 +279,18 @@ final class SymfonyInfoService
     public function getProjectDir(): string
     {
         return $this->projectDir;
+    }
+
+    /**
+     * Get the release date.
+     */
+    public function getReleaseDate(): string
+    {
+        if (\is_string($date = $this->loadReleaseDate())) {
+            return $this->formatMonthYear($date);
+        }
+
+        return self::UNKNOWN;
     }
 
     /**
@@ -377,20 +396,20 @@ final class SymfonyInfoService
     }
 
     /**
-     * Format the expired date.
+     * Format a date.
      *
      * @param string $date the date (month/year) to format
      *
      * @return string the formatted date, if applicable; 'Unknown' otherwise
      */
-    private function formatExpired(string $date): string
+    private function formatMonthYear(string $date): string
     {
         $date = \DateTimeImmutable::createFromFormat('d/m/Y', '01/' . $date);
         if ($date instanceof \DateTimeImmutable) {
             return $date->format('F Y');
         }
 
-        return 'Unknown';
+        return self::UNKNOWN;
     }
 
     /**
@@ -433,6 +452,32 @@ final class SymfonyInfoService
     private function isDebugRoute(string $name): bool
     {
         return \str_starts_with($name, '_');
+    }
+
+    /**
+     * Load the release date.
+     */
+    private function loadReleaseDate(): ?string
+    {
+        try {
+            $item = $this->cache->getItem('symfony_release_date');
+            if ($item->isHit()) {
+                return (string) $item->get();
+            }
+            $url = \sprintf('https://symfony.com/releases/%s.%s.json', Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
+            $releases = FileUtils::decodeJson($url);
+            if (isset($releases['release_date']) && \is_string($releases['release_date'])) {
+                $value = $releases['release_date'];
+                $item->set($value);
+                $this->cache->save($item);
+
+                return $value;
+            }
+        } catch (\Psr\Cache\InvalidArgumentException|\InvalidArgumentException) {
+            // ignore
+        }
+
+        return null;
     }
 
     private function makePathRelative(string $endPath, string $startPath): string

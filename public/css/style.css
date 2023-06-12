@@ -565,6 +565,17 @@ input[type="number"] {
     background-color: inherit !important;
 }
 
+/*
+ * non-editable
+ */
+tr.text-body-secondary td {
+    color: var(--bs-secondary-color);
+}
+
+tr.text-body-secondary.table-primary td {
+    color: var(--bs-table-color);
+}
+
 /**
  * strikeout the row
  */

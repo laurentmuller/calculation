@@ -31,9 +31,6 @@ class ThemeController extends AbstractController
     #[Route(path: '/dialog', name: 'theme_dialog', methods: Request::METHOD_GET)]
     public function dialog(Request $request, ThemeExtension $extension): JsonResponse
     {
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createAccessDeniedException($this->trans('theme.error'));
-        }
         $result = $this->renderView('dialog/dialog_theme.html.twig', [
             'theme_selection' => $extension->getTheme($request),
             'is_dark' => $extension->isDarkTheme($request),

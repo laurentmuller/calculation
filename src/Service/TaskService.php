@@ -70,13 +70,13 @@ class TaskService
 
     /**
      * @return Task[]
-     *
-     * @psalm-suppress MixedReturnTypeCoercion
      */
     public function getSortedTasks(): array
     {
-        return $this->repository->getSortedBuilder(false)
-            ->getQuery()
-            ->getResult();
+        /** @psalm-var \Doctrine\ORM\Query<int, Task> $query */
+        $query = $this->repository->getSortedBuilder(false)
+            ->getQuery();
+
+        return $query->getResult();
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use App\Model\HttpClientError;
+use App\Model\TranslateQuery;
 use App\Service\AbstractHttpClientService;
 use App\Utils\StringUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -20,6 +21,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * Abstract translator service.
+ *
+ * @psalm-import-type TranslatorTranslateType from TranslatorServiceInterface
  */
 abstract class AbstractTranslatorService extends AbstractHttpClientService implements TranslatorServiceInterface
 {
@@ -64,15 +67,32 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
         return self::CACHE_TIMEOUT;
     }
 
-    /**
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
-     */
     public function getLanguages(): array|false
     {
         $key = $this->getCacheKey();
+        /** @psalm-var array<string, string>|false $result */
+        $result = $this->getCacheValue($key, fn () => $this->doLoadLanguages()) ?? false;
 
-        return $this->getCacheValue($key, fn () => $this->doLoadLanguages()) ?? false;
+        return $result;
+    }
+
+    /**
+     * @psalm-return TranslatorTranslateType
+     */
+    protected function createTranslateResults(TranslateQuery $query, string $target): array
+    {
+        return [
+            'source' => $query->text,
+            'target' => $target,
+            'from' => [
+                'tag' => $query->from,
+                'name' => $this->findLanguage($query->from),
+            ],
+            'to' => [
+                'tag' => $query->to,
+                'name' => $this->findLanguage($query->to),
+            ],
+        ];
     }
 
     protected function getValue(array $values, string $path, bool $error = true): mixed

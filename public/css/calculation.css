@@ -31,6 +31,6 @@
     }
 }
 
-#data-table-edit tbody:last-child tr:last-child td {
+#calculations tbody:last-child tr:last-child td {
     border-bottom-width: 0 !important;
 }

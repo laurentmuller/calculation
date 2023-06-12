@@ -17,6 +17,10 @@ use App\Form\AbstractEntityType;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\FormHelper;
 use App\Form\Type\PlainType;
+use App\Service\ApplicationService;
+use App\Utils\FormatUtils;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Edit calculation state type.
@@ -28,7 +32,7 @@ class CalculationEditStateType extends AbstractEntityType
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(private readonly ApplicationService $service, private readonly TranslatorInterface $translator)
     {
         parent::__construct(Calculation::class);
     }
@@ -45,13 +49,6 @@ class CalculationEditStateType extends AbstractEntityType
             ->widgetClass('text-center')
             ->addPlainType(true);
 
-        $helper->field('overallMargin')
-            ->label('calculation.fields.margin')
-            ->updateOption('number_pattern', PlainType::NUMBER_PERCENT)
-            ->updateOption('percent_decimals', 0)
-            ->widgetClass('text-end')
-            ->addPlainType(true);
-
         $helper->field('overallTotal')
             ->updateOption('number_pattern', PlainType::NUMBER_AMOUNT)
             ->widgetClass('text-end')
@@ -66,5 +63,59 @@ class CalculationEditStateType extends AbstractEntityType
         $helper->field('state')
             ->label('calculation.state.new_state')
             ->add(CalculationStateListType::class);
+
+        $helper->listenerPreSetData(fn (FormEvent $event) => $this->addOverallMargin($event));
+    }
+
+    private function addOverallMargin(FormEvent $event): void
+    {
+        /** @psalm-var Calculation $data */
+        $data = $event->getData();
+        $options = [
+            'label' => 'calculation.fields.margin',
+            'expanded' => true,
+            'percent_decimals' => 0,
+            'number_pattern' => PlainType::NUMBER_PERCENT,
+            'attr' => $this->getOverallAttributes($data),
+            'text_class' => $this->getOverallTextClass($data),
+        ];
+        $event->getForm()->add('overallMargin', PlainType::class, $options);
+    }
+
+    private function getOverallAttributes(Calculation $data): array
+    {
+        if ($this->isMarginBelow($data)) {
+            return [
+                'class' => 'text-end',
+                'data-bs-html' => 'true',
+                'data-bs-toggle' => 'tooltip',
+                'data-bs-custom-class' => 'tooltip-danger',
+                'data-bs-title' => $this->translateMarginBelow($data),
+            ];
+        }
+
+        return ['class' => 'text-end'];
+    }
+
+    private function getOverallTextClass(Calculation $data): ?string
+    {
+        return $this->isMarginBelow($data) ? 'text-danger' : null;
+    }
+
+    private function isMarginBelow(Calculation $data): bool
+    {
+        return $this->service->isMarginBelow($data);
+    }
+
+    private function translateMarginBelow(Calculation $data): string
+    {
+        $minimum = $this->service->getMinMargin();
+        $margin = $data->getOverallMargin();
+
+        return $this->translator
+            ->trans('calculation.list.margin_below', [
+                '%margin%' => FormatUtils::formatPercent($margin),
+                '%minimum%' => FormatUtils::formatPercent($minimum),
+            ]);
     }
 }

@@ -113,6 +113,7 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         $view->vars['display_value'] = $display_value;
         $view->vars['expanded'] = $options['expanded'];
         $view->vars['hidden_input'] = $options['hidden_input'];
+        $view->vars['text_class'] = $options['text_class'];
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -190,6 +191,7 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
             'separator' => ', ',
             'value_transformer' => null,
             'display_transformer' => null,
+            'text_class' => null,
         ]);
 
         $resolver->setAllowedTypes('hidden_input', 'bool')
@@ -217,6 +219,11 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         $resolver->setAllowedTypes('display_transformer', [
             'null',
             'callable',
+        ]);
+
+        $resolver->setAllowedTypes('text_class', [
+            'null',
+            'string',
         ]);
     }
 

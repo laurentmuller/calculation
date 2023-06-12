@@ -30,8 +30,8 @@
 {% block plain_widget -%}
 {% if expanded %}
     {% set class = (attr.class|default('') ~ ' form-control-plaintext form-control-readonly')|trim %}
-    <div class="{{ class }}">
-        <span>{{ display_value|default('&nbsp;')|raw }}</span>
+    <div class="{{ class }}"{{ block('widget_container_attributes') }}>
+        <span{% if text_class %} class="{{ text_class }}"{% endif %}>{{ display_value|default('&nbsp;')|raw }}</span>
     </div>
 {% else %}
     <span>{{ display_value|default('&nbsp;')|raw }}</span>

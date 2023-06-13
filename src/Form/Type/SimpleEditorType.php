@@ -179,7 +179,7 @@ class SimpleEditorType extends AbstractType
         $actions = $action['actions'] ?? [];
         if ([] !== $actions) {
             $action['attributes']['aria-expanded'] = 'false';
-            $action['attributes']['data-toggle'] = 'dropdown';
+            $action['attributes']['data-bs-toggle'] = 'dropdown';
             $action['actions'] = $this->updateActions($actions, 'dropdown-item');
         }
     }

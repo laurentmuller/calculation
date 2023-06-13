@@ -31,7 +31,7 @@
             </select>
         </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-md-2 d-print-none">
         <div class="form-group mb-3 text-md-center">
             <span class="form-label">{{ 'exchange_rate.swap_label'|trans }}</span>
             <button type="button" class="btn btn-swap btn-secondary form-control" title="{{ 'exchange_rate.swap_label'|trans }}">
@@ -60,7 +60,7 @@
     <div class="col-md-5">
         <div class="form-group mb-3">
             <label class="form-label" for="result">{{ 'exchange_rate.result'|trans }}</label>
-            <input type="number" class="form-control text-end fw-bold" id="result" name="result" value="1.00" disabled="disabled">
+            <input type="text" class="form-control text-end" id="result" name="result" value="1.00" readonly="readonly">
         </div>
     </div>
 </div>

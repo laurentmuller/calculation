@@ -31,6 +31,22 @@ function updateDate($element, date) {
 }
 
 /**
+ * Format the given value.
+ *
+ * @param {number} value - the value to format.
+ * @param {number} digits - the number of fraction digits.
+ * @return {string} the formatted value.
+ */
+function formatValue(value, digits) {
+    'use strict';
+    const formatter = new Intl.NumberFormat('de-CH', {
+        'minimumFractionDigits': digits,
+        'maximumFractionDigits': digits
+    });
+    return formatter.format(value);
+}
+
+/**
  * Compute values and update UI.
  */
 function compute() {
@@ -61,8 +77,7 @@ function compute() {
             const targetCode = $targetOption.data('name');
             const targetDigits = $targetOption.data('digits');
             const targetText = rate + ' ' + targetCode;
-
-            $('#result').val(result.toFixed(targetDigits));
+            $('#result').val(formatValue(result, targetDigits));
             $('#rate').text($form.data('rate').replace('%base%', baseText).replace('%target%', targetText));
             updateDate($('#last-update'), response.update);
             updateDate($('#next-update'), response.next);

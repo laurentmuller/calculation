@@ -23,18 +23,19 @@
 
 {# plain widget text #}
 {% block plain_label -%}
-{% set element = 'span' %}
+{%- set element = 'span' -%}
 {{ block('form_label') }}
 {%- endblock %}
 
 {% block plain_widget -%}
+{% set display_value = display_value|default('&nbsp;') %}
 {% if expanded %}
     {% set class = (attr.class|default('') ~ ' form-control-plaintext form-control-readonly')|trim %}
-    <div class="{{ class }}"{{ block('widget_container_attributes') }}>
-        <span{% if text_class %} class="{{ text_class }}"{% endif %}>{{ display_value|default('&nbsp;')|raw }}</span>
+    <div class="{{ class }}"{% if not hidden_input %}{{ block('widget_container_attributes') }}{% endif %}>
+        <span{% if text_class %} class="{{ text_class }}"{% endif %}>{{ display_value|raw }}</span>
     </div>
 {% else %}
-    <span>{{ display_value|default('&nbsp;')|raw }}</span>
+    <span>{{ display_value|raw }}</span>
 {% endif %}
 {% if hidden_input %}
     {{ block('hidden_widget') }}
@@ -184,8 +185,8 @@
 {%- endblock %}
 
 {% macro simple_editor_button(action) %}
-{% set translation_domain = 'messages' %}
-{% set attr_translation_parameters = [] %}
+{%- set translation_domain = 'messages' -%}
+{%- set attr_translation_parameters = [] -%}
 <button type="button"{% with {attr: action.attributes} %}{{ block('attributes') }}{% endwith %}>
     {%- if action.text|default(false) -%}
         {{- action.text|trans -}}
@@ -196,7 +197,8 @@
 {% endmacro %}
 
 {% block simple_editor_label -%}
-{% set element = 'span' %}
+{%- set element = 'span' -%}
+{%- set label_attr = label_attr|merge({'class': 'cursor-default'}) -%}
 {{ block('form_label') }}
 {%- endblock %}
 
@@ -210,7 +212,6 @@
         {% for group, actions in groups %}
         <div class="btn-group btn-group-sm" role="group" aria-label="{{ group }}">
         {% for action in actions %}
-            {% set editor_action = action %}
             {% if action.actions|default([])|length %}
             <div class="btn-group btn-group-sm" role="group">
                 {{ _self.simple_editor_button(action) }}
@@ -235,7 +236,7 @@
 {%- endblock %}
 
 {%- block alpha_captcha_widget -%}
-<div class="row">
+<div class="row align-items-center">
     <label for="{{ id }}" class="col-sm-10 col-form-label">
         {{- question -}}
     </label>

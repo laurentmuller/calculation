@@ -63,12 +63,10 @@
     font-weight: 900;
     float: right;
     transition: transform 0.2s ease-in-out;
-    /* angle down (collapsed) */
     content: "\f107";
 }
 
 .navbar-vertical .nav-link-toggle[aria-expanded="true"]::after {
-    /* angle up (expanded) */
     transform: rotate(-180deg);
 }
 

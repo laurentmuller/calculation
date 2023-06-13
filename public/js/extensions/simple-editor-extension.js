@@ -69,8 +69,7 @@
             const queryCommandEnabled = function (command) {
                 return document.queryCommandEnabled(command);
             };
-            const execCommand = function (command) {
-                const value = arguments.length > 1 && typeof arguments[1] !== 'undefined' ? arguments[1] : '';
+            const execCommand = function (command, value) {
                 return document.execCommand(command, false, value);
             };
 
@@ -82,28 +81,20 @@
                 const $content = $editor.find('div.simple-editor-content');
 
                 // actions
-                $editor.find('.simple-editor-toolbar button').each(function (index) {
+                $editor.find('.simple-editor-toolbar button').each(function () {
                     const $button = $(this);
                     const data = $button.data();
                     const exec = data.exec || false;
                     const state = exec && data.state || false;
                     const enabled = exec && data.enabled || false;
 
-                    if (index === 0) {
-                        $button.addClass('rounded-start');
-                    }
-
-                    // exec
-                    if (exec) {
-                        $button.on('click', function () {
-                            if (queryCommandEnabled(exec)) {
-                                return $content.trigger('focus') && execCommand(exec, data.parameter || '');
-                            }
-                            return $content.trigger('focus');
-                        });
-                    } else if (!$button.hasClass('dropdown-toggle')) {
-                        $button.toggleDisabled(true);
-                    }
+                    // handler
+                    $button.on('click', function () {
+                        $content.trigger('focus');
+                        if (exec && queryCommandEnabled(exec)) {
+                            execCommand(exec, data.parameter || '');
+                        }
+                    });
 
                     // state
                     if (state) {
@@ -118,8 +109,6 @@
                             $button.toggleDisabled(!queryCommandEnabled(enabled));
                         });
                     }
-                    // remove attributes
-                    // $button.removeAttr('data-exec data-parameter data-state data-enabled');
                 });
 
                 // handle content events

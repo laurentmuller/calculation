@@ -688,8 +688,21 @@ function initializeDangerTooltips($table) {
 
     // handle page selection button
     if ($showPage.length) {
-        $showPage.on('click', function () {
-            $('#modal-page').modal('show');
+        $showPage.on('click', function (e, source) {
+            const $modalPage = $('#modal-page');
+            if ($modalPage.length === 0) {
+                const url = $showPage.data('url');
+                $.get(url, function (data) {
+                    $(data).appendTo('.page-content');
+                    $table.initPageDialog();
+                    $('#modal-page').data('source', source).modal('show');
+                });
+            } else {
+                $modalPage.modal('show');
+            }
+        });
+        $('.fixed-table-pagination').on('click', '.page-first-separator .page-link,.page-last-separator .page-link', function () {
+            $showPage.trigger('click', [$(this)]);
         });
     }
 

@@ -1385,10 +1385,8 @@ archive:
     new_archive: Nouvel archivage
     description: Résultat de l'archivage des calculations.
     empty: Aucune calculation ne correspond aux critères de mise à jour.
-    date: Date limite
     total: Total
-    new_state: Nouveau statut
-    old_state: Anciens statut
+    old_state: Ancien statut
     calculations: Calculations
     show: Afficher les calculations modifiées
   fields:

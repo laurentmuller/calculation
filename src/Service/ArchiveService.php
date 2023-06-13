@@ -65,12 +65,14 @@ class ArchiveService implements ServiceSubscriberInterface
         $builder = $this->factory->createBuilder(FormType::class, $query);
         $helper = new FormHelper($builder, 'archive.fields.');
         $sources = $this->getSources(false);
+
         $helper->field('date')
             ->updateAttributes([
                 'min' => $this->getDateMinConstraint($sources),
                 'max' => $this->getDateMaxConstraint($sources),
             ])
             ->addDateType();
+
         $helper->field('sources')
             ->updateOptions([
                 'multiple' => true,
@@ -80,12 +82,14 @@ class ArchiveService implements ServiceSubscriberInterface
             ])
             ->labelClass('checkbox-inline checkbox-switch')
             ->add(CalculationStateListType::class);
+
         $helper->field('target')
             ->updateOptions([
                 'group_by' => fn () => null,
                 'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getNotEditableQueryBuilder(),
             ])
             ->add(CalculationStateListType::class);
+
         $helper->addCheckboxSimulate()
             ->addCheckboxConfirm($this->getTranslator(), $query->isSimulate());
 
@@ -114,11 +118,15 @@ class ArchiveService implements ServiceSubscriberInterface
         $date = $query->getDate();
         $target = $query->getTarget();
         $simulate = $query->isSimulate();
+        $sources = $query->getSources();
+
         $result = new ArchiveResult();
         $result->setDate($date)
             ->setTarget($target)
+            ->setSources($sources)
             ->setSimulate($simulate);
-        $calculations = $this->getCalculations($date, $query->getSources());
+
+        $calculations = $this->getCalculations($date, $sources);
         foreach ($calculations as $calculation) {
             $oldState = $calculation->getState();
             if ($oldState instanceof CalculationState && $oldState !== $target) {

@@ -6,7 +6,7 @@
 <div class="border index-child m-1">
     <div class="position-relative p-2">
         {%- if list_path -%}
-            {{- link(path(list_path), title, 'stretched-link', icon, 'index.panel_title_' ~ entity) -}}
+            {{- link(path(list_path), title, '', icon, 'index.panel_title_' ~ entity) -}}
         {%- else -%}
             {{- title|trans -}}
         {%- endif -%}

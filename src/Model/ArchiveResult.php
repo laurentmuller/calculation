@@ -24,6 +24,8 @@ class ArchiveResult
     /** @psalm-var array<string, array{state: CalculationState, calculations: array<Calculation>}> */
     private array $results = [];
     private bool $simulate = true;
+    /** @var CalculationState[] */
+    private array $sources = [];
     private ?CalculationState $target = null;
     private int $total = 0;
 
@@ -58,6 +60,14 @@ class ArchiveResult
         return $this->results;
     }
 
+    /**
+     * @return CalculationState[]
+     */
+    public function getSources(): array
+    {
+        return $this->sources;
+    }
+
     public function getTarget(): ?CalculationState
     {
         return $this->target;
@@ -75,6 +85,7 @@ class ArchiveResult
 
     public function reset(): self
     {
+        $this->sources = [];
         $this->results = [];
         $this->total = 0;
 
@@ -91,6 +102,16 @@ class ArchiveResult
     public function setSimulate(bool $simulate): self
     {
         $this->simulate = $simulate;
+
+        return $this;
+    }
+
+    /**
+     * @param CalculationState[] $sources
+     */
+    public function setSources(array $sources): self
+    {
+        $this->sources = $sources;
 
         return $this;
     }

@@ -157,25 +157,6 @@ function formatProduct(product) {
     return $text;
 }
 
-function testUserName() {
-    'use strict';
-
-    const url = $('.btn-user').data('url');
-    const data = {
-        'id': 0,
-        'username': 'bibi'
-    };
-    try {
-        $.get(url, data, function (response) {
-            window.console.log(response);
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            window.console.log(textStatus, errorThrown);
-        });
-    } catch (error) {
-        window.console.log(error);
-    }
-}
-
 /**
  * Ready function
  */
@@ -244,7 +225,7 @@ function testUserName() {
     $('#category').initSelect2({
         templateResult: formatCategory,
         templateSelection: formatCategorySelection
-    }).val([1, 2, 3, 4, 5, 6]).trigger('change');
+    }).val([1, 2]).trigger('change');
 
     $('.btn-search').on('click', function () {
         $(this).parents('.form-group').find('select').select2('open');
@@ -252,11 +233,6 @@ function testUserName() {
     $('.btn-clear').on('click', function () {
         $(this).parents('.form-group').find('select').val('').trigger('change').focus();
     });
-
-    $('.btn-user').on('click', function () {
-        testUserName();
-    });
-
 
     // drag modal
     $('#dragModal').draggableModal({

@@ -23,8 +23,8 @@
         <tr>
             <td class="w-30 text-nowrap">{{ 'product.result.updated'|trans }}</td>
             <td>
-                <a href="#" class="stretched-link text-decoration-none text-reset" data-bs-toggle="modal" data-bs-target="#resultModal" title="{{ 'product.result.updated'|trans }}">
-                    {{- result.count|integer -}}
+                <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#resultModal" title="{{ 'product.result.updated'|trans }}">
+                    {{ result.count|integer }}<i class="fa-solid fa-eye ms-1"></i>
                 </a>
             </td>
         </tr>
@@ -86,6 +86,8 @@
 {% endblock %}
 {# footer #}
 {% block card_footer %}
-{{ homepage() }}
-{{ link(path('admin_product'), 'product.result.new_update', 'btn btn-form btn-secondary', null) }}
+<div class="d-flex flex-wrap align-items-center gap-2">
+    {{ homepage() }}
+    {{ link(path('admin_product'), 'product.result.new_update', 'btn btn-form btn-secondary', null) }}
+</div>
 {% endblock %}

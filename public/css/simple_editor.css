@@ -20,8 +20,11 @@
     border: 0;
 }
 
-.simple-editor .simple-editor-toolbar button:first-child {
-    border-bottom-left-radius: 0 !important;
+/*
+ * first button
+ */
+.simple-editor .simple-editor-toolbar .btn-group:first-child button:first-child {
+    border-top-left-radius: var(--bs-border-radius) !important;
 }
 
 /**
@@ -63,7 +66,7 @@
 .simple-editor .simple-editor-content h4,
 .simple-editor .simple-editor-content h5,
 .simple-editor .simple-editor-content h6 {
-	font-weight: 500;
+	font-weight: normal !important;
 }
 
 .simple-editor .simple-editor-toolbar .h1,

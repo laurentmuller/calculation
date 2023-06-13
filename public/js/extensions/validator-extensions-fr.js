@@ -22,9 +22,9 @@
             if ($label.length) {
                 return $label.text();
             }
-            const $parent = $element.parents('.mb-3:first');
+            const $parent = $element.parents('.form-group:first,.mb-3:first');
             if ($parent.length) {
-                let $label = $parent.find('label:first');
+                let $label = $parent.find('.form-label:first,label:first');
                 if ($label.length) {
                     return $label.text();
                 }
@@ -75,7 +75,7 @@
             const $element = $(element);
             if ($element.attr('type') === 'date') {
                 const regex = /^\d{4}-\d{2}-\d{2}$/;
-                params = params.map(function(param) {
+                params = params.map(function (param) {
                     if (param.match(regex)) {
                         // let options = {year: "numeric", month: "long", day: "numeric"};
                         // return new Date(param).toLocaleDateString(undefined, options);

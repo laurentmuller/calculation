@@ -926,7 +926,6 @@ function loadingTemplate(message) {
             const $range = $('#page-range');
             const $label = $('#page-label');
             const $button = $('#page-button');
-
             $dialog.on('keydown', function (e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();

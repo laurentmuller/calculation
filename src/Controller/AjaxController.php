@@ -87,6 +87,12 @@ class AjaxController extends AbstractController
         ]);
     }
 
+    #[Route(path: '/dialog/page', name: 'ajax_dialog_page', methods: Request::METHOD_GET)]
+    public function renderPageDialog(): JsonResponse
+    {
+        return $this->renderDialog('dialog/dialog_table_page.html.twig');
+    }
+
     /**
      * Save the state of the sidebar.
      */
@@ -147,5 +153,10 @@ class AjaxController extends AbstractController
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view->value, '', $this->getCookiePath());
 
         return $response;
+    }
+
+    private function renderDialog(string $view, array $parameters = []): JsonResponse
+    {
+        return $this->json($this->renderView($view, $parameters));
     }
 }

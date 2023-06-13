@@ -21,12 +21,6 @@
     width: 35px;
 }
 
-.week-head {
-    border-left-style: solid !important;
-    border-left-width: 0.3rem !important;
-    border-left-color: var(--bs-secondary) !important;
-}
-
 .table-popover tr:first-child td,
 .table-popover tr:first-child th {
     border-top-style: hidden;

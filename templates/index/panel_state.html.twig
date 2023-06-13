@@ -7,7 +7,7 @@
     <div class="position-relative body-tooltip p-2">
         {%- if table_path -%}
             {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
-            <a href="{{ path(table_path, parameters) }}" class="stretched-link" title="{{ list_title }}">
+            <a href="{{ path(table_path, parameters) }}" title="{{ list_title }}">
                 {{- state.code -}}
             </a>
         {%- else -%}

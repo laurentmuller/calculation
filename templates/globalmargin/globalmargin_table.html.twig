@@ -4,18 +4,18 @@
 {%- set title = 'globalmargin.list.title' -%}
 {%- set title_icon = ICON_GLOBAL_MARGIN -%}
 {%- set object_type = ENTITY_GLOBAL_MARGIN -%}
-{% block card_container_class ' col-md-8 offset-md-2 col-xl-6 offset-xl-3' %}
+{% block card_container_class ' col col-xl-8 offset-xl-2' %}
 
 {% block header_actions -%}
-{% if allow_edit -%}
-    {{ link(path('globalmargin_edit', params), 'globalmargin.edit.title', 'add-link p-0') }}
-{%- endif %}
+    {% if allow_edit -%}
+        {{- link(path('globalmargin_edit', params), 'globalmargin.edit.title', 'add-link p-0') }}
+    {%- endif %}
 {%- endblock %}
 
 {% block display_mode %}
 {% if allow_edit -%}
     {{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT) }}
-    {{ _self.item_separator() }}
+    {{- _self.item_separator() }}
 {% endif %}
 {{ parent() }}
 {%- endblock %}

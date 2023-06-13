@@ -217,7 +217,7 @@
                         {{- icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
                     </button>
                 {% endif %}
-                <button type="button" class="dropdown-item btn-show-page">
+                <button type="button" class="dropdown-item btn-show-page" data-url="{{ url('ajax_dialog_page') }}">
                     {{- icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}
                 </button>
                 {% if allow_global %}
@@ -282,29 +282,6 @@
                 <div class="rowlink-skip mx-n2 d-print-none custom-view-actions"></div>
             </div>
             {% block custom_view_body -%}{%- endblock %}
-        </div>
-    </div>
-</div>
-{# page selection dialog #}
-<div class="modal fade" id="modal-page" role="dialog" aria-labelledby="modal-title" aria-hidden="true" tabindex="-1" data-page="{{ 'datatable.dialog_page'|trans }}">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header cursor-move">
-                <h5 class="modal-title">{{- icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}</h5>{{ button_close_modal() }}
-            </div>
-            <div class="modal-body">
-                <span id="dialog-page-title" class="form-label">{{ 'datatable.dialog_message'|trans }}</span>
-                <div class="d-flex align-items-center">
-                    <input id="page-range" type="range" class="form-range border rounded-pill py-1 px-2" min="1" max="100" step="1" value="1">
-                    <label id="page-label" for="page-range" class="form-label text-nowrap ms-2">&nbsp;</label>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-form btn-primary"  id="page-button">
-                    {{- 'common.button_ok'|trans -}}
-                </button>
-                {{ button_close_modal(false, 'common.button_cancel') }}
-            </div>
         </div>
     </div>
 </div>

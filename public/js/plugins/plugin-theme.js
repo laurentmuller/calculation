@@ -295,18 +295,6 @@
                 .on('shown.bs.modal', () => this._onDialogVisible())
                 .on('hidden.bs.modal', () => this._onDialogHidden())
                 .on('keydown', (e) => this._onDialogKeyDown(e));
-
-            $(`${options.dialogId} ${options.help}`).on('click', function () {
-                $(this).siblings(options.input).trigger('click');
-            });
-
-            // const that = this;
-            // $(`${options.dialogId} ${options.input}`).on('input', function () {
-            //     const theme = $(this).val();
-            //     if (theme) {
-            //         that._setTheme(theme);
-            //     }
-            // });
         }
 
         /**
@@ -430,10 +418,7 @@
         // the light icon data key
         'iconLight': 'icon-light',
         // the dark icon data key
-        'iconDark': 'icon-dark',
-        // the help text selector
-        help: '.help-text'
-
+        'iconDark': 'icon-dark'
     };
 
 

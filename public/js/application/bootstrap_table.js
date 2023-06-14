@@ -404,6 +404,43 @@ function initializeDangerTooltips($table) {
 }
 
 /**
+ * Show the page selection dialog.
+ */
+function showPageDialog($table, $button, source) {
+    'use strict';
+    const $dialog = $('#modal-page');
+    if ($dialog.length === 0) {
+        const url = $button.data('url');
+        $.get(url, function (data) {
+            $(data).appendTo('.page-content');
+            $table.initPageDialog();
+            $('#modal-page').data('source', source).modal('show');
+        });
+    } else {
+        $('#modal-page').data('source', source).modal('show');
+    }
+}
+
+/**
+ * Show the sort fields dialog.
+ */
+function showSortDialog($table, $button) {
+    'use strict';
+    const $dialog = $('#modal-sort');
+    if ($dialog.length === 0) {
+        const url = $button.data('url');
+        const columns = $table.getSortableColumns();
+        $.post(url, JSON.stringify(columns), function (data) {
+            $(data).appendTo('.page-content');
+            $table.initSortDialog();
+            $('#modal-sort').modal('show');
+        });
+    } else {
+        $dialog.modal('show');
+    }
+}
+
+/**
  * jQuery extensions.
  */
 
@@ -435,8 +472,8 @@ function initializeDangerTooltips($table) {
      */
     const $table = $('#table-edit');
     const $showPage = $('.btn-show-page');
+    const $showSort = $('.btn-sort-data');
     const $pageButton = $('#button_page');
-    const $sortButton = $('#button_sort');
     const $clearButton = $('#clear_search');
     const $viewButtons = $('.dropdown-menu-view');
     const $searchMinimum = $('#search_minimum');
@@ -500,8 +537,8 @@ function initializeDangerTooltips($table) {
 
             // update page selection button
             if ($showPage.length) {
-                const length = $('.fixed-table-pagination .page-first-separator,.fixed-table-pagination .page-last-separator').length;
-                $showPage.toggleClass('d-none', length === 0);
+                const $separators = $('.fixed-table-pagination .page-first-separator,.fixed-table-pagination .page-last-separator');
+                $showPage.toggleClass('d-none', $separators.length === 0);
             }
 
             // update clear button
@@ -522,11 +559,11 @@ function initializeDangerTooltips($table) {
             if (data.length === 0) {
                 $('.card-footer').hide();
                 $viewButtons.toggleDisabled(true);
-                $sortButton.toggleDisabled(true);
+                $showSort.toggleDisabled(true);
             } else {
                 $('.card-footer').show();
                 $viewButtons.toggleDisabled(false);
-                $sortButton.toggleDisabled(false);
+                $showSort.toggleDisabled(false);
             }
 
             // update search minimum
@@ -678,31 +715,24 @@ function initializeDangerTooltips($table) {
     });
 
     // handle sort buttons
-    $('.btn-sort-data').on('click', function () {
-        $('#modal-sort').modal('show');
-    });
-    $table.on('contextmenu', 'th', function (e) {
-        e.preventDefault();
-        $('#modal-sort').modal('show');
-    });
+    if ($showSort.length) {
+        $showSort.on('click', function () {
+            showSortDialog($table, $showSort);
+        });
+        $table.on('contextmenu', 'th', function (e) {
+            e.preventDefault();
+            showSortDialog($table, $showSort);
+        });
+    }
 
     // handle page selection button
+    const $pagination = $('.fixed-table-pagination');
     if ($showPage.length) {
         $showPage.on('click', function (e, source) {
-            const $modalPage = $('#modal-page');
-            if ($modalPage.length === 0) {
-                const url = $showPage.data('url');
-                $.get(url, function (data) {
-                    $(data).appendTo('.page-content');
-                    $table.initPageDialog();
-                    $('#modal-page').data('source', source).modal('show');
-                });
-            } else {
-                $modalPage.modal('show');
-            }
+            showPageDialog($table, $showPage);
         });
-        $('.fixed-table-pagination').on('click', '.page-first-separator .page-link,.page-last-separator .page-link', function () {
-            $showPage.trigger('click', [$(this)]);
+        $pagination.on('click', '.page-first-separator .page-link,.page-last-separator .page-link', function () {
+            showPageDialog($table, $showPage, $(this));
         });
     }
 
@@ -717,7 +747,7 @@ function initializeDangerTooltips($table) {
 
     // update UI
     $('.card .dropdown-menu').removeSeparators();
-    $('.fixed-table-pagination').addClass('small').appendTo('.card-footer');
+    $pagination.addClass('small').appendTo('.card-footer');
     if ($searchMinimum.length) {
         $searchMinimum.toggleClass('d-none', $table.isSearchText());
     }

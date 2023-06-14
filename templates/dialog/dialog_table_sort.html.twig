@@ -1,53 +1,53 @@
 {% from 'macros/_icons.html.twig' import icon, button_close_modal %}
-<div class="modal fade" id="modal-sort" role="dialog" aria-labelledby="modal-title" aria-hidden="true" tabindex="-1">
+<div class="modal fade" id="modal-sort" role="dialog" aria-labelledby="modal-sort-title" aria-hidden="true" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header cursor-move">
-                <h5 class="modal-title">
+                <h1 class="modal-title fs-5" id="modal-sort-title">
                     {{- icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
-                </h5>
-                {{ button_close_modal() }}
+                </h1>
+                {{- button_close_modal() -}}
             </div>
-            <div class="modal-body">
+            <div class="modal-body px-4">
                 <div class="mb-3">
                     <label class="form-label required" for="sort-name">{{ 'list.sort_column'|trans }}</label>
                     <select class="form-select" id="sort-name" name="sort-name">
-                        {% for column in columns|filter(c => c.sortable) -%}
+                        {% for column in columns -%}
                             <option value="{{ column.field }}" data-sort="{{ column.order }}" data-default="{{ column.default|json_encode }}">
-                                {{- column.title|trans -}}
+                                {{- column.title -}}
                             </option>
                         {%- endfor %}
                     </select>
                 </div>
                 <div>
-                    <span class="form-label required">{{ 'list.sort_label'|trans }}</span>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="sort-order-asc" name="sort-order" value="asc">
-                    <label class="form-check-label" for="sort-order-asc">
-                        {{- icon('arrow-down-a-z fa-solid fa-fw', 'list.sort_ascending') -}}
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="sort-order-desc" name="sort-order" value="desc">
-                    <label class="form-check-label" for="sort-order-desc">
-                        {{- icon('arrow-down-z-a fa-solid fa-fw', 'list.sort_descending') -}}
-                    </label>
+                    <div class="form-label required">{{ 'list.sort_label'|trans }}</div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="sort-order-asc" name="sort-order" value="asc">
+                        <label class="form-check-label" for="sort-order-asc">
+                            {{- icon('arrow-down-a-z fa-solid fa-fw', 'list.sort_ascending') -}}
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="sort-order-desc" name="sort-order" value="desc">
+                        <label class="form-check-label" for="sort-order-desc">
+                            {{- icon('arrow-down-z-a fa-solid fa-fw', 'list.sort_descending') -}}
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer align-items-start">
                 <button type="button" class="btn btn-form btn-primary" id="sort-button">
                     {{- 'common.button_ok'|trans -}}
                 </button>
-                {% set default_column = columns|filter(c => c.visible and c.default)|first %}
-                {% if default_column %}
-                    {% set column_key = default_column.order == 'asc' ? 'list.sort_ascending_title' : 'list.sort_descending_title' %}
-                    {% set column_text = column_key|trans({'%name%': default_column.title|trans}) %}
-                    <button type="button" class="btn btn-form btn-success" id="sort-default-button" title="{{ column_text }}">
+                {% set column = columns|filter(c => c.default)|first %}
+                {% if column %}
+                    {% set key = column.order == 'asc' ? 'list.sort_ascending_title' : 'list.sort_descending_title' %}
+                    {% set text = key|trans({'%name%': column.title}) %}
+                    <button type="button" class="btn btn-form btn-success" id="sort-default-button" title="{{ text }}">
                         {{- 'list.sort_default_title'|trans -}}
                     </button>
                 {% endif %}
-                {{ button_close_modal(false, 'common.button_cancel') }}
+                {{- button_close_modal(false, 'common.button_cancel') -}}
             </div>
         </div>
     </div>

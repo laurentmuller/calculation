@@ -31,11 +31,11 @@
     </div>
 </div>
 {# results dialog #}
-<div class="modal fade" id="modal-result" tabindex="-1">
+<div class="modal fade" id="modal-result" aria-labelledby="modal-generate-title" role="dialog" aria-hidden="true" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ title|trans }}</h5>{{ button_close_modal() }}
+                <h1 class="modal-title fs-5" id="modal-generate-title">{{ title|trans }}</h1>{{ button_close_modal() }}
             </div>
             <div class="modal-body">
                 <span class="form-label fw-bold">{{ 'generate.result_text'|trans }}</span>

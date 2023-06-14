@@ -87,10 +87,22 @@ class AjaxController extends AbstractController
         ]);
     }
 
+    #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/dialog/page', name: 'ajax_dialog_page', methods: Request::METHOD_GET)]
     public function renderPageDialog(): JsonResponse
     {
         return $this->renderDialog('dialog/dialog_table_page.html.twig');
+    }
+
+    #[IsGranted(RoleInterface::ROLE_USER)]
+    #[Route(path: '/dialog/page', name: 'ajax_dialog_sort', methods: Request::METHOD_POST)]
+    public function renderSortDialog(Request $request): JsonResponse
+    {
+        $parameters = [
+            'columns' => $request->toArray(),
+        ];
+
+        return $this->renderDialog('dialog/dialog_table_sort.html.twig', $parameters);
     }
 
     /**

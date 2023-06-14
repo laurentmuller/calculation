@@ -372,7 +372,7 @@ datatable:
   no_action: Aucune action disponible
   dialog_page: Page %page% / %pages%
   dialog_title: Sélectionner une page
-  dialog_message: 'Veuillez indiquer le numéro de page que vous désirez afficher :'
+  dialog_message: 'Veuillez sélectionner le numéro de page que vous désirez afficher :'
 duplicate:
   count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
   description: Calculations contenant le même article plus d'une fois.
@@ -640,9 +640,9 @@ list:
   sort_label: Ordre de tri
   sort_default_title: Tri par défaut
   sort_ascending: Tri croissant
-  sort_ascending_title: 'Ordre de tri par défaut : %name% croissant'
+  sort_ascending_title: "Appliquer l'ordre de tri par défaut : Colonne %name% en mode croissant"
   sort_descending: Tri décroissant
-  sort_descending_title: 'Ordre de tri par défaut : %name% décroissant'
+  sort_descending_title: "Appliquer l'ordre de tri par défaut : Colonne %name% en mode décroissant"
 log:
   name: Entré du journal
   title: Journal de l'application

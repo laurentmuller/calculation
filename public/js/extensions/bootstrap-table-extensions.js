@@ -158,13 +158,11 @@ function loadingTemplate(message) {
                     $this.updateHistory().toggleClass('table-hover', isData);
 
                     // update pagination links
-                    let foundPages = false;
-                    const $modalPage = $('#modal-page');
-                    const modalTitle = $('#modal-page .modal-title').text();
+                    const modalTitle = $this.data('pagination-title');
                     $('.fixed-table-pagination .page-item').each(function (_index, element) {
                         const $item = $(element);
-                        const $link = $item.children('.page-link:first');
-                        const isModal = $item.hasClass('page-first-separator') || $item.hasClass('page-last-separator');
+                        const $link = $item.find('.page-link');
+                        const isModal = $item.is('.page-first-separator,.page-last-separator');
                         const title = isModal ? modalTitle : $link.attr('aria-label');
                         $link.attr({
                             'href': '#',
@@ -172,11 +170,7 @@ function loadingTemplate(message) {
                             'aria-label': title
                         });
                         if (isModal) {
-                            foundPages = true;
                             $item.removeClass('disabled');
-                            $link.on('click', function () {
-                                $modalPage.data('source', $link).modal('show');
-                            });
                         }
                     });
 
@@ -188,14 +182,6 @@ function loadingTemplate(message) {
                             $button.attr('title', title).toggleDisabled(true);
                         }
                     });
-
-                    // initialize dialogs
-                    if (foundPages) {
-                        $this.initPageDialog();
-                    }
-                    if ($this.data('sortable')) {
-                        $this.initSortDialog();
-                    }
                 },
 
                 onCustomViewPostBody: function (data) {
@@ -298,6 +284,24 @@ function loadingTemplate(message) {
          */
         getOptions: function () {
             return $(this).bootstrapTable('getOptions');
+        },
+
+        /**
+         * Gets the sortable columns.
+         *
+         * @return {Array} the sortable columns.
+         */
+        getSortableColumns() {
+            const columns = $(this).getOptions().columns[0];
+            return columns.filter(column => column.visible && column.sortable)
+                .map(function (column) {
+                    return {
+                        'field': column.field,
+                        'title': column.title,
+                        'order': column.sortOrder,
+                        'default': column.default
+                    };
+                });
         },
 
         /**

@@ -3,11 +3,11 @@
 {% set dialog_id = id|default('raw_data_modal') %}
 {% set raw_data_id = raw_data_id|default(dialog_id ~ '_highlight') %}
 {# dialog #}
-<div id="{{ dialog_id }}" class="modal modal-raw-data fade" role="dialog" tabindex="-1" aria-labelledby="dialog-title" aria-hidden="true" data-copy-success="{{ 'dialog_raw_data.copy_success'|trans }}" data-copy-error="{{ 'dialog_raw_data.copy_error'|trans }}">
+<div id="{{ dialog_id }}" class="modal modal-raw-data fade" role="dialog" tabindex="-1" aria-labelledby="modal-data-title" aria-hidden="true" data-copy-success="{{ 'dialog_raw_data.copy_success'|trans }}" data-copy-error="{{ 'dialog_raw_data.copy_error'|trans }}">
     <div class="modal-dialog{% if raw_data %} modal-lg{% endif %}" role="document">
         <div class="modal-content{% if not raw_data %} border-danger{% endif %}">
             <div class="modal-header{% if not raw_data %} text-bg-danger{% endif %}">
-                <h5 class="modal-title"><i class="fa-solid fa-code"></i> <span class="dialog-title">{{ 'dialog_raw_data.title'|trans }}</span></h5>
+                <h1 class="modal-title fs-5" id="modal-data-title"><i class="fa-solid fa-code"></i> <span class="dialog-title">{{ 'dialog_raw_data.title'|trans }}</span></h1>
                 {{- button_close_modal(true, null, dialog_id) -}}
             </div>
             <div class="modal-body">

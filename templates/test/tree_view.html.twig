@@ -127,11 +127,11 @@
         <button type="button" class="btn btn-form btn-primary" data-bs-toggle="modal" data-bs-target="#dragModal">Launch modal</button>
     </div>
 </div>
-<div class="modal fade" id="dragModal" tabindex="-1">
+<div class="modal fade" id="dragModal" role="dialog" aria-hidden="true" tabindex="-1" aria-labelledby="modal-drag-title">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header cursor-move">
-                <h5 class="modal-title">Modal title</h5>
+                <h1 class="modal-title fs-5" id="modal-drag-title">Modal title</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close"></button>
             </div>
             <div class="modal-body">

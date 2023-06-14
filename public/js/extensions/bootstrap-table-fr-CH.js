@@ -51,7 +51,7 @@
             return 'Rechercher';
         },
         formatNoMatches: function () {
-            return 'Aucune entrée ne correspond à la recherche.';
+            return 'Aucune donnée ne correspond aux critères de recherche.';
         },
         formatPaginationSwitch: function () {
             return 'Cacher/Afficher la pagination';

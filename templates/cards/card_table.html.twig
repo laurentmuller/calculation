@@ -148,6 +148,7 @@
     'pagination-parts': "['pageInfo', 'pageList']",
     'pagination-pre-text': '<i class="fa fa-caret-left fa-lg"></i>',
     'pagination-next-text': '<i class="fa fa-caret-right fa-lg"></i>',
+    'pagination-title': 'datatable.dialog_title'|trans,
     'show-extended-pagination': true,
     'sortable': sortable,
     'loading-template': 'loadingTemplate',
@@ -213,7 +214,7 @@
                 {%- endblock %}
                 {% if sortable %}
                     {{ _self.item_separator() }}
-                    <button type="button" class="dropdown-item btn-sort-data">
+                    <button type="button" class="dropdown-item btn-sort-data" data-url="{{ url('ajax_dialog_sort') }}">
                         {{- icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
                     </button>
                 {% endif %}
@@ -285,62 +286,6 @@
         </div>
     </div>
 </div>
-{# sort column dialog #}
-{% if sortable %}
-<div class="modal fade" id="modal-sort" role="dialog" aria-labelledby="modal-title" aria-hidden="true" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header cursor-move">
-                <h5 class="modal-title">
-                    {{- icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
-                </h5>
-                {{ button_close_modal() }}
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label required" for="sort-name">{{ 'list.sort_column'|trans }}</label>
-                    <select class="form-select" id="sort-name" name="sort-name">
-                        {% for column in sortable_columns -%}
-                            <option value="{{ column.field }}" data-sort="{{ column.order }}" data-default="{{ column.default|json_encode }}">
-                                {{- column.title|trans -}}
-                            </option>
-                        {%- endfor %}
-                    </select>
-                </div>
-                <div>
-                    <span class="form-label required">{{ 'list.sort_label'|trans }}</span>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="sort-order-asc" name="sort-order" value="asc">
-                    <label class="form-check-label" for="sort-order-asc">
-                        {{- icon('arrow-down-a-z fa-solid fa-fw', 'list.sort_ascending') -}}
-                    </label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" id="sort-order-desc" name="sort-order" value="desc">
-                    <label class="form-check-label" for="sort-order-desc">
-                        {{- icon('arrow-down-z-a fa-solid fa-fw', 'list.sort_descending') -}}
-                    </label>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-form btn-primary" id="sort-button">
-                    {{- 'common.button_ok'|trans -}}
-                </button>
-                {% set default_column = columns|filter(c => c.visible and c.default)|first %}
-                {% if default_column %}
-                    {% set column_key = default_column.order == 'asc' ? 'list.sort_ascending_title' : 'list.sort_descending_title' %}
-                    {% set column_text = column_key|trans({'%name%': default_column.title|trans}) %}
-                    <button type="button" class="btn btn-form btn-success" id="sort-default-button" title="{{ column_text }}">
-                        {{- 'list.sort_default_title'|trans -}}
-                    </button>
-                {% endif %}
-                {{ button_close_modal(false, 'common.button_cancel') }}
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
 {%- endblock -%}
 {# stylesheets #}
 {% block stylesheets %}

@@ -293,7 +293,7 @@ function loadingTemplate(message) {
          */
         getSortableColumns() {
             const columns = $(this).getOptions().columns[0];
-            return columns.filter(column => column.visible && column.sortable)
+            return columns.filter((column) => column.visible && column.sortable)
                 .map(function (column) {
                     return {
                         'field': column.field,

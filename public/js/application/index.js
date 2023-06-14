@@ -75,7 +75,7 @@ function createKeydownHandler($table) {
                 }
                 break;
             }
-            case 'End':// select last row
+            case 'End': // select last row
             {
                 const $last = $table.find('tr:last');
                 if (!$selection.is($last)) {
@@ -137,8 +137,8 @@ function createKeydownHandler($table) {
             {
                 const $link = $selection.find('.btn-delete');
                 if ($link.length) {
-                    $link[0].click();
                     e.preventDefault();
+                    $link[0].click();
                 }
                 break;
             }
@@ -199,8 +199,12 @@ function updateCounter(e) {
  */
 function selectRow($source, hideMenus) {
     'use strict';
-    $('#calculations tr.table-primary').removeClass('table-primary');
-    $source.closest('tr').addClass('table-primary');
+    const $oldSelection = $('#calculations tr.table-primary');
+    const $newSelection = $source.closest('tr');
+    if ($oldSelection !== $newSelection) {
+        $oldSelection.removeClass('table-primary');
+        $newSelection.addClass('table-primary');
+    }
     if (hideMenus) {
         $.hideDropDownMenus();
     }
@@ -222,23 +226,16 @@ function selectRow($source, hideMenus) {
         }
         $selection.scrollInViewport();
 
-        // enable tooltips
-        $table.tooltip({
-            customClass: 'tooltip-danger',
-            selector: '.has-tooltip',
-            html: true
-        });
-
-        // function to select the row
-        const contextMenuShow = function () {
-            selectRow($(this), true);
-        };
-        $table.on('click', '[data-bs-toggle="dropdown"]', function () {
+        // handle table events and context menu
+        $table.on('mousedown', 'tbody tr', function (e) {
+            if (e.button === 0) {
+                selectRow($(this), true);
+            }
+        }).on('click', 'tr [data-bs-toggle="dropdown"]', function () {
             selectRow($(this), false);
+        }).initContextMenu('#calculations tbody tr td:not(.d-print-none)', function () {
+            selectRow($(this), true);
         });
-
-        // initialize context menu
-        $table.initContextMenu('#calculations tbody tr td:not(.d-print-none)', contextMenuShow);
 
         // remove separators
         $('#calculations .dropdown-menu').removeSeparators();
@@ -254,8 +251,8 @@ function selectRow($source, hideMenus) {
         }).on('keydown', handler);
     }
 
-    // enable tooltips for calculations by state or by month
-    $('.body-tooltip').tooltip({
+    // enable tooltips
+    $('#calculations,.body-tooltip').tooltip({
         customClass: 'tooltip-danger',
         selector: '.has-tooltip',
         html: true
@@ -269,7 +266,7 @@ function selectRow($source, hideMenus) {
         });
     }
 
-    // hide panels
+    // handle hide panels
     const $panels = $('.hide-panel');
     if ($panels.length) {
         $panels.on('click', function (e) {

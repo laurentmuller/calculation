@@ -26,7 +26,7 @@
         "title": "category.fields.products",
         "sortable": false,
         "searchable": false,
-        "class": "text-currency rowlink-skip",
+        "class": "text-currency",
         "fieldFormatter": "formatProducts"
     },
     {
@@ -34,7 +34,7 @@
         "title": "category.fields.tasks",
         "sortable": false,
         "searchable": false,
-        "class": "text-currency rowlink-skip",
+        "class": "text-currency",
         "fieldFormatter": "formatTasks"
     }
 ]

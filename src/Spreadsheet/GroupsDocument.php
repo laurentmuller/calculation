@@ -32,15 +32,22 @@ class GroupsDocument extends AbstractArrayDocument
             'group.fields.description' => Alignment::HORIZONTAL_GENERAL,
             'group.fields.margins' => Alignment::HORIZONTAL_RIGHT,
             'group.fields.categories' => Alignment::HORIZONTAL_RIGHT,
+            'category.fields.products' => Alignment::HORIZONTAL_RIGHT,
+            'category.fields.tasks' => Alignment::HORIZONTAL_RIGHT,
         ]);
         $this->setFormatInt(3)
-            ->setFormatInt(4);
+            ->setFormatInt(4)
+            ->setFormatInt(5)
+            ->setFormatInt(6);
+
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getCode(),
                 $entity->getDescription(),
                 $entity->countMargins(),
                 $entity->countCategories(),
+                $entity->countProducts(),
+                $entity->countTasks(),
             ]);
         }
         $this->finish();

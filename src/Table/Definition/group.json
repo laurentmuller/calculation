@@ -27,7 +27,23 @@
         "title": "group.fields.categories",
         "sortable": false,
         "searchable": false,
-        "class": "text-currency rowlink-skip",
+        "class": "text-currency",
         "fieldFormatter": "formatCategories"
+    },
+    {
+        "field": "products",
+        "title": "category.fields.products",
+        "sortable": false,
+        "searchable": false,
+        "class": "text-currency",
+        "fieldFormatter": "formatProducts"
+    },
+    {
+        "field": "tasks",
+        "title": "category.fields.tasks",
+        "sortable": false,
+        "searchable": false,
+        "class": "text-currency",
+        "fieldFormatter": "formatTasks"
     }
 ]

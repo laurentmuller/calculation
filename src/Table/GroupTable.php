@@ -14,9 +14,12 @@ namespace App\Table;
 
 use App\Entity\Category;
 use App\Entity\Group;
+use App\Entity\Product;
+use App\Entity\Task;
 use App\Repository\AbstractRepository;
 use App\Repository\GroupRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
+use App\Traits\TableCellTrait;
 use App\Utils\FileUtils;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -34,12 +37,15 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
 {
     use AuthorizationCheckerAwareTrait;
     use ServiceSubscriberTrait;
+    use TableCellTrait;
 
     /**
      * Constructor.
      */
-    public function __construct(GroupRepository $repository, private readonly Environment $twig)
-    {
+    public function __construct(
+        GroupRepository $repository,
+        protected readonly Environment $twig
+    ) {
         parent::__construct($repository);
     }
 
@@ -48,22 +54,59 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param Group|array{id: int} $group
+     * @psalm-param array{id: int} $entity
      */
-    public function formatCategories(\Countable|int $categories, Group|array $group): string
+    public function formatCategories(int $value, array $entity): string
     {
-        $id = \is_array($group) ? $group['id'] : $group->getId();
-        $count = $categories instanceof \Countable ? $categories->count() : $categories;
-        $context = [
-            'count' => $count,
-            'title' => 'group.list.category_title',
-            'route' => $this->isGrantedList(Category::class) ? 'category_table' : false,
-            'parameters' => [
-                CategoryTable::PARAM_GROUP => $id,
-            ],
-        ];
+        $route = $this->isGrantedList(Category::class) ? 'category_table' : false;
 
-        return $this->twig->render('macros/_cell_table_link.html.twig', $context);
+        return $this->renderCell(
+            $value,
+            $entity,
+            'group.list.category_title',
+            $route,
+            CategoryTable::PARAM_GROUP
+        );
+    }
+
+    /**
+     * Formatter for the product column.
+     *
+     * @throws \Twig\Error\Error
+     *
+     * @psalm-param array{id: int} $entity
+     */
+    public function formatProducts(int $value, array $entity): string
+    {
+        $route = $this->isGrantedList(Product::class) ? 'product_table' : false;
+
+        return $this->renderCell(
+            $value,
+            $entity,
+            'group.list.product_title',
+            $route,
+            CategoryTable::PARAM_GROUP
+        );
+    }
+
+    /**
+     * Formatter for the task column.
+     *
+     * @throws \Twig\Error\Error
+     *
+     * @psalm-param array{id: int} $entity
+     */
+    public function formatTasks(int $value, array $entity): string
+    {
+        $route = $this->isGrantedList(Task::class) ? 'task_table' : false;
+
+        return $this->renderCell(
+            $value,
+            $entity,
+            'group.list.task_title',
+            $route,
+            CategoryTable::PARAM_GROUP
+        );
     }
 
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder

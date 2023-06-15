@@ -261,8 +261,8 @@ body:not(.status-bar) .btn-back-to-top {
     cursor: pointer;
 }
 
-.table.rowlink td:not(.rowlink-skip) a,
-.table .rowlink td:not(.rowlink-skip) a {
+.table.rowlink td:not(.rowlink-skip) a:not(.rowlink-skip),
+.table .rowlink td:not(.rowlink-skip) a:not(.rowlink-skip) {
     font: inherit;
     color: inherit;
     text-decoration: inherit;

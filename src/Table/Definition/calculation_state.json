@@ -27,7 +27,7 @@
         "title": "calculationstate.fields.calculations",
         "sortable": false,
         "searchable": false,
-        "class": "text-calculation rowlink-skip",
+        "class": "text-calculation",
         "fieldFormatter": "formatCalculations"
     },
     {

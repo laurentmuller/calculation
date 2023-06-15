@@ -22,13 +22,10 @@ use ZxcvbnPhp\Zxcvbn;
 /**
  * Service to validate a password with Zxcvbn.
  *
- * @psalm-type ScoreResult = array{
+ * @psalm-type ScoreResultType = array{
  *     score: int,
- *     feedback: array{
- *          warning: string,
- *          suggestions: string[]
- *      }
- * }
+ *     warning?: string,
+ *     suggestions?: string[]}
  */
 class PasswordService
 {
@@ -92,7 +89,7 @@ class PasswordService
     }
 
     /**
-     * @return array{score: int, warning?: string, suggestions?: string[]}
+     * @psalm-return ScoreResultType
      */
     private function getPasswordStrength(PasswordQuery $query): array
     {
@@ -115,10 +112,8 @@ class PasswordService
 
     private function validatePassword(PasswordQuery $query): ?array
     {
-        if (empty($query->password)) {
-            return $this->getFalseResult(
-                $this->trans('password.empty', [], 'validators'),
-            );
+        if ('' === \trim($query->password)) {
+            return $this->getFalseResult($this->trans('password.empty', [], 'validators'));
         }
 
         return null;
@@ -142,7 +137,7 @@ class PasswordService
     }
 
     /**
-     * @param array{score: int, warning?: string, suggestions?: array} $results
+     * @param ScoreResultType $results
      */
     private function validateScoreResults(array $results): ?array
     {

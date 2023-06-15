@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Category;
-use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
@@ -36,6 +35,7 @@ class CategoriesReport extends AbstractArrayReport
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('category.list.title', [], true);
+
         $default = $this->trans('report.other');
         $fn = fn (Category $category): string => $category->getGroupCode() ?? $default;
         /** @var array<string, Category[]> $groups */
@@ -54,31 +54,7 @@ class CategoriesReport extends AbstractArrayReport
             }
         }
         $this->resetStyle();
-        $tasks = 0;
-        $products = 0;
-        foreach ($entities as $item) {
-            $tasks += $item->countTasks();
-            $products += $item->countProducts();
-        }
-        $txtGroup = $this->trans('counters.groups', ['count' => \count($groups)]);
-        $txtCount = $this->trans('counters.categories', ['count' => \count($entities)]);
-        $txtProduct = $this->trans('counters.products', ['count' => $products]);
-        $txtTask = $this->trans('counters.tasks', ['count' => $tasks]);
-        $border = PdfBorder::none();
-        $margins = $this->setCellMargin(0);
-        $width = $this->GetPageWidth() / 2.0;
-        $this->Cell(
-            w: $width,
-            txt: $txtGroup . ' - ' . $txtCount,
-            border: $border
-        );
-        $this->Cell(
-            txt: $txtProduct . ' - ' . $txtTask,
-            border: $border,
-            ln: PdfMove::NEW_LINE,
-            align: PdfTextAlignment::RIGHT
-        );
-        $this->setCellMargin($margins);
+        $this->renderTotal($groups, $entities);
 
         return true;
     }
@@ -95,5 +71,43 @@ class CategoriesReport extends AbstractArrayReport
                 PdfColumn::right($this->trans('category.fields.products'), 20, true),
                 PdfColumn::right($this->trans('category.fields.tasks'), 20, true)
             )->outputHeaders();
+    }
+
+    private function formatCount(string $id, array|int $value): string
+    {
+        return $this->trans($id, ['count' => \is_array($value) ? \count($value) : $value]);
+    }
+
+    /**
+     * @psalm-param Category[] $entities
+     */
+    private function renderTotal(array $groups, array $entities): void
+    {
+        $tasks = 0;
+        $products = 0;
+        foreach ($entities as $item) {
+            $tasks += $item->countTasks();
+            $products += $item->countProducts();
+        }
+
+        $txtGroups = $this->formatCount('counters.groups', $groups);
+        $Categories = $this->formatCount('counters.categories', $entities);
+        $txtProducts = $this->formatCount('counters.products', $products);
+        $txtTasks = $this->formatCount('counters.tasks', $tasks);
+
+        $border = PdfBorder::none();
+        $margins = $this->setCellMargin(0);
+        $width = $this->GetPageWidth() / 2.0;
+        $this->Cell(
+            w: $width,
+            txt: \sprintf('%s - %s', $txtGroups, $Categories),
+            border: $border
+        );
+        $this->Cell(
+            txt: \sprintf('%s - %s', $txtProducts, $txtTasks),
+            border: $border,
+            align: PdfTextAlignment::RIGHT
+        );
+        $this->setCellMargin($margins);
     }
 }

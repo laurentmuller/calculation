@@ -488,12 +488,14 @@ group:
     description: Description
     margins: Marges
   list:
+    title: Groupes
     add_title: Créer un nouveau groupe
-    category_title: Afficher les catégories de ce groupe
     empty: Aucun groupe défini.
     excel_title: Exporter la liste des groupes
     pdf_title: Télécharger la liste des groupes
-    title: Groupes
+    category_title: Afficher les catégories de ce groupe
+    product_title: Afficher les articles de ce groupe
+    task_title: Afficher les tâches de ce groupe
   name: Groupe
   show:
     title: Propriétés du groupe
@@ -1207,8 +1209,8 @@ theme:
     title: Appliquer le thème système sur le site.
     success: Le <b>thème système</b> a été sélectionné avec succès.
     help: >-
-      Le thème système fait passer l'apparence de claire à sombre en fonction des préférences de l'utilisateur dans le système d'exploitation.br>
-      Sur Windows 11, il se trouve dans les paramètres de la section : <br><i>Personalisation</i> &gt; <i>Couleurs</i> &gt; <i>Choisissez votre mode</i>.
+      Le thème système fait passer l'apparence de claire à sombre en fonction des préférences de l'utilisateur dans le système d'exploitation.<br>
+      Sur Microsoft&reg; Windows&reg; 10 et 11, il se trouve dans les paramètres de la section : <i>Personalisation</i> &gt; <i>Couleurs</i> &gt; <i>Choisissez votre mode</i>.
   dark:
     name: Thème sombre
     title: Appliquer le thème sombre sur le site.

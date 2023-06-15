@@ -405,8 +405,12 @@ function initializeDangerTooltips($table) {
 
 /**
  * Show the page selection dialog.
+ *
+ * @param {jQueryTable} $table - the data table.
+ * @param {jQuery} $button - the caller button.
+ * @param {jQuery} [$source] - the source page link.
  */
-function showPageDialog($table, $button, source) {
+function showPageDialog($table, $button, $source) {
     'use strict';
     const $dialog = $('#modal-page');
     if ($dialog.length === 0) {
@@ -414,15 +418,18 @@ function showPageDialog($table, $button, source) {
         $.get(url, function (data) {
             $(data).appendTo('.page-content');
             $table.initPageDialog();
-            $('#modal-page').data('source', source).modal('show');
+            $('#modal-page').data('source', $source).modal('show');
         });
     } else {
-        $('#modal-page').data('source', source).modal('show');
+        $dialog.data('source', $source).modal('show');
     }
 }
 
 /**
- * Show the sort fields dialog.
+ * Show the sort field dialog.
+ *
+ * @param {jQueryTable} $table - the data table.
+ * @param {jQuery} $button - the caller button.
  */
 function showSortDialog($table, $button) {
     'use strict';

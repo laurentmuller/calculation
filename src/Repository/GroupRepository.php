@@ -34,6 +34,15 @@ class GroupRepository extends AbstractRepository
      */
     private const MARGIN_ALIAS = 'm';
 
+    /**
+     * The alias for the product entity.
+     */
+    private const PRODUCT_ALIAS = CategoryRepository::PRODUCT_ALIAS;
+    /**
+     * The alias for the task entity.
+     */
+    private const TASK_ALIAS = CategoryRepository::TASK_ALIAS;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Group::class);
@@ -98,8 +107,12 @@ class GroupRepository extends AbstractRepository
             ->addSelect("$alias.description")
             ->addSelect($this->getCountDistinct(self::MARGIN_ALIAS, 'margins'))
             ->addSelect($this->getCountDistinct(self::CATEGORY_ALIAS, 'categories'))
+            ->addSelect($this->getCountDistinct(self::PRODUCT_ALIAS, 'products'))
+            ->addSelect($this->getCountDistinct(self::TASK_ALIAS, 'tasks'))
             ->leftJoin("$alias.margins", self::MARGIN_ALIAS)
             ->leftJoin("$alias.categories", self::CATEGORY_ALIAS)
+            ->leftJoin(self::CATEGORY_ALIAS . '.products', self::PRODUCT_ALIAS)
+            ->leftJoin(self::CATEGORY_ALIAS . '.tasks', self::TASK_ALIAS)
             ->groupBy("$alias.id");
     }
 }

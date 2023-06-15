@@ -20,6 +20,7 @@ use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
+use App\Traits\TableCellTrait;
 use App\Utils\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -39,6 +40,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
 {
     use AuthorizationCheckerAwareTrait;
     use ServiceSubscriberTrait;
+    use TableCellTrait;
 
     /**
      * The group parameter name (int).
@@ -48,8 +50,11 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     /**
      * Constructor.
      */
-    public function __construct(CategoryRepository $repository, private readonly GroupRepository $groupRepository, private readonly Environment $twig)
-    {
+    public function __construct(
+        CategoryRepository $repository,
+        protected readonly Environment $twig,
+        private readonly GroupRepository $groupRepository
+    ) {
         parent::__construct($repository);
     }
 
@@ -58,22 +63,19 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param Category|array{id: int} $category
+     * @psalm-param array{id: int} $entity
      */
-    public function formatProducts(\Countable|int $products, Category|array $category): string
+    public function formatProducts(int $value, array $entity): string
     {
-        $id = \is_array($category) ? $category['id'] : $category->getId();
-        $count = $products instanceof \Countable ? $products->count() : $products;
-        $context = [
-            'count' => $count,
-            'title' => 'category.list.product_title',
-            'route' => $this->isGrantedList(Product::class) ? 'product_table' : false,
-            'parameters' => [
-                AbstractCategoryItemTable::PARAM_CATEGORY => $id,
-            ],
-        ];
+        $route = $this->isGrantedList(Product::class) ? 'product_table' : false;
 
-        return $this->twig->render('macros/_cell_table_link.html.twig', $context);
+        return $this->renderCell(
+            $value,
+            $entity,
+            'category.list.product_title',
+            $route,
+            AbstractCategoryItemTable::PARAM_CATEGORY
+        );
     }
 
     /**
@@ -81,22 +83,19 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param Category|array{id: int} $category
+     * @psalm-param array{id: int} $entity
      */
-    public function formatTasks(\Countable|int $tasks, Category|array $category): string
+    public function formatTasks(int $value, array $entity): string
     {
-        $id = \is_array($category) ? $category['id'] : $category->getId();
-        $count = $tasks instanceof \Countable ? $tasks->count() : $tasks;
-        $context = [
-            'count' => $count,
-            'title' => 'category.list.task_title',
-            'route' => $this->isGrantedList(Task::class) ? 'task_table' : false,
-            'parameters' => [
-                AbstractCategoryItemTable::PARAM_CATEGORY => $id,
-            ],
-        ];
+        $route = $this->isGrantedList(Task::class) ? 'task_table' : false;
 
-        return $this->twig->render('macros/_cell_table_link.html.twig', $context);
+        return $this->renderCell(
+            $value,
+            $entity,
+            'category.list.task_title',
+            $route,
+            AbstractCategoryItemTable::PARAM_CATEGORY
+        );
     }
 
     public function getDataQuery(Request $request): DataQuery

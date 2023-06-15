@@ -4,6 +4,7 @@
 {%- set title = 'globalmargin.edit.title' -%}
 {%- set title_icon = ICON_GLOBAL_MARGIN -%}
 {%- set page_list = 'globalmargin_table' -%}
+{% block card_container_class ' col col-xl-6 offset-xl-3' %}
 {# body #}
 {% block card_body %}
 {{ printMargins(form.margins) }}

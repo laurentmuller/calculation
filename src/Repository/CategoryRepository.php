@@ -52,12 +52,12 @@ class CategoryRepository extends AbstractRepository
     /**
      * The alias for the product entity.
      */
-    private const PRODUCT_ALIAS = 'p';
+    final public const PRODUCT_ALIAS = 'p';
 
     /**
      * The alias for the task entity.
      */
-    private const TASK_ALIAS = 't';
+    final public const TASK_ALIAS = 't';
 
     public function __construct(ManagerRegistry $registry)
     {

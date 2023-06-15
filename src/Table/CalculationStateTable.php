@@ -17,6 +17,7 @@ use App\Entity\CalculationState;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationStateRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
+use App\Traits\TableCellTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\FileUtils;
 use Doctrine\ORM\QueryBuilder;
@@ -35,13 +36,16 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
 {
     use AuthorizationCheckerAwareTrait;
     use ServiceSubscriberTrait;
+    use TableCellTrait;
     use TranslatorAwareTrait;
 
     /**
      * Constructor.
      */
-    public function __construct(CalculationStateRepository $repository, private readonly Environment $twig)
-    {
+    public function __construct(
+        CalculationStateRepository $repository,
+        protected readonly Environment $twig
+    ) {
         parent::__construct($repository);
     }
 
@@ -50,22 +54,19 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param CalculationState|array{id: int} $state
+     * @psalm-param array{id: int} $entity
      */
-    public function formatCalculations(\Countable|int $calculations, CalculationState|array $state): string
+    public function formatCalculations(int $value, array $entity): string
     {
-        $id = \is_array($state) ? $state['id'] : $state->getId();
-        $count = $calculations instanceof \Countable ? $calculations->count() : $calculations;
-        $context = [
-            'count' => $count,
-            'title' => 'calculationstate.list.calculation_title',
-            'route' => $this->isGrantedList(Calculation::class) ? 'calculation_table' : false,
-            'parameters' => [
-                CalculationTable::PARAM_STATE => $id,
-            ],
-        ];
+        $route = $this->isGrantedList(Calculation::class) ? 'calculation_table' : false;
 
-        return $this->twig->render('macros/_cell_table_link.html.twig', $context);
+        return $this->renderCell(
+            $value,
+            $entity,
+            'calculationstate.list.calculation_title',
+            $route,
+            CalculationTable::PARAM_STATE
+        );
     }
 
     /**

@@ -21,6 +21,15 @@
         "numeric": true
     },
     {
+        "field": "delta",
+        "title": "globalmargin.fields.delta",
+        "sortable": false,
+        "searchable": false,
+        "fieldFormatter": "formatAmount",
+        "class": "text-currency w-35",
+        "numeric": true
+    },
+    {
         "field": "margin",
         "title": "globalmargin.fields.margin",
         "searchable": true,

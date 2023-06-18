@@ -12,20 +12,21 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use App\Entity\Calculation;
 use App\Traits\CalculationDocumentMarginTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
  * Spreadsheet document for the list of calculations.
  *
- * @extends AbstractArrayDocument<Calculation>
+ * @extends AbstractArrayDocument<\App\Entity\Calculation>
  */
 class CalculationsDocument extends AbstractArrayDocument
 {
     use CalculationDocumentMarginTrait;
 
     /**
+     * @param \App\Entity\Calculation[] $entities
+     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
@@ -42,11 +43,13 @@ class CalculationsDocument extends AbstractArrayDocument
             'calculation.fields.margin' => Alignment::HORIZONTAL_RIGHT,
             'calculation.fields.total' => Alignment::HORIZONTAL_RIGHT,
         ]);
+
         $this->setFormatId(1)
             ->setFormatDate(2)
             ->setFormatAmount(6)
             ->setFormat(7, $this->getMarginFormat())
             ->setFormatAmount(8);
+
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getId(),

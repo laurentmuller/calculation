@@ -81,7 +81,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
                 ->endRow();
         }
 
-        return $this->renderCount($entities, 'counters.states');
+        return $this->renderCount($table, $entities, 'counters.states');
     }
 
     /**

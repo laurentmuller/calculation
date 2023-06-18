@@ -24,6 +24,8 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 class CalculationStatesDocument extends AbstractArrayDocument
 {
     /**
+     * @param \App\Entity\CalculationState[] $entities
+     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
@@ -36,8 +38,10 @@ class CalculationStatesDocument extends AbstractArrayDocument
             'calculationstate.fields.calculations' => Alignment::HORIZONTAL_RIGHT,
             'calculationstate.fields.color' => Alignment::HORIZONTAL_CENTER,
         ]);
+
         $this->setFormatYesNo(3)
             ->setFormatInt(4);
+
         foreach ($entities as $entity) {
             $this->setRowValues($row, [
                 $entity->getCode(),

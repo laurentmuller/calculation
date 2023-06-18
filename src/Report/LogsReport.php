@@ -273,6 +273,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
                 PdfColumn::left($this->trans('log.fields.message'), 150),
                 PdfColumn::left($this->trans('log.fields.user'), 20, true)
             )->outputHeaders();
+
         foreach ($logs as $log) {
             $this->level = $log->getLevel();
             $newDate = $this->getShortDate($log);
@@ -288,7 +289,8 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
                 $log->getUser()
             );
         }
+        $table->setBorderListener(null);
 
-        return $this->renderCount($logs);
+        return $this->renderCount($table, $logs, 'counters.logs');
     }
 }

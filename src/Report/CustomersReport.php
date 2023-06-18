@@ -56,13 +56,14 @@ class CustomersReport extends AbstractArrayReport
                 PdfColumn::left($this->trans('customer.fields.address'), 25),
                 PdfColumn::left($this->trans('customer.fields.zipCity'), 25)
             )->outputHeaders();
+
         if ($this->grouped) {
             $this->outputGrouped($table, $entities);
         } else {
             $this->outputList($table, $entities);
         }
 
-        return $this->renderCount($entities);
+        return $this->renderCount($table, $entities);
     }
 
     private function firstChar(string $text): string

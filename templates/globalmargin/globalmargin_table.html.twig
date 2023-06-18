@@ -4,14 +4,14 @@
 {%- set title = 'globalmargin.list.title' -%}
 {%- set title_icon = ICON_GLOBAL_MARGIN -%}
 {%- set object_type = ENTITY_GLOBAL_MARGIN -%}
-{% block card_container_class ' col col-xl-6 offset-xl-3' %}
-
+{% block card_container_class ' col col-xl-8 offset-xl-2' %}
+{# header actions #}
 {% block header_actions -%}
-    {% if allow_edit -%}
-        {{- link(path('globalmargin_edit', params), 'globalmargin.edit.title', 'add-link p-0') }}
-    {%- endif %}
+{% if allow_edit -%}
+    {{- link(path('globalmargin_edit', params), 'globalmargin.edit.title', 'add-link p-0') }}
+{%- endif %}
 {%- endblock %}
-
+{# display mode  #}
 {% block display_mode %}
 {% if allow_edit -%}
     {{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT) }}
@@ -19,29 +19,30 @@
 {% endif %}
 {{ parent() }}
 {%- endblock %}
-
+{# global actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('globalmargin_pdf'), 'globalmargin.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('globalmargin_excel'), 'globalmargin.list.excel_title', ICON_EXCEL) }}
 {%- endblock %}
-
-{% block show_actions -%}
-{{- _self.item_path(path('globalmargin_show', params), 'globalmargin.show.title', ICON_SHOW, show_class ~ ' btn-default') }}
-{%- endblock %}
-
+{# edit actions #}
 {% block edit_actions -%}
 {{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT) }}
 {%- endblock %}
-
+{# show actions #}
+{% block show_actions -%}
+{{- _self.item_path(path('globalmargin_show', params), 'globalmargin.show.title', ICON_SHOW, show_class ~ ' btn-default') }}
+{%- endblock %}
+{# custom view header #}
 {% block custom_view_header -%}
 {%- if allow_show -%}
-    <a href="{{ path('globalmargin_show', params) }}" class="item-link stretched-link text-body" title="{{ 'globalmargin.show.title'|trans }}">%minimum% - %maximum%</a>
+    <a href="{{ path('globalmargin_show', params) }}" class="item-link text-body" title="{{ 'globalmargin.show.title'|trans }}">%minimum% - %maximum%</a>
 {%- else -%}
     <span>%minimum% - %maximum%</span>
 {%- endif -%}
 {%- endblock %}
-
+{# custom view body #}
 {% block custom_view_body -%}
 {{ _self.property_line() }}
+{{ _self.property_row('globalmargin.fields.delta', '%delta%', 'text-end') }}
 {{ _self.property_row('globalmargin.fields.margin', '%margin%', 'text-end') }}
 {%- endblock %}

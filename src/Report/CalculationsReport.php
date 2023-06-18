@@ -20,6 +20,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
+use App\Traits\GroupByTrait;
 use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
 
@@ -30,7 +31,13 @@ use App\Utils\FormatUtils;
  */
 class CalculationsReport extends AbstractArrayReport
 {
+    use GroupByTrait;
     use MathTrait;
+
+    /**
+     * The sum of items calculations.
+     */
+    private float $items = 0.0;
 
     /**
      * The minimum margin style.
@@ -41,6 +48,11 @@ class CalculationsReport extends AbstractArrayReport
      * The minimum margin.
      */
     private readonly float $minMargin;
+
+    /**
+     * The sum of overall calculations.
+     */
+    private float $overall = 0.0;
 
     /**
      * Constructor.
@@ -63,28 +75,25 @@ class CalculationsReport extends AbstractArrayReport
         if (empty($this->getTitle())) {
             $this->setTitleTrans('calculation.list.title');
         }
+
         $this->AddPage();
+        $this->items = $this->overall = 0.0;
         $table = $this->grouped ? $this->outputByGroup($entities) : $this->outputByList($entities);
-        $items = 0.0;
-        $overall = 0.0;
-        foreach ($entities as $entity) {
-            $items += $entity->getItemsTotal();
-            $overall += $entity->getOverallTotal();
-        }
-        $margins = $this->isFloatZero($items) ? 0 : $this->safeDivide($overall, $items);
+        $margins = $this->isFloatZero($this->items) ? 0 : $this->safeDivide($this->overall, $this->items);
+
         $style = null;
         if (!$this->isFloatZero($margins) && $margins < $this->minMargin) {
             $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         }
-        $text = $this->translateCount($entities, 'counters.calculations', false);
+        $text = $this->translateCount($entities, 'counters.calculations');
         $columns = $table->getColumnsCount() - 3;
         $table->getColumns()[0]->setAlignment(PdfTextAlignment::LEFT)
             ->setFixed(false);
         $table->startHeaderRow()
             ->add($text, $columns)
-            ->add(FormatUtils::formatAmount($items))
+            ->add(FormatUtils::formatAmount($this->items))
             ->add(text: FormatUtils::formatPercent($margins), style: $style)
-            ->add(FormatUtils::formatAmount($overall))
+            ->add(FormatUtils::formatAmount($this->overall))
             ->endRow();
 
         return true;
@@ -147,13 +156,11 @@ class CalculationsReport extends AbstractArrayReport
     private function outputByGroup(array $entities): PdfGroupTableBuilder
     {
         /** @var array<string, Calculation[]> $groups */
-        $groups = [];
-        foreach ($entities as $entity) {
-            $key = (string) $entity->getStateCode();
-            $groups[$key][] = $entity;
-        }
+        $groups = $this->groupBy($entities, fn (Calculation $c): string => (string) $c->getStateCode());
+
         $table = $this->createTable(true);
         foreach ($groups as $group => $items) {
+            $this->addBookmark($group);
             $table->setGroupKey($group);
             foreach ($items as $item) {
                 $this->outputItem($table, $item, true);
@@ -202,5 +209,8 @@ class CalculationsReport extends AbstractArrayReport
             ->add(text: FormatUtils::formatPercent($c->getOverallMargin()), style: $style)
             ->add(FormatUtils::formatAmount($c->getOverallTotal()))
             ->endRow();
+
+        $this->items += $c->getItemsTotal();
+        $this->overall += $c->getOverallTotal();
     }
 }

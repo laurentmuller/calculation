@@ -42,6 +42,8 @@ class TasksDocument extends AbstractArrayDocument
     }
 
     /**
+     * @param \App\Entity\Task[] $entities
+     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
@@ -58,9 +60,11 @@ class TasksDocument extends AbstractArrayDocument
             'taskitemmargin.fields.maximum' => Alignment::HORIZONTAL_RIGHT,
             'taskitemmargin.fields.value' => Alignment::HORIZONTAL_RIGHT,
         ]);
+
         $this->setFormatAmount(6)
             ->setFormatAmount(7)
             ->setFormatPrice(8);
+
         foreach ($entities as $entity) {
             $this->writeTask = true;
             if ($entity->isEmpty()) {

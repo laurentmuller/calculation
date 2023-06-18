@@ -22,6 +22,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 class ProductsDocument extends AbstractArrayDocument
 {
     /**
+     * @param \App\Entity\Product[] $entities
+     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
@@ -35,7 +37,9 @@ class ProductsDocument extends AbstractArrayDocument
             'product.fields.unit' => Alignment::HORIZONTAL_GENERAL,
             'product.fields.supplier' => Alignment::HORIZONTAL_GENERAL,
         ]);
+
         $this->setFormatPrice(4);
+
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getDescription(),

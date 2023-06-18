@@ -21,12 +21,14 @@ use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfMove;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
+use App\Pdf\PdfTableBuilder;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
@@ -76,6 +78,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
             return true;
         }
+
         if ($key instanceof User) {
             $text = $key->getUserIdentifier();
             $description = $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
@@ -99,17 +102,17 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     protected function doRender(array $entities): bool
     {
-        $count = 0;
         $this->setTitleTrans('user.rights.title', [], true);
+
         $this->AddPage();
         $this->rightStyle = PdfStyle::getBulletStyle();
         $this->titleStyle = PdfStyle::getCellStyle()->setIndent(2);
-        $builder = $this->createTableBuilder();
-        $count += $this->outputRoleAdmin($builder);
-        $count += $this->outputRoleUser($builder);
-        $count += $this->outputUsers($entities, $builder);
+        $table = $this->createTableBuilder();
+        $this->outputRoleAdmin($table);
+        $this->outputRoleUser($table);
+        $this->outputUsers($entities, $table);
 
-        return $this->renderCount($count);
+        return $this->renderTotal($table, $entities);
     }
 
     /**
@@ -152,14 +155,14 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      *
      * @psalm-param FlagBag<EntityPermission>|null $rights
      */
-    private function outputRights(PdfGroupTableBuilder $builder, EntityName $entity, ?FlagBag $rights): self
+    private function outputRights(PdfGroupTableBuilder $table, EntityName $entity, ?FlagBag $rights): self
     {
-        $builder->startRow()
+        $table->startRow()
             ->add(text: $this->trans($entity), style: $this->titleStyle);
         foreach (EntityPermission::sorted() as $permission) {
-            $builder->add(text: $this->getRightText($rights, $permission), style: $this->rightStyle);
+            $table->add(text: $this->getRightText($rights, $permission), style: $this->rightStyle);
         }
-        $builder->endRow();
+        $table->endRow();
 
         return $this;
     }
@@ -167,7 +170,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * Output rights for a role.
      */
-    private function outputRole(PdfGroupTableBuilder $builder, Role|User $role): void
+    private function outputRole(PdfGroupTableBuilder $table, Role|User $role): void
     {
         $outputUsers = $role->isAdmin();
         $entities = EntityName::sorted();
@@ -178,7 +181,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         if (!$this->isPrintable((float) $lines * self::LINE_HEIGHT)) {
             $this->AddPage();
         }
-        $builder->setGroupKey($role);
+        $table->setGroupKey($role);
         foreach ($entities as $entity) {
             if (EntityName::LOG === $entity) {
                 continue;
@@ -187,7 +190,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
                 $value = $entity->value;
                 /** @psalm-var FlagBag<EntityPermission>|null $rights */
                 $rights = $role->{$value};
-                $this->outputRights($builder, $entity, $rights);
+                $this->outputRights($table, $entity, $rights);
             }
         }
     }
@@ -195,52 +198,50 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * Output default rights for the administrator role.
      *
-     * @param PdfGroupTableBuilder $builder the builder to output to
-     *
-     * @return int this function returns always 1
+     * @param PdfGroupTableBuilder $table the builder to output to
      */
-    private function outputRoleAdmin(PdfGroupTableBuilder $builder): int
+    private function outputRoleAdmin(PdfGroupTableBuilder $table): void
     {
-        $this->outputRole($builder, $this->getApplication()->getAdminRole());
-
-        return 1;
+        $this->outputRole($table, $this->getApplication()->getAdminRole());
     }
 
     /**
      * Output default rights for the user role.
      *
-     * @param PdfGroupTableBuilder $builder the builder to output to
-     *
-     * @return int this function returns always 1
+     * @param PdfGroupTableBuilder $table the builder to output to
      */
-    private function outputRoleUser(PdfGroupTableBuilder $builder): int
+    private function outputRoleUser(PdfGroupTableBuilder $table): void
     {
-        $this->outputRole($builder, $this->getApplication()->getUserRole());
-
-        return 1;
+        $this->outputRole($table, $this->getApplication()->getUserRole());
     }
 
     /**
      * Output rights for users.
      *
-     * @param User[]               $users   the users
-     * @param PdfGroupTableBuilder $builder the builder to output to
-     *
-     * @return int the number of users
+     * @param User[]               $users the users
+     * @param PdfGroupTableBuilder $table the builder to output to
      */
-    private function outputUsers(array $users, PdfGroupTableBuilder $builder): int
+    private function outputUsers(array $users, PdfGroupTableBuilder $table): void
     {
         if ([] === $users) {
-            return 0;
+            return;
         }
         foreach ($users as $user) {
             if (!$user->isOverwrite()) {
                 $rights = $this->builder->getRole($user)->getRights();
                 $user->setRights($rights);
             }
-            $this->outputRole($builder, $user);
+            $this->outputRole($table, $user);
         }
+    }
 
-        return \count($users);
+    private function renderTotal(PdfTableBuilder $table, array $entities): true
+    {
+        $roles = $this->translateCount(2, 'counters.roles');
+        $users = $this->translateCount($entities, 'counters.users');
+        $text = \sprintf('%s, %s', $roles, $users);
+        $table->singleLine($text, PdfStyle::getHeaderStyle(), PdfTextAlignment::LEFT);
+
+        return true;
     }
 }

@@ -157,6 +157,21 @@ function formatProduct(product) {
     return $text;
 }
 
+function updatePosition($radio) {
+    'use strict';
+    const $button = $radio.parents('.dropdown').find('.dropdown-toggle');
+    const $label = $radio.siblings('label');
+    const value = $radio.val();
+    const text = $label.attr('title');
+    const icon = $label.html().trim();
+
+    $button.data('value', value);
+    $button.find('.position-icon').html(icon);
+    $button.find('.position-text').text(text);
+    $button.dropdown('hide');
+    $button.trigger('focus');
+}
+
 /**
  * Ready function
  */
@@ -240,5 +255,31 @@ function formatProduct(product) {
         focusOnShow: true
     }).on('shown.bs.modal', function () {
         $('#text').trigger('focus');
+    });
+
+    // position
+    $('.dropdown-position .btn-position').on('show.bs.dropdown', function () {
+        const $this = $(this);
+        const value = $this.data('value');
+        const $radio = $(this).parents('.dropdown').find('.btn-check[value="' + value + '"]');
+        $radio.prop('checked', true);
+    }).on('shown.bs.dropdown', function () {
+        $(this).parents('.dropdown').find('.btn-check:checked').trigger('focus');
+    });
+
+    $('.dropdown-position label').on('click', function (e) {
+        if (e.button === 0) {
+            const $this = $(this);
+            const $radio = $this.siblings(':radio');
+            updatePosition($radio);
+        }
+    });
+
+    $('.dropdown-position .btn-check').on('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            e.stopPropagation();
+            updatePosition($(this));
+        }
     });
 }(jQuery));

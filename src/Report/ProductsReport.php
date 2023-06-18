@@ -25,6 +25,9 @@ use App\Utils\FormatUtils;
  */
 class ProductsReport extends AbstractArrayReport
 {
+    /**
+     * @param \App\Entity\Product[] $entities
+     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('product.list.title');
@@ -54,7 +57,7 @@ class ProductsReport extends AbstractArrayReport
                 ->add($entity->getSupplier())
                 ->endRow();
         }
-        $this->renderCount($entities, 'counters.products');
+        $this->renderCount($table, $entities, 'counters.products');
         $this->addPageIndex();
 
         return true;

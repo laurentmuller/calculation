@@ -38,6 +38,9 @@ class GroupsReport extends AbstractArrayReport
         parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE, $unit, $size);
     }
 
+    /**
+     * @param Group[] $entities
+     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('group.list.title', [], true);
@@ -52,16 +55,11 @@ class GroupsReport extends AbstractArrayReport
                 $table->singleLine(null, $emptyStyle);
             }
         }
-        $this->renderTotal($entities, $table);
+        $this->renderTotal($table, $entities);
 
         return true;
     }
 
-    /**
-     * Creates the table builder.
-     *
-     * @return PdfTableBuilder the table
-     */
     private function createTable(): PdfTableBuilder
     {
         return PdfTableBuilder::instance($this)
@@ -82,12 +80,6 @@ class GroupsReport extends AbstractArrayReport
         return $this->trans($id, ['count' => \is_array($value) ? \count($value) : $value]);
     }
 
-    /**
-     * Output a group.
-     *
-     * @param PdfTableBuilder $table the table to render to
-     * @param Group           $group the group to output
-     */
     private function outputGroup(PdfTableBuilder $table, Group $group): void
     {
         $emptyValue = \array_fill(0, 5, '');
@@ -118,9 +110,9 @@ class GroupsReport extends AbstractArrayReport
     }
 
     /**
-     * @psalm-param Group[] $entities
+     * @param Group[] $entities
      */
-    private function renderTotal(array $entities, PdfTableBuilder $table): void
+    private function renderTotal(PdfTableBuilder $table, array $entities): void
     {
         $margins = 0;
         $categories = 0;

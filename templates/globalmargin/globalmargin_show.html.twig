@@ -9,6 +9,7 @@
 {% block property_body %}
 {{ property('globalmargin.fields.minimum', item.minimum|amount) }}
 {{ property('globalmargin.fields.maximum', item.maximum|amount) }}
+{{ property('globalmargin.fields.delta', item.delta|amount) }}
 {{ property('globalmargin.fields.margin', item.margin|percent) }}
 {{ properties(item) }}
 {% endblock %}

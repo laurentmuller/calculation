@@ -99,8 +99,6 @@ abstract class AbstractEntityController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             try {
                 $this->deleteFromDatabase($item);
-                $message = $this->getMessageTrans($item, '.delete.success', 'common.delete_success');
-                $this->warning($message);
             } catch (\Exception $e) {
                 $id = $this->getMessageId('.delete.failure', 'common.delete_failure');
 
@@ -149,12 +147,6 @@ abstract class AbstractEntityController extends AbstractController
         $form = $this->createForm($type, $item);
         if ($this->handleRequestForm($request, $form)) {
             $this->saveToDatabase($item);
-            if ($isNew) {
-                $message = $this->getMessageTrans($item, '.add.success', 'common.add_success');
-            } else {
-                $message = $this->getMessageTrans($item, '.edit.success', 'common.edit_success');
-            }
-            $this->success($message);
             $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());
 
             return $this->getUrlGenerator()->redirect($request, $item, $route);

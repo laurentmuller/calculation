@@ -13,10 +13,10 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Category;
-use App\Pdf\Enums\PdfTextAlignment;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfStyle;
+use App\Pdf\PdfTableBuilder;
 use App\Traits\GroupByTrait;
 use App\Utils\FormatUtils;
 
@@ -36,40 +36,51 @@ class CategoriesReport extends AbstractArrayReport
     {
         $this->setTitleTrans('category.list.title', [], true);
 
-        $default = $this->trans('report.other');
-        $fn = fn (Category $category): string => $category->getGroupCode() ?? $default;
-        /** @var array<string, Category[]> $groups */
-        $groups = $this->groupBy($entities, $fn);
         $this->AddPage();
         $table = $this->createTable();
+        $groups = $this->groupEntities($entities);
+        $style = PdfStyle::getCellStyle()->setIndent(2);
+
         foreach ($groups as $key => $items) {
             $table->setGroupKey($key);
             foreach ($items as $item) {
-                $table->addRow(
-                    $item->getCode(),
-                    $item->getDescription(),
-                    FormatUtils::formatInt($item->countProducts()),
-                    FormatUtils::formatInt($item->countTasks())
-                );
+                $table->startRow()
+                    ->add($item->getCode(), 1, $style)
+                    ->add($item->getDescription())
+                    ->add(FormatUtils::formatInt($item->countProducts()))
+                    ->add(FormatUtils::formatInt($item->countTasks()))
+                    ->endRow();
             }
         }
-        $this->resetStyle();
-        $this->renderTotal($groups, $entities);
+        $this->renderTotal($table, $entities);
 
         return true;
     }
 
     /**
-     * Creates the table builder.
+     * @param Category[] $entities
      */
+    private function countProducts(array $entities): int
+    {
+        return \array_reduce($entities, static fn (int $carry, Category $c): int => $carry + $c->countProducts(), 0);
+    }
+
+    /**
+     * @param Category[] $entities
+     */
+    private function countTasks(array $entities): int
+    {
+        return \array_reduce($entities, static fn (int $carry, Category $c): int => $carry + $c->countTasks(), 0);
+    }
+
     private function createTable(): PdfGroupTableBuilder
     {
         return PdfGroupTableBuilder::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('category.fields.code'), 40, true),
+                PdfColumn::left($this->trans('category.fields.code'), 45, true),
                 PdfColumn::left($this->trans('category.fields.description'), 50),
-                PdfColumn::right($this->trans('category.fields.products'), 20, true),
-                PdfColumn::right($this->trans('category.fields.tasks'), 20, true)
+                PdfColumn::right($this->trans('category.fields.products'), 26, true),
+                PdfColumn::right($this->trans('category.fields.tasks'), 26, true)
             )->outputHeaders();
     }
 
@@ -79,35 +90,33 @@ class CategoriesReport extends AbstractArrayReport
     }
 
     /**
-     * @psalm-param Category[] $entities
+     * @param Category[] $entities
+     *
+     * @return array<string, Category[]>
      */
-    private function renderTotal(array $groups, array $entities): void
+    private function groupEntities(array $entities): array
     {
-        $tasks = 0;
-        $products = 0;
-        foreach ($entities as $item) {
-            $tasks += $item->countTasks();
-            $products += $item->countProducts();
-        }
+        $default = $this->trans('report.other');
+        $callback = fn (Category $category): string => $category->getGroupCode() ?? $default;
+        /** @psalm-var array<string, Category[]> $result */
+        $result = $this->groupBy($entities, $callback);
 
-        $txtGroups = $this->formatCount('counters.groups', $groups);
-        $Categories = $this->formatCount('counters.categories', $entities);
-        $txtProducts = $this->formatCount('counters.products', $products);
-        $txtTasks = $this->formatCount('counters.tasks', $tasks);
+        return $result;
+    }
 
-        $border = PdfBorder::none();
-        $margins = $this->setCellMargin(0);
-        $width = $this->GetPageWidth() / 2.0;
-        $this->Cell(
-            w: $width,
-            txt: \sprintf('%s - %s', $txtGroups, $Categories),
-            border: $border
-        );
-        $this->Cell(
-            txt: \sprintf('%s - %s', $txtProducts, $txtTasks),
-            border: $border,
-            align: PdfTextAlignment::RIGHT
-        );
-        $this->setCellMargin($margins);
+    /**
+     * @param Category[] $entities
+     */
+    private function renderTotal(PdfTableBuilder $table, array $entities): void
+    {
+        $categories = $this->formatCount('counters.categories', $entities);
+        $products = $this->formatCount('counters.products', $this->countProducts($entities));
+        $tasks = $this->formatCount('counters.tasks', $this->countTasks($entities));
+
+        $table->startHeaderRow()
+            ->add($categories, 2)
+            ->add($products)
+            ->add($tasks)
+            ->endRow();
     }
 }

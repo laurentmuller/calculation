@@ -458,6 +458,7 @@ globalmargin:
     margin_percent: Marge (%)
     maximum: Maximum
     minimum: Minimum
+    delta: Ecart
   list:
     title: Marges globales
     empty: Aucune marge globale définie.

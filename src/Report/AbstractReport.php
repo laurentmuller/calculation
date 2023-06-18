@@ -16,13 +16,12 @@ use App\Controller\AbstractController;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
-use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
+use App\Pdf\PdfTableBuilder;
 use App\Traits\TranslatorTrait;
 use App\Twig\FormatExtension;
-use App\Utils\FormatUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -100,26 +99,17 @@ abstract class AbstractReport extends PdfDocument
     abstract public function render(): bool;
 
     /**
-     * Renders a line with the given number of elements.
+     * Renders a single line with the given number of elements.
      *
-     * @param \Countable|array|int $count      the number of elements, an array or a \Countable object
-     * @param string               $message    the translatable message for the count
-     * @param PdfTextAlignment     $align      the text alignment
-     * @param bool                 $resetStyle true to reset style before output the line
-     *
-     * @return bool true if the number of elements is greater than 0
+     * @return bool true if the given number of elements is greater than 0
      */
-    public function renderCount(\Countable|array|int $count, string $message = 'common.count', PdfTextAlignment $align = PdfTextAlignment::LEFT, bool $resetStyle = true): bool
+    public function renderCount(PdfTableBuilder $table, \Countable|array|int $count, string $message = 'common.count'): bool
     {
-        if ($resetStyle) {
-            $this->resetStyle();
-        }
+        $this->resetStyle();
         $text = $this->translateCount($count, $message);
-        $margins = $this->setCellMargin(0);
-        $this->Cell(txt: $text, ln: PdfMove::NEW_LINE, align: $align);
-        $this->setCellMargin($margins);
+        $table->singleLine($text, PdfStyle::getHeaderStyle(), PdfTextAlignment::LEFT);
 
-        return (\is_countable($count) ? \count($count) : $count) > 0;
+        return $this->toInt($count) > 0;
     }
 
     /**
@@ -137,18 +127,15 @@ abstract class AbstractReport extends PdfDocument
     }
 
     /**
-     * Gets the translated count label.
-     *
-     * @param \Countable|array|int $count the number of elements
+     * Gets the translated count text.
      */
-    protected function translateCount(\Countable|array|int $count, string $message = 'common.count', bool $format = true): string
+    protected function translateCount(\Countable|array|int $count, string $message = 'common.count'): string
     {
-        if ($format) {
-            $count = FormatUtils::formatInt($count);
-        } elseif ($count instanceof \Countable || \is_array($count)) {
-            $count = \count($count);
-        }
+        return $this->trans($message, ['%count%' => $this->toInt($count)]);
+    }
 
-        return $this->trans($message, ['%count%' => $count]);
+    private function toInt(\Countable|array|int $value): int
+    {
+        return \is_int($value) ? $value : \count($value);
     }
 }

@@ -22,6 +22,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 class GlobalMarginsDocument extends AbstractArrayDocument
 {
     /**
+     * @param \App\Entity\GlobalMargin[] $entities
+     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
@@ -30,18 +32,32 @@ class GlobalMarginsDocument extends AbstractArrayDocument
         $row = $this->setHeaderValues([
             'globalmargin.fields.minimum' => Alignment::HORIZONTAL_RIGHT,
             'globalmargin.fields.maximum' => Alignment::HORIZONTAL_RIGHT,
+            'globalmargin.fields.delta' => Alignment::HORIZONTAL_RIGHT,
             'globalmargin.fields.margin' => Alignment::HORIZONTAL_RIGHT,
         ]);
+
         $this->setFormatAmount(1)
             ->setFormatAmount(2)
-            ->setFormatPercent(3);
+            ->setFormatAmount(3)
+            ->setFormatPercent(4);
+
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                     $entity->getMinimum(),
                     $entity->getMaximum(),
+                    $entity->getDelta(),
                     $entity->getMargin(),
                 ]);
         }
+
+        $sheet = $this->getActiveSheet();
+        for ($i = 1; $i < 5; ++$i) {
+            $name = $this->stringFromColumnIndex($i);
+            $sheet->getColumnDimension($name)
+                ->setAutoSize(false)
+                ->setWidth(20);
+        }
+
         $this->finish();
 
         return true;

@@ -89,6 +89,12 @@ counters:
             one   {1 marge} 
             other {# marges}
         }
+    logs: >-
+        {count, plural,  
+            =0    {Aucune entrée du journal} 
+            one   {1 entrée du journal} 
+            other {# entrées du journal}
+        }
     weather_daily: >-
         {count, plural,  
             =0    {Aucune prévision journalière} 
@@ -202,6 +208,12 @@ counters:
             =0    {Aucun utilisateur} 
             one   {1 utilisateur} 
             other {# utilisateurs}
+        }
+    roles: >-
+        {count, plural,  
+            =0    {Aucun rôle} 
+            one   {1 rôle} 
+            other {# rôles}
         }
     pixels: >-
         {count, plural,  

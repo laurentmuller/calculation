@@ -657,11 +657,12 @@ function loadingTemplate(message) {
          * @return {jQuery} this instance for chaining.
          */
         sort: function (sortName, sortOrder) {
-            const data = this.getBootstrapTable();
-            if (data && data.options.sortName !== sortName || data.options.sortOrder !== sortOrder) {
-                data.options.sortName = sortName;
-                data.options.sortOrder = sortOrder;
-                this.refresh();
+            const options = this.getOptions();
+            if (options.sortName !== sortName || options.sortOrder !== sortOrder) {
+                $(this).bootstrapTable('sortBy', {
+                    field: sortName,
+                    sortOrder: sortOrder
+                });
             }
             return this;
         },

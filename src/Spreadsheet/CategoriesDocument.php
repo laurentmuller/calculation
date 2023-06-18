@@ -22,6 +22,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 class CategoriesDocument extends AbstractArrayDocument
 {
     /**
+     * @param \App\Entity\Category[] $entities
+     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
@@ -34,7 +36,9 @@ class CategoriesDocument extends AbstractArrayDocument
             'category.fields.products' => Alignment::HORIZONTAL_RIGHT,
             'category.fields.tasks' => Alignment::HORIZONTAL_RIGHT,
         ]);
+
         $this->setFormatInt(4);
+
         $default = $this->trans('report.other');
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [

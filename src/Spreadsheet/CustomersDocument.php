@@ -22,6 +22,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 class CustomersDocument extends AbstractArrayDocument
 {
     /**
+     * @param \App\Entity\Customer[] $entities
+     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
@@ -35,6 +37,7 @@ class CustomersDocument extends AbstractArrayDocument
             'customer.fields.zipCode' => Alignment::HORIZONTAL_RIGHT,
             'customer.fields.city' => Alignment::HORIZONTAL_GENERAL,
         ]);
+
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity->getLastName(),

@@ -22,6 +22,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 class GroupsDocument extends AbstractArrayDocument
 {
     /**
+     * @param \App\Entity\Group[] $entities
+     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
@@ -35,6 +37,7 @@ class GroupsDocument extends AbstractArrayDocument
             'category.fields.products' => Alignment::HORIZONTAL_RIGHT,
             'category.fields.tasks' => Alignment::HORIZONTAL_RIGHT,
         ]);
+
         $this->setFormatInt(3)
             ->setFormatInt(4)
             ->setFormatInt(5)

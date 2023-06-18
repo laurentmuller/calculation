@@ -16,7 +16,9 @@ use App\Interfaces\DisableListenerInterface;
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Traits\DisableListenerTrait;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Events;
 use Doctrine\ORM\UnitOfWork;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,6 +30,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @see TimestampableInterface
  * @see ParentTimestampableInterface
  */
+#[AsDoctrineListener(Events::onFlush)]
 class TimestampableListener implements DisableListenerInterface
 {
     use DisableListenerTrait;
@@ -42,9 +45,6 @@ class TimestampableListener implements DisableListenerInterface
         $this->emptyUser = $translator->trans('common.empty_user');
     }
 
-    /**
-     * Handles the flush event.
-     */
     public function onFlush(OnFlushEventArgs $args): void
     {
         if (!$this->isEnabled()) {
@@ -58,7 +58,7 @@ class TimestampableListener implements DisableListenerInterface
             return;
         }
 
-        $user = $this->getUserName();
+        $user = $this->getUser();
         $date = new \DateTimeImmutable();
         foreach ($entities as $entity) {
             if ($entity->updateTimestampable($date, $user)) {
@@ -115,9 +115,10 @@ class TimestampableListener implements DisableListenerInterface
         return null;
     }
 
-    private function getUserName(): string
+    private function getUser(): string
     {
-        if (($user = $this->security->getUser()) instanceof UserInterface) {
+        $user = $this->security->getUser();
+        if ($user instanceof UserInterface) {
             return $user->getUserIdentifier();
         }
 

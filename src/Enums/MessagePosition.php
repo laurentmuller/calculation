@@ -78,6 +78,31 @@ enum MessagePosition: string implements EnumDefaultInterface, EnumSortableInterf
      */
     case TOP_RIGHT = 'top-right';
 
+    public function getAngle(): int
+    {
+        return match ($this) {
+            MessagePosition::TOP_LEFT => 315,
+            MessagePosition::TOP_CENTER,
+            MessagePosition::CENTER_CENTER => 0,
+            MessagePosition::TOP_RIGHT => 45,
+
+            MessagePosition::CENTER_LEFT => 270,
+            MessagePosition::CENTER_RIGHT => 90,
+
+            MessagePosition::BOTTOM_LEFT => 225,
+            MessagePosition::BOTTOM_CENTER => 180,
+            MessagePosition::BOTTOM_RIGHT => 135,
+        };
+    }
+
+    public function getIcon(): string
+    {
+        return match ($this) {
+            MessagePosition::CENTER_CENTER => 'fa-solid fa-arrows-up-down-left-right',
+            default => 'fa-solid fa-arrow-up fa-rotate-by'
+        };
+    }
+
     /**
      * @return MessagePosition[]
      */

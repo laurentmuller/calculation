@@ -51,6 +51,14 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
         return $value >= $this->minimum && $value < $this->maximum;
     }
 
+    /**
+     * Gets the difference between the maximum and the minimum values.
+     */
+    public function getDelta(): float
+    {
+        return $this->maximum - $this->minimum;
+    }
+
     public function getDisplay(): string
     {
         return FormatUtils::formatAmount($this->getMinimum()) . ' - ' . FormatUtils::formatAmount($this->getMaximum());

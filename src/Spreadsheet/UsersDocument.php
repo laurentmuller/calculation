@@ -44,6 +44,8 @@ class UsersDocument extends AbstractArrayDocument
     }
 
     /**
+     * @param User[] $entities
+     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
@@ -58,7 +60,9 @@ class UsersDocument extends AbstractArrayDocument
             'user.fields.enabled' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
             'user.fields.lastLogin' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
         ]);
+
         $this->setFormatBoolean(5, 'common.value_enabled', 'common.value_disabled', true);
+
         foreach ($entities as $entity) {
             $this->setRowValues($row, [
                 null,

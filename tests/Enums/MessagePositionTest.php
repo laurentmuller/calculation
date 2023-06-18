@@ -23,11 +23,45 @@ class MessagePositionTest extends TestCase
 {
     private ?TranslatorInterface $translator = null;
 
+    public static function getAngle(): array
+    {
+        return [
+            [MessagePosition::TOP_LEFT, 315],
+            [MessagePosition::TOP_CENTER, 0],
+            [MessagePosition::TOP_RIGHT, 45],
+
+            [MessagePosition::CENTER_LEFT, 270],
+            [MessagePosition::CENTER_CENTER, 0],
+            [MessagePosition::CENTER_RIGHT, 90],
+
+            [MessagePosition::BOTTOM_LEFT, 225],
+            [MessagePosition::BOTTOM_CENTER, 180],
+            [MessagePosition::BOTTOM_RIGHT, 135],
+        ];
+    }
+
     public static function getDefault(): array
     {
         return [
               [MessagePosition::getDefault(), MessagePosition::BOTTOM_RIGHT],
               [PropertyServiceInterface::DEFAULT_MESSAGE_POSITION, MessagePosition::BOTTOM_RIGHT],
+        ];
+    }
+
+    public static function getIcon(): array
+    {
+        return [
+            [MessagePosition::TOP_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'],
+            [MessagePosition::TOP_CENTER, 'fa-solid fa-arrow-up fa-rotate-by'],
+            [MessagePosition::TOP_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'],
+
+            [MessagePosition::CENTER_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'],
+            [MessagePosition::CENTER_CENTER, 'fa-solid fa-arrows-up-down-left-right'],
+            [MessagePosition::CENTER_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'],
+
+            [MessagePosition::BOTTOM_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'],
+            [MessagePosition::BOTTOM_CENTER, 'fa-solid fa-arrow-up fa-rotate-by'],
+            [MessagePosition::BOTTOM_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'],
         ];
     }
 
@@ -48,6 +82,13 @@ class MessagePositionTest extends TestCase
         ];
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('getAngle')]
+    public function testAngle(MessagePosition $position, int $expected): void
+    {
+        $value = $position->getAngle();
+        self::assertSame($expected, $value);
+    }
+
     public function testCount(): void
     {
         self::assertCount(9, MessagePosition::cases());
@@ -57,6 +98,13 @@ class MessagePositionTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
     public function testDefault(MessagePosition $value, MessagePosition $expected): void
     {
+        self::assertSame($expected, $value);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getIcon')]
+    public function testIcon(MessagePosition $position, string $expected): void
+    {
+        $value = $position->getIcon();
         self::assertSame($expected, $value);
     }
 

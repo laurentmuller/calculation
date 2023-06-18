@@ -58,7 +58,7 @@ class UsersReport extends AbstractArrayReport
             $this->outputEntity($table, $entity, $enabledStyle, $disabledStyle);
         }
 
-        return $this->renderCount($entities, 'counters.users');
+        return $this->renderCount($table, $entities, 'counters.users');
     }
 
     private function createTable(): PdfTableBuilder

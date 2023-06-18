@@ -128,7 +128,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
         if ($user instanceof User) {
             $this->loginUser($user);
         } else {
-            \PHPUnit\Framework\throwException(new \InvalidArgumentException("Unable to find the user '$username'."));
+            self::fail("Unable to find the user '$username'.");
         }
     }
 }

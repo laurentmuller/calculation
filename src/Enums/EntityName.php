@@ -22,8 +22,6 @@ use App\Utils\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 
-use function Symfony\Component\String\u;
-
 /**
  * The entity name enumeration.
  *
@@ -184,7 +182,7 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
         } else {
             return null;
         }
-        $name = u($name)
+        $name = StringUtils::createString($name)
             ->afterLast('\\')
             ->title()
             ->ensureStart(self::ENTITY_PREFIX)

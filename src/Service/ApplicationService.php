@@ -28,14 +28,12 @@ use App\Model\Role;
 use App\Repository\PropertyRepository;
 use App\Traits\MathTrait;
 use App\Traits\PropertyServiceTrait;
+use App\Utils\StringUtils;
 use App\Validator\Password;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
-
-use function Symfony\Component\String\u;
-
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
@@ -345,7 +343,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     {
         $contraint = new Password();
         foreach (PropertyServiceInterface::PASSWORD_OPTIONS as $option) {
-            $property = u($option)->trimPrefix('security_')->toString();
+            $property = StringUtils::createString($option)->trimPrefix('security_')->toString();
             $contraint->{$property} = $this->getPropertyBoolean($option);
         }
 

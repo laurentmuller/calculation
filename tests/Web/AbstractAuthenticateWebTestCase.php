@@ -20,9 +20,6 @@ use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
-
-use function PHPUnit\Framework\throwException;
-
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -131,7 +128,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
         if ($user instanceof User) {
             $this->loginUser($user);
         } else {
-            throwException(new \InvalidArgumentException("Unable to find the user '$username'."));
+            \PHPUnit\Framework\throwException(new \InvalidArgumentException("Unable to find the user '$username'."));
         }
     }
 }

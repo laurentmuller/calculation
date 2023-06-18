@@ -43,6 +43,7 @@ use App\Traits\GroupByTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
 use App\Translator\TranslatorFactory;
 use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use App\Validator\Captcha;
 use App\Validator\Password;
 use App\Validator\Strength;
@@ -63,9 +64,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
-use function Symfony\Component\String\u;
-
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -189,7 +187,7 @@ class TestController extends AbstractController
             /** @psalm-var array $data */
             $data = $event->getData();
             foreach ($options as $option) {
-                $property = u($option)->trimPrefix('security_')->toString();
+                $property = StringUtils::createString($option)->trimPrefix('security_')->toString();
                 $passwordConstraint->{$property} = (bool) ($data[$option] ?? false);
             }
             $strength = (int) $data['level'];

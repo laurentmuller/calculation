@@ -24,8 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
-use function Symfony\Component\String\u;
-
 /**
  * The abstract table.
  */
@@ -140,7 +138,7 @@ abstract class AbstractTable implements SortModeInterface
     public function getPrefix(): string
     {
         if (null === $this->prefix) {
-            $this->prefix = u(StringUtils::getShortName($this))->snake()->toString();
+            $this->prefix = StringUtils::createString(StringUtils::getShortName($this))->snake()->toString();
         }
 
         return $this->prefix;

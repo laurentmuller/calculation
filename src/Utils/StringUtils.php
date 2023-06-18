@@ -13,9 +13,6 @@ declare(strict_types=1);
 namespace App\Utils;
 
 use Symfony\Component\String\Slugger\AsciiSlugger;
-
-use function Symfony\Component\String\u;
-
 use Symfony\Component\String\UnicodeString;
 
 /**
@@ -46,7 +43,7 @@ final class StringUtils
      */
     public static function ascii(string $value): string
     {
-        return u($value)->ascii()->toString();
+        return self::createString($value)->ascii()->toString();
     }
 
     /**
@@ -63,7 +60,7 @@ final class StringUtils
      */
     public static function capitalize(string $string): string
     {
-        return u($string)->lower()->title()->toString();
+        return self::createString($string)->lower()->title()->toString();
     }
 
     /**
@@ -79,7 +76,17 @@ final class StringUtils
      */
     public static function contains(string $haystack, string $needle, bool $ignore_case = true): bool
     {
-        return self::getString($haystack, $ignore_case)->containsAny($needle);
+        return self::createString($haystack, $ignore_case)->containsAny($needle);
+    }
+
+    /**
+     * Create a new unicode string.
+     */
+    public static function createString(string $string, bool $ignore_case = false): UnicodeString
+    {
+        $result = new UnicodeString($string);
+
+        return $ignore_case ? $result->ignoreCase() : $result;
     }
 
     /**
@@ -142,7 +149,7 @@ final class StringUtils
      */
     public static function endWith(string $haystack, string $needle, bool $ignore_case = true): bool
     {
-        return self::getString($haystack, $ignore_case)->endsWith($needle);
+        return self::createString($haystack, $ignore_case)->endsWith($needle);
     }
 
     /**
@@ -263,7 +270,7 @@ final class StringUtils
      */
     public static function startWith(string $haystack, string $needle, bool $ignore_case = true): bool
     {
-        return self::getString($haystack, $ignore_case)->startsWith($needle);
+        return self::createString($haystack, $ignore_case)->startsWith($needle);
     }
 
     /**
@@ -276,18 +283,5 @@ final class StringUtils
     public static function toString(mixed $var): string
     {
         return \is_string($var) ? $var : (string) $var;
-    }
-
-    /**
-     * Creates a unicode string.
-     *
-     * @param string $string      the string content
-     * @param bool   $ignore_case true to ignore case considerations
-     *
-     * @return UnicodeString the unicode string
-     */
-    private static function getString(string $string, bool $ignore_case): UnicodeString
-    {
-        return $ignore_case ? u($string)->ignoreCase() : u($string);
     }
 }

@@ -1,0 +1,15 @@
+risky: true
+version: 8.2
+preset: symfony2023
+monolithic: true
+finder:
+  exclude:
+    - "vendor"
+    - "vendor-bin"
+  name: "*.php"
+enabled:
+  - native_function_invocation
+  - concat_with_spaces
+disabled:
+  - native_function_invocation_symfony
+  - concat_without_spaces

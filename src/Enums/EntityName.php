@@ -182,7 +182,7 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
         } else {
             return null;
         }
-        $name = StringUtils::createString($name)
+        $name = StringUtils::unicode($name)
             ->afterLast('\\')
             ->title()
             ->ensureStart(self::ENTITY_PREFIX)

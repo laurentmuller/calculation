@@ -43,7 +43,7 @@ final class StringUtils
      */
     public static function ascii(string $value): string
     {
-        return self::createString($value)->ascii()->toString();
+        return self::unicode($value)->ascii()->toString();
     }
 
     /**
@@ -60,7 +60,7 @@ final class StringUtils
      */
     public static function capitalize(string $string): string
     {
-        return self::createString($string)->lower()->title()->toString();
+        return self::unicode($string)->lower()->title()->toString();
     }
 
     /**
@@ -76,17 +76,7 @@ final class StringUtils
      */
     public static function contains(string $haystack, string $needle, bool $ignore_case = true): bool
     {
-        return self::createString($haystack, $ignore_case)->containsAny($needle);
-    }
-
-    /**
-     * Create a new unicode string.
-     */
-    public static function createString(string $string, bool $ignore_case = false): UnicodeString
-    {
-        $result = new UnicodeString($string);
-
-        return $ignore_case ? $result->ignoreCase() : $result;
+        return self::unicode($haystack, $ignore_case)->containsAny($needle);
     }
 
     /**
@@ -149,7 +139,7 @@ final class StringUtils
      */
     public static function endWith(string $haystack, string $needle, bool $ignore_case = true): bool
     {
-        return self::createString($haystack, $ignore_case)->endsWith($needle);
+        return self::unicode($haystack, $ignore_case)->endsWith($needle);
     }
 
     /**
@@ -270,7 +260,7 @@ final class StringUtils
      */
     public static function startWith(string $haystack, string $needle, bool $ignore_case = true): bool
     {
-        return self::createString($haystack, $ignore_case)->startsWith($needle);
+        return self::unicode($haystack, $ignore_case)->startsWith($needle);
     }
 
     /**
@@ -283,5 +273,15 @@ final class StringUtils
     public static function toString(mixed $var): string
     {
         return \is_string($var) ? $var : (string) $var;
+    }
+
+    /**
+     * Create a new unicode string.
+     */
+    public static function unicode(string $string, bool $ignore_case = false): UnicodeString
+    {
+        $result = new UnicodeString($string);
+
+        return $ignore_case ? $result->ignoreCase() : $result;
     }
 }

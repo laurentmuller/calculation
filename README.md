@@ -21,6 +21,7 @@ Qualité du code
 [![Codacy](https://app.codacy.com/project/badge/Grade/47008d380fac4a3ea891c7bd72bddd58)](https://www.codacy.com/gh/laurentmuller/calculation/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=laurentmuller/calculation&amp;utm_campaign=Badge_Grade) 
 [![PHP-Stan](https://img.shields.io/badge/PHPStan-Level%207-brightgreen.svg?style=flat&logo=php)](https://phpstan.org/blog/find-bugs-in-your-code-without-writing-tests) 
 [![Psalm](https://img.shields.io/badge/Psalm-Level%201-brightgreen.svg?style=flat)](https://psalm.dev/docs/running_psalm/installation/)
+[![StyleCI](https://github.styleci.io/repos/229945132/shield?branch=master)](https://github.styleci.io/repos/229945132?branch=master)
 
 Actions
 -------

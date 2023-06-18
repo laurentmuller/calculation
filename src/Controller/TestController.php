@@ -187,7 +187,7 @@ class TestController extends AbstractController
             /** @psalm-var array $data */
             $data = $event->getData();
             foreach ($options as $option) {
-                $property = StringUtils::createString($option)->trimPrefix('security_')->toString();
+                $property = StringUtils::unicode($option)->trimPrefix('security_')->toString();
                 $passwordConstraint->{$property} = (bool) ($data[$option] ?? false);
             }
             $strength = (int) $data['level'];

@@ -138,7 +138,7 @@ abstract class AbstractTable implements SortModeInterface
     public function getPrefix(): string
     {
         if (null === $this->prefix) {
-            $this->prefix = StringUtils::createString(StringUtils::getShortName($this))->snake()->toString();
+            $this->prefix = StringUtils::unicode(StringUtils::getShortName($this))->snake()->toString();
         }
 
         return $this->prefix;

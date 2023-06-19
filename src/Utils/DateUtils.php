@@ -22,14 +22,14 @@ final class DateUtils
     /**
      * The month names.
      *
-     *  @var array<string, array<int, string>>
+     * @var array<string, array<int, string>>
      */
     private static array $monthNames = [];
 
     /**
      * The short month names.
      *
-     *  @var array<string, array<int, string>>
+     * @var array<string, array<int, string>>
      */
     private static array $shortMonthNames = [];
 

@@ -250,7 +250,7 @@ class SwissDatabase extends AbstractDatabase
      *                                                         </tr>
      *                                                         </table>
      *
-     *  @return bool true if success
+     * @return bool true if success
      */
     public function insertCity(array $data): bool
     {
@@ -283,7 +283,7 @@ class SwissDatabase extends AbstractDatabase
      *                                          </tr>
      *                                          </table>
      *
-     *  @return bool true if success
+     * @return bool true if success
      */
     public function insertState(array $data): bool
     {

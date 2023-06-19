@@ -370,7 +370,7 @@ class FormHelper
      * This type just renders the field as a span tag. This is useful for
      * forms where certain field need to be shown but not editable.
      *
-     *  @param bool $expanded true to render the plain type within the label
+     * @param bool $expanded true to render the plain type within the label
      */
     public function addPlainType(bool $expanded = false): self
     {

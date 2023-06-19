@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e78bc00467cd592d20370713070956a",
+    "content-hash": "4c664bc4a90e638ee331d83c6a3250bb",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -59,65 +59,6 @@
                 "source": "https://github.com/Bacon/BaconQrCode/tree/2.0.8"
             },
             "time": "2022-12-07T17:46:57+00:00"
-        },
-        {
-            "name": "beberlei/doctrineextensions",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/beberlei/DoctrineExtensions.git",
-                "reference": "67f32c184e80085e170b6e4e8f4f94bc92394c72"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/beberlei/DoctrineExtensions/zipball/67f32c184e80085e170b6e4e8f4f94bc92394c72",
-                "reference": "67f32c184e80085e170b6e4e8f4f94bc92394c72",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/orm": "^2.7",
-                "php": "^7.2 || ^8.0"
-            },
-            "require-dev": {
-                "doctrine/cache": "^1.11",
-                "friendsofphp/php-cs-fixer": "^2.14",
-                "nesbot/carbon": "*",
-                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
-                "symfony/yaml": "^4.4 || ^5.3 || ^6.0",
-                "zf1/zend-date": "^1.12",
-                "zf1/zend-registry": "^1.12"
-            },
-            "default-branch": true,
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "DoctrineExtensions\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Steve Lacey",
-                    "email": "steve@steve.ly"
-                }
-            ],
-            "description": "A set of extensions to Doctrine 2 that add support for additional query functions available in MySQL, Oracle, PostgreSQL and SQLite.",
-            "keywords": [
-                "database",
-                "doctrine",
-                "orm"
-            ],
-            "support": {
-                "source": "https://github.com/beberlei/DoctrineExtensions/tree/master"
-            },
-            "time": "2023-02-25T19:57:36+00:00"
         },
         {
             "name": "bjeavons/zxcvbn-php",
@@ -176,16 +117,16 @@
         },
         {
             "name": "createnl/zxcvbn-bundle",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/createnl/zxcvbn-bundle.git",
-                "reference": "233e9ac7ee7a918b96d62101e5349ad7c3ab8ea2"
+                "reference": "2041576c0b4b6b9f9a4a11dab896fd749c16cc7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/createnl/zxcvbn-bundle/zipball/233e9ac7ee7a918b96d62101e5349ad7c3ab8ea2",
-                "reference": "233e9ac7ee7a918b96d62101e5349ad7c3ab8ea2",
+                "url": "https://api.github.com/repos/createnl/zxcvbn-bundle/zipball/2041576c0b4b6b9f9a4a11dab896fd749c16cc7a",
+                "reference": "2041576c0b4b6b9f9a4a11dab896fd749c16cc7a",
                 "shasum": ""
             },
             "require": {
@@ -217,9 +158,9 @@
             "description": "zxcvbn-php symfony bundle",
             "support": {
                 "issues": "https://github.com/createnl/zxcvbn-bundle/issues",
-                "source": "https://github.com/createnl/zxcvbn-bundle/tree/3.0.0"
+                "source": "https://github.com/createnl/zxcvbn-bundle/tree/3.0.1"
             },
-            "time": "2022-12-14T11:19:59+00:00"
+            "time": "2023-06-19T13:54:39+00:00"
         },
         {
             "name": "dasprid/enum",
@@ -1396,6 +1337,65 @@
                 "source": "https://github.com/doctrine/sql-formatter/tree/1.1.3"
             },
             "time": "2022-05-23T21:33:49+00:00"
+        },
+        {
+            "name": "dukecity/doctrineextensions",
+            "version": "v2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Dukecity/DoctrineExtensions.git",
+                "reference": "d7eb8883855da297b189e3d28a8c2f0260b85c49"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Dukecity/DoctrineExtensions/zipball/d7eb8883855da297b189e3d28a8c2f0260b85c49",
+                "reference": "d7eb8883855da297b189e3d28a8c2f0260b85c49",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "^2.9",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.17",
+                "nesbot/carbon": "^2.67",
+                "phpunit/phpunit": "^10.2",
+                "symfony/cache": "^5.4 || ^6.2",
+                "symfony/yaml": "^5.4 || ^6.2",
+                "zf1/zend-date": "^1.12.20",
+                "zf1/zend-registry": "^1.12.20"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DoctrineExtensions\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Steve Lacey",
+                    "email": "steve@steve.ly"
+                }
+            ],
+            "description": "A set of extensions to Doctrine 2 that add support for additional query functions available in MySQL, Oracle, PostgreSQL and SQLite.",
+            "keywords": [
+                "database",
+                "doctrine",
+                "orm"
+            ],
+            "support": {
+                "issues": "https://github.com/Dukecity/DoctrineExtensions/issues",
+                "source": "https://github.com/Dukecity/DoctrineExtensions/tree/v2.0"
+            },
+            "time": "2023-06-16T14:44:52+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -10967,9 +10967,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "beberlei/doctrineextensions": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -35,7 +35,7 @@
         "ext-sqlite3": "*",
         "ext-zip": "*",
         "ext-zlib": "*",
-        "beberlei/doctrineextensions": "dev-master",
+        "dukecity/doctrineextensions": "^2.0",
         "createnl/zxcvbn-bundle": "^3.0",
         "doctrine/doctrine-bundle": "^2.6",
         "doctrine/orm": "^2.11",

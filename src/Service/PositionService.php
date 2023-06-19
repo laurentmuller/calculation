@@ -16,7 +16,7 @@ use App\Traits\TranslatorTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Service to format latitude and longitude values.
+ * Service to format direction, latitude and longitude values.
  */
 class PositionService
 {
@@ -45,73 +45,76 @@ class PositionService
         'N',
     ];
 
+    private const GOOGLE_MAP_URL = 'https://www.google.ch/maps/place/%s,%s';
+
+    /**
+     * The search terms.
+     */
+    private const SEARCH = [
+        'N',
+        'S',
+        'E',
+        'W',
+    ];
+
+    /**
+     * The replacement terms.
+     *
+     * @var string[]
+     */
+    private array $replace = [];
+
     public function __construct(private readonly TranslatorInterface $translator)
     {
     }
 
     /**
-     * Translate the given direction.
+     * Format the given direction.
      */
     public function formatDirection(float $deg): string
     {
         $direction = $this->getDirection($deg);
-        $search = [
-            'N',
-            'S',
-            'E',
-            'W',
-        ];
-        $replace = [
-            $this->trans('openweather.direction.N'),
-            $this->trans('openweather.direction.S'),
-            $this->trans('openweather.direction.E'),
-            $this->trans('openweather.direction.W'),
-        ];
 
-        return \str_replace($search, $replace, $direction);
+        return \str_replace(self::SEARCH, $this->getReplace(), $direction);
     }
 
     /**
-     * Convert the given latitude to degrees, minutes and seconds.
+     * Format the given latitude to degrees, minutes and seconds.
      *
      * @throws \InvalidArgumentException if the latitude is not between -90 to +90 (inclusive)
      */
-    public function formatLat(float $latitude): string
+    public function formatLatitude(float $latitude): string
     {
-        if ($latitude < -90 || $latitude > 90) {
-            throw new \InvalidArgumentException(\sprintf('The latitude is not between -90 to +90 (inclusive). %.5f given.', $latitude));
-        }
+        $this->checkLatitude($latitude);
 
-        return $this->formatPosition($latitude, 'N', 'S');
+        return $this->formatValue($latitude, 'N', 'S');
     }
 
     /**
-     * Convert the given latitude and longitude to degrees, minutes and seconds.
+     * Format the given longitude to degrees, minutes and seconds.
+     *
+     * @throws \InvalidArgumentException if the longitude is not between -180 to +180 (inclusive)
+     */
+    public function formatLongitude(float $longitude): string
+    {
+        $this->checkLongitude($longitude);
+
+        return $this->formatValue($longitude, 'E', 'W');
+    }
+
+    /**
+     * Format the given latitude and longitude to degrees, minutes and seconds.
      *
      * @throws \InvalidArgumentException if the latitude is not between -90 to +90 (inclusive) or
      *                                   if the longitude is not between -180 to +180 (inclusive)
      */
-    public function formatLatLng(float $latitude, float $longitude): string
+    public function formatPosition(float $latitude, float $longitude): string
     {
-        return \sprintf('%s / %s', $this->formatLat($latitude), $this->formatLng($longitude));
+        return \sprintf('%s, %s', $this->formatLatitude($latitude), $this->formatLongitude($longitude));
     }
 
     /**
-     * Convert the given longitude to degrees, minutes and seconds.
-     *
-     * @throws \InvalidArgumentException if the longitude is not between -180 to +180 (inclusive)
-     */
-    public function formatLng(float $longitude): string
-    {
-        if ($longitude < -180 || $longitude > 180) {
-            throw new \InvalidArgumentException(\sprintf('The longitude is not between -180 to +180 (inclusive). %.5f given.', $longitude));
-        }
-
-        return $this->formatPosition($longitude, 'E', 'W');
-    }
-
-    /**
-     * Gets the direction for the given degrees.
+     * Get the direction for the given degrees.
      */
     public function getDirection(float $deg): string
     {
@@ -121,21 +124,67 @@ class PositionService
         return self::DIRECTIONS[$index];
     }
 
+    /**
+     * Gets the Google Map URL for the given latitude and longitude.
+     *
+     * @throws \InvalidArgumentException if the latitude is not between -90 to +90 (inclusive) or
+     *                                   if the longitude is not between -180 to +180 (inclusive)
+     */
+    public function getGoogleMapUrl(float $latitude, float $longitude): string
+    {
+        $this->checkLatitude($latitude);
+        $this->checkLongitude($longitude);
+
+        return \sprintf(self::GOOGLE_MAP_URL, $latitude, $longitude);
+    }
+
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
     }
 
-    private function formatPosition(float $position, string $positiveSuffix, string $negativeSuffix): string
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private function checkLatitude(float $latitude): void
     {
-        $suffix = $position >= 0 ? $positiveSuffix : $negativeSuffix;
+        if ($latitude < -90 || $latitude > 90) {
+            throw new \InvalidArgumentException(\sprintf('The latitude is not between -90 to +90 (inclusive). %.5f given.', $latitude));
+        }
+    }
+
+    /**
+     * @throws \InvalidArgumentException
+     */
+    private function checkLongitude(float $longitude): void
+    {
+        if ($longitude < -180 || $longitude > 180) {
+            throw new \InvalidArgumentException(\sprintf('The longitude is not between -180 to +180 (inclusive). %.5f given.', $longitude));
+        }
+    }
+
+    private function formatValue(float $value, string $positiveSuffix, string $negativeSuffix): string
+    {
+        $suffix = $value >= 0 ? $positiveSuffix : $negativeSuffix;
         $suffix = $this->trans("openweather.direction.$suffix");
-        $position = \abs($position);
-        $degrees = \floor($position);
-        $position = ($position - $degrees) * 60.0;
-        $minutes = \floor($position);
-        $seconds = \floor(($position - $minutes) * 60.0);
+        $value = \abs($value);
+        $degrees = \floor($value);
+        $value = ($value - $degrees) * 60.0;
+        $minutes = \floor($value);
+        $seconds = \floor(($value - $minutes) * 60.0);
 
         return \sprintf("%d° %d' %d\" %s", $degrees, $minutes, $seconds, $suffix);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getReplace(): array
+    {
+        if ([] === $this->replace) {
+            $this->replace = \array_map(fn (string $s): string => $this->trans("openweather.direction.$s"), self::SEARCH);
+        }
+
+        return $this->replace;
     }
 }

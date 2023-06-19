@@ -29,6 +29,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *     longitude: ?float,
  *     longitude_dms?: string,
  *     position_dms?: string,
+ *     position_url?: string,
  *     error?: array{code: ?int, type: ?string, info: ?string}
  * }
  *
@@ -165,12 +166,13 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         if (isset($response['region_name'])) {
             $response['region_name'] = \ucfirst($response['region_name']);
         }
-        $latitude = $response['latitude'] ?? null;
-        $longitude = $response['longitude'] ?? null;
-        if (null !== $latitude && null !== $longitude) {
-            $response['latitude_dms'] = $this->service->formatLat($latitude);
-            $response['longitude_dms'] = $this->service->formatLng($longitude);
-            $response['position_dms'] = $this->service->formatLatLng($latitude, $longitude);
+        if (isset($response['latitude']) && isset($response['longitude'])) {
+            $latitude = $response['latitude'];
+            $longitude = $response['longitude'];
+            $response['latitude_dms'] = $this->service->formatLatitude($latitude);
+            $response['longitude_dms'] = $this->service->formatLongitude($longitude);
+            $response['position_dms'] = $this->service->formatPosition($latitude, $longitude);
+            $response['position_url'] = $this->service->getGoogleMapUrl($latitude, $longitude);
         }
 
         return $response;

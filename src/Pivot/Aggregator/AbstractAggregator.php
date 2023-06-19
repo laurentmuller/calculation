@@ -22,9 +22,9 @@ use App\Utils\StringUtils;
 abstract class AbstractAggregator implements \JsonSerializable, \Stringable
 {
     /**
-     *  Constructor.
+     * Constructor.
      *
-     *  @param mixed|null $value the initial value
+     * @param mixed|null $value the initial value
      */
     public function __construct(mixed $value = null)
     {

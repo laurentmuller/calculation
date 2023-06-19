@@ -22,14 +22,12 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
 use App\Entity\User;
+use App\Enums\FlashType;
 use App\Interfaces\DisableListenerInterface;
 use App\Traits\DisableListenerTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
-use Doctrine\ORM\Event\PostPersistEventArgs;
-use Doctrine\ORM\Event\PostRemoveEventArgs;
-use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -62,47 +60,47 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         User::class,
     ];
 
-    public function postPersist(PostPersistEventArgs $args): void
+    /**
+     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     */
+    public function postPersist(LifecycleEventArgs $args): void
     {
         $entity = $this->getEntity($args);
         if (!$entity instanceof AbstractEntity) {
             return;
         }
 
-        $id = $this->getId($entity, '.add.success', 'common.add_success');
-        $params = $this->getParameters($entity);
-        $this->successTrans($id, $params);
-    }
-
-    public function postRemove(PostRemoveEventArgs $args): void
-    {
-        $entity = $this->getEntity($args);
-        if (!$entity instanceof AbstractEntity) {
-            return;
-        }
-
-        $id = $this->getId($entity, '.delete.success', 'common.delete_success');
-        $params = $this->getParameters($entity);
-        $this->warningTrans($id, $params);
-    }
-
-    public function postUpdate(PostUpdateEventArgs $args): void
-    {
-        $entity = $this->getEntity($args);
-        if (!$entity instanceof AbstractEntity) {
-            return;
-        }
-        if ($this->isLastLogin($args, $entity)) {
-            return;
-        }
-
-        $id = $this->getId($entity, '.edit.success', 'common.edit_success');
-        $params = $this->getParameters($entity);
-        $this->successTrans($id, $params);
+        $this->notify($entity, '.add.success', 'common.add_success');
     }
 
     /**
-     * @phpstan-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     */
+    public function postRemove(LifecycleEventArgs $args): void
+    {
+        $entity = $this->getEntity($args);
+        if (!$entity instanceof AbstractEntity) {
+            return;
+        }
+
+        $this->notify($entity, '.delete.success', 'common.delete_success', FlashType::WARNING);
+    }
+
+    /**
+     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     */
+    public function postUpdate(LifecycleEventArgs $args): void
+    {
+        $entity = $this->getEntity($args);
+        if (!$entity instanceof AbstractEntity || $this->isLastLogin($args)) {
+            return;
+        }
+
+        $this->notify($entity, '.edit.success', 'common.edit_success');
+    }
+
+    /**
+     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
      */
     private function getEntity(LifecycleEventArgs $args): ?AbstractEntity
     {
@@ -126,24 +124,27 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         return $this->isTransDefined($id) ? $id : $default;
     }
 
-    private function getParameters(AbstractEntity $entity): array
-    {
-        return ['%name%' => $entity->getDisplay()];
-    }
-
     /**
-     * @phpstan-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
      */
-    private function isLastLogin(LifecycleEventArgs $args, AbstractEntity $entity): bool
+    private function isLastLogin(LifecycleEventArgs $args): bool
     {
-        if ($entity instanceof User) {
+        if ($args->getObject() instanceof User) {
             $manager = $args->getObjectManager();
             $unitOfWork = $manager->getUnitOfWork();
-            $changeSet = $unitOfWork->getEntityChangeSet($entity);
+            $changeSet = $unitOfWork->getEntityChangeSet($args->getObject());
 
             return \array_key_exists('lastLogin', $changeSet);
         }
 
         return false;
+    }
+
+    private function notify(AbstractEntity $entity, string $suffix, string $default, FlashType $type = FlashType::SUCCESS): void
+    {
+        $id = $this->getId($entity, $suffix, $default);
+        $params = ['%name%' => $entity->getDisplay()];
+        $message = $this->trans($id, $params);
+        $this->addFlashMessage($type, $message);
     }
 }

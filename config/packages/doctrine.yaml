@@ -8,6 +8,7 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
         auto_mapping: true
+        validate_xml_mapping: true
         mappings:
             App:
                 is_bundle: false

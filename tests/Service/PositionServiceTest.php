@@ -54,22 +54,7 @@ class PositionServiceTest extends TestCase
         ];
     }
 
-    public static function getLatLngs(): array
-    {
-        return [
-            [-90.0, -180.0, '90° 0\' 0" openweather.direction.S / 180° 0\' 0" openweather.direction.W'],
-            [0.0, 0.0, '0° 0\' 0" openweather.direction.N / 0° 0\' 0" openweather.direction.E'],
-            [90.0, +180, '90° 0\' 0" openweather.direction.N / 180° 0\' 0" openweather.direction.E'],
-
-            [-91.0, 0, '', true],
-            [+91.0, 0, '', true],
-
-            [0, -181, '', true],
-            [0, +181, '', true],
-        ];
-    }
-
-    public static function getLats(): array
+    public static function getLatitudes(): array
     {
         return [
             [-91.0, '', true],
@@ -80,7 +65,7 @@ class PositionServiceTest extends TestCase
         ];
     }
 
-    public static function getLngs(): array
+    public static function getLongitudes(): array
     {
         return [
             [-181.0, '', true],
@@ -91,14 +76,28 @@ class PositionServiceTest extends TestCase
         ];
     }
 
+    public static function getPositions(): array
+    {
+        return [
+            [-90.0, -180.0, '90° 0\' 0" openweather.direction.S, 180° 0\' 0" openweather.direction.W'],
+            [0.0, 0.0, '0° 0\' 0" openweather.direction.N, 0° 0\' 0" openweather.direction.E'],
+            [90.0, +180, '90° 0\' 0" openweather.direction.N, 180° 0\' 0" openweather.direction.E'],
+
+            [-91.0, 0, '', true],
+            [+91.0, 0, '', true],
+
+            [0, -181, '', true],
+            [0, +181, '', true],
+        ];
+    }
+
     /**
      * @throws Exception
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getFormatDirections')]
     public function testFormatDirection(int $deg, string $expected): void
     {
-        $translator = $this->createTranslator();
-        $service = new PositionService($translator);
+        $service = $this->createService();
         $actual = $service->formatDirection($deg);
         $this->assertSame($expected, $actual);
     }
@@ -106,45 +105,42 @@ class PositionServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLats')]
-    public function testFormatLat(float $lat, string $expected, bool $exception = false): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLatitudes')]
+    public function testFormatLatitude(float $lat, string $expected, bool $exception = false): void
     {
         if ($exception) {
             $this->expectException(\InvalidArgumentException::class);
         }
-        $translator = $this->createTranslator();
-        $service = new PositionService($translator);
-        $actual = $service->formatLat($lat);
+        $service = $this->createService();
+        $actual = $service->formatLatitude($lat);
         $this->assertSame($expected, $actual);
     }
 
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLatLngs')]
-    public function testFormatLatLng(float $lat, float $lng, string $expected, bool $exception = false): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLongitudes')]
+    public function testFormatLongitude(float $lng, string $expected, bool $exception = false): void
     {
         if ($exception) {
             $this->expectException(\InvalidArgumentException::class);
         }
-        $translator = $this->createTranslator();
-        $service = new PositionService($translator);
-        $actual = $service->formatLatLng($lat, $lng);
+        $service = $this->createService();
+        $actual = $service->formatLongitude($lng);
         $this->assertSame($expected, $actual);
     }
 
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLngs')]
-    public function testFormatLng(float $lng, string $expected, bool $exception = false): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getPositions')]
+    public function testFormatPosition(float $lat, float $lng, string $expected, bool $exception = false): void
     {
         if ($exception) {
             $this->expectException(\InvalidArgumentException::class);
         }
-        $translator = $this->createTranslator();
-        $service = new PositionService($translator);
-        $actual = $service->formatLng($lng);
+        $service = $this->createService();
+        $actual = $service->formatPosition($lat, $lng);
         $this->assertSame($expected, $actual);
     }
 
@@ -154,10 +150,19 @@ class PositionServiceTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getDirections')]
     public function testGetDirection(float $deg, string $expected): void
     {
-        $translator = $this->createTranslator();
-        $service = new PositionService($translator);
+        $service = $this->createService();
         $actual = $service->getDirection($deg);
         $this->assertSame($expected, $actual);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createService(): PositionService
+    {
+        $translator = $this->createTranslator();
+
+        return new PositionService($translator);
     }
 
     /**

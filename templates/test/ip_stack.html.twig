@@ -14,9 +14,8 @@
         <th colspan="2">{{ name }}</th>
     </tr>
 {%- endmacro %}
-{% macro output_position(lat, lon, text) -%}
-{% if lat and lon %}
-    {%- set href = 'https://www.google.ch/maps/place/%s,%s'|format(lat, lon) -%}
+{% macro output_position(text, href) -%}
+{% if text and href %}
     <tr>
         <td>Position</td>
         <td>
@@ -62,20 +61,16 @@
     {{ _self.output_country(results.country_name|default(false), results.location.country_flag_emoji|default(false)) }}
     {{ _self.output_row('Région', results.region_name|default(false)) }}
     {{ _self.output_row('Ville', results.city|default(false)) }}
-    {{ _self.output_position(results.latitude|default(false), results.longitude|default(false), results.position_dms|default(false)) }}
+    {{ _self.output_position(results.position_dms|default(false), results.position_url|default(false)) }}
     </tbody>
 </table>
 {% include 'dialog/dialog_raw_data.html.twig' with {'raw_data': results, 'description': 'test.ip_stack'|trans, 'allow_copy': true} %}
 {% endblock %}
 {# footer #}
 {% block card_footer -%}
-<div class="row">
-    <div class="col-md-6">
-        {{- homepage() }}
-    </div>
-    <div class="col-md-6 text-end">
-        {{- linkExternal('https://ipstack.com', 'common.api_documentation') -}}
-    </div>
+<div class="d-flex flex-wrap align-items-center gap-2">
+    {{- homepage() }}
+    {{- linkExternal('https://ipstack.com', 'common.api_documentation', 'flex-grow-1 text-sm-end') -}}
 </div>
 {%- endblock %}
 {# stylesheets #}

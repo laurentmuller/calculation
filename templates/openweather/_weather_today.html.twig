@@ -76,11 +76,16 @@
         {{ _self.row_unit('openweather.fields.pressure', main.pressure, units_pressure) }}
         {{ _self.row_no_sep('openweather.fields.humidity', main.humidity, units_percent) }}
         {{ _self.row_no_sep('openweather.fields.clouds', current.clouds.all, units_percent) }}
-
-        {%- set href = 'https://www.google.ch/maps/place/%s,%s'|format(coord.lat, coord.lon) -%}
-        {%- set text = coord.lat_dms ~ ' / ' ~ coord.lon_dms -%}
-        {%- set raw = '<a href="' ~ href ~ '" title="' ~ 'openweather.fields.position_title'|trans ~ '" target="_blank" rel="noopener noreferrer">' ~ text ~ '</a>' -%}
-        {{ _self.row_text('openweather.fields.position', raw) }}
+        {% if coord.lat_lon_url is defined and coord.lat_lon_url %}
+        <tr>
+            <td class="ps-4 w-35">{{ 'openweather.fields.position'|trans }}</td>
+            <td>
+                <a href="{{ coord.lat_lon_url }}" title="{{ 'openweather.fields.position_title'|trans }}" target="_blank" rel="noopener noreferrer">
+                    {{- coord.lat_lon_dms -}}
+                </a>
+            </td>
+        </tr>
+        {% endif %}
         {{ _self.row_text('openweather.fields.locale_date', current.dt_date_time_locale) }}
     </tbody>
 </table>

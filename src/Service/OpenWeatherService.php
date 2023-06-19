@@ -421,6 +421,7 @@ class OpenWeatherService extends AbstractHttpClientService
             self::QUERY => $query,
         ]);
 
+        /** @psalm-var array<string, mixed> $result */
         $result = $response->toArray(false);
         if (!$this->checkErrorCode($result)) {
             return null;
@@ -439,6 +440,7 @@ class OpenWeatherService extends AbstractHttpClientService
 
         try {
             $db = $this->getDatabase(true);
+            /** @psalm-var array<int, mixed> $result */
             $result = $db->findCity($name, $limit);
             if ([] === $result) {
                 return null;
@@ -556,6 +558,8 @@ class OpenWeatherService extends AbstractHttpClientService
 
     /**
      * Update result.
+     *
+     * @psalm-param array<array-key, mixed> $results
      */
     private function updateResults(array &$results, \DateTimeZone|\IntlTimeZone|string $timezone = null): void
     {
@@ -589,15 +593,26 @@ class OpenWeatherService extends AbstractHttpClientService
                     }
                     break;
                 case 'lat':
-                    $results['lat_dms'] = $this->service->formatLat((float) $value);
+                    $results['lat_dms'] = $this->service->formatLatitude((float) $value);
                     break;
                 case 'lon':
-                    $results['lon_dms'] = $this->service->formatLng((float) $value);
+                    $results['lon_dms'] = $this->service->formatLongitude((float) $value);
                     break;
                 case 'deg':
                     $deg = (int) $value;
                     $results['deg_direction'] = $this->service->getDirection($deg);
                     $results['deg_description'] = $this->service->formatDirection($deg);
+                    break;
+                case 'coord':
+                    if (\is_array($value)) {
+                        $this->updateResults($value, $timezone);
+                        if (isset($value['lat']) && isset($value['lon'])) {
+                            $lat = (float) $value['lat'];
+                            $lon = (float) $value['lon'];
+                            $value['lat_lon_dms'] = $this->service->formatPosition($lat, $lon);
+                            $value['lat_lon_url'] = $this->service->getGoogleMapUrl($lat, $lon);
+                        }
+                    }
                     break;
                 default:
                     if (\is_array($value)) {

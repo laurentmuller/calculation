@@ -872,7 +872,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             if ($group->updateCode()) {
                 ++$total;
             }
-            foreach ($group->getCategories()  as $category) {
+            foreach ($group->getCategories() as $category) {
                 if ($category->updateCode()) {
                     ++$total;
                 }

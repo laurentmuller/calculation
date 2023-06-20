@@ -81,24 +81,24 @@ enum MessagePosition: string implements EnumDefaultInterface, EnumSortableInterf
     public function getAngle(): int
     {
         return match ($this) {
-            MessagePosition::TOP_LEFT => 315,
-            MessagePosition::TOP_CENTER,
-            MessagePosition::CENTER_CENTER => 0,
-            MessagePosition::TOP_RIGHT => 45,
+            self::TOP_LEFT => 315,
+            self::TOP_CENTER,
+            self::CENTER_CENTER => 0,
+            self::TOP_RIGHT => 45,
 
-            MessagePosition::CENTER_LEFT => 270,
-            MessagePosition::CENTER_RIGHT => 90,
+            self::CENTER_LEFT => 270,
+            self::CENTER_RIGHT => 90,
 
-            MessagePosition::BOTTOM_LEFT => 225,
-            MessagePosition::BOTTOM_CENTER => 180,
-            MessagePosition::BOTTOM_RIGHT => 135,
+            self::BOTTOM_LEFT => 225,
+            self::BOTTOM_CENTER => 180,
+            self::BOTTOM_RIGHT => 135,
         };
     }
 
     public function getIcon(): string
     {
         return match ($this) {
-            MessagePosition::CENTER_CENTER => 'fa-solid fa-arrows-up-down-left-right',
+            self::CENTER_CENTER => 'fa-solid fa-arrows-up-down-left-right',
             default => 'fa-solid fa-arrow-up fa-rotate-by'
         };
     }
@@ -109,17 +109,17 @@ enum MessagePosition: string implements EnumDefaultInterface, EnumSortableInterf
     public static function sorted(): array
     {
         return [
-            MessagePosition::TOP_LEFT,
-            MessagePosition::TOP_CENTER,
-            MessagePosition::TOP_RIGHT,
+            self::TOP_LEFT,
+            self::TOP_CENTER,
+            self::TOP_RIGHT,
 
-            MessagePosition::CENTER_LEFT,
-            MessagePosition::CENTER_CENTER,
-            MessagePosition::CENTER_RIGHT,
+            self::CENTER_LEFT,
+            self::CENTER_CENTER,
+            self::CENTER_RIGHT,
 
-            MessagePosition::BOTTOM_LEFT,
-            MessagePosition::BOTTOM_CENTER,
-            MessagePosition::BOTTOM_RIGHT,
+            self::BOTTOM_LEFT,
+            self::BOTTOM_CENTER,
+            self::BOTTOM_RIGHT,
         ];
     }
 }

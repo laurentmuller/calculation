@@ -454,11 +454,11 @@ globalmargin:
     title: Modifier les marges globales
     success: Les marges globales ont été mises à jour avec succès.
   fields:
+    minimum: Minimum
+    maximum: Maximum
+    delta: Ecart
     margin: Marge
     margin_percent: Marge (%)
-    maximum: Maximum
-    minimum: Minimum
-    delta: Ecart
   list:
     title: Marges globales
     empty: Aucune marge globale définie.
@@ -500,13 +500,6 @@ group:
   name: Groupe
   show:
     title: Propriétés du groupe
-groupmargin:
-  fields:
-    margin: Marge
-    margin_percent: Marge (%)
-    maximum: Maximum
-    minimum: Minimum
-  name: Marges
 help:
   actions:
     clear: Effacer les critères de recherche

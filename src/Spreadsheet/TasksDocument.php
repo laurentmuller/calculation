@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
@@ -50,20 +49,17 @@ class TasksDocument extends AbstractArrayDocument
     {
         $this->start('task.list.title');
         $this->writeTask = $this->writeItem = false;
-        $row = $this->setHeaderValues([
-            'task.fields.name' => Alignment::HORIZONTAL_GENERAL,
-            'task.fields.group' => Alignment::HORIZONTAL_GENERAL,
-            'task.fields.category' => Alignment::HORIZONTAL_GENERAL,
-            'task.fields.unit' => Alignment::HORIZONTAL_GENERAL,
-            'task.fields.supplier' => Alignment::HORIZONTAL_GENERAL,
-            'taskitemmargin.fields.minimum' => Alignment::HORIZONTAL_RIGHT,
-            'taskitemmargin.fields.maximum' => Alignment::HORIZONTAL_RIGHT,
-            'taskitemmargin.fields.value' => Alignment::HORIZONTAL_RIGHT,
-        ]);
 
-        $this->setFormatAmount(6)
-            ->setFormatAmount(7)
-            ->setFormatPrice(8);
+        $row = $this->setHeaders([
+            'task.fields.name' => HeaderFormat::instance(),
+            'task.fields.group' => HeaderFormat::instance(),
+            'task.fields.category' => HeaderFormat::instance(),
+            'task.fields.unit' => HeaderFormat::instance(),
+            'task.fields.supplier' => HeaderFormat::instance(),
+            'taskitemmargin.fields.minimum' => HeaderFormat::amount(),
+            'taskitemmargin.fields.maximum' => HeaderFormat::amount(),
+            'taskitemmargin.fields.value' => HeaderFormat::amount(),
+        ]);
 
         foreach ($entities as $entity) {
             $this->writeTask = true;

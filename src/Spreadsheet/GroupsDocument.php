@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-
 /**
  * Spreadsheet document for the list of groups.
  *
@@ -29,29 +27,42 @@ class GroupsDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $this->start('group.list.title');
-        $row = $this->setHeaderValues([
-            'group.fields.code' => Alignment::HORIZONTAL_GENERAL,
-            'group.fields.description' => Alignment::HORIZONTAL_GENERAL,
-            'group.fields.margins' => Alignment::HORIZONTAL_RIGHT,
-            'group.fields.categories' => Alignment::HORIZONTAL_RIGHT,
-            'category.fields.products' => Alignment::HORIZONTAL_RIGHT,
-            'category.fields.tasks' => Alignment::HORIZONTAL_RIGHT,
+
+        $row = $this->setHeaders([
+            'group.fields.code' => HeaderFormat::instance(),
+            'group.fields.description' => HeaderFormat::instance(),
+            'group.fields.categories' => HeaderFormat::int(),
+            'category.fields.products' => HeaderFormat::int(),
+            'category.fields.tasks' => HeaderFormat::int(),
+
+            'globalmargin.fields.minimum' => HeaderFormat::amount(),
+            'globalmargin.fields.maximum' => HeaderFormat::amount(),
+            'globalmargin.fields.delta' => HeaderFormat::amount(),
+            'globalmargin.fields.margin' => HeaderFormat::percent(),
         ]);
 
-        $this->setFormatInt(3)
-            ->setFormatInt(4)
-            ->setFormatInt(5)
-            ->setFormatInt(6);
-
         foreach ($entities as $entity) {
-            $this->setRowValues($row++, [
+            $this->setRowValues($row, [
                 $entity->getCode(),
                 $entity->getDescription(),
-                $entity->countMargins(),
                 $entity->countCategories(),
                 $entity->countProducts(),
                 $entity->countTasks(),
             ]);
+            $first = true;
+            foreach ($entity->getMargins() as $margin) {
+                if (!$first) {
+                    ++$row;
+                }
+                $this->setRowValues($row, [
+                    $margin->getMinimum(),
+                    $margin->getMaximum(),
+                    $margin->getDelta(),
+                    $margin->getMargin(),
+                ], 6);
+                $first = false;
+            }
+            ++$row;
         }
         $this->finish();
 

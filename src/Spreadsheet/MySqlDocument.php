@@ -37,20 +37,18 @@ class MySqlDocument extends AbstractDocument
             return false;
         }
         $this->start($this->trans('about.mysql_version', ['%version%' => $this->service->getVersion()]));
-        $row = $this->setHeaderValues([
-            'Name' => Alignment::HORIZONTAL_LEFT,
-            'Value' => Alignment::HORIZONTAL_LEFT,
+        $row = $this->setHeaders([
+            'Name' => HeaderFormat::left(Alignment::VERTICAL_TOP),
+            'Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
         ]);
+
         if ([] !== $database) {
             $row = $this->outputArray($row, $database);
         }
         if ([] !== $configuration) {
             $this->outputArray($row, $configuration);
         }
-        $this->getActiveSheet()
-            ->getStyle('A:B')
-            ->getAlignment()
-            ->setVertical(Alignment::VERTICAL_TOP);
+
         $this->setAutoSize(1)
             ->setColumnWidth(2, 50, true)
             ->finish();

@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-
 /**
  * Spreadsheet document for the list of categories.
  *
@@ -29,15 +27,14 @@ class CategoriesDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $this->start('category.list.title');
-        $row = $this->setHeaderValues([
-            'category.fields.code' => Alignment::HORIZONTAL_GENERAL,
-            'category.fields.description' => Alignment::HORIZONTAL_GENERAL,
-            'category.fields.group' => Alignment::HORIZONTAL_GENERAL,
-            'category.fields.products' => Alignment::HORIZONTAL_RIGHT,
-            'category.fields.tasks' => Alignment::HORIZONTAL_RIGHT,
-        ]);
 
-        $this->setFormatInt(4);
+        $row = $this->setHeaders([
+            'category.fields.code' => HeaderFormat::instance(),
+            'category.fields.description' => HeaderFormat::instance(),
+            'category.fields.group' => HeaderFormat::instance(),
+            'category.fields.products' => HeaderFormat::int(),
+            'category.fields.tasks' => HeaderFormat::int(),
+        ]);
 
         $default = $this->trans('report.other');
         foreach ($entities as $entity) {

@@ -155,7 +155,11 @@
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <button type="button" class="btn btn-form btn-primary" data-bs-toggle="modal" data-bs-target="#dragModal">Launch modal</button>
+        <button type="button" class="btn btn-form btn-primary mb-3 bottom-border-gradient bottom-border-gradient-100" data-bs-toggle="modal" data-bs-target="#dragModal" style="width: 300px;">Launch modal</button>
+        <div class="form-group mb-3">
+            <label class="form-label">Border</label>
+            <input type="text" class="form-control bottom-border-gradient bottom-border-gradient-100">
+        </div>
     </div>
 </div>
 <div class="modal fade" id="dragModal" role="dialog" aria-hidden="true" tabindex="-1" aria-labelledby="modal-drag-title">
@@ -168,7 +172,7 @@
             <div class="modal-body">
                 <div class="form-group mb-3">
                     <label class="form-label" for="text">Text</label>
-                    <input type="text" class="form-control" id="text" aria-describedby="textHelp">
+                    <input type="text" class="form-control bottom-border-gradient bottom-border-gradient-100" id="text" aria-describedby="textHelp">
                     <small id="textHelp" class="form-text text-body-secondary">We'll never share your text with anyone else.</small>
                 </div>
             </div>

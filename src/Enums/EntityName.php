@@ -137,16 +137,16 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
     public static function sorted(): array
     {
         return [
-            EntityName::CALCULATION,
-            EntityName::PRODUCT,
-            EntityName::TASK,
-            EntityName::CATEGORY,
-            EntityName::GROUP,
-            EntityName::CALCULATION_STATE,
-            EntityName::GLOBAL_MARGIN,
-            EntityName::USER,
-            EntityName::CUSTOMER,
-            EntityName::LOG,
+            self::CALCULATION,
+            self::PRODUCT,
+            self::TASK,
+            self::CATEGORY,
+            self::GROUP,
+            self::CALCULATION_STATE,
+            self::GLOBAL_MARGIN,
+            self::USER,
+            self::CUSTOMER,
+            self::LOG,
         ];
     }
 
@@ -155,7 +155,7 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
      */
     public static function tryFindOffset(mixed $subject, int $default = RoleInterface::INVALID_VALUE): int
     {
-        return EntityName::tryFromMixed($subject)?->offset() ?? $default;
+        return self::tryFromMixed($subject)?->offset() ?? $default;
     }
 
     /**
@@ -165,15 +165,15 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
      */
     public static function tryFindValue(mixed $subject, string $default = null): ?string
     {
-        return EntityName::tryFromMixed($subject)?->value ?: $default;
+        return self::tryFromMixed($subject)?->value ?: $default;
     }
 
     /**
      * Find an entity name from the given subject.
      */
-    public static function tryFromMixed(mixed $subject): ?EntityName
+    public static function tryFromMixed(mixed $subject): ?self
     {
-        if ($subject instanceof EntityName) {
+        if ($subject instanceof self) {
             return $subject;
         } elseif (\is_scalar($subject)) {
             $name = (string) $subject;
@@ -188,6 +188,6 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
             ->ensureStart(self::ENTITY_PREFIX)
             ->toString();
 
-        return EntityName::tryFrom($name);
+        return self::tryFrom($name);
     }
 }

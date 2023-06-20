@@ -36,6 +36,6 @@ abstract class AbstractMarginType extends AbstractEntityType
 
     protected function getLabelPrefix(): string
     {
-        return 'groupmargin.fields.';
+        return 'globalmargin.fields.';
     }
 }

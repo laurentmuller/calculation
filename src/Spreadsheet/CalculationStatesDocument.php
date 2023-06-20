@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
@@ -31,16 +30,14 @@ class CalculationStatesDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $this->start('calculationstate.list.title', true);
-        $row = $this->setHeaderValues([
-            'calculationstate.fields.code' => Alignment::HORIZONTAL_GENERAL,
-            'calculationstate.fields.description' => Alignment::HORIZONTAL_GENERAL,
-            'calculationstate.fields.editable' => Alignment::HORIZONTAL_RIGHT,
-            'calculationstate.fields.calculations' => Alignment::HORIZONTAL_RIGHT,
-            'calculationstate.fields.color' => Alignment::HORIZONTAL_CENTER,
-        ]);
 
-        $this->setFormatYesNo(3)
-            ->setFormatInt(4);
+        $row = $this->setHeaders([
+            'calculationstate.fields.code' => HeaderFormat::instance(),
+            'calculationstate.fields.description' => HeaderFormat::instance(),
+            'calculationstate.fields.editable' => HeaderFormat::yesNo(),
+            'calculationstate.fields.calculations' => HeaderFormat::int(),
+            'calculationstate.fields.color' => HeaderFormat::center(),
+        ]);
 
         foreach ($entities as $entity) {
             $this->setRowValues($row, [

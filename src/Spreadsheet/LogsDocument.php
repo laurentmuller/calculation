@@ -48,16 +48,18 @@ class LogsDocument extends AbstractDocument
     {
         $logFile = $this->logFile;
         $this->start('log.title', true);
-        $alignments = [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP];
-        $row = $this->setHeaderValues([
-            'log.fields.level' => $alignments,
-            'log.fields.channel' => $alignments,
-            'log.fields.createdAt' => $alignments,
-            'log.fields.message' => $alignments,
-            'log.fields.user' => $alignments,
+
+        $row = $this->setHeaders([
+            'log.fields.level' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'log.fields.channel' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'log.fields.createdAt' => HeaderFormat::date(Alignment::VERTICAL_TOP),
+            'log.fields.message' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'log.fields.user' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
         ]);
+
         $this->setFormat(3, 'dd/mm/yyyy hh:mm:ss')
             ->setColumnWidth(4, 140, true);
+
         $logs = $logFile->getLogs();
         $sheet = $this->getActiveSheet();
         foreach ($logs as $log) {

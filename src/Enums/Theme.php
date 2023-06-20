@@ -104,9 +104,9 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumT
     public static function sorted(): array
     {
         return [
-            Theme::LIGHT,
-            Theme::DARK,
-            Theme::AUTO,
+            self::LIGHT,
+            self::DARK,
+            self::AUTO,
         ];
     }
 }

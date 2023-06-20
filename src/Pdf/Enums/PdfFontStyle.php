@@ -86,7 +86,7 @@ enum PdfFontStyle: string implements EnumDefaultInterface
     public static function fromStyle(?string $style): self
     {
         if (null === $style || '' === $style) {
-            return PdfFontStyle::REGULAR;
+            return self::REGULAR;
         }
         /** @psalm-var string[] $values */
         static $values = [];

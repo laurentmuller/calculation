@@ -58,8 +58,8 @@ enum TableView: string implements EnumDefaultInterface, EnumSortableInterface, E
     public static function sorted(): array
     {
         return [
-            TableView::TABLE,
-            TableView::CUSTOM,
+            self::TABLE,
+            self::CUSTOM,
        ];
     }
 }

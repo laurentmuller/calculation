@@ -21,6 +21,7 @@ use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -81,7 +82,25 @@ class SpreadsheetDocument extends Spreadsheet
     public function __construct(private readonly TranslatorInterface $translator)
     {
         parent::__construct();
+
+        // replace
+        $this->removeSheetByIndex(0);
+        $this->createSheet();
+
         $this->setPageSizeA4()->setPagePortrait();
+    }
+
+    /**
+     * Create sheet and add it to this workbook.
+     *
+     * @param int|null $sheetIndex Index where sheet should go (0,1,..., or null for last)
+     */
+    public function createSheet($sheetIndex = null): WorksheetDocument
+    {
+        $newSheet = new WorksheetDocument($this);
+        $this->addSheet($newSheet, $sheetIndex);
+
+        return $newSheet;
     }
 
     /**
@@ -108,6 +127,29 @@ class SpreadsheetDocument extends Spreadsheet
             ->setPrintGridlines();
 
         return $sheet;
+    }
+
+    /**
+     * Get active sheet.
+     */
+    public function getActiveSheet(): WorksheetDocument
+    {
+        /** @psalm-var WorksheetDocument $sheet */
+        $sheet = parent::getActiveSheet();
+
+        return $sheet;
+    }
+
+    /**
+     * Gets style for the given column.
+     *
+     * @param int $columnIndex the column index ('A' = First column)
+     */
+    public function getColumnStyle(int $columnIndex): Style
+    {
+        $name = $this->stringFromColumnIndex($columnIndex);
+
+        return $this->getActiveSheet()->getStyle($name);
     }
 
     /**
@@ -293,9 +335,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setColumnConditional(int $columnIndex, Conditional ...$conditionals): static
     {
-        $sheet = $this->getActiveSheet();
-        $name = $this->stringFromColumnIndex($columnIndex);
-        $style = $sheet->getStyle($name);
+        $style = $this->getColumnStyle($columnIndex);
         $conditionals = \array_merge($style->getConditionalStyles(), $conditionals);
         $style->setConditionalStyles($conditionals);
 
@@ -367,11 +407,12 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $sheet = $this->getActiveSheet();
         $name = $this->stringFromColumnIndex($columnIndex);
-        $style = $sheet->getStyle($name)->getFont()->getColor();
+        $style = $this->getColumnStyle($columnIndex);
+        $fontColor = $style->getFont()->getColor();
         if (\strlen($color) > 6) {
-            $style->setARGB($color);
+            $fontColor->setARGB($color);
         } else {
-            $style->setRGB($color);
+            $fontColor->setRGB($color);
         }
         if (!$includeHeader) {
             $sheet->getStyle("{$name}1")->getFont()->getColor()
@@ -389,9 +430,9 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setFormat(int $columnIndex, string $format): static
     {
-        $sheet = $this->getActiveSheet();
-        $name = $this->stringFromColumnIndex($columnIndex);
-        $sheet->getStyle($name)->getNumberFormat()->setFormatCode($format);
+        $this->getColumnStyle($columnIndex)
+            ->getNumberFormat()
+            ->setFormatCode($format);
 
         return $this;
     }
@@ -399,11 +440,17 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the amount format ('#,##0.00') for the given column.
      *
-     * @param int $columnIndex the column index ('A' = First column)
+     * @param int  $columnIndex the column index ('A' = First column)
+     * @param bool $zeroInRed   if true, the red color is used when values are smaller than or equal to 0
      */
-    public function setFormatAmount(int $columnIndex): static
+    public function setFormatAmount(int $columnIndex, bool $zeroInRed = false): static
     {
-        return $this->setFormat($columnIndex, NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+        $format = NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1;
+        if ($zeroInRed) {
+            return $this->setFormat($columnIndex, "[Red][<=0]$format;$format");
+        }
+
+        return $this->setFormat($columnIndex, $format);
     }
 
     /**
@@ -444,7 +491,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the date time format ('dd/mm/yyyy hh:mm') for the given column.
+     * Sets the date and time format ('dd/mm/yyyy hh:mm') for the given column.
      *
      * @param int $columnIndex the column index ('A' = First column)
      */
@@ -485,20 +532,6 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the price format ('#,##0.00') for the given column.
-     *
-     * The red color is used when values are smaller than or equal to 0.
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     */
-    public function setFormatPrice(int $columnIndex): static
-    {
-        $format = NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1;
-
-        return $this->setFormat($columnIndex, "[Red][<=0]$format;$format");
-    }
-
-    /**
      * Sets the translated 'Yes/No' boolean format for the given column.
      *
      * @param int $columnIndex the column index ('A' = First column)
@@ -511,37 +544,26 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the headers of the active sheet with bold style and frozen first row.
      *
-     * @param array $headers     the headers where key is the text to translate and value is the
-     *                           horizontal alignment or if is an array, the horizontal and the vertical
-     *                           alignments
-     * @param int   $columnIndex the starting column index ('A' = First column)
-     * @param int   $rowIndex    the row index (1 = First row)
+     * @param array<string,HeaderFormat> $headers     the headers where the key is the column name to translate
+     * @param int                        $columnIndex the starting column index ('A' = First column)
+     * @param int                        $rowIndex    the row index (1 = First row)
      *
-     * @return int this function return always 2
-     *
-     * @psalm-param array<string, string|string[]> $headers
+     * @return int this function return the given row index + 1
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
-    public function setHeaderValues(array $headers, int $columnIndex = 1, int $rowIndex = 1): int
+    public function setHeaders(array $headers, int $columnIndex = 1, int $rowIndex = 1): int
     {
         $sheet = $this->getActiveSheet();
         $index = $columnIndex;
-        foreach ($headers as $id => $alignment) {
-            $name = $this->stringFromColumnIndex($index++);
-            if (\is_array($alignment)) {
-                $sheet->getStyle($name)
-                    ->getAlignment()
-                    ->setHorizontal($alignment[0])
-                    ->setVertical($alignment[1]);
-            } else {
-                $sheet->getStyle($name)
-                    ->getAlignment()
-                    ->setHorizontal($alignment);
-            }
+        foreach ($headers as $id => $header) {
+            $header->apply($this, $index);
+            $name = $this->stringFromColumnIndex($index);
             $sheet->getColumnDimension($name)->setAutoSize(true);
             $sheet->setCellValue("$name$rowIndex", $this->trans($id));
+            ++$index;
         }
+
         $firstName = $this->stringFromColumnIndex($columnIndex);
         $lastName = $this->stringFromColumnIndex($columnIndex + \count($headers) - 1);
         $sheet->getStyle("$firstName$rowIndex:$lastName$rowIndex")->getFont()->setBold(true);
@@ -552,7 +574,7 @@ class SpreadsheetDocument extends Spreadsheet
             ->setHorizontalCentered(true)
             ->setRowsToRepeatAtTopByStartAndEnd($rowIndex, $rowIndex);
 
-        return 2;
+        return $rowIndex + 1;
     }
 
     /**
@@ -711,9 +733,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setShrinkToFit(int $columnIndex): static
     {
-        $sheet = $this->getActiveSheet();
-        $name = $this->stringFromColumnIndex($columnIndex);
-        $sheet->getStyle($name)->getAlignment()->setShrinkToFit(true);
+        $this->getColumnStyle($columnIndex)->getAlignment()->setShrinkToFit(true);
 
         return $this;
     }

@@ -868,3 +868,81 @@ span.form-label {
 }
 
 /* ============ small devices .end// ============ */
+
+/* ============ Password strength ============ */
+.bottom-border-gradient {
+    position: relative;
+}
+
+.bottom-border-gradient:after {
+    position: absolute;
+    content: '';
+    height: 0.25rem;
+    bottom: -0.25rem;
+    left: var(--bs-border-radius);
+    right: var(--bs-border-radius);
+    /*
+    border-bottom-left-radius: var(--bs-border-radius);
+    border-bottom-right-radius: var(--bs-border-radius);
+    */
+    background-color: transparent !important;
+}
+
+.bottom-border-gradient-20:after {
+    background: linear-gradient(
+            to right,
+            var(--bs-danger) calc(20% - 1px),
+            transparent calc(20% - 1px), transparent
+    );
+}
+
+.bottom-border-gradient-40:after {
+    background: linear-gradient(
+            to right,
+            var(--bs-danger) calc(20% - 1px),
+            transparent calc(20% - 1px), transparent calc(20% + 1px),
+            var(--bs-danger) calc(20% + 1px), var(--bs-danger) calc(40% - 1px),
+            transparent calc(40% - 1px), transparent
+    );
+}
+
+.bottom-border-gradient-60:after {
+    background: linear-gradient(
+            to right,
+            var(--bs-danger) calc(20% - 1px),
+            transparent calc(20% - 1px), transparent calc(20% + 1px),
+            var(--bs-danger) calc(20% + 1px), var(--bs-danger) calc(40% - 1px),
+            transparent calc(40% - 1px), transparent calc(40% + 1px),
+            var(--bs-warning) calc(40% + 1px), var(--bs-warning) calc(60% - 1px),
+            transparent calc(60% - 1px), transparent
+    );
+}
+
+.bottom-border-gradient-80:after {
+    background: linear-gradient(
+            to right,
+            var(--bs-danger) calc(20% - 1px),
+            transparent calc(20% - 1px), transparent calc(20% + 1px),
+            var(--bs-danger) calc(20% + 1px), var(--bs-danger) calc(40% - 1px),
+            transparent calc(40% - 1px), transparent calc(40% + 1px),
+            var(--bs-warning) calc(40% + 1px), var(--bs-warning) calc(60% - 1px),
+            transparent calc(60% - 1px), transparent calc(60% + 1px),
+            var(--bs-success) calc(60% + 1px), var(--bs-success) calc(80% - 1px),
+            transparent calc(80% - 1px)
+    );
+}
+
+.bottom-border-gradient-100:after {
+    background: linear-gradient(
+            to right,
+            var(--bs-danger) calc(20% - 1px),
+            transparent calc(20% - 1px), transparent calc(20% + 1px),
+            var(--bs-danger) calc(20% + 1px), var(--bs-danger) calc(40% - 1px),
+            transparent calc(40% - 1px), transparent calc(40% + 1px),
+            var(--bs-warning) calc(40% + 1px), var(--bs-warning) calc(60% - 1px),
+            transparent calc(60% - 1px), transparent calc(60% + 1px),
+            var(--bs-success) calc(60% + 1px), var(--bs-success) calc(80% - 1px),
+            transparent calc(80% - 1px), transparent calc(80% + 1px),
+            var(--bs-primary) calc(80% + 1px)
+    );
+}

@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Traits\CalculationDocumentMarginTrait;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 /**
  * Spreadsheet document for the list of calculations.
@@ -33,22 +32,17 @@ class CalculationsDocument extends AbstractArrayDocument
     {
         $title = $this->getTitle() ?? 'calculation.list.title';
         $this->start($title, true);
-        $row = $this->setHeaderValues([
-            'calculation.fields.id' => Alignment::HORIZONTAL_CENTER,
-            'calculation.fields.date' => Alignment::HORIZONTAL_CENTER,
-            'calculation.fields.state' => Alignment::HORIZONTAL_GENERAL,
-            'calculation.fields.customer' => Alignment::HORIZONTAL_GENERAL,
-            'calculation.fields.description' => Alignment::HORIZONTAL_GENERAL,
-            'calculationgroup.fields.amount' => Alignment::HORIZONTAL_RIGHT,
-            'calculation.fields.margin' => Alignment::HORIZONTAL_RIGHT,
-            'calculation.fields.total' => Alignment::HORIZONTAL_RIGHT,
-        ]);
 
-        $this->setFormatId(1)
-            ->setFormatDate(2)
-            ->setFormatAmount(6)
-            ->setFormat(7, $this->getMarginFormat())
-            ->setFormatAmount(8);
+        $row = $this->setHeaders([
+            'calculation.fields.id' => HeaderFormat::id(),
+            'calculation.fields.date' => HeaderFormat::date(),
+            'calculation.fields.state' => HeaderFormat::instance(),
+            'calculation.fields.customer' => HeaderFormat::instance(),
+            'calculation.fields.description' => HeaderFormat::instance(),
+            'calculationgroup.fields.amount' => HeaderFormat::amount(),
+            'calculation.fields.margin' => HeaderFormat::percentCustom($this->getMarginFormat()),
+            'calculation.fields.total' => HeaderFormat::amount(),
+        ]);
 
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [

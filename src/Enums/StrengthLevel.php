@@ -73,7 +73,7 @@ enum StrengthLevel: int implements EnumDefaultInterface, EnumSortableInterface, 
      */
     public function isSmaller(int|StrengthLevel $level): bool
     {
-        if ($level instanceof StrengthLevel) {
+        if ($level instanceof self) {
             $level = $level->value;
         }
 
@@ -96,12 +96,12 @@ enum StrengthLevel: int implements EnumDefaultInterface, EnumSortableInterface, 
     public static function sorted(): array
     {
         return [
-            StrengthLevel::NONE,
-            StrengthLevel::VERY_WEAK,
-            StrengthLevel::WEAK,
-            StrengthLevel::MEDIUM,
-            StrengthLevel::STRONG,
-            StrengthLevel::VERY_STRONG,
+            self::NONE,
+            self::VERY_WEAK,
+            self::WEAK,
+            self::MEDIUM,
+            self::STRONG,
+            self::VERY_STRONG,
         ];
     }
 
@@ -112,6 +112,6 @@ enum StrengthLevel: int implements EnumDefaultInterface, EnumSortableInterface, 
      */
     public static function values(): array
     {
-        return \array_map(static fn (StrengthLevel $level): int => $level->value, StrengthLevel::sorted());
+        return \array_map(static fn (self $level): int => $level->value, self::sorted());
     }
 }

@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-
 /**
  * Spreadsheet document for the list of products.
  *
@@ -29,16 +27,15 @@ class ProductsDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $this->start('product.list.title');
-        $row = $this->setHeaderValues([
-            'product.fields.description' => Alignment::HORIZONTAL_GENERAL,
-            'product.fields.group' => Alignment::HORIZONTAL_GENERAL,
-            'product.fields.category' => Alignment::HORIZONTAL_GENERAL,
-            'product.fields.price' => Alignment::HORIZONTAL_RIGHT,
-            'product.fields.unit' => Alignment::HORIZONTAL_GENERAL,
-            'product.fields.supplier' => Alignment::HORIZONTAL_GENERAL,
-        ]);
 
-        $this->setFormatPrice(4);
+        $row = $this->setHeaders([
+            'product.fields.description' => HeaderFormat::instance(),
+            'product.fields.group' => HeaderFormat::instance(),
+            'product.fields.category' => HeaderFormat::instance(),
+            'product.fields.price' => HeaderFormat::amountZero(),
+            'product.fields.unit' => HeaderFormat::instance(),
+            'product.fields.supplier' => HeaderFormat::instance(),
+        ]);
 
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [

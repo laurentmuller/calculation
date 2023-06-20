@@ -98,12 +98,12 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
     public static function sorted(): array
     {
         return [
-            EntityPermission::LIST,
-            EntityPermission::SHOW,
-            EntityPermission::ADD,
-            EntityPermission::EDIT,
-            EntityPermission::DELETE,
-            EntityPermission::EXPORT,
+            self::LIST,
+            self::SHOW,
+            self::ADD,
+            self::EDIT,
+            self::DELETE,
+            self::EXPORT,
         ];
     }
 
@@ -112,7 +112,7 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
      */
     public static function tryFindValue(string $name, int $default = RoleInterface::INVALID_VALUE): int
     {
-        return EntityPermission::tryFromName($name)?->value ?: $default;
+        return self::tryFromName($name)?->value ?: $default;
     }
 
     /**
@@ -120,9 +120,9 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
      *
      * @see EntityPermission::matchName()
      */
-    public static function tryFromName(string $name): ?EntityPermission
+    public static function tryFromName(string $name): ?self
     {
-        foreach (EntityPermission::cases() as $permission) {
+        foreach (self::cases() as $permission) {
             if ($permission->matchName($name)) {
                 return $permission;
             }

@@ -54,9 +54,9 @@ enum EntityAction: string implements EnumDefaultInterface, EnumSortableInterface
     public static function sorted(): array
     {
         return [
-            EntityAction::EDIT,
-            EntityAction::SHOW,
-            EntityAction::NONE,
+            self::EDIT,
+            self::SHOW,
+            self::NONE,
         ];
     }
 
@@ -67,6 +67,6 @@ enum EntityAction: string implements EnumDefaultInterface, EnumSortableInterface
      */
     public static function values(): array
     {
-        return \array_map(fn (EntityAction $action): string => $action->value, EntityAction::sorted());
+        return \array_map(fn (self $action): string => $action->value, self::sorted());
     }
 }

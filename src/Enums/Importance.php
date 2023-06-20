@@ -67,10 +67,10 @@ enum Importance: string implements EnumDefaultInterface, EnumSortableInterface, 
     public static function sorted(): array
     {
         return [
-            Importance::LOW,
-            Importance::MEDIUM,
-            Importance::HIGH,
-            Importance::URGENT,
+            self::LOW,
+            self::MEDIUM,
+            self::HIGH,
+            self::URGENT,
         ];
     }
 }

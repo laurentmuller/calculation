@@ -74,9 +74,9 @@ class SymfonyDocument extends AbstractDocument
     private function outputBundles(array $bundles): void
     {
         $this->createSheetAndTitle($this->controller, 'Bundles');
-        $row = $this->setHeaderValues([
-            'Name' => Alignment::HORIZONTAL_LEFT,
-            'Path' => Alignment::HORIZONTAL_LEFT,
+        $row = $this->setHeaders([
+            'Name' => HeaderFormat::instance(),
+            'Path' => HeaderFormat::instance(),
         ]);
         foreach ($bundles as $bundle) {
             $this->outputRow($row++, $bundle['name'], $bundle['path']);
@@ -103,11 +103,10 @@ class SymfonyDocument extends AbstractDocument
     {
         $app = $this->controller->getApplication();
         $this->setActiveTitle('Symfony', $this->controller);
-        $row = 1;
-        $this->setHeaderValues([
-            'Name' => Alignment::HORIZONTAL_LEFT,
-            'Value' => Alignment::HORIZONTAL_LEFT,
-        ], 1, $row++);
+        $row = $this->setHeaders([
+            'Name' => HeaderFormat::instance(),
+            'Value' => HeaderFormat::instance(),
+        ]);
         $this->outputGroup($row++, 'Kernel')
             ->outputRow($row++, 'Environment', $info->getEnvironment())
             ->outputRow($row++, 'Mode', $this->mode)
@@ -139,10 +138,10 @@ class SymfonyDocument extends AbstractDocument
     {
         $this->createSheetAndTitle($this->controller, $title);
         $row = 1;
-        $this->setHeaderValues([
-            'Name' => Alignment::HORIZONTAL_LEFT,
-            'Version' => Alignment::HORIZONTAL_LEFT,
-            'Description' => Alignment::HORIZONTAL_LEFT,
+        $this->setHeaders([
+            'Name' => HeaderFormat::instance(),
+            'Version' => HeaderFormat::instance(),
+            'Description' => HeaderFormat::instance(),
         ], 1, $row++);
         foreach ($packages as $package) {
             $this->outputRow(
@@ -169,11 +168,10 @@ class SymfonyDocument extends AbstractDocument
     private function outputRoutes(string $title, array $routes): void
     {
         $this->createSheetAndTitle($this->controller, $title);
-        $row = 1;
-        $this->setHeaderValues([
-            'Name' => Alignment::HORIZONTAL_LEFT,
-            'Path' => Alignment::HORIZONTAL_LEFT,
-        ], 1, $row++);
+        $row = $this->setHeaders([
+            'Name' => HeaderFormat::instance(),
+            'Path' => HeaderFormat::instance(),
+        ]);
         foreach ($routes as $route) {
             $this->outputRow($row++, $route['name'], $route['path']);
         }

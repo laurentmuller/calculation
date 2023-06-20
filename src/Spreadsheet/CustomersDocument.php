@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-
 /**
  * Spreadsheet document for the list of customers.
  *
@@ -29,13 +27,13 @@ class CustomersDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $this->start('customer.list.title');
-        $row = $this->setHeaderValues([
-            'customer.fields.lastName' => Alignment::HORIZONTAL_GENERAL,
-            'customer.fields.firstName' => Alignment::HORIZONTAL_GENERAL,
-            'customer.fields.company' => Alignment::HORIZONTAL_GENERAL,
-            'customer.fields.address' => Alignment::HORIZONTAL_GENERAL,
-            'customer.fields.zipCode' => Alignment::HORIZONTAL_RIGHT,
-            'customer.fields.city' => Alignment::HORIZONTAL_GENERAL,
+        $row = $this->setHeaders([
+            'customer.fields.lastName' => HeaderFormat::instance(),
+            'customer.fields.firstName' => HeaderFormat::instance(),
+            'customer.fields.company' => HeaderFormat::instance(),
+            'customer.fields.address' => HeaderFormat::instance(),
+            'customer.fields.zipCode' => HeaderFormat::right(),
+            'customer.fields.city' => HeaderFormat::instance(),
         ]);
 
         foreach ($entities as $entity) {

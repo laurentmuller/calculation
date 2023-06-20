@@ -22,7 +22,6 @@ use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
 use Elao\Enum\FlagBag;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
@@ -82,11 +81,13 @@ class UserRightsDocument extends AbstractArrayDocument
         $service = $this->controller->getApplication();
         $this->start('user.rights.title');
         $permissions = EntityPermission::sorted();
-        $headers = ['user.rights.table_title' => Alignment::HORIZONTAL_GENERAL];
+
+        $headers = ['user.rights.table_title' => HeaderFormat::instance()];
         foreach ($permissions as $permission) {
-            $headers[$permission->getReadable()] = Alignment::HORIZONTAL_CENTER;
+            $headers[$permission->getReadable()] = HeaderFormat::center();
         }
-        $row = $this->setHeaderValues($headers);
+        $row = $this->setHeaders($headers);
+
         $this->outputRole($service->getAdminRole(), $row);
         $this->outputRole($service->getUserRole(), $row);
         foreach ($entities as $entity) {

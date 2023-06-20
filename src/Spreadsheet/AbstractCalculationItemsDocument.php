@@ -64,16 +64,16 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
         $this->start((string) $this->getTitle(), true);
         $this->setForeground(6, Color::COLOR_RED)
             ->setWrapText(6);
-        $row = $this->setHeaderValues([
-            'calculation.fields.id' => [Alignment::HORIZONTAL_CENTER, Alignment::VERTICAL_TOP],
-            'calculation.fields.date' => [Alignment::HORIZONTAL_CENTER, Alignment::VERTICAL_TOP],
-            'calculation.fields.state' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'calculation.fields.customer' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'calculation.fields.description' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'calculationgroup.fields.items' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
+
+        $row = $this->setHeaders([
+            'calculation.fields.id' => HeaderFormat::id(Alignment::VERTICAL_TOP),
+            'calculation.fields.date' => HeaderFormat::date(Alignment::VERTICAL_TOP),
+            'calculation.fields.state' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'calculation.fields.customer' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'calculation.fields.description' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'calculationgroup.fields.items' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
         ]);
-        $this->setFormatId(1)
-            ->setFormatDate(2);
+
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [
                 $entity['id'],

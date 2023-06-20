@@ -52,13 +52,13 @@ class UsersDocument extends AbstractArrayDocument
     {
         $this->start('user.list.title');
         $this->createEnabledConditionals();
-        $row = $this->setHeaderValues([
-            'user.fields.imageFile' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
-            'user.fields.username' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'user.fields.email' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'user.fields.role' => [Alignment::HORIZONTAL_GENERAL, Alignment::VERTICAL_TOP],
-            'user.fields.enabled' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
-            'user.fields.lastLogin' => [Alignment::HORIZONTAL_LEFT, Alignment::VERTICAL_TOP],
+        $row = $this->setHeaders([
+            'user.fields.imageFile' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'user.fields.username' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'user.fields.email' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'user.fields.role' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'user.fields.enabled' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
+            'user.fields.lastLogin' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
         ]);
 
         $this->setFormatBoolean(5, 'common.value_enabled', 'common.value_disabled', true);

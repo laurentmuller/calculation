@@ -69,9 +69,10 @@ class GroupsReport extends AbstractArrayReport
                 PdfColumn::right($this->trans('group.fields.categories'), 26, true),
                 PdfColumn::right($this->trans('category.fields.products'), 26, true),
                 PdfColumn::right($this->trans('category.fields.tasks'), 26, true),
-                PdfColumn::right($this->trans('groupmargin.fields.minimum'), 22, true),
-                PdfColumn::right($this->trans('groupmargin.fields.maximum'), 22, true),
-                PdfColumn::right($this->trans('groupmargin.fields.margin'), 22, true)
+                PdfColumn::right($this->trans('globalmargin.fields.minimum'), 22, true),
+                PdfColumn::right($this->trans('globalmargin.fields.maximum'), 22, true),
+                PdfColumn::right($this->trans('globalmargin.fields.delta'), 22, true),
+                PdfColumn::right($this->trans('globalmargin.fields.margin'), 22, true)
             )->outputHeaders();
     }
 
@@ -99,13 +100,14 @@ class GroupsReport extends AbstractArrayReport
                 }
                 $table->add(FormatUtils::formatAmount($margin->getMinimum()))
                     ->add(FormatUtils::formatAmount($margin->getMaximum()))
+                    ->add(FormatUtils::formatAmount($margin->getDelta()))
                     ->add(FormatUtils::formatPercent($margin->getMargin()))
                     ->endRow();
                 $skip = true;
             }
         } else {
             $empty = $this->trans('group.edit.empty_margins');
-            $table->add($empty, 3)->endRow();
+            $table->add($empty, 4)->endRow();
         }
     }
 
@@ -137,7 +139,7 @@ class GroupsReport extends AbstractArrayReport
             ->add($txtCategories)
             ->add($txtProducts)
             ->add($txtTasks)
-            ->add($txtMargins, 3)
+            ->add($txtMargins, 4)
             ->endRow();
     }
 }

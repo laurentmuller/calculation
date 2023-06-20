@@ -132,6 +132,10 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     public function countItems(): int
     {
+        if (!$this->hasCategories()) {
+            return 0;
+        }
+
         return $this->reduceCategories(fn (int $carry, Category $category): int => $carry + $category->countItems());
     }
 
@@ -148,6 +152,10 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     public function countProducts(): int
     {
+        if (!$this->hasCategories()) {
+            return 0;
+        }
+
         return $this->reduceCategories(fn (int $carry, Category $category): int => $carry + $category->countProducts());
     }
 
@@ -156,6 +164,10 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     public function countTasks(): int
     {
+        if (!$this->hasCategories()) {
+            return 0;
+        }
+
         return $this->reduceCategories(fn (int $carry, Category $category): int => $carry + $category->countTasks());
     }
 
@@ -248,6 +260,40 @@ class Group extends AbstractEntity implements TimestampableInterface
     public function hasMargins(): bool
     {
         return !$this->margins->isEmpty();
+    }
+
+    /**
+     * Returns if this group contains one or more products.
+     */
+    public function hasProducts(): bool
+    {
+        if (!$this->hasCategories()) {
+            return false;
+        }
+        foreach ($this->categories as $category) {
+            if ($category->hasProducts()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns if this category contains one or more tasks.
+     */
+    public function hasTasks(): bool
+    {
+        if (!$this->hasCategories()) {
+            return false;
+        }
+        foreach ($this->categories as $category) {
+            if ($category->hasTasks()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

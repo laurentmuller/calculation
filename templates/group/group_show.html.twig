@@ -13,39 +13,38 @@
 {% block property_body %}
 {{ property('group.fields.code', item.code) }}
 {{ property('group.fields.description', item.description) }}
-{%- if not has_margins -%}
 {{- property('group.fields.margins', 'counters.margins'|trans({'count': item.countMargins})) }}
-{% endif -%}
-{%- if item.hasCategories -%}
 {{- property('group.fields.categories', 'counters.categories'|trans({'count': item.countCategories})) }}
-{% endif -%}
+{{ property('category.fields.products', 'counters.products'|trans({'count': item.countProducts})) }}
+{{ property('category.fields.tasks', 'counters.tasks'|trans({'count': item.countTasks})) }}
 {{ properties(item) }}
 {% endblock %}
 {# body #}
 {% block card_body %}
 {{ parent() }}
 {%- if has_margins -%}
-<div class="{{ block('table_responsive_class') }}">
-    <table class="table table-sm table-hover table-list">
-        <thead>
+    <div class="ms-1 my-1">{{ 'group.fields.margins'|trans }}</div>
+    <div class="{{ block('table_responsive_class') }}">
+        <table class="table table-sm table-hover table-list">
+            <thead>
             <tr>
-                <th class="fw-normal w-25">{{ 'group.fields.margins'|trans }}</th>
-                <th class="fw-normal text-end w-25">{{ 'groupmargin.fields.minimum'|trans }}</th>
-                <th class="fw-normal text-end w-25">{{ 'groupmargin.fields.maximum'|trans }}</th>
-                <th class="fw-normal text-end w-25">{{ 'groupmargin.fields.margin'|trans }}</th>
+                <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.minimum'|trans }}</th>
+                <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.maximum'|trans }}</th>
+                <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.delta'|trans }}</th>
+                <th class="fw-normal text-end w-25">{{ 'globalmargin.fields.margin'|trans }}</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for margin in item.margins -%}
-            <tr>
-                <td class="w-25">&nbsp;</td>
-                <td class="text-end w-25">{{ margin.minimum|amount }}</td>
-                <td class="text-end w-25">{{ margin.maximum|amount }}</td>
-                <td class="text-end w-25">{{ margin.margin|percent }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+            {% for margin in item.margins -%}
+                <tr>
+                    <td class="text-end w-25">{{ margin.minimum|amount }}</td>
+                    <td class="text-end w-25">{{ margin.maximum|amount }}</td>
+                    <td class="text-end w-25">{{ margin.delta|amount }}</td>
+                    <td class="text-end w-25">{{ margin.margin|percent }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {%- endif -%}
 {% endblock %}

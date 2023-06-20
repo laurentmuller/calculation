@@ -49,26 +49,25 @@ class PhpIniDocument extends AbstractDocument
             return true;
         }
         \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
-        $row = $this->setHeaderValues([
-            'Directive' => Alignment::HORIZONTAL_LEFT,
-            'Local Value' => Alignment::HORIZONTAL_LEFT,
-            'Master Value' => Alignment::HORIZONTAL_LEFT,
+        $row = $this->setHeaders([
+            'Directive' => HeaderFormat::left(Alignment::VERTICAL_TOP),
+            'Local Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
+            'Master Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
         ]);
+
         foreach ($content as $key => $value) {
             if ($this->outputGroup($row, $key)) {
                 ++$row;
             }
             $row = $this->outputEntries($row, $value);
         }
-        $this->getActiveSheet()
-            ->getStyle('A')
-            ->getAlignment()
-            ->setVertical(Alignment::VERTICAL_TOP);
+
         $this->setWrapText(2)
             ->setAutoSize(1)
             ->setColumnWidth(2, 50)
             ->setColumnWidth(3, 50, true)
             ->finish();
+
         $this->getPageSetup()
             ->setFitToWidth(1)
             ->setFitToHeight(0);

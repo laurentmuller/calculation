@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-
 /**
  * Spreadsheet document for the list of global margins.
  *
@@ -29,17 +27,13 @@ class GlobalMarginsDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $this->start('globalmargin.list.title');
-        $row = $this->setHeaderValues([
-            'globalmargin.fields.minimum' => Alignment::HORIZONTAL_RIGHT,
-            'globalmargin.fields.maximum' => Alignment::HORIZONTAL_RIGHT,
-            'globalmargin.fields.delta' => Alignment::HORIZONTAL_RIGHT,
-            'globalmargin.fields.margin' => Alignment::HORIZONTAL_RIGHT,
-        ]);
 
-        $this->setFormatAmount(1)
-            ->setFormatAmount(2)
-            ->setFormatAmount(3)
-            ->setFormatPercent(4);
+        $row = $this->setHeaders([
+            'globalmargin.fields.minimum' => HeaderFormat::amount(),
+            'globalmargin.fields.maximum' => HeaderFormat::amount(),
+            'globalmargin.fields.delta' => HeaderFormat::amount(),
+            'globalmargin.fields.margin' => HeaderFormat::percent(),
+        ]);
 
         foreach ($entities as $entity) {
             $this->setRowValues($row++, [

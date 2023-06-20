@@ -37,7 +37,8 @@ class MySqlDocument extends AbstractDocument
             return false;
         }
         $this->start($this->trans('about.mysql_version', ['%version%' => $this->service->getVersion()]));
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'Name' => HeaderFormat::left(Alignment::VERTICAL_TOP),
             'Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
         ]);
@@ -49,7 +50,7 @@ class MySqlDocument extends AbstractDocument
             $this->outputArray($row, $configuration);
         }
 
-        $this->setAutoSize(1)
+        $sheet->setAutoSize(1)
             ->setColumnWidth(2, 50, true)
             ->finish();
 

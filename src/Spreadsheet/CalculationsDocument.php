@@ -33,7 +33,8 @@ class CalculationsDocument extends AbstractArrayDocument
         $title = $this->getTitle() ?? 'calculation.list.title';
         $this->start($title, true);
 
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'calculation.fields.id' => HeaderFormat::id(),
             'calculation.fields.date' => HeaderFormat::date(),
             'calculation.fields.state' => HeaderFormat::instance(),
@@ -45,7 +46,7 @@ class CalculationsDocument extends AbstractArrayDocument
         ]);
 
         foreach ($entities as $entity) {
-            $this->setRowValues($row++, [
+            $sheet->setRowValues($row++, [
                 $entity->getId(),
                 $entity->getDate(),
                 $entity->getStateCode(),
@@ -56,7 +57,7 @@ class CalculationsDocument extends AbstractArrayDocument
                 $entity->getOverallTotal(),
             ]);
         }
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }

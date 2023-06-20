@@ -13,8 +13,12 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Style;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class WorksheetDocument extends Worksheet
@@ -50,6 +54,16 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
+     * Ends render this document by selecting the given cell.
+     *
+     * @param string $selection the cell to select
+     */
+    public function finish(string $selection = 'A2'): self
+    {
+        return $this->setSelectedCell($selection);
+    }
+
+    /**
      * Gets style for the given column.
      *
      * @param int $columnIndex the column index ('A' = First column)
@@ -79,11 +93,126 @@ class WorksheetDocument extends Worksheet
      */
     public function getPercentFormat(bool $decimals = false): string
     {
-        if ($decimals) {
-            return NumberFormat::FORMAT_PERCENTAGE_00;
+        return $decimals ? NumberFormat::FORMAT_PERCENTAGE_00 : NumberFormat::FORMAT_PERCENTAGE;
+    }
+
+    /**
+     * Set the auto-size for the given columns.
+     *
+     * @param int ...$columnIndexes the column indexes ('A' = First column)
+     */
+    public function setAutoSize(int ...$columnIndexes): static
+    {
+        foreach ($columnIndexes as $columnIndex) {
+            $name = $this->stringFromColumnIndex($columnIndex);
+            $this->getColumnDimension($name)->setAutoSize(true);
         }
 
-        return NumberFormat::FORMAT_PERCENTAGE;
+        return $this;
+    }
+
+    public function setCellContent(int $columnIndex, int $rowIndex, mixed $value): static
+    {
+        if (null !== $value && '' !== $value) {
+            if ($value instanceof \DateTimeInterface) {
+                $value = Date::PHPToExcel($value);
+            } elseif (\is_bool($value)) {
+                $value = (int) $value;
+            }
+            parent::setCellValue([$columnIndex, $rowIndex], $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets image at the given coordinate.
+     *
+     * @param string $path        the image path
+     * @param string $coordinates the coordinates (eg: 'A1')
+     * @param int    $width       the image width
+     * @param int    $height      the image height
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     */
+    public function setCellImage(string $path, string $coordinates, int $width, int $height): static
+    {
+        $drawing = new Drawing();
+        $drawing->setPath($path)
+            ->setResizeProportional(false)
+            ->setCoordinates($coordinates)
+            ->setWidth($width)
+            ->setHeight($height)
+            ->setOffsetX(2)
+            ->setOffsetY(2)
+            ->setWorksheet($this);
+        [$columnIndex, $rowIndex] = Coordinate::coordinateFromString($coordinates);
+        $columnDimension = $this->getColumnDimension($columnIndex);
+        if ($width > $columnDimension->getWidth()) {
+            $columnDimension->setWidth($width);
+        }
+        $rowDimension = $this->getRowDimension((int) $rowIndex);
+        if ($height > $rowDimension->getRowHeight()) {
+            $rowDimension->setRowHeight($height);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add conditionals to the given column.
+     *
+     * @param int $columnIndex the column index ('A' = First column)
+     */
+    public function setColumnConditional(int $columnIndex, Conditional ...$conditionals): static
+    {
+        $style = $this->getColumnStyle($columnIndex);
+        $conditionals = \array_merge($style->getConditionalStyles(), $conditionals);
+        $style->setConditionalStyles($conditionals);
+
+        return $this;
+    }
+
+    /**
+     * Set the width for the given column.
+     *
+     * @param int  $columnIndex the column index ('A' = First column)
+     * @param int  $width       the width to set
+     * @param bool $wrapText    true to wrap text
+     *
+     * @see WorksheetDocument::setWrapText()
+     */
+    public function setColumnWidth(int $columnIndex, int $width, bool $wrapText = false): static
+    {
+        $name = $this->stringFromColumnIndex($columnIndex);
+        $this->getColumnDimension($name)->setWidth($width);
+
+        return $wrapText ? $this->setWrapText($columnIndex) : $this;
+    }
+
+    /**
+     * Sets the foreground color for the given column.
+     *
+     * @param int    $columnIndex   the column index ('A' = First column)
+     * @param string $color         the hexadecimal color or an empty string ("") for black color
+     * @param bool   $includeHeader true to set color for all rows; false to skip the first row
+     */
+    public function setForeground(int $columnIndex, string $color, bool $includeHeader = false): static
+    {
+        $name = $this->stringFromColumnIndex($columnIndex);
+        $style = $this->getColumnStyle($columnIndex);
+        $fontColor = $style->getFont()->getColor();
+        if (\strlen($color) > 6) {
+            $fontColor->setARGB($color);
+        } else {
+            $fontColor->setRGB($color);
+        }
+        if (!$includeHeader) {
+            $this->getStyle("{$name}1")->getFont()->getColor()
+                ->setARGB();
+        }
+
+        return $this;
     }
 
     public function setFormat(int $columnIndex, string $format): static
@@ -232,6 +361,109 @@ class WorksheetDocument extends Worksheet
             ->setRowsToRepeatAtTopByStartAndEnd($rowIndex, $rowIndex);
 
         return $rowIndex + 1;
+    }
+
+    /**
+     * Sets the margins.
+     *
+     * @param float $margins the margins to set
+     */
+    public function setMargins(float $margins): static
+    {
+        $pageMargins = $this->getPageMargins();
+        $pageMargins->setTop($margins)
+            ->setBottom($margins)
+            ->setLeft($margins)
+            ->setRight($margins);
+
+        return $this;
+    }
+
+    /**
+     * Sets landscape orientation for the active sheet.
+     */
+    public function setPageLandscape(): static
+    {
+        return $this->setPageOrientation(PageSetup::ORIENTATION_LANDSCAPE);
+    }
+
+    /**
+     * Set the page orientation (default, portait or landscape).
+     *
+     * @psalm-param PageSetup::ORIENTATION_* $orientation
+     */
+    public function setPageOrientation(string $orientation): static
+    {
+        switch ($orientation) {
+            case PageSetup::ORIENTATION_DEFAULT:
+            case PageSetup::ORIENTATION_PORTRAIT:
+            case PageSetup::ORIENTATION_LANDSCAPE:
+                $this->getPageSetup()->setOrientation($orientation);
+                break;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets portrait orientation for the active sheet.
+     */
+    public function setPagePortrait(): static
+    {
+        return $this->setPageOrientation(PageSetup::ORIENTATION_PORTRAIT);
+    }
+
+    /**
+     * Sets the paper size for the active sheet.
+     *
+     * @param int $size the paper size that must be one of PageSetup paper size constant
+     *
+     * @psalm-param PageSetup::PAPERSIZE_* $size
+     */
+    public function setPageSize(int $size): static
+    {
+        $this->getPageSetup()->setPaperSize($size);
+
+        return $this;
+    }
+
+    /**
+     * Sets the paper size to A4 for the active sheet.
+     */
+    public function setPageSizeA4(): static
+    {
+        return $this->setPageSize(PageSetup::PAPERSIZE_A4);
+    }
+
+    /**
+     * Sets the values of the given row.
+     *
+     * @param int   $rowIndex    the row index (1 = First row)
+     * @param array $values      the values to set
+     * @param int   $columnIndex the starting column index ('A' = First column)
+     */
+    public function setRowValues(int $rowIndex, array $values, int $columnIndex = 1): static
+    {
+        /** @psalm-var mixed $value*/
+        foreach ($values as $value) {
+            $this->setCellContent($columnIndex++, $rowIndex, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set wrap text for the given column. The auto-size is automatically disabled.
+     *
+     * @param int $columnIndex the column index ('A' = First column)
+     */
+    public function setWrapText(int $columnIndex): static
+    {
+        $name = $this->stringFromColumnIndex($columnIndex);
+        $this->getColumnDimension($name)->setAutoSize(false);
+        $this->getStyle($name)->getAlignment()->setWrapText(true);
+
+        return $this;
     }
 
     /**

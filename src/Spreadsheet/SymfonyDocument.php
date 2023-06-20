@@ -74,14 +74,15 @@ class SymfonyDocument extends AbstractDocument
     private function outputBundles(array $bundles): void
     {
         $this->createSheetAndTitle($this->controller, 'Bundles');
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
             'Path' => HeaderFormat::instance(),
         ]);
         foreach ($bundles as $bundle) {
             $this->outputRow($row++, $bundle['name'], $bundle['path']);
         }
-        $this->setAutoSize(1, 2)->finish();
+        $sheet->setAutoSize(1, 2)->finish();
     }
 
     /**
@@ -103,7 +104,8 @@ class SymfonyDocument extends AbstractDocument
     {
         $app = $this->controller->getApplication();
         $this->setActiveTitle('Symfony', $this->controller);
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
             'Value' => HeaderFormat::instance(),
         ]);
@@ -126,7 +128,9 @@ class SymfonyDocument extends AbstractDocument
             ->outputRow($row++, 'Project', $info->getProjectDir())
             ->outputRow($row++, 'Logs', $info->getLogInfo())
             ->outputRow($row, 'Cache', $info->getCacheInfo());
-        $this->setAutoSize(1, 2)->finish();
+
+        $sheet->setAutoSize(1, 2)
+            ->finish();
     }
 
     /**
@@ -138,7 +142,8 @@ class SymfonyDocument extends AbstractDocument
     {
         $this->createSheetAndTitle($this->controller, $title);
         $row = 1;
-        $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
             'Version' => HeaderFormat::instance(),
             'Description' => HeaderFormat::instance(),
@@ -151,11 +156,10 @@ class SymfonyDocument extends AbstractDocument
                 $package['description']
             );
         }
-        $this->getActiveSheet()
-            ->getStyle('A:C')
+        $sheet->getStyle('A:C')
             ->getAlignment()
             ->setVertical(Alignment::VERTICAL_TOP);
-        $this->setAutoSize(1, 2)
+        $sheet->setAutoSize(1, 2)
             ->setColumnWidth(3, 70, true)
             ->finish();
     }
@@ -168,14 +172,16 @@ class SymfonyDocument extends AbstractDocument
     private function outputRoutes(string $title, array $routes): void
     {
         $this->createSheetAndTitle($this->controller, $title);
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
             'Path' => HeaderFormat::instance(),
         ]);
         foreach ($routes as $route) {
             $this->outputRow($row++, $route['name'], $route['path']);
         }
-        $this->setAutoSize(1, 2)->finish();
+        $sheet->setAutoSize(1, 2)
+            ->finish();
     }
 
     private function outputRow(int $row, string ...$values): self

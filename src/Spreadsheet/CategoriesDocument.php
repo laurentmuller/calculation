@@ -28,7 +28,8 @@ class CategoriesDocument extends AbstractArrayDocument
     {
         $this->start('category.list.title');
 
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'category.fields.code' => HeaderFormat::instance(),
             'category.fields.description' => HeaderFormat::instance(),
             'category.fields.group' => HeaderFormat::instance(),
@@ -38,7 +39,7 @@ class CategoriesDocument extends AbstractArrayDocument
 
         $default = $this->trans('report.other');
         foreach ($entities as $entity) {
-            $this->setRowValues($row++, [
+            $sheet->setRowValues($row++, [
                 $entity->getCode(),
                 $entity->getDescription(),
                 $entity->getGroupCode() ?? $default,
@@ -46,7 +47,7 @@ class CategoriesDocument extends AbstractArrayDocument
                 $entity->countTasks(),
             ]);
         }
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }

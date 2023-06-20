@@ -62,10 +62,12 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $this->start((string) $this->getTitle(), true);
-        $this->setForeground(6, Color::COLOR_RED)
+
+        $sheet = $this->getActiveSheet();
+        $sheet->setForeground(6, Color::COLOR_RED)
             ->setWrapText(6);
 
-        $row = $this->setHeaders([
+        $row = $sheet->setHeaders([
             'calculation.fields.id' => HeaderFormat::id(Alignment::VERTICAL_TOP),
             'calculation.fields.date' => HeaderFormat::date(Alignment::VERTICAL_TOP),
             'calculation.fields.state' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
@@ -75,7 +77,7 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
         ]);
 
         foreach ($entities as $entity) {
-            $this->setRowValues($row++, [
+            $sheet->setRowValues($row++, [
                 $entity['id'],
                 $entity['date'],
                 $entity['stateCode'],
@@ -84,7 +86,7 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
                 $this->formatItems($entity['items']),
             ]);
         }
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }

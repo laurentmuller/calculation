@@ -28,7 +28,8 @@ class GroupsDocument extends AbstractArrayDocument
     {
         $this->start('group.list.title');
 
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'group.fields.code' => HeaderFormat::instance(),
             'group.fields.description' => HeaderFormat::instance(),
             'group.fields.categories' => HeaderFormat::int(),
@@ -42,7 +43,7 @@ class GroupsDocument extends AbstractArrayDocument
         ]);
 
         foreach ($entities as $entity) {
-            $this->setRowValues($row, [
+            $sheet->setRowValues($row, [
                 $entity->getCode(),
                 $entity->getDescription(),
                 $entity->countCategories(),
@@ -54,7 +55,7 @@ class GroupsDocument extends AbstractArrayDocument
                 if (!$first) {
                     ++$row;
                 }
-                $this->setRowValues($row, [
+                $sheet->setRowValues($row, [
                     $margin->getMinimum(),
                     $margin->getMaximum(),
                     $margin->getDelta(),
@@ -64,7 +65,7 @@ class GroupsDocument extends AbstractArrayDocument
             }
             ++$row;
         }
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }

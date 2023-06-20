@@ -15,29 +15,19 @@ namespace App\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
 use App\Traits\TranslatorTrait;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Style\Conditional;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use PhpOffice\PhpSpreadsheet\Style\Style;
-use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Extends the Spreadsheet class with shortcuts to set properties, formats and values.
+ * Extends the Spreadsheet class with shortcuts to set properties.
  */
 class SpreadsheetDocument extends Spreadsheet
 {
     use TranslatorTrait;
-
-    /**
-     * The default margins (10 millimeters).
-     */
-    final public const DEFAULT_MARGIN = 0.4;
 
     /**
      * The top margins when customer header is present (21 millimeters).
@@ -48,28 +38,6 @@ class SpreadsheetDocument extends Spreadsheet
      * The top and bottom margins when header and/or footer is present (12 millimeters).
      */
     final public const HEADER_FOOTER_MARGIN = 0.47;
-
-    /**
-     * The date time format ('dd/mm/yyyy hh:mm').
-     */
-    private const FORMAT_DATE_TIME = 'dd/mm/yyyy hh:mm';
-
-    /**
-     * The identifier format ('000000').
-     */
-    private const FORMAT_ID = '000000';
-
-    /**
-     * The integer format ('#,##0').
-     */
-    private const FORMAT_INT = '#,##0';
-
-    /**
-     * The boolean formats.
-     *
-     * @var array<string, string>
-     */
-    private array $booleanFormats = [];
 
     /**
      * The file title.
@@ -83,15 +51,15 @@ class SpreadsheetDocument extends Spreadsheet
     {
         parent::__construct();
 
-        // replace
+        // replace default sheet
         $this->removeSheetByIndex(0);
-        $this->createSheet();
-
-        $this->setPageSizeA4()->setPagePortrait();
+        $this->createSheet()
+            ->setPageSizeA4()
+            ->setPagePortrait();
     }
 
     /**
-     * Create sheet and add it to this workbook.
+     * Create a sheet and add it to this workbook.
      *
      * @param int|null $sheetIndex Index where sheet should go (0,1,..., or null for last)
      */
@@ -104,27 +72,28 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Create worksheet, set title and add it to this spreadsheet.
+     * Create a worksheet, set title and add it to this spreadsheet.
      *
      * The created sheet is activated.
      *
      * @param ?string $title      the title of the worksheet
      * @param ?int    $sheetIndex the  index where worksheet should go (0,1,..., or null for last)
      *
-     * @return Worksheet the newly created worksheet
+     * @return WorksheetDocument the newly created worksheet
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    public function createSheetAndTitle(AbstractController $controller, string $title = null, int $sheetIndex = null): Worksheet
+    public function createSheetAndTitle(AbstractController $controller, string $title = null, int $sheetIndex = null): WorksheetDocument
     {
-        $sheet = parent::createSheet($sheetIndex);
+        $sheet = $this->createSheet($sheetIndex);
         if (null !== $title) {
             $sheet->setTitle($this->validateSheetTitle($title));
         }
+        $sheet->setPrintGridlines(true);
+
         $this->setActiveSheetIndex($sheetIndex ?? $this->getSheetCount() - 1);
         $customer = $controller->getUserService()->getCustomer();
-        $this->setHeaderFooter($title, $customer)
-            ->setPrintGridlines();
+        $this->setHeaderFooter($title, $customer);
 
         return $sheet;
     }
@@ -141,37 +110,11 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Gets style for the given column.
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     */
-    public function getColumnStyle(int $columnIndex): Style
-    {
-        $name = $this->stringFromColumnIndex($columnIndex);
-
-        return $this->getActiveSheet()->getStyle($name);
-    }
-
-    /**
      * Gets the page setup of the active sheet.
      */
     public function getPageSetup(): PageSetup
     {
         return $this->getActiveSheet()->getPageSetup();
-    }
-
-    /**
-     * Gets the percent format.
-     *
-     * @param bool $decimals true to display 2 decimals ('0.00%'), false if none ('0%').
-     */
-    public function getPercentFormat(bool $decimals = false): string
-    {
-        if ($decimals) {
-            return NumberFormat::FORMAT_PERCENTAGE_00;
-        }
-
-        return NumberFormat::FORMAT_PERCENTAGE;
     }
 
     /**
@@ -222,22 +165,6 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Set the auto-size for the given columns.
-     *
-     * @param int ...$columnIndexes the column indexes ('A' = First column)
-     */
-    public function setAutoSize(int ...$columnIndexes): static
-    {
-        $sheet = $this->getActiveSheet();
-        foreach ($columnIndexes as $columnIndex) {
-            $name = $this->stringFromColumnIndex($columnIndex);
-            $sheet->getColumnDimension($name)->setAutoSize(true);
-        }
-
-        return $this;
-    }
-
-    /**
      * Sets the category property.
      *
      * @param ?string $category the category
@@ -249,59 +176,6 @@ class SpreadsheetDocument extends Spreadsheet
         }
 
         return $this;
-    }
-
-    /**
-     * Sets image at the given coordinate.
-     *
-     * @param string $path        the image path
-     * @param string $coordinates the coordinates (eg: 'A1')
-     * @param int    $width       the image width
-     * @param int    $height      the image height
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
-     */
-    public function setCellImage(string $path, string $coordinates, int $width, int $height): static
-    {
-        $sheet = $this->getActiveSheet();
-        $drawing = new Drawing();
-        $drawing->setPath($path)
-            ->setResizeProportional(false)
-            ->setCoordinates($coordinates)
-            ->setWidth($width)
-            ->setHeight($height)
-            ->setOffsetX(2)
-            ->setOffsetY(2)
-            ->setWorksheet($sheet);
-        [$columnIndex, $rowIndex] = Coordinate::coordinateFromString($coordinates);
-        $columnDimension = $sheet->getColumnDimension($columnIndex);
-        if ($width > $columnDimension->getWidth()) {
-            $columnDimension->setWidth($width);
-        }
-        $rowDimension = $sheet->getRowDimension((int) $rowIndex);
-        if ($height > $rowDimension->getRowHeight()) {
-            $rowDimension->setRowHeight($height);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets image at the given coordinate.
-     *
-     * @param string $path        the image path
-     * @param int    $columnIndex the column index ('A' = First column)
-     * @param int    $rowIndex    the row index (1 = First row)
-     * @param int    $width       the image width
-     * @param int    $height      the image height
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
-     */
-    public function setCellImageByColumnAndRow(string $path, int $columnIndex, int $rowIndex, int $width, int $height): static
-    {
-        $coordinates = $this->stringFromColumnAndRowIndex($columnIndex, $rowIndex);
-
-        return $this->setCellImage($path, $coordinates, $width, $height);
     }
 
     /**
@@ -329,38 +203,6 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Add conditionals to the given column.
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     */
-    public function setColumnConditional(int $columnIndex, Conditional ...$conditionals): static
-    {
-        $style = $this->getColumnStyle($columnIndex);
-        $conditionals = \array_merge($style->getConditionalStyles(), $conditionals);
-        $style->setConditionalStyles($conditionals);
-
-        return $this;
-    }
-
-    /**
-     * Set the width for the given column.
-     *
-     * @param int  $columnIndex the column index ('A' = First column)
-     * @param int  $width       the width to set
-     * @param bool $wrapText    true to wrap text
-     *
-     * @see SpreadsheetDocument::setWrapText()
-     */
-    public function setColumnWidth(int $columnIndex, int $width, bool $wrapText = false): static
-    {
-        $sheet = $this->getActiveSheet();
-        $name = $this->stringFromColumnIndex($columnIndex);
-        $sheet->getColumnDimension($name)->setWidth($width);
-
-        return $wrapText ? $this->setWrapText($columnIndex) : $this;
-    }
-
-    /**
      * Sets the company name property.
      *
      * @param ?string $company the company name
@@ -375,14 +217,6 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Sets the margins of the active sheet to default value (10 millimeters).
-     */
-    public function setDefaultMargins(): static
-    {
-        return $this->setMargins(self::DEFAULT_MARGIN);
-    }
-
-    /**
      * Sets the document description.
      *
      * @param ?string $description the description
@@ -392,293 +226,6 @@ class SpreadsheetDocument extends Spreadsheet
         if ($description) {
             $this->getProperties()->setDescription($description);
         }
-
-        return $this;
-    }
-
-    /**
-     * Sets the foreground color for the given column.
-     *
-     * @param int    $columnIndex   the column index ('A' = First column)
-     * @param string $color         the hexadecimal color or an empty string ("") for black color
-     * @param bool   $includeHeader true to set color for all rows; false to skip the first row
-     */
-    public function setForeground(int $columnIndex, string $color, bool $includeHeader = false): static
-    {
-        $sheet = $this->getActiveSheet();
-        $name = $this->stringFromColumnIndex($columnIndex);
-        $style = $this->getColumnStyle($columnIndex);
-        $fontColor = $style->getFont()->getColor();
-        if (\strlen($color) > 6) {
-            $fontColor->setARGB($color);
-        } else {
-            $fontColor->setRGB($color);
-        }
-        if (!$includeHeader) {
-            $sheet->getStyle("{$name}1")->getFont()->getColor()
-                ->setARGB();
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets the format for the given column.
-     *
-     * @param int    $columnIndex the column index ('A' = First column)
-     * @param string $format      the format to set
-     */
-    public function setFormat(int $columnIndex, string $format): static
-    {
-        $this->getColumnStyle($columnIndex)
-            ->getNumberFormat()
-            ->setFormatCode($format);
-
-        return $this;
-    }
-
-    /**
-     * Sets the amount format ('#,##0.00') for the given column.
-     *
-     * @param int  $columnIndex the column index ('A' = First column)
-     * @param bool $zeroInRed   if true, the red color is used when values are smaller than or equal to 0
-     */
-    public function setFormatAmount(int $columnIndex, bool $zeroInRed = false): static
-    {
-        $format = NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1;
-        if ($zeroInRed) {
-            return $this->setFormat($columnIndex, "[Red][<=0]$format;$format");
-        }
-
-        return $this->setFormat($columnIndex, $format);
-    }
-
-    /**
-     * Sets the boolean format for the given column.
-     *
-     * @param int    $columnIndex the column index ('A' = First column)
-     * @param string $true        the value to display when <code>true</code>
-     * @param string $false       the value to display when <code>false</code>
-     * @param bool   $translate   <code>true</code> to translate values
-     */
-    public function setFormatBoolean(int $columnIndex, string $true, string $false, bool $translate = false): static
-    {
-        $key = "$false-$true";
-        if (!\array_key_exists($key, $this->booleanFormats)) {
-            if ($translate) {
-                $true = $this->trans($true);
-                $false = $this->trans($false);
-            }
-            $true = \str_replace('"', "''", $true);
-            $false = \str_replace('"', "''", $false);
-            $format = "\"$true\";;\"$false\";@";
-            $this->booleanFormats[$key] = $format;
-        } else {
-            $format = $this->booleanFormats[$key];
-        }
-
-        return $this->setFormat($columnIndex, $format);
-    }
-
-    /**
-     * Sets the date format ('dd/mm/yyyy') for the given column.
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     */
-    public function setFormatDate(int $columnIndex): static
-    {
-        return $this->setFormat($columnIndex, NumberFormat::FORMAT_DATE_DDMMYYYY);
-    }
-
-    /**
-     * Sets the date and time format ('dd/mm/yyyy hh:mm') for the given column.
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     */
-    public function setFormatDateTime(int $columnIndex): static
-    {
-        return $this->setFormat($columnIndex, self::FORMAT_DATE_TIME);
-    }
-
-    /**
-     * Sets the identifier format ('000000') for the given column.
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     */
-    public function setFormatId(int $columnIndex): static
-    {
-        return $this->setFormat($columnIndex, self::FORMAT_ID);
-    }
-
-    /**
-     * Sets the integer format ('#,##0') for the given column.
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     */
-    public function setFormatInt(int $columnIndex): static
-    {
-        return $this->setFormat($columnIndex, self::FORMAT_INT);
-    }
-
-    /**
-     * Sets the percent format for the given column.
-     *
-     * @param int  $columnIndex the column index ('A' = First column)
-     * @param bool $decimals    true to display 2 decimals ('0.00%'), false if none ('0%').
-     */
-    public function setFormatPercent(int $columnIndex, bool $decimals = false): static
-    {
-        return $this->setFormat($columnIndex, $this->getPercentFormat($decimals));
-    }
-
-    /**
-     * Sets the translated 'Yes/No' boolean format for the given column.
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     */
-    public function setFormatYesNo(int $columnIndex): static
-    {
-        return $this->setFormatBoolean($columnIndex, 'common.value_true', 'common.value_false', true);
-    }
-
-    /**
-     * Sets the headers of the active sheet with bold style and frozen first row.
-     *
-     * @param array<string,HeaderFormat> $headers     the headers where the key is the column name to translate
-     * @param int                        $columnIndex the starting column index ('A' = First column)
-     * @param int                        $rowIndex    the row index (1 = First row)
-     *
-     * @return int this function return the given row index + 1
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
-     */
-    public function setHeaders(array $headers, int $columnIndex = 1, int $rowIndex = 1): int
-    {
-        $sheet = $this->getActiveSheet();
-        $index = $columnIndex;
-        foreach ($headers as $id => $header) {
-            $header->apply($this, $index);
-            $name = $this->stringFromColumnIndex($index);
-            $sheet->getColumnDimension($name)->setAutoSize(true);
-            $sheet->setCellValue("$name$rowIndex", $this->trans($id));
-            ++$index;
-        }
-
-        $firstName = $this->stringFromColumnIndex($columnIndex);
-        $lastName = $this->stringFromColumnIndex($columnIndex + \count($headers) - 1);
-        $sheet->getStyle("$firstName$rowIndex:$lastName$rowIndex")->getFont()->setBold(true);
-        $sheet->freezePane(\sprintf('A%d', $rowIndex + 1));
-        $sheet->getPageSetup()
-            ->setFitToWidth(1)
-            ->setFitToHeight(0)
-            ->setHorizontalCentered(true)
-            ->setRowsToRepeatAtTopByStartAndEnd($rowIndex, $rowIndex);
-
-        return $rowIndex + 1;
-    }
-
-    /**
-     * Set the manager property.
-     */
-    public function setManager(?string $manager): static
-    {
-        if ($manager) {
-            $this->getProperties()->setManager($manager);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets the margins of the active sheet.
-     *
-     * @param float $margins the margins to set
-     */
-    public function setMargins(float $margins): static
-    {
-        $pageMargins = $this->getActiveSheet()->getPageMargins();
-        $pageMargins->setTop($margins)
-            ->setBottom($margins)
-            ->setLeft($margins)
-            ->setRight($margins);
-
-        return $this;
-    }
-
-    /**
-     * Sets the page break at the given row.
-     *
-     * @param int $row the row index (1 = First row)
-     */
-    public function setPageBreak(int $row): static
-    {
-        $this->getActiveSheet()->setBreak([1, $row], Worksheet::BREAK_ROW);
-
-        return $this;
-    }
-
-    /**
-     * Sets landscape orientation for the active sheet.
-     */
-    public function setPageLandscape(): static
-    {
-        return $this->setPageOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-    }
-
-    /**
-     * Set the page orientation (default, portait or landscape).
-     *
-     * @psalm-param PageSetup::ORIENTATION_* $orientation
-     */
-    public function setPageOrientation(string $orientation): static
-    {
-        switch ($orientation) {
-            case PageSetup::ORIENTATION_DEFAULT:
-            case PageSetup::ORIENTATION_PORTRAIT:
-            case PageSetup::ORIENTATION_LANDSCAPE:
-                $this->getPageSetup()->setOrientation($orientation);
-                break;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets portrait orientation for the active sheet.
-     */
-    public function setPagePortrait(): static
-    {
-        return $this->setPageOrientation(PageSetup::ORIENTATION_PORTRAIT);
-    }
-
-    /**
-     * Sets the paper size for the active sheet.
-     *
-     * @param int $size the paper size that must be one of PageSetup paper size constant
-     *
-     * @psalm-param PageSetup::PAPERSIZE_* $size
-     */
-    public function setPageSize(int $size): static
-    {
-        $this->getPageSetup()->setPaperSize($size);
-
-        return $this;
-    }
-
-    /**
-     * Sets the paper size to A4 for the active sheet.
-     */
-    public function setPageSizeA4(): static
-    {
-        return $this->setPageSize(PageSetup::PAPERSIZE_A4);
-    }
-
-    /**
-     * Set a value indicating if the gridlines are printed.
-     */
-    public function setPrintGridlines(bool $printGridlines = true): static
-    {
-        $this->getActiveSheet()->setPrintGridlines($printGridlines);
 
         return $this;
     }
@@ -697,43 +244,6 @@ class SpreadsheetDocument extends Spreadsheet
         foreach ($values as $value) {
             $this->setCellValue($sheet, $columnIndex++, $rowIndex, $value);
         }
-
-        return $this;
-    }
-
-    /**
-     * Sets selected cell of the active sheet.
-     *
-     * @param string $coordinates the cell coordinate (i.e. 'A1')
-     */
-    public function setSelectedCell(string $coordinates): static
-    {
-        $this->getActiveSheet()->setSelectedCell($coordinates);
-
-        return $this;
-    }
-
-    /**
-     * Sets selected cell of the active sheet.
-     *
-     * @param int $columnIndex the column index (A = First column)
-     * @param int $rowIndex    the row index (1 = First row)
-     */
-    public function setSelectedCellByColumnAndRow(int $columnIndex, int $rowIndex): static
-    {
-        $coordinates = $this->stringFromColumnAndRowIndex($columnIndex, $rowIndex);
-
-        return $this->setSelectedCell($coordinates);
-    }
-
-    /**
-     * Sets the shrink to fit for the given column.
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     */
-    public function setShrinkToFit(int $columnIndex): static
-    {
-        $this->getColumnStyle($columnIndex)->getAlignment()->setShrinkToFit(true);
 
         return $this;
     }
@@ -780,44 +290,6 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Set wrap text for the given column. The auto-size is automatically disabled.
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     */
-    public function setWrapText(int $columnIndex): static
-    {
-        $sheet = $this->getActiveSheet();
-        $name = $this->stringFromColumnIndex($columnIndex);
-        $sheet->getColumnDimension($name)->setAutoSize(false);
-        $sheet->getStyle($name)->getAlignment()->setWrapText(true);
-
-        return $this;
-    }
-
-    /**
-     * Get the string coordinate from the given column and row index (eg. 2,10 => 'B10').
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     * @param int $rowIndex    the row index (1 = First row)
-     */
-    public function stringFromColumnAndRowIndex(int $columnIndex, int $rowIndex): string
-    {
-        $columnName = $this->stringFromColumnIndex($columnIndex);
-
-        return \sprintf('%s%d', $columnName, $rowIndex);
-    }
-
-    /**
-     * Get the string from the given column index.
-     *
-     * @param int $columnIndex the column index ('A' = First column)
-     */
-    public function stringFromColumnIndex(int $columnIndex): string
-    {
-        return Coordinate::stringFromColumnIndex($columnIndex);
-    }
-
-    /**
      * Initialize this spreadsheet.
      *
      * @param AbstractController $controller the controller to get properties
@@ -835,11 +307,12 @@ class SpreadsheetDocument extends Spreadsheet
             ->setActiveTitle($title)
             ->setCompany($customer->getName())
             ->setUserName($username)
-            ->setCategory($application)
-            ->setPrintGridlines();
+            ->setCategory($application);
 
+        $sheet = $this->getActiveSheet()
+            ->setPrintGridlines(true);
         if ($landscape) {
-            return $this->setPageLandscape();
+            $sheet->setPageLandscape();
         }
 
         return $this;

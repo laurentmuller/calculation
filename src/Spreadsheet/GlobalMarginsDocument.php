@@ -28,7 +28,8 @@ class GlobalMarginsDocument extends AbstractArrayDocument
     {
         $this->start('globalmargin.list.title');
 
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'globalmargin.fields.minimum' => HeaderFormat::amount(),
             'globalmargin.fields.maximum' => HeaderFormat::amount(),
             'globalmargin.fields.delta' => HeaderFormat::amount(),
@@ -36,7 +37,7 @@ class GlobalMarginsDocument extends AbstractArrayDocument
         ]);
 
         foreach ($entities as $entity) {
-            $this->setRowValues($row++, [
+            $sheet->setRowValues($row++, [
                     $entity->getMinimum(),
                     $entity->getMaximum(),
                     $entity->getDelta(),
@@ -44,15 +45,14 @@ class GlobalMarginsDocument extends AbstractArrayDocument
                 ]);
         }
 
-        $sheet = $this->getActiveSheet();
         for ($i = 1; $i < 5; ++$i) {
-            $name = $this->stringFromColumnIndex($i);
+            $name = $sheet->stringFromColumnIndex($i);
             $sheet->getColumnDimension($name)
                 ->setAutoSize(false)
                 ->setWidth(20);
         }
 
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }

@@ -31,7 +31,8 @@ class CalculationStatesDocument extends AbstractArrayDocument
     {
         $this->start('calculationstate.list.title', true);
 
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'calculationstate.fields.code' => HeaderFormat::instance(),
             'calculationstate.fields.description' => HeaderFormat::instance(),
             'calculationstate.fields.editable' => HeaderFormat::yesNo(),
@@ -40,22 +41,21 @@ class CalculationStatesDocument extends AbstractArrayDocument
         ]);
 
         foreach ($entities as $entity) {
-            $this->setRowValues($row, [
+            $sheet->setRowValues($row, [
                 $entity->getCode(),
                 $entity->getDescription(),
                 $entity->isEditable(),
                 $entity->countCalculations(),
             ]);
-            $col = $this->stringFromColumnIndex(5);
+            $col = $sheet->stringFromColumnIndex(5);
             $color = new Color(\substr($entity->getColor(), 1));
-            $fill = $this->getActiveSheet()
-                ->getStyle("$col$row")
+            $fill = $sheet->getStyle("$col$row")
                 ->getFill();
             $fill->setFillType(Fill::FILL_SOLID)
                 ->setStartColor($color);
             ++$row;
         }
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }

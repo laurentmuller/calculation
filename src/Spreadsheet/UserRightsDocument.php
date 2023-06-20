@@ -86,20 +86,20 @@ class UserRightsDocument extends AbstractArrayDocument
         foreach ($permissions as $permission) {
             $headers[$permission->getReadable()] = HeaderFormat::center();
         }
-        $row = $this->setHeaders($headers);
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders($headers);
 
         $this->outputRole($service->getAdminRole(), $row);
         $this->outputRole($service->getUserRole(), $row);
         foreach ($entities as $entity) {
             $this->outputUser($entity, $row);
         }
-        $sheet = $this->getActiveSheet();
         foreach (\range(2, \count($headers)) as $column) {
-            $name = $this->stringFromColumnIndex($column);
+            $name = $sheet->stringFromColumnIndex($column);
             $sheet->getColumnDimension($name)->setAutoSize(false)
                 ->setWidth(11);
         }
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }

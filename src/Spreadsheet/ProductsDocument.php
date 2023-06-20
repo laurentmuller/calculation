@@ -28,7 +28,8 @@ class ProductsDocument extends AbstractArrayDocument
     {
         $this->start('product.list.title');
 
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'product.fields.description' => HeaderFormat::instance(),
             'product.fields.group' => HeaderFormat::instance(),
             'product.fields.category' => HeaderFormat::instance(),
@@ -38,7 +39,7 @@ class ProductsDocument extends AbstractArrayDocument
         ]);
 
         foreach ($entities as $entity) {
-            $this->setRowValues($row++, [
+            $sheet->setRowValues($row++, [
                 $entity->getDescription(),
                 $entity->getGroupCode(),
                 $entity->getCategoryCode(),
@@ -47,7 +48,7 @@ class ProductsDocument extends AbstractArrayDocument
                 $entity->getSupplier(),
             ]);
         }
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }

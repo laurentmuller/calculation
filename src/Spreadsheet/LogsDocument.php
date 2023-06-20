@@ -17,7 +17,6 @@ use App\Model\LogFile;
 use App\Pdf\Html\HtmlBootstrapColors;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Psr\Log\LogLevel;
 
 /**
@@ -49,7 +48,8 @@ class LogsDocument extends AbstractDocument
         $logFile = $this->logFile;
         $this->start('log.title', true);
 
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'log.fields.level' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
             'log.fields.channel' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
             'log.fields.createdAt' => HeaderFormat::date(Alignment::VERTICAL_TOP),
@@ -57,22 +57,22 @@ class LogsDocument extends AbstractDocument
             'log.fields.user' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
         ]);
 
-        $this->setFormat(3, 'dd/mm/yyyy hh:mm:ss')
+        $sheet->setFormat(3, 'dd/mm/yyyy hh:mm:ss')
             ->setColumnWidth(4, 140, true);
 
         $logs = $logFile->getLogs();
-        $sheet = $this->getActiveSheet();
         foreach ($logs as $log) {
-            $this->setRowValues($row, [
+            $sheet->setRowValues($row, [
                 $log->getLevel(true),
                 $log->getChannel(true),
                 $log->getCreatedAt(),
                 $log->getMessage(),
                 $log->getUser(),
-            ])->setBorderStyle($sheet, $row, $log->getLevel());
+            ]);
+            $this->setBorderStyle($sheet, $row, $log->getLevel());
             ++$row;
         }
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }
@@ -95,7 +95,7 @@ class LogsDocument extends AbstractDocument
         return $this->colors[$level];
     }
 
-    private function setBorderStyle(Worksheet $sheet, int $row, ?string $level): void
+    private function setBorderStyle(WorksheetDocument $sheet, int $row, ?string $level): void
     {
         if (null !== $level && '' !== $level) {
             $sheet->getStyle("A$row")

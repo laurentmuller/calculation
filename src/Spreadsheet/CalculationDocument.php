@@ -204,8 +204,8 @@ class CalculationDocument extends AbstractDocument
             ->setHorizontalCentered(true)
             ->setRowsToRepeatAtTopByStartAndEnd(1, 4);
         $sheet->setPrintGridlines(false)
-            ->setShowGridlines(false);
-        $this->finish('A1');
+            ->setShowGridlines(false)
+            ->finish('A1');
 
         return true;
     }

@@ -39,18 +39,6 @@ abstract class AbstractDocument extends SpreadsheetDocument
     abstract public function render(): bool;
 
     /**
-     * Ends render this document by selecting the given cell.
-     *
-     * @param string $selection the cell to select
-     */
-    protected function finish(string $selection = 'A2'): static
-    {
-        $this->setSelectedCell($selection);
-
-        return $this;
-    }
-
-    /**
      * Starts render this document.
      *
      * @param string $title     the spreadsheet title to translate

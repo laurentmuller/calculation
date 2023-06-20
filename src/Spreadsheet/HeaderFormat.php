@@ -39,12 +39,12 @@ class HeaderFormat
     /**
      * Apply this alignements and format to the given column.
      *
-     * @param SpreadsheetDocument $document    the parent document to update
-     * @param int                 $columnIndex the column index ('A' = First column)
+     * @param WorksheetDocument $parent      the worksheet to update
+     * @param int               $columnIndex the column index ('A' = First column)
      */
-    public function apply(SpreadsheetDocument $document, int $columnIndex): void
+    public function apply(WorksheetDocument $parent, int $columnIndex): void
     {
-        $alignment = $document->getColumnStyle($columnIndex)->getAlignment();
+        $alignment = $parent->getColumnStyle($columnIndex)->getAlignment();
         if (null !== $this->horizontal && Alignment::HORIZONTAL_GENERAL !== $this->horizontal) {
             $alignment->setHorizontal($this->horizontal);
         }
@@ -53,9 +53,9 @@ class HeaderFormat
         }
 
         if ($this->format instanceof ColumnFormat) {
-            $this->format->apply($document, $columnIndex);
+            $this->format->apply($parent, $columnIndex);
         } elseif (\is_string($this->format)) {
-            $document->setFormat($columnIndex, $this->format);
+            $parent->setFormat($columnIndex, $this->format);
         }
     }
 

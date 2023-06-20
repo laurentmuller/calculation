@@ -27,7 +27,9 @@ class CustomersDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $this->start('customer.list.title');
-        $row = $this->setHeaders([
+
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'customer.fields.lastName' => HeaderFormat::instance(),
             'customer.fields.firstName' => HeaderFormat::instance(),
             'customer.fields.company' => HeaderFormat::instance(),
@@ -37,7 +39,7 @@ class CustomersDocument extends AbstractArrayDocument
         ]);
 
         foreach ($entities as $entity) {
-            $this->setRowValues($row++, [
+            $sheet->setRowValues($row++, [
                 $entity->getLastName(),
                 $entity->getFirstName(),
                 $entity->getCompany(),
@@ -46,7 +48,7 @@ class CustomersDocument extends AbstractArrayDocument
                 $entity->getCity(),
             ]);
         }
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }

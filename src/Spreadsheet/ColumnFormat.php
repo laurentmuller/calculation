@@ -79,21 +79,21 @@ enum ColumnFormat
     /**
      * Apply this format to the given column.
      *
-     * @param SpreadsheetDocument $document    the parent document to update
-     * @param int                 $columnIndex the column index ('A' = First column)
+     * @param WorksheetDocument $parent      the worksheet to update
+     * @param int               $columnIndex the column index ('A' = First column)
      */
-    public function apply(SpreadsheetDocument $document, int $columnIndex): void
+    public function apply(WorksheetDocument $parent, int $columnIndex): void
     {
         match ($this) {
-            self::AMOUNT => $document->setFormatAmount($columnIndex),
-            self::AMOUNT_ZERO => $document->setFormatAmount($columnIndex, true),
-            self::DATE => $document->setFormatDate($columnIndex),
-            self::DATE_TIME => $document->setFormatDateTime($columnIndex),
-            self::ID => $document->setFormatId($columnIndex),
-            self::INT => $document->setFormatInt($columnIndex),
-            self::PERCENT => $document->setFormatPercent($columnIndex),
-            self::PERCENT_DECIMALS => $document->setFormatPercent($columnIndex, true),
-            self::YES_NO => $document->setFormatYesNo($columnIndex),
+            self::AMOUNT => $parent->setFormatAmount($columnIndex),
+            self::AMOUNT_ZERO => $parent->setFormatAmount($columnIndex, true),
+            self::DATE => $parent->setFormatDate($columnIndex),
+            self::DATE_TIME => $parent->setFormatDateTime($columnIndex),
+            self::ID => $parent->setFormatId($columnIndex),
+            self::INT => $parent->setFormatInt($columnIndex),
+            self::PERCENT => $parent->setFormatPercent($columnIndex),
+            self::PERCENT_DECIMALS => $parent->setFormatPercent($columnIndex, true),
+            self::YES_NO => $parent->setFormatYesNo($columnIndex),
         };
     }
 }

@@ -42,14 +42,15 @@ class PhpIniDocument extends AbstractDocument
         $version = $this->service->getVersion();
         $this->start($this->trans('about.php_version', ['%version%' => $version]));
         $this->setActiveTitle('Configuration', $this->controller);
+        $sheet = $this->getActiveSheet();
         if ([] === $content) {
-            $this->setCellValue($this->getActiveSheet(), 1, 1, $this->trans('about.error'))
-                ->finish('A1');
+            $this->setCellValue($this->getActiveSheet(), 1, 1, $this->trans('about.error'));
+            $sheet->finish('A1');
 
             return true;
         }
         \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
-        $row = $this->setHeaders([
+        $row = $sheet->setHeaders([
             'Directive' => HeaderFormat::left(Alignment::VERTICAL_TOP),
             'Local Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
             'Master Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
@@ -62,13 +63,13 @@ class PhpIniDocument extends AbstractDocument
             $row = $this->outputEntries($row, $value);
         }
 
-        $this->setWrapText(2)
+        $sheet->setWrapText(2)
             ->setAutoSize(1)
             ->setColumnWidth(2, 50)
             ->setColumnWidth(3, 50, true)
             ->finish();
 
-        $this->getPageSetup()
+        $sheet->getPageSetup()
             ->setFitToWidth(1)
             ->setFitToHeight(0);
 

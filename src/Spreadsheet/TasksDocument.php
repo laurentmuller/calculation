@@ -50,7 +50,8 @@ class TasksDocument extends AbstractArrayDocument
         $this->start('task.list.title');
         $this->writeTask = $this->writeItem = false;
 
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $row = $sheet->setHeaders([
             'task.fields.name' => HeaderFormat::instance(),
             'task.fields.group' => HeaderFormat::instance(),
             'task.fields.category' => HeaderFormat::instance(),
@@ -64,7 +65,7 @@ class TasksDocument extends AbstractArrayDocument
         foreach ($entities as $entity) {
             $this->writeTask = true;
             if ($entity->isEmpty()) {
-                $this->setRowValues($row++, [
+                $sheet->setRowValues($row++, [
                     $entity->getName(),
                     $entity->getGroupCode(),
                     $entity->getCategoryCode(),
@@ -74,7 +75,7 @@ class TasksDocument extends AbstractArrayDocument
                 ]);
                 $this->mergeCells(6, 8, $row - 1);
             } else {
-                $this->setRowValues($row++, [
+                $sheet->setRowValues($row++, [
                     $entity->getName(),
                     $entity->getGroupCode(),
                     $entity->getCategoryCode(),
@@ -86,7 +87,7 @@ class TasksDocument extends AbstractArrayDocument
             foreach ($entity->getItems() as $item) {
                 $this->writeItem = true;
                 if ($item->isEmpty()) {
-                    $this->setRowValues($row++, [
+                    $sheet->setRowValues($row++, [
                         $item->getName(),
                         null,
                         null,
@@ -99,7 +100,7 @@ class TasksDocument extends AbstractArrayDocument
                     $index = 0;
                     foreach ($item->getMargins() as $margin) {
                         $text = (0 === $index++) ? $item->getName() : null;
-                        $this->setRowValues($row++, [
+                        $sheet->setRowValues($row++, [
                             $text,
                             null,
                             null,
@@ -114,7 +115,7 @@ class TasksDocument extends AbstractArrayDocument
                 }
             }
         }
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }

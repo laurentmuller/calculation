@@ -51,8 +51,10 @@ class UsersDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $this->start('user.list.title');
-        $this->createEnabledConditionals();
-        $row = $this->setHeaders([
+        $sheet = $this->getActiveSheet();
+        $this->createEnabledConditionals($sheet);
+
+        $row = $sheet->setHeaders([
             'user.fields.imageFile' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
             'user.fields.username' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
             'user.fields.email' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
@@ -60,11 +62,10 @@ class UsersDocument extends AbstractArrayDocument
             'user.fields.enabled' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
             'user.fields.lastLogin' => HeaderFormat::instance(Alignment::VERTICAL_TOP),
         ]);
-
-        $this->setFormatBoolean(5, 'common.value_enabled', 'common.value_disabled', true);
+        $sheet->setFormatBoolean(5, 'common.value_enabled', 'common.value_disabled', true);
 
         foreach ($entities as $entity) {
-            $this->setRowValues($row, [
+            $sheet->setRowValues($row, [
                 null,
                 $entity->getUserIdentifier(),
                 $entity->getEmail(),
@@ -75,11 +76,11 @@ class UsersDocument extends AbstractArrayDocument
             $path = $this->getImagePath($entity);
             if (!empty($path) && FileUtils::isFile($path)) {
                 [$width, $height] = $this->getImageSize($path);
-                $this->setCellImage($path, "A$row", $width, $height);
+                $sheet->setCellImage($path, "A$row", $width, $height);
             }
             ++$row;
         }
-        $this->finish();
+        $sheet->finish();
 
         return true;
     }
@@ -110,11 +111,11 @@ class UsersDocument extends AbstractArrayDocument
     /**
      * Sets the enabled/disable conditionals.
      */
-    private function createEnabledConditionals(): void
+    private function createEnabledConditionals(WorksheetDocument $sheet): void
     {
         $disabled = $this->createConditional('0', Color::COLOR_RED);
         $enabled = $this->createConditional('1', Color::COLOR_DARKGREEN);
-        $this->setColumnConditional(5, $disabled, $enabled);
+        $sheet->setColumnConditional(5, $disabled, $enabled);
     }
 
     /**

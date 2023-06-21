@@ -17,9 +17,6 @@ use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Model\Role;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfDocumentSize;
-use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
@@ -58,13 +55,10 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     public function __construct(
         AbstractController $controller,
-        private readonly RoleBuilderService $builder,
         array $entities,
-        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
-        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
-        PdfDocumentSize $size = PdfDocumentSize::A4
+        private readonly RoleBuilderService $builder
     ) {
-        parent::__construct($controller, $entities, $orientation, $unit, $size);
+        parent::__construct($controller, $entities);
     }
 
     public function outputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool
@@ -111,8 +105,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $this->outputRoleAdmin($table);
         $this->outputRoleUser($table);
         $this->outputUsers($entities, $table);
+        $this->renderTotal($table, $entities);
 
-        return $this->renderTotal($table, $entities);
+        return true;
     }
 
     /**
@@ -235,13 +230,11 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         }
     }
 
-    private function renderTotal(PdfTableBuilder $table, array $entities): true
+    private function renderTotal(PdfTableBuilder $table, array $entities): void
     {
         $roles = $this->translateCount(2, 'counters.roles');
         $users = $this->translateCount($entities, 'counters.users');
         $text = \sprintf('%s, %s', $roles, $users);
         $table->singleLine($text, PdfStyle::getHeaderStyle(), PdfTextAlignment::LEFT);
-
-        return true;
     }
 }

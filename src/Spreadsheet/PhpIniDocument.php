@@ -57,10 +57,10 @@ class PhpIniDocument extends AbstractDocument
         ]);
 
         foreach ($content as $key => $value) {
-            if ($this->outputGroup($row, $key)) {
+            if ($this->outputGroup($sheet, $row, $key)) {
                 ++$row;
             }
-            $row = $this->outputEntries($row, $value);
+            $row = $this->outputEntries($sheet, $row, $value);
         }
 
         $sheet->setWrapText(2)
@@ -115,10 +115,9 @@ class PhpIniDocument extends AbstractDocument
     /**
      * @psalm-param array<string, array{local: scalar, master: scalar}|scalar> $entries
      */
-    private function outputEntries(int $row, array $entries): int
+    private function outputEntries(WorksheetDocument $sheet, int $row, array $entries): int
     {
         $this->sortEntries($entries);
-        $sheet = $this->getActiveSheet();
         $sheet->getPageSetup()
             ->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
         /** @var mixed $entry */
@@ -147,12 +146,12 @@ class PhpIniDocument extends AbstractDocument
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an error occurs
      */
-    private function outputGroup(int $row, string $group): bool
+    private function outputGroup(WorksheetDocument $sheet, int $row, string $group): bool
     {
         if ($this->key !== $group) {
-            $this->setRowValues($row, [$group]);
-            $this->mergeCells(1, 3, $row);
-            $style = $this->getActiveSheet()->getStyle("A$row");
+            $sheet->setRowValues($row, [$group]);
+            $sheet->mergeContent(1, 3, $row);
+            $style = $sheet->getStyle("A$row");
             $style->getFill()->setFillType(Fill::FILL_SOLID)
                 ->getStartColor()->setARGB('F5F5F5');
             $style->getFont()->setBold(true);

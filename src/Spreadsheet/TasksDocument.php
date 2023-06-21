@@ -73,7 +73,7 @@ class TasksDocument extends AbstractArrayDocument
                     $entity->getSupplier(),
                     $this->trans('task.edit.empty_items'),
                 ]);
-                $this->mergeCells(6, 8, $row - 1);
+                $sheet->mergeContent(6, 8, $row - 1);
             } else {
                 $sheet->setRowValues($row++, [
                     $entity->getName(),
@@ -94,7 +94,7 @@ class TasksDocument extends AbstractArrayDocument
                         null,
                         $this->trans('taskitem.edit.empty_items'),
                     ]);
-                    $this->mergeCells(6, 8, $row - 1);
+                    $sheet->mergeContent(6, 8, $row - 1);
                     $this->writeItem = false;
                 } else {
                     $index = 0;

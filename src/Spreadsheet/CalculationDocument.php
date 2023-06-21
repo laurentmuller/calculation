@@ -57,28 +57,28 @@ class CalculationDocument extends AbstractDocument
         $title = $this->trans('calculation.edit.title', ['%id%' => $id]);
         $this->start($title);
         $row = 1;
-        $this->renderTitle($title, $calculation, $row);
+        $sheet = $this->getActiveSheet();
+        $this->renderTitle($sheet, $title, $calculation, $row);
         $this->mergeCells(1, 5, $row);
         $emptyRows[] = $row++;
         if ($calculation->isEmpty()) {
-            return $this->renderEmpty($calculation, $row, $emptyRows);
+            return $this->renderEmpty($sheet, $calculation, $row, $emptyRows);
         }
-        $this->renderItems($calculation, $row);
+        $this->renderItems($sheet, $calculation, $row);
         $this->mergeCells(1, 5, $row);
         $emptyRows[] = $row;
         ++$row;
-        $this->renderTotalGroups($calculation, $row);
-        $this->renderMarginsTotal($calculation, $row);
-        $this->renderGlobalMargin($calculation, $row);
-        $this->renderUserMargin($calculation, $row);
-        $this->renderOverallTotal($calculation, $row);
+        $this->renderTotalGroups($sheet, $calculation, $row);
+        $this->renderMarginsTotal($sheet, $calculation, $row);
+        $this->renderGlobalMargin($sheet, $calculation, $row);
+        $this->renderUserMargin($sheet, $calculation, $row);
+        $this->renderOverallTotal($sheet, $calculation, $row);
 
-        return $this->renderEnd($calculation, $row, $emptyRows);
+        return $this->renderEnd($sheet, $calculation, $row, $emptyRows);
     }
 
-    private function cell(int $column, int $row, mixed $value, bool $bold = false, int $indent = 0, string $alignment = '', string $format = ''): self
+    private function cell(WorksheetDocument $sheet, int $column, int $row, mixed $value, bool $bold = false, int $indent = 0, string $alignment = '', string $format = ''): self
     {
-        $sheet = $this->getActiveSheet();
         $style = $sheet->getCell([$column, $row])->getStyle();
         if ($bold) {
             $style->getFont()->setBold(true);
@@ -92,14 +92,15 @@ class CalculationDocument extends AbstractDocument
         if ('' !== $format) {
             $style->getNumberFormat()->setFormatCode($format);
         }
-        $this->setCellValue($sheet, $column, $row, $value);
+        $sheet->setCellContent($column, $row, $value);
 
         return $this;
     }
 
-    private function cellAmount(int $column, int $row, float $value, bool $bold = false): self
+    private function cellAmount(WorksheetDocument $sheet, int $column, int $row, float $value, bool $bold = false): self
     {
         return $this->cell(
+            sheet: $sheet,
             column: $column,
             row: $row,
             value: $value,
@@ -109,9 +110,10 @@ class CalculationDocument extends AbstractDocument
         );
     }
 
-    private function cellBold(int $column, int $row, mixed $value, int $indent = 0, string $alignment = '', string $format = ''): self
+    private function cellBold(WorksheetDocument $sheet, int $column, int $row, mixed $value, int $indent = 0, string $alignment = '', string $format = ''): self
     {
         return $this->cell(
+            sheet: $sheet,
             column: $column,
             row: $row,
             value: $value,
@@ -122,9 +124,10 @@ class CalculationDocument extends AbstractDocument
         );
     }
 
-    private function cellPercent(int $row, float $value, bool $bold = false, string $format = NumberFormat::FORMAT_PERCENTAGE): self
+    private function cellPercent(WorksheetDocument $sheet, int $row, float $value, bool $bold = false, string $format = NumberFormat::FORMAT_PERCENTAGE): self
     {
         return $this->cell(
+            sheet: $sheet,
             column: 3,
             row: $row,
             value: $value,
@@ -134,9 +137,10 @@ class CalculationDocument extends AbstractDocument
         );
     }
 
-    private function cellText(int $column, int $row, ?string $value, int $indent = 0): self
+    private function cellText(WorksheetDocument $sheet, int $column, int $row, ?string $value, int $indent = 0): self
     {
         return $this->cell(
+            sheet: $sheet,
             column: $column,
             row: $row,
             value: $value,
@@ -144,16 +148,16 @@ class CalculationDocument extends AbstractDocument
         );
     }
 
-    private function fillBackground(int $row): void
+    private function fillBackground(WorksheetDocument $sheet, int $row): void
     {
-        $this->getRowStyle($row)
+        $this->getRowStyle($sheet, $row)
             ->getFill()->setFillType(Fill::FILL_SOLID)
             ->getStartColor()->setARGB(self::COLOR_BACKGROUND);
     }
 
-    private function getRowStyle(int $row): Style
+    private function getRowStyle(WorksheetDocument $sheet, int $row): Style
     {
-        return $this->getActiveSheet()->getStyle("A$row:E$row");
+        return $sheet->getStyle("A$row:E$row");
     }
 
     /**
@@ -161,18 +165,19 @@ class CalculationDocument extends AbstractDocument
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function renderEmpty(Calculation $calculation, int $row, array $emptyRows): bool
+    private function renderEmpty(WorksheetDocument $sheet, Calculation $calculation, int $row, array $emptyRows): bool
     {
         $this->mergeCells(1, 5, $row)
             ->cellBold(
+                sheet: $sheet,
                 column: 1,
                 row: $row,
                 value: $this->trans('calculation.edit.empty'),
                 alignment: Alignment::HORIZONTAL_CENTER
             )
-            ->fillBackground($row);
+            ->fillBackground($sheet, $row);
 
-        return $this->renderEnd($calculation, $row, $emptyRows);
+        return $this->renderEnd($sheet, $calculation, $row, $emptyRows);
     }
 
     /**
@@ -180,9 +185,8 @@ class CalculationDocument extends AbstractDocument
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
-    private function renderEnd(Calculation $calculation, int $lastRow, array $emptyRows): bool
+    private function renderEnd(WorksheetDocument $sheet, Calculation $calculation, int $lastRow, array $emptyRows): bool
     {
-        $sheet = $this->getActiveSheet();
         $sheet->getStyle("A1:E$lastRow")
             ->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)
             ->getColor()->setARGB(self::COLOR_BORDER);
@@ -196,7 +200,7 @@ class CalculationDocument extends AbstractDocument
         foreach (\range('B', 'E') as $column) {
             $sheet->getColumnDimension($column)->setWidth(2.0, 'cm');
         }
-        $this->renderTimestampable($calculation, $lastRow + 1);
+        $this->renderTimestampable($sheet, $calculation, $lastRow + 1);
 
         $sheet->getPageSetup()
             ->setFitToWidth(1)
@@ -213,91 +217,92 @@ class CalculationDocument extends AbstractDocument
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function renderGlobalMargin(Calculation $calculation, int &$row): void
+    private function renderGlobalMargin(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
         $this->mergeCells(1, 2, $row)
-            ->cellText(1, $row, $this->trans('calculation.fields.globalMargin'))
-            ->cellPercent($row, $calculation->getGlobalMargin())
+            ->cellText($sheet, 1, $row, $this->trans('calculation.fields.globalMargin'))
+            ->cellPercent($sheet, $row, $calculation->getGlobalMargin())
             ->mergeCells(4, 5, $row)
-            ->cellAmount(4, $row, $calculation->getGlobalMarginAmount());
+            ->cellAmount($sheet, 4, $row, $calculation->getGlobalMarginAmount());
         ++$row;
     }
 
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function renderItems(Calculation $calculation, int &$row): void
+    private function renderItems(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
-        $this->cellBold(1, $row, $this->trans('calculationitem.fields.description'))
-            ->cellBold(2, $row, $this->trans('calculationitem.fields.unit'))
-            ->cellBold(3, $row, $this->trans('calculationitem.fields.price'), 0, Alignment::HORIZONTAL_RIGHT)
-            ->cellBold(4, $row, $this->trans('calculationitem.fields.quantity'), 0, Alignment::HORIZONTAL_RIGHT)
-            ->cellBold(5, $row, $this->trans('calculationitem.fields.total'), 0, Alignment::HORIZONTAL_RIGHT)
-            ->fillBackground($row);
+        $this->cellBold($sheet, 1, $row, $this->trans('calculationitem.fields.description'))
+            ->cellBold($sheet, 2, $row, $this->trans('calculationitem.fields.unit'))
+            ->cellBold($sheet, 3, $row, $this->trans('calculationitem.fields.price'), 0, Alignment::HORIZONTAL_RIGHT)
+            ->cellBold($sheet, 4, $row, $this->trans('calculationitem.fields.quantity'), 0, Alignment::HORIZONTAL_RIGHT)
+            ->cellBold($sheet, 5, $row, $this->trans('calculationitem.fields.total'), 0, Alignment::HORIZONTAL_RIGHT)
+            ->fillBackground($sheet, $row);
         ++$row;
         foreach ($calculation->getGroups() as $group) {
             $this->mergeCells(1, 5, $row)
-                ->cellBold(1, $row, $group->getCode());
+                ->cellBold($sheet, 1, $row, $group->getCode());
             ++$row;
             foreach ($group->getCategories() as $category) {
                 $this->mergeCells(1, 5, $row)
-                    ->cellBold(1, $row, $category->getCode(), 1);
+                    ->cellBold($sheet, 1, $row, $category->getCode(), 1);
                 ++$row;
                 foreach ($category->getItems() as $item) {
-                    $this->cellText(1, $row, $item->getDescription(), 1)
-                        ->cellText(2, $row, $item->getUnit())
-                        ->cellAmount(3, $row, $item->getPrice())
-                        ->cellAmount(4, $row, $item->getQuantity())
-                        ->cellAmount(5, $row, $item->getTotal());
+                    $this->cellText($sheet, 1, $row, $item->getDescription(), 1)
+                        ->cellText($sheet, 2, $row, $item->getUnit())
+                        ->cellAmount($sheet, 3, $row, $item->getPrice())
+                        ->cellAmount($sheet, 4, $row, $item->getQuantity())
+                        ->cellAmount($sheet, 5, $row, $item->getTotal());
                     ++$row;
                 }
             }
         }
         $this->mergeCells(1, 4, $row)
-            ->cellBold(1, $row, $this->trans('calculation.fields.itemsTotal'))
-            ->cellAmount(5, $row, $calculation->getItemsTotal(), true)
-            ->fillBackground($row);
+            ->cellBold($sheet, 1, $row, $this->trans('calculation.fields.itemsTotal'))
+            ->cellAmount($sheet, 5, $row, $calculation->getItemsTotal(), true)
+            ->fillBackground($sheet, $row);
         ++$row;
     }
 
-    private function renderMarginsTotal(Calculation $calculation, int &$row): void
+    private function renderMarginsTotal(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
-        $this->cellBold(1, $row, $this->trans('calculation.fields.marginTotal'))
-            ->cellAmount(2, $row, $calculation->getItemsTotal())
-            ->cellPercent($row, $calculation->getGroupsMargin())
-            ->cellAmount(4, $row, $calculation->getGroupsMarginAmount())
-            ->cellAmount(5, $row, $calculation->getGroupsTotal(), true)
-            ->fillBackground($row);
+        $this->cellBold($sheet, 1, $row, $this->trans('calculation.fields.marginTotal'))
+            ->cellAmount($sheet, 2, $row, $calculation->getItemsTotal())
+            ->cellPercent($sheet, $row, $calculation->getGroupsMargin())
+            ->cellAmount($sheet, 4, $row, $calculation->getGroupsMarginAmount())
+            ->cellAmount($sheet, 5, $row, $calculation->getGroupsTotal(), true)
+            ->fillBackground($sheet, $row);
         ++$row;
     }
 
-    private function renderOverallTotal(Calculation $calculation, int $row): void
+    private function renderOverallTotal(WorksheetDocument $sheet, Calculation $calculation, int $row): void
     {
-        $this->cellBold(1, $row, $this->trans('calculation.fields.overallTotal'))
-            ->cellAmount(2, $row, $calculation->getItemsTotal(), true)
-            ->cellPercent($row, $calculation->getOverallMargin(), true, $this->getMarginFormat())
-            ->cellAmount(4, $row, $calculation->getOverallMarginAmount(), true)
-            ->cellAmount(5, $row, $calculation->getOverallTotal(), true)
-            ->fillBackground($row);
+        $this->cellBold($sheet, 1, $row, $this->trans('calculation.fields.overallTotal'))
+            ->cellAmount($sheet, 2, $row, $calculation->getItemsTotal(), true)
+            ->cellPercent($sheet, $row, $calculation->getOverallMargin(), true, $this->getMarginFormat())
+            ->cellAmount($sheet, 4, $row, $calculation->getOverallMarginAmount(), true)
+            ->cellAmount($sheet, 5, $row, $calculation->getOverallTotal(), true)
+            ->fillBackground($sheet, $row);
     }
 
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function renderTimestampable(Calculation $calculation, int $row): void
+    private function renderTimestampable(WorksheetDocument $sheet, Calculation $calculation, int $row): void
     {
         $translator = $this->getTranslator();
         $created = $calculation->getCreatedText($translator);
         $updated = $calculation->getUpdatedText($translator);
-        $this->cell(1, $row, $created);
+        $this->cell($sheet, 1, $row, $created);
         $this->mergeCells(2, 5, $row)
             ->cell(
+                sheet: $sheet,
                 column: 2,
                 row: $row,
                 value: $updated,
                 alignment: Alignment::HORIZONTAL_RIGHT
             );
-        $this->getRowStyle($row)
+        $this->getRowStyle($sheet, $row)
             ->getFont()
             ->setSize(9)
             ->setItalic(true);
@@ -306,44 +311,44 @@ class CalculationDocument extends AbstractDocument
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function renderTitle(string $title, Calculation $calculation, int &$row): void
+    private function renderTitle(WorksheetDocument $sheet, string $title, Calculation $calculation, int &$row): void
     {
         $this->mergeCells(1, 5, $row)
-            ->cellBold(1, $row, $title, 0, Alignment::HORIZONTAL_CENTER)
-            ->fillBackground($row);
+            ->cellBold($sheet, 1, $row, $title, 0, Alignment::HORIZONTAL_CENTER)
+            ->fillBackground($sheet, $row);
         ++$row;
         $this->mergeCells(1, 3, $row)
-            ->cellBold(1, $row, $calculation->getCustomer())
+            ->cellBold($sheet, 1, $row, $calculation->getCustomer())
             ->mergeCells(4, 5, $row)
-            ->cellBold(4, $row, $calculation->getStateCode(), 0, Alignment::HORIZONTAL_RIGHT)
-            ->fillBackground($row);
+            ->cellBold($sheet, 4, $row, $calculation->getStateCode(), 0, Alignment::HORIZONTAL_RIGHT)
+            ->fillBackground($sheet, $row);
         ++$row;
         $this->mergeCells(1, 3, $row)
-            ->cellBold(1, $row, $calculation->getDescription())
+            ->cellBold($sheet, 1, $row, $calculation->getDescription())
             ->mergeCells(4, 5, $row)
-            ->cellBold(4, $row, $calculation->getDate(), 0, Alignment::HORIZONTAL_RIGHT, NumberFormat::FORMAT_DATE_DDMMYYYY)
-            ->fillBackground($row);
+            ->cellBold($sheet, 4, $row, $calculation->getDate(), 0, Alignment::HORIZONTAL_RIGHT, NumberFormat::FORMAT_DATE_DDMMYYYY)
+            ->fillBackground($sheet, $row);
         ++$row;
     }
 
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function renderTotalGroups(Calculation $calculation, int &$row): void
+    private function renderTotalGroups(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
-        $this->cellBold(1, $row, $this->trans('calculation.edit.panel_resume'))
-            ->cellBold(2, $row, $this->trans('calculationgroup.fields.amount'), 0, Alignment::HORIZONTAL_RIGHT)
+        $this->cellBold($sheet, 1, $row, $this->trans('calculation.edit.panel_resume'))
+            ->cellBold($sheet, 2, $row, $this->trans('calculationgroup.fields.amount'), 0, Alignment::HORIZONTAL_RIGHT)
             ->mergeCells(3, 4, $row)
-            ->cellBold(3, $row, $this->trans('group.fields.margins'), 0, Alignment::HORIZONTAL_CENTER)
-            ->cellBold(5, $row, $this->trans('calculation.fields.total'), 0, Alignment::HORIZONTAL_RIGHT)
-            ->fillBackground($row);
+            ->cellBold($sheet, 3, $row, $this->trans('group.fields.margins'), 0, Alignment::HORIZONTAL_CENTER)
+            ->cellBold($sheet, 5, $row, $this->trans('calculation.fields.total'), 0, Alignment::HORIZONTAL_RIGHT)
+            ->fillBackground($sheet, $row);
         ++$row;
         foreach ($calculation->getGroups() as $group) {
-            $this->cellText(1, $row, $group->getCode())
-                ->cellAmount(2, $row, $group->getAmount())
-                ->cellPercent($row, $group->getMargin())
-                ->cellAmount(4, $row, $group->getMarginAmount())
-                ->cellAmount(5, $row, $group->getTotal());
+            $this->cellText($sheet, 1, $row, $group->getCode())
+                ->cellAmount($sheet, 2, $row, $group->getAmount())
+                ->cellPercent($sheet, $row, $group->getMargin())
+                ->cellAmount($sheet, 4, $row, $group->getMarginAmount())
+                ->cellAmount($sheet, 5, $row, $group->getTotal());
             ++$row;
         }
     }
@@ -351,19 +356,19 @@ class CalculationDocument extends AbstractDocument
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function renderUserMargin(Calculation $calculation, int &$row): void
+    private function renderUserMargin(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
         if (!empty($calculation->getUserMargin())) {
             $this->mergeCells(1, 4, $row)
-                ->cellBold(1, $row, $this->trans('calculation.fields.totalNet'))
-                ->cellAmount(5, $row, $calculation->getTotalNet(), true)
-                ->fillBackground($row);
+                ->cellBold($sheet, 1, $row, $this->trans('calculation.fields.totalNet'))
+                ->cellAmount($sheet, 5, $row, $calculation->getTotalNet(), true)
+                ->fillBackground($sheet, $row);
             ++$row;
             $this->mergeCells(1, 2, $row)
-                ->cellText(1, $row, $this->trans('calculation.fields.userMargin'))
-                ->cellPercent($row, $calculation->getUserMargin())
+                ->cellText($sheet, 1, $row, $this->trans('calculation.fields.userMargin'))
+                ->cellPercent($sheet, $row, $calculation->getUserMargin())
                 ->mergeCells(4, 5, $row)
-                ->cellAmount(4, $row, $calculation->getUserMarginAmount());
+                ->cellAmount($sheet, 4, $row, $calculation->getUserMarginAmount());
             ++$row;
         }
     }

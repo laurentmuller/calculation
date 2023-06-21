@@ -97,6 +97,23 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
+     * Set merge on a cell range by using cell coordinates.
+     *
+     * @param int  $startColumn the index of the first column ('A' = First column)
+     * @param int  $endColumn   the index of the last column
+     * @param int  $startRow    the index of first row (1 = First row)
+     * @param ?int $endRow      the index of the last cell or null to use the start row
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     */
+    public function mergeContent(int $startColumn, int $endColumn, int $startRow, int $endRow = null): static
+    {
+        $this->mergeCells([$startColumn, $startRow, $endColumn, $endRow ?? $startRow]);
+
+        return $this;
+    }
+
+    /**
      * Set the auto-size for the given columns.
      *
      * @param int ...$columnIndexes the column indexes ('A' = First column)

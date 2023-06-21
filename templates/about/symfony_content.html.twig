@@ -45,6 +45,7 @@
     {# Configuration #}
     <p class="fw-bold mb-1">Configuration</p>
     <div class="accordion accordion-flush" id="symfonyAccordion">
+        {# bundles #}
         {% if bundles|length %}
             <div class="accordion-item">
                 {{ tools.headerLinkInfo('Bundles', 'bundles', bundles) }}
@@ -59,7 +60,6 @@
                 </div>
             </div>
         {% endif %}
-
         {# runtime packages #}
         {% if runtime_packages|length %}
             <div class="accordion-item">
@@ -75,7 +75,6 @@
                 </div>
             </div>
         {% endif %}
-
         {# debug packages #}
         {% if debug_packages|length %}
             <div class="accordion-item">
@@ -106,7 +105,6 @@
                 </div>
             </div>
         {% endif %}
-
         {# debug routes #}
         {% if debug_routes|length %}
             <div class="accordion-item">

@@ -44,8 +44,8 @@ class PhpIniDocument extends AbstractDocument
         $this->setActiveTitle('Configuration', $this->controller);
         $sheet = $this->getActiveSheet();
         if ([] === $content) {
-            $this->setCellValue($this->getActiveSheet(), 1, 1, $this->trans('about.error'));
-            $sheet->finish('A1');
+            $sheet->setCellContent(1, 1, $this->trans('about.error'))
+                ->finish('A1');
 
             return true;
         }

@@ -201,12 +201,12 @@ function selectRow($source, hideMenus) {
     'use strict';
     const $oldSelection = $('#calculations tr.table-primary');
     const $newSelection = $source.closest('tr');
-    if ($oldSelection !== $newSelection) {
+    if (!$newSelection.is($oldSelection)) {
         $oldSelection.removeClass('table-primary');
         $newSelection.addClass('table-primary');
-    }
-    if (hideMenus) {
-        $.hideDropDownMenus();
+        if (hideMenus) {
+            $.hideDropDownMenus();
+        }
     }
 }
 

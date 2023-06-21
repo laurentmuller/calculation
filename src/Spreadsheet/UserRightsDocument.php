@@ -16,13 +16,11 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
-use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
 use Elao\Enum\FlagBag;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * Spreadsheet document for the list of user rights.
@@ -33,9 +31,6 @@ class UserRightsDocument extends AbstractArrayDocument
 {
     use RoleTranslatorTrait;
 
-    private ?bool $writeName = null;
-    private ?bool $writeRights = null;
-
     /**
      * @param User[] $entities
      */
@@ -44,83 +39,36 @@ class UserRightsDocument extends AbstractArrayDocument
         parent::__construct($controller, $entities);
     }
 
-    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): static
-    {
-        if (1 === $columnIndex && $this->writeName) {
-            $values = \explode('|', (string) $value);
-            if (2 === \count($values)) {
-                $richText = new RichText();
-                $font = $richText->createTextRun($values[0])
-                    ->getFont();
-                $font?->setBold(true);
-                $font = $richText->createTextRun(' - ' . $values[1])
-                    ->getFont();
-                $font?->setItalic(true);
-                parent::setCellValue($sheet, $columnIndex, $rowIndex, $richText);
-            } else {
-                parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
-                $sheet->getCell([$columnIndex, $rowIndex])->getStyle()
-                    ->getFont()->setBold(true);
-            }
-        } else {
-            parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
-            if (1 === $columnIndex && $this->writeRights) {
-                $sheet->getCell([$columnIndex, $rowIndex])->getStyle()
-                    ->getAlignment()->setIndent(2);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function doRender(array $entities): bool
     {
-        $service = $this->controller->getApplication();
         $this->start('user.rights.title');
-        $permissions = EntityPermission::sorted();
 
+        $sheet = $this->getActiveSheet();
+        $permissions = EntityPermission::sorted();
         $headers = ['user.rights.table_title' => HeaderFormat::instance()];
         foreach ($permissions as $permission) {
             $headers[$permission->getReadable()] = HeaderFormat::center();
         }
-        $sheet = $this->getActiveSheet();
         $row = $sheet->setHeaders($headers);
 
-        $this->outputRole($service->getAdminRole(), $row);
-        $this->outputRole($service->getUserRole(), $row);
+        $service = $this->controller->getApplication();
+        $this->outputRole($sheet, $service->getAdminRole(), $row);
+        $this->outputRole($sheet, $service->getUserRole(), $row);
         foreach ($entities as $entity) {
-            $this->outputUser($entity, $row);
+            $this->outputUser($sheet, $entity, $row);
         }
+
         foreach (\range(2, \count($headers)) as $column) {
-            $name = $sheet->stringFromColumnIndex($column);
-            $sheet->getColumnDimension($name)->setAutoSize(false)
+            $sheet->getColumnDimensionByColumn($column)
+                ->setAutoSize(false)
                 ->setWidth(11);
         }
         $sheet->finish();
 
         return true;
-    }
-
-    /**
-     * Gets the name for the given role.
-     */
-    private function getEntityName(RoleInterface $entity): string
-    {
-        $role = $this->translateRole($entity);
-        if ($entity instanceof Role) {
-            return $this->trans('user.fields.role') . ' ' . $role;
-        }
-        if ($entity instanceof User) {
-            $text = $entity->getUserIdentifier();
-            $description = $entity->isEnabled() ? $role : $this->trans('common.value_disabled');
-
-            return $text . '|' . $description;
-        }
-
-        return '';
     }
 
     /**
@@ -133,43 +81,58 @@ class UserRightsDocument extends AbstractArrayDocument
         return $rights instanceof FlagBag && $rights->hasFlags($permission) ? 'x' : null;
     }
 
+    private function outputEntityName(WorksheetDocument $sheet, Role|User $entity, int $row): void
+    {
+        $role = $this->translateRole($entity);
+        if ($entity instanceof User) {
+            $text = $entity->getUserIdentifier();
+            $description = $entity->isEnabled() ? $role : $this->trans('common.value_disabled');
+            $richText = new RichText();
+            $richText->createTextRun($text)->getFont()?->setBold(true);
+            $richText->createTextRun(' - ' . $description)->getFont()?->setItalic(true);
+            $sheet->setCellContent(1, $row, $richText);
+        } else {
+            $role = $this->trans('user.fields.role') . ' ' . $role;
+            $sheet->setCellContent(1, $row, $role);
+            $sheet->getStyle([1, $row])->getFont()->setBold(true);
+        }
+    }
+
     /**
      * Output the rights.
      *
      * @psalm-param ?FlagBag<\BackedEnum> $rights
      */
-    private function outputRights(EntityName $entity, ?FlagBag $rights, int $row): void
+    private function outputRights(WorksheetDocument $sheet, EntityName $entity, ?FlagBag $rights, int $row): void
     {
-        $values = [$this->trans($entity)];
+        $columnIndex = 1;
+        $sheet->getStyle([$columnIndex, $row])
+            ->getAlignment()
+            ->setIndent(2);
+        $sheet->setCellContent($columnIndex++, $row, $this->trans($entity));
         foreach (EntityPermission::sorted() as $permission) {
-            $values[] = $this->getRightText($rights, $permission);
+            $sheet->setCellContent($columnIndex++, $row, $this->getRightText($rights, $permission));
         }
-        $this->setRowValues($row, $values);
     }
 
     /**
      * Output the rights for the given role.
      */
-    private function outputRole(Role|User $role, int &$row): void
+    private function outputRole(WorksheetDocument $sheet, Role|User $entity, int &$row): void
     {
-        $outputUsers = $role->isAdmin();
-        $this->writeName = true;
-        $this->setRowValues($row++, [$this->getEntityName($role)]);
-        $this->writeName = false;
-        $this->writeRights = true;
-        $entities = EntityName::sorted();
-        foreach ($entities as $entity) {
-            if (EntityName::LOG === $entity) {
+        $names = EntityName::sorted();
+        $isAdmin = $entity->isAdmin();
+        $this->outputEntityName($sheet, $entity, $row++);
+
+        foreach ($names as $name) {
+            if (EntityName::LOG === $name || (!$isAdmin && EntityName::USER === $name)) {
                 continue;
             }
-            if ($outputUsers || EntityName::USER !== $entity) {
-                $value = $entity->value;
-                /** @psalm-var ?FlagBag<\BackedEnum> $rights $rights */
-                $rights = $role->{$value};
-                $this->outputRights($entity, $rights, $row++);
-            }
+            $value = $name->value;
+            /** @psalm-var ?FlagBag<\BackedEnum> $rights $rights */
+            $rights = $entity->{$value};
+            $this->outputRights($sheet, $name, $rights, $row++);
         }
-        $this->writeRights = false;
     }
 
     /**
@@ -178,12 +141,12 @@ class UserRightsDocument extends AbstractArrayDocument
      * @param User $user the user to output
      * @param int  $row  the current row
      */
-    private function outputUser(User $user, int &$row): void
+    private function outputUser(WorksheetDocument $sheet, User $user, int &$row): void
     {
         if (!$user->isOverwrite()) {
             $rights = $this->builder->getRole($user)->getRights();
             $user->setRights($rights);
         }
-        $this->outputRole($user, $row);
+        $this->outputRole($sheet, $user, $row);
     }
 }

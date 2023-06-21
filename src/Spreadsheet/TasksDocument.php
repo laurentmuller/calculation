@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-
 /**
  * Spreadsheet document for the list of tasks.
  *
@@ -21,25 +19,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
  */
 class TasksDocument extends AbstractArrayDocument
 {
-    private bool $writeItem = false;
-    private bool $writeTask = false;
-
-    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, $value): static
-    {
-        parent::setCellValue($sheet, $columnIndex, $rowIndex, $value);
-        if (1 === $columnIndex) {
-            if ($this->writeTask) {
-                $sheet->getCell([$columnIndex, $rowIndex])->getStyle()
-                    ->getFont()->setBold(true);
-            } elseif ($this->writeItem) {
-                $sheet->getCell([$columnIndex, $rowIndex])->getStyle()
-                    ->getAlignment()->setIndent(2);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @param \App\Entity\Task[] $entities
      *
@@ -48,7 +27,6 @@ class TasksDocument extends AbstractArrayDocument
     protected function doRender(array $entities): bool
     {
         $this->start('task.list.title');
-        $this->writeTask = $this->writeItem = false;
 
         $sheet = $this->getActiveSheet();
         $row = $sheet->setHeaders([
@@ -63,7 +41,8 @@ class TasksDocument extends AbstractArrayDocument
         ]);
 
         foreach ($entities as $entity) {
-            $this->writeTask = true;
+            $sheet->getStyle([1, $row])
+                ->getFont()->setBold(true);
             if ($entity->isEmpty()) {
                 $sheet->setRowValues($row++, [
                     $entity->getName(),
@@ -72,8 +51,7 @@ class TasksDocument extends AbstractArrayDocument
                     $entity->getUnit(),
                     $entity->getSupplier(),
                     $this->trans('task.edit.empty_items'),
-                ]);
-                $sheet->mergeContent(6, 8, $row - 1);
+                ])->mergeContent(6, 8, $row - 1);
             } else {
                 $sheet->setRowValues($row++, [
                     $entity->getName(),
@@ -83,9 +61,10 @@ class TasksDocument extends AbstractArrayDocument
                     $entity->getSupplier(),
                 ]);
             }
-            $this->writeTask = false;
+
             foreach ($entity->getItems() as $item) {
-                $this->writeItem = true;
+                $sheet->getStyle([1, $row])
+                    ->getAlignment()->setIndent(2);
                 if ($item->isEmpty()) {
                     $sheet->setRowValues($row++, [
                         $item->getName(),
@@ -93,9 +72,7 @@ class TasksDocument extends AbstractArrayDocument
                         null,
                         null,
                         $this->trans('taskitem.edit.empty_items'),
-                    ]);
-                    $sheet->mergeContent(6, 8, $row - 1);
-                    $this->writeItem = false;
+                    ])->mergeContent(6, 8, $row - 1);
                 } else {
                     $index = 0;
                     foreach ($item->getMargins() as $margin) {
@@ -110,7 +87,6 @@ class TasksDocument extends AbstractArrayDocument
                             $margin->getMaximum(),
                             $margin->getValue(),
                         ]);
-                        $this->writeItem = false;
                     }
                 }
             }

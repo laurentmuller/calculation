@@ -14,6 +14,7 @@ namespace App\Spreadsheet;
 
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Style;
@@ -21,6 +22,9 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
+/**
+ * Extends the worksheet class with shortcuts to render cells.
+ */
 class WorksheetDocument extends Worksheet
 {
     /**
@@ -51,6 +55,7 @@ class WorksheetDocument extends Worksheet
     public function __construct(SpreadsheetDocument $parent = null, $title = 'Worksheet')
     {
         parent::__construct($parent, $title);
+        $this->setPageSizeA4()->setPagePortrait();
     }
 
     /**
@@ -470,6 +475,25 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
+     * Set title.
+     *
+     * @param string $title                       String containing the dimension of this worksheet
+     * @param bool   $updateFormulaCellReferences Flag indicating whether cell references in formulae should
+     *                                            be updated to reflect the new sheet name.
+     *                                            This should be left as the default true, unless you are
+     *                                            certain that no formula cells on any worksheet contain
+     *                                            references to this worksheet
+     * @param bool   $validate                    False to skip validation of new title. WARNING: This should only be set
+     *                                            at parse time (by Readers), where titles can be assumed to be valid.
+     *
+     * @return $this
+     */
+    public function setTitle($title, $updateFormulaCellReferences = true, $validate = true): static
+    {
+        return parent::setTitle($this->validateTitle($title), $updateFormulaCellReferences, $validate);
+    }
+
+    /**
      * Set wrap text for the given column. The auto-size is automatically disabled.
      *
      * @param int $columnIndex the column index ('A' = First column)
@@ -496,5 +520,20 @@ class WorksheetDocument extends Worksheet
     private function trans(string $id): string
     {
         return $this->getParent()?->trans($id) ?? $id;
+    }
+
+    /**
+     * Validate the worksheet title.
+     */
+    private function validateTitle(string $title): string
+    {
+        /** @var string[] $invalidChars */
+        $invalidChars = self::getInvalidCharacters();
+        $title = \str_replace($invalidChars, '', $title);
+        if (StringHelper::countCharacters($title) > self::SHEET_TITLE_MAXIMUM_LENGTH) {
+            return StringHelper::substring($title, 0, self::SHEET_TITLE_MAXIMUM_LENGTH);
+        }
+
+        return $title;
     }
 }

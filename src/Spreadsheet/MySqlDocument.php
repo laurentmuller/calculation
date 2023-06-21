@@ -44,10 +44,10 @@ class MySqlDocument extends AbstractDocument
         ]);
 
         if ([] !== $database) {
-            $row = $this->outputArray($row, $database);
+            $row = $this->outputArray($sheet, $row, $database);
         }
         if ([] !== $configuration) {
-            $this->outputArray($row, $configuration);
+            $this->outputArray($sheet, $row, $configuration);
         }
 
         $sheet->setAutoSize(1)
@@ -60,10 +60,10 @@ class MySqlDocument extends AbstractDocument
     /**
      * @param array<string, string> $values
      */
-    private function outputArray(int $row, array $values): int
+    private function outputArray(WorksheetDocument $sheet, int $row, array $values): int
     {
         foreach ($values as $key => $value) {
-            $this->setRowValues($row++, [$key, $value]);
+            $sheet->setRowValues($row++, [$key, $value]);
         }
 
         return $row;

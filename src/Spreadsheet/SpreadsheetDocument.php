@@ -15,11 +15,7 @@ namespace App\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Model\CustomerInformation;
 use App\Traits\TranslatorTrait;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
-use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -53,9 +49,7 @@ class SpreadsheetDocument extends Spreadsheet
 
         // replace default sheet
         $this->removeSheetByIndex(0);
-        $this->createSheet()
-            ->setPageSizeA4()
-            ->setPagePortrait();
+        $this->createSheet();
     }
 
     /**
@@ -65,10 +59,10 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function createSheet($sheetIndex = null): WorksheetDocument
     {
-        $newSheet = new WorksheetDocument($this);
-        $this->addSheet($newSheet, $sheetIndex);
+        $sheet = new WorksheetDocument($this);
+        $this->addSheet($sheet, $sheetIndex);
 
-        return $newSheet;
+        return $sheet;
     }
 
     /**
@@ -87,7 +81,7 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $sheet = $this->createSheet($sheetIndex);
         if (null !== $title) {
-            $sheet->setTitle($this->validateSheetTitle($title));
+            $sheet->setTitle($title);
         }
         $sheet->setPrintGridlines(true);
 
@@ -110,14 +104,6 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Gets the page setup of the active sheet.
-     */
-    public function getPageSetup(): PageSetup
-    {
-        return $this->getActiveSheet()->getPageSetup();
-    }
-
-    /**
      * Gets the title.
      */
     public function getTitle(): ?string
@@ -131,34 +117,16 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Set merge on a cell range by using cell coordinates.
-     *
-     * @param int  $startColumn the index of the first column ('A' = First column)
-     * @param int  $endColumn   the index of the last column
-     * @param int  $startRow    the index of first row (1 = First row)
-     * @param ?int $endRow      the index of the last cell or null to use the start row
-     *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
-     */
-    public function mergeCells(int $startColumn, int $endColumn, int $startRow, int $endRow = null): static
-    {
-        $this->getActiveSheet()->mergeCells([$startColumn, $startRow, $endColumn, $endRow ?? $startRow]);
-
-        return $this;
-    }
-
-    /**
      * Sets the title of the active sheet.
      *
      * If this parent's controller is not null, the header and footer are also updated.
      */
     public function setActiveTitle(string $title, AbstractController $controller = null): static
     {
-        $title = $this->validateSheetTitle($title);
-        $this->getActiveSheet()->setTitle($title);
+        $sheet = $this->getActiveSheet()
+            ->setTitle($title);
         if ($controller instanceof AbstractController) {
-            $customer = $controller->getUserService()->getCustomer();
-            $this->setHeaderFooter($title, $customer);
+            return $this->setHeaderFooter($sheet->getTitle(), $controller->getUserService()->getCustomer());
         }
 
         return $this;
@@ -173,30 +141,6 @@ class SpreadsheetDocument extends Spreadsheet
     {
         if ($category) {
             $this->getProperties()->setCategory($category);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set a cell value by using numeric cell coordinates.
-     *
-     * Do nothing if the value is null or empty('').
-     *
-     * @param Worksheet $sheet       the work sheet to write value to
-     * @param int       $columnIndex the column index ('A' = First column)
-     * @param int       $rowIndex    the row index (1 = First row)
-     * @param mixed     $value       the value to set
-     */
-    public function setCellValue(Worksheet $sheet, int $columnIndex, int $rowIndex, mixed $value): static
-    {
-        if (null !== $value && '' !== $value) {
-            if ($value instanceof \DateTimeInterface) {
-                $value = Date::PHPToExcel($value);
-            } elseif (\is_bool($value)) {
-                $value = (int) $value;
-            }
-            $sheet->setCellValue([$columnIndex, $rowIndex], $value);
         }
 
         return $this;
@@ -225,24 +169,6 @@ class SpreadsheetDocument extends Spreadsheet
     {
         if ($description) {
             $this->getProperties()->setDescription($description);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Sets the values of the given row.
-     *
-     * @param int   $rowIndex    the row index (1 = First row)
-     * @param array $values      the values to set
-     * @param int   $columnIndex the starting column index ('A' = First column)
-     */
-    public function setRowValues(int $rowIndex, array $values, int $columnIndex = 1): static
-    {
-        $sheet = $this->getActiveSheet();
-        /** @psalm-var mixed $value*/
-        foreach ($values as $value) {
-            $this->setCellValue($sheet, $columnIndex++, $rowIndex, $value);
         }
 
         return $this;
@@ -325,43 +251,31 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $sheet = $this->getActiveSheet();
         $pageMargins = $sheet->getPageMargins();
-        $header = HeaderFooter::header();
         if ($customer->isPrintAddress()) {
-            $header->addLeft($customer->getName(), true)
+            HeaderFooter::header()
+                ->addLeft($customer->getName(), true)
                 ->addLeft($customer->getAddress())
                 ->addLeft($customer->getZipCity())
                 ->addCenter($title, true)
                 ->addRight($customer->getTranslatedPhone($this))
                 ->addRight($customer->getTranslatedFax($this))
-                ->addRight($customer->getEmail());
+                ->addRight($customer->getEmail())
+                ->apply($sheet);
             $pageMargins->setTop(self::HEADER_CUSTOMER_MARGIN);
         } else {
-            $header->addLeft($title, true)
-                ->addRight($customer->getName(), true);
+            HeaderFooter::header()
+                ->addLeft($title, true)
+                ->addRight($customer->getName(), true)
+                ->apply($sheet);
             $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
         }
-        $header->apply($sheet);
-        $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
+
         HeaderFooter::footer()
             ->addPages()
             ->addDateTime()
             ->apply($sheet);
+        $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
 
         return $this;
-    }
-
-    /**
-     * Validate the worksheet title.
-     */
-    private function validateSheetTitle(string $title): string
-    {
-        /** @var string[] $invalidChars */
-        $invalidChars = Worksheet::getInvalidCharacters();
-        $title = \str_replace($invalidChars, '', $title);
-        if (StringHelper::countCharacters($title) > Worksheet::SHEET_TITLE_MAXIMUM_LENGTH) {
-            return StringHelper::substring($title, 0, Worksheet::SHEET_TITLE_MAXIMUM_LENGTH);
-        }
-
-        return $title;
     }
 }

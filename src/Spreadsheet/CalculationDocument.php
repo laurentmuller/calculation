@@ -19,7 +19,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
-use PhpOffice\PhpSpreadsheet\Style\Style;
 
 /**
  * Spreadsheet document for a calculation.
@@ -56,18 +55,21 @@ class CalculationDocument extends AbstractDocument
         $id = $calculation->getFormattedId();
         $title = $this->trans('calculation.edit.title', ['%id%' => $id]);
         $this->start($title);
+
         $row = 1;
         $sheet = $this->getActiveSheet();
         $this->renderTitle($sheet, $title, $calculation, $row);
-        $this->mergeCells(1, 5, $row);
+        $sheet->mergeContent(1, 5, $row);
         $emptyRows[] = $row++;
         if ($calculation->isEmpty()) {
             return $this->renderEmpty($sheet, $calculation, $row, $emptyRows);
         }
+
         $this->renderItems($sheet, $calculation, $row);
-        $this->mergeCells(1, 5, $row);
+        $sheet->mergeContent(1, 5, $row);
         $emptyRows[] = $row;
         ++$row;
+
         $this->renderTotalGroups($sheet, $calculation, $row);
         $this->renderMarginsTotal($sheet, $calculation, $row);
         $this->renderGlobalMargin($sheet, $calculation, $row);
@@ -77,9 +79,17 @@ class CalculationDocument extends AbstractDocument
         return $this->renderEnd($sheet, $calculation, $row, $emptyRows);
     }
 
-    private function cell(WorksheetDocument $sheet, int $column, int $row, mixed $value, bool $bold = false, int $indent = 0, string $alignment = '', string $format = ''): self
-    {
-        $style = $sheet->getCell([$column, $row])->getStyle();
+    private function cell(
+        WorksheetDocument $sheet,
+        int $column,
+        int $row,
+        mixed $value,
+        bool $bold = false,
+        int $indent = 0,
+        string $alignment = '',
+        string $format = ''
+    ): self {
+        $style = $sheet->getStyle([$column, $row]);
         if ($bold) {
             $style->getFont()->setBold(true);
         }
@@ -150,14 +160,11 @@ class CalculationDocument extends AbstractDocument
 
     private function fillBackground(WorksheetDocument $sheet, int $row): void
     {
-        $this->getRowStyle($sheet, $row)
-            ->getFill()->setFillType(Fill::FILL_SOLID)
-            ->getStartColor()->setARGB(self::COLOR_BACKGROUND);
-    }
-
-    private function getRowStyle(WorksheetDocument $sheet, int $row): Style
-    {
-        return $sheet->getStyle("A$row:E$row");
+        $sheet->getStyle("A$row:E$row")
+            ->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->getStartColor()
+            ->setARGB(self::COLOR_BACKGROUND);
     }
 
     /**
@@ -167,15 +174,14 @@ class CalculationDocument extends AbstractDocument
      */
     private function renderEmpty(WorksheetDocument $sheet, Calculation $calculation, int $row, array $emptyRows): bool
     {
-        $this->mergeCells(1, 5, $row)
-            ->cellBold(
-                sheet: $sheet,
-                column: 1,
-                row: $row,
-                value: $this->trans('calculation.edit.empty'),
-                alignment: Alignment::HORIZONTAL_CENTER
-            )
-            ->fillBackground($sheet, $row);
+        $sheet->mergeContent(1, 5, $row);
+        $this->cellBold(
+            sheet: $sheet,
+            column: 1,
+            row: $row,
+            value: $this->trans('calculation.edit.empty'),
+            alignment: Alignment::HORIZONTAL_CENTER
+        )->fillBackground($sheet, $row);
 
         return $this->renderEnd($sheet, $calculation, $row, $emptyRows);
     }
@@ -188,14 +194,23 @@ class CalculationDocument extends AbstractDocument
     private function renderEnd(WorksheetDocument $sheet, Calculation $calculation, int $lastRow, array $emptyRows): bool
     {
         $sheet->getStyle("A1:E$lastRow")
-            ->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)
-            ->getColor()->setARGB(self::COLOR_BORDER);
+            ->getBorders()
+            ->getAllBorders()
+            ->setBorderStyle(Border::BORDER_THIN)
+            ->getColor()
+            ->setARGB(self::COLOR_BORDER);
+
         foreach ($emptyRows as $emptyRow) {
-            $sheet->getStyle("A$emptyRow")->getBorders()
-                ->getLeft()->setBorderStyle(Border::BORDER_NONE);
-            $sheet->getStyle("E$emptyRow")->getBorders()
-                ->getRight()->setBorderStyle(Border::BORDER_NONE);
+            $sheet->getStyle("A$emptyRow")
+                ->getBorders()
+                ->getLeft()
+                ->setBorderStyle(Border::BORDER_NONE);
+            $sheet->getStyle("E$emptyRow")
+                ->getBorders()
+                ->getRight()
+                ->setBorderStyle(Border::BORDER_NONE);
         }
+
         $sheet->getColumnDimension('A')->setWidth(8.5, 'cm');
         foreach (\range('B', 'E') as $column) {
             $sheet->getColumnDimension($column)->setWidth(2.0, 'cm');
@@ -207,6 +222,7 @@ class CalculationDocument extends AbstractDocument
             ->setFitToHeight(0)
             ->setHorizontalCentered(true)
             ->setRowsToRepeatAtTopByStartAndEnd(1, 4);
+
         $sheet->setPrintGridlines(false)
             ->setShowGridlines(false)
             ->finish('A1');
@@ -219,11 +235,11 @@ class CalculationDocument extends AbstractDocument
      */
     private function renderGlobalMargin(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
-        $this->mergeCells(1, 2, $row)
-            ->cellText($sheet, 1, $row, $this->trans('calculation.fields.globalMargin'))
-            ->cellPercent($sheet, $row, $calculation->getGlobalMargin())
-            ->mergeCells(4, 5, $row)
-            ->cellAmount($sheet, 4, $row, $calculation->getGlobalMarginAmount());
+        $sheet->mergeContent(1, 2, $row);
+        $this->cellText($sheet, 1, $row, $this->trans('calculation.fields.globalMargin'))
+            ->cellPercent($sheet, $row, $calculation->getGlobalMargin());
+        $sheet->mergeContent(4, 5, $row);
+        $this->cellAmount($sheet, 4, $row, $calculation->getGlobalMarginAmount());
         ++$row;
     }
 
@@ -239,14 +255,17 @@ class CalculationDocument extends AbstractDocument
             ->cellBold($sheet, 5, $row, $this->trans('calculationitem.fields.total'), 0, Alignment::HORIZONTAL_RIGHT)
             ->fillBackground($sheet, $row);
         ++$row;
+
         foreach ($calculation->getGroups() as $group) {
-            $this->mergeCells(1, 5, $row)
-                ->cellBold($sheet, 1, $row, $group->getCode());
+            $sheet->mergeContent(1, 5, $row);
+            $this->cellBold($sheet, 1, $row, $group->getCode());
             ++$row;
+
             foreach ($group->getCategories() as $category) {
-                $this->mergeCells(1, 5, $row)
-                    ->cellBold($sheet, 1, $row, $category->getCode(), 1);
+                $sheet->mergeContent(1, 5, $row);
+                $this->cellBold($sheet, 1, $row, $category->getCode(), 1);
                 ++$row;
+
                 foreach ($category->getItems() as $item) {
                     $this->cellText($sheet, 1, $row, $item->getDescription(), 1)
                         ->cellText($sheet, 2, $row, $item->getUnit())
@@ -257,8 +276,9 @@ class CalculationDocument extends AbstractDocument
                 }
             }
         }
-        $this->mergeCells(1, 4, $row)
-            ->cellBold($sheet, 1, $row, $this->trans('calculation.fields.itemsTotal'))
+
+        $sheet->mergeContent(1, 4, $row);
+        $this->cellBold($sheet, 1, $row, $this->trans('calculation.fields.itemsTotal'))
             ->cellAmount($sheet, 5, $row, $calculation->getItemsTotal(), true)
             ->fillBackground($sheet, $row);
         ++$row;
@@ -294,15 +314,16 @@ class CalculationDocument extends AbstractDocument
         $created = $calculation->getCreatedText($translator);
         $updated = $calculation->getUpdatedText($translator);
         $this->cell($sheet, 1, $row, $created);
-        $this->mergeCells(2, 5, $row)
-            ->cell(
-                sheet: $sheet,
-                column: 2,
-                row: $row,
-                value: $updated,
-                alignment: Alignment::HORIZONTAL_RIGHT
-            );
-        $this->getRowStyle($sheet, $row)
+        $sheet->mergeContent(2, 5, $row);
+        $this->cell(
+            sheet: $sheet,
+            column: 2,
+            row: $row,
+            value: $updated,
+            alignment: Alignment::HORIZONTAL_RIGHT
+        );
+
+        $sheet->getStyle("A$row:E$row")
             ->getFont()
             ->setSize(9)
             ->setItalic(true);
@@ -313,20 +334,22 @@ class CalculationDocument extends AbstractDocument
      */
     private function renderTitle(WorksheetDocument $sheet, string $title, Calculation $calculation, int &$row): void
     {
-        $this->mergeCells(1, 5, $row)
-            ->cellBold($sheet, 1, $row, $title, 0, Alignment::HORIZONTAL_CENTER)
+        $sheet->mergeContent(1, 5, $row);
+        $this->cellBold($sheet, 1, $row, $title, 0, Alignment::HORIZONTAL_CENTER)
             ->fillBackground($sheet, $row);
         ++$row;
-        $this->mergeCells(1, 3, $row)
-            ->cellBold($sheet, 1, $row, $calculation->getCustomer())
-            ->mergeCells(4, 5, $row)
-            ->cellBold($sheet, 4, $row, $calculation->getStateCode(), 0, Alignment::HORIZONTAL_RIGHT)
+
+        $sheet->mergeContent(1, 3, $row);
+        $this->cellBold($sheet, 1, $row, $calculation->getCustomer());
+        $sheet->mergeContent(4, 5, $row);
+        $this->cellBold($sheet, 4, $row, $calculation->getStateCode(), 0, Alignment::HORIZONTAL_RIGHT)
             ->fillBackground($sheet, $row);
         ++$row;
-        $this->mergeCells(1, 3, $row)
-            ->cellBold($sheet, 1, $row, $calculation->getDescription())
-            ->mergeCells(4, 5, $row)
-            ->cellBold($sheet, 4, $row, $calculation->getDate(), 0, Alignment::HORIZONTAL_RIGHT, NumberFormat::FORMAT_DATE_DDMMYYYY)
+
+        $sheet->mergeContent(1, 3, $row);
+        $this->cellBold($sheet, 1, $row, $calculation->getDescription());
+        $sheet->mergeContent(4, 5, $row);
+        $this->cellBold($sheet, 4, $row, $calculation->getDate(), 0, Alignment::HORIZONTAL_RIGHT, NumberFormat::FORMAT_DATE_DDMMYYYY)
             ->fillBackground($sheet, $row);
         ++$row;
     }
@@ -337,12 +360,13 @@ class CalculationDocument extends AbstractDocument
     private function renderTotalGroups(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
         $this->cellBold($sheet, 1, $row, $this->trans('calculation.edit.panel_resume'))
-            ->cellBold($sheet, 2, $row, $this->trans('calculationgroup.fields.amount'), 0, Alignment::HORIZONTAL_RIGHT)
-            ->mergeCells(3, 4, $row)
-            ->cellBold($sheet, 3, $row, $this->trans('group.fields.margins'), 0, Alignment::HORIZONTAL_CENTER)
+            ->cellBold($sheet, 2, $row, $this->trans('calculationgroup.fields.amount'), 0, Alignment::HORIZONTAL_RIGHT);
+        $sheet->mergeContent(3, 4, $row);
+        $this->cellBold($sheet, 3, $row, $this->trans('group.fields.margins'), 0, Alignment::HORIZONTAL_CENTER)
             ->cellBold($sheet, 5, $row, $this->trans('calculation.fields.total'), 0, Alignment::HORIZONTAL_RIGHT)
             ->fillBackground($sheet, $row);
         ++$row;
+
         foreach ($calculation->getGroups() as $group) {
             $this->cellText($sheet, 1, $row, $group->getCode())
                 ->cellAmount($sheet, 2, $row, $group->getAmount())
@@ -358,18 +382,21 @@ class CalculationDocument extends AbstractDocument
      */
     private function renderUserMargin(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
-        if (!empty($calculation->getUserMargin())) {
-            $this->mergeCells(1, 4, $row)
-                ->cellBold($sheet, 1, $row, $this->trans('calculation.fields.totalNet'))
-                ->cellAmount($sheet, 5, $row, $calculation->getTotalNet(), true)
-                ->fillBackground($sheet, $row);
-            ++$row;
-            $this->mergeCells(1, 2, $row)
-                ->cellText($sheet, 1, $row, $this->trans('calculation.fields.userMargin'))
-                ->cellPercent($sheet, $row, $calculation->getUserMargin())
-                ->mergeCells(4, 5, $row)
-                ->cellAmount($sheet, 4, $row, $calculation->getUserMarginAmount());
-            ++$row;
+        if (empty($calculation->getUserMargin())) {
+            return;
         }
+
+        $sheet->mergeContent(1, 4, $row);
+        $this->cellBold($sheet, 1, $row, $this->trans('calculation.fields.totalNet'))
+            ->cellAmount($sheet, 5, $row, $calculation->getTotalNet(), true)
+            ->fillBackground($sheet, $row);
+        ++$row;
+
+        $sheet->mergeContent(1, 2, $row);
+        $this->cellText($sheet, 1, $row, $this->trans('calculation.fields.userMargin'))
+            ->cellPercent($sheet, $row, $calculation->getUserMargin());
+        $sheet->mergeContent(4, 5, $row);
+        $this->cellAmount($sheet, 4, $row, $calculation->getUserMarginAmount());
+        ++$row;
     }
 }

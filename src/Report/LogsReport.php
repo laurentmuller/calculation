@@ -199,6 +199,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     {
         $levels = $this->logFile->getLevels();
         $channels = $this->logFile->getChannels();
+
         $columns = [];
         $textCells = [];
         $valueCells = [];
@@ -206,19 +207,23 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $emptyCol = PdfColumn::center(null, 1);
         $emptyCell = new PdfCell(cols: 1, style: PdfStyle::getNoBorderStyle());
         $this->outputCardsEntries($levels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
+
         $columns[] = $sepCol;
         $textCells[] = $emptyCell;
         $valueCells[] = $emptyCell;
         $this->outputCardsEntries($channels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
+
         $columns[] = $sepCol;
         $textCells[] = $emptyCell;
         $valueCells[] = $emptyCell;
         $columns[] = PdfColumn::center(self::TOTAL, 30);
         $textCells[] = new PdfCell(StringUtils::capitalize(self::TOTAL));
         $valueCells[] = new PdfCell(FormatUtils::formatInt($this->logFile->count()));
+
         $this->started = true;
         $this->drawCards = true;
         $titleStyle = PdfStyle::getDefaultStyle()->setBorder(PdfBorder::NONE)->setFontBold();
+
         PdfTableBuilder::instance($this)
             ->addColumns(...$columns)
             ->startRow()

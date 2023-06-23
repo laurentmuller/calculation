@@ -42,6 +42,8 @@ class SpreadsheetDocument extends Spreadsheet
 
     /**
      * Constructor.
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function __construct(private readonly TranslatorInterface $translator)
     {
@@ -56,6 +58,8 @@ class SpreadsheetDocument extends Spreadsheet
      * Create a sheet and add it to this workbook.
      *
      * @param int|null $sheetIndex Index where sheet should go (0,1,..., or null for last)
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function createSheet($sheetIndex = null): WorksheetDocument
     {
@@ -87,7 +91,7 @@ class SpreadsheetDocument extends Spreadsheet
 
         $this->setActiveSheetIndex($sheetIndex ?? $this->getSheetCount() - 1);
         $customer = $controller->getUserService()->getCustomer();
-        $this->setHeaderFooter($title, $customer);
+        $this->setHeaderFooter($customer, $title);
 
         return $sheet;
     }
@@ -126,7 +130,7 @@ class SpreadsheetDocument extends Spreadsheet
         $sheet = $this->getActiveSheet()
             ->setTitle($title);
         if ($controller instanceof AbstractController) {
-            return $this->setHeaderFooter($sheet->getTitle(), $controller->getUserService()->getCustomer());
+            return $this->setHeaderFooter($controller->getUserService()->getCustomer(), $sheet->getTitle());
         }
 
         return $this;
@@ -228,7 +232,7 @@ class SpreadsheetDocument extends Spreadsheet
         $application = $controller->getApplicationName();
         $username = $controller->getUserIdentifier();
         $title = $this->trans($title);
-        $this->setHeaderFooter($title, $customer)
+        $this->setHeaderFooter($customer, $title)
             ->setTitle($title)
             ->setActiveTitle($title)
             ->setCompany($customer->getName())
@@ -247,7 +251,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the header and footer texts.
      */
-    private function setHeaderFooter(?string $title, CustomerInformation $customer): static
+    private function setHeaderFooter(CustomerInformation $customer, ?string $title): static
     {
         $sheet = $this->getActiveSheet();
         $pageMargins = $sheet->getPageMargins();

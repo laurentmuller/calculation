@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c664bc4a90e638ee331d83c6a3250bb",
+    "content-hash": "37ed94ddfcbe56847786552e5dc0c8e0",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1089,16 +1089,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.15.2",
+            "version": "2.15.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "bf449bef7ddc47e62c22f9a06dacc1736abe1c0b"
+                "reference": "4c3bd208018c26498e5f682aaad45fa00ea307d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/bf449bef7ddc47e62c22f9a06dacc1736abe1c0b",
-                "reference": "bf449bef7ddc47e62c22f9a06dacc1736abe1c0b",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/4c3bd208018c26498e5f682aaad45fa00ea307d5",
+                "reference": "4c3bd208018c26498e5f682aaad45fa00ea307d5",
                 "shasum": ""
             },
             "require": {
@@ -1127,14 +1127,14 @@
                 "doctrine/annotations": "^1.13 || ^2",
                 "doctrine/coding-standard": "^9.0.2 || ^12.0",
                 "phpbench/phpbench": "^0.16.10 || ^1.0",
-                "phpstan/phpstan": "~1.4.10 || 1.10.14",
+                "phpstan/phpstan": "~1.4.10 || 1.10.18",
                 "phpunit/phpunit": "^7.5 || ^8.5 || ^9.6",
                 "psr/log": "^1 || ^2 || ^3",
                 "squizlabs/php_codesniffer": "3.7.2",
                 "symfony/cache": "^4.4 || ^5.4 || ^6.0",
                 "symfony/var-exporter": "^4.4 || ^5.4 || ^6.2",
                 "symfony/yaml": "^3.4 || ^4.0 || ^5.0 || ^6.0",
-                "vimeo/psalm": "4.30.0 || 5.11.0"
+                "vimeo/psalm": "4.30.0 || 5.12.0"
             },
             "suggest": {
                 "ext-dom": "Provides support for XSD validation for XML mapping files",
@@ -1184,9 +1184,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.15.2"
+                "source": "https://github.com/doctrine/orm/tree/2.15.3"
             },
-            "time": "2023-06-01T09:35:50+00:00"
+            "time": "2023-06-22T12:36:06+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -1340,16 +1340,16 @@
         },
         {
             "name": "dukecity/doctrineextensions",
-            "version": "v2.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Dukecity/DoctrineExtensions.git",
-                "reference": "d7eb8883855da297b189e3d28a8c2f0260b85c49"
+                "url": "https://github.com/laurentmuller/DoctrineExtensions.git",
+                "reference": "c3b83b96b5c0d82ede1e1d982c8ae2a4be570922"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dukecity/DoctrineExtensions/zipball/d7eb8883855da297b189e3d28a8c2f0260b85c49",
-                "reference": "d7eb8883855da297b189e3d28a8c2f0260b85c49",
+                "url": "https://api.github.com/repos/laurentmuller/DoctrineExtensions/zipball/c3b83b96b5c0d82ede1e1d982c8ae2a4be570922",
+                "reference": "c3b83b96b5c0d82ede1e1d982c8ae2a4be570922",
                 "shasum": ""
             },
             "require": {
@@ -1359,19 +1359,34 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.17",
                 "nesbot/carbon": "^2.67",
+                "phpstan/phpstan": "^1.10",
                 "phpunit/phpunit": "^10.2",
                 "symfony/cache": "^5.4 || ^6.2",
-                "symfony/yaml": "^5.4 || ^6.2",
-                "zf1/zend-date": "^1.12.20",
-                "zf1/zend-registry": "^1.12.20"
+                "symfony/yaml": "^5.4 || ^6.2"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "DoctrineExtensions\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "DoctrineExtensions\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "lint": [
+                    "php-cs-fixer fix --ansi --diff --show-progress=none --verbose"
+                ],
+                "test": [
+                    "phpunit --colors=always"
+                ],
+                "phpstan": [
+                    "phpstan analyse"
+                ]
+            },
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1392,10 +1407,9 @@
                 "orm"
             ],
             "support": {
-                "issues": "https://github.com/Dukecity/DoctrineExtensions/issues",
-                "source": "https://github.com/Dukecity/DoctrineExtensions/tree/v2.0"
+                "source": "https://github.com/laurentmuller/DoctrineExtensions/tree/master"
             },
-            "time": "2023-06-16T14:44:52+00:00"
+            "time": "2023-06-20T09:45:41+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -2225,16 +2239,16 @@
         },
         {
             "name": "maennchen/zipstream-php",
-            "version": "3.0.2",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maennchen/ZipStream-PHP.git",
-                "reference": "b46726e666b5d2ad32959ae9492ee1034e798162"
+                "reference": "b8174494eda667f7d13876b4a7bfef0f62a7c0d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/b46726e666b5d2ad32959ae9492ee1034e798162",
-                "reference": "b46726e666b5d2ad32959ae9492ee1034e798162",
+                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/b8174494eda667f7d13876b4a7bfef0f62a7c0d1",
+                "reference": "b8174494eda667f7d13876b4a7bfef0f62a7c0d1",
                 "shasum": ""
             },
             "require": {
@@ -2290,7 +2304,7 @@
             ],
             "support": {
                 "issues": "https://github.com/maennchen/ZipStream-PHP/issues",
-                "source": "https://github.com/maennchen/ZipStream-PHP/tree/3.0.2"
+                "source": "https://github.com/maennchen/ZipStream-PHP/tree/3.1.0"
             },
             "funding": [
                 {
@@ -2302,7 +2316,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-04-19T19:51:03+00:00"
+            "time": "2023-06-21T14:59:35+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -8265,16 +8279,16 @@
         },
         {
             "name": "vich/uploader-bundle",
-            "version": "2.1.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/dustin10/VichUploaderBundle.git",
-                "reference": "6674793a33bb0ff6069b01b757735a42ac5e3830"
+                "url": "https://github.com/laurentmuller/VichUploaderBundle.git",
+                "reference": "a8ee8940625857b3bf738797551eb4d0bb30702f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dustin10/VichUploaderBundle/zipball/6674793a33bb0ff6069b01b757735a42ac5e3830",
-                "reference": "6674793a33bb0ff6069b01b757735a42ac5e3830",
+                "url": "https://api.github.com/repos/laurentmuller/VichUploaderBundle/zipball/a8ee8940625857b3bf738797551eb4d0bb30702f",
+                "reference": "a8ee8940625857b3bf738797551eb4d0bb30702f",
                 "shasum": ""
             },
             "require": {
@@ -8307,7 +8321,7 @@
                 "league/flysystem-memory": "^2.0",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.3",
                 "mikey179/vfsstream": "^1.6.8",
-                "phpunit/phpunit": "^9.5",
+                "phpunit/phpunit": "^9.6",
                 "symfony/asset": "^5.4 || ^6.0",
                 "symfony/browser-kit": "^5.4 || ^6.0",
                 "symfony/css-selector": "^5.4 || ^6.0",
@@ -8315,14 +8329,15 @@
                 "symfony/dom-crawler": "^5.4 || ^6.0",
                 "symfony/form": "^5.4 || ^6.0",
                 "symfony/framework-bundle": "^5.4 || ^6.0",
-                "symfony/phpunit-bridge": "^6.2",
+                "symfony/phpunit-bridge": "^6.3",
                 "symfony/security-csrf": "^5.4 || ^6.0",
                 "symfony/translation": "^5.4 || ^6.0",
                 "symfony/twig-bridge": "^5.4 || ^6.0",
                 "symfony/twig-bundle": "^5.4 || ^6.0",
                 "symfony/validator": "^5.4 || ^6.0",
                 "symfony/var-dumper": "^5.4 || ^6.0",
-                "symfony/yaml": "^5.4 || ^6.0"
+                "symfony/yaml": "^5.4 || ^6.0",
+                "yoast/phpunit-polyfills": "dev-main#3933ed2a2a7b7a158b48576abeef4a82f737fea1"
             },
             "suggest": {
                 "doctrine/annotations": "If you use doctrine/doctrine-bundle >2.7, this package is required to use annotations",
@@ -8338,6 +8353,7 @@
                 "symfony/form": "To handle uploads in forms",
                 "symfony/yaml": "To use YAML mapping"
             },
+            "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -8349,7 +8365,12 @@
                     "Vich\\UploaderBundle\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Vich\\TestBundle\\": "tests/Fixtures/TestBundle/src",
+                    "Vich\\UploaderBundle\\Tests\\": "tests"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -8366,10 +8387,9 @@
                 "upload"
             ],
             "support": {
-                "issues": "https://github.com/dustin10/VichUploaderBundle/issues",
-                "source": "https://github.com/dustin10/VichUploaderBundle/tree/2.1.1"
+                "source": "https://github.com/laurentmuller/VichUploaderBundle/tree/master"
             },
-            "time": "2023-03-07T07:01:20+00:00"
+            "time": "2023-06-22T03:48:23+00:00"
         }
     ],
     "packages-dev": [
@@ -10967,7 +10987,10 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "dukecity/doctrineextensions": 20,
+        "vich/uploader-bundle": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

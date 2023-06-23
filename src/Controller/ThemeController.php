@@ -12,7 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\Theme;
 use App\Interfaces\RoleInterface;
+use App\Traits\CookieTrait;
 use App\Twig\ThemeExtension;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +30,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class ThemeController extends AbstractController
 {
+    use CookieTrait;
+
     #[Route(path: '/dialog', name: 'theme_dialog', methods: Request::METHOD_GET)]
     public function dialog(Request $request, ThemeExtension $extension): JsonResponse
     {
@@ -37,5 +41,19 @@ class ThemeController extends AbstractController
         ]);
 
         return $this->json($result);
+    }
+
+    #[Route(path: '/save', name: 'theme_save', methods: Request::METHOD_GET)]
+    public function saveTheme(Request $request, ThemeExtension $extension): JsonResponse
+    {
+        $theme = $extension->getTheme($request);
+        $value = $request->query->getString('theme', $theme->value);
+        $theme = Theme::tryFrom($value) ?? $theme;
+        $response = $this->jsonTrue(
+            ['message' => $this->trans($theme->getSuccess())]
+        );
+        $this->setCookie($response, ThemeExtension::KEY_THEME, $theme->value);
+
+        return $response;
     }
 }

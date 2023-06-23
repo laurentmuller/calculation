@@ -67,7 +67,7 @@ trait MathTrait
      */
     protected function round(?float $val, int $precision = 2): float
     {
-        return null === $val ? 0.0 : \round($val, $precision);
+        return null === $val ? 0.0 : \round($val, $precision, \PHP_ROUND_HALF_DOWN);
     }
 
     /**

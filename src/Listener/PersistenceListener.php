@@ -39,6 +39,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 #[AsDoctrineListener(Events::postPersist)]
 #[AsDoctrineListener(Events::postRemove)]
 #[AsDoctrineListener(Events::postUpdate)]
+#[AsDoctrineListener(Events::preRemove)]
 class PersistenceListener implements DisableListenerInterface, ServiceSubscriberInterface
 {
     use DisableListenerTrait;
@@ -60,6 +61,8 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         User::class,
     ];
 
+    private ?string $previousDisplay = null;
+
     /**
      * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
      */
@@ -69,7 +72,6 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         if (!$entity instanceof AbstractEntity) {
             return;
         }
-
         $this->notify($entity, '.add.success', 'common.add_success');
     }
 
@@ -82,7 +84,6 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         if (!$entity instanceof AbstractEntity) {
             return;
         }
-
         $this->notify($entity, '.delete.success', 'common.delete_success', FlashType::WARNING);
     }
 
@@ -95,8 +96,20 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         if (!$entity instanceof AbstractEntity || $this->isLastLogin($args)) {
             return;
         }
-
         $this->notify($entity, '.edit.success', 'common.edit_success');
+    }
+
+    /**
+     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     */
+    public function preRemove(LifecycleEventArgs $args): void
+    {
+        $this->previousDisplay = null;
+        $entity = $this->getEntity($args);
+        if (!$entity instanceof Calculation) {
+            return;
+        }
+        $this->previousDisplay = $entity->getDisplay();
     }
 
     /**
@@ -143,8 +156,9 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     private function notify(AbstractEntity $entity, string $suffix, string $default, FlashType $type = FlashType::SUCCESS): void
     {
         $id = $this->getId($entity, $suffix, $default);
-        $params = ['%name%' => $entity->getDisplay()];
-        $message = $this->trans($id, $params);
+        $display = $this->previousDisplay ?? $entity->getDisplay();
+        $message = $this->trans($id, ['%name%' => $display]);
         $this->addFlashMessage($type, $message);
+        $this->previousDisplay = null;
     }
 }

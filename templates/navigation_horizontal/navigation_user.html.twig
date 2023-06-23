@@ -1,5 +1,5 @@
 {# user menu #}
-{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, navItem, theme_entry, navItemThemeSwitcher %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, navItem, theme_entry, navItemToggle %}
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {% apply spaceless %}
@@ -16,13 +16,12 @@
         {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}
         {{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
         {{ dropdownSeparator() }}
-        {{ navItemThemeSwitcher('dropdown-item') }}
+        {{ navItemToggle('dropdown-item') }}
         {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
         {% if is_previous_admin -%}
             {{ dropdownSeparator() }}
             {{ dropdownItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
         {% endif %}
-        {# switch environment #}
         {% if is_env_dev -%}
             {{ dropdownSeparator() }}
             {{ dropdownItem(link_prod, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) }}

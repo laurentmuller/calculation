@@ -19,7 +19,6 @@
  */
 <!--#include file="plugins/plugin-sidebar.js" -->
 <!--#include file="plugins/plugin-toast.js" -->
-<!--#include file="plugins/plugin-theme.js" -->
 
 /**
  * Common Files

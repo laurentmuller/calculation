@@ -1,22 +1,18 @@
-<div class="toggle-icon collapse{% if expanded %} show{% endif %}" id="message" data-parent="#parent_accordion">
-    <div class="mt-1">
-        <p class="mb-2 form-text text-body-secondary">{{ 'parameters.group_message_help'|trans }}</p>
-        <div class="row">
-            <div class="col-md-4">
-                {{ form_row(form.message_position) }}
-            </div>
-            <div class="col-md-4">
-                {{ form_row(form.message_timeout) }}
-            </div>
-            <div class="col-md-4">
-                {{ form_row(form.message_progress) }}
-            </div>
-        </div>
-        <div class="d-flex flex-md-row flex-column">
-            {{ form_row(form.message_icon) }}
-            {{ form_row(form.message_title) }}
-            {{ form_row(form.message_sub_title) }}
-            {{ form_row(form.message_close) }}
-        </div>
+<p class="mb-2 form-text text-body-secondary">{{ 'parameters.group_message_help'|trans }}</p>
+<div class="row">
+    <div class="col-md-4">
+        {{ form_row(form.message_position) }}
     </div>
+    <div class="col-md-4">
+        {{ form_row(form.message_timeout) }}
+    </div>
+    <div class="col-md-4">
+        {{ form_row(form.message_progress) }}
+    </div>
+</div>
+<div class="d-flex flex-md-row flex-column">
+    {{ form_row(form.message_icon) }}
+    {{ form_row(form.message_title) }}
+    {{ form_row(form.message_sub_title) }}
+    {{ form_row(form.message_close) }}
 </div>

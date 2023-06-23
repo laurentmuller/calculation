@@ -1,5 +1,5 @@
 {# admin menu #}
-{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, navItem, navItemExternal %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, navItem, navItemExternal, navItemToggle %}
 {% set id = 'menu_test' %}
 {% set expanded = app.session.get(id, false) %}
 {% set toggle_class = expanded ? ' active' : '' %}

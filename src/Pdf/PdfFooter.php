@@ -53,22 +53,19 @@ class PdfFooter
     {
         // margins
         $parent = $this->parent;
-        $margins = $parent->setCellMargin(0);
-
-        // position and cells width
-        $parent->SetY(-PdfDocument::FOOTER_OFFSET);
-        $cellWidth = $parent->getPrintableWidth() / 3.0;
-
-        // style
-        PdfStyle::getDefaultStyle()->setFontSize(8)->apply($parent);
-
-        // pages (left) +  text and url (center) + date (right)
-        $this->outputText($this->getPage(), $cellWidth, PdfTextAlignment::LEFT)
-            ->outputText($this->content ?? '', $cellWidth, PdfTextAlignment::CENTER, $this->url ?? '')
-            ->outputText($this->getDate(), $cellWidth, PdfTextAlignment::RIGHT);
-
-        // reset
-        $parent->resetStyle()->setCellMargin($margins);
+        $parent->useCellMargin(function () use ($parent): void {
+            // position and cells width
+            $parent->SetY(-PdfDocument::FOOTER_OFFSET);
+            $cellWidth = $parent->getPrintableWidth() / 3.0;
+            // style
+            PdfStyle::getDefaultStyle()->setFontSize(8)->apply($parent);
+            // pages (left) +  text and url (center) + date (right)
+            $this->outputText($this->getPage(), $cellWidth, PdfTextAlignment::LEFT)
+                ->outputText($this->content ?? '', $cellWidth, PdfTextAlignment::CENTER, $this->url ?? '')
+                ->outputText($this->getDate(), $cellWidth, PdfTextAlignment::RIGHT);
+            // reset
+            $parent->resetStyle();
+        });
     }
 
     /**

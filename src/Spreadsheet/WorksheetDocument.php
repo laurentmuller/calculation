@@ -141,7 +141,8 @@ class WorksheetDocument extends Worksheet
             } elseif (\is_bool($value)) {
                 $value = (int) $value;
             }
-            parent::setCellValue([$columnIndex, $rowIndex], $value);
+
+            return $this->setCellValue([$columnIndex, $rowIndex], $value);
         }
 
         return $this;
@@ -363,18 +364,19 @@ class WorksheetDocument extends Worksheet
      */
     public function setHeaders(array $headers, int $columnIndex = 1, int $rowIndex = 1): int
     {
+        if ([] === $headers) {
+            return $rowIndex;
+        }
+
         $index = $columnIndex;
         foreach ($headers as $id => $header) {
             $header->apply($this, $index);
-            $name = $this->stringFromColumnIndex($index);
-            $this->getColumnDimension($name)->setAutoSize(true);
-            $this->setCellValue("$name$rowIndex", $this->trans($id));
+            $this->getColumnDimensionByColumn($index)->setAutoSize(true);
+            $this->setCellContent($index, $rowIndex, $this->trans($id));
             ++$index;
         }
 
-        $firstName = $this->stringFromColumnIndex($columnIndex);
-        $lastName = $this->stringFromColumnIndex($columnIndex + \count($headers) - 1);
-        $this->getStyle("$firstName$rowIndex:$lastName$rowIndex")->getFont()->setBold(true);
+        $this->getStyle([$columnIndex, $rowIndex, $index - 1, $rowIndex])->getFont()->setBold(true);
         $this->freezePane(\sprintf('A%d', $rowIndex + 1));
         $this->getPageSetup()
             ->setFitToWidth(1)
@@ -383,22 +385,6 @@ class WorksheetDocument extends Worksheet
             ->setRowsToRepeatAtTopByStartAndEnd($rowIndex, $rowIndex);
 
         return $rowIndex + 1;
-    }
-
-    /**
-     * Sets the margins.
-     *
-     * @param float $margins the margins to set
-     */
-    public function setMargins(float $margins): static
-    {
-        $pageMargins = $this->getPageMargins();
-        $pageMargins->setTop($margins)
-            ->setBottom($margins)
-            ->setLeft($margins)
-            ->setRight($margins);
-
-        return $this;
     }
 
     /**

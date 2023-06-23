@@ -36,7 +36,6 @@
     // Theme public class definition
     // ------------------------------------
     const ThemeListener = class {
-
         /**
          * Constructor
          *
@@ -306,7 +305,6 @@
             return window.matchMedia('(prefers-color-scheme: dark)').matches;
         }
 
-
         /**
          * Gets the preferred theme.
          * @return {string} the preferred theme if found; an empty string otherwise.
@@ -420,7 +418,6 @@
         // the dark icon data key
         'iconDark': 'icon-dark'
     };
-
 
     /**
      * The plugin name.

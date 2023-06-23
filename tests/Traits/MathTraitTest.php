@@ -44,6 +44,9 @@ class MathTraitTest extends TestCase
             [0, 0.01, 0],
             [0, 0.01, 1],
 
+            [1.15, 1.154],
+            [1.15, 1.155],
+
             [1, 0, 2, false],
             [0, 0.01, 2, false],
         ];
@@ -74,6 +77,10 @@ class MathTraitTest extends TestCase
             [1.55, 1.55],
             [1.5545, 1.55],
             [1.52, 1.5, 1],
+
+            [1.1549, 1.15],
+            [1.155, 1.15],
+            [1.1551, 1.16],
         ];
     }
 
@@ -142,7 +149,6 @@ class MathTraitTest extends TestCase
     {
         $actual = $this->safeDivide($dividend, $divisor, $default);
         self::assertSame($expected, $actual);
-        self::assertSame(11.0, $this->safeDivide(100, 0, 11));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getValidateFloatRange')]

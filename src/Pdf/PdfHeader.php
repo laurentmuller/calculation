@@ -63,22 +63,18 @@ class PdfHeader
      */
     public function output(): void
     {
-        // margins
         $parent = $this->parent;
-        $margins = $parent->setCellMargin(0);
-
-        // lines
-        $isAddress = $this->isPrintAddress();
-        $printableWidth = $parent->getPrintableWidth();
-        $this->line1($printableWidth, $isAddress);
-        if ($isAddress) {
-            $this->line2($printableWidth);
-            $this->line3($printableWidth);
-        }
-
-        // reset
-        $parent->resetStyle()->setCellMargin($margins);
-        $parent->Ln(2);
+        $parent->useCellMargin(function () use ($parent): void {
+            $isAddress = $this->isPrintAddress();
+            $printableWidth = $parent->getPrintableWidth();
+            $this->line1($printableWidth, $isAddress);
+            if ($isAddress) {
+                $this->line2($printableWidth);
+                $this->line3($printableWidth);
+            }
+            $parent->resetStyle();
+            $parent->Ln(2);
+        });
     }
 
     /**
@@ -178,7 +174,6 @@ class PdfHeader
             $cellWidth = $printableWidth / 2.0;
             $this->outputTitle($cellWidth, false);
             $this->outputName($cellWidth, false);
-
             // description
             $this->outputDescription($printableWidth, false);
         }
@@ -190,7 +185,6 @@ class PdfHeader
             // address + description + fax
             $cellWidth = $printableWidth / 3.0;
             $this->outputAddress($cellWidth);
-
             // description
             $this->outputDescription($cellWidth, true);
         } else {
@@ -223,7 +217,7 @@ class PdfHeader
             $this->applySmallStyle();
             $align = $isAddress ? PdfTextAlignment::CENTER : PdfTextAlignment::LEFT;
             $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
-            $this->outputText($width, PdfDocument::LINE_HEIGHT, $this->description, PdfBorder::none(), $align, $move);
+            $this->outputText($width, self::SMALL_HEIGHT, $this->description, PdfBorder::none(), $align, $move);
         }
     }
 

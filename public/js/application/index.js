@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals MenuBuilder, Toaster  */
+/* globals MenuBuilder, Toaster */
 
 /**
  * -------------- jQuery extensions --------------

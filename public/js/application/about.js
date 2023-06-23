@@ -35,7 +35,7 @@
         }
     });
 
-    // update link title on toggle
+    // update title on toggle
     $('#parent_accordion .accordion-item').on('shown.bs.collapse', function () {
         $(this).find('.accordion-button').attr('title', $configuration.data('collapse'));
     }).on('hidden.bs.collapse', function () {
@@ -46,4 +46,26 @@
     $('#parent_accordion .accordion-item').one('show.bs.collapse', function () {
         $(this).find('.accordion-body').loadContent();
     });
+
+    // $('#parent_accordion .accordion-item').on('mousedown', 'a', function (e) {
+    //     e.stopPropagation();
+    //     e.preventDefault();
+    //     e.target.click();
+    //     // const $target = $(e.target);
+    //     // $target.trigger('click');
+    //     // if ($target.is('a') || $target.parent().is('a')) {
+    //     //     window.console.log($target);
+    //     //     // e.preventDefault();
+    //     //     e.stopPropagation();
+    //     // }
+    // });
+
+    // $('#parent_accordion .accordion-item').on('show.bs.collapse', function (e) {
+    //     window.console.log('show', e);
+    // });
+    // $('#parent_accordion .accordion-item').on('click', 'a', function (e) {
+    //     window.console.log('click', e);
+    // });
+
+    // $("#parent_accordion button.accordion-button").attr("data-bs-toggle", "collapse");
 }(jQuery));

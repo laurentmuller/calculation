@@ -35,10 +35,10 @@
         "ext-sqlite3": "*",
         "ext-zip": "*",
         "ext-zlib": "*",
-        "dukecity/doctrineextensions": "^2.0",
         "createnl/zxcvbn-bundle": "^3.0",
         "doctrine/doctrine-bundle": "^2.6",
         "doctrine/orm": "^2.11",
+        "dukecity/doctrineextensions": "dev-master",
         "elao/enum": "^2.0",
         "endroid/qr-code": "^4.2",
         "erusev/parsedown": "^1.7",
@@ -82,7 +82,7 @@
         "twig/inky-extra": "^3.0",
         "twig/markdown-extra": "^3.0",
         "twig/twig": "^3.0",
-        "vich/uploader-bundle": "^2.0"
+        "vich/uploader-bundle": "dev-master"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.4",
@@ -169,6 +169,14 @@
         {
             "type": "vcs",
             "url": "https://github.com/laurentmuller/ObHighchartsBundle"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laurentmuller/VichUploaderBundle"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/laurentmuller/DoctrineExtensions"
         }
     ]
 }

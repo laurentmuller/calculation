@@ -559,13 +559,6 @@
                 }
             });
         },
-
-        // toast: function (options = {}) {
-        //     return this.each(function () {
-        //         const data = new bootstrap.Toast(this, options);
-        //         return this;
-        //     });
-        // },
     });
 
     if (!$.fn.popover) {

@@ -187,7 +187,8 @@ function handleEmail() {
 
     // validation
     $('#edit-form').initValidator({
-        inline: true, rules: {
+        inline: true,
+        rules: {
             'customer_url': {
                 url: true
             }
@@ -213,7 +214,7 @@ function handleEmail() {
 
     $('#parent_accordion .accordion-item').on('shown.bs.collapse', function () {
         const $this = $(this);
-        const $button= $this.find('.accordion-button');
+        const $button = $this.find('.accordion-button');
         $button.attr('title', $button.data('hide'));
         const $page = getActivePage();
         if ($page && $page.find('.is-invalid').length === 0) {
@@ -222,7 +223,7 @@ function handleEmail() {
         updateVisibleButton();
     }).on('hidden.bs.collapse', function () {
         const $this = $(this);
-        const $button= $this.find('.accordion-button');
+        const $button = $this.find('.accordion-button');
         $button.attr('title', $button.data('show'));
         updateVisibleButton();
     });

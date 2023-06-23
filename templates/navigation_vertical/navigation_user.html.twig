@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, navItem, theme_entry, navItemThemeSwitcher %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, navItem, theme_entry, navItemToggle %}
 {% set id = 'menu_user' %}
 {% set expanded = app.session.get(id, false) %}
 {% set toggle_class = expanded ? ' active' : '' %}
@@ -22,7 +22,7 @@
         {{ navItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
         {{ dropdownSeparator() }}
         <li class="nav-item">
-            {{- navItemThemeSwitcher('nav-link') -}}
+            {{- navItemToggle('nav-link') -}}
         </li>
         {{ navItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
         {% if is_previous_admin -%}

@@ -110,11 +110,11 @@
         });
     }
 
-    function initThemeLinks() {
-        $('.theme-link').themeListener({
-            targetId: '.page-content'
-        });
-    }
+    // function initThemeLinks() {
+    //     $('.theme-link').themeListener({
+    //         targetId: '.page-content'
+    //     });
+    // }
 
     /**
      * Handle back to top button.
@@ -164,45 +164,78 @@
     /**
      * Handle sub-menu.
      */
-    function handleSubMenus() {
-        // prevent closing from click inside dropdown
-        document.querySelectorAll('.dropdown-menu').forEach(function (element) {
-            element.addEventListener('click', function (e) {
-                if (this.querySelectorAll('.submenu').length) {
-                    e.stopPropagation();
-                }
-            });
-        });
+    // function handleSubMenus() {
+    //     // prevent closing from click inside dropdown
+    //     document.querySelectorAll('.dropdown-menu').forEach(function (element) {
+    //         element.addEventListener('click', function (e) {
+    //             if (this.querySelectorAll('.submenu').length) {
+    //                 e.stopPropagation();
+    //             }
+    //         });
+    //     });
+    //
+    //     // close all inner dropdowns when parent is closed
+    //     document.querySelectorAll('.navbar .dropdown').forEach(function (dropdown) {
+    //         dropdown.addEventListener('hidden.bs.dropdown', function () {
+    //             // after dropdown is hidden, hide all submenus too
+    //             this.querySelectorAll('.submenu').forEach(function (submenu) {
+    //                 submenu.style.display = 'none';
+    //             });
+    //         });
+    //     });
+    //
+    //     // toggle submenu style
+    //     document.querySelectorAll('.dropdown-menu a').forEach(function (element) {
+    //         element.addEventListener('click', function (e) {
+    //             const nextElement = this.nextElementSibling;
+    //             if (nextElement && nextElement.classList.contains('submenu')) {
+    //                 // prevent opening link if link needs to open dropdown
+    //                 e.preventDefault();
+    //                 if (nextElement.style.display === 'block') {
+    //                     nextElement.style.display = 'none';
+    //                 } else {
+    //                     nextElement.style.display = 'block';
+    //                 }
+    //             }
+    //         });
+    //     });
+    // }
 
-        // close all inner dropdowns when parent is closed
-        document.querySelectorAll('.navbar .dropdown').forEach(function (dropdown) {
-            dropdown.addEventListener('hidden.bs.dropdown', function () {
-                // after dropdown is hidden, hide all submenus too
-                this.querySelectorAll('.submenu').forEach(function (submenu) {
-                    submenu.style.display = 'none';
-                });
-            });
-        });
+    function initToggleTheme() {
+        $('.toggle-theme').on('click', function () {
+            let icon, text, theme, title;
+            const $this = $(this);
+            const url = $this.data('url');
+            const isDark = document.body.getAttribute('data-bs-theme') === 'dark';
+            if (isDark) {
+                icon = $this.data('light-icon');
+                text = $this.data('light-text');
+                title = $this.data('dark-title');
+                theme = 'light';
+            } else {
+                icon = $this.data('dark-icon');
+                text = $this.data('dark-text');
+                title = $this.data('light-title');
+                theme = 'dark';
+            }
+            const $themes = $('.toggle-theme');
+            $themes.attr('title', title);
+            $themes.find('.theme-icon').attr('class', icon);
+            $themes.find('.theme-text').text(text);
+            document.body.setAttribute('data-bs-theme', theme);
+            $(window).trigger('resize');
+            $.ajaxSetup({global: false});
+            $.get(url, {'theme': theme}).always(() => $.ajaxSetup({global: true}));
+            // $themes.find('.theme-icon').addClass('fa-spin').createTimer(function () {
+            //     $themes.find('.theme-icon').removeClass('fa-spin');
+            // }, 500);
 
-        // toggle submenu style
-        document.querySelectorAll('.dropdown-menu a').forEach(function (element) {
-            element.addEventListener('click', function (e) {
-                const nextElement = this.nextElementSibling;
-                if (nextElement && nextElement.classList.contains('submenu')) {
-                    // prevent opening link if link needs to open dropdown
-                    e.preventDefault();
-                    if (nextElement.style.display === 'block') {
-                        nextElement.style.display = 'none';
-                    } else {
-                        nextElement.style.display = 'block';
-                    }
-                }
-            });
         });
     }
 
     initHorizontalSearch();
     initVerticalSearch();
+    initToggleTheme();
     initBackToTop();
     initSidebar();
 
@@ -211,7 +244,7 @@
      */
     window.addEventListener("DOMContentLoaded", function () {
         showFlashBag();
-        handleSubMenus();
-        initThemeLinks();
+        // handleSubMenus();
+        // initThemeLinks();
     });
 }(jQuery));

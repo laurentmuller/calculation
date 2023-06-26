@@ -175,14 +175,12 @@
             const duration = this.options.duration;
             this.$element.add(this.$pageContent).toggleClass('sidebar-hide');
             if (this._isSideBarHidden()) {
-                this.$navbarHorizontal.show(duration); // duration
+                this.$navbarHorizontal.show(duration);
             } else {
                 this.$navbarHorizontal.hide(); // duration
             }
 
             this._saveState();
-
-            // notify
             this.$element.trigger('toggle.' + Sidebar.NAME);
         }
 
@@ -222,8 +220,7 @@
                 const visible = $link.closest('.nav-item-dropdown').find('.navbar-menu').is(':visible');
                 const title = visible ? options.hideMenu : options.showMenu;
                 $link.attr({
-                    'aria-expanded': String(visible),
-                    'title': title
+                    'aria-expanded': String(visible), 'title': title
                 });
             });
         }
@@ -285,8 +282,7 @@
          */
         _hideMenus($links, $menus) {
             $links.removeClass('active').attr({
-                'title': this.options.showMenu,
-                'aria-expanded': 'false'
+                'title': this.options.showMenu, 'aria-expanded': 'false'
             });
             $menus.hide(this.options.duration);
         }
@@ -336,29 +332,19 @@
     // -----------------------------------
     Sidebar.DEFAULTS = {
         // url to save menu states
-        url: null,
-        // show sidebar button
-        showSidebarButton: '.show-sidebar',
-        // hide sidebar button
-        hideSidebarButton: '.hide-sidebar',
-        // horizontal navigation bar
-        navbarHorizontal: '.navbar-horizontal',
-        // page content
-        pageContent: '.page-content',
-        // the timeout to display/hide sidebar automatically (0 = disabled)
-        timeout: 1500,
-        // the duration to show / hide menus
-        duration: 350,
-        // the minimum width to hide sidebar
-        minWidth: 1200,
-        // texts
+        url: null, // show sidebar button
+        showSidebarButton: '.show-sidebar', // hide sidebar button
+        hideSidebarButton: '.hide-sidebar', // horizontal navigation bar
+        navbarHorizontal: '.navbar-horizontal', // page content
+        pageContent: '.page-content', // the timeout to display/hide sidebar automatically (0 = disabled)
+        timeout: 1500, // the duration to show / hide menus
+        duration: 350, // the minimum width to hide sidebar
+        minWidth: 1200, // texts
         showSidebar: 'Show Sidebar',
         hideSidebar: 'Hide Sidebar',
         showMenu: 'Expand',
-        hideMenu: 'Collapse',
-        // the path name to search for in query parameters to highlight URL
-        pathname: null,
-        // collapse siblings menus
+        hideMenu: 'Collapse', // the path name to search for in query parameters to highlight URL
+        pathname: null, // collapse siblings menus
         collapseSiblingMenus: true
     };
 

@@ -15,7 +15,7 @@ namespace App\Traits;
 use Twig\Environment;
 
 /**
- * Trait to render a link cell to display a another filtered table.
+ * Trait to render a table cell with a link to a filtered table.
  *
  * @property Environment $twig
  */

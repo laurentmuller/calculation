@@ -105,6 +105,7 @@ class UserController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'user_excel')]
     public function excel(StorageInterface $storage): SpreadsheetResponse
@@ -301,6 +302,7 @@ class UserController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/rights/excel', name: 'user_rights_excel')]
     public function rightsExcel(RoleBuilderService $builder): SpreadsheetResponse

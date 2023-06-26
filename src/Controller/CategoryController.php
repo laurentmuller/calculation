@@ -130,6 +130,7 @@ class CategoryController extends AbstractEntityController
      *
      * @throws NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'category_excel')]
     public function excel(): SpreadsheetResponse

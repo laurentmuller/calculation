@@ -128,6 +128,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'calculation_excel')]
     public function excel(): SpreadsheetResponse
@@ -144,6 +145,8 @@ class CalculationController extends AbstractEntityController
 
     /**
      * Export a single calculation to a Spreadsheet document.
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => Requirement::DIGITS])]
     public function excelOne(Calculation $calculation): SpreadsheetResponse

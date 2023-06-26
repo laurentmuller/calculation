@@ -125,6 +125,7 @@ class GroupController extends AbstractEntityController
      *
      * @throws NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'group_excel')]
     public function excel(): SpreadsheetResponse

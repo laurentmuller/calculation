@@ -37,6 +37,8 @@ class UsersDocument extends AbstractArrayDocument
      * Constructor.
      *
      * @param User[] $entities
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage)
     {

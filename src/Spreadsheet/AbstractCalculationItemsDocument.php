@@ -37,6 +37,8 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
     /**
      * Constructor.
      *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     *
      * @psalm-param array<int, array{
      *      id: int,
      *      date: \DateTimeInterface,

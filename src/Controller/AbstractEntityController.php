@@ -233,6 +233,7 @@ abstract class AbstractEntityController extends AbstractController
 
     /**
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
     {

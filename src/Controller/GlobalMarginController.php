@@ -86,6 +86,7 @@ class GlobalMarginController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[Route(path: '/excel', name: 'globalmargin_excel')]
     public function excel(): SpreadsheetResponse

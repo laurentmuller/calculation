@@ -25,6 +25,8 @@ class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
     /**
      * Constructor.
      *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     *
      * @psalm-param array<int, array{
      *      id: int,
      *      date: \DateTimeInterface,

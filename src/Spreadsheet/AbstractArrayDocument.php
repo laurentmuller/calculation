@@ -26,6 +26,8 @@ abstract class AbstractArrayDocument extends AbstractDocument
      *
      * @param AbstractController $controller the parent controller
      * @param T[]                $entities   the entities to render
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function __construct(AbstractController $controller, protected array $entities)
     {

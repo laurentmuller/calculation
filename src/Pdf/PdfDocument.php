@@ -890,6 +890,16 @@ class PdfDocument extends \FPDF
     }
 
     /**
+     * Sets the cell margin.
+     */
+    public function setCellMargin(float $margin): self
+    {
+        $this->cMargin = \max(0.0, $margin);
+
+        return $this;
+    }
+
+    /**
      * Defines the document description.
      *
      * @see PdfHeader::setDescription()
@@ -1006,10 +1016,10 @@ class PdfDocument extends \FPDF
      */
     public function useCellMargin(callable $callable, float $margin = 0.0): self
     {
-        $oldMargins = $this->cMargin;
-        $this->cMargin = \max(0.0, $margin);
+        $previousMargin = $this->getCellMargin();
+        $this->setCellMargin($margin);
         \call_user_func($callable);
-        $this->cMargin = $oldMargins;
+        $this->setCellMargin($previousMargin);
 
         return $this;
     }

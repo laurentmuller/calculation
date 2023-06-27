@@ -71,7 +71,7 @@ class CustomerInformation
     /**
      * Gets the translated fax number.
      */
-    public function getTranslatedFax(object $translator): string
+    public function getTranslatedFax(object $translator = null): string
     {
         if ('' === $fax = $this->fax ?? '') {
             return $fax;
@@ -79,7 +79,7 @@ class CustomerInformation
         if ($translator instanceof TranslatorInterface) {
             return $translator->trans('report.phone', ['{0}' => $fax]);
         }
-        if (\method_exists($translator, 'trans')) {
+        if ($translator && \method_exists($translator, 'trans')) {
             return (string) $translator->trans('report.fax', ['{0}' => $fax]);
         }
 
@@ -89,7 +89,7 @@ class CustomerInformation
     /**
      * Gets the translated phone number.
      */
-    public function getTranslatedPhone(object $translator): string
+    public function getTranslatedPhone(object $translator = null): string
     {
         if ('' === $phone = $this->phone ?? '') {
             return $phone;
@@ -97,7 +97,7 @@ class CustomerInformation
         if ($translator instanceof TranslatorInterface) {
             return $translator->trans('report.phone', ['{0}' => $phone]);
         }
-        if (\method_exists($translator, 'trans')) {
+        if ($translator && \method_exists($translator, 'trans')) {
             return (string) $translator->trans('report.phone', ['{0}' => $phone]);
         }
 

@@ -236,11 +236,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
      */
     protected function concat(string $alias, array $fields, string $default = ''): string
     {
-        foreach ($fields as &$field) {
-            $field = "COALESCE($alias.$field, '$default')";
-        }
+        $values = \array_map(fn (string $field): string => "COALESCE($alias.$field, '$default')", $fields);
 
-        return 'CONCAT(' . \implode(', ', $fields) . ')';
+        return \sprintf('CONCAT(%s)', \implode(',', $values));
     }
 
     /**

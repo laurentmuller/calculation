@@ -54,15 +54,14 @@ class GlobalMarginController extends AbstractEntityController
     public function edit(Request $request): Response
     {
         $this->checkPermission(EntityPermission::ADD, EntityPermission::EDIT, EntityPermission::DELETE);
+
         /** @var GlobalMarginRepository $repository */
         $repository = $this->repository;
         $existingMargins = $repository->findAllByMinimum();
         $root = new GlobalMargins($existingMargins);
         $form = $this->createForm(GlobalMarginsType::class, $root);
         if ($this->handleRequestForm($request, $form)) {
-            /** @var GlobalMargins $data */
-            $data = $form->getData();
-            $newMargins = $data->getMargins()->toArray();
+            $newMargins = $root->getMargins()->toArray();
             foreach ($newMargins as $margin) {
                 $repository->add($margin, false);
             }
@@ -71,7 +70,6 @@ class GlobalMarginController extends AbstractEntityController
                 $repository->remove($margin, false);
             }
             $repository->flush();
-            $this->successTrans('globalmargin.edit.success');
 
             return $this->redirectToRoute('globalmargin_table');
         }

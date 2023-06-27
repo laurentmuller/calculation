@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
-use App\Model\CustomerInformation;
 use App\Traits\TranslatorTrait;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -24,16 +24,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class SpreadsheetDocument extends Spreadsheet
 {
     use TranslatorTrait;
-
-    /**
-     * The top margins when customer header is present (21 millimeters).
-     */
-    final public const HEADER_CUSTOMER_MARGIN = 0.83;
-
-    /**
-     * The top and bottom margins when header and/or footer is present (12 millimeters).
-     */
-    final public const HEADER_FOOTER_MARGIN = 0.47;
 
     /**
      * The file title.
@@ -55,6 +45,46 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
+     * Add external sheet.
+     *
+     * @param Worksheet $worksheet  External sheet to add
+     * @param int|null  $sheetIndex Index where sheet should go (0,1,..., or null for last)
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if the given worksheet is not instance of WorksheetDocument
+     */
+    public function addExternalSheet(Worksheet $worksheet, $sheetIndex = null): WorksheetDocument
+    {
+        if (!$worksheet instanceof WorksheetDocument) {
+            throw new \PhpOffice\PhpSpreadsheet\Exception(\sprintf('%s expected, %s given.', WorksheetDocument::class, \get_debug_type($worksheet)));
+        }
+
+        /** @var WorksheetDocument $worksheet */
+        $worksheet = parent::addExternalSheet($worksheet, $sheetIndex);
+
+        return $worksheet;
+    }
+
+    /**
+     * Add sheet.
+     *
+     * @param Worksheet $worksheet  The worksheet to add
+     * @param int|null  $sheetIndex Index where sheet should go (0,1,..., or null for last)
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception if the given worksheet is not instance of WorksheetDocument
+     */
+    public function addSheet(Worksheet $worksheet, $sheetIndex = null): WorksheetDocument
+    {
+        if (!$worksheet instanceof WorksheetDocument) {
+            throw new \PhpOffice\PhpSpreadsheet\Exception(\sprintf('%s expected, %s given.', WorksheetDocument::class, \get_debug_type($worksheet)));
+        }
+
+        /** @var WorksheetDocument $worksheet */
+        $worksheet = parent::addSheet($worksheet, $sheetIndex);
+
+        return $worksheet;
+    }
+
+    /**
      * Create a sheet and add it to this workbook.
      *
      * @param int|null $sheetIndex Index where sheet should go (0,1,..., or null for last)
@@ -63,10 +93,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function createSheet($sheetIndex = null): WorksheetDocument
     {
-        $sheet = new WorksheetDocument($this);
-        $this->addSheet($sheet, $sheetIndex);
-
-        return $sheet;
+        return $this->addSheet(new WorksheetDocument($this), $sheetIndex);
     }
 
     /**
@@ -75,7 +102,7 @@ class SpreadsheetDocument extends Spreadsheet
      * The created sheet is activated.
      *
      * @param ?string $title      the title of the worksheet
-     * @param ?int    $sheetIndex the  index where worksheet should go (0,1,..., or null for last)
+     * @param ?int    $sheetIndex the index where worksheet should go (0,1,..., or null for last)
      *
      * @return WorksheetDocument the newly created worksheet
      *
@@ -87,13 +114,12 @@ class SpreadsheetDocument extends Spreadsheet
         if (null !== $title) {
             $sheet->setTitle($title);
         }
-        $sheet->setPrintGridlines(true);
 
         $this->setActiveSheetIndex($sheetIndex ?? $this->getSheetCount() - 1);
         $customer = $controller->getUserService()->getCustomer();
-        $this->setHeaderFooter($customer, $title);
 
-        return $sheet;
+        return $sheet->setPrintGridlines(true)
+            ->updateHeaderFooter($customer, $this->translator);
     }
 
     /**
@@ -103,6 +129,60 @@ class SpreadsheetDocument extends Spreadsheet
     {
         /** @psalm-var WorksheetDocument $sheet */
         $sheet = parent::getActiveSheet();
+
+        return $sheet;
+    }
+
+    /**
+     * Get all sheets.
+     *
+     * @return WorksheetDocument[]
+     */
+    public function getAllSheets(): array
+    {
+        /** @psalm-var WorksheetDocument[] $sheets */
+        $sheets = parent::getAllSheets();
+
+        return $sheets;
+    }
+
+    /**
+     * Get sheet by index.
+     *
+     * @param int $sheetIndex Sheet index
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    public function getSheet($sheetIndex): WorksheetDocument
+    {
+        /** @psalm-var WorksheetDocument $sheet */
+        $sheet = parent::getSheet($sheetIndex);
+
+        return $sheet;
+    }
+
+    /**
+     * Get sheet by name.
+     *
+     * @param string $worksheetName Sheet name
+     */
+    public function getSheetByName($worksheetName): ?WorksheetDocument
+    {
+        /** @psalm-var WorksheetDocument|null $sheet */
+        $sheet = parent::getSheetByName($worksheetName);
+
+        return $sheet;
+    }
+
+    /**
+     * Get sheet by name, throwing exception if not found.
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    public function getSheetByNameOrThrow(string $worksheetName): WorksheetDocument
+    {
+        /** @psalm-var WorksheetDocument $sheet */
+        $sheet = parent::getSheetByNameOrThrow($worksheetName);
 
         return $sheet;
     }
@@ -121,6 +201,36 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
+     * Set active sheet index.
+     *
+     * @param int $worksheetIndex Active sheet index
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    public function setActiveSheetIndex($worksheetIndex): WorksheetDocument
+    {
+        /** @psalm-var WorksheetDocument $sheet */
+        $sheet = parent::setActiveSheetIndex($worksheetIndex);
+
+        return $sheet;
+    }
+
+    /**
+     * Set active sheet index by name.
+     *
+     * @param string $worksheetName Sheet title
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     */
+    public function setActiveSheetIndexByName($worksheetName): WorksheetDocument
+    {
+        /** @psalm-var WorksheetDocument $sheet */
+        $sheet = parent::setActiveSheetIndexByName($worksheetName);
+
+        return $sheet;
+    }
+
+    /**
      * Sets the title of the active sheet.
      *
      * If this parent's controller is not null, the header and footer are also updated.
@@ -130,7 +240,8 @@ class SpreadsheetDocument extends Spreadsheet
         $sheet = $this->getActiveSheet()
             ->setTitle($title);
         if ($controller instanceof AbstractController) {
-            return $this->setHeaderFooter($controller->getUserService()->getCustomer(), $sheet->getTitle());
+            $customer = $controller->getUserService()->getCustomer();
+            $sheet->updateHeaderFooter($customer, $this->getTranslator());
         }
 
         return $this;
@@ -208,7 +319,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the username for the creator and the last modified properties.
      */
-    public function setUserName(?string $userName): static
+    public function setUserName(string $userName = null): static
     {
         if ($userName) {
             $this->getProperties()
@@ -230,56 +341,20 @@ class SpreadsheetDocument extends Spreadsheet
     {
         $customer = $controller->getUserService()->getCustomer();
         $application = $controller->getApplicationName();
-        $username = $controller->getUserIdentifier();
+        $userName = $controller->getUserIdentifier();
         $title = $this->trans($title);
-        $this->setHeaderFooter($customer, $title)
-            ->setTitle($title)
-            ->setActiveTitle($title)
-            ->setCompany($customer->getName())
-            ->setUserName($username)
-            ->setCategory($application);
 
         $sheet = $this->getActiveSheet()
-            ->setPrintGridlines(true);
+            ->setPrintGridlines(true)
+            ->setTitle($title)
+            ->updateHeaderFooter($customer, $this->translator);
         if ($landscape) {
             $sheet->setPageLandscape();
         }
 
-        return $this;
-    }
-
-    /**
-     * Sets the header and footer texts.
-     */
-    private function setHeaderFooter(CustomerInformation $customer, ?string $title): static
-    {
-        $sheet = $this->getActiveSheet();
-        $pageMargins = $sheet->getPageMargins();
-        if ($customer->isPrintAddress()) {
-            HeaderFooter::header()
-                ->addLeft($customer->getName(), true)
-                ->addLeft($customer->getAddress())
-                ->addLeft($customer->getZipCity())
-                ->addCenter($title, true)
-                ->addRight($customer->getTranslatedPhone($this))
-                ->addRight($customer->getTranslatedFax($this))
-                ->addRight($customer->getEmail())
-                ->apply($sheet);
-            $pageMargins->setTop(self::HEADER_CUSTOMER_MARGIN);
-        } else {
-            HeaderFooter::header()
-                ->addLeft($title, true)
-                ->addRight($customer->getName(), true)
-                ->apply($sheet);
-            $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
-        }
-
-        HeaderFooter::footer()
-            ->addPages()
-            ->addDateTime()
-            ->apply($sheet);
-        $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
-
-        return $this;
+        return $this->setTitle($title)
+            ->setCompany($customer->getName())
+            ->setUserName($userName)
+            ->setCategory($application);
     }
 }

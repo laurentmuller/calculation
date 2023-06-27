@@ -53,7 +53,6 @@
             const that = this;
             const $element = that.$element;
             const focused = $element.is(':focus');
-            // $element.removeDataAttributes();
             that.length = Object.keys(that.options.colors).length;
             that.cols = that.options.columns;
             that.rows = Math.ceil(that.length / that.cols);
@@ -223,10 +222,7 @@
             if ($button) {
                 $button.trigger('focus');
             } else {
-                this._setSelection({
-                    col: 0,
-                    row: 0
-                });
+                this._setSelection({col: 0, row: 0});
             }
         }
 
@@ -254,8 +250,9 @@
             const oldValue = this.$element.val();
             const newValue = $button.data('value');
             if (!newValue.equalsIgnoreCase(oldValue)) {
-                this.$element.val(newValue);
-                this.$element.trigger('input');
+                this.$element.val(newValue).trigger('input');
+            } else {
+                this._setFocus();
             }
         }
 

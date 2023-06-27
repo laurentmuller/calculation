@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
+use App\Model\CustomerInformation;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
@@ -21,6 +22,7 @@ use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Extends the worksheet class with shortcuts to render cells.
@@ -41,6 +43,16 @@ class WorksheetDocument extends Worksheet
      * The integer format ('#,##0').
      */
     private const FORMAT_INT = '#,##0';
+
+    /**
+     * The top margins when customer header is present (21 millimeters).
+     */
+    private const HEADER_CUSTOMER_MARGIN = 0.83;
+
+    /**
+     * The top and bottom margins when header and/or footer is present (12 millimeters).
+     */
+    private const HEADER_FOOTER_MARGIN = 0.47;
 
     /**
      * The boolean formats.
@@ -501,6 +513,41 @@ class WorksheetDocument extends Worksheet
     public function stringFromColumnIndex(int $columnIndex): string
     {
         return Coordinate::stringFromColumnIndex($columnIndex);
+    }
+
+    /**
+     * Update this header and footer with the given customer information.
+     */
+    public function updateHeaderFooter(CustomerInformation $customer, TranslatorInterface $translator = null): static
+    {
+        $title = $this->getTitle();
+        $pageMargins = $this->getPageMargins();
+        if ($customer->isPrintAddress()) {
+            HeaderFooter::header()
+                ->addLeft($customer->getName(), true)
+                ->addLeft($customer->getAddress())
+                ->addLeft($customer->getZipCity())
+                ->addCenter($title, true)
+                ->addRight($customer->getTranslatedPhone($translator))
+                ->addRight($customer->getTranslatedFax($translator))
+                ->addRight($customer->getEmail())
+                ->apply($this);
+            $pageMargins->setTop(self::HEADER_CUSTOMER_MARGIN);
+        } else {
+            HeaderFooter::header()
+                ->addLeft($title, true)
+                ->addRight($customer->getName(), true)
+                ->apply($this);
+            $pageMargins->setTop(self::HEADER_FOOTER_MARGIN);
+        }
+
+        HeaderFooter::footer()
+            ->addPages()
+            ->addDateTime()
+            ->apply($this);
+        $pageMargins->setBottom(self::HEADER_FOOTER_MARGIN);
+
+        return $this;
     }
 
     private function trans(string $id): string

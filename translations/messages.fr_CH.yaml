@@ -450,9 +450,13 @@ generate:
   submit_text: Générer
   title: Générateur de données
 globalmargin:
+  add:
+    success: La marge globale <b>%name%</b> a été créée avec succès.
+  delete:
+    success: La marge globale <b>%name%</b> a été supprimée avec succès.
   edit:
     title: Modifier les marges globales
-    success: Les marges globales ont été mises à jour avec succès.
+    success: La marge globale <b>%name%</b> a été mise à jour avec succès.
   fields:
     minimum: Minimum
     maximum: Maximum

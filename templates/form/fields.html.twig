@@ -46,16 +46,18 @@
 {% block color_widget -%}
 {%- if 'color-picker' in attr.class|default('') -%}
     {%- set type = type|default('color') -%}
-    {%- set style = 'display:table-column' -%}
-    {%- set class = (required ? ' must-validate' : '') -%}
-    {%- set custom_text = 'color_picker.custom_text'|trans -%}
-    {%- set advanced_text = 'color_picker.advanced_text'|trans -%}
-    {%- set attr = attr|merge({'class': class, 'style': style, 'data-custom-text': custom_text, 'data-advanced-text': advanced_text}) -%}
+    {%- set attr = attr|default({})|merge({
+        'tabindex': -1,
+        'style': 'display:table-column',
+        'class': (required ? ' must-validate' : ''),
+        'data-custom-text': 'color_picker.custom_text'|trans,
+        'data-advanced-text': 'color_picker.advanced_text'|trans
+    }) -%}
     <button type="button" role="combobox" class="color-picker dropdown-toggle form-control d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="dropdown-color border" style="background-color: {{ value|default('#000000') }}"></span>
         <span class="dropdown-text flex-fill text-start"></span>
     </button>
-    <div class="color-picker dropdown-menu text-center p-2" role="menu"></div>
+    <div class="color-picker dropdown-menu p-2" role="menu"></div>
     {{ block('form_widget_simple') }}
 {%- else -%}
     {{- parent() -}}

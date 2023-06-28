@@ -14,9 +14,6 @@ namespace App\Tests\Service;
 
 use App\Enums\Theme;
 use App\Service\ThemeService;
-
-use function PHPUnit\Framework\assertSame;
-
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -52,14 +49,14 @@ class ThemeServiceTest extends TestCase
     {
         $service = new ThemeService();
         $value = $service->getTheme($request);
-        assertSame($expected, $value);
+        self::assertSame($expected, $value);
     }
 
     public function testGetThemes(): void
     {
         $service = new ThemeService();
         $themes = $service->getThemes();
-        assertSame(Theme::sorted(), $themes);
+        self::assertSame(Theme::sorted(), $themes);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getThemeValues')]
@@ -67,7 +64,7 @@ class ThemeServiceTest extends TestCase
     {
         $service = new ThemeService();
         $value = $service->getThemeValue($request);
-        assertSame($expected, $value);
+        self::assertSame($expected, $value);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getIsDarkTheme')]
@@ -75,7 +72,7 @@ class ThemeServiceTest extends TestCase
     {
         $service = new ThemeService();
         $value = $service->isDarkTheme($request);
-        assertSame($expected, $value);
+        self::assertSame($expected, $value);
     }
 
     private static function createRequest(string $value = null): Request

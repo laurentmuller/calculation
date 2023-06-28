@@ -44,13 +44,13 @@ trait RequestTrait
      * @psalm-param class-string<E> $class
      * @psalm-param E|null          $default
      *
-     * @psalm-return ($default is null ? (E|null) : E)
-     *
-     * @psalm-suppress ImplementedReturnTypeMismatch
+     * @psalm-return E|null
      */
     protected function getRequestEnum(Request $request, string $key, string $class, \BackedEnum $default = null): ?\BackedEnum
     {
-        return $this->getRequestBag($request, $key)?->getEnum($key, $class, $default) ?? $default;
+        $value = $this->getRequestBag($request, $key)?->getEnum($key, $class, $default);
+
+        return $value ?? $default;
     }
 
     /**
@@ -84,7 +84,7 @@ trait RequestTrait
      *
      * @psalm-return ($default is null ? (string|int|float|bool|null) : string|int|float|bool)
      */
-    protected function getRequestValue(Request $request, string $key, string|int|float|bool|null $default = null): string|int|float|bool|null
+    protected function getRequestValue(Request $request, string $key, string|int|float|bool $default = null): string|int|float|bool|null
     {
         /** @psalm-var scalar $value */
         $value = $this->getRequestBag($request, $key)?->get($key, $default) ?? $default;

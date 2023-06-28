@@ -1,10 +1,12 @@
 {% from 'macros/_icons.html.twig' import icon %}
-<form id="search-form-vertical" action="{{ path('search') }}" role="search" autocomplete="off" novalidate="novalidate">
-    <div class="form-group my-1">
-        <div class="input-group input-group-sm">
-            <input type="text" id="search" name="search" class="form-control" required="required" minlength="2" autocomplete="off" placeholder="{{ 'search.placeholder'|trans }}">
-            <span class="input-group-text">{{- icon('magnifying-glass') -}}</span>
+<li>
+    <form id="search-form-vertical" action="{{ path('search') }}" role="search" autocomplete="off" novalidate="novalidate">
+        <div class="form-group my-1">
+            <div class="input-group input-group-sm">
+                <input type="text" id="search" name="search" aria-label="{{ 'list.search_placeholder'|trans }}" class="form-control" required="required" minlength="2" autocomplete="off" placeholder="{{ 'search.placeholder'|trans }}">
+                <span class="input-group-text">{{- icon('magnifying-glass') -}}</span>
+            </div>
+            <small id="invalid" class="invalid-feedback">{{ 'search.minimum'|trans }}</small>
         </div>
-        <small id="invalid" class="invalid-feedback">{{ 'search.minimum'|trans }}</small>
-    </div>
-</form>
+    </form>
+</li>

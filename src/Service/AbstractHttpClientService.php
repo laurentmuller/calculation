@@ -147,7 +147,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      *
      * @return mixed the value, if found; the default otherwise
      */
-    protected function getUrlCacheValue(string $url, mixed $default = null, int|\DateInterval|null $time = null): mixed
+    protected function getUrlCacheValue(string $url, mixed $default = null, int|\DateInterval $time = null): mixed
     {
         $key = $this->getUrlKey($url);
 

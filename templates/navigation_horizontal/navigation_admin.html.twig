@@ -5,23 +5,23 @@
     <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{ icon('gear', 'index.menu_admin') }}
     </a>
-    <div class="dropdown-menu" aria-labelledby="{{ id }}">
-        {{ dropdownItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
-        {{ dropdownItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
-        {{ dropdownSeparator() }}
-        {{ dropdownItem(path('user_table'), 'user.list.title', ICON_USER) }}
-        {{ dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'user-check') }}
+    <ul class="dropdown-menu" aria-labelledby="{{ id }}">
+        <li>{{ dropdownItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}</li>
+        <li>{{ dropdownItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}</li>
+        <li>{{ dropdownSeparator() }}</li>
+        <li>{{ dropdownItem(path('user_table'), 'user.list.title', ICON_USER) }}</li>
+        <li>{{ dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'user-check') }}</li>
         {% if is_super_admin -%}
-            {{ dropdownItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'user-shield') }}
+            <li>{{ dropdownItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'user-shield') }}</li>
         {% endif %}
-        {{ dropdownSeparator() }}
-        {{ dropdownItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
+        <li>{{ dropdownSeparator() }}</li>
+        <li>{{ dropdownItem(path('admin_parameters'), 'parameters.title', 'cogs') }}</li>
         {% if is_admin -%}
-            {{ dropdownSeparator() }}
-            {{ dropdownItem(path('log_table'), 'log.title', ICON_LOG) }}
+            <li>{{ dropdownSeparator() }}</li>
+            <li>{{ dropdownItem(path('log_table'), 'log.title', ICON_LOG) }}</li>
             {% if is_super_admin -%}
-                {{ dropdownItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}
+                <li>{{ dropdownItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}</li>
             {% endif %}
         {% endif %}
-    </div>
+    </ul>
 </li>

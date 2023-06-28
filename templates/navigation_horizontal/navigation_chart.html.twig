@@ -5,8 +5,8 @@
     <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{- icon('chart-area', 'index.menu_graphics') -}}
     </a>
-    <div class="dropdown-menu" aria-labelledby="{{ id }}">
-        {{ dropdownItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') }}
-        {{ dropdownItem(path('chart_by_state'), 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}
-    </div>
+    <ul class="dropdown-menu" aria-labelledby="{{ id }}">
+        <li>{{ dropdownItem(path('chart_by_month'), 'title_by_month', 'calendar-alt far', 'chart') }}</li>
+        <li>{{ dropdownItem(path('chart_by_state'), 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}</li>
+    </ul>
 </li>

@@ -367,6 +367,6 @@ abstract class AbstractTable implements SortModeInterface
 
     private function getParamView(Request $request): TableView
     {
-        return $this->getParamEnum($request, TableInterface::PARAM_VIEW, '', TableView::class, TableView::TABLE);
+        return $this->getParamEnum(request: $request, key: TableInterface::PARAM_VIEW, class: TableView::class, default: TableView::TABLE);
     }
 }

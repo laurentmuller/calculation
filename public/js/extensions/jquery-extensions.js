@@ -533,7 +533,7 @@
          * @return {jQuery} - the element for chaining.
          */
         removeSeparators: function () {
-            const selector = '.dropdown-divider';
+            const selector = 'li:has(.dropdown-divider),.dropdown-divider';
             return this.each(function () {
                 const $this = $(this);
                 if ($this.is('.dropdown-menu')) {

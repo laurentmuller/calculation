@@ -39,9 +39,9 @@ trait ParameterTrait
      *
      * @psalm-return ($default is null ? (E|null) : E)
      */
-    protected function getParamEnum(Request $request, string $key, string $prefix, string $class, \BackedEnum $default = null): ?\BackedEnum
+    protected function getParamEnum(Request $request, string $key, string $class, string $prefix = '', \BackedEnum $default = null): ?\BackedEnum
     {
-        $default = $this->getCookieEnum($request, $key, $prefix, $class, $default);
+        $default = $this->getCookieEnum($request, $key, $class, $prefix, $default);
 
         return $this->getRequestEnum($request, $key, $class, $default);
     }

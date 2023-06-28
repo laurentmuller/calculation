@@ -107,7 +107,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the date format or the calendar is invalid
      */
-    private function dateFilter(Environment $env, \DateTimeInterface|string|null $date, string $dateFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
+    private function dateFilter(Environment $env, \DateTimeInterface|string|null $date, string $dateFormat = null, \DateTimeZone|string $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
     {
         return $this->dateTimeFilter($env, $date, $dateFormat, 'none', $timezone, $calendar, $pattern);
     }
@@ -127,7 +127,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the date format, the time format or the calendar is invalid
      */
-    private function dateTimeFilter(Environment $env, \DateTimeInterface|string|null $date, string $dateFormat = null, string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
+    private function dateTimeFilter(Environment $env, \DateTimeInterface|string|null $date, string $dateFormat = null, string $timeFormat = null, \DateTimeZone|string $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
     {
         // check types and calendar
         $date_type = $this->validateDateFormat($dateFormat);
@@ -156,7 +156,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the time format or the calendar is invalid
      */
-    private function timeFilter(Environment $env, \DateTimeInterface|string|null $date, string $timeFormat = null, \DateTimeZone|string|null $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
+    private function timeFilter(Environment $env, \DateTimeInterface|string|null $date, string $timeFormat = null, \DateTimeZone|string $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
     {
         return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $timezone, $calendar, $pattern);
     }

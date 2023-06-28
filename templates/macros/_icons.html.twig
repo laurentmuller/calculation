@@ -87,7 +87,7 @@
 
 {% macro dropdownSeparator(hidden=false, class='') -%}
 {%- set class = ('dropdown-divider ' ~ class ~ (hidden ? ' d-none' : ''))|trim -%}
-<div role="separator" class="{{ class }}"></div>
+<hr class="{{ class }}">
 {%- endmacro %}
 
 {% macro dropdownEllipsis(id=null, title='common.actions', class='btn btn-sm border-0 pt-0') -%}
@@ -202,9 +202,11 @@
 {% set theme_light = enum('\\App\\Enums\\Theme::LIGHT') %}
 {% set theme_dark = enum('\\App\\Enums\\Theme::DARK') %}
 {% set theme_title = theme == theme_dark ? theme_light.title : theme_dark.title %}
-{% set class = (class|default('') ~ ' rowlink-skip toggle-theme')|trim %}
+{% set disabled = app.current_route == 'user_parameters' %}
+{% set class = (class|default('') ~ ' rowlink-skip toggle-theme btn')|trim %}
 {% set attr = {
     'class': class,
+    'type': 'button',
     'title': theme_title|trans,
     'data-url': url('theme_save'),
     'data-light-text': theme_light|trans,
@@ -213,7 +215,7 @@
     'data-dark-text': theme_dark|trans,
     'data-dark-icon': 'theme-icon me-1 ' ~ theme_dark.iconLight,
     'data-dark-title': theme_dark.title|trans} %}
-<button{{ attributes(attr) }}>
+<button{{ attributes(attr) }}{% if disabled %} disabled="disabled"{% endif %}>
     <i class="theme-icon me-1 {{ theme.iconLight }}"></i><span class="theme-text">{{ theme|trans }}</span>
 </button >
 {% endmacro %}

@@ -14,8 +14,7 @@ namespace App\Controller;
 
 use App\Enums\Theme;
 use App\Interfaces\RoleInterface;
-use App\Traits\CookieTrait;
-use App\Twig\ThemeExtension;
+use App\Service\ThemeService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -30,29 +29,26 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class ThemeController extends AbstractController
 {
-    use CookieTrait;
-
     #[Route(path: '/dialog', name: 'theme_dialog', methods: Request::METHOD_GET)]
-    public function dialog(Request $request, ThemeExtension $extension): JsonResponse
+    public function dialog(Request $request, ThemeService $service): JsonResponse
     {
         $result = $this->renderView('dialog/dialog_theme.html.twig', [
-            'theme_selection' => $extension->getTheme($request),
-            'is_dark' => $extension->isDarkTheme($request),
+            'theme_selection' => $service->getTheme($request),
+            'is_dark' => $service->isDarkTheme($request),
         ]);
 
         return $this->json($result);
     }
 
     #[Route(path: '/save', name: 'theme_save', methods: Request::METHOD_GET)]
-    public function saveTheme(Request $request, ThemeExtension $extension): JsonResponse
+    public function saveTheme(Request $request, ThemeService $service): JsonResponse
     {
-        $theme = $extension->getTheme($request);
-        $value = $request->query->getString('theme', $theme->value);
-        $theme = Theme::tryFrom($value) ?? $theme;
+        /** @psalm-var Theme $theme */
+        $theme = $request->query->getEnum('theme', Theme::class, $service->getTheme($request));
         $response = $this->jsonTrue(
             ['message' => $this->trans($theme->getSuccess())]
         );
-        $this->setCookie($response, ThemeExtension::KEY_THEME, $theme->value);
+        $service->saveTheme($response, $theme, $this->getCookiePath());
 
         return $response;
     }

@@ -15,17 +15,17 @@
             <div class="dropdown position-static">
                 {%- set menu_id = 'dropdownMenuCategory_' ~ category.vars.id -%}
                 {{ dropdownEllipsis(menu_id) }}
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
-                    {{ dropdownItemWithClass('#', 'calculation.edit.delete_category', ICON_DELETE, 'btn-delete-category') }}
-                    {{ dropdownSeparator() }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-default btn-add-item') }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}
-                    {{ dropdownSeparator(first and last) }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-category', first) }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.move_up', 'chevron-up', 'btn-up-category', first) }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.move_down', 'chevron-down', 'btn-down-category', last) }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-category', last) }}
-                </div>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
+                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.delete_category', ICON_DELETE, 'btn-delete-category') }}</li>
+                    <li>{{ dropdownSeparator() }}</li>
+                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-default btn-add-item') }}</li>
+                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}</li>
+                    <li>{{ dropdownSeparator(first and last) }}</li>
+                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-category', first) }}</li>
+                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_up', 'chevron-up', 'btn-up-category', first) }}</li>
+                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_down', 'chevron-down', 'btn-down-category', last) }}</li>
+                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-category', last) }}</li>
+                </ul>
             </div>
         </th>
         {%- endif %}

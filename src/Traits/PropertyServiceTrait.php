@@ -65,7 +65,7 @@ trait PropertyServiceTrait
         return EntityAction::SHOW === $this->getEditAction();
     }
 
-    public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
+    public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval $time = null): bool
     {
         if (!$this->doSaveDeferredCacheValue($key, $value, $time)) {
             $this->logWarning($this->trans('application_service.deferred_error', ['%key%' => $key]));

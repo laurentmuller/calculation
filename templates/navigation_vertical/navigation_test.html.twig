@@ -75,7 +75,7 @@
                 {{ navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
             </ul>
         </li>
-        {{ dropdownSeparator() }}
+        <li> {{ dropdownSeparator() }}</li>
         {{ navItem(path('test_notifications'), 'test.notification', 'bell far') }}
         {{ navItem(path('test_editor'), 'test.editor', 'edit') }}
         {{ navItem(path('test_password'), 'password.title', 'lock') }}

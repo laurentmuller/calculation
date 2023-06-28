@@ -47,7 +47,7 @@ trait CookieTrait
      *
      * @psalm-return ($default is null ? (E|null) : E)
      */
-    protected function getCookieEnum(Request $request, string $key, string $prefix, string $class, \BackedEnum $default = null): ?\BackedEnum
+    protected function getCookieEnum(Request $request, string $key, string $class, string $prefix = '', \BackedEnum $default = null): ?\BackedEnum
     {
         $name = $this->getCookieName($key, $prefix);
 

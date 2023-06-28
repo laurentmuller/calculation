@@ -12,34 +12,34 @@
         {% endapply %}
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-        {{ dropdownItem(path('app_logout'), 'index.logout', 'sign-out-alt') }}
-        {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}
-        {{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
-        {{ dropdownSeparator() }}
-        {{ navItemToggle('dropdown-item') }}
-        {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
+        <li>{{ dropdownItem(path('app_logout'), 'index.logout', 'sign-out-alt') }}</li>
+        <li>{{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}</li>
+        <li>{{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}</li>
+        <li>{{ dropdownSeparator() }}</li>
+        <li>{{ navItemToggle('dropdown-item') }}</li>
+        <li>{{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}</li>
         {% if is_previous_admin -%}
-            {{ dropdownSeparator() }}
-            {{ dropdownItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
+            <li>{{ dropdownSeparator() }}</li>
+            <li>{{ dropdownItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}</li>
         {% endif %}
         {% if is_env_dev -%}
-            {{ dropdownSeparator() }}
-            {{ dropdownItem(link_prod, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) }}
+            <li>{{ dropdownSeparator() }}</li>
+            <li>{{ dropdownItem(link_prod, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) }}</li>
         {% elseif is_env_prod or is_env_local -%}
-            {{ dropdownSeparator() }}
-            {{ dropdownItem(link_dev, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) }}
+            <li>{{ dropdownSeparator() }}</li>
+            <li>{{ dropdownItem(link_dev, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) }}</li>
         {% endif %}
-        {{ dropdownSeparator() }}
+        <li>{{ dropdownSeparator() }}</li>
         {% if is_granted_data %}
-            {{ dropdownItem(path('site_map'), 'index.menu_site_map', 'sitemap') }}
+            <li>{{ dropdownItem(path('site_map'), 'index.menu_site_map', 'sitemap') }}</li>
         {% endif %}
-        {{ dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') }}
+        <li>{{ dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') }}</li>
         {% if is_env_dev %}
-            {{ dropdownItem(path('help'), 'help.title', 'question-circle') }}
+            <li>{{ dropdownItem(path('help'), 'help.title', 'question-circle') }}</li>
         {% endif %}
         {% if not status_bar %}
-            {{ dropdownSeparator() }}
-            {{ dropdownItem(path('about'), 'index.menu_info', 'info-circle', null, {'%app_name%': app_name}) }}
+            <li>{{ dropdownSeparator() }}</li>
+            <li>{{ dropdownItem(path('about'), 'index.menu_info', 'info-circle', null, {'%app_name%': app_name}) }}</li>
         {% endif %}
     </ul>
 </li>

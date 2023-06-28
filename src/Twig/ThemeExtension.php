@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
-use App\Enums\Theme;
+use App\Service\ThemeService;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -22,50 +22,17 @@ use Twig\TwigFunction;
  */
 class ThemeExtension extends AbstractExtension
 {
-    /**
-     * The key name for selected theme cookie.
-     */
-    public const KEY_THEME = 'THEME';
+    public function __construct(private readonly ThemeService $service)
+    {
+    }
 
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('theme', $this->getTheme(...)),
-            new TwigFunction('themes', $this->getThemes(...)),
-            new TwigFunction('theme_value', $this->getThemeValue(...)),
-            new TwigFunction('is_dark_theme', $this->isDarkTheme(...)),
+            new TwigFunction('themes', fn () => $this->service->getThemes()),
+            new TwigFunction('theme', fn (Request $request) => $this->service->getTheme($request)),
+            new TwigFunction('theme_value', fn (Request $request) => $this->service->getThemeValue($request)),
+            new TwigFunction('is_dark_theme', fn (Request $request) => $this->service->isDarkTheme($request)),
         ];
-    }
-
-    /**
-     * Gets the selected theme.
-     */
-    public function getTheme(Request $request): Theme
-    {
-        $default = Theme::getDefault();
-        $value = $request->cookies->get(self::KEY_THEME, $default->value);
-
-        return Theme::tryFrom($value) ?? $default;
-    }
-
-    /**
-     * @return Theme[]
-     */
-    public function getThemes(): array
-    {
-        return Theme::sorted();
-    }
-
-    /**
-     * Returns the selected theme value.
-     */
-    public function getThemeValue(Request $request): string
-    {
-        return $this->getTheme($request)->value;
-    }
-
-    public function isDarkTheme(Request $request): bool
-    {
-        return Theme::DARK === $this->getTheme($request);
     }
 }

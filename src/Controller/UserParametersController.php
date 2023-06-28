@@ -12,8 +12,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\Theme;
 use App\Form\User\UserParametersType;
 use App\Interfaces\RoleInterface;
+use App\Service\ThemeService;
 use App\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,15 +32,27 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class UserParametersController extends AbstractController
 {
     #[Route(path: '/parameters', name: 'user_parameters')]
-    public function invoke(Request $request, UserService $service): Response
+    public function invoke(Request $request, UserService $userService, ThemeService $themeService): Response
     {
-        $form = $this->createForm(UserParametersType::class, $service->getProperties());
+        $properties = $userService->getProperties();
+        $properties[UserParametersType::THEME_FIELD] = $themeService->getTheme($request);
+
+        $form = $this->createForm(UserParametersType::class, $properties);
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
-            $service->setProperties($data);
+            /** @psalm-var Theme $theme */
+            $theme = $data[UserParametersType::THEME_FIELD];
 
-            return $this->redirectToHomePage('user.parameters.success');
+            // save properties
+            unset($data[UserParametersType::THEME_FIELD]);
+            $userService->setProperties($data);
+
+            // save theme
+            $response = $this->redirectToHomePage('user.parameters.success');
+            $themeService->saveTheme($response, $theme, $this->getCookiePath());
+
+            return $response;
         }
 
         return $this->render('user/user_parameters.html.twig', [

@@ -57,20 +57,21 @@ const MenuBuilder = class { /* exported MenuBuilder */
     /**
      * Adds a title. Do nothing if the last item is already a title.
      *
-     * @param {string} title - the item's title.
-     * @param {string} [tag] - the item's tag or h6 if none.
+     * @param {jQuery} $item - the item's title.
      * @return {MenuBuilder} This instance for chaining.
      */
-    addTitle(title, tag) {
+    addTitle($item) {
         // already a title?
         if (this.isTitle(this.getLastKey())) {
             return this;
         }
 
-        // properties
-        tag = tag || 'h6';
+        // get properties
+        const title = $item.text();
+        const tag = $item.prop('tagName');
+        const className = $item.attr('class') + ' py-1';
         const key = 'title_' + this.index++;
-        const html = `<${tag} class="dropdown-header p-0">${title}</${tag}>`;
+        const html = `<${tag} class="${className}">${title}</${tag}>`;
 
         // add
         this.items[key] = {
@@ -167,7 +168,7 @@ const MenuBuilder = class { /* exported MenuBuilder */
             if ($item.hasClass('dropdown-divider')) {
                 that.addSeparator();
             } else if ($item.hasClass('dropdown-header')) {
-                that.addTitle($item.text(), $item.prop("tagName"));
+                that.addTitle($item);
             } else if ($item.isSelectable()) {
                 that.addItem($item);
             }

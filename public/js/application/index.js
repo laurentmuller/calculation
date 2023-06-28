@@ -230,6 +230,8 @@ function selectRow($source, hideMenus) {
         $table.on('mousedown', 'tbody tr', function (e) {
             if (e.button === 0) {
                 selectRow($(this), true);
+            } else if (e.button === 2) {
+                $.hideDropDownMenus();
             }
         }).on('click', 'tr [data-bs-toggle="dropdown"]', function () {
             selectRow($(this), false);

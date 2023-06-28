@@ -5,17 +5,17 @@
     <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{ icon('tools', 'index.menu_tools') }}
     </a>
-    <div class="dropdown-menu" aria-labelledby="{{ id }}">
+    <ul class="dropdown-menu" aria-labelledby="{{ id }}">
         {{ dropdownItem(path('search'), 'search.title', 'search') }}
         {% if is_admin %}
-            {{ dropdownSeparator() }}
-            {{ dropdownItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
-            {{ dropdownItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
-            {{ dropdownItem(path('empty_table'), 'empty.title', 'file-code far') }}
+            <li>{{ dropdownSeparator() }}</li>
+            <li>{{ dropdownItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}</li>
+            <li>{{ dropdownItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}</li>
+            <li>{{ dropdownItem(path('empty_table'), 'empty.title', 'file-code far') }}</li>
             {%- if is_granted_task -%}
-                {{ dropdownSeparator() }}
-                {{ dropdownItem(path('task_compute'), 'task_compute.title', 'keyboard') }}
+                <li>{{ dropdownSeparator() }}</li>
+                <li>{{ dropdownItem(path('task_compute'), 'task_compute.title', 'keyboard') }}</li>
             {% endif -%}
         {% endif -%}
-    </div>
+    </ul>
 </li>

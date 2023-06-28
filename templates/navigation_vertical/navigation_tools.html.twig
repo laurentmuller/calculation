@@ -18,7 +18,7 @@
             {{ navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
             {{ navItem(path('empty_table'), 'empty.title', 'file-code far') }}
             {%- if is_granted_task -%}
-                {{ dropdownSeparator() }}
+                <li>{{ dropdownSeparator() }}</li>
                 {{ navItem(path('task_compute'), 'task_compute.title', 'keyboard') }}
             {% endif -%}
         {% endif %}

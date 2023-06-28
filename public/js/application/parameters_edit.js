@@ -28,6 +28,12 @@ function setDefaultValues($source) {
             if (value !== $this.isChecked()) {
                 $this.setChecked(value).trigger('input');
             }
+        } else if ($this.is(':radio')) {
+            const oldValue = $this.isChecked();
+            const newValue = value === $this.val();
+            if (newValue !== oldValue) {
+                $this.setChecked(newValue).trigger('input');
+            }
         } else {
             if (value.toString() !== $this.val().toString()) {
                 $this.val(value).trigger('input');

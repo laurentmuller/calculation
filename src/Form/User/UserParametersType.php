@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\User;
 
+use App\Enums\Theme;
 use App\Form\FormHelper;
 use App\Form\Parameters\AbstractParametersType;
 use App\Service\ApplicationService;
@@ -23,6 +24,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserParametersType extends AbstractParametersType
 {
+    /**
+     * The theme field name.
+     */
+    final public const THEME_FIELD = 'theme';
+
     /**
      * Constructor.
      */
@@ -37,5 +43,24 @@ class UserParametersType extends AbstractParametersType
         $this->addMessageSection($helper);
         $this->addHomePageSection($helper);
         $this->addOptionsSection($helper);
+        $this->addThemeSection($helper);
+    }
+
+    private function addThemeSection(FormHelper $helper): void
+    {
+        $value = Theme::getDefault()->value;
+        $helper->field(self::THEME_FIELD)
+            ->label(false)
+            ->updateOption('expanded', true)
+            ->updateOption('choice_attr', fn (Theme $theme) => $this->updateOptions($theme, $value))
+            ->addEnumType(Theme::class);
+    }
+
+    private function updateOptions(Theme $theme, string $default): array
+    {
+        return [
+            'data-default' => $default,
+            'help' => $theme->getHelp(),
+        ];
     }
 }

@@ -768,7 +768,7 @@ parameters:
   description: Définition des paramètres de l'application.
   default: Valeurs par défaut
   default_all: Toutes les préférences
-  default_visible: Uniquement les préférences affichées
+  default_visible: Les préférences affichées
   default_help: Restaurer les préférences à leur valeur par défaut
   display:
     hide: Masquer
@@ -828,6 +828,8 @@ parameters:
   group_product_help: Article à ajouter automatiquement lors de la création d'une nouvelle calculation.
   group_security: Sécurité
   group_security_help: Options de sécurité utilisées lors de la connection à l'application et de la définition du mot de passe.
+  group_theme: Thème
+  group_theme_help: Appliquer un thème sur ce site
   helps:
     panel_calculation: Nombre de calculations à afficher.
     panel_catalog: Afficher le nombre d'objets du catalogue (base de données).

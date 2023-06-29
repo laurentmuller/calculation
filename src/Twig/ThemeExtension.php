@@ -33,6 +33,7 @@ class ThemeExtension extends AbstractExtension
             new TwigFunction('theme', fn (Request $request) => $this->service->getTheme($request)),
             new TwigFunction('theme_value', fn (Request $request) => $this->service->getThemeValue($request)),
             new TwigFunction('is_dark_theme', fn (Request $request) => $this->service->isDarkTheme($request)),
+            new TwigFunction('next_theme', fn (Request $request) => $this->service->getNextTheme($request)),
         ];
     }
 }

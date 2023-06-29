@@ -201,36 +201,68 @@
     //     });
     // }
 
-    function initToggleTheme() {
-        $('.toggle-theme').on('click', function () {
-            let icon, text, theme, title;
-            const $this = $(this);
-            const url = $this.data('url');
-            const isDark = document.body.getAttribute('data-bs-theme') === 'dark';
-            if (isDark) {
-                icon = $this.data('light-icon');
-                text = $this.data('light-text');
-                title = $this.data('dark-title');
-                theme = 'light';
-            } else {
-                icon = $this.data('dark-icon');
-                text = $this.data('dark-text');
-                title = $this.data('light-title');
-                theme = 'dark';
-            }
-            const $themes = $('.toggle-theme');
-            $themes.attr('title', title);
-            $themes.find('.theme-icon').attr('class', icon);
-            $themes.find('.theme-text').text(text);
-            document.body.setAttribute('data-bs-theme', theme);
-            $(window).trigger('resize');
-            $.ajaxSetup({global: false});
-            $.get(url, {'theme': theme}).always(() => $.ajaxSetup({global: true}));
-            // $themes.find('.theme-icon').addClass('fa-spin').createTimer(function () {
-            //     $themes.find('.theme-icon').removeClass('fa-spin');
-            // }, 500);
+    /**
+     * Apply the given theme.
+     * @param {string} theme - the theme to apply.
+     * @param {string} data - the theme to save.
+     * @param {string} next - the next theme to apply.
+     */
+    function updateThemes(theme, data, next) {
+        // update
+        const $themes = $('.toggle-theme');
+        const url = $themes.data('url');
+        const title = $themes.data(`${next}-title`);
+        const icon = $themes.data(`${data}-icon`);
+        const text = $themes.data(`${data}-text`);
+        $themes.data('theme', data).attr('title', title);
+        $themes.children('.theme-icon').attr('class', icon);
+        $themes.children('.theme-text').text(text);
 
-        });
+        // apply
+        document.body.setAttribute('data-bs-theme', theme);
+        $(window).trigger('resize');
+
+        // save
+        if (url) {
+            $.ajaxSetup({global: false});
+            $.get(url, {'theme': data}).always(() => $.ajaxSetup({global: true}));
+        }
+    }
+
+    /**
+     * Initialize the toggle theme buttons.
+     */
+    function initToggleTheme() {
+        // preferred dark color scheme selector
+        const selector = '(prefers-color-scheme: dark)';
+        // return if the preferred color scheme is dark
+        const isPreferredDark = () => window.matchMedia(selector).matches;
+        // preferred color scheme change listener
+        const listener = () => updateThemes(isPreferredDark() ? 'dark' : 'light', 'auto', 'light');
+        // add button listener
+        const current = $('.toggle-theme').on('click', function (e) {
+            e.preventDefault();
+            const $this = $(this);
+            const current = $this.data('theme') || 'auto';
+            window.matchMedia(selector).removeEventListener('change', listener);
+            switch (current) {
+                case 'light': // -> dark
+                    updateThemes('dark', 'dark', 'auto');
+                    break;
+                case 'dark': // -> auto
+                    updateThemes(isPreferredDark() ? 'dark' : 'light', 'auto', 'light');
+                    window.matchMedia(selector).addEventListener('change', listener);
+                    break;
+                default: // -> light
+                    updateThemes('light', 'light', 'dark');
+                    break;
+            }
+        }).data('theme') || 'auto';
+
+        // add prefers color scheme listener if applicable
+        if (current === 'auto') {
+            window.matchMedia(selector).addEventListener('change', listener);
+        }
     }
 
     initHorizontalSearch();

@@ -30,6 +30,18 @@ class ThemeService
     private const KEY_THEME = 'THEME';
 
     /**
+     * Gets the next theme to apply.
+     */
+    public function getNextTheme(Request $request): Theme
+    {
+        return match ($this->getTheme($request)) {
+            Theme::LIGHT => Theme::DARK,
+            Theme::DARK => Theme::AUTO,
+            default => Theme::LIGHT
+        };
+    }
+
+    /**
      * Gets the selected theme from cookies.
      */
     public function getTheme(Request $request): Theme

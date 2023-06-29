@@ -21,10 +21,8 @@
         {{ navItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}
         {{ navItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
         <li>{{ dropdownSeparator() }}</li>
-        <li class="nav-item">
-            {{- navItemToggle('nav-link') -}}
-        </li>
         {{ navItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
+        <li class="nav-item">{{- navItemToggle('nav-link') -}}</li>
         {% if is_previous_admin -%}
             <li>{{ dropdownSeparator() }}</li>
             {{ navItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}

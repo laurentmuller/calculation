@@ -28,6 +28,13 @@ class ThemeServiceTest extends TestCase
         yield [self::createRequest('light'), false];
     }
 
+    public static function getNextThemes(): \Generator
+    {
+        yield [Theme::LIGHT, Theme::DARK];
+        yield [Theme::DARK, Theme::AUTO];
+        yield [Theme::AUTO, Theme::LIGHT];
+    }
+
     public static function getThemes(): \Generator
     {
         yield [self::createRequest(), Theme::AUTO];
@@ -42,6 +49,15 @@ class ThemeServiceTest extends TestCase
         yield [self::createRequest('auto'), 'auto'];
         yield [self::createRequest('dark'), 'dark'];
         yield [self::createRequest('light'), 'light'];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getNextThemes')]
+    public function testGetNextTheme(Theme $actual, Theme $expected): void
+    {
+        $service = new ThemeService();
+        $request = $this->createRequest($actual);
+        $next = $service->getNextTheme($request);
+        self::assertSame($expected, $next);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getThemes')]
@@ -75,8 +91,11 @@ class ThemeServiceTest extends TestCase
         self::assertSame($expected, $value);
     }
 
-    private static function createRequest(string $value = null): Request
+    private static function createRequest(Theme|string $value = null): Request
     {
+        if ($value instanceof Theme) {
+            $value = $value->value;
+        }
         if ($value) {
             return new Request(cookies: ['THEME' => $value]);
         }

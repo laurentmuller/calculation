@@ -312,7 +312,7 @@
          */
         _getPreferredTheme() {
             const theme = this._getCookieValue();
-            if (theme) {
+            if (theme && theme !== THEME_AUTO) {
                 return theme;
             }
             return this._isMediaDark() ? THEME_DARK : THEME_LIGHT;

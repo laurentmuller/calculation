@@ -16,7 +16,6 @@ use App\Interfaces\MimeTypeInterface;
 use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\MimeTypeTrait;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**

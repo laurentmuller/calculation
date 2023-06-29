@@ -2,9 +2,9 @@
 {% from 'macros/_icons.html.twig' import icon, dropdownItem %}
 {% set id = 'dropdown_data' %}
 <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="{{ id }}" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <button class="nav-link dropdown-toggle" id="{{ id }}" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         {{ icon('database', 'index.menu_data') }}
-    </a>
+    </button>
     <ul class="dropdown-menu" aria-labelledby="{{ id }}">
         {% if is_granted_product -%}
             <li>{{ dropdownItem(path('product_table'), 'product.list.title', ICON_PRODUCT) }}</li>

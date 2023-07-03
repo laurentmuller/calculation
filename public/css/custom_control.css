@@ -41,6 +41,6 @@
 /**
  * special case for dark theme and dark mode
  */
-body[data-bs-theme=dark] .form-check.form-dark .form-check-input:checked {
+html[data-bs-theme=dark] .form-check.form-dark .form-check-input:checked {
     border-color: var(--bs-border-color);
 }

@@ -44,7 +44,7 @@ footer span {
     padding: 0 0.5rem !important;
 }
 
-body[data-bs-theme=dark] footer:before {
+html[data-bs-theme=dark] footer:before {
     top: 0;
     left: 0;
     content: "";
@@ -54,7 +54,7 @@ body[data-bs-theme=dark] footer:before {
     transition: left 0.35s ease
 }
 
-body[data-bs-theme=dark]:not(:has(.sidebar-hide)) footer:before {
+html[data-bs-theme=dark]:not(:has(.sidebar-hide)) footer:before {
     left: 17rem;
     width: calc(100% - 17rem);
 }
@@ -498,7 +498,7 @@ input[type="number"] {
  * Add a drop-down caret before the element
  */
 .drop-down-icon-left:before {
-    font-family: "Font Awesome 6 Free";
+    font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
     padding-right: 4px;
     content: "\f0da";
@@ -804,14 +804,23 @@ a,
 }
 
 /**
- * Checkbox on the right
+ * menu with checked item on the right
  */
-.dropdown-menu-checked {
+.navbar-menu:has(.dropdown-item-checked),
+.dropdown-menu:has(.dropdown-item-checked) {
     min-width: 14rem;
 }
 
+/*
+.dropdown-item-checked {
+    width: 100%;
+    text-align: left;
+    padding-right: 20px;
+}
+*/
+
 .dropdown-item-checked::after {
-    font-family: "Font Awesome 6 Free";
+    font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
     content: '\f00c';
     margin-left: 0.5rem;
@@ -826,7 +835,7 @@ span.form-label {
  * sub-menu
  */
 .dropdown-item-submenu:after {
-    font-family: "Font Awesome 6 Free";
+    font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
     content: '\f0da';
     margin-left: 0.5rem;

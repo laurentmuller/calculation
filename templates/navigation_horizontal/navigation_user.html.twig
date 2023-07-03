@@ -17,7 +17,6 @@
         <li>{{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}</li>
         <li>{{ dropdownSeparator() }}</li>
         <li>{{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}</li>
-        <li>{{ navItemToggle('dropdown-item') }}</li>
         {% if is_previous_admin -%}
             <li>{{ dropdownSeparator() }}</li>
             <li>{{ dropdownItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}</li>

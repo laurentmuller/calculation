@@ -45,10 +45,11 @@ class ThemeController extends AbstractController
     {
         /** @psalm-var Theme $theme */
         $theme = $request->query->getEnum('theme', Theme::class, $service->getTheme($request));
+
         $response = $this->jsonTrue(
             ['message' => $this->trans($theme->getSuccess())]
         );
-        $service->saveTheme($response, $theme, $this->getCookiePath());
+        $service->saveTheme($response, $this->getCookiePath(), $theme);
 
         return $response;
     }

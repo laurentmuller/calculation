@@ -28,18 +28,6 @@
     <button class="btn btn-notify btn-outline-secondary d-print-none" type="button" title="{{ 'parameters.action_test'|trans }}"><i class="fa-regular fa-bell"></i></button>
 </div>
 {%- endblock %}
-{% block _theme_widget -%}
-{%- for child in form %}
-    {{- form_widget(child, {
-        parent_label_class: label_attr.class|default(''),
-        translation_domain: choice_translation_domain,
-        valid: valid,
-    }) -}}
-    <label id="{{ child.vars.id }}_help" for="{{ child.vars.id }}" class="form-label form-text mt-0 ms-4">
-        {{- child.vars.attr.help|trans|raw -}}
-    </label>
-{% endfor %}
-{%- endblock %}
 {# parameters #}
 {%- set cancel_path = path('homepage') -%}
 {%- set super_admin = is_granted('ROLE_SUPER_ADMIN') -%}

@@ -2,7 +2,6 @@
 
 /* globals Toaster, bootstrap */
 
-
 /**
  * Ready function
  */
@@ -204,70 +203,74 @@
     /**
      * Apply the given theme.
      * @param {string} theme - the theme to apply.
-     * @param {string} data - the theme to save.
+     * @param {string} save - the theme to save.
      * @param {string} next - the next theme to apply.
      */
-    function updateThemes(theme, data, next) {
-        // update
-        const $themes = $('.toggle-theme');
-        const url = $themes.data('url');
-        const title = $themes.data(`${next}-title`);
-        const icon = $themes.data(`${data}-icon`);
-        const text = $themes.data(`${data}-text`);
-        $themes.data('theme', data).attr('title', title);
-        $themes.children('.theme-icon').attr('class', icon);
-        $themes.children('.theme-text').text(text);
-
-        // apply
-        document.body.setAttribute('data-bs-theme', theme);
-        $(window).trigger('resize');
-
-        // save
-        if (url) {
-            $.ajaxSetup({global: false});
-            $.get(url, {'theme': data}).always(() => $.ajaxSetup({global: true}));
-        }
-    }
+    // function updateThemes(theme, save, next) {
+    //     // update
+    //     const $themes = $('.toggle-theme');
+    //     const url = $themes.data('url');
+    //     const title = $themes.data(`${next}-title`);
+    //     const icon = $themes.data(`${save}-icon`);
+    //     const text = $themes.data(`${save}-text`);
+    //     $themes.data('theme', save).attr('title', title);
+    //     $themes.children('.theme-icon').attr('class', icon);
+    //     $themes.children('.theme-text').text(text);
+    //
+    //     // apply
+    //     document.documentElement.setAttribute('data-bs-theme', theme);
+    //     $(window).trigger('resize');
+    //
+    //     // save
+    //     if (url) {
+    //         const data = {
+    //             'theme': save,
+    //             'last': theme,
+    //         };
+    //         $.ajaxSetup({global: false});
+    //         $.get(url, data).always(() => $.ajaxSetup({global: true}));
+    //     }
+    // }
 
     /**
      * Initialize the toggle theme buttons.
      */
-    function initToggleTheme() {
-        // preferred dark color scheme selector
-        const selector = '(prefers-color-scheme: dark)';
-        // return if the preferred color scheme is dark
-        const isPreferredDark = () => window.matchMedia(selector).matches;
-        // preferred color scheme change listener
-        const listener = () => updateThemes(isPreferredDark() ? 'dark' : 'light', 'auto', 'light');
-        // add button listener
-        const current = $('.toggle-theme').on('click', function (e) {
-            e.preventDefault();
-            const $this = $(this);
-            const current = $this.data('theme') || 'auto';
-            window.matchMedia(selector).removeEventListener('change', listener);
-            switch (current) {
-                case 'light': // -> dark
-                    updateThemes('dark', 'dark', 'auto');
-                    break;
-                case 'dark': // -> auto
-                    updateThemes(isPreferredDark() ? 'dark' : 'light', 'auto', 'light');
-                    window.matchMedia(selector).addEventListener('change', listener);
-                    break;
-                default: // -> light
-                    updateThemes('light', 'light', 'dark');
-                    break;
-            }
-        }).data('theme') || 'auto';
-
-        // add prefers color scheme listener if applicable
-        if (current === 'auto') {
-            window.matchMedia(selector).addEventListener('change', listener);
-        }
-    }
+    // function initToggleTheme() {
+    //     // preferred dark color scheme selector
+    //     const selector = '(prefers-color-scheme: dark)';
+    //     // return if the preferred color scheme is dark
+    //     const isPreferredDark = () => window.matchMedia(selector).matches;
+    //     // preferred color scheme change listener
+    //     const listener = () => updateThemes(isPreferredDark() ? 'dark' : 'light', 'auto', 'light');
+    //     // add button listener
+    //     const current = $('.toggle-theme').on('click', function (e) {
+    //         e.preventDefault();
+    //         const $this = $(this);
+    //         const current = $this.data('theme') || 'auto';
+    //         window.matchMedia(selector).removeEventListener('change', listener);
+    //         switch (current) {
+    //             case 'light': // -> dark
+    //                 updateThemes('dark', 'dark', 'auto');
+    //                 break;
+    //             case 'dark': // -> auto
+    //                 updateThemes(isPreferredDark() ? 'dark' : 'light', 'auto', 'light');
+    //                 window.matchMedia(selector).addEventListener('change', listener);
+    //                 break;
+    //             default: // -> light
+    //                 updateThemes('light', 'light', 'dark');
+    //                 break;
+    //         }
+    //     }).data('theme') || 'auto';
+    //
+    //     // add prefers color scheme listener if applicable
+    //     if (current === 'auto') {
+    //         window.matchMedia(selector).addEventListener('change', listener);
+    //     }
+    // }
 
     initHorizontalSearch();
     initVerticalSearch();
-    initToggleTheme();
+    // initToggleTheme();
     initBackToTop();
     initSidebar();
 

@@ -30,18 +30,6 @@ class ThemeService
     private const KEY_THEME = 'THEME';
 
     /**
-     * Gets the next theme to apply.
-     */
-    public function getNextTheme(Request $request): Theme
-    {
-        return match ($this->getTheme($request)) {
-            Theme::LIGHT => Theme::DARK,
-            Theme::DARK => Theme::AUTO,
-            default => Theme::LIGHT
-        };
-    }
-
-    /**
      * Gets the selected theme from cookies.
      */
     public function getTheme(Request $request): Theme
@@ -78,8 +66,8 @@ class ThemeService
     /**
      * Save the given theme to cookies.
      */
-    public function saveTheme(Response $response, Theme $theme, string $path): void
+    public function saveTheme(Response $response, string $path, Theme $theme): void
     {
-        $this->setCookie(response: $response, key: self::KEY_THEME, value: $theme->value, path: $path);
+        $this->setCookie(response: $response, key: self::KEY_THEME, value: $theme, path: $path);
     }
 }

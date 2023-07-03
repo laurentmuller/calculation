@@ -141,8 +141,8 @@ tr.text-body-secondary td .text-danger {
 
 .bootstrap-table tr.table-primary.text-body-secondary,
 .bootstrap-table .custom-item.table-primary.text-body-secondary,
-body[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary hr,
-body[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body {
+html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary hr,
+html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body {
     color: var(--bs-table-color) !important;
 }
 

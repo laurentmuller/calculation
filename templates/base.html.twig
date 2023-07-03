@@ -15,7 +15,6 @@
 {%- set sidebar_hide = is_remembered and is_actived ? app.request.cookies.get('SIDEBAR_HIDE', true) : true -%}
 {%- set sidebar_class = sidebar_hide ? ' sidebar-hide' : '' -%}
 {%- set status_bar = status_bar is defined ? status_bar : user_service.statusBar and is_remembered and is_actived -%}
-{%- set theme_class = theme_value(app.request) -%}
 {# rights #}
 {%- set is_granted_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
 {%- set is_granted_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
@@ -66,8 +65,9 @@
 {% block stylesheets %}
 {{- asset_css('css/style.css') }}
 {% endblock %}
+{{- asset_js('js/application/color-modes.js') }}
 </head>
-<body data-bs-theme="{{ theme_class }}"{% if status_bar %} class="status-bar"{% endif %} data-cookie-path="{{ cookie_path }}">
+<body{% if status_bar %} class="status-bar"{% endif %} data-cookie-path="{{ cookie_path }}">
     {# vertical navigation #}
     {%- block navigation_vertical -%}
         {{- include('navigation_vertical/navigation.html.twig') }}

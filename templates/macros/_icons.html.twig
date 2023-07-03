@@ -206,7 +206,7 @@
 {% set attr = {
     'href': '#',
     'class': class,
-    'title': next_theme(app.request).title|trans,
+    'title': selection.title|trans,
     'data-theme': selection.value,
     'data-url': url('theme_save')
 } %}

@@ -35,6 +35,7 @@
                 {% if is_granted_data and show_navigation_search ?? false -%}
                     {{ include('navigation_horizontal/navigation_search.html.twig') }}
                 {% endif %}
+                {{ include('navigation_horizontal/navigation_theme.html.twig') }}
                 {% if is_remembered -%}
                     {{ include('navigation_horizontal/navigation_user.html.twig') }}
                 {% endif %}

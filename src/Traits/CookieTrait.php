@@ -91,6 +91,9 @@ trait CookieTrait
      */
     protected function setCookie(Response $response, string $key, mixed $value, string $prefix = '', string $path = '/', string $modify = '+1 year', bool $httpOnly = true): void
     {
+        if ($value instanceof \BackedEnum) {
+            $value = $value->value;
+        }
         $name = $this->getCookieName($key, $prefix);
         $expire = (new \DateTime())->modify($modify);
         $cookie = new Cookie(name: $name, value: (string) $value, expire: $expire, path: $path, httpOnly: $httpOnly);

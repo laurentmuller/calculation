@@ -3,39 +3,122 @@
 /* globals Toaster, bootstrap */
 
 /**
+ * The auto theme.
+ * @type {string}
+ */
+const THEME_AUTO = 'auto';
+
+/**
+ * The light theme.
+ * @type {string}
+ */
+const THEME_LIGHT = 'light';
+
+/**
+ * The dark theme.
+ * @type {string}
+ */
+const THEME_DARK = 'dark';
+
+/**
+ * The cookie entry name.
+ * @type {string}
+ */
+const COOKIE_ENTRY = 'THEME=';
+
+/**
+ * Gets the stored theme.
+ * @return {string} the stored theme.
+ */
+const getStoredTheme = () => {
+    'use strict';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const entries = decodedCookie.split(';');
+    for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i].trimStart();
+        if (entry.indexOf(COOKIE_ENTRY) === 0) {
+            return entry.substring(COOKIE_ENTRY.length, entry.length);
+        }
+    }
+    return THEME_AUTO;
+};
+
+/**
+ * Sets the stored theme.
+ * @param {string} theme - the theme to store.
+ */
+const setStoredTheme = theme => {
+    'use strict';
+    const date = new Date();
+    date.setFullYear(date.getFullYear() + 1);
+    const path = document.body.dataset.cookiePath || '/';
+    let entry = `${COOKIE_ENTRY}${encodeURIComponent(theme)};`;
+    entry += `expires=${date.toUTCString()};`;
+    entry += `path=${path};`;
+    entry += 'samesite=lax;';
+    document.cookie = entry;
+};
+
+/**
+ * Return a value indicating if the preferred color scheme is dark.
+ * @return {boolean}
+ */
+const isPreferredDark = () => {
+    'use strict';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+};
+
+const getPreferredTheme = () => {
+    'use strict';
+    const storedTheme = getStoredTheme();
+    if (storedTheme) {
+        return storedTheme;
+    }
+    return isPreferredDark() ? THEME_DARK : THEME_LIGHT;
+};
+
+/**
+ * Sets the theme.
+ * @param {string} theme - the theme to apply.
+ */
+const setTheme = theme => {
+    'use strict';
+    if (theme === THEME_AUTO) {
+        theme = isPreferredDark() ? THEME_DARK : THEME_LIGHT;
+    }
+    document.documentElement.setAttribute('data-bs-theme', theme);
+};
+
+(() => {
+    'use strict';
+
+    /**
+     * Set the preferred theme.
+     */
+    setTheme(getPreferredTheme());
+
+    /**
+     * Handle the prefer color scheme change.
+     */
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        const storedTheme = getStoredTheme();
+        if (storedTheme !== THEME_LIGHT && storedTheme !== THEME_DARK) {
+            setTheme(getPreferredTheme());
+        }
+    });
+})();
+
+/**
  * Plugin to handle theme.
  */
 (function ($) {
     'use strict';
 
-    /**
-     * The cookie entry name.
-     * @type {string}
-     */
-    const COOKIE_ENTRY = 'THEME=';
-
-    /**
-     * The auto theme.
-     * @type {string}
-     */
-    const THEME_AUTO = 'auto';
-
-    /**
-     * The light theme.
-     * @type {string}
-     */
-    const THEME_LIGHT = 'light';
-
-    /**
-     * The dark theme.
-     * @type {string}
-     */
-    const THEME_DARK = 'dark';
-
     // ------------------------------------
     // Theme public class definition
     // ------------------------------------
     const ThemeListener = class {
+
         /**
          * Constructor
          *
@@ -54,7 +137,6 @@
         destroy() {
             this.$element.off('click', this.clickProxy);
             this.$element.removeData(ThemeListener.NAME);
-            window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', this.changeProxy);
             const $dialog = this._getDialog();
             if ($dialog) {
                 $dialog.remove();
@@ -71,9 +153,7 @@
          */
         _init() {
             this.clickProxy = () => this._click();
-            this.changeProxy = () => this._change();
             this.$element.on('click', this.clickProxy);
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.changeProxy);
         }
 
         /**
@@ -85,17 +165,6 @@
                 this._showDialog();
             } else {
                 this._loadDialog();
-            }
-        }
-
-        /**
-         * Handle the prefer color scheme change.
-         * @private
-         */
-        _change() {
-            const theme = this._getCookieValue();
-            if (theme !== THEME_LIGHT || theme !== THEME_DARK) {
-                this._setTheme(this._getPreferredTheme());
             }
         }
 
@@ -225,6 +294,7 @@
                 return;
             }
             if (!newTheme) {
+
                 if (oldTheme !== this._getTheme()) {
                     this._setTheme(oldTheme);
                 }
@@ -337,7 +407,7 @@
          * @private
          */
         _getTheme() {
-            return document.body.getAttribute('data-bs-theme') || THEME_AUTO;
+            return document.documentElement.getAttribute('data-bs-theme') || THEME_AUTO;
         }
 
         /**

@@ -68,6 +68,6 @@ class ThemeService
      */
     public function saveTheme(Response $response, string $path, Theme $theme): void
     {
-        $this->setCookie(response: $response, key: self::KEY_THEME, value: $theme, path: $path);
+        $this->setCookie(response: $response, key: self::KEY_THEME, value: $theme, path: $path, httpOnly: false);
     }
 }

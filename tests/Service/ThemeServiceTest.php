@@ -16,6 +16,7 @@ use App\Enums\Theme;
 use App\Service\ThemeService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ThemeService::class)]
 class ThemeServiceTest extends TestCase
@@ -75,12 +76,31 @@ class ThemeServiceTest extends TestCase
         self::assertSame($expected, $value);
     }
 
+    public function testSaveTheme(): void
+    {
+        $path = '/';
+        $theme = Theme::DARK;
+        $service = new ThemeService();
+        $response = new Response();
+        $service->saveTheme($response, $path, $theme);
+
+        $cookies = $response->headers->getCookies();
+        self::assertCount(1, $cookies);
+
+        $cookie = $cookies[0];
+        self::assertSame('THEME', $cookie->getName());
+        self::assertSame($theme->value, $cookie->getValue());
+        self::assertSame($path, $cookie->getPath());
+        self::assertFalse($cookie->isHttpOnly());
+    }
+
     private static function createRequest(Theme|string $value = null): Request
     {
-        if ($value instanceof Theme) {
-            $value = $value->value;
-        }
         if ($value) {
+            if ($value instanceof Theme) {
+                $value = $value->value;
+            }
+
             return new Request(cookies: ['THEME' => $value]);
         }
 

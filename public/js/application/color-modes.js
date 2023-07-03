@@ -21,39 +21,57 @@
      */
     const THEME_DARK = 'dark';
 
-    // const target = document.querySelector('.theme-switcher.nav-link-toggle');
-    // const setAttribute = target.setAttribute;
-    // target.setAttribute = (key, value) => {
-    //     window.console.log(`${key}=${value}`);
-    //     setAttribute.call(target, key, value);
-    // };
+    /**
+     * The cookie entry name.
+     * @type {string}
+     */
+    const COOKIE_ENTRY = 'THEME=';
 
     /**
      * Gets the stored theme.
      * @return {string|null} the stored theme.
      */
-    const getStoredTheme = () => localStorage.getItem('theme');
+    const getStoredTheme = () => {
+        const decodedCookie = decodeURIComponent(document.cookie);
+        const entries = decodedCookie.split(';');
+        for (let i = 0; i < entries.length; i++) {
+            const entry = entries[i].trim();
+            if (entry.startsWith(COOKIE_ENTRY)) {
+                return entry.substring(COOKIE_ENTRY.length);
+            }
+        }
+        return THEME_AUTO;
+    };
 
     /**
      * Sets the stored theme.
      * @param {string} theme - the theme to store.
      */
-    const setStoredTheme = theme => localStorage.setItem('theme', theme);
+    const setStoredTheme = (theme) => {
+        const date = new Date();
+        date.setFullYear(date.getFullYear() + 1);
+        const path = document.body.dataset.cookiePath || '/';
+        let entry = `${COOKIE_ENTRY}${encodeURIComponent(theme)};`;
+        entry += `expires=${date.toUTCString()};`;
+        entry += `path=${path};`;
+        entry += 'samesite=lax;';
+        document.cookie = entry;
+    };
 
     /**
      * Return a value indicating if the preferred color scheme is dark.
-     * @return {boolean}
+     * @return {boolean} true if dark.
      */
     const isPreferredDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-        /**
+    /**
      * Gets the preferred theme.
      * @return {string} the preferred theme.
      */
     const getPreferredTheme = () => {
-        const storedTheme = getStoredTheme();
-        if (storedTheme) {
-            return storedTheme;
+        const theme = getStoredTheme();
+        if (theme) {
+            return theme;
         }
         return isPreferredDark() ? THEME_DARK : THEME_LIGHT;
     };
@@ -62,44 +80,45 @@
      * Sets the theme.
      * @param {string} theme - the theme to apply.
      */
-    const setTheme = theme => {
+    const setTheme = (theme) => {
         if (theme === THEME_AUTO) {
             theme = isPreferredDark() ? THEME_DARK : THEME_LIGHT;
         }
         document.documentElement.setAttribute('data-bs-theme', theme);
     };
 
+    // apply the preferred theme
     setTheme(getPreferredTheme());
 
     /**
-     * Show the active theme and update UI.
-     * @param {string} theme - the theme to apply.
+     * Update the active theme.
+     * @param {string} theme - the selected theme.
      * @param {boolean} focus - true to set focus of the selected item.
      */
-    const showActiveTheme = (theme, focus = false) => {
+    const updateActiveTheme = (theme, focus = false) => {
         // remove check icon
-        document.querySelectorAll('[data-theme-value]').forEach(element => {
+        document.querySelectorAll('[data-theme].dropdown-item-checked').forEach((element) => {
             element.classList.remove('dropdown-item-checked');
         });
 
         // update
-        document.querySelectorAll('.theme-switcher').forEach(themeSwitcher => {
-            //source
-            const menu = themeSwitcher.nextElementSibling;
-            const btnToActive = menu.querySelector(`[data-theme-value="${theme}"]`);
-            const iconToActive = btnToActive.querySelector('.theme-icon');
-            const textToActive = btnToActive.querySelector('.theme-text');
+        document.querySelectorAll('.theme-switcher').forEach((themeSwitcher) => {
+            // get values
+            const sourceMenu = themeSwitcher.nextElementSibling;
+            const sourceTheme = sourceMenu.querySelector(`[data-theme="${theme}"]`);
+            const sourceIcon = sourceTheme.querySelector('.theme-icon');
+            const sourceText = sourceTheme.querySelector('.theme-text');
 
             // add check icon
-            btnToActive.classList.add('dropdown-item-checked');
+            sourceTheme.classList.add('dropdown-item-checked');
 
-            // target
-            const activeThemeIcon = themeSwitcher.querySelector('.theme-icon-active');
-            const activeThemeText = themeSwitcher.querySelector('.theme-text-active');
-            activeThemeIcon.innerHTML = iconToActive.innerHTML;
-            activeThemeText.textContent = textToActive.textContent;
+            // set values
+            const targetIcon = themeSwitcher.querySelector('.theme-icon');
+            const targetText = themeSwitcher.querySelector('.theme-text');
+            targetIcon.className  = sourceIcon.className;
+            targetText.textContent = sourceText.textContent;
 
-            // collapse menu
+            // collapse toggle menu if applicable
             if (themeSwitcher.classList.contains('nav-link-toggle') && themeSwitcher.getAttribute('aria-expanded') === 'true') {
                 themeSwitcher.click();
             }
@@ -123,16 +142,15 @@
      * Handle the content loaded event.
      */
     window.addEventListener('DOMContentLoaded', () => {
-        showActiveTheme(getPreferredTheme());
-        document.querySelectorAll('[data-theme-value]')
-            .forEach(toggle => {
-                toggle.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const theme = toggle.getAttribute('data-theme-value');
-                    setStoredTheme(theme);
-                    setTheme(theme);
-                    showActiveTheme(theme, true);
-                });
+        updateActiveTheme(getPreferredTheme());
+        document.querySelectorAll('[data-theme]').forEach((element) => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+                const theme = element.getAttribute('data-theme');
+                setStoredTheme(theme);
+                setTheme(theme);
+                updateActiveTheme(theme, true);
             });
+        });
     });
 })();

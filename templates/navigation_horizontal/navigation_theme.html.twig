@@ -1,13 +1,13 @@
-{% set current = enum('App\\Enums\\Theme::AUTO') %}
-<li class="nav-item dropdown">
-    <button class="nav-link theme-switcher dropdown-toggle" role="button" title="{{ 'theme.title'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
-        <span class="theme-icon-active"><i class="{{ current.iconLight }}"></i></span><span class="theme-text-active d-lg-none">{{ current|trans }}</span>
+{% set current = theme(app.request) %}
+<li class="nav-item dropdown my-auto">
+    <button class="nav-link dropdown-toggle theme-switcher" role="button" title="{{ 'theme.title'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="me-1 me-lg-0"><i class="theme-icon {{ current.iconLight }}"></i></span><span class="theme-text d-lg-none">{{ current|trans }}</span>
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
     {% for theme in themes() %}
         <li>
-            <button class="dropdown-item" data-theme-value="{{ theme.value }}">
-                <span class="theme-icon"><i class="{{ theme.iconLight }}"></i></span><span class="theme-text">{{ theme|trans }}</span>
+            <button class="dropdown-item" data-theme="{{ theme.value }}">
+                <span class="me-1"><i class="theme-icon {{ theme.iconLight }}"></i></span><span class="theme-text">{{ theme|trans }}</span>
             </button>
         </li>
     {% endfor %}

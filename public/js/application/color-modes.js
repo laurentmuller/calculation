@@ -93,9 +93,8 @@
     /**
      * Update the active theme.
      * @param {string} theme - the selected theme.
-     * @param {boolean} focus - true to set focus of the selected item.
      */
-    const updateActiveTheme = (theme, focus = false) => {
+    const updateActiveTheme = (theme) => {
         // remove check icon
         document.querySelectorAll('[data-theme].dropdown-item-checked').forEach((element) => {
             element.classList.remove('dropdown-item-checked');
@@ -104,8 +103,7 @@
         // update
         document.querySelectorAll('.theme-switcher').forEach((themeSwitcher) => {
             // get values
-            const sourceMenu = themeSwitcher.nextElementSibling;
-            const sourceTheme = sourceMenu.querySelector(`[data-theme="${theme}"]`);
+            const sourceTheme = themeSwitcher.parentElement.querySelector(`[data-theme="${theme}"]`);
             const sourceIcon = sourceTheme.querySelector('.theme-icon');
             const sourceText = sourceTheme.querySelector('.theme-text');
 
@@ -115,15 +113,12 @@
             // set values
             const targetIcon = themeSwitcher.querySelector('.theme-icon');
             const targetText = themeSwitcher.querySelector('.theme-text');
-            targetIcon.className  = sourceIcon.className;
+            targetIcon.className = sourceIcon.className;
             targetText.textContent = sourceText.textContent;
 
             // collapse toggle menu if applicable
             if (themeSwitcher.classList.contains('nav-link-toggle') && themeSwitcher.getAttribute('aria-expanded') === 'true') {
                 themeSwitcher.click();
-            }
-            if (focus) {
-                themeSwitcher.focus();
             }
         });
     };
@@ -147,9 +142,9 @@
             element.addEventListener('click', (e) => {
                 e.preventDefault();
                 const theme = element.getAttribute('data-theme');
+                updateActiveTheme(theme);
                 setStoredTheme(theme);
                 setTheme(theme);
-                updateActiveTheme(theme, true);
             });
         });
     });

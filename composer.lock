@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1fe11e0780cf60239c390278092120ff",
+    "content-hash": "b0f9a15c53633470a0da2b90aa507ae6",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1343,12 +1343,12 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laurentmuller/DoctrineExtensions.git",
+                "url": "https://github.com/Dukecity/DoctrineExtensions.git",
                 "reference": "f6202d2284e91b4fa873b3d3c9a9d3b03096dccb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/DoctrineExtensions/zipball/f6202d2284e91b4fa873b3d3c9a9d3b03096dccb",
+                "url": "https://api.github.com/repos/Dukecity/DoctrineExtensions/zipball/f6202d2284e91b4fa873b3d3c9a9d3b03096dccb",
                 "reference": "f6202d2284e91b4fa873b3d3c9a9d3b03096dccb",
                 "shasum": ""
             },
@@ -1371,22 +1371,7 @@
                     "DoctrineExtensions\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "DoctrineExtensions\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "lint": [
-                    "php-cs-fixer fix --ansi --diff --show-progress=none --verbose"
-                ],
-                "test": [
-                    "phpunit --colors=always"
-                ],
-                "phpstan": [
-                    "phpstan analyse"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1407,7 +1392,8 @@
                 "orm"
             ],
             "support": {
-                "source": "https://github.com/laurentmuller/DoctrineExtensions/tree/master"
+                "issues": "https://github.com/Dukecity/DoctrineExtensions/issues",
+                "source": "https://github.com/Dukecity/DoctrineExtensions/tree/master"
             },
             "time": "2023-06-22T13:29:15+00:00"
         },
@@ -8284,12 +8270,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/VichUploaderBundle.git",
-                "reference": "a8ee8940625857b3bf738797551eb4d0bb30702f"
+                "reference": "6a6c273ac644a6cfe1d2faf1695ff554ae7961e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/VichUploaderBundle/zipball/a8ee8940625857b3bf738797551eb4d0bb30702f",
-                "reference": "a8ee8940625857b3bf738797551eb4d0bb30702f",
+                "url": "https://api.github.com/repos/laurentmuller/VichUploaderBundle/zipball/6a6c273ac644a6cfe1d2faf1695ff554ae7961e2",
+                "reference": "6a6c273ac644a6cfe1d2faf1695ff554ae7961e2",
                 "shasum": ""
             },
             "require": {
@@ -8390,7 +8376,7 @@
             "support": {
                 "source": "https://github.com/laurentmuller/VichUploaderBundle/tree/master"
             },
-            "time": "2023-06-22T03:48:23+00:00"
+            "time": "2023-07-03T19:18:49+00:00"
         }
     ],
     "packages-dev": [

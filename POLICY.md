@@ -18,9 +18,9 @@ licence ci-dessus.
 
 - **Application** : Par application, nous entendons le site web **Calculation** exploité par **bibi.nu**.
 
-- **Données à caractère personnel** : Les données à caractère personnel désignent des données concernant un individu vivant qui
-  peut être identifié à partir de ces données (ou à partir de ces données et d'autres
-  informations en notre possession ou susceptibles d'entrer en notre possession).
+- **Données à caractère personnel** : Les données à caractère personnel désignent des données concernant un individu
+vivant qui peut être identifié à partir de ces données (ou à partir de ces données et d'autres informations en notre
+possession ou susceptibles d'entrer en notre possession).
 
 - **Données d'utilisation** : Les données d'utilisation sont recueillies automatiquement et sont générées soit par
   l'utilisation de l'application, soit par l'infrastructure de l'application proprement dite
@@ -182,9 +182,9 @@ Nous nous réservons le droit d'actualiser notre politique de confidentialité d
 Nous vous informerons de toute modification en publiant la nouvelle politique de confidentialité
 sur cette page.
 
-Avant que la modification ne prenne effet, nous vous en informerons par courrier électronique et/ou 
-en plaçant un avis bien en vue dans notre application et nous actualiserons 
-la "date de prise d'effet" qui figure en haut de la présente politique de confidentialité.
+Avant que la modification ne prenne effet, nous vous en informerons par courrier électronique et/ou en
+plaçant un avis bien en vue dans notre application et nous actualiserons la "date de prise d'effet"
+qui figure en haut de la présente politique de confidentialité.
 
 Nous vous conseillons de consulter la présente politique de confidentialité périodiquement pour
 prendre connaissance de toute modification. Les modifications apportées à la présente politique

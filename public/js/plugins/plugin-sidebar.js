@@ -80,6 +80,9 @@
 
             //  highlight url
             this._highlightPath();
+
+            //save state
+            this.oldState = this._getState();
         }
 
         /**
@@ -318,12 +321,18 @@
          * @private
          */
         _saveState() {
-            const url = this.options.url;
-            if (url) {
-                $.ajaxSetup({global: false});
-                $.post(url, this._getState())
-                    .always(() => $.ajaxSetup({global: true}));
+            if (!this.options.url) {
+                return;
             }
+            const oldState = this.oldState;
+            const newState = this._getState();
+            if (oldState && JSON.stringify(oldState) === JSON.stringify(newState)) {
+                return;
+            }
+            this.oldState = newState;
+            $.ajaxSetup({global: false});
+            $.post(this.options.url, newState)
+                .always(() => $.ajaxSetup({global: true}));
         }
     };
 

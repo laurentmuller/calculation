@@ -173,10 +173,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/laurentmuller/VichUploaderBundle"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/laurentmuller/DoctrineExtensions"
         }
     ]
 }

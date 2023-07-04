@@ -77,7 +77,7 @@
         }
 
         /**
-         * Handle the input radio click event.
+         * Handle the element click event.
          * @private
          */
         _click() {
@@ -196,7 +196,6 @@
             if (document.querySelectorAll(this._getInputCheckedSelector()).length === 0) {
                 document.querySelector(selector).checked = true;
             }
-            $(window).trigger('resize');
         }
 
         /**
@@ -222,12 +221,14 @@
             const oldTheme = $dialog.data('old-theme');
             const newTheme = $dialog.data('new-theme');
             if (oldTheme === newTheme) {
+                $(window).trigger('resize');
                 return;
             }
             if (!newTheme) {
                 if (oldTheme !== this._getTheme()) {
                     this._setTheme(oldTheme);
                 }
+                $(window).trigger('resize');
                 return;
             }
             this._setTheme(newTheme);
@@ -238,6 +239,7 @@
                 const title = $(this._getTitleSelector()).text();
                 Toaster.success(message, title);
             }
+            $(window).trigger('resize');
         }
 
         /**

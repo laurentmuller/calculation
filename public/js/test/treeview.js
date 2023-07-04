@@ -68,7 +68,7 @@ function formatStateSelection(state) {
         }
     });
     const $text = $('<span/>', {
-        'class': 'mx-1',
+        'class': 'me-1',
         'text': text
     });
     return $text.prepend($color);
@@ -266,20 +266,19 @@ function updatePosition($radio) {
     }).on('shown.bs.dropdown', function () {
         $(this).parents('.dropdown').find('.btn-check:checked').trigger('focus');
     });
-
     $('.dropdown-position label').on('click', function (e) {
         if (e.button === 0) {
-            const $this = $(this);
-            const $radio = $this.siblings(':radio');
-            updatePosition($radio);
+            updatePosition($(this).siblings(':radio'));
         }
     });
-
     $('.dropdown-position .btn-check').on('keydown', function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             e.stopPropagation();
             updatePosition($(this));
         }
+    });
+    $('.dropdown-position').parent().find('.form-label').on('click', function (){
+        $('.btn-position').trigger('focus');
     });
 }(jQuery));

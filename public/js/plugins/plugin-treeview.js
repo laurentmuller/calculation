@@ -234,13 +234,11 @@
                         });
                         that._build(that.$element, that.tree, 0);
                     }
-
                 }).always(function () {
                     $loading.remove();
                     that._updateBorders()._selectFirst();
                 });
             }
-
             $element.on('click', '.list-group-item, .state-icon', that.clickProxy);
             $element.on('dblclick', '.list-group-item', that.doubleClickProxy);
             $element.on('keydown', '.list-group-item', that.keyDownProxy);

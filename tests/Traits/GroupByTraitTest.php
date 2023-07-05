@@ -31,8 +31,7 @@ class GroupByTraitTest extends TestCase
             self::createObject(2, '2'),
             self::createObject(2, '3'),
         ];
-        $key = 'id';
-        $result = $this->groupBy($array, $key);
+        $result = $this->groupBy($array, 'id');
 
         self::assertIsArray($result[1]);
         self::assertIsArray($result[2]);

@@ -22,39 +22,46 @@ trait GroupByTrait
      *
      * Any additional keys will be used for grouping the next set of sub-arrays.
      *
-     * @psalm-param array<array-key, mixed>              $array
-     * @psalm-param string|int|callable(mixed):array-key $key
-     * @psalm-param string|int|callable(mixed):array-key ...$others
+     * @psalm-template T of array|object
+     *
+     * @psalm-param array<T>              $array
+     * @psalm-param string|int|callable(T):array-key $key
+     * @psalm-param string|int|callable(T):array-key ...$others
      */
     public function groupBy(array $array, string|int|callable $key, string|int|callable ...$others): array
     {
         $result = [];
-        /** @psalm-var object|array $value */
         foreach ($array as $value) {
-            if (\is_callable($key)) {
-                $entry = $key($value);
-            } elseif (\is_object($value)) {
-                /** @psalm-var array-key $entry */
-                $entry = $value->{$key};
-            } else { // array
-                /** @psalm-var array-key $entry */
-                $entry = $value[$key];
-            }
+            $entry = $this->getGroupKey($value, $key);
             $result[$entry][] = $value;
         }
-        if (\func_num_args() > 2) {
-            $args = \func_get_args();
-            /** @psalm-var callable(mixed):array-key $callback */
-            $callback = [self::class, __FUNCTION__];
-            /** @psalm-param string|int $groupKey */
+
+        $num_args = \func_num_args();
+        if ($num_args > 2) {
+            $function = [self::class, __FUNCTION__];
+            $slice_args = \array_slice(\func_get_args(), 2, $num_args);
             foreach ($result as $groupKey => $value) {
-                $params = \array_merge([$value], \array_slice($args, 2, \func_num_args()));
-                /** @psalm-var array|object $value */
-                $value = \call_user_func_array($callback, $params);
-                $result[$groupKey] = $value;
+                $params = \array_merge([$value], $slice_args);
+                $result[$groupKey] = (array) \call_user_func_array($function, $params); // @phpstan-ignore-line
             }
         }
 
         return $result;
+    }
+
+    private function getGroupKey(array|object $value, string|int|callable $key): string|int
+    {
+        if (\is_callable($key)) {
+            /** @psalm-var array-key $entry */
+            $entry = $key($value);
+        } elseif (\is_array($value)) {
+            /** @psalm-var array-key $entry */
+            $entry = $value[$key];
+        } else { // object
+            /** @psalm-var array-key $entry */
+            $entry = $value->{$key};
+        }
+
+        return $entry;
     }
 }

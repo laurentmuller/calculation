@@ -223,7 +223,8 @@
                 const visible = $link.closest('.nav-item-dropdown').find('.navbar-menu').is(':visible');
                 const title = visible ? options.hideMenu : options.showMenu;
                 $link.attr({
-                    'aria-expanded': String(visible), 'title': title
+                    'aria-expanded': String(visible),
+                    'title': title
                 });
             });
         }

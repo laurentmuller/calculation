@@ -90,7 +90,7 @@ abstract class AbstractReader implements \Iterator
     }
 
     /**
-     * @return TValue
+     * @return ?TValue
      */
     public function current(): mixed
     {

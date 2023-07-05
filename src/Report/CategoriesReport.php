@@ -38,6 +38,7 @@ class CategoriesReport extends AbstractArrayReport
 
         $this->AddPage();
         $table = $this->createTable();
+        /** @psalm-var array<string, Category[]> $groups */
         $groups = $this->groupEntities($entities);
         $style = PdfStyle::getCellStyle()->setIndent(2);
 
@@ -91,17 +92,13 @@ class CategoriesReport extends AbstractArrayReport
 
     /**
      * @param Category[] $entities
-     *
-     * @return array<string, Category[]>
      */
     private function groupEntities(array $entities): array
     {
         $default = $this->trans('report.other');
         $callback = fn (Category $category): string => $category->getGroupCode() ?? $default;
-        /** @psalm-var array<string, Category[]> $result */
-        $result = $this->groupBy($entities, $callback);
 
-        return $result;
+        return $this->groupBy($entities, $callback);
     }
 
     /**

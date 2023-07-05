@@ -24,7 +24,7 @@ namespace App\Utils;
  * }
  * </code>
  *
- * @extends AbstractReader<string|null>
+ * @extends AbstractReader<string>
  */
 class ReverseReader extends AbstractReader
 {

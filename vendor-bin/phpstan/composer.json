@@ -2,7 +2,7 @@
 	"require" : {
 		"php": "^8.2",
 		"phpstan/extension-installer": "^1.0",
-		"phpstan/phpstan": "1.10.21",
+		"phpstan/phpstan": "^1.0",
 		"phpstan/phpstan-deprecation-rules": "^1.0",
 		"phpstan/phpstan-doctrine": "^1.0",
 		"phpstan/phpstan-phpunit": "^1.0",

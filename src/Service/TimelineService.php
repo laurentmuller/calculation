@@ -172,8 +172,8 @@ class TimelineService
         if ([] === $calculations) {
             return [];
         }
-        $fn = static fn (Calculation $c): string => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG);
+        $callback = static fn (Calculation $c): string => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG);
 
-        return $this->groupBy($calculations, $fn);
+        return $this->groupBy($calculations, $callback);
     }
 }

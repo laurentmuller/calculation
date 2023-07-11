@@ -3,7 +3,7 @@
     <button class="nav-link dropdown-toggle theme-switcher" role="button" title="{{ 'theme.description'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="me-1 me-lg-0"><i class="theme-icon {{ current.iconLight }}"></i></span><span class="theme-text d-lg-none">{{ current|trans }}</span>
     </button>
-    <ul class="dropdown-menu dropdown-menu-end ">
+    <ul class="dropdown-menu dropdown-menu-end">
     {% for theme in themes() %}
         <li>
             <button class="dropdown-item" data-theme="{{ theme.value }}">

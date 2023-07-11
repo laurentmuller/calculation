@@ -66,6 +66,13 @@ interface TranslatorServiceInterface
     public static function getName(): string;
 
     /**
+     * Returns if the last error is set.
+     *
+     * @psalm-assert-if-true HttpClientError $this->getLastError()
+     */
+    public function hasLastError(): bool;
+
+    /**
      * Translates a text.
      *
      * @param TranslateQuery $query the query to translate

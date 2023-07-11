@@ -130,11 +130,9 @@
 
         /**
          * Handle the body mouse up event.
-         *
-         * @param {MouseEvent} e - the event.
          * @private
          */
-        _bodyMouseUp(e) {
+        _bodyMouseUp() {
             const options = this.options;
             this.$body.off('mousemove.drag.body', this.bodyMouseMoveProxy);
             this.$header.toggleClass(options.className);

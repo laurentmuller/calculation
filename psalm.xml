@@ -72,14 +72,41 @@
             </errorLevel>
         </UnsupportedPropertyReferenceUsage>
 
+        <MixedAssignment>
+            <errorLevel type="suppress">
+                <file name="src/Controller/AbstractController.php"/>
+                <file name="src/Traits/AuthorizationCheckerAwareTrait.php"/>
+                <file name="src/Traits/CacheAwareTrait.php"/>
+                <file name="src/Traits/LoggerAwareTrait.php"/>
+                <file name="src/Traits/SessionAwareTrait.php"/>
+                <file name="src/Traits/TranslatorAwareTrait.php"/>
+            </errorLevel>
+        </MixedAssignment>
+
+        <MixedInferredReturnType>
+            <errorLevel type="suppress">
+                <file name="src/Controller/AbstractController.php"/>
+                <file name="src/Traits/AuthorizationCheckerAwareTrait.php"/>
+                <file name="src/Traits/CacheAwareTrait.php"/>
+                <file name="src/Traits/LoggerAwareTrait.php"/>
+                <file name="src/Traits/SessionAwareTrait.php"/>
+                <file name="src/Traits/TranslatorAwareTrait.php"/>
+            </errorLevel>
+        </MixedInferredReturnType>
+
+        <MixedReturnStatement>
+            <errorLevel type="suppress">
+                <file name="src/Controller/AbstractController.php"/>
+            </errorLevel>
+        </MixedReturnStatement>
     </issueHandlers>
 
     <plugins>
+        <pluginClass class="Orklah\NotEmpty\Plugin"/>
+        <pluginClass class="Orklah\PsalmInsaneComparison\Plugin"/>
+        <pluginClass class="Orklah\StrictEquality\Plugin"/>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
-        <pluginClass class="Orklah\PsalmInsaneComparison\Plugin"/>
-        <pluginClass class="Orklah\NotEmpty\Plugin"/>
-        <pluginClass class="Orklah\StrictEquality\Plugin"/>
         <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
     </plugins>
 </psalm>

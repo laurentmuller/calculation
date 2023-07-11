@@ -114,7 +114,7 @@
         },
         {
             "name": "bootstrap-table",
-            "version": "1.22.0",
+            "version": "1.22.1",
             "files": [
                 "dist/bootstrap-table.js",
                 "dist/bootstrap-table.css",

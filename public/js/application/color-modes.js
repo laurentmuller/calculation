@@ -116,10 +116,8 @@
             targetIcon.className = sourceIcon.className;
             targetText.textContent = sourceText.textContent;
 
-            // collapse toggle menu if applicable
-            if (themeSwitcher.classList.contains('nav-link-toggle') && themeSwitcher.getAttribute('aria-expanded') === 'true') {
-                themeSwitcher.click();
-            }
+            // raise event for sidebar
+            window.dispatchEvent(new Event('resize'));
         });
     };
 

@@ -1,9 +1,11 @@
 /**! compression tag for ftp-deployment */
 
-/*globals zxcvbn*/
+/* globals zxcvbn */
 
 /**
  * Ready function
+ * @typedef {Object} ZXCVBNResult - the ZXCVBN result
+ * @property {number} score
  */
 (function ($) {
     'use strict';

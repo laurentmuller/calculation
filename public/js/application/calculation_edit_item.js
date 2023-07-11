@@ -224,6 +224,7 @@ class EditItemDialog extends EditDialog {
         const $price = $('#item_price');
         $element.initTypeahead({
             alignWidth: false,
+            copyText: false,
             valueField: 'description',
             displayField: 'description',
             url: $form.data('search-product'),
@@ -243,9 +244,6 @@ class EditItemDialog extends EditDialog {
                 $('#item_category').val(item.categoryId);
                 $price.floatVal(item.price);
                 $price.trigger('input');
-
-                // clear
-                $element.val('');
 
                 // select
                 if (item.price) {

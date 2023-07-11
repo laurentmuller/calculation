@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interfaces\RoleInterface;
-use App\Model\HttpClientError;
 use App\Service\OpenWeatherCityUpdater;
 use App\Service\OpenWeatherService;
 use Symfony\Component\Form\Extension\Core\DataTransformer\NumberToLocalizedStringTransformer;
@@ -191,8 +190,8 @@ class OpenWeatherController extends AbstractController
             $query = $this->getRequestQuery($request);
             $units = $this->getRequestUnits($request);
             $cities = $this->service->search($query, $units);
-            if (($lastError = $this->service->getLastError()) instanceof HttpClientError) {
-                return $this->json($lastError);
+            if ($this->service->hasLastError()) {
+                return $this->json($this->service->getLastError());
             }
             if ([] === $cities) {
                 return $this->jsonFalse();

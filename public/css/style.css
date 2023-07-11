@@ -955,3 +955,7 @@ span.form-label {
             var(--bs-primary) calc(80% + 1px)
     );
 }
+
+.typeahead .active .text-success {
+    color: inherit !important;
+}

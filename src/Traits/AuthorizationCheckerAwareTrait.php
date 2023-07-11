@@ -37,9 +37,7 @@ trait AuthorizationCheckerAwareTrait
     {
         if (null === $this->authorizationChecker) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            /** @psalm-var AuthorizationCheckerInterface $authorizationChecker */
-            $authorizationChecker = $this->container->get(self::class . '::' . __FUNCTION__);
-            $this->authorizationChecker = $authorizationChecker;
+            $this->authorizationChecker = $this->container->get(self::class . '::' . __FUNCTION__);
         }
 
         return $this->authorizationChecker;

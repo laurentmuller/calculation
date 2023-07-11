@@ -31,9 +31,7 @@ trait LoggerAwareTrait
     {
         if (null === $this->logger) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            /** @psalm-var LoggerInterface $logger */
-            $logger = $this->container->get(self::class . '::' . __FUNCTION__);
-            $this->logger = $logger;
+            $this->logger = $this->container->get(self::class . '::' . __FUNCTION__);
         }
 
         return $this->logger;

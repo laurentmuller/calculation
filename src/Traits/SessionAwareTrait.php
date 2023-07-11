@@ -34,9 +34,7 @@ trait SessionAwareTrait
     {
         if (null === $this->requestStack) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            /** @psalm-var RequestStack $requestStack */
-            $requestStack = $this->container->get(self::class . '::' . __FUNCTION__);
-            $this->requestStack = $requestStack;
+            $this->requestStack = $this->container->get(self::class . '::' . __FUNCTION__);
         }
 
         return $this->requestStack;

@@ -119,9 +119,7 @@ abstract class AbstractController extends BaseController
     {
         if (!$this->requestStack instanceof RequestStack) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            /** @psalm-var RequestStack $requestStack */
-            $requestStack = $this->container->get('request_stack');
-            $this->requestStack = $requestStack;
+            $this->requestStack = $this->container->get('request_stack');
         }
 
         return $this->requestStack;

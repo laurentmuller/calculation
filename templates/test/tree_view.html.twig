@@ -6,6 +6,99 @@
 {# body #}
 {% block body -%}
 <div class="row pt-5">
+    <div class="d-flex flex-column flex-shrink-0 py-3 ps-3 border-end overflow-y-auto" style="width: 280px;overflow-y: auto;">
+        <a href="/" class="d-flex align-items-center pb-2 mb-2 link-body-emphasis text-decoration-none border-bottom">
+            <i class="fa-solid fa-home me-1"></i><span class="fs-5 fw-semibold">{{ app_name }}</span>
+        </a>
+        <ul class="list-sidebar list-unstyled ps-0 mb-auto">
+            <li class="mb-1">
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
+                    Home
+                </button>
+                <div class="collapse" id="home-collapse" style="">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded align-items-center">
+                                {{ icon(ICON_USER, 'user.list.title') }}
+                            </a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded align-items-center">{{ icon('cogs', 'parameters.title') }}</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded align-items-center">{{ icon(ICON_GLOBAL_MARGIN, 'below.title') }}</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="mb-1">
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="true">
+                    Dashboard
+                </button>
+                <div class="collapse show" id="dashboard-collapse" style="">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">Overview</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">Weekly</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">Monthly</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">Annually</a></li>
+
+                        <li class="mb-1">
+                            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse2" aria-expanded="false">
+                                {{ icon(ICON_USER, 'user.list.title') }}
+                            </button>
+                            <div class="collapse" id="home-collapse2">
+                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                                    <li><a href="#" class="link-body-emphasis d-inline-flex rounded align-items-center">
+                                            {{ icon(ICON_USER, 'user.list.title') }}
+                                        </a></li>
+                                    <li><a href="#" class="link-body-emphasis d-inline-flex rounded align-items-center">{{ icon('cogs', 'parameters.title') }}</a></li>
+                                    <li><a href="#" class="link-body-emphasis d-inline-flex rounded align-items-center">{{ icon(ICON_GLOBAL_MARGIN, 'below.title') }}</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="mb-1">
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="true">
+                    Orders
+                </button>
+                <div class="collapse show" id="orders-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">New</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">Processed</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">Shipped</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">Returned</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="border-top my-2"></li>
+            <li class="mb-1">
+                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="true">
+                    Account
+                </button>
+                <div class="collapse show" id="account-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">New...</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">Profile</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">Settings</a></li>
+                        <li>
+                            <hr class="dropdown-divider border-top my-2">
+                        </li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex rounded">Sign out</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+        <div class="dropdown border-top">
+            <a href="#" class="d-flex align-items-center link-body-emphasis dropdown-toggle pt-2" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="{{ asset('images/logo/logo-customer-32x32.png') }}" alt="user" width="32" height="32" class="me-1"><strong>Bibi</strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" href="#">New project...</a></li>
+                <li><a class="dropdown-item" href="#">Settings</a></li>
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Sign out</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="row pt-5">
     <div class="col-md-6 offset-md-2">
         <h1>{{- icon(title_icon, title) }}</h1>
     </div>
@@ -196,6 +289,7 @@
 {{ asset_css('js/vendor/currency-flags/currency-flags.css') }}
 {{ asset_css('css/select2.css') }}
 {{ asset_css('css/flags.css') }}
+{{ asset_css('css/test.css') }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts -%}

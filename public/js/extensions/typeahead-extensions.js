@@ -16,7 +16,7 @@
         /**
          * Initialize a type ahead search.
          *
-         * @param {Object} options - the options to override.
+         * @param {Object} [options] - the options to override.
          * @return {Typeahead} The type ahead instance.
          */
         initTypeahead: function (options) {
@@ -25,12 +25,6 @@
                 valueField: '',
                 ajax: {
                     url: options.url
-                },
-                matcher: function () {
-                    return true;
-                },
-                filter: function (data) {
-                    return data;
                 },
                 onSelect: function () {
                     $element.select();

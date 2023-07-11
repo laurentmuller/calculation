@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Translator;
 
-use App\Model\HttpClientError;
 use App\Model\TranslateQuery;
 use App\Service\AbstractHttpClientService;
 use App\Utils\StringUtils;
@@ -139,7 +138,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     private function doLoadLanguages(): ?array
     {
         $languages = $this->loadLanguages();
-        if (!empty($languages) && !$this->getLastError() instanceof HttpClientError) {
+        if (!empty($languages) && !$this->hasLastError()) {
             return $languages;
         }
 

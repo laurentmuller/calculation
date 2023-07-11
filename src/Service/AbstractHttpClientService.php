@@ -104,6 +104,16 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     }
 
     /**
+     * Returns if the last error is set.
+     *
+     * @psalm-assert-if-true HttpClientError $this->lastError
+     */
+    public function hasLastError(): bool
+    {
+        return $this->lastError instanceof HttpClientError;
+    }
+
+    /**
      * Create the HTTP client.
      *
      * @see AbstractHttpClientService::getDefaultOptions()

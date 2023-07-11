@@ -67,6 +67,7 @@ calculation:
     edit_task: Modifier la tâche
     empty: La calculation ne contient aucun article ou le total est égale à 0.
     empty_items: Aucun article.
+    empty_search: Aucun article ne correspond aux critères de recherche
     error:
       search_customer: Erreur lors de la recherche des clients.
       search_product: Erreur lors de la recherche des articles.

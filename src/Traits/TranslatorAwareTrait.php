@@ -31,9 +31,7 @@ trait TranslatorAwareTrait
     {
         if (null === $this->translator) {
             /* @noinspection PhpUnhandledExceptionInspection */
-            /** @psalm-var TranslatorInterface $translator */
-            $translator = $this->container->get(self::class . '::' . __FUNCTION__);
-            $this->translator = $translator;
+            $this->translator = $this->container->get(self::class . '::' . __FUNCTION__);
         }
 
         return $this->translator;

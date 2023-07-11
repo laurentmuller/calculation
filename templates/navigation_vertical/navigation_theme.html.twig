@@ -1,12 +1,14 @@
+{% from 'macros/_icons.html.twig' import dropdownSeparator %}
 {% set current = theme(app.request) %}
-<li class="nav-item nav-item-dropdown">
-    <a class="nav-link nav-link-toggle theme-switcher" href="#" role="button" aria-expanded="false">
-        <i class="theme-icon {{ current.iconLight }} me-1"></i><span class="theme-text">{{ current|trans }}</span>
+<li>{{ dropdownSeparator() }}</li>
+<li class="nav-item">
+    <a class="nav-link dropdown-toggle theme-switcher" href="#" role="button" title="{{ 'theme.description'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
+        <span class="me-1"><i class="theme-icon {{ current.iconLight }} me-1"></i></span><span class="theme-text">{{ current|trans }}</span>
     </a>
-    <ul class="navbar-nav navbar-menu" style="display: none">
+    <ul class="dropdown-menu">
     {% for theme in themes() %}
-        <li class="nav-item">
-            <button class="nav-link" data-theme="{{ theme.value }}">
+        <li>
+            <button class="dropdown-item" data-theme="{{ theme.value }}">
                 <i class="theme-icon {{ theme.iconLight }} me-1"></i><span class="theme-text">{{ theme|trans }}</span>
             </button>
         </li>

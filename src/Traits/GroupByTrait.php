@@ -36,10 +36,9 @@ trait GroupByTrait
             $result[$entry][] = $value;
         }
 
-        $num_args = \func_num_args();
-        if ($num_args > 2) {
+        if (\func_num_args() > 2) {
             $function = [self::class, __FUNCTION__];
-            $slice_args = \array_slice(\func_get_args(), 2, $num_args);
+            $slice_args = \array_slice(\func_get_args(), 2);
             foreach ($result as $groupKey => $value) {
                 $params = \array_merge([$value], $slice_args);
                 $result[$groupKey] = (array) \call_user_func_array($function, $params); // @phpstan-ignore-line
@@ -49,15 +48,17 @@ trait GroupByTrait
         return $result;
     }
 
+    /**
+     * @psalm-param string|int|callable(mixed): array-key $key
+     */
     private function getGroupKey(array|object $value, string|int|callable $key): string|int
     {
         if (\is_callable($key)) {
-            /** @psalm-var array-key $entry */
             $entry = $key($value);
         } elseif (\is_array($value)) {
             /** @psalm-var array-key $entry */
             $entry = $value[$key];
-        } else { // object
+        } else {
             /** @psalm-var array-key $entry */
             $entry = $value->{$key};
         }

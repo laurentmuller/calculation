@@ -51,7 +51,7 @@ td.user {
 }
 
 .icon-level:before {
-    font-family: "Font Awesome 6 Free";
+    font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
     font-style: normal;
     padding-right: 4px;
@@ -103,7 +103,7 @@ td.user {
 }
 
 .icon-channel:before {
-    font-family: "Font Awesome 6 Free";
+    font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
     font-style: normal;
     padding-right: 4px;

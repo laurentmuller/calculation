@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interfaces\RoleInterface;
-use App\Model\HttpClientError;
 use App\Service\ExchangeRateService;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -61,8 +60,8 @@ class ExchangeRateController extends AbstractController
     public function getCodes(): JsonResponse
     {
         $codes = $this->service->getSupportedCodes();
-        if (($lastError = $this->service->getLastError()) instanceof HttpClientError) {
-            return $this->json($lastError);
+        if ($this->service->hasLastError()) {
+            return $this->json($this->service->getLastError());
         }
 
         return $this->json($codes);
@@ -77,8 +76,8 @@ class ExchangeRateController extends AbstractController
     public function getLatest(string $code): JsonResponse
     {
         $latest = $this->service->getLatest($code);
-        if (($lastError = $this->service->getLastError()) instanceof HttpClientError) {
-            return $this->json($lastError);
+        if ($this->service->hasLastError()) {
+            return $this->json($this->service->getLastError());
         }
 
         return $this->json($latest);
@@ -93,8 +92,8 @@ class ExchangeRateController extends AbstractController
         #[MapQueryParameter] string $targetCode = ''
     ): JsonResponse {
         $result = $this->service->getRateAndDates($baseCode, $targetCode);
-        if (($lastError = $this->service->getLastError()) instanceof HttpClientError) {
-            return $this->json($lastError);
+        if ($this->service->hasLastError()) {
+            return $this->json($this->service->getLastError());
         }
         if (\is_array($result)) {
             return $this->jsonTrue([

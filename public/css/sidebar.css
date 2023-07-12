@@ -63,11 +63,11 @@
     font-weight: 900;
     float: right;
     transition: transform 0.2s ease;
-    content: "\f107";
+    content: "\f104";
 }
 
 .navbar-vertical .nav-link-toggle[aria-expanded="true"]::after {
-    transform: rotate(180deg);
+    transform: rotate(-90deg);
 }
 
 @media print {

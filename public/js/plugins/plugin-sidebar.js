@@ -19,7 +19,7 @@
          * Constructor
          *
          * @param {HTMLElement} element - the element to handle.
-         * @param {Object|string} options - the plugin options.
+         * @param {Object|string} [options] - the plugin options.
          */
         constructor(element, options) {
             this.$element = $(element);
@@ -31,7 +31,8 @@
          * Destructor.
          */
         destroy() {
-            this.$element.off('click', '.nav-link-toggle', this.toggleMenuProxy);
+            this.$element.off('hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
+            this.$element.off('shown.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
             this.$showSidebarButton.off('click', this.showSidebarProxy);
             this.$hideSidebarButton.off('click', this.hideSidebarProxy);
             $(window).off('resize', this.resizeProxy);
@@ -54,35 +55,38 @@
             this.$navbarHorizontal = $(options.navbarHorizontal);
             this.$pageContent = $(options.pageContent);
 
-            // create and add proxies
+            // update collapse menus
+            this._updateSiblingMenus();
+
+            // update toggle buttons
+            this._updateToggleButtons();
+
+            // initialize the timeout
+            this._initTimeout();
+
+            // highlight url
+            this._highlightPath();
+
+            // save state
+            this.oldState = this._getState();
+
+            // create proxies
+            this.toggleCollapseProxy = () => this._toggleCollapse();
             this.showSidebarProxy = (e) => this._showSidebar(e);
             this.hideSidebarProxy = (e) => this._hideSidebar(e);
-            this.toggleMenuProxy = (e) => this._toggleMenu(e);
             this.resizeProxy = (e) => this._resize(e);
 
-            this.$element.on('click', '.nav-link-toggle', this.toggleMenuProxy);
+            // bind events
+            this.$element.on('hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
+            this.$element.on('shown.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
             this.$showSidebarButton.on('click', this.showSidebarProxy);
             this.$hideSidebarButton.on('click', this.hideSidebarProxy);
             $(window).on('resize', this.resizeProxy);
-
-            // update menus
-            this._updateMenus();
 
             // hide sidebar if too small
             if (this._isClientTooSmall() && !this._isSideBarHidden()) {
                 $(window).trigger('resize');
             }
-
-            // initialize the timeout
-            if (options.timeout > 0) {
-                this._initTimeout();
-            }
-
-            //  highlight url
-            this._highlightPath();
-
-            //save state
-            this.oldState = this._getState();
         }
 
         /**
@@ -92,6 +96,9 @@
         _initTimeout() {
             const that = this;
             const timeout = this.options.timeout;
+            if (timeout <= 0) {
+                return;
+            }
             const removeTimer = () => that.$element.removeTimer();
             that.$showSidebarButton.on('mouseenter', function (e) {
                 if (that._isSideBarHidden()) {
@@ -167,7 +174,7 @@
         /**
          * Toggle the sidebar.
          *
-         * @param {Event} e - the event.
+         * @param {Event} [e] - the event.
          * @private
          */
         _toggleSidebar(e) {
@@ -188,49 +195,71 @@
         }
 
         /**
-         * Toggle a menu.
-         *
-         * @param {Event} e - the event.
+         * Handle the collapse show and hide events.
          * @private
          */
-        _toggleMenu(e) {
-            e.preventDefault();
-            const that = this;
-            const options = that.options;
-            const $link = $(e.currentTarget);
-            const $parent = $link.closest('.nav-item-dropdown');
-            const $menu = $parent.find('.navbar-menu:first');
-            if ($menu.is(':visible')) {
-                that._collapseChildrenMenus($menu);
-            } else if (options.collapseSiblingMenus) {
-                that._collapseSiblingMenus($menu);
-            }
-            $menu.toggle(options.duration, function () {
-                $link.addClass('active');
-                that._updateMenus();
-                that._saveState();
-            });
+        _toggleCollapse() {
+            this._updateToggleButtons();
+            this._saveState();
         }
 
         /**
-         * Update the menus content.
+         * Update toggle buttons.
          * @private
          */
-        _updateMenus() {
+        _updateToggleButtons() {
             const options = this.options;
-            this.$element.find('.nav-item-dropdown .nav-link-toggle').each(function () {
-                const $link = $(this);
-                const visible = $link.closest('.nav-item-dropdown').find('.navbar-menu').is(':visible');
-                const title = visible ? options.hideMenu : options.showMenu;
-                $link.attr({
-                    'aria-expanded': String(visible),
-                    'title': title
-                });
+            this.$element.find('div.collapse').each(function (index, element) {
+                const $element = $(element);
+                const show = $element.hasClass('show');
+                const title = show ? options.hideMenu : options.showMenu;
+                const $button = $element.prev('.nav-link-toggle');
+                $button.toggleClass('active', show).attr('title', title);
             });
         }
 
         /**
-         * // Add active class to selected url (if any).
+         * Update siblings menus.
+         * @private
+         */
+        _updateSiblingMenus() {
+            if (!this.options.collapseSiblingMenus) {
+                return;
+            }
+            const that = this;
+            const rootId = that._ensureId(this.$element);
+            this.$element.find('div.collapse').each(function (index, element) {
+                const $element = $(element);
+                const count = $element.parents('div.collapse').length;
+                if (count === 0) {
+                    $element.attr('data-bs-parent', rootId);
+                } else {
+                    const $parent = $element.parents('div.collapse:first');
+                    const id = that._ensureId($parent);
+                    $element.attr('data-bs-parent', id);
+                }
+            });
+        }
+
+        /**
+         * Ensure that the given element has a unique identifier.
+         *
+         * @param {JQuery} $element te element to validate.
+         * @return {string} the unique identifier.
+         * @private
+         */
+        _ensureId($element) {
+            const id = $element.attr('id');
+            if (id) {
+                return `#${id}`;
+            }
+            const randomClass = Math.floor(Math.random() * Date.now()).toString(16);
+            $element.addClass(randomClass);
+            return `.${randomClass}`;
+        }
+
+        /**
+         * Add active class to selected url (if any).
          * @private
          */
         _highlightPath() {
@@ -247,48 +276,6 @@
                 }
                 paths.pop();
             }
-        }
-
-        /**
-         * Collapse expanded sibling menus
-         * @param {jQuery} $menu - the selected menu.
-         * @private
-         */
-        _collapseSiblingMenus($menu) {
-            const $parent = $menu.closest('.nav-item-dropdown');
-            const $siblings = $parent.siblings('.nav-item-dropdown');
-            const $links = $siblings.children('.nav-link-toggle[aria-expanded="true"]');
-            const $menus = $siblings.children('.navbar-menu:visible');
-            this._hideMenus($links, $menus);
-            // hide children
-            const that = this;
-            $menus.each(function () {
-                that._collapseChildrenMenus($(this));
-            });
-        }
-
-        /**
-         * Collapse expanded children menus.
-         * @param {jQuery} $menu - the selected menu.
-         * @private
-         */
-        _collapseChildrenMenus($menu) {
-            const $links = $menu.find('.nav-item-dropdown .nav-link-toggle[aria-expanded="true"]');
-            const $menus = $menu.find('.navbar-menu:visible');
-            this._hideMenus($links, $menus);
-        }
-
-        /**
-         * Hide the given menus.
-         * @param {jQuery} $links - the menu links to update.
-         * @param {jQuery} $menus - the menus to hide.
-         * @private
-         */
-        _hideMenus($links, $menus) {
-            $links.removeClass('active').attr({
-                'title': this.options.showMenu, 'aria-expanded': 'false'
-            });
-            $menus.hide(this.options.duration);
         }
 
         /**
@@ -309,9 +296,9 @@
             const menus = {
                 'menu_sidebar_hide': this._isSideBarHidden()
             };
-            this.$element.find('.nav-item-dropdown[id]').each(function (index, element) {
+            this.$element.find('div.collapse[id]').each(function (index, element) {
                 const $element = $(element);
-                menus[$element.attr('id')] = $element.find('.navbar-menu').is(':visible');
+                menus[$element.attr('id')] = $element.hasClass('show');
             });
 
             return menus;
@@ -342,19 +329,29 @@
     // -----------------------------------
     Sidebar.DEFAULTS = {
         // url to save menu states
-        url: null, // show sidebar button
-        showSidebarButton: '.show-sidebar', // hide sidebar button
-        hideSidebarButton: '.hide-sidebar', // horizontal navigation bar
-        navbarHorizontal: '.navbar-horizontal', // page content
-        pageContent: '.page-content', // the timeout to display/hide sidebar automatically (0 = disabled)
-        timeout: 1500, // the duration to show / hide menus
-        duration: 350, // the minimum width to hide sidebar
-        minWidth: 1200, // texts
+        url: null,
+        // show sidebar button selector
+        showSidebarButton: '.show-sidebar',
+        // hide sidebar button selector
+        hideSidebarButton: '.hide-sidebar',
+        // horizontal navigation bar selector
+        navbarHorizontal: '.navbar-horizontal',
+        // page content selector
+        pageContent: '.page-content',
+        // the timeout to display/hide sidebar automatically (0 = disabled)
+        timeout: 1500,
+        // the duration to show / hide menus
+        duration: 350,
+        // the minimum width to hide sidebar
+        minWidth: 1200,
+        // texts
         showSidebar: 'Show Sidebar',
         hideSidebar: 'Hide Sidebar',
-        showMenu: 'Expand',
-        hideMenu: 'Collapse', // the path name to search for in query parameters to highlight URL
-        pathname: null, // collapse siblings menus
+        showMenu: 'Expand Menu',
+        hideMenu: 'Collapse Menu',
+        // the path name to search for in query parameters to highlight URL
+        pathname: null,
+        // collapse siblings menus
         collapseSiblingMenus: true
     };
 

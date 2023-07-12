@@ -55,8 +55,8 @@ html[data-bs-theme=dark] footer:before {
 }
 
 html[data-bs-theme=dark]:not(:has(.sidebar-hide)) footer:before {
-    left: 17rem;
-    width: calc(100% - 17rem);
+    left: 18rem;
+    width: calc(100% - 18rem);
 }
 
 /*

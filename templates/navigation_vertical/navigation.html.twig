@@ -6,7 +6,7 @@
     'show-menu': 'index.menu_show'|trans,
     'hide-menu': 'index.menu_hide'|trans
 } -%}
-<div id="sidebar" data-bs-theme="dark" class="navbar navbar-vertical bg-dark border-end d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}>
+<div id="sidebar" data-bs-theme="dark" class="d-flex flex-nowrap overflow-x-hidden align-items-start navbar navbar-vertical bg-dark border-end d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}>
     {# logo
     <div class="d-flex position-relative mb-1">
         <div class="flex-shrink-0">
@@ -23,7 +23,7 @@
         <i class="fa-solid fa-angle-left"></i>
     </button>
     {% if not status_bar %}
-        <div class="d-flex position-relative mb-3" style="margin-right: 28px">
+        <div class="d-flex position-relative mb-2" style="margin-right: 28px">
             <div class="flex-shrink-0">
                 <img class="rounded-1" src="{{ asset_icon(57) }}" width="57" height="57" alt="{{ app_name }}">
             </div>
@@ -33,7 +33,7 @@
                 <a href="{{ path('about') }}" class="stretched-link" title="{{ 'footer.about_title'|trans }}"></a>
             </div>
         </div>
-        {{ dropdownSeparator(false, 'my-2') }}
+        {{ dropdownSeparator(false, 'my-1 w-100') }}
     {% endif %}
 
     {# home page #}
@@ -41,7 +41,7 @@
         {{- icon('home', 'index.title') -}}
     </a>
     {# pages #}
-    <ul class="navbar-nav">
+    <ul class="navbar-nav mb-auto w-100">
         {% if is_granted_data %}
             {{ include('navigation_vertical/navigation_data.html.twig') }}
         {% endif %}
@@ -57,7 +57,11 @@
         {% if is_test -%}
             {{ include('navigation_vertical/navigation_test.html.twig') }}
         {% endif %}
+    </ul>
+    {# bottom menus #}
+    <div class="d-flex align-items-center border-top w-100 pt-2{% if not status_bar %} mb-4{% endif %}">
         {{ include('navigation_vertical/navigation_user.html.twig') }}
         {{ include('navigation_vertical/navigation_theme.html.twig') }}
-    </ul>
+    </div>
+
 </div>

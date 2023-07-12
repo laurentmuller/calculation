@@ -1,35 +1,37 @@
 {# admin menu #}
-{% from 'macros/_icons.html.twig' import icon, dropdownItem, dropdownSeparator, navItem %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, navItem %}
 {% set id = 'menu_admin' %}
 {% set expanded = app.session.get(id, false) %}
 {% set toggle_class = expanded ? ' active' : '' %}
-{% set display_style = expanded ? 'block' : 'none' %}
+{% set collapse_class = expanded ? ' show' : '' %}
 {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
-<li class="nav-item nav-item-dropdown" id="{{ id }}">
-    <a class="nav-link nav-link-toggle{{ toggle_class }}" href="#" role="button" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
+<li class="nav-item nav-item-dropdown">
+    <button class="nav-link nav-link-toggle{{ toggle_class }}" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
         {{- icon('gear fa-solid fa-fw', 'index.menu_admin') -}}
-    </a>
-    <ul class="navbar-nav navbar-menu" style="display: {{ display_style }}">
-        {{ navItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
-        {{ navItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
-        <li>{{ dropdownSeparator() }}</li>
-        {{ navItem(path('user_table'), 'user.list.title', ICON_USER) }}
-        {{ navItem(path('admin_rights_user'), 'index.menu_rights_user', 'user-check') }}
-        {% if is_super_admin -%}
-            {{ navItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'user-shield') }}
-        {% endif %}
-        <li>{{ dropdownSeparator() }}</li>
-        {{ navItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
-        {% if is_admin -%}
+    </button>
+    <div class="collapse{{ collapse_class }}" id="{{ id }}">
+        <ul class="list-unstyled">
+            {{ navItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
+            {{ navItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
             <li>{{ dropdownSeparator() }}</li>
-            {{ navItem(path('log_table'), 'log.title', ICON_LOG) }}
+            {{ navItem(path('user_table'), 'user.list.title', ICON_USER) }}
+            {{ navItem(path('admin_rights_user'), 'index.menu_rights_user', 'user-check') }}
             {% if is_super_admin -%}
-                {{ navItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}
+                {{ navItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'user-shield') }}
             {% endif %}
-        {% endif %}
-        {% if is_previous_admin -%}
             <li>{{ dropdownSeparator() }}</li>
-            {{ navItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
-        {% endif %}
-    </ul>
+            {{ navItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
+            {% if is_admin -%}
+                <li>{{ dropdownSeparator() }}</li>
+                {{ navItem(path('log_table'), 'log.title', ICON_LOG) }}
+                {% if is_super_admin -%}
+                    {{ navItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}
+                {% endif %}
+            {% endif %}
+            {% if is_previous_admin -%}
+                <li>{{ dropdownSeparator() }}</li>
+                {{ navItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
+            {% endif %}
+        </ul>
+    </div>
 </li>

@@ -6,9 +6,9 @@
     left: 0;
     position: fixed;
     height: 100vh;
-    min-width: 17rem;
-    max-width: 17rem;
-    padding: 1rem;
+    min-width: 18rem;
+    max-width: 18rem;
+    padding: 1rem 1rem 0.1rem;
     transition: margin-left 0.35s ease;
     overflow-y: auto;
     flex-direction: column !important;
@@ -18,14 +18,14 @@
 }
 
 .navbar-vertical.sidebar-hide {
-    margin-left: -17rem;
+    margin-left: -18rem;
 }
 
 /* page-content */
 .page-content {
-    width: calc(100% - 17rem);
+    width: calc(100% - 18rem);
     margin-top: 20px;
-    margin-left: 17rem;
+    margin-left: 18rem;
 }
 
 .page-content.sidebar-hide {
@@ -53,6 +53,31 @@
 
 .navbar-vertical ul ul {
     padding-left: 1.5rem;
+}
+
+.navbar-vertical .nav-link-toggle {
+    width: 100%;
+    text-align: left;
+}
+
+.navbar-vertical .dropup .nav-link {
+    color: var(--bs-navbar-color);
+}
+
+.navbar-vertical .dropup .nav-link:hover,
+.navbar-vertical .dropup .nav-link:focus {
+    color: var(--bs-navbar-hover-color);
+}
+
+.navbar-vertical .dropup .nav-link:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.navbar-vertical .dropup .nav-link.disabled {
+    color: var(--bs-navbar-disabled-color);
+    pointer-events: none;
+    cursor: default;
 }
 
 /*

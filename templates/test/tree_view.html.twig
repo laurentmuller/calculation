@@ -18,282 +18,167 @@
 {% block container_class 'container-fluid' %}
 {# body #}
 {% block body -%}
-<div class="d-flex flex-nowrap">
-    <div class="list-sidebar d-flex flex-column flex-shrink-0 py-2 ps-2 border-end overflow-y-auto">
-        <a href="{{ path('homepage') }}" class="d-flex align-items-center pb-2 mb-2 link-body-emphasis border-bottom">
-            <i class="fa-solid fa-home me-2"></i><span class="fs-5">{{ app_name }}</span>
-        </a>
-        <ul class="list-unstyled mb-auto">
-            <li class="mb-1">
-                {{ _self.side_bar_collapse('Outils', '.home-collapse', false, 'tools') }}
-                <div class="collapse home-collapse" data-bs-parent=".list-sidebar" >
-                    <ul class="btn-toggle-nav list-unstyled pb-1">
-                        {{ _self.side_bar_link('user.list.title', ICON_USER) }}
-                        {{ _self.side_bar_link('parameters.title', 'cogs') }}
-                        {{ _self.side_bar_divider() }}
-                        {{ _self.side_bar_link('below.title', ICON_GLOBAL_MARGIN) }}
-                    </ul>
-                </div>
-            </li>
-            <li class="mb-1">
-                {{ _self.side_bar_collapse('index.menu_data'|trans, '#dashboard-collapse', true, 'database') }}
-                <div class="collapse show" data-bs-parent=".list-sidebar" id="dashboard-collapse">
-                    <ul class="btn-toggle-nav list-unstyled pb-1">
-                        {{ _self.side_bar_link('product.list.title', ICON_PRODUCT) }}
-                        {{ _self.side_bar_link('task.list.title', ICON_TASK) }}
-                        {{ _self.side_bar_link('category.list.title', ICON_CATEGORY) }}
-                        {{ _self.side_bar_link('group.list.title', ICON_GROUP) }}
-                        {{ _self.side_bar_link('calculationstate.list.title', ICON_CALCULATION_STATE) }}
-                        {{ _self.side_bar_link('globalmargin.list.title', ICON_GLOBAL_MARGIN) }}
-                        <li class="mb-1">
-                            {{ _self.side_bar_collapse('user.list.title'|trans, '#home-collapse2', false, ICON_USER) }}
-                            <div class="collapse" id="home-collapse2" data-bs-parent="#dashboard-collapse">
-                                <ul class="btn-toggle-nav list-unstyled pb-1">
-                                    {{ _self.side_bar_link('index.menu_rights_user', 'user-check') }}
-                                    {{ _self.side_bar_link('index.menu_rights_admin', 'user-shield') }}
-                                    {{ _self.side_bar_divider() }}
-                                    {{ _self.side_bar_link('parameters.title', 'cogs') }}
-                                    {{ _self.side_bar_link('log.title', ICON_LOG) }}
-                                    {{ _self.side_bar_link('clear_cache.title', ICON_DELETE) }}
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="mb-1">
-                            {{ _self.side_bar_collapse('product.list.title'|trans, '#home-collapse3', false, ICON_PRODUCT) }}
-                            <div class="collapse" id="home-collapse3" data-bs-parent="#dashboard-collapse">
-                                <ul class="btn-toggle-nav list-unstyled pb-1">
-                                    {{ _self.side_bar_link('index.menu_rights_user', 'user-check') }}
-                                    {{ _self.side_bar_link('index.menu_rights_admin', 'user-shield') }}
-                                    {{ _self.side_bar_divider() }}
-                                    {{ _self.side_bar_link('parameters.title', 'cogs') }}
-                                    {{ _self.side_bar_link('log.title', ICON_LOG) }}
-                                    {{ _self.side_bar_link('clear_cache.title', ICON_DELETE) }}
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            <li class="mb-1">
-                {{ _self.side_bar_collapse('Orders', '#orders-collapse') }}
-                <div class="collapse" data-bs-parent=".list-sidebar" id="orders-collapse">
-                    <ul class="btn-toggle-nav list-unstyled pb-1">
-                        <li><a href="#" class="rounded">New</a></li>
-                        <li><a href="#" class="rounded">Processed</a></li>
-                        <li><a href="#" class="rounded">Shipped</a></li>
-                        {{ _self.side_bar_divider() }}
-                        <li><a href="#" class="rounded">Returned</a></li>
-                    </ul>
-                </div>
-            </li>
-            <li><hr class="dropdown-divider border-top my-1"></li>
-            <li class="mb-1">
-                {{ _self.side_bar_collapse('Account', '#account-collapse') }}
-                <div class="collapse" id="account-collapse" data-bs-parent=".list-sidebar">
-                    <ul class="btn-toggle-nav list-unstyled pb-1">
-                        <li><a href="#" class="rounded">New...</a></li>
-                        <li><a href="#" class="rounded">Profile</a></li>
-                        <li><a href="#" class="rounded">Settings</a></li>
-                        {{ _self.side_bar_divider() }}
-                        <li><a href="#" class="rounded">Sign out</a></li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
-        <div class="d-flex align-items-center border-top" style="padding: .1875rem .5rem;">
-            <div class="dropdown me-auto">
-                <a href="#" class="d-flex align-items-center dropdown-toggle mt-2" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ asset('images/logo/logo-customer-32x32.png') }}" alt="user" width="32" height="32" class="me-2">Bertrand
-                </a>
-                <ul class="dropdown-menu shadow">
-                    <li><a class="dropdown-item" href="#">New project...</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
-                </ul>
-            </div>
-            {% set current = theme(app.request) %}
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center dropdown-toggle theme-switcher mt-2" title="{{ 'theme.description'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="me-1 me-lg-0"><i class="theme-icon {{ current.iconLight }}"></i></span><span class="theme-text d-lg-none">{{ current|trans }}</span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end shadow">
-                    {% for theme in themes() %}
-                        <li>
-                            <button class="dropdown-item" data-theme="{{ theme.value }}">
-                                <span class="me-1"><i class="theme-icon {{ theme.iconLight }}"></i></span><span class="theme-text">{{ theme|trans }}</span>
-                            </button>
-                        </li>
-                    {% endfor %}
-                </ul>
+<div class="row pt-5">
+    <div class="col-md-6 offset-md-2">
+        <h1>{{- icon(title_icon, title) }}</h1>
+    </div>
+    <div class="col-md-2 text-end mt-3">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Toolbar">
+            <button type="button" class="btn btn-outline-secondary btn-expand-all" title="Expand All">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-collapse-all" title="Collapse All">
+                <i class="fa-solid fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-expand-level" title="Expand to level 1">
+                <i class="fa-solid fa-expand-alt"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-refresh" title="Refresh">
+                <i class="fa-solid fa-sync-alt"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div id="tree" class="list-group mb-3" role="tree" data-url="{{ path('test_tree') }}" data-loading-text="{{ 'about.loading'|trans }}" data-badge-class="bg-secondary" data-badge-count="true"></div>
+    </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group mb-3">
+            <label class="form-label" for="country">Pays</label>
+            <select id="country" class="form-select" data-url="{{ asset('images/flags/flag_blank.png') }}">
+                {% for key, value in countries -%}
+                    <option value="{{ key }}">{{ value }}</option>
+                {%- endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group mb-3">
+            <label class="form-label required" for="currency">Monnaie</label>
+            <select id="currency" class="form-select" required="required">
+                {% for currency in currencies -%}
+                    <option value="{{ currency.code }}">{{ currency.name }}</option>
+                {%- endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group mb-3">
+            <label class="form-label" for="state_single">Status (simple)</label>
+            <select id="state_single" class="form-select">
+                {% for key, group in states -%}
+                    <optgroup label="{{ key|trans }}">
+                        {% for state in group -%}
+                            <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
+                        {% endfor %}
+                    </optgroup>
+                {%- endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group mb-3">
+            <label class="form-label" for="state">Status (multiple)</label>
+            <div class="input-group">
+                <select id="state" class="form-select" multiple="multiple" data-delete="Supprimer le statut">
+                    {% for key, group in states -%}
+                        <optgroup label="{{ key|trans }}">
+                            {% for state in group -%}
+                                <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
+                            {% endfor %}
+                        </optgroup>
+                    {%- endfor %}
+                </select>
+                <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un statut">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les statuts">
+                    <i class="fa-regular fa-trash-alt"></i>
+                </button>
             </div>
         </div>
     </div>
-    <div class="d-flex">
-        <div class="row pt-5">
-            <div class="col-md-6 offset-md-2">
-                <h1>{{- icon(title_icon, title) }}</h1>
-            </div>
-            <div class="col-md-2 text-end mt-3">
-                <div class="btn-group btn-group-sm" role="group" aria-label="Toolbar">
-                    <button type="button" class="btn btn-outline-secondary btn-expand-all" title="Expand All">
-                        <i class="fa-solid fa-plus"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary btn-collapse-all" title="Collapse All">
-                        <i class="fa-solid fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary btn-expand-level" title="Expand to level 1">
-                        <i class="fa-solid fa-expand-alt"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary btn-refresh" title="Refresh">
-                        <i class="fa-solid fa-sync-alt"></i>
-                    </button>
-                </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group mb-3">
+            <label class="form-label" for="category">Catégorie</label>
+            <div class="input-group">
+                <span class="input-group-text">@</span>
+                <select id="category" class="form-select" multiple="multiple" data-delete="Supprimer la catégorie">
+                    {% for key, group in categories -%}
+                        <optgroup label="{{ key }}">
+                            {% for category in group -%}
+                                <option value="{{ category.id }}">{{ category.code }}</option>
+                            {%- endfor %}
+                        </optgroup>
+                    {%- endfor %}
+                </select>
+                <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter une catégorie">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer toutes les catégories">
+                    <i class="fa-regular fa-trash-alt"></i>
+                </button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div id="tree" class="list-group mb-3" role="tree" data-url="{{ path('test_tree') }}" data-loading-text="{{ 'about.loading'|trans }}" data-badge-class="bg-secondary" data-badge-count="true"></div>
-            </div>
-            <div class="col-md-8 offset-md-2 my-2">
-                <div class="form-group mb-3">
-                    <label class="form-label" for="country">Pays</label>
-                    <select id="country" class="form-select" data-url="{{ asset('images/flags/flag_blank.png') }}">
-                        {% for key, value in countries -%}
-                            <option value="{{ key }}">{{ value }}</option>
-                        {%- endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-8 offset-md-2 my-2">
-                <div class="form-group mb-3">
-                    <label class="form-label required" for="currency">Monnaie</label>
-                    <select id="currency" class="form-select" required="required">
-                        {% for currency in currencies -%}
-                            <option value="{{ currency.code }}">{{ currency.name }}</option>
-                        {%- endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-8 offset-md-2 my-2">
-                <div class="form-group mb-3">
-                    <label class="form-label" for="state_single">Status (simple)</label>
-                    <select id="state_single" class="form-select">
-                        {% for key, group in states -%}
-                            <optgroup label="{{ key|trans }}">
-                                {% for state in group -%}
-                                    <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
-                                {% endfor %}
-                            </optgroup>
-                        {%- endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-8 offset-md-2 my-2">
-                <div class="form-group mb-3">
-                    <label class="form-label" for="state">Status (multiple)</label>
-                    <div class="input-group">
-                        <select id="state" class="form-select" multiple="multiple" data-delete="Supprimer le statut">
-                            {% for key, group in states -%}
-                                <optgroup label="{{ key|trans }}">
-                                    {% for state in group -%}
-                                        <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
-                                    {% endfor %}
-                                </optgroup>
-                            {%- endfor %}
-                        </select>
-                        <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un statut">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
-                        <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les statuts">
-                            <i class="fa-regular fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8 offset-md-2 my-2">
-                <div class="form-group mb-3">
-                    <label class="form-label" for="category">Catégorie</label>
-                    <div class="input-group">
-                        <span class="input-group-text">@</span>
-                        <select id="category" class="form-select" multiple="multiple" data-delete="Supprimer la catégorie">
-                            {% for key, group in categories -%}
-                                <optgroup label="{{ key }}">
-                                    {% for category in group -%}
-                                        <option value="{{ category.id }}">{{ category.code }}</option>
-                                    {%- endfor %}
-                                </optgroup>
-                            {%- endfor %}
-                        </select>
-                        <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter une catégorie">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
-                        <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer toutes les catégories">
-                            <i class="fa-regular fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8 offset-md-2 my-2">
-                <div class="form-group mb-3">
-                    <label class="form-label" for="product">Article</label>
-                    <select id="product" class="form-select">
-                        {% for key, group in products -%}
-                            <optgroup label="{{ key }}">
-                                {% for product in group -%}
-                                    <option data-price="{{ product.price }}" data-unit="{{ product.unit }}" value="{{ product.id }}">{{ product.description }}</option>
-                                {% endfor %}
-                            </optgroup>/
+    </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <div class="form-group mb-3">
+            <label class="form-label" for="product">Article</label>
+            <select id="product" class="form-select">
+                {% for key, group in products -%}
+                    <optgroup label="{{ key }}">
+                        {% for product in group -%}
+                            <option data-price="{{ product.price }}" data-unit="{{ product.unit }}" value="{{ product.id }}">{{ product.description }}</option>
                         {% endfor %}
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-8 offset-md-2 my-2">
-                <span class="form-label cursor-default">Position</span>
-                <div class="dropdown dropdown-position">
-                    {% set current = user_service.messagePosition %}
-                    {% set positions = enum('App\\Enums\\MessagePosition') %}
-                    <button type="button" class="btn-position form-control d-flex align-items-center dropdown-toggle" data-value="{{ current.value }}" data-bs-toggle="dropdown" aria-expanded="false" style="width: 14rem;">
-                <span class="position-icon me-2">
-                     <i class="{{ current.icon }}" style="--fa-rotate-angle: {{ current.angle }}deg;"></i>
-                </span>
-                        <span class="position-text flex-fill text-start">
-                    {{- current|trans -}}
-                </span>
-                    </button>
-                    <table class="dropdown-menu w-auto table table-borderless mb-0 px-2">
-                        <tr>
-                            {% for position in positions.sorted %}
-                            <td>
-                                {% set id = 'btn-check-dropdown-' ~ position.value %}
-                                <div class="form-check ps-0">
-                                    <input type="radio" class="btn-check" name="btn-check" id="{{ id }}" value="{{ position.value }}" autocomplete="off"{% if current == position %} checked="checked"{% endif %}>
-                                    <label class="btn btn-outline-secondary" for="{{ id }}" style="width: 3rem;" title="{{- position|trans -}}">
-                                        <i class="{{ position.icon }}" style="--fa-rotate-angle: {{ position.angle }}deg;"></i>
-                                    </label>
-                                </div>
-                            </td>
-                            {% if loop.index % 3 == 0 %}</tr><tr>{% endif %}
-                            {% endfor %}
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <div class="col-md-8 offset-md-2 my-2">
-                <button type="button" class="btn btn-form btn-primary mb-3 bottom-border-gradient bottom-border-gradient-100" data-bs-toggle="modal" data-bs-target="#dragModal" style="width: 300px;">Launch modal</button>
-                <div class="form-group mb-3">
-                    <label class="form-label" for="input-text">Border</label>
-                    <input type="text" id="input-text" class="form-control bottom-border-gradient bottom-border-gradient-100">
-                </div>
-                <div class="form-group mb-3">
-                    <label class="form-label" for="input-select">Border</label>
-                    <select id="input-select" class="form-control bottom-border-gradient bottom-border-gradient-100">
-                        <option>Test 1</option>
-                        <option>Test 2</option>
-                    </select>
-                </div>
-            </div>
+                    </optgroup>/
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <span class="form-label cursor-default">Position</span>
+        <div class="dropdown dropdown-position">
+            {% set current = user_service.messagePosition %}
+            {% set positions = enum('App\\Enums\\MessagePosition') %}
+            <button type="button" class="btn-position form-control d-flex align-items-center dropdown-toggle" data-value="{{ current.value }}" data-bs-toggle="dropdown" aria-expanded="false" style="width: 14rem;">
+        <span class="position-icon me-2">
+             <i class="{{ current.icon }}" style="--fa-rotate-angle: {{ current.angle }}deg;"></i>
+        </span>
+                <span class="position-text flex-fill text-start">
+            {{- current|trans -}}
+        </span>
+            </button>
+            <table class="dropdown-menu w-auto table table-borderless mb-0 px-2">
+                <tr>
+                    {% for position in positions.sorted %}
+                    <td>
+                        {% set id = 'btn-check-dropdown-' ~ position.value %}
+                        <div class="form-check ps-0">
+                            <input type="radio" class="btn-check" name="btn-check" id="{{ id }}" value="{{ position.value }}" autocomplete="off"{% if current == position %} checked="checked"{% endif %}>
+                            <label class="btn btn-outline-secondary" for="{{ id }}" style="width: 3rem;" title="{{- position|trans -}}">
+                                <i class="{{ position.icon }}" style="--fa-rotate-angle: {{ position.angle }}deg;"></i>
+                            </label>
+                        </div>
+                    </td>
+                    {% if loop.index % 3 == 0 %}</tr><tr>{% endif %}
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-8 offset-md-2 my-2">
+        <button type="button" class="btn btn-form btn-primary mb-3 bottom-border-gradient bottom-border-gradient-100" data-bs-toggle="modal" data-bs-target="#dragModal" style="width: 300px;">Launch modal</button>
+        <div class="form-group mb-3">
+            <label class="form-label" for="input-text">Border</label>
+            <input type="text" id="input-text" class="form-control bottom-border-gradient bottom-border-gradient-100">
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" for="input-select">Border</label>
+            <select id="input-select" class="form-control bottom-border-gradient bottom-border-gradient-100">
+                <option>Test 1</option>
+                <option>Test 2</option>
+            </select>
         </div>
     </div>
 </div>
@@ -324,7 +209,6 @@
 {{ asset_css('js/vendor/currency-flags/currency-flags.css') }}
 {{ asset_css('css/select2.css') }}
 {{ asset_css('css/flags.css') }}
-{{ asset_css('css/list-sidebar.css') }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts -%}

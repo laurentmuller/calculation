@@ -1,12 +1,14 @@
 {# imports #}
 {% from 'macros/_icons.html.twig' import icon, dropdownSeparator %}
 {% from 'macros/_attributes.html.twig' import attributes %}
+{# attributes #}
 {%- set sidebar_attributes = {
     'url': url('ajax_save_navigation'),
     'show-menu': 'index.menu_show'|trans,
     'hide-menu': 'index.menu_hide'|trans
 } -%}
-<div id="sidebar" data-bs-theme="dark" class="d-flex flex-nowrap overflow-x-hidden align-items-start navbar navbar-vertical bg-dark border-end d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}>
+{# sidebar #}
+<div id="sidebar" data-bs-theme="dark" class="navbar navbar-vertical bg-dark border-end d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}>
     {# logo
     <div class="d-flex position-relative mb-1">
         <div class="flex-shrink-0">
@@ -19,10 +21,12 @@
         </div>
     </div>
     #}
+    {# toggle sidebar #}
     <button class="btn btn-outline-secondary rounded-circle py-0 px-2 hide-sidebar" title="{{ 'index.sidebar_hide'|trans }}">
         <i class="fa-solid fa-angle-left"></i>
     </button>
     {% if not status_bar %}
+        {# about image and link #}
         <div class="d-flex position-relative mb-2" style="margin-right: 28px">
             <div class="flex-shrink-0">
                 <img class="rounded-1" src="{{ asset_icon(57) }}" width="57" height="57" alt="{{ app_name }}">
@@ -35,12 +39,11 @@
         </div>
         {{ dropdownSeparator(false, 'my-1 w-100') }}
     {% endif %}
-
     {# home page #}
     <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
         {{- icon('home', 'index.title') -}}
     </a>
-    {# pages #}
+    {# menus #}
     <ul class="navbar-nav mb-auto w-100">
         {% if is_granted_data %}
             {{ include('navigation_vertical/navigation_data.html.twig') }}
@@ -63,5 +66,4 @@
         {{ include('navigation_vertical/navigation_user.html.twig') }}
         {{ include('navigation_vertical/navigation_theme.html.twig') }}
     </div>
-
 </div>

@@ -117,8 +117,9 @@ class AjaxController extends AbstractController
             /** @psalm-var array<string, string> $menus */
             $menus = $request->request->all();
             $menus = \array_filter($menus, static fn (string $key): bool => \str_starts_with($key, 'menu_'), \ARRAY_FILTER_USE_KEY);
-            foreach ($menus as $key => $value) {
-                $session->set($key, \filter_var($value, \FILTER_VALIDATE_BOOLEAN));
+            foreach ($menus as $key => &$menu) {
+                $menu = \filter_var($menu, \FILTER_VALIDATE_BOOLEAN);
+                $session->set($key, $menu);
             }
             $response = $this->json(true);
             $path = $this->getCookiePath();

@@ -31,8 +31,8 @@
          * Destructor.
          */
         destroy() {
-            this.$element.off('hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
-            this.$element.off('shown.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
+            this.$element.off('shown.bs.collapse hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
+            this.$element.off('click', '.nav-link-toggle', this.toggleClickProxy);
             this.$showSidebarButton.off('click', this.showSidebarProxy);
             this.$hideSidebarButton.off('click', this.hideSidebarProxy);
             $(window).off('resize', this.resizeProxy);
@@ -50,10 +50,10 @@
         _init() {
             // get elements
             const options = this.options;
-            this.$showSidebarButton = $(options.showSidebarButton);
-            this.$hideSidebarButton = $(options.hideSidebarButton);
-            this.$navbarHorizontal = $(options.navbarHorizontal);
-            this.$pageContent = $(options.pageContent);
+            this.$navbarHorizontal = $(options.horizontalNavbarSelector);
+            this.$showSidebarButton = $(options.showSidebarSelector);
+            this.$hideSidebarButton = $(options.hideSidebarSelector);
+            this.$pageContent = $(options.pageContentSelector);
 
             // update collapse menus
             this._updateSiblingMenus();
@@ -71,22 +71,21 @@
             this.oldState = this._getState();
 
             // create proxies
-            this.toggleCollapseProxy = () => this._toggleCollapse();
+            this.toggleCollapseProxy = () => this._updateToggleButtons();
+            this.toggleClickProxy = (e) => this._toggleClick(e);
             this.showSidebarProxy = (e) => this._showSidebar(e);
             this.hideSidebarProxy = (e) => this._hideSidebar(e);
             this.resizeProxy = (e) => this._resize(e);
 
             // bind events
-            this.$element.on('hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
-            this.$element.on('shown.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
+            this.$element.on('shown.bs.collapse hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
+            this.$element.on('click', '.nav-link-toggle', this.toggleClickProxy);
             this.$showSidebarButton.on('click', this.showSidebarProxy);
             this.$hideSidebarButton.on('click', this.hideSidebarProxy);
             $(window).on('resize', this.resizeProxy);
 
             // hide sidebar if too small
-            if (this._isClientTooSmall() && !this._isSideBarHidden()) {
-                $(window).trigger('resize');
-            }
+            $(window).trigger('resize');
         }
 
         /**
@@ -94,32 +93,38 @@
          * @private
          */
         _initTimeout() {
+            // timeout?
             const that = this;
-            const timeout = this.options.timeout;
+            const timeout = that.options.timeout;
             if (timeout <= 0) {
                 return;
             }
-            const removeTimer = () => that.$element.removeTimer();
+
+            // show button
+            const showRemoveTimer = () => that.$showSidebarButton.removeTimer();
             that.$showSidebarButton.on('mouseenter', function (e) {
                 if (that._isSideBarHidden()) {
-                    that.$element.createTimer(function () {
-                        removeTimer();
+                    that.$showSidebarButton.createTimer(function () {
+                        showRemoveTimer();
                         if (that._isSideBarHidden()) {
                             that._showSidebar(e);
                         }
                     }, timeout);
                 }
-            }).on('mouseleave', removeTimer);
+            }).on('mouseleave', showRemoveTimer);
+
+            // hide button
+            const hideRemoveTimer = () => that.$hideSidebarButton.removeTimer();
             that.$hideSidebarButton.on('mouseenter', function (e) {
                 if (!that._isSideBarHidden()) {
-                    that.$element.createTimer(function () {
-                        removeTimer();
+                    that.$hideSidebarButton.createTimer(function () {
+                        hideRemoveTimer();
                         if (!that._isSideBarHidden()) {
                             that._hideSidebar(e);
                         }
                     }, timeout);
                 }
-            }).on('mouseleave', removeTimer);
+            }).on('mouseleave', hideRemoveTimer);
         }
 
         /**
@@ -129,8 +134,7 @@
          * @private
          */
         _isClientTooSmall() {
-            const width = document.documentElement.clientWidth;
-            return width < this.options.minWidth;
+            return document.documentElement.clientWidth < this.options.minWidth;
         }
 
         /**
@@ -195,12 +199,18 @@
         }
 
         /**
-         * Handle the collapse show and hide events.
+         * Handle the toggle button click events.
+         *
+         * @param {Event} [e] - the event.
          * @private
          */
-        _toggleCollapse() {
-            this._updateToggleButtons();
-            this._saveState();
+        _toggleClick(e) {
+            const that = this;
+            const $this = $(e.currentTarget);
+            $this.createTimer(function () {
+                $this.removeTimer();
+                that._saveState();
+            }, 750);
         }
 
         /**
@@ -317,6 +327,7 @@
             if (oldState && JSON.stringify(oldState) === JSON.stringify(newState)) {
                 return;
             }
+            // window.console.log('saveState');
             this.oldState = newState;
             $.ajaxSetup({global: false});
             $.post(this.options.url, newState)
@@ -331,13 +342,13 @@
         // url to save menu states
         url: null,
         // show sidebar button selector
-        showSidebarButton: '.show-sidebar',
+        showSidebarSelector: '.show-sidebar',
         // hide sidebar button selector
-        hideSidebarButton: '.hide-sidebar',
+        hideSidebarSelector: '.hide-sidebar',
         // horizontal navigation bar selector
-        navbarHorizontal: '.navbar-horizontal',
+        horizontalNavbarSelector: '.navbar-horizontal',
         // page content selector
-        pageContent: '.page-content',
+        pageContentSelector: '.page-content',
         // the timeout to display/hide sidebar automatically (0 = disabled)
         timeout: 1500,
         // the duration to show / hide menus
@@ -345,10 +356,10 @@
         // the minimum width to hide sidebar
         minWidth: 1200,
         // texts
-        showSidebar: 'Show Sidebar',
-        hideSidebar: 'Hide Sidebar',
-        showMenu: 'Expand Menu',
-        hideMenu: 'Collapse Menu',
+        showSidebar: 'Show sidebar',
+        hideSidebar: 'Hide sidebar',
+        showMenu: 'Expand menu',
+        hideMenu: 'Collapse menu',
         // the path name to search for in query parameters to highlight URL
         pathname: null,
         // collapse siblings menus

@@ -93,7 +93,10 @@ trait CookieTrait
     {
         if ($value instanceof \BackedEnum) {
             $value = $value->value;
+        } elseif (\is_bool($value)) {
+            $value = (int) $value;
         }
+
         $name = $this->getCookieName($key, $prefix);
         $expire = (new \DateTime())->modify($modify);
         $cookie = new Cookie(name: $name, value: (string) $value, expire: $expire, path: $path, httpOnly: $httpOnly);
@@ -105,10 +108,10 @@ trait CookieTrait
      */
     protected function updateCookie(Response $response, string $key, mixed $value, string $prefix = '', string $path = '/', string $modify = '+1 year', bool $httpOnly = true): void
     {
-        if (null === $value || '' === (string) $value) {
-            $this->clearCookie($response, $key, $prefix, $path, $httpOnly);
-        } else {
+        if ($value instanceof \BackedEnum || \is_bool($value) || '' !== (string) $value) {
             $this->setCookie($response, $key, $value, $prefix, $path, $modify, $httpOnly);
+        } else {
+            $this->clearCookie($response, $key, $prefix, $path, $httpOnly);
         }
     }
 }

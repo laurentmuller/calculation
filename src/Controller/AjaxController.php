@@ -16,6 +16,7 @@ use App\Enums\TableView;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
 use App\Model\PasswordQuery;
+use App\Model\SessionQuery;
 use App\Model\TaskComputeQuery;
 use App\Service\FakerService;
 use App\Service\PasswordService;
@@ -39,6 +40,10 @@ class AjaxController extends AbstractController
 {
     use CookieTrait;
     use MathTrait;
+
+    private const KEY_SIDE_BAR = 'menu_sidebar_hide';
+
+    private const MENU_PREFIX = 'menu_';
 
     /**
      * Compute a task.
@@ -87,16 +92,22 @@ class AjaxController extends AbstractController
         ]);
     }
 
+    /**
+     * Render the page selection dialog for data table.
+     */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/dialog/page', name: 'ajax_dialog_page', methods: Request::METHOD_GET)]
-    public function renderPageDialog(): JsonResponse
+    public function renderDialogPage(): JsonResponse
     {
         return $this->renderDialog('dialog/dialog_table_page.html.twig');
     }
 
+    /**
+     * Render the sort dialog for data table.
+     */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/dialog/page', name: 'ajax_dialog_sort', methods: Request::METHOD_POST)]
-    public function renderSortDialog(Request $request): JsonResponse
+    public function renderDialogSort(Request $request): JsonResponse
     {
         $parameters = [
             'columns' => $request->toArray(),
@@ -112,44 +123,42 @@ class AjaxController extends AbstractController
     #[Route(path: '/navigation', name: 'ajax_save_navigation')]
     public function saveNavigationState(Request $request): JsonResponse
     {
-        if ($request->hasSession()) {
-            $session = $request->getSession();
-            /** @psalm-var array<string, string> $menus */
-            $menus = $request->request->all();
-            $menus = \array_filter($menus, static fn (string $key): bool => \str_starts_with($key, 'menu_'), \ARRAY_FILTER_USE_KEY);
-            foreach ($menus as $key => &$menu) {
-                $menu = \filter_var($menu, \FILTER_VALIDATE_BOOLEAN);
-                $session->set($key, $menu);
-            }
-            $response = $this->json(true);
-            $path = $this->getCookiePath();
-            $isHidden = $menus['menu_sidebar_hide'] ?? true;
-            $this->updateCookie($response, 'SIDEBAR_HIDE', $isHidden ? 1 : 0, '', $path);
-
-            return $response;
+        if (!$request->hasSession()) {
+            return $this->json(false);
         }
 
-        return $this->json(false);
+        $input = $request->request;
+        $session = $request->getSession();
+        /** @psalm-var string $key */
+        foreach ($input->keys() as $key) {
+            if (self::KEY_SIDE_BAR === $key || !\str_starts_with($key, self::MENU_PREFIX)) {
+                continue;
+            }
+            $session->set($key, $input->getBoolean($key));
+        }
+
+        $response = $this->json(true);
+        $path = $this->getCookiePath();
+        $sidebarHide = $input->getBoolean(self::KEY_SIDE_BAR, true);
+        $this->updateCookie($response, 'SIDEBAR_HIDE', $sidebarHide, '', $path);
+
+        return $response;
     }
 
     /**
      * Sets a session attribute.
-     *
-     * The request must contains 'name' and 'value' parameters.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/session/set', name: 'ajax_session_set', methods: Request::METHOD_POST)]
-    public function saveSession(Request $request): JsonResponse
+    public function saveSession(#[MapRequestPayload] SessionQuery $query): JsonResponse
     {
-        $name = $request->request->getString('name');
-        $value = $request->request->getString('value');
-        if ('' !== $name && '' !== $value) {
-            $this->setSessionValue($name, \json_decode($value));
+        try {
+            $this->setSessionValue($query->name, $query->decode());
 
             return $this->json(true);
+        } catch (\JsonException $e) {
+            return $this->jsonException($e);
         }
-
-        return $this->json(false);
     }
 
     /**
@@ -159,10 +168,10 @@ class AjaxController extends AbstractController
     #[Route(path: '/save', name: 'ajax_save_table', methods: Request::METHOD_POST)]
     public function saveTable(Request $request): JsonResponse
     {
-        /** @psalm-var TableView $view */
         $view = $request->getPayload()->getEnum(TableInterface::PARAM_VIEW, TableView::class, TableView::TABLE);
         $response = $this->json(true);
-        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view->value, '', $this->getCookiePath());
+        $path = $this->getCookiePath();
+        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view, '', $path);
 
         return $response;
     }

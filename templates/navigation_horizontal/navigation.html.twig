@@ -14,7 +14,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbar-horizontal">
-            <ul class="navbar-nav me-auto">
+            <ul class="navbar-nav align-items-center me-auto">
                 {% if is_granted_calculation -%}
                     {{ navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
                 {% endif %}
@@ -31,7 +31,7 @@
                     {{ include('navigation_horizontal/navigation_admin.html.twig') }}
                 {% endif %}
             </ul>
-            <ul class="navbar-nav">
+            <ul class="navbar-nav align-items-center">
                 {% if is_granted_data and show_navigation_search ?? false -%}
                     {{ include('navigation_horizontal/navigation_search.html.twig') }}
                 {% endif %}

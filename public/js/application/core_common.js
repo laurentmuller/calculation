@@ -110,6 +110,13 @@
     }
 
     /**
+     * Initialize theme menu tooltips.
+     */
+    function initThemeTooltip() {
+        $('[data-theme][data-bs-toggle="tooltip"]').tooltip();
+    }
+
+    /**
      * Handle back to top button.
      */
     function initBackToTop() {
@@ -203,6 +210,7 @@
      * Must be called after content loaded.
      */
     window.addEventListener("DOMContentLoaded", function () {
+        initThemeTooltip();
         showFlashBag();
     });
 }(jQuery));

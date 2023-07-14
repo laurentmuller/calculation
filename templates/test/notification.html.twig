@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import homepage %}
 {# macros #}
 {% macro button(type, icon) -%}
-<button type="button" data-type="{{ type }}" class="btn btn-notify btn-{{ type }}" style="min-width: 105px;">
+<button type="button" data-type="{{ type }}" class="btn btn-notify btn-{{ type }}" style="min-width: 109px;">
     {{- ('background.' ~ type)|trans -}}
 </button>
 {%- endmacro %}
@@ -38,7 +38,7 @@
 {# body #}
 {% block card_body %}
 <span class="form-label horizontal-line">Type de message</span>
-<div class="d-flex flex-wrap gap-2">
+<div class="d-flex flex-wrap justify-content-center gap-2">
     {{ _self.button('success') }}
     {{ _self.button('warning') }}
     {{ _self.button('danger') }}
@@ -74,7 +74,7 @@
         </select>
     </div>
     <div class="col-md-3 mb-3">
-        <label class="form-label" for="maxNbChars">Nombre de charactères</label>
+        <label class="form-label" for="maxNbChars">Nbre de caractères</label>
         <select id="maxNbChars" name="maxNbChars" data-default="{{ 150 }}" class="form-select">
             {% for i in range(50, 500, 50) %}
                 <option value="{{ i }}"{% if i == 150 %} selected="selected"{% endif %}>{{ i }}</option>

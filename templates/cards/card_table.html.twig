@@ -174,9 +174,9 @@
 {# body #}
 {% block card_body -%}
 {# toolbar #}
-<div class="row my-2 d-print-none">
+<div class="d-flex flex-wrap gap-1 align-items-center my-2 d-print-none">
     {# search #}
-    <div class="col-auto col-search align-self-center me-auto">
+    <div class="col-search me-auto">
     {% if allow_search %}
         <div class="input-group input-group-sm input-group-search search">
             <input class="form-control form-control-search" id="control-search" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" autocomplete="off" type="text">
@@ -188,7 +188,7 @@
     {% endif %}
     </div>
     {# toolbar #}
-    <div class="col-auto col-toolbar align-self-center">
+    <div class="col-toolbar">
         <div class="btn-group btn-group-sm btn-group-toolbar" role="group">
             {# page size #}
             {% block page_list %}

@@ -362,16 +362,26 @@
         },
 
         /**
-         * Creates the div title.
+         * Return if the title must be created
+         * @param {Object} options - The toast options.
+         * @return {boolean}
+         * @private
+         */
+        _isTitle: function (options) {
+            return options.title || options.icon !== false || options.closeButton || options.displayClose || options.subtitle && options.displaySubtitle;
+        },
+
+        /**
+         * Creates the toast header.
          *
          * @param {Object} options - The toast options.
          * @returns {jQuery|undefined} The div title or null if no title.
          * @private
          */
-        _createTitle: function (options) {
-            if (options.title || options.icon !== false || options.closeButton || options.displayClose || options.subtitle && options.displaySubtitle) {
+        _createHeader: function (options) {
+            if (this._isTitle(options)) {
                 // header
-                let clazz = 'toast-header bg-' + options.type;
+                let clazz = 'toast-header column-gap-2 bg-' + options.type;
                 switch (options.type) {
                     case this.NotificationTypes.INFO:
                     case this.NotificationTypes.WARNING:
@@ -386,7 +396,7 @@
                 });
 
                 // icon
-                const $icon = this._createIcon(options);
+                const $icon = this._createHeaderIcon(options);
                 if ($icon) {
                     $div.append($icon);
                 }
@@ -399,13 +409,13 @@
                 $div.append($title);
 
                 // sub-title
-                const $subtitle = this._createSubtitle(options);
+                const $subtitle = this._createHeaderSubtitle(options);
                 if ($subtitle) {
                     $div.append($subtitle);
                 }
 
                 // close button
-                const $close = this._createCloseButton(options);
+                const $close = this._createHeaderCloseButton(options);
                 if ($close) {
                     $div.append($close);
                 }
@@ -416,21 +426,20 @@
         },
 
         /**
-         * Creates the icon title.
+         * Creates the header icon.
          *
          * @param {Object} options - The options.
          * @returns {jQuery|undefined} The icon or null if no icon.
          * @private
          */
-        _createIcon: function (options) {
+        _createHeaderIcon: function (options) {
             if (options.icon === false) {
                 return null;
             } else if ($.isString(options.icon)) {
                 return $(options.icon);
             }
 
-
-            let clazz = 'me-2 fas fa-lg fa-';// mt-1
+            let clazz = 'fas fa-lg fa-';
             switch (options.type) {
                 case this.NotificationTypes.INFO:
                     clazz += 'info-circle';
@@ -451,7 +460,7 @@
 
             // icon only
             if (!options.title && !options.displayClose && !options.displaySubtitle) {
-               clazz += ' py-2';
+                clazz += ' py-2';
             }
 
             // create
@@ -462,16 +471,15 @@
         },
 
         /**
-         * Creates the subtitle.
+         * Creates the header subtitle.
          *
          * @param {Object} options - The toast options.
          * @returns {jQuery|undefined} The subtitle or null if no subtitle defined.
          * @private
          */
-        _createSubtitle: function (options) {
+        _createHeaderSubtitle: function (options) {
             if (options.displaySubtitle && options.subtitle) {
                 return $('<small/>', {
-                    //'class': 'ms-2',
                     'html': options.subtitle
                 });
             }
@@ -479,19 +487,19 @@
         },
 
         /**
-         * Creates the close button.
+         * Creates the header close button.
          *
          * @param {Object} options - The toast options.
          * @returns {jQuery|undefined} The close button or null if no button.
          * @private
          */
-        _createCloseButton: function (options) {
+        _createHeaderCloseButton: function (options) {
             if (options.displayClose) {
                 const title = options.closeTitle || 'Close';
                 return $('<button/>', {
                     'data-bs-dismiss': 'toast',
                     'aria-label': title,
-                    'class': 'btn-close',
+                    'class': 'btn-close ms-0',
                     'type': 'button',
                     'title': title
                 });
@@ -500,13 +508,13 @@
         },
 
         /**
-         * Creates the div message.
+         * Creates the toast message.
          *
          * @param {Object} options - The toast options.
          * @returns {jQuery} The div message.
          * @private
          */
-        _createMessage: function (options) {
+        _createBodyMessage: function (options) {
             const $body = $('<div/>', {
                 'class': 'toast-body',
             });
@@ -524,8 +532,8 @@
          * @private
          */
         _createToast: function (options) {
-            const $title = this._createTitle(options);
-            const $message = this._createMessage(options);
+            const $header = this._createHeader(options);
+            const $message = this._createBodyMessage(options);
             const $progress = this._createProgressBar(options);
             const $toast = $('<div/>', {
                 'role': 'alert',
@@ -534,13 +542,11 @@
                 'class': 'toast border-' + options.type,
                 'css': {
                     'max-width': options.containerWidth,
-                    'flex-basis': options.containerWidth,
-                    'border-style': 'solid',
-                    'border-width': '1px'
+                    'flex-basis': options.containerWidth
                 }
             });
-            if ($title) {
-                $toast.append($title);
+            if ($header) {
+                $toast.append($header);
             }
             $toast.append($message);
             if ($progress) {
@@ -550,7 +556,7 @@
         },
 
         /**
-         * Creates the progress bar.
+         * Creates the bottom progress bar.
          *
          * @param {Object} options - The toast options.
          * @returns {jQuery|undefined} The progress bar or null if no progress.
@@ -561,14 +567,14 @@
                 return null;
             }
             const $bar = $('<div/>', {
-                'class': 'progress-bar bg-' + options.type,
+                'class': 'progress-bar overflow-hidden bg-' + options.type,
                 'role': 'progressbar',
                 'aria-valuenow': '0',
                 'aria-valuemin': '0',
                 'aria-valuemax': '100',
             });
             const $progress = $('<div/>', {
-                'class': 'progress bg-transparent',
+                'class': 'progress bg-transparent rounded-0 rounded-bottom',
                 'css': {
                     'height': options.progress + 'px'
                 },
@@ -588,17 +594,17 @@
          */
         _showToast: function ($toast, options) {
             const that = this;
-            if (options.progress) {
-                $toast.on('show.bs.toast', function () {
-                    const $progress = $toast.find('.progress-bar');
-                    if ($progress.length) {
-                        const timeout = options.timeout;
-                        const endTime = new Date().getTime() + timeout;
-                        $toast.createInterval(that._updateProgress, 100, $progress, endTime, timeout);
-                    }
-                }).on('hide.bs.toast', function () {
-                    $toast.removeInterval();
-                });
+            if (options.progress && options.timeout > 100) {
+                const $progress = $toast.find('.progress-bar');
+                if ($progress.length) {
+                    $toast.on('show.bs.toast', function () {
+                        $progress.data('percent', 0);
+                        const timeout = Math.max(options.timeout / 100, 10);
+                        $toast.createInterval(that._updateProgressBar, timeout, $progress);
+                    }).on('hide.bs.toast', function () {
+                        $toast.removeInterval();
+                    });
+                }
             }
             $toast.toast({
                 delay: options.timeout,
@@ -617,17 +623,15 @@
          * Update the progress bar.
          *
          * @param {jQuery} $progress - The progress bar to update.
-         * @param {Number} endTime - The end time.
-         * @param {Number} timeout - The timeout in milliseconds.
          * @private
          */
-        _updateProgress: function ($progress, endTime, timeout) {
-            const time = new Date().getTime();
-            const delta = (endTime - time) / timeout;
-            const percent = Math.min(100 - delta * 100, 100);
-            $progress.css('width', percent + '%').attr('aria-valuenow', percent);
-            if (percent >= 100) {
+        _updateProgressBar: function ($progress) {
+            const percent = Number.parseInt($progress.data('percent'), 10) + 1;
+            if (percent > 100) {
                 $progress.parents('.toast').removeInterval();
+            } else {
+                $progress.css('width', percent + '%').attr('aria-valuenow', percent);
+                $progress.data('percent', percent);
             }
         },
 

@@ -1,15 +1,8 @@
+{% from 'macros/_themes_list.html.twig' import entries %}
 {% set current = theme(app.request) %}
 <div class="dropup">
     <button href="#" class="nav-link d-flex align-items-center dropdown-toggle rowlink-skip theme-switcher" title="{{ 'theme.description'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="me-1 me-lg-0"><i class="theme-icon {{ current.iconLight }}"></i></span><span class="theme-text d-lg-none">{{ current|trans }}</span>
     </button>
-    <ul class="dropdown-menu dropdown-menu-end shadow">
-    {% for theme in themes() %}
-        <li>
-            <button class="dropdown-item" data-theme="{{ theme.value }}">
-                <span class="me-1"><i class="theme-icon {{ theme.iconLight }}"></i></span><span class="theme-text">{{ theme|trans }}</span>
-            </button>
-        </li>
-    {% endfor %}
-    </ul>
+    {{ entries('dropdown-menu dropdown-menu-end shadow', 'right') }}
 </div>

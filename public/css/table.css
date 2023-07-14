@@ -147,15 +147,24 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body
 }
 
 /**
- * pagination (float)
+ * pagination
  */
-.fixed-table-pagination .float-left {
-    float: left !important;
+.fixed-table-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    align-items: center;
 }
 
-.fixed-table-pagination .float-right {
-    float: right !important;
+.fixed-table-pagination .float-left {
+    margin-right: auto;
+    line-height: initial;
 }
+
+/*
+.fixed-table-pagination .float-right {
+}
+*/
 
 /**
  * search control

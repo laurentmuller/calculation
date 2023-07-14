@@ -1,0 +1,12 @@
+{# output theme entries #}
+{% macro entries(list_class, placement) %}
+<ul class="{{ list_class }}">
+    {% for theme in themes() %}
+    <li>
+        <button class="dropdown-item" data-theme="{{ theme.value }}" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="{{ placement }}" data-bs-trigger="hover" data-bs-custom-class="tooltip-secondary tooltip-left tooltip-xl" data-bs-title="{{ theme.help|trans }}">
+            <span class="me-1"><i class="theme-icon {{ theme.iconLight }}"></i></span><span class="theme-text">{{ theme|trans }}</span>
+        </button>
+    </li>
+    {% endfor %}
+</ul>
+{% endmacro %}

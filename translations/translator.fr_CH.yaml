@@ -9,7 +9,7 @@ Bing:
     400018: Un spécificateur de script source ("fromScript") est manquant ou invalide.
     400019: L'une des langues spécifiées n'est pas prise en charge.
     400020: L'un des éléments du tableau de texte saisi n'est pas valide.
-    400021: Le paramètre de version de l'API est manquant ou invalide.
+    400021: Le paramètre de version de l'interface de programmation d'application (API) est manquant ou invalide.
     400023: Une des paires de langues spécifiées n'est pas valide.
     400035: La langue source (champ "From") n'est pas valide.
     400036: La langue cible (champ "To") est manquante ou invalide.
@@ -48,6 +48,6 @@ Google:
     429: Le quota de ressources est dépassé ou la limite du débit est atteinte.
     499: La demande a été annulée par le client.
     500: Une erreur interne au serveur a été générée.
-    501: Méthode d'API non mise en oeuvre par le serveur.
+    501: Méthode de l'interface de programmation d'application (API) non mise en oeuvre par le serveur.
     503: Le service est indisponible (serveur inactif).
     504: Le délai de la requête est dépassé. Cela se produira uniquement si l'appelant définit un délai plus court que le délai par défaut de la méthode.

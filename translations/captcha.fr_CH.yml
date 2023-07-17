@@ -9,5 +9,5 @@ third: troisième
 fourth: quatrième
 fifth: cinquième
 last: dernière
-error: Le caractère contrôle est incorrect.
+error: Le caractère de contrôle est incorrect.
 required: Le caractère de contrôle est requis.

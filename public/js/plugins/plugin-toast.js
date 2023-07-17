@@ -372,73 +372,53 @@
         },
 
         /**
-         * Creates the toast header.
+         * Append the toast header.
          *
+         * @param {jQuery} $parent - the parent to append header to.
          * @param {Object} options - The toast options.
-         * @returns {jQuery|undefined} The div title or null if no title.
          * @private
          */
-        _createHeader: function (options) {
-            if (this._isTitle(options)) {
-                // header
-                let clazz = 'toast-header column-gap-2 bg-' + options.type;
-                switch (options.type) {
-                    case this.NotificationTypes.INFO:
-                    case this.NotificationTypes.WARNING:
-                        clazz += ' text-dark';
-                        break;
-                    default:
-                        clazz += ' text-white';
-                        break;
-                }
-                const $div = $('<div/>', {
-                    'class': clazz
-                });
-
-                // icon
-                const $icon = this._createHeaderIcon(options);
-                if ($icon) {
-                    $div.append($icon);
-                }
-
-                // title
-                const $title = $('<span/>', {
-                    'class': 'me-auto',
-                    'html': options.title || ''
-                });
-                $div.append($title);
-
-                // sub-title
-                const $subtitle = this._createHeaderSubtitle(options);
-                if ($subtitle) {
-                    $div.append($subtitle);
-                }
-
-                // close button
-                const $close = this._createHeaderCloseButton(options);
-                if ($close) {
-                    $div.append($close);
-                }
-
-                return $div;
+        _createHeader: function ($parent, options) {
+            if (!this._isTitle(options)) {
+                return;
             }
-            return null;
+            // header
+            let clazz = 'toast-header column-gap-2 bg-' + options.type;
+            switch (options.type) {
+                case this.NotificationTypes.INFO:
+                case this.NotificationTypes.WARNING:
+                    clazz += ' text-dark';
+                    break;
+                default:
+                    clazz += ' text-white';
+                    break;
+            }
+            const $div = $('<div/>', {
+                'class': clazz
+            });
+            this._createHeaderIcon($div, options);
+            this._createHeaderTitle($div, options);
+            this._createHeaderSubtitle($div, options);
+            this._createHeaderCloseButton($div, options);
+            $parent.append($div);
         },
 
         /**
-         * Creates the header icon.
+         * Append the header icon.
          *
+         * @param {jQuery} $parent - the parent to append icon to.
          * @param {Object} options - The options.
          * @returns {jQuery|undefined} The icon or null if no icon.
          * @private
          */
-        _createHeaderIcon: function (options) {
+        _createHeaderIcon: function ($parent, options) {
             if (options.icon === false) {
-                return null;
-            } else if ($.isString(options.icon)) {
-                return $(options.icon);
+                return;
             }
-
+            if ($.isString(options.icon)) {
+                $parent.append($(options.icon));
+                return;
+            }
             let clazz = 'fas fa-lg fa-';
             switch (options.type) {
                 case this.NotificationTypes.INFO:
@@ -464,77 +444,91 @@
             }
 
             // create
-            return $('<i/>', {
+            const $icon = $('<i/>', {
                 'class': clazz,
                 'aria-hidden': true
             });
+            $parent.append($icon);
         },
 
         /**
-         * Creates the header subtitle.
-         *
+         * Append the header subtitle.
+
+         * @param {jQuery} $parent - the parent to append header subtitle to.
          * @param {Object} options - The toast options.
-         * @returns {jQuery|undefined} The subtitle or null if no subtitle defined.
          * @private
          */
-        _createHeaderSubtitle: function (options) {
+        _createHeaderSubtitle: function ($parent, options) {
             if (options.displaySubtitle && options.subtitle) {
-                return $('<small/>', {
+                const $subtitle = $('<small/>', {
                     'html': options.subtitle
                 });
+                $parent.append($subtitle);
             }
-            return null;
         },
 
         /**
-         * Creates the header close button.
+         * Append the header close button.
          *
+         * @param {jQuery} $parent - the parent to append close button to.
          * @param {Object} options - The toast options.
-         * @returns {jQuery|undefined} The close button or null if no button.
          * @private
          */
-        _createHeaderCloseButton: function (options) {
-            if (options.displayClose) {
-                const title = options.closeTitle || 'Close';
-                return $('<button/>', {
-                    'data-bs-dismiss': 'toast',
-                    'aria-label': title,
-                    'class': 'btn-close ms-0',
-                    'type': 'button',
-                    'title': title
-                });
+        _createHeaderCloseButton: function ($parent, options) {
+            if (!options.displayClose) {
+                return;
             }
-            return null;
+            const title = options.closeTitle || 'Close';
+            const $button = $('<button/>', {
+                'data-bs-dismiss': 'toast',
+                'class': 'btn-close ms-0',
+                'aria-label': title,
+                'type': 'button',
+                'title': title
+            });
+            $parent.append($button);
+        },
+        /**
+         * Append the header title.
+         *
+         * @param {jQuery} $parent - the parent to append header title to.
+         * @param {Object} options - The toast options.
+         * @private
+         */
+        _createHeaderTitle: function ($parent, options) {
+            const $title = $('<span/>', {
+                'class': 'me-auto',
+                'html': options.title || ''
+            });
+            $parent.append($title);
         },
 
         /**
-         * Creates the toast message.
+         * Append the toast message.
          *
+         * @param {jQuery} $parent - the parent to append message to.
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The div message.
          * @private
          */
-        _createBodyMessage: function (options) {
+        _createBodyMessage: function ($parent, options) {
             const $body = $('<div/>', {
                 'class': 'toast-body',
             });
             const $message = $('<div/>', {
                 'html': options.message
             });
-            return $body.append($message);
+            $body.append($message);
+            $parent.append($body);
         },
 
         /**
-         * Creates the div toast.
+         * Creates the toast.
          *
          * @param {Object} options - The toast options.
          * @returns {jQuery} The div toast.
          * @private
          */
         _createToast: function (options) {
-            const $header = this._createHeader(options);
-            const $message = this._createBodyMessage(options);
-            const $progress = this._createProgressBar(options);
             const $toast = $('<div/>', {
                 'role': 'alert',
                 'aria-atomic': 'true',
@@ -545,26 +539,23 @@
                     'flex-basis': options.containerWidth
                 }
             });
-            if ($header) {
-                $toast.append($header);
-            }
-            $toast.append($message);
-            if ($progress) {
-                $toast.append($progress);
-            }
+            this._createHeader($toast, options);
+            this._createBodyMessage($toast, options);
+            this._createProgressBar($toast, options);
+
             return $toast;
         },
 
         /**
-         * Creates the bottom progress bar.
+         * Append the bottom progress bar.
          *
+         * @param {jQuery} $parent - the parent to append progress bar to.
          * @param {Object} options - The toast options.
-         * @returns {jQuery|undefined} The progress bar or null if no progress.
          * @private
          */
-        _createProgressBar: function (options) {
+        _createProgressBar: function ($parent, options) {
             if (!options.progress) {
-                return null;
+                return;
             }
             const $bar = $('<div/>', {
                 'class': 'progress-bar overflow-hidden bg-' + options.type,
@@ -580,8 +571,7 @@
                 },
             });
             $progress.append($bar);
-
-            return $progress;
+            $parent.append($progress);
         },
 
         /**

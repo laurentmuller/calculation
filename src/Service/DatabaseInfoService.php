@@ -128,7 +128,6 @@ final class DatabaseInfoService
     private function executeQuery(string $sql, bool $all): array|false
     {
         $connection = $this->getConnection();
-        /** @psalm-var \Doctrine\DBAL\Statement $statement */
         $statement = $connection->prepare($sql);
         $result = $statement->executeQuery();
         $entries = $all ? $result->fetchAllAssociative() : $result->fetchAssociative();

@@ -58,7 +58,7 @@
          * @return {Typeahead} this instance for chaining.
          */
         show() {
-            if (!this._isQueryText()) {
+            if (!this._hasItems()) {
                 return this;
             }
             const pos = $.extend({}, this.$element.position(), {
@@ -73,6 +73,7 @@
                 left: pos.left,
                 width: width
             });
+            //this.$menu.dropdown('show');
             this.$menu.show();
             this.visible = true;
             return this;
@@ -85,6 +86,7 @@
          */
         hide() {
             if (this.visible) {
+                //this.$menu.dropdown('hide');
                 this.$menu.hide();
                 this.visible = false;
             }

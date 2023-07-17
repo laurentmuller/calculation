@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
-use App\Entity\User;
+use App\Interfaces\UserInterface;
 use App\Utils\FormatUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,8 +34,8 @@ trait TimestampableTrait
     /**
      * The creation username.
      */
-    #[Assert\Length(max: User::MAX_USERNAME_LENGTH)]
-    #[ORM\Column(length: User::MAX_USERNAME_LENGTH, nullable: true)]
+    #[Assert\Length(max: UserInterface::MAX_USERNAME_LENGTH)]
+    #[ORM\Column(length: UserInterface::MAX_USERNAME_LENGTH, nullable: true)]
     private ?string $createdBy = null;
 
     /**
@@ -47,8 +47,8 @@ trait TimestampableTrait
     /**
      * The updated username.
      */
-    #[Assert\Length(max: User::MAX_USERNAME_LENGTH)]
-    #[ORM\Column(length: User::MAX_USERNAME_LENGTH, nullable: true)]
+    #[Assert\Length(max: UserInterface::MAX_USERNAME_LENGTH)]
+    #[ORM\Column(length: UserInterface::MAX_USERNAME_LENGTH, nullable: true)]
     private ?string $updatedBy = null;
 
     public function getCreatedAt(): ?\DateTimeInterface

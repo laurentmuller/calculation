@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Form\Calculation;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Form\AbstractEntityType;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\FormHelper;
+use App\Interfaces\EntityInterface;
 
 /**
  * Calculation edit type.
@@ -42,12 +42,12 @@ class CalculationType extends AbstractEntityType
             ->addDateType();
 
         $helper->field('customer')
-            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
+            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->autocomplete('off')
             ->addTextType();
 
         $helper->field('description')
-            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
+            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->addTextType();
 
         $helper->field('userMargin')

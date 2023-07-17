@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Form\Category;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Form\Group\GroupListType;
+use App\Interfaces\EntityInterface;
 
 /**
  * Category edit type.
@@ -36,12 +36,12 @@ class CategoryType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('code')
-            ->maxLength(AbstractEntity::MAX_CODE_LENGTH)
+            ->maxLength(EntityInterface::MAX_CODE_LENGTH)
             ->addTextType();
 
         $helper->field('description')
             ->notRequired()
-            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
+            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->addTextareaType();
 
         $helper->field('group')

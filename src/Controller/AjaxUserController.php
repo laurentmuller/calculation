@@ -14,6 +14,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
+use App\Interfaces\UserInterface;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,9 +47,9 @@ class AjaxUserController extends AbstractController
         $message = null;
         if (empty($email)) {
             $message = 'email.blank';
-        } elseif (\strlen($email) < User::MIN_USERNAME_LENGTH) {
+        } elseif (\strlen($email) < UserInterface::MIN_USERNAME_LENGTH) {
             $message = 'email.short';
-        } elseif (\strlen($email) > user::MAX_USERNAME_LENGTH) {
+        } elseif (\strlen($email) > UserInterface::MAX_USERNAME_LENGTH) {
             $message = 'email.long';
         } else {
             $user = $this->findByEmail($email);
@@ -72,9 +73,9 @@ class AjaxUserController extends AbstractController
         $message = null;
         if (empty($username)) {
             $message = 'username.blank';
-        } elseif (\strlen($username) < User::MIN_USERNAME_LENGTH) {
+        } elseif (\strlen($username) < UserInterface::MIN_USERNAME_LENGTH) {
             $message = 'username.short';
-        } elseif (\strlen($username) > User::MAX_USERNAME_LENGTH) {
+        } elseif (\strlen($username) > UserInterface::MAX_USERNAME_LENGTH) {
             $message = 'username.long';
         } else {
             $user = $this->findByUsername($username);

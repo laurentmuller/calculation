@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Form\CalculationState;
 
-use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
+use App\Interfaces\EntityInterface;
 
 /**
  * Calculation state edit type.
@@ -24,9 +24,6 @@ use App\Form\FormHelper;
  */
 class CalculationStateType extends AbstractEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(CalculationState::class);
@@ -35,11 +32,11 @@ class CalculationStateType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('code')
-            ->maxLength(AbstractEntity::MAX_CODE_LENGTH)
+            ->maxLength(EntityInterface::MAX_CODE_LENGTH)
             ->addTextType();
 
         $helper->field('description')
-            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
+            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->notRequired()
             ->addTextareaType();
 

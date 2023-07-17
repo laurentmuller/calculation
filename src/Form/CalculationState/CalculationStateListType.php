@@ -26,9 +26,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationStateListType extends AbstractListEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly TranslatorInterface $translator)
     {
         parent::__construct(CalculationState::class);

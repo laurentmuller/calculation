@@ -17,6 +17,7 @@ use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
 use App\Interfaces\EnumSortableInterface;
+use App\Interfaces\UserInterface;
 use App\Utils\FormatUtils;
 use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use Elao\Enum\ReadableEnumInterface;
@@ -474,8 +475,8 @@ class FormHelper
         return $this->updateOption('prepend_icon', 'fa-fw fa-regular fa-user')
             ->autocomplete($autocomplete)
             ->updateAttributes([
-                'minLength' => User::MIN_USERNAME_LENGTH,
-                'maxLength' => User::MAX_USERNAME_LENGTH,
+                'minLength' => UserInterface::MIN_USERNAME_LENGTH,
+                'maxLength' => UserInterface::MAX_USERNAME_LENGTH,
             ])
             ->addTextType();
     }

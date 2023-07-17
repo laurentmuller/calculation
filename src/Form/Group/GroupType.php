@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Form\Group;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Group;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
+use App\Interfaces\EntityInterface;
 
 /**
  * Group edit type.
@@ -35,12 +35,12 @@ class GroupType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('code')
-            ->maxLength(AbstractEntity::MAX_CODE_LENGTH)
+            ->maxLength(EntityInterface::MAX_CODE_LENGTH)
             ->addTextType();
 
         $helper->field('description')
             ->notRequired()
-            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
+            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->addTextareaType();
 
         $helper->field('margins')

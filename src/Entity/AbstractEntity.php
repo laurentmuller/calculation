@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\EntityInterface;
 use App\Traits\MathTrait;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,19 +20,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Base entity.
  */
 #[ORM\MappedSuperclass]
-abstract class AbstractEntity implements \Stringable
+abstract class AbstractEntity implements EntityInterface
 {
     use MathTrait;
-
-    /**
-     * The maximum length for a code property.
-     */
-    final public const MAX_CODE_LENGTH = 30;
-
-    /**
-     * The maximum length for a string property.
-     */
-    final public const MAX_STRING_LENGTH = 255;
 
     /**
      * The primary key identifier.
@@ -54,29 +45,16 @@ abstract class AbstractEntity implements \Stringable
         return $this->getDisplay();
     }
 
-    /**
-     * Gets a string used to display in the user interface (UI).
-     */
     public function getDisplay(): string
     {
         return \sprintf('%d', (int) $this->id);
     }
 
-    /**
-     * Get the primary key identifier value.
-     *
-     * @return int|null the key identifier value or null if is a new entity
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Returns if this entity is new.
-     *
-     * @return bool true if this entity has never been saved to the database
-     */
     public function isNew(): bool
     {
         return empty($this->id);

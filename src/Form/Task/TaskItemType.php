@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Form\Task;
 
-use App\Entity\AbstractEntity;
 use App\Entity\TaskItem;
 use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
+use App\Interfaces\EntityInterface;
 
 /**
  * Task item edit type.
@@ -36,7 +36,7 @@ class TaskItemType extends AbstractEntityType
     {
         $helper->field('name')
             ->widgetClass('unique-name')
-            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
+            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->addTextType();
 
         $helper->field('position')

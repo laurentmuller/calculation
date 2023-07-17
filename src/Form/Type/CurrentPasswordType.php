@@ -12,8 +12,9 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Entity\AbstractEntity;
 use App\Entity\User;
+use App\Interfaces\EntityInterface;
+use App\Interfaces\UserInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -36,12 +37,12 @@ class CurrentPasswordType extends AbstractType
             'label' => 'user.password.current',
             'autocomplete' => 'current-password',
             'attr' => [
-                'minLength' => User::MIN_PASSWORD_LENGTH,
-                'maxLength' => AbstractEntity::MAX_STRING_LENGTH,
+                'minLength' => UserInterface::MIN_PASSWORD_LENGTH,
+                'maxLength' => EntityInterface::MAX_STRING_LENGTH,
             ],
             'constraints' => [
                 new NotBlank(),
-                new Length(min: User::MIN_PASSWORD_LENGTH, max: AbstractEntity::MAX_STRING_LENGTH),
+                new Length(min: UserInterface::MIN_PASSWORD_LENGTH, max: EntityInterface::MAX_STRING_LENGTH),
                 new UserPassword(message: 'current_password.invalid'),
             ],
         ]);

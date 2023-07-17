@@ -31,25 +31,24 @@
          * Destructor.
          */
         destroy() {
-            // remove element handlers
+            // remove element handlers and data
             const that = this;
             const $element = this.$element;
-            $element.off('focus', that.focusProxy);
-            $element.off('blur', that.blurProxy);
-            $element.off('keypress', that.keyPressProxy);
-            $element.off('keyup', that.keyUpProxy);
-            $element.off('keydown', that.keyDownProxy);
+            $element.off('blur', that.blurProxy)
+                .off('focus', that.focusProxy)
+                .off('input', this.inputProxy)
+                .off('keyup', that.keyUpProxy)
+                .off('keydown', that.keyDownProxy)
+                .off('keypress', that.keyPressProxy)
+                .removeData(Typeahead.NAME);
 
             // remove menu handlers
             const $menu = this.$menu;
             const selector = this.options.selector;
-            $menu.off('click', that.clickProxy);
-            $menu.off('mouseenter', selector, that.mouseEnterProxy);
-            $menu.off('mouseleave', selector, that.mouseLeaveProxy);
-            $menu.remove();
-
-            // remove data
-            $element.removeData(Typeahead.NAME);
+            $menu.off('click', that.clickProxy)
+                .off('mouseenter', selector, that.mouseEnterProxy)
+                .off('mouseleave', selector, that.mouseLeaveProxy)
+                .remove();
         }
 
         /**
@@ -73,7 +72,6 @@
                 left: pos.left,
                 width: width
             });
-            //this.$menu.dropdown('show');
             this.$menu.show();
             this.visible = true;
             return this;
@@ -86,81 +84,10 @@
          */
         hide() {
             if (this.visible) {
-                //this.$menu.dropdown('hide');
                 this.$menu.hide();
                 this.visible = false;
             }
             return this;
-        }
-
-        /**
-         * Render the items.
-         * @param {Array.<Object>} items - the items to render.
-         * @return {Typeahead} this instance for chaining.
-         */
-        render(items) {
-            const data = [];
-            const that = this;
-
-            let display;
-            let newSeparator;
-            let oldSeparator = null;
-            const separator = that.options.separator;
-            const isStringSeparator = that._isString(separator);
-            const isStringDisplay = that._isString(that.displayField);
-
-            // run over items, add separators and categories if applicable
-            $.each(items, function (key, value) {
-                // get separators
-                newSeparator = isStringSeparator ? value[separator] : separator(value);
-                if (key > 0) {
-                    oldSeparator = isStringSeparator ? items[key - 1][separator] : separator(items[key - 1]);
-                }
-
-                // inject separator
-                if (key > 0 && newSeparator !== oldSeparator) {
-                    data.push({
-                        __type__: 'divider'
-                    });
-                }
-
-                // inject category
-                if (newSeparator && (key === 0 || newSeparator !== oldSeparator)) {
-                    data.push({
-                        __type__: 'category',
-                        name: newSeparator
-                    });
-                }
-
-                // inject value
-                data.push(value);
-            });
-
-            // render categories, separators and items
-            that.$menu.html($(data).map(function (_index, item) {
-                // category
-                if (item.__type__ === 'category') {
-                    const html = that.highlighter(item.name);
-                    return $(that.options.header).html(html)[0];
-                }
-                // separator
-                if (item.__type__ === 'divider') {
-                    return $(that.options.divider)[0];
-                }
-                // item
-                if (that._isObject(item)) {
-                    display = isStringDisplay ? item[that.displayField] : that.displayField(item);
-                } else {
-                    display = item;
-                }
-                const value = JSON.stringify(item);
-                const html = that.highlighter(display);
-                return $(that.options.item).data('value', value).html(html)[0];
-            }));
-            if (that.options.autoSelect) {
-                that._first();
-            }
-            return that;
         }
 
         // -----------------------------
@@ -171,6 +98,7 @@
          * Initialize.
          *
          * @return {Typeahead} this instance for chaining.
+         * @throws {Error} if the Ajax URL is not defined.
          * @private
          */
         _init() {
@@ -212,6 +140,145 @@
         }
 
         /**
+         * Start listen events.
+         *
+         * @return {Typeahead} this instance for chaining.
+         * @private
+         */
+        _listen() {
+            // add element handlers
+            const $element = this.$element;
+            this.blurProxy = () => this._blur();
+            this.focusProxy = () => this._focus();
+            this.keyUpProxy = (e) => this._keyup(e);
+            this.inputProxy = (e) => this._input(e);
+            this.keyDownProxy = (e) => this._keydown(e);
+            this.keyPressProxy = (e) => this._keypress(e);
+            $element.on('blur', this.blurProxy)
+                .on('focus', this.focusProxy)
+                .on('input', this.inputProxy)
+                .on('keyup', this.keyUpProxy)
+                .on('keydown', this.keyPressProxy)
+                .on('keypress', this.keyPressProxy);
+
+            // add menu handlers
+            const $menu = this.$menu;
+            const selector = this.options.selector;
+            this.clickProxy = (e) => this._click(e);
+            this.mouseEnterProxy = (e) => this._mouseenter(e);
+            this.mouseLeaveProxy = () => this._mouseleave();
+            $menu.on('click', this.clickProxy)
+                .on('mouseenter', selector, this.mouseEnterProxy)
+                .on('mouseleave', selector, this.mouseLeaveProxy);
+
+            return this;
+        }
+
+        /**
+         * Render the items.
+         *
+         * @param {Array.<Object>} items - the items to render.
+         * @return {Typeahead} this instance for chaining.
+         */
+        _render(items) {
+            /** @type {Array.<Object>} */
+            const data = [];
+            const that = this;
+
+            let newSeparator;
+            let oldSeparator = null;
+            const separator = that.options.separator;
+            const isStringSeparator = that._isString(separator);
+            const isStringDisplay = that._isString(that.displayField);
+
+            // run over items to add separators and categories
+            items.forEach(function (value, index) {
+                // get separator
+                newSeparator = isStringSeparator ? value[separator] : separator(value);
+                if (index > 0) {
+                    oldSeparator = isStringSeparator ? items[index - 1][separator] : separator(items[index - 1]);
+                }
+                // inject separator
+                if (index > 0 && newSeparator !== oldSeparator) {
+                    data.push({
+                        __type__: 'divider'
+                    });
+                }
+                // inject category
+                if (newSeparator && (index === 0 || newSeparator !== oldSeparator)) {
+                    data.push({
+                        __type__: 'category',
+                        name: newSeparator
+                    });
+                }
+                // inject value
+                data.push(value);
+            });
+
+            // render categories, separators and items
+            const regex = that._getHighlighter();
+            /** @type {Array.<JQuery>} */
+            const $items = data.map(function (item) {
+                if (item.__type__ === 'category') {
+                    return that._renderCategory(regex, item);
+                } else if (item.__type__ === 'divider') {
+                    return that._renderSeparator();
+                } else {
+                    return that._renderItem(regex, item, isStringDisplay);
+                }
+            });
+            that.$menu.empty().append($items);
+            if (that.options.autoSelect) {
+                return that._first();
+            }
+            return that;
+        }
+
+        /**
+         * Render a category.
+         *
+         * @param {RegExp} regex
+         * @param {Object} item
+         * @return {JQuery}
+         * @private
+         */
+        _renderCategory(regex, item) {
+            const html = this._highlight(regex, item.name);
+            return $(this.options.header).html(html);
+        }
+
+        /**
+         * Render a separator.
+         *
+         * @return {JQuery}
+         * @private
+         */
+        _renderSeparator() {
+            return $(this.options.divider);
+        }
+
+        /**
+         * Render an item.
+         *
+         * @param {RegExp} regex
+         * @param {Object} item
+         * @param {boolean} isStringDisplay
+         * @return {JQuery}
+         * @private
+         */
+        _renderItem(regex, item, isStringDisplay) {
+            let display;
+            if (this._isObject(item)) {
+                display = isStringDisplay ? item[this.displayField] : this.displayField(item);
+            } else {
+                display = item;
+            }
+            const value = JSON.stringify(item);
+            const html = this._highlight(regex, display);
+            return $(this.options.item).data('value', value).html(html);
+        }
+
+        /**
          * Returns if the given data is a string.
          * @param {*} data - the data to test.
          * @return {boolean} true if a string.
@@ -248,7 +315,7 @@
          * @private
          */
         _select() {
-            const $selectedItem = this.$menu.find('.active');
+            const $selectedItem = this._getSelectedItem();
             if ($selectedItem.length) {
                 let item = JSON.parse($selectedItem.data('value'));
                 let text = $selectedItem.text();
@@ -340,23 +407,13 @@
             if (this._isFunction(this.ajax.preProcess)) {
                 data = this.ajax.preProcess(data);
             }
-            // save for selection retrieval
-            this.ajax.data = data;
-
             // render items
             if (data.length) {
                 this.ajax.xhr = null;
                 this.$menu.removeClass('py-0');
-                return this.render(data).show();
+                return this._render(data).show();
             }
             if (this.options.empty) {
-                // this.$element.tooltip({
-                //     html: true,
-                //     trigger: 'manual',
-                //     placement: 'right',
-                //     customClass: 'tooltip-warning',
-                //     title: this.options.empty
-                // }).tooltip('show');
                 const $item = $('<span/>', {
                     class: 'dropdown-item disabled',
                     text: this.options.empty
@@ -386,7 +443,7 @@
         /**
          * Gets the menu items.
          *
-         * @return {jQuery} the items.
+         * @return {JQuery} the items.
          * @private
          */
         _getItems() {
@@ -401,6 +458,16 @@
          */
         _hasItems() {
             return this._getItems().length > 0;
+        }
+
+        /**
+         * Gets the selected item.
+         *
+         * @return {JQuery} the selected item.
+         * @private
+         */
+        _getSelectedItem() {
+            return this.$menu.find('.active');
         }
 
         /**
@@ -424,21 +491,30 @@
         }
 
         /**
-         * Highlight the given item.
+         * Highlight the given text.
          *
-         * @param {String} item - the item to highlight.
-         *
-         * @return {String}
+         * @param {RegExp} regex - the regular expression.
+         * @param {string} text - the text to highlight
+         * @return {string} the highlighted text.
+         * @private
          */
-        highlighter(item) {
-            const query = this.query.replace(/[\-\[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-            const pattern = `(${query})`;
-            const flags = 'gi';
-            const regex = new RegExp(pattern, flags);
-            return item.replace(regex, function (_$1, match) {
+        _highlight(regex, text) {
+            return text.replace(regex, function (_$1, match) {
                 return `<span class="text-success">${match}</span>`;
             });
         }
+
+        /**
+         * Gets the regular expression used to highlight text.
+         *
+         * @return {RegExp}
+         * @private
+         */
+        _getHighlighter() {
+            const query = this.query.replace(/[\-\[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+            return new RegExp(`(${query})`, 'gi');
+        }
+
 
         /**
          * Select the next menu item.
@@ -447,11 +523,10 @@
          * @private
          */
         _next() {
-            const selector = this.options.selector;
-            const active = this.$menu.find('.active').removeClass('active');
-            const next = active.nextAll(selector).first();
-            if (next.length) {
-                next.addClass('active');
+            const $active = this._getSelectedItem().removeClass('active');
+            const $next = $active.nextAll(this.options.selector).first();
+            if ($next.length) {
+                $next.addClass('active');
             } else {
                 this._first();
             }
@@ -465,11 +540,10 @@
          * @private
          */
         _prev() {
-            const selector = this.options.selector;
-            const active = this.$menu.find('.active').removeClass('active');
-            const prev = active.prevAll(selector).first();
-            if (prev.length) {
-                prev.addClass('active');
+            const $active = this._getSelectedItem().removeClass('active');
+            const $prev = $active.prevAll(this.options.selector).first();
+            if ($prev.length) {
+                $prev.addClass('active');
             } else {
                 this._last();
             }
@@ -483,10 +557,10 @@
          * @private
          */
         _first() {
-            const first = this._getItems().first();
-            if (first.length) {
-                this.$menu.find('.active').removeClass('active');
-                first.addClass('active');
+            const $first = this._getItems().first();
+            if ($first.length) {
+                this._getSelectedItem().removeClass('active');
+                $first.addClass('active');
             }
             return this;
         }
@@ -498,10 +572,10 @@
          * @private
          */
         _last() {
-            const last = this._getItems().last();
-            if (last.length) {
-                this.$menu.find('.active').removeClass('active');
-                last.addClass('active');
+            const $last = this._getItems().last();
+            if ($last.length) {
+                this._getSelectedItem().removeClass('active');
+                $last.addClass('active');
             }
             return this;
         }
@@ -574,7 +648,7 @@
         _keyup(e) {
             switch (e.key) {
                 case 'ArrowDown':
-                    if (!this.visible && this._hasItems() && this._isQueryText()) {
+                    if (e.altKey && !this.visible && this._hasItems() && this._isQueryText()) {
                         this.show();
                     }
                     break;
@@ -599,6 +673,18 @@
         }
 
         /**
+         * Handle the input change event.
+         *
+         * @param {Event} e - the event.
+         * @private
+         */
+        _input(e) {
+            if (!this._isQueryText()) {
+                this.hide();
+            }
+        }
+
+        /**
          * Handle the focus event.
          * @private
          */
@@ -618,7 +704,7 @@
         }
 
         /**
-         * Handle the click event.
+         * Handle the item click event.
          *
          * @param {Event} e - the event.
          * @private
@@ -630,7 +716,7 @@
         }
 
         /**
-         * Handle the mouse enter event.
+         * Handle the item mouse enter event.
          *
          * @param {Event} e - the event.
          * @private
@@ -642,7 +728,7 @@
         }
 
         /**
-         * Handle the mouse leave event.
+         * Handle the item mouse leave event.
          * @private
          */
         _mouseleave() {
@@ -650,41 +736,6 @@
             if (!this.focused && this.visible) {
                 this.hide();
             }
-        }
-
-        /**
-         * Start listen events.
-         *
-         * @return {Typeahead} this instance for chaining.
-         * @private
-         */
-        _listen() {
-            // add element handlers
-            const $element = this.$element;
-            this.focusProxy = () => this._focus();
-            this.blurProxy = () => this._blur();
-            this.keyUpProxy = (e) => this._keyup(e);
-            this.keyPressProxy = (e) => this._keypress(e);
-            this.keyDownProxy = (e) => this._keydown(e);
-
-            $element.on('focus', this.focusProxy);
-            $element.on('blur', this.blurProxy);
-            $element.on('keyup', this.keyUpProxy);
-            $element.on('keypress', this.keyPressProxy);
-            $element.on('keydown', this.keyPressProxy);
-
-            // add menu handlers
-            const $menu = this.$menu;
-            const selector = this.options.selector;
-            this.clickProxy = (e) => this._click(e);
-            this.mouseEnterProxy = (e) => this._mouseenter(e);
-            this.mouseLeaveProxy = () => this._mouseleave();
-
-            $menu.on('click', this.clickProxy);
-            $menu.on('mouseenter', selector, this.mouseEnterProxy);
-            $menu.on('mouseleave', selector, this.mouseLeaveProxy);
-
-            return this;
         }
 
         /**

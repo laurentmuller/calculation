@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Interfaces\RoleInterface;
 use App\Interfaces\TimestampableInterface;
+use App\Interfaces\UserInterface;
 use App\Repository\UserRepository;
 use App\Traits\RoleTrait;
 use App\Traits\TimestampableTrait;
@@ -25,10 +25,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use Vich\UploaderBundle\Exception\MappingNotFoundException;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -43,24 +40,10 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 #[UniqueEntity(fields: ['email'], message: 'email.already_used')]
 #[UniqueEntity(fields: ['username'], message: 'username.already_used')]
 #[Vich\Uploadable]
-class User extends AbstractEntity implements PasswordAuthenticatedUserInterface, ResetPasswordRequestInterface, RoleInterface, TimestampableInterface, UserInterface
+class User extends AbstractEntity implements TimestampableInterface, UserInterface
 {
     use RoleTrait;
     use TimestampableTrait;
-
-    /**
-     * The maximum length for a username property.
-     */
-    final public const MAX_USERNAME_LENGTH = 180;
-    /**
-     * The minimum length for the password.
-     */
-    final public const MIN_PASSWORD_LENGTH = 6;
-
-    /**
-     * The minimum length for a username property.
-     */
-    final public const MIN_USERNAME_LENGTH = 2;
 
     #[Assert\Email]
     #[Assert\NotBlank]
@@ -251,17 +234,11 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         return new Address((string) $this->email, (string) $this->username);
     }
 
-    /**
-     * @see ResetPasswordRequestInterface
-     */
     public function getExpiresAt(): \DateTimeInterface
     {
         return $this->expiresAt ?? new \DateTimeImmutable();
     }
 
-    /**
-     * @see ResetPasswordRequestInterface
-     */
     public function getHashedToken(): string
     {
         return (string) $this->hashedToken;
@@ -320,9 +297,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         return \sprintf('%s (%s)', $this->getUserIdentifier(), (string) $this->getEmail());
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return (string) $this->password;
@@ -338,17 +312,11 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         return $this->properties;
     }
 
-    /**
-     * @see ResetPasswordRequestInterface
-     */
     public function getRequestedAt(): \DateTimeInterface
     {
         return $this->requestedAt ?? new \DateTimeImmutable();
     }
 
-    /**
-     * @see ResetPasswordRequestInterface
-     */
     public function getUser(): object
     {
         return $this;
@@ -380,9 +348,6 @@ class User extends AbstractEntity implements PasswordAuthenticatedUserInterface,
         return $this->enabled;
     }
 
-    /**
-     * @see ResetPasswordRequestInterface
-     */
     public function isExpired(): bool
     {
         return !$this->expiresAt instanceof \DateTimeInterface || $this->expiresAt->getTimestamp() <= \time();

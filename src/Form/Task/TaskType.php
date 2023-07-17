@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Form\Task;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Task;
 use App\Form\AbstractEntityType;
 use App\Form\Category\CategoryListType;
 use App\Form\FormHelper;
+use App\Interfaces\EntityInterface;
 
 /**
  * Task edit type.
@@ -36,7 +36,7 @@ class TaskType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('name')
-            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
+            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->addTextType();
 
         $helper->field('category')
@@ -50,7 +50,7 @@ class TaskType extends AbstractEntityType
 
         $helper->field('supplier')
             ->autocomplete('off')
-            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
+            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->notRequired()
             ->addTextType();
 

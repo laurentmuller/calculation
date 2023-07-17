@@ -25,6 +25,7 @@ use App\Form\Type\CaptchaImageType;
 use App\Form\Type\SimpleEditorType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
+use App\Interfaces\UserInterface;
 use App\Model\HttpClientError;
 use App\Report\HtmlReport;
 use App\Repository\CalculationStateRepository;
@@ -206,9 +207,9 @@ class TestController extends AbstractController
             ->widgetClass('password-strength')
             ->updateAttribute('data-strength', StrengthLevel::MEDIUM->value)
             ->updateAttribute('data-url', $this->generateUrl(route: 'ajax_password', referenceType: UrlGeneratorInterface::ABSOLUTE_URL))
-            ->minLength(User::MIN_PASSWORD_LENGTH)
-            ->maxLength(User::MAX_USERNAME_LENGTH)
-            ->constraints(new Length(min: User::MIN_PASSWORD_LENGTH, max: User::MAX_USERNAME_LENGTH), $passwordConstraint, $strengthConstraint)
+            ->minLength(UserInterface::MIN_PASSWORD_LENGTH)
+            ->maxLength(UserInterface::MAX_USERNAME_LENGTH)
+            ->constraints(new Length(min: UserInterface::MIN_PASSWORD_LENGTH, max: UserInterface::MAX_USERNAME_LENGTH), $passwordConstraint, $strengthConstraint)
             ->addTextType();
         foreach ($options as $option) {
             $helper->field($option)

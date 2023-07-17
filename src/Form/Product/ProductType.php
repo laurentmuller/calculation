@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Form\Product;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Product;
 use App\Form\AbstractEntityType;
 use App\Form\Category\CategoryListType;
 use App\Form\FormHelper;
+use App\Interfaces\EntityInterface;
 
 /**
  * Product edit type.
@@ -36,7 +36,7 @@ class ProductType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('description')
-            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
+            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->addTextType();
 
         $helper->field('unit')
@@ -53,7 +53,7 @@ class ProductType extends AbstractEntityType
 
         $helper->field('supplier')
             ->autocomplete('off')
-            ->maxLength(AbstractEntity::MAX_STRING_LENGTH)
+            ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->notRequired()
             ->addTextType();
     }

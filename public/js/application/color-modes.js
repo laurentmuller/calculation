@@ -139,6 +139,7 @@
         document.querySelectorAll('[data-theme]').forEach((element) => {
             element.addEventListener('click', (e) => {
                 e.preventDefault();
+                $('[data-theme][data-bs-toggle="tooltip"]').tooltip('hide');
                 const theme = element.getAttribute('data-theme');
                 updateActiveTheme(theme);
                 setStoredTheme(theme);

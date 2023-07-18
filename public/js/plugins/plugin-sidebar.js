@@ -254,7 +254,7 @@
         /**
          * Ensure that the given element has a unique identifier.
          *
-         * @param {JQuery} $element te element to validate.
+         * @param {jQuery} $element te element to validate.
          * @return {string} the unique identifier.
          * @private
          */

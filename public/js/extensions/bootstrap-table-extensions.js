@@ -988,7 +988,7 @@ function loadingTemplate(message) {
             const $sortName = $('#sort-name');
             const $button = $('#sort-button');
             const $default = $('#sort-default-button');
-
+            const $tooltip = $dialog.find('[data-bs-toggle="tooltip"]');
             $dialog.on('keydown', function (e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -1005,12 +1005,15 @@ function loadingTemplate(message) {
                 $sortName.trigger('focus');
             }).on('hide.bs.modal', function () {
                 $this.enableKeys();
+            }).on('hidden.bs.modal', function () {
+                $tooltip.tooltip('hide');
             });
 
             const modalOptions = $this.getOptions().draggableModal || false;
             if (modalOptions) {
                 $dialog.draggableModal(modalOptions);
             }
+            $tooltip.tooltip();
 
             $sortName.on('input', function () {
                 // update default order

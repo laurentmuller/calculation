@@ -35,8 +35,8 @@
             const that = this;
             const $element = this.$element;
             $element.off('blur', that.blurProxy)
-                .off('focus', that.focusProxy)
                 .off('input', this.inputProxy)
+                .off('focus', that.focusProxy)
                 .off('keyup', that.keyUpProxy)
                 .off('keydown', that.keyDownProxy)
                 .off('keypress', that.keyPressProxy)
@@ -149,14 +149,14 @@
             // add element handlers
             const $element = this.$element;
             this.blurProxy = () => this._blur();
+            this.inputProxy = () => this._input();
             this.focusProxy = () => this._focus();
             this.keyUpProxy = (e) => this._keyup(e);
-            this.inputProxy = (e) => this._input(e);
             this.keyDownProxy = (e) => this._keydown(e);
             this.keyPressProxy = (e) => this._keypress(e);
             $element.on('blur', this.blurProxy)
-                .on('focus', this.focusProxy)
                 .on('input', this.inputProxy)
+                .on('focus', this.focusProxy)
                 .on('keyup', this.keyUpProxy)
                 .on('keydown', this.keyPressProxy)
                 .on('keypress', this.keyPressProxy);
@@ -217,7 +217,7 @@
 
             // render categories, separators and items
             const regex = that._getHighlighter();
-            /** @type {Array.<JQuery>} */
+            /** @type {Array.<jQuery>} */
             const $items = data.map(function (item) {
                 if (item.__type__ === 'category') {
                     return that._renderCategory(regex, item);
@@ -239,7 +239,7 @@
          *
          * @param {RegExp} regex
          * @param {Object} item
-         * @return {JQuery}
+         * @return {jQuery}
          * @private
          */
         _renderCategory(regex, item) {
@@ -250,7 +250,7 @@
         /**
          * Render a separator.
          *
-         * @return {JQuery}
+         * @return {jQuery}
          * @private
          */
         _renderSeparator() {
@@ -263,7 +263,7 @@
          * @param {RegExp} regex
          * @param {Object} item
          * @param {boolean} isStringDisplay
-         * @return {JQuery}
+         * @return {jQuery}
          * @private
          */
         _renderItem(regex, item, isStringDisplay) {
@@ -443,7 +443,7 @@
         /**
          * Gets the menu items.
          *
-         * @return {JQuery} the items.
+         * @return {jQuery} the items.
          * @private
          */
         _getItems() {
@@ -463,7 +463,7 @@
         /**
          * Gets the selected item.
          *
-         * @return {JQuery} the selected item.
+         * @return {jQuery} the selected item.
          * @private
          */
         _getSelectedItem() {
@@ -500,7 +500,7 @@
          */
         _highlight(regex, text) {
             return text.replace(regex, function (_$1, match) {
-                return `<span class="text-success">${match}</span>`;
+                return `<span class="text-success fw-bold">${match}</span>`;
             });
         }
 
@@ -674,11 +674,9 @@
 
         /**
          * Handle the input change event.
-         *
-         * @param {Event} e - the event.
          * @private
          */
-        _input(e) {
+        _input() {
             if (!this._isQueryText()) {
                 this.hide();
             }

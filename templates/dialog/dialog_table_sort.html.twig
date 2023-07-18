@@ -36,14 +36,12 @@
                 </div>
             </div>
             <div class="modal-footer align-items-start">
-                <button type="button" class="btn btn-form btn-primary" id="sort-button">
-                    {{- 'common.button_ok'|trans -}}
-                </button>
+                <button type="button" class="btn btn-form btn-primary" id="sort-button">{{- 'common.button_ok'|trans -}}</button>
                 {% set column = columns|filter(c => c.default)|first %}
                 {% if column %}
                     {% set key = column.order == 'asc' ? 'list.sort_ascending_title' : 'list.sort_descending_title' %}
                     {% set text = key|trans({'%name%': column.title}) %}
-                    <button type="button" class="btn btn-form btn-success" id="sort-default-button" title="{{ text }}">
+                    <button type="button" class="btn btn-form btn-success" id="sort-default-button" data-bs-toggle="tooltip" data-bs-title="{{ text }}" data-bs-placement="bottom" data-bs-custom-class="tooltip-lg">
                         {{- 'list.sort_default_title'|trans -}}
                     </button>
                 {% endif %}

@@ -1,6 +1,6 @@
 {% from 'macros/_themes_list.html.twig' import entries %}
 {% set current = theme(app.request) %}
-<li class="nav-item dropdown">
+<li class="nav-item dropdown my-1">
     <button class="nav-link dropdown-toggle theme-switcher" role="button" title="{{ 'theme.description'|trans }}" data-bs-toggle="dropdown" aria-expanded="false">
         <span class="me-1 me-lg-0"><i class="theme-icon {{ current.iconLight }}"></i></span><span class="theme-text d-lg-none">{{ current|trans }}</span>
     </button>

@@ -5,10 +5,19 @@
     {%- set type = type|default('number') -%}
     <div class="input-group">
         {%- if not disabled -%}
+            {% from 'macros/_attributes.html.twig' import attributes %}
             {%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': min_margin|percent}) -%}
-            {%- set template = '<div class="tooltip tooltip-success" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>' -%}
-            <button type="button" class="btn btn-outline-secondary d-print-none btn-adjust has-tooltip{% if not overall_below %} cursor-default{% endif %}" aria-label="{{ title }}" data-bs-html="true" data-bs-toggle="tooltip" data-bs-template="{{ template }}" data-bs-title="{{ title }}"{% if not overall_below %} disabled="disabled"{% endif %}>
-                <i class="fa-solid fa-compress-arrows-alt"></i>
+            {%- set class_name = 'btn btn-adjust btn-outline-secondary d-print-none' ~ (overall_below ? '' : ' cursor-default') -%}
+            {%- set button_attributes = {
+                'type': 'button',
+                'class': class_name,
+                'data-bs-html': 'true',
+                'data-bs-title': title,
+                'data-bs-toggle': 'tooltip',
+                'data-bs-custom-class': 'tooltip-success'
+            } -%}
+            <button{{ attributes(button_attributes) }}{% if not overall_below %} disabled="disabled"{% endif %}>
+                <i class="fa-solid fa-pencil"></i>
             </button>
         {%- endif -%}
         {{- block('form_widget_simple') -}}

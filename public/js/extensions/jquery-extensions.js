@@ -108,7 +108,7 @@
          * @returns {string} the formatted value.
          */
         formatInt: function (value) {
-            if (typeof $.integerFormatter === 'undefined') {
+            if ($.isUndefined($.integerFormatter)) {
                 $.integerFormatter = new Intl.NumberFormat('de-CH', {maximumFractionDigits: 0});
             }
             return $.integerFormatter.format(value);
@@ -121,7 +121,7 @@
          * @returns {string} the formatted value.
          */
         formatFloat: function (value) {
-            if (typeof $.floatFormatter === 'undefined') {
+            if ($.isUndefined($.floatFormatter)) {
                 $.floatFormatter = new Intl.NumberFormat('de-CH', {
                     'minimumFractionDigits': 2,
                     'maximumFractionDigits': 2
@@ -229,8 +229,8 @@
         },
 
         /**
-         * Create a timer within the element. Callback function parameters can
-         * be given after the callback and timeout parameters.
+         * Create a timer within the element. Callback function parameters can be given after the callback
+         * and timeout parameters.
          *
          * @param {function} callback - The callback function that will be executed after the timer expires.
          * @param {int} timeout - The number of milliseconds to wait before executing the callback.
@@ -244,7 +244,7 @@
         },
 
         /**
-         * Clear the timer (if any) of the element.
+         * Clear the existing timer (if any) of the element.
          *
          * @return {jQuery} The element for chaining.
          */
@@ -289,7 +289,7 @@
         },
 
         /**
-         * Clear the timer interval (if any) of the element.
+         * Clear the existing timer interval (if any) of the element.
          *
          * @return {jQuery} The element for chaining.
          */
@@ -305,9 +305,8 @@
         },
 
         /**
-         * Clear the timer interval (if any) and create a timer interval within
-         * the element. Callback function parameters can be given after the
-         * callback and timeout values.
+         * Clear the existing timer interval (if any) and create a new timer interval within
+         * the element. Callback function parameters can be given after the callback and timeout values.
          *
          * @param {function} _callback - The callback function that will be executed.
          * @param {int} _timeout - The intervals (in milliseconds) on how often to execute the callback.
@@ -404,7 +403,7 @@
                 type = type.replace(/,/g, '|');
                 type = type.replace(/\/\*/g, '/.*');
 
-                const pattern = '.?(' + type + ')$';
+                const pattern = `.?(${type})$`;
                 const flags = 'i';
                 const regex = new RegExp(pattern, flags);
                 for (let i = 0, len = files.length; i < len; i++) {
@@ -421,7 +420,7 @@
         /**
          * Returns the files (if any) from an input type file.
          *
-         * @return {array} The selected files, if any; an empty array otherwise.
+         * @return {Array.<File>} The selected files, if any; an empty array otherwise.
          */
         getInputFiles: function () {
             const files = this[0].files;
@@ -524,7 +523,7 @@
          */
         hasAttr: function (name) {
             const attr = $(this).attr(name);
-            return typeof attr !== 'undefined' && attr !== false && attr !== null;
+            return !$.isUndefined(attr) && attr !== false && attr !== null;
         },
 
         /**
@@ -564,8 +563,7 @@
     if (!$.fn.popover) {
         $.fn.popover = function (options = {}) {
             return this.each(function () {
-                const data = new bootstrap.Popover(this, options);
-                return data;
+                return new bootstrap.Popover(this, options);
             });
         };
     }
@@ -573,8 +571,7 @@
     if (!$.fn.tooltip) {
         $.fn.tooltip = function (options = {}) {
             return this.each(function () {
-                const data = new bootstrap.Tooltip(this, options);
-                return data;
+                return new bootstrap.Tooltip(this, options);
             });
         };
     }

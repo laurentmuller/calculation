@@ -234,10 +234,15 @@ class Log extends AbstractEntity
 
     /**
      * Create an instance of Log.
+     *
+     * @param int|null $id the optional primary key identifier
      */
-    public static function instance(): self
+    public static function instance(int $id = null): self
     {
-        return new self();
+        $log = new self();
+        $log->id = $id;
+
+        return $log;
     }
 
     public function isChannel(): bool

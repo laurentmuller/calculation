@@ -211,7 +211,7 @@
         marginBottom: 0,
         focusOnShow: false,
         savePosition: false,
-        className: 'bg-primary text-white'
+        className: 'bg-primary-subtle'
     };
 
     /**

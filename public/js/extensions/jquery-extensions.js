@@ -399,13 +399,11 @@
             // check type (copied from accept method)
             let type = $(this).attr('accept') || false;
             if (type) {
-                type = type.replace(/[\-\[\]\/\{\}\(\)\+\?\.\\\^\$\|]/g, '\\$&');
-                type = type.replace(/,/g, '|');
-                type = type.replace(/\/\*/g, '/.*');
-
+                type = type.replace(/[\-\[\]\/\{\}\(\)\+\?\.\\\^\$\|]/g, "\\$&")
+                    .replace(/,/g, "|")
+                    .replace(/\/\*/g, "/.*");
                 const pattern = `.?(${type})$`;
-                const flags = 'i';
-                const regex = new RegExp(pattern, flags);
+                const regex = new RegExp(pattern, 'i');
                 for (let i = 0, len = files.length; i < len; i++) {
                     if (!files[i].type.match(regex)) {
                         return false;

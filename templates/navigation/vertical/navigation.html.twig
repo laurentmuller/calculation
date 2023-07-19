@@ -46,24 +46,24 @@
     {# menus #}
     <ul class="navbar-nav mb-auto w-100">
         {% if is_granted_data %}
-            {{ include('navigation_vertical/navigation_data.html.twig') }}
+            {{ include('navigation/vertical/navigation_data.html.twig') }}
         {% endif %}
         {% if is_granted_calculation %}
-            {{ include('navigation_vertical/navigation_chart.html.twig') }}
+            {{ include('navigation/vertical/navigation_chart.html.twig') }}
         {% endif %}
         {% if is_granted_data or is_admin %}
-            {{ include('navigation_vertical/navigation_tools.html.twig') }}
+            {{ include('navigation/vertical/navigation_tools.html.twig') }}
         {% endif %}
         {% if is_admin -%}
-            {{ include('navigation_vertical/navigation_admin.html.twig') }}
+            {{ include('navigation/vertical/navigation_admin.html.twig') }}
         {% endif %}
         {% if is_test -%}
-            {{ include('navigation_vertical/navigation_test.html.twig') }}
+            {{ include('navigation/vertical/navigation_test.html.twig') }}
         {% endif %}
     </ul>
     {# bottom menus #}
     <div class="d-flex align-items-center border-top w-100 pt-2{% if not status_bar %} mb-4{% endif %}">
-        {{ include('navigation_vertical/navigation_user.html.twig') }}
-        {{ include('navigation_vertical/navigation_theme.html.twig') }}
+        {{ include('navigation/vertical/navigation_user.html.twig') }}
+        {{ include('navigation/vertical/navigation_theme.html.twig') }}
     </div>
 </div>

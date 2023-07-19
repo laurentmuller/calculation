@@ -138,8 +138,7 @@ class LogService implements ServiceSubscriberInterface
                 if (!$values || 6 !== \count($values) || false === $date = $this->parseDate($values[0])) {
                     continue;
                 }
-                $file->addLog(Log::instance()
-                    ->setId($reader->key())
+                $file->addLog(Log::instance($reader->key())
                     ->setCreatedAt($date)
                     ->setChannel($values[1])
                     ->setLevel($values[2])

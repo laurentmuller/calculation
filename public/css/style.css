@@ -949,6 +949,7 @@ span.form-label {
     );
 }
 
-.typeahead .active .text-success {
+.typeahead.dropdown-menu .dropdown-item.active span {
     color: inherit !important;
+    font-weight: inherit !important;
 }

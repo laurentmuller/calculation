@@ -61,16 +61,6 @@ abstract class AbstractEntity implements EntityInterface
     }
 
     /**
-     * Sets the identifier.
-     */
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
      * Trim the given string.
      *
      * @param ?string $str the value to trim

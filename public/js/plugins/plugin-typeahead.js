@@ -267,14 +267,14 @@
          * @private
          */
         _renderItem(regex, item, isStringDisplay) {
-            let display;
+            let text;
             if (this._isObject(item)) {
-                display = isStringDisplay ? item[this.displayField] : this.displayField(item);
+                text = isStringDisplay ? item[this.displayField] : this.displayField(item);
             } else {
-                display = item;
+                text = item;
             }
             const value = JSON.stringify(item);
-            const html = this._highlight(regex, display);
+            const html = this._highlight(regex, text);
             return $(this.options.item).data('value', value).html(html);
         }
 
@@ -347,8 +347,7 @@
             const query = this._getQueryText();
             if (query === this.query) {
                 if (!this.visible) {
-                    this._first();
-                    this.show();
+                    this._first().show();
                 }
                 return this;
             }
@@ -499,9 +498,7 @@
          * @private
          */
         _highlight(regex, text) {
-            return text.replace(regex, function (_$1, match) {
-                return `<span class="text-success fw-bold">${match}</span>`;
-            });
+            return text.replace(regex, this.options.highlight);
         }
 
         /**
@@ -512,7 +509,7 @@
          */
         _getHighlighter() {
             const query = this.query.replace(/[\-\[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-            return new RegExp(`(${query})`, 'gi');
+            return new RegExp(query, 'gi');
         }
 
 
@@ -678,7 +675,7 @@
          */
         _input() {
             if (!this._isQueryText()) {
-                this.hide();
+                this._clearTimeout()._abortAjax().hide();
             }
         }
 
@@ -782,6 +779,7 @@
         item: '<button class="dropdown-item" type="button" role="option" />',
         header: '<h6 class="dropdown-header text-uppercase" />',
         divider: '<hr class="dropdown-divider">',
+        highlight: '<span class="text-success fw-bold">$&</span>',
 
         // functions
         onSelect: null,

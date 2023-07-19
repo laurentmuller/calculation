@@ -641,9 +641,9 @@ list:
   sort_label: Ordre de tri
   sort_default_title: Tri par défaut
   sort_ascending: Tri croissant
-  sort_ascending_title: "Appliquer l'ordre de tri par défaut : Colonne %name% en mode croissant"
+  sort_ascending_title: "Appliquer l'ordre de tri par défaut :<br>%name% en ordre croissant"
   sort_descending: Tri décroissant
-  sort_descending_title: "Appliquer l'ordre de tri par défaut : Colonne %name% en mode décroissant"
+  sort_descending_title: "Appliquer l'ordre de tri par défaut :<br>%name% en ordre décroissant"
 log:
   name: Entré du journal
   title: Journal de l'application

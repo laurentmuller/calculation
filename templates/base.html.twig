@@ -70,13 +70,13 @@
 <body{% if status_bar %} class="status-bar"{% endif %} data-cookie-path="{{ cookie_path }}">
     {# vertical navigation #}
     {%- block navigation_vertical -%}
-        {{- include('navigation_vertical/navigation.html.twig') }}
+        {{- include('navigation/vertical/navigation.html.twig') }}
     {%- endblock %}
     {# main content #}
     <div class="page-content{{ sidebar_class }}">
         {# horizontal navigation #}
         {%- block navigation_horizontal -%}
-            {{ include('navigation_horizontal/navigation.html.twig') }}
+            {{ include('navigation/horizontal/navigation.html.twig') }}
         {%- endblock %}
         {# container #}
         <div role="main" class="{% block container_class 'container' %}">

@@ -256,6 +256,7 @@ class CalculationController extends AbstractEntityController
             $parameters['category_index'] = $item->getCategoriesCount();
             $parameters['item_index'] = $item->getLinesCount();
         }
+        $parameters['id'] = $item->getId();
 
         return parent::editEntity($request, $item, $parameters);
     }

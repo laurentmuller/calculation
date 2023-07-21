@@ -37,13 +37,17 @@
 {# body #}
 {% block body %}
 {{ parent() }}
-<div class="accordion" id="parent_accordion">
+<div class="card" id="parent_accordion">
 {{ tools.aboutCard('licence', 'about_licence_pdf', false, 'about_licence_word') }}
+<hr class="my-0">
 {{ tools.aboutCard('policy', 'about_policy_pdf', false, 'about_policy_word') }}
 {% if super_admin %}
+    <hr class="my-0">
     {{ tools.aboutCard('symfony', 'about_symfony_pdf', 'about_symfony_excel') }}
+    <hr class="my-0">
     {{ tools.aboutCard('php', 'about_php_pdf', 'about_php_excel') }}
-    {{ tools.aboutCard('mysql', 'about_mysql_pdf', 'about_mysql_excel') }}
+    <hr class="my-0">
+    {{ tools.aboutCard('mysql', 'about_mysql_pdf', 'about_mysql_excel', false) }}
 {% endif %}
 </div>
 <div class="d-flex flex-wrap align-content-start gap-2 mt-2 pb-3 d-print-none">

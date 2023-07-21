@@ -102,6 +102,10 @@ final class PhpInfoService
         $info = \str_ireplace('<i>no value</i>', '<i class="text-body-secondary">No value</i>', $info);
         $info = \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
 
+        foreach (['Directive', 'Local Value', 'Master Value'] as $value) {
+            $info = \str_replace($value, '<span class="fw-bold">' . $value . '</span>', $info);
+        }
+
         return (string) \preg_replace('/<table\s(.+?)>(.+?)<\/table>/is', '', $info, 1);
     }
 
@@ -157,15 +161,11 @@ final class PhpInfoService
 
     private function updateContent(string $content): string
     {
-        $keys = [
-            '_KEY',
-            'MAILER_DSN',
-            'DATABASE_URL',
-            'DATABASE_EDIT',
-            'PASSWORD',
-        ];
+        $subst = '$1******$3';
+        $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL'];
         foreach ($keys as $key) {
-            $content = (string) \preg_replace("/<tr>.*$key.*<\/tr>/m", '', $content);
+            $regex = "/(<tr.*\[\'.*$key\'\]<\/td><td.*?>)(.*)(<.*<\/tr>)/mi";
+            $content = (string) \preg_replace($regex, $subst, $content);
         }
 
         return \str_replace(

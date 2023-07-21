@@ -12,6 +12,10 @@
     $.fn.extend({
         loadContent: function () {
             const $this = $(this);
+            if ($this.data('loaded')) {
+                return;
+            }
+            $this.data('loaded', true);
             const url = $this.data('url');
             if (url) {
                 $.getJSON(url).done(function (response) {
@@ -32,40 +36,22 @@
             const content = $configuration.data("error");
             const html = "<i class='fas fa-lg fa-exclamation-triangle me-2'></i>" + content;
             $(this).find(".alert:first").addClass("alert-danger").html(html);
+        },
+
+        /**
+         * @param {string} title - the title to set.
+         */
+        updateTitle: function (title) {
+            const $toggle = $(this).prev('.card-header').find('[data-bs-toggle]');
+            $toggle.attr('title', title);
         }
     });
 
-    // update title on toggle
-    $('#parent_accordion .accordion-item').on('shown.bs.collapse', function () {
-        $(this).find('.accordion-button').attr('title', $configuration.data('collapse'));
+    $('#parent_accordion .collapse').on('shown.bs.collapse', function () {
+        $(this).find('.collapse-content').loadContent();
+        $(this).updateTitle($configuration.data('collapse'));
     }).on('hidden.bs.collapse', function () {
-        $(this).find('.accordion-button').attr('title', $configuration.data('expand'));
+        $(this).updateTitle($configuration.data('expand'));
     });
 
-    // load content on first show
-    $('#parent_accordion .accordion-item').one('show.bs.collapse', function () {
-        $(this).find('.accordion-body').loadContent();
-    });
-
-    // $('#parent_accordion .accordion-item').on('mousedown', 'a', function (e) {
-    //     e.stopPropagation();
-    //     e.preventDefault();
-    //     e.target.click();
-    //     // const $target = $(e.target);
-    //     // $target.trigger('click');
-    //     // if ($target.is('a') || $target.parent().is('a')) {
-    //     //     window.console.log($target);
-    //     //     // e.preventDefault();
-    //     //     e.stopPropagation();
-    //     // }
-    // });
-
-    // $('#parent_accordion .accordion-item').on('show.bs.collapse', function (e) {
-    //     window.console.log('show', e);
-    // });
-    // $('#parent_accordion .accordion-item').on('click', 'a', function (e) {
-    //     window.console.log('click', e);
-    // });
-
-    // $("#parent_accordion button.accordion-button").attr("data-bs-toggle", "collapse");
 }(jQuery));

@@ -26,7 +26,7 @@
 {%- endblock %}
 {# parameters #}
 {%- set title = new ? 'calculation.add.title' : 'calculation.edit.title' -%}
-{%- set title_parameters = new ? {} : {'%id%': item.id|identifier} -%}
+{%- set title_parameters = new ? {} : {'%id%': id|identifier} -%}
 {%- set form_attr = form_attr|default({})|merge({'id': 'edit-form'}) -%}
 {%- if editable -%}
     {%- set form_attr = form_attr|merge({

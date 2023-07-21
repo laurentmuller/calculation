@@ -9,18 +9,6 @@
 } -%}
 {# sidebar #}
 <div id="sidebar" data-bs-theme="dark" class="navbar navbar-vertical bg-dark border-end d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}>
-    {# logo
-    <div class="d-flex position-relative mb-1">
-        <div class="flex-shrink-0">
-            <img src="{{ asset('/images/logo/logo-customer-148x148.png') }}" alt="{{ user_service.application.customerName }}" width="65" class="rounded-circle">
-        </div>
-        <div class="flex-grow-1 ms-2">
-            <h4 class="p-0 m-0 text-white">{{ user_service.application.customerName }}</h4>
-            <p class="fw-light text-body-secondary small mb-0">PUB PROD & PRINT</p>
-            <a href="{{ user_service.application.customerUrl }}" rel="noopener noreferrer" class="stretched-link" target="_blank"></a>
-        </div>
-    </div>
-    #}
     {# toggle sidebar #}
     <button class="btn btn-outline-secondary rounded-circle py-0 px-2 hide-sidebar" title="{{ 'index.sidebar_hide'|trans }}">
         <i class="fa-solid fa-angle-left"></i>

@@ -9,15 +9,16 @@
 
 .phpversion td {
     -ms-word-break: break-word;
-        word-break: break-word;
+    word-break: break-word;
     -webkit-hyphens: auto;
-       -moz-hyphens: auto;
-            hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
 }
 
 .phpversion td.h {
     font-size: initial;
 }
+
 .phpversion td.e {
     width: 30%;
 }
@@ -32,14 +33,23 @@
 
 .phpversion h1 {
     font-weight: bold;
-    font-size: 22px;
+    font-size: 1.5rem;
     margin-bottom: 0;
 }
 
 .phpversion h2 {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 1.25rem;
     margin-bottom: 0;
+}
+
+.phpversion h2 p {
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.phpversion tbody .h th {
+    font-weight: normal;
 }
 
 @media print {
@@ -51,6 +61,6 @@
 }
 
 .icon-about {
-    font-size:5em;
+    font-size: 5em;
     line-height: 1em;
 }

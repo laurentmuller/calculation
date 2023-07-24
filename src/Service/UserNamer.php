@@ -30,7 +30,7 @@ class UserNamer implements NamerInterface
      */
     public static function getBaseName(User|int $key, ImageSize $size, ImageExtension|string $ext = null): string
     {
-        $id = (int) ($key instanceof User ? $key->getId() : $key);
+        $id = \is_int($key) ? $key : (int) $key->getId();
         $name = \sprintf('USER_%06d_%03d', $id, $size->value);
         if (null !== $ext && '' !== $ext) {
             if ($ext instanceof ImageExtension) {

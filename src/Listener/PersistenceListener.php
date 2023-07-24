@@ -93,10 +93,16 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     public function postUpdate(LifecycleEventArgs $args): void
     {
         $entity = $this->getEntity($args);
-        if (!$entity instanceof AbstractEntity || $this->isLastLogin($args)) {
+        if (!$entity instanceof AbstractEntity || $this->isUserLastLogin($args)) {
             return;
         }
-        $this->notify($entity, '.edit.success', 'common.edit_success');
+        if ($this->isUserRights($args)) {
+            $this->notify($entity, '', 'user.rights.success');
+        } elseif ($this->isUserPassword($args)) {
+            $this->notify($entity, '', 'user.change_password.change_success');
+        } else {
+            $this->notify($entity, '.edit.success', 'common.edit_success');
+        }
     }
 
     /**
@@ -138,19 +144,51 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     }
 
     /**
+     * @psalm-template T of AbstractEntity
+     *
      * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     * @psalm-param class-string<T> $class
      */
-    private function isLastLogin(LifecycleEventArgs $args): bool
+    private function isObjectChange(LifecycleEventArgs $args, string $class, string ...$fields): bool
     {
-        if ($args->getObject() instanceof User) {
-            $manager = $args->getObjectManager();
-            $unitOfWork = $manager->getUnitOfWork();
-            $changeSet = $unitOfWork->getEntityChangeSet($args->getObject());
-
-            return \array_key_exists('lastLogin', $changeSet);
+        $object = $args->getObject();
+        if ($object::class !== $class) {
+            return false;
+        }
+        $manager = $args->getObjectManager();
+        $unitOfWork = $manager->getUnitOfWork();
+        $changeSet = $unitOfWork->getEntityChangeSet($object);
+        foreach ($fields as $field) {
+            if (\array_key_exists($field, $changeSet)) {
+                return true;
+            }
         }
 
         return false;
+    }
+
+    /**
+     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     */
+    private function isUserLastLogin(LifecycleEventArgs $args): bool
+    {
+        return $this->isObjectChange($args, User::class, 'lastLogin');
+    }
+
+    /**
+     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     */
+    private function isUserPassword(LifecycleEventArgs $args): bool
+    {
+        return $this->isObjectChange($args, User::class, 'password');
+    }
+
+    /**
+     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     */
+    private function isUserRights(LifecycleEventArgs $args): bool
+    {
+        return $this->isObjectChange($args, User::class, 'rights', 'overwrite');
     }
 
     private function notify(AbstractEntity $entity, string $suffix, string $default, FlashType $type = FlashType::SUCCESS): void

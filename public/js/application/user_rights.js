@@ -8,9 +8,8 @@
  */
 function findCheckBox($parent) {
     'use strict';
-
     if ($parent && $parent.length) {
-        return $parent.findExists(":checkbox");
+        return $parent.findExists(':checkbox');
     }
     return null;
 }
@@ -22,7 +21,6 @@ function findCheckBox($parent) {
  */
 function getAllCheckboxes() {
     'use strict';
-
     return $('#table-edit :checkbox');
 }
 
@@ -34,7 +32,6 @@ function getAllCheckboxes() {
  */
 function updateCheckBoxes($parent, callback) {
     'use strict';
-
     let checked = 0;
     let unchecked = 0;
     const $inputs = [];
@@ -66,15 +63,11 @@ function updateCheckBoxes($parent, callback) {
  */
 function onColumnClick($element) {
     'use strict';
-
-    // get column index
-    const $cell = $element.parents("th");
-    const $row = $cell.parents("tr");
-    const index = $row.children("th").index($cell);
-
-    // update
-    updateCheckBoxes($("#table-edit tbody tr"), function ($elem) {
-        const $parent = $elem.find("td").eq(index);
+    const $cell = $element.parents('th');
+    const $row = $cell.parents('tr');
+    const index = $row.children('th').index($cell);
+    updateCheckBoxes($('#table-edit tbody tr'), function ($elem) {
+        const $parent = $elem.find('td').eq(index);
         return findCheckBox($parent);
     });
 }
@@ -86,12 +79,8 @@ function onColumnClick($element) {
  */
 function onRowClick($element) {
     'use strict';
-
-    // get row
-    const $row = $element.parents("tr");
-
-    // update
-    updateCheckBoxes($row.children("td"), findCheckBox);
+    const $row = $element.parents('tr');
+    updateCheckBoxes($row.children('td'), findCheckBox);
 }
 
 /**
@@ -101,10 +90,10 @@ function onRowClick($element) {
  */
 function onOverwriteClick($element) {
     'use strict';
-
     const disabled = !$element.isChecked();
     getAllCheckboxes().toggleDisabled(disabled);
-    $('#all, #none, #toggle, .btn-col, .btn-row').toggleDisabled(disabled);
+    $('#all, #none, #toggle, .link-col, .link-row').toggleDisabled(disabled);
+
 }
 
 /**
@@ -120,7 +109,7 @@ function updateAllCheckboxes(checked) {
 /**
  * Toggle all checkbox values.
  */
-function toggle() {
+function toggleAllCheckboxes() {
     'use strict';
     getAllCheckboxes().toggleChecked();
 }
@@ -128,14 +117,12 @@ function toggle() {
 /**
  * Resets the inputs to their default values.
  */
-function defaultValues() {
+function setDefaultValues() {
     'use strict';
-
     getAllCheckboxes().each(function () {
         const $this = $(this);
         $this.setChecked($this.data('default') || false);
     });
-
     const $overwrite = $('#user_rights_overwrite');
     if ($overwrite.length) {
         $overwrite.setChecked($overwrite.data('default') || false);
@@ -150,31 +137,30 @@ function defaultValues() {
     'use strict';
 
     // validation
-    $("form").initValidator();
+    $('form').initValidator();
 
     // bind events
-    $("#all").on("click", function () {
+    $('#all').on('click', function () {
         updateAllCheckboxes(true);
     });
-    $("#none").on("click", function () {
+    $('#none').on('click', function () {
         updateAllCheckboxes(false);
     });
-    $("#toggle").on("click", function () {
-        toggle();
+    $('#toggle').on('click', function () {
+        toggleAllCheckboxes();
     });
-    $("#default").on("click", function () {
-        defaultValues();
+    $('#default').on('click', function () {
+        setDefaultValues();
     });
-    $(".link-col").on("click", function (e) {
+    $('.link-col').on('click', function (e) {
         e.preventDefault();
         onColumnClick($(this));
     });
-    $(".link-row").on("click", function (e) {
+    $('.link-row').on('click', function (e) {
         e.preventDefault();
         onRowClick($(this));
     });
-    $('#user_rights_overwrite').on("click", function () {
+    $('#user_rights_overwrite').on('click', function () {
         onOverwriteClick($(this));
     });
-
 }(jQuery));

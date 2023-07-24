@@ -75,12 +75,12 @@
 {%- set title = ('about.' ~ id)|trans -%}
 <div class="card-header border-bottom-0 d-flex align-items-center gap-1">
     <a class="card-title flex-fill mb-0" href="#" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" title="{{ 'about.expand'|trans }}">{{- title -}}</a>
-    {{ linkExternal(path(pdf_route), null, 'fs-5', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
+    {{ linkExternal(path(pdf_route), null, null, ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
     {% if excel_route %}
-        {{ linkExternal(path(excel_route), null, 'fs-5', ICON_EXCEL ~ ' fa-fw', 'common.button_export_excel') }}
+        {{ linkExternal(path(excel_route), null, null, ICON_EXCEL ~ ' fa-fw', 'common.button_export_excel') }}
     {% endif %}
     {% if word_route %}
-        {{ linkExternal(path(word_route), null, 'fs-5', ICON_WORD ~ ' fa-fw', 'common.button_export_word') }}
+        {{ linkExternal(path(word_route), null, null, ICON_WORD ~ ' fa-fw', 'common.button_export_word') }}
     {% endif %}
 </div>
 <div class="card-body border-top collapse" id="{{ id }}" data-bs-parent="#parent_accordion" data-url="{{ route }}">

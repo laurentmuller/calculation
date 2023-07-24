@@ -210,23 +210,19 @@ class CalculationController extends AbstractEntityController
     #[Route(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => Requirement::DIGITS])]
     public function state(Request $request, Calculation $item, EntityManagerInterface $manager): Response
     {
-        $oldState = $item->getState();
         $form = $this->createForm(CalculationEditStateType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            if ($oldState !== $item->getState()) {
-                $manager->flush();
-            }
-            $this->successTrans('calculation.state.success', ['%name%' => $item->getDisplay()]);
+            $manager->flush();
 
             return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
         }
-        // parameters
+
         $parameters = [
             'form' => $form,
             'item' => $item,
         ];
         $this->updateQueryParameters($request, $parameters, (int) $item->getId());
-        // display
+
         return $this->render('calculation/calculation_state.html.twig', $parameters);
     }
 

@@ -96,6 +96,7 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
     private ?string $selector = null;
 
     #[Assert\NotBlank]
+    #[Assert\NoSuspiciousCharacters]
     #[Assert\Length(min: self::MIN_USERNAME_LENGTH, max: self::MAX_USERNAME_LENGTH)]
     #[ORM\Column(length: self::MAX_USERNAME_LENGTH, unique: true)]
     private ?string $username = null;

@@ -166,7 +166,6 @@ class UserController extends AbstractEntityController
         $form = $this->createForm(UserChangePasswordType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
             $this->saveToDatabase($item);
-            $this->successTrans('user.change_password.change_success', ['%name%' => $item->getDisplay()]);
 
             return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
         }
@@ -283,7 +282,6 @@ class UserController extends AbstractEntityController
         $form = $this->createForm(UserRightsType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
             $manager->flush();
-            $this->successTrans('user.rights.success', ['%name%' => $item->getDisplay()]);
 
             return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
         }

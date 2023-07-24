@@ -52,10 +52,15 @@ class StrengthValidator extends AbstractConstraintValidator
         return $this->translator;
     }
 
+    public function validate(#[\SensitiveParameter] mixed $value, Constraint $constraint): void
+    {
+        parent::validate($value, $constraint);
+    }
+
     /**
      * @param Strength $constraint
      */
-    protected function doValidate(string $value, Constraint $constraint): void
+    protected function doValidate(#[\SensitiveParameter] string $value, Constraint $constraint): void
     {
         $minimum = $constraint->minimum;
         if (StrengthLevel::NONE === $minimum) {
@@ -79,12 +84,11 @@ class StrengthValidator extends AbstractConstraintValidator
 
     private function getUserInputs(Strength $constraint): array
     {
+        $userInputs = [];
         $object = $this->context->getObject();
         if (null === $object) {
-            return [];
+            return $userInputs;
         }
-
-        $userInputs = [];
         if (null !== $path = $constraint->userNamePath) {
             $userInputs[] = $this->getValue($object, $path);
         }
@@ -100,7 +104,7 @@ class StrengthValidator extends AbstractConstraintValidator
         try {
             return (string) $this->propertyAccessor->getValue($object, $path);
         } catch (NoSuchPropertyException $e) {
-            throw new ConstraintDefinitionException(\sprintf('Invalid property path "%s" for "%s".', $path, \get_debug_type($object)), $e->getCode(), $e);
+            throw new ConstraintDefinitionException(message: \sprintf('Invalid property path "%s" for "%s".', $path, \get_debug_type($object)), previous: $e);
         }
     }
 }

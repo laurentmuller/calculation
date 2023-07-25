@@ -16,6 +16,8 @@ licence ci-dessus.
 
 ## Définitions
 
+**Application**
+
 - **Application** : Par application, nous entendons le site web **Calculation** exploité par **bibi.nu**.
 
 - **Données à caractère personnel** : Les données à caractère personnel désignent des données concernant un individu

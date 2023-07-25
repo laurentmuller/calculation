@@ -15,6 +15,15 @@ namespace App\Pdf\Html;
 /**
  * Specialized chunk for HTML unordered list (ul).
  */
-class HtmlUlChunk extends HtmlParentChunk
+class HtmlUlChunk extends AbstractHtmlListChunk
 {
+    public function getBulletLast(): string
+    {
+        return \chr(149);
+    }
+
+    public function getBulletText(HtmlLiChunk $chunk): string
+    {
+        return $this->getBulletLast();
+    }
 }

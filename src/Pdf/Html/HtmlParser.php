@@ -135,16 +135,15 @@ readonly class HtmlParser
      * @param string          $name   the tag name
      * @param HtmlParentChunk $parent the parent chunk
      * @param ?string         $class  the optional class name
-     * @param \DOMNode        $node   the current node
+     * @param \DOMText        $node   the current node
      */
-    private function createTextChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): void
+    private function createTextChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMText $node): void
     {
-        /** @var \DOMText $nodeText */
-        $nodeText = $node;
-        if ('' !== $value = \trim($nodeText->wholeText)) {
+        $wholeText = $node->wholeText;
+        if ('' !== $wholeText && ' ' !== $wholeText) {
             $chunk = new HtmlTextChunk($name, $parent);
             $chunk->setClassName($class);
-            $chunk->setText($value);
+            $chunk->setText($wholeText);
         }
     }
 
@@ -274,7 +273,9 @@ readonly class HtmlParser
                 break;
 
             case \XML_TEXT_NODE:
-                $this->createTextChunk($name, $parent, $class, $node);
+                if ($node instanceof \DOMText) {
+                    $this->createTextChunk($name, $parent, $class, $node);
+                }
                 break;
         }
         $this->parseNodes($parent, $node);

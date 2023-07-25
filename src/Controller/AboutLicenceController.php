@@ -51,10 +51,7 @@ class AboutLicenceController extends AbstractController
     #[Route(path: '/pdf', name: 'about_licence_pdf')]
     public function pdf(): PdfResponse
     {
-        $parameters = [
-            'link' => false,
-        ];
-        $content = $this->renderView('about/licence_content.html.twig', $parameters);
+        $content = $this->renderView('about/licence_content.html.twig', ['link' => false]);
         $report = new HtmlReport($this, $content);
         $report->setTitleTrans('about.licence', [], true);
 
@@ -69,10 +66,7 @@ class AboutLicenceController extends AbstractController
     #[Route(path: '/word', name: 'about_licence_word')]
     public function word(): WordResponse
     {
-        $parameters = [
-            'link' => false,
-        ];
-        $content = $this->renderView('about/licence_content.html.twig', $parameters);
+        $content = $this->renderView('about/licence_content.html.twig', ['link' => false]);
         $doc = new HtmlDocument($this, $content);
         $doc->setTitleTrans('about.licence');
 

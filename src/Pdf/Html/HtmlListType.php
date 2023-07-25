@@ -69,16 +69,15 @@ enum HtmlListType: string
      */
     public static function toLetter(int $number, string $suffix = ''): string
     {
-        $text = '';
         if ($number <= 0) {
-            return $text;
+            return '';
         }
-        while ($number > 26) {
-            $text .= 'A';
-            $number -= 26;
+
+        if ($number <= 26) {
+            return \chr(64 + $number) . $suffix;
         }
-        // 64 = 'A'
-        return $text . \chr(64 + $number) . $suffix;
+
+        return \str_repeat('A', \intdiv($number, 26)) . \chr(64 + ($number % 26)) . $suffix;
     }
 
     /**

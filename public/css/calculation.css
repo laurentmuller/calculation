@@ -10,6 +10,7 @@
         max-width: initial;
         width: 100%;
     }
+
     .col-xl-8 {
         -ms-flex: initial;
         flex: initial;
@@ -24,6 +25,7 @@
         flex: 0 0 33.333333%;
         max-width: 33.333333%;
     }
+
     .col-xl-8 {
         -ms-flex: 0 0 66.666667%;
         flex: 0 0 66.666667%;
@@ -33,4 +35,15 @@
 
 #calculations tbody:last-child tr:last-child td {
     border-bottom-width: 0 !important;
+}
+
+/*
+ * reset header group colors when selected
+ */
+thead.group tr.table-success th.bg-body-tertiary,
+thead.group tr.table-primary th.bg-body-tertiary {
+    color: var(--bs-table-color) !important;
+    border-width: 0 !important;
+    border-color: var(--bs-table-border-color) !important;
+    background-color: var(--bs-table-border-color) !important;
 }

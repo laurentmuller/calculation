@@ -34,12 +34,7 @@ class AboutMySqlController extends AbstractController
     #[Route(path: '/content', name: 'about_mysql_content')]
     public function content(DatabaseInfoService $service): JsonResponse
     {
-        $parameters = [
-            'version' => $service->getVersion(),
-            'database' => $service->getDatabase(),
-            'configuration' => $service->getConfiguration(),
-        ];
-        $content = $this->renderView('about/mysql_content.html.twig', $parameters);
+        $content = $this->renderView('about/mysql_content.html.twig', ['service' => $service]);
 
         return $this->jsonTrue(['content' => $content]);
     }

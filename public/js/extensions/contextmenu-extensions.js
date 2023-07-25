@@ -164,7 +164,10 @@ const MenuBuilder = class { /* exported MenuBuilder */
     fill($elements) {
         const that = this;
         $elements.each(function () {
-            const $item = $(this);
+            let $item = $(this);
+            if ($item.is('li')) {
+                $item = $item.children(':first-child');
+            }
             if ($item.hasClass('dropdown-divider')) {
                 that.addSeparator();
             } else if ($item.hasClass('dropdown-header')) {

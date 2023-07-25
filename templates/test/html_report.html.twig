@@ -3,12 +3,15 @@
 {%- endmacro %}
 <h6 class="bookmark">Liste ordonnée (Numbers)</h6>
 <ol>
-    <li>Par application, nous entendons le site web https://www.calculation.bibi.nu exploité par {{ app_owner }}.</li>
+    <li>Par application, nous entendons le site web <strong>bibi.nu</strong> exploité par <strong>{{ app_owner }}</strong>.</li>
     <li>Les données à caractère personnel désignent des données concernant un individu.</li>
     <li>Données d'utilisation
         <ol>
             <li>Première ligne</li>
             <li>Deuxième ligne</li>
+            <li>Troisième ligne</li>
+            <li>Quatrième ligne</li>
+            <li>Cinquième ligne</li>
         </ol>
     </li>
     <li>Les cookies sont de petits <b>fichiers enregistrés</b> sur votre dispositif (ordinateur, tablette ou mobile).</li>
@@ -52,12 +55,13 @@
 </ol>
 <h6 class="bookmark">Liste ordonnée (Alphabetically ordered list, uppercase)</h6>
 <ol type="A" start="1">
-    <li>Par application, nous entendons le site web https://www.calculation.bibi.nu exploité par {{ app_owner }}.</li>
+    <li>Par application, nous entendons le site web <strong>https://www.calculation.bibi.nu</strong> exploité par {{ app_owner }}.</li>
     <li>Les données à caractère personnel désignent des données concernant un individu.</li>
     <li>Données d'utilisation
         <ol type="A">
-            <li>Première ligne</li>
-            <li>Deuxième ligne</li>
+            {% for i in 1..30 %}
+                <li>Ligne {{ i }}</li>
+            {% endfor %}
         </ol>
     </li>
     <li>Les cookies sont de petits fichiers enregistrés sur votre dispositif (ordinateur, tablette ou mobile).</li>

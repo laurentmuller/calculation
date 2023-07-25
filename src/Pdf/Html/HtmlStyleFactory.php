@@ -46,13 +46,13 @@ final class HtmlStyleFactory
             'h6' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.1, 2),
             'p' => self::doCreate(false, PdfFont::DEFAULT_SIZE, 2),
             'ul', 'ol' => self::doCreate(false, PdfFont::DEFAULT_SIZE, 2, 4),
-            'li' => self::default(),
+            'li', 'span' => self::default(),
             'b', 'strong' => self::doCreate(true),
             'i', 'em' => self::default()->setFontItalic(true),
             'u' => self::default()->setFontUnderline(true),
             'code' => self::default()
-                ->setTextColor(PdfTextColor::red())
-                ->setFontName(PdfFontName::COURIER),
+                ->setFontName(PdfFontName::COURIER)
+                ->setTextColor(PdfTextColor::red()),
             'var' => self::default()
                 ->setFontName(PdfFontName::COURIER)
                 ->setFontItalic(),

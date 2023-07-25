@@ -15,7 +15,7 @@ namespace App\Pdf\Html;
 /**
  * Specialized chunk for HTML ordered list (ol).
  */
-class HtmlOlChunk extends HtmlParentChunk
+class HtmlOlChunk extends AbstractHtmlListChunk
 {
     /**
      * The start counting.
@@ -27,37 +27,14 @@ class HtmlOlChunk extends HtmlParentChunk
      */
     private HtmlListType $type = HtmlListType::NUMBER;
 
-    /**
-     * Gets the bullet text for the given child.
-     *
-     * @param AbstractHtmlChunk $chunk the child chunk to get text for
-     *
-     * @return string the bullet text
-     */
-    public function getBulletChunk(AbstractHtmlChunk $chunk): string
+    public function getBulletLast(): string
     {
-        return $this->getBulletText($this->indexOf($chunk) + 1);
+        return $this->getText($this->start + $this->count() - 1);
     }
 
-    /**
-     * Gets the bullet text for this number of children (if any).
-     */
-    public function getBulletMaximum(): string
+    public function getBulletText(HtmlLiChunk $chunk): string
     {
-        return $this->getBulletText($this->count());
-    }
-
-    /**
-     * Gets the bullet text for the given index.
-     * <b>N.B.:</b> If the index is smaller than or equal to 0, an empty string ('') is returned.
-     *
-     * @param int $index the list item index (1 based)
-     *
-     * @return string the bullet text
-     */
-    public function getBulletText(int $index): string
-    {
-        return $this->type->getBulletText($index + $this->start - 1);
+        return $this->getText($this->start + $this->indexOf($chunk));
     }
 
     /**
@@ -96,5 +73,10 @@ class HtmlOlChunk extends HtmlParentChunk
         $this->type = $type;
 
         return $this;
+    }
+
+    private function getText(int $number): string
+    {
+        return $this->type->getBulletText($number);
     }
 }

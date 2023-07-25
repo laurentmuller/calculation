@@ -1661,7 +1661,7 @@ const MoveHandler = {
 
     // user margin
     const $margin = $('#calculation_userMargin');
-    $margin.on('input propertychange', function () {
+    $margin.on('input change', function () {
         $margin.updateTimer(function () {
             Application.updateTotals(false);
         }, 250);

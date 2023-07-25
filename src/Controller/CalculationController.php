@@ -65,21 +65,17 @@ class CalculationController extends AbstractEntityController
     #[Route(path: '/add', name: 'calculation_add')]
     public function add(Request $request): Response
     {
-        $application = $this->getApplication();
-        $state = $application->getDefaultState();
-        $product = $application->getDefaultProduct();
-        $quantity = $application->getDefaultQuantity();
         $item = new Calculation();
-        if ($state instanceof CalculationState) {
+        $application = $this->getApplication();
+        if (($state = $application->getDefaultState()) instanceof CalculationState) {
             $item->setState($state);
         }
-        if ($product instanceof Product) {
-            $item->addProduct($product, $quantity);
+        if (($product = $application->getDefaultProduct()) instanceof Product) {
+            $item->addProduct($product, $application->getDefaultQuantity());
             $this->service->updateTotal($item);
         }
-        $parameters = ['overall_below' => $this->isMarginBelow($item)];
 
-        return $this->editEntity($request, $item, $parameters);
+        return $this->editEntity($request, $item);
     }
 
     /**
@@ -118,9 +114,7 @@ class CalculationController extends AbstractEntityController
     #[Route(path: '/edit/{id}', name: 'calculation_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Calculation $item): Response
     {
-        $parameters = ['overall_below' => $this->isMarginBelow($item)];
-
-        return $this->editEntity($request, $item, $parameters);
+        return $this->editEntity($request, $item);
     }
 
     /**
@@ -242,17 +236,16 @@ class CalculationController extends AbstractEntityController
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
-        /* @var Calculation $item */
-        $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
         $parameters['min_margin'] = $this->getMinMargin();
         $parameters['empty_items'] = $item->hasEmptyItems();
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
+        $parameters['overall_below'] = $this->isMarginBelow($item);
+        $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
         if ($parameters['editable'] = $item->isEditable()) {
             $parameters['group_index'] = $item->getGroupsCount();
             $parameters['category_index'] = $item->getCategoriesCount();
             $parameters['item_index'] = $item->getLinesCount();
         }
-        $parameters['id'] = $item->getId();
 
         return parent::editEntity($request, $item, $parameters);
     }

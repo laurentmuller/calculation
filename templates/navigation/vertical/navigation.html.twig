@@ -28,11 +28,11 @@
         {{ dropdownSeparator(false, 'my-1 w-100') }}
     {% endif %}
     {# home page #}
-    <a class="navbar-brand" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
+    <a class="navbar-brand mb-2" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
         {{- icon('home', 'index.title') -}}
     </a>
     {# menus #}
-    <ul class="navbar-nav mb-auto w-100">
+    <ul class="navbar-nav mb-auto border-top w-100">
         {% if is_granted_data %}
             {{ include('navigation/vertical/navigation_data.html.twig') }}
         {% endif %}

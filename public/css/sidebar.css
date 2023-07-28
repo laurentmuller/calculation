@@ -90,6 +90,7 @@
     font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
     float: right;
+    margin-left: 6px;
     transition: transform 0.2s ease;
     content: "\f104";
 }

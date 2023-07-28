@@ -33,6 +33,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
         self::H5,
         self::H6,
         self::PARAGRAPH,
+        self::SPAN,
         self::LIST_ITEM,
     ];
 

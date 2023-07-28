@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* global bootstrap */
+
 (() => {
     'use strict';
 
@@ -122,6 +124,18 @@
     };
 
     /**
+     * Hide the nav bar.
+     */
+    const hideNavBar = () => {
+        document.querySelectorAll('.navbar-collapse.collapse.show').forEach((element) => {
+            bootstrap.Collapse.getOrCreateInstance(element).hide();
+        });
+        // document.querySelectorAll('.navbar-toggler:not(.collapsed)').forEach((element) => {
+        //     element.click();
+        // });
+    };
+
+    /**
      * Handle the prefer color scheme change.
      */
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
@@ -144,6 +158,7 @@
                 updateActiveTheme(theme);
                 setStoredTheme(theme);
                 setTheme(theme);
+                hideNavBar();
             });
         });
     });

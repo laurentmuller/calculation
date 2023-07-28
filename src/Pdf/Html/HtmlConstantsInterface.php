@@ -18,6 +18,21 @@ namespace App\Pdf\Html;
 interface HtmlConstantsInterface
 {
     /**
+     * The bold element.
+     */
+    public const BOLD = 'b';
+
+    /**
+     * The inline Code element.
+     */
+    public const CODE = 'code';
+
+    /**
+     * The emphasis element.
+     */
+    public const EMPHASIS = 'em';
+
+    /**
      * The H1 tag name.
      */
     public const H1 = 'h1';
@@ -46,6 +61,16 @@ interface HtmlConstantsInterface
      * The H6 tag name.
      */
     public const H6 = 'h6';
+
+    /**
+     * The italic element.
+     */
+    public const ITALIC = 'i';
+
+    /**
+     * The keyboard input element.
+     */
+    public const KEYBOARD = 'kbd';
 
     /**
      * The line break tag name.
@@ -78,12 +103,32 @@ interface HtmlConstantsInterface
     public const PARAGRAPH = 'p';
 
     /**
-     * The samp tag name.
+     * The Sample Output element.
      */
-    public const SAMP = 'samp';
+    public const SAMPLE = 'samp';
+
+    /**
+     * The span tag name.
+     */
+    public const SPAN = 'span';
+
+    /**
+     * The Strong Importance element.
+     */
+    public const STRONG = 'strong';
 
     /**
      * The text chunk.
      */
     public const TEXT = '#text';
+
+    /*
+     * The underline element.
+     */
+    public const UNDERLINE = 'u';
+
+    /**
+     * The variable element.
+     */
+    public const VARIABLE = 'var';
 }

@@ -122,20 +122,14 @@
     function initBackToTop() {
         const $button = $('.btn-back-to-top');
         if ($button.length) {
-            $(window).on('scroll', function () {
+            $(window).on('scroll', () => {
                 if ($(window).scrollTop() > 100) {
                     $button.fadeIn('slow');
                 } else {
                     $button.fadeOut('slow');
                 }
             });
-            $button.on('click', function (e) {
-                e.preventDefault();
-                $('html, body').stop().animate({
-                    scrollTop: $('body').offset().top
-                }, 700);
-                return false;
-            });
+            $button.on('click', () => $(window).scrollTop(0));
         }
     }
 

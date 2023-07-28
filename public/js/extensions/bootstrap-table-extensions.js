@@ -485,7 +485,7 @@ function loadingTemplate(message) {
             $this.find('tbody tr[data-index]').each(function () {
                 const $row = $(this);
                 const row = rows[$row.index()];
-                const $paths = $(this).find('.dropdown-item-path');
+                let $paths = $(this).find('.dropdown-item-path');
                 if ($paths.length) {
                     $paths.each(function () {
                         // update link
@@ -496,7 +496,8 @@ function loadingTemplate(message) {
                         }
                     });
                     // update row
-                    if (onUpdateHref) {
+                    $paths = $(this).find('.dropdown-item-path');
+                    if ($paths.length && onUpdateHref) {
                         onUpdateHref($this, $paths);
                     }
                 }

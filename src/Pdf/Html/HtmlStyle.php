@@ -12,15 +12,24 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
+use App\Pdf\PdfDrawColor;
+use App\Pdf\PdfFillColor;
 use App\Pdf\PdfStyle;
+use App\Pdf\PdfTextColor;
 
 /**
  * The HTML style.
  */
 class HtmlStyle extends PdfStyle
 {
+    /**
+     * The pattern to extract margins.
+     */
+    private const MARGINS_PATTERN = '/^[mp]([tbsexy])?-(sm-|md-|lg-|xl-|xxl-)?([012345])/im';
+
     /**
      * The alignment.
      */
@@ -187,5 +196,130 @@ class HtmlStyle extends PdfStyle
     public function setYMargins(float $margins): self
     {
         return $this->setTopMargin($margins)->setBottomMargin($margins);
+    }
+
+    /**
+     * Update this style for the given class.
+     */
+    public function update(string $class): self
+    {
+        if ('' === $class) {
+            return $this;
+        }
+
+        return $this->updateFont($class)
+            ->updateColor($class)
+            ->updateMargins($class)
+            ->updateBorders($class)
+            ->updateAlignment($class);
+    }
+
+    private function getDefaultBorderColor(): PdfDrawColor
+    {
+        return PdfDrawColor::create('#808080') ?? PdfDrawColor::black();
+    }
+
+    private function updateAlignment(string $class): self
+    {
+        $alignment = match ($class) {
+            'text-start' => PdfTextAlignment::LEFT,
+            'text-end' => PdfTextAlignment::RIGHT,
+            'text-center' => PdfTextAlignment::CENTER,
+            'text-justify' => PdfTextAlignment::JUSTIFIED,
+            default => null,
+        };
+        if (null !== $alignment) {
+            $this->setAlignment($alignment);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Parses the border class.
+     */
+    private function updateBorders(string $class): self
+    {
+        $border = match ($class) {
+            'border' => PdfBorder::ALL,
+            'border-top' => PdfBorder::TOP,
+            'border-bottom' => PdfBorder::BOTTOM,
+            'border-start' => PdfBorder::LEFT,
+            'border-end' => PdfBorder::RIGHT,
+            'border-0' => PdfBorder::NONE,
+            'border-top-0' => PdfBorder::LEFT . PdfBorder::RIGHT . PdfBorder::BOTTOM,
+            'border-start-0' => PdfBorder::RIGHT . PdfBorder::TOP . PdfBorder::BOTTOM,
+            'border-end-0' => PdfBorder::LEFT . PdfBorder::TOP . PdfBorder::BOTTOM,
+            'border-bottom-0' => PdfBorder::LEFT . PdfBorder::RIGHT . PdfBorder::TOP,
+            default => null
+        };
+        if (null !== $border) {
+            $this->setDrawColor($this->getDefaultBorderColor())
+                ->setBorder($border);
+        }
+
+        return $this;
+    }
+
+    private function updateColor(string $class): self
+    {
+        // text
+        if (($color = HtmlBootstrapColors::parseTextColor($class)) instanceof PdfTextColor) {
+            $this->setTextColor($color);
+        }
+        // background
+        if (($color = HtmlBootstrapColors::parseFillColor($class)) instanceof PdfFillColor) {
+            $this->setFillColor($color);
+        }
+        // border
+        if (($color = HtmlBootstrapColors::parseBorderColor($class)) instanceof PdfDrawColor) {
+            $this->setDrawColor($color);
+        }
+
+        return $this;
+    }
+
+    private function updateFont(string $class): self
+    {
+        switch ($class) {
+            case 'fst-normal':
+                $this->setFontRegular();
+                break;
+            case 'fw-bold':
+            case 'fw-bolder':
+                $this->setFontBold(true);
+                break;
+            case 'fst-italic':
+                $this->setFontItalic(true);
+                break;
+            case 'text-decoration-underline':
+                $this->setFontUnderline(true);
+                break;
+            case 'font-monospace':
+                $this->setFontName(PdfFontName::COURIER);
+                break;
+        }
+
+        return $this;
+    }
+
+    private function updateMargins(string $class): self
+    {
+        $matches = [];
+        if (\preg_match_all(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
+            $match = $matches[0];
+            $value = (float) $match[3];
+            match ($match[1]) {
+                't' => $this->setTopMargin($value),
+                'b' => $this->setBottomMargin($value),
+                's' => $this->setLeftMargin($value),
+                'e' => $this->setRightMargin($value),
+                'x' => $this->setXMargins($value),
+                'y' => $this->setYMargins($value),
+                default => $this->setMargins($value) // all
+            };
+        }
+
+        return $this;
     }
 }

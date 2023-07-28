@@ -30,8 +30,10 @@
                 <div class="modal-body">
                     {% block modal_body %}{% endblock %}
                 </div>
-                <div class="modal-footer align-items-start">
-                    {% block modal_buttons %}{% endblock %}
+                <div class="modal-footer justify-content-start align-items-start">
+                    <input type="submit" role="button" id="dialog_submit_button" class="btn btn-form btn-primary" value="{{ 'common.button_ok'|trans }}">
+                    <input type="button" role="button" id="dialog_cancel_button" class="btn btn-form btn-secondary" value="{{ 'common.button_cancel'|trans }}" data-bs-dismiss="modal">
+                    {%- block modal_buttons -%}{%- endblock -%}
                     <small class="flex-grow-1 text-sm-end">{{ 'common.required'|trans|raw }}</small>
                 </div>
             </form>

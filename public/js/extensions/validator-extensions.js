@@ -213,7 +213,7 @@
              * Find elements with the same name attribute.
              *
              * @param {jQuery} $element the element to search same name for.
-             * @return {{jQuery[]}|{jQuery}} the elements, if found; the argument element otherwise.
+             * @return {jQuery[]}} the elements, if found; the argument element otherwise.
              */
             $.validator.prototype.findNamedElements = function ($element) {
                 const name = $element.attr('name') || '';
@@ -233,7 +233,7 @@
                 showModification: true,
                 errorElement: 'small',
                 errorClass: 'is-invalid d-inline-block',
-                ignore: ':hidden:not(".must-validate")',
+                ignore: ':hidden:not(".must-validate"), .skip-validation',
 
                 errorPlacement: function (error, element) {
                     const $parent = $(element).closest('.form-group, .mb-3');

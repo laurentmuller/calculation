@@ -13,7 +13,7 @@
         <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-horizontal" aria-controls="navbarContent" aria-expanded="false" aria-label="{{ 'index.toggle_navigation'|trans }}">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbar-horizontal">
+        <div class="navbar-collapse collapse" id="navbar-horizontal">
             <ul class="navbar-nav me-auto">
                 {% if is_granted_calculation -%}
                     {{ navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}

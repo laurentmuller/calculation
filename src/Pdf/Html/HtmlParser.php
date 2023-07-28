@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Utils\StringUtils;
-
 /**
  * Class to parse HTML content.
  */
@@ -59,10 +57,6 @@ readonly class HtmlParser
 
     /**
      * Creates an HTML line break chunk.
-     *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
-     * @param ?string         $class  the optional class name
      */
     private function createBrChunk(string $name, HtmlParentChunk $parent, ?string $class): void
     {
@@ -72,10 +66,6 @@ readonly class HtmlParser
 
     /**
      * Creates an HTML list item chunk.
-     *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
-     * @param ?string         $class  the optional class name
      */
     private function createLiChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlLiChunk
     {
@@ -87,27 +77,19 @@ readonly class HtmlParser
 
     /**
      * Creates an HTML ordered list chunk.
-     *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
-     * @param ?string         $class  the optional class name
-     * @param \DOMNode        $node   the current node
      */
     private function createOlChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlOlChunk
     {
         $chunk = new HtmlOlChunk($name, $parent);
-        $chunk->setClassName($class);
-        $chunk->setType($this->getTypeAttribute($node));
-        $chunk->setStart($this->getStartAttribute($node));
+        $chunk->setClassName($class)
+            ->setType($this->getTypeAttribute($node))
+            ->setStart($this->getStartAttribute($node));
 
         return $chunk;
     }
 
     /**
      * Creates an HTML page break chunk.
-     *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
      */
     private function createPageBreakChunk(string $name, HtmlParentChunk $parent): void
     {
@@ -116,10 +98,6 @@ readonly class HtmlParser
 
     /**
      * Creates an HTML parent chunk.
-     *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
-     * @param ?string         $class  the optional class name
      */
     private function createParentChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlParentChunk
     {
@@ -131,28 +109,23 @@ readonly class HtmlParser
 
     /**
      * Creates an HTML text chunk.
-     *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
-     * @param ?string         $class  the optional class name
-     * @param \DOMText        $node   the current node
      */
-    private function createTextChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMText $node): void
+    private function createTextChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): void
     {
-        $wholeText = $node->wholeText;
-        if ('' !== $wholeText && ' ' !== $wholeText) {
-            $chunk = new HtmlTextChunk($name, $parent);
-            $chunk->setClassName($class);
-            $chunk->setText($wholeText);
+        if (!$node instanceof \DOMText) {
+            return;
         }
+        $text = $node->wholeText;
+        if ('' === $text || (' ' === $text && $parent->isEmpty())) {
+            return;
+        }
+        $chunk = new HtmlTextChunk($name, $parent);
+        $chunk->setClassName($class)
+            ->setText($text);
     }
 
     /**
      * Creates an HTML unordered list chunk.
-     *
-     * @param string          $name   the tag name
-     * @param HtmlParentChunk $parent the parent chunk
-     * @param ?string         $class  the optional class name
      */
     private function createUlChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlUlChunk
     {
@@ -164,10 +137,6 @@ readonly class HtmlParser
 
     /**
      * Finds the body element.
-     *
-     * @param \DOMDocument $dom the document to search in
-     *
-     * @return ?\DOMNode the body, if found; null otherwise
      */
     private function findBody(\DOMDocument $dom): ?\DOMNode
     {
@@ -182,36 +151,30 @@ readonly class HtmlParser
     /**
      * Gets an attribute value for the given node.
      *
-     * @param \DOMNode $node    the node to get attribute for
-     * @param string   $name    the attribute name to find
-     * @param ?string  $default the default value to return if the attribute is not found
-     *
-     * @return ?string the attribute value, if found; the default value otherwise
-     *
      * @psalm-return ($default is null ? (string|null) : string)
      */
     private function getAttribute(\DOMNode $node, string $name, string $default = null): ?string
     {
-        if ($node->hasAttributes()) {
-            /** @var \DOMNamedNodeMap $attributes */
-            $attributes = $node->attributes;
-            if (($attribute = $attributes->getNamedItem($name)) instanceof \DOMNode) {
-                $value = \trim((string) $attribute->nodeValue);
-                if (StringUtils::isString($value)) {
-                    return $value;
-                }
-            }
+        if (!$node->hasAttributes()) {
+            return $default;
         }
 
-        return $default;
+        /** @var \DOMNamedNodeMap $attributes */
+        $attributes = $node->attributes;
+        if (!($attribute = $attributes->getNamedItem($name)) instanceof \DOMNode) {
+            return $default;
+        }
+
+        $value = \trim((string) $attribute->nodeValue);
+        if ('' === $value) {
+            return $default;
+        }
+
+        return $value;
     }
 
     /**
      * Gets the class attribute value for the given node.
-     *
-     * @param \DOMNode $node the node to get class attribute for
-     *
-     * @return ?string the class attribute, if found; null otherwise
      */
     private function getClassAttribute(\DOMNode $node): ?string
     {
@@ -220,10 +183,6 @@ readonly class HtmlParser
 
     /**
      * Gets the start attribute value for the given node.
-     *
-     * @param \DOMNode $node the node to get type attribute for
-     *
-     * @return int the start attribute, if found; 1 otherwise
      */
     private function getStartAttribute(\DOMNode $node): int
     {
@@ -232,10 +191,6 @@ readonly class HtmlParser
 
     /**
      * Gets the list type attribute value for the given node.
-     *
-     * @param \DOMNode $node the node to get type attribute for
-     *
-     * @return HtmlListType the list type attribute, if found; number type ('1') otherwise
      */
     private function getTypeAttribute(\DOMNode $node): HtmlListType
     {
@@ -247,9 +202,6 @@ readonly class HtmlParser
 
     /**
      * Parse a node and it's children (if any).
-     *
-     * @param HtmlParentChunk $parent the parent chunk
-     * @param \DOMNode        $node   the node to parse
      */
     private function parseNode(HtmlParentChunk $parent, \DOMNode $node): void
     {
@@ -271,11 +223,8 @@ readonly class HtmlParser
                     $parent = $this->createParentChunk($name, $parent, $class);
                 }
                 break;
-
             case \XML_TEXT_NODE:
-                if ($node instanceof \DOMText) {
-                    $this->createTextChunk($name, $parent, $class, $node);
-                }
+                $this->createTextChunk($name, $parent, $class, $node);
                 break;
         }
         $this->parseNodes($parent, $node);
@@ -283,16 +232,14 @@ readonly class HtmlParser
 
     /**
      * Parse the children nodes. Do nothing if node has no children.
-     *
-     * @param HtmlParentChunk $parent the parent chunk
-     * @param \DOMNode        $node   the node to get children to parse
      */
     private function parseNodes(HtmlParentChunk $parent, \DOMNode $node): void
     {
-        if ($node->hasChildNodes()) {
-            foreach ($node->childNodes as $child) {
-                $this->parseNode($parent, $child);
-            }
+        if (!$node->hasChildNodes()) {
+            return;
+        }
+        foreach ($node->childNodes as $child) {
+            $this->parseNode($parent, $child);
         }
     }
 
@@ -306,9 +253,10 @@ readonly class HtmlParser
         if ('' === $content = \trim($this->html)) {
             return false;
         }
-        $content = \trim(\preg_replace('/\r\n|\n|\r/m', '', $content));
-        $content = \trim(\preg_replace('/\s\s+/m', ' ', $content));
-        if ('' === $content) {
+        if ('' === $content = \trim(\preg_replace('/\r\n|\n|\r/m', '', $content))) {
+            return false;
+        }
+        if ('' === $content = \trim(\preg_replace('/\s\s+/m', ' ', $content))) {
             return false;
         }
 

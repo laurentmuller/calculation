@@ -47,3 +47,11 @@ thead.group tr.table-primary th.bg-body-tertiary {
     border-color: var(--bs-table-border-color) !important;
     background-color: var(--bs-table-border-color) !important;
 }
+
+/*
+ * Height for input and center vertically
+ */
+#data-table-edit tr.item {
+    height: 40px;
+    vertical-align: middle !important;
+}

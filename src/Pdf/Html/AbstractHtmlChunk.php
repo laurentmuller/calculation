@@ -12,14 +12,10 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
-use App\Pdf\PdfDrawColor;
-use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
-use App\Pdf\PdfTextColor;
 use App\Report\HtmlReport;
 use App\Utils\StringUtils;
 
@@ -28,11 +24,6 @@ use App\Utils\StringUtils;
  */
 abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 {
-    /**
-     * The pattern to extract margins.
-     */
-    private const MARGINS_PATTERN = '/^[m|p]([tbsexy])?-(sm-|md-|lg-|xl-|xxl-)?([012345])/im';
-
     /**
      * The bookmark.
      */
@@ -44,14 +35,11 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     private int $bookmarkLevel = 0;
 
     /**
-     * The class name.
+     * The class names.
+     *
+     * @var string[]
      */
-    private ?string $className = null;
-
-    /**
-     * The css style.
-     */
-    private ?string $css = null;
+    private array $classes = [];
 
     /**
      * The parent chunk.
@@ -88,19 +76,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     }
 
     /**
-     * Finds the parent for the given the tag names.
-     */
-    public function findParent(string ...$names): ?HtmlParentChunk
-    {
-        $parent = $this->parent;
-        while ($parent instanceof HtmlParentChunk && !$parent->is(...$names)) {
-            $parent = $parent->getParent();
-        }
-
-        return $parent;
-    }
-
-    /**
      * Gets the text alignment from this style or left, if none.
      */
     public function getAlignment(): PdfTextAlignment
@@ -122,22 +97,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     public function getBottomMargin(): float
     {
         return $this->style?->getBottomMargin() ?? 0;
-    }
-
-    /**
-     * Gets the class name.
-     */
-    public function getClassName(): ?string
-    {
-        return $this->className;
-    }
-
-    /**
-     * Gets the CSS style.
-     */
-    public function getCss(): ?string
-    {
-        return $this->css;
     }
 
     /**
@@ -255,25 +214,12 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     public function setClassName(?string $className): static
     {
-        $this->className = null;
+        $this->classes = [];
         if (null !== $className && '' !== $className) {
-            $names = \array_unique(\array_filter(\explode(' ', \strtolower($className))));
-            if ([] !== $names) {
-                $this->className = \implode(' ', $names);
-            }
+            $this->classes = \array_unique(\array_filter(\explode(' ', \strtolower($className))));
         }
 
         return $this->updateStyle();
-    }
-
-    /**
-     * Sets the CSS style.
-     */
-    public function setCss(?string $css): static
-    {
-        $this->css = $css;
-
-        return $this;
     }
 
     /**
@@ -396,51 +342,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
         return $this;
     }
 
-    /**
-     * Update this style, depending on the CSS.
-     */
-    protected function updateCss(): static
-    {
-        if ($this->css) {
-            $matches = [];
-            if (\preg_match_all("/([\w-]+)\s*:\s*([^;]+)\s*;?/", $this->css, $matches, \PREG_SET_ORDER)) {
-                $update = false;
-                $style = $this->getStyle() ?? new HtmlStyle();
-                foreach ($matches as $match) {
-                    $name = \strtolower($match[1]);
-                    $value = \trim($match[2]);
-                    switch ($name) {
-                        case 'color':
-                            $color = PdfTextColor::create($value);
-                            if ($color instanceof PdfTextColor) {
-                                $style->setTextColor($color);
-                                $update = true;
-                            }
-                            break;
-                        case 'background-color':
-                            $color = PdfFillColor::create($value);
-                            if ($color instanceof PdfFillColor) {
-                                $style->setFillColor($color);
-                                $update = true;
-                            }
-                            break;
-                    }
-                }
-
-                if ($update) {
-                    $this->setStyle($style);
-                }
-            }
-        }
-
-        return $this;
-    }
-
-    private function getDefaultBorderColor(): PdfDrawColor
-    {
-        return PdfDrawColor::create('#808080') ?? PdfDrawColor::black();
-    }
-
     private function getParentBorder(): ?PdfBorder
     {
         $border = $this->parent?->style?->getBorder();
@@ -451,21 +352,7 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
         return null;
     }
 
-    private function parseAlignment(HtmlStyle $style, string $class): void
-    {
-        $alignment = match ($class) {
-            'text-start' => PdfTextAlignment::LEFT,
-            'text-end' => PdfTextAlignment::RIGHT,
-            'text-center' => PdfTextAlignment::CENTER,
-            'text-justify' => PdfTextAlignment::JUSTIFIED,
-            default => null,
-        };
-        if (null !== $alignment) {
-            $style->setAlignment($alignment);
-        }
-    }
-
-    private function parseBookmark(string $class): self
+    private function parseBookmark(string $class): void
     {
         // bookmark
         if ('bookmark' === $class) {
@@ -478,144 +365,6 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
         if (\preg_match($regex, $class, $matches)) {
             $this->bookmarkLevel = (int) $matches[1];
         }
-
-        return $this;
-    }
-
-    /**
-     * Parses the border class.
-     *
-     * @param HtmlStyle $style the style to update
-     * @param string    $class the border class name
-     */
-    private function parseBorders(HtmlStyle $style, string $class): self
-    {
-        $border = match ($class) {
-            'border' => PdfBorder::ALL,
-            'border-top' => PdfBorder::TOP,
-            'border-bottom' => PdfBorder::BOTTOM,
-            'border-start' => PdfBorder::LEFT,
-            'border-end' => PdfBorder::RIGHT,
-            'border-0' => PdfBorder::NONE,
-            'border-top-0' => PdfBorder::LEFT . PdfBorder::RIGHT . PdfBorder::BOTTOM,
-            'border-start-0' => PdfBorder::RIGHT . PdfBorder::TOP . PdfBorder::BOTTOM,
-            'border-end-0' => PdfBorder::LEFT . PdfBorder::TOP . PdfBorder::BOTTOM,
-            'border-bottom-0' => PdfBorder::LEFT . PdfBorder::RIGHT . PdfBorder::TOP,
-            default => null
-        };
-        if (null !== $border) {
-            $style->setDrawColor($this->getDefaultBorderColor())
-                ->setBorder($border);
-        }
-
-        return $this;
-    }
-
-    private function parseColor(HtmlStyle $style, string $class): self
-    {
-        // text
-        $color = match ($class) {
-            'text-primary' => HtmlBootstrapColors::PRIMARY->getTextColor(),
-            'text-secondary' => HtmlBootstrapColors::SECONDARY->getTextColor(),
-            'text-success' => HtmlBootstrapColors::SUCCESS->getTextColor(),
-            'text-danger' => HtmlBootstrapColors::DANGER->getTextColor(),
-            'text-warning' => HtmlBootstrapColors::WARNING->getTextColor(),
-            'text-info' => HtmlBootstrapColors::INFO->getTextColor(),
-            'text-light' => HtmlBootstrapColors::LIGHT->getTextColor(),
-            'text-dark' => HtmlBootstrapColors::DARK->getTextColor(),
-            default => null,
-        };
-        if ($color instanceof PdfTextColor) {
-            $style->setTextColor($color);
-        }
-
-        // background
-        $color = match ($class) {
-            'bg-primary',
-            'text-bg-primary' => HtmlBootstrapColors::PRIMARY->getFillColor(),
-            'bg-secondary',
-            'text-bg-secondary' => HtmlBootstrapColors::SECONDARY->getFillColor(),
-            'bg-success',
-            'text-bg-success' => HtmlBootstrapColors::SUCCESS->getFillColor(),
-            'bg-danger',
-            'text-bg-danger' => HtmlBootstrapColors::DANGER->getFillColor(),
-            'bg-warning',
-            'text-bg-warning' => HtmlBootstrapColors::WARNING->getFillColor(),
-            'bg-info',
-            'text-bg-info' => HtmlBootstrapColors::INFO->getFillColor(),
-            'bg-light',
-            'text-bg-light' => HtmlBootstrapColors::LIGHT->getFillColor(),
-            'bg-dark',
-            'text-bg-dark' => HtmlBootstrapColors::DARK->getFillColor(),
-            default => null,
-        };
-        if ($color instanceof PdfFillColor) {
-            $style->setFillColor($color);
-        }
-
-        // border
-        $color = match ($class) {
-            'border-primary' => HtmlBootstrapColors::PRIMARY->getDrawColor(),
-            'border-secondary' => HtmlBootstrapColors::SECONDARY->getDrawColor(),
-            'border-success' => HtmlBootstrapColors::SUCCESS->getDrawColor(),
-            'border-danger' => HtmlBootstrapColors::DANGER->getDrawColor(),
-            'border-warning' => HtmlBootstrapColors::WARNING->getDrawColor(),
-            'border-info' => HtmlBootstrapColors::INFO->getDrawColor(),
-            'border-light' => HtmlBootstrapColors::LIGHT->getDrawColor(),
-            'border-dark' => HtmlBootstrapColors::DARK->getDrawColor(),
-            default => null,
-        };
-        if ($color instanceof PdfDrawColor) {
-            $style->setDrawColor($color);
-        }
-
-        return $this;
-    }
-
-    private function parseFont(HtmlStyle $style, string $class): self
-    {
-        switch ($class) {
-            case 'fw-bold':
-                $style->setFontBold(true);
-                break;
-            case 'fst-italic':
-                $style->setFontItalic(true);
-                break;
-            case 'fst-normal':
-                $style->setFontRegular();
-                break;
-            case 'font-monospace':
-                $style->setFontName(PdfFontName::COURIER);
-                break;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Parses the margins class.
-     *
-     * @param HtmlStyle $style the style to update
-     * @param string    $class the margins class name
-     */
-    private function parseMargins(HtmlStyle $style, string $class): self
-    {
-        $matches = [];
-        if (\preg_match_all(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
-            $match = $matches[0];
-            $value = (float) $match[3];
-            match ($match[1]) {
-                't' => $style->setTopMargin($value),
-                'b' => $style->setBottomMargin($value),
-                's' => $style->setLeftMargin($value),
-                'e' => $style->setRightMargin($value),
-                'x' => $style->setXMargins($value),
-                'y' => $style->setYMargins($value),
-                default => $style->setMargins($value) // all
-            };
-        }
-
-        return $this;
     }
 
     /**
@@ -623,22 +372,16 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
      */
     private function updateStyle(): static
     {
-        // create style by tag name
-        $style = HtmlStyleFactory::create($this->name);
-        if (!$style instanceof HtmlStyle) {
-            return $this->setStyle(null);
+        // bookmark
+        foreach ($this->classes as $class) {
+            $this->parseBookmark($class);
         }
 
-        // class
-        if (null !== $this->className) {
-            $classNames = \explode(' ', $this->className);
-            foreach ($classNames as $class) {
-                $this->parseBookmark($class)
-                    ->parseFont($style, $class)
-                    ->parseColor($style, $class)
-                    ->parseMargins($style, $class)
-                    ->parseBorders($style, $class)
-                    ->parseAlignment($style, $class);
+        // create style
+        $style = HtmlStyleFactory::create($this->name);
+        if ($style instanceof HtmlStyle) {
+            foreach ($this->classes as $class) {
+                $style->update($class);
             }
         }
 

@@ -8,7 +8,7 @@
 {% macro headerLinkInfo(title, id, countable) -%}
 <h2 class="accordion-header position-relative" id="{{ id }}-header">
     <button class="accordion-button collapsed ps-1 py-1" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" aria-controls="{{ id }}">
-        <span class="flex-fill">{{- title -}}</span><span class="badge text-bg-secondary rounded-pill me-2">{{- countable|length|integer -}}</span>
+        <span class="flex-fill">{{- title -}}</span><span class="badge text-bg-secondary rounded-pill me-1">{{- countable|length|integer -}}</span>
     </button>
 </h2>
 {%- endmacro %}
@@ -74,7 +74,7 @@
 {%- set route = path('about_' ~ id ~ '_content') -%}
 {%- set title = ('about.' ~ id)|trans -%}
 <div class="card-header border-bottom-0 d-flex align-items-center gap-1">
-    <a class="card-title flex-fill mb-0" href="#" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" title="{{ 'about.expand'|trans }}">{{- title -}}</a>
+    <a class="drop-down-icon-left card-title flex-fill mb-0" href="#" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" title="{{ 'about.expand'|trans }}">{{- title -}}</a>
     {{ linkExternal(path(pdf_route), null, null, ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
     {% if excel_route %}
         {{ linkExternal(path(excel_route), null, null, ICON_EXCEL ~ ' fa-fw', 'common.button_export_excel') }}

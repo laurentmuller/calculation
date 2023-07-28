@@ -72,8 +72,7 @@ class PdfHeader
                 $this->line2($printableWidth);
                 $this->line3($printableWidth);
             }
-            $parent->resetStyle();
-            $parent->Ln(2);
+            $parent->resetStyle()->Ln(2);
         });
     }
 

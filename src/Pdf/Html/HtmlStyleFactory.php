@@ -30,33 +30,34 @@ final class HtmlStyleFactory
 
     /**
      * Creates a style for the given tag name.
-     *
-     * @param string $name the tag name
-     *
-     * @return ?HtmlStyle the style, if applicable; <code>null</code> otherwise
      */
     public static function create(string $name): ?HtmlStyle
     {
         return match (\strtolower($name)) {
-            'h1' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 2.5, 2),
-            'h2' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 2.0, 2),
-            'h3' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.75, 2),
-            'h4' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.5, 2),
-            'h5' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.25, 2),
-            'h6' => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.1, 2),
-            'p' => self::doCreate(false, PdfFont::DEFAULT_SIZE, 2),
-            'ul', 'ol' => self::doCreate(false, PdfFont::DEFAULT_SIZE, 2, 4),
-            'li', 'span' => self::default(),
-            'b', 'strong' => self::doCreate(true),
-            'i', 'em' => self::default()->setFontItalic(true),
-            'u' => self::default()->setFontUnderline(true),
-            'code' => self::default()
+            HtmlConstantsInterface::H1 => self::doCreate(true, PdfFont::DEFAULT_SIZE * 2.5, 2),
+            HtmlConstantsInterface::H2 => self::doCreate(true, PdfFont::DEFAULT_SIZE * 2.0, 2),
+            HtmlConstantsInterface::H3 => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.75, 2),
+            HtmlConstantsInterface::H4 => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.5, 2),
+            HtmlConstantsInterface::H5 => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.25, 2),
+            HtmlConstantsInterface::H6 => self::doCreate(true, PdfFont::DEFAULT_SIZE * 1.1, 2),
+            HtmlConstantsInterface::PARAGRAPH => self::doCreate(false, PdfFont::DEFAULT_SIZE, 2),
+            HtmlConstantsInterface::LIST_ORDERED,
+            HtmlConstantsInterface::LIST_UNORDERED => self::doCreate(false, PdfFont::DEFAULT_SIZE, 2, 4),
+            HtmlConstantsInterface::LIST_ITEM,
+            HtmlConstantsInterface::SPAN => self::default(),
+            HtmlConstantsInterface::BOLD,
+            HtmlConstantsInterface::STRONG => self::doCreate(true),
+            HtmlConstantsInterface::ITALIC,
+            HtmlConstantsInterface::EMPHASIS => self::default()->setFontItalic(true),
+            HtmlConstantsInterface::UNDERLINE => self::default()->setFontUnderline(true),
+            HtmlConstantsInterface::CODE => self::default()
                 ->setFontName(PdfFontName::COURIER)
                 ->setTextColor(PdfTextColor::red()),
-            'var' => self::default()
+            HtmlConstantsInterface::VARIABLE => self::default()
                 ->setFontName(PdfFontName::COURIER)
                 ->setFontItalic(),
-            'samp', 'kbd' => self::default()
+            HtmlConstantsInterface::SAMPLE,
+            HtmlConstantsInterface::KEYBOARD => self::default()
                 ->setFontName(PdfFontName::COURIER),
             default => null,
         };
@@ -65,18 +66,13 @@ final class HtmlStyleFactory
     /**
      * Gets the default style.
      */
-    public static function default(): HtmlStyle
+    private static function default(): HtmlStyle
     {
         return new HtmlStyle();
     }
 
     /**
      * Creates a new style.
-     *
-     * @param bool  $bold         the font bold
-     * @param float $size         the font size
-     * @param float $bottomMargin the bottom margin
-     * @param float $leftMargin   the left margin
      */
     private static function doCreate(bool $bold = false, float $size = PdfFont::DEFAULT_SIZE, float $bottomMargin = 0.0, float $leftMargin = 0.0): HtmlStyle
     {

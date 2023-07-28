@@ -1627,13 +1627,13 @@ const MoveHandler = {
     // edit in place (price and quantity)
     $tableEdit.on('click', 'td.text-editable', function () {
         const $cell = $(this);
-        $cell.celledit({
+        $cell.cellEdit({
             'type': 'number',
             'required': true,
             'autoEdit': true,
             'autoDispose': true,
             'useNumberFormat': true,
-            'inputClass': 'form-control form-control-sm text-end my-n1 mx-0',
+            'inputClass': 'form-control form-control-sm text-end skip-validation',
             'attributes': {
                 'inputmode': 'decimal',
                 'scale': '2'

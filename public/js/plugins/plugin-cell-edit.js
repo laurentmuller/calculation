@@ -10,14 +10,6 @@
     // CellEdit public class definition
     // ------------------------------------
 
-    /**
-     * Plugin name.
-     * @type {{NAME: string}}
-     */
-    $.CellEdit = {
-        'NAME': 'bs.cell-edit'
-    };
-
     const CellEdit = class {
 
         // -----------------------------
@@ -44,7 +36,7 @@
                 this._cancel(null, false);
             }
             this.$element.off('click', this.clickProxy)
-                .removeData($.CellEdit.NAME);
+                .removeData(CellEdit.NAME);
         }
 
         /**
@@ -109,7 +101,7 @@
 
             const attributes = $.extend(true, {
                 'data-bs-custom-class': customClass,
-                'data-bs-toggle': 'tooltip',
+                'data-bs-toggle':  'tooltip',
                 'data-bs-trigger': 'manual',
                 'data-bs-title': title,
                 'type': options.type,
@@ -257,7 +249,7 @@
     };
 
     // -----------------------------
-    // CellEdit default options
+    // Default options
     // -----------------------------
     CellEdit.DEFAULTS = {
         // the input type
@@ -300,26 +292,32 @@
         'onCancelEdit': null,
     };
 
+
+    // -------------------------------
+    // The plugin name.
+    // -------------------------------
+    CellEdit.NAME = 'bs.cell-edit';
+
     // -------------------------------
     // CellEdit plugin definition
     // -------------------------------
-    const oldCellEdit = $.fn.celledit;
-    $.fn.celledit = function (options) { // jslint ignore:line
+    const oldCellEdit = $.fn.cellEdit;
+    $.fn.cellEdit = function (options) { // jslint ignore:line
         return this.each(function () {
             const $this = $(this);
-            if (!$this.data($.CellEdit.NAME)) {
+            if (!$this.data(CellEdit.NAME)) {
                 const settings = typeof options === 'object' && options;
-                $this.data($.CellEdit.NAME, new CellEdit(this, settings));
+                $this.data(CellEdit.NAME, new CellEdit(this, settings));
             }
         });
     };
-    $.fn.celledit.Constructor = CellEdit;
+    $.fn.cellEdit.Constructor = CellEdit;
 
     // ------------------------------------
     // CellEdit no conflict
     // ------------------------------------
-    $.fn.celledit.noConflict = function () {
-        $.fn.celledit = oldCellEdit;
+    $.fn.cellEdit.noConflict = function () {
+        $.fn.cellEdit = oldCellEdit;
         return this;
     };
 }(jQuery));

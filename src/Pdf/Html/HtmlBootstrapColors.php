@@ -75,4 +75,72 @@ enum HtmlBootstrapColors: string
 
         return $color;
     }
+
+    /**
+     * Gets the border color for the given class name.
+     */
+    public static function parseBorderColor(string $class): ?PdfDrawColor
+    {
+        $color = match ($class) {
+            'border-primary' => HtmlBootstrapColors::PRIMARY,
+            'border-secondary' => HtmlBootstrapColors::SECONDARY,
+            'border-success' => HtmlBootstrapColors::SUCCESS,
+            'border-danger' => HtmlBootstrapColors::DANGER,
+            'border-warning' => HtmlBootstrapColors::WARNING,
+            'border-info' => HtmlBootstrapColors::INFO,
+            'border-light' => HtmlBootstrapColors::LIGHT,
+            'border-dark' => HtmlBootstrapColors::DARK,
+            default => null,
+        };
+
+        return $color?->getDrawColor();
+    }
+
+    /**
+     * Gets the fill color for the given class name.
+     */
+    public static function parseFillColor(string $class): ?PdfFillColor
+    {
+        $color = match ($class) {
+            'bg-primary',
+            'text-bg-primary' => HtmlBootstrapColors::PRIMARY,
+            'bg-secondary',
+            'text-bg-secondary' => HtmlBootstrapColors::SECONDARY,
+            'bg-success',
+            'text-bg-success' => HtmlBootstrapColors::SUCCESS,
+            'bg-danger',
+            'text-bg-danger' => HtmlBootstrapColors::DANGER,
+            'bg-warning',
+            'text-bg-warning' => HtmlBootstrapColors::WARNING,
+            'bg-info',
+            'text-bg-info' => HtmlBootstrapColors::INFO,
+            'bg-light',
+            'text-bg-light' => HtmlBootstrapColors::LIGHT,
+            'bg-dark',
+            'text-bg-dark' => HtmlBootstrapColors::DARK,
+            default => null,
+        };
+
+        return $color?->getFillColor();
+    }
+
+    /**
+     * Gets the text color for the given class name.
+     */
+    public static function parseTextColor(string $class): ?PdfTextColor
+    {
+        $color = match ($class) {
+            'text-primary' => HtmlBootstrapColors::PRIMARY,
+            'text-secondary' => HtmlBootstrapColors::SECONDARY,
+            'text-success' => HtmlBootstrapColors::SUCCESS,
+            'text-danger' => HtmlBootstrapColors::DANGER,
+            'text-warning' => HtmlBootstrapColors::WARNING,
+            'text-info' => HtmlBootstrapColors::INFO,
+            'text-light' => HtmlBootstrapColors::LIGHT,
+            'text-dark' => HtmlBootstrapColors::DARK,
+            default => null,
+        };
+
+        return $color?->getTextColor();
+    }
 }

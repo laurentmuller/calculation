@@ -12,9 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
-use App\Service\ProductUpdater;
+use App\Service\ProductUpdateService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -30,26 +29,26 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ProductUpdateController extends AbstractController
 {
     #[Route(path: '/product', name: 'admin_product')]
-    public function invoke(Request $request, ProductUpdater $updater): Response
+    public function invoke(Request $request, ProductUpdateService $service): Response
     {
         $application = $this->getApplication();
-        $query = $updater->createUpdateQuery();
-        $form = $updater->createForm($query);
+        $query = $service->createQuery();
+        $form = $service->createForm($query);
         if ($this->handleRequestForm($request, $form)) {
-            $updater->saveUpdateQuery($query);
-            $result = $updater->update($query);
+            $service->saveQuery($query);
+            $result = $service->update($query);
             if (!$query->isSimulate() && $result->isValid()) {
-                $application->setProperty(PropertyServiceInterface::P_DATE_PRODUCT, new \DateTime());
+                $application->setLastUpdateProducts();
             }
 
             return $this->render('admin/product_result.html.twig', [
-                'result' => $result,
                 'query' => $query,
+                'result' => $result,
             ]);
         }
 
         return $this->render('admin/product_query.html.twig', [
-            'last_update' => $application->getUpdateProducts(),
+            'last_update' => $application->getLastUpdateProducts(),
             'form' => $form,
         ]);
     }

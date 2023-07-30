@@ -167,7 +167,7 @@ calculationstate:
     title: Supprimer le statut
     message: Êtes-vous sûr de vouloir supprimer le statut <b>%name%</b> ?
     success: Le statut <b>%name%</b> a été supprimé avec succès.
-    failure: Impossible de supprimer le statut <b>%name%</b>. Il est référencé dans %calculations%'
+    failure: Impossible de supprimer le statut <b>%name%</b>. Il est référencé dans %calculations%.
   edit:
     title: Modifier le statut
     success: Le statut <b>%name%</b> a été mis à jour avec succès.

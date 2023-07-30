@@ -13,11 +13,12 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Entity\CalculationState;
+use App\Utils\FormatUtils;
 
 /**
  * Contains parameters to archive calculations.
  */
-class ArchiveQuery
+class CalculationArchiveQuery
 {
     private \DateTimeInterface $date;
     private bool $simulate = true;
@@ -37,6 +38,11 @@ class ArchiveQuery
         return $this->date;
     }
 
+    public function getDateFormatted(): string
+    {
+        return FormatUtils::formatDate($this->date);
+    }
+
     /**
      * @return CalculationState[]
      */
@@ -45,9 +51,21 @@ class ArchiveQuery
         return $this->sources;
     }
 
+    public function getSourcesCode(): string
+    {
+        $sources = \array_map(static fn (CalculationState $state): string => (string) $state->getCode(), $this->sources);
+
+        return \implode(', ', $sources);
+    }
+
     public function getTarget(): ?CalculationState
     {
         return $this->target;
+    }
+
+    public function getTargetCode(): ?string
+    {
+        return $this->target?->getCode();
     }
 
     public function isSimulate(): bool

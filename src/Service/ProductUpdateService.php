@@ -35,7 +35,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Service to update the price of products.
  */
-class ProductUpdater implements ServiceSubscriberInterface
+class ProductUpdateService implements ServiceSubscriberInterface
 {
     use LoggerAwareTrait;
     use MathTrait;
@@ -56,7 +56,8 @@ class ProductUpdater implements ServiceSubscriberInterface
     public function __construct(
         private readonly ProductRepository $productRepository,
         private readonly CategoryRepository $categoryRepository,
-        private readonly FormFactoryInterface $factory
+        private readonly FormFactoryInterface $factory,
+        private readonly SuspendEventListenerService $service,
     ) {
     }
 
@@ -116,7 +117,7 @@ class ProductUpdater implements ServiceSubscriberInterface
     /**
      * Create the update query from session.
      */
-    public function createUpdateQuery(): ProductUpdateQuery
+    public function createQuery(): ProductUpdateQuery
     {
         $id = $this->getSessionInt(self::KEY_CATEGORY, 0);
         $category = $this->getCategory($id);
@@ -136,7 +137,7 @@ class ProductUpdater implements ServiceSubscriberInterface
     /**
      *  Save the update query to session.
      */
-    public function saveUpdateQuery(ProductUpdateQuery $query): void
+    public function saveQuery(ProductUpdateQuery $query): void
     {
         $percent = $query->isPercent();
         $type = $percent ? ProductUpdateQuery::UPDATE_PERCENT : ProductUpdateQuery::UPDATE_FIXED;
@@ -177,8 +178,13 @@ class ProductUpdater implements ServiceSubscriberInterface
             }
         }
         if (!$query->isSimulate() && $result->isValid()) {
-            $this->productRepository->flush();
-            $this->logResult($query, $result);
+            try {
+                $this->service->disableListeners();
+                $this->productRepository->flush();
+                $this->logResult($query, $result);
+            } finally {
+                $this->service->enableListeners();
+            }
         }
 
         return $result;
@@ -236,7 +242,7 @@ class ProductUpdater implements ServiceSubscriberInterface
     }
 
     /**
-     * Log the update result.
+     * Log result.
      */
     private function logResult(ProductUpdateQuery $query, ProductUpdateResult $result): void
     {

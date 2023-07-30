@@ -77,14 +77,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return $role;
     }
 
-    /**
-     * Gets the last archive calculation.
-     */
-    public function getArchiveCalculation(): ?\DateTimeInterface
-    {
-        return $this->getPropertyDate(self::P_DATE_CALCULATION);
-    }
-
     public function getCustomer(): CustomerInformation
     {
         $info = new CustomerInformation();
@@ -298,11 +290,27 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
+     * Gets the last archive calculations date.
+     */
+    public function getLastArchiveCalculations(): ?\DateTimeInterface
+    {
+        return $this->getPropertyDate(self::P_DATE_CALCULATION);
+    }
+
+    /**
      * Gets the last import of Swiss cities.
      */
     public function getLastImport(): ?\DateTimeInterface
     {
         return $this->getPropertyDate(self::P_DATE_IMPORT);
+    }
+
+    /**
+     * Gets the last products update.
+     */
+    public function getLastUpdateProducts(): ?\DateTimeInterface
+    {
+        return $this->getPropertyDate(self::P_DATE_PRODUCT);
     }
 
     public function getMessagePosition(): MessagePosition
@@ -397,14 +405,6 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         $value = $this->getPropertyInteger(self::P_STRENGTH_LEVEL, $default->value);
 
         return StrengthLevel::tryFrom($value) ?? $default;
-    }
-
-    /**
-     * Gets the last products update.
-     */
-    public function getUpdateProducts(): ?\DateTimeInterface
-    {
-        return $this->getPropertyDate(self::P_DATE_PRODUCT);
     }
 
     /**
@@ -532,6 +532,22 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         }
 
         return $this;
+    }
+
+    /**
+     * Set the date of the last archive calculations.
+     */
+    public function setLastArchiveCalculations(\DateTime $date = new \DateTime()): self
+    {
+        return $this->setProperty(PropertyServiceInterface::P_DATE_CALCULATION, $date);
+    }
+
+    /**
+     * Set the date of the last update of product prices.
+     */
+    public function setLastUpdateProducts(\DateTime $date = new \DateTime()): self
+    {
+        return $this->setProperty(PropertyServiceInterface::P_DATE_PRODUCT, $date);
     }
 
     public function setProperties(array $properties, array $defaultValues = null): static

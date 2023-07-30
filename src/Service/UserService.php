@@ -174,10 +174,10 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return $this->getPropertyBoolean(self::P_STATUS_BAR, $this->service->isStatusBar());
     }
 
-    public function setProperties(array $properties): static
+    public function setProperties(array $properties, array $defaultValues = null): static
     {
         if ([] !== $properties && ($user = $this->getUser()) instanceof User) {
-            $defaultValues = $this->service->getProperties();
+            $defaultValues ??= $this->service->getProperties();
             /** @psalm-var mixed $value */
             foreach ($properties as $key => $value) {
                 $this->saveProperty($key, $value, $defaultValues, $user);

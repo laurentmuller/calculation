@@ -421,4 +421,9 @@ interface PropertyServiceInterface
      * Returns a value indicating if the status bar is displayed.
      */
     public function isStatusBar(): bool;
+
+    /**
+     * Set the properties.
+     */
+    public function setProperties(array $properties, array $defaultValues = null): static;
 }

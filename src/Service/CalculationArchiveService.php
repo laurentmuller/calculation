@@ -16,10 +16,11 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Form\FormHelper;
-use App\Model\ArchiveQuery;
-use App\Model\ArchiveResult;
+use App\Model\CalculationArchiveQuery;
+use App\Model\CalculationArchiveResult;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Traits\LoggerAwareTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
@@ -34,8 +35,9 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Service to archive calculations.
  */
-class ArchiveService implements ServiceSubscriberInterface
+class CalculationArchiveService implements ServiceSubscriberInterface
 {
+    use LoggerAwareTrait;
     use ServiceSubscriberTrait;
     use SessionAwareTrait;
     use TranslatorAwareTrait;
@@ -51,7 +53,8 @@ class ArchiveService implements ServiceSubscriberInterface
     public function __construct(
         private readonly CalculationRepository $calculationRepository,
         private readonly CalculationStateRepository $stateRepository,
-        private readonly FormFactoryInterface $factory
+        private readonly FormFactoryInterface $factory,
+        private readonly SuspendEventListenerService $service,
     ) {
     }
 
@@ -60,7 +63,7 @@ class ArchiveService implements ServiceSubscriberInterface
      *
      * @return FormInterface<mixed>
      */
-    public function createForm(ArchiveQuery $query): FormInterface
+    public function createForm(CalculationArchiveQuery $query): FormInterface
     {
         $builder = $this->factory->createBuilder(FormType::class, $query);
         $helper = new FormHelper($builder, 'archive.fields.');
@@ -99,9 +102,9 @@ class ArchiveService implements ServiceSubscriberInterface
     /**
      * Create the archive query.
      */
-    public function createQuery(): ArchiveQuery
+    public function createQuery(): CalculationArchiveQuery
     {
-        $query = new ArchiveQuery();
+        $query = new CalculationArchiveQuery();
         $query->setSources($this->getSources(true))
             ->setSimulate($this->isSimulate())
             ->setTarget($this->getTarget())
@@ -111,16 +114,30 @@ class ArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * Process the archive query and return the result.
+     * Save the query values to the session.
      */
-    public function processQuery(ArchiveQuery $query): ArchiveResult
+    public function saveQuery(CalculationArchiveQuery $query): void
+    {
+        $date = $query->isSimulate() ? $query->getDate()->getTimestamp() : null;
+        $this->setSessionValues([
+            self::KEY_SOURCES => $this->getIds($query->getSources()),
+            self::KEY_TARGET => $query->getTarget()?->getId(),
+            self::KEY_SIMULATE => $query->isSimulate(),
+            self::KEY_DATE => $date,
+        ]);
+    }
+
+    /**
+     * Update the calculations.
+     */
+    public function update(CalculationArchiveQuery $query): CalculationArchiveResult
     {
         $date = $query->getDate();
         $target = $query->getTarget();
         $simulate = $query->isSimulate();
         $sources = $query->getSources();
 
-        $result = new ArchiveResult();
+        $result = new CalculationArchiveResult();
         $result->setDate($date)
             ->setTarget($target)
             ->setSources($sources)
@@ -135,24 +152,16 @@ class ArchiveService implements ServiceSubscriberInterface
             }
         }
         if (!$simulate && $result->isValid()) {
-            $this->calculationRepository->flush();
+            try {
+                $this->service->disableListeners();
+                $this->calculationRepository->flush();
+                $this->logResult($query, $result);
+            } finally {
+                $this->service->enableListeners();
+            }
         }
 
         return $result;
-    }
-
-    /**
-     * Save the query values to the session.
-     */
-    public function saveQuery(ArchiveQuery $query): void
-    {
-        $date = $query->isSimulate() ? $query->getDate()->getTimestamp() : null;
-        $this->setSessionValues([
-            self::KEY_SOURCES => $this->getIds($query->getSources()),
-            self::KEY_TARGET => $query->getTarget()?->getId(),
-            self::KEY_SIMULATE => $query->isSimulate(),
-            self::KEY_DATE => $date,
-        ]);
     }
 
     /**
@@ -320,5 +329,20 @@ class ArchiveService implements ServiceSubscriberInterface
     private function isSimulate(): bool
     {
         return $this->isSessionBool(self::KEY_SIMULATE, true);
+    }
+
+    /**
+     * Log result.
+     */
+    private function logResult(CalculationArchiveQuery $query, CalculationArchiveResult $result): void
+    {
+        $context = [
+            $this->trans('archive.fields.date') => $query->getDateFormatted(),
+            $this->trans('archive.fields.sources') => $query->getSourcesCode(),
+            $this->trans('archive.fields.target') => $query->getTargetCode(),
+            $this->trans('archive.result.calculations') => $result->total(),
+        ];
+        $message = $this->trans('archive.title');
+        $this->logInfo($message, $context);
     }
 }

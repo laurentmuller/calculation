@@ -77,7 +77,7 @@ class ApplicationServiceTest extends KernelTestCase
     {
         $service = $this->getApplicationService();
         self::assertNull($service->getLastImport());
-        self::assertNull($service->getUpdateProducts());
+        self::assertNull($service->getLastUpdateProducts());
     }
 
     public function testDefaultCategory(): void

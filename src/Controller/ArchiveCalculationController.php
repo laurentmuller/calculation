@@ -12,10 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
-use App\Service\ArchiveService;
-use App\Service\SuspendEventListenerService;
+use App\Service\CalculationArchiveService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -31,30 +29,26 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ArchiveCalculationController extends AbstractController
 {
     #[Route(path: '/archive', name: 'admin_archive')]
-    public function invoke(Request $request, ArchiveService $service, SuspendEventListenerService $listener): Response
+    public function invoke(Request $request, CalculationArchiveService $service): Response
     {
         $application = $this->getApplication();
         $query = $service->createQuery();
         $form = $service->createForm($query);
         if ($this->handleRequestForm($request, $form)) {
-            try {
-                $service->saveQuery($query);
-                $listener->disableListeners();
-                $result = $service->processQuery($query);
-                if (!$query->isSimulate() && $result->isValid()) {
-                    $application->setProperty(PropertyServiceInterface::P_DATE_CALCULATION, new \DateTime());
-                }
-
-                return $this->render('admin/archive_result.html.twig', [
-                    'result' => $result,
-                ]);
-            } finally {
-                $listener->enableListeners();
+            $service->saveQuery($query);
+            $result = $service->update($query);
+            if (!$query->isSimulate() && $result->isValid()) {
+                $application->setLastArchiveCalculations();
             }
+
+            return $this->render('admin/archive_result.html.twig', [
+                'query' => $query,
+                'result' => $result,
+            ]);
         }
 
         return $this->render('admin/archive_query.html.twig', [
-            'last_update' => $application->getArchiveCalculation(),
+            'last_update' => $application->getLastArchiveCalculations(),
             'form' => $form,
         ]);
     }

@@ -18,21 +18,21 @@
         }
         const $button = $('#search-button-horizontal');
         const $input = $('#search-form-horizontal #search');
-        const hideInvalid = function () {
+        const hideInvalid = () => {
             $input.removeClass('is-invalid').data('display', false).tooltip('hide');
         };
-        const hideForm = function () {
+        const hideForm = () => {
             $input.val('');
             hideInvalid();
             $form.animate({
                 width: 0
-            }, function () {
+            }, () => {
                 $form.hide();
                 $button.show().trigger('focus');
             });
         };
 
-        $button.on('click', function () {
+        $button.on('click', () => {
             $button.hide();
             $form.show().animate({
                 width: 200
@@ -40,7 +40,7 @@
                 $input.trigger('focus');
             });
         });
-        $input.on('keyup', function (e) {
+        $input.on('keyup', (e) => {
             if (e.key === 'Escape') {
                 hideForm();
             } else {
@@ -53,10 +53,10 @@
                     hideInvalid();
                 }
             }
-        }).on('blur', function () {
+        }).on('blur', () => {
             hideForm();
         });
-        $form.on('submit', function (e) {
+        $form.on('submit', (e) => {
             if ($input.val().trim().length < 2 || $input.hasClass('is-invalid')) {
                 e.preventDefault();
             }
@@ -73,25 +73,25 @@
         }
         const $input = $('#search-form-vertical #search');
         const $label = $('#search-form-vertical #invalid');
-        const hideInvalid = function () {
+        const hideInvalid = () => {
             $input.removeClass('is-invalid');
             $label.hide();
         };
-        const showInvalid = function () {
+        const showInvalid = () => {
             $input.addClass('is-invalid');
             $label.show();
         };
-        $input.on('input', function () {
+        $input.on('input', () => {
             if ($input.val().trim().length < 2) {
                 showInvalid();
             } else {
                 hideInvalid();
             }
-        }).on('blur', function () {
+        }).on('blur', () => {
             $input.val('');
             hideInvalid();
         });
-        $form.on('submit', function (e) {
+        $form.on('submit', (e) => {
             if ($input.val().trim().length < 2) {
                 e.preventDefault();
                 $input.trigger('select').trigger('focus');

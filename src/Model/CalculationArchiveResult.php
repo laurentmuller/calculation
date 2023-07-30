@@ -18,7 +18,7 @@ use App\Entity\CalculationState;
 /**
  * Contains result of archive calculations.
  */
-class ArchiveResult
+class CalculationArchiveResult
 {
     private ?\DateTimeInterface $date = null;
     /** @psalm-var array<string, array{state: CalculationState, calculations: array<Calculation>}> */

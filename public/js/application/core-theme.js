@@ -128,11 +128,23 @@
      */
     const hideNavBar = () => {
         document.querySelectorAll('.navbar-collapse.collapse.show').forEach((element) => {
-            bootstrap.Collapse.getOrCreateInstance(element).hide();
+            const collapse = bootstrap.Collapse.getInstance(element);
+            if (collapse) {
+                collapse.hide();
+            }
         });
-        // document.querySelectorAll('.navbar-toggler:not(.collapsed)').forEach((element) => {
-        //     element.click();
-        // });
+    };
+
+    /**
+     * Hide the theme switcher tooltips
+     */
+    const hideThemeTooltip = () => {
+        document.querySelectorAll('[data-theme][data-bs-toggle="tooltip"]').forEach((element) => {
+            const tooltip = bootstrap.Tooltip.getInstance(element);
+            if (tooltip) {
+                tooltip.hide();
+            }
+        });
     };
 
     /**
@@ -153,11 +165,21 @@
         document.querySelectorAll('[data-theme]').forEach((element) => {
             element.addEventListener('click', (e) => {
                 e.preventDefault();
-                setTimeout(() => $('[data-theme][data-bs-toggle="tooltip"]').tooltip('hide'), 100);
+                setTimeout(() => hideThemeTooltip(), 100);
+                // const tooltip = bootstrap.Tooltip.getInstance(element);
+                // if (tooltip) {
+                //     tooltip.hide();
+                // }
                 const theme = element.getAttribute('data-theme');
                 updateActiveTheme(theme);
                 setStoredTheme(theme);
                 setTheme(theme);
+            });
+            // element.addEventListener('shown.bs.tooltip', () => {
+            // });
+        });
+        document.querySelectorAll('.navbar-horizontal .dropdown-item,.navbar-horizontal .navbar-brand').forEach((element) => {
+            element.addEventListener('click', () => {
                 hideNavBar();
             });
         });

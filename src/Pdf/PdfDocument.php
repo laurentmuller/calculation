@@ -116,6 +116,21 @@ class PdfDocument extends \FPDF
     final public const LINE_HEIGHT = 5.0;
 
     /**
+     * The encoding source.
+     */
+    private const ENCODING_FROM = [
+        'ASCII',
+        'UTF-8',
+        'CP1252',
+        'ISO-8859-1',
+    ];
+
+    /**
+     * The encoding target.
+     */
+    private const ENCODING_TO = 'CP1252';
+
+    /**
      * The default index title.
      */
     private const INDEX_TITLE = 'Index';
@@ -709,6 +724,21 @@ class PdfDocument extends \FPDF
     }
 
     /**
+     * Sets the ordinate for the given delta value and optionally moves the current abscissa back to the left margin.
+     *
+     * @param float $delta  the delta value of the ordinate to move to
+     * @param bool  $resetX whether to reset the abscissa
+     */
+    public function moveY(float $delta, bool $resetX = true): self
+    {
+        if (!$this->isFloatZero($delta)) {
+            $this->SetY($this->GetY() + $delta, $resetX);
+        }
+
+        return $this;
+    }
+
+    /**
      * This method allows printing text with line breaks.
      *
      * They can be automatic (as soon as the text reaches the right border of the cell) or explicit (via the \n character).
@@ -1076,7 +1106,7 @@ class PdfDocument extends \FPDF
         }
 
         try {
-            return \mb_convert_encoding($str, 'ISO-8859-1', 'UTF-8, ISO-8859-1');
+            return \mb_convert_encoding($str, self::ENCODING_TO, self::ENCODING_FROM);
         } catch (\Exception) {
             return $str;
         }

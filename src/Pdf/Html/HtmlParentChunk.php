@@ -13,15 +13,12 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Report\HtmlReport;
-use App\Traits\MathTrait;
 
 /**
  * Represents a chunk container.
  */
 class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
 {
-    use MathTrait;
-
     /**
      * The children chunk.
      *
@@ -126,14 +123,12 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
 
     public function output(HtmlReport $report): void
     {
-        // update margins
-        $this->applyMargins($report, $this->getLeftMargin(), $this->getRightMargin(), function (HtmlReport $report): void {
-            $this->moveY($report, $this->getTopMargin());
-            parent::output($report);
-            $this->outputChildren($report);
-            $this->moveY($report, $this->getBottomMargin());
-            $this->getParent()?->applyStyle($report);
-        });
+        $this->applyMargins(
+            $report,
+            $this->getLeftMargin(),
+            $this->getRightMargin(),
+            fn (HtmlReport $report) => $this->doOutput($report)
+        );
     }
 
     /**
@@ -186,17 +181,12 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
         return $child instanceof self && $child->isLastNewLine($child);
     }
 
-    /**
-     * Move up/down the current y position of the report.
-     * Do nothing if the delta value is equal to 0.
-     *
-     * @param HtmlReport $report the report to update
-     * @param float      $delta  the move up/down value
-     */
-    private function moveY(HtmlReport $report, float $delta): void
+    private function doOutput(HtmlReport $report): void
     {
-        if (!$this->isFloatZero($delta)) {
-            $report->SetY($report->GetY() + $delta, false);
-        }
+        $report->moveY($this->getTopMargin(), false);
+        parent::output($report);
+        $this->outputChildren($report);
+        $report->moveY($this->getBottomMargin(), false);
+        $this->getParent()?->applyStyle($report);
     }
 }

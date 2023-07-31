@@ -176,6 +176,9 @@ class PasswordValidator extends AbstractConstraintValidator
         return 0;
     }
 
+    /**
+     * @psalm-param non-empty-string $pattern
+     */
     private function validateRegex(bool $apply, string $pattern, string $value, string $message, string $code): bool
     {
         if ($apply && !\preg_match($pattern, $value)) {

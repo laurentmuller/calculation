@@ -54,13 +54,14 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     /**
      * Constructor.
      *
-     * @param string           $name   the tag name
-     * @param ?HtmlParentChunk $parent the parent chunk
+     * @param string           $name      the tag name
+     * @param ?HtmlParentChunk $parent    the parent chunk
+     * @param ?string          $className the class name
      */
-    public function __construct(private readonly string $name, HtmlParentChunk $parent = null)
+    public function __construct(private readonly string $name, HtmlParentChunk $parent = null, string $className = null)
     {
         $parent?->add($this);
-        $this->updateStyle();
+        $this->setClassName($className);
     }
 
     /**

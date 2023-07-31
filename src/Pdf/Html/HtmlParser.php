@@ -36,19 +36,13 @@ readonly class HtmlParser
         if (false === $source = $this->trimHtml()) {
             return null;
         }
-
-        // load content
-        $document = new \DOMDocument();
-        if (!$document->loadHTML($source, \LIBXML_NOERROR | \LIBXML_NOBLANKS)) {
+        if (false === $document = $this->loadDocument($source)) {
+            return null;
+        }
+        if (false === $body = $this->findBody($document)) {
             return null;
         }
 
-        // find body
-        if (!($body = $this->findBody($document)) instanceof \DOMNode) {
-            return null;
-        }
-
-        // parse
         $root = new HtmlParentChunk($body->nodeName);
         $this->parseNodes($root, $body);
 
@@ -58,31 +52,26 @@ readonly class HtmlParser
     /**
      * Creates an HTML line break chunk.
      */
-    private function createBrChunk(string $name, HtmlParentChunk $parent, ?string $class): void
+    private function createBrChunk(string $name, HtmlParentChunk $parent, ?string $className): void
     {
-        $chunk = new HtmlBrChunk($name, $parent);
-        $chunk->setClassName($class);
+        new HtmlBrChunk($name, $parent, $className);
     }
 
     /**
      * Creates an HTML list item chunk.
      */
-    private function createLiChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlLiChunk
+    private function createLiChunk(string $name, HtmlParentChunk $parent, ?string $className): HtmlLiChunk
     {
-        $chunk = new HtmlLiChunk($name, $parent);
-        $chunk->setClassName($class);
-
-        return $chunk;
+        return new HtmlLiChunk($name, $parent, $className);
     }
 
     /**
      * Creates an HTML ordered list chunk.
      */
-    private function createOlChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): HtmlOlChunk
+    private function createOlChunk(string $name, HtmlParentChunk $parent, ?string $className, \DOMNode $node): HtmlOlChunk
     {
-        $chunk = new HtmlOlChunk($name, $parent);
-        $chunk->setClassName($class)
-            ->setType($this->getTypeAttribute($node))
+        $chunk = new HtmlOlChunk($name, $parent, $className);
+        $chunk->setType($this->getTypeAttribute($node))
             ->setStart($this->getStartAttribute($node));
 
         return $chunk;
@@ -99,18 +88,15 @@ readonly class HtmlParser
     /**
      * Creates an HTML parent chunk.
      */
-    private function createParentChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlParentChunk
+    private function createParentChunk(string $name, HtmlParentChunk $parent, ?string $className): HtmlParentChunk
     {
-        $chunk = new HtmlParentChunk($name, $parent);
-        $chunk->setClassName($class);
-
-        return $chunk;
+        return new HtmlParentChunk($name, $parent, $className);
     }
 
     /**
      * Creates an HTML text chunk.
      */
-    private function createTextChunk(string $name, HtmlParentChunk $parent, ?string $class, \DOMNode $node): void
+    private function createTextChunk(string $name, HtmlParentChunk $parent, ?string $className, \DOMNode $node): void
     {
         if (!$node instanceof \DOMText) {
             return;
@@ -119,33 +105,29 @@ readonly class HtmlParser
         if ('' === $text || (' ' === $text && $parent->isEmpty())) {
             return;
         }
-        $chunk = new HtmlTextChunk($name, $parent);
-        $chunk->setClassName($class)
-            ->setText($text);
+        $chunk = new HtmlTextChunk($name, $parent, $className);
+        $chunk->setText($text);
     }
 
     /**
      * Creates an HTML unordered list chunk.
      */
-    private function createUlChunk(string $name, HtmlParentChunk $parent, ?string $class): HtmlUlChunk
+    private function createUlChunk(string $name, HtmlParentChunk $parent, ?string $className): HtmlUlChunk
     {
-        $chunk = new HtmlUlChunk($name, $parent);
-        $chunk->setClassName($class);
-
-        return $chunk;
+        return new HtmlUlChunk($name, $parent, $className);
     }
 
     /**
      * Finds the body element.
      */
-    private function findBody(\DOMDocument $dom): ?\DOMNode
+    private function findBody(\DOMDocument $document): \DOMNode|false
     {
-        $bodies = $dom->getElementsByTagName('body');
+        $bodies = $document->getElementsByTagName(HtmlConstantsInterface::BODY);
         if (0 !== $bodies->length) {
             return $bodies->item(0);
         }
 
-        return null;
+        return false;
     }
 
     /**
@@ -178,7 +160,7 @@ readonly class HtmlParser
      */
     private function getClassAttribute(\DOMNode $node): ?string
     {
-        return $this->getAttribute($node, 'class');
+        return $this->getAttribute($node, HtmlConstantsInterface::CLASS_ATTRIBUTE);
     }
 
     /**
@@ -186,7 +168,7 @@ readonly class HtmlParser
      */
     private function getStartAttribute(\DOMNode $node): int
     {
-        return (int) $this->getAttribute($node, 'start', '1');
+        return (int) $this->getAttribute($node, HtmlConstantsInterface::START_ATTRIBUTE, '1');
     }
 
     /**
@@ -195,9 +177,22 @@ readonly class HtmlParser
     private function getTypeAttribute(\DOMNode $node): HtmlListType
     {
         $default = HtmlListType::NUMBER;
-        $value = $this->getAttribute($node, 'type', $default->value);
+        $value = $this->getAttribute($node, HtmlConstantsInterface::TYPE_ATTRIBUTE, $default->value);
 
         return HtmlListType::tryFrom($value) ?? $default;
+    }
+
+    /**
+     * Load the given HTML.
+     */
+    private function loadDocument(string $source): \DOMDocument|false
+    {
+        $document = new \DOMDocument();
+        if ($document->loadHTML($source, \LIBXML_NOERROR | \LIBXML_NOBLANKS)) {
+            return $document;
+        }
+
+        return false;
     }
 
     /**
@@ -206,25 +201,25 @@ readonly class HtmlParser
     private function parseNode(HtmlParentChunk $parent, \DOMNode $node): void
     {
         $name = $node->nodeName;
-        $class = $this->getClassAttribute($node);
+        $className = $this->getClassAttribute($node);
         switch ($node->nodeType) {
             case \XML_ELEMENT_NODE:
-                if (HtmlConstantsInterface::PAGE_BREAK === $class) {
+                if (HtmlConstantsInterface::PAGE_BREAK === $className) {
                     $this->createPageBreakChunk($name, $parent);
                 } elseif (HtmlConstantsInterface::LINE_BREAK === $name) {
-                    $this->createBrChunk($name, $parent, $class);
+                    $this->createBrChunk($name, $parent, $className);
                 } elseif (HtmlConstantsInterface::LIST_ITEM === $name) {
-                    $parent = $this->createLiChunk($name, $parent, $class);
+                    $parent = $this->createLiChunk($name, $parent, $className);
                 } elseif (HtmlConstantsInterface::LIST_ORDERED === $name) {
-                    $parent = $this->createOlChunk($name, $parent, $class, $node);
+                    $parent = $this->createOlChunk($name, $parent, $className, $node);
                 } elseif (HtmlConstantsInterface::LIST_UNORDERED === $name) {
-                    $parent = $this->createUlChunk($name, $parent, $class);
+                    $parent = $this->createUlChunk($name, $parent, $className);
                 } else {
-                    $parent = $this->createParentChunk($name, $parent, $class);
+                    $parent = $this->createParentChunk($name, $parent, $className);
                 }
                 break;
             case \XML_TEXT_NODE:
-                $this->createTextChunk($name, $parent, $class, $node);
+                $this->createTextChunk($name, $parent, $className, $node);
                 break;
         }
         $this->parseNodes($parent, $node);

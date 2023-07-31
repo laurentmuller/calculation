@@ -67,7 +67,7 @@ enum HtmlListType: string
      *
      * @return string the letters
      */
-    public static function toLetter(int $number, string $suffix = ''): string
+    private static function toLetter(int $number, string $suffix = ''): string
     {
         if ($number <= 0) {
             return '';
@@ -90,7 +90,7 @@ enum HtmlListType: string
      *
      * @return string the roman number
      */
-    public static function toRoman(int $number, string $suffix = ''): string
+    private static function toRoman(int $number, string $suffix = ''): string
     {
         // lookup array used to traverse the number
         /** @psalm-var array<string, int> $lookup */

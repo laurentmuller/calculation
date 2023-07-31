@@ -53,7 +53,7 @@
         <UndefinedFunction>
             <errorLevel type="suppress">
                 <file name="src/Twig/FormatExtension.php"/>
-                <referencedFunction name="App\Twig\FormatExtension::dateTimeFilter"/>
+                <referencedFunction name="dateTimeFilter"/>
             </errorLevel>
         </UndefinedFunction>
 
@@ -99,6 +99,13 @@
                 <file name="src/Controller/AbstractController.php"/>
             </errorLevel>
         </MixedReturnStatement>
+
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <file name="src/Twig/HighlightExtension.php" />
+                <referencedFunction name="exportPhp"/>
+            </errorLevel>
+        </InvalidArgument>
     </issueHandlers>
 
     <plugins>

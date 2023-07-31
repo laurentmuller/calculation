@@ -40,6 +40,8 @@ class PregExtension extends AbstractExtension
      * @param string|string[]      $replacement
      *
      * @return string|string[]|null
+     *
+     * @psalm-param array<array-key, non-empty-string>|non-empty-string $pattern
      */
     protected function pregFilter(string|array|null $subject, string|array $pattern, string|array $replacement, int $limit = -1): string|array|null
     {
@@ -56,6 +58,7 @@ class PregExtension extends AbstractExtension
      * @param string[]|null $subject
      *
      * @psalm-param int<0,1> $flags
+     * @psalm-param non-empty-string $pattern
      */
     protected function pregGrep(array|null $subject, string $pattern, int $flags = 0): array|false
     {
@@ -71,6 +74,7 @@ class PregExtension extends AbstractExtension
      *
      * @psalm-param  int-mask<256, 512, 768> $flags
      * @psalm-param  int                     $offset
+     * @psalm-param non-empty-string $pattern
      */
     protected function pregMatch(?string $subject, string $pattern, int $flags = 0, int $offset = 0): array|false
     {
@@ -103,6 +107,8 @@ class PregExtension extends AbstractExtension
      * @param string[]|string      $replacement
      *
      * @return string[]|string|null
+     *
+     * @psalm-param array<array-key, non-empty-string>|non-empty-string $pattern
      */
     protected function pregReplace(array|string|null $subject, array|string $pattern, array|string $replacement, int $limit = -1): array|string|null
     {
@@ -117,6 +123,8 @@ class PregExtension extends AbstractExtension
      * Split text into an array using a regular expression.
      *
      * @return string[]|false
+     *
+     * @psalm-param non-empty-string $pattern
      */
     protected function pregSplit(?string $subject, string $pattern): array|false
     {

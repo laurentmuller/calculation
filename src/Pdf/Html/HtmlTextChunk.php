@@ -106,7 +106,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
                     case PdfTextAlignment::JUSTIFIED:
                         $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
                         $report->MultiCell(h: $height, txt: $text, align: $align);
-                        $report->SetY($report->GetY() - $report->getLastHeight());
+                        $report->moveY(-$report->getLastHeight());
 
                         return;
                     default:

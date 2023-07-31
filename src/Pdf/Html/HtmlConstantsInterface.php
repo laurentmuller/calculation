@@ -18,12 +18,22 @@ namespace App\Pdf\Html;
 interface HtmlConstantsInterface
 {
     /**
+     * The body tag name.
+     */
+    public const BODY = 'body';
+
+    /**
      * The bold element.
      */
     public const BOLD = 'b';
 
     /**
-     * The inline Code element.
+     * The class attribute name.
+     */
+    public const CLASS_ATTRIBUTE = 'class';
+
+    /**
+     * The inline code element.
      */
     public const CODE = 'code';
 
@@ -103,7 +113,7 @@ interface HtmlConstantsInterface
     public const PARAGRAPH = 'p';
 
     /**
-     * The Sample Output element.
+     * The sample output element.
      */
     public const SAMPLE = 'samp';
 
@@ -113,7 +123,12 @@ interface HtmlConstantsInterface
     public const SPAN = 'span';
 
     /**
-     * The Strong Importance element.
+     * The start ordered list attribute name.
+     */
+    public const START_ATTRIBUTE = 'start';
+
+    /**
+     * The strong importance element.
      */
     public const STRONG = 'strong';
 
@@ -121,6 +136,11 @@ interface HtmlConstantsInterface
      * The text chunk.
      */
     public const TEXT = '#text';
+
+    /**
+     * The list type attribute name.
+     */
+    public const TYPE_ATTRIBUTE = 'type';
 
     /*
      * The underline element.

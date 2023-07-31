@@ -25,6 +25,9 @@ use Twig\TwigFilter;
  */
 class HighlightExtension extends AbstractExtension
 {
+    /**
+     * @const array<non-empty-string, non-empty-string>
+     */
     private const PHP_PATTERNS = [
         '/title="(.*?)"/i' => '',
         '/data-depth=\d+\s/i' => '',
@@ -78,7 +81,7 @@ class HighlightExtension extends AbstractExtension
         $output = \fopen('php://memory', 'r+');
         $dumper->dump($data, $output);
         $content = (string) \stream_get_contents($output, -1, 0);
-        $content = StringUtils::pregReplace(self::PHP_PATTERNS, $content);
+        $content = StringUtils::pregReplace(self::PHP_PATTERNS, $content); // @phpstan-ignore-line
         if ('' !== $id) {
             $content = \preg_replace('/highlight-php-\d+/', $id, $content);
         }

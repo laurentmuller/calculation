@@ -19,6 +19,8 @@ class HtmlOlChunk extends AbstractHtmlListChunk
 {
     /**
      * The start counting.
+     *
+     * @psalm-var positive-int
      */
     private int $start = 1;
 
@@ -54,9 +56,7 @@ class HtmlOlChunk extends AbstractHtmlListChunk
     }
 
     /**
-     * Sets the start counting.
-     *
-     * <b>N.B.:</b> The minimum value is 1.
+     * Sets the start counting (must be positive).
      */
     public function setStart(int $start): self
     {
@@ -77,6 +77,6 @@ class HtmlOlChunk extends AbstractHtmlListChunk
 
     private function getText(int $number): string
     {
-        return $this->type->getBulletText($number);
+        return $this->type->getBulletText(\max($number, $this->start));
     }
 }

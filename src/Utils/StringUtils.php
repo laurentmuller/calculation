@@ -212,6 +212,8 @@ final class StringUtils
      * @return string|string[] returns a string or an array with the replaced values
      *
      * @phpstan-return ($subject is string ? string : string[])
+     *
+     * @psalm-param array<non-empty-string, non-empty-string> $values
      */
     public static function pregReplace(array $values, string|array $subject): string|array
     {

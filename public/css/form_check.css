@@ -39,7 +39,7 @@
 }
 
 /**
- * special case for dark theme and dark mode
+ * special case for dark theme and dark color
  */
 html[data-bs-theme=dark] .form-check.form-dark .form-check-input:checked {
     border-color: var(--bs-border-color);

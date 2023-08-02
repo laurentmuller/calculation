@@ -29,24 +29,24 @@ readonly class HtmlParser
     /**
      * Parses this HTML content and return the root parent.
      *
-     * @return ?HtmlParentChunk the root parent, if success; <code>null</code> otherwise
+     * @return HtmlParentChunk|false the root parent, if success; <code>false</code> otherwise
      */
-    public function parse(): ?HtmlParentChunk
+    public function parse(): HtmlParentChunk|false
     {
-        if (false === $source = $this->trimHtml()) {
-            return null;
+        if (!$source = $this->trimHtml()) {
+            return false;
         }
-        if (false === $document = $this->loadDocument($source)) {
-            return null;
+        if (!$document = $this->loadDocument($source)) {
+            return false;
         }
-        if (false === $body = $this->findBody($document)) {
-            return null;
+        if (!$body = $this->findBody($document)) {
+            return false;
         }
 
         $root = new HtmlParentChunk($body->nodeName);
         $this->parseNodes($root, $body);
 
-        return $root->isEmpty() ? null : $root;
+        return $root->isEmpty() ? false : $root;
     }
 
     /**

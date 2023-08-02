@@ -33,6 +33,11 @@ class PdfFooter
      */
     private ?string $content = null;
 
+    /*
+     * The formatted date.
+     */
+    private ?string $date = null;
+
     /**
      * The content URL.
      */
@@ -51,7 +56,6 @@ class PdfFooter
      */
     public function output(): void
     {
-        // margins
         $parent = $this->parent;
         $parent->useCellMargin(function () use ($parent): void {
             // position and cells width
@@ -86,7 +90,7 @@ class PdfFooter
      */
     private function getDate(): string
     {
-        return FormatUtils::formatDateTime(new \DateTime(), \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
+        return $this->date ??= FormatUtils::formatDateTime(new \DateTime());
     }
 
     /**

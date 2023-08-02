@@ -44,96 +44,108 @@
         <div id="tree" class="list-group mb-3" role="tree" data-url="{{ path('test_tree') }}" data-loading-text="{{ 'about.loading'|trans }}" data-badge-class="bg-secondary" data-badge-count="true"></div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group mb-3">
-            <label class="form-label" for="country">Pays</label>
-            <select id="country" class="form-select" data-url="{{ asset('images/flags/flag_blank.png') }}">
-                {% for key, value in countries -%}
-                    <option value="{{ key }}">{{ value }}</option>
-                {%- endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group mb-3">
-            <label class="form-label required" for="currency">Monnaie</label>
-            <select id="currency" class="form-select" required="required">
-                {% for currency in currencies -%}
-                    <option value="{{ currency.code }}">{{ currency.name }}</option>
-                {%- endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group mb-3">
-            <label class="form-label" for="state_single">Status (simple)</label>
-            <select id="state_single" class="form-select">
-                {% for key, group in states -%}
-                    <optgroup label="{{ key|trans }}">
-                        {% for state in group -%}
-                            <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
-                        {% endfor %}
-                    </optgroup>
-                {%- endfor %}
-            </select>
-        </div>
-    </div>
-    <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group mb-3">
-            <label class="form-label" for="state">Status (multiple)</label>
-            <div class="input-group">
-                <select id="state" class="form-select" multiple="multiple" data-delete="Supprimer le statut">
-                    {% for key, group in states -%}
-                        <optgroup label="{{ key|trans }}">
-                            {% for state in group -%}
-                                <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
-                            {% endfor %}
-                        </optgroup>
-                    {%- endfor %}
-                </select>
-                <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un statut">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-                <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les statuts">
-                    <i class="fa-regular fa-trash-alt"></i>
-                </button>
+        <div class="row">
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label" for="country">Pays</label>
+                    <select id="country" class="form-select" data-url="{{ asset('images/flags/flag_blank.png') }}">
+                        {% for key, value in countries -%}
+                            <option value="{{ key }}">{{ value }}</option>
+                        {%- endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label required" for="currency">Monnaie</label>
+                    <select id="currency" class="form-select" required="required">
+                        {% for currency in currencies -%}
+                            <option value="{{ currency.code }}">{{ currency.name }}</option>
+                        {%- endfor %}
+                    </select>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group mb-3">
-            <label class="form-label" for="category">Catégorie</label>
-            <div class="input-group">
-                <span class="input-group-text">@</span>
-                <select id="category" class="form-select" multiple="multiple" data-delete="Supprimer la catégorie">
-                    {% for key, group in categories -%}
-                        <optgroup label="{{ key }}">
-                            {% for category in group -%}
-                                <option value="{{ category.id }}">{{ category.code }}</option>
+        <div class="row">
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label" for="state_single">Status (simple)</label>
+                    <select id="state_single" class="form-select">
+                        {% for key, group in states -%}
+                            <optgroup label="{{ key|trans }}">
+                                {% for state in group -%}
+                                    <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {%- endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label" for="state">Status (multiple)</label>
+                    <div class="input-group">
+                        <select id="state" class="form-select" multiple="multiple" data-delete="Supprimer le statut">
+                            {% for key, group in states -%}
+                                <optgroup label="{{ key|trans }}">
+                                    {% for state in group -%}
+                                        <option value="{{ state.id }}" data-color="{{ state.color }}">{{ state.code }}</option>
+                                    {% endfor %}
+                                </optgroup>
                             {%- endfor %}
-                        </optgroup>
-                    {%- endfor %}
-                </select>
-                <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter une catégorie">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-                <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer toutes les catégories">
-                    <i class="fa-regular fa-trash-alt"></i>
-                </button>
+                        </select>
+                        <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter un statut">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer tous les statuts">
+                            <i class="fa-regular fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <div class="form-group mb-3">
-            <label class="form-label" for="product">Article</label>
-            <select id="product" class="form-select">
-                {% for key, group in products -%}
-                    <optgroup label="{{ key }}">
-                        {% for product in group -%}
-                            <option data-price="{{ product.price }}" data-unit="{{ product.unit }}" value="{{ product.id }}">{{ product.description }}</option>
+        <div class="row">
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label" for="category">Catégorie</label>
+                    <div class="input-group">
+                        <span class="input-group-text">@</span>
+                        <select id="category" class="form-select" multiple="multiple" data-delete="Supprimer la catégorie">
+                            {% for key, group in categories -%}
+                                <optgroup label="{{ key }}">
+                                    {% for category in group -%}
+                                        <option value="{{ category.id }}">{{ category.code }}</option>
+                                    {%- endfor %}
+                                </optgroup>
+                            {%- endfor %}
+                        </select>
+                        <button class="btn btn-outline-secondary btn-search" type="button" title="Ajouter une catégorie">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-clear" type="button" title="Supprimer toutes les catégories">
+                            <i class="fa-regular fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group mb-3">
+                    <label class="form-label" for="product">Article</label>
+                    <select id="product" class="form-select">
+                        {% for key, group in products -%}
+                            <optgroup label="{{ key }}">
+                                {% for product in group -%}
+                                    <option data-price="{{ product.price }}" data-unit="{{ product.unit }}" value="{{ product.id }}">{{ product.description }}</option>
+                                {% endfor %}
+                            </optgroup>/
                         {% endfor %}
-                    </optgroup>/
-                {% endfor %}
-            </select>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
@@ -142,12 +154,8 @@
             {% set current = user_service.messagePosition %}
             {% set positions = enum('App\\Enums\\MessagePosition').sorted() %}
             <button type="button" class="btn-position form-control d-flex align-items-center dropdown-toggle" data-value="{{ current.value }}" data-bs-toggle="dropdown" aria-expanded="false" style="width: 14rem;">
-        <span class="position-icon me-2">
-             <i class="{{ current.icon }}" style="--fa-rotate-angle: {{ current.angle }}deg;"></i>
-        </span>
-                <span class="position-text flex-fill text-start">
-            {{- current|trans -}}
-        </span>
+                <span class="position-icon me-2"><i class="{{ current.icon }}" style="--fa-rotate-angle: {{ current.angle }}deg;"></i></span>
+                <span class="position-text flex-fill text-start">{{- current|trans -}}</span>
             </button>
             <table class="dropdown-menu w-auto table table-borderless mb-0 px-2">
                 <tr>
@@ -173,15 +181,29 @@
 </div>
 <div class="row">
     <div class="col-md-8 offset-md-2 my-2">
-        <label class="form-label" for="search">Drop-down menu</label>
-        <div class="input-group mb-3">
-            <input class="form-control" type="search" id="search" name="search" autocomplete="off">
-            <button class="btn btn-outline-secondary dropdown-toggle ps-2" type="button" data-bs-toggle="dropdown" data-bs-reference="parent" aria-expanded="false" />
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Action</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
-                <li><a class="dropdown-item" href="#">Something</a></li>
-            </ul>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label" for="search">Drop-down menu</label>
+                    <div class="input-group">
+                        <input class="form-control" type="search" id="search" name="search" autocomplete="off">
+                        <button class="btn btn-outline-secondary dropdown-toggle ps-2" type="button" data-bs-toggle="dropdown" data-bs-reference="parent" aria-expanded="false"></button>
+                        <ul class="dropdown-menu">
+                        {% for i in range(0, 100, 20) %}
+                            <li><button class="dropdown-item dropdown-item-gradient" data-value="{{ i }}">{{ (i / 100)|percent }}</button></li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    <span class="bottom-border-gradient bottom-border-gradient-100"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <label class="form-label" for="gradient">Border gradient</label>
+                    <input class="form-control bottom-border-gradient bottom-border-gradient-80" id="gradient" name="gradient">
+                    <span class="bottom-border-gradient bottom-border-gradient-100"></span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

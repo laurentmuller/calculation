@@ -50,22 +50,14 @@ class CSVReaderTest extends TestCase
     public function testLines(): void
     {
         $lines = 0;
+        $lastKey = -1;
         $reader = $this->getReader();
-        foreach ($reader as $ignored) {
+        foreach ($reader as $key => $ignored) {
             ++$lines;
+            $lastKey = $key;
         }
         self::assertSame(4, $lines);
-        self::assertSame(3, $reader->key());
-        $reader->close();
-    }
-
-    public function testRewind(): void
-    {
-        $reader = $this->getReader();
-        $reader->next();
-        self::assertSame(1, $reader->key());
-        $reader->rewind();
-        self::assertSame(0, $reader->key());
+        self::assertSame(3, $lastKey);
         $reader->close();
     }
 

@@ -1,0 +1,44 @@
+{% extends 'cards/card_base.html.twig' %}
+{% from 'macros/_icons.html.twig' import link, homepage, button_close_modal %}
+{% from 'macros/_properties.html.twig' import stateCss %}
+{# macro #}
+{% macro add_line_info(name, value) -%}
+<tr>
+    <td class="w-30 text-nowrap">{{ name|trans }}</td>
+    <td>{{ value|raw }}</td>
+</tr>
+{%- endmacro %}
+{# parameters #}
+{%- set title = 'calculation.update.title' -%}
+{%- set title_icon = 'pencil' -%}
+{%- set title_description = 'calculation.result.description' -%}
+{%- set cancel_path = path('homepage') -%}
+{%- set results = result.results -%}
+{# body #}
+{% block card_body %}
+<div class="table-responsive position-relative">
+    <table class="table table-no-bottom table-sm">
+        {{ _self.add_line_info('calculation.update.dateFrom', query.dateFrom|locale_date('full')) }}
+        {{ _self.add_line_info('calculation.update.dateTo', query.dateTo|locale_date('full')) }}
+        {{ _self.add_line_info('calculation.update.states', query.statesCode) }}
+        <tr>
+            <td class="w-30 text-nowrap">
+                {{ 'calculation.list.title'|trans }}
+            </td>
+            <td>
+                {{ result.count|integer }}
+            </td>
+        </tr>
+    </table>
+</div>
+{% if result.valid and query.simulate %}
+    <p class="mb-0 text-end text-body-secondary small">{{ 'simulate.message'|trans }}</p>
+{% endif %}
+{% endblock %}
+{# footer #}
+{% block card_footer %}
+<div class="d-flex flex-wrap align-items-center gap-2">
+    {{ homepage() }}
+    {{ link(path('admin_update'), 'calculation.result.update', 'btn btn-form btn-secondary', null) -}}
+</div>
+{% endblock %}

@@ -47,9 +47,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     private const KEY_SOURCES = 'archive.sources';
     private const KEY_TARGET = 'archive.target';
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         private readonly CalculationRepository $calculationRepository,
         private readonly CalculationStateRepository $stateRepository,
@@ -138,11 +135,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $sources = $query->getSources();
 
         $result = new CalculationArchiveResult();
-        $result->setDate($date)
-            ->setTarget($target)
-            ->setSources($sources)
-            ->setSimulate($simulate);
-
         $calculations = $this->getCalculations($date, $sources);
         foreach ($calculations as $calculation) {
             $oldState = $calculation->getState();
@@ -340,7 +332,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             $this->trans('archive.fields.date') => $query->getDateFormatted(),
             $this->trans('archive.fields.sources') => $query->getSourcesCode(),
             $this->trans('archive.fields.target') => $query->getTargetCode(),
-            $this->trans('archive.result.calculations') => $result->total(),
+            $this->trans('archive.result.calculations') => $result->getTotal(),
         ];
         $message = $this->trans('archive.title');
         $this->logInfo($message, $context);

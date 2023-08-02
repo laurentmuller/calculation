@@ -41,18 +41,6 @@ class ReverseReaderTest extends TestCase
             self::assertSame("Line $index", $line);
             --$index;
         }
-        self::assertFalse($reader->valid());
-        self::assertNull($reader->current());
-        $reader->close();
-    }
-
-    public function testRewind(): void
-    {
-        $reader = $this->getReader();
-        $reader->next();
-        self::assertSame(1, $reader->key());
-        $reader->rewind();
-        self::assertSame(0, $reader->key());
         $reader->close();
     }
 

@@ -19,7 +19,7 @@ use App\Utils\FormatUtils;
 /**
  * Contains parameters to update products.
  */
-class ProductUpdateQuery
+class ProductUpdateQuery extends AbstractSimulateQuery
 {
     /**
      * Update products with a fixed amount.
@@ -32,13 +32,18 @@ class ProductUpdateQuery
     final public const UPDATE_PERCENT = 'percent';
 
     private bool $allProducts = true;
+
     private ?Category $category = null;
+
     private float $fixed = 0;
+
     private float $percent = 0;
+
     /** @var Product[] */
     private array $products = [];
+
     private bool $round = false;
-    private bool $simulate = true;
+
     private string $type = self::UPDATE_PERCENT;
 
     /**
@@ -156,14 +161,6 @@ class ProductUpdateQuery
     }
 
     /**
-     * Returns a value indicating if the update is simulated (no flush changes in the database).
-     */
-    public function isSimulate(): bool
-    {
-        return $this->simulate;
-    }
-
-    /**
      * Sets a value indicating if all products of the selected category must update.
      */
     public function setAllProducts(bool $allProducts): self
@@ -221,16 +218,6 @@ class ProductUpdateQuery
     public function setRound(bool $round): self
     {
         $this->round = $round;
-
-        return $this;
-    }
-
-    /**
-     * Sets a value indicating if the update is simulated (no flush changes in the database).
-     */
-    public function setSimulate(bool $simulate): self
-    {
-        $this->simulate = $simulate;
 
         return $this;
     }

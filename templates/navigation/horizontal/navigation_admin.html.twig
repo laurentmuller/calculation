@@ -7,6 +7,7 @@
     </button>
     <ul class="dropdown-menu" aria-labelledby="{{ id }}">
         <li>{{ dropdownItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}</li>
+        <li>{{ dropdownItem(path('admin_update'), 'calculation.update.title', 'pencil') }}</li>
         <li>{{ dropdownItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}</li>
         <li>{{ dropdownSeparator() }}</li>
         <li>{{ dropdownItem(path('user_table'), 'user.list.title', ICON_USER) }}</li>

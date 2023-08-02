@@ -41,11 +41,12 @@ class ReverseReader extends AbstractReader
     /**
      * Constructor.
      *
-     * @param \SplFileInfo|string $file the file to open
+     * @param \SplFileInfo|string $file   the file to open
+     * @param bool                $binary true to open the file with binary mode
      */
-    public function __construct(\SplFileInfo|string $file)
+    public function __construct(\SplFileInfo|string $file, bool $binary = false)
     {
-        parent::__construct($file);
+        parent::__construct($file, $binary);
     }
 
     protected function getNextData($stream): ?string

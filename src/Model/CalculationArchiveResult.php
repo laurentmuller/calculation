@@ -17,16 +17,14 @@ use App\Entity\CalculationState;
 
 /**
  * Contains result of archive calculations.
+ *
+ * @psalm-type ResultsType = array<string, array{state: CalculationState, calculations: array<Calculation>}>
  */
 class CalculationArchiveResult
 {
-    private ?\DateTimeInterface $date = null;
-    /** @psalm-var array<string, array{state: CalculationState, calculations: array<Calculation>}> */
+    /** @psalm-var ResultsType */
     private array $results = [];
-    private bool $simulate = true;
-    /** @var CalculationState[] */
-    private array $sources = [];
-    private ?CalculationState $target = null;
+
     private int $total = 0;
 
     /**
@@ -45,13 +43,8 @@ class CalculationArchiveResult
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
-    {
-        return $this->date;
-    }
-
     /**
-     * @psalm-return array<string, array{state: CalculationState, calculations: array<Calculation>}>
+     * @psalm-return ResultsType
      */
     public function getResults(): array
     {
@@ -60,22 +53,9 @@ class CalculationArchiveResult
         return $this->results;
     }
 
-    /**
-     * @return CalculationState[]
-     */
-    public function getSources(): array
+    public function getTotal(): int
     {
-        return $this->sources;
-    }
-
-    public function getTarget(): ?CalculationState
-    {
-        return $this->target;
-    }
-
-    public function isSimulate(): bool
-    {
-        return $this->simulate;
+        return $this->total;
     }
 
     public function isValid(): bool
@@ -85,46 +65,9 @@ class CalculationArchiveResult
 
     public function reset(): self
     {
-        $this->sources = [];
         $this->results = [];
         $this->total = 0;
 
         return $this;
-    }
-
-    public function setDate(?\DateTimeInterface $date): self
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    public function setSimulate(bool $simulate): self
-    {
-        $this->simulate = $simulate;
-
-        return $this;
-    }
-
-    /**
-     * @param CalculationState[] $sources
-     */
-    public function setSources(array $sources): self
-    {
-        $this->sources = $sources;
-
-        return $this;
-    }
-
-    public function setTarget(?CalculationState $target): self
-    {
-        $this->target = $target;
-
-        return $this;
-    }
-
-    public function total(): int
-    {
-        return $this->total;
     }
 }

@@ -19,7 +19,7 @@
 <hr>
 {{ form_row(form.simulate) }}
 {{ form_row(form.confirm) }}
-{{ form_rest(form) }}
+{{ parent() }}
 {% if last_update is defined and last_update %}
     {%- set date = last_update|locale_datetime('long', 'short') -%}
     <hr class="my-2">

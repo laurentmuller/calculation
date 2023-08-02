@@ -14,19 +14,20 @@ namespace App\Model;
 
 /**
  * Contains result of updated products.
+ *
+ * @psalm-type ProductType = array{description: string|null, oldPrice: float, newPrice: float}
  */
 class ProductUpdateResult implements \Countable
 {
     /**
-     * @psalm-var array<array{description: string|null, oldPrice: float, newPrice: float}>
+     * @psalm-var ProductType[]
      */
     private array $products = [];
-    private bool $simulate = true;
 
     /**
      * Add a product to the list of updated products.
      *
-     * @psalm-param array{description: string|null, oldPrice: float, newPrice: float} $values
+     * @psalm-param ProductType $values
      */
     public function addProduct(array $values): self
     {
@@ -43,16 +44,11 @@ class ProductUpdateResult implements \Countable
     /**
      * Gets the updated products.
      *
-     * @psalm-return array<array{description: string|null, oldPrice: float, newPrice: float}>
+     * @psalm-return ProductType[]
      */
     public function getProducts(): array
     {
         return $this->products;
-    }
-
-    public function isSimulate(): bool
-    {
-        return $this->simulate;
     }
 
     /**
@@ -61,12 +57,5 @@ class ProductUpdateResult implements \Countable
     public function isValid(): bool
     {
         return [] !== $this->products;
-    }
-
-    public function setSimulate(bool $simulate): self
-    {
-        $this->simulate = $simulate;
-
-        return $this;
     }
 }

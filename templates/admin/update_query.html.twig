@@ -1,0 +1,29 @@
+{% extends 'cards/card_edit.html.twig' %}
+{# parameters #}
+{%- set title = 'calculation.update.title' -%}
+{%- set title_icon = 'pencil' -%}
+{%- set title_description = 'calculation.update.description' -%}
+{%- set submit_text = 'calculation.update.submit' -%}
+{%- set form_attr = form_attr|default({})|merge({'data-error': 'archive.edit.error'|trans}) -%}
+{# body #}
+{% block card_body %}
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.dateFrom) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.dateTo) }}
+    </div>
+</div>
+{{ form_row(form.states) }}
+<hr>
+{{ form_row(form.simulate) }}
+{{ form_row(form.confirm) }}
+{{ parent() }}
+{% endblock %}
+{# javascripts #}
+{% block javascripts %}
+{{ parent() }}
+{{ asset_js('js/plugins/plugin-simulate.js') }}
+{{ asset_js('js/application/calculation_update.js') }}
+{% endblock %}

@@ -4,14 +4,15 @@ doctrine:
         types:
             fixed_float: 'App\Types\FixedFloatType'
     orm:
-        auto_generate_proxy_classes: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-        proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
         auto_mapping: true
         validate_xml_mapping: true
+        auto_generate_proxy_classes: true
+        report_fields_where_declared: true
+        proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         mappings:
             App:
-                is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
                 alias: App
+                is_bundle: false
+                prefix: 'App\Entity'
+                dir: '%kernel.project_dir%/src/Entity'

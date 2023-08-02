@@ -17,27 +17,10 @@ namespace App\Utils;
  *
  * @template TValue
  *
- * @implements \Iterator<int, TValue>
+ * @implements \IteratorAggregate<int, TValue>
  */
-abstract class AbstractReader implements \Iterator
+abstract class AbstractReader implements \IteratorAggregate
 {
-    /**
-     * The first rewind call.
-     */
-    private bool $canRewind;
-
-    /**
-     * The current data.
-     *
-     * @var ?TValue
-     */
-    private mixed $data = null;
-
-    /**
-     * The current key (line index).
-     */
-    private int $key = 0;
-
     /**
      * The resource file.
      *
@@ -48,22 +31,19 @@ abstract class AbstractReader implements \Iterator
     /**
      * Constructor.
      *
-     * @param \SplFileInfo|string|resource $file the file to open
+     * @param \SplFileInfo|string|resource $file   the file to open
+     * @param bool                         $binary true to open the file with binary mode
      */
-    public function __construct(mixed $file)
+    public function __construct(mixed $file, bool $binary = false)
     {
         if ($file instanceof \SplFileInfo) {
             $file = $file->getPathname();
         }
         if (\is_resource($file)) {
-            $this->canRewind = false;
             $this->stream = $file;
         } else {
-            $this->canRewind = true;
-            $this->stream = \fopen($file, 'r');
-        }
-        if (\is_resource($this->stream)) {
-            $this->parseNextLine();
+            $mode = $binary ? 'rb' : 'r';
+            $this->stream = \fopen($file, $mode);
         }
     }
 
@@ -83,18 +63,18 @@ abstract class AbstractReader implements \Iterator
     public function close(): void
     {
         if (\is_resource($this->stream) && \fclose($this->stream)) {
-            $this->key = 0;
-            $this->data = null;
             $this->stream = false;
         }
     }
 
     /**
-     * @return ?TValue
+     * @return \Generator<int, TValue>
      */
-    public function current(): mixed
+    public function getIterator(): \Generator
     {
-        return $this->data;
+        while (\is_resource($this->stream) && !\feof($this->stream) && null !== $data = $this->getNextData($this->stream)) {
+            yield $data;
+        }
     }
 
     /**
@@ -105,37 +85,6 @@ abstract class AbstractReader implements \Iterator
         return \is_resource($this->stream);
     }
 
-    public function key(): int
-    {
-        return $this->key;
-    }
-
-    public function next(): void
-    {
-        $this->parseNextLine();
-        if ($this->valid()) {
-            ++$this->key;
-        }
-    }
-
-    public function rewind(): void
-    {
-        try {
-            if ($this->canRewind && 0 !== $this->key
-                    && \is_resource($this->stream) && \rewind($this->stream)) {
-                $this->key = 0;
-                $this->parseNextLine();
-            }
-        } catch (\Exception) {
-            $this->canRewind = false;
-        }
-    }
-
-    public function valid(): bool
-    {
-        return null !== $this->data;
-    }
-
     /**
      * Gets data from the given resource.
      *
@@ -144,15 +93,4 @@ abstract class AbstractReader implements \Iterator
      * @return ?TValue the parsed data or null if none
      */
     abstract protected function getNextData($stream): mixed;
-
-    /**
-     * Parse the next line.
-     */
-    protected function parseNextLine(): void
-    {
-        $this->data = null;
-        if (\is_resource($this->stream) && !\feof($this->stream)) {
-            $this->data = $this->getNextData($this->stream);
-        }
-    }
 }

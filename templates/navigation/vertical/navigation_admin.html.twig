@@ -12,6 +12,7 @@
     <div class="collapse{{ collapse_class }}" id="{{ id }}">
         <ul class="list-unstyled">
             {{ navItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
+            {{ navItem(path('admin_update'), 'calculation.update.title', 'pencil') }}
             {{ navItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
             <li>{{ dropdownSeparator() }}</li>
             {{ navItem(path('user_table'), 'user.list.title', ICON_USER) }}

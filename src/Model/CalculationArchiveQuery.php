@@ -18,12 +18,13 @@ use App\Utils\FormatUtils;
 /**
  * Contains parameters to archive calculations.
  */
-class CalculationArchiveQuery
+class CalculationArchiveQuery extends AbstractSimulateQuery
 {
     private \DateTimeInterface $date;
-    private bool $simulate = true;
+
     /** @var CalculationState[] */
     private array $sources = [];
+
     private ?CalculationState $target = null;
 
     public function __construct()
@@ -68,21 +69,9 @@ class CalculationArchiveQuery
         return $this->target?->getCode();
     }
 
-    public function isSimulate(): bool
-    {
-        return $this->simulate;
-    }
-
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function setSimulate(bool $simulate): self
-    {
-        $this->simulate = $simulate;
 
         return $this;
     }

@@ -9,7 +9,7 @@
  */
 function getActivePage() {
     'use strict';
-    const $source = $('#parent_accordion .accordion-collapse.collapse.show');
+    const $source = $('#parameterAccordion .collapse.show');
     return $source.length ? $source : null;
 }
 
@@ -74,7 +74,7 @@ function updateVisibleButton() {
 function displayNotification() {
     'use strict';
     // get random text
-    let title = $('.card-title').text();
+    let title = $('.card-title:first').text();
     const url = $('#edit-form').data("random");
     $.getJSON(url, function (response) {
         if (response.result && response.content) {
@@ -213,14 +213,14 @@ function handleEmail() {
             setDefaultValues($source);
         }
     });
-    $('.btn-notify').on('click', function (e) {
+    $('.btn-notify').on('click', (e) => {
         e.preventDefault();
         displayNotification();
     });
 
-    $('#parent_accordion .accordion-item').on('shown.bs.collapse', function () {
+    $('#parameterAccordion .collapse').on('shown.bs.collapse', function () {
         const $this = $(this);
-        const $button = $this.find('.accordion-button');
+        const $button = $this.prev('.card-header').find('a.card-title');
         $button.attr('title', $button.data('hide'));
         const $page = getActivePage();
         if ($page && $page.find('.is-invalid').length === 0) {
@@ -229,7 +229,7 @@ function handleEmail() {
         updateVisibleButton();
     }).on('hidden.bs.collapse', function () {
         const $this = $(this);
-        const $button = $this.find('.accordion-button');
+        const $button = $this.prev('.card-header').find('a.card-title');
         $button.attr('title', $button.data('show'));
         updateVisibleButton();
     });

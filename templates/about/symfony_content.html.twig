@@ -44,80 +44,70 @@
     </table>
     {# Configuration #}
     <p class="fw-bold mb-1 p-1 border-bottom">Configuration</p>
-    <div class="accordion accordion-flush" id="symfonyAccordion">
+    <div id="symfonyAccordion">
         {# bundles #}
         {% if bundles|length %}
-            <div class="accordion-item">
-                {{ tools.headerLinkInfo('Bundles', 'bundles', bundles) }}
-                <div class="accordion-collapse collapse" id="bundles" aria-labelledby="bundles-header" data-bs-parent="#symfonyAccordion">
-                    <table class="table table-hover table-no-end-line table-sm mb-0">
-                        <tbody>
-                        {% for bundle in service.bundles %}
-                            {{ tools.rowBundle(bundle) }}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            {{ tools.headerLinkInfo('Bundles', 'bundles', bundles) }}
+            <div class="collapse" id="bundles" aria-labelledby="bundles-header" data-bs-parent="#symfonyAccordion">
+                <table class="table table-hover table-sm mb-0">
+                    <tbody>
+                    {% for bundle in service.bundles %}
+                        {{ tools.rowBundle(bundle) }}
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         {% endif %}
         {# runtime packages #}
         {% if runtime_packages|length %}
-            <div class="accordion-item">
-                {{ tools.headerLinkInfo('Packages', 'runtime-packages', runtime_packages) }}
-                <div class="accordion-collapse collapse" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
-                    <table class="table table-hover table-no-end-line table-sm mb-0">
-                        <tbody>
-                        {% for package in runtime_packages %}
-                            {{ tools.rowPackage(package) }}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            {{ tools.headerLinkInfo('Packages', 'runtime-packages', runtime_packages) }}
+            <div class="accordion-collapse collapse" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
+                <table class="table table-hover table-no-end-line table-sm mb-0">
+                    <tbody>
+                    {% for package in runtime_packages %}
+                        {{ tools.rowPackage(package) }}
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         {% endif %}
         {# debug packages #}
         {% if debug_packages|length %}
-            <div class="accordion-item">
-                {{ tools.headerLinkInfo('Debug Packages', 'dev-packages', debug_packages) }}
-                <div class="accordion-collapse collapse" id="dev-packages" aria-labelledby="dev-packages-header" data-bs-parent="#symfonyAccordion">
-                    <table class="table table-hover table-no-end-line table-sm mb-0">
-                        <tbody>
-                        {% for package in debug_packages %}
-                            {{ tools.rowPackage(package) }}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            {{ tools.headerLinkInfo('Debug Packages', 'dev-packages', debug_packages) }}
+            <div class="accordion-collapse collapse" id="dev-packages" aria-labelledby="dev-packages-header" data-bs-parent="#symfonyAccordion">
+                <table class="table table-hover table-no-end-line table-sm mb-0">
+                    <tbody>
+                    {% for package in debug_packages %}
+                        {{ tools.rowPackage(package) }}
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         {% endif %}
         {# runtime routes #}
         {% if runtime_routes|length %}
-            <div class="accordion-item">
-                {{ tools.headerLinkInfo('Routes', 'runtime-routes', runtime_routes) }}
-                <div class="accordion-collapse collapse" id="runtime-routes" aria-labelledby="runtime-routes-header" data-bs-parent="#symfonyAccordion">
-                    <table class="table table-hover table-no-end-line table-sm mb-0">
-                        <tbody>
-                        {% for route in runtime_routes %}
-                            {{ tools.rowInfo(route.name, route.path, 'ps-3') }}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            {{ tools.headerLinkInfo('Routes', 'runtime-routes', runtime_routes) }}
+            <div class="accordion-collapse collapse" id="runtime-routes" aria-labelledby="runtime-routes-header" data-bs-parent="#symfonyAccordion">
+                <table class="table table-hover table-no-end-line table-sm mb-0">
+                    <tbody>
+                    {% for route in runtime_routes %}
+                        {{ tools.rowInfo(route.name, route.path, 'ps-3') }}
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         {% endif %}
         {# debug routes #}
         {% if debug_routes|length %}
-            <div class="accordion-item">
-                {{ tools.headerLinkInfo('Debug Routes', 'debug-routes', debug_routes) }}
-                <div class="accordion-collapse collapse" id="debug-routes" aria-labelledby="debug-routes-header" data-bs-parent="#symfonyAccordion">
-                    <table class="table table-hover table-no-end-line table-sm mb-0">
-                        <tbody>
-                        {% for route in debug_routes %}
-                            {{ tools.rowInfo(route.name, route.path, 'ps-3') }}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            {{ tools.headerLinkInfo('Debug Routes', 'debug-routes', debug_routes) }}
+            <div class="accordion-collapse collapse" id="debug-routes" aria-labelledby="debug-routes-header" data-bs-parent="#symfonyAccordion">
+                <table class="table table-hover table-no-end-line table-sm mb-0">
+                    <tbody>
+                    {% for route in debug_routes %}
+                        {{ tools.rowInfo(route.name, route.path, 'ps-3') }}
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         {% endif %}
      </div>

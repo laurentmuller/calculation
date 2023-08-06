@@ -6,7 +6,10 @@
 {# sections #}
 {% block sections -%}
 {{ _self.collapseLine('display', form, true) }}
+<hr class="my-0">
 {{ _self.collapseLine('message', form) }}
+<hr class="my-0">
 {{ _self.collapseLine('home', form) }}
+<hr class="my-0">
 {{ _self.collapseLine('options', form) }}
 {%- endblock %}

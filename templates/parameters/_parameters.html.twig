@@ -2,23 +2,19 @@
 {% form_theme form with _self %}
 {# macros #}
 {% macro collapseLine(href, form, expanded=false, options=null) %}
-{%- set name = ('parameters.group_' ~ href)|trans -%}
 {%- set header_id = 'header_' ~ href -%}
+{%- set name = ('parameters.group_' ~ href)|trans -%}
 {%- set template = 'parameters/_parameters_' ~ href ~ '.html.twig' -%}
 {%- set show = 'parameters.display_parameters.show'|trans({'%name%': name}) -%}
 {%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
 {%- set title = expanded ? hide : show -%}
-<div class="accordion-item">
-    <h2 class="accordion-header" id="{{ header_id }}">
-        <button class="accordion-button py-2{% if not expanded %} collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ href }}" aria-expanded="{{ expanded|json_encode }}" aria-controls="{{ href }}" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">
-            {{- name -}}
-        </button>
-    </h2>
-    <div id="{{ href }}" class="accordion-collapse collapse{% if expanded %} show{% endif %}" aria-labelledby="{{ header_id }}" data-bs-parent="#parent_accordion">
-        <div class="accordion-body pt-1">
-            {{ include(template, {'form': form, options: options}) }}
-        </div>
-    </div>
+<div class="card-header d-flex-wrap-center border-bottom-0">
+    <a class="drop-down-icon-left card-title flex-fill mb-0" href="#" data-bs-toggle="collapse" data-bs-target="#{{ href }}" aria-expanded="{{ expanded|json_encode }}" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">
+        {{- name -}}
+    </a>
+</div>
+<div id="{{ href }}" class="card-body border-top collapse{% if expanded %} show{% endif %}" data-bs-parent="#parameterAccordion">
+    {{ include(template, {'form': form, options: options}) }}
 </div>
 {% endmacro %}
 {# customized fields #}
@@ -49,7 +45,7 @@
 {%- endblock %}
 {# body #}
 {% block card_body -%}
-<div class="accordion" id="parent_accordion">
+<div class="card" id="parameterAccordion">
     {% block sections %}{% endblock %}
 </div>
 {{ parent() }}

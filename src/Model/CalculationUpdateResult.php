@@ -16,14 +16,9 @@ use App\Entity\Calculation;
 
 /**
  * Contains result of update overall total of calculations.
- *
- * @psalm-type ResultType = array{calculation: Calculation, oldTotal: float, delta: float}
  */
 class CalculationUpdateResult implements \Countable
 {
-    /**
-     * @var ResultType[]
-     */
     private array $results = [];
 
     /**
@@ -35,8 +30,13 @@ class CalculationUpdateResult implements \Countable
     public function addCalculation(float $oldTotal, Calculation $calculation): self
     {
         $this->results[] = [
-            'oldTotal' => $oldTotal,
-            'calculation' => $calculation,
+            'id' => $calculation->getId(),
+            'color' => $calculation->getStateColor(),
+            'date' => $calculation->getDate(),
+            'customer' => $calculation->getCustomer(),
+            'description' => $calculation->getDescription(),
+            'old_value' => $oldTotal,
+            'new_value' => $calculation->getOverallTotal(),
             'delta' => $oldTotal - $calculation->getOverallTotal(),
         ];
 
@@ -48,9 +48,6 @@ class CalculationUpdateResult implements \Countable
         return \count($this->results);
     }
 
-    /**
-     * @return ResultType[]
-     */
     public function getResults(): array
     {
         return $this->results;

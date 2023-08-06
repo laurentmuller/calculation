@@ -166,7 +166,7 @@
 {% block card_body_class ' px-3 pt-0 pb-1' %}
 {# header #}
 {% block card_header -%}
-<div class="d-flex flex-wrap align-items-center gap-1">
+<div class="d-flex-wrap-center">
     <div class="me-auto">{{ parent() }}</div>
     <div class="d-print-none">{% block header_actions -%}{%- endblock %}</div>
 </div>
@@ -174,9 +174,9 @@
 {# body #}
 {% block card_body -%}
 {# toolbar #}
-<div class="d-flex flex-wrap gap-1 align-items-center my-2 d-print-none">
+<div class="d-flex-wrap-center my-2 d-print-none">
     {# search #}
-    <div class="col-search me-auto">
+    <div class="me-auto">
     {% if allow_search %}
         <div class="input-group input-group-sm input-group-search search">
             <input class="form-control form-control-search" id="control-search" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" autocomplete="off" type="text">
@@ -188,29 +188,28 @@
     {% endif %}
     </div>
     {# toolbar #}
-    <div class="col-toolbar">
-        <div class="btn-group btn-group-sm btn-group-toolbar" role="group">
-            {# page size #}
-            {% block page_list %}
+    <div class="btn-group btn-group-sm btn-group-toolbar" role="group">
+        {# page size #}
+        {% block page_list %}
             {% if pageList is defined and pageList|length > 1 %}
-            <div class="btn-group btn-group-sm dropdown" role="group">
-                {# menu is created on the prebody event #}
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_page" data-value="{{ limit }}" data-bs-toggle="dropdown" title="{{ 'list.limit_title'|trans }}" aria-expanded="false">
-                    {{- params.limit -}}
-                </button>
-                <div class="dropdown-menu dropdown-menu-page" aria-labelledby="button_page"></div>
-            </div>
+                <div class="btn-group btn-group-sm dropdown" role="group">
+                    {# menu is created on the prebody event #}
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_page" data-value="{{ limit }}" data-bs-toggle="dropdown" title="{{ 'list.limit_title'|trans }}" aria-expanded="false">
+                        {{- params.limit -}}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-page" aria-labelledby="button_page"></div>
+                </div>
             {% endif %}
-            {% endblock %}
-            <div class="btn-group btn-group-sm" role="group">
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-bs-toggle="dropdown" title="{{ 'common.other_actions'|trans }}" aria-expanded="false">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="button_other_actions">
+        {% endblock %}
+        <div class="btn-group btn-group-sm" role="group">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-bs-toggle="dropdown" title="{{ 'common.other_actions'|trans }}" aria-expanded="false">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="button_other_actions">
                 {# display mode #}
                 {% block display_mode %}
-                {{ _self.button_view('table_view.table', 'table', 'table', params.view) }}
-                {{ _self.button_view('table_view.custom', 'grip-horizontal', 'custom', params.view) }}
+                    {{ _self.button_view('table_view.table', 'table', 'table', params.view) }}
+                    {{ _self.button_view('table_view.custom', 'grip-horizontal', 'custom', params.view) }}
                 {%- endblock %}
                 {% if sortable %}
                     {{ _self.item_separator() }}
@@ -225,7 +224,6 @@
                     {{ _self.item_separator() }}
                     {% block global_actions -%}{%- endblock %}
                 {% endif %}
-                </div>
             </div>
         </div>
     </div>
@@ -276,7 +274,7 @@
 <div id="custom-view" class="d-none">
     <div class="col mb-2 px-1">
         <div class="custom-item border h-100 px-3 py-2{% block custom_view_card_class %}{%- endblock %}">
-            <div class="d-flex align-items-center gap-1 rowlink-skip">
+            <div class="d-flex-wrap-center rowlink-skip">
                 <div class="text-truncate fw-bold me-auto">
                     {% block custom_view_header -%}{%- endblock %}
                 </div>

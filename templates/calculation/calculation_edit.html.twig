@@ -6,12 +6,14 @@
     <div class="input-group">
         {%- if not disabled -%}
             {% from 'macros/_attributes.html.twig' import attributes %}
+            {%- set label = 'calculation.edit.adjust_label'|trans -%}
             {%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': min_margin|percent}) -%}
             {%- set class_name = 'btn btn-adjust btn-outline-secondary d-print-none' ~ (overall_below ? '' : ' cursor-default') -%}
             {%- set attrs = {
                 'type': 'button',
-                'role': 'button',
                 'id': 'btn-adjust',
+                'name': 'btn-adjust',
+                'aria-label': label,
                 'class': class_name,
                 'data-bs-html': 'true',
                 'data-bs-title': title,

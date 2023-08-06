@@ -374,7 +374,7 @@ class PdfDocument extends \FPDF
      * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
      *                                        <li>A PdfTextAlignment enumeration.</li>
-     *                                        <li><code>'L'</code> or an empty string (''): left align (default value).</li>
+     *                                        <li><code>'L'</code> or an empty string (""): left align (default value).</li>
      *                                        <li><code>'C'</code>: Center.</li>
      *                                        <li><code>'R'</code>: Right align.</li>
      *                                        </ul>

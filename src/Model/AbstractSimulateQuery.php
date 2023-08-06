@@ -13,23 +13,17 @@ declare(strict_types=1);
 namespace App\Model;
 
 /**
- * Abstract query with simulate property.
+ * Abstract query with simulate (no flush changes in the database) property.
  */
 abstract class AbstractSimulateQuery
 {
     private bool $simulate = true;
 
-    /**
-     * Returns a value indicating if the update is simulated (no flush changes in the database).
-     */
     public function isSimulate(): bool
     {
         return $this->simulate;
     }
 
-    /**
-     * Sets a value indicating if the update is simulated (no flush changes in the database).
-     */
     public function setSimulate(bool $simulate): static
     {
         $this->simulate = $simulate;

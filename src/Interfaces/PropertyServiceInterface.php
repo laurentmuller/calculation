@@ -57,7 +57,7 @@ interface PropertyServiceInterface
     final public const DEFAULT_MESSAGE_PROGRESS = 1;
 
     /**
-     * The default display flash bag message sub-title (boolean).
+     * The default display flash bag message subtitle (boolean).
      */
     final public const DEFAULT_MESSAGE_SUB_TITLE = false;
 
@@ -304,6 +304,11 @@ interface PropertyServiceInterface
      * The property name for the password strength level (int).
      */
     final public const P_STRENGTH_LEVEL = 'security_strength_level';
+
+    /**
+     * The property name for the date of the last update calculations (date).
+     */
+    final public const P_UPDATE_CALCULATION = 'update_calculation';
 
     /**
      * The property name for the user role rights (string).

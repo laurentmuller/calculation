@@ -47,7 +47,6 @@ class ProductUpdateService implements ServiceSubscriberInterface
     private const KEY_FIXED = 'product.update.fixed';
     private const KEY_PERCENT = 'product.update.percent';
     private const KEY_ROUND = 'product.update.round';
-    private const KEY_SIMULATE = 'product.update.simulate';
     private const KEY_TYPE = 'product.update.type';
 
     /**
@@ -76,7 +75,7 @@ class ProductUpdateService implements ServiceSubscriberInterface
             ->add(CategoryListType::class);
         $helper->field('allProducts')
             ->notRequired()
-            ->rowClass('mb-0')
+            ->updateRowAttribute('class', 'form-group mb-0')
             ->updateAttribute('data-error', $this->trans('product.update.products_error'))
             ->addCheckboxType();
         $helper->field('products')
@@ -95,10 +94,12 @@ class ProductUpdateService implements ServiceSubscriberInterface
             ->add(EntityType::class);
         $helper->field('percent')
             ->updateAttribute('data-type', ProductUpdateQuery::UPDATE_PERCENT)
+            ->updateAttribute('aria-label', $this->trans('product.update.percent'))
             ->help('product.update.percent_help')
             ->addPercentType();
         $helper->field('fixed')
             ->updateAttribute('data-type', ProductUpdateQuery::UPDATE_FIXED)
+            ->updateAttribute('aria-label', $this->trans('product.update.fixed'))
             ->help('product.update.fixed_help')
             ->addNumberType();
         $helper->field('round')
@@ -128,7 +129,6 @@ class ProductUpdateService implements ServiceSubscriberInterface
             ->setPercent($this->getSessionFloat(self::KEY_PERCENT, 0))
             ->setFixed($this->getSessionFloat(self::KEY_FIXED, 0))
             ->setType($this->getSessionString(self::KEY_TYPE, ProductUpdateQuery::UPDATE_PERCENT))
-            ->setSimulate($this->isSessionBool(self::KEY_SIMULATE, true))
             ->setRound($this->isSessionBool(self::KEY_ROUND));
 
         return $query;
@@ -144,7 +144,6 @@ class ProductUpdateService implements ServiceSubscriberInterface
         $key = $percent ? self::KEY_PERCENT : self::KEY_FIXED;
         $this->setSessionValues([
             self::KEY_CATEGORY => $query->getCategoryId(),
-            self::KEY_SIMULATE => $query->isSimulate(),
             self::KEY_ROUND => $query->isRound(),
             self::KEY_TYPE => $type,
             $key => $query->getValue(),

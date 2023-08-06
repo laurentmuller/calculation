@@ -60,7 +60,7 @@ class AjaxCalculationController extends AbstractController
     }
 
     /**
-     * Update the calculation's totals.
+     * Update the total of a calculation.
      */
     #[Route(path: '/update', name: 'ajax_update', methods: Request::METHOD_POST)]
     public function update(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
@@ -72,20 +72,21 @@ class AjaxCalculationController extends AbstractController
                 return $this->json($parameters);
             }
             $parameters['min_margin'] = $service->getMinMargin();
-            if ($this->getRequestBoolean($request, 'adjust') && $parameters['overall_below']) {
+            $adjust = $this->getRequestBoolean($request, 'adjust');
+            if ($adjust && $parameters['overall_below']) {
                 $service->adjustUserMargin($parameters);
             }
             $body = $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters);
-            $result = [
+
+            return $this->json([
                 'result' => true,
                 'body' => $body,
+                'adjust' => $adjust,
                 'user_margin' => $parameters['user_margin'] ?? 0,
                 'overall_margin' => $parameters['overall_margin'],
                 'overall_total' => $parameters['overall_total'],
                 'overall_below' => $parameters['overall_below'],
-            ];
-
-            return $this->json($result);
+            ]);
         } catch (\Exception $e) {
             $message = $this->trans('calculation.edit.error.update_total');
             $context = $this->getExceptionContext($e);

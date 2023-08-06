@@ -58,6 +58,7 @@ calculation:
   edit:
     add_item: Ajouter un article
     add_task: Ajouter une tâche
+    adjust_label: Ajuster la marge utilisateur
     adjust_title: Ajuster la marge utilisateur pour atteindre le seuil minimal de <b>%minimum%</b>
     delete_category: Supprimer la catégorie
     delete_group: Supprimer le groupe
@@ -140,15 +141,18 @@ calculation:
     success: Le statut de la calculation Nº <b>%name%</b> a été mis à jour avec succès.
   update:
     title: Mise à jour des calculations
-    description: Cette page vous permet de recalculer le total général des calculations.
+    description: Cette page vous permet de recalculer et de mettre à jour le total général des calculations.
     dateFrom: Date de début
     dateTo: Date de fin
     states: Status
     submit: Mettre à jour
+    last_update: 'Dernière mise à jour : %date%'
   result:
     description: Résultat de la mise à jour des calculations.
     update: Nouvelle mise à jour
-
+    old_value: Ancien total
+    new_value: Nouveau total
+    delta: Différence
 calculationgroup:
   fields:
     amount: Montant

@@ -223,7 +223,7 @@ final class FileUtils
     /**
      * Normalizes the given file.
      *
-     * During normalization, all slashes are replaced by forward slashes (“/“).
+     * During normalization, all slashes are replaced by forward slashes ('/').
      * This method does not remove invalid or dot path segments. Consequently, it is much
      * more efficient and should be used whenever the given path is known to be a valid,
      * absolute system path.

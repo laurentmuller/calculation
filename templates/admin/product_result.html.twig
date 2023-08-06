@@ -23,7 +23,7 @@
         <tr>
             <td class="w-30 text-nowrap">{{ 'product.result.updated'|trans }}</td>
             <td>
-                <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#resultModal" title="{{ 'product.result.updated'|trans }}">
+                <a href="#" class="stretched-link" data-bs-toggle="modal" data-bs-target="#modal-result" title="{{ 'product.result.updated'|trans }}">
                     {{ result.count|integer }}<i class="fa-solid fa-eye ms-1"></i>
                 </a>
             </td>
@@ -41,7 +41,7 @@
 {% endif %}
 {# dialog #}
 {% if result.valid %}
-<div class="modal fade" id="resultModal" role="dialog" aria-hidden="true" tabindex="-1" aria-labelledby="modal-result-title">
+<div class="modal fade" id="modal-result" role="dialog" aria-hidden="true" tabindex="-1" aria-labelledby="modal-result-title">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -86,7 +86,7 @@
 {% endblock %}
 {# footer #}
 {% block card_footer %}
-<div class="d-flex flex-wrap align-items-center gap-2">
+<div class="d-flex-wrap-center">
     {{ homepage() }}
     {{ link(path('admin_product'), 'product.result.new_update', 'btn btn-form btn-secondary', null) }}
 </div>

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Entity\User;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\UserInterface;
 use Symfony\Component\Form\AbstractType;

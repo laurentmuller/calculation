@@ -43,7 +43,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     use TranslatorAwareTrait;
 
     private const KEY_DATE = 'archive.date';
-    private const KEY_SIMULATE = 'archive.simulate';
     private const KEY_SOURCES = 'archive.sources';
     private const KEY_TARGET = 'archive.target';
 
@@ -103,7 +102,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     {
         $query = new CalculationArchiveQuery();
         $query->setSources($this->getSources(true))
-            ->setSimulate($this->isSimulate())
             ->setTarget($this->getTarget())
             ->setDate($this->getDate());
 
@@ -117,9 +115,8 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     {
         $date = $query->isSimulate() ? $query->getDate()->getTimestamp() : null;
         $this->setSessionValues([
-            self::KEY_SOURCES => $this->getIds($query->getSources()),
-            self::KEY_TARGET => $query->getTarget()?->getId(),
-            self::KEY_SIMULATE => $query->isSimulate(),
+            self::KEY_SOURCES => $query->getSourcesId(),
+            self::KEY_TARGET => $query->getTargetId(),
             self::KEY_DATE => $date,
         ]);
     }
@@ -164,9 +161,8 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         $builder = $this->calculationRepository
             ->createQueryBuilder('c');
         if ([] !== $sources) {
-            $ids = $this->getIds($sources);
             $builder->andWhere('c.state IN (:states)')
-                ->setParameter('states', $ids);
+                ->setParameter('states', $sources);
         }
         if ($date instanceof \DateTimeInterface) {
             $builder->andWhere('c.date <= :date')
@@ -278,16 +274,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * @param CalculationState[] $sources
-     *
-     * @return int[]
-     */
-    private function getIds(array $sources): array
-    {
-        return \array_map(fn (CalculationState $state): int => (int) $state->getId(), $sources);
-    }
-
-    /**
      * @return CalculationState[]
      */
     private function getSources(bool $useSession): array
@@ -318,14 +304,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         return null;
     }
 
-    private function isSimulate(): bool
-    {
-        return $this->isSessionBool(self::KEY_SIMULATE, true);
-    }
-
-    /**
-     * Log result.
-     */
     private function logResult(CalculationArchiveQuery $query, CalculationArchiveResult $result): void
     {
         $context = [

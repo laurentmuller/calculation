@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Entity\CalculationState;
+use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Contains parameters to archive calculations.
@@ -23,15 +25,17 @@ class CalculationArchiveQuery extends AbstractSimulateQuery
     private \DateTimeInterface $date;
 
     /** @var CalculationState[] */
+    #[Assert\Count(min: 1)]
     private array $sources = [];
 
     private ?CalculationState $target = null;
 
+    /**
+     * @throws \Exception
+     */
     public function __construct()
     {
-        $date = new \DateTime();
-        $interval = new \DateInterval('P6M');
-        $this->date = $date->sub($interval);
+        $this->date = DateUtils::sub(DateUtils::removeTime(), 'P6M');
     }
 
     public function getDate(): \DateTimeInterface
@@ -59,6 +63,14 @@ class CalculationArchiveQuery extends AbstractSimulateQuery
         return \implode(', ', $sources);
     }
 
+    /**
+     * @return int[]
+     */
+    public function getSourcesId(): array
+    {
+        return \array_map(static fn (CalculationState $state): int => (int) $state->getId(), $this->sources);
+    }
+
     public function getTarget(): ?CalculationState
     {
         return $this->target;
@@ -67,6 +79,11 @@ class CalculationArchiveQuery extends AbstractSimulateQuery
     public function getTargetCode(): ?string
     {
         return $this->target?->getCode();
+    }
+
+    public function getTargetId(): ?int
+    {
+        return $this->target?->getId();
     }
 
     public function setDate(\DateTimeInterface $date): self

@@ -232,7 +232,7 @@
                 focusInvalid: true,
                 showModification: true,
                 errorElement: 'small',
-                errorClass: 'is-invalid d-inline-block',
+                errorClass: 'is-invalid', // d-inline-block or d-block',
                 ignore: ':hidden:not(".must-validate"), .skip-validation',
 
                 errorPlacement: function (error, element) {

@@ -18,34 +18,34 @@
 {% block container_class 'container-fluid' %}
 {# body #}
 {% block body -%}
-<div class="row pt-5">
-    <div class="col-md-6 offset-md-2">
-        <h1>{{- icon(title_icon, title) }}</h1>
-    </div>
-    <div class="col-md-2 text-end mt-3">
-        <div class="btn-group btn-group-sm" role="group" aria-label="Toolbar">
-            <button type="button" class="btn btn-outline-secondary btn-expand-all" title="Expand All">
-                <i class="fa-solid fa-plus"></i>
-            </button>
-            <button type="button" class="btn btn-outline-secondary btn-collapse-all" title="Collapse All">
-                <i class="fa-solid fa-minus"></i>
-            </button>
-            <button type="button" class="btn btn-outline-secondary btn-expand-level" title="Expand to level 1">
-                <i class="fa-solid fa-expand-alt"></i>
-            </button>
-            <button type="button" class="btn btn-outline-secondary btn-refresh" title="Refresh">
-                <i class="fa-solid fa-sync-alt"></i>
-            </button>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="d-flex-wrap-center mb-2">
+            <h1 class="me-auto h4">{{- icon(title_icon, title) }}</h1>
+            <div class="btn-group btn-group-sm" role="group" aria-label="Toolbar">
+                <button type="button" class="btn btn-outline-secondary btn-expand-all" title="Expand All">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-collapse-all" title="Collapse All">
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-expand-level" title="Expand to level 1">
+                    <i class="fa-solid fa-expand-alt"></i>
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-refresh" title="Refresh">
+                    <i class="fa-solid fa-sync-alt"></i>
+                </button>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
     <div class="col-md-8 offset-md-2">
         <div id="tree" class="list-group mb-3" role="tree" data-url="{{ path('test_tree') }}" data-loading-text="{{ 'about.loading'|trans }}" data-badge-class="bg-secondary" data-badge-count="true"></div>
     </div>
+</div>
+<div class="row">
     <div class="col-md-8 offset-md-2 my-2">
         <div class="row">
-            <div class="col">
+            <div class="col-lg-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="country">Pays</label>
                     <select id="country" class="form-select" data-url="{{ asset('images/flags/flag_blank.png') }}">
@@ -55,7 +55,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-lg-6">
                 <div class="form-group mb-3">
                     <label class="form-label required" for="currency">Monnaie</label>
                     <select id="currency" class="form-select" required="required">
@@ -69,7 +69,7 @@
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="row">
-            <div class="col">
+            <div class="col-xl-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="state_single">Status (simple)</label>
                     <select id="state_single" class="form-select">
@@ -83,7 +83,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-xl-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="state">Status (multiple)</label>
                     <div class="input-group">
@@ -109,7 +109,7 @@
     </div>
     <div class="col-md-8 offset-md-2 my-2">
         <div class="row">
-            <div class="col">
+            <div class="col-xl-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="category">Catégorie</label>
                     <div class="input-group">
@@ -132,7 +132,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-xl-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="product">Article</label>
                     <select id="product" class="form-select">
@@ -149,40 +149,45 @@
         </div>
     </div>
     <div class="col-md-8 offset-md-2 my-2">
-        <span class="form-label cursor-default">Position</span>
-        <div class="dropdown dropdown-position">
-            {% set current = user_service.messagePosition %}
-            {% set positions = enum('App\\Enums\\MessagePosition').sorted() %}
-            <button type="button" class="btn-position form-control d-flex align-items-center dropdown-toggle" data-value="{{ current.value }}" data-bs-toggle="dropdown" aria-expanded="false" style="width: 14rem;">
-                <span class="position-icon me-2"><i class="{{ current.icon }}" style="--fa-rotate-angle: {{ current.angle }}deg;"></i></span>
-                <span class="position-text flex-fill text-start">{{- current|trans -}}</span>
-            </button>
-            <table class="dropdown-menu w-auto table table-borderless mb-0 px-2">
-                <tr>
-                    {% for position in positions %}
-                    <td>
-                        {% set id = 'btn-check-dropdown-' ~ position.value %}
-                        <div class="form-check ps-0">
-                            <input type="radio" class="btn-check" name="btn-check" id="{{ id }}" value="{{ position.value }}" autocomplete="off"{% if current == position %} checked="checked"{% endif %}>
-                            <label class="btn btn-outline-secondary" for="{{ id }}" style="width: 3rem;" title="{{- position|trans -}}">
-                                <i class="{{ position.icon }}" style="--fa-rotate-angle: {{ position.angle }}deg;"></i>
-                            </label>
-                        </div>
-                    </td>
-                    {% if loop.index % 3 == 0 %}</tr><tr>{% endif %}
-                    {% endfor %}
-                </tr>
-            </table>
+        <div class="row">
+            <div class="col-lg-6">
+                <span class="form-label cursor-default">Position</span>
+                <div class="dropdown dropdown-position">
+                    {% set current = user_service.messagePosition %}
+                    {% set positions = enum('App\\Enums\\MessagePosition').sorted() %}
+                    <button type="button" class="btn-position form-control d-flex align-items-center dropdown-toggle" data-value="{{ current.value }}" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="position-icon me-2"><i class="{{ current.icon }}" style="--fa-rotate-angle: {{ current.angle }}deg;"></i></span>
+                        <span class="position-text flex-fill text-start">{{- current|trans -}}</span>
+                    </button>
+                    <table class="dropdown-menu w-auto table table-borderless mb-0 px-2">
+                        <tr>
+                            {% for position in positions %}
+                            <td>
+                                {% set id = 'btn-check-dropdown-' ~ position.value %}
+                                <div class="form-check ps-0">
+                                    <input type="radio" class="btn-check" name="btn-check" id="{{ id }}" value="{{ position.value }}" autocomplete="off"{% if current == position %} checked="checked"{% endif %}>
+                                    <label class="btn btn-outline-secondary" for="{{ id }}" style="width: 3rem;" title="{{- position|trans -}}">
+                                        <i class="{{ position.icon }}" style="--fa-rotate-angle: {{ position.angle }}deg;"></i>
+                                    </label>
+                                </div>
+                            </td>
+                            {% if loop.index % 3 == 0 %}</tr><tr>{% endif %}
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <span class="form-label cursor-default">Modal</span>
+                <button type="button" class="btn btn-form btn-primary mb-3 bottom-border-gradient bottom-border-gradient-100 w-100" data-bs-toggle="modal" data-bs-target="#dragModal">Launch modal</button>
+            </div>
         </div>
-    </div>
-    <div class="col-md-8 offset-md-2 my-2">
-        <button type="button" class="btn btn-form btn-primary mb-3 bottom-border-gradient bottom-border-gradient-100" data-bs-toggle="modal" data-bs-target="#dragModal" style="width: 300px;">Launch modal</button>
     </div>
 </div>
 <div class="row">
     <div class="col-md-8 offset-md-2 my-2">
         <div class="row">
-            <div class="col">
+            <div class="col-lg-6">
                 <div class="mb-3">
                     <label class="form-label" for="search">Drop-down menu</label>
                     <div class="input-group">
@@ -197,7 +202,7 @@
                     <span class="bottom-border-gradient bottom-border-gradient-100"></span>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-lg-6">
                 <div class="mb-3">
                     <label class="form-label" for="gradient">Border gradient</label>
                     <input class="form-control bottom-border-gradient bottom-border-gradient-80" id="gradient" name="gradient">

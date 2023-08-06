@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\User;
 use App\Form\Type\CurrentPasswordType;
 use App\Form\Type\PlainType;
 use App\Form\Type\RepeatPasswordType;
@@ -456,7 +455,7 @@ class FormHelper
     /**
      * Add an Url type to the builder and reset all values to default.
      *
-     * @param string $default_protocol If a value is submitted that doesn't begin with some protocol (e.g. http://, ftp://, etc), this protocol will be prepended to the string when the data is submitted to the form.
+     * @param string $default_protocol If a value is submitted that doesn't begin with some protocol (e.g. http://, ftp://, etc.), this protocol will be prepended to the string when the data is submitted to the form.
      */
     public function addUrlType(string $default_protocol = 'https'): self
     {

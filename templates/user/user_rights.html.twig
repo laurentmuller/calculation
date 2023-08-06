@@ -7,16 +7,19 @@
 {%- set page_list = 'user_table' -%}
 {%- set overwrite = form.overwrite.vars.checked -%}
 {%- set show_required = false -%}
-
 {% block card_container_class '' %}
-
+{# header #}
 {% block card_header %}
-<div class="row">
-    <div class="col-lg-5 mt-1">{{ parent() }}</div>
-    <div class="col-lg-7 text-lg-end d-print-none">{{ rights.actions(overwrite) }}</div>
+<div class="d-flex align-items-center">
+    <div class="me-auto">
+        {{ parent() }}
+    </div>
+    <div>
+        {{ rights.actions(overwrite) }}
+    </div>
 </div>
 {%- endblock %}
-
+{# body #}
 {% block card_body %}
 <div class="row">
     <div class="col-md-5">
@@ -32,7 +35,7 @@
 {{ rights.table(form, default, permissions, overwrite) }}
 {{ form_row(form.overwrite, {attr: {'data-default': default.overwrite|json_encode}}) }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts -%}
 {% if app.debug %}
 {{ parent() }}

@@ -35,12 +35,12 @@
 {# header #}
 {% block card_header %}
 {% if id %}
-    <div class="row">
-        <div class="col-md-8">
+    <div class="d-flex-wrap-center">
+        <div class="me-auto">
             {{ parent() }}
             <small>{{ 'openweather.current.date_calculation'|trans({'%date%': current.dt_date_time_medium}) }}</small>
         </div>
-        <div class="col-md-4 text-md-end small d-print-none">
+        <div class="d-print-none">
             {{ _self.system('metric', units_system, route, id, count) }}
             <span> / </span>
             {{ _self.system('imperial', units_system, route, id, count) }}

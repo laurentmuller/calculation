@@ -10,9 +10,13 @@
 {% block card_container_class '' %}
 {# header #}
 {% block card_header %}
-<div class="row">
-    <div class="col-lg-5 mt-1">{{ parent() }}</div>
-    <div class="col-lg-7 text-lg-end d-print-none">{{ rights.actions() }}</div>
+<div class="d-flex-wrap-center">
+    <div class="me-auto">
+        {{ parent() }}
+    </div>
+    <div>
+        {{ rights.actions() }}
+    </div>
 </div>
 {%- endblock %}
 {# body #}

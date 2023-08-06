@@ -22,7 +22,7 @@
 {% endblock %}
 {# footer #}
 {% block card_footer -%}
-<div class="d-flex flex-wrap align-items-center gap-2">
+<div class="d-flex-wrap-center">
     {% block actions_form %}
         {% if cancel_path|default(false) %}
             {{ button_ok(cancel_path) }}

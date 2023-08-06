@@ -2,7 +2,7 @@
 {% from 'macros/_icons.html.twig' import homepage %}
 {# macros #}
 {% macro button(type, icon) -%}
-<button type="button" data-type="{{ type }}" class="btn btn-notify btn-{{ type }}" style="min-width: 109px;">
+<button type="button" data-type="{{ type }}" class="btn btn-notify btn-{{ type }}{% if type == 'dark' %} border{% endif %}" style="min-width: 109px;">
     {{- ('background.' ~ type)|trans -}}
 </button>
 {%- endmacro %}
@@ -49,7 +49,7 @@
 </div>
 <hr>
 <div class="row">
-    <div class="col-md-3 mb-3">
+    <div class="col-md-6 col-lg-3 mb-3">
         <label class="form-label" for="position">{{ 'parameters.fields.message_position'|trans }}</label>
         <select id="position" name="position" class="form-select" data-failure="{{ 'parameters.failure'|trans }}" data-default="{{ position.value }}" data-position="{{ position.value }}" data-random="{{ url('ajax_random_text') }}">
         {% for current in positions %}
@@ -57,7 +57,7 @@
         {% endfor %}
         </select>
     </div>
-    <div class="col-md-3 mb-3">
+    <div class="col-md-6 col-lg-3 mb-3">
         <label class="form-label" for="timeout">{{ 'parameters.fields.message_timeout'|trans }}</label>
         <select id="timeout" name="timeout" data-default="{{ timeout }}" class="form-select">
             {% for seconds in 1..5 %}
@@ -65,7 +65,7 @@
             {% endfor %}
         </select>
     </div>
-    <div class="col-md-3 mb-3">
+    <div class="col-md-6 col-lg-3 mb-3">
         <label class="form-label" for="progress">{{ 'parameters.fields.message_progress'|trans }}</label>
         <select id="progress" name="progress" data-default="{{ progress }}" class="form-select">
             {% for i in 0..5 %}
@@ -73,7 +73,7 @@
             {% endfor %}
         </select>
     </div>
-    <div class="col-md-3 mb-3">
+    <div class="col-md-6 col-lg-3 mb-3">
         <label class="form-label" for="maxNbChars">Nbre de caractères</label>
         <select id="maxNbChars" name="maxNbChars" data-default="{{ 150 }}" class="form-select">
             {% for i in range(50, 500, 50) %}
@@ -83,7 +83,7 @@
     </div>
 </div>
 <span class="form-label horizontal-line">{{ 'parameters.group_options'|trans }}</span>
-<div class="d-flex flex-wrap gap-2">
+<div class="d-flex-wrap-center">
     {{ _self.checkbox('title', 'parameters.fields.message_title', user_service.messageTitle) }}
     {{ _self.checkbox('icon', 'parameters.fields.message_icon', user_service.messageIcon) }}
     {{ _self.checkbox('subtitle', 'parameters.fields.message_sub_title', user_service.messageSubTitle) }}

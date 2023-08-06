@@ -44,25 +44,23 @@
 {# body #}
 {% block card_body %}
 {{ form_row(form.category) }}
-<div class="row mb-2">
-    <div class="col-md-6">
+<div class="d-flex-wrap-center mb-3">
+    <div class="me-auto">
         {{ form_row(form.allProducts) }}
     </div>
-    <div class="col-md-6 text-md-end d-print-none">
-        <div class="btn-group btn-group-sm" role="group">
-            <button type="button" id="btn-all" class="btn btn-outline-secondary" disabled="disabled" title="{{ 'product.update.check_all'|trans }}">
-                <i class="fa-fw fa-solid fa-check-circle"></i>
-            </button>
-            <button type="button" id="btn-none" class="btn btn-outline-secondary" disabled="disabled" title="{{ 'product.update.check_none'|trans }}">
-                <i class="fa-fw fa-solid fa-times-circle"></i>
-            </button>
-            <button type="button" id="btn-reverse" class="btn btn-outline-secondary" disabled="disabled" title="{{ 'product.update.check_reverse'|trans }}">
-                <i class="fa-fw fa-solid fa-toggle-on"></i>
-            </button>
-        </div>
+    <div class="btn-group btn-group-sm" role="group">
+        <button type="button" id="btn-all" class="btn btn-outline-secondary" disabled="disabled" title="{{ 'product.update.check_all'|trans }}">
+            <i class="fa-fw fa-solid fa-check-circle"></i>
+        </button>
+        <button type="button" id="btn-none" class="btn btn-outline-secondary" disabled="disabled" title="{{ 'product.update.check_none'|trans }}">
+            <i class="fa-fw fa-solid fa-times-circle"></i>
+        </button>
+        <button type="button" id="btn-reverse" class="btn btn-outline-secondary" disabled="disabled" title="{{ 'product.update.check_reverse'|trans }}">
+            <i class="fa-fw fa-solid fa-toggle-on"></i>
+        </button>
     </div>
 </div>
-<div id="overflow-table" class="overflow-auto table-fixed-header small-scrollbar border mb-3">
+<div id="overflow-table" class="overflow-auto table-fixed-header table-fixed-header-sm small-scrollbar border mb-3">
     <table class="table table-hover table-fixed-header table-no-end-line table-sm mb-0" id="form_products">
         <thead>
             <tr>
@@ -90,6 +88,10 @@
         {{ form_widget(form.fixed, {'attr': fixed_attr, 'options': {'is_percent': is_percent}}) }}
     </div>
 </div>
+{{ form_row(form.round) }}
+<hr>
+{{ form_row(form.simulate) }}
+{{ form_row(form.confirm) }}
 {{ form_rest(form) }}
 {% if last_update is defined and last_update %}
     {%- set date = last_update|locale_datetime('long', 'short') -%}

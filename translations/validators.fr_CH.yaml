@@ -89,3 +89,7 @@ This value contains characters that are not allowed by the current restriction-l
 Using invisible characters is not allowed.: L'utilisation de caractères invisibles n’est pas autorisée.
 Mixing numbers from different scripts is not allowed.: Le mélange de différents scripts n’est pas autorisé.
 Using hidden overlay characters is not allowed.: L'utilisation de caractères superposés masqués n'est pas autorisée.
+# CalculationUpdateQuery
+date_less_today: La date doit être plus petite ou égale à aujourd'hui.
+date_less_to: La date doit être plus petite ou égale à la date de fin.
+date_less_one_month: La date doit être de 1 mois au maximum avant la date de fin.

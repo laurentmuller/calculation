@@ -40,13 +40,13 @@
 {%- set title_icon = 'location-dot' -%}
 {# header #}
 {% block card_header %}
-<div class="row">
-    <div class="col-lg-10 mt-1">{{ parent() }}</div>
-    <div class="col-lg-2 text-lg-end d-print-none">
-        <a href="#" data-bs-toggle="modal" data-bs-target="#raw_data_modal" title="{{ 'dialog_raw_data.tooltip'|trans }}">
-            <i class="fa-solid fa-code"></i>
-        </a>
+<div class="d-flex-wrap-center">
+    <div class="me-auto">
+        {{ parent() }}
     </div>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#raw_data_modal" title="{{ 'dialog_raw_data.tooltip'|trans }}">
+        <i class="fa-solid fa-code"></i>
+    </a>
 </div>
 {% endblock %}
 {# body #}
@@ -68,7 +68,7 @@
 {% endblock %}
 {# footer #}
 {% block card_footer -%}
-<div class="d-flex flex-wrap align-items-center gap-2">
+<div class="d-flex-wrap-center">
     {{- homepage() }}
     {{- linkExternal('https://ipstack.com', 'common.api_documentation', 'flex-grow-1 text-sm-end') -}}
 </div>

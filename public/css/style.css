@@ -911,3 +911,19 @@ span.bottom-border-gradient {
     color: inherit !important;
     font-weight: inherit !important;
 }
+
+.d-flex-wrap {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: start !important;
+    column-gap: 0.5rem !important;
+    -moz-column-gap: 0.5rem !important;
+}
+
+.d-flex-wrap-center {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    column-gap: 0.5rem !important;
+    -moz-column-gap: 0.5rem !important;
+}

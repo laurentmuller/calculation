@@ -82,7 +82,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Adds a child to the list of this children.
+     * Adds a child to the list of children.
      *
      * <b>NB:</b> The children are sorted after insertion.
      *

@@ -14,7 +14,6 @@ namespace App\Controller;
 
 use App\Form\User\UserParametersType;
 use App\Interfaces\RoleInterface;
-use App\Service\ThemeService;
 use App\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +30,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class UserParametersController extends AbstractController
 {
     #[Route(path: '/parameters', name: 'user_parameters')]
-    public function invoke(Request $request, UserService $userService, ThemeService $themeService): Response
+    public function invoke(Request $request, UserService $userService): Response
     {
         $form = $this->createForm(UserParametersType::class, $userService->getProperties());
         if ($this->handleRequestForm($request, $form)) {

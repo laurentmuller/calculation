@@ -230,6 +230,14 @@ final class DateUtils
     }
 
     /**
+     * Remove the time part of the given date.
+     */
+    public static function removeTime(\DateTime|\DateTimeImmutable $date = new \DateTime()): \DateTime|\DateTimeImmutable
+    {
+        return $date->setTime(0, 0);
+    }
+
+    /**
      * Returns a new date with the given interval subtracted.
      *
      * @param \DateTimeInterface   $date     the date

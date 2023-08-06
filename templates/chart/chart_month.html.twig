@@ -1,5 +1,6 @@
 {% extends 'chart/chart_base.html.twig' %}
 {% trans_default_domain 'chart' %}
+{% from 'macros/_icons.html.twig' import icon %}
 
 {# add a month option #}
 {% macro month(value, selected) -%}
@@ -11,15 +12,15 @@
 {# parameters #}
 {%- set title = 'title_by_month' -%}
 {%- set title_icon = 'calendar-alt far' -%}
-{%- set list_path = 'calculation_table' -%}
-
 {# class #}
 {% block card_container_class '' -%}
-
+{# header #}
 {% block card_header %}
-<div class="d-flex flex-wrap align-items-center gap-2">
-    {{ parent() }}
-    <div class="d-flex flex-fill align-items-center d-print-none gap-2">
+<div class="d-flex-wrap-center">
+    <h1 class="card-title me-auto">
+        {{- icon(title_icon, title, title_domain|default(null), title_parameters|default({})) -}}
+    </h1>
+    <div class="d-flex-wrap-center d-print-none">
         <label class="form-label ms-sm-auto mb-0" for="months">{{ 'last_month.period'|trans }}</label>
         <select class="form-select form-select-sm w-auto d-print-none" id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_by_month') }}">
             {% for current in allowed_months %}
@@ -29,46 +30,42 @@
     </div>
 </div>
 {%- endblock %}
-
+{# data #}
 {% block data %}
-<div class="col my-2 table-responsive">
-    <table class="table table-bordered table-hover table-list table-sm">
-        <thead>
-            <tr>
-                <th class="text-nowrap">{{ 'fields.month'|trans }}</th>
-                <th class="text-currency">{{ 'fields.count'|trans }}</th>
-                <th class="text-currency" style="border-bottom: 2px solid darkgreen;">{{ 'fields.net'|trans }}</th>
-                <th class="text-currency" style="border-bottom: 2px solid darkred;">{{ 'fields.margin_amount'|trans }}</th>
-                <th class="text-percent">{{ 'fields.margin_percent'|trans }}</th>
-                <th class="text-currency">{{ 'fields.total'|trans }}</th>
-            </tr>
-        </thead>
-        <tbody data-link="row" class="rowlink">
-            {% for item in data -%}
-            {%- set month = item.date|locale_date('none', null, null, 'MMMM Y')|capitalize -%}
-            {%- set parameters = {'search': item.date|locale_date('none', null, null, 'MM.Y')} -%}
-            <tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
-                <td class="text-nowrap">
-                    <a href="{{ path(list_path, parameters) }}">{{ month }}</a>
-                </td>
-                <td class="text-currency">{{ item.count|integer }}</td>
-                <td class="text-currency">{{ item.items|integer }}</td>
-                <td class="text-currency">{{ item.marginAmount|integer }}</td>
-                <td class="text-percent{{ _self.margin_below_class(item.marginPercent, min_margin) }}"{{ _self.margin_below_tooltip(item.marginPercent, min_margin) }}>{{ item.marginPercent|percent(false) }}</td>
-                <td class="text-currency">{{ item.sum|integer }}</td>
-            </tr>
-            {% endfor -%}
-            <tr title="{{ 'row_show_all'|trans }}">
-                <td class="fw-bold text-nowrap">
-                    <a href="{{ path(list_path) }}">{{ 'fields.total'|trans }}</a>
-                </td>
-                <td class="fw-bold text-currency">{{ count|integer }}</td>
-                <td class="fw-bold text-currency">{{ items|integer }}</td>
-                <td class="fw-bold text-currency">{{ marginAmount|integer }}</td>
-                <td class="fw-bold text-percent{{ _self.margin_below_class(marginPercent, min_margin) }}"{{ _self.margin_below_tooltip(marginPercent, min_margin) }}>{{ marginPercent|percent(false) }}</td>
-                <td class="fw-bold text-currency">{{ total|integer }}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<thead>
+    <tr>
+        <th class="text-nowrap">{{ 'fields.month'|trans }}</th>
+        <th class="text-currency">{{ 'fields.count'|trans }}</th>
+        <th class="text-currency" style="border-bottom: 2px solid darkgreen;">{{ 'fields.net'|trans }}</th>
+        <th class="text-currency" style="border-bottom: 2px solid darkred;">{{ 'fields.margin_amount'|trans }}</th>
+        <th class="text-percent">{{ 'fields.margin_percent'|trans }}</th>
+        <th class="text-currency">{{ 'fields.total'|trans }}</th>
+    </tr>
+</thead>
+<tbody data-link="row" class="rowlink">
+    {% for item in data -%}
+    {%- set month = item.date|locale_date('none', null, null, 'MMMM Y')|capitalize -%}
+    {%- set parameters = {'search': item.date|locale_date('none', null, null, 'MM.Y')} -%}
+    <tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
+        <td class="text-nowrap">
+            <a href="{{ path(list_path, parameters) }}">{{ month }}</a>
+        </td>
+        <td class="text-currency">{{ item.count|integer }}</td>
+        <td class="text-currency">{{ item.items|integer }}</td>
+        <td class="text-currency">{{ item.marginAmount|integer }}</td>
+        <td class="text-percent{{ _self.margin_below_class(item.marginPercent, min_margin) }}"{{ _self.margin_below_tooltip(item.marginPercent, min_margin) }}>{{ item.marginPercent|percent(false) }}</td>
+        <td class="text-currency">{{ item.sum|integer }}</td>
+    </tr>
+    {% endfor -%}
+    <tr title="{{ 'row_show_all'|trans }}">
+        <td class="fw-bold text-nowrap">
+            <a href="{{ path(list_path) }}">{{ 'fields.total'|trans }}</a>
+        </td>
+        <td class="fw-bold text-currency">{{ count|integer }}</td>
+        <td class="fw-bold text-currency">{{ items|integer }}</td>
+        <td class="fw-bold text-currency">{{ marginAmount|integer }}</td>
+        <td class="fw-bold text-percent{{ _self.margin_below_class(marginPercent, min_margin) }}"{{ _self.margin_below_tooltip(marginPercent, min_margin) }}>{{ marginPercent|percent(false) }}</td>
+        <td class="fw-bold text-currency">{{ total|integer }}</td>
+    </tr>
+</tbody>
 {% endblock %}

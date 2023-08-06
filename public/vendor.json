@@ -27,7 +27,7 @@
         {
             "name": "@fortawesome/fontawesome-free",
             "display": "fontawesome-free",
-            "version": "6.4.0",
+            "version": "6.4.2",
             "target": "font-awesome",
             "files": [
                 "css/all.css",

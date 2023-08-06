@@ -91,6 +91,21 @@ class DateUtilsTest extends TestCase
         }
     }
 
+    public static function getRemoveTimes(): \Generator
+    {
+        $format = 'Y-m-d H:i:s';
+        $expected = \DateTimeImmutable::createFromFormat($format, '2013-03-15 00:00:00');
+
+        $date = \DateTime::createFromFormat($format, '2013-03-15 00:00:00');
+        yield [$date, $expected];
+
+        $date = \DateTime::createFromFormat($format, '2013-03-15 01:02:03');
+        yield [$date, $expected];
+
+        $date = \DateTime::createFromFormat($format, '2013-03-15 23:59:59');
+        yield [$date, $expected];
+    }
+
     /**
      * @return array<array{0:string, 1: int}>
      */
@@ -256,6 +271,13 @@ class DateUtilsTest extends TestCase
     {
         $values = DateUtils::getMonths();
         self::assertCount(12, $values);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRemoveTimes')]
+    public function testRemoveTime(\DateTime|\DateTimeImmutable $date, \DateTimeInterface $expected): void
+    {
+        $value = DateUtils::removeTime($date);
+        self::assertSame($expected->getTimestamp(), $value->getTimestamp());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getShortMonthNames')]

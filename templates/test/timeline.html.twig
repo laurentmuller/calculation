@@ -28,15 +28,15 @@
 {# body #}
 {% block body -%}
 <form name="search" id="search" action="{{ path('timeline') }}">
-    <div class="d-flex flex-wrap align-items-center gap-2">
+    <div class="d-flex-wrap-center">
         <h4 class="flex-fill">{{ icon(title_icon, title) }}</h4>
         {# date #}
-        <div class="d-flex flex-wrap align-items-center gap-2">
+        <div class="d-flex-wrap-center">
             <label for="date" class="form-label mb-0">{{ 'timeline.date'|trans }}</label>
             <input id="date" name="date" type="date" class="form-control form-control-sm w-auto" min="{{ min_date_locale }}" max="{{ max_date_locale }}" value="{{ date }}">
         </div>
         {# interval #}
-        <div class="d-flex flex-wrap align-items-center gap-2">
+        <div class="d-flex-wrap-center">
             <label for="interval" class="form-label mb-0">{{ 'timeline.interval'|trans }}</label>
             <select id="interval" name="interval" class="form-control form-select-sm w-auto">
                 {{ _self.addInterval('P3D', 3, 'counters.days', interval) }}
@@ -67,17 +67,15 @@
     </div>
     <hr class="my-1" />
 </form>
-<div class="row align-content-center my-1 text-body-secondary">
-    <div class="col">
+<div class="d-flex align-items-center text-body-secondary my-1">
+    <div class="me-auto">
         {{- from|locale_date('long') }} - {{ to|locale_date('long') -}}
     </div>
-    <div class="col-auto text-end">
-        {{- 'counters.calculations'|trans({'count': count}) -}}
-    </div>
+    {{- 'counters.calculations'|trans({'count': count}) -}}
 </div>
 <hr class="mt-0 mb-2">
 {% if data|length %}
-<div class="row g-0 table-responsive">
+<div class="row table-responsive g-0">
     <div class="col">
         <ul class="timeline">
             {% for key, calculations in data %}
@@ -85,7 +83,7 @@
             {%- set query = calculations[0].date|locale_date('short') -%}
             {%- set title = 'counters.calculations_day'|trans({'count': count, 'date': key}) -%}
             <li class="success">
-                <div class="position-relative ms-2">
+                <div class="position-relative table-responsive ms-2">
                     <table class="table table-sm table-borderless">
                         <tbody>
                             <tr>
@@ -103,7 +101,7 @@
                                 {{ helper.dataRow(calculation, 'text-cell') -}}
                             {% endfor %}
                             <tr>
-                                <td colspan="6" class="p-0"><hr class="my-0"></td>                                </td>
+                                <td colspan="6" class="p-0"><hr class="my-0"></td>
                             </tr>
                         </tbody>
                     </table>

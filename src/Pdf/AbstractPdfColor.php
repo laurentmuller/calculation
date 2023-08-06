@@ -14,7 +14,6 @@ namespace App\Pdf;
 
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 use App\Traits\MathTrait;
-use App\Utils\StringUtils;
 
 /**
  * Define a RGB color.
@@ -241,18 +240,14 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      */
     public static function parse(?string $value): array|false
     {
-        // string?
-        if (!StringUtils::isString($value)) {
+        if (null === $value || '' === $value) {
             return false;
         }
 
-        // gets a proper hex string
-        $value = \preg_replace('/[^0-9A-Fa-f]/', '', (string) $value);
-
-        // parse depending of length
-        switch (\strlen((string) $value)) {
+        $parsed = \preg_replace('/[^0-9A-Fa-f]/', '', $value);
+        switch (\strlen($parsed)) {
             case 6:
-                $color = \hexdec($value);
+                $color = \hexdec($parsed);
                 /** @psalm-var int<0, 255> $r */
                 $r = 0xFF & ($color >> 0x10);
                 /** @psalm-var int<0, 255> $g */
@@ -264,11 +259,11 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 
             case 3:
                 /** @psalm-var int<0, 255> $r */
-                $r = (int) \hexdec(\str_repeat(\substr($value, 0, 1), 2));
+                $r = \hexdec(\str_repeat(\substr($parsed, 0, 1), 2));
                 /** @psalm-var int<0, 255> $g */
-                $g = (int) \hexdec(\str_repeat(\substr($value, 1, 1), 2));
+                $g = \hexdec(\str_repeat(\substr($parsed, 1, 1), 2));
                 /** @psalm-var int<0, 255> $b */
-                $b = (int) \hexdec(\str_repeat(\substr($value, 2, 1), 2));
+                $b = \hexdec(\str_repeat(\substr($parsed, 2, 1), 2));
 
                 return [$r, $g, $b];
 

@@ -334,9 +334,11 @@ const Application = {
 
         // call
         const url = $form.data('update');
+
         /**
          * @param {Object} response
          * @param {boolean} response.result
+         * @param {boolean} response.adjust
          * @param {string} response.message
          * @param {string} response.body
          * @param {number} response.user_margin
@@ -347,7 +349,6 @@ const Application = {
             if (!response.result) {
                 return that.disable(response.message);
             }
-
             // update content
             const $totalPanel = $('#totals-panel');
             if (response.body) {
@@ -356,7 +357,7 @@ const Application = {
             } else {
                 $totalPanel.fadeOut();
             }
-            if (adjust && !$.isUndefined(response.user_margin) && !isNaN(response.user_margin)) {
+            if (response.adjust && !$.isUndefined(response.user_margin) && !isNaN(response.user_margin)) {
                 $('#calculation_userMargin').intVal(response.user_margin).selectFocus();
             }
             if (response.overall_below) {
@@ -1661,7 +1662,7 @@ const MoveHandler = {
 
     // user margin
     const $margin = $('#calculation_userMargin');
-    $margin.on('input change', function () {
+    $margin.on('input', function () {
         $margin.updateTimer(function () {
             Application.updateTotals(false);
         }, 250);

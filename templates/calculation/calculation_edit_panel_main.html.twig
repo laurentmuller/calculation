@@ -2,22 +2,14 @@
 {% from 'macros/_icons.html.twig' import icon, link, button_submit, button_cancel, button_ok %}
 <div id="main-panel" class="card mb-3">
     <div class="card-header">
-    {%- if editable -%}
-        <h1 class="card-title">
-            {{- icon(ICON_CALCULATION, title, null, title_parameters) -}}
-        </h1>
-    {% else %}
-        <div class="row">
-            <div class="col-xl-5">
-                <h1 class="card-title">
-                    {{- icon(ICON_CALCULATION, title, null, title_parameters) -}}
-                </h1>
-            </div>
-            <div class="col-xl-7 text-xl-end">
-                 <small class="text-danger">{{ 'calculation.edit.read_only'|trans({'%name%': item.stateCode}) }}</small>
-            </div>
+        <div class="d-flex-wrap-center">
+            <h1 class="card-title me-auto">
+                {{- icon(ICON_CALCULATION, title, null, title_parameters) -}}
+            </h1>
+            {%- if not editable -%}
+                <small class="text-danger">{{ 'calculation.edit.read_only'|trans({'%name%': item.stateCode}) }}</small>
+            {% endif %}
         </div>
-    {% endif %}
         <div>{{ form_errors(form) }}</div>
     </div>
     <div class="card-body">
@@ -36,7 +28,7 @@
         </div>
     </div>
     <div class="card-footer d-print-none">
-        <div class="d-flex flex-wrap gap-2">
+        <div class="d-flex-wrap">
             {%- if editable -%}
                 {{ button_submit() }}
                 {{ button_cancel(cancel_path) }}

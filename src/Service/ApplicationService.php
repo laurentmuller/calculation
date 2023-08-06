@@ -306,6 +306,14 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
+     * Gets the last update calculations date.
+     */
+    public function getLastUpdateCalculations(): ?\DateTimeInterface
+    {
+        return $this->getPropertyDate(self::P_UPDATE_CALCULATION);
+    }
+
+    /**
      * Gets the last products update.
      */
     public function getLastUpdateProducts(): ?\DateTimeInterface
@@ -537,15 +545,23 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     /**
      * Set the date of the last archive calculations.
      */
-    public function setLastArchiveCalculations(\DateTime $date = new \DateTime()): self
+    public function setLastArchiveCalculations(\DateTimeInterface $date = new \DateTime()): self
     {
         return $this->setProperty(PropertyServiceInterface::P_DATE_CALCULATION, $date);
     }
 
     /**
+     * Set the date of the last update calculations.
+     */
+    public function setLastUpdateCalculations(\DateTimeInterface $date = new \DateTime()): self
+    {
+        return $this->setProperty(PropertyServiceInterface::P_UPDATE_CALCULATION, $date);
+    }
+
+    /**
      * Set the date of the last update of product prices.
      */
-    public function setLastUpdateProducts(\DateTime $date = new \DateTime()): self
+    public function setLastUpdateProducts(\DateTimeInterface $date = new \DateTime()): self
     {
         return $this->setProperty(PropertyServiceInterface::P_DATE_PRODUCT, $date);
     }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Generator;
 
+use App\Entity\AbstractEntity;
 use App\Entity\Product;
 use App\Faker\Generator;
 use App\Utils\FormatUtils;
@@ -38,7 +39,7 @@ class ProductGenerator extends AbstractEntityGenerator
         return $this->trans('counters.products_generate', ['count' => $count]);
     }
 
-    protected function mapEntity($entity): array
+    protected function mapEntity(AbstractEntity $entity): array
     {
         return [
             'description' => $entity->getDescription(),

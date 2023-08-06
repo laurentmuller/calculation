@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Generator;
 
+use App\Entity\AbstractEntity;
 use App\Faker\Generator;
 use App\Interfaces\GeneratorInterface;
 use App\Service\FakerService;
@@ -93,7 +94,7 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
      *
      * @return array<string, mixed>
      */
-    abstract protected function mapEntity($entity): array;
+    abstract protected function mapEntity(AbstractEntity $entity): array;
 
     /**
      * @param T[] $entities

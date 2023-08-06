@@ -48,14 +48,14 @@
         <p class="mb-0 text-end text-body-secondary small">{{ 'simulate.message'|trans }}</p>
     {% endif %}
     {# results dialog #}
-    <div class="modal fade" id="modal-result" role="dialog" tabindex="-1" aria-labelledby="modal-archive-title" aria-hidden="true">
+    <div class="modal fade" id="modal-result" role="dialog" tabindex="-1" aria-labelledby="modal-result-title" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modal-archive-title">{{ title|trans }}</h1>{{ button_close_modal() }}
+                    <h1 class="modal-title fs-5" id="modal-result-title">{{ title|trans }}</h1>{{ button_close_modal() }}
                 </div>
                 <div class="modal-body">
-                    <span class="form-label">{{ 'archive.result.calculations'|trans }}</span>
+                    <span class="form-label">{{ 'calculation.list.title'|trans }}</span>
                     <div class="overflow-auto table-fixed-header small-scrollbar border">
                         <table class="table table-hover table-no-end-line table-sm mb-0">
                             <tbody>
@@ -102,7 +102,7 @@
 {% endblock %}
 {# footer #}
 {% block card_footer %}
-<div class="d-flex flex-wrap align-items-center gap-2">
+<div class="d-flex-wrap-center">
     {{ homepage() }}
     {{ link(path('admin_archive'), 'archive.result.new_archive', 'btn btn-form btn-secondary', null) -}}
 </div>

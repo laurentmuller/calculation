@@ -23,6 +23,7 @@ use App\Repository\CalculationStateRepository;
 use App\Traits\LoggerAwareTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
+use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\QueryBuilder;
@@ -44,7 +45,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
 
     private const KEY_DATE_FROM = 'calculation.update.date_from';
     private const KEY_DATE_TO = 'calculation.update.date_to';
-    private const KEY_SIMULATE = 'calculation.update.simulate';
     private const KEY_STATES = 'calculation.update.states';
 
     public function __construct(
@@ -90,10 +90,9 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     public function createQuery(): CalculationUpdateQuery
     {
         $query = new CalculationUpdateQuery();
-        $query->setDateFrom($this->getDateFrom($query))
-            ->setDateTo($this->getDateTo($query))
-            ->setStates($this->getStates(true))
-            ->setSimulate($this->isSimulate());
+        $query->setDateFrom($this->getDate(self::KEY_DATE_FROM, $query->getDateFrom()))
+            ->setDateTo($this->getDate(self::KEY_DATE_TO, $query->getDateTo()))
+            ->setStates($this->getStates(true));
 
         return $query;
     }
@@ -103,8 +102,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         $this->setSessionValues([
             self::KEY_DATE_FROM => $query->getDateFrom(),
             self::KEY_DATE_TO => $query->getDateTo(),
-            self::KEY_STATES => $this->getIds($query->getStates()),
-            self::KEY_SIMULATE => $query->isSimulate(),
+            self::KEY_STATES => $query->getStatesId(),
         ]);
     }
 
@@ -140,7 +138,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             try {
                 $this->listenerService->disableListeners();
                 $this->calculationRepository->flush();
-                // $this->logResult($query, $result);
+                $this->logResult($query, $result);
             } finally {
                 $this->listenerService->enableListeners();
             }
@@ -152,10 +150,10 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     private function getCalculations(CalculationUpdateQuery $query): array
     {
         return $this->calculationRepository
-            ->createDefaultQueryBuilder('e')
-            ->where('e.state in (:states)')
-            ->andWhere('e.date >= :from')
-            ->andWhere('e.date <= :to')
+            ->createQueryBuilder('c')
+            ->where('c.state in (:states)')
+            ->andWhere('c.date >= :from')
+            ->andWhere('c.date <= :to')
             ->setParameter('states', $query->getStates())
             ->setParameter('from', $query->getDateFrom(), Types::DATE_MUTABLE)
             ->setParameter('to', $query->getDateTo(), Types::DATE_MUTABLE)
@@ -163,24 +161,14 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             ->getResult();
     }
 
-    private function getDateFrom(CalculationUpdateQuery $query): \DateTimeInterface
+    private function getDate(string $key, \DateTimeInterface $default): \DateTimeInterface
     {
-        return $this->getSessionDate(self::KEY_DATE_FROM, $query->getDateFrom());
-    }
+        $date = $this->getSessionDate($key, $default);
+        if ($date instanceof \DateTime) {
+            return DateUtils::removeTime($date);
+        }
 
-    private function getDateTo(CalculationUpdateQuery $query): \DateTimeInterface
-    {
-        return $this->getSessionDate(self::KEY_DATE_TO, $query->getDateTo());
-    }
-
-    /**
-     * @param CalculationState[] $sources
-     *
-     * @return int[]
-     */
-    private function getIds(array $sources): array
-    {
-        return \array_map(fn (CalculationState $state): int => (int) $state->getId(), $sources);
+        return $date;
     }
 
     /**
@@ -204,8 +192,15 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         return $sources;
     }
 
-    private function isSimulate(): bool
+    private function logResult(CalculationUpdateQuery $query, CalculationUpdateResult $result): void
     {
-        return $this->isSessionBool(self::KEY_SIMULATE, true);
+        $context = [
+            $this->trans('calculation.update.dateFrom') => $query->getDateFromFormatted(),
+            $this->trans('calculation.update.dateTo') => $query->getDateToFormatted(),
+            $this->trans('calculation.update.states') => $query->getStatesCode(),
+            $this->trans('calculation.list.title') => $result->count(),
+        ];
+        $message = $this->trans('calculation.update.title');
+        $this->logInfo($message, $context);
     }
 }

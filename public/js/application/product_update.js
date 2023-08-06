@@ -159,10 +159,12 @@ function updatePrices() {
     $('#edit-form').simulate().initValidator({
         rules: {
             'form[percent]': {
-                notEqualToZero: true
+                notEqualToZero: true,
+                required: "#form_type_percent:checked"
             },
             'form[fixed]': {
-                notEqualToZero: true
+                notEqualToZero: true,
+                required: "#form_type_fixed:checked"
             },
             'form[allProducts]': {
                 checkProducts: true

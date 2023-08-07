@@ -8280,12 +8280,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/VichUploaderBundle.git",
-                "reference": "6a6c273ac644a6cfe1d2faf1695ff554ae7961e2"
+                "reference": "cecfa572e152c1a00d1d7f453f6b390b6bae10d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/VichUploaderBundle/zipball/6a6c273ac644a6cfe1d2faf1695ff554ae7961e2",
-                "reference": "6a6c273ac644a6cfe1d2faf1695ff554ae7961e2",
+                "url": "https://api.github.com/repos/laurentmuller/VichUploaderBundle/zipball/cecfa572e152c1a00d1d7f453f6b390b6bae10d2",
+                "reference": "cecfa572e152c1a00d1d7f453f6b390b6bae10d2",
                 "shasum": ""
             },
             "require": {
@@ -8386,7 +8386,7 @@
             "support": {
                 "source": "https://github.com/laurentmuller/VichUploaderBundle/tree/master"
             },
-            "time": "2023-07-03T19:18:49+00:00"
+            "time": "2023-08-07T11:03:19+00:00"
         }
     ],
     "packages-dev": [

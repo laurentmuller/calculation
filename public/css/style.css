@@ -916,7 +916,7 @@ span.bottom-border-gradient {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: start !important;
-    row-gap: 0.5rem !important;
+    row-gap: 0.25rem !important;
     column-gap: 0.5rem !important;
     -moz-column-gap: 0.5rem !important;
 }
@@ -925,7 +925,7 @@ span.bottom-border-gradient {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: center !important;
-    row-gap: 0.5rem !important;
+    row-gap: 0.25rem !important;
     column-gap: 0.5rem !important;
     -moz-column-gap: 0.5rem !important;
 }

@@ -12,6 +12,33 @@
     $.fn.extend({
 
         /**
+         * Gets the validator.
+         *
+         * @return {jQuery|null}
+         */
+        getValidator() {
+            return $(this).data('validator');
+        },
+
+        /**
+         * Validate elements.
+         *
+         * @return {jQuery}
+         */
+        validateElement() {
+            return this.each(function () {
+                const $that = $(this);
+                const $form = $that.parents('form');
+                if ($form.length) {
+                    const validator = $form.getValidator();
+                    if (validator) {
+                        validator.element($that);
+                    }
+                }
+            });
+        },
+
+        /**
          * Initialize captcha.
          *
          * @return {jQuery} the caller for chaining.

@@ -10,27 +10,33 @@
     <td class="text-currency">{{ product_price }}</td>
 </tr>
 {%- endmacro %}
+{#  percent widget #}
 {% block _form_percent_widget -%}
-<div class="input-group">
-    <div class="input-group-text">
-        <input type="radio" id="form_type_percent" name="form_type" class="me-1"{% if options.is_percent %} checked="checked"{% endif %}>
-        <label class="form-check-label" for="form_type_percent">{{ 'product.update.percent'|trans }}</label>
+<div class="form-group">
+    <div class="input-group">
+        <div class="input-group-text">
+            <input type="radio" id="form_type_percent" name="form_type" class="me-1"{% if options.is_percent %} checked="checked"{% endif %}>
+            <label class="form-check-label" for="form_type_percent">{{ 'product.update.percent'|trans }}</label>
+        </div>
+        {{ block('form_widget_simple') }}
     </div>
-    {{ block('form_widget_simple') }}
+    {{ block('form_help') }}
+    {{ block('form_errors') }}
 </div>
-{{ block('form_help') }}
-{{ block('form_errors') }}
 {%- endblock %}
+{#  amount widget #}
 {% block _form_fixed_widget -%}
-<div class="input-group">
-    <div class="input-group-text">
-        <input type="radio" id="form_type_fixed" name="form_type" class="me-1"{% if not options.is_percent %} checked="checked"{% endif %}>
-        <label class="form-check-label" for="form_type_fixed">{{ 'product.update.fixed'|trans }}</label>
+<div class="form-group">
+    <div class="input-group">
+        <div class="input-group-text">
+            <input type="radio" id="form_type_fixed" name="form_type" class="me-1"{% if not options.is_percent %} checked="checked"{% endif %}>
+            <label class="form-check-label" for="form_type_fixed">{{ 'product.update.fixed'|trans }}</label>
+        </div>
+        {{ block('form_widget_simple') }}
     </div>
-    {{ block('form_widget_simple') }}
+    {{ block('form_help') }}
+    {{ block('form_errors') }}
 </div>
-{{ block('form_help') }}
-{{ block('form_errors') }}
 {%- endblock %}
 {# parameters #}
 {%- set title = 'product.update.title' -%}

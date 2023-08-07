@@ -59,8 +59,7 @@ function getSelectableProducts() {
  */
 function validateProducts() {
     'use strict';
-    const validator = $('#edit-form').validate();
-    return validator.element("#form_allProducts");
+    return $("#form_allProducts").validateElement();
 }
 
 /**
@@ -136,7 +135,6 @@ function updatePrices() {
     const $percent = $('#form_percent');
     const $category = $('#form_category');
     const $allProducts = $('#form_allProducts');
-
     const $alert = $('#alert');
     const $overFlow = $('#overflow-table');
 
@@ -190,11 +188,13 @@ function updatePrices() {
         $fixed.toggleDisabled(percent);
         $percent.toggleDisabled(!percent);
         if (percent) {
-            $fixed.removeValidation();
             $type.val($percent.data('type'));
+            $fixed.removeValidation();
+            $percent.validateElement();
         } else {
-            $percent.removeValidation();
             $type.val($fixed.data('type'));
+            $percent.removeValidation();
+            $fixed.validateElement();
         }
         hideEmptyPrices();
         updatePrices();

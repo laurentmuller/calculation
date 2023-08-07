@@ -13,7 +13,7 @@
         {{- name -}}
     </a>
 </div>
-<div id="{{ href }}" class="card-body border-top collapse{% if expanded %} show{% endif %}" data-bs-parent="#parameterAccordion">
+<div id="{{ href }}" class="card-body border-top collapse{% if expanded %} show{% endif %}" data-bs-parent=".card-parameter">
     {{ include(template, {'form': form, options: options}) }}
 </div>
 {% endmacro %}
@@ -45,7 +45,7 @@
 {%- endblock %}
 {# body #}
 {% block card_body -%}
-<div class="card" id="parameterAccordion">
+<div class="card card-parameter">
     {% block sections %}{% endblock %}
 </div>
 {{ parent() }}

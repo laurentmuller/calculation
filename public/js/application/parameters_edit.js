@@ -9,7 +9,7 @@
  */
 function getActivePage() {
     'use strict';
-    const $source = $('#parameterAccordion .collapse.show');
+    const $source = $('.card-parameter .collapse.show');
     return $source.length ? $source : null;
 }
 
@@ -218,7 +218,7 @@ function handleEmail() {
         displayNotification();
     });
 
-    $('#parameterAccordion .collapse').on('shown.bs.collapse', function () {
+    $('.card-parameter .collapse').on('shown.bs.collapse', function () {
         const $this = $(this);
         const $button = $this.prev('.card-header').find('a.card-title');
         $button.attr('title', $button.data('hide'));

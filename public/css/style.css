@@ -44,7 +44,7 @@ footer span {
     padding: 0 0.5rem !important;
 }
 
-html[data-bs-theme=dark] footer:before {
+footer:before {
     top: 0;
     left: 0;
     content: "";
@@ -54,7 +54,7 @@ html[data-bs-theme=dark] footer:before {
     transition: left 0.35s ease
 }
 
-html[data-bs-theme=dark]:not(:has(.sidebar-hide)) footer:before {
+html:not(:has(.sidebar-hide)) footer:before {
     left: 18rem;
     width: calc(100% - 18rem);
 }
@@ -916,6 +916,7 @@ span.bottom-border-gradient {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: start !important;
+    row-gap: 0.5rem !important;
     column-gap: 0.5rem !important;
     -moz-column-gap: 0.5rem !important;
 }
@@ -924,6 +925,7 @@ span.bottom-border-gradient {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: center !important;
+    row-gap: 0.5rem !important;
     column-gap: 0.5rem !important;
     -moz-column-gap: 0.5rem !important;
 }

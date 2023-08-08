@@ -107,8 +107,8 @@ String.prototype.format = function () {
     'use strict';
     let formatted = this;
     for (let i = 0; i < arguments.length; i++) {
-        const pattern = '\\{' + i + '\\}';
         const flags = 'gi';
+        const pattern = `\\{${i}\\}`;
         const regexp = new RegExp(pattern, flags);
         formatted = formatted.replace(regexp, arguments[i]);
     }

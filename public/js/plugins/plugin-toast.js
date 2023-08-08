@@ -147,7 +147,7 @@
          */
         removeContainer: function () {
             if (this.id) {
-                $('#' + this.id).remove();
+                $(`#${this.id}`).remove();
                 this.id = null;
             }
             return this;
@@ -335,7 +335,7 @@
             const $div = $('#' + id);
 
             // class
-            const className = 'toast-container toast-plugin position-fixed ' + options.position;
+            const className = `toast-container toast-plugin position-fixed ${options.position}`;
 
             // style
             const css = {};
@@ -383,16 +383,7 @@
                 return;
             }
             // header
-            let clazz = 'toast-header column-gap-2 bg-' + options.type;
-            switch (options.type) {
-                case this.NotificationTypes.INFO:
-                case this.NotificationTypes.WARNING:
-                    clazz += ' text-dark';
-                    break;
-                default:
-                    clazz += ' text-white';
-                    break;
-            }
+            const clazz = `toast-header column-gap-2 text-bg-${options.type}`;
             const $div = $('<div/>', {
                 'class': clazz
             });
@@ -539,7 +530,7 @@
                 'role': 'alert',
                 'aria-atomic': 'true',
                 'aria-live': 'assertive',
-                'class': 'toast border-' + options.type,
+                'class': `toast border-${options.type}`,
                 'css': {
                     'max-width': options.containerWidth,
                     'flex-basis': options.containerWidth
@@ -563,8 +554,13 @@
             if (!options.progress) {
                 return;
             }
+            //text-bg-primary
+            let className = `progress-bar overflow-hidden bg-${options.type}`;
+            if (options.type === this.NotificationTypes.DARK && $('html').data('bs-theme') === 'dark') {
+                className = 'progress-bar overflow-hidden bg-body-secondary';
+            }
             const $bar = $('<div/>', {
-                'class': 'progress-bar overflow-hidden bg-' + options.type,// + '-subtle'
+                'class': className,
                 'role': 'progressbar',
                 'aria-valuenow': '0',
                 'aria-valuemin': '0',
@@ -573,7 +569,7 @@
             const $progress = $('<div/>', {
                 'class': 'progress bg-transparent rounded-0 rounded-bottom',
                 'css': {
-                    'height': options.progress + 'px'
+                    'height': `${options.progress}px`
                 },
             });
             $progress.append($bar);
@@ -594,10 +590,9 @@
                 const $progress = $toast.find('.progress-bar');
                 if ($progress.length) {
                     $toast.on('show.bs.toast', function () {
-                        $progress.data('percent', 0);
-                        const timeout = Math.max(options.timeout / 100, 10);
-                        $toast.createInterval(that._updateProgressBar, timeout, $progress);
-                    }).on('hidden.bs.toast', function () {
+                        options.start = new Date();
+                        $toast.createInterval(that._updateProgressBar, 250, $progress, options);
+                    }).on('hide.bs.toast', function () {
                         $toast.removeInterval();
                     });
                 }
@@ -619,17 +614,18 @@
          * Update the progress bar.
          *
          * @param {jQuery} $progress - The progress bar to update.
+         * @param {Object} options - The toast options.
          * @private
          */
-        _updateProgressBar: function ($progress) {
-            const percent = Number.parseInt($progress.data('percent'), 10) + 1;
+        _updateProgressBar: function ($progress, options) {
+            const elapsed = new Date() - options.start;
+            const percent = Math.ceil(((elapsed / options.timeout) * 100));
             if (percent > 100) {
                 $progress.parents('.toast').removeInterval();
                 $progress.remove();
             } else {
-                $progress.css('width', percent + '%')
-                    .attr('aria-valuenow', percent)
-                    .data('percent', percent);
+                $progress.css('width', `${percent}%`)
+                    .attr('aria-valuenow', percent);
             }
         },
 

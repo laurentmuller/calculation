@@ -166,22 +166,14 @@
             element.addEventListener('click', (e) => {
                 e.preventDefault();
                 setTimeout(() => hideThemeTooltip(), 100);
-                // const tooltip = bootstrap.Tooltip.getInstance(element);
-                // if (tooltip) {
-                //     tooltip.hide();
-                // }
                 const theme = element.getAttribute('data-theme');
                 updateActiveTheme(theme);
                 setStoredTheme(theme);
                 setTheme(theme);
             });
-            // element.addEventListener('shown.bs.tooltip', () => {
-            // });
         });
         document.querySelectorAll('.navbar-horizontal .dropdown-item,.navbar-horizontal .navbar-brand').forEach((element) => {
-            element.addEventListener('click', () => {
-                hideNavBar();
-            });
+            element.addEventListener('click', () => hideNavBar());
         });
     });
 })();

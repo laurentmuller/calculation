@@ -50,8 +50,8 @@
     padding-right: 0;
 }
 
-.navbar-vertical.bg-dark .dropdown-divider {
-    border-top: 1px solid var(--bs-border-color-translucent);
+.navbar-vertical .dropdown-divider {
+    border-top: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color-translucent) !important;
 }
 
 .navbar-vertical ul ul {

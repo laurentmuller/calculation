@@ -478,16 +478,22 @@
             if (!options.displayClose) {
                 return;
             }
+            let className = 'btn-close btn-close-white ms-0';
+            if (options.type === this.NotificationTypes.WARNING ||
+                options.type === this.NotificationTypes.INFO) {
+                className = 'btn-close ms-0';
+            }
             const title = options.closeTitle || 'Close';
             const $button = $('<button/>', {
                 'data-bs-dismiss': 'toast',
-                'class': 'btn-close ms-0',
+                'class': className,
                 'aria-label': title,
                 'type': 'button',
                 'title': title
             });
             $parent.append($button);
         },
+
         /**
          * Append the header title.
          *
@@ -558,7 +564,7 @@
                 return;
             }
             const $bar = $('<div/>', {
-                'class': 'progress-bar overflow-hidden bg-' + options.type,
+                'class': 'progress-bar overflow-hidden bg-' + options.type,// + '-subtle'
                 'role': 'progressbar',
                 'aria-valuenow': '0',
                 'aria-valuemin': '0',
@@ -591,7 +597,7 @@
                         $progress.data('percent', 0);
                         const timeout = Math.max(options.timeout / 100, 10);
                         $toast.createInterval(that._updateProgressBar, timeout, $progress);
-                    }).on('hide.bs.toast', function () {
+                    }).on('hidden.bs.toast', function () {
                         $toast.removeInterval();
                     });
                 }
@@ -619,9 +625,11 @@
             const percent = Number.parseInt($progress.data('percent'), 10) + 1;
             if (percent > 100) {
                 $progress.parents('.toast').removeInterval();
+                $progress.remove();
             } else {
-                $progress.css('width', percent + '%').attr('aria-valuenow', percent);
-                $progress.data('percent', percent);
+                $progress.css('width', percent + '%')
+                    .attr('aria-valuenow', percent)
+                    .data('percent', percent);
             }
         },
 

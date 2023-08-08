@@ -14,7 +14,7 @@ html {
     overflow-x: hidden;
 }
 
-[data-bs-theme=light] body {
+html[data-bs-theme=light] body {
     background-color: var(--bs-secondary);
 }
 

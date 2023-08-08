@@ -84,17 +84,9 @@
 /*
  * close button
  */
-[data-bs-theme=light] .toast-plugin .toast.border-primary .btn-close,
-[data-bs-theme=light] .toast-plugin .toast.border-success .btn-close,
-[data-bs-theme=light] .toast-plugin .toast.border-danger .btn-close,
-[data-bs-theme=light] .toast-plugin .toast.border-dark .btn-close {
-    filter: var(--bs-btn-close-white-filter);
-}
-
-[data-bs-theme=light] .toast-plugin .toast.border-info .btn-close,
-[data-bs-theme=dark] .toast-plugin .toast.border-warning .btn-close,
-[data-bs-theme=dark] .toast-plugin .toast.border-info .btn-close {
-    filter: invert(1) brightness(0);
+html[data-bs-theme=dark] .toast-plugin .toast.border-info .btn-close,
+html[data-bs-theme=dark] .toast-plugin .toast.border-warning .btn-close {
+    filter: inherit;
 }
 
 /**

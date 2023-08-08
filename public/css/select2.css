@@ -4,21 +4,21 @@
 
 /**! compression tag for ftp-deployment */
 
-[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection {
+html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection {
     background-color: var(--bs-body-bg) !important;
 }
 
-[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__rendered {
+html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__rendered {
     color: var(--bs-body-color) !important;
 }
 
-[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-dropdown,
-[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-search__field {
+html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-dropdown,
+html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-search__field {
     color: var(--bs-body-color) !important;
     background-color: var(--bs-body-bg) !important;
 }
 
-[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__choice {
+html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__choice {
     color: var(--bs-body-color) !important;
     background-color: var(--bs-body-bg) !important;
 }

@@ -172,3 +172,10 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body
 .form-control.form-control-search {
     width: 130px;
 }
+
+/**
+ * drop-down second level
+ */
+.dropdown-item.dropdown-child {
+    padding-left: 2.7rem !important;
+}

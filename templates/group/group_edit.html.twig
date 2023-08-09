@@ -7,11 +7,7 @@
 {%- set page_list = 'group_table' -%}
 {# body #}
 {% block card_body %}
-<div class="row">
-    <div class="col-md-6">
-        {{ form_row(form.code) }}
-    </div>
-</div>
+{{ form_row(form.code) }}
 {{ form_row(form.description) }}
 {{ printMargins(form.margins) }}
 {% endblock %}

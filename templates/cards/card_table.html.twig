@@ -21,7 +21,7 @@
         'data-icon': icon(icon ~ ' fa-fw')|raw,
         'data-default': default}) %}
     {% set attributes = attributes|filter(v => v is not empty) %}
-    <button{{ output_attributes(attributes) }}>{{- icon(icon ~ ' fa-fw') }} {{ text -}}</button>
+    <button{{ output_attributes(attributes) }}>{{- icon(icon ~ ' fa-fw') }}{{ text -}}</button>
 {% endapply %}
 {% endmacro %}
 {# output a drop-down item #}

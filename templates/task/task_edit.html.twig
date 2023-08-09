@@ -43,10 +43,10 @@
             <em>{{ form_errors(margin.value) }}</em>
         </div>
     </td>
-    <td class="actions px-0 py-2 d-print-none">
-        <button type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'taskitem.edit.delete_item'|trans }}">
+    <td class="actions align-middle pt-0 d-print-none">
+        <a href="#" type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'taskitem.edit.delete_item'|trans }}">
             {{- icon(ICON_DELETE) -}}
-        </button>
+        </a>
     </td>
 </tr>
 {% endmacro -%}
@@ -65,13 +65,15 @@
     </div>
     <div id="{{ id_content }}" class="collapse{% if show %} show{% endif %}" aria-labelledby="{{ id_header }}" data-bs-parent="#items">
         <div class="card-body pt-0">
-            <div class="row">
-                <div class="col-auto me-auto">
-                    <span class="form-label">{{ 'taskitem.fields.margins'|trans }}</span>
-                </div>
-                <div class="col-auto d-print-none">
-                    <a href="#" type="button" class="p-0 btn-add-margin btn btn-link">{{ 'taskitem.edit.add_item'|trans }}</a>
-                    <a href="#" type="button" class="p-0 btn-sort-margin btn btn-link {% if count < 2 %} disabled{% endif %}" title="{{ 'taskitem.edit.sort_items'|trans }}"><i class="fa-solid fa-sort-numeric-up"></i></a>
+            <div class="d-flex-wrap-center">
+                <span class="form-label me-auto">{{ 'taskitem.fields.margins'|trans }}</span>
+                <div class="mb-2 d-print-none">
+                    <button type="button" class="p-0 btn btn-link btn-add-margin">
+                        {{- 'taskitem.edit.add_item'|trans -}}
+                    </button>
+                    <button type="button" class="p-0 btn btn-link btn-sort-margin {% if count < 2 %} disabled{% endif %}" title="{{ 'taskitem.edit.sort_items'|trans }}">
+                        <i class="fa-solid fa-sort-numeric-up"></i>
+                    </button>
                 </div>
             </div>
             <hr class="my-0">

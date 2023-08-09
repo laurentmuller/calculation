@@ -24,27 +24,45 @@
             {{ tools.rowInfo('Release', service.releaseDate) }}
             {{ tools.rowInfo('End of maintenance', service.endOfMaintenance) }}
             {{ tools.rowInfo('End of product life', service.endOfLife) }}
-
-            {{ tools.headerInfo('Parameters') }}
-            {{ tools.rowInfo('Intl Locale', locale) }}
-            {{ tools.rowInfo('Timezone', service.timezone) }}
-            {{ tools.rowInfo('Charset', service.charset) }}
-
-            {{ tools.headerInfo('Extensions') }}
-            {{ tools.rowInfoBoolean('Debug', app.debug ? 'Enabled' : 'Disabled', app.debug) }}
-            {{ tools.rowInfoBoolean('OP Cache', service.zendCacheLoaded ? 'Enabled' : 'Disabled', service.zendCacheLoaded) }}
-            {{ tools.rowInfoBoolean('APCu', service.apcuLoaded ? 'Enabled' : 'Disabled', service.apcuLoaded) }}
-            {{ tools.rowInfoBoolean('Xdebug', service.xdebugLoaded ? 'Enabled' : 'Disabled', service.xdebugLoaded) }}
-
-            {{ tools.headerInfo('Directories') }}
-            {{ tools.rowInfo('Project', service.projectDir) }}
-            {{ tools.rowInfo('Logs', service.logInfo) }}
-            {{ tools.rowInfo('Cache', service.cacheInfo) }}
         </tbody>
     </table>
     {# Configuration #}
     <p class="fw-bold mb-1 p-1 border-bottom">Configuration</p>
     <div id="symfonyAccordion">
+        {# parameters #}
+        {{ tools.headerLinkInfo('Parameters', 'parameters') }}
+        <div class="collapse" id="parameters" aria-labelledby="parameters-header" data-bs-parent="#symfonyAccordion">
+            <table class="table table-hover table-sm mb-0">
+                <tbody>
+                {{ tools.rowInfo('Intl Locale', locale, 'ps-3') }}
+                {{ tools.rowInfo('Timezone', service.timezone, 'ps-3') }}
+                {{ tools.rowInfo('Charset', service.charset, 'ps-3') }}
+                </tbody>
+            </table>
+        </div>
+        {# extensions #}
+        {{ tools.headerLinkInfo('Extensions', 'extensions') }}
+        <div class="collapse" id="extensions" aria-labelledby="extensions-header" data-bs-parent="#symfonyAccordion">
+            <table class="table table-hover table-sm mb-0">
+                <tbody>
+                {{ tools.rowInfoBoolean('Debug', app.debug ? 'Enabled' : 'Disabled', app.debug, 'ps-3') }}
+                {{ tools.rowInfoBoolean('OP Cache', service.zendCacheLoaded ? 'Enabled' : 'Disabled', service.zendCacheLoaded, 'ps-3') }}
+                {{ tools.rowInfoBoolean('APCu', service.apcuLoaded ? 'Enabled' : 'Disabled', service.apcuLoaded, 'ps-3') }}
+                {{ tools.rowInfoBoolean('Xdebug', service.xdebugLoaded ? 'Enabled' : 'Disabled', service.xdebugLoaded, 'ps-3') }}
+                </tbody>
+            </table>
+        </div>
+        {# directories #}
+        {{ tools.headerLinkInfo('Directories', 'directories') }}
+        <div class="collapse" id="directories" aria-labelledby="directories-header" data-bs-parent="#symfonyAccordion">
+            <table class="table table-hover table-sm mb-0">
+                <tbody>
+                {{ tools.rowInfo('Project', service.projectDir, 'ps-3') }}
+                {{ tools.rowInfo('Logs', service.logInfo, 'ps-3') }}
+                {{ tools.rowInfo('Cache', service.cacheInfo, 'ps-3') }}
+                </tbody>
+            </table>
+        </div>
         {# bundles #}
         {% if bundles|length %}
             {{ tools.headerLinkInfo('Bundles', 'bundles', bundles) }}

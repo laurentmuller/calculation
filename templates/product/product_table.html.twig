@@ -25,7 +25,7 @@
             {{ _self.item_separator() }}
             {{ _self.output_dropdown('group', entry.id, group_id, key, {'data-parameter': 'groupId'}, ICON_GROUP) }}
             {% for code, code_id in entry.categories %}
-                {{ _self.output_dropdown('category ps-5', code_id, category_id, code, {'data-parameter': 'categoryId'}, ICON_CATEGORY) }}
+                {{ _self.output_dropdown('child category', code_id, category_id, code, {'data-parameter': 'categoryId'}, ICON_CATEGORY) }}
             {% endfor %}
         {% endfor %}
     </div>

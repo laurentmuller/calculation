@@ -5,12 +5,14 @@
 </tr>
 {%- endmacro %}
 
-{% macro headerLinkInfo(title, id, countable) -%}
+{% macro headerLinkInfo(title, id, countable=null) -%}
 <div class="d-flex-wrap-center border-bottom" id="{{ id }}-header">
-    <a href="#" class="drop-down-icon-left text-body my-1 me-auto" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" aria-controls="{{ id }}">
+    <a href="#" class="drop-down-icon-left flex-fill text-body my-1" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" aria-controls="{{ id }}">
         {{- title -}}
     </a>
-    <span class="badge text-bg-secondary rounded-pill me-1">{{- countable|length|integer -}}</span>
+    {% if countable %}
+        <span class="badge text-bg-secondary rounded-pill me-1">{{- countable|length|integer -}}</span>
+    {% endif %}
 </div>
 {%- endmacro %}
 
@@ -38,11 +40,12 @@
 </tr>
 {%- endmacro %}
 
-{% macro rowInfoBoolean(name, value, enabled) -%}
+{% macro rowInfoBoolean(name, value, enabled, name_class='') -%}
 {%- set check_text = enabled ? '✓' : '✗' -%}
 {%- set check_class = enabled ? 'success' : 'secondary' -%}
+ {%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
 <tr>
-    <td class="e">{{ name }}</td>
+    <td class="{{ name_class }}">{{ name }}</td>
     <td class="v">
         <span class="fw-bold me-1 text-{{ check_class }}">{{ check_text }}</span><span>{{ value }}</span>
     </td>
@@ -76,12 +79,12 @@
 {%- set title = ('about.' ~ id)|trans -%}
 <div class="card-header d-flex-wrap-center border-bottom-0">
     <a class="drop-down-icon-left card-title flex-fill mb-0" href="#" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" title="{{ 'about.expand'|trans }}">{{- title -}}</a>
-    {{ linkExternal(path(pdf_route), null, null, ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
+    {{ linkExternal(path(pdf_route), null, null, ICON_PDF, 'common.button_export_pdf') }}
     {% if excel_route %}
-        {{ linkExternal(path(excel_route), null, null, ICON_EXCEL ~ ' fa-fw', 'common.button_export_excel') }}
+        {{ linkExternal(path(excel_route), null, null, ICON_EXCEL, 'common.button_export_excel') }}
     {% endif %}
     {% if word_route %}
-        {{ linkExternal(path(word_route), null, null, ICON_WORD ~ ' fa-fw', 'common.button_export_word') }}
+        {{ linkExternal(path(word_route), null, null, ICON_WORD, 'common.button_export_word') }}
     {% endif %}
 </div>
 <div class="card-body border-top collapse" id="{{ id }}" data-bs-parent="#parent_accordion" data-url="{{ route }}">

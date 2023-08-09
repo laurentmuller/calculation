@@ -25,7 +25,7 @@ function updateUI() {
 /**
  * Gets the maximum value.
  *
- * @returns the maximum value.
+ * @returns {number} the maximum value.
  */
 function getMaxValue() {
     'use strict';
@@ -39,7 +39,7 @@ function getMaxValue() {
 /**
  * Gets the minimum margin value.
  *
- * @returns the minimum margin value.
+ * @returns {number} the minimum margin value.
  */
 function getMinMargin() {
     'use strict';
@@ -52,16 +52,15 @@ function getMinMargin() {
 
 /**
  * Adds a new margin row.
- *
- * @param {jQuery} $table - the parent table.
  */
-function addMargin($table) {
+function addMargin() {
     'use strict';
     // get values before inserting the row
     const margin = getMinMargin();
     const minimum = getMaxValue();
     const maximum = Math.max(minimum * 2, 100);
     // get prototype and update index
+    const $table = $('#data-table-edit');
     const prototype = $table.data('prototype');
     const index = $table.data('index');
     $table.data('index', index + 1);
@@ -92,17 +91,16 @@ function removeMargin($caller) {
 
 /**
  * Sorts the margins.
- *
- * @param {jQuery} $table - the parent table.
  */
-function sortMargins($table) {
+function sortMargins() {
     'use strict';
+    const $table = $('#data-table-edit');
     const $body = $table.find('tbody');
     let $rows = $body.find('tr');
     if ($rows.length < 2) {
         return $rows;
     }
-    $rows = $rows.sort(function (rowA, rowB) {
+    $rows.sort(function (rowA, rowB) {
         const valueA = $(rowA).find("input[name$='[minimum]']").floatVal();
         const valueB = $(rowB).find("input[name$='[minimum]']").floatVal();
         if (valueA < valueB) {
@@ -120,24 +118,23 @@ function sortMargins($table) {
  */
 (function ($) {
     'use strict';
-    // handle delete button
-    const $table = $('#data-table-edit');
-    $table.on('click', '.btn-delete', function (e) {
+    // handle buttons
+    $('.btn-add').on('click', function (e) {
+        e.preventDefault();
+        addMargin();
+    });
+    $('.btn-sort').on('click', function (e) {
+        e.preventDefault();
+        sortMargins();
+    });
+    $('#data-table-edit').on('click', '.btn-delete-margin', function (e) {
         e.preventDefault();
         removeMargin($(this));
     });
-    // handle add button
-    $('.btn-add').on('click', function (e) {
-        e.preventDefault();
-        addMargin($table);
-    });
-    // handle sort button
-    $('.btn-sort').on('click', function (e) {
-        e.preventDefault();
-        sortMargins($table, true);
-    });
+
     // update UI
     updateUI();
+
     // validation
     $('form').initValidator();
 }(jQuery));

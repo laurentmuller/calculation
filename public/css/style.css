@@ -519,6 +519,27 @@ input[type="number"] {
 }
 
 /**
+ * Toggle icon (angle-left) after the element
+ */
+.drop-down-icon-right {
+    flex: 1 1 auto !important;
+}
+
+.drop-down-icon-right:after {
+    font-family: "Font Awesome 6 Free", sans-serif;
+    font-weight: 900;
+    float: right;
+    margin-left: 6px;
+    content: "\f104";
+    transition: transform 0.2s ease;
+}
+
+.drop-down-icon-right[aria-expanded="true"]::after {
+    transform: rotate(-90deg);
+}
+
+
+/**
  * Reset the table hover row.
  */
 .table-hover tbody tr.not-hover:hover {

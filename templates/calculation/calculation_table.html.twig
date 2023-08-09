@@ -29,7 +29,7 @@
             {{ _self.item_separator() }}
             {{ _self.output_dropdown('editable', entry.id, state_editable, entry.text|trans, {'data-parameter': 'stateEditable'}, entry.icon) }}
             {% for code, id in entry.states %}
-                {{ _self.output_dropdown('state ps-5', id, state_id, code, {'data-parameter': 'stateId'}, ICON_CALCULATION_STATE) }}
+                {{ _self.output_dropdown('child state', id, state_id, code, {'data-parameter': 'stateId'}, ICON_CALCULATION_STATE) }}
             {% endfor %}
         {% endfor %}
     </div>

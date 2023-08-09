@@ -33,10 +33,6 @@
     }
 }
 
-#calculations tbody:last-child tr:last-child td {
-    border-bottom-width: 0 !important;
-}
-
 /*
  * reset header group colors when selected
  */

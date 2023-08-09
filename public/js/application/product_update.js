@@ -59,7 +59,7 @@ function getSelectableProducts() {
  */
 function validateProducts() {
     'use strict';
-    return $("#form_allProducts").validateElement();
+    return $("#form_allProducts").validate();
 }
 
 /**

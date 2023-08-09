@@ -31,7 +31,7 @@
 
     /**
      * Gets the stored theme.
-     * @return {string|null} the stored theme.
+     * @return {string} the stored theme.
      */
     const getStoredTheme = () => {
         const decodedCookie = decodeURIComponent(document.cookie);

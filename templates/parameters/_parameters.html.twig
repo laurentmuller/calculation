@@ -9,7 +9,7 @@
 {%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
 {%- set title = expanded ? hide : show -%}
 <div class="card-header d-flex-wrap-center border-bottom-0">
-    <a class="drop-down-icon-left card-title flex-fill mb-0" href="#" data-bs-toggle="collapse" data-bs-target="#{{ href }}" aria-expanded="{{ expanded|json_encode }}" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">
+    <a class="drop-down-icon-right card-title mb-0" href="#" data-bs-toggle="collapse" data-bs-target="#{{ href }}" aria-expanded="{{ expanded|json_encode }}" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">
         {{- name -}}
     </a>
 </div>

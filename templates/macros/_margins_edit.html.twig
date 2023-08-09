@@ -1,6 +1,6 @@
 {# output a sigle margin row #}
 {% macro printMarginRow(margin) %}
-{% from 'macros/_icons.html.twig' import link %}
+{% from 'macros/_icons.html.twig' import icon %}
 <tr>
     <td class="w-35">
         <div class="form-group">
@@ -21,7 +21,9 @@
         </div>
     </td>
     <td class="actions align-middle pt-0 d-print-none">
-        {{- link('#', false, 'btn btn-sm btn-outline-danger btn-edit btn-delete d-print-none', ICON_DELETE, 'group.edit.delete_margin') -}}
+        <a href="#" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'group.edit.delete_margin'|trans }}">
+            {{- icon(ICON_DELETE) -}}
+        </a>
     </td>
 </tr>
 {% endmacro %}
@@ -29,41 +31,37 @@
 {% macro printMargins(margins) %}
 {%- set margins_length = margins|length %}
 {%- set table_class = 'table table-borderless table-edit' ~ (margins_length == 0 ? ' d-none' : '') -%}
-<div class="row">
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col">
-                <span class="form-label">{{ 'group.fields.margins'|trans }}</span>
-            </div>
-            <div class="col text-end">
-                <a href="#" role="button" class="p-0 btn-add btn-link">
-                    {{- 'group.edit.add_margin'|trans -}}
-                </a>
-                <a href="#" role="button" class="p-0 btn-sort btn-link {% if margins|length < 2 %} disabled{% endif %}" title="{{ 'group.edit.sort_margins'|trans }}">
-                    <i class="fa-solid fa-sort-numeric-up fa-fw"></i>
-                </a>
-            </div>
-        </div>
-        <hr class="mt-0 mb-2">
-        <table id="data-table-edit" class="{{ table_class }}" data-index="{{ margins_length }}" data-prototype="{{ _self.printMarginRow(margins.vars.prototype)|e('html_attr') }}">
-            <thead>
-            <tr>
-                <th class="vertical-middle text-end fw-normal required">{{ 'globalmargin.fields.minimum'|trans }}</th>
-                <th class="vertical-middle text-end fw-normal required">{{ 'globalmargin.fields.maximum'|trans }}</th>
-                <th class="vertical-middle text-end fw-normal required">{{ 'globalmargin.fields.margin_percent'|trans }}</th>
-                <th class="actions d-print-none">&nbsp;</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for margin in margins %}
-                {{ _self.printMarginRow(margin) }}
-            {% endfor %}
-            </tbody>
-        </table>
-        {{ form_errors(margins) }}
-        <small id="empty_margins" class="text-body-secondary{% if margins_length > 0 %} d-none{% endif %}">
-            {{- 'group.edit.empty_margins'|trans -}}
-        </small>
+<div class="d-flex-wrap-center">
+    <span class="form-label me-auto">{{ 'group.fields.margins'|trans }}</span>
+    <div class="mb-2 d-print-none">
+        <button type="button" class="p-0 btn btn-link btn-add">
+            {{- 'group.edit.add_margin'|trans -}}
+        </button>
+        <button type="button" class="p-0 btn btn-link btn-sort {% if margins|length < 2 %} disabled{% endif %}" title="{{ 'group.edit.sort_margins'|trans }}">
+            <i class="fa-solid fa-sort-numeric-up fa-fw"></i>
+        </button>
     </div>
 </div>
+<hr class="mt-0 mb-2">
+<div class="table-responsive">
+    <table id="data-table-edit" class="{{ table_class }}" data-index="{{ margins_length }}" data-prototype="{{ _self.printMarginRow(margins.vars.prototype)|e('html_attr') }}">
+        <thead>
+        <tr>
+            <th class="vertical-middle text-end fw-normal required">{{ 'globalmargin.fields.minimum'|trans }}</th>
+            <th class="vertical-middle text-end fw-normal required">{{ 'globalmargin.fields.maximum'|trans }}</th>
+            <th class="vertical-middle text-end fw-normal required">{{ 'globalmargin.fields.margin_percent'|trans }}</th>
+            <th class="actions d-print-none">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for margin in margins %}
+            {{ _self.printMarginRow(margin) }}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{{ form_errors(margins) }}
+<small id="empty_margins" class="text-body-secondary{% if margins_length %} d-none{% endif %}">
+    {{- 'group.edit.empty_margins'|trans -}}
+</small>
 {% endmacro %}

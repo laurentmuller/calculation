@@ -9,7 +9,7 @@
     min-width: 18rem;
     max-width: 18rem;
     padding: 0.5rem 1rem 0.1rem;
-    transition: margin-left 0.35s ease;
+    transition: margin-left 0.35s ease-in-out;
     overflow-y: auto;
     overflow-x: hidden;
     flex-direction: column !important;
@@ -91,7 +91,7 @@
     font-weight: 900;
     float: right;
     margin-left: 6px;
-    transition: transform 0.2s ease;
+    transition: transform 0.15s ease-in-out;
     content: "\f104";
 }
 

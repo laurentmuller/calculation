@@ -34,7 +34,7 @@
             settings.type = this._checkType(type);
             settings.message = message;
             settings.title = title;
-            if (!settings.title && settings.displaySubtitle) {
+            if (!settings.title && settings.displaySubtitle && settings.subtitle) {
                 settings.title = settings.subtitle;
                 settings.displaySubtitle = false;
                 settings.subtitle = null;
@@ -362,6 +362,15 @@
         },
 
         /**
+         * Return if the dark them is created
+         * @return {boolean}
+         * @private
+         */
+        _isDarkTheme: function () {
+            return document.documentElement.getAttribute('data-bs-theme') === 'dark';
+        },
+
+        /**
          * Return if the title must be created
          * @param {Object} options - The toast options.
          * @return {boolean}
@@ -410,33 +419,33 @@
                 $parent.append($(options.icon));
                 return;
             }
-            let clazz = 'fas fa-lg fa-';
+            let className = 'fas fa-lg fa-';
             switch (options.type) {
                 case this.NotificationTypes.INFO:
-                    clazz += 'info-circle';
+                    className += 'info-circle';
                     break;
                 case this.NotificationTypes.SUCCESS:
-                    clazz += 'check-circle';
+                    className += 'check-circle';
                     break;
                 case this.NotificationTypes.WARNING:
-                    clazz += 'exclamation-circle';
+                    className += 'exclamation-circle';
                     break;
                 case this.NotificationTypes.DANGER:
-                    clazz += 'exclamation-triangle';
+                    className += 'exclamation-triangle';
                     break;
                 default:
-                    clazz += 'check-circle';
+                    className += 'check-circle';
                     break;
             }
 
             // icon only
             if (!options.title && !options.displayClose && !options.displaySubtitle) {
-                clazz += ' py-2';
+                className += ' py-2';
             }
 
             // create
             const $icon = $('<i/>', {
-                'class': clazz,
+                'class': className,
                 'aria-hidden': true
             });
             $parent.append($icon);
@@ -554,13 +563,12 @@
             if (!options.progress) {
                 return;
             }
-            //text-bg-primary
-            let className = `progress-bar overflow-hidden bg-${options.type}`;
-            if (options.type === this.NotificationTypes.DARK && $('html').data('bs-theme') === 'dark') {
-                className = 'progress-bar overflow-hidden bg-body-secondary';
+            let className = `bg-${options.type}`;
+            if (options.type === this.NotificationTypes.DARK && this._isDarkTheme()) {
+                className = 'bg-body-secondary';
             }
             const $bar = $('<div/>', {
-                'class': className,
+                'class': `progress-bar overflow-hidden ${className}`,
                 'role': 'progressbar',
                 'aria-valuenow': '0',
                 'aria-valuemin': '0',

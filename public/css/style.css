@@ -11,7 +11,7 @@
 
 .navbar.navbar-horizontal {
     margin-bottom: 20px;
-    transition: top 0.3s;
+    transition: top 0.3s ease-in-out;
 }
 
 body.status-bar .navbar.navbar-vertical {
@@ -51,7 +51,7 @@ footer:before {
     width: 100%;
     position: absolute;
     border-top: var(--bs-border-width) solid var(--bs-border-color);
-    transition: left 0.35s ease
+    transition: left 0.3s ease-in-out
 }
 
 html:not(:has(.sidebar-hide)) footer:before {
@@ -341,10 +341,6 @@ textarea.fixed {
 /**
  * Cursors
  */
-.cursor-default {
-    cursor: default !important;
-}
-
 .cursor-wait {
     cursor: wait !important;
 }
@@ -511,7 +507,7 @@ input[type="number"] {
     float: left;
     margin-right: 6px;
     content: "\f105";
-    transition: transform 0.2s ease;
+    transition: transform 0.15s ease-in-out;
 }
 
 .drop-down-icon-left[aria-expanded="true"]:before {
@@ -531,7 +527,7 @@ input[type="number"] {
     float: right;
     margin-left: 6px;
     content: "\f104";
-    transition: transform 0.2s ease;
+    transition: transform 0.15s ease-in-out;
 }
 
 .drop-down-icon-right[aria-expanded="true"]::after {
@@ -804,7 +800,6 @@ span.form-label {
 
 /**
  * sub-menu
- */
 .dropdown-item-submenu:after {
     font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
@@ -812,33 +807,27 @@ span.form-label {
     margin-left: 0.5rem;
     float: right;
 }
-
 @media all and (min-width: 992px) {
     .dropdown-menu li {
         position: relative !important;
     }
-
     .dropdown-menu .submenu {
         display: none;
         position: absolute;
         left: 100%;
         top: -7px;
     }
-
     .dropdown-menu .submenu-left {
         right: 100%;
         left: auto;
     }
-
     .dropdown-menu > li:hover {
         background-color: #f1f1f1
     }
-
     .dropdown-menu > li:hover > .submenu {
         display: block;
     }
 }
-
 @media (max-width: 991px) {
     .dropdown-menu .dropdown-menu {
         margin-left: 0.7rem;
@@ -846,8 +835,7 @@ span.form-label {
         margin-bottom: .5rem;
     }
 }
-
-/* ============ small devices .end// ============ */
+*/
 
 /* ============ Password strength ============ */
 .bottom-border-gradient {

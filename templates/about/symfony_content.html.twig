@@ -1,4 +1,33 @@
 {% import 'about/_about_macro.html.twig' as tools %}
+{% from 'macros/_icons.html.twig' import linkExternal %}
+{# macros #}
+{% macro headerLinkInfo(title, id, countable=null) -%}
+<div class="d-flex-wrap-center border-bottom" id="{{ id }}-header">
+    <a href="#" class="drop-down-icon-left flex-fill text-body my-1" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'about.expand'|trans }}">
+        {{- title -}}
+    </a>
+    {% if countable %}
+        <span class="badge text-bg-secondary rounded-pill">{{- countable|length|integer -}}</span>
+    {% endif %}
+    </div>
+{%- endmacro %}
+{% macro rowBundle(bundle) -%}
+<tr>
+    <td class="e ps-3">
+        {{- bundle.name -}}{%- if bundle.homepage|default(false) %}&nbsp;{{- linkExternal(bundle.homepage, '', 'd-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
+    </td>
+    <td class="v">{{ bundle.path }}</td>
+</tr>
+{%- endmacro %}
+{% macro rowPackage(package) -%}
+<tr>
+    <td class="e ps-3">
+        {{- package.name -}}{%- if package.homepage %}&nbsp;{{- linkExternal(package.homepage, '', 'd-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
+    </td>
+    <td class="f text-nowrap">{{ package.version }}</td>
+    <td class="text">{{ package.description }}</td>
+</tr>
+{%- endmacro %}
 {# parameters #}
 {%- set bundles = service.bundles|default([]) -%}
 {%- set runtime_packages = service.packages.runtime|default([]) -%}
@@ -30,7 +59,7 @@
     <p class="fw-bold mb-1 p-1 border-bottom">Configuration</p>
     <div id="symfonyAccordion">
         {# parameters #}
-        {{ tools.headerLinkInfo('Parameters', 'parameters') }}
+        {{ _self.headerLinkInfo('Parameters', 'parameters') }}
         <div class="collapse" id="parameters" aria-labelledby="parameters-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-hover table-sm mb-0">
                 <tbody>
@@ -41,7 +70,7 @@
             </table>
         </div>
         {# extensions #}
-        {{ tools.headerLinkInfo('Extensions', 'extensions') }}
+        {{ _self.headerLinkInfo('Extensions', 'extensions') }}
         <div class="collapse" id="extensions" aria-labelledby="extensions-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-hover table-sm mb-0">
                 <tbody>
@@ -53,7 +82,7 @@
             </table>
         </div>
         {# directories #}
-        {{ tools.headerLinkInfo('Directories', 'directories') }}
+        {{ _self.headerLinkInfo('Directories', 'directories') }}
         <div class="collapse" id="directories" aria-labelledby="directories-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-hover table-sm mb-0">
                 <tbody>
@@ -65,12 +94,12 @@
         </div>
         {# bundles #}
         {% if bundles|length %}
-            {{ tools.headerLinkInfo('Bundles', 'bundles', bundles) }}
+            {{ _self.headerLinkInfo('Bundles', 'bundles', bundles) }}
             <div class="collapse" id="bundles" aria-labelledby="bundles-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-hover table-sm mb-0">
                     <tbody>
                     {% for bundle in service.bundles %}
-                        {{ tools.rowBundle(bundle) }}
+                        {{ _self.rowBundle(bundle) }}
                     {% endfor %}
                     </tbody>
                 </table>
@@ -78,12 +107,12 @@
         {% endif %}
         {# runtime packages #}
         {% if runtime_packages|length %}
-            {{ tools.headerLinkInfo('Packages', 'runtime-packages', runtime_packages) }}
+            {{ _self.headerLinkInfo('Packages', 'runtime-packages', runtime_packages) }}
             <div class="accordion-collapse collapse" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-hover table-no-end-line table-sm mb-0">
                     <tbody>
                     {% for package in runtime_packages %}
-                        {{ tools.rowPackage(package) }}
+                        {{ _self.rowPackage(package) }}
                     {% endfor %}
                     </tbody>
                 </table>
@@ -91,12 +120,12 @@
         {% endif %}
         {# debug packages #}
         {% if debug_packages|length %}
-            {{ tools.headerLinkInfo('Debug Packages', 'dev-packages', debug_packages) }}
+            {{ _self.headerLinkInfo('Debug Packages', 'dev-packages', debug_packages) }}
             <div class="accordion-collapse collapse" id="dev-packages" aria-labelledby="dev-packages-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-hover table-no-end-line table-sm mb-0">
                     <tbody>
                     {% for package in debug_packages %}
-                        {{ tools.rowPackage(package) }}
+                        {{ _self.rowPackage(package) }}
                     {% endfor %}
                     </tbody>
                 </table>
@@ -104,7 +133,7 @@
         {% endif %}
         {# runtime routes #}
         {% if runtime_routes|length %}
-            {{ tools.headerLinkInfo('Routes', 'runtime-routes', runtime_routes) }}
+            {{ _self.headerLinkInfo('Routes', 'runtime-routes', runtime_routes) }}
             <div class="accordion-collapse collapse" id="runtime-routes" aria-labelledby="runtime-routes-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-hover table-no-end-line table-sm mb-0">
                     <tbody>
@@ -117,7 +146,7 @@
         {% endif %}
         {# debug routes #}
         {% if debug_routes|length %}
-            {{ tools.headerLinkInfo('Debug Routes', 'debug-routes', debug_routes) }}
+            {{ _self.headerLinkInfo('Debug Routes', 'debug-routes', debug_routes) }}
             <div class="accordion-collapse collapse" id="debug-routes" aria-labelledby="debug-routes-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-hover table-no-end-line table-sm mb-0">
                     <tbody>

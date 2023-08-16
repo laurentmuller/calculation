@@ -19,6 +19,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Chart to display calculations by month.
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
 #[\AllowDynamicProperties]
 class MonthChart extends BaseChart
@@ -76,9 +78,9 @@ class MonthChart extends BaseChart
             ->hideLegend()
             ->setPlotOptions()
             ->setTooltipOptions()
-            ->xAxis($xAxis)
-            ->yAxis($yAxis)
-            ->series($series);
+            ->setXAxis($xAxis)
+            ->setYAxis($yAxis)
+            ->setSeries($series);
         $data = [];
         foreach ($dateValues as $index => $date) {
             $data[] = [
@@ -108,6 +110,18 @@ class MonthChart extends BaseChart
             'allowed_months' => $allowedMonths,
             'min_margin' => $this->getMinMargin(),
         ];
+    }
+
+    protected function setTooltipOptions(): static
+    {
+        parent::setTooltipOptions();
+        $this->tooltip->merge([
+            'shared' => true,
+            'useHTML' => true,
+            'formatter' => $this->getFormatterExpression(),
+        ]);
+
+        return $this;
     }
 
     /**
@@ -406,6 +420,7 @@ class MonthChart extends BaseChart
 
         return [
             [
+                'gridLineColor' => 'var(--bs-border-color)',
                 'labels' => [
                     'formatter' => $formatter,
                     'style' => [
@@ -424,8 +439,7 @@ class MonthChart extends BaseChart
      */
     private function setPlotOptions(): self
     {
-        // @phpstan-ignore-next-line
-        $this->plotOptions->series([
+        $this->plotOptions['series'] = [
             'cursor' => 'pointer',
             'stacking' => 'normal',
             'pointPadding' => 0,
@@ -435,25 +449,7 @@ class MonthChart extends BaseChart
                    'click' => $this->getClickExpression(),
                 ],
             ],
-        ]);
-
-        return $this;
-    }
-
-    /**
-     * Sets the tooltip options.
-     */
-    private function setTooltipOptions(): self
-    {
-        // @phpstan-ignore-next-line
-        $this->tooltip
-            ->formatter($this->getFormatterExpression())
-            ->style($this->getFontStyle(12))
-            ->borderColor('rgba(255, 255, 255, 0.125)')
-            ->backgroundColor('white')
-            ->borderRadius(4)
-            ->useHTML(true)
-            ->shared(true);
+        ];
 
         return $this;
     }

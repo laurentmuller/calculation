@@ -22,8 +22,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * Chart to display calculations by state.
  *
  * @psalm-import-type QueryCalculationType from CalculationStateRepository
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-#[\AllowDynamicProperties]
 class StateChart extends BaseChart
 {
     /**
@@ -60,11 +61,12 @@ class StateChart extends BaseChart
                 'url' => $url,
             ];
         }, $states);
+
         $this->hideTitle()
             ->setPlotOptions()
             ->setLegendOptions()
             ->setTooltipOptions()
-            ->series($this->getSeries($data));
+            ->setSeries($this->getSeries($data));
         $this->colors = $this->getColors($states);
 
         return [
@@ -77,6 +79,17 @@ class StateChart extends BaseChart
             'marginAmount' => $total - $items,
             'min_margin' => $this->getMinMargin(),
         ];
+    }
+
+    protected function setTooltipOptions(): static
+    {
+        parent::setTooltipOptions();
+        $this->tooltip->merge([
+            'headerFormat' => '',
+            'pointFormat' => '<span><b>{point.name} : {point.y:,.0f}</b> ({point.percentage:.1f}%)</span>',
+        ]);
+
+        return $this;
     }
 
     private function getClickExpression(): Expr
@@ -137,9 +150,8 @@ class StateChart extends BaseChart
     private function setLegendOptions(): self
     {
         $style = $this->getFontStyle();
-
-        // @phpstan-ignore-next-line
-        $this->legend->itemStyle($style)->itemHoverStyle($style);
+        $this->legend['itemStyle'] = $style;
+        $this->legend['itemHoverStyle'] = $style;
 
         return $this;
     }
@@ -149,25 +161,7 @@ class StateChart extends BaseChart
      */
     private function setPlotOptions(): self
     {
-        // @phpstan-ignore-next-line
-        $this->plotOptions->pie($this->getPieOptions());
-
-        return $this;
-    }
-
-    /**
-     * Sets the tooltip options.
-     */
-    private function setTooltipOptions(): self
-    {
-        // @phpstan-ignore-next-line
-        $this->tooltip
-            ->headerFormat('')
-            ->borderColor('rgba(255, 255, 255, 0.125)')
-            ->style($this->getFontStyle(12))
-            ->backgroundColor('white')
-            ->borderRadius(4)
-            ->pointFormat('<span><b>{point.name} : {point.y:,.0f}</b> ({point.percentage:.1f}%)</span>');
+        $this->plotOptions['pie'] = $this->getPieOptions();
 
         return $this;
     }

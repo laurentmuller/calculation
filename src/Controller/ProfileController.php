@@ -62,7 +62,7 @@ class ProfileController extends AbstractController
 
             return $this->redirectToHomePage('profile.edit.success', ['%username%' => $user->getUserIdentifier()]);
         }
-        // display
+
         return $this->render('profile/profile_edit.html.twig', [
             'form' => $form,
         ]);

@@ -1,0 +1,42 @@
+{% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownItemWithClass, dropdownSeparator, dropdownItem, dropdownItemExternal %}
+{{ dropdownEllipsis() }}
+<div class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
+    {%- if edit_page -%}
+        {%- set path = path(edit_page, params) -%}
+        {% set item_class = is_editable ? 'btn-default' : '' %}
+        {{ dropdownItemWithClass(path, 'calculation.edit.title_short', ICON_EDIT, item_class) }}
+    {%- endif -%}
+    {%- if state_page -%}
+        {%- set path = path(state_page, params) -%}
+        {% set item_class = is_editable ? '' : 'btn-default' %}
+        {{ dropdownItemWithClass(path, 'calculation.list.state_title', ICON_CALCULATION_STATE, item_class) }}
+    {%- endif -%}
+    {%- if delete_page -%}
+        {{- dropdownSeparator() }}
+        {%- set path = path(delete_page, params) -%}
+        {{ dropdownItemWithClass(path, 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
+    {%- endif -%}
+    {%- if add_page -%}
+        {{- dropdownSeparator() }}
+        {%- set path = path(add_page, params) -%}
+        {{ dropdownItem(path, 'calculation.add.title', ICON_ADD) }}
+        {%- set path = path(clone_page, params) -%}
+        {{ dropdownItem(path, 'common.button_clone', ICON_COPY) }}
+    {%- endif -%}
+    {%- if show_page -%}
+        {{- dropdownSeparator() }}
+        {%- set path = path(show_page, params) -%}
+        {{ dropdownItem(path, 'calculation.show.title', ICON_SHOW) }}
+    {%- endif -%}
+    {%- if single_page_pdf or single_page_excel -%}
+        {{- dropdownSeparator() }}
+        {%- if single_page_pdf -%}
+            {%- set path = path(single_page_pdf, {'id': id}) -%}
+            {{ dropdownItemExternal(path, 'calculation.list.pdf_single_title', ICON_PDF) }}
+        {% endif %}
+        {%- if single_page_excel -%}
+            {%- set path = path(single_page_excel, {'id': id}) -%}
+            {{ dropdownItemExternal(path, 'calculation.list.excel_single_title', ICON_EXCEL) }}
+        {% endif %}
+    {%- endif -%}
+</div>

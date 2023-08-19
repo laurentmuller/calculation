@@ -62,7 +62,8 @@ class StateChart extends BaseChart
             ];
         }, $states);
 
-        $this->hideTitle()
+        $this->setType(self::TYPE_PIE)
+            ->hideTitle()
             ->setPlotOptions()
             ->setLegendOptions()
             ->setTooltipOptions()
@@ -122,9 +123,9 @@ class StateChart extends BaseChart
             'cursor' => 'pointer',
             'showInLegend' => true,
             'allowPointSelect' => true,
-            'dataLabels' => [
-                'enabled' => false,
-            ],
+            'dataLabels' => ['enabled' => false],
+            'borderRadius' => ['radius' => 0],
+            'borderColor' => $this->getBorderColor(),
             'point' => [
                 'events' => [
                     'click' => $this->getClickExpression(),
@@ -138,7 +139,6 @@ class StateChart extends BaseChart
         return [
             [
                 'data' => $data,
-                'type' => self::TYPE_PIE,
                 'name' => $this->transChart('title_by_state'),
             ],
         ];

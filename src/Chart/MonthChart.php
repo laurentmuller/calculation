@@ -22,7 +22,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-#[\AllowDynamicProperties]
 class MonthChart extends BaseChart
 {
     private readonly string $url;
@@ -73,18 +72,11 @@ class MonthChart extends BaseChart
         $series = $this->getSeries($data);
         $yAxis = $this->getYaxis();
         $xAxis = $this->getXAxis($dateValues);
-        $this->setType(self::TYPE_COLUMN)
-            ->hideTitle()
-            ->hideLegend()
-            ->setPlotOptions()
-            ->setTooltipOptions()
-            ->setXAxis($xAxis)
-            ->setYAxis($yAxis)
-            ->setSeries($series);
+
         $data = [];
         foreach ($dateValues as $index => $date) {
             $data[] = [
-                'date' => (int) ($date / 1000),
+                'date' => (int) ($date / 1_000),
                 'count' => $countValues[$index],
                 'sum' => $sumValues[$index],
                 'items' => $itemValues[$index],
@@ -97,6 +89,15 @@ class MonthChart extends BaseChart
         $items = (float) \array_sum($itemValues);
         $marginAmount = $total - $items;
         $marginPercent = $this->safeDivide($total, $items);
+
+        $this->setType(self::TYPE_COLUMN)
+            ->hideTitle()
+            ->hideLegend()
+            ->setPlotOptions()
+            ->setTooltipOptions()
+            ->setXAxis($xAxis)
+            ->setYAxis($yAxis)
+            ->setSeries($series);
 
         return [
             'chart' => $this,
@@ -197,7 +198,7 @@ class MonthChart extends BaseChart
      */
     private function getDateValues(array $data): array
     {
-        return \array_map(fn (array $item): int => $item['date']->getTimestamp() * 1000, $data);
+        return \array_map(static fn (array $item): int => $item['date']->getTimestamp() * 1000, $data);
     }
 
     private function getFormatterExpression(): Expr
@@ -281,7 +282,7 @@ class MonthChart extends BaseChart
      */
     private function getItemsSeries(array $data): array
     {
-        return \array_map(fn (array $item): array => [$item['items'], $item['count']], $data);
+        return \array_map(static fn (array $item): array => [$item['items'], $item['count']], $data);
     }
 
     /**
@@ -315,7 +316,7 @@ class MonthChart extends BaseChart
      */
     private function getMarginAmounts(array $data): array
     {
-        return \array_map(fn (array $item): float => $item['total'] - $item['items'], $data);
+        return \array_map(static fn (array $item): float => $item['total'] - $item['items'], $data);
     }
 
     /**
@@ -332,7 +333,7 @@ class MonthChart extends BaseChart
      */
     private function getMarginPercents(array $data): array
     {
-        return \array_map(fn (array $item): float => $item['margin'], $data);
+        return \array_map(static fn (array $item): float => $item['margin'], $data);
     }
 
     /**
@@ -349,7 +350,7 @@ class MonthChart extends BaseChart
      */
     private function getMarginsSeries(array $data): array
     {
-        return \array_map(fn (array $item): array => [$item['total'] - $item['items'], $item['count']], $data);
+        return \array_map(static fn (array $item): array => [$item['total'] - $item['items'], $item['count']], $data);
     }
 
     /**
@@ -394,7 +395,7 @@ class MonthChart extends BaseChart
      */
     private function getSumValues(array $data): array
     {
-        return \array_map(fn (array $item): float => $item['total'], $data);
+        return \array_map(static fn (array $item): float => $item['total'], $data);
     }
 
     private function getXAxis(array $dates): array
@@ -402,9 +403,10 @@ class MonthChart extends BaseChart
         return [
             'type' => 'datetime',
             'categories' => $dates,
+            'lineColor' => $this->getBorderColor(),
             'labels' => [
-                'format' => '{value:%B %Y}',
-                'style' => $this->getFontStyle(12),
+                'format' => '{value:%b %Y}',
+                'style' => $this->getFontStyle(14),
             ],
         ];
     }
@@ -420,12 +422,10 @@ class MonthChart extends BaseChart
 
         return [
             [
-                'gridLineColor' => 'var(--bs-border-color)',
+                'gridLineColor' => $this->getBorderColor(),
                 'labels' => [
                     'formatter' => $formatter,
-                    'style' => [
-                        'fontSize' => '12px',
-                    ],
+                    'style' => $this->getFontStyle(14),
                 ],
                 'title' => [
                     'text' => null,
@@ -440,10 +440,12 @@ class MonthChart extends BaseChart
     private function setPlotOptions(): self
     {
         $this->plotOptions['series'] = [
+            'pointPadding' => 0,
             'cursor' => 'pointer',
             'stacking' => 'normal',
-            'pointPadding' => 0,
             'keys' => ['y', 'custom.count'],
+            'borderRadius' => ['radius' => 0],
+            'borderColor' => $this->getBorderColor(),
             'point' => [
                 'events' => [
                    'click' => $this->getClickExpression(),

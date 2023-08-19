@@ -17,7 +17,6 @@ use App\Interfaces\RoleInterface;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -155,7 +154,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
                 ->where('e.hashedToken IS NOT NULL')
                 ->getQuery()
                 ->getSingleScalarResult();
-        } catch (NoResultException|NonUniqueResultException) {
+        } catch (NonUniqueResultException) {
             return false;
         }
     }

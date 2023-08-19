@@ -1,0 +1,22 @@
+{#  footer #}
+<div class="card-footer d-print-none p-2" data-url="{{ url('homepage') }}">
+    <div class="d-flex-wrap-center card-footer-content" data-url="{{ url('homepage') }}">
+        <div class="ms-sm-auto form-control-sm form-check form-switch" title="{{ 'index.panel_table_user_help'|trans }}">
+            <input type="checkbox" class="form-check-input" id="restrict" data-value="{{ restrict|json_encode }}"{% if restrict %} checked="checked"{% endif %}>
+            <label class="form-check-label" for="restrict">{{ 'index.panel_table_user'|trans }}</label>
+        </div>
+        <div class="form-control-sm form-check form-switch">
+            <input type="checkbox" class="form-check-input" id="custom" data-value="{{ custom|json_encode }}"{% if custom %} checked="checked"{% endif %}>
+            <label class="form-check-label" for="custom">{{ 'table_view.custom'|trans }}</label>
+        </div>
+        {% set counter = user_service.panelCalculation %}
+        <div class="dropdown dropdown-counter" title="{{ 'index.panel_table_count'|trans }}" data-path="{{ path('homepage_calculation') }}" data-value="{{ counter }}">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ counter }}</button>
+            <div class="dropdown-menu">
+            {% for index in calculations_range %}
+                <button class="dropdown-item dropdown-item-counter{% if counter == index %} active{% endif %}" data-value="{{ index }}" >{{ 'counters.calculations'|trans({'count': index}) }}</button>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

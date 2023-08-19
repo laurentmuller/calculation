@@ -67,7 +67,7 @@ class UserServiceTest extends KernelTestCase
         self::assertTrue($service->isPanelCatalog());
         self::assertTrue($service->isPanelMonth());
         self::assertTrue($service->isPanelState());
-        self::assertSame(10, $service->getPanelCalculation());
+        self::assertSame(12, $service->getPanelCalculation());
     }
 
     private function getUserService(): UserService

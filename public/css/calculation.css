@@ -51,3 +51,20 @@ thead.group tr.table-primary th.bg-body-tertiary {
     height: 40px;
     vertical-align: middle !important;
 }
+
+/*
+ * card view
+ */
+.row-item.table-primary {
+    background-color: var(--bs-table-bg);
+}
+
+.row-item.table-primary .fw-bold a,
+.row-item.table-primary.text-body-secondary,
+.row-item.table-primary.text-body-secondary .fw-bold a {
+    color: var(--bs-table-color) !important;
+}
+
+.row-item.text-body-secondary .fw-bold a {
+    color: var(--bs-secondary-color) !important;
+}

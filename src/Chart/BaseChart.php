@@ -18,7 +18,6 @@ use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use Laminas\Json\Expr;
-use Ob\HighchartsBundle\Highcharts\ChartOption;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -67,9 +66,9 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
         parent::__construct();
         $this->setRenderTo()
             ->hideCredits()
+            ->initFontStyle()
             ->initLangOptions()
-            ->setBackground('var(--bs-body-bg)')
-            ->setFontFamily('var(--bs-body-font-family)');
+            ->setBackground('var(--bs-body-bg)');
     }
 
     /**
@@ -101,21 +100,21 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Sets the chart background color.
+     * Sets the chart font style.
      */
-    public function setBackground(string $color): static
+    public function initFontStyle(): static
     {
-        $this->chart['backgroundColor'] = $color;
+        $this->chart['style'] = $this->getFontStyle();
 
         return $this;
     }
 
     /**
-     * Sets the chart font family.
+     * Sets the chart background color.
      */
-    public function setFontFamily(string $font): static
+    public function setBackground(string $color): static
     {
-        $this->chart['style'] = ['fontFamily' => $font];
+        $this->chart['backgroundColor'] = $color;
 
         return $this;
     }
@@ -171,9 +170,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      */
     public function setXAxisCategories(mixed $categories): self
     {
-        if ($this->xAxis instanceof ChartOption) {
-            $this->xAxis['categories'] = $categories;
-        }
+        $this->xAxis['categories'] = $categories;
 
         return $this;
     }
@@ -185,9 +182,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      */
     public function setXAxisTitle(?string $title): self
     {
-        if ($this->xAxis instanceof ChartOption) {
-            $this->xAxis['title'] = ['text' => $title];
-        }
+        $this->xAxis['title'] = ['text' => $title];
 
         return $this;
     }
@@ -206,9 +201,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
      */
     public function setYAxisTitle(?string $title): self
     {
-        if ($this->yAxis instanceof ChartOption) {
-            $this->yAxis['title'] = ['text' => $title];
-        }
+        $this->yAxis['title'] = ['text' => $title];
 
         return $this;
     }
@@ -225,6 +218,11 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
         return new Expr($expression);
     }
 
+    protected function getBorderColor(): string
+    {
+        return 'var(--bs-border-color)';
+    }
+
     /**
      * Gets the font style.
      */
@@ -238,7 +236,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the minimum margin, in percent, for a calculation (default: 3.0 = 300%).
+     * Gets the minimum margin, in percent, for a calculation.
      */
     protected function getMinMargin(): float
     {
@@ -254,7 +252,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
             'borderRadius' => 4,
             'style' => $this->getFontStyle(12),
             'backgroundColor' => 'var(--bs-light)',
-            'borderColor' => 'var(--bs-border-color)',
+            'borderColor' => $this->getBorderColor(),
         ]);
 
         return $this;

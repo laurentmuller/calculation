@@ -174,7 +174,6 @@
          * @return {jQuery} The element for chaining.
          */
         scrollInViewport: function (delay = 400, bottomMargin = 50) {
-            // const $window = $(window);
             const $target = $('html, body');
             return this.each(function () {
                 const $this = $(this);

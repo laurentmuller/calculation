@@ -16,7 +16,7 @@
         <th class="text-currency">{{ 'fields.net'|trans }}</th>
         <th class="text-currency">{{ 'fields.margin_amount'|trans }}</th>
         <th class="text-percent">{{ 'fields.margin_percent'|trans }}</th>
-        <th class="text-currency">{{ 'fields.sum'|trans }}</th>
+        <th class="text-currency">{{ 'fields.total'|trans }}</th>
         <th class="text-percent">{{ 'fields.percent'|trans }}</th>
     </tr>
 </thead>
@@ -24,7 +24,7 @@
     {% for item in data -%}
     <tr title="{{ 'row_by_state'|trans({'%name%': item.code}) }}">
         <td class="text-nowrap">
-            <span class="me-2 text-border" style="border-left-width: 2rem !important; {{ properties.stateCss(item.color) }}"></span><a href="{{ path(list_path, {'stateId': item.id}) }}">{{- item.code }}</a>
+            <span class="text-border" style="border-left-width: 2rem !important; {{ properties.stateCss(item.color) }}"></span><a href="{{ path(list_path, {'stateId': item.id}) }}">{{- item.code }}</a>
         </td>
         <td class="text-currency">{{ item.count|integer }}</td>
         <td class="text-percent">{{ item.percentCalculation|percent(true, 1, 4) }}</td>

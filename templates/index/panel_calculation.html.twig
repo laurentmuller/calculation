@@ -1,0 +1,34 @@
+{% import 'index/_macros.html.twig' as macros %}
+{# parameters #}
+{%- set caller = path(app.current_route) -%}
+{%- set selection = app.request.get('id', 0) -%}
+{# actions #}
+{%- set object_type = ENTITY_CALCULATION -%}
+{%- set add_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_add' : null -%}
+{%- set clone_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
+{%- set edit_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
+{%- set state_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
+{%- set delete_page = is_granted(ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
+{%- set show_page = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
+{%- set single_page_pdf = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
+{%- set single_page_excel = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_excel_id' : null -%}
+{%- set default_page = user_service.actionEdit ? edit_page : show_page -%}
+{%- set row_link = not user_service.actionNone and (edit_page or show_page) -%}
+{%- set is_drop_down = add_page or edit_page or delete_page or show_page or single_page_pdf -%}
+{%- set is_calculations = calculations|length -%}
+{# content #}
+<div class="card mb-2">
+    {{ include('index/_calculation_header.html.twig') }}
+    <div class="card-body {% if is_calculations %}p-2{% else %}g-0 p-1{% endif %}">
+        {% if is_calculations %}
+            {% if custom %}
+                {{- include('index/_calculation_card.html.twig') }}
+            {% else %}
+                {{- include('index/_calculation_table.html.twig') }}
+            {% endif %}
+        {%- else -%}
+            {{ macros.empty() }}
+        {%- endif -%}
+    </div>
+    {{ include('index/_calculation_footer.html.twig') }}
+</div>

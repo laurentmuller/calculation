@@ -79,7 +79,7 @@ interface PropertyServiceInterface
     /**
      * The default number of displayed calculation in the home page (int).
      */
-    final public const DEFAULT_PANEL_CALCULATION = 10;
+    final public const DEFAULT_PANEL_CALCULATION = 12;
 
     /**
      * The default output customer address in PDF documents (boolean).

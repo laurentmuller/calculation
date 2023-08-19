@@ -171,7 +171,7 @@ class AjaxController extends AbstractController
         $view = $request->getPayload()->getEnum(TableInterface::PARAM_VIEW, TableView::class, TableView::TABLE);
         $response = $this->json(true);
         $path = $this->getCookiePath();
-        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view, '', $path);
+        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view, path: $path);
 
         return $response;
     }

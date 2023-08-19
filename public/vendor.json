@@ -51,7 +51,6 @@
             ]
         },
         {
-            "example": "https://cdn.jsdelivr.net/npm/highcharts@11.0.0/highcharts.js",
             "name": "highcharts",
             "version": "11.1.0",
             "files": [

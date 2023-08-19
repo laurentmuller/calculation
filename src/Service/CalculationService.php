@@ -123,7 +123,7 @@ final class CalculationService implements ServiceSubscriberInterface
         $overall_group['total'] = $net_total + $user_group['total'];
         $overall_group['margin'] = \floor($overall_group['total'] / $total_amount * 100.0) / 100.0;
         $overall_group['margin_amount'] = $overall_group['total'] - $total_amount;
-        $parameters['user_margin'] = (int) (100.0 * $user_margin);
+        $parameters['user_margin'] = (int) \floor(100.0 * $user_margin);
     }
 
     /**

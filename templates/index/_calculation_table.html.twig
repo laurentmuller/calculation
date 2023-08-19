@@ -1,0 +1,37 @@
+{% import 'macros/_properties.html.twig' as properties %}
+<div class="table-responsive">
+    <table id="calculations" class="table table-hover table-sm m-0">
+        <tbody{% if row_link %} data-link="row" class="rowlink" data-target="a.btn-default"{% endif %}>
+        {% for calculation in calculations %}
+            {%- set id = calculation.id -%}
+            {%- set is_editable = calculation.stateEditable -%}
+            {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
+            {% set class_name = 'row-item' %}
+            {% if id == selection %}
+                {% set class_name = class_name ~ ' table-primary' %}
+            {% elseif not is_editable %}
+                {% set class_name = class_name ~ ' text-body-secondary' %}
+            {% endif %}
+            <tr data-id="{{ id }}" class="{{ class_name }}">
+                <td class="text-id text-border user-select-none" style="{{ properties.stateCss(calculation.stateColor) }}">{{- calculation.id|identifier -}}</td>
+                <td class="text-date user-select-none">{{ calculation.date|locale_date }}</td>
+                <td class="text-state user-select-none">{{ calculation.stateCode }}</td>
+                <td class="text-customer text-cell user-select-none">{{ calculation.customer }}</td>
+                <td class="text-description text-cell user-select-none">{{ calculation.description }}</td>
+                {%- if calculation.overallTotal and calculation.overallMargin < min_margin -%}
+                    {%- set margin_title = 'calculation.list.margin_below'|trans({'%margin%': calculation.overallMargin|percent, '%minimum%': min_margin|percent}) -%}
+                    <td class="text-percent user-select-none text-danger has-tooltip" title="{{ margin_title }}">{{ calculation.overallMargin|percent }}</td>
+                {%- else -%}
+                    <td class="text-percent user-select-none">{{ calculation.overallMargin|percent }}</td>
+                {%- endif -%}
+                <td class="text-currency user-select-none">{{ calculation.overallTotal|amount }}</td>
+                {%- if is_drop_down -%}
+                    <td class="actions context-menu-skip rowlink-skip d-print-none">
+                        {{ include('index/_calculation_menu.html.twig') }}
+                    </td>
+                {% endif %}
+            </tr>
+        {%- endfor -%}
+        </tbody>
+    </table>
+</div>

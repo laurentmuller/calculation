@@ -19,8 +19,11 @@ use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
+use App\Enums\TableView;
+use App\Form\Parameters\AbstractParametersType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
+use App\Interfaces\TableInterface;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
 use App\Traits\MathTrait;
@@ -47,6 +50,11 @@ class IndexController extends AbstractController
     use ParameterTrait;
 
     /**
+     * The custom view query parameter.
+     */
+    final public const PARAM_CUSTOM = 'custom';
+
+    /**
      * The restriction query parameter.
      */
     final public const PARAM_RESTRICT = 'restrict';
@@ -61,7 +69,7 @@ class IndexController extends AbstractController
     /**
      * Hide the catalog panel.
      */
-    #[Route(path: '/hide/catalog', name: 'homepage_hide_catalog')]
+    #[Route(path: '/hide/catalog', name: 'homepage_hide_catalog', methods: Request::METHOD_POST)]
     public function hideCatalog(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_CATALOG, 'index.panel_catalog_hide_success');
@@ -70,7 +78,7 @@ class IndexController extends AbstractController
     /**
      * Hide the month panel.
      */
-    #[Route(path: '/hide/month', name: 'homepage_hide_month')]
+    #[Route(path: '/hide/month', name: 'homepage_hide_month', methods: Request::METHOD_POST)]
     public function hideMonth(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_MONTH, 'index.panel_month_hide_success');
@@ -79,7 +87,7 @@ class IndexController extends AbstractController
     /**
      * Hide the state panel.
      */
-    #[Route(path: '/hide/state', name: 'homepage_hide_state')]
+    #[Route(path: '/hide/state', name: 'homepage_hide_state', methods: Request::METHOD_POST)]
     public function hideState(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_STATE, 'index.panel_state_hide_success');
@@ -90,18 +98,29 @@ class IndexController extends AbstractController
      *
      * @throws \Exception
      */
-    #[Route(path: '/', name: 'homepage')]
-    public function invoke(#[MapQueryParameter] bool $restrict = false): Response
-    {
+    #[Route(path: '/', name: self::HOME_PAGE, methods: Request::METHOD_GET)]
+    public function invoke(
+        Request $request,
+        #[MapQueryParameter] bool $restrict = null,
+        #[MapQueryParameter] bool $custom = null
+    ): Response {
         $service = $this->getUserService();
+        $restrict ??= $this->getCookieBoolean($request, self::PARAM_RESTRICT);
+        if (null === $custom) {
+            $default = $service->getDisplayMode();
+            $view = $this->getCookieEnum($request, TableInterface::PARAM_VIEW, TableView::class, default: $default);
+        } else {
+            $view = $custom ? TableView::CUSTOM : TableView::TABLE;
+        }
+
         $user = $restrict ? $this->getUser() : null;
         $parameters = [
             'min_margin' => $this->getMinMargin(),
             'calculations' => $this->getCalculations($service->getPanelCalculation(), $user),
+            'calculations_range' => AbstractParametersType::getCalculationRange(),
+            self::PARAM_CUSTOM => TableView::CUSTOM === $view,
+            self::PARAM_RESTRICT => $restrict,
         ];
-        if ($restrict) {
-            $parameters[self::PARAM_RESTRICT] = 1;
-        }
         if ($service->isPanelState()) {
             $parameters['states'] = $this->getStates();
         }
@@ -116,9 +135,11 @@ class IndexController extends AbstractController
             $parameters['state_count'] = $this->count(CalculationState::class);
             $parameters['margin_count'] = $this->count(GlobalMargin::class);
         }
+
         $path = $this->getCookiePath();
         $response = $this->render('index/index.html.twig', $parameters);
-        $this->setCookie($response, self::PARAM_RESTRICT, $restrict, '', $path);
+        $this->updateCookie($response, self::PARAM_RESTRICT, $restrict, path: $path);
+        $this->updateCookie($response, TableInterface::PARAM_VIEW, $view, path: $path);
 
         return $response;
     }
@@ -126,7 +147,7 @@ class IndexController extends AbstractController
     /**
      * Update the number of displayed calculations.
      */
-    #[Route(path: '/update/count', name: 'homepage_calculation')]
+    #[Route(path: '/update/count', name: 'homepage_calculation', methods: Request::METHOD_POST)]
     public function updateCalculation(Request $request): JsonResponse
     {
         $this->checkAjaxRequest($request);

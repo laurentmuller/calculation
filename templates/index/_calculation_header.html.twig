@@ -1,0 +1,11 @@
+{% from 'macros/_icons.html.twig' import icon %}
+<div class="card-header">
+    <div class="d-flex-wrap-center">
+        <h1 class="card-title flex-fill">{{ icon(ICON_CALCULATION, 'index.panel_table_title') }}</h1>
+        {%- if add_page -%}
+            {%- set params = route_params(app.request)|merge({'caller': caller}) -%}
+            {%- set path = path(add_page, params) -%}
+            <a href="{{ path }}" class="d-print-none">{{ 'calculation.add.title'|trans }}</a>
+        {%- endif -%}
+    </div>
+</div>

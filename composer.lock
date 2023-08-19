@@ -484,16 +484,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.6.5",
+            "version": "3.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "96d5a70fd91efdcec81fc46316efc5bf3da17ddf"
+                "reference": "63646ffd71d1676d2f747f871be31b7e921c7864"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/96d5a70fd91efdcec81fc46316efc5bf3da17ddf",
-                "reference": "96d5a70fd91efdcec81fc46316efc5bf3da17ddf",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/63646ffd71d1676d2f747f871be31b7e921c7864",
+                "reference": "63646ffd71d1676d2f747f871be31b7e921c7864",
                 "shasum": ""
             },
             "require": {
@@ -509,10 +509,11 @@
                 "doctrine/coding-standard": "12.0.0",
                 "fig/log-test": "^1",
                 "jetbrains/phpstorm-stubs": "2023.1",
-                "phpstan/phpstan": "1.10.21",
+                "phpstan/phpstan": "1.10.29",
                 "phpstan/phpstan-strict-rules": "^1.5",
                 "phpunit/phpunit": "9.6.9",
                 "psalm/plugin-phpunit": "0.18.4",
+                "slevomat/coding-standard": "8.13.1",
                 "squizlabs/php_codesniffer": "3.7.2",
                 "symfony/cache": "^5.4|^6.0",
                 "symfony/console": "^4.4|^5.4|^6.0",
@@ -576,7 +577,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.6.5"
+                "source": "https://github.com/doctrine/dbal/tree/3.6.6"
             },
             "funding": [
                 {
@@ -592,7 +593,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-17T09:15:50+00:00"
+            "time": "2023-08-17T05:38:17+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -2105,16 +2106,16 @@
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.9.6",
+            "version": "2.9.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/ObHighchartsBundle.git",
-                "reference": "3d091fcd87f397c48de4c9e11b922fde5bfb17fc"
+                "reference": "b8376fb4df57d59af4092b8324cb29268fab9008"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/ObHighchartsBundle/zipball/3d091fcd87f397c48de4c9e11b922fde5bfb17fc",
-                "reference": "3d091fcd87f397c48de4c9e11b922fde5bfb17fc",
+                "url": "https://api.github.com/repos/laurentmuller/ObHighchartsBundle/zipball/b8376fb4df57d59af4092b8324cb29268fab9008",
+                "reference": "b8376fb4df57d59af4092b8324cb29268fab9008",
                 "shasum": ""
             },
             "require": {
@@ -2178,9 +2179,9 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/laurentmuller/ObHighchartsBundle/tree/2.9.6"
+                "source": "https://github.com/laurentmuller/ObHighchartsBundle/tree/2.9.7"
             },
-            "time": "2023-08-16T13:20:14+00:00"
+            "time": "2023-08-16T18:11:51+00:00"
         },
         {
             "name": "lorenzo/pinky",

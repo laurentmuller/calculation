@@ -57,6 +57,16 @@ abstract class AbstractParametersType extends AbstractType
         return '';
     }
 
+    /**
+     * Gets the displayed calculation range.
+     *
+     * @return int[]
+     */
+    public static function getCalculationRange(): array
+    {
+        return \range(4, 20, 4);
+    }
+
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -213,7 +223,7 @@ abstract class AbstractParametersType extends AbstractType
      */
     private function getCalculationChoices(): array
     {
-        $values = [5, 10, 15, 20, 25];
+        $values = self::getCalculationRange();
 
         return \array_combine($values, $values);
     }

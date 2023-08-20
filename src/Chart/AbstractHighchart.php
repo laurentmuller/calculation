@@ -17,24 +17,24 @@ use App\Traits\MathTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
-use Laminas\Json\Expr;
+use Ob\HighchartsBundle\Highcharts\ChartOption;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
- * Extends the High chart with method shortcuts.
+ * Extends the Highchart with method shortcuts.
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class BaseChart extends Highchart implements ServiceSubscriberInterface
+class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
 {
     use MathTrait;
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
 
     /**
-     * The identifier (#id) of the div where to render the chart.
+     * The default identifier (#id) of the div where to render the chart.
      */
     final public const CONTAINER = 'chartContainer';
 
@@ -158,7 +158,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
         return $this;
     }
 
-    public function setXAxis(array $xAxis): static
+    public function setXAxis(ChartOption|array $xAxis): static
     {
         $this->xAxis = $xAxis;
 
@@ -187,7 +187,7 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
         return $this;
     }
 
-    public function setYAxis(array $yAxis): static
+    public function setYAxis(ChartOption|array $yAxis): static
     {
         $this->yAxis = $yAxis;
 
@@ -204,18 +204,6 @@ class BaseChart extends Highchart implements ServiceSubscriberInterface
         $this->yAxis['title'] = ['text' => $title];
 
         return $this;
-    }
-
-    /**
-     * Create an expression.
-     *
-     * @param string $expression the expression to represent
-     *
-     * @return Expr the expression
-     */
-    protected function createExpression(string $expression): Expr
-    {
-        return new Expr($expression);
     }
 
     protected function getBorderColor(): string

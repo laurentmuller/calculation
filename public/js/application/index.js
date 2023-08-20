@@ -45,7 +45,7 @@ function updateView() {
 
     const params = {
         custom: $custom.isChecked(),
-        restrict: +$restrict.isChecked(),
+        restrict: $restrict.isChecked(),
     };
     const id = $('.row-item.table-primary').data('id');
     if (id) {

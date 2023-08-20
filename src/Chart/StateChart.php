@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class StateChart extends BaseChart
+class StateChart extends AbstractHighchart
 {
     /**
      * Constructor.
@@ -95,11 +95,11 @@ class StateChart extends BaseChart
 
     private function getClickExpression(): Expr
     {
-        $function = <<<FUNCTION
+        $function = <<<JAVA_SCRIPT
             function() {
                 location.href = this.url;
             }
-            FUNCTION;
+            JAVA_SCRIPT;
 
         return $this->createExpression($function);
     }

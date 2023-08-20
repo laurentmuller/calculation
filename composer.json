@@ -45,7 +45,7 @@
         "fakerphp/faker": "^1.14",
         "google/recaptcha": "^1.2",
         "imagine/imagine": "^1.2",
-        "laurentmuller/highcharts-bundle": "^2.9",
+        "laurentmuller/highcharts-bundle": "dev-master",
         "phpoffice/phpspreadsheet": "^1.0",
         "phpoffice/phpword": "^1.0",
         "robquistnl/simplehtmltotext": "^1.1",

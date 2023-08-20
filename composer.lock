@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ddf0c8f4e9575d3d731c38adac8e9a6b",
+    "content-hash": "7861e2e1d741de7a83ec62a13d7acf3f",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1394,7 +1394,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Dukecity/DoctrineExtensions/issues",
-                "source": "https://github.com/Dukecity/DoctrineExtensions/tree/master"
+                "source": "https://github.com/Dukecity/DoctrineExtensions/tree/v2.0.1"
             },
             "time": "2023-06-22T13:29:15+00:00"
         },
@@ -2106,16 +2106,16 @@
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.9.7",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/ObHighchartsBundle.git",
-                "reference": "b8376fb4df57d59af4092b8324cb29268fab9008"
+                "reference": "9125ceeb830b529161b537738103163d30ac5afa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/ObHighchartsBundle/zipball/b8376fb4df57d59af4092b8324cb29268fab9008",
-                "reference": "b8376fb4df57d59af4092b8324cb29268fab9008",
+                "url": "https://api.github.com/repos/laurentmuller/ObHighchartsBundle/zipball/9125ceeb830b529161b537738103163d30ac5afa",
+                "reference": "9125ceeb830b529161b537738103163d30ac5afa",
                 "shasum": ""
             },
             "require": {
@@ -2141,6 +2141,7 @@
                 "symfony/phpunit-bridge": "^6.0",
                 "vimeo/psalm": "^5.9"
             },
+            "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -2154,7 +2155,7 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Ob\\HighchartsBundle\\Tests\\": "Tests/"
+                    "Ob\\HighchartsBundle\\Tests\\": "tests/"
                 }
             },
             "license": [
@@ -2179,9 +2180,9 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/laurentmuller/ObHighchartsBundle/tree/2.9.7"
+                "source": "https://github.com/laurentmuller/ObHighchartsBundle/tree/master"
             },
-            "time": "2023-08-16T18:11:51+00:00"
+            "time": "2023-08-20T06:10:42+00:00"
         },
         {
             "name": "lorenzo/pinky",
@@ -10996,7 +10997,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "dukecity/doctrineextensions": 20
+        "dukecity/doctrineextensions": 20,
+        "laurentmuller/highcharts-bundle": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

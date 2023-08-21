@@ -21,6 +21,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * Chart to display calculations by month.
  *
  * @psalm-suppress PropertyNotSetInConstructor
+ *
+ * @psalm-import-type CalculationByMonthType from CalculationRepository
  */
 class MonthChart extends AbstractHighchart
 {
@@ -168,14 +170,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param array<array{
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      year: int,
-     *      month: int,
-     *      margin: float,
-     *      date: \DateTimeInterface}> $data
+     * @param CalculationByMonthType[] $data
      *
      * @return int[]
      */
@@ -185,14 +180,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param array<array{
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      year: int,
-     *      month: int,
-     *      margin: float,
-     *      date: \DateTimeInterface}> $data
+     * @param CalculationByMonthType[] $data
      *
      * @return int[]
      */
@@ -261,14 +249,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param array<array{
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      year: int,
-     *      month: int,
-     *      margin: float,
-     *      date: \DateTimeInterface}> $data
+     * @param CalculationByMonthType[] $data
      *
      * @return array<array-key, array{float, int}>
      */
@@ -278,14 +259,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param array<array{
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      year: int,
-     *      month: int,
-     *      margin: float,
-     *      date: \DateTimeInterface}> $data
+     * @param CalculationByMonthType[] $data
      *
      * @return float[]
      */
@@ -295,14 +269,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param array<array{
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      year: int,
-     *      month: int,
-     *      margin: float,
-     *      date: \DateTimeInterface}> $data
+     * @param CalculationByMonthType[] $data
      *
      * @return float[]
      */
@@ -312,14 +279,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param array<array{
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      year: int,
-     *      month: int,
-     *      margin: float,
-     *      date: \DateTimeInterface}> $data
+     * @param CalculationByMonthType[] $data
      *
      * @return float[]
      */
@@ -329,14 +289,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param array<array{
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      year: int,
-     *      month: int,
-     *      margin: float,
-     *      date: \DateTimeInterface}> $data
+     * @param CalculationByMonthType[] $data
      *
      * @return array<array-key, array{float, int}>
      */
@@ -346,16 +299,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param array<array{
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      year: int,
-     *      month: int,
-     *      margin: float,
-     *      date: \DateTimeInterface}> $data
-     *
-     * @return array[]
+     * @param CalculationByMonthType[] $data
      */
     private function getSeries(array $data): array
     {
@@ -374,14 +318,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param array<array{
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      year: int,
-     *      month: int,
-     *      margin: float,
-     *      date: \DateTimeInterface}> $data
+     * @param CalculationByMonthType[] $data
      *
      * @return float[]
      */
@@ -439,9 +376,7 @@ class MonthChart extends AbstractHighchart
             'borderRadius' => ['radius' => 0],
             'borderColor' => $this->getBorderColor(),
             'point' => [
-                'events' => [
-                   'click' => $this->getClickExpression(),
-                ],
+                'events' => ['click' => $this->getClickExpression()],
             ],
         ];
 

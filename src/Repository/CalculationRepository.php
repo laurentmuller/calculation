@@ -24,6 +24,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Repository for calculation entity.
  *
  * @template-extends AbstractRepository<Calculation>
+ *
+ * @psalm-type CalculationByMonthType = array{
+ *        count: int,
+ *        items: float,
+ *        total: float,
+ *        year: int,
+ *        month: int,
+ *        margin: float,
+ *        date: \DateTimeInterface}
  */
 class CalculationRepository extends AbstractRepository
 {
@@ -200,14 +209,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @return array an array with the year, the month, the number and the sum of calculations
      *
-     * @psalm-return array<array{
-     *      count: int,
-     *      items: float,
-     *      total: float,
-     *      year: int,
-     *      month: int,
-     *      margin: float,
-     *      date: \DateTimeInterface}>
+     * @psalm-return CalculationByMonthType[]
      *
      * @throws \Exception
      */

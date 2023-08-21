@@ -149,7 +149,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     /**
      * Sets the chart type.
      *
-     * @psalm-param 'column'|'line'|'pie'|'spline' $type
+     * @psalm-param self::TYPE_* $type
      */
     public function setType(string $type): static
     {

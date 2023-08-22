@@ -171,6 +171,27 @@ trait PropertyServiceTrait
     }
 
     /**
+     * Gets an enumeration value.
+     *
+     * @template T of \BackedEnum
+     *
+     * @psalm-param T $default
+     *
+     * @psalm-return T
+     */
+    protected function getPropertyEnum(string $propertyName, \BackedEnum $default): \BackedEnum
+    {
+        $defaultValue = $default->value;
+        if (\is_int($defaultValue)) {
+            $value = $this->getPropertyInteger($propertyName, $defaultValue);
+        } else {
+            $value = $this->getPropertyString($propertyName, $defaultValue);
+        }
+
+        return $default::tryFrom($value) ?? $default;
+    }
+
+    /**
      * Gets a float property.
      *
      * @param string $name    the property name to search for

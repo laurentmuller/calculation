@@ -15,6 +15,7 @@ namespace App\Repository;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Repository for user's property entity.
@@ -33,7 +34,7 @@ class UserPropertyRepository extends AbstractRepository
      *
      * @return UserProperty[] the user's properties
      */
-    public function findByUser(User $user): array
+    public function findByUser(UserInterface $user): array
     {
         return $this->findBy(['user' => $user]);
     }
@@ -41,7 +42,7 @@ class UserPropertyRepository extends AbstractRepository
     /**
      * Gets a property for the given user and name.
      */
-    public function findOneByUserAndName(User $user, string $name): ?UserProperty
+    public function findOneByUserAndName(UserInterface $user, string $name): ?UserProperty
     {
         return $this->findOneBy(['user' => $user, 'name' => $name]);
     }

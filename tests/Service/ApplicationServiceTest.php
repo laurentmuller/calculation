@@ -84,14 +84,12 @@ class ApplicationServiceTest extends KernelTestCase
     {
         $service = $this->getApplicationService();
         self::assertNull($service->getDefaultCategory());
-        self::assertSame(0, $service->getDefaultCategoryId());
     }
 
     public function testDefaultProduct(): void
     {
         $service = $this->getApplicationService();
         self::assertNull($service->getDefaultProduct());
-        self::assertSame(0, $service->getDefaultProductId());
         self::assertSame(0.0, $service->getDefaultQuantity());
         self::assertTrue($service->isDefaultEdit());
     }
@@ -100,7 +98,6 @@ class ApplicationServiceTest extends KernelTestCase
     {
         $service = $this->getApplicationService();
         self::assertNull($service->getDefaultState());
-        self::assertSame(0, $service->getDefaultStateId());
     }
 
     public function testDisplayMode(): void

@@ -61,18 +61,12 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     public function getDisplayMode(): TableView
     {
-        $default = $this->service->getDisplayMode();
-        $value = $this->getPropertyString(self::P_DISPLAY_MODE, $default->value);
-
-        return TableView::tryFrom($value) ?? $default;
+        return $this->getPropertyEnum(self::P_DISPLAY_MODE, $this->service->getDisplayMode());
     }
 
     public function getEditAction(): EntityAction
     {
-        $default = $this->service->getEditAction();
-        $value = $this->getPropertyString(self::P_EDIT_ACTION, $default->value);
-
-        return EntityAction::tryFrom($value) ?? $default;
+        return $this->getPropertyEnum(self::P_EDIT_ACTION, $this->service->getEditAction());
     }
 
     /**
@@ -93,10 +87,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     public function getMessagePosition(): MessagePosition
     {
-        $default = $this->service->getMessagePosition();
-        $value = $this->getPropertyString(self::P_MESSAGE_POSITION, $default->value);
-
-        return MessagePosition::tryFrom($value) ?? $default;
+        return $this->getPropertyEnum(self::P_MESSAGE_POSITION, $this->service->getMessagePosition());
     }
 
     public function getMessageProgress(): int

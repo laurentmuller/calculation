@@ -153,23 +153,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getDefaultCategory(): ?Category
     {
-        $id = $this->getDefaultCategoryId();
-        if (0 !== $id) {
-            $category = $this->manager->getRepository(Category::class)->find($id);
-            if ($category instanceof Category) {
-                return $category;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the default category identifier.
-     */
-    public function getDefaultCategoryId(): int
-    {
-        return $this->getPropertyInteger(self::P_DEFAULT_CATEGORY);
+        return $this->findEntity(self::P_DEFAULT_CATEGORY, Category::class);
     }
 
     /**
@@ -177,23 +161,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getDefaultProduct(): ?Product
     {
-        $id = $this->getDefaultProductId();
-        if (0 !== $id) {
-            $product = $this->manager->getRepository(Product::class)->find($id);
-            if ($product instanceof Product) {
-                return $product;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the default product identifier.
-     */
-    public function getDefaultProductId(): int
-    {
-        return $this->getPropertyInteger(self::P_DEFAULT_PRODUCT);
+        return $this->findEntity(self::P_DEFAULT_PRODUCT, Product::class);
     }
 
     /**
@@ -209,23 +177,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getDefaultState(): ?CalculationState
     {
-        $id = $this->getDefaultStateId();
-        if (0 !== $id) {
-            $state = $this->manager->getRepository(CalculationState::class)->find($id);
-            if ($state instanceof CalculationState) {
-                return $state;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the default calculation state identifier.
-     */
-    public function getDefaultStateId(): int
-    {
-        return $this->getPropertyInteger(self::P_DEFAULT_STATE);
+        return $this->findEntity(self::P_DEFAULT_STATE, CalculationState::class);
     }
 
     /**
@@ -275,18 +227,12 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     public function getDisplayMode(): TableView
     {
-        $default = self::DEFAULT_DISPLAY_MODE;
-        $value = $this->getPropertyString(self::P_DISPLAY_MODE, $default->value);
-
-        return TableView::tryFrom($value) ?? $default;
+        return $this->getPropertyEnum(self::P_DISPLAY_MODE, self::DEFAULT_DISPLAY_MODE);
     }
 
     public function getEditAction(): EntityAction
     {
-        $default = self::DEFAULT_ACTION;
-        $value = $this->getPropertyString(self::P_EDIT_ACTION, $default->value);
-
-        return EntityAction::tryFrom($value) ?? $default;
+        return $this->getPropertyEnum(self::P_EDIT_ACTION, self::DEFAULT_ACTION);
     }
 
     /**
@@ -323,10 +269,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     public function getMessagePosition(): MessagePosition
     {
-        $default = self::DEFAULT_MESSAGE_POSITION;
-        $value = $this->getPropertyString(self::P_MESSAGE_POSITION, $default->value);
-
-        return MessagePosition::tryFrom($value) ?? $default;
+        return $this->getPropertyEnum(self::P_MESSAGE_POSITION, self::DEFAULT_MESSAGE_POSITION);
     }
 
     public function getMessageProgress(): int
@@ -409,10 +352,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getStrengthLevel(): StrengthLevel
     {
-        $default = self::DEFAULT_STRENGTH_LEVEL;
-        $value = $this->getPropertyInteger(self::P_STRENGTH_LEVEL, $default->value);
-
-        return StrengthLevel::tryFrom($value) ?? $default;
+        return $this->getPropertyEnum(self::P_STRENGTH_LEVEL, self::DEFAULT_STRENGTH_LEVEL);
     }
 
     /**
@@ -611,6 +551,23 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     {
         $properties = $this->manager->getRepository(Property::class)->findAll();
         $this->saveProperties($properties);
+    }
+
+    /**
+     * @template T of AbstractEntity
+     *
+     * @psalm-param class-string<T> $entityName
+     *
+     * @psalm-return T|null
+     */
+    private function findEntity(string $propertyName, string $entityName): ?AbstractEntity
+    {
+        $id = $this->getPropertyInteger($propertyName);
+        if (0 === $id) {
+            return null;
+        }
+
+        return $this->manager->getRepository($entityName)->find($id);
     }
 
     /**

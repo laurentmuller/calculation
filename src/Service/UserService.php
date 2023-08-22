@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
@@ -24,6 +23,7 @@ use App\Traits\PropertyServiceTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
@@ -165,13 +165,17 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return $this->getPropertyBoolean(self::P_STATUS_BAR, $this->service->isStatusBar());
     }
 
+    /**
+     * @param array<string, mixed>      $properties
+     * @param array<string, mixed>|null $defaultValues
+     */
     public function setProperties(array $properties, array $defaultValues = null): static
     {
-        if ([] !== $properties && ($user = $this->getUser()) instanceof User) {
-            $defaultValues ??= $this->service->getProperties();
+        if ([] !== $properties && ($user = $this->getUser()) instanceof UserInterface) {
+            $values = $defaultValues ?? $this->service->getProperties();
             /** @psalm-var mixed $value */
             foreach ($properties as $key => $value) {
-                $this->saveProperty($key, $value, $defaultValues, $user);
+                $this->saveProperty($key, $value, $values, $user);
             }
             $this->repository->flush();
             $this->updateAdapter();
@@ -182,27 +186,26 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     protected function updateAdapter(): void
     {
-        if (($user = $this->getUser()) instanceof User) {
+        if (($user = $this->getUser()) instanceof UserInterface) {
             $properties = $this->repository->findByUser($user);
             $this->saveProperties($properties);
         }
     }
 
-    private function getUser(): ?User
+    private function getUser(): ?UserInterface
     {
-        $user = $this->security->getUser();
-
-        return $user instanceof User ? $user : null;
+        return $this->security->getUser();
     }
 
     /**
      * Update a property without saving changes to database.
+     *
+     * @param array<string, mixed> $defaultValues
      */
-    private function saveProperty(string $name, mixed $value, array $defaultValues, User $user): void
+    private function saveProperty(string $name, mixed $value, array $defaultValues, UserInterface $user): void
     {
         $property = $this->repository->findOneByUserAndName($user, $name);
         if ($this->isDefaultValue($defaultValues, $name, $value)) {
-            // remove if present
             if ($property instanceof UserProperty) {
                 $this->repository->remove($property, false);
             }

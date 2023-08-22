@@ -506,15 +506,19 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         return $this->setProperty(PropertyServiceInterface::P_DATE_PRODUCT, $date);
     }
 
+    /**
+     * @param array<string, mixed>      $properties
+     * @param array<string, mixed>|null $defaultValues
+     */
     public function setProperties(array $properties, array $defaultValues = null): static
     {
         if ([] !== $properties) {
             /** @psalm-var PropertyRepository $repository */
             $repository = $this->manager->getRepository(Property::class);
-            $defaultValues ??= $this->getDefaultValues();
+            $values = $defaultValues ?? $this->getDefaultValues();
             /** @psalm-var mixed $value */
             foreach ($properties as $key => $value) {
-                $this->saveProperty($key, $value, $defaultValues, $repository);
+                $this->saveProperty($key, $value, $values, $repository);
             }
             $this->manager->flush();
             $this->updateAdapter();
@@ -572,6 +576,8 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Update a property without saving changes to database.
+     *
+     * @param array<string, mixed> $defaultValues
      */
     private function saveProperty(string $name, mixed $value, array $defaultValues, PropertyRepository $repository): void
     {

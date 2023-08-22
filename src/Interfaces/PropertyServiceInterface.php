@@ -428,6 +428,9 @@ interface PropertyServiceInterface
 
     /**
      * Set the properties.
+     *
+     * @param array<string, mixed>      $properties
+     * @param array<string, mixed>|null $defaultValues
      */
     public function setProperties(array $properties, array $defaultValues = null): static;
 }

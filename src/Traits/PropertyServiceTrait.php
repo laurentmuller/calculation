@@ -232,9 +232,9 @@ trait PropertyServiceTrait
     /**
      * Returns if the given value is the default value.
      *
-     * @param array  $defaultProperties the default properties to get default value from
-     * @param string $name              the property name
-     * @param mixed  $value             the value to compare to
+     * @param array<string, mixed> $defaultProperties the default properties to get default value from
+     * @param string               $name              the property name
+     * @param mixed                $value             the value to compare to
      *
      * @return bool true if default
      */

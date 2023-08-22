@@ -248,9 +248,6 @@ function selectRow($source, hideMenus) {
         }).on('click', '.row-item [data-bs-toggle="dropdown"]', function () {
             selectRow($(this), false);
         }).initContextMenu('.row-item td:not(.context-menu-skip),.row-item div:not(.context-menu-skip)', function () {
-            // table: .row-item td:not(.context-menu-skip)
-            // card:  .row-item div:not(.context-menu-skip)
-            // example:  selector: 'span.context-menu'
             selectRow($(this), true);
         });
 

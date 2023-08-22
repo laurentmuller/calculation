@@ -6,7 +6,8 @@ Programme de calcul basé sur l'environnement de développement Symfony 6.x.
 
 ## Licence
 
-Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une [politique de confidentialité](POLICY.md).
+Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
+[politique de confidentialité](POLICY.md).
 
 ## Versions
 

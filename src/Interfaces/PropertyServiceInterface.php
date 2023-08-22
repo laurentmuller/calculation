@@ -200,7 +200,6 @@ interface PropertyServiceInterface
      * <ul>
      * <li>'<code>table</code>': Show values within a table (default).</li>
      * <li>'<code>custom</code>': Show values as cards.</li>
-     * <li>'<code>card</code>': Show detailed values.</li>
      * </ul>
      * </p>.
      */

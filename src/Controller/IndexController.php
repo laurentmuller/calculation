@@ -111,6 +111,7 @@ class IndexController extends AbstractController
             $view = $this->getCookieEnum($request, TableInterface::PARAM_VIEW, TableView::class, default: $default);
         } else {
             $view = $custom ? TableView::CUSTOM : TableView::TABLE;
+            $service->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $view);
         }
 
         $user = $restrict ? $this->getUser() : null;

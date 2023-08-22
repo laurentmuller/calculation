@@ -14,4 +14,6 @@ jobs:
       - uses: DavidAnson/markdownlint-cli2-action@v11
         with:
           globs: '*.md'
+
+      - name: Run markdown lint
         run: markdownlint-cli2

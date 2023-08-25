@@ -1,0 +1,117 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Tests\Validator;
+
+use App\Service\CaptchaImageService;
+use App\Validator\Captcha;
+use App\Validator\CaptchaValidator;
+use PHPUnit\Framework\MockObject\Exception;
+use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
+
+/**
+ * @extends ConstraintValidatorTestCase<CaptchaValidator>
+ */
+#[\PHPUnit\Framework\Attributes\CoversClass(CaptchaValidator::class)]
+class CaptchaValidatorTest extends ConstraintValidatorTestCase
+{
+    protected bool $validateTimeout = true;
+    protected bool $validateToken = true;
+
+    /**
+     * @throws Exception
+     */
+    public function testEmptyIsValid(): void
+    {
+        $service = $this->createService();
+        $contraint = $this->createConstraint();
+        $this->validator = new CaptchaValidator($service);
+        $this->validator->initialize($this->context);
+        $this->validator->validate('', $contraint);
+        self::assertNoViolation();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testNullIsValid(): void
+    {
+        $service = $this->createService();
+        $contraint = $this->createConstraint();
+        $this->validator = new CaptchaValidator($service);
+        $this->validator->initialize($this->context);
+        $this->validator->validate(null, $contraint);
+
+        self::assertNoViolation();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testTimeoutInvalid(): void
+    {
+        $service = $this->createService(false);
+        $contraint = $this->createConstraint();
+        $this->validator = new CaptchaValidator($service);
+        $this->validator->initialize($this->context);
+        $this->validator->validate('dummy', $contraint);
+
+        $this->buildViolation('captcha.timeout')
+            ->setCode(Captcha::IS_TIMEOUT_ERROR)
+            ->assertRaised();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testTokenInvalid(): void
+    {
+        $service = $this->createService(true, false);
+        $contraint = $this->createConstraint();
+        $this->validator = new CaptchaValidator($service);
+        $this->validator->initialize($this->context);
+        $this->validator->validate('dummy', $contraint);
+
+        $this->buildViolation('captcha.invalid')
+            ->setCode(Captcha::IS_INVALID_ERROR)
+            ->assertRaised();
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function createValidator(): CaptchaValidator
+    {
+        $service = $this->createService();
+
+        return new CaptchaValidator($service);
+    }
+
+    private function createConstraint(): Captcha
+    {
+        return new Captcha();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createService(bool $validateTimeout = true, bool $validateToken = true): CaptchaImageService
+    {
+        $service = $this->createMock(CaptchaImageService::class);
+        $service->method('validateTimeout')
+            ->willReturn($validateTimeout);
+        $service->method('validateToken')
+            ->willReturn($validateToken);
+
+        return $service;
+    }
+}

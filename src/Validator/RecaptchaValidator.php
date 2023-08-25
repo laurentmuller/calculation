@@ -13,8 +13,6 @@ declare(strict_types=1);
 namespace App\Validator;
 
 use ReCaptcha\ReCaptcha as ReCaptchaService;
-use ReCaptcha\Response;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -26,13 +24,9 @@ class RecaptchaValidator extends AbstractConstraintValidator
 {
     /**
      * Constructor.
-     *
-     * @param string $secret the reCaptcha secret key
      */
-    public function __construct(
-        #[Autowire('%google_recaptcha_secret_key%')]
-        private readonly string $secret
-    ) {
+    public function __construct(private readonly ReCaptchaService $service)
+    {
         parent::__construct(Recaptcha::class);
     }
 
@@ -41,7 +35,7 @@ class RecaptchaValidator extends AbstractConstraintValidator
      */
     protected function doValidate(string $value, Constraint $constraint): void
     {
-        $response = $this->verify($value);
+        $response = $this->service->verify($value);
         if ($response->isSuccess()) {
             return;
         }
@@ -53,12 +47,5 @@ class RecaptchaValidator extends AbstractConstraintValidator
                 ->setCode($code)
                 ->addViolation();
         }
-    }
-
-    private function verify(string $value): Response
-    {
-        $service = new ReCaptchaService($this->secret);
-
-        return $service->verify($value);
     }
 }

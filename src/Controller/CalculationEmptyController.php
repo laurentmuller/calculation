@@ -78,7 +78,7 @@ class CalculationEmptyController extends AbstractController
     #[Route(path: '', name: 'empty_table')]
     public function table(Request $request, CalculationEmptyTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_empty.html.twig', $logger);
+        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_empty.html.twig', $logger, $this->getUserService());
     }
 
     /**

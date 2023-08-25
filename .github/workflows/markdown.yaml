@@ -1,4 +1,4 @@
-name: Markdown Lint
+name: Markdown
 
 on: [push, pull_request]
 
@@ -10,7 +10,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Load Markdown Lint
+      - name: Run Markdown Lint
         uses: DavidAnson/markdownlint-cli2-action@v11
         with:
           globs: '*.md'

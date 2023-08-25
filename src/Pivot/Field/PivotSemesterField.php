@@ -77,12 +77,12 @@ class PivotSemesterField extends PivotDateField
     {
         if (\is_callable($this->formatter)) {
             return \call_user_func($this->formatter, $semester);
-        } else {
-            return match ($semester) {
-                1 => '1st semester',
-                2 => '2nd semester',
-                default => (string) $semester,
-            };
         }
+
+        return match ($semester) {
+            1 => '1st semester',
+            2 => '2nd semester',
+            default => (string) $semester,
+        };
     }
 }

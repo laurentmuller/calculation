@@ -15,12 +15,14 @@ namespace App\Controller;
 use App\Interfaces\RoleInterface;
 use App\Traits\CookieTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to handle the license agreement.
  */
+#[AsController]
 #[Route(path: '/policy')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class PolicyController extends AbstractController
@@ -37,7 +39,7 @@ class PolicyController extends AbstractController
     {
         $path = $this->getCookiePath();
         $response = $this->redirectToHomePage('cookie_banner.success');
-        $this->updateCookie($response, self::POLICY_ACCEPTED, true, '', $path);
+        $this->updateCookie($response, self::POLICY_ACCEPTED, true, path: $path);
 
         return $response;
     }

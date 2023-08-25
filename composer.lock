@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7861e2e1d741de7a83ec62a13d7acf3f",
+    "content-hash": "24f809dd7a314cff227bb963a9189818",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1341,7 +1341,7 @@
         },
         {
             "name": "dukecity/doctrineextensions",
-            "version": "dev-master",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Dukecity/DoctrineExtensions.git",
@@ -1365,7 +1365,6 @@
                 "symfony/cache": "^5.4 || ^6.2",
                 "symfony/yaml": "^5.4 || ^6.2"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -1551,21 +1550,21 @@
         },
         {
             "name": "endroid/qr-code",
-            "version": "4.8.2",
+            "version": "4.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/qr-code.git",
-                "reference": "2436c2333a3931c95e2b96eb82f16f53143d6bba"
+                "reference": "e1b5482a225ee0bd842a5b2e5043a4540b2846ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/qr-code/zipball/2436c2333a3931c95e2b96eb82f16f53143d6bba",
-                "reference": "2436c2333a3931c95e2b96eb82f16f53143d6bba",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/e1b5482a225ee0bd842a5b2e5043a4540b2846ad",
+                "reference": "e1b5482a225ee0bd842a5b2e5043a4540b2846ad",
                 "shasum": ""
             },
             "require": {
                 "bacon/bacon-qr-code": "^2.0.5",
-                "php": "^8.0"
+                "php": "^8.1"
             },
             "conflict": {
                 "khanamiryan/qrcode-detector-decoder": "^1.0.6"
@@ -1614,7 +1613,7 @@
             ],
             "support": {
                 "issues": "https://github.com/endroid/qr-code/issues",
-                "source": "https://github.com/endroid/qr-code/tree/4.8.2"
+                "source": "https://github.com/endroid/qr-code/tree/4.8.3"
             },
             "funding": [
                 {
@@ -1622,7 +1621,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-03-30T18:46:02+00:00"
+            "time": "2023-08-25T12:30:03+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -10997,7 +10996,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "dukecity/doctrineextensions": 20,
         "laurentmuller/highcharts-bundle": 20
     },
     "prefer-stable": true,

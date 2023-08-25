@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Enums\TableView;
+use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
 use App\Model\PasswordQuery;
@@ -21,6 +22,7 @@ use App\Model\TaskComputeQuery;
 use App\Service\FakerService;
 use App\Service\PasswordService;
 use App\Service\TaskService;
+use App\Service\UserService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -41,9 +43,9 @@ class AjaxController extends AbstractController
     use CookieTrait;
     use MathTrait;
 
-    private const KEY_SIDE_BAR = 'menu_sidebar_hide';
+    private const KEY_SIDE_BAR = 'sidebar_hide';
 
-    private const MENU_PREFIX = 'menu_';
+    private const MENU_PREFIX = 'menu_sidebar_';
 
     /**
      * Compute a task.
@@ -120,27 +122,23 @@ class AjaxController extends AbstractController
      * Save the state of the sidebar.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/navigation', name: 'ajax_save_navigation')]
+    #[Route(path: '/navigation', name: 'ajax_save_navigation', methods: Request::METHOD_POST)]
     public function saveNavigationState(Request $request): JsonResponse
     {
-        if (!$request->hasSession()) {
-            return $this->json(false);
-        }
-
         $input = $request->request;
-        $session = $request->getSession();
+        $session = $this->getSession();
+
         /** @psalm-var string $key */
         foreach ($input->keys() as $key) {
-            if (self::KEY_SIDE_BAR === $key || !\str_starts_with($key, self::MENU_PREFIX)) {
-                continue;
+            if (\str_starts_with($key, self::MENU_PREFIX)) {
+                $session?->set($key, $input->getBoolean($key));
             }
-            $session->set($key, $input->getBoolean($key));
         }
 
         $response = $this->json(true);
         $path = $this->getCookiePath();
         $sidebarHide = $input->getBoolean(self::KEY_SIDE_BAR, true);
-        $this->updateCookie($response, 'SIDEBAR_HIDE', $sidebarHide, '', $path);
+        $this->updateCookie($response, self::KEY_SIDE_BAR, $sidebarHide, path: $path);
 
         return $response;
     }
@@ -166,12 +164,14 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/save', name: 'ajax_save_table', methods: Request::METHOD_POST)]
-    public function saveTable(Request $request): JsonResponse
+    public function saveTable(Request $request, UserService $service): JsonResponse
     {
-        $view = $request->getPayload()->getEnum(TableInterface::PARAM_VIEW, TableView::class, TableView::TABLE);
+        $default = $service->getDisplayMode();
+        $view = $request->request->getEnum(TableInterface::PARAM_VIEW, TableView::class, $default);
         $response = $this->json(true);
         $path = $this->getCookiePath();
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view, path: $path);
+        $service->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $view);
 
         return $response;
     }

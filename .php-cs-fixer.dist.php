@@ -28,8 +28,8 @@ $rules = [
     // --------------------------------------------------------------
     '@Symfony' => true,
     '@Symfony:risky' => true,
-    '@PHP80Migration:risky' => true,
     '@PHP82Migration' => true,
+    '@PHP80Migration:risky' => true,
     '@DoctrineAnnotation' => true,
     '@PHPUnit100Migration:risky' => true,
 
@@ -51,6 +51,9 @@ $rules = [
     'list_syntax' => ['syntax' => 'short'],
     'doctrine_annotation_array_assignment' => ['operator' => '='],
     'ordered_interfaces' => true,
+    'no_useless_else' => true,
+    'no_useless_return' => true,
+    'php_unit_strict' => true,
 ];
 
 $finder = Finder::create()
@@ -60,6 +63,7 @@ $finder = Finder::create()
 $config = new Config();
 
 return $config
+    ->setCacheFile(__DIR__ . '/var/php-cs-fixer.cache')
     ->setRiskyAllowed(true)
     ->setFinder($finder)
     ->setRules($rules);

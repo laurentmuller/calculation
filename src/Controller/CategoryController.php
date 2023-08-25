@@ -179,7 +179,7 @@ class CategoryController extends AbstractEntityController
     #[Route(path: '', name: 'category_table')]
     public function table(Request $request, CategoryTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'category/category_table.html.twig', $logger);
+        return $this->handleTableRequest($request, $table, 'category/category_table.html.twig', $logger, $this->getUserService());
     }
 
     /**

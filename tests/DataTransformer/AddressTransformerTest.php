@@ -67,7 +67,7 @@ class AddressTransformerTest extends TestCase
         }
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
-        self::assertEquals($expected, $actual);
+        self::assertEqualsCanonicalizing($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]

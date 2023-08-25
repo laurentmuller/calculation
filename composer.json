@@ -38,7 +38,7 @@
         "createnl/zxcvbn-bundle": "^3.0",
         "doctrine/doctrine-bundle": "^2.6",
         "doctrine/orm": "^2.11",
-        "dukecity/doctrineextensions": "dev-master",
+        "dukecity/doctrineextensions": "^2.0",
         "elao/enum": "^2.0",
         "endroid/qr-code": "^4.2",
         "erusev/parsedown": "^1.7",

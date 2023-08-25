@@ -22,14 +22,6 @@ final class PhpInfoService
     /**
      * Gets PHP information as array.
      *
-     * Note:
-     * <ul>
-     * <li>'yes', 'enabled', 1 and 'on' values are converted to boolean true.</li>
-     * <li>'no', 'disabled', 0 and 'off' values are converted to boolean false.</li>
-     * <li>if applicable values are converted to integer or float.</li>
-     * </ul>
-     * In all other case, values are returned as string.
-     *
      * @param int $what The output may be customized by passing one or more of the following constants bitwise values summed
      *                  together in the optional what parameter.
      *                  One can also combine the respective constants or bitwise values
@@ -97,16 +89,30 @@ final class PhpInfoService
     public function asHtml(int $what = \INFO_ALL): string
     {
         $info = $this->asText($what);
-        $info = (string) \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
-        $info = (string) \preg_replace('/<a\s(.+?)>(.+?)<\/a>/is', '<p>$2</p>', $info);
+
+        $info = \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
+        $info = \preg_replace('/<a\s(.+?)>(.+?)<\/a>/mi', '<p>$2</p>', $info);
+        $info = \str_ireplace('background-color: white; text-align: center', '', $info);
         $info = \str_ireplace('<i>no value</i>', '<i class="text-body-secondary">No value</i>', $info);
-        $info = \str_replace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
+        $info = \str_ireplace('(none)', '<i class="text-body-secondary">None</i>', $info);
+        $info = \str_ireplace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
 
         foreach (['Directive', 'Local Value', 'Master Value'] as $value) {
             $info = \str_replace($value, '<span class="fw-bold">' . $value . '</span>', $info);
         }
 
-        return (string) \preg_replace('/<table\s(.+?)>(.+?)<\/table>/is', '', $info, 1);
+        foreach (['On', 'Yes', 'Enabled'] as $value) {
+            $search = '/<td class="v">' . $value . '\s?<\/td>/mi';
+            $replace = '<td class="v"><span class="text-success fw-bold me-1">✓</span>' . $value . '</td>';
+            $info = \preg_replace($search, $replace, $info);
+        }
+        foreach (['Off', 'No', 'Disabled'] as $value) {
+            $search = '/<td class="v">' . $value . '\s?<\/td>/mi';
+            $replace = '<td class="v"><span class="text-secondary fw-bold me-1">✗</span>' . $value . '</td>';
+            $info = \preg_replace($search, $replace, $info);
+        }
+
+        return \preg_replace('/<table\s(.+?)>(.+?)<\/table>/is', '', $info, 1);
     }
 
     /**
@@ -135,28 +141,22 @@ final class PhpInfoService
         return \PHP_VERSION;
     }
 
-    /**
-     * Converts the given variable.
-     */
-    private function convert(mixed $var): string|int|float|bool
+    private function convert(string $var): string|int|float
     {
-        $value = \strtolower((string) $var);
-        if (\in_array($value, ['yes', 'enabled', 'on', '1'], true)) {
-            return true;
-        } elseif (\in_array($value, ['no', 'disabled', 'off', '0'], true)) {
-            return false;
-        } elseif (\is_int($var) || \preg_match('/^-?\d+$/', $value)) {
-            return (int) $value;
-        } elseif (\is_float($var)) {
-            return $var;
-        } elseif (\preg_match('/^-?\d+\.\d+$/', $value)) {
-            $pos = (int) \strrpos($value, '.');
-            $decimals = \strlen($value) - $pos - 1;
-
-            return \round((float) $value, $decimals);
-        } else {
-            return \str_replace('\\', '/', (string) $var);
+        if (\in_array(\strtolower($var), ['yes', 'no', 'enabled', 'disabled', 'on', 'off', 'no value'], true)) {
+            return \ucfirst($var);
         }
+        if (\preg_match('/^-?\d+$/', $var)) {
+            return (int) $var;
+        }
+        if (\preg_match('/^-?\d+\.\d+$/', $var)) {
+            $pos = (int) \strrpos($var, '.');
+            $decimals = \strlen($var) - $pos - 1;
+
+            return \round((float) $var, $decimals);
+        }
+
+        return \str_replace('\\', '/', $var);
     }
 
     private function updateContent(string $content): string
@@ -164,14 +164,11 @@ final class PhpInfoService
         $subst = '$1******$3';
         $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL'];
         foreach ($keys as $key) {
-            $regex = "/(<tr.*\[\'.*$key\'\]<\/td><td.*?>)(.*)(<.*<\/tr>)/mi";
-            $content = (string) \preg_replace($regex, $subst, $content);
+            $regex = "/(<tr.*\['.*$key']<\/td><td.*?>)(.*)(<.*<\/tr>)/mi";
+            $content = \preg_replace($regex, $subst, $content);
         }
+        $content = \str_replace(['✘ ', '✔ ', '⊕'], '', $content);
 
-        return \str_replace(
-            ['yes', 'enabled', 'disabled', 'none', 'no value', '🖹', '✔ ', '✘ '],
-            ['Yes', 'Enabled', 'Disabled', 'None', 'No value', '', '', ''],
-            $content
-        );
+        return \trim($content);
     }
 }

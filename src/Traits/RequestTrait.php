@@ -96,12 +96,14 @@ trait RequestTrait
     {
         if ($request->attributes->has($key)) {
             return $request->attributes;
-        } elseif ($request->query->has($key)) {
-            return $request->query;
-        } elseif ($request->request->has($key)) {
-            return $request->request;
-        } else {
-            return null;
         }
+        if ($request->query->has($key)) {
+            return $request->query;
+        }
+        if ($request->request->has($key)) {
+            return $request->request;
+        }
+
+        return null;
     }
 }

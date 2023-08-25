@@ -97,11 +97,12 @@ trait MathTrait
     {
         if ($value < $min) {
             return $min;
-        } elseif ($value > $max) {
-            return $max;
-        } else {
-            return $value;
         }
+        if ($value > $max) {
+            return $max;
+        }
+
+        return $value;
     }
 
     /**
@@ -119,8 +120,8 @@ trait MathTrait
             return $min;
         } elseif ($value > $max) {
             return $max;
-        } else {
-            return $value;
         }
+
+        return $value;
     }
 }

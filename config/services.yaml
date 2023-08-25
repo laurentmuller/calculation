@@ -52,6 +52,7 @@ services:
     App\:
         resource: '../src/*'
         exclude:
+            - '../src/Kernel.php'
             - '../src/Calendar'
             - '../src/Entity'
             - '../src/Enums'
@@ -64,11 +65,14 @@ services:
             - '../src/Traits'
             - '../src/Util'
             - '../src/Word'
-            - '../src/Kernel.php'
 
     # make public to use with VichUploaderBundle
     App\Service\UserNamer:
         public: true
+
+    ReCaptcha\ReCaptcha:
+        arguments: ['%google_recaptcha_secret_key%']
+
 
     # custom line formatter for monolog
     monolog.custom_formatter:

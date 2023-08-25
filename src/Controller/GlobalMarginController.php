@@ -133,7 +133,7 @@ class GlobalMarginController extends AbstractEntityController
     #[Route(path: '', name: 'globalmargin_table')]
     public function table(Request $request, GlobalMarginTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'globalmargin/globalmargin_table.html.twig', $logger);
+        return $this->handleTableRequest($request, $table, 'globalmargin/globalmargin_table.html.twig', $logger, $this->getUserService());
     }
 
     protected function getEditFormType(): string

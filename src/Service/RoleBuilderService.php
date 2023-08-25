@@ -96,30 +96,28 @@ class RoleBuilderService
      * @return FlagBag<EntityPermission>
      *
      * @psalm-suppress InvalidArgument
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      */
     private function getAllPermissions(): FlagBag
     {
-        /** @psalm-var FlagBag<EntityPermission> $permissions */
-        $permissions = FlagBag::from(...EntityPermission::sorted());
-
-        return $permissions;
+        return FlagBag::from(...EntityPermission::sorted());
     }
 
     /**
      * @return FlagBag<EntityPermission>
      *
-     * @psalm-suppress InvalidArgument
+     *  @psalm-suppress InvalidArgument
+     *  @psalm-suppress InvalidReturnType
+     *  @psalm-suppress InvalidReturnStatement
      */
     private function getDefaultPermissions(): FlagBag
     {
-        /** @psalm-var FlagBag<EntityPermission> $permissions */
-        $permissions = FlagBag::from(
+        return FlagBag::from(
             EntityPermission::LIST,
             EntityPermission::EXPORT,
             EntityPermission::SHOW
         );
-
-        return $permissions;
     }
 
     /**

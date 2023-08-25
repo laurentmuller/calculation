@@ -229,11 +229,12 @@ final class SymfonyInfoService
         if ($eom instanceof \DateTimeImmutable && $eol instanceof \DateTimeImmutable) {
             if ($now > $eol) {
                 return 'Unmaintained';
-            } elseif ($now > $eom) {
-                return 'Security Fixes Only';
-            } else {
-                return 'Maintained';
             }
+            if ($now > $eom) {
+                return 'Security Fixes Only';
+            }
+
+            return 'Maintained';
         }
 
         return self::UNKNOWN;

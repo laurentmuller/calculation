@@ -349,7 +349,7 @@ class UserController extends AbstractEntityController
     #[Route(path: '', name: 'user_table')]
     public function table(Request $request, UserTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'user/user_table.html.twig', $logger);
+        return $this->handleTableRequest($request, $table, 'user/user_table.html.twig', $logger, $this->getUserService());
     }
 
     protected function getEditFormType(): string

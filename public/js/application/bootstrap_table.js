@@ -23,7 +23,7 @@ function customViewFormatter(data) {
         // fields
         let html = $template.html();
         Object.keys(row).forEach(function (key) {
-            html = html.replaceAll('%' + key + '%', row[key] || undefinedText);
+            html = html.replaceAll(`%${key}%`, row[key] || undefinedText);
         });
 
         // functions
@@ -42,7 +42,7 @@ function customViewFormatter(data) {
         return carry + html;
     }, '');
 
-    return '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 m-0 mx-n1">' + content + '</div>';
+    return `<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 m-0 mx-n1">${content}</div>`;
 }
 
 /**
@@ -83,7 +83,7 @@ function styleBorderColor(_value, row) {
     if (!$.isUndefined(row.color)) {
         return {
             css: {
-                'border-left-color': row.color + ' !important'
+                'border-left-color': `${row.color} !important`
             }
         };
     }
@@ -529,7 +529,9 @@ function showSortDialog($table, $button) {
                     // build items
                     const $pages = pageList.map(function (page) {
                         const $page = $('<button/>', {
-                            'class': 'dropdown-page dropdown-item', 'data-value': page, 'text': page
+                            'class': 'dropdown-page dropdown-item',
+                            'data-value': page,
+                            'text': page
                         });
                         if (page === options.pageSize) {
                             $page.addClass('active');
@@ -591,7 +593,7 @@ function showSortDialog($table, $button) {
         onRenderCustomView: function (_$table, row, $item) {
             // update border color
             if (typeof row.color !== 'undefined') {
-                const style = 'border-left-color: ' + row.color + ' !important';
+                const style = `border-left-color: ${row.color} !important`;
                 $item.attr('style', style);
             }
 

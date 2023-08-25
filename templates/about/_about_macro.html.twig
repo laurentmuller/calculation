@@ -40,3 +40,10 @@
     </td>
 </tr>
 {%- endmacro %}
+
+{% macro content_header_link(url, version, icon, margin_left=false) -%}
+<i class="icon-about icon-{{ icon }}"></i>
+<a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset" title="{{ 'about.extern_link'|trans }}"{% if margin_left %} style="margin-left: {{ margin_left }}px"{% endif %}>
+    <span class="h1">{{ 'about.version'|trans({'%version%': version}) }}</span>
+</a>
+{%- endmacro %}

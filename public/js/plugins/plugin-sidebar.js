@@ -68,6 +68,7 @@
             this._highlightPath();
 
             // save state
+            /** @type {Array<string, boolean>} */
             this.oldState = this._getState();
 
             // create proxies
@@ -193,7 +194,6 @@
             } else {
                 this.$navbarHorizontal.hide(); // duration
             }
-
             this._saveState();
             this.$element.trigger('toggle.' + Sidebar.NAME);
         }
@@ -244,9 +244,10 @@
                 if (count === 0) {
                     $element.attr('data-bs-parent', rootId);
                 } else {
-                    const $parent = $element.parents('div.collapse:first');
-                    const id = that._ensureId($parent);
-                    $element.attr('data-bs-parent', id);
+                    $element.parents('div.collapse:first').each(function (index, element) {
+                        const id = that._ensureId($(element));
+                        $element.attr('data-bs-parent', id);
+                    });
                 }
             });
         }
@@ -300,17 +301,16 @@
 
         /**
          * Gets the navigation state.
+         * @return {Array.<string, boolean>}
          * @private
          */
         _getState() {
-            const menus = {
-                'menu_sidebar_hide': this._isSideBarHidden()
-            };
-            this.$element.find('div.collapse[id]').each(function (index, element) {
+            const menus = {};
+            this.$element.find('div.collapse[id^="menu_sidebar_"]').each(function (index, element) {
                 const $element = $(element);
                 menus[$element.attr('id')] = $element.hasClass('show');
             });
-
+            menus.sidebar_hide = this._isSideBarHidden();
             return menus;
         }
 
@@ -327,7 +327,6 @@
             if (oldState && JSON.stringify(oldState) === JSON.stringify(newState)) {
                 return;
             }
-            // window.console.log('saveState');
             this.oldState = newState;
             $.ajaxSetup({global: false});
             $.post(this.options.url, newState)

@@ -1,6 +1,6 @@
 {# admin menu #}
 {% from 'macros/_icons.html.twig' import icon, dropdownSeparator, navItem, navItemExternal %}
-{% set id = 'menu_test' %}
+{% set id = 'menu_sidebar_test' %}
 {% set expanded = app.session.get(id, false) %}
 {% set toggle_class = expanded ? ' active' : '' %}
 {% set collapse_class = expanded ? ' show' : '' %}
@@ -12,7 +12,7 @@
     </button>
     <div class="collapse{{ collapse_class }}" id="{{ id }}">
         <ul class="list-unstyled">
-            {% set id = 'menu_test_service' %}
+            {% set id = 'menu_sidebar_test_service' %}
             {% set expanded = app.session.get(id, false) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}
@@ -31,7 +31,7 @@
                 </div>
             </li>
 
-            {% set id = 'menu_test_page' %}
+            {% set id = 'menu_sidebar_test_page' %}
             {% set expanded = app.session.get(id, false) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}
@@ -50,7 +50,7 @@
                 </div>
             </li>
 
-            {% set id = 'menu_test_admin' %}
+            {% set id = 'menu_sidebar_test_admin' %}
             {% set expanded = app.session.get(id, false) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}
@@ -68,7 +68,7 @@
                 </div>
             </li>
 
-            {% set id = 'menu_test_chart' %}
+            {% set id = 'menu_sidebar_test_chart' %}
             {% set expanded = app.session.get(id, false) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}

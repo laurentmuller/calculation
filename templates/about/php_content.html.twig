@@ -1,10 +1,7 @@
 {% import 'about/_about_macro.html.twig' as tools %}
 <div class="phpversion">
-    <div style="transform: rotate(0);">
-        <a href="https://www.php.net/" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset" title="{{ 'about.extern_link'|trans }}">
-            <i class="icon-php-alt icon-about"></i>
-            <h1 class="p text-body">{{ 'about.version'|trans({'%version%': version}) }}</h1>
-        </a>
+    <div class="border-bottom position-relative pb-1">
+        {{- tools.content_header_link('https://www.php.net', version, 'php-alt', -15) -}}
     </div>
     {{ phpInfo|raw }}
     <table id="data-table-extra" class="table table-hover table-sm mb-0">

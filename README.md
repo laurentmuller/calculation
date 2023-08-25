@@ -22,17 +22,18 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 [![Codacy](https://app.codacy.com/project/badge/Grade/47008d380fac4a3ea891c7bd72bddd58)](https://www.codacy.com/gh/laurentmuller/calculation/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=laurentmuller/calculation&amp;utm_campaign=Badge_Grade)
 [![PHP-Stan](https://img.shields.io/badge/PHPStan-Level%207-brightgreen.svg?style=flat&logo=php)](https://phpstan.org/blog/find-bugs-in-your-code-without-writing-tests)
 [![Psalm](https://img.shields.io/badge/Psalm-Level%201-brightgreen.svg?style=flat)](https://psalm.dev/docs/running_psalm/installation/)
-[![StyleCI](https://github.styleci.io/repos/229945132/shield?branch=master)](https://github.styleci.io/repos/229945132?branch=master)
 
 ## Actions
 
-[![Php-cs-fixer](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml)
+[![PHP-CS-Fixer](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml)
 [![Lint](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml)
 [![PHP-Stan](https://github.com/laurentmuller/calculation/actions/workflows/php-stan.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-stan.yaml)
 [![PHPUnit](https://github.com/laurentmuller/calculation/actions/workflows/php-unit.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-unit.yaml)
 [![Rector](https://github.com/laurentmuller/calculation/actions/workflows/rector.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/rector.yaml)
-[![Psalm Static analysis](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml)
+[![Psalm](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml)
 [![Twigcs](https://github.com/laurentmuller/calculation/actions/workflows/twigcs.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/twigcs.yaml)
+[![StyleCI](https://github.styleci.io/repos/229945132/shield?branch=master)](https://github.styleci.io/repos/229945132?branch=master)
+[![Markdown](https://github.com/laurentmuller/calculation/actions/workflows/markdown.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/markdown.yaml)
 
 ## Contributions
 

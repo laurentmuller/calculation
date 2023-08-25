@@ -312,11 +312,12 @@ final class FormatUtils
         $array = \array_map(function (\IntlTimeZone|\DateTimeZone|string|int|null $value): string {
             if ($value instanceof \IntlTimeZone) {
                 return $value->getID();
-            } elseif ($value instanceof \DateTimeZone) {
-                return $value->getName();
-            } else {
-                return (string) $value;
             }
+            if ($value instanceof \DateTimeZone) {
+                return $value->getName();
+            }
+
+            return (string) $value;
         }, $values);
 
         return \implode('|', $array);

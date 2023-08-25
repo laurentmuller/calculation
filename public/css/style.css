@@ -938,3 +938,10 @@ span.bottom-border-gradient {
     column-gap: 0.5rem !important;
     -moz-column-gap: 0.5rem !important;
 }
+
+.d-flex-no-wrap-center {
+    display: flex !important;
+    align-items: center !important;
+    column-gap: 0.5rem !important;
+    -moz-column-gap: 0.5rem !important;
+}

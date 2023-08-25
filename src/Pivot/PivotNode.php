@@ -208,9 +208,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     {
         if ($index >= 0 && $index < $this->count()) {
             return $this->children[\array_keys($this->children)[$index]];
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**

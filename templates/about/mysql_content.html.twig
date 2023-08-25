@@ -6,28 +6,25 @@
 <div class="phpversion">
     <table id="data-table-mysql" class="table table-hover table-sm mb-0">
         <tbody>
-        <tr class="h">
-            <td colspan="2" style="transform: rotate(0);">
-                <a href="https://www.mysql.com/" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset" title="{{ 'about.extern_link'|trans }}">
-                   <i class="icon-mysql icon-about"></i>
-                   <h1 class="p text-body">{{ 'about.version'|trans({'%version%': service.version}) }}</h1>
-                </a>
-            </td>
-        </tr>
-        {{ tools.headerInfo('Database') }}
-        {% for key, value in service.database %}
-            {{ tools.rowInfo(key, value) }}
-        {% endfor %}
-        {{ tools.headerInfo('Configuration') }}
-         {% for key, value in service.configuration %}
-             {% if value in enabled_values %}
-                {{ tools.rowInfoBoolean(key, value, true) }}
-             {% elseif value in disabled_values %}
-                 {{ tools.rowInfoBoolean(key, value, false) }}
-             {% else %}
-                 {{ tools.rowInfo(key, value) }}
-             {% endif %}
-        {% endfor %}
+            <tr class="h">
+                <td colspan="2" class="position-relative">
+                    {{- tools.content_header_link('https://www.mysql.com', service.version, 'mysql') -}}
+                </td>
+            </tr>
+            {{ tools.headerInfo('Database') }}
+            {% for key, value in service.database %}
+                {{ tools.rowInfo(key, value) }}
+            {% endfor %}
+            {{ tools.headerInfo('Configuration') }}
+             {% for key, value in service.configuration %}
+                 {% if value in enabled_values %}
+                    {{ tools.rowInfoBoolean(key, value, true) }}
+                 {% elseif value in disabled_values %}
+                     {{ tools.rowInfoBoolean(key, value, false) }}
+                 {% else %}
+                     {{ tools.rowInfo(key, value) }}
+                 {% endif %}
+            {% endfor %}
         </tbody>
     </table>
 </div>

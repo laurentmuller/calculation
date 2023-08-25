@@ -51,6 +51,7 @@ use App\Validator\Strength;
 use App\Word\HtmlDocument;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use ReCaptcha\ReCaptcha;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormError;

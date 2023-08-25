@@ -23,6 +23,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
  * Document containing PHP configuration.
+ *
+ *  @psalm-type EntriesType = array{local: string, master: string}|string
  */
 class PhpIniDocument extends AbstractDocument
 {
@@ -51,6 +53,7 @@ class PhpIniDocument extends AbstractDocument
 
             return true;
         }
+
         \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
         $row = $sheet->setHeaders([
             'Directive' => HeaderFormat::left(Alignment::VERTICAL_TOP),
@@ -58,11 +61,12 @@ class PhpIniDocument extends AbstractDocument
             'Master Value' => HeaderFormat::left(Alignment::VERTICAL_TOP),
         ]);
 
-        foreach ($content as $key => $value) {
+        /**  @psalm-var array<string, EntriesType> $entries */
+        foreach ($content as $key => $entries) {
             if ($this->outputGroup($sheet, $row, $key)) {
                 ++$row;
             }
-            $row = $this->outputEntries($sheet, $row, $value);
+            $row = $this->outputEntries($sheet, $row, $entries);
         }
 
         $sheet->setWrapText(2)
@@ -84,6 +88,8 @@ class PhpIniDocument extends AbstractDocument
         $italic = false;
         if (\preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
             $color = \substr($var, 1);
+        } elseif (\in_array(\strtolower($var), ['no', 'disabled', 'off'], true)) {
+            $color = '7F7F7F';
         } elseif (StringUtils::equalIgnoreCase('no value', $var)) {
             $color = '7F7F7F';
             $italic = true;
@@ -107,22 +113,18 @@ class PhpIniDocument extends AbstractDocument
      */
     private function convert(mixed $var): string
     {
-        if (\is_bool($var)) {
-            return \ucfirst(StringUtils::encodeJson($var));
-        } else {
-            return \htmlspecialchars_decode((string) $var);
-        }
+        return \htmlspecialchars_decode((string) $var);
     }
 
     /**
-     * @psalm-param array<string, array{local: scalar, master: scalar}|scalar> $entries
+     * @psalm-param array<string, EntriesType> $entries
      */
     private function outputEntries(WorksheetDocument $sheet, int $row, array $entries): int
     {
         $this->sortEntries($entries);
         $sheet->getPageSetup()
             ->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-        /** @var mixed $entry */
+
         foreach ($entries as $key => $entry) {
             $keyValue = $this->convert($key);
             if (\is_array($entry)) {
@@ -166,7 +168,7 @@ class PhpIniDocument extends AbstractDocument
     }
 
     /**
-     * @psalm-param array<string, array{local: scalar, master: scalar}|scalar> $entries
+     * @psalm-param array<string, EntriesType> $entries
      */
     private function sortEntries(array &$entries): void
     {
@@ -175,9 +177,9 @@ class PhpIniDocument extends AbstractDocument
             $isArrayB = \is_array($entries[$b]);
             if ($isArrayA !== $isArrayB) {
                 return $isArrayA <=> $isArrayB;
-            } else {
-                return \strcasecmp($a, $b);
             }
+
+            return \strcasecmp($a, $b);
         });
     }
 }

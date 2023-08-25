@@ -39,11 +39,8 @@
     <table id="data-table-symfony" class="table table-hover table-sm mb-0">
         <tbody>
             <tr class="h">
-                <td colspan="2" style="transform: rotate(0);">
-                    <a href="https://symfony.com/" target="_blank" rel="noopener noreferrer" class="stretched-link text-reset" title="{{ 'about.extern_link'|trans }}">
-                        <i class="icon-symfony icon-about"></i>
-                        <h1 class="p text-body">{{ 'about.version'|trans({'%version%': service.version}) }}</h1>
-                    </a>
+                <td colspan="2" class="position-relative">
+                    {{- tools.content_header_link('https://symfony.com', service.version, 'symfony') -}}
                 </td>
             </tr>
             {{ tools.headerInfo('Kernel') }}

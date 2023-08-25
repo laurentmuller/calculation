@@ -23,6 +23,8 @@ use App\Utils\StringUtils;
 
 /**
  * Report for php.ini.
+ *
+ * @psalm-type EntriesType = array{local: string, master: string}|string
  */
 class PhpIniReport extends AbstractReport
 {
@@ -48,6 +50,7 @@ class PhpIniReport extends AbstractReport
 
             return true;
         }
+
         \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
         $table = PdfGroupTableBuilder::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
@@ -56,6 +59,8 @@ class PhpIniReport extends AbstractReport
                 PdfColumn::left('Local Value', 30),
                 PdfColumn::left('Master Value', 30)
             )->outputHeaders();
+
+        /**  @psalm-var array<string, EntriesType> $entries */
         foreach ($content as $key => $entries) {
             $this->outputEntries($table, $key, $entries);
         }
@@ -63,16 +68,9 @@ class PhpIniReport extends AbstractReport
         return true;
     }
 
-    /**
-     * @param mixed $var the variable to convert
-     */
     private function convert(mixed $var): string
     {
-        if (\is_bool($var)) {
-            return \ucfirst(StringUtils::encodeJson($var));
-        } else {
-            return \htmlspecialchars_decode((string) $var);
-        }
+        return \htmlspecialchars_decode((string) $var);
     }
 
     /**
@@ -84,6 +82,8 @@ class PhpIniReport extends AbstractReport
         $style = PdfFontStyle::REGULAR;
         if (\preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
             $color = PdfTextColor::create($var);
+        } elseif (\in_array(\strtolower($var), ['no', 'disabled', 'off', '(none)'], true)) {
+            $color = PdfTextColor::darkGray();
         } elseif (StringUtils::equalIgnoreCase('no value', $var)) {
             $color = PdfTextColor::darkGray();
             $style = PdfFontStyle::ITALIC;
@@ -96,7 +96,7 @@ class PhpIniReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<string, array{local: scalar, master: scalar}|scalar> $entries
+     * @psalm-param array<string, EntriesType> $entries
      */
     private function outputEntries(PdfGroupTableBuilder $table, string $key, array $entries): void
     {
@@ -124,7 +124,7 @@ class PhpIniReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<string, array{local: scalar, master: scalar}|scalar> $entries
+     * @psalm-param array<string, EntriesType> $entries
      */
     private function sortEntries(array &$entries): void
     {
@@ -133,9 +133,9 @@ class PhpIniReport extends AbstractReport
             $isArrayB = \is_array($entries[$b]);
             if ($isArrayA !== $isArrayB) {
                 return $isArrayA <=> $isArrayB;
-            } else {
-                return \strcasecmp($a, $b);
             }
+
+            return \strcasecmp($a, $b);
         });
     }
 }

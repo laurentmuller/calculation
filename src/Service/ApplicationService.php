@@ -411,9 +411,9 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     {
         if ($value instanceof Calculation) {
             return $value->isMarginBelow($this->getMinMargin());
-        } else {
-            return !$this->isFloatZero($value) && $value < $this->getMinMargin();
         }
+
+        return !$this->isFloatZero($value) && $value < $this->getMinMargin();
     }
 
     public function isMessageClose(): bool
@@ -507,22 +507,23 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
-     * @param array<string, mixed>      $properties
-     * @param array<string, mixed>|null $defaultValues
+     * @param array<string, mixed> $properties
      */
-    public function setProperties(array $properties, array $defaultValues = null): static
+    public function setProperties(array $properties): static
     {
-        if ([] !== $properties) {
-            /** @psalm-var PropertyRepository $repository */
-            $repository = $this->manager->getRepository(Property::class);
-            $values = $defaultValues ?? $this->getDefaultValues();
-            /** @psalm-var mixed $value */
-            foreach ($properties as $key => $value) {
-                $this->saveProperty($key, $value, $values, $repository);
-            }
-            $this->manager->flush();
-            $this->updateAdapter();
+        if ([] === $properties) {
+            return $this;
         }
+
+        /** @psalm-var PropertyRepository $repository */
+        $repository = $this->manager->getRepository(Property::class);
+        $defaultValues = $this->getDefaultValues();
+        /** @psalm-var mixed $value */
+        foreach ($properties as $key => $value) {
+            $this->saveProperty($key, $value, $defaultValues, $repository);
+        }
+        $repository->flush();
+        $this->updateAdapter();
 
         return $this;
     }

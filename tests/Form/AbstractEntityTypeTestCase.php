@@ -50,7 +50,7 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
         self::assertTrue($form->isSynchronized());
 
         // check data
-        self::assertEquals($expected, $model);
+        self::assertEqualsCanonicalizing($expected, $model);
 
         // check view
         $view = $form->createView();

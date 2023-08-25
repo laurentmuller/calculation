@@ -40,8 +40,10 @@
         <tbody>
             <tr class="h">
                 <td colspan="2">
-                    <img alt="{{ 'about.app_name'|trans }}" width="64" height="64" class="rounded-1" src="{{ asset_icon(72) }}">
-                    <h1>{{ 'about.version'|trans({'%version%': app_version}) }}</h1>
+                    <div class="d-inline-flex align-items-end">
+                        <img alt="{{ 'about.app_name'|trans }}" width="64" height="64" class="rounded-1 me-2" src="{{ asset_icon(72) }}">
+                        <h1>{{ 'about.version'|trans({'%version%': app_version}) }}</h1>
+                    </div>
                 </td>
             </tr>
             {{ tools.rowInfo('about.app_name'|trans, app_name) }}

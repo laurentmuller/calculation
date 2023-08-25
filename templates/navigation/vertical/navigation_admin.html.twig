@@ -1,6 +1,6 @@
 {# admin menu #}
 {% from 'macros/_icons.html.twig' import icon, dropdownSeparator, navItem %}
-{% set id = 'menu_admin' %}
+{% set id = 'menu_sidebar_admin' %}
 {% set expanded = app.session.get(id, false) %}
 {% set toggle_class = expanded ? ' active' : '' %}
 {% set collapse_class = expanded ? ' show' : '' %}

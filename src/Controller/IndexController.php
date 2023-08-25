@@ -164,7 +164,11 @@ class IndexController extends AbstractController
 
     protected function getSessionKey(string $key): string
     {
-        return self::PARAM_RESTRICT === $key ? \strtoupper($key) : $key;
+        return match ($key) {
+            self::PARAM_CUSTOM,
+            self::PARAM_RESTRICT => \strtoupper($key),
+            default => $key,
+        };
     }
 
     private function checkAjaxRequest(Request $request): void

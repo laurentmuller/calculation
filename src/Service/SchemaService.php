@@ -474,11 +474,12 @@ class SchemaService implements ServiceSubscriberInterface
         $callback = static function (array $a, array $b): int {
             if ($a['primary']) {
                 return -1;
-            } elseif ($b['primary']) {
-                return 1;
-            } else {
-                return \strnatcmp((string) $a['name'], (string) $b['name']);
             }
+            if ($b['primary']) {
+                return 1;
+            }
+
+            return \strnatcmp((string) $a['name'], (string) $b['name']);
         };
 
         \usort($indexes, $callback);

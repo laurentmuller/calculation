@@ -53,6 +53,12 @@ jobs:
         if: always() && steps.install.outcome == 'success'
         run: php bin/console lint:container
 
+      - name: Lint Markdown
+        if: always() && steps.install.outcome == 'success'
+        uses: DavidAnson/markdownlint-cli2-action@v11
+        with:
+          globs: '*.md'
+
       - name: Schema validate
         if: always() && steps.install.outcome == 'success'
         run: php bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction

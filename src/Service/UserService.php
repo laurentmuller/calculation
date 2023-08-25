@@ -166,20 +166,25 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
     }
 
     /**
-     * @param array<string, mixed>      $properties
-     * @param array<string, mixed>|null $defaultValues
+     * @param array<string, mixed> $properties
      */
-    public function setProperties(array $properties, array $defaultValues = null): static
+    public function setProperties(array $properties): static
     {
-        if ([] !== $properties && ($user = $this->getUser()) instanceof UserInterface) {
-            $values = $defaultValues ?? $this->service->getProperties();
-            /** @psalm-var mixed $value */
-            foreach ($properties as $key => $value) {
-                $this->saveProperty($key, $value, $values, $user);
-            }
-            $this->repository->flush();
-            $this->updateAdapter();
+        if ([] === $properties) {
+            return $this;
         }
+        $user = $this->getUser();
+        if (!$user instanceof UserInterface) {
+            return $this;
+        }
+
+        $defaultValues = $this->service->getProperties();
+        /** @psalm-var mixed $value */
+        foreach ($properties as $key => $value) {
+            $this->saveProperty($key, $value, $defaultValues, $user);
+        }
+        $this->repository->flush();
+        $this->updateAdapter();
 
         return $this;
     }

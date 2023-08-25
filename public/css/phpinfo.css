@@ -31,9 +31,10 @@
     margin-bottom: 5px;
 }
 
-.phpversion h1 {
+.phpversion h1,
+.phpversion .h1 {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     margin-bottom: 0;
 }
 

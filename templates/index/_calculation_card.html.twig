@@ -4,7 +4,7 @@
     {%- set id = calculation.id -%}
     {%- set is_editable = calculation.stateEditable -%}
     {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
-    {% set class_name = 'row-item border text-border h-100 px-3 py-2' %}
+    {% set class_name = 'row-item border text-border h-100 px-2 py-1' %}
     {% if id == selection %}
         {% set class_name = class_name ~ ' table-primary' %}
     {% elseif not is_editable %}
@@ -12,7 +12,7 @@
     {% endif %}
     <div class="col mb-2 px-1">
         <div data-id="{{ id }}" class="{{ class_name }}" style="{{ properties.stateCss(calculation.stateColor) }}">
-            <div class="d-flex-wrap-center context-menu-skip">
+            <div class="d-flex-no-wrap-center context-menu-skip">
                 <div class="text-truncate fw-bold me-auto">
                     {% if edit_page %}
                         {% set edit_route = is_editable ? edit_page : state_page %}
@@ -35,12 +35,16 @@
                 {% endif %}
             </div>
             <div class="text-truncate user-select-none">
-                {{- calculation.date|locale_date }} / {{ calculation.stateCode -}}
+                {% apply spaceless %}
+                    <span title="{{ 'calculation.fields.date'|trans }}">{{- calculation.date|locale_date }}</span>
+                    <span>&nbsp;/&nbsp;</span>
+                    <span title="{{ 'calculation.fields.state'|trans }}">{{ calculation.stateCode -}}</span>
+                {% endapply %}
             </div>
-            <div class="text-truncate user-select-none">
+            <div class="text-truncate user-select-none" title="{{ 'calculation.fields.customer'|trans }}">
                 {{- calculation.customer -}}
             </div>
-            <div class="text-truncate user-select-none">
+            <div class="text-truncate user-select-none" title="{{ 'calculation.fields.description'|trans }}">
                 {{- calculation.description -}}
             </div>
             <hr class="mt-2 mb-1">
@@ -51,9 +55,9 @@
                         {{ calculation.overallMargin|percent }}
                     </div>
                 {% else %}
-                    <div class="user-select-none">{{ calculation.overallMargin|percent }}</div>
+                    <div class="user-select-none" title="{{ 'calculation.fields.globalMargin'|trans }}">{{ calculation.overallMargin|percent }}</div>
                 {% endif %}
-                <div class="user-select-none ms-auto">{{ calculation.overallTotal|amount }}</div>
+                <div class="user-select-none ms-auto" title="{{ 'calculation.fields.overallTotal'|trans }}">{{ calculation.overallTotal|amount }}</div>
             </div>
         </div>
     </div>

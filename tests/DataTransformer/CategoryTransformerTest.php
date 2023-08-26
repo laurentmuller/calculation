@@ -18,6 +18,7 @@ use App\Form\DataTransformer\CategoryTransformer;
 use App\Repository\CategoryRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
+use Doctrine\ORM\Exception\NotSupported;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -201,6 +202,9 @@ class CategoryTransformerTest extends KernelTestCase
         return $this->group;
     }
 
+    /**
+     * @throws NotSupported
+     */
     private function getRepository(): CategoryRepository
     {
         if (!$this->repository instanceof CategoryRepository) {

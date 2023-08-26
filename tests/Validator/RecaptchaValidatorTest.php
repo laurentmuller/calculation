@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Validator;
 
+use App\Service\RecaptchaService;
 use App\Validator\Recaptcha;
 use App\Validator\RecaptchaValidator;
 use PHPUnit\Framework\MockObject\Exception;
-use ReCaptcha\ReCaptcha as ReCaptchaService;
 use ReCaptcha\Response;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
@@ -33,10 +33,14 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
         ];
     }
 
+    /**
+     * @throws Exception
+     */
     public function testEmptyIsValid(): void
     {
         $contraint = $this->createConstraint();
-        $this->validator->validate('', $contraint);
+        $validator = $this->initValidator();
+        $validator->validate('', $contraint);
         self::assertNoViolation();
     }
 
@@ -47,19 +51,21 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
     public function testErrorCodeIsInvalid(string $code): void
     {
         $contraint = $this->createConstraint();
-        $service = $this->createService($code);
-        $this->validator = new RecaptchaValidator($service);
-        $this->validator->initialize($this->context);
-        $this->validator->validate('dummy', $contraint);
+        $validator = $this->initValidator($code);
+        $validator->validate('dummy', $contraint);
         $this->buildViolation("recaptcha.$code")
             ->setCode($code)
             ->assertRaised();
     }
 
+    /**
+     * @throws Exception
+     */
     public function testNullIsValid(): void
     {
         $contraint = $this->createConstraint();
-        $this->validator->validate(null, $contraint);
+        $validator = $this->initValidator();
+        $validator->validate(null, $contraint);
         self::assertNoViolation();
     }
 
@@ -93,5 +99,17 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
             ->willReturn($response);
 
         return $service;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function initValidator(string $code = ''): RecaptchaValidator
+    {
+        $service = $this->createService($code);
+        $this->validator = new RecaptchaValidator($service);
+        $this->validator->initialize($this->context);
+
+        return $this->validator;
     }
 }

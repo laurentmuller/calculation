@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Validator;
 
-use ReCaptcha\ReCaptcha as ReCaptchaService;
+use App\Service\RecaptchaService;
 use Symfony\Component\Validator\Constraint;
 
 /**

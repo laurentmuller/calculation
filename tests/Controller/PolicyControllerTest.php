@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(PolicyController::class)]
 class PolicyControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array|\Generator
+    public static function getRoutes(): array
     {
         return [
             ['/policy/accept', '', Response::HTTP_FOUND],

@@ -24,19 +24,14 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(CaptchaValidator::class)]
 class CaptchaValidatorTest extends ConstraintValidatorTestCase
 {
-    protected bool $validateTimeout = true;
-    protected bool $validateToken = true;
-
     /**
      * @throws Exception
      */
     public function testEmptyIsValid(): void
     {
-        $service = $this->createService();
         $contraint = $this->createConstraint();
-        $this->validator = new CaptchaValidator($service);
-        $this->validator->initialize($this->context);
-        $this->validator->validate('', $contraint);
+        $validator = $this->initValidator();
+        $validator->validate('', $contraint);
         self::assertNoViolation();
     }
 
@@ -45,11 +40,9 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
      */
     public function testNullIsValid(): void
     {
-        $service = $this->createService();
         $contraint = $this->createConstraint();
-        $this->validator = new CaptchaValidator($service);
-        $this->validator->initialize($this->context);
-        $this->validator->validate(null, $contraint);
+        $validator = $this->initValidator();
+        $validator->validate(null, $contraint);
 
         self::assertNoViolation();
     }
@@ -59,12 +52,9 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
      */
     public function testTimeoutInvalid(): void
     {
-        $service = $this->createService(false);
         $contraint = $this->createConstraint();
-        $this->validator = new CaptchaValidator($service);
-        $this->validator->initialize($this->context);
-        $this->validator->validate('dummy', $contraint);
-
+        $validator = $this->initValidator(false);
+        $validator->validate('dummy', $contraint);
         $this->buildViolation('captcha.timeout')
             ->setCode(Captcha::IS_TIMEOUT_ERROR)
             ->assertRaised();
@@ -75,12 +65,9 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
      */
     public function testTokenInvalid(): void
     {
-        $service = $this->createService(true, false);
         $contraint = $this->createConstraint();
-        $this->validator = new CaptchaValidator($service);
-        $this->validator->initialize($this->context);
-        $this->validator->validate('dummy', $contraint);
-
+        $validator = $this->initValidator(true, false);
+        $validator->validate('dummy', $contraint);
         $this->buildViolation('captcha.invalid')
             ->setCode(Captcha::IS_INVALID_ERROR)
             ->assertRaised();
@@ -113,5 +100,17 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
             ->willReturn($validateToken);
 
         return $service;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function initValidator(bool $validateTimeout = true, bool $validateToken = true): CaptchaValidator
+    {
+        $service = $this->createService($validateTimeout, $validateToken);
+        $this->validator = new CaptchaValidator($service);
+        $this->validator->initialize($this->context);
+
+        return $this->validator;
     }
 }

@@ -99,17 +99,19 @@ class RecaptchaService
         return $errors;
     }
 
-    public function verify(Request $request, string $response): Response
+    public function verify(string $response, Request $request = null): Response
     {
-        $hostname = (string) $request->server->get('SERVER_NAME');
-        $remoteIp = (string) $request->server->get('REMOTE_ADDR');
-        $expectedHostName = $this->debug ? $remoteIp : $hostname;
-
         $recaptcha = new ReCaptcha($this->secretKey);
-        $recaptcha->setExpectedHostname($expectedHostName)
-            ->setChallengeTimeout($this->timeoutSeconds)
+        $recaptcha->setChallengeTimeout($this->timeoutSeconds)
             ->setScoreThreshold($this->scoreThreshold)
             ->setExpectedAction($this->action);
+
+        $remoteIp = null;
+        if ($request instanceof Request) {
+            $hostname = (string) $request->server->get('SERVER_NAME');
+            $remoteIp = (string) $request->server->get('REMOTE_ADDR');
+            $recaptcha->setExpectedHostname($this->debug ? $remoteIp : $hostname);
+        }
 
         return $recaptcha->verify($response, $remoteIp);
     }

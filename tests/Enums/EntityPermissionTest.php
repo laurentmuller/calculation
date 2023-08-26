@@ -22,8 +22,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityPermission::class)]
 class EntityPermissionTest extends TestCase
 {
-    private ?TranslatorInterface $translator = null;
-
     /**
      * @return array<array{EntityPermission, string}>
      */
@@ -203,12 +201,10 @@ class EntityPermissionTest extends TestCase
      */
     private function createTranslator(): TranslatorInterface
     {
-        if (!$this->translator instanceof TranslatorInterface) {
-            $this->translator = $this->createMock(TranslatorInterface::class);
-            $this->translator->method('trans')
-                ->willReturnArgument(0);
-        }
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')
+            ->willReturnArgument(0);
 
-        return $this->translator;
+        return $translator;
     }
 }

@@ -15,6 +15,7 @@ namespace App\Tests\Entity;
 use App\Entity\User;
 use App\Entity\UserProperty;
 use App\Repository\UserPropertyRepository;
+use Doctrine\ORM\Exception\NotSupported;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(UserProperty::class)]
 class UserPropertyTest extends AbstractEntityValidatorTestCase
@@ -95,6 +96,9 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         self::assertCount(3, $result);
     }
 
+    /**
+     * @throws NotSupported
+     */
     public function testInvalidName(): void
     {
         $object = new UserProperty();
@@ -114,6 +118,9 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         self::assertCount(1, $result);
     }
 
+    /**
+     * @throws NotSupported
+     */
     public function testInvalidValue(): void
     {
         $object = new UserProperty('name');
@@ -146,6 +153,9 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         }
     }
 
+    /**
+     * @throws NotSupported
+     */
     public function testValid(): void
     {
         $object = new UserProperty('name');
@@ -155,6 +165,9 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         self::assertCount(0, $result);
     }
 
+    /**
+     * @throws NotSupported
+     */
     private function getRepository(): UserPropertyRepository
     {
         /** @psalm-var UserPropertyRepository $repository */
@@ -163,6 +176,9 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         return $repository;
     }
 
+    /**
+     * @throws NotSupported
+     */
     private function getUser(): ?User
     {
         return $this->getManager()->getRepository(User::class)->find(1);

@@ -76,7 +76,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getConstraints')]
-    public function testEmptyStringIsValid(string $constraint): void
+    public function testEmptyIsValid(string $constraint): void
     {
         $constraint = $this->createPassword([$constraint => true]);
         $this->validator->validate('', $constraint);

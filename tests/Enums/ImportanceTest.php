@@ -20,8 +20,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(Importance::class)]
 class ImportanceTest extends TestCase
 {
-    private ?TranslatorInterface $translator = null;
-
     public static function getLabel(): array
     {
         return [
@@ -94,12 +92,10 @@ class ImportanceTest extends TestCase
      */
     private function createTranslator(): TranslatorInterface
     {
-        if (!$this->translator instanceof TranslatorInterface) {
-            $this->translator = $this->createMock(TranslatorInterface::class);
-            $this->translator->method('trans')
-                ->willReturnArgument(0);
-        }
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')
+            ->willReturnArgument(0);
 
-        return $this->translator;
+        return $translator;
     }
 }

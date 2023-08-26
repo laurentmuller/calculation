@@ -70,10 +70,6 @@ services:
     App\Service\UserNamer:
         public: true
 
-    ReCaptcha\ReCaptcha:
-        arguments: ['%google_recaptcha_secret_key%']
-
-
     # custom line formatter for monolog
     monolog.custom_formatter:
         class: Monolog\Formatter\LineFormatter

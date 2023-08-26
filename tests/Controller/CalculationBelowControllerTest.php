@@ -18,6 +18,7 @@ use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationBelowController::class)]
@@ -46,6 +47,9 @@ class CalculationBelowControllerTest extends AbstractControllerTestCase
         ];
     }
 
+    /**
+     * @throws ORMException
+     */
     protected function addEntities(): void
     {
         if (!self::$state instanceof CalculationState) {
@@ -85,6 +89,9 @@ class CalculationBelowControllerTest extends AbstractControllerTestCase
         }
     }
 
+    /**
+     * @throws ORMException
+     */
     protected function deleteEntities(): void
     {
         self::$calculation = $this->deleteEntity(self::$calculation);

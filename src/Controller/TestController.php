@@ -275,7 +275,7 @@ class TestController extends AbstractController
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $response = (string) $form->get('recaptcha')->getData();
-            $result = $service->verify($request, $response);
+            $result = $service->verify($response, $request);
             if ($result->isSuccess()) {
                 /** @psalm-var array<string, string[]|string> $values */
                 $values = $result->toArray();
@@ -449,7 +449,7 @@ class TestController extends AbstractController
     private function formatRecaptchaResult(array $values): string
     {
         $values = \array_filter($values);
-        $html = '<table class="table table-borderless table-sm mb-0"><tbody>';
+        $html = '<table class="table table-sm table-borderless mb-0"><tbody>';
         foreach ($values as $key => $value) {
             if (\is_array($value)) {
                 $value = \implode('<br>', $value);

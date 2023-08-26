@@ -16,6 +16,7 @@ use App\Enums\StrengthLevel;
 use App\Validator\Strength;
 use App\Validator\StrengthValidator;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -60,7 +61,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getStrengthLevels')]
-    public function testEmptyStringIsValid(StrengthLevel $level): void
+    public function testEmptyIsValid(StrengthLevel $level): void
     {
         $constraint = new Strength($level);
         $this->validator->validate('', $constraint);
@@ -100,21 +101,19 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
     public function testStrengthInvalid(int $strength): void
     {
         $this->expectException(ConstraintDefinitionException::class);
-
         new Strength($strength);
     }
 
+    /**
+     * @throws Exception
+     */
     protected function createValidator(): StrengthValidator
     {
-        $translator = $this->getMockBuilder(TranslatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $translator = $this->createMock(TranslatorInterface::class);
         $translator->method('trans')
             ->willReturn(self::EMPTY_MESSAGE);
 
-        $factory = $this->getMockBuilder(ZxcvbnFactoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $factory = $this->createMock(ZxcvbnFactoryInterface::class);
         $factory->method('createZxcvbn')
             ->willReturn(new Zxcvbn());
 

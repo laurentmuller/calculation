@@ -20,6 +20,7 @@ use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -29,6 +30,9 @@ class EntityVoterTest extends TestCase
 {
     private ?EntityVoter $voter = null;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $this->voter = $this->getEntityVoter();
@@ -146,6 +150,9 @@ class EntityVoterTest extends TestCase
         return $this->getDefaultUser()->setEnabled(false);
     }
 
+    /**
+     * @throws Exception
+     */
     private function getEntityVoter(): EntityVoter
     {
         return new EntityVoter($this->createMock(ApplicationService::class));

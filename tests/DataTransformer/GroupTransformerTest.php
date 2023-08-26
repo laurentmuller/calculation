@@ -17,6 +17,7 @@ use App\Form\DataTransformer\GroupTransformer;
 use App\Repository\GroupRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
+use Doctrine\ORM\Exception\NotSupported;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -159,6 +160,9 @@ class GroupTransformerTest extends KernelTestCase
         return $this->group;
     }
 
+    /**
+     * @throws NotSupported
+     */
     private function getRepository(): GroupRepository
     {
         if (!$this->repository instanceof GroupRepository) {

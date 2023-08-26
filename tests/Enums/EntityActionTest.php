@@ -21,8 +21,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityAction::class)]
 class EntityActionTest extends TypeTestCase
 {
-    private ?TranslatorInterface $translator = null;
-
     public static function getDefault(): array
     {
         return [
@@ -99,12 +97,10 @@ class EntityActionTest extends TypeTestCase
      */
     private function createTranslator(): TranslatorInterface
     {
-        if (!$this->translator instanceof TranslatorInterface) {
-            $this->translator = $this->createMock(TranslatorInterface::class);
-            $this->translator->method('trans')
-                ->willReturnArgument(0);
-        }
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')
+            ->willReturnArgument(0);
 
-        return $this->translator;
+        return $translator;
     }
 }

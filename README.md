@@ -12,7 +12,7 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 ## Versions
 
 [![Application](https://img.shields.io/badge/Application-3.0.0-blue)](https://github.com/laurentmuller/calculation)
-[![Symfony](https://img.shields.io/badge/Symfony-6.3.3-informational?logo=symfony)](https://symfony.com)
+[![Symfony](https://img.shields.io/badge/Symfony-6.3.4-informational?logo=symfony)](https://symfony.com)
 [![PHP](https://img.shields.io/badge/PHP-8.2.5-informational?logo=php)](https://www.php.net)
 [![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)](https://www.mysql.com)
 
@@ -33,7 +33,6 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 [![Psalm](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml)
 [![Twigcs](https://github.com/laurentmuller/calculation/actions/workflows/twigcs.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/twigcs.yaml)
 [![StyleCI](https://github.styleci.io/repos/229945132/shield?branch=master)](https://github.styleci.io/repos/229945132?branch=master)
-[![Markdown](https://github.com/laurentmuller/calculation/actions/workflows/markdown.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/markdown.yaml)
 
 ## Contributions
 

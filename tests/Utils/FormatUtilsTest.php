@@ -94,8 +94,6 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-return \Generator<int, array{0: \DateTimeInterface|int|null, 1: string|null, 2?: (-1|0|1|2|3), 3?: (-1|0|1|2|3)}, mixed, void>
-     *
      * @throws \Exception
      */
     public static function getDateTimes(): \Generator

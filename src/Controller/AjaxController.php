@@ -43,9 +43,9 @@ class AjaxController extends AbstractController
     use CookieTrait;
     use MathTrait;
 
-    private const KEY_SIDE_BAR = 'sidebar_hide';
+    private const KEY_SIDE_BAR = 'SidebarHide';
 
-    private const MENU_PREFIX = 'menu_sidebar_';
+    private const MENU_PREFIX = 'MenuSidebar';
 
     /**
      * Compute a task.

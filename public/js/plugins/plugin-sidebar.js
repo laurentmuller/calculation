@@ -306,11 +306,11 @@
          */
         _getState() {
             const menus = {};
-            this.$element.find('div.collapse[id^="menu_sidebar_"]').each(function (index, element) {
+            this.$element.find('div.collapse[id^="MenuSidebar"]').each(function (index, element) {
                 const $element = $(element);
                 menus[$element.attr('id')] = $element.hasClass('show');
             });
-            menus.sidebar_hide = this._isSideBarHidden();
+            menus.SidebarHide = this._isSideBarHidden();
             return menus;
         }
 
@@ -359,7 +359,7 @@
         hideSidebar: 'Hide sidebar',
         showMenu: 'Expand menu',
         hideMenu: 'Collapse menu',
-        // the path name to search for in query parameters to highlight URL
+        // the path name to search in query parameters to highlight URL
         pathname: null,
         // collapse siblings menus
         collapseSiblingMenus: true

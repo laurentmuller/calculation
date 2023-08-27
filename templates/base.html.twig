@@ -12,7 +12,7 @@
 {%- set title_parameters = title_parameters|default({}) -%}
 {%- set title_domain = title_domain|default(null) -%}
 {%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
-{%- set sidebar_hide = is_remembered and is_actived ? app.request.cookies.get('SIDEBAR_HIDE', true) : true -%}
+{%- set sidebar_hide = is_remembered and is_actived ? app.request.cookies.get('SIDEBARHIDE', true) : true -%}
 {%- set sidebar_class = sidebar_hide ? ' sidebar-hide' : '' -%}
 {%- set status_bar = status_bar is defined ? status_bar : user_service.statusBar and is_remembered and is_actived -%}
 {# rights #}

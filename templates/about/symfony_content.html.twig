@@ -46,21 +46,21 @@
             {{ tools.headerInfo('Kernel') }}
             {{ tools.rowInfo('Environment', app.environment) }}
             {{ tools.rowInfo('Mode', app_mode) }}
-            {{ tools.rowInfo('Version status', service.maintenanceStatus) }}
+            {{ tools.rowInfo('Status', service.maintenanceStatus) }}
             {{ tools.rowInfo('Release', service.releaseDate) }}
             {{ tools.rowInfo('End of maintenance', service.endOfMaintenance) }}
             {{ tools.rowInfo('End of product life', service.endOfLife) }}
         </tbody>
     </table>
     {# Configuration #}
-    <p class="fw-bold mb-1 p-1 border-bottom">Configuration</p>
+    <p class="fw-bold mb-0 p-1 border-bottom">Configuration</p>
     <div id="symfonyAccordion">
         {# parameters #}
         {{ _self.headerLinkInfo('Parameters', 'parameters') }}
         <div class="collapse" id="parameters" aria-labelledby="parameters-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-hover table-sm mb-0">
                 <tbody>
-                {{ tools.rowInfo('Intl Locale', locale, 'ps-3') }}
+                {{ tools.rowInfo('Locale', locale, 'ps-3') }}
                 {{ tools.rowInfo('Timezone', service.timezone, 'ps-3') }}
                 {{ tools.rowInfo('Charset', service.charset, 'ps-3') }}
                 </tbody>

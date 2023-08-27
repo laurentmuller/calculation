@@ -3,12 +3,12 @@
 <div class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
     {%- if edit_page -%}
         {%- set path = path(edit_page, params) -%}
-        {% set item_class = is_editable ? 'btn-default' : '' %}
+        {% set item_class = row_edit and is_editable ? 'btn-default' : '' %}
         {{ dropdownItemWithClass(path, 'calculation.edit.title_short', ICON_EDIT, item_class) }}
     {%- endif -%}
     {%- if state_page -%}
         {%- set path = path(state_page, params) -%}
-        {% set item_class = is_editable ? '' : 'btn-default' %}
+        {% set item_class = row_edit and not is_editable ? 'btn-default' : '' %}
         {{ dropdownItemWithClass(path, 'calculation.list.state_title', ICON_CALCULATION_STATE, item_class) }}
     {%- endif -%}
     {%- if delete_page -%}
@@ -25,8 +25,9 @@
     {%- endif -%}
     {%- if show_page -%}
         {{- dropdownSeparator() }}
+        {% set item_class = row_show ? 'btn-default' : '' %}
         {%- set path = path(show_page, params) -%}
-        {{ dropdownItem(path, 'calculation.show.title', ICON_SHOW) }}
+        {{ dropdownItemWithClass(path, 'calculation.show.title', ICON_SHOW, item_class) }}
     {%- endif -%}
     {%- if single_page_pdf or single_page_excel -%}
         {{- dropdownSeparator() }}

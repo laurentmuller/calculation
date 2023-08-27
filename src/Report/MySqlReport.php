@@ -39,6 +39,7 @@ class MySqlReport extends AbstractReport
         if ([] === $database && [] === $configuration) {
             return false;
         }
+
         $this->AddPage();
         $table = PdfGroupTableBuilder::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
@@ -46,19 +47,24 @@ class MySqlReport extends AbstractReport
                 PdfColumn::left('Name', 40),
                 PdfColumn::left('Value', 60)
             )->outputHeaders();
-        if ([] !== $database) {
-            $table->setGroupKey('Database');
-            foreach ($database as $key => $value) {
-                $table->addRow($key, $value);
-            }
-        }
-        if ([] !== $configuration) {
-            $table->setGroupKey('Configuration');
-            foreach ($configuration as $key => $value) {
-                $table->addRow($key, $value);
-            }
-        }
+
+        $this->outputArray($table, 'Database', $database);
+        $this->outputArray($table, 'Configuration', $configuration);
 
         return true;
+    }
+
+    /**
+     * @param array<string, string> $values
+     */
+    private function outputArray(PdfGroupTableBuilder $table, string $title, array $values): void
+    {
+        if ([] !== $values) {
+            $this->addBookmark($title);
+            $table->setGroupKey($title);
+            foreach ($values as $key => $value) {
+                $table->addRow($key, $value);
+            }
+        }
     }
 }

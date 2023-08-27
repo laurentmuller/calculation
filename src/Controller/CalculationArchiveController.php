@@ -26,11 +26,21 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[AsController]
 #[Route(path: '/admin')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
-class ArchiveCalculationController extends AbstractController
+class CalculationArchiveController extends AbstractController
 {
+    /**
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
     #[Route(path: '/archive', name: 'admin_archive')]
     public function invoke(Request $request, CalculationArchiveService $service): Response
     {
+        if (!$service->isEditableStates()) {
+            return $this->redirectToHomePage('archive.editable_empty');
+        }
+        if (!$service->isNotEditableStates()) {
+            return $this->redirectToHomePage('archive.not_editable_empty');
+        }
+
         $application = $this->getApplication();
         $query = $service->createQuery();
         $form = $service->createForm($query);

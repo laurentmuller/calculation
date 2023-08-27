@@ -15,6 +15,7 @@ namespace App\Service;
 use App\Entity\User;
 use App\Enums\ImageExtension;
 use App\Enums\ImageSize;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 use Vich\UploaderBundle\Naming\NamerInterface;
 
@@ -23,6 +24,7 @@ use Vich\UploaderBundle\Naming\NamerInterface;
  *
  * @implements NamerInterface<User>
  */
+#[Autoconfigure(public: true)]
 class UserNamer implements NamerInterface
 {
     /**

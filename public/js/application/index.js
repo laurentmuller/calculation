@@ -62,16 +62,12 @@ function updateView() {
  *
  * @param {jQuery} $oldSelection - the old selection.
  * @param {jQuery} $newSelection - the new selection.
- * @param {boolean} hideMenus - true to hide displayed drop-down menus.
  */
-function toggleSelection($oldSelection, $newSelection, hideMenus) {
+function toggleSelection($oldSelection, $newSelection) {
     'use strict';
     if (!$oldSelection.is($newSelection)) {
         $oldSelection.removeClass('table-primary');
         $newSelection.addClass('table-primary').scrollInViewport();
-    }
-    if (hideMenus) {
-        $.hideDropDownMenus();
     }
 }
 
@@ -110,14 +106,14 @@ function createKeydownHandler($parent) {
             case 'End': // select last row
             {
                 const $last = $parent.find('.row-item:last');
-                toggleSelection($selection, $last, false);
+                toggleSelection($selection, $last);
                 e.preventDefault();
                 break;
             }
             case 'Home': // select first row
             {
                 const $first = $parent.find('.row-item:first');
-                toggleSelection($selection, $first, false);
+                toggleSelection($selection, $first);
                 e.preventDefault();
                 break;
             }
@@ -129,10 +125,10 @@ function createKeydownHandler($parent) {
                 const $prev = $rows.eq(index);
                 const $last = $rows.eq($rows.length - 1);
                 if ($prev.length) {
-                    toggleSelection($selection, $prev, false);
+                    toggleSelection($selection, $prev);
                     e.preventDefault();
                 } else if ($last.length) {
-                    toggleSelection($selection, $last, false);
+                    toggleSelection($selection, $last);
                     e.preventDefault();
                 }
                 break;
@@ -144,10 +140,10 @@ function createKeydownHandler($parent) {
                 const $next = $rows.eq(index);
                 const $first = $rows.eq(0);
                 if ($next.length) {
-                    toggleSelection($selection, $next, false);
+                    toggleSelection($selection, $next);
                     e.preventDefault();
                 } else if ($first.length) {
-                    toggleSelection($selection, $first, false);
+                    toggleSelection($selection, $first);
                     e.preventDefault();
                 }
                 break;
@@ -214,13 +210,12 @@ function updateCounter(e) {
  * Select a row.
  *
  * @param {jQuery} $source - the source to find row to select.
- * @param {boolean} hideMenus - true to hide displayed drop-down menus.
  */
-function selectRow($source, hideMenus) {
+function selectRow($source) {
     'use strict';
     const $oldSelection = $('#calculations .row-item.table-primary');
     const $newSelection = $source.closest('.row-item');
-    toggleSelection($oldSelection, $newSelection, hideMenus);
+    toggleSelection($oldSelection, $newSelection);
 }
 
 /**
@@ -241,14 +236,14 @@ function selectRow($source, hideMenus) {
         // handle table events and context menu
         $calculations.on('mousedown', '.row-item', function (e) {
             if (e.button === 0) {
-                selectRow($(this), true);
+                selectRow($(this));
             } else if (e.button === 2) {
                 $.hideDropDownMenus();
             }
         }).on('click', '.row-item [data-bs-toggle="dropdown"]', function () {
-            selectRow($(this), false);
+            selectRow($(this));
         }).initContextMenu('.row-item td:not(.context-menu-skip),.row-item div:not(.context-menu-skip)', function () {
-            selectRow($(this), true);
+            selectRow($(this));
         });
 
         // remove separators

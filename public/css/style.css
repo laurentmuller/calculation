@@ -945,3 +945,16 @@ span.bottom-border-gradient {
     column-gap: 0.5rem !important;
     -moz-column-gap: 0.5rem !important;
 }
+
+.card.card-collapse .card-header {
+    border-bottom: 0 !important;
+}
+
+.card.card-collapse .card-body,
+.card.card-collapse .card-header:not(:first-child) {
+    border-top: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+.card.card-collapse .card-header .drop-down-icon-left,
+.card.card-collapse .card-header .drop-down-icon-right {
+    margin-bottom: 0 !important;
+}

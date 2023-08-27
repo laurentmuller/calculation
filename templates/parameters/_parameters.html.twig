@@ -8,12 +8,12 @@
 {%- set show = 'parameters.display_parameters.show'|trans({'%name%': name}) -%}
 {%- set hide = 'parameters.display_parameters.hide'|trans({'%name%': name}) -%}
 {%- set title = expanded ? hide : show -%}
-<div class="card-header d-flex-wrap-center border-bottom-0">
-    <a class="drop-down-icon-right card-title mb-0" href="#" data-bs-toggle="collapse" data-bs-target="#{{ href }}" aria-expanded="{{ expanded|json_encode }}" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">
+<div class="card-header d-flex-wrap-center">
+    <a class="drop-down-icon-right card-title" href="#" data-bs-toggle="collapse" data-bs-target="#{{ href }}" aria-expanded="{{ expanded|json_encode }}" title="{{ title }}" data-show="{{ show }}" data-hide="{{ hide }}">
         {{- name -}}
     </a>
 </div>
-<div id="{{ href }}" class="card-body border-top collapse{% if expanded %} show{% endif %}" data-bs-parent=".card-parameter">
+<div id="{{ href }}" class="card-body collapse{% if expanded %} show{% endif %}" data-bs-parent=".card-parameter">
     {{ include(template, {'form': form, options: options}) }}
 </div>
 {% endmacro %}
@@ -45,7 +45,7 @@
 {%- endblock %}
 {# body #}
 {% block card_body -%}
-<div class="card card-parameter">
+<div class="card card-parameter card-collapse">
     {% block sections %}{% endblock %}
 </div>
 {{ parent() }}

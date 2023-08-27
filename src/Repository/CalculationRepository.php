@@ -97,9 +97,10 @@ class CalculationRepository extends AbstractRepository
     {
         $builder = $this->createQueryBuilder('e')
             ->select('COUNT(e.id)');
-        $builder = self::addBelowFilter($builder, $minMargin);
 
-        return (int) $builder->getQuery()->getSingleScalarResult();
+        return (int) self::addBelowFilter($builder, $minMargin)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -122,11 +123,12 @@ class CalculationRepository extends AbstractRepository
             ->getDQL();
         /** @psalm-var literal-string $where */
         $where = "r.id in($dql)"; // @phpstan-ignore-line
-        $builder = $this->createQueryBuilder('r')
-            ->select('COUNT(r.id)')
-            ->where($where);
 
-        return (int) $builder->getQuery()->getSingleScalarResult();
+        return (int) $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->where($where)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -148,11 +150,12 @@ class CalculationRepository extends AbstractRepository
             ->getDQL();
         /** @psalm-var literal-string $where */
         $where = "r.id in($dql)"; // @phpstan-ignore-line
-        $builder = $this->createQueryBuilder('r')
-            ->select('COUNT(r.id)')
-            ->where($where);
 
-        return (int) $builder->getQuery()->getSingleScalarResult();
+        return (int) $this->createQueryBuilder('r')
+            ->select('COUNT(r.id)')
+            ->where($where)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**

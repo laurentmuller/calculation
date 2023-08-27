@@ -66,10 +66,6 @@ services:
             - '../src/Util'
             - '../src/Word'
 
-    # make public to use with VichUploaderBundle
-    App\Service\UserNamer:
-        public: true
-
     # custom line formatter for monolog
     monolog.custom_formatter:
         class: Monolog\Formatter\LineFormatter

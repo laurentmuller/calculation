@@ -6,20 +6,13 @@
 {# sections #}
 {% block sections -%}
 {{ _self.collapseLine('customer', form, true) }}
-<hr class="my-0">
 {{ _self.collapseLine('default', form) }}
-<hr class="my-0">
 {{ _self.collapseLine('product', form) }}
-<hr class="my-0">
 {{ _self.collapseLine('display', form) }}
-<hr class="my-0">
 {{ _self.collapseLine('message', form) }}
-<hr class="my-0">
 {{ _self.collapseLine('home', form) }}
-<hr class="my-0">
 {{ _self.collapseLine('options', form) }}
 {% if super_admin %}
-    <hr class="my-0">
     {{ _self.collapseLine('security', form, false, options) }}
 {% endif %}
 {%- endblock %}

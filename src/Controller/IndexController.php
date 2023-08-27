@@ -99,7 +99,7 @@ class IndexController extends AbstractController
      * @throws \Exception
      */
     #[Route(path: '/', name: self::HOME_PAGE, methods: Request::METHOD_GET)]
-    public function invoke(
+    public function index(
         Request $request,
         #[MapQueryParameter] bool $restrict = null,
         #[MapQueryParameter] bool $custom = null

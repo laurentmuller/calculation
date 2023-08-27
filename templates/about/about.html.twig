@@ -5,8 +5,8 @@
 {% macro card(id, pdf_route, excel_route=false, word_route=false) -%}
     {%- set title = ('about.' ~ id)|trans -%}
     {%- set route = path('about_' ~ id ~ '_content') -%}
-    <div class="card-header d-flex-wrap-center border-bottom-0">
-        <a class="drop-down-icon-left card-title flex-fill mb-0" href="#" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" title="{{ 'about.expand'|trans }}">{{- title -}}</a>
+    <div class="card-header d-flex-wrap-center">
+        <a class="drop-down-icon-left card-title flex-fill" href="#" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" title="{{ 'about.expand'|trans }}">{{- title -}}</a>
         {{ linkExternal(path(pdf_route), null, null, ICON_PDF, 'common.button_export_pdf') }}
         {% if excel_route %}
             {{ linkExternal(path(excel_route), null, null, ICON_EXCEL, 'common.button_export_excel') }}
@@ -15,7 +15,7 @@
             {{ linkExternal(path(word_route), null, null, ICON_WORD, 'common.button_export_word') }}
         {% endif %}
     </div>
-    <div class="card-body border-top collapse" id="{{ id }}" data-bs-parent="#aboutAccordion" data-url="{{ route }}">
+    <div class="card-body collapse" id="{{ id }}" data-bs-parent="#aboutAccordion" data-url="{{ route }}">
         <div class="collapse-content" data-url="{{ route }}">
             <div class="alert py-0 mb-0" role="alert">
                 <span class="spinner-border spinner-border-sm text-secondary me-2" role="status"></span><span>{{ 'about.loading'|trans }}</span>
@@ -60,16 +60,12 @@
 {# body #}
 {% block body %}
 {{ parent() }}
-<div class="card" id="aboutAccordion">
+<div class="card card-collapse" id="aboutAccordion">
     {{ _self.card('licence', 'about_licence_pdf', false, 'about_licence_word') }}
-    <hr class="my-0">
     {{ _self.card('policy', 'about_policy_pdf', false, 'about_policy_word') }}
     {% if is_admin %}
-        <hr class="my-0">
         {{ _self.card('symfony', 'about_symfony_pdf', 'about_symfony_excel') }}
-        <hr class="my-0">
         {{ _self.card('php', 'about_php_pdf', 'about_php_excel') }}
-        <hr class="my-0">
         {{ _self.card('mysql', 'about_mysql_pdf', 'about_mysql_excel', false) }}
     {% endif %}
 </div>

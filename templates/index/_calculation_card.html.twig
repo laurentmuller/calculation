@@ -14,13 +14,13 @@
         <div data-id="{{ id }}" class="{{ class_name }}" style="{{ properties.stateCss(calculation.stateColor) }}">
             <div class="d-flex-no-wrap-center context-menu-skip">
                 <div class="text-truncate fw-bold me-auto">
-                    {% if edit_page %}
+                    {% if row_edit %}
                         {% set edit_route = is_editable ? edit_page : state_page %}
                         {% set edit_title = is_editable ? 'calculation.edit.title_short' : 'calculation.list.state_title' %}
                         <a href="{{ path(edit_route, params) }}" class="item-link text-body" title="{{ edit_title|trans }}">
                             {{- calculation.id|identifier -}}
                         </a>
-                    {% elseif show_page %}
+                    {% elseif row_show %}
                         <a href="{{ path('calculation_show', params) }}" class="item-link text-body" title="{{ 'calculation.show.title'|trans }}">
                             {{- calculation.id|identifier -}}
                         </a>
@@ -29,7 +29,7 @@
                     {% endif %}
                 </div>
                 {%- if is_drop_down -%}
-                    <div class="context-menu-skip mx-n2 d-print-none">
+                    <div class="context-menu-skip d-print-none">
                         {{ include('index/_calculation_menu.html.twig') }}
                     </div>
                 {% endif %}

@@ -103,6 +103,18 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
+     * Get the number of calculation states where editable is true.
+     *
+     * @psalm-param literal-string $alias
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function getEditableCount(string $alias = self::DEFAULT_ALIAS): int
+    {
+        return $this->countStates($this->getEditableQueryBuilder($alias), $alias);
+    }
+
+    /**
      * Gets query builder for state where editable is true.
      *
      * @psalm-param literal-string $alias
@@ -111,6 +123,18 @@ class CalculationStateRepository extends AbstractRepository
     {
         return $this->getSortedBuilder($alias)
             ->where("$alias.editable = 1");
+    }
+
+    /**
+     * Get the number of calculation states where editable is false.
+     *
+     * @psalm-param literal-string $alias
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function getNotEditableCount(string $alias = self::DEFAULT_ALIAS): int
+    {
+        return $this->countStates($this->getNotEditableQueryBuilder($alias), $alias);
     }
 
     /**
@@ -180,6 +204,19 @@ class CalculationStateRepository extends AbstractRepository
             ->addSelect($this->getCountDistinct(self::CALCULATION_ALIAS, 'calculations'))
             ->leftJoin("$alias.calculations", self::CALCULATION_ALIAS)
             ->groupBy("$alias.id");
+    }
+
+    /**
+     * @psalm-param literal-string $alias
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    private function countStates(QueryBuilder $builder, string $alias): int
+    {
+        return (int) $builder->select("count($alias.id)")
+            ->resetDQLPart('orderBy')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**

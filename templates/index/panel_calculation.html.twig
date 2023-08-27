@@ -2,7 +2,7 @@
 {# parameters #}
 {%- set caller = path(app.current_route) -%}
 {%- set selection = app.request.get('id', 0) -%}
-{# actions #}
+{# page actions #}
 {%- set object_type = ENTITY_CALCULATION -%}
 {%- set add_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_add' : null -%}
 {%- set clone_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
@@ -12,8 +12,11 @@
 {%- set show_page = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
 {%- set single_page_pdf = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
 {%- set single_page_excel = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_excel_id' : null -%}
-{%- set default_page = user_service.actionEdit ? edit_page : show_page -%}
-{%- set row_link = not user_service.actionNone and (edit_page or show_page) -%}
+{# default actions #}
+{%- set row_none = user_service.actionNone -%}
+{%- set row_edit = edit_page and user_service.actionEdit -%}
+{%- set row_show = show_page and user_service.actionShow -%}
+{%- set row_link = not row_none and (edit_page or show_page) -%}
 {%- set is_drop_down = add_page or edit_page or delete_page or show_page or single_page_pdf -%}
 {%- set is_calculations = calculations|length -%}
 {# content #}

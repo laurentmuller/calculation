@@ -1394,6 +1394,8 @@ user:
       success: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
 archive:
   title: Archiver des calculations
+  editable_empty: Aucun statut modifiable n'est présent.
+  not_editable_empty: Aucun statut non-modifiable n'est présent.
   edit:
     description: Cette page vous permet d'archiver des calculations en modifiant leur statut.
     last_update: 'Dernier archivage : %date%'

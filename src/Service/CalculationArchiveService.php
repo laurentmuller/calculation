@@ -109,6 +109,26 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
+     * Returns a value indicating if one or ore calculation states are editable.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function isEditableStates(): bool
+    {
+        return $this->stateRepository->getEditableCount() > 0;
+    }
+
+    /**
+     * Returns a value indicating if one or ore calculation states are not editable.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    public function isNotEditableStates(): bool
+    {
+        return $this->stateRepository->getNotEditableCount() > 0;
+    }
+
+    /**
      * Save the query values to the session.
      */
     public function saveQuery(CalculationArchiveQuery $query): void

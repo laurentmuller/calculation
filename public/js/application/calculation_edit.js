@@ -291,7 +291,11 @@ const Application = {
 
         const that = this;
         const $form = $('#edit-form');
+        const $buttonAdjust = $('.btn-adjust');
         const $userMarginRow = $('#user-margin-row');
+
+        // hide tooltip
+        $buttonAdjust.tooltip('hide');
 
         // show or hide empty items
         $('#empty-items').toggleClass('d-none', $('#data-table-edit tbody').length !== 0);
@@ -312,7 +316,7 @@ const Application = {
             } else {
                 $userMarginRow.removeClass('d-none');
             }
-            $('.btn-adjust').toggleDisabled(true).addClass('cursor-default');
+            $buttonAdjust.toggleDisabled(true).addClass('cursor-default');
             return that;
         }
 
@@ -361,9 +365,9 @@ const Application = {
                 $('#calculation_userMargin').intVal(response.user_margin).selectFocus();
             }
             if (response.overall_below) {
-                $('.btn-adjust').toggleDisabled(false).removeClass('cursor-default');
+                $buttonAdjust.toggleDisabled(false).removeClass('cursor-default');
             } else {
-                $('.btn-adjust').toggleDisabled(true).addClass('cursor-default');
+                $buttonAdjust.toggleDisabled(true).addClass('cursor-default');
             }
             $('#calculation_customer').trigger('input');
             $("#data-table-edit").updateErrors();

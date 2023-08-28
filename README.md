@@ -33,7 +33,3 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 [![Psalm](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml)
 [![Twigcs](https://github.com/laurentmuller/calculation/actions/workflows/twigcs.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/twigcs.yaml)
 [![StyleCI](https://github.styleci.io/repos/229945132/shield?branch=master)](https://github.styleci.io/repos/229945132?branch=master)
-
-## Contributions
-
-![Contributions](https://streak-stats.demolab.com?user=laurentmuller&locale=fr&type=png)

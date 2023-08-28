@@ -101,7 +101,7 @@
 
             const attributes = $.extend(true, {
                 'data-bs-custom-class': customClass,
-                'data-bs-toggle':  'tooltip',
+                'data-bs-toggle': 'tooltip',
                 'data-bs-trigger': 'manual',
                 'data-bs-title': title,
                 'type': options.type,

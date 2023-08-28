@@ -52,7 +52,8 @@ function submitForm(form) {
     $form.data('value', newValue);
 
     // get items
-    const id = $('#task').intVal();
+    const $task = $('#task');
+    const id = $task.intVal();
     const $itemsEmpty = $('.task-items-empty');
     const selector = `#table-task-edit .task-item-row[data-id="${id}"] .item-input:checked`;
     const items = $(selector).map(function () {
@@ -73,7 +74,7 @@ function submitForm(form) {
     // get data
     const url = $form.prop('action');
     const data = {
-        'id': $('#task').intVal(),
+        'id': $task.intVal(),
         'quantity': $('#quantity').floatVal(),
         'items': items
     };

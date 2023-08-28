@@ -13,7 +13,7 @@ class EditItemDialog extends EditDialog {
     /**
      * Gets the selected item.
      *
-     * @returns {Object} the item.
+     * @returns {{description: string, unit: string, price: number, quantity: number, total: number}} the item.
      */
     getItem() {
         'use strict';
@@ -148,9 +148,9 @@ class EditItemDialog extends EditDialog {
         'use strict';
         this.hide();
         if (this.$editingRow) {
-            const button = this.$editingRow.findExists('.btn-delete-item');
-            if (button) {
-                this.application.removeItem(button);
+            const $button = this.$editingRow.findExists('.btn-delete-item');
+            if ($button) {
+                this.application.removeItem($button);
             }
         }
     }

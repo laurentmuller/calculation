@@ -6,6 +6,7 @@
  * @property {jQuery} $form
  * @property {jQuery} $modal
  * @property {jQuery} $category
+ * @property {Application} application
  */
 class EditDialog {
 
@@ -20,7 +21,6 @@ class EditDialog {
             throw new TypeError('Abstract class "EditDialog" cannot be instantiated directly.');
         }
         this.application = application;
-        // this._init();
     }
 
     /**
@@ -87,7 +87,7 @@ class EditDialog {
     /**
      * Gets the selected group.
      *
-     * @returns {Object} the group.
+     * @returns {{id: number, code: string}}  the group.
      */
     getGroup() {
         'use strict';
@@ -104,7 +104,7 @@ class EditDialog {
     /**
      * Gets the selected category.
      *
-     * @returns {Object} the category.
+     * @returns {{id: number, code: string}} the category.
      */
     getCategory() {
         'use strict';

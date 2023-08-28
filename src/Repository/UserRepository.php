@@ -16,7 +16,6 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -154,7 +153,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
                 ->where('e.hashedToken IS NOT NULL')
                 ->getQuery()
                 ->getSingleScalarResult();
-        } catch (NonUniqueResultException) {
+        } catch (\Doctrine\ORM\Exception\ORMException) {
             return false;
         }
     }
@@ -186,7 +185,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     public function removeResetPasswordRequest(ResetPasswordRequestInterface $resetPasswordRequest): void
     {
         if (!$resetPasswordRequest instanceof User) {
-            throw new UnsupportedUserException(\sprintf('Instance of "%s" is not supported.', $resetPasswordRequest::class));
+            throw new UnsupportedUserException(\sprintf('Expected "%s", "%s" given.', ResetPasswordRequestInterface::class, $resetPasswordRequest::class));
         }
         $this->resetPasswordRequest($resetPasswordRequest);
     }

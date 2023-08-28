@@ -42,7 +42,7 @@ class ProfileChangePasswordType extends AbstractEntityType
         parent::configureOptions($resolver);
         $resolver->setDefaults([
             'constraints' => [
-                new Callback(function (User $_user, ExecutionContextInterface $context): void {
+                new Callback(function (User $user, ExecutionContextInterface $context): void {
                     $this->validate($context);
                 }),
             ],

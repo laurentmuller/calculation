@@ -3,7 +3,7 @@
 /* globals sortable, Toaster, MenuBuilder, EditTaskDialog, EditItemDialog  */
 
 /**
- * -------------- The Application handler --------------
+ * -------------- The Application --------------
  */
 const Application = {
 
@@ -451,7 +451,7 @@ const Application = {
     /**
      * Finds or create the table head for the given group.
      *
-     * @param {Object} group - the group data used to find row.
+     * @param {{id: number, code: string}} group - the group data used to find row.
      * @returns {jQuery} the table head.
      */
     findOrCreateGroup: function (group) {
@@ -467,7 +467,7 @@ const Application = {
      * Find or create the table body for the given category.
      *
      * @param {jQuery} $group - the parent group (thead).
-     * @param {Object} category - the category data used to update row.
+     * @param {{id: number, code: string}} category - the category data used to update row.
      * @returns {jQuery} the table body.
      */
     findOrCreateCategory: function ($group, category) {
@@ -618,7 +618,7 @@ const Application = {
     /**
      * Appends the given group to the table.
      *
-     * @param {Object} group - the group data used to update row.
+     * @param {{id: number, code: string}} group - the group data used to update row.
      * @returns {jQuery} the appended group.
      */
     appendGroup: function (group) {
@@ -661,7 +661,7 @@ const Application = {
      * Appends the given category to the table.
      *
      * @param {jQuery} $group - the parent group (thead).
-     * @param {Object} category - the category data used to update row.
+     * @param {{id: number, code: string}} category - the category data used to update row.
      * @returns {jQuery} the appended category.
      */
     appendCategory: function ($group, category) {

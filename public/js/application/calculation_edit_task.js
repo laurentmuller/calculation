@@ -13,7 +13,7 @@ class EditTaskDialog extends EditDialog {
     /**
      * Gets the selected items.
      *
-     * @return {Object} the items.
+     * @return {Array.<{description: string, unit: string, price: number, quantity: number, total: number}>} the items.
      */
     getItems() {
         'use strict';
@@ -25,9 +25,9 @@ class EditTaskDialog extends EditDialog {
         return that._getCheckedItems().map(function () {
             const $row = $(this).parents('.task-item-row');
             const text = $row.find('.form-check-label').text();
+            const description = task + ' - ' + text;
             const price = $.parseFloat($row.find('.task_value').data('value'));
             const total = $.roundValue(price * quantity);
-            const description = task + ' - ' + text;
             /* eslint no-lone-blocks: "off" */
             return {
                 description: description,

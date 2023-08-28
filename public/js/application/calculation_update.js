@@ -48,7 +48,8 @@
     $form.simulate().initValidator({
         rules: {
             'form[states][]': {
-                require_from_group: [1, '#form_states .form-check-input'],
+                /* eslint camelcase: "off" */
+                require_from_group: [1, '#form_states .form-check-input']
             }
         }, messages: {
             'form[states][]': $form.data('error')

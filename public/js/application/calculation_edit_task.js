@@ -28,6 +28,7 @@ class EditTaskDialog extends EditDialog {
             const price = $.parseFloat($row.find('.task_value').data('value'));
             const total = $.roundValue(price * quantity);
             const description = task + ' - ' + text;
+            /* eslint no-lone-blocks: "off" */
             return {
                 description: description,
                 unit: unit,

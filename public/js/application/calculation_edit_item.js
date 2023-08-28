@@ -20,9 +20,12 @@ class EditItemDialog extends EditDialog {
         const price = this.$price.floatVal();
         const quantity = this.$quantity.floatVal();
         const total = $.roundValue(price * quantity);
+        const description = this.$description.val();
+        const unit = this.$unit.val();
+        /* eslint no-lone-blocks: "off" */
         return {
-            description: this.$description.val(),
-            unit: this.$unit.val(),
+            description: description,
+            unit: unit,
             price: price,
             quantity: quantity,
             total: total

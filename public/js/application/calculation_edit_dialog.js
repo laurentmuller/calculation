@@ -94,6 +94,7 @@ class EditDialog {
         const $selection = this.$category.getSelectedOption();
         const id = $.parseInt($selection.data('groupId'));
         const code = $selection.data('groupCode');
+        /* eslint no-lone-blocks: "off" */
         return {
             id: id,
             code: code
@@ -110,6 +111,7 @@ class EditDialog {
         const $selection = this.$category.getSelectedOption();
         const id = this.$category.intVal();
         const code = $selection.text();
+        /* eslint no-lone-blocks: "off" */
         return {
             id: id,
             code: code

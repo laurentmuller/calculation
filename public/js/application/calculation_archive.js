@@ -9,7 +9,8 @@
     $form.simulate().initValidator({
         rules: {
             'form[sources][]': {
-                require_from_group: [1, '#form_sources .form-check-input'],
+                /* eslint camelcase: "off" */
+                require_from_group: [1, '#form_sources .form-check-input']
             }
         },
         messages: {

@@ -93,6 +93,7 @@ function createKeydownHandler($parent) {
         }
 
         const $selection = $parent.find('.row-item.table-primary');
+        /*eslint no-lone-blocks: "off"*/
         switch (e.key) {
             case 'Enter':  // edit selected row
             {

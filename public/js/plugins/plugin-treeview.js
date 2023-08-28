@@ -414,6 +414,7 @@
             }
 
             const $target = $(e.currentTarget);
+            /*eslint no-lone-blocks: "off"*/
             switch (e.key) {
                 case 'End': { //  => last
                     const $item = this.$element.find('.list-group-item:visible:last');

@@ -171,7 +171,9 @@
             // value?
             if (!result) {
                 return {
-                    score: 0, percent: 0, text: ''
+                    score: 0,
+                    percent: 0,
+                    text: ''
                 };
             }
 
@@ -179,9 +181,10 @@
             const score = result.score;
             const key = options.verdictKeys[score];
             const text = typeof options.translate === 'function' ? options.translate(key) : key;
-
             return {
-                score: score, percent: (score + 1) * 20, text: text
+                score: score,
+                percent: (score + 1) * 20,
+                text: text
             };
         }
 

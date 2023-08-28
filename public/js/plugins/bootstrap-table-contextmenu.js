@@ -11,10 +11,10 @@
 
     $.extend($.fn.bootstrapTable.defaults, {
         // Option defaults
-        contextMenu: undefined,
+        contextMenu: null,
         contextMenuTrigger: 'right',
         contextMenuAutoClickRow: true,
-        contextMenuButton: undefined,
+        contextMenuButton: null,
         rowSelector: 'table-primary',
 
         beforeContextMenuRow: function (e, row, buttonElement) {

@@ -400,9 +400,11 @@
             const $selection = this._findButton('.btn-color:focus') || $button;
             if ($selection && $selection.length) {
                 const index = $selection.data('index');
+                const col = index % this.cols;
+                const row = Math.trunc(index / this.cols);
                 return {
-                    col: index % this.cols,
-                    row: Math.trunc(index / this.cols)
+                    col: col,
+                    row: row
                 };
             }
             // first button

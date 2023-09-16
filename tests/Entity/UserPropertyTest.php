@@ -92,6 +92,7 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
     public function testInvalidAll(): void
     {
         $object = new UserProperty();
+        self::assertNotNull($this->validator);
         $result = $this->validator->validate($object);
         self::assertCount(3, $result);
     }
@@ -161,6 +162,7 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         $object = new UserProperty('name');
         $object->setString('value');
         $object->setUser($this->getUser());
+        self::assertNotNull($this->validator);
         $result = $this->validator->validate($object);
         self::assertCount(0, $result);
     }

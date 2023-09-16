@@ -18,25 +18,25 @@ use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
- * Abstract data transformer to convert an entity to an identifier (integer).
+ * Data transformer to convert an entity to an identifier (integer).
  *
  * @template T of AbstractEntity
  *
  * @template-implements DataTransformerInterface<T, int>
  */
-class AbstractEntityTransformer implements DataTransformerInterface
+readonly class EntityTransformer implements DataTransformerInterface
 {
     /**
      * @var class-string<T>
      */
-    private readonly string $className;
+    private string $className;
 
     /**
      * Constructor.
      *
      * @param AbstractRepository<T> $repository
      */
-    public function __construct(private readonly AbstractRepository $repository)
+    public function __construct(private AbstractRepository $repository)
     {
         $this->className = $this->repository->getClassName();
     }
@@ -44,7 +44,7 @@ class AbstractEntityTransformer implements DataTransformerInterface
     /**
      * @param int|string|null $value
      *
-     * @return T|null
+     * @psalm-return T|null
      */
     public function reverseTransform(mixed $value): ?AbstractEntity
     {
@@ -58,7 +58,7 @@ class AbstractEntityTransformer implements DataTransformerInterface
         }
 
         $entity = $this->repository->find((int) $value);
-        if (!\is_a($entity, $this->className)) {
+        if (null === $entity || !\is_a($entity, $this->className)) {
             $message = \sprintf('Unable to find a "%s" for the value "%s".', $this->className, $value);
             throw new TransformationFailedException($message);
         }
@@ -67,7 +67,7 @@ class AbstractEntityTransformer implements DataTransformerInterface
     }
 
     /**
-     * @param AbstractEntity|null $value
+     * @psalm-param AbstractEntity|null $value
      */
     public function transform(mixed $value): ?int
     {

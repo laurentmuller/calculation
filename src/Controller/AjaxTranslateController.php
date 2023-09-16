@@ -44,8 +44,10 @@ class AjaxTranslateController extends AbstractController
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/detect', name: 'ajax_detect', methods: Request::METHOD_GET)]
     public function detect(
-        #[MapQueryParameter] string $text = null,
-        #[MapQueryParameter(name: 'service')] string $class = null
+        #[MapQueryParameter]
+        string $text = null,
+        #[MapQueryParameter(name: 'service')]
+        string $class = null
     ): JsonResponse {
         if (empty($text)) {
             return $this->jsonFalse([

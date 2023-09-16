@@ -41,8 +41,10 @@ class AjaxUserController extends AbstractController
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/check/user/email', name: 'ajax_check_user_email', methods: Request::METHOD_GET)]
     public function checkEmail(
-        #[MapQueryParameter] string $email = null,
-        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)] int $id = null,
+        #[MapQueryParameter]
+        string $email = null,
+        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
+        int $id = null,
     ): JsonResponse {
         $message = null;
         if (empty($email)) {
@@ -67,8 +69,10 @@ class AjaxUserController extends AbstractController
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/check/user/name', name: 'ajax_check_user_name', methods: Request::METHOD_GET)]
     public function checkName(
-        #[MapQueryParameter] string $username = null,
-        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)] int $id = null,
+        #[MapQueryParameter]
+        string $username = null,
+        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
+        int $id = null,
     ): JsonResponse {
         $message = null;
         if (empty($username)) {

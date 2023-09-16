@@ -88,8 +88,10 @@ class ExchangeRateController extends AbstractController
      */
     #[Route(path: '/rate', name: 'exchange_rate', methods: Request::METHOD_GET)]
     public function getRate(
-        #[MapQueryParameter] string $baseCode = '',
-        #[MapQueryParameter] string $targetCode = ''
+        #[MapQueryParameter]
+        string $baseCode = '',
+        #[MapQueryParameter]
+        string $targetCode = ''
     ): JsonResponse {
         $result = $this->service->getRateAndDates($baseCode, $targetCode);
         if ($this->service->hasLastError()) {

@@ -9,14 +9,14 @@
     "plugins": [
         {
             "name": "jquery",
-            "version": "3.7.0",
+            "version": "3.7.1",
             "files": [
                 "dist/jquery.js"
             ]
         },
         {
             "name": "bootstrap",
-            "version": "5.3.1",
+            "version": "5.3.2",
             "files": [
                 "dist/js/bootstrap.bundle.js",
                 "dist/js/bootstrap.bundle.js.map",

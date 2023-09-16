@@ -38,8 +38,10 @@ class TimelineController extends AbstractController
      */
     #[Route(path: '', name: 'timeline', methods: Request::METHOD_GET)]
     public function current(
-        #[MapQueryParameter] string $date = null,
-        #[MapQueryParameter] string $interval = null
+        #[MapQueryParameter]
+        string $date = null,
+        #[MapQueryParameter]
+        string $interval = null
     ): Response {
         $parameters = $this->service->current($date, $interval);
 

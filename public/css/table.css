@@ -173,5 +173,5 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body
  * drop-down second level
  */
 .dropdown-item.dropdown-child {
-    padding-left: 2.7rem !important;
+    padding-left: calc(2 * var(--bs-dropdown-item-padding-x)) !important;
 }

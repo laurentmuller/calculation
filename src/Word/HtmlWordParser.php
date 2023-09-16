@@ -58,10 +58,10 @@ class HtmlWordParser
     public function parse(string $content): string
     {
         // trim spaces
-        $content = \preg_replace('/\s+/', ' ', $content);
+        $content = (string) \preg_replace('/\s+/', ' ', $content);
 
         // replace classes by styles
-        return \preg_replace_callback(
+        return (string) \preg_replace_callback(
             self::CLASS_PATTERN,
             fn (array $matches): string => \sprintf('style="%s"', $this->mapClassName($matches[2])),
             $content,

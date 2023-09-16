@@ -101,8 +101,10 @@ class IndexController extends AbstractController
     #[Route(path: '/', name: self::HOME_PAGE, methods: Request::METHOD_GET)]
     public function index(
         Request $request,
-        #[MapQueryParameter] bool $restrict = null,
-        #[MapQueryParameter] bool $custom = null
+        #[MapQueryParameter]
+        bool $restrict = null,
+        #[MapQueryParameter]
+        bool $custom = null
     ): Response {
         $service = $this->getUserService();
         $restrict ??= $this->getCookieBoolean($request, self::PARAM_RESTRICT);

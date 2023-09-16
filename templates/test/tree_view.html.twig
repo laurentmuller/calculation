@@ -135,15 +135,18 @@
             <div class="col-xl-6">
                 <div class="form-group mb-3">
                     <label class="form-label" for="product">Article</label>
-                    <select id="product" class="form-select">
-                        {% for key, group in products -%}
-                            <optgroup label="{{ key }}">
-                                {% for product in group -%}
-                                    <option data-price="{{ product.price }}" data-unit="{{ product.unit }}" value="{{ product.id }}">{{ product.description }}</option>
-                                {% endfor %}
-                            </optgroup>/
-                        {% endfor %}
-                    </select>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa-regular fa-file-alt"></i></span>
+                        <select id="product" class="form-select">
+                            {% for key, group in products -%}
+                                <optgroup label="{{ key }}">
+                                    {% for product in group -%}
+                                        <option data-price="{{ product.price }}" data-unit="{{ product.unit }}" value="{{ product.id }}">{{ product.description }}</option>
+                                    {% endfor %}
+                                </optgroup>/
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>

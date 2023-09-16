@@ -14,8 +14,9 @@ namespace App\Form\Calculation;
 
 use App\Entity\CalculationCategory;
 use App\Form\AbstractEntityType;
-use App\Form\DataTransformer\CategoryTransformer;
+use App\Form\DataTransformer\EntityTransformer;
 use App\Form\FormHelper;
+use App\Repository\CategoryRepository;
 
 /**
  * Calculation category edit type.
@@ -25,11 +26,17 @@ use App\Form\FormHelper;
 class CalculationCategoryType extends AbstractEntityType
 {
     /**
+     * @var EntityTransformer<\App\Entity\Category>
+     */
+    private readonly EntityTransformer $transformer;
+
+    /**
      * Constructor.
      */
-    public function __construct(private readonly CategoryTransformer $transformer)
+    public function __construct(CategoryRepository $repository)
     {
         parent::__construct(CalculationCategory::class);
+        $this->transformer = new EntityTransformer($repository);
     }
 
     protected function addFormFields(FormHelper $helper): void

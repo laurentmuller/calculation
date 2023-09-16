@@ -40,11 +40,14 @@ class StrengthLevelTranslatorTraitTest extends TestCase
     }
 
     /**
-     * @psalm-suppress InvalidNullableReturnType
-     * @psalm-suppress NullableReturnStatement
+     * @throws Exception
      */
     public function getTranslator(): TranslatorInterface
     {
+        if (!$this->translator instanceof TranslatorInterface) {
+            $this->translator = $this->createTranslator('');
+        }
+
         return $this->translator;
     }
 

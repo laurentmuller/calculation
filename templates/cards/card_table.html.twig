@@ -21,7 +21,9 @@
         'data-icon': icon(icon ~ ' fa-fw')|raw,
         'data-default': default}) %}
     {% set attributes = attributes|filter(v => v is not empty) %}
-    <button{{ output_attributes(attributes) }}>{{- icon(icon ~ ' fa-fw') }}{{ text -}}</button>
+    <button{{ output_attributes(attributes) }}>
+        {{- icon(icon ~ ' me-1') -}}{{- text -}}
+    </button>
 {% endapply %}
 {% endmacro %}
 {# output a drop-down item #}
@@ -34,7 +36,7 @@
         'data-value': value,
         'class': ('dropdown-item dropdown-' ~ suffix ~ active)|trim}) %}
     <button{{ output_attributes(attributes) }}>
-        {%- if icon %}{{ icon(icon ~ ' fa-fw') }} {% endif %}{{ text|default(value) -}}
+        {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{%- endif -%}{{- text|default(value) -}}
     </button>
 {% endapply %}
 {%- endmacro %}
@@ -42,7 +44,7 @@
 {% macro output_dropdown_header(text, translate=false, icon=null) -%}
     {{ _self.item_separator() }}
     <h6 class="dropdown-header">
-        {%- if icon %}{{ icon(icon ~ ' fa-fw') }} {% endif %}{{ (translate ? text|trans : text)|upper -}}
+        {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{% endif %}{{- (translate ? text|trans : text)|upper -}}
     </h6>
 {%- endmacro %}
 {# output a drop-down item path #}

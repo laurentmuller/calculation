@@ -209,7 +209,7 @@ class StringUtilsTest extends TestCase
         } elseif ($exception) {
             $this->expectException(\RuntimeException::class);
         }
-        $result = StringUtils::getShortName($var);
+        $result = StringUtils::getShortName($var); /* @phpstan-ignore-line */
         self::assertSame($expected, $result);
     }
 

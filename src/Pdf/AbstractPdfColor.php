@@ -244,7 +244,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
             return false;
         }
 
-        $parsed = \preg_replace('/[^0-9A-Fa-f]/', '', $value);
+        $parsed = (string) \preg_replace('/[^0-9A-Fa-f]/', '', $value);
         switch (\strlen($parsed)) {
             case 6:
                 $color = \hexdec($parsed);

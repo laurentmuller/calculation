@@ -57,7 +57,8 @@ class CaptchaController extends AbstractController
     #[Route(path: '/validate', name: 'captcha_validate', methods: Request::METHOD_GET)]
     public function validate(
         CaptchaImageService $service,
-        #[MapQueryParameter] string $captcha = null
+        #[MapQueryParameter]
+        string $captcha = null
     ): JsonResponse {
         if (!$service->validateTimeout()) {
             $response = $this->trans('captcha.timeout', [], 'validators');

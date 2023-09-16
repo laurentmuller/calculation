@@ -115,10 +115,10 @@ class HtmlReport extends AbstractReport
     {
         $leftMargin = $this->lMargin;
         $rightMargin = $this->rMargin;
-        if ($leftMargin !== $this->leftMargin) {
+        if (null !== $this->leftMargin && $this->leftMargin !== $leftMargin) {
             $this->lMargin = $this->x = $this->leftMargin;
         }
-        if ($rightMargin !== $this->rightMargin) {
+        if (null !== $this->rightMargin && $this->rightMargin !== $rightMargin) {
             $this->rMargin = $this->rightMargin;
         }
 

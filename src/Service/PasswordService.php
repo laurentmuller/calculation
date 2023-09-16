@@ -137,7 +137,7 @@ class PasswordService
     }
 
     /**
-     * @param ScoreResultType $results
+     * @psalm-param ScoreResultType $results
      */
     private function validateScoreResults(array $results): ?array
     {

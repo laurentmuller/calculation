@@ -113,8 +113,8 @@ class OpenWeatherServiceTest extends KernelTestCase
 
     public function testGroupInvalidCount(): void
     {
-        self::assertNotNull($this->service);
         $this->expectException(\InvalidArgumentException::class);
+        self::assertNotNull($this->service);
         $this->service->group(\range(0, 25));
     }
 

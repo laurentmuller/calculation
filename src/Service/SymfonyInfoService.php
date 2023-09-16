@@ -115,27 +115,29 @@ final class SymfonyInfoService
      */
     public function getBundles(): array
     {
-        if (null === $this->bundles) {
-            $this->bundles = [];
-            $projectDir = $this->projectDir;
-            $vendorDir = FileUtils::buildPath($projectDir, 'vendor');
-            foreach ($this->kernel->getBundles() as $key => $bundleObject) {
-                $path = $bundleObject->getPath();
-                $this->bundles[$key] = [
-                    'name' => $key,
-                    'namespace' => $bundleObject->getNamespace(),
-                    'path' => $this->makePathRelative($path, $projectDir),
-                    'package' => $this->makePathRelative($path, $vendorDir),
-                ];
-            }
-            if ([] !== $this->bundles) {
-                \ksort($this->bundles);
-                $this->getPackages();
-                $this->updateBundles();
-            }
+        if (null !== $this->bundles) {
+            return $this->bundles;
         }
 
-        return $this->bundles;
+        $this->bundles = [];
+        $projectDir = $this->projectDir;
+        $vendorDir = FileUtils::buildPath($projectDir, 'vendor');
+        foreach ($this->kernel->getBundles() as $key => $bundleObject) {
+            $path = $bundleObject->getPath();
+            $this->bundles[$key] = [
+                'name' => $key,
+                'namespace' => $bundleObject->getNamespace(),
+                'path' => $this->makePathRelative($path, $projectDir),
+                'package' => $this->makePathRelative($path, $vendorDir),
+            ];
+        }
+        if ([] !== $this->bundles) {
+            \ksort($this->bundles);
+            $this->getPackages();
+            $this->updateBundles();
+        }
+
+        return $this->bundles; /* @phpstan-ignore-line */
     }
 
     /**

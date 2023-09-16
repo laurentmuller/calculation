@@ -52,8 +52,9 @@ class HelpReport extends AbstractReport
         $service = $this->service;
         $newPage = $this->outputMainMenus($service->getMainMenus());
         $newPage = $this->outputDialogs($service->getDialogs(), $newPage);
+        $this->outputEntities($service->getEntities(), $newPage);
 
-        return $this->outputEntities($service->getEntities(), $newPage);
+        return true;
     }
 
     /**
@@ -61,7 +62,7 @@ class HelpReport extends AbstractReport
      */
     private function br2nl(string $str): string
     {
-        return \preg_replace('#<br\s*/?>#i', \PHP_EOL, $str);
+        return (string) \preg_replace('#<br\s*/?>#i', \PHP_EOL, $str);
     }
 
     /**
@@ -200,7 +201,9 @@ class HelpReport extends AbstractReport
      */
     private function outputDialog(array $item): void
     {
-        $this->outputTitle($item['id']);
+        $id = $item['id'];
+        $this->addBookmark($this->trans($id), true, 1);
+        $this->outputTitle($id);
         if ($description = $item['description'] ?? false) {
             $this->MultiCell(txt: $description);
         }
@@ -276,7 +279,9 @@ class HelpReport extends AbstractReport
             $this->AddPage();
             $newPage = false;
         }
-        $this->outputTitle('help.dialog_menu', 12);
+        $id = 'help.dialog_menu';
+        $this->addBookmark($this->trans($id), true);
+        $this->outputTitle($id, 12);
         $this->outputLine();
         foreach ($dialogs as $dialog) {
             if ($newPage) {
@@ -292,16 +297,18 @@ class HelpReport extends AbstractReport
     /**
      * @psalm-param HelpEntityType[]|null $entities
      */
-    private function outputEntities(?array $entities, bool $newPage): bool
+    private function outputEntities(?array $entities, bool $newPage): void
     {
         if (null === $entities || [] === $entities) {
-            return false;
+            return;
         }
         if ($newPage) {
             $this->AddPage();
             $newPage = false;
         }
-        $this->outputTitle('help.entity_menu', 12);
+        $id = 'help.entity_menu';
+        $this->addBookmark($this->trans($id), true);
+        $this->outputTitle($id, 12);
         $this->outputLine();
         foreach ($entities as $entity) {
             if ($newPage) {
@@ -310,8 +317,6 @@ class HelpReport extends AbstractReport
             $newPage = true;
             $this->outputEntity($entity);
         }
-
-        return true;
     }
 
     /**
@@ -319,7 +324,9 @@ class HelpReport extends AbstractReport
      */
     private function outputEntity(array $item): void
     {
-        $this->outputTitle($item['id'] . '.name');
+        $id = $item['id'] . '.name';
+        $this->addBookmark($this->trans($id), true, 1);
+        $this->outputTitle($id);
         if ($description = $item['description'] ?? false) {
             $this->MultiCell(txt: $description);
         }
@@ -398,7 +405,9 @@ class HelpReport extends AbstractReport
             return false;
         }
         $this->AddPage();
-        $this->outputTitle('help.main_menu', 12);
+        $id = 'help.main_menu';
+        $this->addBookmark($this->trans($id), true);
+        $this->outputTitle($id, 12);
         $this->outputLine();
         if (null !== $rootMenu = $this->service->getMainMenu()) {
             $description = $rootMenu['description'] ?? null;

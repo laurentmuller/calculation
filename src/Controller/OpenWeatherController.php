@@ -255,7 +255,7 @@ class OpenWeatherController extends AbstractController
         $form = $updater->createForm();
         if ($this->handleRequestForm($request, $form)) {
             /** @var UploadedFile $file */
-            $file = $form['file']->getData();
+            $file = $form->get('file')->getData();
             $results = $updater->import($file);
 
             return $this->render('openweather/import_result.html.twig', $results);

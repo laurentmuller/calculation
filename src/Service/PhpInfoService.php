@@ -90,8 +90,8 @@ final class PhpInfoService
     {
         $info = $this->asText($what);
 
-        $info = \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
-        $info = \preg_replace('/<a\s(.+?)>(.+?)<\/a>/mi', '<p>$2</p>', $info);
+        $info = (string) \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
+        $info = (string) \preg_replace('/<a\s(.+?)>(.+?)<\/a>/mi', '<p>$2</p>', $info);
         $info = \str_ireplace('background-color: white; text-align: center', '', $info);
         $info = \str_ireplace('<i>no value</i>', '<i class="text-body-secondary">No value</i>', $info);
         $info = \str_ireplace('(none)', '<i class="text-body-secondary">None</i>', $info);
@@ -104,15 +104,15 @@ final class PhpInfoService
         foreach (['On', 'Yes', 'Enabled'] as $value) {
             $search = '/<td class="v">' . $value . '\s?<\/td>/mi';
             $replace = '<td class="v"><span class="text-success fw-bold me-1">✓</span>' . $value . '</td>';
-            $info = \preg_replace($search, $replace, $info);
+            $info = (string) \preg_replace($search, $replace, $info);
         }
         foreach (['Off', 'No', 'Disabled'] as $value) {
             $search = '/<td class="v">' . $value . '\s?<\/td>/mi';
             $replace = '<td class="v"><span class="text-secondary fw-bold me-1">✗</span>' . $value . '</td>';
-            $info = \preg_replace($search, $replace, $info);
+            $info = (string) \preg_replace($search, $replace, $info);
         }
 
-        return \preg_replace('/<table\s(.+?)>(.+?)<\/table>/is', '', $info, 1);
+        return (string) \preg_replace('/<table\s(.+?)>(.+?)<\/table>/is', '', $info, 1);
     }
 
     /**
@@ -165,7 +165,7 @@ final class PhpInfoService
         $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL'];
         foreach ($keys as $key) {
             $regex = "/(<tr.*\['.*$key']<\/td><td.*?>)(.*)(<.*<\/tr>)/mi";
-            $content = \preg_replace($regex, $subst, $content);
+            $content = (string) \preg_replace($regex, $subst, $content);
         }
         $content = \str_replace(['✘ ', '✔ ', '⊕'], '', $content);
 

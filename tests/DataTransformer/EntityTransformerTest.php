@@ -12,42 +12,44 @@ declare(strict_types=1);
 
 namespace App\Tests\DataTransformer;
 
+use App\Entity\Category;
 use App\Entity\Group;
-use App\Form\DataTransformer\GroupTransformer;
-use App\Repository\GroupRepository;
+use App\Form\DataTransformer\EntityTransformer;
+use App\Repository\CategoryRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
-use Doctrine\ORM\Exception\NotSupported;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(GroupTransformer::class)]
-class GroupTransformerTest extends KernelTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(EntityTransformer::class)]
+class EntityTransformerTest extends KernelTestCase
 {
     use DatabaseTrait;
     use ServiceTrait;
 
+    private ?Category $category = null;
     private ?Group $group = null;
-    private ?GroupRepository $repository = null;
-    private ?GroupTransformer $transformer = null;
+    private ?CategoryRepository $repository = null;
+    /** @psalm-var EntityTransformer<Category>|null */
+    private ?EntityTransformer $transformer = null;
 
     /**
-     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function setUp(): void
     {
         parent::setUp();
         $this->group = $this->createGroup();
-        $this->transformer = new GroupTransformer($this->getRepository());
+        $this->category = $this->createCategory($this->group);
+        $this->transformer = new EntityTransformer($this->getRepository());
     }
 
     /**
-     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function tearDown(): void
     {
+        $this->category = $this->deleteCategory();
         $this->group = $this->deleteGroup();
         $this->transformer = null;
         $this->repository = null;
@@ -57,7 +59,10 @@ class GroupTransformerTest extends KernelTestCase
     public static function getReverseTransformValues(): \Generator
     {
         yield [null, null];
+        yield ['', null];
         yield [true, null, true];
+        yield [-1, null, true];
+        yield ['fake', null, true];
     }
 
     public static function getTransformValues(): \Generator
@@ -66,13 +71,8 @@ class GroupTransformerTest extends KernelTestCase
         yield [true, null, true];
     }
 
-    public function testGroupNotNull(): void
-    {
-        self::assertNotNull($this->group);
-    }
-
     /**
-     * @psalm-param int|string|null $value
+     * @psalm-param string|int|null $value
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getReverseTransformValues')]
     public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
@@ -85,24 +85,17 @@ class GroupTransformerTest extends KernelTestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testReverseTransformInvalid(): void
-    {
-        self::assertNotNull($this->transformer);
-        $this->expectException(TransformationFailedException::class);
-        $actual = $this->transformer->reverseTransform(-1);
-        self::assertSame($this->group, $actual);
-    }
-
-    public function testReverseTransformValid(): void
+    public function testReverseTransformCategory(): void
     {
         self::assertNotNull($this->group);
+        self::assertNotNull($this->category);
         self::assertNotNull($this->transformer);
-        $actual = $this->transformer->reverseTransform($this->group->getId());
-        self::assertSame($this->group, $actual);
+        $actual = $this->transformer->reverseTransform($this->category->getId());
+        self::assertSame($this->category, $actual);
     }
 
     /**
-     * @psalm-suppress MixedArgument
+     * @psalm-param \App\Entity\AbstractEntity|null $value
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]
     public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
@@ -115,21 +108,32 @@ class GroupTransformerTest extends KernelTestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testTransformerNotNull(): void
-    {
-        self::assertNotNull($this->transformer);
-    }
-
-    public function testTransformValid(): void
+    public function testTransformCategory(): void
     {
         self::assertNotNull($this->group);
+        self::assertNotNull($this->category);
         self::assertNotNull($this->transformer);
-        $actual = $this->transformer->transform($this->group);
-        self::assertSame($this->group->getId(), $actual);
+        $actual = $this->transformer->transform($this->category);
+        self::assertSame($this->category->getId(), $actual);
     }
 
     /**
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    private function createCategory(Group $group): Category
+    {
+        $category = new Category();
+        $category->setCode('Test')
+            ->setGroup($group);
+
+        $manager = $this->getManager();
+        $manager->persist($category);
+        $manager->flush();
+
+        return $category;
+    }
+
+    /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     private function createGroup(): Group
@@ -145,7 +149,21 @@ class GroupTransformerTest extends KernelTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    private function deleteCategory(): null
+    {
+        if ($this->category instanceof Category) {
+            $manager = $this->getManager();
+            $manager->remove($this->category);
+            $manager->flush();
+            $this->category = null;
+        }
+
+        return $this->category;
+    }
+
+    /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     private function deleteGroup(): null
@@ -161,13 +179,13 @@ class GroupTransformerTest extends KernelTestCase
     }
 
     /**
-     * @throws NotSupported
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
-    private function getRepository(): GroupRepository
+    private function getRepository(): CategoryRepository
     {
-        if (!$this->repository instanceof GroupRepository) {
-            /** @psalm-var GroupRepository $repository */
-            $repository = $this->getManager()->getRepository(Group::class);
+        if (!$this->repository instanceof CategoryRepository) {
+            /** @psalm-var CategoryRepository $repository */
+            $repository = $this->getManager()->getRepository(Category::class);
             $this->repository = $repository;
         }
 

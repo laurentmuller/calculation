@@ -41,10 +41,14 @@ class AjaxSearchController extends AbstractController
     #[Route(path: '/search/address', name: 'ajax_search_address', methods: Request::METHOD_GET)]
     public function searchAddress(
         SwissPostService $service,
-        #[MapQueryParameter] string $zip = null,
-        #[MapQueryParameter] string $city = null,
-        #[MapQueryParameter] string $street = null,
-        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)] int $limit = null
+        #[MapQueryParameter]
+        string $zip = null,
+        #[MapQueryParameter]
+        string $city = null,
+        #[MapQueryParameter]
+        string $street = null,
+        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
+        int $limit = null
     ): JsonResponse {
         $limit ??= 15;
         if (!empty($zip)) {
@@ -67,8 +71,10 @@ class AjaxSearchController extends AbstractController
     #[Route(path: '/search/customer', name: 'ajax_search_customer', methods: Request::METHOD_GET)]
     public function searchCustomer(
         CalculationRepository $repository,
-        #[MapQueryParameter] string $query = null,
-        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)] int $limit = null
+        #[MapQueryParameter]
+        string $query = null,
+        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
+        int $limit = null
     ): JsonResponse {
         return $this->getValuesFromRepository($repository, 'customer', $query, $limit);
     }
@@ -80,8 +86,10 @@ class AjaxSearchController extends AbstractController
     #[Route(path: '/search/product', name: 'ajax_search_product', methods: Request::METHOD_GET)]
     public function searchProduct(
         ProductRepository $repository,
-        #[MapQueryParameter] string $query = null,
-        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)] int $limit = null
+        #[MapQueryParameter]
+        string $query = null,
+        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
+        int $limit = null
     ): JsonResponse {
         return $this->getValuesFromCallback(
             fn (string $query, int $limit) => $repository->search($query, $limit),
@@ -97,8 +105,10 @@ class AjaxSearchController extends AbstractController
     #[Route(path: '/search/supplier', name: 'ajax_search_supplier', methods: Request::METHOD_GET)]
     public function searchSupplier(
         EntityManagerInterface $manager,
-        #[MapQueryParameter] string $query = null,
-        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)] int $limit = null
+        #[MapQueryParameter]
+        string $query = null,
+        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
+        int $limit = null
     ): JsonResponse {
         return $this->getValuesFromManager($manager, 'supplier', $query, $limit);
     }
@@ -110,8 +120,10 @@ class AjaxSearchController extends AbstractController
     #[Route(path: '/search/title', name: 'ajax_search_title', methods: Request::METHOD_GET)]
     public function searchTitle(
         CustomerRepository $repository,
-        #[MapQueryParameter] string $query = null,
-        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)] int $limit = null
+        #[MapQueryParameter]
+        string $query = null,
+        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
+        int $limit = null
     ): JsonResponse {
         return $this->getValuesFromRepository($repository, 'title', $query, $limit);
     }
@@ -123,8 +135,10 @@ class AjaxSearchController extends AbstractController
     #[Route(path: '/search/unit', name: 'ajax_search_unit', methods: Request::METHOD_GET)]
     public function searchUnit(
         EntityManagerInterface $manager,
-        #[MapQueryParameter] string $query = null,
-        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)] int $limit = null
+        #[MapQueryParameter]
+        string $query = null,
+        #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
+        int $limit = null
     ): JsonResponse {
         return $this->getValuesFromManager($manager, 'unit', $query, $limit);
     }

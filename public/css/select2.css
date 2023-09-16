@@ -4,8 +4,10 @@
 
 /**! compression tag for ftp-deployment */
 
-html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection {
+.select2-container--bootstrap-5 .select2-selection {
     background-color: var(--bs-body-bg) !important;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
 }
 
 html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__rendered {
@@ -37,8 +39,9 @@ html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__cho
 }
 
 .select2-container--bootstrap-5 .select2-selection.select2-selection--multiple {
-    padding-top: 3px !important;
-    padding-bottom: 4px !important;
+    padding-left: 0.375rem !important;
+    padding-top: 1px !important;
+    padding-bottom: 0 !important;
 }
 
 .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered {
@@ -57,7 +60,8 @@ html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__cho
 
 .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__rendered .select2-selection__choice {
     display: inline-flex;
-
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 .select2-container--bootstrap-5 .select2-selection--multiple .select2-search {
@@ -65,7 +69,6 @@ html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__cho
 }
 
 .select2-container--bootstrap-5.select2-container.select2-container--open {
-    /*margin-left: -1px;*/
     margin-top: -1px;
 }
 
@@ -73,8 +76,10 @@ html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection__cho
     box-shadow: inherit !important;
 }
 
-/*
- .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
-    margin-left: 0;
+.input-group:has(.select2) {
+    flex-wrap: nowrap !important;
 }
-*/
+
+html[data-bs-theme=dark] .select2-container--bootstrap-5 .select2-selection--single {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23dee2e6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+}

@@ -84,10 +84,12 @@ class GeneratorControllerTest extends AbstractControllerTestCase
      */
     protected function deleteEntities(): void
     {
-        foreach (self::$products as $product) {
-            $this->deleteEntity($product);
+        if (null !== self::$products) {
+            foreach (self::$products as $product) {
+                $this->deleteEntity($product);
+            }
+            self::$products = null;
         }
-        self::$products = null;
 
         self::$category = $this->deleteEntity(self::$category);
         self::$group = $this->deleteEntity(self::$group);

@@ -80,10 +80,13 @@ class HighlightExtension extends AbstractExtension
         /** @psalm-var resource $output */
         $output = \fopen('php://memory', 'r+');
         $dumper->dump($data, $output);
-        $content = (string) \stream_get_contents($output, -1, 0);
+        $content = \stream_get_contents($output, -1, 0);
+        if (!\is_string($content)) {
+            return null;
+        }
         $content = StringUtils::pregReplace(self::PHP_PATTERNS, $content); // @phpstan-ignore-line
         if ('' !== $id) {
-            $content = \preg_replace('/highlight-php-\d+/', $id, $content);
+            $content = (string) \preg_replace('/highlight-php-\d+/', $id, $content);
         }
 
         return \trim($content);

@@ -217,7 +217,7 @@ final class StringUtils
      */
     public static function pregReplace(array $values, string|array $subject): string|array
     {
-        return \preg_replace(\array_keys($values), \array_values($values), $subject);
+        return \preg_replace(\array_keys($values), \array_values($values), $subject); /* @phpstan-ignore-line */
     }
 
     /**

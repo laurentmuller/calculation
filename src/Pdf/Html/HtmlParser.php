@@ -124,7 +124,7 @@ readonly class HtmlParser
     {
         $bodies = $document->getElementsByTagName(HtmlConstantsInterface::BODY);
         if (0 !== $bodies->length) {
-            return $bodies->item(0);
+            return $bodies->item(0) ?? false;
         }
 
         return false;
@@ -248,10 +248,10 @@ readonly class HtmlParser
         if ('' === $content = \trim($this->html)) {
             return false;
         }
-        if ('' === $content = \trim(\preg_replace('/\r\n|\n|\r/m', '', $content))) {
+        if ('' === $content = \trim((string) \preg_replace('/\r\n|\n|\r/m', '', $content))) {
             return false;
         }
-        if ('' === $content = \trim(\preg_replace('/\s\s+/m', ' ', $content))) {
+        if ('' === $content = \trim((string) \preg_replace('/\s\s+/m', ' ', $content))) {
             return false;
         }
 

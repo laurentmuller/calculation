@@ -3,7 +3,8 @@ includes:
     - vendor-bin/phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 parameters:
-    level: 7
+    level: 8
+    tmpDir: var/phpstan.cache
     paths:
     - src
     - tests

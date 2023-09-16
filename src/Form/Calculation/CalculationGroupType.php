@@ -14,8 +14,9 @@ namespace App\Form\Calculation;
 
 use App\Entity\CalculationGroup;
 use App\Form\AbstractEntityType;
-use App\Form\DataTransformer\GroupTransformer;
+use App\Form\DataTransformer\EntityTransformer;
 use App\Form\FormHelper;
+use App\Repository\GroupRepository;
 
 /**
  * Calculation group edit type.
@@ -25,11 +26,17 @@ use App\Form\FormHelper;
 class CalculationGroupType extends AbstractEntityType
 {
     /**
+     * @var EntityTransformer<\App\Entity\Group>
+     */
+    private readonly EntityTransformer $transformer;
+
+    /**
      * Constructor.
      */
-    public function __construct(private readonly GroupTransformer $transformer)
+    public function __construct(GroupRepository $repository)
     {
         parent::__construct(CalculationGroup::class);
+        $this->transformer = new EntityTransformer($repository);
     }
 
     protected function addFormFields(FormHelper $helper): void

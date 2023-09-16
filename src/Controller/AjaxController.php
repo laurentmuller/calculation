@@ -108,7 +108,7 @@ class AjaxController extends AbstractController
      * Render the sort dialog for data table.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/dialog/page', name: 'ajax_dialog_sort', methods: Request::METHOD_POST)]
+    #[Route(path: '/dialog/sort', name: 'ajax_dialog_sort', methods: Request::METHOD_POST)]
     public function renderDialogSort(Request $request): JsonResponse
     {
         $parameters = [

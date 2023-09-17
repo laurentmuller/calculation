@@ -19,7 +19,7 @@
                 </td>
                 <td class="">
                     {% apply spaceless %}
-                    <span>{{ data.weather.description }}</span>{% if data.rain['3h']|default(false) %}<span title="{{ 'openweather.fields.rain'|trans }}">, {{ tools.value_rain(data.rain['3h'], units_volume) }}</span>{% endif %}
+                    <span title="{{ 'openweather.fields.description'|trans }}">{{ data.weather.description }}</span>{% if data.rain['3h']|default(false) %}<span title="{{ 'openweather.fields.rain'|trans }}">, {{ tools.value_rain(data.rain['3h'], units_volume) }}</span>{% endif %}
                     <br>
                     <span title="{{ 'openweather.fields.wind_title'|trans }}">{{ tools.value_speed(data.wind.speed, units_speed) }}</span>
                     <span>, </span>

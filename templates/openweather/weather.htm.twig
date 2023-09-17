@@ -38,7 +38,7 @@
     <div class="d-flex-wrap-center">
         <div class="me-auto">
             {{ parent() }}
-            <small>{{ 'openweather.current.date_calculation'|trans({'%date%': current.dt_date_time_medium}) }}</small>
+            <small>{{ 'openweather.current.date_calculation'|trans({'%date%': current.dt_date_time_long}) }}</small>
         </div>
         <div class="d-print-none">
             {{ _self.system('metric', units_system, route, id, count) }}

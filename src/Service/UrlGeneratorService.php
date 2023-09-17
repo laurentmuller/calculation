@@ -33,6 +33,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class UrlGeneratorService
 {
     use RequestTrait;
+
     /**
      * The caller parameter name.
      */

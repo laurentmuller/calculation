@@ -93,7 +93,7 @@ final class PhpInfoService
         $info = (string) \preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', $info);
         $info = (string) \preg_replace('/<a\s(.+?)>(.+?)<\/a>/mi', '<p>$2</p>', $info);
         $info = \str_ireplace('background-color: white; text-align: center', '', $info);
-        $info = \str_ireplace('<i>no value</i>', '<i class="text-body-secondary">No value</i>', $info);
+        $info = \str_ireplace('<i>no value</i>', '<i class="text-secondary">No value</i>', $info);
         $info = \str_ireplace('(none)', '<i class="text-body-secondary">None</i>', $info);
         $info = \str_ireplace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
 
@@ -101,14 +101,23 @@ final class PhpInfoService
             $info = \str_replace($value, '<span class="fw-bold">' . $value . '</span>', $info);
         }
 
-        foreach (['On', 'Yes', 'Enabled'] as $value) {
+        foreach (['on', 'yes', 'enabled'] as $value) {
             $search = '/<td class="v">' . $value . '\s?<\/td>/mi';
-            $replace = '<td class="v"><span class="text-success fw-bold me-1">✓</span>' . $value . '</td>';
+            $replace = '<td class="v enabled">' . StringUtils::capitalize($value) . '</td>';
+            $info = (string) \preg_replace($search, $replace, $info);
+
+            $search = '/<th>' . $value . '\s?<\/th>/mi';
+            $replace = '<td class="v enabled">' . StringUtils::capitalize($value) . '</td>';
             $info = (string) \preg_replace($search, $replace, $info);
         }
-        foreach (['Off', 'No', 'Disabled'] as $value) {
+
+        foreach (['off', 'no', 'disabled'] as $value) {
             $search = '/<td class="v">' . $value . '\s?<\/td>/mi';
-            $replace = '<td class="v"><span class="text-secondary fw-bold me-1">✗</span>' . $value . '</td>';
+            $replace = '<td class="v disabled">' . StringUtils::capitalize($value) . '</td>';
+            $info = (string) \preg_replace($search, $replace, $info);
+
+            $search = '/<th>' . $value . '\s?<\/th>/mi';
+            $replace = '<td class="v disabled">' . StringUtils::capitalize($value) . '</td>';
             $info = (string) \preg_replace($search, $replace, $info);
         }
 
@@ -144,7 +153,7 @@ final class PhpInfoService
     private function convert(string $var): string|int|float
     {
         if (\in_array(\strtolower($var), ['yes', 'no', 'enabled', 'disabled', 'on', 'off', 'no value'], true)) {
-            return \ucfirst($var);
+            return StringUtils::capitalize($var);
         }
         if (\preg_match('/^-?\d+$/', $var)) {
             return (int) $var;

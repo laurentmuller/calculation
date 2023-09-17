@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Database\OpenWeatherDatabase;
 use App\Utils\FormatUtils;
+use phpDocumentor\Reflection\DocBlock\Tags\See;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
@@ -123,6 +124,11 @@ class OpenWeatherService extends AbstractHttpClientService
      * The small icon URL.
      */
     private const ICON_SMALL_URL = 'https://openweathermap.org/img/wn/{0}@2x.png';
+
+    /**
+     * The long format used for dates.
+     */
+    private const TYPE_LONG = \IntlDateFormatter::LONG;
 
     /**
      * The medium format used for dates.
@@ -516,21 +522,15 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Converts the given offset to a time zone.
      *
-     * @param int $offset the timezone offset in seconds from UTC
-     *
-     * @return \DateTimeZone the timezone offset in +/-HH:MM form
-     *
      * @throws \Exception
      */
     private function offsetToTimZone(int $offset): \DateTimeZone
     {
-        $sign = $offset < 0 ? '-' : '+';
-        $offset = (float) \abs($offset);
-        $minutes = (\floor($offset / 60.0) % 60.0);
-        $hours = (int) \floor($offset / 3600.0);
-        $id = \sprintf('%s%02d%02d', $sign, $hours, $minutes);
+        $hours = \intdiv($offset, 3600);
+        $minutes = \abs(\intdiv($offset, 60) % 60);
+        $timezone = \sprintf('%+03d%02d', $hours, $minutes);
 
-        return new \DateTimeZone($id);
+        return new \DateTimeZone($timezone);
     }
 
     private function replaceUrl(string $url, string $value): string
@@ -544,6 +544,7 @@ class OpenWeatherService extends AbstractHttpClientService
         if (isset($result['dt_date'])) {
             return;
         }
+
         $result['dt_date'] = FormatUtils::formatDate($value, self::TYPE_SHORT);
         $result['dt_date_locale'] = FormatUtils::formatDate($value, self::TYPE_SHORT, $timezone);
         $result['dt_time'] = FormatUtils::formatTime($value, self::TYPE_SHORT);
@@ -552,6 +553,8 @@ class OpenWeatherService extends AbstractHttpClientService
         $result['dt_date_time_locale'] = FormatUtils::formatDateTime($value, self::TYPE_SHORT, self::TYPE_SHORT, $timezone);
         $result['dt_date_time_medium'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT);
         $result['dt_date_time_medium_locale'] = FormatUtils::formatDateTime($value, self::TYPE_MEDIUM, self::TYPE_SHORT, $timezone);
+        $result['dt_date_time_long'] = FormatUtils::formatDateTime($value, self::TYPE_LONG, self::TYPE_SHORT);
+        $result['dt_date_time_long_locale'] = FormatUtils::formatDateTime($value, self::TYPE_LONG, self::TYPE_SHORT, $timezone);
 
         unset($result['dt_txt']);
     }
@@ -612,6 +615,11 @@ class OpenWeatherService extends AbstractHttpClientService
                             $value['lat_lon_dms'] = $this->service->formatPosition($lat, $lon);
                             $value['lat_lon_url'] = $this->service->getGoogleMapUrl($lat, $lon);
                         }
+                    }
+                    break;
+                case 'timezone':
+                    if ($timezone instanceof \DateTimeZone) {
+                        $results['timezone_name'] = $timezone->getName();
                     }
                     break;
                 default:

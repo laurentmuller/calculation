@@ -128,9 +128,15 @@ tr.text-body-secondary td .text-danger {
 }
 
 /*
+ * text muted in card view
+ */
+.bootstrap-table .custom-item.text-body-secondary a.text-body {
+    color: var(--bs-secondary-color) !important;
+}
+
+/*
  * selection
  */
-
 .bootstrap-table .custom-item.table-primary {
     background-color: var(--bs-table-bg) !important;
 }

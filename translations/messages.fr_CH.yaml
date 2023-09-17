@@ -717,6 +717,7 @@ openweather:
   error:
     empty_city: Aucune localité n'a été importée.
   fields:
+    description: Description
     clouds: Nébulosité
     current: Valeurs actuelles
     humidity: Humidité

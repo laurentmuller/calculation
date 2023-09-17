@@ -76,6 +76,7 @@
         {{ _self.row_unit('openweather.fields.pressure', main.pressure, units_pressure) }}
         {{ _self.row_no_sep('openweather.fields.humidity', main.humidity, units_percent) }}
         {{ _self.row_no_sep('openweather.fields.clouds', current.clouds.all, units_percent) }}
+        {{ _self.row_text('openweather.fields.locale_date', current.dt_date_time_locale) }}
         {% if coord.lat_lon_url is defined and coord.lat_lon_url %}
         <tr>
             <td class="ps-4 w-35">{{ 'openweather.fields.position'|trans }}</td>
@@ -86,7 +87,6 @@
             </td>
         </tr>
         {% endif %}
-        {{ _self.row_text('openweather.fields.locale_date', current.dt_date_time_locale) }}
     </tbody>
 </table>
 {% include 'dialog/dialog_raw_data.html.twig' with {'id': 'current_data_modal', 'description': title, 'raw_data': current, 'allow_copy': true} %}

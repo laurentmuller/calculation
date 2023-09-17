@@ -19,8 +19,9 @@
     font-size: initial;
 }
 
+.phpversion tr.h th,
 .phpversion td.e {
-    width: 30%;
+    width: 33%;
 }
 
 .phpversion td.f {
@@ -31,17 +32,23 @@
     margin-bottom: 5px;
 }
 
+
 .phpversion h1,
-.phpversion .h1 {
+.phpversion h2,
+.phpversion .h1,
+.phpversion .h2 {
     font-weight: bold;
-    font-size: 1.25rem;
     margin-bottom: 0;
 }
 
-.phpversion h2 {
-    font-weight: bold;
+.phpversion h1,
+.phpversion .h1 {
     font-size: 1.25rem;
-    margin-bottom: 0;
+}
+
+.phpversion h2,
+.phpversion .h2 {
+    font-size: 1.15rem;
 }
 
 .phpversion h2 p {
@@ -51,6 +58,10 @@
 
 .phpversion tbody .h th {
     font-weight: normal;
+}
+
+.phpversion tbody .h th.v {
+    width: 70%;
 }
 
 @media print {
@@ -64,4 +75,21 @@
 .icon-about {
     font-size: 5em;
     line-height: 1em;
+}
+
+.phpversion td.enabled:before {
+    content: '✓';
+    font-weight: bold;
+    margin-right: 0.25rem;
+    color: var(--bs-success);
+}
+
+.phpversion td.v.disabled {
+    color: var(--bs-secondary);
+}
+
+.phpversion td.v.disabled:before {
+    content: '✗';
+    font-weight: bold;
+    margin-right: 0.25rem;
 }

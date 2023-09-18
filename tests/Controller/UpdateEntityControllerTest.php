@@ -26,6 +26,7 @@ class UpdateEntityControllerTest extends AbstractControllerTestCase
     private static ?Category $category = null;
     private static ?Customer $customer = null;
     private static ?Group $group = null;
+    /** @var Product[]|null */
     private static ?array $products = null;
     private static ?CalculationState $state = null;
 

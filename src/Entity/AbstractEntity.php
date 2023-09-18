@@ -18,6 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Base entity.
+ *
+ * @psalm-consistent-constructor
  */
 #[ORM\MappedSuperclass]
 abstract class AbstractEntity implements EntityInterface

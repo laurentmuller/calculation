@@ -48,7 +48,7 @@ class RepeatPasswordType extends AbstractType
             'second_options' => self::getConfirmOptions(),
             'constraint' => [
                 new NotBlank(),
-                new Length(min: 6, max: EntityInterface::MAX_STRING_LENGTH),
+                new Length(min: UserInterface::MIN_PASSWORD_LENGTH, max: EntityInterface::MAX_STRING_LENGTH),
             ],
         ]);
     }

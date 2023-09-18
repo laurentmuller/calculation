@@ -1,5 +1,5 @@
 {% extends 'chart/chart_base.html.twig' %}
-{% import 'macros/_properties.html.twig' as properties %}
+{% from 'macros/_properties.html.twig' import stateCss %}
 {% trans_default_domain 'chart' %}
 {# parameters #}
 {%- set title = 'title_by_state' -%}
@@ -24,7 +24,7 @@
     {% for item in data -%}
     <tr title="{{ 'row_by_state'|trans({'%name%': item.code}) }}">
         <td class="text-nowrap">
-            <span class="text-border" style="border-left-width: 2rem !important; {{ properties.stateCss(item.color) }}"></span><a href="{{ path(list_path, {'stateId': item.id}) }}">{{- item.code }}</a>
+            <span class="text-border" style="border-left-width: 2rem !important; {{ stateCss(item.color) }}"></span><a href="{{ path(list_path, {'stateId': item.id}) }}">{{- item.code }}</a>
         </td>
         <td class="text-currency">{{ item.count|integer }}</td>
         <td class="text-percent">{{ item.percentCalculation|percent(true, 1, 4) }}</td>

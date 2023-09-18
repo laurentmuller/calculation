@@ -63,7 +63,7 @@ $finder = Finder::create()
 $config = new Config();
 
 return $config
-    ->setCacheFile(__DIR__ . '/var/php-cs-fixer.cache')
+    ->setCacheFile('./var/ci/php-cs-fixer')
     ->setRiskyAllowed(true)
     ->setFinder($finder)
     ->setRules($rules);

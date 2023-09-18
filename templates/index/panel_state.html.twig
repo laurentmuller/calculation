@@ -2,8 +2,8 @@
 {% import 'index/_macros.html.twig' as macros %}
 {# macros #}
 {% macro cardEntry(state, table_path, parameters=[], min_margin) -%}
-{% import 'macros/_properties.html.twig' as properties %}
-<div class="border index-child m-1 {% if state.color %} text-border{% endif %}"{% if state.color %} style="{{ properties.stateCss(state.color) }}"{% endif %}>
+{% from 'macros/_properties.html.twig' import stateCss %}
+<div class="border index-child m-1 {% if state.color %} text-border{% endif %}"{% if state.color %} style="{{ stateCss(state.color) }}"{% endif %}>
     <div class="position-relative body-tooltip p-2">
         {%- if table_path -%}
             {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}

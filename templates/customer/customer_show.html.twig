@@ -1,5 +1,5 @@
 {% extends 'cards/card_show.html.twig' %}
-{% import 'macros/_properties.html.twig' as properties %}
+{% from 'macros/_properties.html.twig' import property, email, externalLink %}
 {# parameters #}
 {%- set title = 'customer.show.title' -%}
 {%- set params = route_params(app.request, item) %}
@@ -9,13 +9,13 @@
 {%- set cancel_path = cancel_url(app.request, item, 'customer_table') -%}
 {# properties #}
 {% block property_body %}
-{{ properties.property('customer.fields.title', item.title) }}
-{{ properties.property('customer.fields.firstName', item.firstName) }}
-{{ properties.property('customer.fields.lastName', item.lastName) }}
-{{ properties.property('customer.fields.company', item.company) }}
-{{ properties.property('customer.fields.address', item.address) }}
-{{ properties.property('customer.fields.zipCode', item.zipCode) }}
-{{ properties.property('customer.fields.city', item.city) }}
-{{ properties.email(item.email, null, 'customer.fields.email') }}
-{{ properties.externalLink(item.webSite, null, null, 'customer.fields.webSite') }}
+{{ property('customer.fields.title', item.title) }}
+{{ property('customer.fields.firstName', item.firstName) }}
+{{ property('customer.fields.lastName', item.lastName) }}
+{{ property('customer.fields.company', item.company) }}
+{{ property('customer.fields.address', item.address) }}
+{{ property('customer.fields.zipCode', item.zipCode) }}
+{{ property('customer.fields.city', item.city) }}
+{{ email(item.email, null, 'customer.fields.email') }}
+{{ externalLink(item.webSite, null, null, 'customer.fields.webSite') }}
 {% endblock %}

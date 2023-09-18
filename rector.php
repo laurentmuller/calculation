@@ -36,6 +36,9 @@ return static function (RectorConfig $rectorConfig): void {
         ],
     ]);
 
+    // cache
+    $rectorConfig->cacheDirectory('./var/ci/rector');
+
     // rules to apply
     $rectorConfig->sets([
         // global

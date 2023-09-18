@@ -103,7 +103,7 @@ class EntityPermissionTest extends TestCase
     public function testBits(): void
     {
         $expected = [1, 2, 4, 8, 16, 32];
-        $permissions = FlagBag::fromAll(EntityPermission::class);
+        $permissions = $this->fromAll();
         $bits = $permissions->getBits();
         self::assertSame($expected, $bits);
     }
@@ -122,7 +122,7 @@ class EntityPermissionTest extends TestCase
 
     public function testCount(): void
     {
-        $permissions = FlagBag::fromAll(EntityPermission::class);
+        $permissions = $this->fromAll();
         $bits = $permissions->getBits();
         self::assertCount(6, $bits);
 
@@ -160,7 +160,7 @@ class EntityPermissionTest extends TestCase
 
     public function testSum(): void
     {
-        $permissions = FlagBag::fromAll(EntityPermission::class);
+        $permissions = $this->fromAll();
         self::assertSame(63, $permissions->getValue());
     }
 
@@ -206,5 +206,17 @@ class EntityPermissionTest extends TestCase
             ->willReturnArgument(0);
 
         return $translator;
+    }
+
+    /**
+     * @psalm-return FlagBag<EntityPermission>
+     *
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
+     * @psalm-suppress InvalidArgument
+     */
+    private function fromAll(): FlagBag
+    {
+        return FlagBag::fromAll(EntityPermission::class); // @phpstan-ignore-line
     }
 }

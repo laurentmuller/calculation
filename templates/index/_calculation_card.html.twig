@@ -1,4 +1,4 @@
-{% import 'macros/_properties.html.twig' as properties %}
+{% from 'macros/_properties.html.twig' import stateCss %}
 <div id="calculations" class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4 m-0 mx-n1">
 {% for calculation in calculations %}
     {%- set id = calculation.id -%}
@@ -11,7 +11,7 @@
         {% set class_name = class_name ~ ' text-body-secondary' %}
     {% endif %}
     <div class="col mb-2 px-1">
-        <div data-id="{{ id }}" class="{{ class_name }}" style="{{ properties.stateCss(calculation.stateColor) }}">
+        <div data-id="{{ id }}" class="{{ class_name }}" style="{{ stateCss(calculation.stateColor) }}">
             <div class="d-flex-no-wrap-center context-menu-skip">
                 <div class="text-truncate fw-bold me-auto">
                     {% if row_edit %}

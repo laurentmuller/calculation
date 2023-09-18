@@ -163,7 +163,12 @@
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        }
+        },
+        "php-cs-fixer": "vendor/bin/php-cs-fixer fix --diff --dry-run",
+        "psalm": "vendor/bin/psalm --config=psalm.xml",
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit=2G",
+        "rector": "vendor/bin/rector process --dry-run",
+        "twigcs": "vendor/bin/twigcs --severity error --display blocking templates"
     },
     "repositories": [
         {

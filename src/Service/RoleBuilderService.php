@@ -107,9 +107,9 @@ class RoleBuilderService
     /**
      * @return FlagBag<EntityPermission>
      *
-     *  @psalm-suppress InvalidArgument
-     *  @psalm-suppress InvalidReturnType
-     *  @psalm-suppress InvalidReturnStatement
+     * @psalm-suppress InvalidArgument
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      */
     private function getDefaultPermissions(): FlagBag
     {

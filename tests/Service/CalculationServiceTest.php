@@ -103,7 +103,9 @@ class CalculationServiceTest extends KernelTestCase
 
     protected function echo(string $name, mixed $value): void
     {
-        echo \sprintf("\n%-15s: %s", $name, $value);
+        if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
+            echo \sprintf("\n%-15s: %s", $name, (string) $value);
+        }
     }
 
     protected function getTestedService(): CalculationService

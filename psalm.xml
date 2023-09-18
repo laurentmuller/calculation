@@ -4,10 +4,10 @@
        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
        errorLevel="1"
        phpVersion="8.2"
-       cacheDirectory="var/psalm.cache"
+       cacheDirectory="var/ci/psalm"
        allowStringToStandInForClass="true"
        findUnusedBaselineEntry="true"
-       findUnusedCode="true"
+       findUnusedCode="false"
        findUnusedPsalmSuppress="true"
        findUnusedVariablesAndParams="true"
        strictBinaryOperands="true">

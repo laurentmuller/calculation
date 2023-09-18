@@ -13,10 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\NonceService;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(NonceService::class)]
-class NonceServiceTest extends KernelTestCase
+class NonceServiceTest extends TestCase
 {
     private ?NonceService $service = null;
 
@@ -25,10 +25,7 @@ class NonceServiceTest extends KernelTestCase
      */
     protected function setUp(): void
     {
-        $service = self::getContainer()->get(NonceService::class);
-        if ($service instanceof NonceService) {
-            $this->service = $service;
-        }
+        $this->service = new NonceService();
     }
 
     /**

@@ -18,9 +18,6 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(DateUtils::class)]
 class DateUtilsTest extends TestCase
 {
-    /**
-     * @return array<array{0:int, 1: int}>
-     */
     public static function getCompletYears(): array
     {
         return [
@@ -127,9 +124,6 @@ class DateUtilsTest extends TestCase
         ];
     }
 
-    /**
-     * @return array<array{0:string, 1: int}>
-     */
     public static function getShortWeekdayNames(): array
     {
         return [

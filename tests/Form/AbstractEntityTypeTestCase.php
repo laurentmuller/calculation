@@ -94,10 +94,13 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     /**
      * Update the given entity with the given data.
      *
-     * @param class-string<TEntity> $className
-     * @param array<string, mixed>  $data
+     * @psalm-param class-string<TEntity> $className
+     * @psalm-param array<string, mixed>  $data
      *
-     * @return TEntity
+     * @psalm-return TEntity
+     *
+     * @psalm-suppress InvalidReturnStatement
+     * @psalm-suppress InvalidReturnType
      */
     protected function populate(string $className, array $data): mixed
     {

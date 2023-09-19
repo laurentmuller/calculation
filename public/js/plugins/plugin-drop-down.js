@@ -40,8 +40,10 @@
          */
         destroy() {
             if (this.$menu.length) {
-                this.$menu.off('shown.bs.dropdown', this.menuShowProxy);
                 this.$menu.off('click', '.dropdown-item', this.menuClickProxy);
+            }
+            if (this.$dropdown.length) {
+                this.$dropdown.off('shown.bs.dropdown', this.menuShowProxy);
             }
             this.$element.removeData($.DropDown.NAME);
         }
@@ -69,7 +71,8 @@
          * @return {string} the identifier attribute.
          */
         getId() {
-            const $item = this.$menu.find('.active');
+            const className = '.' + this.options.selectionClass;
+            const $item = this.$menu.find(className);
             if ($item.length && $item.data('parameter')) {
                 return $item.data('parameter');
             }
@@ -85,12 +88,16 @@
          * @private
          */
         _init() {
+            // window.console.log(this.$element.closest("[data-bs-toggle='dropdown']"));
             this.$menu = this.$element.next('.dropdown-menu');
             if (this.$menu.length) {
-                this.menuShowProxy = () => this._menuShow();
                 this.menuClickProxy = (e) => this._menuClick(e);
-                this.$menu.on('shown.bs.dropdown', this.menuShowProxy);
                 this.$menu.on('click', '.dropdown-item', this.menuClickProxy);
+            }
+            this.$dropdown = this.$element.closest("[data-bs-toggle='dropdown']");
+            if (this.$dropdown.length) {
+                this.menuShowProxy = () => this._menuShow();
+                this.$dropdown.on('shown.bs.dropdown', this.menuShowProxy);
             }
         }
 
@@ -99,7 +106,9 @@
          * @private
          */
         _menuShow() {
-            this.$menu.find('.active').trigger('focus');
+            const className = '.' + this.options.selectionClass;
+            const $item = this.$menu.find(className);
+            this.$menu.find(className).trigger('focus');
         }
 
         /**
@@ -127,7 +136,8 @@
         _updateValue(value, $selection) {
             const options = this.options;
             const $element = this.$element;
-            const $items = this.$menu.find('.dropdown-item').removeClass('active');
+            const className = this.options.selectionClass;
+            const $items = this.$menu.find('.dropdown-item').removeClass(className);
 
             // default values
             /** @type {jQuery} */
@@ -141,7 +151,7 @@
             if (!value || !$selection) {
                 $selection = $items.first();
             }
-            $selection.addClass('active');
+            $selection.addClass(className);
 
             // icon
             if (options.copyIcon) {
@@ -179,7 +189,9 @@
     DropDown.DEFAULTS = {
         copyText: true,
         copyIcon: true,
-        resetIcon: true
+        resetIcon: true,
+        selectionClass: 'active'
+        // selectionClass: 'dropdown-item-checked'
     };
 
     // -----------------------------------

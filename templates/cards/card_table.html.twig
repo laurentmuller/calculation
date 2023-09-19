@@ -9,22 +9,20 @@
 {%- endmacro %}
 {# output a drop-down menu #}
 {% macro output_dropdown_menu(id, icon, text, title, value, default) -%}
-{% apply spaceless %}
-    {% set attributes = attributes|default([])|merge({
-        'id': id,
-        'title': title|trans,
-        'type': 'button',
-        'class': 'btn btn-outline-secondary dropdown-toggle dropdown-input',
-        'aria-expanded': 'false',
-        'data-bs-toggle': 'dropdown',
-        'data-value': value,
-        'data-icon': icon(icon ~ ' fa-fw')|raw,
-        'data-default': default}) %}
-    {% set attributes = attributes|filter(v => v is not empty) %}
-    <button{{ output_attributes(attributes) }}>
-        {{- icon(icon ~ ' me-1') -}}{{- text -}}
-    </button>
-{% endapply %}
+{%- set attributes = attributes|default([])|merge({
+    'id': id,
+    'title': title|trans,
+    'type': 'button',
+    'class': 'btn btn-outline-secondary dropdown-toggle dropdown-input',
+    'aria-expanded': 'false',
+    'data-bs-toggle': 'dropdown',
+    'data-value': value,
+    'data-icon': icon(icon ~ ' fa-fw')|raw,
+    'data-default': default}) -%}
+{%- set attributes = attributes|filter(v => v is not empty) -%}
+<button{{ output_attributes(attributes) }}>
+    {{- icon(icon ~ ' me-1') -}}{{- text -}}
+</button>
 {% endmacro %}
 {# output a drop-down item #}
 {% macro output_dropdown(suffix, value, selection, text, attributes=[], icon=null) -%}

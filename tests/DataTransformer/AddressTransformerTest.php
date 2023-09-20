@@ -22,22 +22,14 @@ class AddressTransformerTest extends TestCase
 {
     private ?AddressTransformer $transformer = null;
 
-    /**
-     * Prepares the environment before running a test.
-     */
     protected function setUp(): void
     {
         $this->transformer = new AddressTransformer();
-        parent::setUp();
     }
 
-    /**
-     * Cleans up the environment after running a test.
-     */
     protected function tearDown(): void
     {
         $this->transformer = null;
-        parent::tearDown();
     }
 
     public static function getReverseTransformValues(): \Generator
@@ -68,6 +60,9 @@ class AddressTransformerTest extends TestCase
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
         self::assertEqualsCanonicalizing($expected, $actual);
+        if ($exception) {
+            self::fail('A exception must be raised.');
+        }
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]
@@ -79,6 +74,9 @@ class AddressTransformerTest extends TestCase
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
         self::assertSame($expected, $actual);
+        if ($exception) {
+            self::fail('A exception must be raised.');
+        }
     }
 
     public function testTransformerNotNull(): void

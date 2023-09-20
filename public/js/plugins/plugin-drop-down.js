@@ -71,7 +71,7 @@
          * @return {string} the identifier attribute.
          */
         getId() {
-            const className = '.' + this.options.selectionClass;
+            const className = `.${this.options.selectionClass}`;
             const $item = this.$menu.find(className);
             if ($item.length && $item.data('parameter')) {
                 return $item.data('parameter');
@@ -88,13 +88,12 @@
          * @private
          */
         _init() {
-            // window.console.log(this.$element.closest("[data-bs-toggle='dropdown']"));
             this.$menu = this.$element.next('.dropdown-menu');
             if (this.$menu.length) {
                 this.menuClickProxy = (e) => this._menuClick(e);
                 this.$menu.on('click', '.dropdown-item', this.menuClickProxy);
             }
-            this.$dropdown = this.$element.closest("[data-bs-toggle='dropdown']");
+            this.$dropdown = this.$element.closest('[data-bs-toggle="dropdown"]');
             if (this.$dropdown.length) {
                 this.menuShowProxy = () => this._menuShow();
                 this.$dropdown.on('shown.bs.dropdown', this.menuShowProxy);
@@ -106,8 +105,7 @@
          * @private
          */
         _menuShow() {
-            const className = '.' + this.options.selectionClass;
-            const $item = this.$menu.find(className);
+            const className = `.${this.options.selectionClass}`;
             this.$menu.find(className).trigger('focus');
         }
 
@@ -136,7 +134,7 @@
         _updateValue(value, $selection) {
             const options = this.options;
             const $element = this.$element;
-            const className = this.options.selectionClass;
+            const className = options.selectionClass;
             const $items = this.$menu.find('.dropdown-item').removeClass(className);
 
             // default values
@@ -175,7 +173,7 @@
 
             // update
             if ($icon.length) {
-                $element.text(' ' + text).prepend($icon.clone());
+                $element.text(text).prepend($icon.clone());
             } else {
                 $element.text(text);
             }
@@ -191,7 +189,6 @@
         copyIcon: true,
         resetIcon: true,
         selectionClass: 'active'
-        // selectionClass: 'dropdown-item-checked'
     };
 
     // -----------------------------------

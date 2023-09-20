@@ -15,6 +15,7 @@ namespace App\Form\DataTransformer;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Exception\ExceptionInterface;
 
 /**
  * Transforms between an Address string and an Address object.
@@ -24,15 +25,11 @@ use Symfony\Component\Mime\Address;
 class AddressTransformer implements DataTransformerInterface
 {
     /**
-     * Transforms an Address object into a string.
-     *
      * @psalm-param mixed $value
-     *
-     * @psalm-return Address|null
      */
     public function reverseTransform(mixed $value): ?Address
     {
-        if (null === $value) {
+        if (null === $value || '' === $value) {
             return null;
         }
 
@@ -43,7 +40,7 @@ class AddressTransformer implements DataTransformerInterface
 
         try {
             $address = Address::create($value);
-        } catch (\InvalidArgumentException $e) {
+        } catch (ExceptionInterface $e) {
             $message = \sprintf('Unable to parse the address for the value "%s".', $value);
             throw new TransformationFailedException($message, $e->getCode(), $e);
         }
@@ -52,11 +49,7 @@ class AddressTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transforms an Address string into an Address object.
-     *
      * @psalm-param mixed $value
-     *
-     * @psalm-return string|null
      */
     public function transform(mixed $value): ?string
     {

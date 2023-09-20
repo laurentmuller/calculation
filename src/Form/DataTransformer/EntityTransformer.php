@@ -14,11 +14,12 @@ namespace App\Form\DataTransformer;
 
 use App\Entity\AbstractEntity;
 use App\Repository\AbstractRepository;
+use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
- * Data transformer to convert an entity to an identifier (integer).
+ * Data transformer to convert entity to identifier.
  *
  * @template T of AbstractEntity
  *
@@ -53,12 +54,12 @@ readonly class EntityTransformer implements DataTransformerInterface
         }
 
         if (!\is_numeric($value)) {
-            $message = \sprintf('A "number" expected, a "%s" given.', \get_debug_type($value));
+            $message = \sprintf('A "numeric" value expected, a "%s" given.', \get_debug_type($value));
             throw new TransformationFailedException($message);
         }
 
         $entity = $this->repository->find((int) $value);
-        if (null === $entity || !\is_a($entity, $this->className)) {
+        if (null === $entity || !$this->validate($entity)) {
             $message = \sprintf('Unable to find a "%s" for the value "%s".', $this->className, $value);
             throw new TransformationFailedException($message);
         }
@@ -75,11 +76,16 @@ readonly class EntityTransformer implements DataTransformerInterface
             return null;
         }
 
-        if (!\is_a($value, $this->className)) {
+        if (!$this->validate($value)) {
             $message = \sprintf('A "%s" expected, a "%s" given.', $this->className, \get_debug_type($value));
             throw new TransformationFailedException($message);
         }
 
         return $value->getId();
+    }
+
+    private function validate(mixed $entity): bool
+    {
+        return \is_object($entity) && $this->className === ClassUtils::getClass($entity);
     }
 }

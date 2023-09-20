@@ -17,7 +17,7 @@ use App\Entity\Log;
 /**
  * Class to sort logs.
  */
-class LogSorter
+readonly class LogSorter
 {
     private const COLUMN_CHANNEL = 'channel';
 
@@ -35,7 +35,7 @@ class LogSorter
      * @param string $field     the field to sort
      * @param bool   $ascending true to sort in ascending mode false to sort in descending mode
      */
-    public function __construct(private readonly string $field, private readonly bool $ascending)
+    public function __construct(private string $field, private bool $ascending)
     {
     }
 

@@ -12,10 +12,9 @@ declare(strict_types=1);
 
 namespace App\Tests\DataTransformer;
 
-use App\Entity\Category;
 use App\Entity\Group;
 use App\Form\DataTransformer\EntityTransformer;
-use App\Repository\CategoryRepository;
+use App\Repository\GroupRepository;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -27,10 +26,9 @@ class EntityTransformerTest extends KernelTestCase
     use DatabaseTrait;
     use ServiceTrait;
 
-    private ?Category $category = null;
     private ?Group $group = null;
-    private ?CategoryRepository $repository = null;
-    /** @psalm-var EntityTransformer<Category>|null */
+    private ?GroupRepository $repository = null;
+    /** @psalm-var EntityTransformer<Group>|null */
     private ?EntityTransformer $transformer = null;
 
     /**
@@ -40,7 +38,6 @@ class EntityTransformerTest extends KernelTestCase
     {
         parent::setUp();
         $this->group = $this->createGroup();
-        $this->category = $this->createCategory($this->group);
         $this->transformer = new EntityTransformer($this->getRepository());
     }
 
@@ -49,7 +46,6 @@ class EntityTransformerTest extends KernelTestCase
      */
     protected function tearDown(): void
     {
-        $this->category = $this->deleteCategory();
         $this->group = $this->deleteGroup();
         $this->transformer = null;
         $this->repository = null;
@@ -83,15 +79,17 @@ class EntityTransformerTest extends KernelTestCase
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
         self::assertSame($expected, $actual);
+        if ($exception) {
+            self::fail('A exception must be raised.');
+        }
     }
 
-    public function testReverseTransformCategory(): void
+    public function testReverseTransformGroup(): void
     {
         self::assertNotNull($this->group);
-        self::assertNotNull($this->category);
         self::assertNotNull($this->transformer);
-        $actual = $this->transformer->reverseTransform($this->category->getId());
-        self::assertSame($this->category, $actual);
+        $actual = $this->transformer->reverseTransform($this->group->getId());
+        self::assertSame($this->group, $actual);
     }
 
     /**
@@ -106,31 +104,17 @@ class EntityTransformerTest extends KernelTestCase
         self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
         self::assertSame($expected, $actual);
+        if ($exception) {
+            self::fail('A exception must be raised.');
+        }
     }
 
-    public function testTransformCategory(): void
+    public function testTransformGroup(): void
     {
         self::assertNotNull($this->group);
-        self::assertNotNull($this->category);
         self::assertNotNull($this->transformer);
-        $actual = $this->transformer->transform($this->category);
-        self::assertSame($this->category->getId(), $actual);
-    }
-
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
-    private function createCategory(Group $group): Category
-    {
-        $category = new Category();
-        $category->setCode('Test')
-            ->setGroup($group);
-
-        $manager = $this->getManager();
-        $manager->persist($category);
-        $manager->flush();
-
-        return $category;
+        $actual = $this->transformer->transform($this->group);
+        self::assertSame($this->group->getId(), $actual);
     }
 
     /**
@@ -151,21 +135,6 @@ class EntityTransformerTest extends KernelTestCase
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    private function deleteCategory(): null
-    {
-        if ($this->category instanceof Category) {
-            $manager = $this->getManager();
-            $manager->remove($this->category);
-            $manager->flush();
-            $this->category = null;
-        }
-
-        return $this->category;
-    }
-
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
     private function deleteGroup(): null
     {
         if ($this->group instanceof Group) {
@@ -181,11 +150,11 @@ class EntityTransformerTest extends KernelTestCase
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    private function getRepository(): CategoryRepository
+    private function getRepository(): GroupRepository
     {
-        if (!$this->repository instanceof CategoryRepository) {
-            /** @psalm-var CategoryRepository $repository */
-            $repository = $this->getManager()->getRepository(Category::class);
+        if (!$this->repository instanceof GroupRepository) {
+            /** @psalm-var GroupRepository $repository */
+            $repository = $this->getManager()->getRepository(Group::class);
             $this->repository = $repository;
         }
 

@@ -17,7 +17,7 @@
     'aria-expanded': 'false',
     'data-bs-toggle': 'dropdown',
     'data-value': value,
-    'data-icon': icon(icon ~ ' fa-fw')|raw,
+    'data-icon': icon(icon ~ ' me-1')|raw,
     'data-default': default}) -%}
 {%- set attributes = attributes|filter(v => v is not empty) -%}
 <button{{ output_attributes(attributes) }}>
@@ -96,7 +96,7 @@
 {%- endmacro %}
 {# output a drop-down view item #}
 {% macro button_view(text, icon, view, selection) %}
-<button type="button" class="dropdown-item dropdown-menu-view{% if view == selection %} dropdown-item-checked{% endif %}" data-value="{{ view }}">
+<button type="button" class="dropdown-item dropdown-menu-view{% if view == selection %} dropdown-item-checked-right{% endif %}" data-value="{{ view }}">
     {{- icon(icon ~ ' fa-fw', text) -}}
 </button>
 {%- endmacro %}

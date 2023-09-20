@@ -779,14 +779,14 @@ a,
 }
 
 /**
- * menu with checked item on the right
+ * dropdown menu with checked item on the right
  */
-.navbar-menu:has(.dropdown-item-checked),
-.dropdown-menu:has(.dropdown-item-checked) {
+.navbar-menu:has(.dropdown-item-checked-right),
+.dropdown-menu:has(.dropdown-item-checked-right) {
     min-width: 14rem;
 }
 
-.dropdown-item-checked::after {
+.dropdown-item-checked-right::after {
     font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
     content: '\f00c';
@@ -796,7 +796,7 @@ a,
 
 
 /**
- * menu with checked item on the left
+ * dropdown menu with checked item on the left
  */
 .dropdown-item-checked-left {
     padding-left: calc((2 * var(--bs-dropdown-item-padding-x)) + 6px);

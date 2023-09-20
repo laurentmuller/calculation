@@ -694,7 +694,8 @@ function showSortDialog($table, $button) {
             } else if (isQueryParams) {
                 $table.refresh();
             }
-            $('input.form-control-search').trigger('focus');
+            $table.find('tr.table-primary').trigger('focus');
+            //$('input.form-control-search').trigger('focus');
         });
     }
 
@@ -717,8 +718,8 @@ function showSortDialog($table, $button) {
 
     // handle view buttons
     $viewButtons.on('click', function () {
-        $viewButtons.removeClass('dropdown-item-checked');
-        const view = $(this).addClass('dropdown-item-checked').data('value') || 'table';
+        $viewButtons.removeClass('dropdown-item-checked-right');
+        const view = $(this).addClass('dropdown-item-checked-right').data('value') || 'table';
         $('#button_other_actions').trigger('focus');
         $table.setDisplayMode(view);
     });

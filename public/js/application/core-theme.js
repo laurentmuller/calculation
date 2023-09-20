@@ -98,8 +98,8 @@
      */
     const updateActiveTheme = (theme) => {
         // remove check icon
-        document.querySelectorAll('[data-theme].dropdown-item-checked').forEach((element) => {
-            element.classList.remove('dropdown-item-checked');
+        document.querySelectorAll('[data-theme].dropdown-item-checked-right').forEach((element) => {
+            element.classList.remove('dropdown-item-checked-right');
         });
 
         // update
@@ -110,7 +110,7 @@
             const sourceText = sourceTheme.querySelector('.theme-text');
 
             // add check icon
-            sourceTheme.classList.add('dropdown-item-checked');
+            sourceTheme.classList.add('dropdown-item-checked-right');
 
             // set values
             const targetIcon = themeSwitcher.querySelector('.theme-icon');

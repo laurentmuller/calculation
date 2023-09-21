@@ -83,10 +83,12 @@ class OpenWeatherCityUpdater
         $db = null;
 
         try {
-            if (null === $temp_name = FileUtils::tempFile('sql')) {
+            $temp_name = FileUtils::tempFile('sql');
+            if (null === $temp_name) {
                 return $this->falseResult('swisspost.error.temp_file');
             }
-            if (false === $cities = $this->getFileContent($file)) {
+            $cities = $this->getFileContent($file);
+            if (false === $cities) {
                 return $this->falseResult('swisspost.error.open_archive', [
                         '%name%' => $file->getClientOriginalName(),
                     ]);
@@ -136,13 +138,16 @@ class OpenWeatherCityUpdater
         if (!$file->isValid()) {
             return false;
         }
-        if (false === $filename = $file->getRealPath()) {
+        $filename = $file->getRealPath();
+        if (false === $filename) {
             return false;
         }
-        if (false === $content = \file_get_contents($filename)) {
+        $content = \file_get_contents($filename);
+        if (false === $content) {
             return false;
         }
-        if (false === $content = \gzdecode($content)) {
+        $content = \gzdecode($content);
+        if (false === $content) {
             return false;
         }
 

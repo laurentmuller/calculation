@@ -114,7 +114,8 @@ class SchemaReport extends AbstractReport
      */
     private function formatType(array $column): string
     {
-        if (($length = $column['length']) > 0) {
+        $length = $column['length'];
+        if ($length > 0) {
             return \sprintf('%s(%d)', $column['type'], $length);
         }
 

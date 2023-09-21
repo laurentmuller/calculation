@@ -168,7 +168,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         $current = $this;
         /** @psalm-var mixed $key */
         foreach ($keys as $key) {
-            if (!($found = $current->find($key)) instanceof self) {
+            $found = $current->find($key);
+            if (!$found instanceof self) {
                 return null;
             }
             $current = $found;
@@ -189,7 +190,9 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
         foreach ($this->children as $child) {
             if ($child->equalsKey($key)) {
                 return $child;
-            } elseif (($found = $child->findRecursive($key)) instanceof self) {
+            }
+            $found = $child->findRecursive($key);
+            if ($found instanceof self) {
                 return $found;
             }
         }

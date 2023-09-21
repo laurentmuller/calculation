@@ -126,15 +126,18 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function checkPwned(Password $constraint, string $value): bool
     {
-        if ($constraint->pwned && 0 !== $count = $this->getPasswordCount($value)) {
-            $parameters = [
-                '{{count}}' => FormatUtils::formatInt($count),
-            ];
-
-            return $this->addViolation($constraint->pwned_message, $value, $parameters, Password::PWNED_ERROR);
+        if (!$constraint->pwned) {
+            return false;
         }
 
-        return false;
+        $count = $this->getPasswordCount($value);
+        if (0 === $count) {
+            return false;
+        }
+
+        $parameters = ['{{count}}' => FormatUtils::formatInt($count)];
+
+        return $this->addViolation($constraint->pwned_message, $value, $parameters, Password::PWNED_ERROR);
     }
 
     /**

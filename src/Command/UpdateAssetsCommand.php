@@ -80,7 +80,8 @@ class UpdateAssetsCommand extends Command
         }
         $source = $configuration['source'];
         $target = FileUtils::buildPath($publicDir, $configuration['target']);
-        if (!$targetTemp = $this->getTargetTemp($publicDir)) {
+        $targetTemp = $this->getTargetTemp($publicDir);
+        if (false === $targetTemp) {
             return Command::FAILURE;
         }
 

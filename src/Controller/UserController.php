@@ -226,12 +226,7 @@ class UserController extends AbstractEntityController
             /** @var User[] $users */
             $users = $form->get($name)->getData();
             $repository->resetPasswordRequest($users);
-            $count = \count($users);
-            if (1 === $count && false !== $user = \reset($users)) {
-                $this->successTrans('user.reset.success', ['%name%' => $user->getUserIdentifier()]);
-            } else {
-                $this->successTrans('user.reset_all.success', ['%count%' => $count]);
-            }
+            $this->successResetPassword($users);
 
             return $generator->redirect($request, null, $this->getDefaultRoute());
         }
@@ -254,7 +249,7 @@ class UserController extends AbstractEntityController
                 /** @psalm-var UserRepository $repository */
                 $repository = $this->repository;
                 $repository->removeResetPasswordRequest($item);
-                $this->successTrans('user.reset.success', ['%name%' => $identifier]);
+                $this->successResetPassword([$item]);
             } else {
                 $this->warningTrans('user.reset.error', ['%name%' => $identifier]);
             }
@@ -395,5 +390,23 @@ class UserController extends AbstractEntityController
     private function isSameUser(User $user, ?UserInterface $value): bool
     {
         return $value instanceof User && $value->getId() === $user->getId();
+    }
+
+    /**
+     * @param User[] $users
+     */
+    private function successResetPassword(array $users): void
+    {
+        $count = \count($users);
+        if (1 === $count) {
+            $user = \reset($users);
+            if (false !== $user) {
+                $this->successTrans('user.reset.success', ['%name%' => $user->getUserIdentifier()]);
+
+                return;
+            }
+        }
+
+        $this->successTrans('user.reset_all.success', ['%count%' => $count]);
     }
 }

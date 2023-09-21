@@ -54,7 +54,8 @@ class AjaxController extends AbstractController
     #[Route(path: '/task', name: 'ajax_task', methods: Request::METHOD_POST)]
     public function computeTask(Request $request, TaskService $service): JsonResponse
     {
-        if (!($query = $service->createQuery($request)) instanceof TaskComputeQuery) {
+        $query = $service->createQuery($request);
+        if (!$query instanceof TaskComputeQuery) {
             return $this->jsonFalse([
                 'message' => $this->trans('task_compute.error.task'),
             ]);

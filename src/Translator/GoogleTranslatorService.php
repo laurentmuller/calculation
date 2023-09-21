@@ -61,7 +61,8 @@ class GoogleTranslatorService extends AbstractTranslatorService
     public function detect(string $text): array|false
     {
         $query = ['q' => $text];
-        if (!$response = $this->call(uri: self::URI_DETECT, query: $query)) {
+        $response = $this->call(uri: self::URI_DETECT, query: $query);
+        if (false === $response) {
             return false;
         }
         /** @psalm-var string|null $tag */
@@ -97,7 +98,8 @@ class GoogleTranslatorService extends AbstractTranslatorService
             'q' => $query->text,
             'format' => $query->html ? 'html' : 'text',
         ];
-        if (!$response = $this->call(self::URI_TRANSLATE, $params)) {
+        $response = $this->call(self::URI_TRANSLATE, $params);
+        if (false === $response) {
             return false;
         }
 
@@ -132,7 +134,8 @@ class GoogleTranslatorService extends AbstractTranslatorService
     protected function loadLanguages(): array|false
     {
         $query = ['target' => self::getAcceptLanguage()];
-        if (!$response = $this->call(uri: self::URI_LANGUAGE, query: $query)) {
+        $response = $this->call(uri: self::URI_LANGUAGE, query: $query);
+        if (false === $response) {
             return false;
         }
         /** @psalm-var array<array{name: string, language: string}>|false  $languages */

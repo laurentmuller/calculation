@@ -72,7 +72,8 @@ class ImageService
      */
     public function allocate(int $red, int $green, int $blue): int|false
     {
-        if (false !== $color = \imagecolorallocate($this->image, $red, $green, $blue)) {
+        $color = \imagecolorallocate($this->image, $red, $green, $blue);
+        if (false !== $color) {
             $this->colors[] = $color;
         }
 
@@ -93,7 +94,8 @@ class ImageService
      */
     public function allocateAlpha(int $red = 0, int $green = 0, int $blue = 0, int $alpha = 127): int|false
     {
-        if (false !== $color = \imagecolorallocatealpha($this->image, $red, $green, $blue, $alpha)) {
+        $color = \imagecolorallocatealpha($this->image, $red, $green, $blue, $alpha);
+        if (false !== $color) {
             $this->colors[] = $color;
         }
 

@@ -52,12 +52,14 @@ class PasswordService
      */
     public function validate(PasswordQuery $query): array
     {
-        if (null !== $response = $this->validatePassword($query)) {
+        $response = $this->validatePassword($query);
+        if (null !== $response) {
             return $response;
         }
 
         $results = $this->getPasswordStrength($query);
-        if (null !== $response = $this->validateScoreResults($results)) {
+        $response = $this->validateScoreResults($results);
+        if (null !== $response) {
             return $response;
         }
 
@@ -76,7 +78,8 @@ class PasswordService
             ],
         ]);
 
-        if (null !== $response = $this->validateScoreLevel($minimumLevel, $scoreLevel, $results)) {
+        $response = $this->validateScoreLevel($minimumLevel, $scoreLevel, $results);
+        if (null !== $response) {
             return $response;
         }
 

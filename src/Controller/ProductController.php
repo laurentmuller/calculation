@@ -56,7 +56,8 @@ class ProductController extends AbstractEntityController
     public function add(Request $request): Response
     {
         $item = new Product();
-        if (($category = $this->getApplication()->getDefaultCategory()) instanceof Category) {
+        $category = $this->getApplication()->getDefaultCategory();
+        if ($category instanceof Category) {
             $item->setCategory($category);
         }
 

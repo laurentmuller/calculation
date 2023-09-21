@@ -120,7 +120,8 @@ class ResponseListener
         // CSP
         $response = $event->getResponse();
         $headers = $response->headers;
-        if ('' !== $csp = $this->getCSP($response)) {
+        $csp = $this->getCSP($response);
+        if ('' !== $csp) {
             foreach (self::CSP_HEADERS as $key) {
                 $headers->set($key, $csp);
             }

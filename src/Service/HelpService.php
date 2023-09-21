@@ -230,7 +230,8 @@ class HelpService implements ServiceSubscriberInterface
 
     private function findById(string $path, string $id): ?array
     {
-        if ($entries = $this->findEntries($path)) {
+        $entries = $this->findEntries($path);
+        if (null !== $entries) {
             /** @psalm-var array $entry */
             foreach ($entries as $entry) {
                 if (isset($entry['id']) && $entry['id'] === $id) {
@@ -289,7 +290,8 @@ class HelpService implements ServiceSubscriberInterface
              */
             $entityA = isset($a['entity']) ? $this->trans($a['entity'] . '.name') : 'zzzz';
             $entityB = isset($b['entity']) ? $this->trans($b['entity'] . '.name') : 'zzzz';
-            if (0 !== $result = \strnatcmp($entityA, $entityB)) {
+            $result = \strnatcmp($entityA, $entityB);
+            if (0 !== $result) {
                 return $result;
             }
             $textA = $this->trans($a['id']);

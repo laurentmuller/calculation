@@ -57,7 +57,8 @@ class AjaxTranslateController extends AbstractController
 
         try {
             $service = $this->getService($class);
-            if ($result = $service->detect($text)) {
+            $result = $service->detect($text);
+            if (\is_array($result)) {
                 return $this->jsonTrue([
                     'service' => $service::getName(),
                     'data' => $result,
@@ -81,7 +82,8 @@ class AjaxTranslateController extends AbstractController
     {
         try {
             $service = $this->getService($class);
-            if ($languages = $service->getLanguages()) {
+            $languages = $service->getLanguages();
+            if (\is_array($languages)) {
                 return $this->jsonTrue([
                     'languages' => $languages,
                 ]);
@@ -115,7 +117,8 @@ class AjaxTranslateController extends AbstractController
 
         try {
             $service = $this->getService($query->service);
-            if ($result = $service->translate($query)) {
+            $result = $service->translate($query);
+            if (\is_array($result)) {
                 return $this->jsonTrue([
                     'service' => $service::getName(),
                     'data' => $result,
@@ -138,7 +141,8 @@ class AjaxTranslateController extends AbstractController
 
     private function handleError(TranslatorServiceInterface $service, string $message): JsonResponse
     {
-        if (($error = $service->getLastError()) instanceof HttpClientError) {
+        $error = $service->getLastError();
+        if ($error instanceof HttpClientError) {
             $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
             if ($this->isTransDefined($id, 'translator')) {
                 $error->setMessage($this->trans($id, [], 'translator'));

@@ -115,7 +115,8 @@ trait CacheAwareTrait
             return $item->get();
         }
         if (\is_callable($default)) {
-            if (null !== $value = \call_user_func($default)) {
+            $value = \call_user_func($default);
+            if (null !== $value) {
                 $this->setCacheValue($key, $value, $time);
 
                 return $value;
@@ -150,7 +151,8 @@ trait CacheAwareTrait
      */
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval $time = null): bool
     {
-        if (null !== $item = $this->getCacheItem($key)) {
+        $item = $this->getCacheItem($key);
+        if (null !== $item) {
             $item->set($value);
             if (null !== $time) {
                 $item->expiresAfter($time);
@@ -187,7 +189,9 @@ trait CacheAwareTrait
         $key = self::cleanKey($key);
         if (null === $value) {
             return $this->deleteCacheItem($key);
-        } elseif (null !== $item = $this->getCacheItem($key)) {
+        }
+        $item = $this->getCacheItem($key);
+        if (null !== $item) {
             $item->expiresAfter($time ?? $this->getCacheTimeout())
                 ->set($value);
 

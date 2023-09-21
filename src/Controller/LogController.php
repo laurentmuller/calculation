@@ -139,7 +139,8 @@ class LogController extends AbstractController
     #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Request $request, int $id, LogService $service): Response
     {
-        if (!($item = $service->getLog($id)) instanceof Log) {
+        $item = $service->getLog($id);
+        if (!$item instanceof Log) {
             $this->warningTrans('log.show.not_found');
             $route = $this->getDefaultRoute($request);
 
@@ -163,7 +164,8 @@ class LogController extends AbstractController
      */
     private function getDefaultRoute(Request $request): string
     {
-        if (null !== $route = $this->getRequestString($request, 'route')) {
+        $route = $this->getRequestString($request, 'route');
+        if (null !== $route) {
             return $route;
         }
 

@@ -169,7 +169,8 @@ class Category extends AbstractEntity implements TimestampableInterface
     public function getFullCode(): ?string
     {
         $code = $this->code;
-        if ($parent = $this->getGroupCode()) {
+        $parent = $this->getGroupCode();
+        if (null !== $parent) {
             return \sprintf('%s - %s', (string) $code, $parent);
         }
 

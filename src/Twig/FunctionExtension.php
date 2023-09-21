@@ -67,8 +67,11 @@ final class FunctionExtension extends AbstractExtension
         private readonly UploaderHelper $helper,
         private readonly UrlGeneratorService $generator,
     ) {
-        if (FileUtils::exists($composer_file) && \is_int($version = \filemtime($composer_file))) {
-            $this->version = $version;
+        if (FileUtils::exists($composer_file)) {
+            $version = \filemtime($composer_file);
+            if (\is_int($version)) {
+                $this->version = $version;
+            }
         }
         $this->webDir = FileUtils::normalize($webDir);
     }
@@ -118,7 +121,8 @@ final class FunctionExtension extends AbstractExtension
      */
     private function assetExists(?string $path): bool
     {
-        if (null === $file = $this->getRealPath($path)) {
+        $file = $this->getRealPath($path);
+        if (null === $file) {
             return false;
         }
 
@@ -208,7 +212,11 @@ final class FunctionExtension extends AbstractExtension
      */
     private function assetVersion(?string $path): int
     {
-        if ($this->debug || null === $realPath = $this->getRealPath($path)) {
+        if ($this->debug) {
+            return $this->version;
+        }
+        $realPath = $this->getRealPath($path);
+        if (null === $realPath) {
             return $this->version;
         }
         if (!isset($this->versions[$realPath])) {
@@ -243,7 +251,8 @@ final class FunctionExtension extends AbstractExtension
             return null;
         }
         $path = FileUtils::buildPath($this->webDir, $path);
-        if (false === $file = \realpath($path)) {
+        $file = \realpath($path);
+        if (false === $file) {
             return null;
         }
         if (!FileUtils::isFile($file)) {

@@ -57,7 +57,8 @@ class HtmlReport extends AbstractReport
             return false;
         }
 
-        if (!$root = $this->parseContent()) {
+        $root = $this->parseContent();
+        if (!$root instanceof HtmlParentChunk) {
             return false;
         }
 

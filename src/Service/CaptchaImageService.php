@@ -99,7 +99,8 @@ class CaptchaImageService implements ServiceSubscriberInterface
         }
         $this->clear();
         $text = $this->generateRandomString($length);
-        if (($image = $this->createImage($text, $width, $height)) instanceof ImageService) {
+        $image = $this->createImage($text, $width, $height);
+        if ($image instanceof ImageService) {
             $data = $this->encodeImage($image);
             $this->setSessionValues([
                 self::KEY_TEXT => $text,
@@ -162,7 +163,8 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     private function createImage(string $text, int $width, int $height): ?ImageService
     {
-        if (!($image = ImageService::fromTrueColor($width, $height)) instanceof ImageService) {
+        $image = ImageService::fromTrueColor($width, $height);
+        if (!$image instanceof ImageService) {
             return null;
         }
         $this->drawBackground($image)

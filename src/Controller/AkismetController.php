@@ -24,14 +24,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for the Askimet service.
  */
 #[AsController]
-#[Route(path: '/askimet')]
+#[Route(path: '/akismet')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-class AskimetController extends AbstractController
+class AkismetController extends AbstractController
 {
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    #[Route(path: '/spam', name: 'askimet_comment')]
+    #[Route(path: '/spam', name: 'akismet_comment')]
     public function verifyComment(AkismetService $service, FakerService $faker): JsonResponse
     {
         $comment = $faker->getGenerator()->realText(145);
@@ -46,7 +46,7 @@ class AskimetController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/verify', name: 'askimet_key')]
+    #[Route(path: '/verify', name: 'akismet_key')]
     public function verifyKey(AkismetService $service): JsonResponse
     {
         $results = $service->verifyKey();

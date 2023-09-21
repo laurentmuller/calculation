@@ -369,7 +369,8 @@ class TestController extends AbstractController
     {
         $service = $factory->getSessionService();
         $languages = $service->getLanguages();
-        if (($error = $service->getLastError()) instanceof HttpClientError) {
+        $error = $service->getLastError();
+        if ($error instanceof HttpClientError) {
             $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
             if ($this->isTransDefined($id, 'translator')) {
                 $error->setMessage($this->trans($id, [], 'translator'));
@@ -453,8 +454,11 @@ class TestController extends AbstractController
         foreach ($values as $key => $value) {
             if (\is_array($value)) {
                 $value = \implode('<br>', $value);
-            } elseif ('challenge_ts' === $key && false !== $time = \strtotime($value)) {
-                $value = FormatUtils::formatDateTime($time, null, \IntlDateFormatter::MEDIUM);
+            } elseif ('challenge_ts' === $key) {
+                $time = \strtotime($value);
+                if (false !== $time) {
+                    $value = FormatUtils::formatDateTime($time, null, \IntlDateFormatter::MEDIUM);
+                }
             }
             $html .= "<tr><td>$key</td><td>:</td><td>$value</td></tr>";
         }

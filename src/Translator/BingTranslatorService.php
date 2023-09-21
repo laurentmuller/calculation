@@ -70,9 +70,11 @@ class BingTranslatorService extends AbstractTranslatorService
     public function detect(string $text): array|false
     {
         $json = [['Text' => $text]];
-        if (!$response = $this->call(uri: self::URI_DETECT, json: $json)) {
+        $response = $this->call(uri: self::URI_DETECT, json: $json);
+        if (false === $response) {
             return false;
         }
+
         /** @psalm-var string|null $tag */
         $tag = $this->getValue($response, '[0][language]');
         if (!\is_string($tag)) {
@@ -106,7 +108,8 @@ class BingTranslatorService extends AbstractTranslatorService
             'textType' => $query->html ? 'html' : 'plain',
         ];
         $json = [['Text' => $query->text]];
-        if (!$response = $this->call(self::URI_TRANSLATE, $params, $json)) {
+        $response = $this->call(self::URI_TRANSLATE, $params, $json);
+        if (false === $response) {
             return false;
         }
 
@@ -145,7 +148,8 @@ class BingTranslatorService extends AbstractTranslatorService
     protected function loadLanguages(): array|false
     {
         $query = ['scope' => 'translation'];
-        if (!$response = $this->call(uri: self::URI_LANGUAGE, query: $query, json: $query, method: Request::METHOD_GET)) {
+        $response = $this->call(uri: self::URI_LANGUAGE, query: $query, json: $query, method: Request::METHOD_GET);
+        if (false === $response) {
             return false;
         }
         /** @psalm-var array<string, array{name: string}>|null  $translation */
@@ -173,7 +177,8 @@ class BingTranslatorService extends AbstractTranslatorService
             self::JSON => $json,
             self::QUERY => $query,
         ]);
-        if (!\is_array($values = $this->checkResponse($response))) {
+        $values = $this->checkResponse($response);
+        if (!\is_array($values)) {
             return false;
         }
 

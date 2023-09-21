@@ -85,7 +85,8 @@ class UrlGeneratorService
     public function cancelUrl(Request $request, AbstractEntity|int|null $id = 0, string $defaultRoute = AbstractController::HOME_PAGE, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         $params = $this->routeParams($request, $id);
-        if (null !== $caller = $this->getCaller($params)) {
+        $caller = $this->getCaller($params);
+        if (null !== $caller) {
             unset($params[self::PARAM_CALLER]);
             if ([] !== $params) {
                 $caller .= \str_contains($caller, '?') ? '&' : '?';
@@ -117,7 +118,8 @@ class UrlGeneratorService
     {
         $params = [];
         foreach (self::PARAMETER_NAMES as $name) {
-            if (null !== ($value = $this->getRequestValue($request, $name))) {
+            $value = $this->getRequestValue($request, $name);
+            if (null !== $value) {
                 $params[$name] = $value;
             }
         }

@@ -178,7 +178,8 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      */
     private function doGetLatest(string $url): ?array
     {
-        if (\is_array($response = $this->get($url))) {
+        $response = $this->get($url);
+        if (\is_array($response)) {
             /** @psalm-var array<string, float>|null $rates */
             $rates = $response['conversion_rates'] ?? null;
             if (\is_array($rates)) {
@@ -240,7 +241,8 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      */
     private function doGetSupportedCodes(string $url): ?array
     {
-        if (\is_array($response = $this->get($url))) {
+        $response = $this->get($url);
+        if (\is_array($response)) {
             /** @psalm-var string[]|null $codes */
             $codes = $response['supported_codes'] ?? null;
             if (\is_array($codes)) {

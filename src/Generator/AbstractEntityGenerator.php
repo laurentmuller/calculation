@@ -56,7 +56,8 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
         try {
             $items = [];
             $entities = $this->createEntities($count, $simulate, $this->generator);
-            if (($count = \count($entities)) > 0) {
+            $count = \count($entities);
+            if ($count > 0) {
                 $items = $this->saveAndMapEntities($entities, $simulate);
             }
 

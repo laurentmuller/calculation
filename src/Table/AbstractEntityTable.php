@@ -161,11 +161,15 @@ abstract class AbstractEntityTable extends AbstractTable
     protected function orderBy(DataQuery $query, QueryBuilder $builder, string $alias): void
     {
         $orderBy = [];
-        if ($sorting = StringUtils::isString($query->sort) && StringUtils::isString($query->order)) {
+        $sorting = StringUtils::isString($query->sort);
+        if ($sorting && StringUtils::isString($query->order)) {
             $this->updateOrderBy($orderBy, $query, $alias);
         }
-        if (!$sorting && ($column = $this->getDefaultColumn()) instanceof Column) {
-            $this->updateOrderBy($orderBy, $column, $alias);
+        if (!$sorting) {
+            $column = $this->getDefaultColumn();
+            if ($column instanceof Column) {
+                $this->updateOrderBy($orderBy, $column, $alias);
+            }
         }
         $this->updateOrderBy($orderBy, $this->getDefaultOrder(), $alias);
         foreach ($orderBy as $sort => $order) {
@@ -186,7 +190,8 @@ abstract class AbstractEntityTable extends AbstractTable
         if (!StringUtils::isString($search)) {
             return false;
         }
-        if ([] === $searchFields = $this->getSearchFields()) {
+        $searchFields = $this->getSearchFields();
+        if ([] === $searchFields) {
             return false;
         }
         $whereExpr = new Orx();

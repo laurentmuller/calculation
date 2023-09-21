@@ -61,7 +61,8 @@ class HtmlTextChunk extends AbstractHtmlChunk
     public function isNewLine(): bool
     {
         // check if the next chunk is a parent chunk
-        if (($parent = $this->getParent()) instanceof HtmlParentChunk) {
+        $parent = $this->getParent();
+        if ($parent instanceof HtmlParentChunk) {
             $index = $this->index();
             $count = $parent->count();
             if (-1 !== $index && $index < $count - 1) {
@@ -92,7 +93,8 @@ class HtmlTextChunk extends AbstractHtmlChunk
 
     protected function outputText(HtmlReport $report, string $text): void
     {
-        if (($parent = $this->getParent()) instanceof HtmlParentChunk) {
+        $parent = $this->getParent();
+        if ($parent instanceof HtmlParentChunk) {
             // bookmark
             if ($parent->isBookmark()) {
                 $report->addBookmark($text, true, $parent->getBookmarkLevel());

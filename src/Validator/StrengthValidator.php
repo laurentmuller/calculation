@@ -89,11 +89,11 @@ class StrengthValidator extends AbstractConstraintValidator
         if (null === $object) {
             return $userInputs;
         }
-        if (null !== $path = $constraint->userNamePath) {
-            $userInputs[] = $this->getValue($object, $path);
+        if (null !== $constraint->userNamePath) {
+            $userInputs[] = $this->getValue($object, $constraint->userNamePath);
         }
-        if (null !== $path = $constraint->emailPath) {
-            $userInputs[] = $this->getValue($object, $path);
+        if (null !== $constraint->emailPath) {
+            $userInputs[] = $this->getValue($object, $constraint->emailPath);
         }
 
         return \array_filter($userInputs);

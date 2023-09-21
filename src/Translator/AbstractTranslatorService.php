@@ -54,11 +54,21 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
      */
     public function findLanguage(?string $tag): ?string
     {
-        if ($tag && ($languages = $this->getLanguages()) && ($name = \array_search($tag, $languages, true))) {
-            return $name;
+        if (null === $tag) {
+            return null;
         }
 
-        return null;
+        $languages = $this->getLanguages();
+        if (false === $languages) {
+            return null;
+        }
+
+        $name = \array_search($tag, $languages, true);
+        if (false === $name) {
+            return null;
+        }
+
+        return $name;
     }
 
     public function getCacheTimeout(): int

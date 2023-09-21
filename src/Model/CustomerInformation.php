@@ -73,7 +73,8 @@ class CustomerInformation
      */
     public function getTranslatedFax(object $translator = null): string
     {
-        if ('' === $fax = $this->fax ?? '') {
+        $fax = $this->fax ?? '';
+        if ('' === $fax) {
             return $fax;
         }
         if ($translator instanceof TranslatorInterface) {
@@ -91,7 +92,8 @@ class CustomerInformation
      */
     public function getTranslatedPhone(object $translator = null): string
     {
-        if ('' === $phone = $this->phone ?? '') {
+        $phone = $this->phone ?? '';
+        if ('' === $phone) {
             return $phone;
         }
         if ($translator instanceof TranslatorInterface) {

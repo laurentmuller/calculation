@@ -59,13 +59,15 @@ class EntityVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-        if (!($user = $this->getUser($token)) instanceof User) {
+        $user = $this->getUser($token);
+        if (!$user instanceof User) {
             return false;
         }
         if ($user->isSuperAdmin()) {
             return true;
         }
-        if (null === $name = EntityName::tryFindValue($subject)) {
+        $name = EntityName::tryFindValue($subject);
+        if (null === $name) {
             return false;
         }
         if (EntityName::LOG->matchValue($name)) {

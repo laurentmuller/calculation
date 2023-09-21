@@ -34,7 +34,8 @@ class PhpIniReport extends AbstractReport
     public function __construct(AbstractController $controller, private readonly PhpInfoService $service)
     {
         parent::__construct($controller);
-        if ($description = \php_ini_loaded_file()) {
+        $description = \php_ini_loaded_file();
+        if (\is_string($description)) {
             $this->getHeader()->setDescription($description);
         }
         $version = $this->service->getVersion();

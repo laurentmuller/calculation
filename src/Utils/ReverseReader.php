@@ -39,8 +39,6 @@ class ReverseReader extends AbstractReader
     private const LINE_FEED = "\n";
 
     /**
-     * Constructor.
-     *
      * @param \SplFileInfo|string $file   the file to open
      * @param bool                $binary true to open the file with binary mode
      */
@@ -77,6 +75,10 @@ class ReverseReader extends AbstractReader
         }
         \fseek($stream, 1, \SEEK_CUR);
 
-        return '' === $line ? null : \strrev($line);
+        if ('' !== $line) {
+            return \strrev($line);
+        }
+
+        return null;
     }
 }

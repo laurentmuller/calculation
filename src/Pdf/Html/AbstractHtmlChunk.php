@@ -321,7 +321,8 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
     protected function outputText(HtmlReport $report, string $text): void
     {
         $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
-        if (($border = $this->getParentBorder()) instanceof PdfBorder) {
+        $border = $this->getParentBorder();
+        if ($border instanceof PdfBorder) {
             $required = $report->GetStringWidth($text) + 2.0 * $report->getCellMargin();
             if ($required > $report->getRemainingWidth()) {
                 $report->MultiCell(0, $height, $text, $border);

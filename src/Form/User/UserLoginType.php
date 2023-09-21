@@ -13,22 +13,12 @@ declare(strict_types=1);
 namespace App\Form\User;
 
 use App\Form\FormHelper;
-use App\Service\ApplicationService;
-use App\Service\CaptchaImageService;
 
 /**
  * User login type.
  */
 class UserLoginType extends AbstractUserCaptchaType
 {
-    /**
-     * Constructor.
-     */
-    public function __construct(CaptchaImageService $service, ApplicationService $application)
-    {
-        parent::__construct($service, $application);
-    }
-
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('username')

@@ -339,10 +339,9 @@ function updateShowEntityAction(row, $action, propertyName) {
  * Formatter for the actions' column.
  *
  * @param {number} value - the field value (id).
- * @param {object} _row - the row record data.
  * @returns {string} the rendered cell.
  */
-function formatActions(value, _row) {
+function formatActions(value) {
     'use strict';
     const substr = '$1' + value;
     const regex = /(\/|\bid=)(\d+)/;
@@ -738,7 +737,7 @@ function showSortDialog($table, $button) {
     // handle page selection button
     const $pagination = $('.fixed-table-pagination');
     if ($showPage.length) {
-        $showPage.on('click', function (e, source) {
+        $showPage.on('click', function () {
             showPageDialog($table, $showPage);
         });
         $pagination.on('click', '.page-first-separator .page-link,.page-last-separator .page-link', function () {

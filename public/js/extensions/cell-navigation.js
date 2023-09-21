@@ -32,32 +32,33 @@ $.fn.extend({
             const $cell = $(e.target).closest('td');
 
             switch (e.key) {
-            case arrow.left:
-                if (input.selectionStart || 0 === 0) {
-                    $moveTo = $cell.prev('td:has(input)');
-                }
-                break;
+                case arrow.left:
+                    if (input.selectionStart || 0 === 0) {
+                        $moveTo = $cell.prev('td:has(input)');
+                    }
+                    break;
 
-            case arrow.right:
-                if (input.selectionEnd || input.value.length === input.value.length) {
-                    $moveTo = $cell.next('td:has(input)');
-                }
-                break;
+                case arrow.right:
+                    if (input.selectionEnd || input.value.length === input.value.length) {
+                        $moveTo = $cell.next('td:has(input)');
+                    }
+                    break;
 
-            case arrow.up:
-            case arrow.down:
-                let $moveToRow = null;
-                const $row = $cell.closest('tr');
-                const pos = $cell[0].cellIndex;
-                if (e.key === arrow.down) {
-                    $moveToRow = $row.next('tr');
-                } else if (e.key === arrow.up) {
-                    $moveToRow = $row.prev('tr');
+                case arrow.up:
+                case arrow.down: {
+                    let $moveToRow = null;
+                    const $row = $cell.closest('tr');
+                    const pos = $cell[0].cellIndex;
+                    if (e.key === arrow.down) {
+                        $moveToRow = $row.next('tr');
+                    } else if (e.key === arrow.up) {
+                        $moveToRow = $row.prev('tr');
+                    }
+                    if ($moveToRow && $moveToRow.length) {
+                        $moveTo = $($moveToRow[0].cells[pos]);
+                    }
+                    break;
                 }
-                if ($moveToRow && $moveToRow.length) {
-                    $moveTo = $($moveToRow[0].cells[pos]);
-                }
-                break;
             }
 
             if ($moveTo && $moveTo.length) {

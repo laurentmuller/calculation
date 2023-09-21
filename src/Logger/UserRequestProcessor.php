@@ -32,7 +32,8 @@ readonly class UserRequestProcessor implements ProcessorInterface
 
     public function __invoke(LogRecord $record): LogRecord
     {
-        if (($user = $this->security->getUser()) instanceof UserInterface) {
+        $user = $this->security->getUser();
+        if ($user instanceof UserInterface) {
             $record->extra[Log::USER_FIELD] = $user->getUserIdentifier();
         }
 

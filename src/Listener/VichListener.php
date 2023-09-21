@@ -98,7 +98,8 @@ class VichListener
         }
 
         // target file name
-        if ('' === $name = $mapping->getUploadName($user)) {
+        $name = $mapping->getUploadName($user);
+        if ('' === $name) {
             return;
         }
 

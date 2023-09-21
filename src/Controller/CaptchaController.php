@@ -40,7 +40,8 @@ class CaptchaController extends AbstractController
     #[Route(path: '/image', name: 'captcha_image')]
     public function image(CaptchaImageService $service): JsonResponse
     {
-        if ($data = $service->generateImage(true)) {
+        $data = $service->generateImage(true);
+        if (null !== $data) {
             return $this->jsonTrue([
                 'data' => $data,
             ]);

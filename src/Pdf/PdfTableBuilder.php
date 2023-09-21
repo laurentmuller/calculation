@@ -551,13 +551,13 @@ class PdfTableBuilder
             }
             $this->drawCellText($parent, $index, $textBounds, $text, $alignment, $line_height);
 
-            if ($link = $cell->getLink()) {
+            if ($cell->isLink()) {
                 $linkBounds = clone $textBounds;
                 $linkBounds->inflate(-$margins);
                 $linkWidth = $parent->GetStringWidth($text);
                 $linkHeight = (float) $parent->getLinesCount($text, $textBounds->width()) * $line_height - 2.0 * $margins;
                 $linkBounds->setSize($linkWidth, $linkHeight);
-                $this->drawCellLink($parent, $linkBounds, $link);
+                $this->drawCellLink($parent, $linkBounds, $cell->getLink());
             }
         }
 

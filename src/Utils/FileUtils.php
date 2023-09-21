@@ -84,7 +84,8 @@ final class FileUtils
         if (!self::isFile($file) && false === \filter_var($file, \FILTER_VALIDATE_URL)) {
             throw new \InvalidArgumentException(\sprintf("The file '%s' can not be found.", $file));
         }
-        if (false === $content = \file_get_contents($file)) {
+        $content = \file_get_contents($file);
+        if (false === $content) {
             throw new \InvalidArgumentException(\sprintf("Unable to get content of the file '%s'.", $file));
         }
 

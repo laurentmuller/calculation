@@ -50,7 +50,8 @@ class CalculationBelowController extends AbstractController
     public function excel(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();
-        if (($response = $this->getEmptyResponse($repository, $minMargin)) instanceof RedirectResponse) {
+        $response = $this->getEmptyResponse($repository, $minMargin);
+        if ($response instanceof RedirectResponse) {
             return $response;
         }
         $items = $this->getItems($repository, $minMargin);
@@ -70,7 +71,8 @@ class CalculationBelowController extends AbstractController
     public function pdf(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();
-        if (($response = $this->getEmptyResponse($repository, $minMargin)) instanceof RedirectResponse) {
+        $response = $this->getEmptyResponse($repository, $minMargin);
+        if ($response instanceof RedirectResponse) {
             return $response;
         }
         $items = $this->getItems($repository, $minMargin);

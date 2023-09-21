@@ -67,10 +67,12 @@ class CalculationController extends AbstractEntityController
     {
         $item = new Calculation();
         $application = $this->getApplication();
-        if (($state = $application->getDefaultState()) instanceof CalculationState) {
+        $state = $application->getDefaultState();
+        if ($state instanceof CalculationState) {
             $item->setState($state);
         }
-        if (($product = $application->getDefaultProduct()) instanceof Product) {
+        $product = $application->getDefaultProduct();
+        if ($product instanceof Product) {
             $item->addProduct($product, $application->getDefaultQuantity());
             $this->service->updateTotal($item);
         }
@@ -241,7 +243,9 @@ class CalculationController extends AbstractEntityController
         $parameters['duplicate_items'] = $item->hasDuplicateItems();
         $parameters['overall_below'] = $this->isMarginBelow($item);
         $parameters['groups'] = $this->service->createGroupsFromCalculation($item);
-        if ($parameters['editable'] = $item->isEditable()) {
+        $parameters['editable'] = false;
+        if ($item->isEditable()) {
+            $parameters['editable'] = true;
             $parameters['group_index'] = $item->getGroupsCount();
             $parameters['category_index'] = $item->getCategoriesCount();
             $parameters['item_index'] = $item->getLinesCount();

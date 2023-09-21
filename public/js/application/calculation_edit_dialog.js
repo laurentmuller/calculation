@@ -182,12 +182,10 @@ class EditDialog {
     /**
      * Initialize this dialog when editing an item.
      *
-     * @param {jQuery} _$row - the selected row.
-     *
      * @return {this} This instance for chaining.
      * @protected
      */
-    _initEdit(_$row) {
+    _initEdit() {
         'use strict';
         return this;
     }

@@ -19,30 +19,30 @@
     <thead>
         <tr>
             <th>{{ 'swisspost.fields.objects'|trans }}</th>
-            <th class="text-currency">{{ 'swisspost.fields.errors'|trans }}</th>
-            <th class="text-currency">{{ 'swisspost.fields.valids'|trans }}</th>
+            <th class="text-currency">{{ 'swisspost.fields.invalid'|trans }}</th>
+            <th class="text-currency">{{ 'swisspost.fields.valid'|trans }}</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>{{ 'swisspost.fields.states'|trans }}</td>
-            <td class="text-currency">{{ result.errors.state|integer }}</td>
-            <td class="text-currency">{{ result.valids.state|integer }}</td>
+            <td class="text-currency">{{ result.invalidEntries.state|integer }}</td>
+            <td class="text-currency">{{ result.validEntries.state|integer }}</td>
         </tr>
         <tr>
             <td>{{ 'swisspost.fields.cities'|trans }}</td>
-            <td class="text-currency">{{ result.errors.city|integer }}</td>
-            <td class="text-currency">{{ result.valids.city|integer }}</td>
+            <td class="text-currency">{{ result.invalidEntries.city|integer }}</td>
+            <td class="text-currency">{{ result.validEntries.city|integer }}</td>
         </tr>
         <tr>
             <td>{{ 'swisspost.fields.streets'|trans }}</td>
-            <td class="text-currency">{{ result.errors.street|integer }}</td>
-            <td class="text-currency">{{ result.valids.street|integer }}</td>
+            <td class="text-currency">{{ result.invalidEntries.street|integer }}</td>
+            <td class="text-currency">{{ result.validEntries.street|integer }}</td>
         </tr>
         <tr>
             <th>{{ 'swisspost.fields.total'|trans }}</th>
-            <th class="text-currency">{{ (result.errorCount)|integer }}</th>
-            <th class="text-currency">{{ (result.validCount)|integer }}</th>
+            <th class="text-currency">{{ (result.invalidEntriesCount)|integer }}</th>
+            <th class="text-currency">{{ (result.validEntriesCount)|integer }}</th>
         </tr>
     </tbody>
 </table>

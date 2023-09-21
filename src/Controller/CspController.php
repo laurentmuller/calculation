@@ -35,7 +35,8 @@ class CspController extends AbstractController
     #[Route(path: '/csp', name: 'log_csp')]
     public function invoke(LoggerInterface $logger, MailerInterface $mailer): Response
     {
-        if (false !== $context = $this->getContext()) {
+        $context = $this->getContext();
+        if (false !== $context) {
             try {
                 $title = $this->trans('notification.csp_title');
                 $logger->error($title, $context);

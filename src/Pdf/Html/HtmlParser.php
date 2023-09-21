@@ -33,13 +33,16 @@ readonly class HtmlParser
      */
     public function parse(): HtmlParentChunk|false
     {
-        if (!$source = $this->trimHtml()) {
+        $source = $this->trimHtml();
+        if (false === $source) {
             return false;
         }
-        if (!$document = $this->loadDocument($source)) {
+        $document = $this->loadDocument($source);
+        if (false === $document) {
             return false;
         }
-        if (!$body = $this->findBody($document)) {
+        $body = $this->findBody($document);
+        if (false === $body) {
             return false;
         }
 
@@ -143,7 +146,8 @@ readonly class HtmlParser
 
         /** @var \DOMNamedNodeMap $attributes */
         $attributes = $node->attributes;
-        if (!($attribute = $attributes->getNamedItem($name)) instanceof \DOMNode) {
+        $attribute = $attributes->getNamedItem($name);
+        if (!$attribute instanceof \DOMNode) {
             return $default;
         }
 
@@ -245,13 +249,16 @@ readonly class HtmlParser
      */
     private function trimHtml(): string|false
     {
-        if ('' === $content = \trim($this->html)) {
+        $content = \trim($this->html);
+        if ('' === $content) {
             return false;
         }
-        if ('' === $content = \trim((string) \preg_replace('/\r\n|\n|\r/m', '', $content))) {
+        $content = \trim((string) \preg_replace('/\r\n|\n|\r/m', '', $content));
+        if ('' === $content) {
             return false;
         }
-        if ('' === $content = \trim((string) \preg_replace('/\s\s+/m', ' ', $content))) {
+        $content = \trim((string) \preg_replace('/\s\s+/m', ' ', $content));
+        if ('' === $content) {
             return false;
         }
 

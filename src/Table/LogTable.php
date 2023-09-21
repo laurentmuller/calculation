@@ -105,7 +105,8 @@ class LogTable extends AbstractTable implements \Countable
     protected function handleQuery(DataQuery $query): DataResults
     {
         $results = parent::handleQuery($query);
-        if (!($logFile = $this->service->getLogFile()) instanceof LogFile) {
+        $logFile = $this->service->getLogFile();
+        if (!$logFile instanceof LogFile) {
             return $results->setStatus(Response::HTTP_PRECONDITION_FAILED);
         }
         if ($logFile->isEmpty()) {

@@ -85,6 +85,14 @@ class PdfCell
     }
 
     /**
+     * Return a value indicating if this link is not an empty string.
+     */
+    public function isLink(): bool
+    {
+        return '' !== $this->link;
+    }
+
+    /**
      * Sets the cell alignment.
      */
     public function setAlignment(?PdfTextAlignment $alignment): self

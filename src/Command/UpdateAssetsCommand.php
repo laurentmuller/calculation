@@ -67,7 +67,8 @@ class UpdateAssetsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
-        if (null === $publicDir = $this->getPublicDir()) {
+        $publicDir = $this->getPublicDir();
+        if (null === $publicDir) {
             return Command::INVALID;
         }
         $configuration = $this->loadConfiguration($publicDir);
@@ -166,7 +167,8 @@ class UpdateAssetsCommand extends Command
      */
     private function copyFile(string $sourceFile, string $targetFile, array $prefixes): bool
     {
-        if (false !== ($content = $this->readFile($sourceFile))) {
+        $content = $this->readFile($sourceFile);
+        if (\is_string($content)) {
             return $this->dumpFile($content, $targetFile, $prefixes);
         }
 
@@ -265,7 +267,8 @@ class UpdateAssetsCommand extends Command
 
     private function getTargetTemp(string $publicDir): string|false
     {
-        if (null === $dir = FileUtils::tempDir($publicDir)) {
+        $dir = FileUtils::tempDir($publicDir);
+        if (null === $dir) {
             $this->writeError('Unable to create a temporary directory.');
 
             return false;
@@ -308,7 +311,8 @@ class UpdateAssetsCommand extends Command
 
     private function loadJson(string $filename): ?array
     {
-        if (!$content = $this->readFile($filename)) {
+        $content = $this->readFile($filename);
+        if (false === $content) {
             return null;
         }
 

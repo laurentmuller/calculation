@@ -93,7 +93,8 @@ class WordHeader extends AbstractHeaderFooter
 
     private function addName(Cell $cell, string $name, array $cellStyle, array $textStyle): void
     {
-        if (null !== $url = $this->customer?->getUrl()) {
+        $url = $this->customer?->getUrl();
+        if (null !== $url) {
             $cell->addLink($url, $name, $cellStyle, $textStyle);
         } else {
             $cell->addText($name, $cellStyle, $textStyle);

@@ -57,10 +57,12 @@ class MailerService implements ServiceSubscriberInterface
             ->markdown($this->convert((string) $comment->getMessage()))
             ->action($this->trans('index.title'), $this->getHomeUrl())
             ->attachFromUploadedFiles(...$comment->getAttachments());
-        if (($address = $comment->getFromAddress()) instanceof Address) {
+        $address = $comment->getFromAddress();
+        if ($address instanceof Address) {
             $notification->from($address);
         }
-        if (($address = $comment->getToAddress()) instanceof Address) {
+        $address = $comment->getToAddress();
+        if ($address instanceof Address) {
             $notification->to($address);
         }
         $this->mailer->send($notification);

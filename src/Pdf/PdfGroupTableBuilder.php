@@ -55,7 +55,8 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     {
         if ($this->groupBeforeHeader && $this->isRepeatHeader()) {
             $this->setRepeatHeader(false);
-            if ($result = parent::checkNewPage($height)) {
+            $result = parent::checkNewPage($height);
+            if ($result) {
                 $this->outputGroup();
                 $this->outputHeaders();
             }
@@ -64,7 +65,8 @@ class PdfGroupTableBuilder extends PdfTableBuilder
             return $result;
         }
 
-        if ($result = parent::checkNewPage($height)) {
+        $result = parent::checkNewPage($height);
+        if ($result) {
             $this->outputGroup();
         }
 

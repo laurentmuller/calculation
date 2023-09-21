@@ -191,10 +191,12 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
 
     protected function updateAdapter(): void
     {
-        if (($user = $this->getUser()) instanceof UserInterface) {
-            $properties = $this->repository->findByUser($user);
-            $this->saveProperties($properties);
+        $user = $this->getUser();
+        if (!$user instanceof UserInterface) {
+            return;
         }
+        $properties = $this->repository->findByUser($user);
+        $this->saveProperties($properties);
     }
 
     private function getUser(): ?UserInterface

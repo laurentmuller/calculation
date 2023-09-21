@@ -29,9 +29,7 @@ namespace App\Utils;
 class CSVReader extends AbstractReader
 {
     /**
-     * Constructor.
-     *
-     * @param \SplFileInfo|string|resource $file      the CSV file to open
+     * @param \SplFileInfo|string|resource $file      the CSV file to open or an opened resource
      * @param bool                         $binary    true to open the file with binary mode
      * @param int                          $length    the line length. Must be greater than the longest line (in characters) to be found in
      *                                                the CSV file (allowing for trailing line-end characters). Setting it to 0,
@@ -43,7 +41,7 @@ class CSVReader extends AbstractReader
      * @psalm-param int<0, max> $length
      */
     public function __construct(
-        $file,
+        mixed $file,
         bool $binary = false,
         private readonly int $length = 0,
         private readonly string $separator = ',',
@@ -55,7 +53,8 @@ class CSVReader extends AbstractReader
 
     protected function getNextData($stream): ?array
     {
-        if (\is_array($data = \fgetcsv($stream, $this->length, $this->separator, $this->enclosure, $this->escape))) {
+        $data = \fgetcsv($stream, $this->length, $this->separator, $this->enclosure, $this->escape);
+        if (\is_array($data)) {
             return $data;
         }
 

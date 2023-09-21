@@ -21,54 +21,34 @@ class SwissPostUpdateResult
 {
     private ?string $error = null;
     /** @var SwissPostResultType */
-    private array $errors = [
-            'state' => 0,
-            'city' => 0,
-            'street' => 0,
-        ];
+    private array $invalidEntries = ['state' => 0, 'city' => 0, 'street' => 0];
     private bool $overwrite = false;
     private string $sourceFile = '';
     private string $sourceName = '';
-    private ?\DateTimeInterface $validity = null;
     /** @var SwissPostResultType */
-    private array $valids = [
-        'state' => 0,
-        'city' => 0,
-        'street' => 0,
-    ];
+    private array $validEntries = ['state' => 0, 'city' => 0, 'street' => 0];
+    private ?\DateTimeInterface $validity = null;
 
     /**
      * Adds a parsed city to the results.
-     *
-     * @param bool $valid true if valid; false if not
-     *
-     * @return bool the valid argument
      */
-    public function addCity(bool $valid): bool
+    public function addCity(bool $valid): self
     {
         return $this->add($valid, 'city');
     }
 
     /**
      * Adds a parsed state to the results.
-     *
-     * @param bool $valid true if valid; false if not
-     *
-     * @return bool the valid argument
      */
-    public function addState(bool $valid): bool
+    public function addState(bool $valid): self
     {
         return $this->add($valid, 'state');
     }
 
     /**
      * Adds a parsed street to the results.
-     *
-     * @param bool $valid true if valid; false if not
-     *
-     * @return bool the valid argument
      */
-    public function addStreet(bool $valid): bool
+    public function addStreet(bool $valid): self
     {
         return $this->add($valid, 'street');
     }
@@ -82,21 +62,21 @@ class SwissPostUpdateResult
     }
 
     /**
-     * Gets the total number of errors.
-     */
-    public function getErrorCount(): int
-    {
-        return \array_sum($this->errors);
-    }
-
-    /**
      * Gets the error entries.
      *
      * @return SwissPostResultType
      */
-    public function getErrors(): array
+    public function getInvalidEntries(): array
     {
-        return $this->errors;
+        return $this->invalidEntries;
+    }
+
+    /**
+     * Gets the total number of invalid entries.
+     */
+    public function getInvalidEntriesCount(): int
+    {
+        return \array_sum($this->invalidEntries);
     }
 
     /**
@@ -116,11 +96,21 @@ class SwissPostUpdateResult
     }
 
     /**
+     * Gets the valid entries.
+     *
+     * @return SwissPostResultType
+     */
+    public function getValidEntries(): array
+    {
+        return $this->validEntries;
+    }
+
+    /**
      * Gets the total number of valid entries.
      */
-    public function getValidCount(): int
+    public function getValidEntriesCount(): int
     {
-        return \array_sum($this->valids);
+        return \array_sum($this->validEntries);
     }
 
     /**
@@ -129,16 +119,6 @@ class SwissPostUpdateResult
     public function getValidity(): ?\DateTimeInterface
     {
         return $this->validity;
-    }
-
-    /**
-     * Gets the valid entries.
-     *
-     * @return SwissPostResultType
-     */
-    public function getValids(): array
-    {
-        return $this->valids;
     }
 
     /**
@@ -210,10 +190,10 @@ class SwissPostUpdateResult
     /**
      * @psalm-param 'state'|'city'|'street' $key
      */
-    private function add(bool $valid, string $key): bool
+    private function add(bool $valid, string $key): self
     {
-        $valid ? $this->valids[$key]++ : $this->errors[$key]++;
+        $valid ? $this->validEntries[$key]++ : $this->invalidEntries[$key]++;
 
-        return $valid;
+        return $this;
     }
 }

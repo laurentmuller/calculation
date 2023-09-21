@@ -77,7 +77,7 @@
 
 .primary-nav li a {
     margin: 0;
-    padding: .875em .9375em .9375em .9375em;
+    padding: .875em .9375em .9375em;
     display: block;
     /*font-size: .9375em;*/
     color: white;
@@ -92,7 +92,7 @@
 
 .primary-nav li span {
     margin: 0;
-    padding: .875em .9375em .9375em .9375em;
+    padding: .875em .9375em .9375em;
     display: block;
     /*font-size: .9375em;*/
     color: white;
@@ -200,7 +200,7 @@
 
 .primary-nav > ul > li:before {
     height: 1.375em;
-    top: -1.375em;;
+    top: -1.375em;
     right: calc(50% + .625em);
     width: 100%;
     border-top-width: 2px;

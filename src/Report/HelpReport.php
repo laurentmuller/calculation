@@ -113,8 +113,8 @@ class HelpReport extends AbstractReport
     {
         $default = $field['type'] ?? 'text';
         $type = $this->trans("help.types.$default");
-        if ($length = $field['length'] ?? null) {
-            return "$type ($length)";
+        if (isset($field['length'])) {
+            return \sprintf('%s (%s)', $type, $field['length']);
         }
 
         return $type;
@@ -204,18 +204,18 @@ class HelpReport extends AbstractReport
         $id = $item['id'];
         $this->addBookmark($this->trans($id), true, 1);
         $this->outputTitle($id);
-        if ($description = $item['description'] ?? false) {
-            $this->MultiCell(txt: $description);
+        if (isset($item['description'])) {
+            $this->MultiCell(txt: $item['description']);
         }
-        if ($image = $item['image'] ?? false) {
+        if (isset($item['image'])) {
             $this->Ln(3);
             $this->outputText('help.labels.screenshot');
-            $this->outputImage($image);
+            $this->outputImage($item['image']);
         }
-        if ($details = $item['details'] ?? null) {
+        if (isset($item['details'])) {
             $this->Ln(3);
             $this->outputText('help.labels.description');
-            $this->outputDetails($details);
+            $this->outputDetails($item['details']);
         }
         $entity = $this->findEntity($item);
         $fields = $this->findFields($entity);
@@ -327,8 +327,8 @@ class HelpReport extends AbstractReport
         $id = $item['id'] . '.name';
         $this->addBookmark($this->trans($id), true, 1);
         $this->outputTitle($id);
-        if ($description = $item['description'] ?? false) {
-            $this->MultiCell(txt: $description);
+        if (isset($item['description'])) {
+            $this->MultiCell(txt: $item['description']);
         }
         $fields = $this->findFields($item);
         if (null !== $fields) {
@@ -409,7 +409,8 @@ class HelpReport extends AbstractReport
         $this->addBookmark($this->trans($id), true);
         $this->outputTitle($id, 12);
         $this->outputLine();
-        if (null !== $rootMenu = $this->service->getMainMenu()) {
+        $rootMenu = $this->service->getMainMenu();
+        if (null !== $rootMenu) {
             $description = $rootMenu['description'] ?? null;
             if (null !== $description) {
                 $this->outputText($description, false);

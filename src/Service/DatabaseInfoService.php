@@ -84,7 +84,8 @@ final class DatabaseInfoService
                 /** @noinspection PhpInternalEntityUsedInspection */
                 $params = $this->getConnection()->getParams();
                 foreach (['dbname', 'host', 'port', 'driver', 'serverVersion', 'charset'] as $key) {
-                    if (\is_scalar($value = $params[$key] ?? null)) {
+                    $value = $params[$key] ?? null;
+                    if (\is_scalar($value)) {
                         $key = match ($key) {
                             'dbname' => 'Name',
                             'serverVersion' => 'Version',

@@ -29,9 +29,7 @@ abstract class AbstractReader implements \IteratorAggregate
     private mixed $stream;
 
     /**
-     * Constructor.
-     *
-     * @param \SplFileInfo|string|resource $file   the file to open
+     * @param \SplFileInfo|string|resource $file   the file to open or an opened resource
      * @param bool                         $binary true to open the file with binary mode
      */
     public function __construct(mixed $file, bool $binary = false)

@@ -38,12 +38,14 @@ trait TableTrait
      */
     protected function handleTableRequest(Request $request, AbstractTable $table, string $template, LoggerInterface $logger, UserService $service): Response
     {
-        if (null !== $subject = $table->getEntityClassName()) {
+        $subject = $table->getEntityClassName();
+        if (null !== $subject) {
             $this->denyAccessUnlessGranted(EntityPermission::LIST, $subject);
         }
 
         try {
-            if (null !== $message = $table->getEmptyMessage()) {
+            $message = $table->getEmptyMessage();
+            if (null !== $message) {
                 return $this->redirectToHomePage(message: $message, type: FlashType::INFO);
             }
             $query = $table->getDataQuery($request);

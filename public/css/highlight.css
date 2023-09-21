@@ -16,6 +16,8 @@ pre.highlight-php {
     position: relative;
     word-break: break-all;
     margin: 0;
+    background: none;
+    color: #CC7832;
 }
 
 pre.highlight-php .highlight-php-num {
@@ -29,6 +31,7 @@ pre.highlight-php .highlight-php-const {
 
 pre.highlight-php .highlight-php-str {
     font-weight: bold;
+    color: #629755;
 }
 
 pre.highlight-php .highlight-php-meta {
@@ -44,15 +47,6 @@ pre.highlight-php .highlight-php-index {
  */
 .pre-scrollable-highlight-php {
     background-color: initial;
-}
-
-pre.highlight-php {
-    background: none;
-    color: #CC7832;
-}
-
-pre.highlight-php .highlight-php-str {
-    color: #629755;
 }
 
 pre.highlight-php .highlight-php-note {
@@ -131,8 +125,8 @@ html[data-bs-theme=dark] pre.highlight-php .highlight-php-ellipsis {
  * SQL highlight light mode.
  */
 pre.highlight-sql {
-    line-height: 1.2em;
     font: 13px Menlo, Monaco, Consolas, monospace;
+    line-height: 1.2em;
     word-wrap: break-word;
     white-space: pre-wrap;
     position: relative;

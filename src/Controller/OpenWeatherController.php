@@ -107,7 +107,8 @@ class OpenWeatherController extends AbstractController
         try {
             $id = $this->getRequestId($request);
             $units = $this->getRequestUnits($request);
-            if (false === $response = $this->service->current($id, $units)) {
+            $response = $this->service->current($id, $units);
+            if (false === $response) {
                 $response = $this->service->getLastError();
             }
 
@@ -127,7 +128,8 @@ class OpenWeatherController extends AbstractController
             $cityId = $this->getRequestId($request);
             $units = $this->getRequestUnits($request);
             $count = $this->getRequestCount($request);
-            if (false === $response = $this->service->daily($cityId, $count, $units)) {
+            $response = $this->service->daily($cityId, $count, $units);
+            if (false === $response) {
                 $response = $this->service->getLastError();
             }
 
@@ -147,7 +149,8 @@ class OpenWeatherController extends AbstractController
             $cityId = $this->getRequestId($request);
             $units = $this->getRequestUnits($request);
             $count = $this->getRequestCount($request);
-            if (false === $response = $this->service->forecast($cityId, $count, $units)) {
+            $response = $this->service->forecast($cityId, $count, $units);
+            if (false === $response) {
                 $response = $this->service->getLastError();
             }
 

@@ -344,8 +344,8 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractReport && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-        if ('' === $name && \is_string($title = $doc->getTitle())) {
-            $name = $title;
+        if ('' === $name && null !== $doc->getTitle()) {
+            $name = (string) $doc->getTitle();
         }
 
         return new PdfResponse($doc, $inline, $name);
@@ -367,8 +367,8 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractDocument && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-        if ('' === $name && \is_string($title = $doc->getTitle())) {
-            $name = $title;
+        if ('' === $name && null !== $doc->getTitle()) {
+            $name = (string) $doc->getTitle();
         }
 
         return new SpreadsheetResponse($doc, $inline, $name);
@@ -390,8 +390,8 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractWordDocument && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-        if ('' === $name && \is_string($title = $doc->getTitle())) {
-            $name = $title;
+        if ('' === $name && null !== $doc->getTitle()) {
+            $name = (string) $doc->getTitle();
         }
 
         return new WordResponse($doc, $inline, $name);

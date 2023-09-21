@@ -146,22 +146,27 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
      */
     private function drawBorder(PdfTableBuilder $builder, ?string $level, PdfRectangle $bounds, PdfBorder $border): bool
     {
-        if ($level && $color = $this->getLevelColor($level)) {
-            $x = $bounds->x() + self::HALF_WIDTH;
-            $y = $bounds->y() + self::HALF_WIDTH;
-            $h = $bounds->height() - self::FULL_WIDTH;
-            $doc = $builder->getParent();
-            $doc->rectangle($bounds, $border);
-            $color->apply($doc);
-            $doc->SetLineWidth(self::FULL_WIDTH);
-            $doc->Line($x, $y, $x, $y + $h);
-            PdfLine::default()->apply($doc);
-            PdfDrawColor::cellBorder()->apply($doc);
-
-            return true;
+        if (null === $level || '' === $level) {
+            return false;
         }
 
-        return false;
+        $color = $this->getLevelColor($level);
+        if (!$color instanceof PdfDrawColor) {
+            return false;
+        }
+
+        $x = $bounds->x() + self::HALF_WIDTH;
+        $y = $bounds->y() + self::HALF_WIDTH;
+        $h = $bounds->height() - self::FULL_WIDTH;
+        $doc = $builder->getParent();
+        $doc->rectangle($bounds, $border);
+        $color->apply($doc);
+        $doc->SetLineWidth(self::FULL_WIDTH);
+        $doc->Line($x, $y, $x, $y + $h);
+        PdfLine::default()->apply($doc);
+        PdfDrawColor::cellBorder()->apply($doc);
+
+        return true;
     }
 
     /**
@@ -170,7 +175,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     private function getLevelColor(string $level): ?PdfDrawColor
     {
         if (!\array_key_exists($level, $this->colors)) {
-            return $this->colors[$level] = match ($level) {
+            $this->colors[$level] = match ($level) {
                 LogLevel::ALERT,
                 LogLevel::CRITICAL,
                 LogLevel::EMERGENCY,
@@ -188,7 +193,6 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
 
     private function getShortDate(Log $log): int
     {
-        // remove minutes and seconds
         $timestamp = $log->getTimestamp();
         $timestamp -= ($timestamp % 3600);
 

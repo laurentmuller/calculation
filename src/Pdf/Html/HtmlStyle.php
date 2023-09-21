@@ -264,15 +264,18 @@ class HtmlStyle extends PdfStyle
     private function updateColor(string $class): self
     {
         // text
-        if (($color = HtmlBootstrapColors::parseTextColor($class)) instanceof PdfTextColor) {
+        $color = HtmlBootstrapColors::parseTextColor($class);
+        if ($color instanceof PdfTextColor) {
             $this->setTextColor($color);
         }
         // background
-        if (($color = HtmlBootstrapColors::parseFillColor($class)) instanceof PdfFillColor) {
+        $color = HtmlBootstrapColors::parseFillColor($class);
+        if ($color instanceof PdfFillColor) {
             $this->setFillColor($color);
         }
         // border
-        if (($color = HtmlBootstrapColors::parseBorderColor($class)) instanceof PdfDrawColor) {
+        $color = HtmlBootstrapColors::parseBorderColor($class);
+        if ($color instanceof PdfDrawColor) {
             $this->setDrawColor($color);
         }
 

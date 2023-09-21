@@ -36,12 +36,12 @@ final class SymfonyInfoService
     /**
      * The array key for debug packages and routes.
      */
-    final public const KEY_DEBUG = 'debug';
+    public const KEY_DEBUG = 'debug';
 
     /**
      * The array key for runtime packages and routes.
      */
-    final public const KEY_RUNTIME = 'runtime';
+    public const KEY_RUNTIME = 'runtime';
 
     /**
      * The file name containing composer information.
@@ -289,7 +289,8 @@ final class SymfonyInfoService
      */
     public function getReleaseDate(): string
     {
-        if (\is_string($date = $this->loadReleaseDate())) {
+        $date = $this->loadReleaseDate();
+        if (\is_string($date)) {
             return $this->formatMonthYear($date);
         }
 
@@ -532,7 +533,8 @@ final class SymfonyInfoService
     {
         if (null !== $this->bundles && null !== $this->packages) {
             foreach ($this->bundles as &$bundle) {
-                if (null !== $package = $this->findPackage($bundle['package'])) {
+                $package = $this->findPackage($bundle['package']);
+                if (null !== $package) {
                     $bundle['homepage'] = $package['homepage'];
                 }
             }

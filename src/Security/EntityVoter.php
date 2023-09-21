@@ -71,10 +71,12 @@ class EntityVoter extends Voter
         if (EntityName::LOG->matchValue($name)) {
             return $user->isAdmin();
         }
-        if (RoleInterface::INVALID_VALUE === $offset = EntityName::tryFindOffset($name)) {
+        $offset = EntityName::tryFindOffset($name);
+        if (RoleInterface::INVALID_VALUE === $offset) {
             return false;
         }
-        if (RoleInterface::INVALID_VALUE === $mask = EntityPermission::tryFindValue($attribute)) {
+        $mask = EntityPermission::tryFindValue($attribute);
+        if (RoleInterface::INVALID_VALUE === $mask) {
             return false;
         }
         $rights = $this->getRights($user);

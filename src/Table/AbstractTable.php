@@ -106,7 +106,8 @@ abstract class AbstractTable implements SortModeInterface
         $query->limit = $this->getParamLimit($request, $query->view);
         $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
 
-        if (($column = $this->getDefaultColumn()) instanceof Column) {
+        $column = $this->getDefaultColumn();
+        if ($column instanceof Column) {
             $query->sort = $column->getField();
             $query->order = $column->getOrder();
         }

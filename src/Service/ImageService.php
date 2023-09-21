@@ -175,7 +175,8 @@ class ImageService
      */
     public static function fromBmp(string $filename): ?self
     {
-        if (false !== $image = \imagecreatefrombmp($filename)) {
+        $image = \imagecreatefrombmp($filename);
+        if ($image instanceof \GdImage) {
             return new self($image, $filename);
         }
 
@@ -191,7 +192,8 @@ class ImageService
      */
     public static function fromGif(string $filename): ?self
     {
-        if (false !== $image = \imagecreatefromgif($filename)) {
+        $image = \imagecreatefromgif($filename);
+        if ($image instanceof \GdImage) {
             return new self($image, $filename);
         }
 
@@ -207,7 +209,8 @@ class ImageService
      */
     public static function fromJpeg(string $filename): ?self
     {
-        if (false !== $image = \imagecreatefromjpeg($filename)) {
+        $image = \imagecreatefromjpeg($filename);
+        if ($image instanceof \GdImage) {
             return new self($image, $filename);
         }
 
@@ -247,7 +250,8 @@ class ImageService
      */
     public static function fromPng(string $filename): ?self
     {
-        if (false !== $image = \imagecreatefrompng($filename)) {
+        $image = \imagecreatefrompng($filename);
+        if ($image instanceof \GdImage) {
             return new self($image, $filename);
         }
 
@@ -264,7 +268,8 @@ class ImageService
      */
     public static function fromTrueColor(int $width, int $height): ?self
     {
-        if (false !== $image = \imagecreatetruecolor($width, $height)) {
+        $image = \imagecreatetruecolor($width, $height);
+        if ($image instanceof \GdImage) {
             return new self($image);
         }
 
@@ -280,7 +285,8 @@ class ImageService
      */
     public static function fromWbmp(string $filename): ?self
     {
-        if (false !== $image = \imagecreatefromwbmp($filename)) {
+        $image = \imagecreatefromwbmp($filename);
+        if ($image instanceof \GdImage) {
             return new self($image, $filename);
         }
 
@@ -296,7 +302,8 @@ class ImageService
      */
     public static function fromWebp(string $filename): ?self
     {
-        if (false !== $image = \imagecreatefromwebp($filename)) {
+        $image = \imagecreatefromwebp($filename);
+        if ($image instanceof \GdImage) {
             return new self($image, $filename);
         }
 
@@ -312,7 +319,8 @@ class ImageService
      */
     public static function fromXbm(string $filename): ?self
     {
-        if (false !== $image = \imagecreatefromxbm($filename)) {
+        $image = \imagecreatefromxbm($filename);
+        if ($image instanceof \GdImage) {
             return new self($image, $filename);
         }
 
@@ -328,7 +336,8 @@ class ImageService
      */
     public static function fromXpm(string $filename): ?self
     {
-        if (false !== $image = \imagecreatefromxpm($filename)) {
+        $image = \imagecreatefromxpm($filename);
+        if ($image instanceof \GdImage) {
             return new self($image, $filename);
         }
 

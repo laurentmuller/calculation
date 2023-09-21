@@ -210,12 +210,12 @@ abstract class AbstractParametersType extends AbstractType
 
     protected function isSuperAdmin(): bool
     {
-        if (($user = $this->security->getUser()) instanceof RoleInterface) {
-            /* @psalm-var RoleInterface $user */
-            return $user->isSuperAdmin();
+        $user = $this->security->getUser();
+        if (!$user instanceof RoleInterface) {
+            return false;
         }
 
-        return false;
+        return $user->isSuperAdmin();
     }
 
     /**

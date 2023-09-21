@@ -174,7 +174,8 @@ final class CalculationService implements ServiceSubscriberInterface
     {
         /** @psalm-var ServiceGroupType[] $groups */
         $groups = [];
-        if (!$source_groups = $this->getArrayByKey($source, 'groups')) {
+        $source_groups = $this->getArrayByKey($source, 'groups');
+        if (null === $source_groups) {
             return $this->createEmptyParameters();
         }
         /** @psalm-var array<int, float> $item_groups */
@@ -185,7 +186,11 @@ final class CalculationService implements ServiceSubscriberInterface
             return $carry;
         }, []);
         foreach ($item_groups as $key => $value) {
-            if (empty($value) || !($group = $this->getGroup($key)) instanceof Group) {
+            if (empty($value)) {
+                continue;
+            }
+            $group = $this->getGroup($key);
+            if (!$group instanceof Group) {
                 continue;
             }
             $id = (int) $group->getId();
@@ -471,7 +476,8 @@ final class CalculationService implements ServiceSubscriberInterface
 
     private function reduceCategory(array $category): float
     {
-        if ($items = $this->getArrayByKey($category, 'items')) {
+        $items = $this->getArrayByKey($category, 'items');
+        if (\is_array($items)) {
             return \array_reduce($items, fn (float $carry, array $item): float => $carry + ((float) $item['price'] * (float) $item['quantity']), 0);
         }
 
@@ -480,7 +486,8 @@ final class CalculationService implements ServiceSubscriberInterface
 
     private function reduceGroup(array $group): float
     {
-        if ($categories = $this->getArrayByKey($group, 'categories')) {
+        $categories = $this->getArrayByKey($group, 'categories');
+        if (\is_array($categories)) {
             return \array_reduce($categories, fn (float $carry, array $category): float => $carry + $this->reduceCategory($category), 0);
         }
 

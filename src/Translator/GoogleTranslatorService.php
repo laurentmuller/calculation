@@ -45,7 +45,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * Constructor.
      *
-     * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
+     * @throws \InvalidArgumentException if the API key is not defined, is null or is empty
      */
     public function __construct(
         #[\SensitiveParameter]

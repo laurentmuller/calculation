@@ -16,17 +16,18 @@ Array.prototype.randomElement = function (lastIndex) {
 
     const len = this.length;
     switch (len) {
-    case 0:
-        return null;
-    case 1:
-        return this[0];
-    default:
-        let index = 0;
-        do {
-            index = Math.floor(Math.random() * len);
-        } while (this[index] === lastIndex);
+        case 0:
+            return null;
+        case 1:
+            return this[0];
+        default: {
+            let index = 0;
+            do {
+                index = Math.floor(Math.random() * len);
+            } while (this[index] === lastIndex);
 
-        return this[index];
+            return this[index];
+        }
     }
 };
 

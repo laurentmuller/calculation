@@ -17,14 +17,15 @@
         contextMenuButton: null,
         rowSelector: 'table-primary',
 
-        beforeContextMenuRow: function (e, row, buttonElement) {
+        beforeContextMenuRow: function () {
             // return false here to prevent menu showing
         },
+        
         // Event default handlers
-        onContextMenuItem: function (row, $element) {
+        onContextMenuItem: function () {
             return false;
         },
-        onContextMenuRow: function (row, $element) {
+        onContextMenuRow: function () {
             return false;
         }
     });

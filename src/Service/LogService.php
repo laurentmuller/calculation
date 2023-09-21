@@ -135,7 +135,11 @@ class LogService implements ServiceSubscriberInterface
             $file = new LogFile($this->getFileName());
             $reader = new CSVReader(file: $this->fileName, separator: self::VALUES_SEP);
             foreach ($reader as $key => $values) {
-                if (!$values || 6 !== \count($values) || false === $date = $this->parseDate($values[0])) {
+                if (!$values || 6 !== \count($values)) {
+                    continue;
+                }
+                $date = $this->parseDate($values[0]);
+                if (false === $date) {
                     continue;
                 }
                 $file->addLog(Log::instance($key)

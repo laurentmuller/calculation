@@ -34,19 +34,15 @@ class ImportAddressController extends AbstractController
      */
     private const DATA_URL = 'https://www.post.ch/fr/espace-clients/services-en-ligne/zopa/adress-und-geodaten/info';
 
-    private const KEY_OVERWRITE = 'import.overwrite';
-
     #[Route(path: '/import', name: 'admin_import')]
     public function invoke(Request $request, SwissPostUpdater $updater): Response
     {
-        $data = ['overwrite' => $this->isSessionBool(self::KEY_OVERWRITE)];
-        $form = $updater->createForm($data);
+        $form = $updater->createForm();
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array{file: UploadedFile|string|null, overwrite: bool} $data */
             $data = $form->getData();
             $file = $data['file'];
             $overwrite = $data['overwrite'];
-            $this->setSessionValue(self::KEY_OVERWRITE, $overwrite);
             $result = $updater->import($file, $overwrite);
 
             return $this->render('admin/import_result.html.twig', [

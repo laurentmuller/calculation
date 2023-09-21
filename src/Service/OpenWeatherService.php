@@ -472,8 +472,11 @@ class OpenWeatherService extends AbstractHttpClientService
         foreach ($data as $key => $value) {
             if ('timezone' === $key) {
                 return (int) $value;
-            } elseif (\is_array($value) && $timeZone = $this->findTimeZone($value)) {
-                return $timeZone;
+            } elseif (\is_array($value)) {
+                $timeZone = $this->findTimeZone($value);
+                if (0 !== $timeZone) {
+                    return $timeZone;
+                }
             }
         }
 

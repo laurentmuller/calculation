@@ -197,7 +197,8 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      */
     private function doGetRate(string $url): ?float
     {
-        if (\is_array($response = $this->get($url))) {
+        $response = $this->get($url);
+        if (\is_array($response)) {
             /** @psalm-var float|null $rate */
             $rate = $response['conversion_rate'] ?? null;
             if (\is_float($rate)) {
@@ -217,7 +218,8 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      */
     private function doGetRateAndDates(string $url): ?array
     {
-        if (\is_array($response = $this->get($url))) {
+        $response = $this->get($url);
+        if (\is_array($response)) {
             /** @psalm-var float|null $rate */
             $rate = $response['conversion_rate'] ?? null;
             if (\is_float($rate)) {

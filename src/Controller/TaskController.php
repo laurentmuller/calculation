@@ -50,6 +50,7 @@ class TaskController extends AbstractEntityController
      */
     public function __construct(TaskRepository $repository)
     {
+        // phpcs:disable
         parent::__construct($repository);
     }
 

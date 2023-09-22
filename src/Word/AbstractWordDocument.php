@@ -141,10 +141,12 @@ abstract class AbstractWordDocument extends WordDocument
         parent::initialize();
         $properties = $this->getDocInfo();
         $properties->setCategory($this->controller->getApplicationName());
-        if (null !== $user = $this->controller->getUserIdentifier()) {
+        $user = $this->controller->getUserIdentifier();
+        if (null !== $user) {
             $properties->setCreator($user);
         }
-        if (null !== $customer = $this->controller->getApplication()->getCustomerName()) {
+        $customer = $this->controller->getApplication()->getCustomerName();
+        if (null !== $customer) {
             $properties->setCompany($customer);
         }
     }

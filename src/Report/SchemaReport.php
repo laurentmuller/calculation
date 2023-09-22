@@ -207,7 +207,8 @@ class SchemaReport extends AbstractReport
     {
         $this->AddPage();
         $name = $table['name'];
-        if (\is_int($link = $this->findLink($name))) {
+        $link = $this->findLink($name);
+        if (\is_int($link)) {
             $this->SetLink($link);
         }
         $this->outputTitle('schema.table.title', ['%name%' => $name]);

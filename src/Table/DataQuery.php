@@ -28,7 +28,7 @@ class DataQuery implements SortModeInterface
     /**
      * The custom datas.
      *
-     * @var array<string, mixed>
+     * @var array<string, string|int>
      */
     public array $customData = [];
 
@@ -84,11 +84,8 @@ class DataQuery implements SortModeInterface
 
     /**
      * Adds a custom data to this list of custom datas.
-     *
-     * @param string $name  the custom data name
-     * @param mixed  $value custom data value
      */
-    public function addCustomData(string $name, mixed $value): self
+    public function addCustomData(string $name, string|int $value): self
     {
         $this->customData[$name] = $value;
 
@@ -98,23 +95,14 @@ class DataQuery implements SortModeInterface
     /**
      * Gets a custom data.
      *
-     * @param string     $name    the custom data name to get value for
-     * @param mixed|null $default the default value to return if the custom data is not present
+     * @param string          $name    the custom data name to get value for
+     * @param string|int|null $default the default value to return if the custom data is not present
      *
-     * @return mixed the custom data, if present; the default value otherwise
-     *
-     * @psalm-template T
-     *
-     * @psalm-param T|null $default
-     *
-     * @psalm-return ($default is null ? (T|null) : T)
+     * @return string|int|null the custom data, if present; the default value otherwise
      */
-    public function getCustomData(string $name, mixed $default = null): mixed
+    public function getCustomData(string $name, string|int $default = null): string|int|null
     {
-        /** @psalm-var T|null $value */
-        $value = $this->customData[$name] ?? $default;
-
-        return $value;
+        return $this->customData[$name] ?? $default;
     }
 
     /**

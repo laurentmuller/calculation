@@ -103,7 +103,9 @@ class CalculationTable extends AbstractEntityTable
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::search($query, $builder, $alias);
-        if (0 !== $stateId = $query->getCustomData(self::PARAM_STATE, 0)) {
+        /** @psalm-var int $stateId */
+        $stateId = $query->getCustomData(self::PARAM_STATE, 0);
+        if (0 !== $stateId) {
             /** @psalm-var string $field */
             $field = $this->repository->getSearchFields('state.id', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_STATE)
@@ -112,7 +114,9 @@ class CalculationTable extends AbstractEntityTable
             return true;
         }
 
-        if (0 !== $stateEditable = $query->getCustomData(self::PARAM_EDITABLE, 0)) {
+        /** @psalm-var int $stateEditable */
+        $stateEditable = $query->getCustomData(self::PARAM_EDITABLE, 0);
+        if (0 !== $stateEditable) {
             /** @psalm-var string $field */
             $field = $this->repository->getSearchFields('state.editable', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_EDITABLE)
@@ -129,7 +133,7 @@ class CalculationTable extends AbstractEntityTable
         parent::updateResults($query, $results);
         if (!$query->callback) {
             $results->addAttribute('row-style', 'styleTextMuted');
-
+            /** @psalm-var int $stateId */
             $stateId = $query->getCustomData(self::PARAM_STATE, 0);
             $results->addParameter(self::PARAM_STATE, $stateId);
 

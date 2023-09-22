@@ -223,7 +223,8 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     private function addSelection(array &$entities, DataQuery $query): void
     {
-        if (0 === $id = $query->id) {
+        $id = $query->id;
+        if (0 === $id) {
             return;
         }
 

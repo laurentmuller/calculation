@@ -52,7 +52,8 @@ abstract class AbstractReport extends PdfDocument
         $this->extension = new FormatExtension($this->translator);
         $appName = $controller->getApplicationName();
         $this->SetCreator($appName);
-        if (null !== $userName = $controller->getUserIdentifier()) {
+        $userName = $controller->getUserIdentifier();
+        if (null !== $userName) {
             $this->SetAuthor($userName);
         }
         $service = $this->controller->getUserService();

@@ -76,7 +76,8 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::search($query, $builder, $alias);
-        if (0 !== $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0)) {
+        $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0);
+        if (0 !== $categoryId) {
             /** @psalm-var string $field */
             $field = $this->repository->getSearchFields('category.id', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
@@ -84,7 +85,8 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
 
             return true;
         }
-        if (0 !== $groupId = $query->getCustomData(self::PARAM_GROUP, 0)) {
+        $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
+        if (0 !== $groupId) {
             /** @psalm-var string $field */
             $field = $this->repository->getSearchFields('group.id', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_GROUP)
@@ -100,9 +102,11 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
+            /** @psalm-var int $categoryId */
             $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0);
             $results->addParameter(self::PARAM_CATEGORY, $categoryId);
 
+            /** @psalm-var int $groupId */
             $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
             $results->addParameter(self::PARAM_GROUP, $groupId);
 

@@ -64,6 +64,7 @@ class UserController extends AbstractEntityController
      */
     public function __construct(UserRepository $repository)
     {
+        // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
         parent::__construct($repository);
     }
 

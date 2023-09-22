@@ -52,7 +52,7 @@ class StrengthValidator extends AbstractConstraintValidator
         return $this->translator;
     }
 
-    public function validate(#[\SensitiveParameter] mixed $value, Constraint $constraint): void
+    public function validate(#[\SensitiveParameter] mixed $value, Constraint $constraint): void // phpcs:ignore
     {
         parent::validate($value, $constraint);
     }

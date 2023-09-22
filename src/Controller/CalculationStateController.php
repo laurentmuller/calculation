@@ -44,7 +44,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct(CalculationStateRepository $repository)
+    public function __construct(CalculationStateRepository $repository) // phpcs:ignore
     {
         parent::__construct($repository);
     }

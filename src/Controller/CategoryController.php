@@ -47,7 +47,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct(CategoryRepository $repository)
+    public function __construct(CategoryRepository $repository) // phpcs:ignore
     {
         parent::__construct($repository);
     }

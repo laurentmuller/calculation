@@ -108,10 +108,11 @@ class RegistrationController extends AbstractController
 
     private function findUser(Request $request): ?User
     {
-        if (0 !== $id = $this->getRequestInt($request, 'id')) {
-            return $this->repository->find($id);
+        $id = $this->getRequestInt($request, 'id');
+        if (0 === $id) {
+            return null;
         }
 
-        return null;
+        return $this->repository->find($id);
     }
 }

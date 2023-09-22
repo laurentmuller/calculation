@@ -31,7 +31,7 @@ class TaskTable extends AbstractCategoryItemTable
     /**
      * Constructor.
      */
-    public function __construct(
+    public function __construct(// phpcs:ignore
         TaskRepository $repository,
         CategoryRepository $categoryRepository,
         GroupRepository $groupRepository

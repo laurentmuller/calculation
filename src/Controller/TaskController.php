@@ -48,9 +48,8 @@ class TaskController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct(TaskRepository $repository)
+    public function __construct(TaskRepository $repository) // phpcs:ignore
     {
-        // phpcs:disable
         parent::__construct($repository);
     }
 

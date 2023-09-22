@@ -42,7 +42,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
     /**
      * Constructor.
      */
-    public function __construct(
+    public function __construct(// phpcs:ignore
         CalculationStateRepository $repository,
         protected readonly Environment $twig
     ) {

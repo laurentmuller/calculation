@@ -47,7 +47,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
      *
      * @psalm-param AbstractCategoryItemRepository<T> $repository
      */
-    public function __construct(
+    public function __construct(// phpcs:ignore
         AbstractCategoryItemRepository $repository,
         protected readonly CategoryRepository $categoryRepository,
         protected readonly GroupRepository $groupRepository
@@ -136,13 +136,17 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
      */
     private function getGroup(int $groupId): ?array
     {
-        if (0 !== $groupId && ($entity = $this->groupRepository->find($groupId)) instanceof Group) {
-            return [
-                'id' => $entity->getId(),
-                'code' => $entity->getCode(),
-            ];
+        if (0 === $groupId) {
+            return null;
+        }
+        $entity = $this->groupRepository->find($groupId);
+        if (!$entity instanceof Group) {
+            return null;
         }
 
-        return null;
+        return [
+            'id' => $entity->getId(),
+            'code' => $entity->getCode(),
+        ];
     }
 }

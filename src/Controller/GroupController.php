@@ -44,7 +44,7 @@ class GroupController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct(GroupRepository $repository)
+    public function __construct(GroupRepository $repository) // phpcs:ignore
     {
         parent::__construct($repository);
     }

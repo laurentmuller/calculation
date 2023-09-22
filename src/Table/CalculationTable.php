@@ -44,8 +44,11 @@ class CalculationTable extends AbstractEntityTable
     /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository, protected readonly CalculationStateRepository $stateRepository, protected readonly Environment $twig)
-    {
+    public function __construct(// phpcs:ignore
+        CalculationRepository $repository,
+        protected readonly CalculationStateRepository $stateRepository,
+        protected readonly Environment $twig
+    ) {
         parent::__construct($repository);
     }
 
@@ -151,14 +154,18 @@ class CalculationTable extends AbstractEntityTable
      */
     private function getCalculationState(int $stateId): ?array
     {
-        if (0 !== $stateId && ($entity = $this->stateRepository->find($stateId)) instanceof CalculationState) {
-            return [
-                'id' => $entity->getId(),
-                'code' => $entity->getCode(),
-            ];
+        if (0 === $stateId) {
+            return null;
+        }
+        $entity = $this->stateRepository->find($stateId);
+        if (!$entity instanceof CalculationState) {
+            return null;
         }
 
-        return null;
+        return [
+            'id' => $entity->getId(),
+            'code' => $entity->getCode(),
+        ];
     }
 
     private function isEditable(int $stateEditable): bool

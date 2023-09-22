@@ -27,8 +27,12 @@ class CalculationBelowTable extends CalculationTable implements \Countable
     /**
      * Constructor.
      */
-    public function __construct(CalculationRepository $repository, CalculationStateRepository $stateRepository, Environment $twig, private readonly ApplicationService $service)
-    {
+    public function __construct(// phpcs:ignore
+        CalculationRepository $repository,
+        CalculationStateRepository $stateRepository,
+        Environment $twig,
+        private readonly ApplicationService $service
+    ) {
         parent::__construct($repository, $stateRepository, $twig);
     }
 

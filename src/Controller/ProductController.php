@@ -44,9 +44,9 @@ class ProductController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct(ProductRepository $repository)
+    public function __construct(ProductRepository $repository) // phpcs:ignore
     {
-        parent::__construct($repository); // phpcs:ignore
+        parent::__construct($repository);
     }
 
     /**

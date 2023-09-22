@@ -45,7 +45,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Constructor.
      */
-    public function __construct(GlobalMarginRepository $repository)
+    public function __construct(GlobalMarginRepository $repository) // phpcs:ignore
     {
         parent::__construct($repository);
     }

@@ -42,7 +42,7 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
     /**
      * Constructor.
      */
-    public function __construct(
+    public function __construct(// phpcs:ignore
         GroupRepository $repository,
         protected readonly Environment $twig
     ) {

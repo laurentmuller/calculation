@@ -484,16 +484,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.6.6",
+            "version": "3.6.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "63646ffd71d1676d2f747f871be31b7e921c7864"
+                "reference": "8e0e268052b4a8974cb00215bb2892787021614f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/63646ffd71d1676d2f747f871be31b7e921c7864",
-                "reference": "63646ffd71d1676d2f747f871be31b7e921c7864",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/8e0e268052b4a8974cb00215bb2892787021614f",
+                "reference": "8e0e268052b4a8974cb00215bb2892787021614f",
                 "shasum": ""
             },
             "require": {
@@ -509,9 +509,9 @@
                 "doctrine/coding-standard": "12.0.0",
                 "fig/log-test": "^1",
                 "jetbrains/phpstorm-stubs": "2023.1",
-                "phpstan/phpstan": "1.10.29",
+                "phpstan/phpstan": "1.10.34",
                 "phpstan/phpstan-strict-rules": "^1.5",
-                "phpunit/phpunit": "9.6.9",
+                "phpunit/phpunit": "9.6.12",
                 "psalm/plugin-phpunit": "0.18.4",
                 "slevomat/coding-standard": "8.13.1",
                 "squizlabs/php_codesniffer": "3.7.2",
@@ -577,7 +577,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.6.6"
+                "source": "https://github.com/doctrine/dbal/tree/3.6.7"
             },
             "funding": [
                 {
@@ -593,7 +593,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-17T05:38:17+00:00"
+            "time": "2023-09-19T20:15:41+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -7847,16 +7847,16 @@
         },
         {
             "name": "symfonycasts/verify-email-bundle",
-            "version": "v1.13.0",
+            "version": "v1.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/verify-email-bundle.git",
-                "reference": "eb7bc997f36ad872a0d56bf209fe37fed148b0a7"
+                "reference": "9031ecab9a727ee45c0ec430fe2dcd44f8f95fd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/verify-email-bundle/zipball/eb7bc997f36ad872a0d56bf209fe37fed148b0a7",
-                "reference": "eb7bc997f36ad872a0d56bf209fe37fed148b0a7",
+                "url": "https://api.github.com/repos/SymfonyCasts/verify-email-bundle/zipball/9031ecab9a727ee45c0ec430fe2dcd44f8f95fd4",
+                "reference": "9031ecab9a727ee45c0ec430fe2dcd44f8f95fd4",
                 "shasum": ""
             },
             "require": {
@@ -7888,9 +7888,9 @@
             "description": "Simple, stylish Email Verification for Symfony",
             "support": {
                 "issues": "https://github.com/SymfonyCasts/verify-email-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/verify-email-bundle/tree/v1.13.0"
+                "source": "https://github.com/SymfonyCasts/verify-email-bundle/tree/v1.14.0"
             },
-            "time": "2023-01-04T12:46:15+00:00"
+            "time": "2023-09-22T11:15:22+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",

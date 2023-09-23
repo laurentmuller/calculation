@@ -56,6 +56,7 @@
                                 <th class="text-nowrap">{{ 'product.fields.description'|trans }}</th>
                                 <th class="text-currency">{{ 'product.result.old_price'|trans }}</th>
                                 <th class="text-currency">{{ 'product.result.new_price'|trans }}</th>
+                                <th class="text-currency">{{ 'product.result.delta'|trans }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,12 +65,13 @@
                             <td class="text-nowrap">{{ product.description }}</td>
                             <td class="text-currency">{{ product.oldPrice|amount }}</td>
                             <td class="text-currency">{{ product.newPrice|amount }}</td>
+                            <td class="text-currency">{{ product.delta|amount }}</td>
                         </tr>
                         {% endfor %}
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th class="text-nowrap" colspan="2">{{ 'product.result.total'|trans }}</th>
+                                <th class="text-nowrap" colspan="3">{{ 'product.result.total'|trans }}</th>
                                 <th class="text-currency">{{- 'counters.products'|trans({'count': result.count}) -}}</th>
                             </tr>
                         </tfoot>

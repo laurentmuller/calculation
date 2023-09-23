@@ -194,11 +194,9 @@ abstract class AbstractEntityController extends AbstractController
      * @param ?string                $field    the optional sorted field
      * @param string                 $mode     the optional sort mode ("ASC" or "DESC")
      * @param array<Criteria|string> $criteria the filter criteria
-     * @param string                 $alias    the entity alias
+     * @param literal-string         $alias    the entity alias
      *
      * @return AbstractEntity[] the entities
-     *
-     * @psalm-param literal-string $alias
      *
      * @psalm-return T[]
      *

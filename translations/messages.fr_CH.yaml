@@ -926,6 +926,7 @@ product:
     new_price: Nouveau prix
     new_update: Nouvelle mise à jour
     old_price: Ancien prix
+    delta: Différence
     updated: Articles mises à jour
     value: Valeur
     total: Total

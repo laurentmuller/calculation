@@ -102,7 +102,7 @@ function formatCategory(category) {
         return text;
     }
     const $icon = $('<i/>', {
-        'class': 'far fa-folder fa-fw',
+        'class': 'far fa-folder me-1',
     });
     const $text = $('<span/>', {
         'class': 'text-truncate',
@@ -119,7 +119,7 @@ function formatCategorySelection(category) {
         return text;
     }
     const $icon = $('<i/>', {
-        'class': 'far fa-folder fa-fw',
+        'class': 'far fa-folder me-1',
     });
     const $text = $('<span/>', {
         'text': text,

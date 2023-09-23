@@ -182,7 +182,7 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Returns the current, the 5 days/3 hours forecast and 16 day/daily forecast
+     * Returns the current, the hourly and daily forecasts
      * conditions data for a specific location.
      *
      * @param int    $id    the city identifier
@@ -219,7 +219,7 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Returns 16 day / daily forecast conditions data for a specific location.
+     * Returns daily forecast conditions data for a specific location.
      *
      * @param int    $id    the city identifier
      * @param int    $count the number of result to return or -1 for all
@@ -241,7 +241,7 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Returns 5 days / 3 hours forecast conditions data for a specific location.
+     * Returns hourly forecast conditions data for a specific location.
      *
      * @param int    $id    the city identifier
      * @param int    $count the number of result to return or -1 for all

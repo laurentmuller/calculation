@@ -118,8 +118,10 @@ function updatePrices() {
         const $this = $(this);
         const oldPrice = $.parseFloat($this.attr('data-price'));
         const newPrice = computePrice(oldPrice, value, percent, round);
-        const text = $.formatFloat(newPrice);
-        $this.closest('tr').find('td:eq(2)').text(text);
+        const delta = newPrice - oldPrice;
+        const $row = $this.closest('tr');
+        $row.find('td:eq(2)').text($.formatFloat(newPrice));
+        $row.find('td:eq(3)').text($.formatFloat(delta));
     });
     updateButtons();
 }

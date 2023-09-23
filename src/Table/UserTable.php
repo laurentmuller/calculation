@@ -38,7 +38,7 @@ class UserTable extends AbstractEntityTable
      * Constructor.
      */
     public function __construct(// phpcs:ignore
-        serRepository $repository,
+        UserRepository $repository,
         private readonly TranslatorInterface $translator,
         private readonly Environment $twig,
         private readonly Security $security

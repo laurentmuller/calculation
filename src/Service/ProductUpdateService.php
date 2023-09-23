@@ -172,6 +172,7 @@ class ProductUpdateService implements ServiceSubscriberInterface
                     'description' => $product->getDescription(),
                     'oldPrice' => $oldPrice,
                     'newPrice' => $newPrice,
+                    'delta' => $newPrice - $oldPrice,
                 ]);
             }
         }

@@ -25,6 +25,8 @@ use App\Utils\FileUtils;
 /**
  * Report for the help documentation.
  *
+ * @psalm-import-type HelpActionType from HelpService
+ * @psalm-import-type HelpForbiddenType from HelpService
  * @psalm-import-type HelpFieldType from HelpService
  * @psalm-import-type HelpDialogType from HelpService
  * @psalm-import-type HelpEntityType from HelpService
@@ -126,10 +128,14 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array<array{id: string, description: string}> $actions
+     * @psalm-param HelpActionType[] $actions
      */
     private function outputActions(array $actions, string $description): void
     {
+        if ([] === $actions) {
+            return;
+        }
+
         $height = self::LINE_HEIGHT * ('' === $description ? 0.0 : (float) $this->getLinesCount($description, 0.0)) + 3.0 + self::LINE_HEIGHT;
         if (!$this->isPrintable($height)) {
             $this->AddPage();
@@ -157,6 +163,10 @@ class HelpReport extends AbstractReport
      */
     private function outputColumns(array $item, array $fields): void
     {
+        if ([] === $fields) {
+            return;
+        }
+
         $table = PdfTableBuilder::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('help.fields.column'), 30, true),
@@ -175,6 +185,9 @@ class HelpReport extends AbstractReport
      */
     private function outputConstraints(array $constraints): void
     {
+        if ([] === $constraints) {
+            return;
+        }
         $margin = $this->getLeftMargin();
         $this->SetLeftMargin($margin + 4.0);
         foreach ($constraints as $constraint) {
@@ -231,27 +244,19 @@ class HelpReport extends AbstractReport
                 $this->outputFields($entity, $fields);
             }
             $displayEntityActions = $item['displayEntityActions'] ?? false;
-            if ($displayEntityActions) {
-                /** @psalm-var array<array{id: string, description: string}>|null $actions */
-                $actions = $entity['actions'] ?? null;
-                if (null !== $actions) {
-                    $this->outputActions($actions, 'help.labels.entity_actions');
-                }
+            if ($displayEntityActions && isset($entity['actions'])) {
+                $this->outputActions($entity['actions'], 'help.labels.entity_actions');
             }
         }
-        /** @psalm-var array<array{id: string, description: string}>|null $actions */
-        $actions = $item['editActions'] ?? null;
-        if (null !== $actions) {
-            $this->outputActions($actions, 'help.labels.edit_actions');
+
+        if (isset($item['editActions'])) {
+            $this->outputActions($item['editActions'], 'help.labels.edit_actions');
         }
-        /** @psalm-var array<array{id: string, description: string}>|null $actions */
-        $actions = $item['globalActions'] ?? null;
-        if (null !== $actions) {
-            $this->outputActions($actions, 'help.labels.global_actions');
+        if (isset($item['globalActions'])) {
+            $this->outputActions($item['globalActions'], 'help.labels.global_actions');
         }
-        /** @psalm-var array{image: string|null, text:string|null, action: array|null}|null $forbidden */
-        $forbidden = $item['forbidden'] ?? null;
-        if (null !== $forbidden) {
+        if (isset($item['forbidden'])) {
+            $forbidden = $item['forbidden'];
             $this->Ln(3);
             $text = $forbidden['text'] ?? $this->trans('help.labels.forbidden_text');
             $this->outputText($text, false);
@@ -259,10 +264,8 @@ class HelpReport extends AbstractReport
             if (null !== $image) {
                 $this->outputImage($image);
             }
-            /** @psalm-var array{id: string, description: string}|null $action */
-            $action = $forbidden['action'] ?? null;
-            if (null !== $action) {
-                $this->outputActions([$action], 'help.labels.edit_actions');
+            if (isset($forbidden['action'])) {
+                $this->outputActions([$forbidden['action']], 'help.labels.edit_actions');
             }
         }
     }
@@ -275,14 +278,17 @@ class HelpReport extends AbstractReport
         if (null === $dialogs || [] === $dialogs) {
             return false;
         }
+
         if ($newPage) {
             $this->AddPage();
             $newPage = false;
         }
+
         $id = 'help.dialog_menu';
         $this->addBookmark($this->trans($id), true);
         $this->outputTitle($id, 12);
         $this->outputLine();
+
         foreach ($dialogs as $dialog) {
             if ($newPage) {
                 $this->AddPage();
@@ -302,14 +308,17 @@ class HelpReport extends AbstractReport
         if (null === $entities || [] === $entities) {
             return;
         }
+
         if ($newPage) {
             $this->AddPage();
             $newPage = false;
         }
+
         $id = 'help.entity_menu';
         $this->addBookmark($this->trans($id), true);
         $this->outputTitle($id, 12);
         $this->outputLine();
+
         foreach ($entities as $entity) {
             if ($newPage) {
                 $this->AddPage();
@@ -338,16 +347,13 @@ class HelpReport extends AbstractReport
         } else {
             $this->outputText('help.labels.entity_empty');
         }
-        $constraints = $item['constraints'] ?? null;
-        if (null !== $constraints) {
+        if (isset($item['constraints'])) {
             $this->Ln(3);
             $this->outputText('help.labels.constraints');
-            $this->outputConstraints($constraints);
+            $this->outputConstraints($item['constraints']);
         }
-        /** @psalm-var array<array{id: string, description: string}>|null $actions */
-        $actions = $item['actions'] ?? null;
-        if (null !== $actions) {
-            $this->outputActions($actions, 'help.labels.entity_actions');
+        if (isset($item['actions'])) {
+            $this->outputActions($item['actions'], 'help.labels.entity_actions');
         }
     }
 
@@ -357,6 +363,10 @@ class HelpReport extends AbstractReport
      */
     private function outputFields(array $item, array $fields): void
     {
+        if ([] === $fields) {
+            return;
+        }
+
         $table = PdfTableBuilder::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('help.fields.field'), 30, true),
@@ -364,6 +374,7 @@ class HelpReport extends AbstractReport
                 PdfColumn::left($this->trans('help.fields.type'), 30, true),
                 PdfColumn::center($this->trans('help.fields.required'), 18, true)
             )->outputHeaders();
+
         foreach ($fields as $field) {
             $table->addRow(
                 $this->formatFieldName($item, $field),
@@ -404,6 +415,7 @@ class HelpReport extends AbstractReport
         if (null === $menus || [] === $menus) {
             return false;
         }
+
         $this->AddPage();
         $id = 'help.main_menu';
         $this->addBookmark($this->trans($id), true);
@@ -411,15 +423,13 @@ class HelpReport extends AbstractReport
         $this->outputLine();
         $rootMenu = $this->service->getMainMenu();
         if (null !== $rootMenu) {
-            $description = $rootMenu['description'] ?? null;
-            if (null !== $description) {
-                $this->outputText($description, false);
+            if (isset($rootMenu['description'])) {
+                $this->outputText($rootMenu['description'], false);
             }
-            $image = $rootMenu['image'] ?? null;
-            if (null !== $image) {
+            if (isset($rootMenu['image'])) {
                 $this->Ln(3);
                 $this->outputText('help.labels.screenshot');
-                $this->outputImage($image);
+                $this->outputImage($rootMenu['image']);
             }
         }
         $this->Ln(3);
@@ -439,22 +449,31 @@ class HelpReport extends AbstractReport
      */
     private function outputMenus(PdfTableBuilder $table, array $menus, int $indent = 0): void
     {
+        if ([] === $menus) {
+            return;
+        }
+
         $style = PdfStyle::getCellStyle()->setIndent($indent);
         foreach ($menus as $menu) {
             $table->startRow()
                 ->add(text: $this->splitTrans($menu['id']), style: $style)
-                ->add($menu['description'])
+                ->add($menu['description'] ?? null)
                 ->endRow();
-            /** @psalm-var HelpMenuType[]|null $menus */
-            $menus = $menu['menus'] ?? null;
-            if (null !== $menus) {
-                $this->outputMenus($table, $menus, $indent + 4);
+
+            /** @psalm-var HelpMenuType[]|null $sub_menus */
+            $sub_menus = $menu['menus'] ?? null;
+            if (null !== $sub_menus) {
+                $this->outputMenus($table, $sub_menus, $indent + 4);
             }
         }
     }
 
     private function outputText(string $id, bool $translate = true): void
     {
+        if ('' === $id) {
+            return;
+        }
+
         if ($translate) {
             $id = $this->trans($id);
         }

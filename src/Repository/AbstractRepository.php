@@ -53,9 +53,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Creates a default query builder.
      *
-     * @param string $alias the entity alias
-     *
-     * @psalm-param literal-string $alias
+     * @param literal-string $alias the entity alias
      */
     public function createDefaultQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -142,14 +140,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
      *
      * @param array<string, string>  $sortedFields the sorted fields where key is the field name and value is the sort mode ('ASC' or 'DESC')
      * @param array<Criteria|string> $criteria     the filter criteria (the where clause)
-     * @param string                 $alias        the entity alias
+     * @param literal-string         $alias        the entity alias
      *
-     * @throws Query\QueryException
      * @throws \Doctrine\ORM\Exception\ORMException
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
-     *
-     * @psalm-param literal-string $alias
      *
      * @psalm-return Query<T>
      */

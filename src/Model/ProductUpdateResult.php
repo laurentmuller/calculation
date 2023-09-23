@@ -15,7 +15,7 @@ namespace App\Model;
 /**
  * Contains result of updated products.
  *
- * @psalm-type ProductType = array{description: string|null, oldPrice: float, newPrice: float}
+ * @psalm-type ProductType = array{description: string|null, oldPrice: float, newPrice: float, delta: float}
  */
 class ProductUpdateResult implements \Countable
 {

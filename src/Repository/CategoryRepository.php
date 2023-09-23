@@ -106,10 +106,9 @@ class CategoryRepository extends AbstractRepository
     /**
      * Gets the query builder for the list of categories sorted by the parent's group code and then by the code.
      *
-     * @param int    $filterType the filter type to apply. One of the FILTER_* constants.
-     * @param string $alias      the default entity alias
+     * @param int            $filterType the filter type to apply. One of the FILTER_* constants.
+     * @param literal-string $alias      the entity alias
      *
-     * @psalm-param literal-string $alias
      * @psalm-param self::FILTER_* $filterType
      */
     public function getQueryBuilderByGroup(int $filterType = self::FILTER_NONE, string $alias = self::DEFAULT_ALIAS): QueryBuilder
@@ -151,7 +150,7 @@ class CategoryRepository extends AbstractRepository
     /**
      * Gets the query builder for the table.
      *
-     * @psalm-param literal-string $alias
+     * @param literal-string $alias the entity alias
      */
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

@@ -10,20 +10,19 @@ $.fn.extend({
     enableCellNavigation: function () {
         'use strict';
 
-        const arrow = {
-            left: 'ArrowLeft',
-            up: 'ArrowUp',
-            right: 'ArrowRight',
-            down: 'ArrowDown'
+        const Arrow = {
+            Left: 'ArrowLeft',
+            Up: 'ArrowUp',
+            Right: 'ArrowRight',
+            Down: 'ArrowDown'
         };
 
         /**
          * @param {KeyboardEvent} e - the event.
          */
         this.on('keydown', 'input', function (e) {
-            // this.find('input').keydown(function (e) {
-            // shortcut for key other than arrow keys
-            if ($.inArray(e.key, [arrow.left, arrow.up, arrow.right, arrow.down]) < 0) {
+            // shortcut for key other than Arrow keys
+            if ($.inArray(e.key, [Arrow.Left, Arrow.Up, Arrow.Right, Arrow.Down]) < 0) {
                 return;
             }
 
@@ -32,26 +31,26 @@ $.fn.extend({
             const $cell = $(e.target).closest('td');
 
             switch (e.key) {
-                case arrow.left:
+                case Arrow.Left:
                     if (input.selectionStart || 0 === 0) {
                         $moveTo = $cell.prev('td:has(input)');
                     }
                     break;
 
-                case arrow.right:
+                case Arrow.Right:
                     if (input.selectionEnd || input.value.length === input.value.length) {
                         $moveTo = $cell.next('td:has(input)');
                     }
                     break;
 
-                case arrow.up:
-                case arrow.down: {
+                case Arrow.Up:
+                case Arrow.Down: {
                     let $moveToRow = null;
                     const $row = $cell.closest('tr');
                     const pos = $cell[0].cellIndex;
-                    if (e.key === arrow.down) {
+                    if (e.key === Arrow.Down) {
                         $moveToRow = $row.next('tr');
-                    } else if (e.key === arrow.up) {
+                    } else if (e.key === Arrow.up) {
                         $moveToRow = $row.prev('tr');
                     }
                     if ($moveToRow && $moveToRow.length) {
@@ -64,9 +63,6 @@ $.fn.extend({
             if ($moveTo && $moveTo.length) {
                 e.preventDefault();
                 $moveTo.find('input:first').select().focus();
-                // $moveTo.find('input').each(function (index, input) {
-                // input.focus().select();
-                // });
             }
         });
         return this;

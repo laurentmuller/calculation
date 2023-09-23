@@ -22,7 +22,14 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Service to provide help.
  *
- *  @psalm-type HelpFieldType = array{
+ * @psalm-type HelpActionType = array{
+ *       id: string,
+ *       description: string}
+ * @psalm-type HelpForbiddenType = array{
+ *     image: string|null,
+ *     text:string|null,
+ *     action: HelpActionType|null}
+ * @psalm-type HelpFieldType = array{
  *      name: string,
  *      description: string,
  *      type: string|null,
@@ -35,23 +42,23 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      displayEntityColumns: true|null,
  *      displayEntityFields: true|null,
  *      displayEntityActions: true|null,
- *      entity: null|string,
- *      editActions: null|array,
- *      globalActions: array|null,
- *      forbidden: array|null,
+ *      entity: string|null,
+ *      editActions: HelpActionType[]|null,
+ *      globalActions: HelpActionType[]|null,
+ *      forbidden: HelpForbiddenType|null,
  *      details: string[]|null}
  * @psalm-type HelpEntityType = array{
  *      id: string,
  *      name: string,
  *      description: string|null,
  *      constraints: string[]|null,
- *      actions: array|null,
+ *      actions: HelpActionType[]|null,
  *      fields: HelpFieldType[]|null,
  *      required: bool|null,
- *      editActions: array|null}
+ *      editActions: HelpActionType|null}
  * @psalm-type HelpMenuType = array{
  *      id: string,
- *      description: string,
+ *      description: string|null,
  *      menus: array|null}
  * @psalm-type HelpMainMenuType = array{
  *      id: string,

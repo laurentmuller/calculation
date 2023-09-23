@@ -113,9 +113,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * Gets the query builder for the list of users sorted by username.
      *
-     * @param string $alias the default entity alias
-     *
-     * @psalm-param literal-string $alias
+     * @param literal-string $alias the entity alias
      */
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {

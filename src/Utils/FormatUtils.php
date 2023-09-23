@@ -88,15 +88,17 @@ final class FormatUtils
      */
     public static function formatDateTime(\DateTimeInterface|int|null $date, int $datetype = null, int $timetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = \IntlDateFormatter::GREGORIAN, string $pattern = null, string $locale = null): ?string
     {
-        if (null !== $date) {
-            $formatter = self::getDateFormatter($datetype, $timetype, $timezone, $calendar, $pattern, $locale);
-            $result = $formatter->format($date);
-            if (false !== $result) {
-                return $result;
-            }
+        if (null === $date) {
+            return null;
         }
 
-        return null;
+        $formatter = self::getDateFormatter($datetype, $timetype, $timezone, $calendar, $pattern, $locale);
+        $result = $formatter->format($date);
+        if (false === $result) {
+            return null;
+        }
+
+        return $result;
     }
 
     /**

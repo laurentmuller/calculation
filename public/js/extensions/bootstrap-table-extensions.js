@@ -786,53 +786,51 @@ function loadingTemplate(message) {
          */
         enableKeys: function () {
             const $this = $(this);
-
-            // get or create the key handler
             let keyHandler = $this.data('keys.handler');
             if (!keyHandler) {
                 keyHandler = function (e) {
-                    if ((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
+                    if ((e.key === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
                         return;
                     }
-                    switch (e.keyCode) {
-                        case 13:  // enter (edit action on selected row)
+                    switch (e.key) {
+                        case 'Enter':
                             if ($this.editRow()) {
                                 e.preventDefault();
                             }
                             break;
-                        case 33: // page up (previous page)
-                            if ($this.showPreviousPage(false)) {
-                                e.preventDefault();
-                            }
-                            break;
-                        case 34: // page down (next page)
-                            if ($this.showNextPage()) {
-                                e.preventDefault();
-                            }
-                            break;
-                        case 35: // end (last row of the current page)
-                            if ($this.selectLastRow()) {
-                                e.preventDefault();
-                            }
-                            break;
-                        case 36: // home (first row of the current page)
+                        case 'Home':
                             if ($this.selectFirstRow()) {
                                 e.preventDefault();
                             }
                             break;
-                        case 37: // left arrow (previous row of the current page)
-                        case 38: // up arrow
+                        case 'End':
+                            if ($this.selectLastRow()) {
+                                e.preventDefault();
+                            }
+                            break;
+                        case 'PageUp':
+                            if ($this.showPreviousPage(false)) {
+                                e.preventDefault();
+                            }
+                            break;
+                        case 'PageDown':
+                            if ($this.showNextPage()) {
+                                e.preventDefault();
+                            }
+                            break;
+                        case 'ArrowLeft':
+                        case 'ArrowUp':
                             if ($this.selectPreviousRow()) {
                                 e.preventDefault();
                             }
                             break;
-                        case 39: // right arrow (next row of the current page)
-                        case 40: // down arrow
+                        case 'ArrowRight':
+                        case 'ArrowDown':
                             if ($this.selectNextRow()) {
                                 e.preventDefault();
                             }
                             break;
-                        case 46: // delete (delete action of the selected row)
+                        case 'Delete':
                             if ($this.deleteRow()) {
                                 e.preventDefault();
                             }
@@ -841,8 +839,6 @@ function loadingTemplate(message) {
                 };
                 $this.data('keys.handler', keyHandler);
             }
-
-            // add handlers
             $(document).off('keydown.bs.table', keyHandler).on('keydown.bs.table', keyHandler);
             return $this;
         },

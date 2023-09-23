@@ -8,6 +8,7 @@
     <td class="text-nowrap">{{- form_widget(item, {attr: {'disabled': 'disabled'}}) -}}</td>
     <td class="text-currency">{{ product_price }}</td>
     <td class="text-currency">{{ product_price }}</td>
+    <td class="text-currency">{{ 0|amount }}</td>
 </tr>
 {%- endmacro %}
 {#  percent widget #}
@@ -73,6 +74,7 @@
                 <th class="text-nowrap">{{ 'product.fields.description'|trans }}</th>
                 <th class="text-currency">{{ 'product.result.old_price'|trans }}</th>
                 <th class="text-currency">{{ 'product.result.new_price'|trans }}</th>
+                <th class="text-currency">{{ 'product.result.delta'|trans }}</th>
             </tr>
         </thead>
         <tbody>

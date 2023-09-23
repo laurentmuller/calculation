@@ -105,7 +105,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Get the number of calculation states where editable is true.
      *
-     * @psalm-param literal-string $alias
+     * @param literal-string $alias the entity alias
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -117,7 +117,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Gets query builder for state where editable is true.
      *
-     * @psalm-param literal-string $alias
+     * @param literal-string $alias the entity alias
      */
     public function getEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -128,7 +128,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Get the number of calculation states where editable is false.
      *
-     * @psalm-param literal-string $alias
+     * @param literal-string $alias the entity alias
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -140,7 +140,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Gets query builder for state where editable is false.
      *
-     * @psalm-param literal-string $alias
+     * @param literal-string $alias the entity alias
      */
     public function getNotEditableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -149,11 +149,9 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * Gets the query builder for the list of states sorted by the editable and the code fields.
+     * Gets the query builder for the list of states sorted by the editable and code fields.
      *
-     * @param string $alias the default entity alias
-     *
-     * @psalm-param literal-string $alias
+     * @param literal-string $alias the entity alias
      */
     public function getQueryBuilderByEditable(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -161,16 +159,14 @@ class CalculationStateRepository extends AbstractRepository
         $codeField = $this->getSortField('code', $alias);
 
         return $this->createQueryBuilder($alias)
-            ->orderBy($editField, Criteria::DESC)
+            ->orderBy($editField, Criteria::ASC)
             ->addOrderBy($codeField, Criteria::ASC);
     }
 
     /**
      * Gets the query builder for the list of states sorted by code.
      *
-     * @param string $alias the default entity alias
-     *
-     * @psalm-param literal-string $alias
+     * @param literal-string $alias the entity alias
      */
     public function getSortedBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -191,7 +187,7 @@ class CalculationStateRepository extends AbstractRepository
     /**
      * Gets the query builder for the table.
      *
-     * @psalm-param literal-string $alias
+     * @param literal-string $alias the entity alias
      */
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
@@ -207,7 +203,7 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * @psalm-param literal-string $alias
+     * @param literal-string $alias the entity alias
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */

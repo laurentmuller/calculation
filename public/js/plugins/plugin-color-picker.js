@@ -9,6 +9,11 @@
     // -----------------------------------
     // ColorPicker public class definition
     // -----------------------------------
+    /**
+     * @typedef  {Object}  SelectionType
+     * @property {number}  col - the column index.
+     * @property {number}  row - the row index.
+     */
     const ColorPicker = class {
 
         // -----------------------------
@@ -257,94 +262,40 @@
         }
 
         /**
-         * Handles the color button key down event.
+         * Handles the color button key up event.
          *
          * @param {KeyboardEvent} e - the event.
          * @private
          */
         _onColorButtonKeyUp(e) {
-            const cols = this.cols;
-            const lastCol = this.cols - 1;
-            const lastRow = this.rows - 1;
             const $button = $(e.target);
             const selection = this._getSelection($button);
-            const length = this.length;
-            let index = selection.row * this.cols + selection.col;
-
             switch (e.key) {
                 case 'Home':
-                    selection.col = 0;
-                    if (e.ctrlKey) {
-                        selection.row = 0;
-                    }
+                    this._selectFirst(e, selection);
                     break;
-
                 case 'End':
-                    selection.col = lastCol;
-                    if (e.ctrlKey || selection.row * cols + selection.col >= length) {
-                        index = length - 1;
-                        selection.row = Math.trunc(index / cols);
-                        selection.col = index % this.cols;
-                    }
+                    this._selectLast(e, selection);
                     break;
-
                 case 'ArrowLeft':
-                    selection.col = selection.col > 0 ? selection.col - 1 : lastCol;
-                    if (selection.row * cols + selection.col >= length) {
-                        index = length - 1;
-                        selection.row = Math.trunc(index / cols);
-                        selection.col = index % this.cols;
-                    }
+                    this._selectLeft(e, selection);
                     break;
-
-                case 'ArrowUp': // up arrow
-                    selection.row = selection.row > 0 ? selection.row - 1 : lastRow;
-                    if (selection.row * cols + selection.col >= length) {
-                        selection.row = lastRow - 1;
-                    }
-                    break;
-
                 case 'ArrowRight':
-                    selection.col = selection.col < lastCol ? selection.col + 1 : 0;
-                    if (selection.row * cols + selection.col >= length) {
-                        selection.col = 0;
-                    }
+                    this._selectRight(e, selection);
                     break;
-
+                case 'ArrowUp':
+                    this._selectUp(e, selection);
+                    break;
                 case 'ArrowDown':
-                    selection.row = selection.row < lastRow ? selection.row + 1 : 0;
-                    if (selection.row * cols + selection.col >= length) {
-                        selection.row = 0;
-                    }
+                    this._selectDown(e, selection);
                     break;
-
                 case '+':
-                    if (index < length - 1) {
-                        index++;
-                        selection.row = Math.trunc(index / cols);
-                        selection.col = index % cols;
-                    } else {
-                        selection.col = selection.row = 0;
-                    }
+                    this._selectNext(e, selection);
                     break;
-
                 case '-':
-                    if (index > 0) {
-                        index--;
-                    } else {
-                        index = length - 1;
-                    }
-                    selection.row = Math.trunc(index / cols);
-                    selection.col = index % cols;
+                    this._selectPrevious(e, selection);
                     break;
-
-                default:
-                    return;
             }
-
-            // update
-            this._setSelection(selection);
-            e.preventDefault();
         }
 
         /**
@@ -392,7 +343,7 @@
          * Gets the selected color button.
          *
          * @param {jQuery} $button - the clicked button element.
-         * @returns {Object} the row and column index of the selected button.
+         * @returns {SelectionType} the row and column index of the selected button.
          * @private
          */
         _getSelection($button) {
@@ -429,7 +380,7 @@
         /**
          * Sets the selected (focus) color button.
          *
-         * @param {Object} selection - the selection to set (must contain a 'row' and a 'col' fields).
+         * @param {SelectionType} selection - the selection to set (must contain a 'row' and a 'col' fields).
          * @returns {jQuery} the button, if found; null otherwise.
          * @private
          */
@@ -462,6 +413,147 @@
             // custom text
             return this.options.customText;
         }
+
+        /**
+         * @param {KeyboardEvent} e
+         * @param {SelectionType} selection
+         * @private
+         */
+        _selectFirst(e, selection) {
+            selection.col = 0;
+            if (e.ctrlKey) {
+                selection.row = 0;
+            }
+            this._setSelection(selection);
+            e.preventDefault();
+        }
+
+        /**
+         * @param {KeyboardEvent} e
+         * @param {SelectionType} selection
+         * @private
+         */
+        _selectLast(e, selection) {
+            const cols = this.cols;
+            const length = this.length;
+            selection.col = cols - 1;
+            if (e.ctrlKey || selection.row * cols + selection.col >= length) {
+                const index = length - 1;
+                selection.row = Math.trunc(index / cols);
+                selection.col = index % cols;
+            }
+            this._setSelection(selection);
+            e.preventDefault();
+        }
+
+        /**
+         * @param {KeyboardEvent} e
+         * @param {SelectionType} selection
+         * @private
+         */
+        _selectLeft(e, selection) {
+            const cols = this.cols;
+            const length = this.length;
+            selection.col = selection.col > 0 ? selection.col - 1 : cols - 1;
+            if (selection.row * cols + selection.col >= length) {
+                const index = length - 1;
+                selection.row = Math.trunc(index / cols);
+                selection.col = index % this.cols;
+            }
+            this._setSelection(selection);
+            e.preventDefault();
+        }
+
+        /**
+         * @param {KeyboardEvent} e
+         * @param {SelectionType} selection
+         * @private
+         */
+        _selectRight(e, selection) {
+            const cols = this.cols;
+            const length = this.length;
+            selection.col = selection.col < cols - 1 ? selection.col + 1 : 0;
+            if (selection.row * cols + selection.col >= length) {
+                selection.col = 0;
+            }
+            this._setSelection(selection);
+            e.preventDefault();
+        }
+
+        /**
+         * @param {KeyboardEvent} e
+         * @param {SelectionType} selection
+         * @private
+         */
+        _selectUp(e, selection) {
+            const cols = this.cols;
+            const rows = this.rows;
+            const length = this.length;
+            selection.row = selection.row > 0 ? selection.row - 1 : rows - 1;
+            if (selection.row * cols + selection.col >= length) {
+                selection.row = rows - 2;
+            }
+            this._setSelection(selection);
+            e.preventDefault();
+        }
+
+        /**
+         * @param {KeyboardEvent} e
+         * @param {SelectionType} selection
+         * @private
+         */
+        _selectDown(e, selection) {
+            const cols = this.cols;
+            const rows = this.rows;
+            const length = this.length;
+            selection.row = selection.row < rows - 1 ? selection.row + 1 : 0;
+            if (selection.row * cols + selection.col >= length) {
+                selection.row = 0;
+            }
+            this._setSelection(selection);
+            e.preventDefault();
+        }
+
+        /**
+         * @param {KeyboardEvent} e
+         * @param {SelectionType} selection
+         * @private
+         */
+        _selectNext(e, selection) {
+            const cols = this.cols;
+            const length = this.length;
+            let index = selection.row * cols + selection.col;
+            if (index < length - 1) {
+                index++;
+                selection.row = Math.trunc(index / cols);
+                selection.col = index % cols;
+            } else {
+                selection.col = selection.row = 0;
+            }
+            this._setSelection(selection);
+            e.preventDefault();
+        }
+
+        /**
+         * @param {KeyboardEvent} e
+         * @param {SelectionType} selection
+         * @private
+         */
+        _selectPrevious(e, selection) {
+            const cols = this.cols;
+            const length = this.length;
+            let index = selection.row * cols + selection.col;
+            if (index > 0) {
+                index--;
+            } else {
+                index = length - 1;
+            }
+            selection.row = Math.trunc(index / cols);
+            selection.col = index % cols;
+            this._setSelection(selection);
+            e.preventDefault();
+        }
+
     };
 
     // -----------------------------------

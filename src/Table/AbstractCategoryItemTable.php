@@ -121,14 +121,18 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
      */
     private function getCategory(int $categoryId): ?array
     {
-        if (0 !== $categoryId && ($entity = $this->categoryRepository->find($categoryId)) instanceof Category) {
-            return [
-                'id' => $entity->getId(),
-                'code' => $entity->getCode(),
-            ];
+        if (0 === $categoryId) {
+            return null;
+        }
+        $entity = $this->categoryRepository->find($categoryId);
+        if (!$entity instanceof Category) {
+            return null;
         }
 
-        return null;
+        return [
+            'id' => $entity->getId(),
+            'code' => $entity->getCode(),
+        ];
     }
 
     /**

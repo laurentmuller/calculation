@@ -72,92 +72,134 @@ function toggleSelection($oldSelection, $newSelection) {
 }
 
 /**
+ * @param {KeyboardEvent} e
+ * @param {jQuery} $selection
+ */
+function onKeyEnter(e, $selection) {
+    'use strict';
+    const $link = $selection.find('.btn-default');
+    if ($link.length) {
+        $link[0].click();
+        e.preventDefault();
+    }
+}
+
+/**
+ * @param {KeyboardEvent} e
+ * @param {jQuery} $selection
+ * @param {jQuery} $parent
+ */
+function onKeyHome(e, $selection, $parent) {
+    'use strict';
+    const $first = $parent.find('.row-item:first');
+    toggleSelection($selection, $first);
+    e.preventDefault();
+}
+
+/**
+ * @param {KeyboardEvent} e
+ * @param {jQuery} $selection
+ * @param {jQuery} $parent
+ */
+function onKeyEnd(e, $selection, $parent) {
+    'use strict';
+    const $last = $parent.find('.row-item:last');
+    toggleSelection($selection, $last);
+    e.preventDefault();
+}
+
+/**
+ * @param {KeyboardEvent} e
+ * @param {jQuery} $selection
+ * @param {jQuery} $rows
+ */
+function onKeyPrevious(e, $selection, $rows) {
+    'use strict';
+    const index = $selection.length ? $rows.index($selection) - 1 : $rows.length - 1;
+    const $prev = $rows.eq(index);
+    const $last = $rows.eq($rows.length - 1);
+    if ($prev.length) {
+        toggleSelection($selection, $prev);
+        e.preventDefault();
+    } else if ($last.length) {
+        toggleSelection($selection, $last);
+        e.preventDefault();
+    }
+}
+
+/**
+ * @param {KeyboardEvent} e
+ * @param {jQuery} $selection
+ * @param {jQuery} $rows
+ */
+function onKeyNext(e, $selection, $rows) {
+    'use strict';
+    const index = $selection.length ? $rows.index($selection) + 1 : 0;
+    const $next = $rows.eq(index);
+    const $first = $rows.eq(0);
+    if ($next.length) {
+        toggleSelection($selection, $next);
+        e.preventDefault();
+    } else if ($first.length) {
+        toggleSelection($selection, $first);
+        e.preventDefault();
+    }
+}
+
+/**
+ * @param {KeyboardEvent} e
+ * @param {jQuery} $selection
+ */
+function onKeyDelete(e, $selection) {
+    'use strict';
+    const $link = $selection.find('.btn-delete');
+    if ($link.length) {
+        e.preventDefault();
+        $link[0].click();
+    }
+}
+
+/**
  * Creates the key down handler for the calculation table.
  *
  * @param {jQuery} $parent - the parent to handle.
- * @return {(function(*): void)|*}
+ * @return {(function(*): void)}
  */
 function createKeydownHandler($parent) {
     'use strict';
     /** @param {KeyboardEvent} e */
     return function (e) {
-        // special key?
-        if ((e.keyCode === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
+        if ((e.key === 0 || e.ctrlKey || e.metaKey || e.altKey) && !(e.ctrlKey && e.altKey)) {
             return;
         }
-
-        // rows?
         const $rows = $parent.find('.row-item');
         if ($rows.length === 0) {
             return;
         }
-
         const $selection = $parent.find('.row-item.table-primary');
-        /*eslint no-lone-blocks: "off"*/
         switch (e.key) {
-            case 'Enter':  // edit selected row
-            {
-                const $link = $selection.find('.btn-default');
-                if ($link.length) {
-                    $link[0].click();
-                    e.preventDefault();
-                }
+            case 'Enter':
+                onKeyEnter(e, $selection);
                 break;
-            }
-            case 'End': // select last row
-            {
-                const $last = $parent.find('.row-item:last');
-                toggleSelection($selection, $last);
-                e.preventDefault();
+            case 'Delete':
+                onKeyDelete(e, $selection);
                 break;
-            }
-            case 'Home': // select first row
-            {
-                const $first = $parent.find('.row-item:first');
-                toggleSelection($selection, $first);
-                e.preventDefault();
+            case 'Home':
+                onKeyHome(e, $selection, $parent);
                 break;
-            }
+            case 'End':
+                onKeyEnd(e, $selection, $parent);
+                break;
+            case '-':
             case 'ArrowLeft':
-            case 'ArrowUp': // select previous row or last if no selection
-            {
-                const index = $selection.length ? $rows.index($selection) - 1 : $rows.length - 1;
-                //const index = $rows.index($selection) - 1;
-                const $prev = $rows.eq(index);
-                const $last = $rows.eq($rows.length - 1);
-                if ($prev.length) {
-                    toggleSelection($selection, $prev);
-                    e.preventDefault();
-                } else if ($last.length) {
-                    toggleSelection($selection, $last);
-                    e.preventDefault();
-                }
+            case 'ArrowUp':
+                onKeyPrevious(e, $selection, $rows);
                 break;
-            }
+            case '+':
             case 'ArrowRight':
-            case 'ArrowDown': // select next row or first if no selection
-            {
-                const index = $selection.length ? $rows.index($selection) + 1 : 0;
-                const $next = $rows.eq(index);
-                const $first = $rows.eq(0);
-                if ($next.length) {
-                    toggleSelection($selection, $next);
-                    e.preventDefault();
-                } else if ($first.length) {
-                    toggleSelection($selection, $first);
-                    e.preventDefault();
-                }
+            case 'ArrowDown':
+                onKeyNext(e, $selection, $rows);
                 break;
-            }
-            case 'Delete': // delete selected row
-            {
-                const $link = $selection.find('.btn-delete');
-                if ($link.length) {
-                    e.preventDefault();
-                    $link[0].click();
-                }
-                break;
-            }
         }
     };
 }
@@ -236,12 +278,17 @@ function selectRow($source) {
 
         // handle table events and context menu
         $calculations.on('mousedown', '.row-item', function (e) {
-            if (e.button === 0) {
-                selectRow($(this));
-            } else if (e.button === 2) {
-                $.hideDropDownMenus();
+            switch (e.button) {
+                case 0:
+                    selectRow($(this));
+                    break;
+                case 2:
+                    $.hideDropDownMenus();
+                    break;
             }
         }).on('click', '.row-item [data-bs-toggle="dropdown"]', function () {
+            selectRow($(this));
+        }).on('focus', '.item-link', function () {
             selectRow($(this));
         }).initContextMenu('.row-item td:not(.context-menu-skip),.row-item div:not(.context-menu-skip)', function () {
             selectRow($(this));

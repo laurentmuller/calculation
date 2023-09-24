@@ -248,7 +248,6 @@ class HelpReport extends AbstractReport
                 $this->outputActions($entity['actions'], 'help.labels.entity_actions');
             }
         }
-
         if (isset($item['editActions'])) {
             $this->outputActions($item['editActions'], 'help.labels.edit_actions');
         }

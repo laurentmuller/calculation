@@ -37,15 +37,17 @@ readonly class SortableEntity
      *
      * @template T of object
      *
-     * @param T|class-string<T> $objectOrClass either a string containing the name of
-     *                                         the class to reflect, or an object
-     * @param bool              $validate      true to validate that the property name exist
+     * @param object|string $objectOrClass either a string containing the name of
+     *                                     the class to reflect, or an object
+     * @param bool          $validate      true to validate that the property name exist
      *
      * @return array<string, string> an array with the field as key and the order as value. An
      *                               empty array is returned if not attribute is found.
      *
      * @throws \ReflectionException if the class does not exist or if the validate parameter
      *                              is true and a property name is not found
+     *
+     * @psalm-param T|class-string<T> $objectOrClass
      */
     public static function getOrder(object|string $objectOrClass, bool $validate = false): array
     {

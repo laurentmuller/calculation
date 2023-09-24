@@ -22,7 +22,7 @@ use App\Utils\StringUtils;
 /**
  * Represents an HTML chunk.
  */
-abstract class AbstractHtmlChunk implements HtmlConstantsInterface
+abstract class AbstractHtmlChunk
 {
     /**
      * The bookmark.
@@ -235,14 +235,14 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 
     /**
      * Apply the given font (if any), call the callback and restore the previous font.
+     *
      * Example:
-     * <pre>
+     *
      * <code>
      *      $this->applyFont($report, $myFont, function(HtmlReport $report) {
      *          ...
      *      });
      * </code>
-     * </pre>.
      *
      * @param HtmlReport $report   the report to set and restore font
      * @param ?PdfFont   $font     the font to apply
@@ -263,14 +263,14 @@ abstract class AbstractHtmlChunk implements HtmlConstantsInterface
 
     /**
      * Apply the given margins (if different from 0), call the callback and restore the previous margins.
+     *
      * Example:
-     * <pre>
+     *
      * <code>
      *      $this->applyMargins($report, 10, 25, function(HtmlReport $report) {
-     *          ...
+     *          // ...
      *      });
      * </code>
-     * </pre>.
      *
      * @param HtmlReport $report      the report to set and restore margins
      * @param float      $leftMargin  the left margin to add

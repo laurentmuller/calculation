@@ -27,7 +27,7 @@ interface EnumDefaultInterface
     /**
      * Gets the default enumeration.
      *
-     * @return T
+     * @psalm-return T
      *
      * @throws \LogicException if default enumeration is not found
      */

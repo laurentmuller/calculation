@@ -15,7 +15,6 @@ namespace App\Tests\Traits;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Traits\RoleTranslatorTrait;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -39,9 +38,6 @@ class RoleTranslatorTraitTest extends TestCase
         ];
     }
 
-    /**
-     * @throws Exception
-     */
     public function getTranslator(): TranslatorInterface
     {
         if (!$this->translator instanceof TranslatorInterface) {
@@ -53,8 +49,6 @@ class RoleTranslatorTraitTest extends TestCase
 
     /**
      * @param string|RoleInterface $role the role to translate
-     *
-     * @throws Exception
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTranslateRoles')]
     public function testTranslateRole(RoleInterface|string $role, string $message): void
@@ -65,9 +59,6 @@ class RoleTranslatorTraitTest extends TestCase
         self::assertSame($actual, $expected);
     }
 
-    /**
-     * @throws Exception
-     */
     private function createTranslator(string $message): TranslatorInterface
     {
         $translator = $this->createMock(TranslatorInterface::class);

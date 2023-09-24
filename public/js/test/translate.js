@@ -261,7 +261,6 @@ function handleService() {
 (function ($) {
     'use strict';
     const $text = $('#text');
-    const $from = $('#from');
     const $fromTo = $('#from, #to');
 
     // initialize select

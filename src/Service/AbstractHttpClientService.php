@@ -186,7 +186,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      *
      * @return ResponseInterface the response
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface when an unsupported option is passed
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface when an unsupported option is passed
      *
      * @psalm-param Request::METHOD_* $method
      */
@@ -203,7 +203,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      *
      * @return ResponseInterface the response
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface when an unsupported option is passed
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface when an unsupported option is passed
      */
     protected function requestGet(string $url, array $options = []): ResponseInterface
     {
@@ -218,7 +218,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      *
      * @return ResponseInterface the response
      *
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface when an unsupported option is passed
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface when an unsupported option is passed
      */
     protected function requestPost(string $url, array $options = []): ResponseInterface
     {

@@ -28,7 +28,6 @@
         initFileInput: function (callback) {
             return this.each(function () {
                 const $that = $(this);
-                const isThumbnail = $that.parents('.form-group').findExists('.img-thumbnail');
                 $that.on('input', function () {
                     $that.valid();
                     if (typeof callback === 'function') {

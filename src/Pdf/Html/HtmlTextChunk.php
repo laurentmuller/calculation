@@ -26,15 +26,15 @@ class HtmlTextChunk extends AbstractHtmlChunk
      * The names of parents to use with multi-cell.
      */
     private const PARENT_MULTI_CELL = [
-        self::H1,
-        self::H2,
-        self::H3,
-        self::H4,
-        self::H5,
-        self::H6,
-        self::PARAGRAPH,
-        self::SPAN,
-        self::LIST_ITEM,
+        HtmlConstantsInterface::H1,
+        HtmlConstantsInterface::H2,
+        HtmlConstantsInterface::H3,
+        HtmlConstantsInterface::H4,
+        HtmlConstantsInterface::H5,
+        HtmlConstantsInterface::H6,
+        HtmlConstantsInterface::PARAGRAPH,
+        HtmlConstantsInterface::SPAN,
+        HtmlConstantsInterface::LIST_ITEM,
     ];
 
     /**
@@ -68,7 +68,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
             if (-1 !== $index && $index < $count - 1) {
                 $next = $parent->getChildren()[$index + 1];
 
-                return $next->is(self::LIST_ORDERED, self::LIST_UNORDERED);
+                return $next->is(HtmlConstantsInterface::LIST_ORDERED, HtmlConstantsInterface::LIST_UNORDERED);
             }
         }
 

@@ -21,6 +21,13 @@ profile:
 php:
   version: 8.2 #(Applied in CI/CD pipeline)
 
+exclude:
+  - name: All
+    paths:
+      - vendor
+      - vendor-bin
+      - public/js/*.js
+
 #Execute shell command before Qodana execution (Applied in CI/CD pipeline)
 #bootstrap: sh ./prepare-qodana.sh
 

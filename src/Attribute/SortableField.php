@@ -36,13 +36,15 @@ readonly class SortableField
      *
      * @template T of object
      *
-     * @param T|class-string<T> $objectOrClass either a string containing the name of
-     *                                         the class to reflect, or an object
-     * @param string            $name          the property name to get order for
+     * @param object|string $objectOrClass either a string containing the name of
+     *                                     the class to reflect, or an object
+     * @param string        $name          the property name to get order for
      *
      * @return ?string the default order or null if no attribute is found
      *
      * @throws \ReflectionException if the class does not exist
+     *
+     * @psalm-param T|class-string<T> $objectOrClass
      */
     public static function getOrder(object|string $objectOrClass, string $name): ?string
     {

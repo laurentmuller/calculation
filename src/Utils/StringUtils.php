@@ -179,10 +179,12 @@ final class StringUtils
      *
      * @template T of object
      *
-     * @param T|class-string<T> $objectOrClass either a string containing the name of
-     *                                         the class to reflect, or an object
+     * @param object|string $objectOrClass either a string containing the name of
+     *                                     the class to reflect, or an object
      *
-     * @return string the short name or null if the variable is null
+     * @return string the short name
+     *
+     * @psalm-param T|class-string<T> $objectOrClass
      */
     public static function getShortName(object|string $objectOrClass): string
     {

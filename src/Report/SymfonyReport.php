@@ -112,15 +112,21 @@ class SymfonyReport extends AbstractReport
             ->outputRow($table, 'Version status', $info->getMaintenanceStatus())
             ->outputRow($table, 'End of maintenance', $info->getEndOfMaintenance())
             ->outputRow($table, 'End of product life', $info->getEndOfLife());
+
+        $this->addBookmark('Parameters', false, 1);
         $table->setGroupKey('Parameters');
         $this->outputRow($table, 'Intl Locale', $this->locale)
             ->outputRow($table, 'Timezone', $info->getTimeZone())
             ->outputRow($table, 'Charset', $info->getCharset());
+
+        $this->addBookmark('Extensions', false, 1);
         $table->setGroupKey('Extensions');
         $this->outputRowEnabled($table, 'Debug', $app->isDebug())
             ->outputRowEnabled($table, 'OP Cache', $info->isZendCacheLoaded())
             ->outputRowEnabled($table, 'APCu', $info->isApcuLoaded())
             ->outputRowEnabled($table, 'Xdebug', $info->isXdebugLoaded());
+
+        $this->addBookmark('Directories', false, 1);
         $table->setGroupKey('Directories');
         $this->outputRow($table, 'Project', $info->getProjectDir())
             ->outputRow($table, 'Logs', $info->getLogInfo())

@@ -21,7 +21,7 @@
     <li>Par application, <b>nous</b> <b>entendons</b> le site web https://www.calculation.bibi.nu exploité par {{ app_owner }}.</li>
     <li>Les données à caractère personnel désignent des données concernant un individu.</li>
     <li>Données d'utilisation
-        <ol start="1">
+        <ol start="10">
             <li>Première ligne</li>
             <li>Deuxième ligne</li>
         </ol>
@@ -29,7 +29,7 @@
     <li>Les cookies sont de petits fichiers enregistrés sur votre dispositif (ordinateur, tablette ou mobile).</li>
 </ol>
 
-<h6 class="bookmark">Liste ordonnée (Roman numbers, uppercase)</h6>
+<h6 class="bookmark">Liste ordonnée (Roman uppercase)</h6>
 <ol type="I">
     <li>Par application, nous entendons le site web https://www.calculation.bibi.nu exploité par {{ app_owner }}.</li>
     <li>Les données à caractère personnel désignent des données concernant un individu.</li>
@@ -41,7 +41,7 @@
     </li>
     <li>Les cookies sont de petits fichiers enregistrés sur votre dispositif (ordinateur, tablette ou mobile).</li>
 </ol>
-<h6 class="bookmark">Liste ordonnée (Roman numbers, lowercase)</h6>
+<h6 class="bookmark">Liste ordonnée (Roman lowercase)</h6>
 <ol type="i">
     <li>Par application, nous entendons le site web https://www.calculation.bibi.nu exploité par {{ app_owner }}.</li>
     <li>Les données à caractère personnel désignent des données concernant un individu.</li>
@@ -53,20 +53,20 @@
     </li>
     <li>Les cookies sont de petits fichiers enregistrés sur votre dispositif (ordinateur, tablette ou mobile).</li>
 </ol>
-<h6 class="bookmark">Liste ordonnée (Alphabetically ordered list, uppercase)</h6>
+<h6 class="bookmark">Liste ordonnée (Alphabetically uppercase, start at 20)</h6>
 <ol type="A" start="1">
     <li>Par application, nous entendons le site web <strong>https://www.calculation.bibi.nu</strong> exploité par {{ app_owner }}.</li>
     <li>Les données à caractère personnel désignent des données concernant un individu.</li>
     <li>Données d'utilisation
-        <ol type="A">
-            {% for i in 1..30 %}
+        <ol type="A" start="20">
+            {% for i in 20..30 %}
                 <li>Ligne {{ i }}</li>
             {% endfor %}
         </ol>
     </li>
     <li>Les cookies sont de petits fichiers enregistrés sur votre dispositif (ordinateur, tablette ou mobile).</li>
 </ol>
-<h6 class="bookmark">Liste ordonnée (Alphabetically ordered list, lowercase)</h6>
+<h6 class="bookmark">Liste ordonnée (Alphabetically lowercase)</h6>
 <ol type="a" start="1">
     <li>Par application, nous entendons le site web https://www.calculation.bibi.nu exploité par {{ app_owner }}.</li>
     <li>Les données à caractère personnel désignent des données concernant un individu.</li>

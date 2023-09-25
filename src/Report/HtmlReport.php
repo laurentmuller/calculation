@@ -29,7 +29,7 @@ class HtmlReport extends AbstractReport
 
     public function __construct(
         AbstractController $controller,
-        private readonly string $content,
+        private readonly string $html,
         PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
         PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
         PdfDocumentSize $size = PdfDocumentSize::A4
@@ -53,7 +53,7 @@ class HtmlReport extends AbstractReport
 
     public function render(): bool
     {
-        if ('' === $this->content) {
+        if ('' === $this->html) {
             return false;
         }
 
@@ -141,9 +141,9 @@ class HtmlReport extends AbstractReport
         }
     }
 
-    private function parseContent(): HtmlParentChunk|false
+    private function parseContent(): ?HtmlParentChunk
     {
-        $parser = new HtmlParser($this->content);
+        $parser = new HtmlParser($this->html);
 
         return $parser->parse();
     }

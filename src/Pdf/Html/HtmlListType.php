@@ -43,6 +43,8 @@ enum HtmlListType: string
     /**
      * Gets the bullet text for the given number.
      *
+     * Returns an empty string if the number is not positive.
+     *
      * @param int    $number the list item index (1 based)
      * @param string $suffix the suffix to append
      *

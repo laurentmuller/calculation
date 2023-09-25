@@ -59,7 +59,7 @@ class HtmlLiChunk extends HtmlParentChunk
      */
     private function findFont(): ?PdfFont
     {
-        $chunk = $this->findChild(HtmlConstantsInterface::TEXT);
+        $chunk = $this->findChild(HtmlTag::TEXT);
         while ($chunk && !$chunk->hasStyle()) {
             $chunk = $chunk->getParent();
         }

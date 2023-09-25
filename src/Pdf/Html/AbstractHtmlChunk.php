@@ -17,7 +17,6 @@ use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
-use App\Utils\StringUtils;
 
 /**
  * Represents an HTML chunk.
@@ -167,14 +166,12 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Returns if this tag name match the given one of the list of names.
-     *
-     * @return bool true if match
+     * Returns if this name match one of the given tags, ignoring case consideration.
      */
-    public function is(string ...$names): bool
+    public function is(HtmlTag ...$tags): bool
     {
-        foreach ($names as $name) {
-            if (StringUtils::equalIgnoreCase($this->name, $name)) {
+        foreach ($tags as $tag) {
+            if ($tag->match($this->name)) {
                 return true;
             }
         }
@@ -236,14 +233,6 @@ abstract class AbstractHtmlChunk
     /**
      * Apply the given font (if any), call the callback and restore the previous font.
      *
-     * Example:
-     *
-     * <code>
-     *      $this->applyFont($report, $myFont, function(HtmlReport $report) {
-     *          ...
-     *      });
-     * </code>
-     *
      * @param HtmlReport $report   the report to set and restore font
      * @param ?PdfFont   $font     the font to apply
      * @param callable   $callback the callback to call after the font has been set. The report is passed as argument.
@@ -263,14 +252,6 @@ abstract class AbstractHtmlChunk
 
     /**
      * Apply the given margins (if different from 0), call the callback and restore the previous margins.
-     *
-     * Example:
-     *
-     * <code>
-     *      $this->applyMargins($report, 10, 25, function(HtmlReport $report) {
-     *          // ...
-     *      });
-     * </code>
      *
      * @param HtmlReport $report      the report to set and restore margins
      * @param float      $leftMargin  the left margin to add
@@ -380,7 +361,7 @@ abstract class AbstractHtmlChunk
         }
 
         // create style
-        $style = HtmlStyleFactory::create($this->name);
+        $style = HtmlTag::getStyleFromName($this->name);
         if ($style instanceof HtmlStyle) {
             foreach ($this->classes as $class) {
                 $style->update($class);

@@ -15,7 +15,6 @@ namespace App\Pdf\Html;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
 use App\Report\HtmlReport;
-use App\Utils\StringUtils;
 
 /**
  * Represents a text chunk.
@@ -26,37 +25,21 @@ class HtmlTextChunk extends AbstractHtmlChunk
      * The names of parents to use with multi-cell.
      */
     private const PARENT_MULTI_CELL = [
-        HtmlConstantsInterface::H1,
-        HtmlConstantsInterface::H2,
-        HtmlConstantsInterface::H3,
-        HtmlConstantsInterface::H4,
-        HtmlConstantsInterface::H5,
-        HtmlConstantsInterface::H6,
-        HtmlConstantsInterface::PARAGRAPH,
-        HtmlConstantsInterface::SPAN,
-        HtmlConstantsInterface::LIST_ITEM,
+        HtmlTag::H1,
+        HtmlTag::H2,
+        HtmlTag::H3,
+        HtmlTag::H4,
+        HtmlTag::H5,
+        HtmlTag::H6,
+        HtmlTag::PARAGRAPH,
+        HtmlTag::SPAN,
+        HtmlTag::LIST_ITEM,
     ];
 
     /**
      * The text.
      */
     private ?string $text = null;
-
-    /**
-     * Gets the text.
-     */
-    public function getText(): ?string
-    {
-        return $this->text;
-    }
-
-    /**
-     * Returns if this text is <code>null</code> or empty.
-     */
-    public function isEmpty(): bool
-    {
-        return !StringUtils::isString($this->text);
-    }
 
     public function isNewLine(): bool
     {
@@ -68,7 +51,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
             if (-1 !== $index && $index < $count - 1) {
                 $next = $parent->getChildren()[$index + 1];
 
-                return $next->is(HtmlConstantsInterface::LIST_ORDERED, HtmlConstantsInterface::LIST_UNORDERED);
+                return $next->is(HtmlTag::LIST_ORDERED, HtmlTag::LIST_UNORDERED);
             }
         }
 
@@ -88,7 +71,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
 
     protected function getOutputText(): ?string
     {
-        return $this->getText();
+        return $this->text;
     }
 
     protected function outputText(HtmlReport $report, string $text): void

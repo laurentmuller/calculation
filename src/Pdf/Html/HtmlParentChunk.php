@@ -20,16 +20,12 @@ use App\Report\HtmlReport;
 class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
 {
     /**
-     * The children chunk.
-     *
      * @var AbstractHtmlChunk[]
      */
     private array $children = [];
 
     /**
-     * Adds a child to the collection of children. Do nothing if the child is already in this collection.
-     *
-     * @param AbstractHtmlChunk $child the child to add
+     * Adds a child to this collection of children. Do nothing if the child is already in this collection.
      */
     public function add(AbstractHtmlChunk $child): static
     {
@@ -41,29 +37,28 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
         return $this;
     }
 
-    /**
-     * @return int the number of children
-     */
     public function count(): int
     {
         return \count($this->children);
     }
 
     /**
-     * Finds the first child for the given the tag names.
-     *
-     * @return ?AbstractHtmlChunk the child, if found; <code>null</code> otherwise
+     * Finds the first child for the given tags.
      */
-    public function findChild(string ...$names): ?AbstractHtmlChunk
+    public function findChild(HtmlTag ...$tags): ?AbstractHtmlChunk
     {
+        if ($this->isEmpty()) {
+            return null;
+        }
+
         foreach ($this->children as $child) {
-            if ($child->is(...$names)) {
+            if ($child->is(...$tags)) {
                 return $child;
             }
             if (!$child instanceof self) {
                 continue;
             }
-            $chunk = $child->findChild(...$names);
+            $chunk = $child->findChild(...$tags);
             if ($chunk  instanceof AbstractHtmlChunk) {
                 return $chunk;
             }
@@ -85,8 +80,6 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     /**
      * Gets the index of the given child.
      *
-     * @param AbstractHtmlChunk $chunk the child chunk
-     *
      * @return int the index, if found; -1 otherwise
      */
     public function indexOf(AbstractHtmlChunk $chunk): int
@@ -98,8 +91,6 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
 
     /**
      * Checks whether the children are empty (contains no elements).
-     *
-     * @return bool true if the collection is empty, false otherwise
      */
     public function isEmpty(): bool
     {
@@ -108,15 +99,17 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
 
     public function isNewLine(): bool
     {
-        return match ($this->getName()) {
-            HtmlConstantsInterface::H1,
-            HtmlConstantsInterface::H2,
-            HtmlConstantsInterface::H3,
-            HtmlConstantsInterface::H4,
-            HtmlConstantsInterface::H5,
-            HtmlConstantsInterface::H6,
-            HtmlConstantsInterface::PARAGRAPH => true,
-            HtmlConstantsInterface::LIST_ITEM => !self::isLastNewLine($this),
+        $name = \strtolower($this->getName());
+
+        return match (HtmlTag::tryFrom($name)) {
+            HtmlTag::H1,
+            HtmlTag::H2,
+            HtmlTag::H3,
+            HtmlTag::H4,
+            HtmlTag::H5,
+            HtmlTag::H6,
+            HtmlTag::PARAGRAPH => true,
+            HtmlTag::LIST_ITEM => !self::isLastNewLine($this),
             default => parent::isNewLine(),
         };
     }
@@ -133,8 +126,6 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
 
     /**
      * Output these children chunks (if any) to the given report.
-     *
-     * @param HtmlReport $report the report to write to
      */
     public function outputChildren(HtmlReport $report): void
     {
@@ -147,9 +138,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     }
 
     /**
-     * Remove a child from the collection of children. Do nothing if the child is not in this collection.
-     *
-     * @param AbstractHtmlChunk $child the child to remove
+     * Remove a child from this collection of children. Do nothing if the child is not in this collection.
      */
     public function remove(AbstractHtmlChunk $child): static
     {
@@ -162,11 +151,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     }
 
     /**
-     * Returns if the last child has a new line.
-     *
-     * @param HtmlParentChunk $parent the parent to get the last child
-     *
-     * @return bool true if new line
+     * Returns if the last child, if any; has a new line.
      */
     protected static function isLastNewLine(self $parent): bool
     {

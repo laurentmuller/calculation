@@ -169,12 +169,13 @@ class EditDialog {
     /**
      * Initialize this dialog when adding a new item.
      *
-     * @param {jQuery} _$row - the selected row.
+     * @param {jQuery} $row - the selected row.
      *
      * @return {this} This instance for chaining.
      * @protected
      */
-    _initAdd(_$row) {
+    /*eslint no-unused-vars: ["error", { "args": "none" }]*/
+    _initAdd($row) {
         'use strict';
         return this;
     }
@@ -182,10 +183,13 @@ class EditDialog {
     /**
      * Initialize this dialog when editing an item.
      *
+     * @param {jQuery} $row - the selected row.
+     *
      * @return {this} This instance for chaining.
      * @protected
      */
-    _initEdit() {
+    /*eslint no-unused-vars: ["error", { "args": "none" }]*/
+    _initEdit($row) {
         'use strict';
         return this;
     }

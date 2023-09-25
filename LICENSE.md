@@ -23,8 +23,8 @@ sur les autres éléments contractuels.
 ## Droits de biens immatériels
 
 Le fournisseur détient l'ensemble des droits d'auteur et tous les autres biens
-immatériels liés à l'application. Il n'y a pas de vente de l'application au
-preneur de licence et aucun droit d'auteur ne lui est cédé.
+immatériels liés à l'application. Il n'y a pas de vente de l'application et
+aucun droit d'auteur n'est cédé au preneur de licence.
 
 ## Définition de la licence
 
@@ -55,8 +55,8 @@ pas possible de concevoir des applications disponibles en permanence dans toutes
 les applications et combinaisons possibles et d'une fiabilité absolue. Le
 fournisseur garantit au preneur de contrat que l'application fonctionne au
 moment de son installation selon le mode d'utilisation publié sur son site
-Internet. La compatibilité avec des systèmes d'exploitation autres que ceux
-mentionnés sur le site du fournisseur n'est pas garantie. Au cas où
+Internet. La compatibilité n'est pas garantie avec des systèmes d'exploitation 
+autres que ceux mentionnés sur le site du fournisseur. Au cas où
 l'application serait défectueuse, le preneur de contrat doit signaler les
 défauts constatés auprès du fournisseur. Le fournisseur doit tenir compte des
 défauts constatés lors des mises à jour et développements ultérieurs de ses

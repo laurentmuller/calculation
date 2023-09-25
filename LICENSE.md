@@ -55,7 +55,7 @@ pas possible de concevoir des applications disponibles en permanence dans toutes
 les applications et combinaisons possibles et d'une fiabilité absolue. Le
 fournisseur garantit au preneur de contrat que l'application fonctionne au
 moment de son installation selon le mode d'utilisation publié sur son site
-Internet. La compatibilité n'est pas garantie avec des systèmes d'exploitation 
+Internet. La compatibilité n'est pas garantie avec des systèmes d'exploitation
 autres que ceux mentionnés sur le site du fournisseur. Au cas où
 l'application serait défectueuse, le preneur de contrat doit signaler les
 défauts constatés auprès du fournisseur. Le fournisseur doit tenir compte des

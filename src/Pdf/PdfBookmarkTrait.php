@@ -53,24 +53,23 @@ trait PdfBookmarkTrait
     /**
      * Add a bookmark.
      *
-     * @param string $text   the bookmark text
-     * @param bool   $isUTF8 indicates if the text is encoded in ISO-8859-1 (false) or UTF-8 (true)
-     * @param int    $level  the outline level (0 is top level, 1 is just below, and so on)
-     * @param float  $y      the ordinate of the outline destination in the current page.
-     *                       -1 means the current position. 0 means top of page.
-     * @param bool   $link   true to create and add a link at the given ordinate position and page
+     * @param string $text       the bookmark text
+     * @param bool   $isUTF8     indicates if the text is encoded in ISO-8859-1 (false) or UTF-8 (true)
+     * @param int    $level      the outline level (0 is top level, 1 is just below, and so on)
+     * @param bool   $useCurrent the ordinate of the outline destination in the current page.
+     *                           true means the current position. false means top of page.
+     * @param bool   $link       true to create and add a link at the given ordinate position and page
      *
      * @see PdfDocument::addPageIndex()
      */
-    public function addBookmark(string $text, bool $isUTF8 = false, int $level = 0, float $y = -1, bool $link = true): self
+    public function addBookmark(string $text, bool $isUTF8 = false, int $level = 0, bool $useCurrent = true, bool $link = true): self
     {
         if (!$isUTF8) {
             $text = (string) $this->_UTF8encode($text);
         }
-        if ($y < 0) {
-            $y = $this->y;
-        }
+
         $page = $this->page;
+        $y = $useCurrent ? $this->y : 0.0;
         $linkId = $link ? $this->CreateLink($y, $page) : '';
         $this->bookmarks[] = [
             'text' => $text,
@@ -104,18 +103,18 @@ trait PdfBookmarkTrait
         }
         // title
         $this->AddPage();
-        $index = $this->_outputIndexTitle($title ?? self::INDEX_TITLE, $titleStyle ?? PdfStyle::getBoldCellStyle(), $addBookmark);
+        $titleBookmark = $this->_outputIndexTitle($title, $titleStyle, $addBookmark);
 
         // bookmarks
         $space = 1.25;
         $contentStyle ??= PdfStyle::getDefaultStyle();
         $contentStyle->apply($this);
-        $line_height = $this->getFontSize() + 2.0;
+        $line_height = $this->getFontSize() + $space;
         $printable_width = $this->getPrintableWidth();
 
         foreach ($this->bookmarks as $bookmark) {
-            // skip this bookmark
-            if ($index === $bookmark) {
+            // skip title bookmark
+            if ($titleBookmark === $bookmark) {
                 continue;
             }
 
@@ -272,17 +271,18 @@ trait PdfBookmarkTrait
     /**
      * @psalm-return PdfBookmarkType|false
      */
-    private function _outputIndexTitle(string $title, PdfStyle $titleStyle, bool $addBookmark): array|false
+    private function _outputIndexTitle(?string $title, ?PdfStyle $titleStyle, bool $addBookmark): array|false
     {
+        $title ??= self::INDEX_TITLE;
+        $titleStyle ??= PdfStyle::getBoldCellStyle();
+
+        if ($addBookmark) {
+            $this->addBookmark($title);
+        }
         $titleStyle->apply($this);
         $this->Cell(txt: $title, ln: PdfMove::NEW_LINE, align: PdfTextAlignment::CENTER);
-        if (!$addBookmark) {
-            return false;
-        }
 
-        $this->addBookmark(text: $title, y: $this->y - $this->lasth);
-
-        return \end($this->bookmarks);
+        return $addBookmark ? \end($this->bookmarks) : false;
     }
 
     /**

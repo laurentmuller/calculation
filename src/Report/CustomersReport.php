@@ -16,6 +16,7 @@ use App\Controller\AbstractController;
 use App\Entity\Customer;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Utils\StringUtils;
@@ -44,6 +45,8 @@ class CustomersReport extends AbstractArrayReport
 
     /**
      * @param Customer[] $entities
+     *
+     * @throws PdfException
      */
     protected function doRender(array $entities): bool
     {
@@ -112,6 +115,8 @@ class CustomersReport extends AbstractArrayReport
 
     /**
      * @param Customer[] $entities
+     *
+     * @throws PdfException
      */
     private function outputGrouped(PdfGroupTableBuilder $table, array $entities): void
     {

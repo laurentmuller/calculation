@@ -66,10 +66,15 @@ abstract class AbstractReport extends PdfDocument
      *
      * Override the default behavior by adding a translated title if null and the page index to bookmarks.
      */
-    public function addPageIndex(string $title = null, PdfStyle $titleStyle = null, PdfStyle $contentStyle = null, bool $addBookmark = false): self
-    {
+    public function addPageIndex(
+        string $title = null,
+        PdfStyle $titleStyle = null,
+        PdfStyle $contentStyle = null,
+        bool $addBookmark = true,
+        string $separator = null
+    ): self {
         $title ??= $this->trans('report.index');
-        parent::addPageIndex($title, $titleStyle, $contentStyle);
+        parent::addPageIndex($title, $titleStyle, $contentStyle, $addBookmark, $separator);
 
         return $this;
     }

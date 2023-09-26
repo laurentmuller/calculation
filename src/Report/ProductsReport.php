@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
@@ -27,6 +28,8 @@ class ProductsReport extends AbstractArrayReport
 {
     /**
      * @param \App\Entity\Product[] $entities
+     *
+     * @throws PdfException
      */
     protected function doRender(array $entities): bool
     {

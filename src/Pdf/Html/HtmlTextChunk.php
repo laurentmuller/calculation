@@ -14,6 +14,7 @@ namespace App\Pdf\Html;
 
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
+use App\Pdf\PdfException;
 use App\Report\HtmlReport;
 
 /**
@@ -74,6 +75,9 @@ class HtmlTextChunk extends AbstractHtmlChunk
         return $this->text;
     }
 
+    /**
+     * @throws PdfException
+     */
     protected function outputText(HtmlReport $report, string $text): void
     {
         $parent = $this->getParent();

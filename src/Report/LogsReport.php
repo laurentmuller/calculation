@@ -24,6 +24,7 @@ use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDrawColor;
+use App\Pdf\PdfException;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfLine;
 use App\Pdf\PdfRectangle;
@@ -113,6 +114,9 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         return (0 === $index) && $this->drawBorder($builder, $this->level, $bounds, $border);
     }
 
+    /**
+     * @throws PdfException
+     */
     public function render(): bool
     {
         $logFile = $this->logFile;
@@ -127,6 +131,9 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         return $this->outputLogs($logFile->getLogs());
     }
 
+    /**
+     * @throws PdfException
+     */
     private function addDateBookmark(int $date): void
     {
         $start_text = FormatUtils::formatDateTime($date + 3600, \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
@@ -267,6 +274,8 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
      * @param Log[] $logs the logs
      *
      * @return bool true on success
+     *
+     * @throws PdfException
      */
     private function outputLogs(array $logs): bool
     {

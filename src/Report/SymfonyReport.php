@@ -15,6 +15,7 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Service\SymfonyInfoService;
@@ -37,6 +38,9 @@ class SymfonyReport extends AbstractReport
         $this->setTitleTrans('about.symfony_version', ['%version%' => $this->service->getVersion()]);
     }
 
+    /**
+     * @throws PdfException
+     */
     public function render(): bool
     {
         $info = $this->service;
@@ -75,6 +79,8 @@ class SymfonyReport extends AbstractReport
 
     /**
      * @param BundleType[] $bundles
+     *
+     * @throws PdfException
      */
     private function outputBundles(array $bundles): void
     {
@@ -96,6 +102,9 @@ class SymfonyReport extends AbstractReport
         }
     }
 
+    /**
+     * @throws PdfException
+     */
     private function outputInfo(SymfonyInfoService $info): void
     {
         $this->addBookmark('Kernel');
@@ -135,6 +144,8 @@ class SymfonyReport extends AbstractReport
 
     /**
      * @param array<string, PackageType> $packages
+     *
+     * @throws PdfException
      */
     private function outputPackages(string $title, array $packages): void
     {
@@ -160,6 +171,8 @@ class SymfonyReport extends AbstractReport
 
     /**
      * @param RouteType[] $routes
+     *
+     * @throws PdfException
      */
     private function outputRoutes(string $title, array $routes): void
     {

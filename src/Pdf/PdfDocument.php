@@ -63,14 +63,14 @@ use App\Traits\MathTrait;
  * @method float  GetPageHeight()                                         Gets the height of current page in user unit.
  * @method string _textstring(string $s)                                  Convert the given string.
  * @method int    AddLink()                                               Creates a new internal link and returns its identifier.
- * @method void   SetLink(int $link, float $y = 0, int $page = -1)        Defines the page and position a link points to.
+ * @method void   SetLink(int $link, float $y = 0.0, int $page = -1)      Defines the page and position a link points to.
  * @method void   Line(float $x1, float $y1, float $x2, float $y2)        Draws a line between two points using the current line width.
  * @method void   SetLineWidth(float $width)                              Set the line width.
  * @method void   SetMargins(float $left, float $top, ?float $right=null) Sets the left, top and right margins. By default, they are equal to 1 cm. If the right value is null, the default value is the left one.
  * @method void   SetLeftMargin(float $margin)                            Sets the left margin. The method can be called before creating the first page. If the current abscissa gets out of page, it is brought back to the margin.
  * @method void   SetRightMargin(float $margin)                           Sets the right margin. The method can be called before creating the first page.
  * @method void   SetTopMargin(float $margin)                             Sets the top margin. The method can be called before creating the first page.
- * @method void   SetAutoPageBreak(boolean $auto, float $margin = 0)      Enables or disables the automatic page breaking mode. When enabling, the second parameter is the distance from the bottom of the page that defines the triggering limit. By default, the mode is on and the margin is 1.5 cm.
+ * @method void   SetAutoPageBreak(boolean $auto, float $margin = 0.0)    Enables or disables the automatic page breaking mode. When enabling, the second parameter is the distance from the bottom of the page that defines the triggering limit. By default, the mode is on and the margin is 1.5 cm.
  * @method bool   AcceptPageBreak()                                       Whenever a page break condition is met, the method is called, and the break is issued or not depending on the returned value. The default implementation returns a value according to the mode selected by SetAutoPageBreak().
  *
  * @psalm-type PdfFontType = array{
@@ -920,18 +920,6 @@ class PdfDocument extends \FPDF
     public function Write($h, $txt, $link = ''): void
     {
         parent::Write($h, $this->_cleanText($txt), $link);
-    }
-
-    protected function _putcatalog(): void
-    {
-        parent::_putcatalog();
-        $this->putBookmarksToCatalog();
-    }
-
-    protected function _putresources(): void
-    {
-        parent::_putresources();
-        $this->putBookmarksToResources();
     }
 
     /**

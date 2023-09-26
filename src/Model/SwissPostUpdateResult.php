@@ -22,11 +22,13 @@ class SwissPostUpdateResult
     private ?string $error = null;
     /** @var SwissPostResultType */
     private array $invalidEntries = ['state' => 0, 'city' => 0, 'street' => 0];
+    private int $invalidEntriesCount = 0;
     private bool $overwrite = false;
     private string $sourceFile = '';
     private string $sourceName = '';
     /** @var SwissPostResultType */
     private array $validEntries = ['state' => 0, 'city' => 0, 'street' => 0];
+    private int $validEntriesCount = 0;
     private ?\DateTimeInterface $validity = null;
 
     /**
@@ -76,7 +78,7 @@ class SwissPostUpdateResult
      */
     public function getInvalidEntriesCount(): int
     {
-        return \array_sum($this->invalidEntries);
+        return $this->invalidEntriesCount;
     }
 
     /**
@@ -110,7 +112,7 @@ class SwissPostUpdateResult
      */
     public function getValidEntriesCount(): int
     {
-        return \array_sum($this->validEntries);
+        return $this->validEntriesCount;
     }
 
     /**
@@ -192,7 +194,13 @@ class SwissPostUpdateResult
      */
     private function add(bool $valid, string $key): self
     {
-        $valid ? $this->validEntries[$key]++ : $this->invalidEntries[$key]++;
+        if ($valid) {
+            ++$this->validEntriesCount;
+            ++$this->validEntries[$key];
+        } else {
+            ++$this->invalidEntriesCount;
+            ++$this->invalidEntries[$key];
+        }
 
         return $this;
     }

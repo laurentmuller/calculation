@@ -17,19 +17,15 @@ use App\Pdf\Enums\PdfTextAlignment;
 use App\Utils\FormatUtils;
 
 /**
- * Trait to handle PDF bookmarks.
+ * Trait to handle bookmarks and page index.
  *
  * @psalm-type PdfBookmarkType = array{
  *      text: string,
- *      level: int,
+ *      level: non-negative-int,
  *      y: float,
  *      page: int,
  *      link: string|int,
- *      parent?: int,
- *      first?: int,
- *      prev?: int,
- *      next?: int,
- *      last?: int}
+ *      hierarchy: array<string, int>}
  */
 trait PdfBookmarkTrait
 {
@@ -37,6 +33,11 @@ trait PdfBookmarkTrait
      * The default index title.
      */
     private const INDEX_TITLE = 'Index';
+
+    /**
+     * The space between texts.
+     */
+    private const SPACE = 1.25;
 
     /**
      * The bookmark root object number.
@@ -56,27 +57,47 @@ trait PdfBookmarkTrait
      * @param string $text       the bookmark text
      * @param bool   $isUTF8     indicates if the text is encoded in ISO-8859-1 (false) or UTF-8 (true)
      * @param int    $level      the outline level (0 is top level, 1 is just below, and so on)
-     * @param bool   $useCurrent the ordinate of the outline destination in the current page.
-     *                           true means the current position. false means top of page.
+     * @param bool   $useCurrent indicate if the ordinate of the outline destination in the current page
+     *                           is the current position (true) or the top of the page (false)
      * @param bool   $link       true to create and add a link at the given ordinate position and page
      *
+     * @throws PdfException if the given level is invalid. A level is not valid if:
+     *                      <ul>
+     *                      <li>Is smaller than 0.</li>
+     *                      <li>Is greater than the level of the last bookmark plus 1.</li>
+     *                      </ul>
+     *
      * @see PdfDocument::addPageIndex()
+     *
+     * @psalm-param non-negative-int $level
      */
-    public function addBookmark(string $text, bool $isUTF8 = false, int $level = 0, bool $useCurrent = true, bool $link = true): self
-    {
+    public function addBookmark(
+        string $text,
+        bool $isUTF8 = false,
+        int $level = 0,
+        bool $useCurrent = true,
+        bool $link = true
+    ): self {
+        // validate
+        $this->_validateLevel($level);
+
+        // convert
         if (!$isUTF8) {
             $text = (string) $this->_UTF8encode($text);
         }
 
+        // add
         $page = $this->page;
         $y = $useCurrent ? $this->y : 0.0;
-        $linkId = $link ? $this->CreateLink($y, $page) : '';
+        $id = $link ? $this->CreateLink($y, $page) : '';
+        $y = ($this->h - $y) * $this->k;
         $this->bookmarks[] = [
             'text' => $text,
-            'level' => \max(0, $level),
-            'y' => ($this->h - $y) * $this->k,
+            'level' => $level,
+            'y' => $y,
             'page' => $page,
-            'link' => $linkId,
+            'link' => $id,
+            'hierarchy' => [],
         ];
 
         return $this;
@@ -93,24 +114,34 @@ trait PdfBookmarkTrait
      * @param ?PdfStyle $titleStyle   the title style or null to use the default style (Font Arial 9pt Bold)
      * @param ?PdfStyle $contentStyle the content style or null to use the default style (Font Arial 9pt Regular)
      * @param bool      $addBookmark  true to add the page index in the list of the bookmarks
+     * @param ?string   $separator    the separator character used between the text and the page or null to use default ('.')
      *
      * @see PdfDocument::addBookmark()
      */
-    public function addPageIndex(string $title = null, PdfStyle $titleStyle = null, PdfStyle $contentStyle = null, bool $addBookmark = true): PdfDocument
-    {
+    public function addPageIndex(
+        string $title = null,
+        PdfStyle $titleStyle = null,
+        PdfStyle $contentStyle = null,
+        bool $addBookmark = true,
+        string $separator = null
+    ): PdfDocument {
+        // empty?
         if ([] === $this->bookmarks) {
             return $this;
         }
+
         // title
         $this->AddPage();
         $titleBookmark = $this->_outputIndexTitle($title, $titleStyle, $addBookmark);
 
         // bookmarks
-        $space = 1.25;
         $contentStyle ??= PdfStyle::getDefaultStyle();
         $contentStyle->apply($this);
-        $line_height = $this->getFontSize() + $space;
+        $line_height = $this->getFontSize() + self::SPACE;
         $printable_width = $this->getPrintableWidth();
+        if (null === $separator || '' === $separator) {
+            $separator = '.';
+        }
 
         foreach ($this->bookmarks as $bookmark) {
             // skip title bookmark
@@ -120,10 +151,10 @@ trait PdfBookmarkTrait
 
             // page size
             $page_text = FormatUtils::formatInt($bookmark['page']);
-            $page_size = $this->GetStringWidth($page_text) + $space;
+            $page_size = $this->GetStringWidth($page_text) + self::SPACE;
 
             // level
-            $offset = $this->_outputIndexLevel($bookmark['level'], $space);
+            $offset = $this->_outputIndexLevel($bookmark['level']);
 
             // text
             $link = $bookmark['link'];
@@ -133,26 +164,25 @@ trait PdfBookmarkTrait
                 $line_height,
                 $page_size,
                 $offset,
-                $space,
                 $link
             );
 
-            // dot
-            $this->_outputIndexDot(
+            // separator
+            $this->_outputIndexSeparator(
+                $separator,
                 $printable_width,
                 $line_height,
                 $page_size,
                 $offset,
                 $text_size,
-                $space,
                 $link
             );
 
             // page
             $this->_outputIndexPage(
+                $page_text,
                 $line_height,
                 $page_size,
-                $page_text,
                 $link
             );
         }
@@ -160,20 +190,30 @@ trait PdfBookmarkTrait
         return $this->resetStyle();
     }
 
-    protected function putBookmarksToCatalog(): void
+    /**
+     * Update catalog.
+     */
+    protected function _putcatalog(): void
     {
+        parent::_putcatalog();
         if ([] === $this->bookmarks) {
             return;
         }
+
         $this->_putParams('/Outlines %d 0 R', $this->bookmarkRoot);
         $this->_put('/PageMode /UseOutlines');
     }
 
-    protected function putBookmarksToResources(): void
+    /**
+     * Update resources.
+     */
+    protected function _putresources(): void
     {
+        parent::_putresources();
         if ([] === $this->bookmarks) {
             return;
         }
+
         $n = $this->n + 1;
         $lastReference = $this->_updateBookmarks();
         foreach ($this->bookmarks as $bookmark) {
@@ -191,45 +231,21 @@ trait PdfBookmarkTrait
         $this->_put('endobj');
     }
 
-    private function _outputIndexDot(
-        float $printable_width,
-        float $line_height,
-        float $page_size,
-        float $offset,
-        float $text_size,
-        float $space,
-        string|int $link
-    ): void {
-        $dots_width = $printable_width - $page_size - $offset - $text_size - 2.0 * $space;
-        $dots_count = (int) ($dots_width / $this->GetStringWidth('.'));
-        if ($dots_count > 0) {
-            $dots_text = \str_repeat('.', $dots_count);
-            $this->Cell(
-                w: $dots_width + $space,
-                h: $line_height,
-                txt: $dots_text,
-                align: PdfTextAlignment::RIGHT,
-                link: $link
-            );
-        }
-    }
-
-    private function _outputIndexLevel(int $level, float $space): float
+    private function _outputIndexLevel(int $level): float
     {
+        $offset = 0;
         if ($level > 0) {
-            $offset = (float) $level * 2.0 * $space;
+            $offset = (float) $level * 2.0 * self::SPACE;
             $this->Cell($offset);
-
-            return $offset;
         }
 
-        return 0;
+        return $offset;
     }
 
     private function _outputIndexPage(
+        string $page_text,
         float $line_height,
         float $page_size,
-        string $page_text,
         string|int $link
     ): void {
         $this->Cell(
@@ -242,24 +258,46 @@ trait PdfBookmarkTrait
         );
     }
 
+    private function _outputIndexSeparator(
+        string $separator,
+        float $printable_width,
+        float $line_height,
+        float $page_size,
+        float $offset,
+        float $text_size,
+        string|int $link
+    ): void {
+        $dots_width = $printable_width - $offset - $text_size - $page_size - 2.0 * self::SPACE;
+        $dots_count = (int) ($dots_width / $this->GetStringWidth($separator));
+        if ($dots_count > 0) {
+            $dots_text = \str_repeat($separator, $dots_count);
+            $this->Cell(
+                w: $dots_width + self::SPACE,
+                h: $line_height,
+                txt: $dots_text,
+                align: PdfTextAlignment::RIGHT,
+                link: $link
+            );
+        }
+    }
+
     private function _outputIndexText(
         string $text,
         float $printable_width,
         float $line_height,
         float $page_size,
         float $offset,
-        float $space,
         string|int $link
     ): float {
         $text = $this->_cleanText($text);
         $text_size = $this->GetStringWidth($text);
-        $available_size = $printable_width - $page_size - $offset - 2.0 * $space;
+        $available_size = $printable_width - $offset - $page_size - 2.0 * self::SPACE;
         while ($text_size >= $available_size) {
             $text = \substr($text, 0, -1);
             $text_size = $this->GetStringWidth($text);
         }
         $this->Cell(
-            w: $text_size + $space,
+            w: $text_size + self::SPACE,
             h: $line_height,
             txt: $text,
             link: $link
@@ -276,13 +314,18 @@ trait PdfBookmarkTrait
         $title ??= self::INDEX_TITLE;
         $titleStyle ??= PdfStyle::getBoldCellStyle();
 
+        $result = false;
         if ($addBookmark) {
-            $this->addBookmark($title);
+            try {
+                $this->addBookmark($title);
+                $result = \end($this->bookmarks);
+            } catch (PdfException) {
+            }
         }
         $titleStyle->apply($this);
         $this->Cell(txt: $title, ln: PdfMove::NEW_LINE, align: PdfTextAlignment::CENTER);
 
-        return $addBookmark ? \end($this->bookmarks) : false;
+        return $result;
     }
 
     /**
@@ -292,13 +335,11 @@ trait PdfBookmarkTrait
     {
         $this->_newobj();
         $this->_putParams('<</Title %s', $this->_textstring($bookmark['text']));
-        foreach (['parent', 'prev', 'next', 'first', 'last'] as $key) {
-            if (isset($bookmark[$key])) {
-                $this->_putParams('/%s %d 0 R', \ucfirst($key), $n + (int) $bookmark[$key]);
-            }
+        foreach ($bookmark['hierarchy'] as $key => $value) {
+            $this->_putParams('/%s %d 0 R', $key, $n + $value);
         }
-        $pageN = $this->PageInfo[$bookmark['page']]['n'];
-        $this->_putParams('/Dest [%d 0 R /XYZ 0 %.2F null]', $pageN, $bookmark['y']);
+        $page = $this->PageInfo[$bookmark['page']]['n'];
+        $this->_putParams('/Dest [%d 0 R /XYZ 0 %.2F null]', $page, $bookmark['y']);
         $this->_put('/Count 0>>');
         $this->_endobj();
     }
@@ -311,29 +352,47 @@ trait PdfBookmarkTrait
     private function _updateBookmarks(): int
     {
         $level = 0;
-        $count = \count($this->bookmarks);
         /** @psalm-var array<int, int> $references */
         $references = [];
-        foreach ($this->bookmarks as $index => $bookmark) {
-            if ($bookmark['level'] > 0) {
-                $parent = $references[$bookmark['level'] - 1];
-                $this->bookmarks[$index]['parent'] = $parent;
-                $this->bookmarks[$parent]['last'] = $index;
-                if ($bookmark['level'] > $level) {
-                    $this->bookmarks[$parent]['first'] = $index;
+        $count = \count($this->bookmarks);
+        foreach ($this->bookmarks as $index => &$bookmark) {
+            $currentLevel = $bookmark['level'];
+            if ($currentLevel > 0) {
+                $parent = $references[$currentLevel - 1];
+                $bookmark['hierarchy']['Parent'] = $parent;
+                $this->bookmarks[$parent]['hierarchy']['Last'] = $index;
+                if ($currentLevel > $level) {
+                    $this->bookmarks[$parent]['hierarchy']['First'] = $index;
                 }
             } else {
-                $this->bookmarks[$index]['parent'] = $count;
+                $bookmark['hierarchy']['Parent'] = $count;
             }
-            if ($bookmark['level'] <= $level && $index > 0) {
-                $prev = $references[$bookmark['level']];
-                $this->bookmarks[$prev]['next'] = $index;
-                $this->bookmarks[$index]['prev'] = $prev;
+            if ($currentLevel <= $level && $index > 0) {
+                $prev = $references[$currentLevel];
+                $bookmark['hierarchy']['Prev'] = $prev;
+                $this->bookmarks[$prev]['hierarchy']['Next'] = $index;
             }
-            $references[$bookmark['level']] = $index;
-            $level = $bookmark['level'];
+            $references[$currentLevel] = $index;
+            $level = $currentLevel;
         }
 
         return $references[0];
+    }
+
+    /**
+     * @throws PdfException
+     */
+    private function _validateLevel(int $level): void
+    {
+        $maxLevel = 0;
+        if ([] !== $this->bookmarks) {
+            $bookmark = \end($this->bookmarks);
+            $maxLevel = $bookmark['level'] + 1;
+        }
+        if ($level < 0 || $level > $maxLevel) {
+            $allowed = \implode('...', \array_unique([0, $maxLevel]));
+            $message = \sprintf('Invalid bookmark level: %d. Allowed value: %s.', $level, $allowed);
+            $this->Error($message);
+        }
     }
 }

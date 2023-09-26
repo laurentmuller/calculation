@@ -17,6 +17,7 @@ use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfException;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Service\SchemaService;
@@ -47,6 +48,9 @@ class SchemaReport extends AbstractReport
         $this->setDescription($this->trans('schema.description'));
     }
 
+    /**
+     * @throws PdfException
+     */
     public function render(): bool
     {
         $tables = $this->service->getTables();
@@ -202,6 +206,8 @@ class SchemaReport extends AbstractReport
 
     /**
      * @psalm-param SchemaTableType $table
+     *
+     * @throws PdfException
      */
     private function outputTable(array $table): void
     {
@@ -219,6 +225,8 @@ class SchemaReport extends AbstractReport
 
     /**
      * @psalm-param SchemaSoftTableType[] $tables
+     *
+     * @throws PdfException
      */
     private function outputTables(array $tables): void
     {
@@ -246,6 +254,9 @@ class SchemaReport extends AbstractReport
         }
     }
 
+    /**
+     * @throws PdfException
+     */
     private function outputTitle(string $id, array $parameters = []): void
     {
         $text = $this->trans($id, $parameters);

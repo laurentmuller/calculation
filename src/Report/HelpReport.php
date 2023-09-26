@@ -16,6 +16,7 @@ use App\Controller\AbstractController;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDrawColor;
+use App\Pdf\PdfException;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Service\HelpService;
@@ -49,6 +50,9 @@ class HelpReport extends AbstractReport
         $this->setTitleTrans('help.title');
     }
 
+    /**
+     * @throws PdfException
+     */
     public function render(): bool
     {
         $service = $this->service;
@@ -211,6 +215,8 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpDialogType $item
+     *
+     * @throws PdfException
      */
     private function outputDialog(array $item): void
     {
@@ -271,6 +277,8 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpDialogType[]|null $dialogs
+     *
+     * @throws PdfException
      */
     private function outputDialogs(?array $dialogs, bool $newPage): bool
     {
@@ -301,6 +309,8 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpEntityType[]|null $entities
+     *
+     * @throws PdfException
      */
     private function outputEntities(?array $entities, bool $newPage): void
     {
@@ -329,6 +339,8 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpEntityType $item
+     *
+     * @throws PdfException
      */
     private function outputEntity(array $item): void
     {
@@ -408,6 +420,8 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpMenuType[]|null $menus
+     *
+     * @throws PdfException
      */
     private function outputMainMenus(?array $menus): bool
     {

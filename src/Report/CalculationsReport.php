@@ -17,6 +17,7 @@ use App\Entity\Calculation;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
@@ -69,6 +70,8 @@ class CalculationsReport extends AbstractArrayReport
 
     /**
      * @param Calculation[] $entities
+     *
+     * @throws PdfException
      */
     protected function doRender(array $entities): bool
     {
@@ -152,6 +155,8 @@ class CalculationsReport extends AbstractArrayReport
      * @param Calculation[] $entities the calculations to render
      *
      * @return PdfGroupTableBuilder the table builder
+     *
+     * @throws PdfException
      */
     private function outputByGroup(array $entities): PdfGroupTableBuilder
     {

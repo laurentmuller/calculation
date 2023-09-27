@@ -109,8 +109,7 @@ class IndexController extends AbstractController
         $service = $this->getUserService();
         $restrict ??= $this->getCookieBoolean($request, self::PARAM_RESTRICT);
         if (null === $custom) {
-            $default = $service->getDisplayMode();
-            $view = $this->getCookieEnum($request, TableInterface::PARAM_VIEW, TableView::class, default: $default);
+            $view = $this->getCookieEnum($request, TableInterface::PARAM_VIEW, $service->getDisplayMode());
         } else {
             $view = $custom ? TableView::CUSTOM : TableView::TABLE;
             $service->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $view);

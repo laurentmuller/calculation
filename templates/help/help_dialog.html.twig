@@ -70,7 +70,7 @@
 {%- endblock %}
 {# body #}
 {% block help_body -%}
-<p class="mb-1">{{ dialog.description }}</p>
+<p class="mb-0">{{ dialog.description }}</p>
 <hr class="my-2">
 {{ tools.output_image(dialog.image|default(false)) }}
 {# details #}
@@ -107,7 +107,7 @@
     {%- set text = dialog.forbidden.text|default('help.labels.forbidden_text'|trans) -%}
     {%- set image = dialog.forbidden.image|default(false) -%}
     {%- set action = dialog.forbidden.action|default(false) -%}
-    <p class="my-2 mb-0">{{ text }}</p>
+    <p class="mb-2">{{ text }}</p>
     {% if image %}{{- tools.output_image(image, false) -}}{% endif %}
     {% if action %}
         <p class="mt-2 mb-0">{{ 'help.labels.edit_actions'|trans }}</p>

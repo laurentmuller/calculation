@@ -114,7 +114,7 @@ trait PdfBookmarkTrait
      * @param ?PdfStyle $titleStyle   the title style or null to use the default style (Font Arial 9pt Bold)
      * @param ?PdfStyle $contentStyle the content style or null to use the default style (Font Arial 9pt Regular)
      * @param bool      $addBookmark  true to add the page index in the list of the bookmarks
-     * @param ?string   $separator    the separator character used between the text and the page or null to use default ('.')
+     * @param string    $separator    the separator character used between the text and the page
      *
      * @see PdfDocument::addBookmark()
      */
@@ -123,7 +123,7 @@ trait PdfBookmarkTrait
         PdfStyle $titleStyle = null,
         PdfStyle $contentStyle = null,
         bool $addBookmark = true,
-        string $separator = null
+        string $separator = '.'
     ): PdfDocument {
         // empty?
         if ([] === $this->bookmarks) {
@@ -134,15 +134,17 @@ trait PdfBookmarkTrait
         $this->AddPage();
         $titleBookmark = $this->_outputIndexTitle($title, $titleStyle, $addBookmark);
 
-        // bookmarks
+        // content style
         $contentStyle ??= PdfStyle::getDefaultStyle();
         $contentStyle->apply($this);
+
         $line_height = $this->getFontSize() + self::SPACE;
         $printable_width = $this->getPrintableWidth();
-        if (null === $separator || '' === $separator) {
-            $separator = '.';
+        if ('' === $separator) {
+            $separator = ' ';
         }
 
+        // bookmarks
         foreach ($this->bookmarks as $bookmark) {
             // skip title bookmark
             if ($titleBookmark === $bookmark) {
@@ -158,31 +160,28 @@ trait PdfBookmarkTrait
 
             // text
             $link = $bookmark['link'];
+            $width = $printable_width - $offset - $page_size - self::SPACE;
             $text_size = $this->_outputIndexText(
                 $bookmark['text'],
-                $printable_width,
+                $width,
                 $line_height,
-                $page_size,
-                $offset,
                 $link
             );
 
             // separator
+            $width -= $text_size + self::SPACE;
             $this->_outputIndexSeparator(
                 $separator,
-                $printable_width,
+                $width,
                 $line_height,
-                $page_size,
-                $offset,
-                $text_size,
                 $link
             );
 
             // page
             $this->_outputIndexPage(
                 $page_text,
-                $line_height,
                 $page_size,
+                $line_height,
                 $link
             );
         }
@@ -243,15 +242,15 @@ trait PdfBookmarkTrait
     }
 
     private function _outputIndexPage(
-        string $page_text,
+        string $page,
+        float $width,
         float $line_height,
-        float $page_size,
         string|int $link
     ): void {
         $this->Cell(
-            w: $page_size,
+            w: $width,
             h: $line_height,
-            txt: $page_text,
+            txt: $page,
             ln: PdfMove::NEW_LINE,
             align: PdfTextAlignment::RIGHT,
             link: $link
@@ -260,50 +259,46 @@ trait PdfBookmarkTrait
 
     private function _outputIndexSeparator(
         string $separator,
-        float $printable_width,
+        float $width,
         float $line_height,
-        float $page_size,
-        float $offset,
-        float $text_size,
         string|int $link
     ): void {
-        $dots_width = $printable_width - $offset - $text_size - $page_size - 2.0 * self::SPACE;
-        $dots_count = (int) ($dots_width / $this->GetStringWidth($separator));
-        if ($dots_count > 0) {
-            $dots_text = \str_repeat($separator, $dots_count);
+        $count = (int) ($width / $this->GetStringWidth($separator));
+        $width += self::SPACE;
+        if ($count > 0) {
+            $text = \str_repeat($separator, $count);
             $this->Cell(
-                w: $dots_width + self::SPACE,
+                w: $width,
                 h: $line_height,
-                txt: $dots_text,
+                txt: $text,
                 align: PdfTextAlignment::RIGHT,
                 link: $link
             );
+        } else {
+            $this->x += $width;
         }
     }
 
     private function _outputIndexText(
         string $text,
-        float $printable_width,
+        float $width,
         float $line_height,
-        float $page_size,
-        float $offset,
         string|int $link
     ): float {
         $text = $this->_cleanText($text);
-        $text_size = $this->GetStringWidth($text);
-        $available_size = $printable_width - $offset - $page_size - 2.0 * self::SPACE;
-        while ($text_size >= $available_size) {
+        $text_width = $this->GetStringWidth($text);
+        while ($text_width > $width) {
             $text = \substr($text, 0, -1);
-            $text_size = $this->GetStringWidth($text);
+            $text_width = $this->GetStringWidth($text);
         }
         $this->Cell(
-            w: $text_size + self::SPACE,
+            w: $text_width + self::SPACE,
             h: $line_height,
             txt: $text,
             link: $link
         );
 
-        return $text_size;
+        return $text_width;
     }
 
     /**
@@ -324,6 +319,7 @@ trait PdfBookmarkTrait
         }
         $titleStyle->apply($this);
         $this->Cell(txt: $title, ln: PdfMove::NEW_LINE, align: PdfTextAlignment::CENTER);
+        $this->resetStyle();
 
         return $result;
     }
@@ -352,7 +348,6 @@ trait PdfBookmarkTrait
     private function _updateBookmarks(): int
     {
         $level = 0;
-        /** @psalm-var array<int, int> $references */
         $references = [];
         $count = \count($this->bookmarks);
         foreach ($this->bookmarks as $index => &$bookmark) {

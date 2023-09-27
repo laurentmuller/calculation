@@ -32,18 +32,17 @@ trait ParameterTrait
     /**
      * Returns the parameter value converted to an enum.
      *
-     * @template E of \BackedEnum
+     * @template EnumType of \BackedEnum
      *
-     * @psalm-param class-string<E> $class
-     * @psalm-param E|null          $default
+     * @param EnumType $default
      *
-     * @psalm-return ($default is null ? (E|null) : E)
+     * @return EnumType
      */
-    protected function getParamEnum(Request $request, string $key, string $class, string $prefix = '', \BackedEnum $default = null): ?\BackedEnum
+    protected function getParamEnum(Request $request, string $key, \BackedEnum $default, string $prefix = ''): \BackedEnum
     {
-        $default = $this->getCookieEnum($request, $key, $class, $prefix, $default);
+        $default = $this->getCookieEnum($request, $key, $default, $prefix);
 
-        return $this->getRequestEnum($request, $key, $class, $default);
+        return $this->getRequestEnum($request, $key, $default);
     }
 
     protected function getParamFloat(Request $request, string $key, string $prefix = '', float $default = 0): float

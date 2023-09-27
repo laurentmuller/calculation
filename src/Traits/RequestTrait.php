@@ -39,18 +39,15 @@ trait RequestTrait
     /**
      * Returns the parameter value converted to an enum.
      *
-     * @psalm-template E of \BackedEnum
+     * @template EnumType of \BackedEnum
      *
-     * @psalm-param class-string<E> $class
-     * @psalm-param E|null          $default
+     * @param EnumType $default
      *
-     * @psalm-return E|null
+     * @return EnumType
      */
-    protected function getRequestEnum(Request $request, string $key, string $class, \BackedEnum $default = null): ?\BackedEnum
+    protected function getRequestEnum(Request $request, string $key, \BackedEnum $default): \BackedEnum
     {
-        $value = $this->getRequestBag($request, $key)?->getEnum($key, $class, $default);
-
-        return $value ?? $default;
+        return $this->getRequestBag($request, $key)?->getEnum($key, $default::class, $default) ?? $default;
     }
 
     /**

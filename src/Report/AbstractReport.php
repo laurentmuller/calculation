@@ -71,7 +71,7 @@ abstract class AbstractReport extends PdfDocument
         PdfStyle $titleStyle = null,
         PdfStyle $contentStyle = null,
         bool $addBookmark = true,
-        string $separator = null
+        string $separator = '.'
     ): self {
         $title ??= $this->trans('report.index');
         parent::addPageIndex($title, $titleStyle, $contentStyle, $addBookmark, $separator);

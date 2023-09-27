@@ -40,18 +40,17 @@ trait CookieTrait
     /**
      * Returns the cookie value converted to an enum.
      *
-     * @template E of \BackedEnum
+     * @template EnumType of \BackedEnum
      *
-     * @psalm-param class-string<E> $class
-     * @psalm-param E|null          $default
+     * @param EnumType $default
      *
-     * @psalm-return ($default is null ? (E|null) : E)
+     * @return EnumType
      */
-    protected function getCookieEnum(Request $request, string $key, string $class, string $prefix = '', \BackedEnum $default = null): ?\BackedEnum
+    protected function getCookieEnum(Request $request, string $key, \BackedEnum $default, string $prefix = ''): \BackedEnum
     {
         $name = $this->getCookieName($key, $prefix);
 
-        return $request->cookies->getEnum($name, $class, $default);
+        return $request->cookies->getEnum($name, $default::class, $default) ?? $default;
     }
 
     protected function getCookieFloat(Request $request, string $key, string $prefix = '', float $default = 0): float

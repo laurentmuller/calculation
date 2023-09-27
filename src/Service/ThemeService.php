@@ -34,7 +34,7 @@ class ThemeService
      */
     public function getTheme(Request $request): Theme
     {
-        return $this->getCookieEnum(request: $request, key: self::KEY_THEME, class: Theme::class, default: Theme::getDefault());
+        return $this->getCookieEnum($request, self::KEY_THEME, Theme::getDefault());
     }
 
     /**

@@ -236,7 +236,7 @@ trait PdfBookmarkTrait
         $offset = 0;
         if ($level > 0) {
             $offset = (float) $level * 2.0 * self::SPACE;
-            $this->Cell($offset);
+            $this->x += $offset;
         }
 
         return $offset;

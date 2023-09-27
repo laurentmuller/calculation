@@ -59,6 +59,7 @@ class HelpReport extends AbstractReport
         $newPage = $this->outputMainMenus($service->getMainMenus());
         $newPage = $this->outputDialogs($service->getDialogs(), $newPage);
         $this->outputEntities($service->getEntities(), $newPage);
+        $this->addPageIndex();
 
         return true;
     }

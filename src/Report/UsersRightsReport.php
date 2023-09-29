@@ -22,6 +22,7 @@ use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfException;
 use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
@@ -93,6 +94,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     /**
      * @param User[] $entities
+     *
+     * @throws PdfException
      */
     protected function doRender(array $entities): bool
     {
@@ -164,6 +167,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     /**
      * Output rights for a role.
+     *
+     * @throws PdfException
      */
     private function outputRole(PdfGroupTableBuilder $table, Role|User $role): void
     {
@@ -175,6 +180,11 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         }
         if (!$this->isPrintable((float) $lines * self::LINE_HEIGHT)) {
             $this->AddPage();
+        }
+        if ($role instanceof User) {
+            $this->addBookmark($role->getUserIdentifier(), true);
+        } else {
+            $this->addBookmark($this->translateRole($role));
         }
         $table->setGroupKey($role);
         foreach ($entities as $entity) {
@@ -194,6 +204,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      * Output default rights for the administrator role.
      *
      * @param PdfGroupTableBuilder $table the builder to output to
+     *
+     * @throws PdfException
      */
     private function outputRoleAdmin(PdfGroupTableBuilder $table): void
     {
@@ -204,6 +216,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      * Output default rights for the user role.
      *
      * @param PdfGroupTableBuilder $table the builder to output to
+     *
+     * @throws PdfException
      */
     private function outputRoleUser(PdfGroupTableBuilder $table): void
     {
@@ -215,6 +229,8 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      *
      * @param User[]               $users the users
      * @param PdfGroupTableBuilder $table the builder to output to
+     *
+     * @throws PdfException
      */
     private function outputUsers(array $users, PdfGroupTableBuilder $table): void
     {

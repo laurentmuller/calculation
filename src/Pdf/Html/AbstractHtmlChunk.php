@@ -367,7 +367,7 @@ abstract class AbstractHtmlChunk
         }
 
         // create style
-        $style = HtmlTag::getStyleFromName($this->name);
+        $style = HtmlTag::getStyle($this->name);
         if ($style instanceof HtmlStyle) {
             foreach ($this->classes as $class) {
                 $style->update($class);

@@ -94,10 +94,6 @@ class RoleBuilderService
 
     /**
      * @return FlagBag<EntityPermission>
-     *
-     * @psalm-suppress InvalidArgument
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
      */
     private function getAllPermissions(): FlagBag
     {
@@ -106,10 +102,6 @@ class RoleBuilderService
 
     /**
      * @return FlagBag<EntityPermission>
-     *
-     * @psalm-suppress InvalidArgument
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
      */
     private function getDefaultPermissions(): FlagBag
     {
@@ -125,7 +117,7 @@ class RoleBuilderService
      */
     private function getNonePermissions(): FlagBag
     {
-        return new FlagBag(EntityPermission::class, FlagBag::NONE);
+        return new FlagBag(EntityPermission::class);
     }
 
     private function getRoleWithAll(string $roleName): Role

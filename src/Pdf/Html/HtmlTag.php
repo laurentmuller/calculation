@@ -157,9 +157,25 @@ enum HtmlTag: string
     }
 
     /**
+     * Creates a style for the given tag name, ignoring case consideration.
+     */
+    public static function getStyle(string $value): ?HtmlStyle
+    {
+        return HtmlTag::tryFrom(\strtolower($value))?->style();
+    }
+
+    /**
+     * Returns a value indicating if the given value is equal to this value, ignoring case consideration.
+     */
+    public function match(string $value): bool
+    {
+        return StringUtils::equalIgnoreCase($this->value, $value);
+    }
+
+    /**
      * Gets the style for this tag.
      */
-    public function getStyle(): ?HtmlStyle
+    public function style(): ?HtmlStyle
     {
         return match ($this) {
             HtmlTag::H1 => $this->createStyle(true, 2.5, 2),
@@ -184,22 +200,6 @@ enum HtmlTag: string
             HtmlTag::KEYBOARD => $this->createStyle()->setFontName(PdfFontName::COURIER),
             default => null
         };
-    }
-
-    /**
-     * Creates a style for the given tag name, ignoring case consideration.
-     */
-    public static function getStyleFromName(string $value): ?HtmlStyle
-    {
-        return HtmlTag::tryFrom(\strtolower($value))?->getStyle();
-    }
-
-    /**
-     * Returns a value indicating if the given value is equal to this value, ignoring case consideration.
-     */
-    public function match(string $value): bool
-    {
-        return StringUtils::equalIgnoreCase($this->value, $value);
     }
 
     private function createStyle(bool $bold = false, float $sizeFactor = 1.0, float $bottomMargin = 0.0, float $leftMargin = 0.0): HtmlStyle

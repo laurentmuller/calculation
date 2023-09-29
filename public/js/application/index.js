@@ -77,11 +77,7 @@ function toggleSelection($oldSelection, $newSelection) {
  */
 function onKeyEnter(e, $selection) {
     'use strict';
-    const $link = $selection.find('.btn-default');
-    if ($link.length) {
-        $link[0].click();
-        e.preventDefault();
-    }
+    editRow($selection, e);
 }
 
 /**
@@ -262,6 +258,21 @@ function selectRow($source) {
 }
 
 /**
+ * Edit the given row.
+ *
+ * @param {jQuery} $source - the source to find row to select.
+ * @param {KeyboardEvent} e - the optional event
+ */
+function editRow($source, e) {
+    'use strict';
+    const $link = $source.find('.btn-default');
+    if ($link.length) {
+        $link[0].click();
+        e.preventDefault();
+    }
+}
+
+/**
  * Ready function
  */
 (function ($) {
@@ -288,7 +299,9 @@ function selectRow($source) {
             }
         }).on('click', '.row-item [data-bs-toggle="dropdown"]', function () {
             selectRow($(this));
-        }).on('focus', '.item-link', function () {
+        }).on('dblclick', '.row-item', function (e) {
+            editRow($(this), e);
+        }).on('focus', '.item-link,button[data-bs-toggle="dropdown"]', function () {
             selectRow($(this));
         }).initContextMenu('.row-item td:not(.context-menu-skip),.row-item div:not(.context-menu-skip)', function () {
             selectRow($(this));

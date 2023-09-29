@@ -64,7 +64,8 @@ trait PdfBookmarkTrait
      * @throws PdfException if the given level is invalid. A level is not valid if:
      *                      <ul>
      *                      <li>Is smaller than 0.</li>
-     *                      <li>Is greater than the level of the last bookmark plus 1.</li>
+     *                      <li>Is greater than the level of the previous bookmark plus 1. For example if the previous
+     *                      bookmark is 2; the allowed values are 0..3.</li>
      *                      </ul>
      *
      * @see PdfDocument::addPageIndex()
@@ -104,7 +105,7 @@ trait PdfBookmarkTrait
     }
 
     /**
-     * Add a new page (index page) containing all bookmarks.
+     * Add an index page (as new page) containing all bookmarks.
      *
      * Each line contain the text on the left, the page number on the right and are separate by dot ('.') characters.
      *
@@ -113,7 +114,7 @@ trait PdfBookmarkTrait
      * @param ?string   $title        the index title or null to use the default title ('Index')
      * @param ?PdfStyle $titleStyle   the title style or null to use the default style (Font Arial 9pt Bold)
      * @param ?PdfStyle $contentStyle the content style or null to use the default style (Font Arial 9pt Regular)
-     * @param bool      $addBookmark  true to add the page index in the list of the bookmarks
+     * @param bool      $addBookmark  true to add the index page itself in the list of the bookmarks
      * @param string    $separator    the separator character used between the text and the page
      *
      * @see PdfDocument::addBookmark()
@@ -151,39 +152,20 @@ trait PdfBookmarkTrait
                 continue;
             }
 
-            // page size
+            // page text and size
             $page_text = FormatUtils::formatInt($bookmark['page']);
             $page_size = $this->GetStringWidth($page_text) + self::SPACE;
-
-            // level
+            // level offset
             $offset = $this->_outputIndexLevel($bookmark['level']);
-
             // text
             $link = $bookmark['link'];
             $width = $printable_width - $offset - $page_size - self::SPACE;
-            $text_size = $this->_outputIndexText(
-                $bookmark['text'],
-                $width,
-                $line_height,
-                $link
-            );
-
+            $text_size = $this->_outputIndexText($bookmark['text'], $width, $line_height, $link);
             // separator
             $width -= $text_size + self::SPACE;
-            $this->_outputIndexSeparator(
-                $separator,
-                $width,
-                $line_height,
-                $link
-            );
-
+            $this->_outputIndexSeparator($separator, $width, $line_height, $link);
             // page
-            $this->_outputIndexPage(
-                $page_text,
-                $page_size,
-                $line_height,
-                $link
-            );
+            $this->_outputIndexPage($page_text, $page_size, $line_height, $link);
         }
 
         return $this->resetStyle();

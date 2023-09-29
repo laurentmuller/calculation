@@ -149,6 +149,26 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body
 }
 
 /**
+ * no record found
+ */
+.bootstrap-table:has(tr.no-records-found) {
+    margin-bottom: 1rem;
+}
+
+.bootstrap-table:has(tr.no-records-found) thead {
+    display: none;
+}
+
+.bootstrap-table .fixed-table-container .table tbody tr.no-records-found {
+    border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
+}
+
+.bootstrap-table .fixed-table-container .table tbody tr.no-records-found td {
+    padding: 0.5rem !important;
+    color: var(--bs-secondary) !important;
+}
+
+/**
  * pagination
  */
 .fixed-table-pagination {

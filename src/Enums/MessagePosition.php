@@ -98,7 +98,7 @@ enum MessagePosition: string implements EnumDefaultInterface, EnumSortableInterf
     public function getIcon(): string
     {
         return match ($this) {
-            self::CENTER_CENTER => 'fa-solid fa-arrows-up-down-left-right',
+            self::CENTER_CENTER => 'fa-solid fa-location-crosshairs',
             default => 'fa-solid fa-arrow-up fa-rotate-by'
         };
     }

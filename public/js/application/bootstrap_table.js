@@ -12,20 +12,18 @@ function customViewFormatter(data) {
     'use strict';
     const $table = $('#table-edit');
     const regex = /JavaScript:(\w*)/m;
-    const $template = $('#custom-view');
-    const rowIndex = $table.getSelectionIndex();
+    const $template = $('#custom-view-template');
     const rowClass = $table.getOptions().rowClass;
+    const rowIndex = $table.getSelectionIndex();
     const undefinedText = $table.data('undefined-text') || '&#8203;';
     const content = data.reduce(function (carry, row, index) {
         // update class selection
         $template.find('.custom-item').toggleClass(rowClass, rowIndex === index);
-
-        // fields
+        // replace fields
         let html = $template.html();
         Object.keys(row).forEach(function (key) {
             html = html.replaceAll(`%${key}%`, row[key] || undefinedText);
         });
-
         // functions
         let match = regex.exec(html);
         while (match !== null) {
@@ -37,12 +35,11 @@ function customViewFormatter(data) {
             html = html.replaceAll(match[0], value);
             match = regex.exec(html);
         }
-
         // add
         return carry + html;
     }, '');
 
-    return `<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 m-0 mx-n1">${content}</div>`;
+    return `<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 my-0 mx-n1">${content}</div>`;
 }
 
 /**

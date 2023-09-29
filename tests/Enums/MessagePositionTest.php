@@ -54,7 +54,7 @@ class MessagePositionTest extends TestCase
             [MessagePosition::TOP_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'],
 
             [MessagePosition::CENTER_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'],
-            [MessagePosition::CENTER_CENTER, 'fa-solid fa-arrows-up-down-left-right'],
+            [MessagePosition::CENTER_CENTER, 'fa-solid fa-location-crosshairs'],
             [MessagePosition::CENTER_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'],
 
             [MessagePosition::BOTTOM_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'],
@@ -77,6 +77,23 @@ class MessagePositionTest extends TestCase
             [MessagePosition::BOTTOM_LEFT, 'bottom-left'],
             [MessagePosition::BOTTOM_CENTER, 'bottom-center'],
             [MessagePosition::BOTTOM_RIGHT, 'bottom-right'],
+        ];
+    }
+
+    public static function getTranslation(): array
+    {
+        return [
+            [MessagePosition::TOP_LEFT, 'message_position.top-left'],
+            [MessagePosition::TOP_CENTER, 'message_position.top-center'],
+            [MessagePosition::TOP_RIGHT, 'message_position.top-right'],
+
+            [MessagePosition::CENTER_LEFT, 'message_position.center-left'],
+            [MessagePosition::CENTER_CENTER, 'message_position.center-center'],
+            [MessagePosition::CENTER_RIGHT, 'message_position.center-right'],
+
+            [MessagePosition::BOTTOM_LEFT, 'message_position.bottom-left'],
+            [MessagePosition::BOTTOM_CENTER, 'message_position.bottom-center'],
+            [MessagePosition::BOTTOM_RIGHT, 'message_position.bottom-right'],
         ];
     }
 
@@ -136,12 +153,11 @@ class MessagePositionTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
-    public function testTranslate(MessagePosition $position, string $value): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTranslation')]
+    public function testTranslate(MessagePosition $position, string $expected): void
     {
         $translator = $this->createTranslator();
         $result = $position->trans($translator);
-        $expected = 'message_position.' . $value;
         self::assertSame($expected, $result);
     }
 

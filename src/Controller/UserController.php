@@ -274,8 +274,15 @@ class UserController extends AbstractEntityController
 
             return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
         }
+
+        $default = $builder->getRole($item);
         $form = $this->createForm(UserRightsType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
+            // same as default?
+            if ($item->getRights() === $default->getRights()) {
+                $item->setOverwrite(false)
+                    ->setRights(null);
+            }
             $manager->flush();
 
             return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
@@ -284,8 +291,8 @@ class UserController extends AbstractEntityController
         return $this->render('user/user_rights.html.twig', [
             'item' => $item,
             'form' => $form,
+            'default' => $default,
             'params' => ['id' => $item->getId()],
-            'default' => $builder->getRole($item),
             'permissions' => EntityPermission::sorted(),
         ]);
     }

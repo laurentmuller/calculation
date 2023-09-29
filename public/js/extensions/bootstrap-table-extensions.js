@@ -240,7 +240,13 @@ function loadingTemplate(message) {
 
             // handle items in custom view
             $this.parents('.bootstrap-table').on('mousedown', '.custom-item', function () {
-                const index = $(this).parent().index();
+                const index = $(this).parents('.col-custom-view').index();
+                const $row = $this.find('tbody tr[data-index]:eq(' + index + ')');
+                if ($row.length) {
+                    $row.updateRow($this);
+                }
+            }).on('focus', '.custom-item a.item-link,.custom-item button[data-bs-toggle="dropdown"]', function () {
+                const index = $(this).parents('.col-custom-view').index();
                 const $row = $this.find('tbody tr[data-index]:eq(' + index + ')');
                 if ($row.length) {
                     $row.updateRow($this);
@@ -892,7 +898,7 @@ function loadingTemplate(message) {
             const $view = $this.getCustomView();
             if ($view && $view.find('.no-records-found').length === 0) {
                 $('<p/>', {
-                    class: 'no-records-found text-center border-top p-2 mb-1',
+                    class: 'no-records-found text-center text-secondary border p-2 mt-2 mb-0',
                     text: $this.getOptions().formatNoMatches()
                 }).appendTo($view);
             }

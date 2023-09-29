@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5959c0561522762835fe1443b12ffd18",
+    "content-hash": "38a9e7e25cc2382910c9e78f0231a0f5",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -597,16 +597,16 @@
         },
         {
             "name": "doctrine/deprecations",
-            "version": "v1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/deprecations.git",
-                "reference": "612a3ee5ab0d5dd97b7cf3874a6efe24325efac3"
+                "reference": "4f2d4f2836e7ec4e7a8625e75c6aa916004db931"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/612a3ee5ab0d5dd97b7cf3874a6efe24325efac3",
-                "reference": "612a3ee5ab0d5dd97b7cf3874a6efe24325efac3",
+                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/4f2d4f2836e7ec4e7a8625e75c6aa916004db931",
+                "reference": "4f2d4f2836e7ec4e7a8625e75c6aa916004db931",
                 "shasum": ""
             },
             "require": {
@@ -638,9 +638,9 @@
             "homepage": "https://www.doctrine-project.org/",
             "support": {
                 "issues": "https://github.com/doctrine/deprecations/issues",
-                "source": "https://github.com/doctrine/deprecations/tree/v1.1.1"
+                "source": "https://github.com/doctrine/deprecations/tree/1.1.2"
             },
-            "time": "2023-06-03T09:27:29+00:00"
+            "time": "2023-09-27T20:04:15+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -1466,16 +1466,16 @@
         },
         {
             "name": "elao/enum",
-            "version": "v2.2.0",
+            "version": "2.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Elao/PhpEnums.git",
-                "reference": "d555de9dcffc36db5fe18d2abd528e380874e59b"
+                "url": "https://github.com/laurentmuller/PhpEnums.git",
+                "reference": "a19ae3271063501c8e757ce8a13bd4ff8b9a7db7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/d555de9dcffc36db5fe18d2abd528e380874e59b",
-                "reference": "d555de9dcffc36db5fe18d2abd528e380874e59b",
+                "url": "https://api.github.com/repos/laurentmuller/PhpEnums/zipball/a19ae3271063501c8e757ce8a13bd4ff8b9a7db7",
+                "reference": "a19ae3271063501c8e757ce8a13bd4ff8b9a7db7",
                 "shasum": ""
             },
             "require": {
@@ -1497,9 +1497,11 @@
                 "symfony/framework-bundle": "^5.4|^6.0",
                 "symfony/http-kernel": "^5.4.2|^6.0.1",
                 "symfony/phpunit-bridge": "^5.4|^6.0",
+                "symfony/translation": "^5.4|^6.0",
                 "symfony/var-dumper": "^5.4|^6.0",
                 "symfony/yaml": "^5.4|^6.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1507,14 +1509,19 @@
                 }
             },
             "autoload": {
-                "files": [
-                    "src/Bridge/Symfony/VarDumper/Resources/register_caster.php"
-                ],
                 "psr-4": {
                     "Elao\\Enum\\": "src/"
+                },
+                "files": [
+                    "src/Bridge/Symfony/VarDumper/Resources/register_caster.php"
+                ]
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Elao\\Enum\\Tests\\": "tests/",
+                    "App\\": "tests/Fixtures/Integration/Symfony/src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1537,29 +1544,28 @@
                 "symfony"
             ],
             "support": {
-                "issues": "https://github.com/Elao/PhpEnums/issues",
-                "source": "https://github.com/Elao/PhpEnums/tree/v2.2.0"
+                "source": "https://github.com/laurentmuller/PhpEnums/tree/2.x"
             },
             "funding": [
                 {
-                    "url": "https://github.com/ogizanagi",
-                    "type": "github"
+                    "type": "github",
+                    "url": "https://github.com/ogizanagi"
                 }
             ],
-            "time": "2023-03-24T15:08:02+00:00"
+            "time": "2023-09-29T05:26:10+00:00"
         },
         {
             "name": "endroid/qr-code",
-            "version": "4.8.4",
+            "version": "4.8.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/endroid/qr-code.git",
-                "reference": "a122b85d4a5a3257d471257a43ac3e5676a27ffe"
+                "reference": "0db25b506a8411a5e1644ebaa67123a6eb7b6a77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/endroid/qr-code/zipball/a122b85d4a5a3257d471257a43ac3e5676a27ffe",
-                "reference": "a122b85d4a5a3257d471257a43ac3e5676a27ffe",
+                "url": "https://api.github.com/repos/endroid/qr-code/zipball/0db25b506a8411a5e1644ebaa67123a6eb7b6a77",
+                "reference": "0db25b506a8411a5e1644ebaa67123a6eb7b6a77",
                 "shasum": ""
             },
             "require": {
@@ -1613,7 +1619,7 @@
             ],
             "support": {
                 "issues": "https://github.com/endroid/qr-code/issues",
-                "source": "https://github.com/endroid/qr-code/tree/4.8.4"
+                "source": "https://github.com/endroid/qr-code/tree/4.8.5"
             },
             "funding": [
                 {
@@ -1621,7 +1627,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-28T18:12:07+00:00"
+            "time": "2023-09-29T14:03:20+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -9633,16 +9639,16 @@
         },
         {
             "name": "sebastian/complexity",
-            "version": "3.0.1",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/complexity.git",
-                "reference": "c70b73893e10757af9c6a48929fa6a333b56a97a"
+                "reference": "68cfb347a44871f01e33ab0ef8215966432f6957"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/complexity/zipball/c70b73893e10757af9c6a48929fa6a333b56a97a",
-                "reference": "c70b73893e10757af9c6a48929fa6a333b56a97a",
+                "url": "https://api.github.com/repos/sebastianbergmann/complexity/zipball/68cfb347a44871f01e33ab0ef8215966432f6957",
+                "reference": "68cfb347a44871f01e33ab0ef8215966432f6957",
                 "shasum": ""
             },
             "require": {
@@ -9655,7 +9661,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "3.0-dev"
+                    "dev-main": "3.1-dev"
                 }
             },
             "autoload": {
@@ -9679,7 +9685,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/complexity/issues",
                 "security": "https://github.com/sebastianbergmann/complexity/security/policy",
-                "source": "https://github.com/sebastianbergmann/complexity/tree/3.0.1"
+                "source": "https://github.com/sebastianbergmann/complexity/tree/3.1.0"
             },
             "funding": [
                 {
@@ -9687,7 +9693,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-31T09:55:53+00:00"
+            "time": "2023-09-28T11:50:59+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -10999,7 +11005,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "elao/enum": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

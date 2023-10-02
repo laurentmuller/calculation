@@ -72,6 +72,21 @@ function toggleSelection($oldSelection, $newSelection) {
 }
 
 /**
+ * Edit the given row.
+ *
+ * @param {jQuery} $source - the source to find row to select.
+ * @param {KeyboardEvent} e - the optional event
+ */
+function editRow($source, e) {
+    'use strict';
+    const $link = $source.find('.btn-default');
+    if ($link.length) {
+        $link[0].click();
+        e.preventDefault();
+    }
+}
+
+/**
  * @param {KeyboardEvent} e
  * @param {jQuery} $selection
  */
@@ -255,21 +270,6 @@ function selectRow($source) {
     const $oldSelection = $('#calculations .row-item.table-primary');
     const $newSelection = $source.closest('.row-item');
     toggleSelection($oldSelection, $newSelection);
-}
-
-/**
- * Edit the given row.
- *
- * @param {jQuery} $source - the source to find row to select.
- * @param {KeyboardEvent} e - the optional event
- */
-function editRow($source, e) {
-    'use strict';
-    const $link = $source.find('.btn-default');
-    if ($link.length) {
-        $link[0].click();
-        e.preventDefault();
-    }
 }
 
 /**

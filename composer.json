@@ -39,7 +39,7 @@
         "doctrine/doctrine-bundle": "^2.6",
         "doctrine/orm": "^2.11",
         "dukecity/doctrineextensions": "^2.0",
-        "elao/enum": "2.x-dev",
+        "elao/enum": "^2.x-dev",
         "endroid/qr-code": "^4.2",
         "erusev/parsedown": "^1.7",
         "fakerphp/faker": "^1.14",

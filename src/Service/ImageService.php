@@ -696,9 +696,9 @@ class ImageService
      * @param string $fontFile the path to the TrueType font
      * @param string $text     The text string in UTF-8 encoding.
      *                         <br>
-     *                         May include decimal numeric character references (of the form:
-     *                         &amp;#8364;) to access characters in a font beyond position 127.
-     *                         The hexadecimal format (like &amp;#xA9;) is supported.
+     *                         May include decimal numeric character references, of the form:
+     *                         &amp;#8364;, to access characters in a font beyond position 127.
+     *                         The hexadecimal format, like &amp;#xA9;, is supported.
      *                         Strings in UTF-8 encoding can be passed directly.
      *                         <br>
      *                         Named entities, such as &amp;copy;, are not supported. Consider using

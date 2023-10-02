@@ -57,8 +57,8 @@ class HtmlListTypeTest extends TestCase
             [-1, '', '.'],
             [0, ''],
             [0, '', '.'],
-            [5000, ''],
-            [5000, '', '.'],
+            [4000, ''],
+            [4000, '', '.'],
 
             [1000, 'M'],
             [1000, 'M.', '.'],
@@ -81,7 +81,7 @@ class HtmlListTypeTest extends TestCase
             [123, 'CXXIII'],
             [2004, 'MMIV'],
             [2355, 'MMCCCLV'],
-            [4999, 'MMMMCMXCIX'],
+            [3999, 'MMMCMXCIX'],
         ];
     }
 

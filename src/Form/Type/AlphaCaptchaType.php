@@ -49,8 +49,11 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
      *
      * @param iterable<AlphaCaptchaInterface> $captchas
      */
-    public function __construct(TranslatorInterface $translator, #[TaggedIterator(AlphaCaptchaInterface::class)] iterable $captchas)
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+        #[TaggedIterator(AlphaCaptchaInterface::class)]
+        iterable $captchas
+    ) {
         $this->dataError = $translator->trans('required', [], 'captcha');
         $captchas = $captchas instanceof \Traversable ? \iterator_to_array($captchas) : $captchas;
         $this->captcha = $captchas[\array_rand($captchas)];

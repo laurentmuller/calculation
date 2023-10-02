@@ -17,6 +17,8 @@ parameters:
     doctrine:
        ormRepositoryClass: App\Repository\AbstractRepository
 
+    checkUninitializedProperties: true
+
     # Level 6
     checkMissingIterableValueType: false
 

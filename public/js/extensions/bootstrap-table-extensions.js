@@ -76,6 +76,21 @@ function loadingTemplate(message) {
         },
 
         /**
+         * Update the custom view row.
+         *
+         * @param {jQueryTable} $table - the bootstrap table.
+         * @return {boolean} true if the row is found and updated.
+         */
+        updateCustomRow: function ($table) {
+            const index = $(this).parents('.col-custom-view').index();
+            const $row = $table.find('tbody tr[data-index]:eq(' + index + ')');
+            if ($row.length) {
+                return $row.updateRow($table);
+            }
+            return false;
+        },
+
+        /**
          * Update the selected row.
          *
          * @param {jQueryTable} $table - the bootstrap table.
@@ -240,17 +255,9 @@ function loadingTemplate(message) {
 
             // handle items in custom view
             $this.parents('.bootstrap-table').on('mousedown', '.custom-item', function () {
-                const index = $(this).parents('.col-custom-view').index();
-                const $row = $this.find('tbody tr[data-index]:eq(' + index + ')');
-                if ($row.length) {
-                    $row.updateRow($this);
-                }
+                $(this).updateCustomRow($this);
             }).on('focus', '.custom-item a.item-link,.custom-item button[data-bs-toggle="dropdown"]', function () {
-                const index = $(this).parents('.col-custom-view').index();
-                const $row = $this.find('tbody tr[data-index]:eq(' + index + ')');
-                if ($row.length) {
-                    $row.updateRow($this);
-                }
+                $(this).updateCustomRow($this);
             }).on('dblclick', '.custom-item.table-primary div:not(.rowlink-skip)', function (e) {
                 if (e.button === 0) {
                     $this.editRow();

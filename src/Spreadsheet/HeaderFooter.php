@@ -45,9 +45,9 @@ class HeaderFooter
 
     private const PAGE_AND_PAGES = 'Page &P / &N';
 
-    private String $centerText = '';
-    private String $leftText = '';
-    private String $rightText = '';
+    private string $centerText = '';
+    private string $leftText = '';
+    private string $rightText = '';
 
     /**
      * Constructor.

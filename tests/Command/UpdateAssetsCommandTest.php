@@ -20,20 +20,30 @@ use Symfony\Component\Console\Tester\CommandTester;
 #[\PHPUnit\Framework\Attributes\CoversClass(UpdateAssetsCommand::class)]
 class UpdateAssetsCommandTest extends KernelTestCase
 {
-    public function testExecute(): void
+    public function testExecuteDryRun(): void
+    {
+        $output = $this->execute(['--dry-run' => true]);
+        $this->assertStringContainsString('Check versions', $output);
+    }
+
+    public function testExecuteUpdate(): void
+    {
+        $output = $this->execute();
+        $this->assertStringContainsString('[OK]', $output);
+        $this->assertStringContainsString('/public/js/vendor', $output);
+    }
+
+    private function execute(array $options = []): string
     {
         $kernel = self::bootKernel();
         $application = new Application($kernel);
 
         $command = $application->find('app:update-assets');
         $tester = new CommandTester($command);
-        $tester->execute([]);
+        $tester->execute($options);
 
         $tester->assertCommandIsSuccessful();
 
-        // the output of the command in the console
-        $output = $tester->getDisplay();
-        $this->assertStringContainsString('[OK]', $output);
-        $this->assertStringContainsString('/public/js/vendor', $output);
+        return $tester->getDisplay();
     }
 }

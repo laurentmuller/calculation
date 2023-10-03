@@ -38,7 +38,7 @@ class ImageService
      * Constructor.
      *
      * @param \GdImage $image    the image to handle
-     * @param ?string  $filename the file name or null if none
+     * @param ?string  $filename the file name, the URL or null if none
      */
     private function __construct(private readonly \GdImage $image, private readonly ?string $filename = null)
     {
@@ -149,9 +149,29 @@ class ImageService
      *
      * @return bool true on success or false on failure
      */
-    public function copyResampled(self $dst_image, int $dst_x, int $dst_y, int $src_x, int $src_y, int $dst_w, int $dst_h, int $src_w, int $src_h): bool
-    {
-        return \imagecopyresampled($dst_image->image, $this->image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
+    public function copyResampled(
+        self $dst_image,
+        int $dst_x,
+        int $dst_y,
+        int $src_x,
+        int $src_y,
+        int $dst_w,
+        int $dst_h,
+        int $src_w,
+        int $src_h
+    ): bool {
+        return \imagecopyresampled(
+            $dst_image->image,
+            $this->image,
+            $dst_x,
+            $dst_y,
+            $src_x,
+            $src_y,
+            $dst_w,
+            $dst_h,
+            $src_w,
+            $src_h
+        );
     }
 
     /**
@@ -169,57 +189,6 @@ class ImageService
     }
 
     /**
-     * Create a new bitmap image handler from file or URL.
-     *
-     * @param string $filename the path to the PNG image
-     *
-     * @return ?ImageService an image handler on success, <code>null</code> on error
-     */
-    public static function fromBmp(string $filename): ?self
-    {
-        $image = \imagecreatefrombmp($filename);
-        if ($image instanceof \GdImage) {
-            return new self($image, $filename);
-        }
-
-        return null;
-    }
-
-    /**
-     * Create a new GIF image handler from file or URL.
-     *
-     * @param string $filename the path to the PNG image
-     *
-     * @return ?ImageService an image handler on success, <code>null</code> on error
-     */
-    public static function fromGif(string $filename): ?self
-    {
-        $image = \imagecreatefromgif($filename);
-        if ($image instanceof \GdImage) {
-            return new self($image, $filename);
-        }
-
-        return null;
-    }
-
-    /**
-     * Create a new JPEG image handler from file or URL.
-     *
-     * @param string $filename the path to the PNG image
-     *
-     * @return ?ImageService an image handler on success, <code>null</code> on error
-     */
-    public static function fromJpeg(string $filename): ?self
-    {
-        $image = \imagecreatefromjpeg($filename);
-        if ($image instanceof \GdImage) {
-            return new self($image, $filename);
-        }
-
-        return null;
-    }
-
-    /**
      * Create a new image handler from file or URL.
      *
      * This method uses the file extension to create the handler.
@@ -230,34 +199,17 @@ class ImageService
      */
     public static function fromName(string $filename): ?self
     {
-        $ext = \strtolower(\pathinfo($filename, \PATHINFO_EXTENSION));
-
-        return match (ImageExtension::tryFrom($ext)) {
-            ImageExtension::BMP => self::fromBmp($filename),
-            ImageExtension::GIF => self::fromGif($filename),
-            ImageExtension::JPEG,
-            ImageExtension::JPG => self::fromJpeg($filename),
-            ImageExtension::PNG => self::fromPng($filename),
-            ImageExtension::XBM => self::fromXbm($filename),
-            default => null,
-        };
-    }
-
-    /**
-     * Create a new PNG image handler from file or URL.
-     *
-     * @param string $filename the path to the PNG image
-     *
-     * @return ?ImageService an image handler on success, <code>null</code> on error
-     */
-    public static function fromPng(string $filename): ?self
-    {
-        $image = \imagecreatefrompng($filename);
-        if ($image instanceof \GdImage) {
-            return new self($image, $filename);
+        $file_extension = \strtolower(\pathinfo($filename, \PATHINFO_EXTENSION));
+        $image_extension = ImageExtension::tryFrom($file_extension);
+        if (!$image_extension instanceof ImageExtension) {
+            return null;
+        }
+        $image = $image_extension->create($filename);
+        if (!$image instanceof \GdImage) {
+            return null;
         }
 
-        return null;
+        return new self($image, $filename);
     }
 
     /**
@@ -279,75 +231,7 @@ class ImageService
     }
 
     /**
-     * Create a new WBMP image handler from file or URL.
-     *
-     * @param string $filename the path to the WBMP (Wireless Bitmaps) image
-     *
-     * @return ?ImageService an image handler on success, <code>null</code> on error
-     */
-    public static function fromWbmp(string $filename): ?self
-    {
-        $image = \imagecreatefromwbmp($filename);
-        if ($image instanceof \GdImage) {
-            return new self($image, $filename);
-        }
-
-        return null;
-    }
-
-    /**
-     * Create a new image handler from file or URL.
-     *
-     * @param string $filename the path to the WebP image
-     *
-     * @return ImageService|null an image handler on success, <code>null</code> on error
-     */
-    public static function fromWebp(string $filename): ?self
-    {
-        $image = \imagecreatefromwebp($filename);
-        if ($image instanceof \GdImage) {
-            return new self($image, $filename);
-        }
-
-        return null;
-    }
-
-    /**
-     * Create a new image handler from file or URL.
-     *
-     * @param string $filename the path to the PNG image
-     *
-     * @return ImageService|null an image handler on success, <code>null</code> on error
-     */
-    public static function fromXbm(string $filename): ?self
-    {
-        $image = \imagecreatefromxbm($filename);
-        if ($image instanceof \GdImage) {
-            return new self($image, $filename);
-        }
-
-        return null;
-    }
-
-    /**
-     * Create a new image handler from file or URL.
-     *
-     * @param string $filename the path to the XPM image
-     *
-     * @return ImageService|null an image handler on success, <code>null</code> on error
-     */
-    public static function fromXpm(string $filename): ?self
-    {
-        $image = \imagecreatefromxpm($filename);
-        if ($image instanceof \GdImage) {
-            return new self($image, $filename);
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets the loaded file name, if any.
+     * Gets the loaded file name or URL, if any.
      */
     public function getFilename(): ?string
     {
@@ -430,33 +314,34 @@ class ImageService
     /**
      * Output a BMP image to either the browser or a file.
      *
-     * @param ?string $to the path or an open stream resource, which is automatically being closed
-     *                    after this function returns, to save the file to. If not set or null, the
-     *                    raw image stream will be outputted directly.
-     *                    <p>
-     *                    <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                    </p>
+     * @param resource|string|null $to         The path or an open stream resource (which is automatically closed after
+     *                                         this function returns) to save the file to. If not set or null, the raw
+     *                                         image stream will be output directly.
+     *                                         <p>
+     *                                         null is invalid if the compressed arguments is not used.
+     *                                         </p>
+     * @param bool                 $compressed whether the BMP should be compressed with run-length encoding (RLE), or not
      *
      * @return bool true on success or false on failure
      */
-    public function toBmp(string $to = null): bool
+    public function toBmp(mixed $to = null, bool $compressed = true): bool
     {
-        return \imagebmp($this->image, $to);
+        return \imagebmp($this->image, $to, $compressed);
     }
 
     /**
      * Output a GIF image to either the browser or a file.
      *
-     * @param ?string $to the path or an open stream resource, which is automatically being closed
-     *                    after this function returns, to save the file to. If not set or null, the
-     *                    raw image stream will be outputted directly.
-     *                    <p>
-     *                    <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                    </p>
+     * @param resource|string|null $to The path or an open stream resource (which is automatically closed after this
+     *                                 function returns) to save the file to. If not set or null, the raw image stream
+     *                                 will be output directly.
+     *                                 <p>
+     *                                 <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                 </p>
      *
      * @return bool true on success or false on failure
      */
-    public function toGif(string $to = null): bool
+    public function toGif(mixed $to = null): bool
     {
         return \imagegif($this->image, $to);
     }
@@ -464,19 +349,19 @@ class ImageService
     /**
      * Output a JPEG image to either the browser or a file.
      *
-     * @param ?string $to      the path or an open stream resource, which is automatically being closed
-     *                         after this function returns, to save the file to. If not set or null, the
-     *                         raw image stream will be outputted directly.
-     *                         <p>
-     *                         <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                         </p>
-     * @param int     $quality the quality is optional, and ranges from 0 (the worst quality, smaller file)
-     *                         to 100 (the best quality, biggest file). The default is the default IJG quality value
-     *                         (about 75).
+     * @param resource|string|null $to      The path or an open stream resource (which is automatically closed after
+     *                                      this function returns) to save the file to. If not set or null, the raw
+     *                                      image stream will be output directly.
+     *                                      <p>
+     *                                      <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                      </p>
+     * @param int                  $quality the quality is optional, and ranges from 0 (the worst quality, smaller file)
+     *                                      to 100 (the best quality, biggest file). The default is the default IJG
+     *                                      quality value (about 75).
      *
      * @return bool true on success or false on failure
      */
-    public function toJpeg(string $to = null, int $quality = -1): bool
+    public function toJpeg(mixed $to = null, int $quality = -1): bool
     {
         return \imagejpeg($this->image, $to, $quality);
     }
@@ -484,20 +369,20 @@ class ImageService
     /**
      * Output a PNG image to either the browser or a file.
      *
-     * @param ?string $to      the path or an open stream resource, which is automatically being closed
-     *                         after this function returns, to save the file to. If not set or null, the
-     *                         raw image stream will be outputted directly.
-     *                         <p>
-     *                         <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                         </p>
-     * @param int     $quality the compression level: from 0 (no compression) to 9. The current default is 6.
-     * @param int     $filters allows reducing the PNG file size. It is a bitmask field which may be set to any
-     *                         combination of the PNG_FILTER_XX constants. PNG_NO_FILTER or PNG_ALL_FILTERS may also be
-     *                         used to respectively disable or activate all filters.
+     * @param resource|string|null $to      The path or an open stream resource (which is automatically closed after
+     *                                      this function returns) to save the file to. If not set or null, the raw
+     *                                      image stream will be output directly.
+     *                                      <p>
+     *                                      <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                      </p>
+     * @param int                  $quality the compression level: from 0 (no compression) to 9. The current default is 6.
+     * @param int                  $filters allows reducing the PNG file size. It is a bitmask field which may be set
+     *                                      to any combination of the PNG_FILTER_XX constants. PNG_NO_FILTER or
+     *                                      PNG_ALL_FILTERS may also be used to respectively disable or activate all filters.
      *
      * @return bool true on success or false on failure
      */
-    public function toPng(string $to = null, int $quality = -1, int $filters = -1): bool
+    public function toPng(mixed $to = null, int $quality = -1, int $filters = -1): bool
     {
         return \imagepng($this->image, $to, $quality, $filters);
     }
@@ -505,41 +390,37 @@ class ImageService
     /**
      * Output a WBMP (Wireless Bitmaps) image to either the browser or a file.
      *
-     * @param ?string $to         the path or an open stream resource, which is automatically being closed
-     *                            after this function returns, to save the file to. If not set or null, the
-     *                            raw image stream will be outputted directly.
-     *                            <p>
-     *                            <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                            </p>
-     * @param ?int    $foreground you can set the foreground color with this parameter by setting an
-     *                            identifier obtained from allocate. The default foreground color
-     *                            is black. All other colors are treated as background.
+     * @param resource|string|null $to         The path or an open stream resource (which is automatically closed after
+     *                                         this function returns) to save the file to. If not set or null, the raw
+     *                                         image stream will be output directly.
+     *                                         <p>
+     *                                         <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                         </p>
+     * @param ?int                 $foreground you can set the foreground color with this parameter by setting an
+     *                                         identifier obtained from allocate. The default foreground color
+     *                                         is black. All other colors are treated as background.
      *
      * @return bool true on success or false on failure
      */
-    public function toWbmp(string $to = null, int $foreground = null): bool
+    public function toWbmp(mixed $to = null, int $foreground = null): bool
     {
-        if ($foreground) {
-            return \imagewbmp($this->image, $to, $foreground);
-        }
-
-        return \imagewbmp($this->image, $to);
+        return \imagewbmp($this->image, $to, $foreground);
     }
 
     /**
      * Output a JPEG image to either the browser or a file.
      *
-     * @param ?string $to      the path or an open stream resource, which is automatically being closed
-     *                         after this function returns, to save the file to. If not set or null, the
-     *                         raw image stream will be outputted directly.
-     *                         <p>
-     *                         <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                         </p>
-     * @param int     $quality the ranges from 0 (the worst quality, smaller file) to 100 (the best quality, biggest file)
+     * @param resource|string|null $to      The path or an open stream resource (which is automatically closed after
+     *                                      this function returns) to save the file to. If not set or null, the raw
+     *                                      image stream will be output directly.
+     *                                      <p>
+     *                                      <code>null</code> is invalid if the quality and filters arguments are not used.
+     *                                      </p>
+     * @param int                  $quality the ranges from 0 (the worst quality, smaller file) to 100 (the best quality, biggest file)
      *
      * @return bool true on success or false on failure
      */
-    public function toWebp(string $to = null, int $quality = 80): bool
+    public function toWebp(mixed $to = null, int $quality = 80): bool
     {
         return \imagewebp($this->image, $to, $quality);
     }
@@ -547,7 +428,8 @@ class ImageService
     /**
      * Output a XBM image to either the browser or a file.
      *
-     * @param ?string $to         the path to save the file to. If not set or null, the raw image stream will be outputted directly.
+     * @param ?string $to         The path to save the file to, given as string. If null, the raw image stream will be
+     *                            output directly.
      *                            <p>
      *                            <code>null</code> is invalid if the quality and filters arguments are not used.
      *                            </p>
@@ -559,11 +441,7 @@ class ImageService
      */
     public function toXbm(string $to = null, int $foreground = null): bool
     {
-        if ($foreground) {
-            return \imagexbm($this->image, $to, $foreground);
-        }
-
-        return \imagexbm($this->image, $to);
+        return \imagexbm($this->image, $to, $foreground);
     }
 
     /**
@@ -571,7 +449,8 @@ class ImageService
      *
      * @param int $color a color identifier created with allocate
      *
-     * @return int the identifier of the new transparent color
+     * @return int the identifier of the new (or current, if none is specified) transparent color is returned. If color
+     *             is null, and the image has no transparent color, the returned identifier will be -1.
      */
     public function transparent(int $color): int
     {
@@ -588,45 +467,49 @@ class ImageService
      *
      * @return int[]|false an array with 8 elements representing four points making the bounding box of the
      *                     text on success and false on error.<br>
-     *                     The points are relative to the text regardless of the angle, so "upper left" means in the top left-hand
-     *                     corner seeing the text horizontally.<br><br>
+     *                     The points are relative to the text regardless of the angle, so "upper left" means in the
+     *                     top left-hand corner seeing the text horizontally.<br><br>
      *                     <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
+     *                     <thead>
      *                     <tr>
      *                     <th>Key</th>
      *                     <th>Content</th>
      *                     </tr>
+     *                     </thead>
+     *                     <tbody>
      *                     <tr>
-     *                     <td>0</td>
+     *                     <td style="text-align: center;">0</td>
      *                     <td>The lower left corner, X position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>1</td>
+     *                     <td style="text-align: center;">1</td>
      *                     <td>The lower left corner, Y position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>2</td>
+     *                     <td style="text-align: center;">2</td>
      *                     <td>The lower right corner, X position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>3</td>
+     *                     <td style="text-align: center;">3</td>
      *                     <td>The lower right corner, Y position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>4</td>
+     *                     <td style="text-align: center;">4</td>
      *                     <td>The upper right corner, X position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>5</td>
+     *                     <td style="text-align: center;">5</td>
      *                     <td>The upper right corner, Y position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>6</td>
+     *                     <td style="text-align: center;">6</td>
      *                     <td>The upper left corner, X position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>7</td>
+     *                     <td style="text-align: center;">7</td>
      *                     <td>The upper left corner, Y position.</td>
      *                     </tr>
+     *                     </tbody>
      *                     </table>
      */
     public function ttfBox(float $size, float $angle, string $fontFile, string $text): array|false
@@ -710,50 +593,70 @@ class ImageService
      *
      * @return array|false an array with 8 elements representing four points making the bounding box of the
      *                     text on success and false on error.<br>
-     *                     The points are relative to the text regardless of the angle, so "upper left" means in the top left-hand
-     *                     corner seeing the text horizontally.<br>
+     *                     The points are relative to the text regardless of the angle, so "upper left" means in the
+     *                     top left-hand corner seeing the text horizontally.<br>
      *                     <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
+     *                     <thead>
      *                     <tr>
      *                     <th>Key</th>
      *                     <th>Content</th>
      *                     </tr>
+     *                     </thead>
+     *                     <tbody>
      *                     <tr>
-     *                     <td>0</td>
+     *                     <td style="text-align: center;">0</td>
      *                     <td>The lower left corner, X position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>1</td>
+     *                     <td style="text-align: center;">1</td>
      *                     <td>The lower left corner, Y position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>2</td>
+     *                     <td style="text-align: center;">2</td>
      *                     <td>The lower right corner, X position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>3</td>
+     *                     <td style="text-align: center;">3</td>
      *                     <td>The lower right corner, Y position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>4</td>
+     *                     <td style="text-align: center;">4</td>
      *                     <td>The upper right corner, X position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>5</td>
+     *                     <td style="text-align: center;">5</td>
      *                     <td>The upper right corner, Y position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>6</td>
+     *                     <td style="text-align: center;">6</td>
      *                     <td>The upper left corner, X position.</td>
      *                     </tr>
      *                     <tr>
-     *                     <td>7</td>
+     *                     <td style="text-align: center;">7</td>
      *                     <td>The upper left corner, Y position.</td>
      *                     </tr>
+     *                     </tbody>
      *                     </table>
      */
-    public function ttfText(float $size, float $angle, int $x, int $y, int $color, string $fontFile, string $text): array|false
-    {
-        return \imagettftext($this->image, $size, $angle, $x, $y, $color, $fontFile, $text);
+    public function ttfText(
+        float $size,
+        float $angle,
+        int $x,
+        int $y,
+        int $color,
+        string $fontFile,
+        string $text
+    ): array|false {
+        return \imagettftext(
+            $this->image,
+            $size,
+            $angle,
+            $x,
+            $y,
+            $color,
+            $fontFile,
+            $text
+        );
     }
 
     /**

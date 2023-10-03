@@ -26,13 +26,16 @@ class ImageExtensionTest extends TestCase
             [ImageExtension::JPEG, 'jpeg'],
             [ImageExtension::JPG, 'jpg'],
             [ImageExtension::PNG, 'png'],
+            [ImageExtension::WBMP, 'wbmp'],
+            [ImageExtension::WEBP, 'webp'],
             [ImageExtension::XBM, 'xbm'],
+            [ImageExtension::XPM, 'xpm'],
         ];
     }
 
     public function testCount(): void
     {
-        self::assertCount(6, ImageExtension::cases());
+        self::assertCount(9, ImageExtension::cases());
     }
 
     public function testDefault(): void

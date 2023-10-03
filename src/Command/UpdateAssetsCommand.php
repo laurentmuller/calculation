@@ -59,6 +59,7 @@ class UpdateAssetsCommand extends Command
      * The dry-run option.
      */
     private const DRY_RUN_OPTION = 'dry-run';
+
     /**
      * The configuration file name.
      */

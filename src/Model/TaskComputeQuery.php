@@ -74,6 +74,9 @@ class TaskComputeQuery
         return $this;
     }
 
+    /**
+     * @psalm-suppress MixedArgumentTypeCoercion
+     */
     private function updateItems(): void
     {
         $this->items = $this->task->getItems()->map(static fn (TaskItem $item) => (int) $item->getId())->toArray();

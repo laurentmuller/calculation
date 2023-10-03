@@ -26,7 +26,7 @@ use Twig\TwigFilter;
 class HighlightExtension extends AbstractExtension
 {
     /**
-     * @const array<non-empty-string, non-empty-string>
+     * @const array<non-empty-string, string>
      */
     private const PHP_PATTERNS = [
         '/title="(.*?)"/i' => '',
@@ -84,7 +84,7 @@ class HighlightExtension extends AbstractExtension
         if (!\is_string($content)) {
             return null;
         }
-        $content = StringUtils::pregReplace(self::PHP_PATTERNS, $content); // @phpstan-ignore-line
+        $content = StringUtils::pregReplace(self::PHP_PATTERNS, $content);
         if ('' !== $id) {
             $content = (string) \preg_replace('/highlight-php-\d+/', $id, $content);
         }

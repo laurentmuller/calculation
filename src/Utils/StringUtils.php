@@ -215,7 +215,7 @@ final class StringUtils
      *
      * @phpstan-return ($subject is string ? string : string[])
      *
-     * @psalm-param array<non-empty-string, non-empty-string> $values
+     * @psalm-param array<non-empty-string, string> $values
      */
     public static function pregReplace(array $values, string|array $subject): string|array
     {

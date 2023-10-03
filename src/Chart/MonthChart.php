@@ -20,8 +20,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Chart to display calculations by month.
  *
- * @psalm-suppress PropertyNotSetInConstructor
- *
  * @psalm-import-type CalculationByMonthType from CalculationRepository
  */
 class MonthChart extends AbstractHighchart

@@ -24,8 +24,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Extends the Highchart with method shortcuts.
- *
- * @psalm-suppress PropertyNotSetInConstructor
  */
 class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
 {

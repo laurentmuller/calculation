@@ -19,6 +19,11 @@ namespace App\Faker;
  */
 class CustomCompany extends \Faker\Provider\fr_CH\Company
 {
+    /**
+     * @psalm-var mixed
+     *
+     * @phpstan-var string[]
+     */
     protected static $formats = [
         '{{lastName}} {{companySuffix}}',
         '{{lastName}} {{firstName}} {{companySuffix}}',

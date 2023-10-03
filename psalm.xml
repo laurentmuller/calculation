@@ -37,12 +37,6 @@
             </errorLevel>
         </PropertyNotSetInConstructor>
 
-        <MissingPropertyType>
-            <errorLevel type="suppress">
-                <referencedProperty name="App\Faker\CustomCompany::$formats"/>
-            </errorLevel>
-        </MissingPropertyType>
-
         <InternalMethod>
             <errorLevel type="suppress">
                 <file name="src/Service/DatabaseInfoService.php"/>
@@ -56,14 +50,6 @@
                 <referencedFunction name="dateTimeFilter"/>
             </errorLevel>
         </UndefinedFunction>
-
-        <InvalidClassConstantType>
-            <errorLevel type="suppress">
-                <referencedConstant name="App\Validator\Captcha::ERROR_NAMES"/>
-                <referencedConstant name="App\Validator\Password::ERROR_NAMES"/>
-                <referencedConstant name="App\Validator\Strength::ERROR_NAMES"/>
-            </errorLevel>
-        </InvalidClassConstantType>
 
         <UnsupportedPropertyReferenceUsage>
             <errorLevel type="suppress">
@@ -100,12 +86,12 @@
             </errorLevel>
         </MixedReturnStatement>
 
-        <InvalidArgument>
+        <MixedArgumentTypeCoercion>
             <errorLevel type="suppress">
-                <file name="src/Twig/HighlightExtension.php" />
-                <referencedFunction name="exportPhp"/>
+                <file name="src/Model/TaskComputeQuery.php" />
+                <referencedFunction name="updateItems" />
             </errorLevel>
-        </InvalidArgument>
+        </MixedArgumentTypeCoercion>
     </issueHandlers>
 
     <plugins>

@@ -17,8 +17,8 @@ use App\Traits\MathTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
-use Ob\HighchartsBundle\Highcharts\ChartOption;
-use Ob\HighchartsBundle\Highcharts\Highchart;
+use HighchartsBundle\Highcharts\ChartOption;
+use HighchartsBundle\Highcharts\Highchart;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 

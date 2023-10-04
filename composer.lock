@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c195c43b48abcb4e390fe80864a9d63a",
+    "content-hash": "211483e2490da1427ad2c5af858a7e53",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2111,16 +2111,16 @@
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.9.9",
+            "version": "2.9.11",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laurentmuller/ObHighchartsBundle.git",
-                "reference": "f495df77083a44b30fa9cc3cda8ff24fc8adf57f"
+                "url": "https://github.com/laurentmuller/HighchartsBundle.git",
+                "reference": "a538594f849bedbc47c3b9c06ace80ce47a7eab2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/ObHighchartsBundle/zipball/f495df77083a44b30fa9cc3cda8ff24fc8adf57f",
-                "reference": "f495df77083a44b30fa9cc3cda8ff24fc8adf57f",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/a538594f849bedbc47c3b9c06ace80ce47a7eab2",
+                "reference": "a538594f849bedbc47c3b9c06ace80ce47a7eab2",
                 "shasum": ""
             },
             "require": {
@@ -2154,12 +2154,12 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Ob\\HighchartsBundle\\": "src/"
+                    "HighchartsBundle\\": "src/"
                 }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Ob\\HighchartsBundle\\Tests\\": "tests/"
+                    "HighchartsBundle\\Tests\\": "tests/"
                 }
             },
             "license": [
@@ -2167,7 +2167,10 @@
             ],
             "authors": [
                 {
-                    "name": "Marc Aubé"
+                    "name": "Laurent Muller",
+                    "email": "bibi@bibi.nu",
+                    "homepage": "https://www.bibi.nu",
+                    "role": "Developer"
                 }
             ],
             "description": "Symfony Bundle that ease the use of highcharts to display rich graph and charts in your app",
@@ -2179,14 +2182,12 @@
                 "graph",
                 "graphs",
                 "highcharts",
-                "marcaube",
-                "ob",
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/laurentmuller/ObHighchartsBundle/tree/2.9.9"
+                "source": "https://github.com/laurentmuller/HighchartsBundle/tree/2.9.11"
             },
-            "time": "2023-08-21T12:44:44+00:00"
+            "time": "2023-10-04T08:03:25+00:00"
         },
         {
             "name": "lorenzo/pinky",

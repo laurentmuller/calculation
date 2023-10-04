@@ -4,7 +4,7 @@ return [
     Createnl\ZxcvbnBundle\ZxcvbnBundle::class => ['all' => true],
     Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],
     Elao\Enum\Bridge\Symfony\Bundle\ElaoEnumBundle::class => ['all' => true],
-    Ob\HighchartsBundle\ObHighchartsBundle::class => ['all' => true],
+    HighchartsBundle\HighchartsBundle::class => ['all' => true],
     SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle::class => ['all' => true],
     SymfonyCasts\Bundle\VerifyEmail\SymfonyCastsVerifyEmailBundle::class => ['all' => true],
     Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true],

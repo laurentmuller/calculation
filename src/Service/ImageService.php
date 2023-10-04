@@ -197,14 +197,15 @@ class ImageService
      *
      * @return ?ImageService an image handler on success, <code>null</code> on error
      */
-    public static function fromName(string $filename): ?self
+    public static function fromFile(string $filename): ?self
     {
         $file_extension = \strtolower(\pathinfo($filename, \PATHINFO_EXTENSION));
         $image_extension = ImageExtension::tryFrom($file_extension);
         if (!$image_extension instanceof ImageExtension) {
             return null;
         }
-        $image = $image_extension->create($filename);
+
+        $image = $image_extension->createImage($filename);
         if (!$image instanceof \GdImage) {
             return null;
         }
@@ -223,11 +224,11 @@ class ImageService
     public static function fromTrueColor(int $width, int $height): ?self
     {
         $image = \imagecreatetruecolor($width, $height);
-        if ($image instanceof \GdImage) {
-            return new self($image);
+        if (!$image instanceof \GdImage) {
+            return null;
         }
 
-        return null;
+        return new self($image);
     }
 
     /**
@@ -275,11 +276,11 @@ class ImageService
     {
         /** @psalm-var int[]|false $values */
         $values = \imageresolution($this->image);
-        if (\is_array($values)) {
-            return $values[0];
+        if (!\is_array($values)) {
+            return $default;
         }
 
-        return $default;
+        return $values[0];
     }
 
     /**
@@ -309,139 +310,6 @@ class ImageService
     public function setPixel(int $x, int $y, int $color): bool
     {
         return \imagesetpixel($this->image, $x, $y, $color);
-    }
-
-    /**
-     * Output a BMP image to either the browser or a file.
-     *
-     * @param resource|string|null $to         The path or an open stream resource (which is automatically closed after
-     *                                         this function returns) to save the file to. If not set or null, the raw
-     *                                         image stream will be output directly.
-     *                                         <p>
-     *                                         null is invalid if the compressed arguments is not used.
-     *                                         </p>
-     * @param bool                 $compressed whether the BMP should be compressed with run-length encoding (RLE), or not
-     *
-     * @return bool true on success or false on failure
-     */
-    public function toBmp(mixed $to = null, bool $compressed = true): bool
-    {
-        return \imagebmp($this->image, $to, $compressed);
-    }
-
-    /**
-     * Output a GIF image to either the browser or a file.
-     *
-     * @param resource|string|null $to The path or an open stream resource (which is automatically closed after this
-     *                                 function returns) to save the file to. If not set or null, the raw image stream
-     *                                 will be output directly.
-     *                                 <p>
-     *                                 <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                                 </p>
-     *
-     * @return bool true on success or false on failure
-     */
-    public function toGif(mixed $to = null): bool
-    {
-        return \imagegif($this->image, $to);
-    }
-
-    /**
-     * Output a JPEG image to either the browser or a file.
-     *
-     * @param resource|string|null $to      The path or an open stream resource (which is automatically closed after
-     *                                      this function returns) to save the file to. If not set or null, the raw
-     *                                      image stream will be output directly.
-     *                                      <p>
-     *                                      <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                                      </p>
-     * @param int                  $quality the quality is optional, and ranges from 0 (the worst quality, smaller file)
-     *                                      to 100 (the best quality, biggest file). The default is the default IJG
-     *                                      quality value (about 75).
-     *
-     * @return bool true on success or false on failure
-     */
-    public function toJpeg(mixed $to = null, int $quality = -1): bool
-    {
-        return \imagejpeg($this->image, $to, $quality);
-    }
-
-    /**
-     * Output a PNG image to either the browser or a file.
-     *
-     * @param resource|string|null $to      The path or an open stream resource (which is automatically closed after
-     *                                      this function returns) to save the file to. If not set or null, the raw
-     *                                      image stream will be output directly.
-     *                                      <p>
-     *                                      <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                                      </p>
-     * @param int                  $quality the compression level: from 0 (no compression) to 9. The current default is 6.
-     * @param int                  $filters allows reducing the PNG file size. It is a bitmask field which may be set
-     *                                      to any combination of the PNG_FILTER_XX constants. PNG_NO_FILTER or
-     *                                      PNG_ALL_FILTERS may also be used to respectively disable or activate all filters.
-     *
-     * @return bool true on success or false on failure
-     */
-    public function toPng(mixed $to = null, int $quality = -1, int $filters = -1): bool
-    {
-        return \imagepng($this->image, $to, $quality, $filters);
-    }
-
-    /**
-     * Output a WBMP (Wireless Bitmaps) image to either the browser or a file.
-     *
-     * @param resource|string|null $to         The path or an open stream resource (which is automatically closed after
-     *                                         this function returns) to save the file to. If not set or null, the raw
-     *                                         image stream will be output directly.
-     *                                         <p>
-     *                                         <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                                         </p>
-     * @param ?int                 $foreground you can set the foreground color with this parameter by setting an
-     *                                         identifier obtained from allocate. The default foreground color
-     *                                         is black. All other colors are treated as background.
-     *
-     * @return bool true on success or false on failure
-     */
-    public function toWbmp(mixed $to = null, int $foreground = null): bool
-    {
-        return \imagewbmp($this->image, $to, $foreground);
-    }
-
-    /**
-     * Output a JPEG image to either the browser or a file.
-     *
-     * @param resource|string|null $to      The path or an open stream resource (which is automatically closed after
-     *                                      this function returns) to save the file to. If not set or null, the raw
-     *                                      image stream will be output directly.
-     *                                      <p>
-     *                                      <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                                      </p>
-     * @param int                  $quality the ranges from 0 (the worst quality, smaller file) to 100 (the best quality, biggest file)
-     *
-     * @return bool true on success or false on failure
-     */
-    public function toWebp(mixed $to = null, int $quality = 80): bool
-    {
-        return \imagewebp($this->image, $to, $quality);
-    }
-
-    /**
-     * Output a XBM image to either the browser or a file.
-     *
-     * @param ?string $to         The path to save the file to, given as string. If null, the raw image stream will be
-     *                            output directly.
-     *                            <p>
-     *                            <code>null</code> is invalid if the quality and filters arguments are not used.
-     *                            </p>
-     * @param ?int    $foreground you can set the foreground color with this parameter by setting an
-     *                            identifier obtained from allocate. The default foreground color
-     *                            is black. All other colors are treated as background.
-     *
-     * @return bool true on success or false on failure
-     */
-    public function toXbm(string $to = null, int $foreground = null): bool
-    {
-        return \imagexbm($this->image, $to, $foreground);
     }
 
     /**
@@ -521,23 +389,6 @@ class ImageService
     }
 
     /**
-     * Gets the height of a text using TrueType font.
-     *
-     * @param float  $size     the font size
-     * @param float  $angle    the angle in degrees in which text will be measured
-     * @param string $fontFile the path to the TrueType font
-     * @param string $text     the string to be measured
-     *
-     * @return int the text height or 0 on error
-     *
-     * @see ImageService::ttfBox()
-     */
-    public function ttfHeight(float $size, float $angle, string $fontFile, string $text): int
-    {
-        return $this->ttfSize($size, $angle, $fontFile, $text)[1];
-    }
-
-    /**
      * Gets the width and the height of a text using TrueType font.
      *
      * @param float  $size     the font size
@@ -552,16 +403,16 @@ class ImageService
     public function ttfSize(float $size, float $angle, string $fontFile, string $text): array
     {
         $box = $this->ttfBox($size, $angle, $fontFile, $text);
-        if (\is_array($box)) {
-            $values = [$box[0], $box[2], $box[4], $box[6]];
-            $width = \max($values) - \min($values);
-            $values = [$box[1], $box[3], $box[5], $box[7]];
-            $height = \max($values) - \min($values);
-
-            return [$width, $height];
+        if (!\is_array($box)) {
+            return [0, 0];
         }
 
-        return [0, 0];
+        $values = [$box[0], $box[2], $box[4], $box[6]];
+        $width = \max($values) - \min($values);
+        $values = [$box[1], $box[3], $box[5], $box[7]];
+        $height = \max($values) - \min($values);
+
+        return [$width, $height];
     }
 
     /**
@@ -657,22 +508,5 @@ class ImageService
             $fontFile,
             $text
         );
-    }
-
-    /**
-     * Gets the width of a text using TrueType font.
-     *
-     * @param float  $size     the font size
-     * @param float  $angle    the angle in degrees in which text will be measured
-     * @param string $fontFile the path to the TrueType font
-     * @param string $text     the string to be measured
-     *
-     * @return int the text width or 0 on error
-     *
-     * @see ImageService::ttfBox()
-     */
-    public function ttfWidth(float $size, float $angle, string $fontFile, string $text): int
-    {
-        return $this->ttfSize($size, $angle, $fontFile, $text)[0];
     }
 }

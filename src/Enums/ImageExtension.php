@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Enums;
 
 use App\Interfaces\EnumDefaultInterface;
+use App\Service\ImageService;
 use App\Traits\EnumDefaultTrait;
 use Elao\Enum\Attribute\EnumCase;
 
@@ -83,7 +84,7 @@ enum ImageExtension: string implements EnumDefaultInterface
      *
      * @return \GdImage|false an image resource identifier on success, false on error
      */
-    public function create(string $filename): \GdImage|false
+    public function createImage(string $filename): \GdImage|false
     {
         return match ($this) {
             ImageExtension::BMP => \imagecreatefrombmp($filename),
@@ -101,18 +102,23 @@ enum ImageExtension: string implements EnumDefaultInterface
     /**
      * Output an image to either the browser or a file.
      *
-     * @param \GdImage                $image   a GdImage object, returned by one of the image creation functions
-     * @param resource|string|null    $file    The path or an open stream resource, which is automatically closed after this
-     *                                         function returns; to save the file to. If not set or null, the raw image
-     *                                         stream will be output directly.
+     * @param \GdImage|ImageService   $image   a GdImage object, returned by one of the image creation functions or an
+     *                                         image service to get GdImage for
+     * @param resource|string|null    $file    The path or an open stream resource, which is automatically closed after
+     *                                         this function returns; to save the file to. If not set or null, the raw
+     *                                         image stream will be output directly.
      * @param array<string, int|bool> $options additional options to use
      *
      * @return bool true on success or false on failure
      *
      * @psalm-param SaveOptionsType $options
      */
-    public function save(\GdImage $image, mixed $file = null, array $options = []): bool
+    public function saveImage(\GdImage|ImageService $image, mixed $file = null, array $options = []): bool
     {
+        if ($image instanceof ImageService) {
+            $image = $image->getImage();
+        }
+
         return match ($this) {
             ImageExtension::BMP => \imagebmp($image, $file, $options['compressed'] ?? true),
             ImageExtension::GIF => \imagegif($image, $file),

@@ -173,7 +173,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/laurentmuller/ObHighchartsBundle"
+            "url": "https://github.com/laurentmuller/HighchartsBundle"
         },
         {
             "type": "vcs",

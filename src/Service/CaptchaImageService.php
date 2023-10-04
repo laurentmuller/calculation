@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Enums\ImageExtension;
 use App\Traits\SessionAwareTrait;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -20,6 +21,12 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to generate and validate a captcha image.
+ *
+ * @psalm-type ComputeTextType = array{
+ *     char: string,
+ *     angle: int,
+ *     height: int,
+ *     width: int}
  */
 class CaptchaImageService implements ServiceSubscriberInterface
 {
@@ -88,7 +95,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      * @param int  $width  the image width
      * @param int  $height the image height
      *
-     * @return string|null the image encoded with the base 64 or null if the image canot be created
+     * @return string|null the image encoded with the base 64 or null if the image can not be created
      *
      * @throws \Exception
      */
@@ -97,21 +104,22 @@ class CaptchaImageService implements ServiceSubscriberInterface
         if (!$force && $this->validateTimeout() && $this->hasSessionValue(self::KEY_DATA)) {
             return $this->getSessionString(self::KEY_DATA);
         }
+
         $this->clear();
         $text = $this->generateRandomString($length);
         $image = $this->createImage($text, $width, $height);
-        if ($image instanceof ImageService) {
-            $data = $this->encodeImage($image);
-            $this->setSessionValues([
-                self::KEY_TEXT => $text,
-                self::KEY_DATA => $data,
-                self::KEY_TIME => \time(),
-            ]);
-
-            return $data;
+        if (!$image instanceof ImageService) {
+            return null;
         }
 
-        return null;
+        $data = $this->encodeImage($image);
+        $this->setSessionValues([
+            self::KEY_TEXT => $text,
+            self::KEY_DATA => $data,
+            self::KEY_TIME => \time(),
+        ]);
+
+        return $data;
     }
 
     /**
@@ -137,7 +145,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Compute the text layout.
      *
-     * @pslam-return array<array{angle: int(-8, 8), char: string, height: int, width: int}>
+     * @pslam-return non-empty-array<ComputeTextType>
      *
      * @throws \Exception
      */
@@ -167,10 +175,11 @@ class CaptchaImageService implements ServiceSubscriberInterface
         if (!$image instanceof ImageService) {
             return null;
         }
-        $this->drawBackground($image)
-            ->drawPoints($image, $width, $height)
-            ->drawLines($image, $width, $height)
-            ->drawText($image, $width, $height, $text);
+
+        $this->drawBackground($image);
+        $this->drawPoints($image, $width, $height);
+        $this->drawLines($image, $width, $height);
+        $this->drawText($image, $width, $height, $text);
 
         return $image;
     }
@@ -178,14 +187,14 @@ class CaptchaImageService implements ServiceSubscriberInterface
     /**
      * Draws the white background image.
      */
-    private function drawBackground(ImageService $image): self
+    private function drawBackground(ImageService $image): void
     {
         $color = $image->allocateWhite();
-        if (\is_int($color)) {
-            $image->fill($color);
+        if (!\is_int($color)) {
+            return;
         }
 
-        return $this;
+        $image->fill($color);
     }
 
     /**
@@ -193,19 +202,19 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @throws \Exception
      */
-    private function drawLines(ImageService $image, int $width, int $height): self
+    private function drawLines(ImageService $image, int $width, int $height): void
     {
         $color = $image->allocate(195, 195, 195);
-        if (\is_int($color)) {
-            $lines = \random_int(3, 7);
-            for ($i = 0; $i < $lines; ++$i) {
-                $y1 = \random_int(0, $height);
-                $y2 = \random_int(0, $height);
-                $image->line(0, $y1, $width, $y2, $color);
-            }
+        if (!\is_int($color)) {
+            return;
         }
 
-        return $this;
+        $lines = \random_int(3, 7);
+        for ($i = 0; $i < $lines; ++$i) {
+            $y1 = \random_int(0, $height);
+            $y2 = \random_int(0, $height);
+            $image->line(0, $y1, $width, $y2, $color);
+        }
     }
 
     /**
@@ -213,19 +222,19 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @throws \Exception
      */
-    private function drawPoints(ImageService $image, int $width, int $height): self
+    private function drawPoints(ImageService $image, int $width, int $height): void
     {
         $color = $image->allocate(0, 0, 255);
-        if (\is_int($color)) {
-            $points = \random_int(300, 400);
-            for ($i = 0; $i < $points; ++$i) {
-                $x = \random_int(0, $width);
-                $y = \random_int(0, $height);
-                $image->setPixel($x, $y, $color);
-            }
+        if (!\is_int($color)) {
+            return;
         }
 
-        return $this;
+        $points = \random_int(300, 400);
+        for ($i = 0; $i < $points; ++$i) {
+            $x = \random_int(0, $width);
+            $y = \random_int(0, $height);
+            $image->setPixel($x, $y, $color);
+        }
     }
 
     /**
@@ -233,25 +242,25 @@ class CaptchaImageService implements ServiceSubscriberInterface
      *
      * @throws \Exception
      */
-    private function drawText(ImageService $image, int $width, int $height, string $text): self
+    private function drawText(ImageService $image, int $width, int $height, string $text): void
     {
         $font = $this->font;
         $color = $image->allocateBlack();
-        if (\is_int($color)) {
-            $size = (int) ((float) $height * 0.7);
-            /** @psalm-var non-empty-array<array{angle: int, char: string, height: int, width: int}> $items */
-            $items = $this->computeText($image, $size, $font, $text);
-            $textHeight = \max(\array_column($items, 'height'));
-            $textWidth = \array_sum(\array_column($items, 'width')) + (\count($items) - 1) * self::CHAR_SPACE;
-            $x = \intdiv($width - $textWidth, 2);
-            $y = \intdiv($height - $textHeight, 2) + $size;
-            foreach ($items as $item) {
-                $image->ttfText($size, $item['angle'], $x, $y, $color, $font, $item['char']);
-                $x += $item['width'] + self::CHAR_SPACE;
-            }
+        if (!\is_int($color)) {
+            return;
         }
 
-        return $this;
+        $size = (int) ((float) $height * 0.7);
+        /** @psalm-var non-empty-array<ComputeTextType> $items */
+        $items = $this->computeText($image, $size, $font, $text);
+        $textHeight = \max(\array_column($items, 'height'));
+        $textWidth = \array_sum(\array_column($items, 'width')) + (\count($items) - 1) * self::CHAR_SPACE;
+        $x = \intdiv($width - $textWidth, 2);
+        $y = \intdiv($height - $textHeight, 2) + $size;
+        foreach ($items as $item) {
+            $image->ttfText($size, $item['angle'], $x, $y, $color, $font, $item['char']);
+            $x += $item['width'] + self::CHAR_SPACE;
+        }
     }
 
     /**
@@ -260,7 +269,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
     private function encodeImage(ImageService $image): string
     {
         \ob_start();
-        $image->toPng();
+        ImageExtension::PNG->saveImage($image);
         $buffer = (string) \ob_get_contents();
         \ob_end_clean();
 

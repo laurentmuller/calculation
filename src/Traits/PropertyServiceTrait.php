@@ -32,7 +32,7 @@ trait PropertyServiceTrait
     }
     use LoggerAwareTrait;
     use ServiceSubscriberTrait {
-        setContainer as doSetContainer;
+        ServiceSubscriberTrait::setContainer as doSetContainer;
     }
     use TranslatorAwareTrait;
 
@@ -63,6 +63,11 @@ trait PropertyServiceTrait
     public function isActionShow(): bool
     {
         return EntityAction::SHOW === $this->getEditAction();
+    }
+
+    public function isDarkNavigation(): bool
+    {
+        return $this->getPropertyBoolean(self::P_DARK_NAVIGATION, true);
     }
 
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval $time = null): bool
@@ -270,6 +275,7 @@ trait PropertyServiceTrait
             self::P_PANEL_MONTH => $this->isPanelMonth(),
             self::P_PANEL_CATALOG => $this->isPanelCatalog(),
             self::P_STATUS_BAR => $this->isStatusBar(),
+            self::P_DARK_NAVIGATION => $this->isDarkNavigation(),
             // document options
             self::P_QR_CODE => $this->isQrCode(),
             self::P_PRINT_ADDRESS => $this->isPrintAddress(),

@@ -24,5 +24,7 @@ html[data-bs-theme=light] body {
 
 ::-webkit-scrollbar {
     width: 0;
+    visibility: hidden;
+    -webkit-appearance: none;
     background-color: transparent;
 }

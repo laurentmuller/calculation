@@ -22,8 +22,8 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Traits\LoggerTrait;
 use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelMedium;
-use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeNone;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PdfWriter;
 use Psr\Log\LoggerInterface;
 
@@ -187,8 +187,8 @@ class CalculationReport extends AbstractReport
                 PdfWriter::WRITER_OPTION_Y => $this->GetPageHeight() - self::FOOTER_OFFSET - self::QR_CODE_SIZE - self::QR_CODE_OFFSET,
             ];
             Builder::create()
-                ->roundBlockSizeMode(new RoundBlockSizeModeNone())
-                ->errorCorrectionLevel(new ErrorCorrectionLevelMedium())
+                ->errorCorrectionLevel(ErrorCorrectionLevel::Medium)
+                ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
                 ->size((int) self::QR_CODE_SIZE)
                 ->writer(new PdfWriter())
                 ->writerOptions($options)

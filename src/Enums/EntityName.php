@@ -14,13 +14,13 @@ namespace App\Enums;
 
 use App\Interfaces\EnumConstantsInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Interfaces\EnumTranslatableInterface;
 use App\Interfaces\RoleInterface;
 use App\Traits\EnumExtrasTrait;
-use App\Traits\EnumTranslatableTrait;
 use App\Utils\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
+use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
+use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
 
 /**
  * The entity name enumeration.
@@ -28,10 +28,10 @@ use Elao\Enum\Attribute\ReadableEnum;
  * @implements EnumSortableInterface<EntityName>
  */
 #[ReadableEnum(suffix: '.name')]
-enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface, EnumTranslatableInterface
+enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface, TranslatableEnumInterface
 {
     use EnumExtrasTrait;
-    use EnumTranslatableTrait;
+    use TranslatableEnumTrait;
 
     /*
      * The calculation rights.

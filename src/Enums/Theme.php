@@ -14,11 +14,11 @@ namespace App\Enums;
 
 use App\Interfaces\EnumDefaultInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Interfaces\EnumTranslatableInterface;
 use App\Traits\EnumDefaultTrait;
-use App\Traits\EnumTranslatableTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
+use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
+use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
 
 /**
  * Theme style enumeration.
@@ -27,10 +27,10 @@ use Elao\Enum\Attribute\ReadableEnum;
  * @implements EnumSortableInterface<Theme>
  */
 #[ReadableEnum(prefix: 'theme.', suffix: '.name', useValueAsDefault: true)]
-enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, EnumTranslatableInterface
+enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, TranslatableEnumInterface
 {
     use EnumDefaultTrait;
-    use EnumTranslatableTrait;
+    use TranslatableEnumTrait;
 
     /*
     * The auto (system) theme.

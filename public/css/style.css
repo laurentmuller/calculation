@@ -644,21 +644,33 @@ table.table-fixed-header th {
 /**
  * small scrollbar
  */
-.small-scrollbar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+.small-scrollbar {
+    overflow: auto;
 }
 
-.small-scrollbar::-webkit-scrollbar-track {
-    background-color: var(--bs-light);
+.small-scrollbar::-webkit-scrollbar {
+    visibility: hidden;
+    -webkit-appearance: none;
+    width: 6px;
+    height: 6px;
+    background-color: transparent;
 }
 
 .small-scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--bs-gray-500);
+    visibility: hidden;
+    border-radius: 3px;
+    background-color: var(--bs-secondary-bg-subtle);
 }
 
-.small-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: var(--bs-gray-700);
+html[data-bs-theme=dark] .small-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--bs-secondary-bg);
+}
+
+.small-scrollbar:hover::-webkit-scrollbar,
+.small-scrollbar:hover::-webkit-scrollbar-thumb,
+.small-scrollbar:focus::-webkit-scrollbar,
+.small-scrollbar:focus::-webkit-scrollbar-thumb {
+    visibility: visible;
 }
 
 .card-footer hr.card-footer-line {

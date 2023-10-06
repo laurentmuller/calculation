@@ -213,7 +213,7 @@ function handleService() {
 
     // update API documentation URL
     const href = $option.data('api');
-    $('#api-url').attr('href', href);
+    $('.api-url').attr('href', href);
 
     // update languages
     const url = $service.data('languages');

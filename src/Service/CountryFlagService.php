@@ -35,11 +35,11 @@ class CountryFlagService
         $names = Countries::getNames($locale);
         if ($flagOnly) {
             foreach (\array_keys($names) as $code) {
-                $choices[self::getFlag($code, false)] = $code;
+                $choices[$this->getFlag($code, false)] = $code;
             }
         } else {
             foreach ($names as $code => $name) {
-                $choices[\sprintf('%s %s', self::getFlag($code, false), $name)] = $code;
+                $choices[\sprintf('%s %s', $this->getFlag($code, false), $name)] = $code;
             }
         }
 
@@ -57,23 +57,26 @@ class CountryFlagService
     /**
      * Gets the Emoji flag for the given country code.
      *
-     * @param string $code     the country code to get Emoji flag for
-     * @param bool   $validate true to validate the given country code
+     * @param string $alpha2Code the country code (ISO 3166-1 alpha-2) to get Emoji flag for
+     * @param bool   $validate   true to validate the given country code
      *
      * @throws \InvalidArgumentException if the validate parameter is true and the given country code does not exist
      *
      * @see Countries::exists()
      */
-    public static function getFlag(string $code, bool $validate = true): string
+    public function getFlag(string $alpha2Code, bool $validate = true): string
     {
-        if ($validate && !Countries::exists($code)) {
-            throw new \InvalidArgumentException("Invalid country code: '$code'.");
+        if (Countries::exists($alpha2Code)) {
+            return $this->getEmojiChar($alpha2Code[0]) . $this->getEmojiChar($alpha2Code[1]);
+        }
+        if ($validate) {
+            throw new \InvalidArgumentException("Invalid country code: '$alpha2Code'.");
         }
 
-        return self::getEmojiChar($code[0]) . self::getEmojiChar($code[1]);
+        return '';
     }
 
-    private static function getEmojiChar(string $chr): string
+    private function getEmojiChar(string $chr): string
     {
         return \mb_chr(self::REGIONAL_OFFSET + \mb_ord($chr, 'UTF-8'), 'UTF-8');
     }

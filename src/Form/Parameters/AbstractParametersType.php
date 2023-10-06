@@ -33,6 +33,8 @@ abstract class AbstractParametersType extends AbstractType
 {
     use TranslatorTrait;
 
+    private const LABEL_PREFIX = 'parameters.fields.';
+
     /**
      * Constructor.
      *
@@ -48,7 +50,7 @@ abstract class AbstractParametersType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
-        $helper = new FormHelper($builder, 'parameters.fields.');
+        $helper = new FormHelper($builder, self::LABEL_PREFIX);
         $this->addSections($helper);
     }
 
@@ -99,21 +101,8 @@ abstract class AbstractParametersType extends AbstractType
 
     protected function addHomePageSection(FormHelper $helper): void
     {
-        $key = PropertyServiceInterface::P_PANEL_STATE;
-        $helper->field($key)
-            ->label('index.panel_state')
-            ->updateAttribute('data-default', $this->getDefaultValue($key))
-            ->help('parameters.helps.' . $key)
-            ->notRequired()
-            ->addCheckboxType();
-
-        $key = PropertyServiceInterface::P_PANEL_MONTH;
-        $helper->field($key)
-            ->label('index.panel_month')
-            ->updateAttribute('data-default', $this->getDefaultValue($key))
-            ->help('parameters.helps.' . $key)
-            ->notRequired()
-            ->addCheckboxType();
+        $this->addOption($helper, PropertyServiceInterface::P_PANEL_STATE, 'index.panel_state');
+        $this->addOption($helper, PropertyServiceInterface::P_PANEL_MONTH, 'index.panel_month');
 
         $key = PropertyServiceInterface::P_PANEL_CATALOG;
         $helper->field($key)
@@ -135,13 +124,8 @@ abstract class AbstractParametersType extends AbstractType
             ])
             ->addChoiceType($this->getCalculationChoices());
 
-        $key = PropertyServiceInterface::P_STATUS_BAR;
-        $helper->field($key)
-            ->updateAttribute('data-default', $this->getDefaultValue($key))
-            ->help('parameters.helps.' . $key)
-            ->rowClass('mb-1')
-            ->notRequired()
-            ->addCheckboxType();
+        $this->addOption($helper, PropertyServiceInterface::P_STATUS_BAR);
+        $this->addOption($helper, PropertyServiceInterface::P_DARK_NAVIGATION);
     }
 
     protected function addMessageSection(FormHelper $helper): void
@@ -171,19 +155,8 @@ abstract class AbstractParametersType extends AbstractType
 
     protected function addOptionsSection(FormHelper $helper): void
     {
-        $key = PropertyServiceInterface::P_QR_CODE;
-        $helper->field($key)
-            ->updateAttribute('data-default', $this->getDefaultValue($key))
-            ->help('parameters.helps.' . $key)
-            ->notRequired()
-            ->addCheckboxType();
-
-        $key = PropertyServiceInterface::P_PRINT_ADDRESS;
-        $helper->field($key)
-            ->updateAttribute('data-default', $this->getDefaultValue($key))
-            ->help('parameters.helps.' . $key)
-            ->notRequired()
-            ->addCheckboxType();
+        $this->addOption($helper, PropertyServiceInterface::P_QR_CODE);
+        $this->addOption($helper, PropertyServiceInterface::P_PRINT_ADDRESS);
     }
 
     /**
@@ -216,6 +189,17 @@ abstract class AbstractParametersType extends AbstractType
         }
 
         return $user->isSuperAdmin();
+    }
+
+    private function addOption(FormHelper $helper, string $key, string $label = null): void
+    {
+        $label ??= self::LABEL_PREFIX . $key;
+        $helper->field($key)
+            ->label($label)
+            ->updateAttribute('data-default', $this->getDefaultValue($key))
+            ->help('parameters.helps.' . $key)
+            ->notRequired()
+            ->addCheckboxType();
     }
 
     /**

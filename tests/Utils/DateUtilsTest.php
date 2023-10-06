@@ -39,6 +39,18 @@ class DateUtilsTest extends TestCase
         ];
     }
 
+    public static function getDays(): \Generator
+    {
+        // today
+        $date = new \DateTime();
+        $day = (int) $date->format('j');
+        yield [$date, $day];
+
+        foreach (\range(1, 31) as $index) {
+            yield [new \DateTime("2022-01-$index"), $index];
+        }
+    }
+
     /**
      * @return array<array{0:\DateTimeInterface|null, 1: string|null}>
      */
@@ -229,6 +241,13 @@ class DateUtilsTest extends TestCase
     public function testFormatFormDate(?\DateTimeInterface $date, ?string $expected): void
     {
         $actual = DateUtils::formatFormDate($date);
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getDays')]
+    public function testGetDay(\DateTimeInterface $date, int $expected): void
+    {
+        $actual = DateUtils::getDay($date);
         self::assertSame($expected, $actual);
     }
 

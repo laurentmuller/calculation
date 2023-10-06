@@ -114,18 +114,15 @@ trait CacheAwareTrait
         if (null !== $item && $item->isHit()) {
             return $item->get();
         }
-        if (\is_callable($default)) {
-            $value = \call_user_func($default);
-            if (null !== $value) {
-                $this->setCacheValue($key, $value, $time);
-
-                return $value;
-            }
-
-            return null;
+        if (!\is_callable($default)) {
+            return $default;
+        }
+        $value = \call_user_func($default);
+        if (null !== $value) {
+            $this->setCacheValue($key, $value, $time);
         }
 
-        return $default;
+        return $value;
     }
 
     /**

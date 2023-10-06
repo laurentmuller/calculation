@@ -70,8 +70,10 @@ function updateVisibleButton() {
 
 /**
  * Display a notification.
+ *
+ * @param {string} [type] - the notification type.
  */
-function displayNotification() {
+function displayNotification(type) {
     'use strict';
     // get random text
     let title = $('.card-title:first').text();
@@ -81,8 +83,11 @@ function displayNotification() {
             // content
             const content = '<p class="m-0 p-0">' + response.content + '</p>';
             // type
-            const types = Object.values(Toaster.NotificationTypes);
-            const type = types.randomElement();
+            if (!type) {
+                const types = Object.values(Toaster.NotificationTypes);
+                type = types.randomElement();
+            }
+
             // title
             if (!$('#message_title').isChecked()) {
                 title = null;
@@ -215,7 +220,7 @@ function handleEmail() {
     });
     $('.btn-notify').on('click', (e) => {
         e.preventDefault();
-        displayNotification();
+        displayNotification($(e.currentTarget).data('value'));
     });
 
     $('.card-parameter .collapse').on('shown.bs.collapse', function () {

@@ -115,6 +115,11 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         return $this->loadProperties();
     }
 
+    public function isDarkNavigation(): bool
+    {
+        return $this->getPropertyBoolean(self::P_DARK_NAVIGATION, $this->service->isDarkNavigation());
+    }
+
     public function isMessageClose(): bool
     {
         return $this->getPropertyBoolean(self::P_MESSAGE_CLOSE, $this->service->isMessageClose());

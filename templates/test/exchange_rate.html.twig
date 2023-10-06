@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage %}
+{% from 'macros/_icons.html.twig' import homepage, apiLink %}
 {# macros #}
 {% macro fillCodes(codes, selection='') %}
 {% for key, code in codes -%}
@@ -71,6 +71,21 @@
         {{- 'exchange_rate.next_update'|trans({'%date%': 'common.empty_date'|trans}) -}}
     </div>
 </div>
+{% endblock %}
+{# footer #}
+{% block card_footer -%}
+{{ parent() }}
+{% if quota %}
+    <hr class="card-footer-line">
+    <div class="d-flex-wrap text-body-secondary small mt-2">
+    <span class="me-auto">
+        {{- 'exchange_rate.quota'|trans({'%date%': quota.date|locale_date('long'), '%remaining%': quota.remaining|integer, '%allowed%': quota.allowed|integer}) -}}
+    </span>
+        <span>
+        {{- apiLink(quota.documentation) -}}
+    </span>
+    </div>
+{% endif %}
 {% endblock %}
 {# actions #}
 {% block actions_form -%}

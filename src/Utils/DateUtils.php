@@ -102,6 +102,16 @@ final class DateUtils
     }
 
     /**
+     * Gets the numeric representation of a day of the month for the given date.
+     *
+     * @return int a value 1 through 31
+     */
+    public static function getDay(\DateTimeInterface $date): int
+    {
+        return (int) $date->format('j');
+    }
+
+    /**
      * Gets the numeric representation of a month for the given date.
      *
      * @return int a value 1 through 12
@@ -231,6 +241,12 @@ final class DateUtils
 
     /**
      * Remove the time part of the given date.
+     *
+     * @psalm-template T of \DateTime|\DateTimeImmutable
+     *
+     * @psalm-param T $date
+     *
+     * @psalm-return (T is \DateTime ? \DateTime : \DateTimeImmutable)
      */
     public static function removeTime(\DateTime|\DateTimeImmutable $date = new \DateTime()): \DateTime|\DateTimeImmutable
     {

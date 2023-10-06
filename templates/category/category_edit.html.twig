@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% from 'macros/_timestampable.html.twig' import timestampable %}
+{% from 'macros/_timestampable.html.twig' import timestampable_footer %}
 {# parameters #}
 {%- set title = new ? 'category.add.title' : 'category.edit.title' -%}
 {%- set title_icon = ICON_CATEGORY -%}
@@ -19,7 +19,7 @@
 
 {% block card_footer -%}
 {{ parent() }}
-{{ timestampable(item) }}
+{{ timestampable_footer(item) }}
 {% endblock %}
 
 {% block javascripts %}

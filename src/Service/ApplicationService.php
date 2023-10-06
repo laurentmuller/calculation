@@ -161,7 +161,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getDefaultProduct(): ?Product
     {
-        return $this->findEntity(self::P_DEFAULT_PRODUCT, Product::class);
+        return $this->findEntity(self::P_PRODUCT_DEFAULT, Product::class);
     }
 
     /**
@@ -169,7 +169,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function getDefaultQuantity(): float
     {
-        return $this->getPropertyFloat(self::P_DEFAULT_PRODUCT_QUANTITY);
+        return $this->getPropertyFloat(self::P_PRODUCT_QUANTITY);
     }
 
     /**
@@ -191,8 +191,8 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             // margin
             self::P_MIN_MARGIN => self::DEFAULT_MIN_MARGIN,
             // default product
-            self::P_DEFAULT_PRODUCT_EDIT => true,
-            self::P_DEFAULT_PRODUCT_QUANTITY => 0,
+            self::P_PRODUCT_EDIT => self::DEFAULT_TRUE,
+            self::P_PRODUCT_QUANTITY => 0,
             // display and edit entities
             self::P_DISPLAY_MODE => self::DEFAULT_DISPLAY_MODE,
             self::P_EDIT_ACTION => self::DEFAULT_ACTION,
@@ -206,10 +206,11 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_MESSAGE_CLOSE => self::DEFAULT_MESSAGE_CLOSE,
             // home page
             self::P_PANEL_CALCULATION => self::DEFAULT_PANEL_CALCULATION,
-            self::P_PANEL_CATALOG => true,
-            self::P_PANEL_STATE => true,
-            self::P_PANEL_MONTH => true,
-            self::P_STATUS_BAR => true,
+            self::P_PANEL_CATALOG => self::DEFAULT_TRUE,
+            self::P_PANEL_STATE => self::DEFAULT_TRUE,
+            self::P_PANEL_MONTH => self::DEFAULT_TRUE,
+            self::P_STATUS_BAR => self::DEFAULT_TRUE,
+            self::P_DARK_NAVIGATION => self::DEFAULT_TRUE,
             // document options
             self::P_QR_CODE => self::DEFAULT_QR_CODE,
             self::P_PRINT_ADDRESS => self::DEFAULT_PRINT_ADDRESS,
@@ -335,9 +336,9 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
                 self::P_DEFAULT_CATEGORY => $this->getDefaultCategory(),
                 self::P_MIN_MARGIN => $this->getMinMargin(),
                 // default product
-                self::P_DEFAULT_PRODUCT => $this->getDefaultProduct(),
-                self::P_DEFAULT_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
-                self::P_DEFAULT_PRODUCT_EDIT => $this->isDefaultEdit(),
+                self::P_PRODUCT_DEFAULT => $this->getDefaultProduct(),
+                self::P_PRODUCT_QUANTITY => $this->getDefaultQuantity(),
+                self::P_PRODUCT_EDIT => $this->isDefaultEdit(),
             ]
         );
         foreach (self::PASSWORD_OPTIONS as $option) {
@@ -391,7 +392,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function isDefaultEdit(): bool
     {
-        return $this->getPropertyBoolean(self::P_DEFAULT_PRODUCT_EDIT, self::DEFAULT_PRODUCT_EDIT);
+        return $this->getPropertyBoolean(self::P_PRODUCT_EDIT, self::DEFAULT_PRODUCT_EDIT);
     }
 
     /**
@@ -438,17 +439,17 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     public function isPanelCatalog(): bool
     {
-        return $this->getPropertyBoolean(self::P_PANEL_CATALOG, true);
+        return $this->getPropertyBoolean(self::P_PANEL_CATALOG, self::DEFAULT_TRUE);
     }
 
     public function isPanelMonth(): bool
     {
-        return $this->getPropertyBoolean(self::P_PANEL_MONTH, true);
+        return $this->getPropertyBoolean(self::P_PANEL_MONTH, self::DEFAULT_TRUE);
     }
 
     public function isPanelState(): bool
     {
-        return $this->getPropertyBoolean(self::P_PANEL_STATE, true);
+        return $this->getPropertyBoolean(self::P_PANEL_STATE, self::DEFAULT_TRUE);
     }
 
     public function isPrintAddress(): bool
@@ -463,7 +464,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     public function isStatusBar(): bool
     {
-        return $this->getPropertyBoolean(self::P_STATUS_BAR, true);
+        return $this->getPropertyBoolean(self::P_STATUS_BAR, self::DEFAULT_TRUE);
     }
 
     /**
@@ -541,7 +542,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function updateDeletedProduct(Product $product): void
     {
-        $this->updateDeletedEntity(self::P_DEFAULT_PRODUCT, $product);
+        $this->updateDeletedEntity(self::P_PRODUCT_DEFAULT, $product);
     }
 
     /**

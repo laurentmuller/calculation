@@ -87,7 +87,7 @@ class ApplicationParametersType extends AbstractParametersType
 
     private function addDefaultProductSection(FormHelper $helper): void
     {
-        $key = PropertyServiceInterface::P_DEFAULT_PRODUCT;
+        $key = PropertyServiceInterface::P_PRODUCT_DEFAULT;
         $helper->field($key)
             ->notRequired()
             ->widgetClass('must-validate')
@@ -95,12 +95,12 @@ class ApplicationParametersType extends AbstractParametersType
             ->updateAttribute('data-default', '')
             ->add(ProductListType::class);
 
-        $key = PropertyServiceInterface::P_DEFAULT_PRODUCT_QUANTITY;
+        $key = PropertyServiceInterface::P_PRODUCT_QUANTITY;
         $helper->field($key)
             ->updateAttribute('data-default', (float) $this->getDefaultValue($key))
             ->addNumberType();
 
-        $key = PropertyServiceInterface::P_DEFAULT_PRODUCT_EDIT;
+        $key = PropertyServiceInterface::P_PRODUCT_EDIT;
         $this->addCheckBox($helper, $key);
     }
 

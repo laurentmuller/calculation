@@ -23,10 +23,14 @@ use Twig\TwigFilter;
  */
 class EmojiFlagExtension extends AbstractExtension
 {
+    public function __construct(private readonly CountryFlagService $service)
+    {
+    }
+
     public function getFilters(): array
     {
         return [
-            new TwigFilter('flag_emoji', CountryFlagService::getFlag(...)),
+            new TwigFilter('flag_emoji', $this->service->getFlag(...)),
         ];
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\TranslatorAwareTrait;
+use App\Utils\DateUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -28,13 +29,16 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *     name: string,
  *     numericCode: int,
  *     fractionDigits: int,
- *     roundingIncrement: int
- * }
+ *     roundingIncrement: int}
  * @psalm-type ExchangeRateAndDateType = array{
  *     rate: float,
  *     next: int|null,
- *     update: int|null
- * }
+ *     update: int|null}
+ * @psalm-type ExchangeQuotaType = array{
+ *      allowed: int,
+ *      remaining: int,
+ *      date: \DateTimeInterface,
+ *      documentation: string}
  */
 class ExchangeRateService extends AbstractHttpClientService implements ServiceSubscriberInterface
 {
@@ -65,6 +69,11 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
      * The URI for latest exchange rates.
      */
     private const URI_LATEST = 'latest/%s';
+
+    /**
+     * The URI for quota.
+     */
+    private const URI_QUOTA = 'quota';
 
     /**
      * The URI for exchange rate.
@@ -112,6 +121,20 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         $url = $this->getUrl(self::URI_LATEST, $code);
         /** @psalm-var array<string, float> $result */
         $result = $this->getUrlCacheValue($url, fn () => $this->doGetLatest($url)) ?? [];
+
+        return $result;
+    }
+
+    /**
+     * Gets the deadline, the  allowed and the remaining calls.
+     *
+     * @psalm-return ExchangeQuotaType|null
+     */
+    public function getQuota(): ?array
+    {
+        $url = self::URI_QUOTA;
+        /** @psalm-var ExchangeQuotaType|null $result */
+        $result = $this->getUrlCacheValue($url, fn () => $this->doGetQuota($url));
 
         return $result;
     }
@@ -171,6 +194,19 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
         return [self::BASE_URI => $this->endpoint];
     }
 
+    private function computeNextDate(int $day): \DateTimeInterface
+    {
+        $date = DateUtils::removeTime();
+        $year = DateUtils::getYear($date);
+        $month = DateUtils::getMonth($date);
+        $date->setDate($year, $month, $day);
+        if ($day < DateUtils::getDay($date)) {
+            return $date->modify('+1 month');
+        }
+
+        return $date;
+    }
+
     /**
      * @psalm-return array<string, float>|null
      *
@@ -179,17 +215,38 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     private function doGetLatest(string $url): ?array
     {
         $response = $this->get($url);
-        if (\is_array($response)) {
-            /** @psalm-var array<string, float>|null $rates */
-            $rates = $response['conversion_rates'] ?? null;
-            if (\is_array($rates)) {
-                $this->timeout = $this->getDeltaTime($response);
+        if (!\is_array($response)) {
+            return null;
+        }
+        /** @psalm-var array<string, float>|null $rates */
+        $rates = $response['conversion_rates'] ?? null;
+        if (!\is_array($rates)) {
+            return null;
+        }
+        $this->timeout = $this->getDeltaTime($response);
 
-                return $rates;
-            }
+        return $rates;
+    }
+
+    /**
+     * @psalm-return ExchangeQuotaType|null
+     *
+     * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     */
+    private function doGetQuota(string $url): ?array
+    {
+        /** @psalm-var array{refresh_day_of_month: int, plan_quota: int, requests_remaining: int, documentation: string}|null $response */
+        $response = $this->get($url);
+        if (!\is_array($response)) {
+            return null;
         }
 
-        return null;
+        return [
+            'allowed' => $response['plan_quota'],
+            'remaining' => $response['requests_remaining'],
+            'documentation' => $response['documentation'],
+            'date' => $this->computeNextDate($response['refresh_day_of_month']),
+        ];
     }
 
     /**
@@ -198,17 +255,17 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     private function doGetRate(string $url): ?float
     {
         $response = $this->get($url);
-        if (\is_array($response)) {
-            /** @psalm-var float|null $rate */
-            $rate = $response['conversion_rate'] ?? null;
-            if (\is_float($rate)) {
-                $this->timeout = $this->getDeltaTime($response);
-
-                return $rate;
-            }
+        if (!\is_array($response)) {
+            return null;
         }
+        /** @psalm-var float|null $rate */
+        $rate = $response['conversion_rate'] ?? null;
+        if (!\is_float($rate)) {
+            return null;
+        }
+        $this->timeout = $this->getDeltaTime($response);
 
-        return null;
+        return $rate;
     }
 
     /**
@@ -219,21 +276,21 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     private function doGetRateAndDates(string $url): ?array
     {
         $response = $this->get($url);
-        if (\is_array($response)) {
-            /** @psalm-var float|null $rate */
-            $rate = $response['conversion_rate'] ?? null;
-            if (\is_float($rate)) {
-                $this->timeout = $this->getDeltaTime($response);
-
-                return [
-                    'rate' => $rate,
-                    'next' => $this->getNextTime($response),
-                    'update' => $this->getUpdateTime($response),
-                ];
-            }
+        if (!\is_array($response)) {
+            return null;
         }
+        /** @psalm-var float|null $rate */
+        $rate = $response['conversion_rate'] ?? null;
+        if (!\is_float($rate)) {
+            return null;
+        }
+        $this->timeout = $this->getDeltaTime($response);
 
-        return null;
+        return [
+            'rate' => $rate,
+            'next' => $this->getNextTime($response),
+            'update' => $this->getUpdateTime($response),
+        ];
     }
 
     /**
@@ -244,18 +301,17 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     private function doGetSupportedCodes(string $url): ?array
     {
         $response = $this->get($url);
-        if (\is_array($response)) {
-            /** @psalm-var string[]|null $codes */
-            $codes = $response['supported_codes'] ?? null;
-            if (\is_array($codes)) {
-                $result = $this->mapCodes($codes);
-                $this->timeout = $this->getDeltaTime($response);
-
-                return $result;
-            }
+        if (!\is_array($response)) {
+            return null;
         }
+        /** @psalm-var string[]|null $codes */
+        $codes = $response['supported_codes'] ?? null;
+        if (!\is_array($codes)) {
+            return null;
+        }
+        $this->timeout = $this->getDeltaTime($response);
 
-        return null;
+        return $this->mapCodes($codes);
     }
 
     /**

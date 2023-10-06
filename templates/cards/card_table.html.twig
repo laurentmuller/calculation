@@ -165,12 +165,12 @@
 {% block card_container_class '' %}
 {% block card_body_class ' px-3 pt-0 pb-1' %}
 {# header #}
-{% block card_header -%}
+{% block card_header %}
 <div class="d-flex-wrap-center">
     <div class="me-auto">{{ parent() }}</div>
     <div class="d-print-none">{% block header_actions -%}{%- endblock %}</div>
 </div>
-{%- endblock %}
+{% endblock %}
 {# body #}
 {% block card_body -%}
 {# toolbar #}

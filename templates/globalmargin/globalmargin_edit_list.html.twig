@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% from 'macros/_margins_edit.html.twig' import printMargins %}
+{% from 'macros/_margins_edit.html.twig' import outputMargins %}
 {# parameters #}
 {%- set title = 'globalmargin.edit.title' -%}
 {%- set title_icon = ICON_GLOBAL_MARGIN -%}
@@ -7,7 +7,7 @@
 {% block card_container_class ' col col-xl-8 offset-xl-2' %}
 {# body #}
 {% block card_body %}
-{{ printMargins(form.margins) }}
+{{ outputMargins(form.margins) }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}

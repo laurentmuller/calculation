@@ -14,7 +14,7 @@
 {% macro rowBundle(bundle) -%}
 <tr>
     <td class="e ps-3">
-        {{- bundle.name -}}{%- if bundle.homepage|default(false) %}&nbsp;{{- linkExternal(bundle.homepage, '', 'd-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
+        {{- bundle.name -}}{%- if bundle.homepage|default(false) %}{{- linkExternal(bundle.homepage, '', 'mx-1 d-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
     </td>
     <td class="v">{{ bundle.path }}</td>
 </tr>
@@ -22,7 +22,7 @@
 {% macro rowPackage(package) -%}
 <tr>
     <td class="e ps-3">
-        {{- package.name -}}{%- if package.homepage %}&nbsp;{{- linkExternal(package.homepage, '', 'd-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
+        {{- package.name -}}{%- if package.homepage %}{{- linkExternal(package.homepage, '', 'mx-1 d-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
     </td>
     <td class="f text-nowrap">{{ package.version }}</td>
     <td class="text">{{ package.description }}</td>

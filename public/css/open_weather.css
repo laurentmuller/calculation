@@ -8,6 +8,12 @@
     white-space: nowrap;
 }
 
+
+.ow-time {
+    width: 50px;
+    white-space: nowrap;
+}
+
 .ow-icon {
     width: 50px;
     text-align: center;
@@ -34,7 +40,7 @@
 }
 
 .ow-temperature {
-    width: 120px;
+    width: 70px;
 }
 
 .ow-temperature-pills {
@@ -43,6 +49,7 @@
     border-radius: 50rem;
     padding: 0.2rem 0.5rem;
     width: 55px;
+    line-height: 1rem;
 }
 
 .ow-temperature-forecast {

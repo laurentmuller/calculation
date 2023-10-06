@@ -9,13 +9,13 @@
             {% for data in forecast.list %}
             <tr>
                 <td class="ow-date">
-                    {{ data.dt_time_locale }}
+                    {{- data.dt_time_locale -}}
                 </td>
                 <td class="ow-icon">
                     <img src="{{ data.weather.icon_small }}" class="ow-image" alt="{{ 'openweather.fields.forecast_weather'|trans }}" title="{{ data.weather.description }}">
                 </td>
                 <td class="ow-temperature">
-                    <span class="ow-temperature-pills ow-temperature-forecast" title="{{ 'openweather.fields.temp'|trans }}">{{ tools.value_temp(data.main.temp, units_temp) }}</span>
+                    <p class="ow-temperature-pills ow-temperature-forecast mt-1 mb-0" title="{{ 'openweather.fields.temp'|trans }}">{{ tools.value_temp(data.main.temp, units_temp) }}</p>
                 </td>
                 <td class="">
                     {% apply spaceless %}

@@ -14,11 +14,11 @@ namespace App\Enums;
 
 use App\Interfaces\EnumDefaultInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Interfaces\EnumTranslatableInterface;
 use App\Traits\EnumDefaultTrait;
-use App\Traits\EnumTranslatableTrait;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
+use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
+use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
 
 /**
  * Entity action enumeration.
@@ -27,10 +27,10 @@ use Elao\Enum\Attribute\ReadableEnum;
  * @implements EnumSortableInterface<EntityAction>
  */
 #[ReadableEnum(prefix: 'entity_action.', useValueAsDefault: true)]
-enum EntityAction: string implements EnumDefaultInterface, EnumSortableInterface, EnumTranslatableInterface
+enum EntityAction: string implements EnumDefaultInterface, EnumSortableInterface, TranslatableEnumInterface
 {
     use EnumDefaultTrait;
-    use EnumTranslatableTrait;
+    use TranslatableEnumTrait;
 
     /*
      * Edit the entity (default value).

@@ -1,6 +1,6 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% from 'macros/_margins_edit.html.twig' import printMargins %}
-{% from 'macros/_timestampable.html.twig' import timestampable %}
+{% from 'macros/_margins_edit.html.twig' import outputMargins %}
+{% from 'macros/_timestampable.html.twig' import timestampable_footer %}
 {# parameters #}
 {%- set title = new ? 'group.add.title' : 'group.edit.title' -%}
 {%- set title_icon = ICON_GROUP -%}
@@ -9,12 +9,12 @@
 {% block card_body %}
 {{ form_row(form.code) }}
 {{ form_row(form.description) }}
-{{ printMargins(form.margins) }}
+{{ outputMargins(form.margins) }}
 {% endblock %}
 {# footer #}
 {% block card_footer -%}
 {{ parent() }}
-{{ timestampable(item) }}
+{{ timestampable_footer(item) }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}

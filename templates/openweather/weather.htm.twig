@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import linkExternal %}
+{% from 'macros/_icons.html.twig' import apiLink %}
 {% from 'openweather/_weather_macro.html.twig' import value_temp %}
 {# macros #}
 {% macro system(units, selection, route, id, count) -%}
@@ -55,12 +55,19 @@
 {# body #}
 {% block card_body %}
 {% if id %}
-    <h2>
-        <span class="flag-emoji me-1" title="{{ current.sys.country_name }}">{{ current.sys.country|flag_emoji }}</span>{{- current.name }}, {{ current.sys.country_name -}}
-    </h2>
-    <h3 class="fw-normal">
-        <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="{{ 'openweather.fields.current_weather'|trans }}" title="{{ current.weather.description }}">{{ value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
-    </h3>
+    <div class="d-flex-wrap">
+        <div class="me-auto">
+            <h2>
+                <span class="flag-emoji mx-1" title="{{ current.sys.country_name }}">{{ current.sys.country|flag_emoji }}</span>{{- current.name }}, {{ current.sys.country_name -}}
+            </h2>
+            <h3 class="fw-normal">
+                <img src="{{ current.weather.icon_big }}" class="ow-image ow-image-title" alt="{{ 'openweather.fields.current_weather'|trans }}" title="{{ current.weather.description }}">{{ value_temp(current.main.temp, units_temp) }}, {{ current.weather.description }}
+            </h3>
+        </div>
+        <div class="small d-print-none">
+            {{- apiLink(api_url) -}}
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-5">
             {{ include('openweather/_weather_today.html.twig') }}
@@ -73,10 +80,6 @@
 {% else %}
     <p class="mb-0 text-center">{{ 'openweather.current.empty'|trans|replace({'#': path('openweather_search')})|raw }}</p>
 {% endif %}
-<hr class="d-print-none">
-<p class="small text-end mt-1 mb-0 d-print-none">
-    {{- linkExternal(api_url, 'common.api_documentation') -}}
-</p>
 {% endblock %}
 {# stylesheets #}
 {% block stylesheets %}

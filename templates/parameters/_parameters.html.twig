@@ -21,7 +21,22 @@
 {% block _message_progress_widget -%}
 <div class="input-group">
     {{- block('choice_widget') -}}
-    <button class="btn btn-notify btn-outline-secondary d-print-none" type="button" title="{{ 'parameters.action_test'|trans }}"><i class="fa-regular fa-bell"></i></button>
+    <button class="btn btn-notify btn-outline-secondary d-print-none" type="button" title="{{ 'parameters.action_test'|trans }}">
+        <i class="fa-regular fa-bell"></i>
+    </button>
+    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" title="{{ 'parameters.action_test'|trans }}">
+        <span class="visually-hidden">Basculer la liste déroulante</span>
+    </button>
+    {% set types = enum('App\\Enums\\FlashType').cases() %}
+    <ul class="dropdown-menu dropdown-menu-end">
+        {% for type in types %}
+        <li>
+            <button class="dropdown-item btn-notify" type="button" data-value="{{ type.value }}">
+                <i class="me-1 {{ type.icon }}" style="color: {{ type.styleColor }}"></i>{{ type|trans }}
+            </button>
+        </li>
+        {% endfor %}
+    </ul>
 </div>
 {%- endblock %}
 {# parameters #}

@@ -279,8 +279,8 @@ common:
   button_edit: Modifier
   button_export: Exporter
   button_export_pdf: Exporter au format PDF
-  button_export_excel: Exporter vers Microsoft® Excel
-  button_export_word: Exporter vers Microsoft® Word
+  button_export_excel: Exporter vers Microsoft® Excel®
+  button_export_word: Exporter vers Microsoft® Word®
   button_excel_list: Exporter la liste
   button_card: Mode mosaïque
   button_import: Importer
@@ -329,6 +329,7 @@ common:
   save_data: Sauvegarde des données...
   data_changed: Données modifiées
   api_documentation: Documentation (API)
+  api_documentation_help: 'Accéder à la documentation de l''interface d''application'
 simulate:
   label: Simuler la mise à jour
   help: Simule une mise à jour sans enregistrer les changements dans la base de données.
@@ -430,6 +431,7 @@ exchange_rate:
   last_update: 'Dernière mise à jour : %date%'
   next_update: 'Prochaine mise à jour : %date%'
   rate: 'Taux de change : %base% = %target%'
+  quota: 'Demandes restantes jusqu''au %date% : %remaining% / %allowed%'
   result: Résultat
   source: Devise locale
   swap_label: Inverser
@@ -829,6 +831,7 @@ parameters:
     qr_code: Code QR sur les calculations
     time_format: Format des heures
     status_bar: Barre d'état
+    dark_navigation: Thème sombre
   group_customer: Client
   group_customer_help: Données du client utilisées pour l'impression des documents.
   group_default: Valeurs par défaut
@@ -845,8 +848,6 @@ parameters:
   group_product_help: Article à ajouter automatiquement lors de la création d'une nouvelle calculation.
   group_security: Sécurité
   group_security_help: Options de sécurité utilisées lors de la connection à l'application et de la définition du mot de passe.
-  group_theme: Thème
-  group_theme_help: Appliquer un thème sur ce site
   helps:
     panel_calculation: Nombre de calculations à afficher.
     panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
@@ -855,6 +856,7 @@ parameters:
     print_address: L'adresse du client est imprimée sur les entêtes des documents Excel®, Word® et PDF.
     qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
     status_bar: Afficher la barre d'état au bas de l'application.
+    dark_navigation: Utiliser le thème sombre pour le menu principal et la barre d'état.
   placeholders:
     default_product: <Aucun article sélectionné>
   success: Les paramètres de l'application ont été mis à jour avec succès.

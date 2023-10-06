@@ -1,6 +1,6 @@
 {# imports #}
 {% from 'macros/_icons.html.twig' import icon %}
-{% from 'macros/_timestampable.html.twig' import timestampable %}
+{% from 'macros/_timestampable.html.twig' import timestampable_footer %}
 <div id="totals-panel" class="card mb-3">
     <div class="card-header">
         <h1 class="card-title">{{ icon('list-ul', 'calculation.edit.panel_resume') }}</h1>
@@ -15,6 +15,6 @@
         </div>
     </div>
     <div class="card-footer px-3{% if new %} d-none{% endif %}">
-        {{- timestampable(item, false) -}}
+        {{- timestampable_footer(item, false) -}}
     </div>
 </div>

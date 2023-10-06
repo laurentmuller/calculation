@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage, linkExternal %}
+{% from 'macros/_icons.html.twig' import homepage, apiLink %}
 {# macros #}
 {% macro output_row(name, value) -%}
 {% if value %}
@@ -70,7 +70,7 @@
 {% block card_footer -%}
 <div class="d-flex-wrap-center">
     {{- homepage() }}
-    {{- linkExternal('https://ipstack.com', 'common.api_documentation', 'flex-grow-1 text-sm-end') -}}
+    {{- apiLink('https://ipstack.com', 'flex-grow-1 text-sm-end') -}}
 </div>
 {%- endblock %}
 {# stylesheets #}

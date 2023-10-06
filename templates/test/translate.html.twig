@@ -1,11 +1,11 @@
 {% extends 'cards/card_edit.html.twig' %}
 {# macros #}
+{% from 'macros/_icons.html.twig' import apiLink %}
 {% macro fillLanguages(languages, language=false) %}
 {% for key, value in languages -%}
     <option value="{{ value }}"{% if value == language %} selected="selected"{% endif %}>{{ key }}</option>
 {% endfor -%}
 {% endmacro %}
-
 {# parameters #}
 {%- set title = 'translator.title' -%}
 {%- set title_icon = 'globe' -%}
@@ -22,7 +22,7 @@
                      'data-locale': app.locale}) -%}
 
 {% block card_container_class '' %}
-
+{# body #}
 {% block card_body %}
 <div class="row">
     <div class="col-md-5">
@@ -80,20 +80,20 @@
         <span id="detected" class="text-body-secondary"></span>
     </div>
     <div class="col-md-6 text-md-end d-print-none">
-        <a class="small" id="api-url" href="{{ service.apiUrl }}" target="_blank" rel="noopener noreferrer">{{ 'common.api_documentation'|trans }}</a>
+        {{ apiLink(service.apiUrl, 'api-url') }}
     </div>
 </div>
 {% endblock %}
-
+{# action form #}
 {% block actions_form -%}
 {{ parent() }}
 <button type="button" class="btn btn-form btn-success btn-copy" disabled="disabled" data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>
 {%- endblock %}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/select2.css') }}
 {%- endblock -%}
-
+{# javascripts #}
 {% block javascripts -%}
 {{ parent() }}
 {{ asset_js('js/vendor/select2/js/select2.js') }}

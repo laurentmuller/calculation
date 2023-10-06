@@ -102,6 +102,11 @@ interface PropertyServiceInterface
     final public const DEFAULT_STRENGTH_LEVEL = StrengthLevel::NONE;
 
     /**
+     * The default true value (boolean).
+     */
+    final public const DEFAULT_TRUE = true;
+
+    /**
      * The property name for the administrator role rights (string).
      */
     final public const P_ADMIN_RIGHTS = 'admin_rights';
@@ -147,6 +152,11 @@ interface PropertyServiceInterface
     final public const P_CUSTOMER_ZIP_CITY = 'customer_zip_city';
 
     /**
+     * The property name to use dark theme for the sidebar, the navigation abr and the footer (bool).
+     */
+    final public const P_DARK_NAVIGATION = 'dark_navigation';
+
+    /**
      * The property name for the date of the last archiving calculations (date).
      */
     final public const P_DATE_CALCULATION = 'archive_calculation';
@@ -165,21 +175,6 @@ interface PropertyServiceInterface
      * The property name for the default category (integer).
      */
     final public const P_DEFAULT_CATEGORY = 'default_category';
-
-    /**
-     * The property name for the default product (integer).
-     */
-    final public const P_DEFAULT_PRODUCT = 'default_product';
-
-    /**
-     * The property name for the default product edit (bool).
-     */
-    final public const P_DEFAULT_PRODUCT_EDIT = 'default_product_edit';
-
-    /**
-     * The property name for the default product quantity (float).
-     */
-    final public const P_DEFAULT_PRODUCT_QUANTITY = 'default_product_quantity';
 
     /**
      * The property name for the default calculation state (integer).
@@ -288,6 +283,21 @@ interface PropertyServiceInterface
      * The property name to output the customer address in PDF documents.
      */
     final public const P_PRINT_ADDRESS = 'print_address';
+
+    /**
+     * The property name for the default product (integer).
+     */
+    final public const P_PRODUCT_DEFAULT = 'default_product';
+
+    /**
+     * The property name for the default product edition (bool).
+     */
+    final public const P_PRODUCT_EDIT = 'default_product_edit';
+
+    /**
+     * The property name for the default product quantity (float).
+     */
+    final public const P_PRODUCT_QUANTITY = 'default_product_quantity';
 
     /**
      * The property name to output a QR Code at the end of the PDF calculation document.

@@ -1,5 +1,5 @@
 {# create timestampable row #}
-{% macro timestampable(item, separator=true) %}
+{% macro timestampable_footer(item, separator=true) %}
 {% if not item.new %}
     {# created date and user #}
     {% if not item.createdAt and not item.createdBy %}
@@ -20,7 +20,7 @@
     {% if separator %}
         <hr class="card-footer-line">
     {% endif %}
-    <div class="d-flex-wrap-center text-body-tertiary small">
+    <div class="d-flex-wrap-center text-body-tertiary small{% if separator %} mt-2{% endif %}">
         <span class="me-auto">{{- created -}}</span>
         <span>{{- updated -}}</span>
     </div>

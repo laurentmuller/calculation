@@ -91,7 +91,7 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
     abstract protected function getCountMessage(int $count): string;
 
     /**
-     * @param T $entity
+     * @psalm-param T $entity
      *
      * @return array<string, mixed>
      */

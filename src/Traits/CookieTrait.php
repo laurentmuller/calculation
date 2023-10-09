@@ -42,9 +42,9 @@ trait CookieTrait
      *
      * @template EnumType of \BackedEnum
      *
-     * @param EnumType $default
+     * @psalm-param EnumType $default
      *
-     * @return EnumType
+     * @psalm-return EnumType
      */
     protected function getCookieEnum(Request $request, string $key, \BackedEnum $default, string $prefix = ''): \BackedEnum
     {

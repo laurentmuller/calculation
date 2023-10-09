@@ -173,9 +173,9 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
         $headers = $response->getHeaders();
         $code = (int) ($headers['X-akismet-alert-code'][0] ?? 0);
         if (0 !== $code) {
-            $message = $this->trans((string) $code, [], 'askimet');
+            $message = $this->trans((string) $code, [], 'akismet');
             if ($message === (string) $code) {
-                $message = $headers['X-akismet-alert-msg'][0] ?? $this->trans('unknown', [], 'askimet');
+                $message = $headers['X-akismet-alert-msg'][0] ?? $this->trans('unknown', [], 'akismet');
             }
 
             return $this->setLastError($code, $message);

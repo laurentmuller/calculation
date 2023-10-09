@@ -41,9 +41,9 @@ trait RequestTrait
      *
      * @template EnumType of \BackedEnum
      *
-     * @param EnumType $default
+     * @psalm-param EnumType $default
      *
-     * @return EnumType
+     * @psalm-return EnumType
      */
     protected function getRequestEnum(Request $request, string $key, \BackedEnum $default): \BackedEnum
     {

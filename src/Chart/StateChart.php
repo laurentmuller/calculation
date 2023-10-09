@@ -45,11 +45,6 @@ class StateChart extends AbstractHighchart
         $count = \array_sum(\array_column($states, 'count'));
         $total = \array_sum(\array_column($states, 'total'));
         $items = \array_sum(\array_column($states, 'items'));
-        /** @psalm-var array{count: int, total: float} $state */
-        foreach ($states as &$state) {
-            $state['percentCalculation'] = $this->safeDivide($state['count'], $count);
-            $state['percentAmount'] = $this->safeDivide($state['total'], $total);
-        }
         $data = \array_map(function (array $state): array {
             $url = $this->generator->generate('calculation_table', [CalculationTable::PARAM_STATE => $state['id']]);
 

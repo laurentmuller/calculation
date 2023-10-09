@@ -1,5 +1,6 @@
 {% extends 'chart/chart_base.html.twig' %}
 {% from 'macros/_properties.html.twig' import stateCss %}
+{% from 'macros/_icons.html.twig' import button_pdf %}
 {% trans_default_domain 'chart' %}
 {# parameters #}
 {%- set title = 'title_by_state' -%}
@@ -49,3 +50,8 @@
     </tr>
 </tbody>
 {% endblock %}
+{# footer #}
+{% block card_footer -%}
+    {{ parent() }}
+    {{ button_pdf('chart_by_state_pdf', {}, 'common.button_export_pdf') }}
+{%- endblock %}

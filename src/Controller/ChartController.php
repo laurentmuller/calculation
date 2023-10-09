@@ -15,6 +15,11 @@ namespace App\Controller;
 use App\Chart\MonthChart;
 use App\Chart\StateChart;
 use App\Interfaces\RoleInterface;
+use App\Report\CalculationByMonthReport;
+use App\Report\CalculationByStateReport;
+use App\Repository\CalculationRepository;
+use App\Repository\CalculationStateRepository;
+use App\Response\PdfResponse;
 use App\Traits\MathTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,6 +29,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * The controller for charts.
+ *
+ * @psalm-import-type QueryCalculationType from CalculationStateRepository
  */
 #[AsController]
 #[Route(path: '/chart')]
@@ -42,12 +49,24 @@ class ChartController extends AbstractController
     public function month(Request $request, MonthChart $chart): Response
     {
         $key = 'chart_by_month';
-        $count = $this->getSessionInt($key, 6);
-        $count = $this->getRequestInt($request, 'count', $count);
-        $parameters = $chart->generate($count);
+        $months = $this->getMonths($request);
+        $parameters = $chart->generate($months);
         $this->setSessionValue($key, $parameters['months']);
 
         return $this->render('chart/chart_month.html.twig', $parameters);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route(path: '/month/pdf', name: 'chart_by_month_pdf', methods: Request::METHOD_GET)]
+    public function monthPdf(Request $request, CalculationRepository $repository): PdfResponse
+    {
+        $months = $this->getMonths($request);
+        $data = $repository->getByMonth($months);
+        $report = new CalculationByMonthReport($this, $data);
+
+        return $this->renderPdfDocument($report);
     }
 
     /**
@@ -55,9 +74,25 @@ class ChartController extends AbstractController
      *
      * @throws \Exception
      */
-    #[Route(path: '/state', name: 'chart_by_state')]
+    #[Route(path: '/state', name: 'chart_by_state', methods: Request::METHOD_GET)]
     public function state(StateChart $chart): Response
     {
         return $this->render('chart/chart_state.html.twig', $chart->generate());
+    }
+
+    #[Route(path: '/state/pdf', name: 'chart_by_state_pdf', methods: Request::METHOD_GET)]
+    public function statePdf(CalculationStateRepository $repository): PdfResponse
+    {
+        $data = $repository->getCalculations();
+        $report = new CalculationByStateReport($this, $data);
+
+        return $this->renderPdfDocument($report);
+    }
+
+    private function getMonths(Request $request): int
+    {
+        $count = $this->getSessionInt('chart_by_month', 6);
+
+        return $this->getRequestInt($request, 'count', $count);
     }
 }

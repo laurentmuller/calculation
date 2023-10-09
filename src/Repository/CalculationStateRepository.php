@@ -14,6 +14,7 @@ namespace App\Repository;
 
 use App\Entity\CalculationState;
 use App\Traits\GroupByTrait;
+use App\Traits\MathTrait;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -30,7 +31,9 @@ use Doctrine\Persistence\ManagerRegistry;
  *      items: float,
  *      total: float,
  *      margin: float,
- *      marginAmount: float}
+ *      marginAmount: float,
+ *      percentCalculation :float,
+ *      percentAmount:float}
  * @psalm-type DropDownType = array<int, array{
  *     id: int,
  *     icon: string,
@@ -42,6 +45,7 @@ use Doctrine\Persistence\ManagerRegistry;
 class CalculationStateRepository extends AbstractRepository
 {
     use GroupByTrait;
+    use MathTrait;
 
     /**
      * The alias for the calculation entity.
@@ -64,9 +68,18 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getCalculations(): array
     {
-        return $this->getCalculationsQueryBuilder()
+        $result = $this->getCalculationsQueryBuilder()
             ->getQuery()
             ->getArrayResult();
+
+        $count = \array_sum(\array_column($result, 'count'));
+        $total = \array_sum(\array_column($result, 'total'));
+        foreach ($result as &$data) {
+            $data['percentCalculation'] = $this->safeDivide($data['count'], $count);
+            $data['percentAmount'] = $this->safeDivide($data['total'], $total);
+        }
+
+        return $result;
     }
 
     /**

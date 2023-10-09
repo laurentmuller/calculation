@@ -1,14 +1,12 @@
 {% extends 'chart/chart_base.html.twig' %}
+{% from 'macros/_icons.html.twig' import icon, button_pdf %}
 {% trans_default_domain 'chart' %}
-{% from 'macros/_icons.html.twig' import icon %}
-
 {# add a month option #}
 {% macro month(value, selected) -%}
 <option value="{{ value }}"{% if selected %} selected="selected"{% endif %}>
     {{- 'counters.months'|trans({'count': value}, 'messages') -}}
 </option>
 {%- endmacro %}
-
 {# parameters #}
 {%- set title = 'title_by_month' -%}
 {%- set title_icon = 'calendar-alt far' -%}
@@ -69,3 +67,8 @@
     </tr>
 </tbody>
 {% endblock %}
+{# footer #}
+{% block card_footer -%}
+    {{ parent() }}
+    {{ button_pdf('chart_by_month_pdf', {'count': months}, 'common.button_export_pdf') }}
+{%- endblock %}

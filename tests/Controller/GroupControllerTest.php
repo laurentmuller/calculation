@@ -13,13 +13,13 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\GroupController;
-use App\Entity\Group;
+use App\Tests\EntityTrait\GroupTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(GroupController::class)]
 class GroupControllerTest extends AbstractControllerTestCase
 {
-    private static ?Group $entity = null;
+    use GroupTrait;
 
     public static function getRoutes(): array
     {
@@ -63,11 +63,7 @@ class GroupControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (!self::$entity instanceof Group) {
-            self::$entity = new Group();
-            self::$entity->setCode('Test Code');
-            $this->addEntity(self::$entity);
-        }
+        $this->getGroup();
     }
 
     /**
@@ -75,6 +71,6 @@ class GroupControllerTest extends AbstractControllerTestCase
      */
     protected function deleteEntities(): void
     {
-        self::$entity = $this->deleteEntity(self::$entity);
+        $this->deleteGroup();
     }
 }

@@ -39,20 +39,22 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
 
     public function drawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool
     {
-        if (3 === $index) {
-            if ($this->started) {
-                $doc = $builder->getParent();
-                $margin = $doc->getCellMargin();
-                $bounds->inflateXY(-3.0 * $margin, -$margin)
-                    ->setHeight(self::LINE_HEIGHT - 2.0 * $margin);
-                $doc->rectangle($bounds, PdfRectangleStyle::BOTH);
-
-                return true;
-            }
+        if (3 !== $index) {
+            return false;
+        }
+        if (!$this->started) {
             $this->started = true;
+
+            return false;
         }
 
-        return false;
+        $doc = $builder->getParent();
+        $margin = $doc->getCellMargin();
+        $bounds->inflateXY(-3.0 * $margin, -$margin)
+            ->setHeight(self::LINE_HEIGHT - 2.0 * $margin);
+        $doc->rectangle($bounds, PdfRectangleStyle::BOTH);
+
+        return true;
     }
 
     /**
@@ -62,6 +64,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
     {
         $this->setTitleTrans('calculationstate.list.title');
         $this->AddPage();
+
         $table = PdfTableBuilder::instance($this)
             ->setBackgroundListener($this)
             ->addColumns(
@@ -71,6 +74,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
                 PdfColumn::center($this->trans('calculationstate.fields.color'), 15, true),
                 PdfColumn::right($this->trans('calculationstate.fields.calculations'), 22, true)
             )->outputHeaders();
+
         foreach ($entities as $entity) {
             $table->startRow()
                 ->add($entity->getCode())

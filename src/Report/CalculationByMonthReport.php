@@ -12,9 +12,13 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTextColor;
 use App\Repository\CalculationRepository;
+use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
 
 /**
@@ -26,6 +30,8 @@ use App\Utils\FormatUtils;
  */
 class CalculationByMonthReport extends AbstractArrayReport
 {
+    use MathTrait;
+
     /**
      * @psalm-param CalculationByMonthType[] $entities
      */
@@ -37,14 +43,14 @@ class CalculationByMonthReport extends AbstractArrayReport
         $table = $this->createTable();
 
         foreach ($entities as $entity) {
-            $table->startRow()
-                ->add($this->formatDate($entity['date']))
-                ->add(FormatUtils::formatInt($entity['count']))
-                ->add(FormatUtils::formatInt($entity['items']))
-                ->add(FormatUtils::formatInt($entity['total'] - $entity['items']))
-                ->add(FormatUtils::formatPercent($entity['margin'], false))
-                ->add(FormatUtils::formatInt($entity['total']))
-                ->endRow();
+            $table->startRow()->addValues(
+                $this->formatDate($entity['date']),
+                FormatUtils::formatInt($entity['count']),
+                FormatUtils::formatInt($entity['items']),
+                FormatUtils::formatInt($entity['total'] - $entity['items']),
+                $this->formatPercent($entity['margin']),
+                FormatUtils::formatInt($entity['total'])
+            )->endRow();
         }
 
         // total
@@ -52,16 +58,16 @@ class CalculationByMonthReport extends AbstractArrayReport
         $items = $this->sum($entities, 'items');
         $total = $this->sum($entities, 'total');
         $net = $total - $items;
-        $margin = 1.0 + $net / $items;
+        $margin = 1.0 + $this->safeDivide($net, $items);
 
-        $table->startHeaderRow()
-            ->add($this->transChart('fields.total'))
-            ->add(FormatUtils::formatInt($count))
-            ->add(FormatUtils::formatInt($items))
-            ->add(FormatUtils::formatInt($net))
-            ->add(FormatUtils::formatPercent($margin, false))
-            ->add(FormatUtils::formatInt($total))
-            ->endRow();
+        $table->startHeaderRow()->addValues(
+            $this->transChart('fields.total'),
+            FormatUtils::formatInt($count),
+            FormatUtils::formatInt($items),
+            FormatUtils::formatInt($net),
+            $this->formatPercent($margin, true),
+            FormatUtils::formatInt($total)
+        )->endRow();
 
         return true;
     }
@@ -73,7 +79,7 @@ class CalculationByMonthReport extends AbstractArrayReport
             PdfColumn::right($this->transChart('fields.count'), 25, true),
             PdfColumn::right($this->transChart('fields.net'), 25, true),
             PdfColumn::right($this->transChart('fields.margin_amount'), 25, true),
-            PdfColumn::right($this->transChart('fields.margin_percent'), 25, true),
+            PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
             PdfColumn::right($this->transChart('fields.total'), 25, true),
         ];
 
@@ -85,6 +91,23 @@ class CalculationByMonthReport extends AbstractArrayReport
     private function formatDate(\DateTimeInterface $date): string
     {
         return \ucfirst(FormatUtils::formatDate(date: $date, pattern: 'MMMM Y'));
+    }
+
+    private function formatPercent(float $value, bool $bold = false): PdfCell
+    {
+        $cell = new PdfCell(FormatUtils::formatPercent($value, false));
+        $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
+        if ($this->isMinMargin($value)) {
+            $style->setTextColor(PdfTextColor::red());
+        }
+        $cell->setStyle($style);
+
+        return $cell;
+    }
+
+    private function isMinMargin(float $value): bool
+    {
+        return !$this->isFloatZero($value) && $value < $this->controller->getMinMargin();
     }
 
     private function sum(array $entities, string $key): float

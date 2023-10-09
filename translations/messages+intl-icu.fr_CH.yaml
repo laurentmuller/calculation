@@ -195,13 +195,13 @@ counters:
         {count, plural,  
             =0    {Aucun statut} 
             one   {1 statut} 
-            other {# status}
+            other {# statuts}
         }
     states_lower: >-
         {count, plural,  
             =0    {aucun statut} 
             one   {1 statut} 
-            other {# status}
+            other {# statuts}
         }
     users: >-
         {count, plural,  

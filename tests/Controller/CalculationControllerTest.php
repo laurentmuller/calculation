@@ -13,18 +13,18 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\CalculationController;
-use App\Entity\Calculation;
-use App\Entity\CalculationState;
-use App\Entity\Category;
-use App\Entity\Group;
+use App\Tests\EntityTrait\CalculationStateTrait;
+use App\Tests\EntityTrait\CalculationTrait;
+use App\Tests\EntityTrait\CategoryTrait;
+use App\Tests\EntityTrait\GroupTrait;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationController::class)]
 class CalculationControllerTest extends AbstractControllerTestCase
 {
-    private static ?Calculation $calculation = null;
-    private static ?Category $category = null;
-    private static ?Group $group = null;
-    private static ?CalculationState $state = null;
+    use CalculationStateTrait;
+    use CalculationTrait;
+    use CategoryTrait;
+    use GroupTrait;
 
     public static function getRoutes(): array
     {
@@ -84,29 +84,8 @@ class CalculationControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (!self::$state instanceof CalculationState) {
-            self::$state = new CalculationState();
-            self::$state->setCode('Test State');
-            $this->addEntity(self::$state);
-        }
-        if (!self::$group instanceof Group) {
-            self::$group = new Group();
-            self::$group->setCode('Test Group');
-            $this->addEntity(self::$group);
-        }
-        if (!self::$category instanceof Category) {
-            self::$category = new Category();
-            self::$category->setCode('Test Category')
-                ->setGroup(self::$group);
-            $this->addEntity(self::$category);
-        }
-        if (!self::$calculation instanceof Calculation) {
-            self::$calculation = new Calculation();
-            self::$calculation->setCustomer('Test Customer')
-                ->setDescription('Test Description')
-                ->setState(self::$state);
-            $this->addEntity(self::$calculation);
-        }
+        $this->getCategory($this->getGroup());
+        $this->getCalculation($this->getCalculationState());
     }
 
     /**
@@ -114,9 +93,9 @@ class CalculationControllerTest extends AbstractControllerTestCase
      */
     protected function deleteEntities(): void
     {
-        self::$calculation = $this->deleteEntity(self::$calculation);
-        self::$category = $this->deleteEntity(self::$category);
-        self::$group = $this->deleteEntity(self::$group);
-        self::$state = $this->deleteEntity(self::$state);
+        $this->deleteCalculation();
+        $this->deleteCategory();
+        $this->deleteGroup();
+        $this->deleteCalculationState();
     }
 }

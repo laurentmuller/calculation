@@ -148,8 +148,13 @@ class MonthChart extends AbstractHighchart
     {
         $step = 6;
         $maxMonths = $this->repository->countDistinctMonths();
+        if ($maxMonths <= $step) {
+            return [$maxMonths];
+        }
+
         if ($maxMonths % $step > 0) {
-            $maxMonths += $step;
+            $delta = $step % $maxMonths;
+            $maxMonths += $delta;
         }
 
         return \range($step, $maxMonths, $step);

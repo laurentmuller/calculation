@@ -13,15 +13,15 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\CategoryController;
-use App\Entity\Category;
-use App\Entity\Group;
+use App\Tests\EntityTrait\CategoryTrait;
+use App\Tests\EntityTrait\GroupTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CategoryController::class)]
 class CategoryControllerTest extends AbstractControllerTestCase
 {
-    private static ?Category $entity = null;
-    private static ?Group $group = null;
+    use CategoryTrait;
+    use GroupTrait;
 
     public static function getRoutes(): array
     {
@@ -65,17 +65,7 @@ class CategoryControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (!self::$group instanceof Group) {
-            self::$group = new Group();
-            self::$group->setCode('Test Parent');
-            $this->addEntity(self::$group);
-        }
-        if (!self::$entity instanceof Category) {
-            self::$entity = new Category();
-            self::$entity->setCode('Test Code')
-                ->setGroup(self::$group);
-            $this->addEntity(self::$entity);
-        }
+        $this->getCategory($this->getGroup());
     }
 
     /**
@@ -83,7 +73,7 @@ class CategoryControllerTest extends AbstractControllerTestCase
      */
     protected function deleteEntities(): void
     {
-        self::$entity = $this->deleteEntity(self::$entity);
-        self::$group = $this->deleteEntity(self::$group);
+        $this->deleteCategory();
+        $this->deleteGroup();
     }
 }

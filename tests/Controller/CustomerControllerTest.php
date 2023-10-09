@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(CustomerController::class)]
 class CustomerControllerTest extends AbstractControllerTestCase
 {
-    private static ?Customer $entity = null;
+    private ?Customer $entity = null;
 
     public static function getRoutes(): array
     {
@@ -59,10 +59,10 @@ class CustomerControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (!self::$entity instanceof Customer) {
-            self::$entity = new Customer();
-            self::$entity->setCompany('Test Company');
-            $this->addEntity(self::$entity);
+        if (!$this->entity instanceof Customer) {
+            $this->entity = new Customer();
+            $this->entity->setCompany('Test Company');
+            $this->addEntity($this->entity);
         }
     }
 
@@ -71,6 +71,6 @@ class CustomerControllerTest extends AbstractControllerTestCase
      */
     protected function deleteEntities(): void
     {
-        self::$entity = $this->deleteEntity(self::$entity);
+        $this->entity = $this->deleteEntity($this->entity);
     }
 }

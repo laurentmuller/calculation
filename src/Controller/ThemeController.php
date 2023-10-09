@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Enums\Theme;
-use App\Interfaces\RoleInterface;
 use App\Service\ThemeService;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -26,7 +26,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  */
 #[AsController]
 #[Route(path: '/theme')]
-#[IsGranted(RoleInterface::ROLE_USER)]
+#[IsGranted(new Expression('is_granted("ROLE_USER") and user.isEnabled()'))]
 class ThemeController extends AbstractController
 {
     #[Route(path: '/dialog', name: 'theme_dialog', methods: Request::METHOD_GET)]

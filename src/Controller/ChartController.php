@@ -14,6 +14,8 @@ namespace App\Controller;
 
 use App\Chart\MonthChart;
 use App\Chart\StateChart;
+use App\Entity\Calculation;
+use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationByMonthReport;
 use App\Report\CalculationByStateReport;
@@ -48,6 +50,7 @@ class ChartController extends AbstractController
     #[Route(path: '/month', name: 'chart_by_month', methods: Request::METHOD_GET)]
     public function month(Request $request, MonthChart $chart): Response
     {
+        $this->checkAccess();
         $key = 'chart_by_month';
         $months = $this->getMonths($request);
         $parameters = $chart->generate($months);
@@ -62,6 +65,7 @@ class ChartController extends AbstractController
     #[Route(path: '/month/pdf', name: 'chart_by_month_pdf', methods: Request::METHOD_GET)]
     public function monthPdf(Request $request, CalculationRepository $repository): PdfResponse
     {
+        $this->checkAccess(EntityPermission::EXPORT);
         $months = $this->getMonths($request);
         $data = $repository->getByMonth($months);
         $report = new CalculationByMonthReport($this, $data);
@@ -77,16 +81,24 @@ class ChartController extends AbstractController
     #[Route(path: '/state', name: 'chart_by_state', methods: Request::METHOD_GET)]
     public function state(StateChart $chart): Response
     {
+        $this->checkAccess();
+
         return $this->render('chart/chart_state.html.twig', $chart->generate());
     }
 
     #[Route(path: '/state/pdf', name: 'chart_by_state_pdf', methods: Request::METHOD_GET)]
     public function statePdf(CalculationStateRepository $repository): PdfResponse
     {
+        $this->checkAccess(EntityPermission::EXPORT);
         $data = $repository->getCalculations();
         $report = new CalculationByStateReport($this, $data);
 
         return $this->renderPdfDocument($report);
+    }
+
+    private function checkAccess(EntityPermission $permission = EntityPermission::SHOW): void
+    {
+        $this->denyAccessUnlessGranted($permission, Calculation::class);
     }
 
     private function getMonths(Request $request): int

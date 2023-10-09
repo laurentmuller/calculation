@@ -13,13 +13,13 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\GlobalMarginController;
-use App\Entity\GlobalMargin;
+use App\Tests\EntityTrait\GlobalMarginTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(GlobalMarginController::class)]
 class GlobalMarginControllerTest extends AbstractControllerTestCase
 {
-    private static ?GlobalMargin $entity = null;
+    use GlobalMarginTrait;
 
     public static function getRoutes(): array
     {
@@ -51,13 +51,7 @@ class GlobalMarginControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (!self::$entity instanceof GlobalMargin) {
-            self::$entity = new GlobalMargin();
-            self::$entity->setMinimum(0)
-                ->setMaximum(100)
-                ->setMargin(0.1);
-            $this->addEntity(self::$entity);
-        }
+        $this->getGlobalMargin();
     }
 
     /**
@@ -65,6 +59,6 @@ class GlobalMarginControllerTest extends AbstractControllerTestCase
      */
     protected function deleteEntities(): void
     {
-        self::$entity = $this->deleteEntity(self::$entity);
+        $this->deleteGlobalMargin();
     }
 }

@@ -13,13 +13,13 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\CalculationStateController;
-use App\Entity\CalculationState;
+use App\Tests\EntityTrait\CalculationStateTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationStateController::class)]
 class CalculationStateControllerTest extends AbstractControllerTestCase
 {
-    private static ?CalculationState $entity = null;
+    use CalculationStateTrait;
 
     public static function getRoutes(): array
     {
@@ -59,11 +59,7 @@ class CalculationStateControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (!self::$entity instanceof CalculationState) {
-            self::$entity = new CalculationState();
-            self::$entity->setCode('Test Code');
-            $this->addEntity(self::$entity);
-        }
+        $this->getCalculationState();
     }
 
     /**
@@ -71,6 +67,6 @@ class CalculationStateControllerTest extends AbstractControllerTestCase
      */
     protected function deleteEntities(): void
     {
-        self::$entity = $this->deleteEntity(self::$entity);
+        $this->deleteCalculationState();
     }
 }

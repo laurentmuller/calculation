@@ -144,7 +144,7 @@ calculation:
     description: Cette page vous permet de recalculer et de mettre à jour le total général des calculations.
     dateFrom: Date de début
     dateTo: Date de fin
-    states: Status
+    states: Statuts
     submit: Mettre à jour
     last_update: 'Dernière mise à jour : %date%'
   result:
@@ -852,7 +852,7 @@ parameters:
     panel_calculation: Nombre de calculations à afficher.
     panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
     panel_month: Afficher la liste des calculations regroupées par mois.
-    panel_state: Afficher la liste des calculations regroupées par status.
+    panel_state: Afficher la liste des calculations regroupées par statut.
     print_address: L'adresse du client est imprimée sur les entêtes des documents Excel®, Word® et PDF.
     qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
     status_bar: Afficher la barre d'état au bas de l'application.
@@ -1417,7 +1417,7 @@ archive:
   fields:
     date: Date limite
     target: Nouveau statut
-    sources: Anciens status
+    sources: Anciens statuts
 notification:
   csp_title: Violation de règles CSP
   csp_description: L'agent utilisateur de l'application %name% a rapporté des violations des règles de la politique de sécurité de contenu (Content Security Policy).

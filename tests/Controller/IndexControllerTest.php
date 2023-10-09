@@ -20,6 +20,7 @@ class IndexControllerTest extends AbstractControllerTestCase
     public static function getRoutes(): array
     {
         return [
+            ['/', self::ROLE_DISABLED],
             ['/', self::ROLE_USER],
             ['/', self::ROLE_ADMIN],
             ['/', self::ROLE_SUPER_ADMIN],

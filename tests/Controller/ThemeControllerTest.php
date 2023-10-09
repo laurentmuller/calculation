@@ -19,16 +19,26 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(ThemeController::class)]
 class ThemeControllerTest extends AbstractControllerTestCase
 {
-    private const ROUTES = ['/theme/dialog', '/theme/save'];
-
-    private const USERS = [self::ROLE_USER, self::ROLE_ADMIN, self::ROLE_SUPER_ADMIN];
-
     public static function getRoutes(): \Generator
     {
-        foreach (self::ROUTES as $route) {
-            foreach (self::USERS as $user) {
+        $routes = [
+            '/theme/dialog',
+            '/theme/save',
+        ];
+        $users = [
+            self::ROLE_USER,
+            self::ROLE_ADMIN,
+            self::ROLE_SUPER_ADMIN,
+        ];
+
+        foreach ($routes as $route) {
+            foreach ($users as $user) {
                 yield [$route, $user, Response::HTTP_OK, Request::METHOD_GET, true];
             }
+        }
+
+        foreach ($routes as $route) {
+            yield [$route, self::ROLE_DISABLED, Response::HTTP_FORBIDDEN, Request::METHOD_GET, true];
         }
     }
 }

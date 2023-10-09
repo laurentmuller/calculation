@@ -265,16 +265,21 @@ class SchemaService implements ServiceSubscriberInterface
 
     private function getDefaultValue(Column $column): string
     {
-        $type = $column->getType();
+        /** @psalm-var string|null $default */
         $default = $column->getDefault();
-        if (null !== $default && $type instanceof BooleanType) {
+        if (!\is_string($default)) {
+            return '';
+        }
+
+        $type = $column->getType();
+        if ($type instanceof BooleanType) {
             return StringUtils::encodeJson(\filter_var($default, \FILTER_VALIDATE_BOOLEAN));
         }
         if ('0' === $default && $type instanceof FloatType) {
             return '0.00';
         }
 
-        return $default ?? '';
+        return $default;
     }
 
     /**

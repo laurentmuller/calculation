@@ -13,17 +13,17 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\ProductController;
-use App\Entity\Category;
-use App\Entity\Group;
-use App\Entity\Product;
+use App\Tests\EntityTrait\CategoryTrait;
+use App\Tests\EntityTrait\GroupTrait;
+use App\Tests\EntityTrait\ProductTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ProductController::class)]
 class ProductControllerTest extends AbstractControllerTestCase
 {
-    private static ?Category $category = null;
-    private static ?Group $group = null;
-    private static ?Product $product = null;
+    use CategoryTrait;
+    use GroupTrait;
+    use ProductTrait;
 
     public static function getRoutes(): array
     {
@@ -67,25 +67,9 @@ class ProductControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        if (!self::$group instanceof Group) {
-            self::$group = new Group();
-            self::$group->setCode('Test Group');
-            $this->addEntity(self::$group);
-        }
-
-        if (!self::$category instanceof Category) {
-            self::$category = new Category();
-            self::$category->setCode('Test Category')
-                ->setGroup(self::$group);
-            $this->addEntity(self::$category);
-        }
-
-        if (!self::$product instanceof Product) {
-            self::$product = new Product();
-            self::$product->setDescription('Test Product')
-                ->setCategory(self::$category);
-            $this->addEntity(self::$product);
-        }
+        $group = $this->getGroup();
+        $category = $this->getCategory($group);
+        $this->getProduct($category);
     }
 
     /**
@@ -93,8 +77,8 @@ class ProductControllerTest extends AbstractControllerTestCase
      */
     protected function deleteEntities(): void
     {
-        self::$product = $this->deleteEntity(self::$product);
-        self::$category = $this->deleteEntity(self::$category);
-        self::$group = $this->deleteEntity(self::$group);
+        $this->deleteProduct();
+        $this->deleteCategory();
+        $this->deleteGroup();
     }
 }

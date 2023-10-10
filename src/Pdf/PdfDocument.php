@@ -827,6 +827,42 @@ class PdfDocument extends \FPDF
     }
 
     /**
+     * Defines the color used for all drawing operations (lines, rectangles and cell borders).
+     *
+     * It can be expressed in RGB components or gray scale. The method can be called before the first page is created and the value is retained from page to page.
+     *
+     * @param int  $r If $g and $b are given, red component; if not, indicates the gray level. Value between 0 and 255.
+     * @param ?int $g the green component (value between 0 and 255)
+     * @param ?int $b the blue component (value between 0 and 255)
+     *
+     * @psalm-param int<0, 255> $r
+     * @psalm-param int<0, 255>|null $g
+     * @psalm-param int<0, 255>|null $b
+     */
+    public function SetDrawColor($r, $g = null, $b = null): void
+    {
+        parent::SetDrawColor($r, $g, $b);
+    }
+
+    /**
+     * Defines the color used for all filling operations (filled rectangles and cell backgrounds).
+     *
+     * It can be expressed in RGB components or gray scale. The method can be called before the first page is created and the value is retained from page to page.
+     *
+     * @param int  $r If $g and $b are given, red component; if not, indicates the gray level. Value between 0 and 255.
+     * @param ?int $g the green component (value between 0 and 255)
+     * @param ?int $b the blue component (value between 0 and 255)
+     *
+     * @psalm-param int<0, 255> $r
+     * @psalm-param int<0, 255>|null $g
+     * @psalm-param int<0, 255>|null $b
+     */
+    public function SetFillColor($r, $g = null, $b = null): void
+    {
+        parent::SetFillColor($r, $g, $b);
+    }
+
+    /**
      * Sets the font used to print character strings.
      *
      * @param PdfFontName|string  $family the font family. It can be either a font name enumeration, a name defined by AddFont()
@@ -859,6 +895,24 @@ class PdfDocument extends \FPDF
             $style = $style->value;
         }
         parent::SetFont($family, $style, $size);
+    }
+
+    /**
+     * Defines the color used for text.
+     *
+     * It can be expressed in RGB components or gray scale. The method can be called before the first page is created and the value is retained from page to page.
+     *
+     * @param int  $r If $g et $b are given, red component; if not, indicates the gray level. Value between 0 and 255.
+     * @param ?int $g the green component (value between 0 and 255)
+     * @param ?int $b the blue component (value between 0 and 255)
+     *
+     * @psalm-param int<0, 255> $r
+     * @psalm-param int<0, 255>|null $g
+     * @psalm-param int<0, 255>|null $b
+     */
+    public function SetTextColor($r, $g = null, $b = null): void
+    {
+        parent::SetTextColor($r, $g, $b);
     }
 
     /**

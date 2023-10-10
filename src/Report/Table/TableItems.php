@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Report;
+namespace App\Report\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationCategory;
@@ -20,6 +20,7 @@ use App\Pdf\PdfDocument;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
+use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -27,7 +28,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Table to render the groups, categories and items of a calculation.
  */
-class CalculationTableItems extends PdfGroupTableBuilder
+class TableItems extends PdfGroupTableBuilder
 {
     use TranslatorTrait;
     /**

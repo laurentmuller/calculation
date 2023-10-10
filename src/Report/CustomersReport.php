@@ -44,8 +44,6 @@ class CustomersReport extends AbstractArrayReport
     }
 
     /**
-     * @param Customer[] $entities
-     *
      * @throws PdfException
      */
     protected function doRender(array $entities): bool

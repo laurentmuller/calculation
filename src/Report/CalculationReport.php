@@ -20,6 +20,9 @@ use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
+use App\Report\Table\TableGroups;
+use App\Report\Table\TableItems;
+use App\Report\Table\TableOverall;
 use App\Traits\LoggerTrait;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\ErrorCorrectionLevel;
@@ -86,10 +89,10 @@ class CalculationReport extends AbstractReport
         if ($calculation->isEmpty()) {
             $this->renderEmpty();
         } else {
-            CalculationTableItems::render($this);
+            TableItems::render($this);
             $this->checkEndHeight($calculation);
-            CalculationTableGroups::render($this);
-            CalculationTableOverall::render($this);
+            TableGroups::render($this);
+            TableOverall::render($this);
         }
         $this->renderTimestampable($calculation);
         $this->renderQrCode();

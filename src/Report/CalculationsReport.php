@@ -69,8 +69,6 @@ class CalculationsReport extends AbstractArrayReport
     }
 
     /**
-     * @param Calculation[] $entities
-     *
      * @throws PdfException
      */
     protected function doRender(array $entities): bool

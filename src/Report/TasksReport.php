@@ -45,9 +45,6 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         return true;
     }
 
-    /**
-     * @param Task[] $entities
-     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('task.list.title', [], true);

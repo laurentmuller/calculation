@@ -12,8 +12,14 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\Interfaces\PdfDrawCellTextInterface;
+use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfDocument;
+use App\Pdf\PdfFillColor;
+use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
@@ -28,13 +34,30 @@ use App\Utils\FormatUtils;
  *
  * @extends AbstractArrayReport<QueryCalculationType>
  */
-class CalculationByStateReport extends AbstractArrayReport
+class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCellTextInterface
 {
     use MathTrait;
 
-    /**
-     * @psalm-param  QueryCalculationType[] $entities
-     */
+    /** @psalm-var QueryCalculationType|null */
+    private ?array $currentRow = null;
+
+    public function drawCellText(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): bool
+    {
+        if (0 !== $index || null === $this->currentRow) {
+            return false;
+        }
+        $color = PdfFillColor::create($this->currentRow['color']);
+        if (!$color instanceof PdfFillColor) {
+            return false;
+        }
+
+        $parent = $builder->getParent();
+        $this->drawStateRect($parent, $bounds, $color);
+        $this->drawStateText($parent, $bounds, $text, $align, $height);
+
+        return true;
+    }
+
     protected function doRender(array $entities): bool
     {
         $this->SetTitle($this->transChart('title_by_state'));
@@ -43,7 +66,8 @@ class CalculationByStateReport extends AbstractArrayReport
         $table = $this->createTable();
 
         foreach ($entities as $entity) {
-            $table->startRow()->addValues(
+            $this->currentRow = $entity;
+            $table->addRow(
                 $entity['code'],
                 FormatUtils::formatInt($entity['count']),
                 $this->formatPercent($entity['percentCalculation'], 2),
@@ -52,7 +76,8 @@ class CalculationByStateReport extends AbstractArrayReport
                 $this->formatPercent($entity['margin'], 0, true),
                 FormatUtils::formatInt($entity['total']),
                 $this->formatPercent($entity['percentAmount'], 2)
-            )->endRow();
+            );
+            $this->currentRow = null;
         }
 
         // total
@@ -65,7 +90,7 @@ class CalculationByStateReport extends AbstractArrayReport
         $margin = 1.0 + $this->safeDivide($net, $items);
         $percentAmount = $this->sum($entities, 'percentAmount');
 
-        $table->startHeaderRow()->addValues(
+        $table->addHeaderRow(
             $this->transChart('fields.total'),
             FormatUtils::formatInt($count),
             $this->formatPercent($percentCalculation, 2, bold: true),
@@ -73,28 +98,51 @@ class CalculationByStateReport extends AbstractArrayReport
             FormatUtils::formatInt($marginAmount),
             $this->formatPercent($margin, 0, bold: true),
             FormatUtils::formatInt($total),
-            $this->formatPercent($percentAmount, 2, bold: true),
-        )->endRow();
+            $this->formatPercent($percentAmount, 2, bold: true)
+        );
 
         return true;
     }
 
     private function createTable(): PdfTableBuilder
     {
-        $columns = [
-            PdfColumn::left($this->transChart('fields.state'), 20),
-            PdfColumn::right($this->transChart('fields.count'), 25, true),
-            PdfColumn::right('%', 15, true),
-            PdfColumn::right($this->transChart('fields.net'), 20, true),
-            PdfColumn::right($this->transChart('fields.margin_amount'), 20, true),
-            PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
-            PdfColumn::right($this->transChart('fields.total'), 20, true),
-            PdfColumn::right('%', 15, true),
-        ];
-
         return PdfTableBuilder::instance($this)
-            ->addColumns(...$columns)
-            ->outputHeaders();
+            ->setTextListener($this)
+            ->addColumns(
+                PdfColumn::left($this->transChart('fields.state'), 20),
+                PdfColumn::right($this->transChart('fields.count'), 25, true),
+                PdfColumn::right('%', 15, true),
+                PdfColumn::right($this->transChart('fields.net'), 20, true),
+                PdfColumn::right($this->transChart('fields.margin_amount'), 20, true),
+                PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
+                PdfColumn::right($this->transChart('fields.total'), 20, true),
+                PdfColumn::right('%', 15, true)
+            )->outputHeaders();
+    }
+
+    private function drawStateRect(PdfDocument $parent, PdfRectangle $bounds, PdfFillColor $color): void
+    {
+        $color->apply($parent);
+        $margin = $parent->getCellMargin();
+        $parent->Rect(
+            $bounds->x() + $margin,
+            $bounds->y() + $margin,
+            5.0,
+            $bounds->height() - 2.0 * $margin,
+            PdfBorder::BOTH
+        );
+    }
+
+    private function drawStateText(PdfDocument $parent, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): void
+    {
+        $offset = 6.0;
+        $parent->SetX($parent->GetX() + $offset);
+        $parent->Cell(
+            w: $bounds->width() - $offset,
+            h: $height,
+            txt: $text,
+            align: $align
+        );
     }
 
     private function formatPercent(float $value, int $decimals = 1, bool $useStyle = false, bool $bold = false): PdfCell

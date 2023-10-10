@@ -234,14 +234,14 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @param ?string $value a hexadecimal string
      *
-     * @return array|false the RGB array (<code>red, green, blue</code>) or <code>false</code> if the value can not be converted
+     * @return ?array the RGB array (<code>red, green, blue</code>) or <code>null</code> if the value can not be converted
      *
-     * @psalm-return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}|false
+     * @psalm-return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}|null
      */
-    public static function parse(?string $value): array|false
+    public static function parse(?string $value): ?array
     {
         if (null === $value || '' === $value) {
-            return false;
+            return null;
         }
 
         $parsed = (string) \preg_replace('/[^0-9A-Fa-f]/', '', $value);
@@ -268,7 +268,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
                 return [$r, $g, $b];
 
             default:
-                return false;
+                return null;
         }
     }
 

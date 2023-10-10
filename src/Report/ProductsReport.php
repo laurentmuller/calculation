@@ -27,8 +27,6 @@ use App\Utils\FormatUtils;
 class ProductsReport extends AbstractArrayReport
 {
     /**
-     * @param \App\Entity\Product[] $entities
-     *
      * @throws PdfException
      */
     protected function doRender(array $entities): bool

@@ -29,9 +29,6 @@ class CategoriesReport extends AbstractArrayReport
 {
     use GroupByTrait;
 
-    /**
-     * @param Category[] $entities
-     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('category.list.title', [], true);

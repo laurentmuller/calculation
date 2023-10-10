@@ -118,7 +118,7 @@ class PdfColorTest extends TestCase
     public function testParseInvalid(?string $value): void
     {
         $color = PdfFillColor::parse($value);
-        self::assertFalse($color);
+        self::assertNull($color);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getColors')]

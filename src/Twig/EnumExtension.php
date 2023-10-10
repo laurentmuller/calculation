@@ -45,10 +45,10 @@ class EnumExtension extends AbstractExtension
             {
             }
 
-            public function __call(string $caseName, array $arguments): mixed
+            public function __call(string $name, array $arguments): mixed
             {
                 // @phpstan-ignore-next-line
-                return \call_user_func_array([$this->fullClassName, $caseName], $arguments);
+                return \call_user_func_array([$this->fullClassName, $name], $arguments);
             }
         };
     }

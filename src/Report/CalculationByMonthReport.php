@@ -32,9 +32,6 @@ class CalculationByMonthReport extends AbstractArrayReport
 {
     use MathTrait;
 
-    /**
-     * @psalm-param CalculationByMonthType[] $entities
-     */
     protected function doRender(array $entities): bool
     {
         $this->SetTitle($this->transChart('title_by_month'));
@@ -43,14 +40,14 @@ class CalculationByMonthReport extends AbstractArrayReport
         $table = $this->createTable();
 
         foreach ($entities as $entity) {
-            $table->startRow()->addValues(
+            $table->addRow(
                 $this->formatDate($entity['date']),
                 FormatUtils::formatInt($entity['count']),
                 FormatUtils::formatInt($entity['items']),
                 FormatUtils::formatInt($entity['total'] - $entity['items']),
                 $this->formatPercent($entity['margin']),
                 FormatUtils::formatInt($entity['total'])
-            )->endRow();
+            );
         }
 
         // total
@@ -60,32 +57,29 @@ class CalculationByMonthReport extends AbstractArrayReport
         $net = $total - $items;
         $margin = 1.0 + $this->safeDivide($net, $items);
 
-        $table->startHeaderRow()->addValues(
+        $table->addHeaderRow(
             $this->transChart('fields.total'),
             FormatUtils::formatInt($count),
             FormatUtils::formatInt($items),
             FormatUtils::formatInt($net),
             $this->formatPercent($margin, true),
             FormatUtils::formatInt($total)
-        )->endRow();
+        );
 
         return true;
     }
 
     private function createTable(): PdfTableBuilder
     {
-        $columns = [
-            PdfColumn::left($this->transChart('fields.month'), 20),
-            PdfColumn::right($this->transChart('fields.count'), 25, true),
-            PdfColumn::right($this->transChart('fields.net'), 25, true),
-            PdfColumn::right($this->transChart('fields.margin_amount'), 25, true),
-            PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
-            PdfColumn::right($this->transChart('fields.total'), 25, true),
-        ];
-
         return PdfTableBuilder::instance($this)
-            ->addColumns(...$columns)
-            ->outputHeaders();
+            ->addColumns(
+                PdfColumn::left($this->transChart('fields.month'), 20),
+                PdfColumn::right($this->transChart('fields.count'), 25, true),
+                PdfColumn::right($this->transChart('fields.net'), 25, true),
+                PdfColumn::right($this->transChart('fields.margin_amount'), 25, true),
+                PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
+                PdfColumn::right($this->transChart('fields.total'), 25, true),
+            )->outputHeaders();
     }
 
     private function formatDate(\DateTimeInterface $date): string

@@ -15,8 +15,10 @@ ECHO -------------------------------------- PHP-PSALM --------------------------
 ECHO -------------------------------------- PHP-STAN ------------------------------------------ && ^
 .\vendor-bin\phpstan\vendor\bin\phpstan.bat analyse --memory-limit=2G                           && ^
 ECHO -------------------------------------- PHP-RECTOR ---------------------------------------- && ^
-.\vendor-bin\rector\vendor\bin\rector.bat process --dry-run                                     && ^
+.\vendor-bin\rector\vendor\bin\rector.bat process --dry-run --config=rector.php                 && ^
 ECHO -------------------------------------- PHP-TWIG-CS --------------------------------------- && ^
 .\vendor-bin\twigcs\vendor\bin\twigcs.bat --severity error --display blocking templates         && ^
 ECHO -------------------------------------- PHP-UNIT ------------------------------------------ && ^
 .\vendor-bin\phpunit\vendor\bin\phpunit.bat
+SET STA__TIME=%TIME: =0%
+ECHO -------------------------------------- END BATCH %STA__TIME% -----------------------------

@@ -38,9 +38,6 @@ class GroupsReport extends AbstractArrayReport
         parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE, $unit, $size);
     }
 
-    /**
-     * @param Group[] $entities
-     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('group.list.title', [], true);

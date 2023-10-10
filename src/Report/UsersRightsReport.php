@@ -93,8 +93,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     }
 
     /**
-     * @param User[] $entities
-     *
      * @throws PdfException
      */
     protected function doRender(array $entities): bool

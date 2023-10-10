@@ -13,7 +13,7 @@ customer:
   zip_code: Le code postal doit contenir 4 chiffres.
 email:
   already_used: L'adresse e-mail est déjà utilisée.
-  blank: Entrez une adresse e-mail s'il vous plait.
+  blank: Une adresse e-mail est requise.
   invalid: L'adresse e-mail est invalide.
   long: L'adresse e-mail est trop longue.
   short: L'adresse e-mail est trop courte.

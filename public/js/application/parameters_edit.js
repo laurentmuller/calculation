@@ -71,18 +71,23 @@ function updateVisibleButton() {
 /**
  * Display a notification.
  *
- * @param {string} [type] - the notification type.
+ * @param {jQuery} [source] - the notification source.
  */
-function displayNotification(type) {
+function displayNotification($source) {
     'use strict';
     // get random text
     let title = $('.card-title:first').text();
     const url = $('#edit-form').data("random");
     $.getJSON(url, function (response) {
         if (response.result && response.content) {
-            // content
-            const content = '<p class="m-0 p-0">' + response.content + '</p>';
             // type
+            let type = null;
+            if ($source) {
+                type = $source.data('value');
+                if ($source.text().trim()) {
+                    title = $source.text().trim();
+                }
+            }
             if (!type) {
                 const types = Object.values(Toaster.NotificationTypes);
                 type = types.randomElement();
@@ -92,6 +97,8 @@ function displayNotification(type) {
             if (!$('#message_title').isChecked()) {
                 title = null;
             }
+            // content
+            const content = '<p class="m-0 p-0">' + response.content + '</p>';
             // options
             const options = {
                 dataset: '#flashes',
@@ -220,7 +227,7 @@ function handleEmail() {
     });
     $('.btn-notify').on('click', (e) => {
         e.preventDefault();
-        displayNotification($(e.currentTarget).data('value'));
+        displayNotification($(e.currentTarget));
     });
 
     $('.card-parameter .collapse').on('shown.bs.collapse', function () {

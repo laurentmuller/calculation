@@ -23,9 +23,6 @@ use App\Utils\FormatUtils;
  */
 class GlobalMarginsReport extends AbstractArrayReport
 {
-    /**
-     * @param \App\Entity\GlobalMargin[] $entities
-     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('globalmargin.list.title');

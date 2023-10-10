@@ -29,43 +29,48 @@ use App\Utils\FormatUtils;
  */
 class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface
 {
-    private bool $started = false;
-
-    public function AddPage($orientation = '', $size = '', $rotation = 0): void
-    {
-        parent::AddPage($orientation, $size, $rotation);
-        $this->started = false;
-    }
+    private ?CalculationState $currentState = null;
 
     public function drawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool
     {
-        if (3 !== $index) {
-            return false;
-        }
-        if (!$this->started) {
-            $this->started = true;
-
+        if (3 !== $index || !$this->currentState instanceof CalculationState) {
             return false;
         }
 
-        $doc = $builder->getParent();
-        $margin = $doc->getCellMargin();
+        $parent = $builder->getParent();
+        $margin = $parent->getCellMargin();
         $bounds->inflateXY(-3.0 * $margin, -$margin)
             ->setHeight(self::LINE_HEIGHT - 2.0 * $margin);
-        $doc->rectangle($bounds, PdfRectangleStyle::BOTH);
+        $parent->rectangle($bounds, PdfRectangleStyle::BOTH);
 
         return true;
     }
 
-    /**
-     * @param CalculationState[] $entities
-     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('calculationstate.list.title');
-        $this->AddPage();
 
-        $table = PdfTableBuilder::instance($this)
+        $this->AddPage();
+        $table = $this->createTable();
+
+        foreach ($entities as $entity) {
+            $this->currentState = $entity;
+            $table->startRow()
+                ->add($entity->getCode())
+                ->add($entity->getDescription())
+                ->add($this->formatBoolean($entity->isEditable()))
+                ->add(style: $this->getColorStyle($entity))
+                ->add(FormatUtils::formatInt($entity->countCalculations()))
+                ->endRow();
+            $this->currentState = null;
+        }
+
+        return $this->renderCount($table, $entities, 'counters.states');
+    }
+
+    private function createTable(): PdfTableBuilder
+    {
+        return PdfTableBuilder::instance($this)
             ->setBackgroundListener($this)
             ->addColumns(
                 PdfColumn::left($this->trans('calculationstate.fields.code'), 20),
@@ -74,18 +79,6 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
                 PdfColumn::center($this->trans('calculationstate.fields.color'), 15, true),
                 PdfColumn::right($this->trans('calculationstate.fields.calculations'), 22, true)
             )->outputHeaders();
-
-        foreach ($entities as $entity) {
-            $table->startRow()
-                ->add($entity->getCode())
-                ->add($entity->getDescription())
-                ->add($this->formatBoolean($entity->isEditable()))
-                ->add(style: $this->getColorStyle($entity))
-                ->add(FormatUtils::formatInt($entity->countCalculations()))
-                ->endRow();
-        }
-
-        return $this->renderCount($table, $entities, 'counters.states');
     }
 
     /**

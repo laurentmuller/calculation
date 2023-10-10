@@ -23,9 +23,9 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * Base repository.
  *
- * @template T of AbstractEntity
+ * @template TEntity of AbstractEntity
  *
- * @template-extends ServiceEntityRepository<T>
+ * @template-extends ServiceEntityRepository<TEntity>
  */
 abstract class AbstractRepository extends ServiceEntityRepository
 {
@@ -146,7 +146,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
      *
-     * @psalm-return Query<T>
+     * @psalm-return Query<TEntity>
      */
     public function getSearchQuery(array $sortedFields = [], array $criteria = [], string $alias = self::DEFAULT_ALIAS): Query
     {

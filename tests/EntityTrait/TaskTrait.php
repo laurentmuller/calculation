@@ -20,6 +20,8 @@ use App\Entity\Task;
  */
 trait TaskTrait
 {
+    use CategoryTrait;
+
     private ?Task $task = null;
 
     /**
@@ -30,6 +32,7 @@ trait TaskTrait
         if ($this->task instanceof Task) {
             $this->task = $this->deleteEntity($this->task);
         }
+        $this->deleteCategory();
     }
 
     /**

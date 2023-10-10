@@ -14,14 +14,12 @@ namespace App\Tests\Controller;
 
 use App\Controller\CategoryController;
 use App\Tests\EntityTrait\CategoryTrait;
-use App\Tests\EntityTrait\GroupTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CategoryController::class)]
 class CategoryControllerTest extends AbstractControllerTestCase
 {
     use CategoryTrait;
-    use GroupTrait;
 
     public static function getRoutes(): array
     {

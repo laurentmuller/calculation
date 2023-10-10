@@ -21,6 +21,8 @@ use App\Service\CalculationService;
  */
 trait CalculationTrait
 {
+    use CalculationStateTrait;
+
     private ?Calculation $calculation = null;
 
     /**
@@ -61,5 +63,6 @@ trait CalculationTrait
         if ($this->calculation instanceof Calculation) {
             $this->calculation = $this->deleteEntity($this->calculation);
         }
+        $this->deleteCalculationState();
     }
 }

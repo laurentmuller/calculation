@@ -13,20 +13,14 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\CalculationDuplicateController;
-use App\Tests\EntityTrait\CalculationStateTrait;
 use App\Tests\EntityTrait\CalculationTrait;
-use App\Tests\EntityTrait\CategoryTrait;
-use App\Tests\EntityTrait\GroupTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationDuplicateController::class)]
 class CalculationDuplicateControllerTest extends AbstractControllerTestCase
 {
-    use CalculationStateTrait;
     use CalculationTrait;
-    use CategoryTrait;
-    use GroupTrait;
     use ProductTrait;
 
     public static function getRoutes(): array
@@ -69,8 +63,5 @@ class CalculationDuplicateControllerTest extends AbstractControllerTestCase
     {
         $this->deleteCalculation();
         $this->deleteProduct();
-        $this->deleteCategory();
-        $this->deleteGroup();
-        $this->deleteCalculationState();
     }
 }

@@ -17,7 +17,6 @@ use App\Entity\Customer;
 use App\Entity\Product;
 use App\Tests\EntityTrait\CalculationStateTrait;
 use App\Tests\EntityTrait\CategoryTrait;
-use App\Tests\EntityTrait\GroupTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(UpdateEntityController::class)]
@@ -25,7 +24,6 @@ class UpdateEntityControllerTest extends AbstractControllerTestCase
 {
     use CalculationStateTrait;
     use CategoryTrait;
-    use GroupTrait;
 
     private ?Customer $customer = null;
     /** @var Product[]|null */
@@ -86,7 +84,6 @@ class UpdateEntityControllerTest extends AbstractControllerTestCase
             $this->products = null;
         }
         $this->deleteCategory();
-        $this->deleteGroup();
         $this->deleteCalculationState();
         $this->customer = $this->deleteEntity($this->customer);
     }

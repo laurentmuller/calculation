@@ -20,6 +20,8 @@ use App\Entity\Group;
  */
 trait CategoryTrait
 {
+    use GroupTrait;
+
     private ?Category $category = null;
 
     /**
@@ -45,5 +47,6 @@ trait CategoryTrait
         if ($this->category instanceof Category) {
             $this->category = $this->deleteEntity($this->category);
         }
+        $this->deleteGroup();
     }
 }

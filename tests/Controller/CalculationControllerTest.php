@@ -13,18 +13,14 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\CalculationController;
-use App\Tests\EntityTrait\CalculationStateTrait;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\CategoryTrait;
-use App\Tests\EntityTrait\GroupTrait;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationController::class)]
 class CalculationControllerTest extends AbstractControllerTestCase
 {
-    use CalculationStateTrait;
     use CalculationTrait;
     use CategoryTrait;
-    use GroupTrait;
 
     public static function getRoutes(): array
     {
@@ -84,8 +80,10 @@ class CalculationControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        $this->getCategory($this->getGroup());
-        $this->getCalculation($this->getCalculationState());
+        $group = $this->getGroup();
+        $this->getCategory($group);
+        $state = $this->getCalculationState();
+        $this->getCalculation($state);
     }
 
     /**
@@ -95,7 +93,5 @@ class CalculationControllerTest extends AbstractControllerTestCase
     {
         $this->deleteCalculation();
         $this->deleteCategory();
-        $this->deleteGroup();
-        $this->deleteCalculationState();
     }
 }

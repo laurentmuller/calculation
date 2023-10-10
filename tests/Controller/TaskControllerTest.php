@@ -13,19 +13,13 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\TaskController;
-use App\Tests\EntityTrait\CategoryTrait;
-use App\Tests\EntityTrait\GroupTrait;
 use App\Tests\EntityTrait\TaskItemTrait;
-use App\Tests\EntityTrait\TaskTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(TaskController::class)]
 class TaskControllerTest extends AbstractControllerTestCase
 {
-    use CategoryTrait;
-    use GroupTrait;
     use TaskItemTrait;
-    use TaskTrait;
 
     public static function getRoutes(): array
     {
@@ -89,8 +83,5 @@ class TaskControllerTest extends AbstractControllerTestCase
     protected function deleteEntities(): void
     {
         $this->deleteTaskItem();
-        $this->deleteTask();
-        $this->deleteCategory();
-        $this->deleteGroup();
     }
 }

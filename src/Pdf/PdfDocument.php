@@ -392,7 +392,7 @@ class PdfDocument extends \FPDF
             return 0;
         }
         if ($width <= 0) {
-            $width = $this->w - $this->rMargin - $this->x;
+            $width = $this->getRemainingWidth();
         }
 
         $sep = -1;

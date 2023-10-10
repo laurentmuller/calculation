@@ -20,6 +20,8 @@ use App\Entity\Product;
  */
 trait ProductTrait
 {
+    use CategoryTrait;
+
     private ?Product $product = null;
 
     /**
@@ -46,5 +48,6 @@ trait ProductTrait
         if ($this->product instanceof Product) {
             $this->product = $this->deleteEntity($this->product);
         }
+        $this->deleteCategory();
     }
 }

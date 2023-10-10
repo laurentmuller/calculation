@@ -13,16 +13,12 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\ProductController;
-use App\Tests\EntityTrait\CategoryTrait;
-use App\Tests\EntityTrait\GroupTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ProductController::class)]
 class ProductControllerTest extends AbstractControllerTestCase
 {
-    use CategoryTrait;
-    use GroupTrait;
     use ProductTrait;
 
     public static function getRoutes(): array
@@ -78,7 +74,5 @@ class ProductControllerTest extends AbstractControllerTestCase
     protected function deleteEntities(): void
     {
         $this->deleteProduct();
-        $this->deleteCategory();
-        $this->deleteGroup();
     }
 }

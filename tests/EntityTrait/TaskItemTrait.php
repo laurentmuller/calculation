@@ -20,6 +20,8 @@ use App\Entity\TaskItem;
  */
 trait TaskItemTrait
 {
+    use TaskTrait;
+
     private ?TaskItem $taskItem = null;
 
     /**
@@ -30,6 +32,7 @@ trait TaskItemTrait
         if ($this->taskItem instanceof TaskItem) {
             $this->taskItem = $this->deleteEntity($this->taskItem);
         }
+        $this->deleteTask();
     }
 
     /**

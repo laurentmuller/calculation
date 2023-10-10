@@ -91,7 +91,7 @@ class RightsTraitTest extends TestCase
         self::assertTrue($this->__isset($entity));
         /** @psalm-var FlagBag<EntityPermission> $entity */
         $entity = $this->$entity;
-        self::assertInstanceOf(FlagBag::class, $entity); // @phpstan-ignore-line
+        self::assertInstanceOf(FlagBag::class, $entity);
         self::assertSame(0, $entity->getValue());
     }
 

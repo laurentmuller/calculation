@@ -31,8 +31,8 @@ class CheckSubClassTraitTest extends TestCase
             [new Calculation(), Calculation::class],
             [new Calculation(), AbstractEntity::class],
 
-            ['\App\Entity\Calculation', Calculation::class], // @phpstan-ignore-line
-            ['\App\Entity\Calculation', AbstractEntity::class], // @phpstan-ignore-line
+            ['\App\Entity\Calculation', Calculation::class],
+            ['\App\Entity\Calculation', AbstractEntity::class],
 
             ['ZZ', AbstractEntity::class, true],
         ];

@@ -30,11 +30,11 @@ class ExceptionContextTraitTest extends TestCase
 
         $result = $this->getExceptionContext($e);
 
-        self::assertArrayHasKey('message', $result); // @phpstan-ignore-line
-        self::assertArrayHasKey('code', $result); // @phpstan-ignore-line
-        self::assertArrayHasKey('file', $result); // @phpstan-ignore-line
-        self::assertArrayHasKey('line', $result); // @phpstan-ignore-line
-        self::assertArrayHasKey('trace', $result); // @phpstan-ignore-line
+        self::assertArrayHasKey('message', $result);
+        self::assertArrayHasKey('code', $result);
+        self::assertArrayHasKey('file', $result);
+        self::assertArrayHasKey('line', $result);
+        self::assertArrayHasKey('trace', $result);
 
         self::assertSame($message, $result['message']);
         self::assertSame($code, $result['code']);

@@ -103,7 +103,7 @@ class OpenWeatherServiceTest extends KernelTestCase
         self::assertCount(1, $list);
 
         $units = $result['units'];
-        self::assertNotEmpty($units); // @phpstan-ignore-line
+        self::assertNotEmpty($units);
 
         $firstList = $list[0] ?? null;
         self::assertIsArray($firstList);

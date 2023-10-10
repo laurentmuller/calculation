@@ -278,7 +278,6 @@ abstract class AbstractEntityTable extends AbstractTable
         }
         $builder->resetDQLPart(self::JOIN_PART);
         foreach ($joins as $join) {
-            // @phpstan-ignore-next-line
             $builder->join($join->getJoin(), (string) $join->getAlias());
         }
 

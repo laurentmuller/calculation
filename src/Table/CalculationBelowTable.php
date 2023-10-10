@@ -44,7 +44,6 @@ class CalculationBelowTable extends CalculationTable implements \Countable
         /** @psalm-var CalculationRepository $repository */
         $repository = $this->repository;
 
-        // @phpstan-ignore-next-line
         return $repository->countItemsBelow($this->getMinMargin());
     }
 

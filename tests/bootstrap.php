@@ -17,9 +17,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 $logfile = \dirname(__DIR__) . '/var/log/test.log';
 
-// @phpstan-ignore-next-line
 if (\file_exists($logfile)) {
-    // @phpstan-ignore-next-line
     \file_put_contents($logfile, '');
 }
 
@@ -33,7 +31,6 @@ try {
     // ignore
 }
 
-// @phpstan-ignore-next-line
 if (\file_exists(\dirname(__DIR__) . '/config/bootstrap.php')) {
     require \dirname(__DIR__) . '/config/bootstrap.php';
 } elseif (\method_exists(Dotenv::class, 'bootEnv')) {

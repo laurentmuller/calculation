@@ -286,7 +286,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         $stop_process = false;
         /** @psalm-var SwissAddressType|null $data */
-        foreach ($reader as $data) { // @phpstan-ignore-line
+        foreach ($reader as $data) {
             if ($stop_process || null === $data) {
                 break;
             }

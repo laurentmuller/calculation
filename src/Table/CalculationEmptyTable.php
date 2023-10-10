@@ -49,7 +49,6 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
      */
     public function count(): int
     {
-        // @phpstan-ignore-next-line
         return $this->repository->countItemsEmpty();
     }
 

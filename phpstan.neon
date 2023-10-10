@@ -1,7 +1,3 @@
-includes:
-    - vendor-bin/phpstan/vendor/slam/phpstan-extensions/conf/symfony-rules.neon
-    - vendor-bin/phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
-
 parameters:
     level: 8
     tmpDir: var/ci/phpstan
@@ -13,9 +9,6 @@ parameters:
     scanFiles:
     - vendor/twig/twig/src/Extension/CoreExtension.php
     - vendor/symfony/validator/Test/ConstraintValidatorTestCase.php
-
-    doctrine:
-       ormRepositoryClass: App\Repository\AbstractRepository
 
     checkUninitializedProperties: true
 

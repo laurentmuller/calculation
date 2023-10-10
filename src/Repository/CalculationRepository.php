@@ -122,7 +122,7 @@ class CalculationRepository extends AbstractRepository
             ->having('COUNT(i.id) > 1')
             ->getDQL();
         /** @psalm-var literal-string $where */
-        $where = "r.id in($dql)"; // @phpstan-ignore-line
+        $where = "r.id in($dql)";
 
         return (int) $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')
@@ -149,7 +149,7 @@ class CalculationRepository extends AbstractRepository
             ->orWhere('i.quantity = 0')
             ->getDQL();
         /** @psalm-var literal-string $where */
-        $where = "r.id in($dql)"; // @phpstan-ignore-line
+        $where = "r.id in($dql)";
 
         return (int) $this->createQueryBuilder('r')
             ->select('COUNT(r.id)')

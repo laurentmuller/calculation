@@ -34,7 +34,7 @@ final class SwitchNode extends Node
             ->raw(") {\n")
             ->indent();
         /** @psalm-var Node[] $cases */
-        $cases = $this->getNode('cases'); // @phpstan-ignore-line
+        $cases = $this->getNode('cases');
         foreach ($cases as $case) {
             if (!$case->hasNode('body')) {
                 continue;

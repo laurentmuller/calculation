@@ -52,9 +52,6 @@ class CountryFlagType extends AbstractType
         return CountryType::class;
     }
 
-    /**
-     * @phpstan-ignore-next-line
-     */
     private function loadChoices(Options $options): array
     {
         /** @psalm-var string|null $locale */

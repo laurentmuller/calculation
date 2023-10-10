@@ -344,7 +344,7 @@ class SearchService implements ServiceSubscriberInterface
         /** @psalm-var literal-string $from */
         $from = $class;
         /** @psalm-var literal-string $where */
-        $where = "$content LIKE :" . self::SEARCH_PARAM; // @phpstan-ignore-line
+        $where = "$content LIKE :" . self::SEARCH_PARAM;
 
         return $this->manager->createQueryBuilder()
             ->select('e.id')

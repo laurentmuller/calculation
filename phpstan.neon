@@ -16,10 +16,6 @@ parameters:
     checkMissingIterableValueType: false
 
     ignoreErrors:
-        - '#no value type specified#'
-        -
-            message: '#type mapping mismatch#'
-            path: src/Entity/*
         -
             message: '#@extends contains generic type#'
             path: src/Form/Extension/*

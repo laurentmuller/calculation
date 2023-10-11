@@ -101,7 +101,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
     /**
      * Returns if the key is not empty.
      */
-    public function isKey(): bool
+    public function hasKey(): bool
     {
         return StringUtils::isString($this->getName());
     }

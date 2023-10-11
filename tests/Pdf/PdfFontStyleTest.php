@@ -46,6 +46,8 @@ class PdfFontStyleTest extends TestCase
 
             ['biu', PdfFontStyle::BOLD_ITALIC_UNDERLINE],
             ['iub', PdfFontStyle::BOLD_ITALIC_UNDERLINE],
+            ['ubi', PdfFontStyle::BOLD_ITALIC_UNDERLINE],
+            ['uib', PdfFontStyle::BOLD_ITALIC_UNDERLINE],
 
             ['bu', PdfFontStyle::BOLD_UNDERLINE],
             ['uB', PdfFontStyle::BOLD_UNDERLINE],
@@ -65,6 +67,7 @@ class PdfFontStyleTest extends TestCase
 
             ['BBB', PdfFontStyle::BOLD],
             ['BIBI', PdfFontStyle::BOLD_ITALIC],
+            ['bibi', PdfFontStyle::BOLD_ITALIC],
         ];
     }
 

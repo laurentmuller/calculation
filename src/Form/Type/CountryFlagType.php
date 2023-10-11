@@ -36,7 +36,7 @@ class CountryFlagType extends AbstractType
     {
         $defaultCode = CountryFlagService::getDefaultCode();
         $resolver->setDefaults([
-            'choice_loader' => fn (Options $options) => ChoiceList::lazy($this, fn () => $this->loadChoices($options)),
+            'choice_loader' => fn (Options $options) => ChoiceList::lazy($this, fn (): array => $this->loadChoices($options)),
             'attr' => ['class' => self::FLAG_CLASS],
             'preferred_choices' => [$defaultCode],
             'choice_translation_locale' => null,

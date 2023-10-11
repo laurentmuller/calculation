@@ -230,6 +230,7 @@ class CalculationRepository extends AbstractRepository
             ->orderBy('year', Criteria::DESC)
             ->addOrderBy('month', Criteria::DESC)
             ->setMaxResults($maxResults);
+
         $result = $builder->getQuery()->getArrayResult();
         /** @psalm-var array $item */
         foreach ($result as &$item) {

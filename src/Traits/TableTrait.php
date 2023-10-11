@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Trait to handle an {@link AbstractTable} request.
+ * Trait to handle an <code></code>AbstractTable</code> request.
  */
 trait TableTrait
 {

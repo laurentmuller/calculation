@@ -81,26 +81,20 @@ enum PdfFontStyle: string implements EnumDefaultInterface
     /**
      * Converts the given string (if any) to a font style.
      *
-     * If no match, the {@link PdfFontStyle::REGULAR} is returned.
+     * If no match, the <code>PdfFontStyle::REGULAR</code> is returned.
      */
     public static function fromStyle(?string $style): self
     {
         if (null === $style || '' === $style) {
             return self::REGULAR;
         }
-        /** @psalm-var string[] $values */
-        static $values = [];
-        if ([] === $values) {
-            $values = [
-               self::BOLD->value,
-               self::ITALIC->value,
-               self::UNDERLINE->value,
-        ];
-        }
+
         $result = '';
-        $style = \strtoupper($style);
-        foreach ($values as $value) {
-            $result .= \str_contains($style, $value) ? $value : '';
+        $enums = [self::BOLD, self::ITALIC, self::UNDERLINE];
+        foreach ($enums as $enum) {
+            if (false !== \stripos($style, $enum->value)) {
+                $result .= $enum->value;
+            }
         }
 
         return self::from($result);

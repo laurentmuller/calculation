@@ -312,7 +312,7 @@ class PdfBorder
     {
         $allowed = [self::TOP, self::LEFT, self::BOTTOM, self::RIGHT];
         $chars = \array_unique(\str_split(\strtoupper($value)));
-        $chars = \array_filter($chars, fn (string $ch) => \in_array($ch, $allowed, true));
+        $chars = \array_filter($chars, fn (string $ch): bool => \in_array($ch, $allowed, true));
 
         if ([] === $chars) {
             return self::NONE;

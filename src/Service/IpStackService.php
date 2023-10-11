@@ -85,7 +85,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
     {
         $url = $this->getUrl($request);
         /** @psalm-var IpStackType|null $result */
-        $result = $this->getUrlCacheValue($url, fn () => $this->doGetIpInfo($url));
+        $result = $this->getUrlCacheValue($url, fn (): ?array => $this->doGetIpInfo($url));
 
         return $result;
     }

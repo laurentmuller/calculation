@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
- * Trait for class implementing the {@link \App\Interfaces\MimeTypeInterface MimeTypeInterface} interface.
+ * Trait for class implementing the <code>MimeTypeInterface</code> interface.
  *
  * @psalm-require-implements \App\Interfaces\MimeTypeInterface
  */

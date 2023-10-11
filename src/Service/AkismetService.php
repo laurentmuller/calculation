@@ -153,7 +153,7 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
      */
     public function verifyKey(): bool
     {
-        return (bool) ($this->getUrlCacheValue(self::URI_VERIFY, fn () => $this->doVerifyKey()) ?? false);
+        return (bool) ($this->getUrlCacheValue(self::URI_VERIFY, fn (): ?bool => $this->doVerifyKey()) ?? false);
     }
 
     protected function getDefaultOptions(): array

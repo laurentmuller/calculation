@@ -3,11 +3,8 @@
 <li class="nav-item dropdown">
     <button class="nav-link dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
         {% apply spaceless %}
-            {% set image = asset_image_user(app.user, '032', {'alt': 'user.fields.imageFile'|trans, 'title': app.user.userIdentifier, 'class': 'avatar rounded-circle'}) %}
-            {% if image %}
-                {{ image|raw }}
-            {% else -%}
-                {{ icon('user fa-lg far') }}&nbsp;{{ app.user.userIdentifier }}
+            {% set image = asset_image_user(app.user, '032', {'alt': 'user.fields.imageFile'|trans, 'title': app.user.userIdentifier, 'class': 'avatar rounded-circle me-1'}) %}
+            {% if image %}{{ image|raw }}{% else -%}{{ icon('user fa-lg far me-2') }}{{ app.user.userIdentifier }}
             {% endif -%}
         {% endapply %}
     </button>

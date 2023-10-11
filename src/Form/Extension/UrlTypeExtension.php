@@ -29,12 +29,14 @@ class UrlTypeExtension extends AbstractTypeExtension
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        if (isset($options['default_protocol'])) {
-            /** @psalm-var string $value */
-            $value = $options['default_protocol'];
-            $vars = &$view->vars['attr'];
-            $vars['data-protocol'] = $value;
+        if (!isset($options['default_protocol'])) {
+            return;
         }
+
+        /** @psalm-var string $value */
+        $value = $options['default_protocol'];
+        $attr = $view->vars['attr'] ?? [];
+        $view->vars['attr'] = \array_merge($attr, ['data-protocol' => $value]);
     }
 
     public static function getExtendedTypes(): iterable

@@ -7,6 +7,19 @@
     {{- 'counters.months'|trans({'count': value}, 'messages') -}}
 </option>
 {%- endmacro %}
+{# format the percent with arrow #}
+{% macro cell_percent(value, previous) -%}
+{% set icon = 'right' %}
+{% set color = 'var(--bs-secondary)' %}
+{% if previous and previous < value %}
+    {% set icon = 'up' %}
+    {% set color = 'var(--bs-success)' %}
+{% elseif previous and previous > value %}
+    {% set icon = 'down' %}
+    {% set color = 'var(--bs-danger)' %}
+{% endif %}
+<i class="fa-fw fa-solid fa-caret-{{ icon }}" style="color:{{ color }}"></i>{{ value|percent(false) -}}
+{%- endmacro %}
 {# parameters #}
 {%- set title = 'title_by_month' -%}
 {%- set title_icon = 'calendar-alt far' -%}
@@ -41,6 +54,7 @@
     </tr>
 </thead>
 <tbody data-link="row" class="rowlink">
+    {% set last_percent = null %}
     {% for item in data -%}
     {%- set month = item.date|locale_date('none', null, null, 'MMMM Y')|capitalize -%}
     {%- set parameters = {'search': item.date|locale_date('none', null, null, 'MM.Y')} -%}
@@ -51,7 +65,11 @@
         <td class="text-currency">{{ item.count|integer }}</td>
         <td class="text-currency">{{ item.items|integer }}</td>
         <td class="text-currency">{{ item.marginAmount|integer }}</td>
-        <td class="text-percent{{ _self.margin_below_class(item.marginPercent, min_margin) }}"{{ _self.margin_below_tooltip(item.marginPercent, min_margin) }}>{{ item.marginPercent|percent(false) }}</td>
+        <td class="text-percent{{ _self.margin_below_class(item.marginPercent, min_margin) }}"{{ _self.margin_below_tooltip(item.marginPercent, min_margin) }}>
+            {%- set new_percent = item.marginPercent|round(2, 'floor') -%}
+            {{- _self.cell_percent(new_percent, last_percent) -}}
+            {%- set last_percent = new_percent -%}
+        </td>
         <td class="text-currency">{{ item.sum|integer }}</td>
     </tr>
     {% endfor -%}

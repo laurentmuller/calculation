@@ -196,7 +196,7 @@ class HelpService implements ServiceSubscriberInterface
      */
     public function getHelp(): array
     {
-        return (array) ($this->getCacheValue(self::CACHE_KEY, fn () => $this->loadHelp()) ?? []);
+        return (array) ($this->getCacheValue(self::CACHE_KEY, fn (): ?array => $this->loadHelp()) ?? []);
     }
 
     /**

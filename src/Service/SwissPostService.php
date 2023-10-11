@@ -39,7 +39,7 @@ readonly class SwissPostService
      */
     public function findAll(string $value, int $limit = 25): array
     {
-        return $this->find(fn (SwissDatabase $db) => $db->findAll($value, $limit));
+        return $this->find(fn (SwissDatabase $db): array => $db->findAll($value, $limit));
     }
 
     /**
@@ -52,7 +52,7 @@ readonly class SwissPostService
      */
     public function findCity(string $name, int $limit = 25): array
     {
-        return $this->find(fn (SwissDatabase $db) => $db->findCity($name, $limit));
+        return $this->find(fn (SwissDatabase $db): array => $db->findCity($name, $limit));
     }
 
     /**
@@ -65,7 +65,7 @@ readonly class SwissPostService
      */
     public function findStreet(string $name, int $limit = 25): array
     {
-        return $this->find(fn (SwissDatabase $db) => $db->findStreet($name, $limit));
+        return $this->find(fn (SwissDatabase $db): array => $db->findStreet($name, $limit));
     }
 
     /**
@@ -78,7 +78,7 @@ readonly class SwissPostService
      */
     public function findZip(string $zip, int $limit = 25): array
     {
-        return $this->find(fn (SwissDatabase $db) => $db->findZip($zip, $limit));
+        return $this->find(fn (SwissDatabase $db): array => $db->findZip($zip, $limit));
     }
 
     /**

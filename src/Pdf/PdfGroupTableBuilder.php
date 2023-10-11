@@ -121,7 +121,7 @@ class PdfGroupTableBuilder extends PdfTableBuilder
      */
     public function outputGroup(): static
     {
-        if ($this->group->isKey() && !$this->inProgress) {
+        if ($this->group->hasKey() && !$this->inProgress) {
             $this->inProgress = true;
             if (!$this->groupListener instanceof PdfGroupListenerInterface || !$this->groupListener->outputGroup($this, $this->group)) {
                 $this->group->output($this);
@@ -202,11 +202,17 @@ class PdfGroupTableBuilder extends PdfTableBuilder
         return $this;
     }
 
+    /**
+     * Returns a value indicating if the group is currently output.
+     */
     protected function isInProgress(): bool
     {
         return $this->inProgress;
     }
 
+    /**
+     * Sets a value indicating if the group is currently output.
+     */
     protected function setInProgress(bool $inProgress): static
     {
         $this->inProgress = $inProgress;

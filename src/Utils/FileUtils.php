@@ -344,7 +344,7 @@ final class FileUtils
                 $result = $base . \uniqid((string) \mt_rand(), true);
                 if (!self::exists($result) && self::mkdir($result)) {
                     if ($deleteOnExit) {
-                        \register_shutdown_function(fn () => self::remove($result));
+                        \register_shutdown_function(fn (): bool => self::remove($result));
                     }
 
                     return $result;
@@ -369,7 +369,7 @@ final class FileUtils
         try {
             $file = self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
             if ($deleteOnExit) {
-                \register_shutdown_function(fn () => self::remove($file));
+                \register_shutdown_function(fn (): bool => self::remove($file));
             }
 
             return $file;

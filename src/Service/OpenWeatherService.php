@@ -372,7 +372,7 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units, 'limit' => $limit]);
 
-        return (array) ($this->getCacheValue($key, fn () => $this->doSearch($name, $limit)) ?? []);
+        return (array) ($this->getCacheValue($key, fn (): ?array => $this->doSearch($name, $limit)) ?? []);
     }
 
     protected function getDefaultOptions(): array
@@ -497,7 +497,7 @@ class OpenWeatherService extends AbstractHttpClientService
         $key = $this->getCacheKey($uri, $query);
 
         /** @psalm-var array|false $result */
-        $result = $this->getCacheValue($key, fn () => $this->doGet($uri, $query)) ?? false;
+        $result = $this->getCacheValue($key, fn (): ?array => $this->doGet($uri, $query)) ?? false;
 
         return $result;
     }

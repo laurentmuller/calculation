@@ -99,7 +99,7 @@ class SchemaService implements ServiceSubscriberInterface
     public function getTable(string $name): array
     {
         /** @psalm-var SchemaTableType $result */
-        $result = $this->getCacheValue("schema_service.metadata.table.$name", fn () => $this->loadTable($name));
+        $result = $this->getCacheValue("schema_service.metadata.table.$name", fn (): array => $this->loadTable($name));
 
         return $result;
     }
@@ -112,7 +112,7 @@ class SchemaService implements ServiceSubscriberInterface
     public function getTables(): array
     {
         /** @psalm-var SchemaSoftTableType[] $results */
-        $results = $this->getCacheValue('schema_service.tables', fn () => $this->loadTables());
+        $results = $this->getCacheValue('schema_service.tables', fn (): array => $this->loadTables());
 
         // update records
         foreach ($results as &$result) {
@@ -319,7 +319,7 @@ class SchemaService implements ServiceSubscriberInterface
         /** @psalm-var array<string, ClassMetadataInfo<object>> $result */
         $result = $this->getCacheValue(
             'schema_service.metadata',
-            fn () => $this->loadMetaDatas($this->manager),
+            fn (): array => $this->loadMetaDatas($this->manager),
             self::CACHE_TIMEOUT
         );
 

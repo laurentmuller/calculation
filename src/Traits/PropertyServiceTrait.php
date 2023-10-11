@@ -20,7 +20,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
- * Trait for class implementing the {@link \App\Interfaces\PropertyServiceInterface PropertyServiceInterface} interface.
+ * Trait for class implementing the <code>PropertyServiceInterface</code> interface.
  *
  * @psalm-require-implements \App\Interfaces\PropertyServiceInterface
  */

@@ -47,7 +47,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     public function getGlobals(): array
     {
         /** @psalm-var array<string, mixed> $globals */
-        $globals = $this->getCacheValue(self::CACHE_KEY, fn () => $this->loadValues());
+        $globals = $this->getCacheValue(self::CACHE_KEY, fn (): array => $this->loadValues());
 
         return $globals;
     }
@@ -64,11 +64,11 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     private function getConstants(string $className): array
     {
         $reflection = new \ReflectionClass($className);
-        $constants = \array_filter($reflection->getReflectionConstants(), static fn (\ReflectionClassConstant $c) => $c->isPublic());
+        $constants = \array_filter($reflection->getReflectionConstants(), static fn (\ReflectionClassConstant $c): bool => $c->isPublic());
 
         return \array_reduce(
             $constants,
-            static fn (array $carry, \ReflectionClassConstant $c) => $carry + [$c->getName() => $c->getValue()],
+            static fn (array $carry, \ReflectionClassConstant $c): array => $carry + [$c->getName() => $c->getValue()],
             []
         );
     }

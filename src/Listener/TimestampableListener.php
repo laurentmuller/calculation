@@ -75,7 +75,7 @@ class TimestampableListener implements DisableListenerInterface
     private function filterEntities(array $entities, bool $includeChildren = true): array
     {
         return \array_unique(\array_filter(\array_map(
-            fn (object $entity) => $this->getTimestampable($entity, $includeChildren),
+            fn (object $entity): ?TimestampableInterface => $this->getTimestampable($entity, $includeChildren),
             $entities
         )));
     }

@@ -91,7 +91,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
         parent::__clone();
 
         // clone categories
-        $this->categories = $this->categories->map(fn (CalculationCategory $category) => (clone $category)->setGroup($this));
+        $this->categories = $this->categories->map(fn (CalculationCategory $category): CalculationCategory => (clone $category)->setGroup($this));
     }
 
     /**

@@ -141,7 +141,7 @@ readonly class LogFilter
      */
     private function filterValue(array $logs): array
     {
-        return \array_filter($logs, fn (Log $log) => $this->acceptChannel($log)
+        return \array_filter($logs, fn (Log $log): bool => $this->acceptChannel($log)
             || $this->acceptLevel($log)
             || $this->acceptDate($log)
             || $this->acceptMessage($log)

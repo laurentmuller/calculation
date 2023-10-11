@@ -16,7 +16,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Abstract type to use within the {@link FormHelper}.
+ * Abstract type to use within the <code>FormHelper</code>.
  *
  * @extends AbstractType<mixed>
  */

@@ -18,7 +18,7 @@ use App\Utils\StringUtils;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Edition type to use within an {@link AbstractEntity} class.
+ * Edition type to use within an <code>AbstractEntity</code> class.
  *
  * @template T of AbstractEntity
  */

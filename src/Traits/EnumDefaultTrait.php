@@ -15,7 +15,7 @@ namespace App\Traits;
 use App\Interfaces\EnumDefaultInterface;
 
 /**
- * Trait for enumeration implementing {@link EnumDefaultInterface} interface.
+ * Trait for enumeration implementing <code>EnumDefaultInterface</code> interface.
  *
  * @psalm-require-implements EnumDefaultInterface
  */

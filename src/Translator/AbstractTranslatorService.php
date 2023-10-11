@@ -80,7 +80,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     {
         $key = $this->getCacheKey();
         /** @psalm-var array<string, string>|false $result */
-        $result = $this->getCacheValue($key, fn () => $this->doLoadLanguages()) ?? false;
+        $result = $this->getCacheValue($key, fn (): ?array => $this->doLoadLanguages()) ?? false;
 
         return $result;
     }

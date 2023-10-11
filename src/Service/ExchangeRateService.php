@@ -120,7 +120,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = $this->getUrl(self::URI_LATEST, $code);
         /** @psalm-var array<string, float> $result */
-        $result = $this->getUrlCacheValue($url, fn () => $this->doGetLatest($url)) ?? [];
+        $result = $this->getUrlCacheValue($url, fn (): ?array => $this->doGetLatest($url)) ?? [];
 
         return $result;
     }
@@ -134,7 +134,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = self::URI_QUOTA;
         /** @psalm-var ExchangeQuotaType|null $result */
-        $result = $this->getUrlCacheValue($url, fn () => $this->doGetQuota($url));
+        $result = $this->getUrlCacheValue($url, fn (): ?array => $this->doGetQuota($url));
 
         return $result;
     }
@@ -151,7 +151,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
 
-        return (float) ($this->getUrlCacheValue($url, fn () => $this->doGetRate($url)) ?? 0.0);
+        return (float) ($this->getUrlCacheValue($url, fn (): ?float => $this->doGetRate($url)) ?? 0.0);
     }
 
     /**
@@ -168,7 +168,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
         /** @psalm-var ExchangeRateAndDateType|null $result */
-        $result = $this->getUrlCacheValue($url, fn () => $this->doGetRateAndDates($url));
+        $result = $this->getUrlCacheValue($url, fn (): ?array => $this->doGetRateAndDates($url));
 
         return $result;
     }
@@ -184,7 +184,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     {
         $url = self::URI_CODES;
         /** @psalm-var array<string, ExchangeRateType> $result */
-        $result = $this->getUrlCacheValue($url, fn () => $this->doGetSupportedCodes($url)) ?? [];
+        $result = $this->getUrlCacheValue($url, fn (): ?array => $this->doGetSupportedCodes($url)) ?? [];
 
         return $result;
     }
@@ -417,7 +417,7 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
 
             return $carry;
         }, []);
-        \uasort($result, fn (array $a, array $b) => $a['name'] <=> $b['name']);
+        \uasort($result, fn (array $a, array $b): int => $a['name'] <=> $b['name']);
 
         return $result;
     }

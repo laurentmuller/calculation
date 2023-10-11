@@ -15,7 +15,7 @@ namespace App\Traits;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Trait for class implementing the {@link \App\Interfaces\PositionInterface PositionInterface} interface.
+ * Trait for class implementing the <code></code>PositionInterface</code> interface.
  *
  * @psalm-require-implements \App\Interfaces\PositionInterface
  */

@@ -21,7 +21,7 @@ use App\Traits\MathTrait;
 use App\Utils\StringUtils;
 
 /**
- * Class to build a table.
+ * Class to build and output a table.
  *
  * @see PdfColumn
  */
@@ -162,7 +162,9 @@ class PdfTableBuilder
     /**
      * Create and add a header row with the given values.
      *
-     * @throws \LogicException if the row is already started
+     * @throws \LogicException      if the row is already started
+     * @throws \LengthException     if values parameter is empty
+     * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
      */
     public function addHeaderRow(PdfCell|string|null ...$values): static
     {
@@ -174,7 +176,9 @@ class PdfTableBuilder
     /**
      * Create and add a row with the given values.
      *
-     * @throws \LogicException if the row is already started
+     * @throws \LogicException      if the row is already started
+     * @throws \LengthException     if values parameter is empty
+     * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
      *
      * @see PdfTableBuilder::addStyledRow()
      */
@@ -192,8 +196,8 @@ class PdfTableBuilder
      * @param ?PdfStyle                  $style the row style or null for default cell style
      *
      * @throws \LogicException      if a row is already started
-     * @throws \LengthException     if no cell is defined
-     * @throws \OutOfRangeException if the number of spanned cells is not equal to the number of columns
+     * @throws \LengthException     if  cells parameter is empty
+     * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
      *
      * @see PdfTableBuilder::addRow()
      */
@@ -228,20 +232,21 @@ class PdfTableBuilder
      * @param float $height The desired height
      *
      * @return bool true if a new page is added
+     *
+     * @see PdfDocument::isPrintable()
      */
     public function checkNewPage(float $height): bool
     {
         $parent = $this->parent;
-        if (!$parent->isPrintable($height)) {
-            $parent->AddPage();
-            if ($this->repeatHeader) {
-                $this->outputHeaders();
-            }
-
-            return true;
+        if ($parent->isPrintable($height)) {
+            return false;
+        }
+        $parent->AddPage();
+        if ($this->repeatHeader) {
+            $this->outputHeaders();
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -256,7 +261,8 @@ class PdfTableBuilder
         if (!$this->isRowStarted()) {
             throw new \LogicException('No row started.');
         }
-        for ($i = 0, $remaining = $this->getColumnsCount() - $this->getCellsSpan(); $i < $remaining; ++$i) {
+        $remaining = $this->getColumnsCount() - $this->getCellsSpan();
+        for ($i = 0; $i < $remaining; ++$i) {
             $this->add('');
         }
 
@@ -277,8 +283,10 @@ class PdfTableBuilder
         if ([] === $this->cells) {
             throw new \LengthException('No cell defined.');
         }
-        if ($this->getCellsSpan() !== $this->getColumnsCount()) {
-            throw new \OutOfRangeException(\sprintf('Invalid spanned cells: expected %d, %d given.', $this->getColumnsCount(), $this->getCellsSpan()));
+        $span = $this->getCellsSpan();
+        $count = $this->getColumnsCount();
+        if ($span !== $count) {
+            throw new \OutOfRangeException(\sprintf('Invalid spanned cells: expected %d, %d given.', $count, $span));
         }
 
         $cells = $this->cells;
@@ -464,6 +472,10 @@ class PdfTableBuilder
      * @throws \LogicException if a row is already started
      *
      * @see PdfTableBuilder::add()
+     *
+     * @throws \LogicException      if the row is already started
+     * @throws \LengthException     if no column is defined
+     * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
      */
     public function singleLine(string $text = null, PdfStyle $style = null, PdfTextAlignment $alignment = null): static
     {
@@ -503,8 +515,10 @@ class PdfTableBuilder
     }
 
     /**
-     * Output a single cell. The default behavior is to draw the cell border (if any),
-     * fill the cell (if applicable) and draw the text.
+     * Output a single cell.
+     *
+     * The default behavior is to draw the cell border (if any), fill the cell (if applicable) and draw the text.
+     *
      * After this call, the current position is at the top/right of the cell.
      *
      * @param PdfDocument      $parent    the parent document
@@ -725,13 +739,11 @@ class PdfTableBuilder
     /**
      * Gets the total columns span.
      *
-     * @return int the number of columns span
-     *
      * @see PdfCell::getCols()
      */
     protected function getCellsSpan(): int
     {
-        return \array_reduce($this->cells, fn (int $carry, PdfCell $cell) => $carry + $cell->getCols(), 0);
+        return \array_reduce($this->cells, static fn (int $carry, PdfCell $cell): int => $carry + $cell->getCols(), 0);
     }
 
     /**
@@ -741,8 +753,6 @@ class PdfTableBuilder
      * @param float[]    $widths the cell widths
      * @param PdfStyle[] $styles the cell styles
      * @param PdfCell[]  $cells  the cells
-     *
-     * @return float the line height
      *
      * @see PdfTableBuilder::getCellHeight()
      */

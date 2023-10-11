@@ -108,7 +108,7 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
         /** @psalm-var array<string, string> $result */
         $result = \array_reduce(
             self::cases(),
-            static fn (array $choices, self $type) => $choices + ['ENTITY_' . $type->name => $type->value],
+            static fn (array $choices, self $type): array => $choices + ['ENTITY_' . $type->name => $type->value],
             [],
         );
 

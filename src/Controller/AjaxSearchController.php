@@ -92,7 +92,7 @@ class AjaxSearchController extends AbstractController
         int $limit = null
     ): JsonResponse {
         return $this->getValuesFromCallback(
-            fn (string $query, int $limit) => $repository->search($query, $limit),
+            fn (string $query, int $limit): array => $repository->search($query, $limit),
             $query,
             $limit
         );

@@ -77,7 +77,7 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
         /** @psalm-var array<string, string> $result */
         $result = \array_reduce(
             self::cases(),
-            static fn (array $choices, self $type) => $choices + ['ATTRIBUTE_' . $type->name => $type->name],
+            static fn (array $choices, self $type): array => $choices + ['ATTRIBUTE_' . $type->name => $type->name],
             [],
         );
 

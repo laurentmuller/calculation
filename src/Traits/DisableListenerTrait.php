@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 /**
- * Trait for class implementing {@link DisableListenerInterface DisableListenerInterface} interface.
+ * Trait for class implementing <code>DisableListenerInterface</code> interface.
  *
  * @psalm-require-implements \App\Interfaces\DisableListenerInterface
  */

@@ -440,6 +440,8 @@ class PdfDocument extends \FPDF
 
     /**
      * Gets the printable width.
+     *
+     * @return float the document width minus the left and right margins
      */
     public function getPrintableWidth(): float
     {

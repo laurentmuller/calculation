@@ -87,6 +87,9 @@ class UserType extends AbstractEntityType
         $user = $event->getData();
         $form = $event->getForm();
         if ($user->isNew()) {
+            // the password must be set, if not; the form is not valid
+            $user->setPassword('123456');
+            $event->setData($user);
             $form->remove('lastLogin');
         } else {
             $form->remove('plainPassword');

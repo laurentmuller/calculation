@@ -70,7 +70,7 @@ class LogController extends AbstractController
             'file' => $file,
             'size' => FileUtils::formatSize($file),
             'entries' => FileUtils::getLinesCount($file),
-            'route' => $this->getRequestString($request, 'route'),
+            'route' => $this->getDefaultRoute($request),
         ];
 
         return $this->render('log/log_delete.html.twig', $parameters);
@@ -164,12 +164,7 @@ class LogController extends AbstractController
      */
     private function getDefaultRoute(Request $request): string
     {
-        $route = $this->getRequestString($request, 'route');
-        if (null !== $route) {
-            return $route;
-        }
-
-        return 'log_table';
+        return $this->getRequestString($request, 'route', 'log_table');
     }
 
     private function getEmptyResponse(string $message = 'log.list.empty', FlashType $type = FlashType::INFO): RedirectResponse

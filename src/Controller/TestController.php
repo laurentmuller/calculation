@@ -329,27 +329,32 @@ class TestController extends AbstractController
      * Search zip codes, cities and streets from Switzerland.
      */
     #[Route(path: '/swiss', name: 'test_swiss')]
-    public function swiss(Request $request, SwissPostService $service): Response
+    public function swiss(Request $request, SwissPostService $service): JsonResponse
     {
         $all = $this->getRequestString($request, 'all');
         $zip = $this->getRequestString($request, 'zip');
         $city = $this->getRequestString($request, 'city');
         $street = $this->getRequestString($request, 'street');
         $limit = $this->getRequestInt($request, 'limit', 25);
-        if (null !== $all) {
+        if ('' !== $all) {
+            $query = $all;
             $rows = $service->findAll($all, $limit);
-        } elseif (null !== $zip) {
+        } elseif ('' !== $zip) {
+            $query = $zip;
             $rows = $service->findZip($zip, $limit);
-        } elseif (null !== $city) {
+        } elseif ('' !== $city) {
+            $query = $city;
             $rows = $service->findCity($city, $limit);
-        } elseif (null !== $street) {
+        } elseif ('' !== $street) {
+            $query = $street;
             $rows = $service->findStreet($street, $limit);
         } else {
+            $query = '';
             $rows = [];
         }
         $data = [
             'result' => [] !== $rows,
-            'query' => $all ?? $zip ?? $city ?? $street ?? '',
+            'query' => $query,
             'limit' => $limit,
             'count' => \count($rows),
             'rows' => $rows,

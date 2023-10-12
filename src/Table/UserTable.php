@@ -130,14 +130,15 @@ class UserTable extends AbstractEntityTable
     private function getOriginalUserId(): int
     {
         $token = $this->security->getToken();
-        if ($token instanceof SwitchUserToken) {
-            $user = $token->getOriginalToken()->getUser();
-            if ($user instanceof User) {
-                return (int) $user->getId();
-            }
+        if (!$token instanceof SwitchUserToken) {
+            return 0;
+        }
+        $user = $token->getOriginalToken()->getUser();
+        if (!$user instanceof User) {
+            return 0;
         }
 
-        return 0;
+        return (int) $user->getId();
     }
 
     private function isResettableUsers(): bool

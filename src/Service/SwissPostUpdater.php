@@ -19,6 +19,7 @@ use App\Model\SwissPostUpdateResult;
 use App\Traits\LoggerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\CSVReader;
+use App\Utils\DateUtils;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
@@ -353,7 +354,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         if ($this->validateLength($data, 1)) {
             $validity = \DateTime::createFromFormat(self::DATE_PATTERN, (string) $data[1]);
             if ($validity instanceof \DateTime) {
-                $validity = $validity->setTime(0, 0);
+                $validity = DateUtils::removeTime($validity);
             }
         }
         if (!$validity instanceof \DateTimeInterface) {

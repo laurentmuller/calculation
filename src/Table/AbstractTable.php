@@ -358,7 +358,7 @@ abstract class AbstractTable implements SortModeInterface
 
     private function getParamSearch(Request $request): string
     {
-        return $this->getParamString($request, TableInterface::PARAM_SEARCH, '', '');
+        return $this->getParamString($request, TableInterface::PARAM_SEARCH);
     }
 
     private function getParamSort(Request $request, string $default): string

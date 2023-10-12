@@ -18,7 +18,6 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
@@ -44,13 +43,10 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * @see ResetPasswordRequestRepositoryInterface
      *
-     * @throws UnsupportedUserException
+     * @psalm-param User $user
      */
     public function createResetPasswordRequest(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken): ResetPasswordRequestInterface
     {
-        if (!$user instanceof User) {
-            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $user::class));
-        }
         $expiresAt = \DateTimeImmutable::createFromInterface($expiresAt);
 
         return $user->setResetPasswordRequest($expiresAt, $selector, $hashedToken);
@@ -86,14 +82,12 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
 
     /**
      * @see ResetPasswordRequestRepositoryInterface
+     *
+     * @psalm-param User $user
      */
     public function getMostRecentNonExpiredRequestDate(object $user): ?\DateTimeInterface
     {
-        if ($user instanceof User && !$user->isExpired()) {
-            return $user->getRequestedAt();
-        }
-
-        return null;
+        return $user->isExpired() ? null : $user->getRequestedAt();
     }
 
     /**
@@ -133,7 +127,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Returns the criteria clause to filter user where the role name is not the super administrator role name.
+     * Returns the criteria clause to filter users where the role name is not the super administrator role name.
      */
     public function getSuperAdminFilter(string $alias = self::DEFAULT_ALIAS): string
     {
@@ -178,13 +172,10 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * @see ResetPasswordRequestRepositoryInterface
      *
-     * @throws UnsupportedUserException
+     * @psalm-param User $resetPasswordRequest
      */
     public function removeResetPasswordRequest(ResetPasswordRequestInterface $resetPasswordRequest): void
     {
-        if (!$resetPasswordRequest instanceof User) {
-            throw new UnsupportedUserException(\sprintf('Expected "%s", "%s" given.', ResetPasswordRequestInterface::class, $resetPasswordRequest::class));
-        }
         $this->resetPasswordRequest($resetPasswordRequest);
     }
 
@@ -208,14 +199,10 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * @see PasswordUpgraderInterface
      *
-     * @throws UnsupportedUserException
+     * @psalm-param User $user
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        if (!$user instanceof User) {
-            throw new UnsupportedUserException(\sprintf('Instance of "%s" is not supported.', $user::class));
-        }
-
         $user->setPassword($newHashedPassword);
         $this->flush();
     }

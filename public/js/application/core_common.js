@@ -16,6 +16,8 @@
         if ($form.length === 0) {
             return;
         }
+        const formSize = 150;
+        const breakPoint = 992;
         const $button = $('#search-button-horizontal');
         const $input = $('#search-form-horizontal #search');
         const hideInvalid = () => {
@@ -24,21 +26,31 @@
         const hideForm = () => {
             $input.val('');
             hideInvalid();
-            $form.animate({
-                width: 0
-            }, () => {
-                $form.hide();
-                $button.show().trigger('focus');
-            });
+            if (window.innerWidth > breakPoint) {
+                $form.animate({
+                    width: 0
+                }, () => {
+                    $form.hide();
+                    $button.show().trigger('focus');
+                });
+            }
         };
-
         $button.on('click', () => {
             $button.hide();
             $form.show().animate({
-                width: 200
-            }, function () {
+                width: formSize
+            },  () => {
                 $input.trigger('focus');
             });
+        });
+        $(window).on('resize', () => {
+            if (window.innerWidth > breakPoint) {
+                $button.show();
+                $form.css('width', 0).hide();
+            } else {
+                $button.hide();
+                $form.css('width', formSize).show();
+            }
         });
         $input.on('keyup', (e) => {
             if (e.key === 'Escape') {

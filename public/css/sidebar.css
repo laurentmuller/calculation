@@ -27,7 +27,7 @@
 /* page-content */
 .page-content {
     width: calc(100% - 18rem);
-    margin-top: 20px;
+    margin-top: 0.75rem;
     margin-left: 18rem;
 }
 

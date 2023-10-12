@@ -170,7 +170,7 @@ class OpenWeatherController extends AbstractController
             $units = $this->getRequestUnits($request);
             $latitude = $this->getRequestFloat($request, self::KEY_LATITUDE);
             $longitude = $this->getRequestFloat($request, self::KEY_LONGITUDE);
-            $exclude = $this->getRequestString($request, self::KEY_EXCLUDE, '');
+            $exclude = $this->getRequestString($request, self::KEY_EXCLUDE);
             $exclude = \explode(',', $exclude);
             $response = $this->service->oneCall($latitude, $longitude, $units, $exclude);
             if (false === $response) {
@@ -407,7 +407,7 @@ class OpenWeatherController extends AbstractController
 
     private function getRequestQuery(Request $request): string
     {
-        return \trim($this->getRequestString($request, self::KEY_QUERY, ''));
+        return \trim($this->getRequestString($request, self::KEY_QUERY));
     }
 
     private function getRequestUnits(Request $request): string

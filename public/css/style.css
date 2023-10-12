@@ -10,7 +10,7 @@
 /**! compression tag for ftp-deployment */
 
 .navbar.navbar-horizontal {
-    margin-bottom: 20px;
+    margin-bottom: 0.75rem;
     transition: top 0.3s ease-in-out;
 }
 

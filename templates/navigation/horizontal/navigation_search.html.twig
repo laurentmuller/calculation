@@ -1,8 +1,8 @@
 {# search form #}
 {% from 'macros/_icons.html.twig' import icon %}
 <li class="nav-item my-auto">
-    <a href="#" id="search-button-horizontal" class="nav-link" title="{{ 'search.title'|trans }}">{{- icon('search fa-fw') -}}</a>
-    <form id="search-form-horizontal" action="{{ path('search') }}" class="mx-2 my-auto" role="search" novalidate="novalidate" style="display: none; width: 0;">
+    <button id="search-button-horizontal" class="nav-link" title="{{ 'search.title'|trans }}">{{- icon('search fa-fw') -}}</button>
+    <form id="search-form-horizontal" action="{{ path('search') }}" class="my-auto mx-lg-2 py-1 py-lg-0" role="search" novalidate="novalidate" style="display: none; width: 0;">
         <input type="text" id="search" name="search" class="form-control form-control-sm w-100" aria-label="{{ 'list.search_placeholder'|trans }}" required="required" minlength="2" autocomplete="off" placeholder="{{ 'search.placeholder'|trans }}" data-display="false" data-bs-toggle="tooltip" data-bs-trigger="manual" data-bs-custom-class="tooltip-danger" data-bs-title="{{ 'search.minimum'|trans }}">
     </form>
 </li>

@@ -113,31 +113,19 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
     }
 
     /**
-     * @psalm-return array{
-     *      id: int|null,
-     *      username: string|null,
-     *      password: string|null}
+     * @return array{int|null, string|null, string|null}
      */
     public function __serialize(): array
     {
-        return [
-            'id' => $this->id,
-            'username' => $this->username,
-            'password' => $this->password,
-        ];
+        return [$this->id, $this->username, $this->password];
     }
 
     /**
-     * @psalm-param array{
-     *     id: int|null,
-     *     username: string|null,
-     *     password: string|null} $data
+     * @param array{int|null, string, string} $data
      */
     public function __unserialize(array $data): void
     {
-        $this->id = $data['id'];
-        $this->username = $data['username'];
-        $this->password = $data['password'];
+        [$this->id, $this->username, $this->password] = $data;
     }
 
     /**

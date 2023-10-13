@@ -465,6 +465,9 @@
             }
             settings.parent.addClass('position-relative');
             $alert.appendTo($(settings.parent)).show(settings.show);
+            setTimeout(() => {
+                $alert.remove();
+            }, 1500);
 
             return $this;
         }

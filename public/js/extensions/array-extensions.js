@@ -13,7 +13,6 @@
 /* eslint no-extend-native: ["error", { "exceptions": ["Array"] }] */
 Array.prototype.randomElement = function (lastIndex) {
     'use strict';
-
     const len = this.length;
     switch (len) {
         case 0:
@@ -37,7 +36,6 @@ Array.prototype.randomElement = function (lastIndex) {
 /* eslint no-extend-native: ["error", { "exceptions": ["Array"] }] */
 Array.prototype.last = function () {
     'use strict';
-
     return this.length ? this[this.length - 1] : null;
 };
 
@@ -47,7 +45,6 @@ Array.prototype.last = function () {
 /* eslint no-extend-native: ["error", { "exceptions": ["Array"] }] */
 Array.prototype.unique = function () {
     'use strict';
-
     return this.filter(function (value, index, self) {
         return self.indexOf(value) === index;
     });

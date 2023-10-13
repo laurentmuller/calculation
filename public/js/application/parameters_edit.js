@@ -71,35 +71,21 @@ function updateVisibleButton() {
 /**
  * Display a notification.
  *
- * @param {jQuery} [source] - the notification source.
+ * @param {jQuery} $source - the notification source.
  */
 function displayNotification($source) {
     'use strict';
     // get random text
-    let title = $('.card-title:first').text();
     const url = $('#edit-form').data("random");
+    const showError = () => {
+        const message = $('form').data('failure');
+        Toaster.danger(message, $('.card-title:first').text());
+    };
     $.getJSON(url, function (response) {
         if (response.result && response.content) {
-            // type
-            let type = null;
-            if ($source) {
-                type = $source.data('value');
-                if ($source.text().trim()) {
-                    title = $source.text().trim();
-                }
-            }
-            if (!type) {
-                const types = Object.values(Toaster.NotificationTypes);
-                type = types.randomElement();
-            }
-
-            // title
-            if (!$('#message_title').isChecked()) {
-                title = null;
-            }
-            // content
-            const content = '<p class="m-0 p-0">' + response.content + '</p>';
-            // options
+            const type = $source.data('value');
+            const content = `<p class="m-0 p-0">${response.content}</p>`;
+            const title = $('#message_title').isChecked() ? $source.text().trim() : null;
             const options = {
                 dataset: '#flashes',
                 icon: $('#message_icon').isChecked(),
@@ -111,12 +97,10 @@ function displayNotification($source) {
             };
             Toaster.notify(type, content, title, options);
         } else {
-            const message = $('form').data('failure');
-            Toaster.danger(message, title);
+            showError();
         }
     }).fail(function () {
-        const message = $('form').data('failure');
-        Toaster.danger(message, title);
+        showError();
     });
 }
 
@@ -227,9 +211,14 @@ function handleEmail() {
     });
     $('.btn-notify').on('click', (e) => {
         e.preventDefault();
+        const $items = $('.dropdown-notify');
+        const index = Math.floor(Math.random() * $items.length);
+        $items.eq(index).trigger('click');
+    });
+    $('.dropdown-notify').on('click', (e) => {
+        e.preventDefault();
         displayNotification($(e.currentTarget));
     });
-
     $('.card-parameter .collapse').on('shown.bs.collapse', function () {
         const $this = $(this);
         const $button = $this.prev('.card-header').find('a.card-title');

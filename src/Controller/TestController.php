@@ -27,9 +27,12 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\UserInterface;
 use App\Model\HttpClientError;
+use App\Pdf\PdfException;
+use App\Pdf\PdfLabelDocument;
 use App\Report\HtmlReport;
 use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\CustomerRepository;
 use App\Repository\ProductRepository;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
@@ -133,6 +136,36 @@ class TestController extends AbstractController
         return $this->render('test/editor.html.twig', [
             'form' => $form,
         ]);
+    }
+
+    /**
+     * @throws PdfException
+     */
+    #[Route(path: '/label', name: 'test_label')]
+    public function exportLabel(CustomerRepository $repository): PdfResponse
+    {
+        $format = '3422';
+        $report = new PdfLabelDocument($format);
+        $report->SetTitle("Etiquette - Format Avery $format");
+        $report->setLabelBorder(true);
+
+        $customers = $repository->findBy([], [], 30);
+        foreach ($customers as $customer) {
+            $values = \array_filter([
+                $customer->getCompany(),
+                $customer->getFullName(),
+                $customer->getAddress(),
+                "\n",
+                $customer->getZipCity(),
+            ]);
+            $text = \implode("\n", $values);
+            $report->addLabel($text);
+        }
+
+        $report->AddPage();
+        $report->dashedRect(50, 50, 100, 101, 15, 1.0);
+
+        return $this->renderPdfDocument($report);
     }
 
     /**

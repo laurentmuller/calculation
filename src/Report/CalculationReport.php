@@ -215,8 +215,7 @@ class CalculationReport extends AbstractReport
         $this->useCellMargin(function () use ($width, $created, $updated): void {
             $this->Cell(w: $width, txt: $created);
             $this->Cell(w: $width, txt: $updated, align: PdfTextAlignment::RIGHT);
-        });
-        $this->resetStyle();
+        })->resetStyle();
     }
 
     /**

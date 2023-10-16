@@ -107,7 +107,8 @@ trait PdfBookmarkTrait
     /**
      * Add an index page (as new page) containing all bookmarks.
      *
-     * Each line contain the text on the left, the page number on the right and are separate by dot ('.') characters.
+     * Each line contain the text on the left, the page number on the right and are separate by the given separator
+     * characters.
      *
      * <b>Remark:</b> Do nothing if no bookmark is defined.
      *
@@ -139,7 +140,7 @@ trait PdfBookmarkTrait
         $contentStyle ??= PdfStyle::getDefaultStyle();
         $contentStyle->apply($this);
 
-        $line_height = $this->getFontSize() + self::SPACE;
+        $height = $this->getFontSize() + self::SPACE;
         $printable_width = $this->getPrintableWidth();
         if ('' === $separator) {
             $separator = ' ';
@@ -160,12 +161,12 @@ trait PdfBookmarkTrait
             // text
             $link = $bookmark['link'];
             $width = $printable_width - $offset - $page_size - self::SPACE;
-            $text_size = $this->_outputIndexText($bookmark['text'], $width, $line_height, $link);
+            $text_size = $this->_outputIndexText($bookmark['text'], $width, $height, $link);
             // separator
             $width -= $text_size + self::SPACE;
-            $this->_outputIndexSeparator($separator, $width, $line_height, $link);
+            $this->_outputIndexSeparator($separator, $width, $height, $link);
             // page
-            $this->_outputIndexPage($page_text, $page_size, $line_height, $link);
+            $this->_outputIndexPage($page_text, $page_size, $height, $link);
         }
 
         return $this->resetStyle();
@@ -226,12 +227,12 @@ trait PdfBookmarkTrait
     private function _outputIndexPage(
         string $page,
         float $width,
-        float $line_height,
+        float $height,
         string|int $link
     ): void {
         $this->Cell(
             w: $width,
-            h: $line_height,
+            h: $height,
             txt: $page,
             ln: PdfMove::NEW_LINE,
             align: PdfTextAlignment::RIGHT,
@@ -242,7 +243,7 @@ trait PdfBookmarkTrait
     private function _outputIndexSeparator(
         string $separator,
         float $width,
-        float $line_height,
+        float $height,
         string|int $link
     ): void {
         $count = (int) ($width / $this->GetStringWidth($separator));
@@ -251,7 +252,7 @@ trait PdfBookmarkTrait
             $text = \str_repeat($separator, $count);
             $this->Cell(
                 w: $width,
-                h: $line_height,
+                h: $height,
                 txt: $text,
                 align: PdfTextAlignment::RIGHT,
                 link: $link
@@ -264,7 +265,7 @@ trait PdfBookmarkTrait
     private function _outputIndexText(
         string $text,
         float $width,
-        float $line_height,
+        float $height,
         string|int $link
     ): float {
         $text = $this->_cleanText($text);
@@ -275,7 +276,7 @@ trait PdfBookmarkTrait
         }
         $this->Cell(
             w: $text_width + self::SPACE,
-            h: $line_height,
+            h: $height,
             txt: $text,
             link: $link
         );

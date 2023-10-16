@@ -1,0 +1,308 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Pdf;
+
+use App\Pdf\Enums\PdfDocumentSize;
+use App\Pdf\Enums\PdfDocumentUnit;
+
+/**
+ * PDF document to output labels.
+ *
+ * @psalm-type LabelType = array{
+ *     pageSize: 'A3'|'A4'|'A5'|'Legal'|'Letter',
+ *     unit: 'in'|'mm',
+ *     marginLeft: float,
+ *     marginTop: float,
+ *     cols: positive-int,
+ *     rows: positive-int,
+ *     spaceX: float,
+ *     spaceY: float,
+ *     width: float,
+ *     height: float,
+ *     fontSize: int<6, 15>}
+ **/
+class PdfLabelDocument extends PdfDocument
+{
+    use PdfDashBorderTrait;
+
+    /**
+     * Avery formats.
+     */
+    public const AVERY_FORMATS = [
+        '5160' => ['pageSize' => 'Letter',	'unit' => 'mm',	'marginLeft' => 1.762,	'marginTop' => 10.7,	'cols' => 3,	'rows' => 10,	'spaceX' => 3.175,	'spaceY' => 0,	 'width' => 66.675,	'height' => 25.4,	'fontSize' => 8],
+        '5161' => ['pageSize' => 'Letter',	'unit' => 'mm',	'marginLeft' => 0.967,	'marginTop' => 10.7,	'cols' => 2,	'rows' => 10,	'spaceX' => 3.967,	'spaceY' => 0,	 'width' => 101.6,	'height' => 25.4,	'fontSize' => 8],
+        '5162' => ['pageSize' => 'Letter',	'unit' => 'mm',	'marginLeft' => 0.97,	'marginTop' => 20.224,	'cols' => 2,	'rows' => 7,	'spaceX' => 4.762,	'spaceY' => 0,	 'width' => 100.807, 'height' => 35.72,	'fontSize' => 8],
+        '5163' => ['pageSize' => 'Letter',	'unit' => 'mm',	'marginLeft' => 1.762,	'marginTop' => 10.7, 	'cols' => 2,	'rows' => 5,	'spaceX' => 3.175,	'spaceY' => 0,	 'width' => 101.6,	'height' => 50.8,	'fontSize' => 8],
+        '5164' => ['pageSize' => 'Letter',	'unit' => 'in',	'marginLeft' => 0.148,	'marginTop' => 0.5, 	'cols' => 2,	'rows' => 3,	'spaceX' => 0.2031,	'spaceY' => 0,	 'width' => 4.0,	'height' => 3.33,	'fontSize' => 12],
+        '8600' => ['pageSize' => 'Letter',	'unit' => 'mm',	'marginLeft' => 7.1, 	'marginTop' => 19, 		'cols' => 3, 	'rows' => 10, 	'spaceX' => 9.5, 	'spaceY' => 3.1, 'width' => 66.6, 	'height' => 25.4,	'fontSize' => 8],
+        'L7163' => ['pageSize' => 'A4',		'unit' => 'mm',	'marginLeft' => 5,		'marginTop' => 15, 		'cols' => 2,	'rows' => 7,	'spaceX' => 25,		'spaceY' => 0,	 'width' => 99.1,	'height' => 38.1,	'fontSize' => 9],
+        '3422' => ['pageSize' => 'A4',		'unit' => 'mm',	'marginLeft' => 0,		'marginTop' => 8.5, 	'cols' => 3,	'rows' => 8,	'spaceX' => 0,		'spaceY' => 0,	 'width' => 70,		'height' => 35,		'fontSize' => 9],
+    ];
+
+    private const FONT_CONVERSION = [
+        6 => 2.0,
+        7 => 2.5,
+        8 => 3.0,
+        9 => 4.0,
+        10 => 5.0,
+        11 => 6.0,
+        12 => 7.0,
+        13 => 8.0,
+        14 => 9.0,
+        15 => 10.0,
+    ];
+
+    private const UNIT_CONVERSION = [
+        'in' => 39.37008,
+        'mm' => 1000.0,
+    ];
+
+    // number of labels horizontally
+    private int $cols = 0;
+    // current column (0 based index)
+    private int $currentCol;
+    // current row (0 based index)
+    private int $currentRow;
+    // height of label
+    private float $height = 0;
+    // draw border around labels
+    private bool $labelBorder = false;
+    // Line height
+    private float $lineHeight = 0;
+    // left margin of labels
+    private float $marginLeft = 0;
+    // top margin of labels
+    private float $marginTop = 0;
+    // padding inside labels
+    private float $padding = 0;
+    // number of labels vertically
+    private int $rows = 0;
+    // horizontal space between 2 labels
+    private float $spaceX = 0;
+    // vertical space between 2 labels
+    private float $spaceY = 0;
+    // document unit
+    private string $unit;
+    // width of label
+    private float $width = 0;
+
+    /**
+     * @param int $startIndex the zero based index of the first label
+     *
+     * @psalm-param LabelType|string $format
+     * @psalm-param 'in'|'mm' $unit
+     * @psalm-param non-negative-int $startIndex
+     *
+     * @throws PdfException if the format parameter contain invalid value
+     */
+    public function __construct(array|string $format, string $unit = 'mm', int $startIndex = 0)
+    {
+        if (\is_string($format)) {
+            if (!isset(self::AVERY_FORMATS[$format])) {
+                $formats = \implode(', ', \array_keys(self::AVERY_FORMATS));
+                $this->Error(\sprintf('Unknown label format: %s. Allowed formats: %s.', $format, $formats));
+            }
+            $format = self::AVERY_FORMATS[$format];
+        }
+
+        $documentUnit = $this->_getDocumentUnit($unit);
+        $documentSize = $this->_getDocumentSize($format);
+        parent::__construct(unit: $documentUnit, size: $documentSize);
+
+        $this->unit = $documentUnit->value;
+        $this->_setFormat($format);
+        $this->SetFont('Arial');
+        $this->SetMargins(0, 0);
+        $this->SetAutoPageBreak(false);
+
+        $col = 1 + $startIndex % $this->cols;
+        if ($col > $this->cols) {
+            $this->Error(\sprintf('Invalid starting column: %d. Maximum allowed: %d.', $col, $this->cols));
+        }
+        $row = 1 + \intdiv($startIndex, $this->cols);
+        if ($row > $this->rows) {
+            $this->Error(\sprintf('Invalid starting row: %d. Maximum allowed: %d.', $row, $this->rows));
+        }
+        $this->currentCol = $col - 1;
+        $this->currentRow = $row - 1;
+    }
+
+    public function _putcatalog(): void
+    {
+        parent::_putcatalog();
+        $this->_put('/ViewerPreferences <</PrintScaling /None>>');
+    }
+
+    /**
+     * Output a label.
+     */
+    public function addLabel(string $text): static
+    {
+        if (0 === $this->page) {
+            $this->AddPage();
+        } elseif ($this->currentRow === $this->rows) {
+            $this->currentRow = 0;
+            $this->AddPage();
+        }
+        $this->_drawText($text);
+        $this->_drawBorder();
+        if (++$this->currentCol === $this->cols) {
+            $this->currentCol = 0;
+            ++$this->currentRow;
+        }
+
+        return $this;
+    }
+
+    public function Footer(): void
+    {
+        // skip
+    }
+
+    public function Header(): void
+    {
+        // skip
+    }
+
+    /**
+     * Set a value indicating if a dash border is draw around labels.
+     */
+    public function setLabelBorder(bool $labelBorder): static
+    {
+        $this->labelBorder = $labelBorder;
+
+        return $this;
+    }
+
+    /**
+     * Convert units (inch to mm or mm to inch).
+     *
+     * @psalm-param 'in'|'mm' $src
+     */
+    private function _convertUnit(float $value, string $src): float
+    {
+        if ($src !== $this->unit) {
+            return $value * self::UNIT_CONVERSION[$this->unit] / self::UNIT_CONVERSION[$src];
+        }
+
+        return $value;
+    }
+
+    private function _drawBorder(): void
+    {
+        if (!$this->labelBorder) {
+            return;
+        }
+        $x = $this->marginLeft + (float) $this->currentCol * ($this->width + $this->spaceX);
+        $y = $this->marginTop + (float) $this->currentRow * ($this->height + $this->spaceY);
+        PdfDrawColor::cellBorder()->apply($this);
+        $this->dashedRect($x, $y, $this->width, $this->height);
+    }
+
+    private function _drawText(string $text): void
+    {
+        if ('' === $text) {
+            return;
+        }
+        $this->SetXY($this->_getLabelX(), $this->_getLabelY($text));
+        $this->MultiCell($this->width - $this->padding, $this->lineHeight, $text, 0, 'L');
+    }
+
+    /**
+     * @psalm-param LabelType $format
+     *
+     * @throws PdfException
+     */
+    private function _getDocumentSize(array $format): PdfDocumentSize
+    {
+        try {
+            return PdfDocumentSize::from($format['pageSize']);
+        } catch (\ValueError $e) {
+            throw new PdfException(\sprintf('Invalid page size: %s.', $format['pageSize']), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * @throws PdfException
+     */
+    private function _getDocumentUnit(string $unit): PdfDocumentUnit
+    {
+        try {
+            return PdfDocumentUnit::from($unit);
+        } catch (\ValueError $e) {
+            throw new PdfException(\sprintf('Invalid unit: %s.', $unit), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Give the line height for a given font size.
+     *
+     * @throws PdfException
+     */
+    private function _getHeightChars(int $pt): float
+    {
+        if (!isset(self::FONT_CONVERSION[$pt])) {
+            $sizes = \implode(', ', \array_keys(self::FONT_CONVERSION));
+            $this->Error(\sprintf('Invalid font size: %d. Allowed sizes: %s', $pt, $sizes));
+        }
+
+        return $this->_convertUnit(self::FONT_CONVERSION[$pt], 'mm');
+    }
+
+    private function _getLabelX(): float
+    {
+        return $this->marginLeft + (float) $this->currentCol * ($this->width + $this->spaceX) + $this->padding;
+    }
+
+    private function _getLabelY(string $text): float
+    {
+        $lines = $this->getLinesCount($text, $this->width - 2.0 * $this->padding);
+        $height = (float) $lines * $this->lineHeight;
+        $y = ($this->height - $height) / 2.0;
+
+        return $this->marginTop + (float) $this->currentRow * ($this->height + $this->spaceY) + $y;
+    }
+
+    /**
+     * Set the character size.
+     *
+     * @throws PdfException
+     */
+    private function _setFontSize(int $pt): void
+    {
+        $this->lineHeight = $this->_getHeightChars($pt);
+        $this->SetFontSize($pt);
+    }
+
+    /**
+     * Sets the label format.
+     *
+     * @psalm-param LabelType $format
+     *
+     * @throws PdfException
+     */
+    private function _setFormat(array $format): void
+    {
+        $unit = $format['unit'];
+        $this->cols = $format['cols'];
+        $this->rows = $format['rows'];
+        $this->marginLeft = $this->_convertUnit($format['marginLeft'], $unit);
+        $this->marginTop = $this->_convertUnit($format['marginTop'], $unit);
+        $this->spaceX = $this->_convertUnit($format['spaceX'], $unit);
+        $this->spaceY = $this->_convertUnit($format['spaceY'], $unit);
+        $this->width = $this->_convertUnit($format['width'], $unit);
+        $this->height = $this->_convertUnit($format['height'], $unit);
+        $this->padding = $this->_convertUnit(3, 'mm');
+        $this->_setFontSize($format['fontSize']);
+    }
+}

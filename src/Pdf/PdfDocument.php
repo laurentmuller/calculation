@@ -514,7 +514,7 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * Draws a horizontal line with current draw color and line width.
+     * Draws a horizontal line with current draw color and optionally the given line width.
      *
      * @param float    $beforeSpace the verticale space before the line
      * @param float    $afterSpace  the verticale space after the line

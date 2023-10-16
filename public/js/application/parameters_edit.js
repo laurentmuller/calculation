@@ -69,6 +69,15 @@ function updateVisibleButton() {
 }
 
 /**
+ * Display an error notification.
+ */
+function displayError() {
+    'use strict';
+    const message = $('form').data('failure');
+    Toaster.danger(message, $('.card-title:first').text());
+}
+
+/**
  * Display a notification.
  *
  * @param {jQuery} $source - the notification source.
@@ -77,10 +86,6 @@ function displayNotification($source) {
     'use strict';
     // get random text
     const url = $('#edit-form').data("random");
-    const showError = () => {
-        const message = $('form').data('failure');
-        Toaster.danger(message, $('.card-title:first').text());
-    };
     $.getJSON(url, function (response) {
         if (response.result && response.content) {
             const type = $source.data('value');
@@ -97,10 +102,10 @@ function displayNotification($source) {
             };
             Toaster.notify(type, content, title, options);
         } else {
-            showError();
+            displayError();
         }
     }).fail(function () {
-        showError();
+        displayError();
     });
 }
 

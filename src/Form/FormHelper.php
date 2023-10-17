@@ -422,10 +422,10 @@ class FormHelper
     /**
      * Add a text area type to the builder and reset all values to default.
      */
-    public function addTextareaType(int $rows = 2): self
+    public function addTextareaType(int $rows = 2, string $widgetClass = 'resizable'): self
     {
         return $this->updateAttribute('rows', $rows)
-            ->widgetClass('resizable')
+            ->widgetClass($widgetClass)
             ->add(TextareaType::class);
     }
 

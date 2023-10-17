@@ -139,6 +139,8 @@ class TestController extends AbstractController
     }
 
     /**
+     * Export a report label.
+     *
      * @throws PdfException
      */
     #[Route(path: '/label', name: 'test_label')]
@@ -163,7 +165,14 @@ class TestController extends AbstractController
         }
 
         $report->AddPage();
-        $report->dashedRect(50, 50, 100, 101, 15, 1.0);
+        $report->dashedRect(50, 50, 100, 101, 15, 1);
+
+        $report->AddPage();
+        $report->setDash(9, 5);
+        $report->SetDrawColor(0);
+        $report->SetLineWidth(1);
+        $report->Rect(50, 50, 100, 101);
+        $report->setDash();
 
         return $this->renderPdfDocument($report);
     }

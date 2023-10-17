@@ -63,7 +63,7 @@ class CustomerType extends AbstractEntityType
             ->autocomplete('disabled')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
             ->notRequired()
-            ->addTextareaType();
+            ->addTextareaType(widgetClass: 'resizable-small');
 
         $helper->field('zipCode')
             ->autocomplete('disabled')

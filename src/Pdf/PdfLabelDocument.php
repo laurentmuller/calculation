@@ -33,7 +33,7 @@ use App\Pdf\Enums\PdfDocumentUnit;
  **/
 class PdfLabelDocument extends PdfDocument
 {
-    use PdfDashBorderTrait;
+    use PdfDashLineTrait;
 
     /**
      * Avery formats.

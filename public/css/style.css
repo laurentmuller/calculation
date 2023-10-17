@@ -330,8 +330,13 @@ body:not(.status-bar) .btn-back-to-top {
  * textarea
  */
 textarea.resizable {
-    min-height: 8rem;
+    min-height: 7rem;
     max-height: 16rem;
+}
+
+textarea.resizable-small {
+    min-height: 4rem;
+    max-height: 8.5rem;
 }
 
 textarea.fixed {

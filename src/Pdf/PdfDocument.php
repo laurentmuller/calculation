@@ -25,6 +25,7 @@ use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\MathTrait;
+use App\Utils\StringUtils;
 
 /**
  * PDF document with default header, footer, outline and index capabilities.
@@ -118,11 +119,6 @@ class PdfDocument extends \FPDF
      * The encoding target.
      */
     private const ENCODING_TO = 'CP1252';
-
-    /**
-     * The new line separator.
-     */
-    private const NEW_LINE = "\n";
 
     /**
      * The footer.
@@ -387,8 +383,8 @@ class PdfDocument extends \FPDF
             return 0;
         }
         $text = \rtrim(\str_replace("\r", '', $text));
-        $lenText = \strlen($text);
-        if (0 === $lenText) {
+        $len = \strlen($text);
+        if (0 === $len) {
             return 0;
         }
         if ($width <= 0) {
@@ -403,10 +399,10 @@ class PdfDocument extends \FPDF
         $cw = $this->CurrentFont['cw'];
         $maxWidth = ($width - 2.0 * $this->cMargin) * 1000.0 / $this->FontSize;
 
-        while ($index < $lenText) {
+        while ($index < $len) {
             $ch = $text[$index];
             // new line?
-            if (self::NEW_LINE === $ch) {
+            if (StringUtils::NEW_LINE === $ch) {
                 ++$index;
                 $sep = -1;
                 $lastIndex = $index;

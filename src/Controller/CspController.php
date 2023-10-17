@@ -60,7 +60,7 @@ class CspController extends AbstractController
                 $key = \reset($entries);
                 $values = \array_map(static fn (string $entry): string => \trim($entry, "'"), \array_slice($entries, 1));
                 \sort($values);
-                $result[$key] = \implode("\n", $values);
+                $result[$key] = \implode(StringUtils::NEW_LINE, $values);
             }
         }
 

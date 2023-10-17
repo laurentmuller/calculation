@@ -14,6 +14,8 @@ namespace App\Pdf;
 
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
+use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
+use App\Utils\StringUtils;
 
 /**
  * PDF document to output labels.
@@ -39,14 +41,14 @@ class PdfLabelDocument extends PdfDocument
      * Avery formats.
      */
     public const AVERY_FORMATS = [
-        '5160' => ['pageSize' => 'Letter',	'unit' => 'mm',	'marginLeft' => 1.762,	'marginTop' => 10.7,	'cols' => 3,	'rows' => 10,	'spaceX' => 3.175,	'spaceY' => 0,	 'width' => 66.675,	'height' => 25.4,	'fontSize' => 8],
-        '5161' => ['pageSize' => 'Letter',	'unit' => 'mm',	'marginLeft' => 0.967,	'marginTop' => 10.7,	'cols' => 2,	'rows' => 10,	'spaceX' => 3.967,	'spaceY' => 0,	 'width' => 101.6,	'height' => 25.4,	'fontSize' => 8],
-        '5162' => ['pageSize' => 'Letter',	'unit' => 'mm',	'marginLeft' => 0.97,	'marginTop' => 20.224,	'cols' => 2,	'rows' => 7,	'spaceX' => 4.762,	'spaceY' => 0,	 'width' => 100.807, 'height' => 35.72,	'fontSize' => 8],
-        '5163' => ['pageSize' => 'Letter',	'unit' => 'mm',	'marginLeft' => 1.762,	'marginTop' => 10.7, 	'cols' => 2,	'rows' => 5,	'spaceX' => 3.175,	'spaceY' => 0,	 'width' => 101.6,	'height' => 50.8,	'fontSize' => 8],
-        '5164' => ['pageSize' => 'Letter',	'unit' => 'in',	'marginLeft' => 0.148,	'marginTop' => 0.5, 	'cols' => 2,	'rows' => 3,	'spaceX' => 0.2031,	'spaceY' => 0,	 'width' => 4.0,	'height' => 3.33,	'fontSize' => 12],
-        '8600' => ['pageSize' => 'Letter',	'unit' => 'mm',	'marginLeft' => 7.1, 	'marginTop' => 19, 		'cols' => 3, 	'rows' => 10, 	'spaceX' => 9.5, 	'spaceY' => 3.1, 'width' => 66.6, 	'height' => 25.4,	'fontSize' => 8],
-        'L7163' => ['pageSize' => 'A4',		'unit' => 'mm',	'marginLeft' => 5,		'marginTop' => 15, 		'cols' => 2,	'rows' => 7,	'spaceX' => 25,		'spaceY' => 0,	 'width' => 99.1,	'height' => 38.1,	'fontSize' => 9],
-        '3422' => ['pageSize' => 'A4',		'unit' => 'mm',	'marginLeft' => 0,		'marginTop' => 8.5, 	'cols' => 3,	'rows' => 8,	'spaceX' => 0,		'spaceY' => 0,	 'width' => 70,		'height' => 35,		'fontSize' => 9],
+        '3422' => ['pageSize' => 'A4',      'unit' => 'mm', 'marginLeft' => 0,      'marginTop' => 8.5,     'cols' => 3, 'rows' => 8,   'spaceX' => 0,      'spaceY' => 0,   'width' => 70,      'height' => 35,    'fontSize' => 9],
+        '5160' => ['pageSize' => 'Letter',  'unit' => 'mm', 'marginLeft' => 1.762,  'marginTop' => 10.7,    'cols' => 3, 'rows' => 10,  'spaceX' => 3.175,  'spaceY' => 0,   'width' => 66.675,  'height' => 25.4,  'fontSize' => 8],
+        '5161' => ['pageSize' => 'Letter',  'unit' => 'mm', 'marginLeft' => 6.4,    'marginTop' => 12.7,    'cols' => 2, 'rows' => 10,  'spaceX' => 4.8,    'spaceY' => 0,   'width' => 101.6,   'height' => 25.4,  'fontSize' => 8],
+        '5162' => ['pageSize' => 'Letter',  'unit' => 'mm', 'marginLeft' => 0.97,   'marginTop' => 20.224,  'cols' => 2, 'rows' => 7,   'spaceX' => 4.762,  'spaceY' => 0,   'width' => 100.807, 'height' => 35.72, 'fontSize' => 8],
+        '5163' => ['pageSize' => 'Letter',  'unit' => 'mm', 'marginLeft' => 1.762,  'marginTop' => 10.7,    'cols' => 2, 'rows' => 5,   'spaceX' => 3.175,  'spaceY' => 0,   'width' => 101.6,   'height' => 50.8,  'fontSize' => 8],
+        '5164' => ['pageSize' => 'Letter',  'unit' => 'in', 'marginLeft' => 0.148,  'marginTop' => 0.5,     'cols' => 2, 'rows' => 3,   'spaceX' => 0.2031, 'spaceY' => 0,   'width' => 4.0,     'height' => 3.33,  'fontSize' => 12],
+        '8600' => ['pageSize' => 'Letter',  'unit' => 'mm', 'marginLeft' => 7.1,    'marginTop' => 19,      'cols' => 3, 'rows' => 10,  'spaceX' => 9.5,    'spaceY' => 3.1, 'width' => 66.6,    'height' => 25.4,  'fontSize' => 8],
+        'L7163' => ['pageSize' => 'A4',     'unit' => 'mm', 'marginLeft' => 5,      'marginTop' => 15,      'cols' => 2, 'rows' => 7,   'spaceX' => 25,     'spaceY' => 0,   'width' => 99.1,    'height' => 38.1,  'fontSize' => 9],
     ];
 
     private const FONT_CONVERSION = [
@@ -77,6 +79,8 @@ class PdfLabelDocument extends PdfDocument
     private float $height = 0;
     // draw border around labels
     private bool $labelBorder = false;
+    // the label listener
+    private ?PdfLabelTextListenerInterface $labelTextListener = null;
     // Line height
     private float $lineHeight = 0;
     // left margin of labels
@@ -97,13 +101,15 @@ class PdfLabelDocument extends PdfDocument
     private float $width = 0;
 
     /**
-     * @param int $startIndex the zero based index of the first label
+     * @param array|string $format     a label type or one of the predefined format name
+     * @param string       $unit       the user unit. Must be 'in' or 'mm'.
+     * @param int          $startIndex the zero based index of the first label
      *
      * @psalm-param LabelType|string $format
      * @psalm-param 'in'|'mm' $unit
      * @psalm-param non-negative-int $startIndex
      *
-     * @throws PdfException if the format parameter contain invalid value
+     * @throws PdfException if the format name is unknown or if the format array contain invalid value
      */
     public function __construct(array|string $format, string $unit = 'mm', int $startIndex = 0)
     {
@@ -135,6 +141,7 @@ class PdfLabelDocument extends PdfDocument
         }
         $this->currentCol = $col - 1;
         $this->currentRow = $row - 1;
+        $this->cMargin = 0;
     }
 
     public function _putcatalog(): void
@@ -164,18 +171,22 @@ class PdfLabelDocument extends PdfDocument
         return $this;
     }
 
+    /**
+     * This implementation skip output footer.
+     */
     public function Footer(): void
     {
-        // skip
-    }
-
-    public function Header(): void
-    {
-        // skip
     }
 
     /**
-     * Set a value indicating if a dash border is draw around labels.
+     * This implementation skip output header.
+     */
+    public function Header(): void
+    {
+    }
+
+    /**
+     * Sets a value indicating if a dash border is draw around labels.
      */
     public function setLabelBorder(bool $labelBorder): static
     {
@@ -185,8 +196,16 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * Convert units (inch to mm or mm to inch).
-     *
+     * Sets the draw label texts listener.
+     */
+    public function setLabelTextListener(?PdfLabelTextListenerInterface $labelTextListener): static
+    {
+        $this->labelTextListener = $labelTextListener;
+
+        return $this;
+    }
+
+    /**
      * @psalm-param 'in'|'mm' $src
      */
     private function _convertUnit(float $value, string $src): float
@@ -214,8 +233,27 @@ class PdfLabelDocument extends PdfDocument
         if ('' === $text) {
             return;
         }
-        $this->SetXY($this->_getLabelX(), $this->_getLabelY($text));
-        $this->MultiCell($this->width - $this->padding, $this->lineHeight, $text, 0, 'L');
+
+        $x = $this->_getLabelX();
+        $y = $this->_getLabelY($text);
+        $w = $this->width - $this->padding;
+        if (!$this->labelTextListener instanceof PdfLabelTextListenerInterface) {
+            $this->SetXY($x, $y);
+            $this->MultiCell(w: $w, h: $this->lineHeight, txt: $text, align: 'L');
+
+            return;
+        }
+
+        $texts = \explode(StringUtils::NEW_LINE, $text);
+        $lines = \count($texts);
+        foreach ($texts as $index => $text) {
+            $this->SetXY($x, $y);
+            // @phpstan-ignore-next-line
+            if (!$this->labelTextListener->drawLabelText($this, $text, $index, $lines, $w, $this->lineHeight)) {
+                $this->Cell($w, $this->lineHeight, $text);
+            }
+            $y += $this->lasth;
+        }
     }
 
     /**
@@ -225,10 +263,12 @@ class PdfLabelDocument extends PdfDocument
      */
     private function _getDocumentSize(array $format): PdfDocumentSize
     {
+        $pageSize = $format['pageSize'];
+
         try {
-            return PdfDocumentSize::from($format['pageSize']);
+            return PdfDocumentSize::from($pageSize);
         } catch (\ValueError $e) {
-            throw new PdfException(\sprintf('Invalid page size: %s.', $format['pageSize']), $e->getCode(), $e);
+            throw new PdfException(\sprintf('Invalid page size: %s.', $pageSize), $e->getCode(), $e);
         }
     }
 
@@ -274,8 +314,6 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * Set the character size.
-     *
      * @throws PdfException
      */
     private function _setFontSize(int $pt): void
@@ -285,8 +323,6 @@ class PdfLabelDocument extends PdfDocument
     }
 
     /**
-     * Sets the label format.
-     *
      * @psalm-param LabelType $format
      *
      * @throws PdfException

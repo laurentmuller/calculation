@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Utils\StringUtils;
+
 /**
  * Trait to format duplicate items for table, PDF report and Excel document.
  */
@@ -36,6 +38,6 @@ trait DuplicateItemsTrait
      */
     protected function getItemsSeparator(): string
     {
-        return "\n";
+        return StringUtils::NEW_LINE;
     }
 }

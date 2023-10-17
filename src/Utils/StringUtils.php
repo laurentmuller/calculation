@@ -20,6 +20,11 @@ use Symfony\Component\String\UnicodeString;
  */
 final class StringUtils
 {
+    /**
+     * The new line separator.
+     */
+    public const NEW_LINE = "\n";
+
     private const VAR_PATTERN = [
         "/array \(/" => '[',
         "/^([ ]*)\)(,?)$/m" => '$1]$2',

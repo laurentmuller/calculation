@@ -14,7 +14,6 @@ namespace App\Controller;
 
 use App\Entity\CalculationState;
 use App\Entity\Category;
-use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Enums\Importance;
@@ -27,12 +26,14 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\UserInterface;
 use App\Model\HttpClientError;
+use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfException;
 use App\Pdf\PdfLabelDocument;
 use App\Report\HtmlReport;
 use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\CustomerRepository;
+use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
@@ -52,6 +53,7 @@ use App\Validator\Captcha;
 use App\Validator\Password;
 use App\Validator\Strength;
 use App\Word\HtmlDocument;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Event\PreSubmitEvent;
@@ -146,33 +148,53 @@ class TestController extends AbstractController
     #[Route(path: '/label', name: 'test_label')]
     public function exportLabel(CustomerRepository $repository): PdfResponse
     {
-        $format = '3422';
+        $listener = new class() implements PdfLabelTextListenerInterface {
+            public function drawLabelText(PdfLabelDocument $parent, string $text, int $index, int $lines, float $width, float $height): bool
+            {
+                if ($index < 2) {
+                    $font = $parent->getCurrentFont();
+                    $parent->SetFont('', 'B');
+                    $parent->Cell($width, $height, $text);
+                    $font->apply($parent);
+
+                    return true;
+                }
+
+                return false;
+            }
+        };
+        $format = '5161';
         $report = new PdfLabelDocument($format);
         $report->SetTitle("Etiquette - Format Avery $format");
+        $report->setLabelTextListener($listener);
         $report->setLabelBorder(true);
 
-        $customers = $repository->findBy([], [], 30);
+        $sortField = $repository->getSortField(CustomerRepository::NAME_COMPANY_FIELD);
+        /** @psalm-var \App\Entity\Customer[] $customers */
+        $customers = $repository->createDefaultQueryBuilder()
+            ->orderBy($sortField, Criteria::ASC)
+            ->setMaxResults(40)
+            ->getQuery()
+            ->getResult();
+
         foreach ($customers as $customer) {
             $values = \array_filter([
                 $customer->getCompany(),
                 $customer->getFullName(),
+                StringUtils::NEW_LINE,
                 $customer->getAddress(),
-                "\n",
                 $customer->getZipCity(),
             ]);
-            $text = \implode("\n", $values);
+            $text = \implode(StringUtils::NEW_LINE, $values);
             $report->addLabel($text);
         }
 
         $report->AddPage();
-        $report->dashedRect(50, 50, 100, 101, 15, 1);
-
-        $report->AddPage();
-        $report->setDash(9, 5);
-        $report->SetDrawColor(0);
         $report->SetLineWidth(1);
-        $report->Rect(50, 50, 100, 101);
-        $report->setDash();
+        $report->dashedRect(55, 30, 100, 50);
+        $report->setDashPattern(5, 3);
+        $report->Rect(55, 100, 100, 50);
+        $report->setDashPattern();
 
         return $this->renderPdfDocument($report);
     }
@@ -443,13 +465,12 @@ class TestController extends AbstractController
     }
 
     #[Route(path: '/tree', name: 'test_tree')]
-    public function tree(Request $request, EntityManagerInterface $manager): Response
+    public function tree(Request $request, GroupRepository $repository, EntityManagerInterface $manager): Response
     {
         if ($request->isXmlHttpRequest()) {
             $count = 0;
             $nodes = [];
-            /** @psalm-var Group[] $groups */
-            $groups = $manager->getRepository(Group::class)->findAllByCode();
+            $groups = $repository->findAllByCode();
             foreach ($groups as $group) {
                 $node = [
                     'id' => \sprintf('group-%d', (int) $group->getId()),

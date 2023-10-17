@@ -52,7 +52,7 @@ final class PhpInfoService
         foreach ($array as $index => $entry) {
             if (\preg_match($regexLine, $entry, $matchs)) {
                 $name = \trim($matchs[1]);
-                $vals = \explode("\n", $array[$index + 1]);
+                $vals = \explode(StringUtils::NEW_LINE, $array[$index + 1]);
                 foreach ($vals as $val) {
                     if (\preg_match($regex3cols, $val, $matchs)) {
                         // 3 columns

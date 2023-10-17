@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
+use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 /**
@@ -177,7 +178,7 @@ class HeaderFooter
             return $this;
         }
         if ('' !== $value) {
-            $value .= "\n";
+            $value .= StringUtils::NEW_LINE;
         }
         if (self::INITIAL_FONT_SIZE !== $this->fontSize) {
             $value .= \sprintf('&%d', $this->fontSize);

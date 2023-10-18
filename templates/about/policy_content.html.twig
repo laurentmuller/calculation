@@ -181,7 +181,7 @@
 </p>
 <p class="text-justify">Avant que la modification ne prenne effet, nous vous en informerons par courrier électronique
     et/ou en plaçant un avis bien en vue dans notre application et nous actualiserons la "date de prise d'effet" qui
-    figure en haut de la présente politique de confidentialité.
+    figure en bas de la présente politique de confidentialité.
 </p>
 <p class="text-justify">Nous vous conseillons de consulter la présente politique de confidentialité périodiquement pour
     prendre connaissance de toute modification. Les modifications apportées à la présente politique de confidentialité
@@ -191,4 +191,4 @@
 <h4 class="bookmark bookmark-{{ level }}">Nous contacter</h4>
 <p class="text-justify">Pour toute question relative à la présente politique de confidentialité, veuillez nous contacter
     par {% if comments is defined and comments %}<a href="{{ path('user_comment') }}">courrier électronique</a>{% else %}courrier électronique{% endif %}.</p>
-<p class="mb-0 text-end">{{ app_owner_city }}, {{ 'now'|locale_date('none', null, null, 'MMMM Y')|capitalize }}</p>
+<p class="mb-0 text-end">{{ app_owner_city }}, {{ 'now'|locale_date('none', null, null, 'MMMM Y') }}</p>

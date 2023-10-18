@@ -25,23 +25,23 @@ enum PdfDocumentUnit: string implements EnumDefaultInterface
 {
     use EnumDefaultTrait;
 
-    /*
+    /**
      * Centimeter.
      */
     case CENTIMETER = 'cm';
 
-    /*
+    /**
      * Inch.
      */
     case INCH = 'in';
 
-    /*
+    /**
      * Millimeter (default).
      */
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case MILLIMETER = 'mm';
 
-    /*
+    /**
      * Point.
      */
     case POINT = 'pt';

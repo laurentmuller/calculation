@@ -25,12 +25,12 @@ enum PdfDocumentOrientation: string implements EnumDefaultInterface
 {
     use EnumDefaultTrait;
 
-    /*
+    /**
      * Landscape orientation.
      */
     case LANDSCAPE = 'L';
 
-    /*
+    /**
      * Portrait orientation (default).
      */
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]

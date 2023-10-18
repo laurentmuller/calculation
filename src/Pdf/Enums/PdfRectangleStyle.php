@@ -22,22 +22,22 @@ use App\Pdf\PdfDocument;
  */
 enum PdfRectangleStyle: string
 {
-    /*
+    /**
      * Draw the border around the rectangle.
      */
     case BORDER = 'D';
 
-    /*
+    /**
      * Draw the border and fill the rectangle.
      */
     case BOTH = 'FD';
 
-    /*
+    /**
      * Fill the rectangle.
      */
     case FILL = 'F';
 
-    /*
+    /**
      * No border is draw, nor fill.
      */
     case NONE = '';

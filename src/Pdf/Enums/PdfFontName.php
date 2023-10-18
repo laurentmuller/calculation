@@ -25,7 +25,7 @@ enum PdfFontName: string implements EnumDefaultInterface
 {
     use EnumDefaultTrait;
 
-    /*
+    /**
      * The Arial font name (synonymous: sans serif).
      *
      * This is the default font.
@@ -33,27 +33,27 @@ enum PdfFontName: string implements EnumDefaultInterface
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case ARIAL = 'Arial';
 
-    /*
+    /**
      * The Courier font name (fixed-width).
      */
     case COURIER = 'Courier';
 
-    /*
+    /**
      * The Helvetica font name (synonymous: sans serif).
      */
     case HELVETICA = 'Helvetica';
 
-    /*
+    /**
      * The Symbol font name (symbolic).
      */
     case SYMBOL = 'Symbol';
 
-    /*
+    /**
      * The Times font name (serif).
      */
     case TIMES = 'Times';
 
-    /*
+    /**
      * The ZapfDingbats font name (symbolic).
      */
     case ZAPFDINGBATS = 'ZapfDingbats';

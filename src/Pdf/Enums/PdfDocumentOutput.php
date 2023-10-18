@@ -25,17 +25,17 @@ enum PdfDocumentOutput: string implements EnumDefaultInterface
 {
     use EnumDefaultTrait;
 
-    /*
+    /**
      * Send to the browser and force a file download with the given name parameter.
      */
     case DOWNLOAD = 'D';
 
-    /*
+    /**
      * Save to a local file with the given name parameter (may include a path).
      */
     case FILE = 'F';
 
-    /*
+    /**
      * Send the file inline to the browser (default).
      *
      * The PDF viewer is used if available.
@@ -43,7 +43,7 @@ enum PdfDocumentOutput: string implements EnumDefaultInterface
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case INLINE = 'I';
 
-    /*
+    /**
      * Return the document as a string.
      */
     case STRING = 'S';

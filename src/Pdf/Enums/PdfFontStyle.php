@@ -25,55 +25,55 @@ enum PdfFontStyle: string implements EnumDefaultInterface
 {
     use EnumDefaultTrait;
 
-    /*
+    /**
      * Bold.
      *
      * Not allowed for <code>Symbol</code> and <code>ZapfDingbats</code> fonts.
      */
     case BOLD = 'B';
 
-    /*
+    /**
      * Bold and italic.
      *
      * Not allowed for <code>Symbol</code> and <code>ZapfDingbats</code> fonts.
      */
     case BOLD_ITALIC = 'BI';
 
-    /*
+    /**
      * Bold, italic and underline.
      *
      * Not allowed for <code>Symbol</code> and <code>ZapfDingbats</code> fonts.
      */
     case BOLD_ITALIC_UNDERLINE = 'BIU';
 
-    /*
+    /**
      * Bold and underline.
      *
      * Not allowed for <code>Symbol</code> and <code>ZapfDingbats</code> fonts.
      */
     case BOLD_UNDERLINE = 'BU';
 
-    /*
+    /**
      * Italic.
      *
      * Not allowed for <code>Symbol</code> and <code>ZapfDingbats</code> fonts.
      */
     case ITALIC = 'I';
 
-    /*
+    /**
      * Italic and underline.
      *
      * Not allowed for <code>Symbol</code> and <code>ZapfDingbats</code> fonts.
      */
     case ITALIC_UNDERLINE = 'IU';
 
-    /*
+    /**
      * Regular (default).
      */
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case REGULAR = '';
 
-    /*
+    /**
      * Underline.
      */
     case UNDERLINE = 'U';

@@ -95,3 +95,5 @@ preneur de licence ou à son siège.
 
 Pour toute question relative à la présente politique de confidentialité,
 veuillez nous contacter par [courrier électronique](mailto:calculation@bibi.nu?subject=Calculation).
+
+Montévraz, octobre 2023

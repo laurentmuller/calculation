@@ -25,12 +25,12 @@ enum PdfDocumentSize: string implements EnumDefaultInterface
 {
     use EnumDefaultTrait;
 
-    /*
+    /**
      * A3 (297 × 420 mm).
      */
     case A3 = 'A3';
 
-    /*
+    /**
      * A4 (210 × 297 mm).
      *
      * This is the default value.
@@ -38,17 +38,17 @@ enum PdfDocumentSize: string implements EnumDefaultInterface
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case A4 = 'A4';
 
-    /*
+    /**
      * A5 (148 × 210 mm).
      */
     case A5 = 'A5';
 
-    /*
-     * Legal (8.5 x 14 inches))
+    /**
+     * Legal (8.5 x 14 inches).
      */
     case LEGAL = 'Legal';
 
-    /*
+    /**
      * Letter (8.5 x 11 inches).
      */
     case LETTER = 'Letter';

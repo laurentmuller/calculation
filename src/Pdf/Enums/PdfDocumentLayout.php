@@ -25,23 +25,23 @@ enum PdfDocumentLayout: string implements EnumDefaultInterface
 {
     use EnumDefaultTrait;
 
-    /*
+    /**
      * Displays pages continuously.
      */
     case CONTINUOUS = 'continuous';
 
-    /*
+    /**
      * Uses viewer default mode.
      */
     case DEFAULT = 'default';
 
-    /*
+    /**
      * Displays one page at once (default).
      */
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case SINGLE = 'single';
 
-    /*
+    /**
      * Displays two pages on two columns.
      */
     case TWO_PAGES = 'two';

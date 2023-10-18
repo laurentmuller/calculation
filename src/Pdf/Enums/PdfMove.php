@@ -17,12 +17,12 @@ namespace App\Pdf\Enums;
  */
 enum PdfMove: int
 {
-    /*
+    /**
      * Move below of the printed cell.
      */
     case BELOW = 2;
 
-    /*
+    /**
      * Move at the beginning of the next line after the cell is printed.
      *
      * It is equivalent to the setting <b>RIGHT</b> and calling the
@@ -30,7 +30,7 @@ enum PdfMove: int
      */
     case NEW_LINE = 1;
 
-    /*
+    /**
      * Move to the right position of the printed cell.
      */
     case RIGHT = 0;

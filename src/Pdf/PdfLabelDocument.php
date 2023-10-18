@@ -144,12 +144,6 @@ class PdfLabelDocument extends PdfDocument
         $this->cMargin = 0;
     }
 
-    public function _putcatalog(): void
-    {
-        parent::_putcatalog();
-        $this->_put('/ViewerPreferences <</PrintScaling /None>>');
-    }
-
     /**
      * Output a label.
      */
@@ -161,8 +155,8 @@ class PdfLabelDocument extends PdfDocument
             $this->currentRow = 0;
             $this->AddPage();
         }
-        $this->_drawText($text);
-        $this->_drawBorder();
+        $this->_outputLabelText($text);
+        $this->_outputLabelBorder();
         if (++$this->currentCol === $this->cols) {
             $this->currentCol = 0;
             ++$this->currentRow;
@@ -205,6 +199,12 @@ class PdfLabelDocument extends PdfDocument
         return $this;
     }
 
+    protected function _putcatalog(): void
+    {
+        parent::_putcatalog();
+        $this->_put('/ViewerPreferences <</PrintScaling /None>>');
+    }
+
     /**
      * @psalm-param 'in'|'mm' $src
      */
@@ -215,45 +215,6 @@ class PdfLabelDocument extends PdfDocument
         }
 
         return $value;
-    }
-
-    private function _drawBorder(): void
-    {
-        if (!$this->labelBorder) {
-            return;
-        }
-        $x = $this->marginLeft + (float) $this->currentCol * ($this->width + $this->spaceX);
-        $y = $this->marginTop + (float) $this->currentRow * ($this->height + $this->spaceY);
-        PdfDrawColor::cellBorder()->apply($this);
-        $this->dashedRect($x, $y, $this->width, $this->height);
-    }
-
-    private function _drawText(string $text): void
-    {
-        if ('' === $text) {
-            return;
-        }
-
-        $x = $this->_getLabelX();
-        $y = $this->_getLabelY($text);
-        $w = $this->width - $this->padding;
-        if (!$this->labelTextListener instanceof PdfLabelTextListenerInterface) {
-            $this->SetXY($x, $y);
-            $this->MultiCell(w: $w, h: $this->lineHeight, txt: $text, align: 'L');
-
-            return;
-        }
-
-        $texts = \explode(StringUtils::NEW_LINE, $text);
-        $lines = \count($texts);
-        foreach ($texts as $index => $text) {
-            $this->SetXY($x, $y);
-            // @phpstan-ignore-next-line
-            if (!$this->labelTextListener->drawLabelText($this, $text, $index, $lines, $w, $this->lineHeight)) {
-                $this->Cell($w, $this->lineHeight, $text);
-            }
-            $y += $this->lasth;
-        }
     }
 
     /**
@@ -311,6 +272,45 @@ class PdfLabelDocument extends PdfDocument
         $y = ($this->height - $height) / 2.0;
 
         return $this->marginTop + (float) $this->currentRow * ($this->height + $this->spaceY) + $y;
+    }
+
+    private function _outputLabelBorder(): void
+    {
+        if (!$this->labelBorder) {
+            return;
+        }
+        $x = $this->marginLeft + (float) $this->currentCol * ($this->width + $this->spaceX);
+        $y = $this->marginTop + (float) $this->currentRow * ($this->height + $this->spaceY);
+        PdfDrawColor::cellBorder()->apply($this);
+        $this->dashedRect($x, $y, $this->width, $this->height);
+    }
+
+    private function _outputLabelText(string $text): void
+    {
+        if ('' === $text) {
+            return;
+        }
+
+        $x = $this->_getLabelX();
+        $y = $this->_getLabelY($text);
+        $w = $this->width - $this->padding;
+        if (!$this->labelTextListener instanceof PdfLabelTextListenerInterface) {
+            $this->SetXY($x, $y);
+            $this->MultiCell(w: $w, h: $this->lineHeight, txt: $text, align: 'L');
+
+            return;
+        }
+
+        $texts = \explode(StringUtils::NEW_LINE, $text);
+        $lines = \count($texts);
+        foreach ($texts as $index => $text) {
+            $this->SetXY($x, $y);
+            // @phpstan-ignore-next-line
+            if (!$this->labelTextListener->drawLabelText($this, $text, $index, $lines, $w, $this->lineHeight)) {
+                $this->Cell($w, $this->lineHeight, $text);
+            }
+            $y += $this->lasth;
+        }
     }
 
     /**

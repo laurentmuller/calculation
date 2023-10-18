@@ -17,22 +17,22 @@ namespace App\Pdf\Enums;
  */
 enum PdfTextAlignment: string
 {
-    /*
+    /**
      * Center alignment.
      */
     case CENTER = 'C';
 
-    /*
+    /**
      * Justified alignment (only valid when output multi-cell).
      */
     case JUSTIFIED = 'J';
 
-    /*
+    /**
      * Left alignment (default).
      */
     case LEFT = 'L';
 
-    /*
+    /**
      * Right alignment.
      */
     case RIGHT = 'R';

@@ -27,25 +27,25 @@ enum FlashType: string implements TranslatableEnumInterface
     use EnumExtrasTrait;
     use TranslatableEnumTrait;
 
-    /*
+    /**
      * Danger flash bag.
      */
     #[EnumCase(extras: ['icon' => 'fas fa-lg fa-exclamation-triangle'])]
     case DANGER = 'danger';
 
-    /*
+    /**
      * Information  flash bag.
      */
     #[EnumCase(extras: ['icon' => 'fas fa-lg fa-info-circle'])]
     case INFO = 'info';
 
-    /*
+    /**
      * Success flash bag.
      */
     #[EnumCase(extras: ['icon' => 'fas fa-lg fa-check-circle'])]
     case SUCCESS = 'success';
 
-    /*
+    /**
      * Warning flash bag.
      */
     #[EnumCase(extras: ['icon' => 'fas fa-lg fa-exclamation-circle'])]
@@ -60,7 +60,7 @@ enum FlashType: string implements TranslatableEnumInterface
     }
 
     /**
-     * Gets the color.
+     * Gets the icon color.
      */
     public function getStyleColor(): string
     {

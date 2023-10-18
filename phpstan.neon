@@ -10,9 +10,8 @@ parameters:
     - vendor/twig/twig/src/Extension/CoreExtension.php
     - vendor/symfony/validator/Test/ConstraintValidatorTestCase.php
 
+    reportUnmatchedIgnoredErrors: true
     checkUninitializedProperties: true
-
-    # Level 6
     checkMissingIterableValueType: false
 
     ignoreErrors:

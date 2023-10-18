@@ -28,6 +28,7 @@ use App\Repository\UserRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\MailerService;
+use App\Service\ResetPasswordService;
 use App\Service\RoleBuilderService;
 use App\Service\RoleHierarchyService;
 use App\Spreadsheet\UserRightsDocument;
@@ -47,6 +48,7 @@ use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
@@ -334,6 +336,25 @@ class UserController extends AbstractEntityController
         $doc = new UsersRightsReport($this, $entities, $builder);
 
         return $this->renderPdfDocument($doc);
+    }
+
+    /**
+     * Sends an email to the user to reset its password.
+     */
+    #[Route(path: '/reset/send/{id}', name: 'user_reset_send', requirements: ['id' => Requirement::DIGITS])]
+    public function sendResetPassword(Request $request, User $item, ResetPasswordService $service): Response
+    {
+        $result = $service->sendEmail($request, $item);
+        $parameters = ['%name%' => $item];
+        if (false === $result) {
+            $this->warningTrans('reset_user_not_found', $parameters, 'security');
+        } elseif (!$result instanceof ResetPasswordToken) {
+            $this->warningTrans('reset_token_not_found', $parameters, 'security');
+        } else {
+            $this->successTrans('reset_token_send', $parameters, 'security');
+        }
+
+        return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
     }
 
     /**

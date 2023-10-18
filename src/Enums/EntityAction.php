@@ -32,18 +32,18 @@ enum EntityAction: string implements EnumDefaultInterface, EnumSortableInterface
     use EnumDefaultTrait;
     use TranslatableEnumTrait;
 
-    /*
+    /**
      * Edit the entity (default value).
      */
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case EDIT = 'edit';
 
-    /*
+    /**
      * No action.
      */
     case NONE = 'none';
 
-    /*
+    /**
      * Show the entity.
      */
     case SHOW = 'show';

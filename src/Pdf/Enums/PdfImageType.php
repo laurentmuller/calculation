@@ -17,11 +17,23 @@ namespace App\Pdf\Enums;
  */
 enum PdfImageType: string
 {
+    /**
+     * GIF format.
+     */
     case GIF = 'gif';
 
+    /**
+     * JPEG format.
+     */
     case JPEG = 'jpeg';
 
+    /**
+     * JPG format.
+     */
     case JPG = 'jpg';
 
+    /**
+     * PNG format.
+     */
     case PNG = 'png';
 }

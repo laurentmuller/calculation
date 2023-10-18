@@ -19,6 +19,8 @@ use App\Mime\RegistrationEmail;
 use App\Repository\UserRepository;
 use App\Service\EmailVerifier;
 use App\Service\UserExceptionService;
+use App\Traits\LoggerTrait;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,14 +37,22 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 #[Route(path: '/register')]
 class RegistrationController extends AbstractController
 {
+    use LoggerTrait;
+
     private const ROUTE_REGISTER = 'user_register';
     private const ROUTE_VERIFY = 'user_verify';
 
     public function __construct(
         private readonly EmailVerifier $verifier,
         private readonly UserRepository $repository,
-        private readonly UserExceptionService $service
+        private readonly UserExceptionService $service,
+        private readonly LoggerInterface $logger
     ) {
+    }
+
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 
     /**
@@ -52,7 +62,6 @@ class RegistrationController extends AbstractController
     public function register(Request $request, AuthenticationUtils $utils): Response
     {
         $user = new User();
-        $user->setPassword('fake');
         $form = $this->createForm(UserRegistrationType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
             $this->repository->add($user);
@@ -63,7 +72,7 @@ class RegistrationController extends AbstractController
 
                 return $this->redirectToHomePage();
             } catch (TransportExceptionInterface $e) {
-                $this->service->handleException($request, $e);
+                $this->handleException($request, $e);
 
                 return $this->redirectToRoute(self::ROUTE_REGISTER);
             }
@@ -89,7 +98,7 @@ class RegistrationController extends AbstractController
         try {
             $this->verifier->handleEmail($request, $user);
         } catch (VerifyEmailExceptionInterface $e) {
-            $this->service->handleException($request, $e);
+            $this->handleException($request, $e);
 
             return $this->redirectToRoute(self::ROUTE_REGISTER);
         }
@@ -100,9 +109,9 @@ class RegistrationController extends AbstractController
     private function createEmail(User $user): RegistrationEmail
     {
         return (new RegistrationEmail())
-            ->subject($this->trans('registration.subject'))
+            ->to($user->getEmailAddress())
             ->from($this->getAddressFrom())
-            ->to((string) $user->getEmail())
+            ->subject($this->trans('registration.subject'))
             ->update(Importance::MEDIUM, $this->getTranslator());
     }
 
@@ -114,5 +123,10 @@ class RegistrationController extends AbstractController
         }
 
         return $this->repository->find($id);
+    }
+
+    private function handleException(Request $request, \Throwable $e): void
+    {
+        $this->logException($this->service->handleException($request, $e));
     }
 }

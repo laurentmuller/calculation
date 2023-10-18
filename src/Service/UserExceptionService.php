@@ -33,12 +33,14 @@ class UserExceptionService
     /**
      * Handle an exception by set the authentication error to the session.
      */
-    public function handleException(Request $request, \Throwable $e): void
+    public function handleException(Request $request, \Throwable $e): CustomUserMessageAuthenticationException
     {
+        $exception = $this->mapException($e);
         if ($request->hasSession()) {
-            $exception = $this->mapException($e);
             $request->getSession()->set(SecurityRequestAttributes::AUTHENTICATION_ERROR, $exception);
         }
+
+        return $exception;
     }
 
     /**
@@ -75,9 +77,7 @@ class UserExceptionService
             return $this->createException('reset_invalid_reset_password_token', $e);
         }
         if ($e instanceof TooManyPasswordRequestsException) {
-            $parameters = ['%availableAt%' => $e->getAvailableAt()->format('H:i')];
-
-            return $this->createException('reset_too_many_password_request', $e, $parameters);
+            return $this->createException('reset_too_many_password_request', $e, ['%availableAt%' => $e->getAvailableAt()->format('H:i')]);
         }
         if ($e instanceof ResetPasswordExceptionInterface) {
             return $this->createException($e->getReason(), $e);

@@ -32,13 +32,13 @@ enum TableView: string implements EnumDefaultInterface, EnumSortableInterface, T
     use EnumDefaultTrait;
     use TranslatableEnumTrait;
 
-    /*
+    /**
      * Show values as cards.
      */
     #[EnumCase(extras: ['page-size' => 15])]
     case CUSTOM = 'custom';
 
-    /*
+    /**
      * Show values within a table (default value).
      */
     #[EnumCase(extras: ['page-size' => 20, EnumDefaultInterface::NAME => true])]

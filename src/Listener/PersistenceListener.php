@@ -61,6 +61,23 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         User::class,
     ];
 
+    /**
+     * The field names to skip.
+     */
+    private const SKIP_FIELDS = [
+        // TimestampableInterface
+        'createdAt',
+        'createdBy',
+        'updatedAt',
+        'updatedBy',
+        // User
+        'requestedAt',
+        'expiresAt',
+        'selector',
+        'hashedToken',
+        'lastLogin',
+    ];
+
     private ?string $previousDisplay = null;
 
     /**
@@ -93,12 +110,20 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     public function postUpdate(LifecycleEventArgs $args): void
     {
         $entity = $this->getEntity($args);
-        if (!$entity instanceof AbstractEntity || $this->isUserLastLogin($args)) {
+        if (!$entity instanceof AbstractEntity) {
             return;
         }
-        if ($this->isUserRights($args)) {
+
+        $manager = $args->getObjectManager();
+        $unitOfWork = $manager->getUnitOfWork();
+        $changeSet = \array_keys($unitOfWork->getEntityChangeSet($entity));
+        if ($this->isSkipFields($changeSet)) {
+            return;
+        }
+
+        if ($this->isUserRights($entity, $changeSet)) {
             $this->notify($entity, '', 'user.rights.success');
-        } elseif ($this->isUserPassword($args)) {
+        } elseif ($this->isUserPassword($entity, $changeSet)) {
             $this->notify($entity, '', 'user.change_password.change_success');
         } else {
             $this->notify($entity, '.edit.success', 'common.edit_success');
@@ -143,23 +168,13 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         return $this->isTransDefined($id) ? $id : $default;
     }
 
-    /**
-     * @psalm-template T of AbstractEntity
-     *
-     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
-     * @psalm-param class-string<T> $class
-     */
-    private function isObjectChange(LifecycleEventArgs $args, string $class, string ...$fields): bool
+    private function isObjectChange(object $object, string $class, array $changeSet, string ...$fields): bool
     {
-        $object = $args->getObject();
         if ($object::class !== $class) {
             return false;
         }
-        $manager = $args->getObjectManager();
-        $unitOfWork = $manager->getUnitOfWork();
-        $changeSet = $unitOfWork->getEntityChangeSet($object);
         foreach ($fields as $field) {
-            if (\array_key_exists($field, $changeSet)) {
+            if (\in_array($field, $changeSet, true)) {
                 return true;
             }
         }
@@ -167,28 +182,21 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         return false;
     }
 
-    /**
-     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
-     */
-    private function isUserLastLogin(LifecycleEventArgs $args): bool
+    private function isSkipFields(array $changeSet): bool
     {
-        return $this->isObjectChange($args, User::class, 'lastLogin');
+        $intersect = \array_intersect($changeSet, self::SKIP_FIELDS);
+
+        return $intersect === $changeSet;
     }
 
-    /**
-     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
-     */
-    private function isUserPassword(LifecycleEventArgs $args): bool
+    private function isUserPassword(object $object, array $changeSet): bool
     {
-        return $this->isObjectChange($args, User::class, 'password');
+        return $this->isObjectChange($object, User::class, $changeSet, 'password');
     }
 
-    /**
-     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
-     */
-    private function isUserRights(LifecycleEventArgs $args): bool
+    private function isUserRights(object $object, array $changeSet): bool
     {
-        return $this->isObjectChange($args, User::class, 'rights', 'overwrite');
+        return $this->isObjectChange($object, User::class, $changeSet, 'rights', 'overwrite');
     }
 
     private function notify(AbstractEntity $entity, string $suffix, string $default, FlashType $type = FlashType::SUCCESS): void

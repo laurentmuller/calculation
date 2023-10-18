@@ -32,37 +32,37 @@ enum StrengthLevel: int implements EnumDefaultInterface, EnumSortableInterface, 
     use EnumDefaultTrait;
     use TranslatableEnumTrait;
 
-    /*
+    /**
      * Medium level.
      */
     #[EnumCase('medium')]
     case MEDIUM = 2;
 
-    /*
+    /**
      * No validation level (default value).
      */
     #[EnumCase('none', [EnumDefaultInterface::NAME => true])]
     case NONE = -1;
 
-    /*
+    /**
      * Strong level.
      */
     #[EnumCase('strong')]
     case STRONG = 3;
 
-    /*
+    /**
      * Very strong level.
      */
     #[EnumCase('very_strong')]
     case VERY_STRONG = 4;
 
-    /*
+    /**
      * Very weak level.
      */
     #[EnumCase('very_weak')]
     case VERY_WEAK = 0;
 
-    /*
+    /**
      * Weak level.
      */
     #[EnumCase('weak')]

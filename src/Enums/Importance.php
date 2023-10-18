@@ -32,23 +32,23 @@ enum Importance: string implements EnumDefaultInterface, EnumSortableInterface, 
     use EnumDefaultTrait;
     use TranslatableEnumTrait;
 
-    /*
+    /**
      * High importance.
      */
     case HIGH = 'high';
 
-    /*
+    /**
      * Low importance (default value).
      */
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case LOW = 'low';
 
-    /*
+    /**
      * Medium  importance.
      */
     case MEDIUM = 'medium';
 
-    /*
+    /**
      * Urgente importance.
      */
     case URGENT = 'urgent';

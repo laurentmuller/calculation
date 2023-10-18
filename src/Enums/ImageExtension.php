@@ -26,54 +26,60 @@ use Elao\Enum\Attribute\EnumCase;
  *     compressed?: bool,
  *     quality?: int,
  *     filters?: int,
- *     foreground_color?: int}
+ *     foreground_color?: int|null}
+ * @psalm-type AllowedOptionsType = array{
+ *     compressed?: true,
+ *     filters?: int,
+ *     foreground_color?: null,
+ *     quality?: int}
  */
 enum ImageExtension: string implements EnumDefaultInterface
 {
     use EnumDefaultTrait;
 
-    /*
-     * The Bitmap file extension ("bmp").
+    /**
+     * The Device-Independent Bitmap (DIB) graphic extension.
      */
     case BMP = 'bmp';
 
-    /*
-     * The Gif file extension ("gif").
+    /**
+     * The Graphical Interchange Format (GIF) extension.
      */
     case GIF = 'gif';
 
-    /*
-     * The JPEG file extension ("jpeg").
+    /**
+     * The Joint Photographic Experts Group (JPEG) extension.
      */
     case JPEG = 'jpeg';
 
-    /*
-     * The JPG file extension ("jpg").
+    /**
+     * The Joint Photographic Group (JPG) extension.
      */
     case JPG = 'jpg';
 
-    /*
-     * The PNG file extension ("png").
+    /**
+     * The Portable Network Graphics (PNG) extension (default value).
      */
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case PNG = 'png';
 
     /**
-     *The Wireless Application Protocol Bitmap Format ("wbmp").
+     *The Wireless Application Protocol Bitmap Format.
      */
     case WBMP = 'wbmp';
 
     /**
-     * The Webp file extension ("webp").
+     * The Webp extension.
      */
     case WEBP = 'webp';
-    /*
-     * The XBM file extension ("xbm").
+
+    /**
+     * The X Window System bitmap (XBM) extension.
      */
     case XBM = 'xbm';
 
-    /*
-     * The XPM file extension ("xpm").
+    /**
+     * The X11 pixmap extension (XPM).
      */
     case XPM = 'xpm';
 
@@ -100,6 +106,25 @@ enum ImageExtension: string implements EnumDefaultInterface
     }
 
     /**
+     * Gets the allowed options to save image.
+     *
+     * @psalm-return AllowedOptionsType
+     */
+    public function getAllowedOptions(): array
+    {
+        return match ($this) {
+            ImageExtension::BMP => ['compressed' => true],
+            ImageExtension::JPEG,
+            ImageExtension::JPG,
+            ImageExtension::WEBP => ['quality' => -1],
+            ImageExtension::PNG => ['quality' => -1, 'filters' => -1],
+            ImageExtension::WBMP,
+            ImageExtension::XBM => ['foreground_color' => null],
+            default => [],
+        };
+    }
+
+    /**
      * Output an image to either the browser or a file.
      *
      * @param \GdImage|ImageService   $image   a GdImage object, returned by one of the image creation functions or an
@@ -119,15 +144,25 @@ enum ImageExtension: string implements EnumDefaultInterface
             $image = $image->getImage();
         }
 
+        $allowed = $this->getAllowedOptions();
+        $keys = \array_keys($allowed);
+        $diff = \array_diff(\array_keys($options), $keys);
+        if ([] !== $diff) {
+            throw new \RuntimeException(\sprintf('Invalid options: %s, allowed options: %s.', \implode(', ', $diff), \implode(', ', $keys)));
+        }
+
+        /** @psalm-var array{compressed: bool, quality: int, filters: int, foreground_color: int|null} $options */
+        $options = \array_merge($allowed, $options);
+
         return match ($this) {
-            ImageExtension::BMP => \imagebmp($image, $file, $options['compressed'] ?? true),
+            ImageExtension::BMP => \imagebmp($image, $file, $options['compressed']),
             ImageExtension::GIF => \imagegif($image, $file),
             ImageExtension::JPEG,
-            ImageExtension::JPG => \imagejpeg($image, $file, $options['quality'] ?? -1),
-            ImageExtension::PNG => \imagepng($image, $file, $options['quality'] ?? -1, $options['filters'] ?? -1),
-            ImageExtension::WEBP => \imagewebp($image, $file, $options['quality'] ?? 80),
-            ImageExtension::WBMP => \imagewbmp($image, $file, $options['foreground_color'] ?? null),
-            ImageExtension::XBM => \imagexbm($image, (string) $file, $options['foreground_color'] ?? null),
+            ImageExtension::JPG => \imagejpeg($image, $file, $options['quality']),
+            ImageExtension::PNG => \imagepng($image, $file, $options['quality'], $options['filters']),
+            ImageExtension::WEBP => \imagewebp($image, $file, $options['quality']),
+            ImageExtension::WBMP => \imagewbmp($image, $file, $options['foreground_color']),
+            ImageExtension::XBM => \imagexbm($image, (string) $file, $options['foreground_color']),
             ImageExtension::XPM => false,
         };
     }

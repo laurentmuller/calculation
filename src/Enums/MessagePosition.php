@@ -32,52 +32,55 @@ enum MessagePosition: string implements EnumDefaultInterface, EnumSortableInterf
     use EnumDefaultTrait;
     use TranslatableEnumTrait;
 
-    /*
+    /**
      * Bottom center position.
      */
     case BOTTOM_CENTER = 'bottom-center';
 
-    /*
+    /**
      * Bottom left position.
      */
     case BOTTOM_LEFT = 'bottom-left';
 
-    /*
+    /**
      * Bottom right position.
      */
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case BOTTOM_RIGHT = 'bottom-right';
 
-    /*
+    /**
      * Center position.
      */
     case CENTER_CENTER = 'center-center';
 
-    /*
+    /**
      * Center left position.
      */
     case CENTER_LEFT = 'center-left';
 
-    /*
+    /**
      * Center right position.
      */
     case CENTER_RIGHT = 'center-right';
 
-    /*
+    /**
      * Top center position.
      */
     case TOP_CENTER = 'top-center';
 
-    /*
+    /**
      * Top left position.
      */
     case TOP_LEFT = 'top-left';
 
-    /*
+    /**
      * Top right position.
      */
     case TOP_RIGHT = 'top-right';
 
+    /**
+     * Gets the rotation angle of the icon.
+     */
     public function getAngle(): int
     {
         return match ($this) {
@@ -95,6 +98,9 @@ enum MessagePosition: string implements EnumDefaultInterface, EnumSortableInterf
         };
     }
 
+    /**
+     * Gets icon.
+     */
     public function getIcon(): string
     {
         return match ($this) {

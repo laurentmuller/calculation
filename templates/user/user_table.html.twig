@@ -17,13 +17,11 @@
     {{- _self.item_path(path('user_reset_all', params), 'user.reset_all.title', 'eraser') }}
     {{- _self.item_separator() }}
 {% endif %}
-
 {{- _self.item_external(path('user_pdf'), 'user.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('user_excel'), 'user.list.excel_title', ICON_EXCEL) }}
 {{- _self.item_separator() }}
 {{- _self.item_external(path('user_rights_pdf'), 'user.list.rights_export', ICON_PDF) }}
 {{- _self.item_external(path('user_rights_excel'), 'user.list.rights_excel', ICON_EXCEL) }}
-
 {%- endblock %}
 
 {% block show_actions -%}
@@ -52,6 +50,7 @@
     {{- _self.item_path(path('user_message', params), 'user.message.title', 'envelope far', 'btn-user-message') }}
     {{- _self.item_separator('user-reset-divider') }}
     {{- _self.item_path(path('user_reset', params), 'user.reset.title', 'eraser', 'btn-user-reset') }}
+    {{- _self.item_path(path('user_reset_send', params), 'resetting.request.title', 'envelope-circle-check', 'btn-user-send') }}
 {% endif %}
 {%- if not is_granted('IS_IMPERSONATOR') and is_granted('ROLE_ADMIN') -%}
     {% if allow_edit or allow_delete or allow_add or allow_show %}

@@ -97,8 +97,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      */
     public function getResettableUsers(): array
     {
-        return $this->createQueryBuilder('e')
-            ->where('e.hashedToken IS NOT NULL')
+        return $this->createResettableQueryBuilder()
             ->orderBy('e.username')
             ->getQuery()
             ->getResult();
@@ -140,9 +139,8 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     public function isResettableUsers(): bool
     {
         try {
-            return 0 !== (int) $this->createQueryBuilder('e')
+            return 0 !== $this->createResettableQueryBuilder()
                 ->select('COUNT(e.id)')
-                ->where('e.hashedToken IS NOT NULL')
                 ->getQuery()
                 ->getSingleScalarResult();
         } catch (\Doctrine\ORM\Exception\ORMException) {
@@ -156,13 +154,13 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     public function removeExpiredResetPasswordRequests(): int
     {
         $time = new \DateTimeImmutable('-1 week');
-        $query = $this->createQueryBuilder('u')
+        $query = $this->createQueryBuilder('e')
             ->update()
-            ->set('u.selector', 'NULL')
-            ->set('u.hashedToken', 'NULL')
-            ->set('u.requestedAt', 'NULL')
-            ->set('u.expiresAt', 'NULL')
-            ->where('u.expiresAt <= :time')
+            ->set('e.selector', 'NULL')
+            ->set('e.hashedToken', 'NULL')
+            ->set('e.requestedAt', 'NULL')
+            ->set('e.expiresAt', 'NULL')
+            ->where('e.expiresAt <= :time')
             ->setParameter('time', $time, Types::DATETIME_IMMUTABLE)
             ->getQuery();
 
@@ -205,5 +203,11 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     {
         $user->setPassword($newHashedPassword);
         $this->flush();
+    }
+
+    private function createResettableQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.hashedToken IS NOT NULL');
     }
 }

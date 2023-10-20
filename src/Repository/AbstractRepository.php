@@ -37,7 +37,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Add the given entity to the database.
      *
-     * @param AbstractEntity $entity the entity to make managed and persistent
+     * @param AbstractEntity $entity the entity to add
      * @param bool           $flush  true to flush change to the database
      *
      * @see AbstractRepository::flush()
@@ -198,6 +198,9 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
     /**
      * Remove the given entity from the database.
+     *
+     * @param AbstractEntity $entity the entity to remove
+     * @param bool           $flush  true to flush change to the database
      */
     public function remove(AbstractEntity $entity, bool $flush = true): void
     {

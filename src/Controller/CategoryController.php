@@ -100,15 +100,14 @@ class CategoryController extends AbstractEntityController
             }
             $message = $this->trans('category.delete.failure', ['%name%' => $item->getDisplay()]);
             $parameters = [
-                'item' => $item,
-                'id' => $item->getId(),
                 'title' => 'category.delete.title',
                 'message' => $message,
+                'item' => $item,
                 'items' => $items,
                 'back_page' => $this->getDefaultRoute(),
                 'back_text' => 'common.button_back_list',
             ];
-            $this->updateQueryParameters($request, $parameters, $item->getId());
+            $this->updateQueryParameters($request, $parameters, $item);
 
             return $this->render('cards/card_warning.html.twig', $parameters);
         }

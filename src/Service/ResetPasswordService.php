@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Controller\ResetPasswordController;
 use App\Entity\User;
 use App\Enums\Importance;
 use App\Mime\ResetPasswordEmail;
@@ -35,10 +36,6 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 class ResetPasswordService
 {
     use LoggerTrait;
-    /**
-     * The reset password route name.
-     */
-    public const ROUTE_RESET = 'app_reset_password';
 
     private const THROTTLE_MINUTES = 5;
     private const THROTTLE_OFFSET = 'PT3300S';
@@ -52,9 +49,9 @@ class ResetPasswordService
         private readonly MailerInterface $mailer,
         private readonly LoggerInterface $logger,
         #[Autowire('%mailer_user_email%')]
-        private readonly string $fromUserEmail,
+        private readonly string $mailerUserEmail,
         #[Autowire('%mailer_user_name%')]
-        private readonly string $fromUserName
+        private readonly string $mailerUserName
     ) {
     }
 
@@ -99,7 +96,7 @@ class ResetPasswordService
      */
     public function getThrottleAt(ResetPasswordToken $token): \DateTimeInterface
     {
-        /** @var \DateTime $expireAt */
+        /** @psalm-var \DateTime $expireAt */
         $expireAt = clone $token->getExpiresAt();
         $interval = new \DateInterval(self::THROTTLE_OFFSET);
 
@@ -179,13 +176,13 @@ class ResetPasswordService
 
     private function getAddressFrom(): Address
     {
-        return new Address($this->fromUserEmail, $this->fromUserName);
+        return new Address($this->mailerUserEmail, $this->mailerUserName);
     }
 
     private function getResetAction(ResetPasswordToken $token): string
     {
         return $this->generator->generate(
-            self::ROUTE_RESET,
+            ResetPasswordController::ROUTE_RESET,
             ['token' => $token->getToken()],
             UrlGeneratorInterface::ABSOLUTE_URL
         );

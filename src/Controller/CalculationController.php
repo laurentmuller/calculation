@@ -210,14 +210,14 @@ class CalculationController extends AbstractEntityController
         if ($this->handleRequestForm($request, $form)) {
             $manager->flush();
 
-            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
+            return $this->redirectToDefaultRoute($request, $item);
         }
 
         $parameters = [
             'form' => $form,
             'item' => $item,
         ];
-        $this->updateQueryParameters($request, $parameters, (int) $item->getId());
+        $this->updateQueryParameters($request, $parameters, $item);
 
         return $this->render('calculation/calculation_state.html.twig', $parameters);
     }

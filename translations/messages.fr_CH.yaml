@@ -1304,7 +1304,7 @@ user:
     message: Êtes-vous sûr de vouloir supprimer l'utilisateur <b>%name%</b> ?
     success: L'utilisateur <b>%name%</b> a été supprimé avec succès.
     failure: Impossible de supprimer l'utilisateur <b>%name%</b>.
-    connected: Impossible de supprimer l'utilisateur actuellement connecté !
+    connected: Impossible de supprimer l'utilisateur <b>%name%</b> qui est actuellement connecté à l'application.
   edit:
     title: Modifier l'utilisateur
     success: L'utilisateur <b>%name%</b> a été mis à jour avec succès.
@@ -1356,6 +1356,7 @@ user:
     new_confirmation: Répéter le nouveau mot de passe
   reset:
     title: Supprimer la demande de mot de passe
+    send: Envoyer une demande de mot de passe
     confirmation: Êtes-vous sûr de vouloir supprimer la demande de mot de passe pour l'utilisateur <b>%name%</b> ?
     success: La demande de mot de passe pour l'utilisateur <b>%name%</b> a été supprimée avec succès.
     error: Aucune demande de mot de passe pour l'utilisateur <b>%name%</b> n'a été requise.
@@ -1365,6 +1366,10 @@ user:
     empty: Aucune demande de mot de passe n'a été requise.
     success: Les %count% demandes de mot de passe ont été supprimées avec succès.
     error: Un ou plusieurs utilisateurs doivent être sélectionnés.
+  send:
+    title: Renvoyer une demande de mot de passe
+    message: Êtes-vous sûr de vouloir renvoyer une nouvelle demande de mot de passe pour l'utilisateur <b>%name%</b> ?
+    submit : Renvoyer
   rights:
     title: Droits d'accès
     all_title: Tous les droits

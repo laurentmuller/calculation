@@ -94,7 +94,7 @@ class TaskController extends AbstractEntityController
             if ([] === $tasks) {
                 $this->warningTrans('task.list.empty');
 
-                return $this->getUrlGenerator()->redirect($request, null, $this->getDefaultRoute());
+                return $this->redirectToDefaultRoute($request);
             }
             $task = $tasks[0];
         } else {
@@ -108,7 +108,7 @@ class TaskController extends AbstractEntityController
             'form' => $form,
             'tasks' => $tasks,
         ];
-        $this->updateQueryParameters($request, $parameters, $task->getId());
+        $this->updateQueryParameters($request, $parameters, $task);
 
         return $this->render('task/task_compute.html.twig', $parameters);
     }

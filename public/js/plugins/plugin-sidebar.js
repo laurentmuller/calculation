@@ -306,11 +306,12 @@
          */
         _getState() {
             const menus = {};
-            this.$element.find('div.collapse[id^="MenuSidebar"]').each(function (index, element) {
-                const $element = $(element);
-                menus[$element.attr('id')] = $element.hasClass('show');
+            const options = this.options;
+            const selector = `div.collapse[id^='${options.menuPrefix}']`;
+            this.$element.find(selector).each(function (index, element) {
+                menus[element.id] = element.classList.contains('show');
             });
-            menus.SidebarHide = this._isSideBarHidden();
+            menus[options.menuHide] = this._isSideBarHidden();
             return menus;
         }
 
@@ -340,6 +341,10 @@
     Sidebar.DEFAULTS = {
         // url to save menu states
         url: null,
+        // the sidebar key used to save state
+        menuHide: 'MENU_SIDEBAR_HIDE',
+        // the menus prefix used to save state
+        menuPrefix: 'MENU_SIDEBAR_',
         // show sidebar button selector
         showSidebarSelector: '.show-sidebar',
         // hide sidebar button selector

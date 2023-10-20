@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\RoleInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Interfaces\UserInterface;
 use App\Repository\UserRepository;
@@ -306,7 +307,16 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
         return $this->requestedAt ?? new \DateTimeImmutable();
     }
 
-    public function getUser(): object
+    public function getRoleIcon(): string
+    {
+        return match ($this->getRole()) {
+            RoleInterface::ROLE_SUPER_ADMIN => 'fa-solid fa-user-gear',
+            RoleInterface::ROLE_ADMIN => 'fa-solid fa-user-shield',
+            default => 'fa-solid fa-user',
+        };
+    }
+
+    public function getUser(): self
     {
         return $this;
     }

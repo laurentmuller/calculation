@@ -40,8 +40,13 @@ class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
+    /**
+     * The reset password route name.
+     */
+    public const ROUTE_RESET = 'app_reset_password';
+
     private const ROUTE_CHECK = 'app_check_email';
-    private const ROUTE_FORGET = 'app_forgot_password_request';
+    private const ROUTE_REQUEST = 'app_forgot_password_request';
 
     public function __construct(
         private readonly ResetPasswordHelperInterface $helper,
@@ -71,14 +76,14 @@ class ResetPasswordController extends AbstractController
     /**
      * Display and process form to request a password reset.
      */
-    #[Route(path: '', name: self::ROUTE_FORGET)]
+    #[Route(path: '', name: self::ROUTE_REQUEST)]
     public function request(Request $request, AuthenticationUtils $utils): Response
     {
         $form = $this->createForm(RequestChangePasswordType::class);
         if ($this->handleRequestForm($request, $form)) {
-            $usernameOrEmail = (string) $form->get('user')->getData();
+            $user = (string) $form->get('user')->getData();
 
-            return $this->sendEmail($request, $usernameOrEmail);
+            return $this->sendEmail($request, $user);
         }
 
         return $this->render('reset_password/request.html.twig', [
@@ -90,13 +95,13 @@ class ResetPasswordController extends AbstractController
     /**
      * Validates and process the reset URL that the user clicked in their email.
      */
-    #[Route(path: '/reset/{token}', name: ResetPasswordService::ROUTE_RESET)]
+    #[Route(path: '/reset/{token}', name: self::ROUTE_RESET)]
     public function reset(Request $request, Security $security, string $token = null): Response
     {
         if (null !== $token) {
             $this->storeTokenInSession($token);
 
-            return $this->redirectToRoute(ResetPasswordService::ROUTE_RESET);
+            return $this->redirectToRoute(self::ROUTE_RESET);
         }
         $token = $this->getTokenFromSession();
         if (null === $token) {
@@ -109,7 +114,7 @@ class ResetPasswordController extends AbstractController
         } catch (ResetPasswordExceptionInterface $e) {
             $this->service->handleException($request, $e);
 
-            return $this->redirectToRoute(self::ROUTE_FORGET);
+            return $this->redirectToRoute(self::ROUTE_REQUEST);
         }
 
         $form = $this->createForm(ResetChangePasswordType::class, $user);
@@ -135,20 +140,20 @@ class ResetPasswordController extends AbstractController
             // ignore
         }
 
-        return $this->redirectToHomePage('resetting.success', ['%username%' => $user->getUserIdentifier()]);
+        return $this->redirectToHomePage();
     }
 
     /**
      * Send email to the user for resetting the password.
      */
-    private function sendEmail(Request $request, string $usernameOrEmail): RedirectResponse
+    private function sendEmail(Request $request, string $user): RedirectResponse
     {
-        $result = $this->service->sendEmail($request, $usernameOrEmail);
+        $result = $this->service->sendEmail($request, $user);
         if (false === $result) {
             return $this->redirectToRoute(self::ROUTE_CHECK);
         }
         if (!$result instanceof ResetPasswordToken) {
-            return $this->redirectToRoute(self::ROUTE_FORGET);
+            return $this->redirectToRoute(self::ROUTE_REQUEST);
         }
         $this->setTokenObjectInSession($result);
 

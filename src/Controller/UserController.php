@@ -38,6 +38,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -85,9 +86,9 @@ class UserController extends AbstractEntityController
     public function delete(Request $request, User $item, Security $security, LoggerInterface $logger): Response
     {
         if ($this->isConnectedUser($item) || $this->isOriginalUser($item, $security)) {
-            $this->warningTrans('user.delete.connected');
+            $this->warningTrans('user.delete.connected', ['%name%' => $item]);
 
-            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
+            return $this->redirectToDefaultRoute($request, $item);
         }
 
         return $this->deleteEntity($request, $item, $logger);
@@ -131,7 +132,7 @@ class UserController extends AbstractEntityController
         if ($this->isConnectedUser($user)) {
             $this->warningTrans('user.message.connected');
 
-            return $this->getUrlGenerator()->redirect($request, $user, $this->getDefaultRoute());
+            return $this->redirectToDefaultRoute($request, $user);
         }
 
         /** @psalm-var User|Address $from */
@@ -146,7 +147,7 @@ class UserController extends AbstractEntityController
                 $service->sendComment($comment);
                 $this->successTrans('user.message.success', ['%name%' => $user->getDisplay()]);
 
-                return $this->getUrlGenerator()->redirect($request, $user, $this->getDefaultRoute());
+                return $this->redirectToDefaultRoute($request, $user);
             } catch (TransportExceptionInterface $e) {
                 return $this->renderFormException('user.message.error', $e, $logger);
             }
@@ -169,7 +170,7 @@ class UserController extends AbstractEntityController
         if ($this->handleRequestForm($request, $form)) {
             $this->saveToDatabase($item);
 
-            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
+            return $this->redirectToDefaultRoute($request, $item);
         }
         $parameters = [
             'item' => $item,
@@ -212,7 +213,7 @@ class UserController extends AbstractEntityController
         if ([] === $users) {
             $this->warningTrans('user.reset_all.empty');
 
-            return $generator->redirect($request, null, $this->getDefaultRoute());
+            return $this->redirectToDefaultRoute($request);
         }
         if (1 === \count($users)) {
             $params = $generator->routeParams($request, \reset($users));
@@ -223,19 +224,18 @@ class UserController extends AbstractEntityController
         $name = 'users';
         $data = [$name => $users];
         $form = $this->createFormBuilder($data)
-            ->add($name, ResetAllPasswordType::class)->getForm();
+            ->add($name, ResetAllPasswordType::class)
+            ->getForm();
         if ($this->handleRequestForm($request, $form)) {
             /** @var User[] $users */
             $users = $form->get($name)->getData();
             $repository->resetPasswordRequest($users);
             $this->successResetPassword($users);
 
-            return $generator->redirect($request, null, $this->getDefaultRoute());
+            return $this->redirectToDefaultRoute($request);
         }
 
-        return $this->render('user/user_reset_all_passwords.html.twig', [
-            'form' => $form,
-        ]);
+        return $this->render('user/user_reset_all_passwords.html.twig', ['form' => $form]);
     }
 
     /**
@@ -244,8 +244,7 @@ class UserController extends AbstractEntityController
     #[Route(path: '/reset/{id}', name: 'user_reset', requirements: ['id' => Requirement::DIGITS])]
     public function resetPasswordRequest(Request $request, User $item): Response
     {
-        $identifier = $item->getUserIdentifier();
-        $form = $this->createFormBuilder()->getForm();
+        $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
             if ($item->isResetPassword()) {
                 /** @psalm-var UserRepository $repository */
@@ -253,15 +252,18 @@ class UserController extends AbstractEntityController
                 $repository->removeResetPasswordRequest($item);
                 $this->successResetPassword([$item]);
             } else {
-                $this->warningTrans('user.reset.error', ['%name%' => $identifier]);
+                $this->warningTrans('user.reset.error', ['%name%' => $item]);
             }
 
-            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
+            return $this->redirectToDefaultRoute($request, $item);
         }
 
-        return $this->render('user/user_reset_password.html.twig', [
+        return $this->render('cards/card_delete.html.twig', [
             'form' => $form,
-            'name' => $identifier,
+            'title' => 'user.reset.title',
+            'title_icon' => 'eraser',
+            'message' => 'user.reset.confirmation',
+            'message_parameters' => ['%name%' => $item],
         ]);
     }
 
@@ -274,7 +276,7 @@ class UserController extends AbstractEntityController
         if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
             $this->warningTrans('user.rights.connected');
 
-            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
+            return $this->redirectToDefaultRoute($request, $item);
         }
 
         $default = $builder->getRole($item);
@@ -287,7 +289,7 @@ class UserController extends AbstractEntityController
             }
             $manager->flush();
 
-            return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
+            return $this->redirectToDefaultRoute($request, $item);
         }
 
         return $this->render('user/user_rights.html.twig', [
@@ -339,22 +341,34 @@ class UserController extends AbstractEntityController
     }
 
     /**
-     * Sends an email to the user to reset its password.
+     * Sends an email to the user for reset its password.
      */
     #[Route(path: '/reset/send/{id}', name: 'user_reset_send', requirements: ['id' => Requirement::DIGITS])]
-    public function sendResetPassword(Request $request, User $item, ResetPasswordService $service): Response
+    public function sendPasswordRequest(Request $request, User $item, ResetPasswordService $service): Response
     {
-        $result = $service->sendEmail($request, $item);
-        $parameters = ['%name%' => $item];
-        if (false === $result) {
-            $this->warningTrans('reset_user_not_found', $parameters, 'security');
-        } elseif (!$result instanceof ResetPasswordToken) {
-            $this->warningTrans('reset_token_not_found', $parameters, 'security');
-        } else {
-            $this->successTrans('reset_token_send', $parameters, 'security');
+        $form = $this->createForm(FormType::class);
+        if ($this->handleRequestForm($request, $form)) {
+            $result = $service->sendEmail($request, $item);
+            $parameters = ['%name%' => $item];
+            if (false === $result) {
+                $this->warningTrans('reset_user_not_found', $parameters, 'security');
+            } elseif (!$result instanceof ResetPasswordToken) {
+                $this->warningTrans('reset_token_not_found', $parameters, 'security');
+            } else {
+                $this->successTrans('reset_token_send', $parameters, 'security');
+            }
+
+            return $this->redirectToDefaultRoute($request, $item);
         }
 
-        return $this->getUrlGenerator()->redirect($request, $item, $this->getDefaultRoute());
+        return $this->render('cards/card_confirm.html.twig', [
+            'form' => $form,
+            'title' => 'user.send.title',
+            'title_icon' => 'envelope-circle-check fas',
+            'message' => 'user.send.message',
+            'message_parameters' => ['%name%' => $item],
+            'submit_text' => 'user.send.submit',
+        ]);
     }
 
     /**

@@ -4,18 +4,6 @@
         "visible": false
     },
     {
-        "field": "level",
-        "title": "log.fields.level",
-        "class": "text-border level",
-        "fieldFormatter": "formatLevel"
-    },
-    {
-        "field": "channel",
-        "title": "log.fields.channel",
-        "class": "channel",
-        "fieldFormatter": "formatChannel"
-    },
-    {
         "field": "createdAt",
         "title": "log.fields.createdAt",
         "default": true,
@@ -27,6 +15,18 @@
         "field": "message",
         "title": "log.fields.message",
         "class": "message"
+    },
+    {
+        "field": "level",
+        "title": "log.fields.level",
+        "class": "level",
+        "fieldFormatter": "formatLevel"
+    },
+    {
+        "field": "channel",
+        "title": "log.fields.channel",
+        "class": "channel",
+        "fieldFormatter": "formatChannel"
     },
     {
         "field": "user",

@@ -1,13 +1,11 @@
 {% extends 'cards/card_delete.html.twig' %}
 {# parameters #}
 {%- set title = 'clear_cache.title' -%}
-{%- set title_icon = 'trash-can far' -%}
 {%- set submit_text = 'clear_cache.submit' -%}
-{% set page_list = 'homepage' %}
-{# body #}
-{% block card_body %}
-<div class="my-3">
-    <p>{{ 'clear_cache.message'|trans({'%size%': size})|raw }}</p>
-    <p class="mb-0">{{ 'clear_cache.note'|trans|raw }}</p>
-</div>
+{%- set message = 'clear_cache.message' %}
+{%- set message_parameters = {'%size%': size} -%}
+{# message #}
+{% block message %}
+{{ parent() }}
+<p class="my-2">{{ 'clear_cache.note'|trans|raw }}</p>
 {% endblock %}

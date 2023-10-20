@@ -1,0 +1,20 @@
+{% extends 'cards/card_edit.html.twig' %}
+{# parameters #}
+{%- set title_icon = title_icon|default('circle-question far') -%}
+{%- set title = title|default('flash_bag.success') -%}
+{%- set border = border|default('warning') -%}
+{%- set submit_class = submit_class|default('btn btn-form btn-' ~ border) -%}
+{%- set show_required = show_required is defined ? show_required : false -%}
+{# class #}
+{% block card_class ' border-' ~ border %}
+{% block card_header_class ' text-bg-' ~ border %}
+{% block card_container_class ' col col-xl-8 offset-xl-2' %}
+{# body #}
+{% block card_body -%}
+    {% block message %}
+        {% if message is defined %}
+            <p class="my-2">{{ message|trans(message_parameters|default({}))|raw }}</p>
+        {% endif %}
+    {% endblock %}
+{{ parent() }}
+{%- endblock %}

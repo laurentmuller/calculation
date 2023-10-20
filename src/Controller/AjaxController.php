@@ -43,10 +43,6 @@ class AjaxController extends AbstractController
     use CookieTrait;
     use MathTrait;
 
-    private const KEY_SIDE_BAR = 'SidebarHide';
-
-    private const MENU_PREFIX = 'MenuSidebar';
-
     /**
      * Compute a task.
      */
@@ -120,26 +116,20 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Save the state of the sidebar.
+     * Save the state of the sidebar to cookies.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/navigation', name: 'ajax_save_navigation', methods: Request::METHOD_POST)]
     public function saveNavigationState(Request $request): JsonResponse
     {
         $input = $request->request;
-        $session = $this->getSession();
+        $response = $this->json(true);
+        $path = $this->getCookiePath();
 
         /** @psalm-var string $key */
         foreach ($input->keys() as $key) {
-            if (\str_starts_with($key, self::MENU_PREFIX)) {
-                $session?->set($key, $input->getBoolean($key));
-            }
+            $this->updateCookie($response, $key, $input->getBoolean($key), path: $path);
         }
-
-        $response = $this->json(true);
-        $path = $this->getCookiePath();
-        $sidebarHide = $input->getBoolean(self::KEY_SIDE_BAR, true);
-        $this->updateCookie($response, self::KEY_SIDE_BAR, $sidebarHide, path: $path);
 
         return $response;
     }

@@ -1,7 +1,7 @@
 {# admin menu #}
 {% from 'macros/_icons.html.twig' import icon, dropdownSeparator, navItem, navItemExternal %}
-{% set id = 'MenuSidebarTest' %}
-{% set expanded = app.session.get(id, false) %}
+{% set id = 'MENU_SIDEBAR_TEST' %}
+{% set expanded = app.request.cookies.get(id, false) %}
 {% set toggle_class = expanded ? ' active' : '' %}
 {% set collapse_class = expanded ? ' show' : '' %}
 {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
@@ -12,8 +12,8 @@
     </button>
     <div class="collapse{{ collapse_class }}" id="{{ id }}">
         <ul class="list-unstyled">
-            {% set id = 'MenuSidebarTestService' %}
-            {% set expanded = app.session.get(id, false) %}
+            {% set id = 'MENU_SIDEBAR_TEST_SERVICE' %}
+            {% set expanded = app.request.cookies.get(id, false) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}
             {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
@@ -31,8 +31,8 @@
                 </div>
             </li>
 
-            {% set id = 'MenuSidebarTestPage' %}
-            {% set expanded = app.session.get(id, false) %}
+            {% set id = 'MENU_SIDEBAR_TEST_PAGE' %}
+            {% set expanded = app.request.cookies.get(id, false) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}
             {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
@@ -50,8 +50,8 @@
                 </div>
             </li>
 
-            {% set id = 'MenuSidebarTestAdmin' %}
-            {% set expanded = app.session.get(id, false) %}
+            {% set id = 'MENU_SIDEBAR_TEST_ADMIN' %}
+            {% set expanded = app.request.cookies.get(id, false) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}
             {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
@@ -68,8 +68,8 @@
                 </div>
             </li>
 
-            {% set id = 'MenuSidebarTestChart' %}
-            {% set expanded = app.session.get(id, false) %}
+            {% set id = 'MENU_SIDEBAR_TEST_CHART' %}
+            {% set expanded = app.request.cookies.get(id, false) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}
             {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}

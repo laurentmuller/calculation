@@ -27,6 +27,7 @@ use App\Word\WordDocument;
 use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -87,6 +88,7 @@ abstract class AbstractEntityController extends AbstractController
      * @param LoggerInterface $logger  the logger to log any exception
      *
      * @psalm-param T $item
+     * @psalm-param array{route?: string|null, ...} $parameters
      */
     protected function deleteEntity(Request $request, AbstractEntity $item, LoggerInterface $logger, array $parameters = []): Response
     {
@@ -106,15 +108,17 @@ abstract class AbstractEntityController extends AbstractController
 
                 return $this->renderFormException($id, $e, $logger);
             }
-            $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());
 
-            return $this->getUrlGenerator()->redirect($request, null, $route);
+            return $this->redirectToDefaultRoute(request: $request, route: $parameters['route'] ?? null);
         }
 
-        $parameters['form'] = $form;
-        $parameters['title'] = $this->getMessageId('.delete.title', 'common.delete_title');
-        $parameters['message'] = $this->getMessageTrans($item, '.delete.message', 'common.delete_message');
-        $this->updateQueryParameters($request, $parameters, $item->getId());
+        $parameters += [
+            'form' => $form,
+            'title' => $this->getMessageId('.delete.title', 'common.delete_title'),
+            'message' => $this->getMessageId('.delete.message', 'common.delete_message'),
+            'message_parameters' => ['%name%' => $item],
+        ];
+        $this->updateQueryParameters($request, $parameters, $item);
 
         return $this->render('cards/card_delete.html.twig', $parameters);
     }
@@ -139,27 +143,26 @@ abstract class AbstractEntityController extends AbstractController
      * @param array          $parameters the optional parameters
      *
      * @psalm-param T $item
+     * @psalm-param array{route?: string|null, ...} $parameters
      */
     protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
     {
         $isNew = $item->isNew();
-        $permission = $isNew ? EntityPermission::ADD : EntityPermission::EDIT;
-        $this->checkPermission($permission);
+        $this->checkPermission($isNew ? EntityPermission::ADD : EntityPermission::EDIT);
+
         $type = $this->getEditFormType();
         $form = $this->createForm($type, $item);
         if ($this->handleRequestForm($request, $form)) {
             $this->saveToDatabase($item);
-            $route = (string) ($parameters['route'] ?? $this->getDefaultRoute());
 
-            return $this->getUrlGenerator()->redirect($request, $item, $route);
+            return $this->redirectToDefaultRoute($request, $item, $parameters['route'] ?? null);
         }
 
         $parameters['new'] = $isNew;
         $parameters['item'] = $item;
         $parameters['form'] = $form;
-        $this->updateQueryParameters($request, $parameters, (int) $item->getId());
+        $this->updateQueryParameters($request, $parameters, $item);
 
-        // show form
         return $this->render($this->getEditTemplate(), $parameters);
     }
 
@@ -222,7 +225,15 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
+     * Redirect to the default route.
+     */
+    protected function redirectToDefaultRoute(Request $request, AbstractEntity|int|null $item = 0, string $route = null): RedirectResponse
+    {
+        return $this->getUrlGenerator()->redirect($request, $item, $route ?? $this->getDefaultRoute());
+    }
+
+    /**
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
@@ -232,7 +243,7 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
@@ -243,7 +254,7 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException if the access is denied
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
@@ -293,17 +304,21 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Update the parameters by adding the request query values.
      *
-     * @param Request $request    the request to get the query values
-     * @param array   $parameters the parameters to update
-     * @param ?int    $id         an optional entity identifier
+     * @param Request                 $request    the request to get the query values
+     * @param array                   $parameters the parameters to update
+     * @param AbstractEntity|int|null $id         an optional entity identifier
      */
-    protected function updateQueryParameters(Request $request, array &$parameters, ?int $id = 0): void
+    protected function updateQueryParameters(Request $request, array &$parameters, AbstractEntity|int|null $id = 0): void
     {
         /** @psalm-var array $existing */
         $existing = $parameters['params'] ?? [];
         $queryParameters = $request->query->all();
         $parameters['params'] = $existing + $queryParameters;
-        if (!empty($id) && !isset($parameters['params']['id'])) {
+
+        if ($id instanceof AbstractEntity) {
+            $id = $id->getId();
+        }
+        if (null !== $id && 0 !== $id && !isset($parameters['params']['id'])) {
             $parameters['params']['id'] = $id;
         }
     }
@@ -321,13 +336,5 @@ abstract class AbstractEntityController extends AbstractController
         $id = $this->lowerName . $suffix;
 
         return $this->isTransDefined($id) ? $id : $default;
-    }
-
-    private function getMessageTrans(AbstractEntity $entity, string $suffix, string $default): string
-    {
-        $id = $this->getMessageId($suffix, $default);
-        $params = ['%name%' => $entity->getDisplay()];
-
-        return $this->trans($id, $params);
     }
 }

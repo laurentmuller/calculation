@@ -7,7 +7,8 @@
     {% set class_name = 'row-item border text-border h-100 px-2 py-1' %}
     {% if id == selection %}
         {% set class_name = class_name ~ ' table-primary' %}
-    {% elseif not is_editable %}
+    {% endif %}
+    {%if not is_editable %}
         {% set class_name = class_name ~ ' text-body-secondary' %}
     {% endif %}
     <div class="col mb-2 px-1">

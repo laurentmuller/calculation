@@ -4,36 +4,29 @@
 {%- set title = title|default('flash_bag.warning') -%}
 {%- set title_icon = title_icon|default('exclamation-circle') -%}
 {%- set back_page = back_page|default(false) -%}
-{%- set back_text = back_text|default('common.button_back') -%}
 {%- set back_icon = back_icon|default('chevron-left') -%}
+{%- set back_text = back_text|default('common.button_back') -%}
 {%- set back_class = back_class|default('btn btn-form btn-primary') -%}
 {# classes #}
 {% block card_class ' border-warning' %}
 {% block card_header_class ' text-bg-warning' %}
 {# body #}
 {% block card_body %}
-<p class="mb-0">
+<p class="my-2">
     {{- message|default('http_error_500.description'|trans)|raw -}}
 </p>
-{# message_list #}
-{% if message_list|default(false) %}
-<p class="mt-2">
-    {{- message_list|trans|raw -}}
-</p>
-{% endif %}
-{# items #}
 {%- if items|default(false) and items|length -%}
-<ul class="mt-2 ms-5">
-    {% for item in items -%}
-    <li>{{ item|raw }}</li>
-    {%- endfor %}
-</ul>
+    <ul class="mt-2 ms-5">
+        {% for item in items -%}
+            <li>{{ item|raw }}</li>
+        {%- endfor %}
+    </ul>
 {%- endif -%}
 {%- endblock %}
-
+{# footer #}
 {% block card_footer %}
-{% if back_page %}
-    {%- set href = cancel_url(app.request, id|default(0), back_page) -%}
+{% if back_page and item %}
+    {%- set href = cancel_url(app.request, item.id, back_page) -%}
     {{ link(href, back_text, back_class, back_icon) }}
 {% else %}
     {{ homepage() }}

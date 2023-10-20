@@ -103,9 +103,6 @@ class Log extends AbstractEntity
         return $message;
     }
 
-    /**
-     * Gets the channel.
-     */
     public function getChannel(bool $capitalize = false): string
     {
         return $capitalize ? StringUtils::capitalize($this->channel) : $this->channel;
@@ -129,17 +126,11 @@ class Log extends AbstractEntity
         };
     }
 
-    /**
-     * Gets the context.
-     */
     public function getContext(): ?array
     {
         return $this->context;
     }
 
-    /**
-     * Gets the creation date.
-     */
     public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
@@ -150,17 +141,11 @@ class Log extends AbstractEntity
         return $this->getMessage();
     }
 
-    /**
-     * Gets the extra information.
-     */
     public function getExtra(): ?array
     {
         return $this->extra;
     }
 
-    /**
-     * Gets the formatted date.
-     */
     public function getFormattedDate(): string
     {
         if (null === $this->formattedDate) {
@@ -170,17 +155,11 @@ class Log extends AbstractEntity
         return $this->formattedDate;
     }
 
-    /**
-     * Gets the level.
-     */
     public function getLevel(bool $capitalize = false): string
     {
         return $capitalize ? StringUtils::capitalize($this->level) : $this->level;
     }
 
-    /**
-     * Gets the level color.
-     */
     public function getLevelColor(): string
     {
         return match ($this->level) {
@@ -194,9 +173,6 @@ class Log extends AbstractEntity
         };
     }
 
-    /**
-     * Gets the level's icon.
-     */
     public function getLevelIcon(): string
     {
         return match ($this->level) {
@@ -209,25 +185,19 @@ class Log extends AbstractEntity
         };
     }
 
-    /**
-     * Gets the message.
-     */
     public function getMessage(): string
     {
         return $this->message;
     }
 
     /**
-     * Gets the creation date as the Unix timestamp.
+     * Gets the creation date as unix timestamp.
      */
     public function getTimestamp(): int
     {
         return $this->getCreatedAt()->getTimestamp();
     }
 
-    /**
-     * Gets the user identifier.
-     */
     public function getUser(): ?string
     {
         return $this->extra[self::USER_FIELD] ?? null;
@@ -256,22 +226,14 @@ class Log extends AbstractEntity
         return !empty($this->level);
     }
 
-    /**
-     * Sets the channel.
-     */
     public function setChannel(string $channel): self
     {
-        if (self::APP_CHANNEL_SHORT === $channel) {
-            $channel = self::APP_CHANNEL_LONG;
-        }
-        $this->channel = \strtolower($channel);
+        $channel = \strtolower($channel);
+        $this->channel = self::APP_CHANNEL_SHORT === $channel ? self::APP_CHANNEL_LONG : $channel;
 
         return $this;
     }
 
-    /**
-     * Sets the context.
-     */
     public function setContext(?array $context): self
     {
         $this->context = $context;
@@ -279,9 +241,6 @@ class Log extends AbstractEntity
         return $this;
     }
 
-    /**
-     * Sets creation date.
-     */
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
@@ -290,8 +249,6 @@ class Log extends AbstractEntity
     }
 
     /**
-     * Sets the extra information.
-     *
      * @param ?array<string, string> $extra
      */
     public function setExtra(?array $extra): self
@@ -301,9 +258,6 @@ class Log extends AbstractEntity
         return $this;
     }
 
-    /**
-     * Sets the level.
-     */
     public function setLevel(string $level): self
     {
         $this->level = \strtolower($level);
@@ -311,9 +265,6 @@ class Log extends AbstractEntity
         return $this;
     }
 
-    /**
-     * Sets the message.
-     */
     public function setMessage(string $message): self
     {
         $this->message = \trim($message);

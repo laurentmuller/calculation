@@ -81,11 +81,11 @@ class UserTable extends AbstractEntityTable
     }
 
     /**
-     * Translate the user's role.
+     * @throws \Twig\Error\Error
      */
-    public function formatRole(string $role): string
+    public function formatRole(string $role, User $user): string
     {
-        return $this->translateRole($role);
+        return $this->twig->render('macros/_cell_user_role.html.twig', ['value' => $this->translateRole($role), 'user' => $user]);
     }
 
     public function getTranslator(): TranslatorInterface

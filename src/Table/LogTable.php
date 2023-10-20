@@ -50,8 +50,6 @@ class LogTable extends AbstractTable implements \Countable
     }
 
     /**
-     * Formats the channel.
-     *
      * @throws \Twig\Error\Error
      */
     public function formatChannel(string $value, Log $log): string
@@ -68,8 +66,6 @@ class LogTable extends AbstractTable implements \Countable
     }
 
     /**
-     * Format the level.
-     *
      * @throws \Twig\Error\Error
      */
     public function formatLevel(string $value, Log $log): string

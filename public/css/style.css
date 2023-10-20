@@ -54,7 +54,7 @@ footer:before {
     transition: left 0.3s ease-in-out
 }
 
-html:not(:has(.sidebar-hide)) footer:before {
+html:has(.sidebar-show) footer:before {
     left: 18rem;
     width: calc(100% - 18rem);
 }

@@ -1,5 +1,11 @@
 /**! compression tag for ftp-deployment */
 
+.toast-plugin {
+    padding: 1.25rem;
+    transition: all 0.35s ease-in-out;
+    /*transition: margin-top 0.35s ease-in-out, margin-left 0.35s ease-in-out;*/
+}
+
 /**
  * positions
  */
@@ -88,30 +94,38 @@ html[data-bs-theme=dark] .toast-plugin .toast.border-info .btn-close,
 html[data-bs-theme=dark] .toast-plugin .toast.border-warning .btn-close {
     filter: inherit;
 }
+
 /*
  * border for dark toast
  */
 html[data-bs-theme=dark] .toast-plugin .toast.border-dark {
     border-color: var(--bs-border-color) !important;
 }
+
 /**
   * margins
   */
-.page-content.sidebar-hide .toast-plugin.top-left,
-.page-content.sidebar-hide .toast-plugin.top-center,
-.page-content.sidebar-hide .toast-plugin.top-right {
-    margin-top: 80px !important;
+.page-content:not(.sidebar-show) .toast-plugin.top-left,
+.page-content:not(.sidebar-show) .toast-plugin.top-center,
+.page-content:not(.sidebar-show) .toast-plugin.top-right {
+    margin-top: 4rem !important;
 }
 
-.page-content:not(.sidebar-hide) .toast-plugin.top-left,
-.page-content:not(.sidebar-hide) .toast-plugin.center-left,
-.page-content:not(.sidebar-hide) .toast-plugin.bottom-left {
-    margin-left: 292px !important;
+.page-content.sidebar-show .toast-plugin.top-left,
+.page-content.sidebar-show .toast-plugin.center-left,
+.page-content.sidebar-show .toast-plugin.bottom-left {
+    margin-left: 18rem !important;
 }
 
-.page-content:not(.sidebar-hide) .modal,
-.page-content:not(.sidebar-hide) .toast-plugin.top-center,
-.page-content:not(.sidebar-hide) .toast-plugin.center-center,
-.page-content:not(.sidebar-hide) .toast-plugin.bottom-center {
-    margin-left: 136px !important;
+.page-content.sidebar-show .modal,
+.page-content.sidebar-show .toast-plugin.top-center,
+.page-content.sidebar-show .toast-plugin.center-center,
+.page-content.sidebar-show .toast-plugin.bottom-center {
+    margin-left: 9rem !important;
+}
+
+.page-content:has(footer) .toast-plugin.bottom-left,
+.page-content:has(footer) .toast-plugin.bottom-center,
+.page-content:has(footer) .toast-plugin.bottom-right {
+    margin-bottom: 2rem !important;
 }

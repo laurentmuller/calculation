@@ -10,8 +10,7 @@
         'dataset': '#flashes',
         'target': '.page-content',
         'subtitle': app_name_version,
-        'close-title': 'common.button_close'|trans,
-        'margin-bottom': user_service.statusBar ? 49 : 20}) %}
+        'close-title': 'common.button_close'|trans}) %}
     {% if is_logout %}
         {% set flash_attributes = flash_attributes|filter((value, key) => key != 'margin-bottom' and key != 'margin-left') %}
     {% endif %}

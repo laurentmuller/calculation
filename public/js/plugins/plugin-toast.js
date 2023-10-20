@@ -196,12 +196,6 @@
             // the toasts width
             containerWidth: '350px',
 
-            // the container margins
-            marginTop: '20px',
-            marginBottom: '20px',
-            marginLeft: '20px',
-            marginRight: '20px',
-
             // the show duration in milliseconds
             timeout: 4000,
 
@@ -337,28 +331,17 @@
             // class
             const className = `toast-container toast-plugin position-fixed ${options.position}`;
 
-            // style
-            const css = {};
-            options.position.split('-').forEach(function (edge) {
-                const key = 'margin-' + edge;
-                const value = options[key.camelize()];
-                if (value) {
-                    css[key] = value;
-                }
-            });
-
             // exist?
             if ($div.length === 0) {
                 const $target = this._getTarget(options);
                 return $('<div/>', {
                     id: id,
-                    css: css,
                     class: className
                 }).appendTo($target);
             }
 
             // update
-            return $div.css(css).attr('class', className);
+            return $div.attr('class', className);
         },
 
         /**
@@ -594,14 +577,11 @@
          */
         _showToast: function ($toast, options) {
             const that = this;
-            if (options.progress && options.timeout > 100) {
+            if (options.progress && options.timeout > 200) {
                 const $progress = $toast.find('.progress-bar');
                 if ($progress.length) {
                     $toast.on('show.bs.toast', function () {
-                        options.start = new Date();
-                        $toast.createInterval(that._updateProgressBar, 250, $progress, options);
-                    }).on('hide.bs.toast', function () {
-                        $toast.removeInterval();
+                        $progress.animate({width: '100%'}, options.timeout - 200);
                     });
                 }
             }
@@ -616,25 +596,6 @@
             }).toast('show');
 
             return that;
-        },
-
-        /**
-         * Update the progress bar.
-         *
-         * @param {jQuery} $progress - The progress bar to update.
-         * @param {Object} options - The toast options.
-         * @private
-         */
-        _updateProgressBar: function ($progress, options) {
-            const elapsed = new Date() - options.start;
-            const percent = Math.ceil(((elapsed / options.timeout) * 100));
-            if (percent > 100) {
-                $progress.parents('.toast').removeInterval();
-                $progress.remove();
-            } else {
-                $progress.css('width', `${percent}%`)
-                    .attr('aria-valuenow', percent);
-            }
         },
 
         /**

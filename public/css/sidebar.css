@@ -20,18 +20,18 @@
     align-items: flex-start;
 }
 
-.navbar-vertical.sidebar-hide {
+.navbar-vertical:not(.sidebar-show) {
     margin-left: -18rem;
 }
 
 /* page-content */
-.page-content {
+.page-content.sidebar-show {
     width: calc(100% - 18rem);
     margin-top: 0.75rem;
     margin-left: 18rem;
 }
 
-.page-content.sidebar-hide {
+.page-content:not(.sidebar-show) {
     width: 100%;
     margin: 0;
 }

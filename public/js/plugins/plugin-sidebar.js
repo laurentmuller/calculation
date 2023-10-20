@@ -104,10 +104,10 @@
             // show button
             const showRemoveTimer = () => that.$showSidebarButton.removeTimer();
             that.$showSidebarButton.on('mouseenter', function (e) {
-                if (that._isSideBarHidden()) {
+                if (!that._isSideBarVisible()) {
                     that.$showSidebarButton.createTimer(function () {
                         showRemoveTimer();
-                        if (that._isSideBarHidden()) {
+                        if (!that._isSideBarVisible()) {
                             that._showSidebar(e);
                         }
                     }, timeout);
@@ -117,10 +117,10 @@
             // hide button
             const hideRemoveTimer = () => that.$hideSidebarButton.removeTimer();
             that.$hideSidebarButton.on('mouseenter', function (e) {
-                if (!that._isSideBarHidden()) {
+                if (that._isSideBarVisible()) {
                     that.$hideSidebarButton.createTimer(function () {
                         hideRemoveTimer();
-                        if (!that._isSideBarHidden()) {
+                        if (that._isSideBarVisible()) {
                             that._hideSidebar(e);
                         }
                     }, timeout);
@@ -157,7 +157,7 @@
          * @private
          */
         _hideSidebar(e) {
-            if (!this._isSideBarHidden()) {
+            if (this._isSideBarVisible()) {
                 this.$element.removeTimer();
                 this._toggleSidebar(e);
             }
@@ -170,7 +170,7 @@
          * @private
          */
         _showSidebar(e) {
-            if (this._isSideBarHidden()) {
+            if (!this._isSideBarVisible()) {
                 this.$element.removeTimer();
                 this._toggleSidebar(e);
             }
@@ -188,11 +188,11 @@
             }
             $.hideDropDownMenus();
             const duration = this.options.duration;
-            this.$element.add(this.$pageContent).toggleClass('sidebar-hide');
-            if (this._isSideBarHidden()) {
-                this.$navbarHorizontal.show(duration);
-            } else {
+            this.$element.add(this.$pageContent).toggleClass('sidebar-show');
+            if (this._isSideBarVisible()) {
                 this.$navbarHorizontal.hide(); // duration
+            } else {
+                this.$navbarHorizontal.show(duration);
             }
             this._saveState();
             this.$element.trigger('toggle.' + Sidebar.NAME);
@@ -290,13 +290,13 @@
         }
 
         /**
-         * Returns if the sidebar is hidden.
+         * Returns if the sidebar is visible.
          *
-         * @return {boolean} true if hidden; false if visible.
+         * @return {boolean} true if visible; false if hidden.
          * @private
          */
-        _isSideBarHidden() {
-            return this.$element.hasClass('sidebar-hide');
+        _isSideBarVisible() {
+            return this.$element.hasClass('sidebar-show');
         }
 
         /**
@@ -311,7 +311,7 @@
             this.$element.find(selector).each(function (index, element) {
                 menus[element.id] = element.classList.contains('show');
             });
-            menus[options.menuHide] = this._isSideBarHidden();
+            menus[options.menuShow] = this._isSideBarVisible();
             return menus;
         }
 
@@ -342,7 +342,7 @@
         // url to save menu states
         url: null,
         // the sidebar key used to save state
-        menuHide: 'MENU_SIDEBAR_HIDE',
+        menuShow: 'MENU_SIDEBAR_SHOW',
         // the menus prefix used to save state
         menuPrefix: 'MENU_SIDEBAR_',
         // show sidebar button selector

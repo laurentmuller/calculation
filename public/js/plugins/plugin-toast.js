@@ -22,7 +22,7 @@
          * @param {string} message - The message.
          * @param {string} [title] - The title.
          * @param {Object} [options] - The options.
-         * @returns {Object} this instance.
+         * @returns {Toaster} this instance.
          */
         notify: function (type, message, title, options) {
             // merge and update options
@@ -49,7 +49,7 @@
                 $container.append($toast);
             }
 
-            //save identifier
+            // save identifier
             this.id = $container.attr('id');
 
             // show
@@ -62,7 +62,7 @@
          * @param {string} message - The message.
          * @param {string} [title] - The title.
          * @param {Object} [options] - The options.
-         * @returns {Object} this instance.
+         * @returns {Toaster} this instance.
          */
         info: function (message, title, options) {
             return this.notify(this.NotificationTypes.INFO, message, title, options);
@@ -74,7 +74,7 @@
          * @param {string} message - The message.
          * @param {string} [title] - The title.
          * @param {Object} [options] - The options.
-         * @returns {Object} this instance.
+         * @returns {Toaster} this instance.
          */
         success: function (message, title, options) {
             return this.notify(this.NotificationTypes.SUCCESS, message, title, options);
@@ -86,7 +86,7 @@
          * @param {string} message - The message.
          * @param {string} [title] - The title.
          * @param {Object} [options] - The options.
-         * @returns {Object} this instance.
+         * @returns {Toaster} this instance.
          */
         warning: function (message, title, options) {
             return this.notify(this.NotificationTypes.WARNING, message, title, options);
@@ -98,7 +98,7 @@
          * @param {string} message - The message.
          * @param {string} [title] - The title.
          * @param {Object} [options] - The options.
-         * @returns {Object} this instance.
+         * @returns {Toaster} this instance.
          */
         danger: function (message, title, options) {
             return this.notify(this.NotificationTypes.DANGER, message, title, options);
@@ -110,7 +110,7 @@
          * @param {string} message - The message.
          * @param {string} [title] - The title.
          * @param {Object} [options] - The options.
-         * @returns {Object} this instance.
+         * @returns {Toaster} this instance.
          */
         primary: function (message, title, options) {
             return this.notify(this.NotificationTypes.PRIMARY, message, title, options);
@@ -122,7 +122,7 @@
          * @param {string} message - The message.
          * @param {string} [title] - The title.
          * @param {Object} [options] - The options.
-         * @returns {Object} this instance.
+         * @returns {Toaster} this instance.
          */
         secondary: function (message, title, options) {
             return this.notify(this.NotificationTypes.SECONDARY, message, title, options);
@@ -134,7 +134,7 @@
          * @param {string} message - The message.
          * @param {string} [title] - The title.
          * @param {Object} [options] - The options.
-         * @returns {Object} this instance.
+         * @returns {Toaster} this instance.
          */
         dark: function (message, title, options) {
             return this.notify(this.NotificationTypes.DARK, message, title, options);
@@ -143,7 +143,7 @@
         /**
          * Remove this toasts DIV container.
          *
-         * @returns {Object} this instance.
+         * @returns {Toaster} this instance.
          */
         removeContainer: function () {
             if (this.id) {
@@ -308,7 +308,7 @@
          * Gets target container.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The target container.
+         * @returns {JQuery} The target container.
          * @private
          */
         _getTarget: function (options) {
@@ -320,7 +320,7 @@
          * Gets or creates the toast container div.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The toasts container.
+         * @returns {JQuery} The toasts container.
          * @private
          */
         _getContainer: function (options) {
@@ -366,7 +366,7 @@
         /**
          * Append the toast header.
          *
-         * @param {jQuery} $parent - the parent to append header to.
+         * @param {JQuery} $parent - the parent to append header to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -389,9 +389,9 @@
         /**
          * Append the header icon.
          *
-         * @param {jQuery} $parent - the parent to append icon to.
+         * @param {JQuery} $parent - the parent to append icon to.
          * @param {Object} options - The options.
-         * @returns {jQuery|undefined} The icon or null if no icon.
+         * @returns {JQuery|undefined} The icon or null if no icon.
          * @private
          */
         _createHeaderIcon: function ($parent, options) {
@@ -437,7 +437,7 @@
         /**
          * Append the header subtitle.
 
-         * @param {jQuery} $parent - the parent to append header subtitle to.
+         * @param {JQuery} $parent - the parent to append header subtitle to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -453,7 +453,7 @@
         /**
          * Append the header close button.
          *
-         * @param {jQuery} $parent - the parent to append close button to.
+         * @param {JQuery} $parent - the parent to append close button to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -480,7 +480,7 @@
         /**
          * Append the header title.
          *
-         * @param {jQuery} $parent - the parent to append header title to.
+         * @param {JQuery} $parent - the parent to append header title to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -495,7 +495,7 @@
         /**
          * Append the toast message.
          *
-         * @param {jQuery} $parent - the parent to append message to.
+         * @param {JQuery} $parent - the parent to append message to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -514,7 +514,7 @@
          * Creates the toast.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The div toast.
+         * @returns {JQuery} The div toast.
          * @private
          */
         _createToast: function (options) {
@@ -538,7 +538,7 @@
         /**
          * Append the bottom progress bar.
          *
-         * @param {jQuery} $parent - the parent to append progress bar to.
+         * @param {JQuery} $parent - the parent to append progress bar to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -570,9 +570,9 @@
         /**
          * Show the toast.
          *
-         * @param {jQuery} $toast - The toast to show.
+         * @param {JQuery} $toast - The toast to show.
          * @param {Object} options - The toast options.
-         * @return {Object} This instance.
+         * @return {Toaster} This instance.
          * @private
          */
         _showToast: function ($toast, options) {

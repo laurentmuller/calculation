@@ -1,4 +1,5 @@
-{% if app.user and not app.request.cookies.get(constant('App\\Controller\\PolicyController::POLICY_ACCEPTED')) %}
+{%- set key = constant('App\\Controller\\PolicyController::POLICY_ACCEPTED') -%}
+{% if app.user and not app.request.cookies.getBoolean(key) %}
 {% from 'macros/_icons.html.twig' import link %}
 <footer class="navbar navbar-footer {{ navigation_class }} py-1 justify-content-md-end fixed-bottom small d-print-none" style="z-index: 1031;">
     <span class="navbar-text pe-0"> {{- 'cookie_banner.message'|trans }}</span>

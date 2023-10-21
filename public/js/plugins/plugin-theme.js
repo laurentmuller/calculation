@@ -122,7 +122,7 @@
 
         /**
          * Gets the dialog
-         * @return {jQuery|null} the dialog, if found; null otherwise.
+         * @return {JQuery|null} the dialog, if found; null otherwise.
          * @private
          */
         _getDialog() {

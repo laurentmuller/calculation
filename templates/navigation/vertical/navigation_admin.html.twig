@@ -1,7 +1,7 @@
 {# admin menu #}
 {% from 'macros/_icons.html.twig' import icon, dropdownSeparator, navItem %}
 {% set id = 'MENU_SIDEBAR_ADMIN' %}
-{% set expanded = app.request.cookies.get(id, false) %}
+{% set expanded = app.request.cookies.getBoolean(id) %}
 {% set toggle_class = expanded ? ' active' : '' %}
 {% set collapse_class = expanded ? ' show' : '' %}
 {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}

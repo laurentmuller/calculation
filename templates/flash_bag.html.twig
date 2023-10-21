@@ -5,22 +5,14 @@
 {%- endmacro %}
 {# add all flash messages #}
 {% apply spaceless %}
-    {% set is_logout = app.request.get('logout', '') == 'success' %}
     {% set flash_attributes = user_service.messageAttributes|merge({
         'dataset': '#flashes',
         'target': '.page-content',
         'subtitle': app_name_version,
         'close-title': 'common.button_close'|trans}) %}
-    {% if is_logout %}
-        {% set flash_attributes = flash_attributes|filter((value, key) => key != 'margin-bottom' and key != 'margin-left') %}
-    {% endif %}
     <div id="flashes" class="d-none"{{ attributes(flash_attributes, 'data-') }}>
         {% for key, messages in app.flashes %}
             {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
         {% endfor %}
-        {# add logout flashbag message if applicable #}
-        {% if is_logout %}
-            {{ _self.addFlashbag('success', 'security.logout.success'|trans({'%app_name%': app_name_version})) }}
-        {% endif %}
     </div>
 {% endapply %}

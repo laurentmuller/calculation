@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\User\UserLoginType;
 use App\Interfaces\RoleInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,8 +30,10 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 #[AsController]
 class SecurityController extends AbstractController
 {
+    private const LOGIN_ROUTE = 'app_login';
+
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Route(path: '/login', name: 'app_login')]
+    #[Route(path: '/login', name: self::LOGIN_ROUTE)]
     public function login(#[CurrentUser] ?User $user, AuthenticationUtils $utils): Response
     {
         if ($user instanceof User) {
@@ -52,5 +55,14 @@ class SecurityController extends AbstractController
     public function logout(): never
     {
         throw new \LogicException('This method should never be reached.');
+    }
+
+    #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
+    #[Route(path: '/logout/success', name: 'app_logout_success')]
+    public function logoutSuccess(): RedirectResponse
+    {
+        $this->successTrans('security.logout.success', ['%app_name%' => $this->getApplicationName()]);
+
+        return $this->redirectToRoute(self::LOGIN_ROUTE);
     }
 }

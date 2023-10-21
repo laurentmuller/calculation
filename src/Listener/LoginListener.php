@@ -43,9 +43,6 @@ class LoginListener implements ServiceSubscriberInterface
     ) {
     }
 
-    /**
-     * Handles the login success event.
-     */
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
         $user = $event->getUser();
@@ -53,9 +50,6 @@ class LoginListener implements ServiceSubscriberInterface
         $this->notify($user);
     }
 
-    /**
-     * Notify the success login to the user.
-     */
     private function notify(UserInterface $user): void
     {
         $params = [
@@ -66,9 +60,6 @@ class LoginListener implements ServiceSubscriberInterface
         $this->successTrans('security.login.success', $params);
     }
 
-    /**
-     * Update the last login date of the given user.
-     */
     private function updateUser(UserInterface $user): void
     {
         if ($user instanceof User) {

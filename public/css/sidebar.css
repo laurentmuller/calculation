@@ -1,13 +1,17 @@
 /**! compression tag for ftp-deployment */
 
+:root {
+    --sidebar-width: 18rem;
+}
+
 /* navigation bar */
 .navbar-vertical {
     top: 0;
     left: 0;
     position: fixed;
     height: 100vh;
-    min-width: 18rem;
-    max-width: 18rem;
+    min-width: var(--sidebar-width);
+    max-width: var(--sidebar-width);
     padding: 0.5rem 1rem 0.1rem;
     transition: margin-left 0.35s ease-in-out;
     overflow-y: auto;
@@ -21,14 +25,14 @@
 }
 
 .navbar-vertical:not(.sidebar-show) {
-    margin-left: -18rem;
+    margin-left: calc(var(--sidebar-width) * -1);
 }
 
 /* page-content */
 .page-content.sidebar-show {
-    width: calc(100% - 18rem);
+    width: calc(100% - var(--sidebar-width));
     margin-top: 0.75rem;
-    margin-left: 18rem;
+    margin-left: var(--sidebar-width);
 }
 
 .page-content:not(.sidebar-show) {

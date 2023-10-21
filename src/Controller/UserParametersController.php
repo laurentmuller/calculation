@@ -47,7 +47,7 @@ class UserParametersController extends AbstractController
 
             // save display mode
             if (isset($data[PropertyServiceInterface::P_DISPLAY_MODE])) {
-                /** @var TableView $display */
+                /** @psalm-var TableView $display */
                 $display = $data[PropertyServiceInterface::P_DISPLAY_MODE];
                 $this->updateCookie($response, TableInterface::PARAM_VIEW, $display, path: $this->getCookiePath());
             }

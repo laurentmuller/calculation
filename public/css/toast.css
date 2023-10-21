@@ -114,7 +114,7 @@ html[data-bs-theme=dark] .toast-plugin .toast.border-dark {
 .page-content.sidebar-show .toast-plugin.top-left,
 .page-content.sidebar-show .toast-plugin.center-left,
 .page-content.sidebar-show .toast-plugin.bottom-left {
-    margin-left: 18rem !important;
+    margin-left: var(--sidebar-width) !important;
 }
 
 .page-content.sidebar-show .modal,

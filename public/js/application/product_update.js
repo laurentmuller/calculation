@@ -192,11 +192,9 @@ function updatePrices() {
         if (percent) {
             $type.val($percent.data('type'));
             $fixed.removeValidation();
-            $percent.validateElement();
         } else {
             $type.val($fixed.data('type'));
             $percent.removeValidation();
-            $fixed.validateElement();
         }
         hideEmptyPrices();
         updatePrices();

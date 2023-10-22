@@ -53,7 +53,7 @@ class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSub
             ->rowClass('mb-0')
             ->label('registration.agreeTerms.label')
             ->updateAttribute('data-error', $this->trans('registration.agreeTerms.error'))
-            ->addCheckboxType();
+            ->addCheckboxType(false);
 
         $helper->listenerPreSetData($this->onPreSetData(...));
     }

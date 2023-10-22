@@ -64,7 +64,6 @@ class ProfileChangePasswordType extends AbstractEntityType
 
         $helper->field('checkPassword')
             ->label('user.change_password.check_password')
-            ->notRequired()
             ->notMapped()
             ->addCheckboxType();
 

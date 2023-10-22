@@ -24,14 +24,15 @@ security:
             login_throttling: ~
 
             form_login:
-                enable_csrf: true
                 login_path: app_login
                 check_path: app_login
+                enable_csrf: true
                 username_parameter: username
                 password_parameter: password
 
             logout:
                 path: app_logout
+                enable_csrf: true
                 target: app_logout_success
 
             remember_me:

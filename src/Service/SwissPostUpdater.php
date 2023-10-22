@@ -104,7 +104,6 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             ->addFileType(self::FILE_EXTENSION);
         $helper->field('overwrite')
             ->help('swisspost.helps.overwrite')
-            ->notRequired()
             ->addCheckboxType();
 
         return $helper->createForm();

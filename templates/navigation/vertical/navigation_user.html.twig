@@ -7,7 +7,7 @@
         {% endapply %}
     </button>
     <ul class="dropdown-menu">
-        <li>{{ dropdownItem(path('app_logout'), 'index.logout', 'sign-out-alt') }}</li>
+        <li>{{ dropdownItem(logout_path(), 'index.logout', 'sign-out-alt') }}</li>
         <li>{{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}</li>
         <li>{{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}</li>
         <li>{{ dropdownSeparator() }}</li>

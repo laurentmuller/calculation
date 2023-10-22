@@ -15,7 +15,6 @@ namespace App\Listener;
 use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Http\Event\SwitchUserEvent;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -37,16 +36,6 @@ class SwitchUserListener implements ServiceSubscriberInterface
     private const EXIT_VALUE = '_exit';
 
     /**
-     * The menu active key.
-     */
-    private const MENU_ACTIVE = 'menu_active';
-
-    /**
-     * The menus prefix.
-     */
-    private const MENU_PREFIX = 'menu_';
-
-    /**
      * The switch user parameter name.
      */
     private const SWITCH_USER = '_switch_user';
@@ -62,9 +51,6 @@ class SwitchUserListener implements ServiceSubscriberInterface
         $original = $this->getOriginalUsername($event);
         $action = $this->getRequestString($request, self::SWITCH_USER);
 
-        // clear menus
-        $this->clearMenus($request);
-
         // get message
         if (self::EXIT_VALUE === $action) {
             $id = 'user.switch.exit.success';
@@ -79,23 +65,6 @@ class SwitchUserListener implements ServiceSubscriberInterface
             '%orignal%' => $original,
             '%name%' => $name,
         ]);
-    }
-
-    private function clearMenus(Request $request): void
-    {
-        if ($request->hasSession()) {
-            $session = $request->getSession();
-            $values = \array_filter($session->all(), $this->filterKey(...), \ARRAY_FILTER_USE_KEY);
-            /** @psalm-var string $key */
-            foreach (\array_keys($values) as $key) {
-                $session->remove($key);
-            }
-        }
-    }
-
-    private function filterKey(string $key): bool
-    {
-        return self::MENU_ACTIVE !== $key && \str_starts_with($key, self::MENU_PREFIX);
     }
 
     private function getOriginalUsername(SwitchUserEvent $event): ?string

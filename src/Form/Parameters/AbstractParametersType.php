@@ -82,7 +82,6 @@ abstract class AbstractParametersType extends AbstractType
         $helper->field($key)
             ->labelClass('checkbox-inline checkbox-switch')
             ->updateAttribute('data-default', $this->getDefaultValue($key))
-            ->notRequired()
             ->addCheckboxType();
     }
 
@@ -110,7 +109,6 @@ abstract class AbstractParametersType extends AbstractType
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->help('parameters.helps.' . $key)
             ->rowClass('mb-1')
-            ->notRequired()
             ->addCheckboxType();
 
         $key = PropertyServiceInterface::P_PANEL_CALCULATION;
@@ -198,7 +196,6 @@ abstract class AbstractParametersType extends AbstractType
             ->label($label)
             ->updateAttribute('data-default', $this->getDefaultValue($key))
             ->help('parameters.helps.' . $key)
-            ->notRequired()
             ->addCheckboxType();
     }
 

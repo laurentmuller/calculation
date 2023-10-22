@@ -62,7 +62,6 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
             ->addPlainType(true);
         $helper->field('overwrite')
             ->rowClass('mt-3')
-            ->notRequired()
             ->addCheckboxType();
     }
 

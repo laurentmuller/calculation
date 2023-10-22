@@ -45,7 +45,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormTypeInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\File;
@@ -69,7 +68,7 @@ class FormHelper
     /**
      * The field identifier.
      */
-    private ?string $field = null;
+    private string $field = '';
 
     /**
      * The help attributes.
@@ -135,7 +134,7 @@ class FormHelper
      */
     public function add(string $type): self
     {
-        $field = (string) $this->field;
+        $field = $this->field;
         $this->builder->add($field, $type, $this->getOptions());
         if ($this->modelTransformer instanceof DataTransformerInterface) {
             $this->builder->get($field)->addModelTransformer($this->modelTransformer);
@@ -158,7 +157,7 @@ class FormHelper
                 'disabled' => $disabled ? 'disabled' : null,
             ])
             ->notMapped()
-            ->addCheckboxType();
+            ->addCheckboxType(false);
     }
 
     /**
@@ -170,19 +169,19 @@ class FormHelper
             ->label('simulate.label')
             ->help('simulate.help')
             ->helpClass('ms-4')
-            ->notRequired()
             ->addCheckboxType();
     }
 
     /**
      * Add a checkbox type to the builder and reset all values to default.
      *
-     * @param bool $switchStyle true to render the checkbox with the toggle switch style
+     * @param bool $not_required true if not required; false if required
      */
-    public function addCheckboxType(bool $switchStyle = true): self
+    public function addCheckboxType(bool $not_required = true): self
     {
-        if ($switchStyle) {
-            $this->labelClass('checkbox-switch');
+        $this->labelClass('checkbox-switch');
+        if ($not_required) {
+            $this->notRequired();
         }
 
         return $this->add(CheckboxType::class);
@@ -446,7 +445,6 @@ class FormHelper
      */
     public function addTrueFalseType(string $true = 'common.value_true', string $false = 'common.value_false', string|bool|null $translation = true): self
     {
-        // 'choice_translation_domain' => false,
         return $this->updateOption('choices', [$true => true, $false => false])
             ->updateOption('choice_translation_domain', $translation)
             ->add(ChoiceType::class);
@@ -540,24 +538,10 @@ class FormHelper
      * @return FormInterface<mixed> the form
      *
      * @see FormBuilderInterface::getForm()
-     * @see FormHelper::createView()
      */
     public function createForm(): FormInterface
     {
         return $this->builder->getForm();
-    }
-
-    /**
-     * Create the form view.
-     *
-     * @return FormView the form view
-     *
-     * @see FormInterface::createView()
-     * @see FormHelper::createForm()
-     */
-    public function createView(FormView $parent = null): FormView
-    {
-        return $this->createForm()->createView($parent);
     }
 
     /**
@@ -658,8 +642,7 @@ class FormHelper
      *
      * @param string   $eventName the event name to listen for
      * @param callable $listener  the event listener to add
-     * @param int      $priority  The priority of the listener. Listeners
-     *                            with a higher priority are called before
+     * @param int      $priority  The priority of the listener. Listeners with a higher priority are called before
      *                            listeners with a lower priority.
      *
      * @psalm-param FormEvents::PRE_SUBMIT|FormEvents::SUBMIT|FormEvents::POST_SUBMIT|FormEvents::PRE_SET_DATA|FormEvents::POST_SET_DATA $eventName
@@ -676,8 +659,7 @@ class FormHelper
      * Adds a post-set-data-submit event listener to this form builder.
      *
      * @param callable $listener the event listener to add
-     * @param int      $priority The priority of the listener. Listeners
-     *                           with a higher priority are called before
+     * @param int      $priority The priority of the listener. Listeners with a higher priority are called before
      *                           listeners with a lower priority.
      *
      * @psalm-param callable(PostSetDataEvent): void $listener
@@ -691,8 +673,7 @@ class FormHelper
      * Adds a post-submit event listener to this form builder.
      *
      * @param callable $listener the event listener to add
-     * @param int      $priority The priority of the listener. Listeners
-     *                           with a higher priority are called before
+     * @param int      $priority The priority of the listener. Listeners with a higher priority are called before
      *                           listeners with a lower priority.
      *
      * @psalm-param callable(PostSubmitEvent): void $listener
@@ -706,8 +687,7 @@ class FormHelper
      * Adds a pre-set-data event listener to this form builder.
      *
      * @param callable $listener the event listener to add
-     * @param int      $priority The priority of the listener. Listeners
-     *                           with a higher priority are called before
+     * @param int      $priority The priority of the listener. Listeners with a higher priority are called before
      *                           listeners with a lower priority.
      *
      * @psalm-param callable(PreSetDataEvent): void $listener
@@ -721,8 +701,7 @@ class FormHelper
      * Adds a pre-submit event listener to this form builder.
      *
      * @param callable $listener the event listener to add
-     * @param int      $priority The priority of the listener. Listeners
-     *                           with a higher priority are called before
+     * @param int      $priority The priority of the listener. Listeners with a higher priority are called before
      *                           listeners with a lower priority.
      *
      * @psalm-param callable(PreSubmitEvent): void $listener
@@ -736,8 +715,7 @@ class FormHelper
      * Adds a submit event listener to this form builder.
      *
      * @param callable $listener the event listener to add
-     * @param int      $priority The priority of the listener. Listeners
-     *                           with a higher priority are called before
+     * @param int      $priority The priority of the listener. Listeners with a higher priority are called before
      *                           listeners with a lower priority.
      *
      * @psalm-param callable(SubmitEvent): void $listener

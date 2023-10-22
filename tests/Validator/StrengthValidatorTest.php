@@ -77,7 +77,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getStrengths')]
-    public function testStrength(string $value, int $strength, bool $violation = true): void
+    public function testStrength(string $value, int $strength, bool $violation): void
     {
         $level = StrengthLevel::tryFrom($strength) ?? StrengthLevel::NONE;
         $constraint = new Strength($level);

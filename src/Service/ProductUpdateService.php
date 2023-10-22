@@ -74,7 +74,6 @@ class ProductUpdateService implements ServiceSubscriberInterface
             ->updateOption('query_builder', static fn (CategoryRepository $repository): QueryBuilder => $repository->getQueryBuilderByGroup(CategoryRepository::FILTER_PRODUCTS))
             ->add(CategoryListType::class);
         $helper->field('allProducts')
-            ->notRequired()
             ->updateRowAttribute('class', 'form-group mb-0')
             ->updateAttribute('data-error', $this->trans('product.update.products_error'))
             ->addCheckboxType();
@@ -105,7 +104,6 @@ class ProductUpdateService implements ServiceSubscriberInterface
         $helper->field('round')
             ->help('product.update.round_help')
             ->helpClass('ms-4')
-            ->notRequired()
             ->addCheckboxType();
         $helper->addCheckboxSimulate()
             ->addCheckboxConfirm($this->getTranslator(), $query->isSimulate());

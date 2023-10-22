@@ -277,7 +277,6 @@ class TestController extends AbstractController
             ->addTextType();
         foreach ($options as $option) {
             $helper->field($option)
-                ->notRequired()
                 ->addCheckboxType();
         }
         $helper->field('level')

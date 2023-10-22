@@ -137,7 +137,6 @@ class ApplicationParametersType extends AbstractParametersType
                 ->label("password.$option")
                 ->updateAttribute('data-default', $this->getDefaultValue($option))
                 ->rowClass('mb-1')
-                ->notRequired()
                 ->addCheckboxType();
         }
     }

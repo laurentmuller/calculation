@@ -19,6 +19,8 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
  * Extends logger trait wih the subscribed service.
  *
  * @property \Psr\Container\ContainerInterface $container
+ *
+ * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait LoggerAwareTrait
 {

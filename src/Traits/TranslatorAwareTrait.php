@@ -19,6 +19,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Extends translator trait wih the subscribed service.
  *
  * @property \Psr\Container\ContainerInterface $container
+ *
+ * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait TranslatorAwareTrait
 {

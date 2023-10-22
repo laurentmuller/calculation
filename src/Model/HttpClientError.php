@@ -26,9 +26,9 @@ class HttpClientError implements \JsonSerializable, \Stringable
      *
      * @param int             $code      the error code
      * @param string          $message   the error message
-     * @param \Exception|null $exception the optional source exception
+     * @param \Throwable|null $exception the optional source exception
      */
-    public function __construct(private readonly int $code, private string $message, private readonly ?\Exception $exception = null)
+    public function __construct(private readonly int $code, private string $message, private readonly ?\Throwable $exception = null)
     {
     }
 
@@ -42,7 +42,7 @@ class HttpClientError implements \JsonSerializable, \Stringable
         return $this->code;
     }
 
-    public function getException(): ?\Exception
+    public function getException(): ?\Throwable
     {
         return $this->exception;
     }

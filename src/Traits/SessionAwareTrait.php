@@ -21,6 +21,8 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
  * Trait to get or set values within session.
  *
  * @property \Psr\Container\ContainerInterface $container
+ *
+ * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait SessionAwareTrait
 {

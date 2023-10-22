@@ -21,6 +21,8 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
  * Trait to check grant actions.
  *
  * @property \Psr\Container\ContainerInterface $container
+ *
+ * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait AuthorizationCheckerAwareTrait
 {

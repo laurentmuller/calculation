@@ -57,7 +57,7 @@ class GlobalMarginController extends AbstractEntityController
 
         /** @var GlobalMarginRepository $repository */
         $repository = $this->repository;
-        $existingMargins = $repository->findAllByMinimum();
+        $existingMargins = $repository->findByMinimum();
         $root = new GlobalMargins($existingMargins);
         $form = $this->createForm(GlobalMarginsType::class, $root);
         if ($this->handleRequestForm($request, $form)) {

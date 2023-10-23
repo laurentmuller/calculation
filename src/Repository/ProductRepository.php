@@ -32,35 +32,6 @@ class ProductRepository extends AbstractCategoryItemRepository
     }
 
     /**
-     * Gets all products order by description, group and category.
-     *
-     * @return Product[]
-     */
-    public function findAllByDescription(): array
-    {
-        return $this->findBy([], ['description' => Criteria::ASC]);
-    }
-
-    /**
-     * Gets all products order by group, category and description.
-     *
-     * @return Product[]
-     */
-    public function findAllByGroup(): array
-    {
-        $groupField = $this->getSortField('group.code');
-        $categoryField = $this->getSortField('category.code');
-        $descriptionField = $this->getSortField('description');
-
-        return $this->createDefaultQueryBuilder()
-            ->orderBy($groupField)
-            ->addOrderBy($categoryField)
-            ->addOrderBy($descriptionField)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
      * Gets all products for the given category.
      *
      * @param Category $category the category to search products for
@@ -78,7 +49,37 @@ class ProductRepository extends AbstractCategoryItemRepository
     }
 
     /**
-     * Gets the default query builder with all products order by the category code, the group code and the product description.
+     * Gets all products order by description.
+     *
+     * @return Product[]
+     */
+    public function findByDescription(): array
+    {
+        return $this->findBy([], ['description' => Criteria::ASC]);
+    }
+
+    /**
+     * Gets all products order by group, category and description.
+     *
+     * @return Product[]
+     */
+    public function findByGroup(): array
+    {
+        $groupField = $this->getSortField('group.code');
+        $categoryField = $this->getSortField('category.code');
+        $descriptionField = $this->getSortField('description');
+
+        return $this->createDefaultQueryBuilder()
+            ->orderBy($groupField)
+            ->addOrderBy($categoryField)
+            ->addOrderBy($descriptionField)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Gets the default query builder with all products order by the category code, the group code and the
+     * product description.
      */
     public function getQueryBuilderByCategory(): QueryBuilder
     {

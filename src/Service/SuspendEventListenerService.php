@@ -78,6 +78,21 @@ class SuspendEventListenerService
     }
 
     /**
+     * Disabled listeners, call the given function and enabled listeners.
+     *
+     * @param callable $callback the function to call while listeners are disabled
+     */
+    public function suspendListeners(callable $callback): void
+    {
+        try {
+            $this->disableListeners();
+            \call_user_func($callback);
+        } finally {
+            $this->enableListeners();
+        }
+    }
+
+    /**
      * Update listeners enablement.
      */
     private function updateListeners(bool $enabled): void

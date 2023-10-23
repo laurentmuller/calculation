@@ -12,8 +12,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Form\CalculationState\CalculationStateListType;
 use App\Interfaces\RoleInterface;
+use App\Model\CalculationArchiveQuery;
+use App\Repository\CalculationStateRepository;
 use App\Service\CalculationArchiveService;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -41,9 +46,9 @@ class CalculationArchiveController extends AbstractController
             return $this->redirectToHomePage('archive.not_editable_empty');
         }
 
-        $application = $this->getApplication();
         $query = $service->createQuery();
-        $form = $service->createForm($query);
+        $application = $this->getApplication();
+        $form = $this->createQueryForm($service, $query);
         if ($this->handleRequestForm($request, $form)) {
             $service->saveQuery($query);
             $result = $service->update($query);
@@ -61,5 +66,34 @@ class CalculationArchiveController extends AbstractController
             'last_update' => $application->getLastArchiveCalculations(),
             'form' => $form,
         ]);
+    }
+
+    private function createQueryForm(CalculationArchiveService $service, CalculationArchiveQuery $query): FormInterface
+    {
+        $helper = $this->createFormHelper('archive.fields.', $query);
+        $helper->field('date')
+            ->updateAttributes([
+                'min' => $service->getDateMinConstraint(),
+                'max' => $service->getDateMaxConstraint(),
+            ])
+            ->addDateType();
+        $helper->field('sources')
+            ->updateOptions([
+                'multiple' => true,
+                'expanded' => true,
+                'group_by' => fn () => null,
+                'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getEditableQueryBuilder(),
+            ])
+            ->labelClass('checkbox-inline checkbox-switch')
+            ->add(CalculationStateListType::class);
+        $helper->field('target')
+            ->updateOptions([
+                'group_by' => fn () => null,
+                'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getNotEditableQueryBuilder(),
+            ])
+            ->add(CalculationStateListType::class);
+        $helper->addSimulateAndConfirmType($this->getTranslator(), $query->isSimulate());
+
+        return $helper->createForm();
     }
 }

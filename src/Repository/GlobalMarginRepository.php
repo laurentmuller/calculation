@@ -35,7 +35,7 @@ class GlobalMarginRepository extends AbstractRepository
      *
      * @return GlobalMargin[]
      */
-    public function findAllByMinimum(): array
+    public function findByMinimum(): array
     {
         return $this->findBy([], ['minimum' => Criteria::ASC]);
     }

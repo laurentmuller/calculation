@@ -14,8 +14,6 @@ namespace App\Service;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
-use App\Form\CalculationState\CalculationStateListType;
-use App\Form\FormHelper;
 use App\Model\CalculationArchiveQuery;
 use App\Model\CalculationArchiveResult;
 use App\Repository\CalculationRepository;
@@ -26,9 +24,6 @@ use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -49,50 +44,8 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     public function __construct(
         private readonly CalculationRepository $calculationRepository,
         private readonly CalculationStateRepository $stateRepository,
-        private readonly FormFactoryInterface $factory,
         private readonly SuspendEventListenerService $service,
     ) {
-    }
-
-    /**
-     * Create the edit form.
-     *
-     * @return FormInterface<mixed>
-     */
-    public function createForm(CalculationArchiveQuery $query): FormInterface
-    {
-        $builder = $this->factory->createBuilder(FormType::class, $query);
-        $helper = new FormHelper($builder, 'archive.fields.');
-        $sources = $this->getSources(false);
-
-        $helper->field('date')
-            ->updateAttributes([
-                'min' => $this->getDateMinConstraint($sources),
-                'max' => $this->getDateMaxConstraint($sources),
-            ])
-            ->addDateType();
-
-        $helper->field('sources')
-            ->updateOptions([
-                'multiple' => true,
-                'expanded' => true,
-                'group_by' => fn () => null,
-                'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getEditableQueryBuilder(),
-            ])
-            ->labelClass('checkbox-inline checkbox-switch')
-            ->add(CalculationStateListType::class);
-
-        $helper->field('target')
-            ->updateOptions([
-                'group_by' => fn () => null,
-                'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getNotEditableQueryBuilder(),
-            ])
-            ->add(CalculationStateListType::class);
-
-        $helper->addCheckboxSimulate()
-            ->addCheckboxConfirm($this->getTranslator(), $query->isSimulate());
-
-        return $helper->createForm();
     }
 
     /**
@@ -109,7 +62,29 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * Returns a value indicating if one or ore calculation states are editable.
+     * Gets the maximum allowed date or null if none.
+     */
+    public function getDateMaxConstraint(): ?string
+    {
+        $sources = $this->getSources(false);
+        $date = $this->getDateMax($sources);
+
+        return DateUtils::formatFormDate($date?->sub(new \DateInterval('P1M')));
+    }
+
+    /**
+     * Gets the minimum allowed date or null if none.
+     */
+    public function getDateMinConstraint(): ?string
+    {
+        $sources = $this->getSources(false);
+        $date = $this->getDateMin($sources);
+
+        return DateUtils::formatFormDate($date);
+    }
+
+    /**
+     * Returns a value indicating if one or more calculation states are editable.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -119,7 +94,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * Returns a value indicating if one or ore calculation states are not editable.
+     * Returns a value indicating if one or more calculation states are not editable.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -148,7 +123,6 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     {
         $date = $query->getDate();
         $target = $query->getTarget();
-        $simulate = $query->isSimulate();
         $sources = $query->getSources();
 
         $result = new CalculationArchiveResult();
@@ -156,25 +130,25 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         foreach ($calculations as $calculation) {
             $oldState = $calculation->getState();
             if ($oldState instanceof CalculationState && $oldState !== $target) {
-                $result->addCalculation($oldState, $calculation);
                 $calculation->setState($target);
+                $result->addCalculation($oldState, $calculation);
             }
         }
-        if (!$simulate && $result->isValid()) {
-            try {
-                $this->service->disableListeners();
-                $this->calculationRepository->flush();
-                $this->logResult($query, $result);
-            } finally {
-                $this->service->enableListeners();
-            }
+
+        if ($query->isSimulate() || !$result->isValid()) {
+            return $result;
         }
+
+        $this->service->suspendListeners(function () use ($query, $result): void {
+            $this->calculationRepository->flush();
+            $this->logResult($query, $result);
+        });
 
         return $result;
     }
 
     /**
-     * @param CalculationState[] $sources
+     * @psalm-param CalculationState[] $sources
      */
     private function createQueryBuilder(array $sources, \DateTimeInterface $date = null): QueryBuilder
     {
@@ -195,9 +169,9 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     /**
      * Gets the calculations to archive.
      *
-     * @param CalculationState[] $sources
+     * @psalm-param CalculationState[] $sources
      *
-     * @return Calculation[]
+     * @psalm-return Calculation[]
      */
     private function getCalculations(\DateTimeInterface $date, array $sources): array
     {
@@ -205,7 +179,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             return [];
         }
 
-        /** @psalm-var \Doctrine\ORM\Query<int, Calculation> $query */
+        /** @psalm-var \Doctrine\ORM\Query<array-key, Calculation> $query */
         $query = $this->createQueryBuilder($sources, $date)
             ->getQuery();
 
@@ -218,11 +192,13 @@ class CalculationArchiveService implements ServiceSubscriberInterface
         if ($date instanceof \DateTimeInterface) {
             return $date;
         }
+
         $sources = $this->getSources(false);
         $minDate = $this->getDateMin($sources);
         if (!$minDate instanceof \DateTime) {
             return (new \DateTime())->sub(new \DateInterval('P6M'));
         }
+
         $interval = new \DateInterval('P1M');
         $minDate->add($interval);
         $maxDate = $this->getDateMax($sources);
@@ -234,7 +210,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * @param CalculationState[] $sources
+     * @psalm-param CalculationState[] $sources
      */
     private function getDateMax(array $sources): ?\DateTime
     {
@@ -254,17 +230,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * @param CalculationState[] $sources
-     */
-    private function getDateMaxConstraint(array $sources): ?string
-    {
-        $date = $this->getDateMax($sources);
-
-        return DateUtils::formatFormDate($date?->sub(new \DateInterval('P1M')));
-    }
-
-    /**
-     * @param CalculationState[] $sources
+     * @psalm-param CalculationState[] $sources
      */
     private function getDateMin(array $sources): ?\DateTime
     {
@@ -284,17 +250,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
     }
 
     /**
-     * @param CalculationState[] $sources
-     */
-    private function getDateMinConstraint(array $sources): ?string
-    {
-        $date = $this->getDateMin($sources);
-
-        return DateUtils::formatFormDate($date);
-    }
-
-    /**
-     * @return CalculationState[]
+     * @psalm-return CalculationState[]
      */
     private function getSources(bool $useSession): array
     {
@@ -303,15 +259,18 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             ->getEditableQueryBuilder()
             ->getQuery()
             ->getResult();
-        if ($useSession) {
-            /** @var int[] $ids */
-            $ids = $this->getSessionValue(self::KEY_SOURCES, []);
-            if ([] !== $ids) {
-                return \array_filter($sources, fn (CalculationState $state): bool => \in_array($state->getId(), $ids, true));
-            }
+
+        if (!$useSession) {
+            return $sources;
         }
 
-        return $sources;
+        /** @var int[] $ids */
+        $ids = $this->getSessionValue(self::KEY_SOURCES, []);
+        if ([] === $ids) {
+            return $sources;
+        }
+
+        return \array_filter($sources, fn (CalculationState $state): bool => \in_array($state->getId(), $ids, true));
     }
 
     private function getTarget(): ?CalculationState
@@ -330,7 +289,7 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             $this->trans('archive.fields.date') => $query->getDateFormatted(),
             $this->trans('archive.fields.sources') => $query->getSourcesCode(),
             $this->trans('archive.fields.target') => $query->getTargetCode(),
-            $this->trans('archive.result.calculations') => $result->getTotal(),
+            $this->trans('archive.result.calculations') => $result->count(),
         ];
         $message = $this->trans('archive.title');
         $this->logInfo($message, $context);

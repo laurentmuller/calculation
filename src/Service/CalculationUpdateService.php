@@ -14,8 +14,6 @@ namespace App\Service;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
-use App\Form\CalculationState\CalculationStateListType;
-use App\Form\FormHelper;
 use App\Model\CalculationUpdateQuery;
 use App\Model\CalculationUpdateResult;
 use App\Repository\CalculationRepository;
@@ -26,10 +24,6 @@ use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -50,41 +44,9 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     public function __construct(
         private readonly CalculationRepository $calculationRepository,
         private readonly CalculationStateRepository $stateRepository,
-        private readonly FormFactoryInterface $factory,
         private readonly SuspendEventListenerService $listenerService,
         private readonly CalculationService $calculationService,
     ) {
-    }
-
-    /**
-     * Create the edit form.
-     *
-     * @return FormInterface<mixed>
-     */
-    public function createForm(CalculationUpdateQuery $query): FormInterface
-    {
-        $builder = $this->factory->createBuilder(FormType::class, $query);
-        $helper = new FormHelper($builder, 'calculation.update.');
-        $helper->field('dateFrom')
-            ->addDateType();
-
-        $helper->field('dateTo')
-            ->addDateType();
-
-        $helper->field('states')
-            ->updateOptions([
-                'multiple' => true,
-                'expanded' => true,
-                'group_by' => fn () => null,
-                'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getEditableQueryBuilder(),
-            ])
-            ->labelClass('checkbox-inline checkbox-switch')
-            ->add(CalculationStateListType::class);
-
-        $helper->addCheckboxSimulate()
-            ->addCheckboxConfirm($this->getTranslator(), $query->isSimulate());
-
-        return $helper->createForm();
     }
 
     public function createQuery(): CalculationUpdateQuery
@@ -134,15 +96,14 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             $result->addCalculation($oldTotal, $calculation);
         }
 
-        if (!$query->isSimulate() && $result->isValid()) {
-            try {
-                $this->listenerService->disableListeners();
-                $this->calculationRepository->flush();
-                $this->logResult($query, $result);
-            } finally {
-                $this->listenerService->enableListeners();
-            }
+        if ($query->isSimulate() || !$result->isValid()) {
+            return $result;
         }
+
+        $this->listenerService->suspendListeners(function () use ($query, $result): void {
+            $this->calculationRepository->flush();
+            $this->logResult($query, $result);
+        });
 
         return $result;
     }

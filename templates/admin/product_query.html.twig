@@ -47,7 +47,7 @@
 {%- set percent_attr = is_percent ? {} : {'disabled': 'disabled'} -%}
 {%- set fixed_attr = is_percent ? {'disabled': 'disabled'} : {} -%}
 {%- set category_id = form.category.vars.value|default(0) -%}
-{%- set submit_text = 'update.submit_text' -%}
+{%- set submit_text = 'product.update.submit' -%}
 {# body #}
 {% block card_body %}
 {{ form_row(form.category) }}

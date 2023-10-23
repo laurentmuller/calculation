@@ -38,11 +38,4 @@ trait TranslatorAwareTrait
 
         return $this->translator;
     }
-
-    public function setTranslator(?TranslatorInterface $translator): static
-    {
-        $this->translator = $translator;
-
-        return $this;
-    }
 }

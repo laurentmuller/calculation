@@ -85,7 +85,7 @@ class CustomerController extends AbstractEntityController
     #[Route(path: '/excel', name: 'customer_excel')]
     public function excel(CustomerRepository $repository): SpreadsheetResponse
     {
-        $entities = $repository->findAllByNameAndCompany();
+        $entities = $repository->findByNameAndCompany();
         if ([] === $entities) {
             $message = $this->trans('customer.list.empty');
             throw $this->createNotFoundException($message);
@@ -103,7 +103,7 @@ class CustomerController extends AbstractEntityController
     #[Route(path: '/pdf', name: 'customer_pdf')]
     public function pdf(Request $request, CustomerRepository $repository): PdfResponse
     {
-        $entities = $repository->findAllByNameAndCompany();
+        $entities = $repository->findByNameAndCompany();
         if ([] === $entities) {
             $message = $this->trans('customer.list.empty');
             throw $this->createNotFoundException($message);

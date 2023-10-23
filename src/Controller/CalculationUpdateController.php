@@ -12,9 +12,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Form\CalculationState\CalculationStateListType;
 use App\Interfaces\RoleInterface;
+use App\Model\CalculationUpdateQuery;
+use App\Repository\CalculationStateRepository;
 use App\Service\CalculationUpdateService;
 use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -35,9 +40,9 @@ class CalculationUpdateController extends AbstractController
     #[Route(path: '/update', name: 'admin_update')]
     public function update(Request $request, CalculationUpdateService $service): Response
     {
-        $application = $this->getApplication();
         $query = $service->createQuery();
-        $form = $service->createForm($query);
+        $application = $this->getApplication();
+        $form = $this->createQueryForm($query);
         if ($this->handleRequestForm($request, $form)) {
             $service->saveQuery($query);
             $result = $service->update($query);
@@ -55,5 +60,26 @@ class CalculationUpdateController extends AbstractController
             'last_update' => $application->getLastUpdateCalculations(),
             'form' => $form,
         ]);
+    }
+
+    private function createQueryForm(CalculationUpdateQuery $query): FormInterface
+    {
+        $helper = $this->createFormHelper('calculation.update.', $query);
+        $helper->field('dateFrom')
+            ->addDateType();
+        $helper->field('dateTo')
+            ->addDateType();
+        $helper->field('states')
+            ->updateOptions([
+                'multiple' => true,
+                'expanded' => true,
+                'group_by' => fn () => null,
+                'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getEditableQueryBuilder(),
+            ])
+            ->labelClass('checkbox-inline checkbox-switch')
+            ->add(CalculationStateListType::class);
+        $helper->addSimulateAndConfirmType($this->getTranslator(), $query->isSimulate());
+
+        return $helper->createForm();
     }
 }

@@ -56,8 +56,7 @@ class GeneratorController extends AbstractController
                 'max' => 20,
                 'step' => 1,
             ])->addNumberType(0);
-        $helper->addCheckboxSimulate()
-            ->addCheckboxConfirm($this->getTranslator(), $data['simulate']);
+        $helper->addSimulateAndConfirmType($this->getTranslator(), $data['simulate']);
 
         return $this->render('admin/generate.html.twig', [
             'form' => $helper->createForm(),

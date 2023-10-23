@@ -951,7 +951,7 @@ product:
     round: Arrondir au 5 centimes
     round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
     type: Type de mise à jour
-    submit_text: Mettre à jour
+    submit: Mettre à jour
 profile:
   change_password:
     title: Modifier le mot de passe
@@ -1277,15 +1277,6 @@ translator:
   to_label: Vers
   translate_error: Une erreur s'est produite lors de la traduction du texte.
   translate_success: La traduction du texte <b>%from%</b> en <b>%to%</b> avec le service <b>%service%</b> a été réalisée avec succès.
-update:
-  description: Cet outil permet de mettre à jour les objets sélectionnés avec des données aléatoires.
-  fields:
-    entity: Objet à mettre à jour
-  help:
-    calculation: Remplace le nom du client, la description et le statut.
-    customer: Remplace le nom, le prénom, la société et l'e-mail.
-  submit_text: Mettre à jour
-  title: Mise à jour des données
 user:
   add:
     title: Nouvel utilisateur

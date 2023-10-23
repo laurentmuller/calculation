@@ -58,7 +58,6 @@ abstract class AbstractController extends BaseController
 
     // services
     private ?UrlGeneratorService $generatorService = null;
-    private ?TranslatorInterface $translator = null;
     private ?UserService $userService = null;
 
     /**

@@ -53,7 +53,7 @@ class GroupRepository extends AbstractRepository
      *
      * @return Group[]
      */
-    public function findAllByCode(): array
+    public function findByCode(): array
     {
         return $this->findBy([], ['code' => Criteria::ASC]);
     }

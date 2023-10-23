@@ -469,7 +469,7 @@ class TestController extends AbstractController
         if ($request->isXmlHttpRequest()) {
             $count = 0;
             $nodes = [];
-            $groups = $repository->findAllByCode();
+            $groups = $repository->findByCode();
             foreach ($groups as $group) {
                 $node = [
                     'id' => \sprintf('group-%d', (int) $group->getId()),
@@ -572,7 +572,7 @@ class TestController extends AbstractController
     {
         /** @psalm-var ProductRepository $repository */
         $repository = $manager->getRepository(Product::class);
-        $products = $repository->findAllByGroup();
+        $products = $repository->findByGroup();
         $fn = static fn (Product $p): string => \sprintf('%s - %s', $p->getGroupCode(), $p->getCategoryCode());
 
         return $this->groupBy($products, $fn);

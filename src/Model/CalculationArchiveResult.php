@@ -20,12 +20,11 @@ use App\Entity\CalculationState;
  *
  * @psalm-type ResultsType = array<string, array{state: CalculationState, calculations: array<Calculation>}>
  */
-class CalculationArchiveResult
+class CalculationArchiveResult implements \Countable
 {
+    private int $count = 0;
     /** @psalm-var ResultsType */
     private array $results = [];
-
-    private int $total = 0;
 
     /**
      * Adds the given calculation to the results.
@@ -38,9 +37,14 @@ class CalculationArchiveResult
         $key = (string) $state->getCode();
         $this->results[$key]['state'] = $state;
         $this->results[$key]['calculations'][] = $calculation;
-        ++$this->total;
+        ++$this->count;
 
         return $this;
+    }
+
+    public function count(): int
+    {
+        return $this->count;
     }
 
     /**
@@ -53,20 +57,15 @@ class CalculationArchiveResult
         return $this->results;
     }
 
-    public function getTotal(): int
-    {
-        return $this->total;
-    }
-
     public function isValid(): bool
     {
-        return $this->total > 0;
+        return $this->count > 0;
     }
 
     public function reset(): self
     {
         $this->results = [];
-        $this->total = 0;
+        $this->count = 0;
 
         return $this;
     }

@@ -53,7 +53,7 @@ class CustomerRepository extends AbstractRepository
      *
      * @return Customer[]
      */
-    public function findAllByNameAndCompany(): array
+    public function findByNameAndCompany(): array
     {
         $fields = $this->concat(self::DEFAULT_ALIAS, self::NAME_COMPANY_FIELDS, 'ZZZ');
 

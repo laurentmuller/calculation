@@ -15,43 +15,13 @@ namespace App\Tests\DataTransformer;
 use App\Entity\Group;
 use App\Form\DataTransformer\EntityTransformer;
 use App\Repository\GroupRepository;
-use App\Tests\DatabaseTrait;
-use App\Tests\ServiceTrait;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityTransformer::class)]
 class EntityTransformerTest extends KernelTestCase
 {
-    use DatabaseTrait;
-    use ServiceTrait;
-
-    private ?Group $group = null;
-    private ?GroupRepository $repository = null;
-    /** @psalm-var EntityTransformer<Group>|null */
-    private ?EntityTransformer $transformer = null;
-
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->group = $this->createGroup();
-        $this->transformer = new EntityTransformer($this->getRepository());
-    }
-
-    /**
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
-    protected function tearDown(): void
-    {
-        $this->group = $this->deleteGroup();
-        $this->transformer = null;
-        $this->repository = null;
-        parent::tearDown();
-    }
-
     public static function getReverseTransformValues(): \Generator
     {
         yield [null, null];
@@ -64,100 +34,111 @@ class EntityTransformerTest extends KernelTestCase
     public static function getTransformValues(): \Generator
     {
         yield [null, null];
+        yield ['', null, true];
         yield [true, null, true];
+        yield ['fake', null, true];
     }
 
     /**
      * @psalm-param string|int|null $value
+     *
+     * @throws Exception
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getReverseTransformValues')]
     public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
+        $group = null;
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
+        } else {
+            $group = $this->createGroup();
         }
-        self::assertNotNull($this->transformer);
-        $actual = $this->transformer->reverseTransform($value);
-        self::assertSame($expected, $actual);
+        $transformer = $this->createTransformer($group);
+        $actual = $transformer->reverseTransform($value);
+        $this->assertSame($expected, $actual);
         if ($exception) {
-            self::fail('A exception must be raised.');
+            $this->fail('A exception must be raised.');
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function testReverseTransformGroup(): void
     {
-        self::assertNotNull($this->group);
-        self::assertNotNull($this->transformer);
-        $actual = $this->transformer->reverseTransform($this->group->getId());
-        self::assertSame($this->group, $actual);
+        $group = $this->createGroup();
+        $transformer = $this->createTransformer($group);
+        $value = $group->getId();
+        $actual = $transformer->reverseTransform($value);
+        $this->assertSame($group, $actual);
     }
 
     /**
      * @psalm-param \App\Entity\AbstractEntity|null $value
+     *
+     * @throws Exception
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]
     public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
+        $group = null;
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
+        } else {
+            $group = $this->createGroup();
         }
-        self::assertNotNull($this->transformer);
-        $actual = $this->transformer->transform($value);
-        self::assertSame($expected, $actual);
+        $transformer = $this->createTransformer($group);
+        $actual = $transformer->transform($value);
+        $this->assertSame($expected, $actual);
         if ($exception) {
-            self::fail('A exception must be raised.');
+            $this->fail('A exception must be raised.');
         }
-    }
-
-    public function testTransformGroup(): void
-    {
-        self::assertNotNull($this->group);
-        self::assertNotNull($this->transformer);
-        $actual = $this->transformer->transform($this->group);
-        self::assertSame($this->group->getId(), $actual);
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws Exception
      */
+    public function testTransformGroup(): void
+    {
+        $group = $this->createGroup();
+        $transformer = $this->createTransformer($group);
+        $actual = $transformer->transform($group);
+        $expected = $group->getId();
+        $this->assertSame($expected, $actual);
+    }
+
     private function createGroup(): Group
     {
         $group = new Group();
-        $group->setCode('Test');
-
-        $manager = $this->getManager();
-        $manager->persist($group);
-        $manager->flush();
+        $property = new \ReflectionProperty(Group::class, 'id');
+        $property->setValue($group, 1);
 
         return $group;
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws Exception
      */
-    private function deleteGroup(): null
+    private function createRepository(Group $group = null): GroupRepository
     {
-        if ($this->group instanceof Group) {
-            $manager = $this->getManager();
-            $manager->remove($this->group);
-            $manager->flush();
-            $this->group = null;
-        }
+        $repository = $this->createMock(GroupRepository::class);
+        $repository->method('find')
+            ->willReturn($group);
+        $repository->method('getClassName')
+            ->willReturn(Group::class);
 
-        return $this->group;
+        return $repository;
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @psalm-return EntityTransformer<Group>
+     *
+     * @throws Exception
      */
-    private function getRepository(): GroupRepository
+    private function createTransformer(Group $group = null): EntityTransformer
     {
-        if (!$this->repository instanceof GroupRepository) {
-            /** @psalm-var GroupRepository $repository */
-            $repository = $this->getManager()->getRepository(Group::class);
-            $this->repository = $repository;
-        }
+        $repository = $this->createRepository($group);
 
-        return $this->repository;
+        return new EntityTransformer($repository);
     }
 }

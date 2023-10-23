@@ -36,7 +36,7 @@
                 <th class="text-border">{{ 'archive.result.total'|trans }}</th>
                 <th class="text-end">
                     <a href="#" class="stretched-link" title="{{ 'archive.result.show'|trans }}" data-bs-toggle="modal" data-bs-target="#modal-result">
-                        <i class="fa-solid fa-eye me-1"></i>{{ result.total|integer }}
+                        <i class="fa-solid fa-eye me-1"></i>{{ result.count|integer }}
                     </a>
                 </th>
             </tr>
@@ -82,7 +82,7 @@
                             <tfoot>
                                 <tr>
                                     <th class="text-border" colspan="4">{{ 'archive.result.total'|trans }}</th>
-                                    <th class="text-end" colspan="2">{{ 'counters.calculations'|trans({'count': result.total}) }}</th>
+                                    <th class="text-end" colspan="2">{{ 'counters.calculations'|trans({'count': result.count}) }}</th>
                                 </tr>
                             </tfoot>
                         </table>

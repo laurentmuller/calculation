@@ -111,10 +111,6 @@
 }
 
 /* scrollbar */
-.navbar-vertical {
-    overflow: auto;
-}
-
 .navbar-vertical::-webkit-scrollbar {
     visibility: hidden;
     -webkit-appearance: none;

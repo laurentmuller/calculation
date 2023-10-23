@@ -144,43 +144,14 @@ class FormHelper
     }
 
     /**
-     * Add a checkbox input to confirm an operation.
-     *
-     * @param bool $disabled true if the checkbox must be disabled
-     */
-    public function addCheckboxConfirm(?TranslatorInterface $translator, bool $disabled): self
-    {
-        return $this->field('confirm')
-            ->label('simulate.confirm')
-            ->updateAttributes([
-                'data-error' => $translator?->trans('simulate.error'),
-                'disabled' => $disabled ? 'disabled' : null,
-            ])
-            ->notMapped()
-            ->addCheckboxType(false);
-    }
-
-    /**
-     * Add a checkbox input to simulate an operation.
-     */
-    public function addCheckboxSimulate(): self
-    {
-        return $this->field('simulate')
-            ->label('simulate.label')
-            ->help('simulate.help')
-            ->helpClass('ms-4')
-            ->addCheckboxType();
-    }
-
-    /**
      * Add a checkbox type to the builder and reset all values to default.
      *
-     * @param bool $not_required true if not required; false if required
+     * @param bool $notRequired true if not required; false if required
      */
-    public function addCheckboxType(bool $not_required = true): self
+    public function addCheckboxType(bool $notRequired = true): self
     {
         $this->labelClass('checkbox-switch');
-        if ($not_required) {
+        if ($notRequired) {
             $this->notRequired();
         }
 
@@ -201,13 +172,13 @@ class FormHelper
     /**
      * Add a collection type to the builder with the given entry type and reset all values to default.
      *
-     * @param string $entryType    the entry type class, must be a subclass of FormTypeInterface class
-     * @param bool   $allow_add    true to allow user to add a new entry
-     * @param bool   $allow_delete true to allow user to delete an entry
+     * @param string $entryType   the entry type class, must be a subclass of FormTypeInterface class
+     * @param bool   $allowAdd    true to allow user to add a new entry
+     * @param bool   $allowDelete true to allow user to delete an entry
      *
      * @throws UnexpectedValueException if the entry type is not an instance of FormTypeInterface class
      */
-    public function addCollectionType(string $entryType, bool $allow_add = true, bool $allow_delete = true): self
+    public function addCollectionType(string $entryType, bool $allowAdd = true, bool $allowDelete = true): self
     {
         if (!\is_a($entryType, FormTypeInterface::class, true)) {
             throw new UnexpectedValueException($entryType, FormTypeInterface::class);
@@ -216,8 +187,8 @@ class FormHelper
         return $this->updateOptions([
                 'entry_type' => $entryType,
                 'entry_options' => ['label' => false],
-                'allow_delete' => $allow_delete,
-                'allow_add' => $allow_add,
+                'allow_delete' => $allowDelete,
+                'allow_add' => $allowAdd,
                 'by_reference' => false,
                 'label' => false,
             ])->add(CollectionType::class);
@@ -386,8 +357,10 @@ class FormHelper
      * @param string $passwordLabel the label used for the password
      * @param string $confirmLabel  the label used for the confirmation password
      */
-    public function addRepeatPasswordType(string $passwordLabel = RepeatPasswordType::PASSWORD_LABEL, string $confirmLabel = RepeatPasswordType::CONFIRM_LABEL): self
-    {
+    public function addRepeatPasswordType(
+        string $passwordLabel = RepeatPasswordType::PASSWORD_LABEL,
+        string $confirmLabel = RepeatPasswordType::CONFIRM_LABEL
+    ): self {
         if (RepeatPasswordType::PASSWORD_LABEL !== $passwordLabel) {
             $first_options = \array_replace_recursive(
                 RepeatPasswordType::getPasswordOptions(),
@@ -404,6 +377,29 @@ class FormHelper
         }
 
         return $this->add(RepeatPasswordType::class);
+    }
+
+    /**
+     * Add checkbox inputs to simulate and confirm an operation.
+     */
+    public function addSimulateAndConfirmType(TranslatorInterface $translator, bool $disabled): self
+    {
+        $this->field('simulate')
+            ->label('simulate.label')
+            ->help('simulate.help')
+            ->helpClass('ms-4')
+            ->addCheckboxType();
+
+        $this->field('confirm')
+            ->label('simulate.confirm')
+            ->updateAttributes([
+                'data-error' => $translator->trans('simulate.error'),
+                'disabled' => $disabled ? 'disabled' : null,
+            ])
+            ->notMapped()
+            ->addCheckboxType(false);
+
+        return $this;
     }
 
     /**
@@ -439,13 +435,17 @@ class FormHelper
     /**
      * Add a True/False choice type to the builder and reset all values to default.
      *
-     * @param string           $true        the translatable text to use for the "True" value
-     * @param string           $false       the translatable text to use for the "False" value
-     * @param string|bool|null $translation determines if the choice values should be translated and in which translation domain
+     * @param string           $trueText    the translatable text to use for the "True" value
+     * @param string           $falseText   the translatable text to use for the "False" value
+     * @param string|bool|null $translation determines if the choice values should be translated and in which
+     *                                      translation domain
      */
-    public function addTrueFalseType(string $true = 'common.value_true', string $false = 'common.value_false', string|bool|null $translation = true): self
-    {
-        return $this->updateOption('choices', [$true => true, $false => false])
+    public function addTrueFalseType(
+        string $trueText = 'common.value_true',
+        string $falseText = 'common.value_false',
+        string|bool|null $translation = true
+    ): self {
+        return $this->updateOption('choices', [$trueText => true, $falseText => false])
             ->updateOption('choice_translation_domain', $translation)
             ->add(ChoiceType::class);
     }
@@ -453,11 +453,13 @@ class FormHelper
     /**
      * Add an Url type to the builder and reset all values to default.
      *
-     * @param string $default_protocol If a value is submitted that doesn't begin with some protocol (e.g. http://, ftp://, etc.), this protocol will be prepended to the string when the data is submitted to the form.
+     * @param string $protocol If a value is submitted that doesn't begin with some protocol
+     *                         (e.g. http://, ftp://, etc.), this protocol will be prepended to the string when the
+     *                         data is submitted to the form.
      */
-    public function addUrlType(string $default_protocol = 'https'): self
+    public function addUrlType(string $protocol = 'https'): self
     {
-        return $this->updateOption('default_protocol', $default_protocol)
+        return $this->updateOption('default_protocol', $protocol)
             ->updateOption('prepend_icon', 'fa-fw fa-solid fa-globe')
             ->updateOption('prepend_class', 'input-group-url')
             ->updateAttribute('inputmode', 'url')
@@ -606,17 +608,18 @@ class FormHelper
     /**
      * Add a class name to the help class attributes.
      *
-     * @param string $name one or more space-separated classes to be added to the help class attribute
+     * @param string $classNames one or more space-separated classes to be added to the help class attribute
      */
-    public function helpClass(string $name): self
+    public function helpClass(string $classNames): self
     {
-        return $this->addClasses($this->helpAttributes, $name);
+        return $this->addClasses($this->helpAttributes, $classNames);
     }
 
     /**
      * Sets the label property.
      *
-     * @param TranslatableInterface|string|false $label the translatable, the label identifier to translate or false to hide
+     * @param TranslatableInterface|string|false $label the translatable, the label identifier to translate or false
+     *                                                  to hide
      */
     public function label(string|\Stringable|TranslatableInterface|false $label): self
     {
@@ -630,99 +633,81 @@ class FormHelper
     /**
      * Add a class name to the label class attributes.
      *
-     * @param string $name one or more space-separated classes to be added to the label class attribute
+     * @param string $classNames one or more space-separated classes to be added to the label class attribute
      */
-    public function labelClass(string $name): self
+    public function labelClass(string $classNames): self
     {
-        return $this->addClasses($this->labelAttributes, $name);
-    }
-
-    /**
-     * Adds an event listener to this form builder.
-     *
-     * @param string   $eventName the event name to listen for
-     * @param callable $listener  the event listener to add
-     * @param int      $priority  The priority of the listener. Listeners with a higher priority are called before
-     *                            listeners with a lower priority.
-     *
-     * @psalm-param FormEvents::PRE_SUBMIT|FormEvents::SUBMIT|FormEvents::POST_SUBMIT|FormEvents::PRE_SET_DATA|FormEvents::POST_SET_DATA $eventName
-     * @psalm-param (callable(PostSetDataEvent))|(callable(PostSubmitEvent))|(callable(PreSetDataEvent))|(callable(PreSubmitEvent))|(callable(SubmitEvent)) $listener
-     */
-    public function listener(string $eventName, callable $listener, int $priority = 0): self
-    {
-        $this->builder->addEventListener($eventName, $listener, $priority);
-
-        return $this;
+        return $this->addClasses($this->labelAttributes, $classNames);
     }
 
     /**
      * Adds a post-set-data-submit event listener to this form builder.
      *
-     * @param callable $listener the event listener to add
-     * @param int      $priority The priority of the listener. Listeners with a higher priority are called before
-     *                           listeners with a lower priority.
-     *
-     * @psalm-param callable(PostSetDataEvent): void $listener
+     * @param callable(PostSetDataEvent): void $listener the event listener to add
+     * @param int                              $priority The priority of the listener. Listeners with a higher
+     *                                                   priority are called before listeners with a lower priority.
      */
     public function listenerPostSetData(callable $listener, int $priority = 0): self
     {
-        return $this->listener(FormEvents::POST_SET_DATA, $listener, $priority);
+        $this->builder->addEventListener(FormEvents::POST_SET_DATA, $listener, $priority);
+
+        return $this;
     }
 
     /**
      * Adds a post-submit event listener to this form builder.
      *
-     * @param callable $listener the event listener to add
-     * @param int      $priority The priority of the listener. Listeners with a higher priority are called before
-     *                           listeners with a lower priority.
-     *
-     * @psalm-param callable(PostSubmitEvent): void $listener
+     * @param callable(PostSubmitEvent): void $listener the event listener to add
+     * @param int                             $priority The priority of the listener. Listeners with a higher
+     *                                                  priority are called before listeners with a lower priority.
      */
     public function listenerPostSubmit(callable $listener, int $priority = 0): self
     {
-        return $this->listener(FormEvents::POST_SUBMIT, $listener, $priority);
+        $this->builder->addEventListener(FormEvents::POST_SUBMIT, $listener, $priority);
+
+        return $this;
     }
 
     /**
      * Adds a pre-set-data event listener to this form builder.
      *
-     * @param callable $listener the event listener to add
-     * @param int      $priority The priority of the listener. Listeners with a higher priority are called before
-     *                           listeners with a lower priority.
-     *
-     * @psalm-param callable(PreSetDataEvent): void $listener
+     * @param callable(PreSetDataEvent): void $listener the event listener to add
+     * @param int                             $priority The priority of the listener. Listeners with a higher
+     *                                                  priority are called before listeners with a lower priority.
      */
     public function listenerPreSetData(callable $listener, int $priority = 0): self
     {
-        return $this->listener(FormEvents::PRE_SET_DATA, $listener, $priority);
+        $this->builder->addEventListener(FormEvents::PRE_SET_DATA, $listener, $priority);
+
+        return $this;
     }
 
     /**
      * Adds a pre-submit event listener to this form builder.
      *
-     * @param callable $listener the event listener to add
-     * @param int      $priority The priority of the listener. Listeners with a higher priority are called before
-     *                           listeners with a lower priority.
-     *
-     * @psalm-param callable(PreSubmitEvent): void $listener
+     * @param callable(PreSubmitEvent): void $listener $listener the event listener to add
+     * @param int                            $priority The priority of the listener. Listeners with a higher
+     *                                                 priority are called before listeners with a lower priority.
      */
     public function listenerPreSubmit(callable $listener, int $priority = 0): self
     {
-        return $this->listener(FormEvents::PRE_SUBMIT, $listener, $priority);
+        $this->builder->addEventListener(FormEvents::PRE_SUBMIT, $listener, $priority);
+
+        return $this;
     }
 
     /**
      * Adds a submit event listener to this form builder.
      *
-     * @param callable $listener the event listener to add
-     * @param int      $priority The priority of the listener. Listeners with a higher priority are called before
-     *                           listeners with a lower priority.
-     *
-     * @psalm-param callable(SubmitEvent): void $listener
+     * @param callable(SubmitEvent): void $listener the event listener to add
+     * @param int                         $priority The priority of the listener. Listeners with a higher
+     *                                              priority are called before listeners with a lower priority.
      */
     public function listenerSubmit(callable $listener, int $priority = 0): self
     {
-        return $this->listener(FormEvents::SUBMIT, $listener, $priority);
+        $this->builder->addEventListener(FormEvents::SUBMIT, $listener, $priority);
+
+        return $this;
     }
 
     /**
@@ -791,7 +776,8 @@ class FormHelper
     /**
      * Sets the priority.
      *
-     * @param int $priority the priority to set. Fields with higher priorities are rendered first and fields with same priority are rendered in their original order.
+     * @param int $priority the priority to set. Fields with higher priorities are rendered first and fields with same
+     *                      priority are rendered in their original order.
      */
     public function priority(int $priority): self
     {
@@ -824,11 +810,11 @@ class FormHelper
     /**
      * Add a class name to the row class attributes.
      *
-     * @param string $name one or more space-separated classes to be added to the row class attribute
+     * @param string $classNames one or more space-separated classes to be added to the row class attribute
      */
-    public function rowClass(string $name): self
+    public function rowClass(string $classNames): self
     {
-        return $this->addClasses($this->rowAttributes, $name);
+        return $this->addClasses($this->rowAttributes, $classNames);
     }
 
     /**
@@ -906,15 +892,15 @@ class FormHelper
     /**
      * Add a class name to the widget class attribute.
      *
-     * @param string $name one or more space-separated classes to be added to the widget class attribute
+     * @param string $classNames one or more space-separated classes to be added to the widget class attribute
      */
-    public function widgetClass(string $name): self
+    public function widgetClass(string $classNames): self
     {
-        return $this->addClasses($this->attributes, $name);
+        return $this->addClasses($this->attributes, $classNames);
     }
 
     /**
-     * Add one or more classes. Do nothing if the given name is empty.
+     * Add one or more classes. Do nothing if the given classe names is empty.
      *
      * @psalm-param array<string, mixed> $array
      */

@@ -78,8 +78,8 @@ class ProductUpdateServiceTest extends TestCase
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_FIXED);
 
         $result = $service->update($query);
-        $this->assertFalse($result->isValid());
-        $this->assertCount(0, $result->getProducts());
+        self::assertFalse($result->isValid());
+        self::assertCount(0, $result->getProducts());
     }
 
     /**
@@ -88,7 +88,7 @@ class ProductUpdateServiceTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getFixedRounded')]
     public function testFixedRounded(float $price, float $expected, float $fixed = 1.0): void
     {
-        $this->assertNotNull($this->product);
+        self::assertNotNull($this->product);
         $this->product->setPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_FIXED, $this->product)
@@ -98,11 +98,11 @@ class ProductUpdateServiceTest extends TestCase
         $service = $this->createService();
         $result = $service->update($query);
 
-        $this->assertTrue($result->isValid());
+        self::assertTrue($result->isValid());
         $products = $result->getProducts();
-        $this->assertCount(1, $products);
+        self::assertCount(1, $products);
         $product = $products[0];
-        $this->assertProduct($product, $expected);
+        self::assertProduct($product, $expected);
     }
 
     /**
@@ -114,7 +114,7 @@ class ProductUpdateServiceTest extends TestCase
         $fixed = 1.0;
         $expected = $price + $fixed;
 
-        $this->assertNotNull($this->product);
+        self::assertNotNull($this->product);
         $this->product->setPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_FIXED, $this->product)
@@ -123,11 +123,11 @@ class ProductUpdateServiceTest extends TestCase
         $service = $this->createService();
         $result = $service->update($query);
 
-        $this->assertTrue($result->isValid());
+        self::assertTrue($result->isValid());
         $products = $result->getProducts();
-        $this->assertCount(1, $products);
+        self::assertCount(1, $products);
         $product = $products[0];
-        $this->assertProduct($product, $expected);
+        self::assertProduct($product, $expected);
     }
 
     /**
@@ -136,7 +136,7 @@ class ProductUpdateServiceTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getPercentRounded')]
     public function testPercentRounded(float $price, float $percent, float $expected): void
     {
-        $this->assertNotNull($this->product);
+        self::assertNotNull($this->product);
         $this->product->setPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_PERCENT, $this->product)
@@ -146,11 +146,11 @@ class ProductUpdateServiceTest extends TestCase
         $service = $this->createService();
         $result = $service->update($query);
 
-        $this->assertTrue($result->isValid());
+        self::assertTrue($result->isValid());
         $products = $result->getProducts();
-        $this->assertCount(1, $products);
+        self::assertCount(1, $products);
         $product = $products[0];
-        $this->assertProduct($product, $expected);
+        self::assertProduct($product, $expected);
     }
 
     /**
@@ -162,7 +162,7 @@ class ProductUpdateServiceTest extends TestCase
         $percent = 0.1;
         $expected = $price * (1.0 + $percent);
 
-        $this->assertNotNull($this->product);
+        self::assertNotNull($this->product);
         $this->product->setPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_PERCENT, $this->product)
@@ -171,23 +171,23 @@ class ProductUpdateServiceTest extends TestCase
         $service = $this->createService();
         $result = $service->update($query);
 
-        $this->assertTrue($result->isValid());
+        self::assertTrue($result->isValid());
         $products = $result->getProducts();
-        $this->assertCount(1, $products);
+        self::assertCount(1, $products);
         $product = $products[0];
-        $this->assertProduct($product, $expected);
+        self::assertProduct($product, $expected);
     }
 
     private function assertProduct(mixed $product, float $newPrice = null): void
     {
-        $this->assertIsArray($product);
-        $this->assertArrayHasKey('description', $product);
-        $this->assertArrayHasKey('oldPrice', $product);
-        $this->assertArrayHasKey('newPrice', $product);
-        $this->assertArrayHasKey('delta', $product);
+        self::assertIsArray($product);
+        self::assertArrayHasKey('description', $product);
+        self::assertArrayHasKey('oldPrice', $product);
+        self::assertArrayHasKey('newPrice', $product);
+        self::assertArrayHasKey('delta', $product);
 
         if (null !== $newPrice) {
-            $this->assertSame($newPrice, $product['newPrice']);
+            self::assertSame($newPrice, $product['newPrice']);
         }
     }
 

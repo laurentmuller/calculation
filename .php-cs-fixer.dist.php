@@ -54,6 +54,7 @@ $rules = [
     'no_useless_else' => true,
     'no_useless_return' => true,
     'php_unit_strict' => true,
+    'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
 ];
 
 $finder = Finder::create()

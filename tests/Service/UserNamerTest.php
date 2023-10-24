@@ -43,7 +43,7 @@ class UserNamerTest extends TestCase
     public function testBaseName(string $expected, int $value, ImageSize $size, ImageExtension|string $ext = null): void
     {
         $result = UserNamer::getBaseName($value, $size, $ext);
-        $this->assertSame($result, $expected);
+        self::assertSame($result, $expected);
     }
 
     public function testName(): void
@@ -52,6 +52,6 @@ class UserNamerTest extends TestCase
         $namer = new UserNamer();
         $mapping = new PropertyMapping('', '');
         $result = $namer->name($user, $mapping);
-        $this->assertSame($result, 'USER_000000_192.png');
+        self::assertSame($result, 'USER_000000_192.png');
     }
 }

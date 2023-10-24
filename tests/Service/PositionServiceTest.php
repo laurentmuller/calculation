@@ -99,7 +99,7 @@ class PositionServiceTest extends TestCase
     {
         $service = $this->createService();
         $actual = $service->formatDirection($deg);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -113,7 +113,7 @@ class PositionServiceTest extends TestCase
         }
         $service = $this->createService();
         $actual = $service->formatLatitude($lat);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -127,7 +127,7 @@ class PositionServiceTest extends TestCase
         }
         $service = $this->createService();
         $actual = $service->formatLongitude($lng);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -141,7 +141,7 @@ class PositionServiceTest extends TestCase
         }
         $service = $this->createService();
         $actual = $service->formatPosition($lat, $lng);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -152,7 +152,7 @@ class PositionServiceTest extends TestCase
     {
         $service = $this->createService();
         $actual = $service->getDirection($deg);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     /**

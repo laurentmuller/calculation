@@ -175,6 +175,39 @@ class StringUtilsTest extends TestCase
         self::assertSame($expected, $result);
     }
 
+    public function testDecodeJson(): void
+    {
+        $expected = ['key' => 'value'];
+        /** @psalm-var string $encoded */
+        $encoded = \json_encode($expected);
+        $actual = StringUtils::decodeJson($encoded);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testDecodeJsonWidthException(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        StringUtils::decodeJson('{"key":}');
+        self::fail("An \InvalidArgumentException must be throw.");
+    }
+
+    public function testEncodeJson(): void
+    {
+        $expected = '{"key":"value"}';
+        /** @psalm-var array $decoded */
+        $decoded = \json_decode($expected, true);
+        $actual = StringUtils::encodeJson($decoded);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testEncodeJsonWidthException(): void
+    {
+        self::expectException(\InvalidArgumentException::class);
+        $input = \mb_convert_encoding('ø, æ, å', 'ISO-8859-1');
+        StringUtils::encodeJson($input);
+        self::fail("An \InvalidArgumentException must be throw.");
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getEndWith')]
     public function testEndWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
@@ -218,6 +251,11 @@ class StringUtilsTest extends TestCase
     {
         $result = StringUtils::isString($var);
         self::assertSame($expected, $result);
+    }
+
+    public function testNewLine(): void
+    {
+        self::assertSame("\n", StringUtils::NEW_LINE);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getStartWith')]

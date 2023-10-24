@@ -23,14 +23,14 @@ class UpdateAssetsCommandTest extends KernelTestCase
     public function testExecuteDryRun(): void
     {
         $output = $this->execute(['--dry-run' => true]);
-        $this->assertStringContainsString('Check versions', $output);
+        self::assertStringContainsString('Check versions', $output);
     }
 
     public function testExecuteUpdate(): void
     {
         $output = $this->execute();
-        $this->assertStringContainsString('[OK]', $output);
-        $this->assertStringContainsString('/public/js/vendor', $output);
+        self::assertStringContainsString('[OK]', $output);
+        self::assertStringContainsString('/public/js/vendor', $output);
     }
 
     private function execute(array $options = []): string

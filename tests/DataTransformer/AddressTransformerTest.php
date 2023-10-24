@@ -57,11 +57,11 @@ class AddressTransformerTest extends TestCase
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->reverseTransform($value);
-        $this->assertEqualsCanonicalizing($expected, $actual);
+        self::assertEqualsCanonicalizing($expected, $actual);
         if ($exception) {
-            $this->fail('A exception must be raised.');
+            self::fail('A exception must be raised.');
         }
     }
 
@@ -71,16 +71,16 @@ class AddressTransformerTest extends TestCase
         if ($exception) {
             $this->expectException(TransformationFailedException::class);
         }
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
         $actual = $this->transformer->transform($value);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
         if ($exception) {
-            $this->fail('A exception must be raised.');
+            self::fail('A exception must be raised.');
         }
     }
 
     public function testTransformerNotNull(): void
     {
-        $this->assertNotNull($this->transformer);
+        self::assertNotNull($this->transformer);
     }
 }

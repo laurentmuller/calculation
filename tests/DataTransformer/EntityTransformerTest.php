@@ -16,11 +16,11 @@ use App\Entity\Group;
 use App\Form\DataTransformer\EntityTransformer;
 use App\Repository\GroupRepository;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityTransformer::class)]
-class EntityTransformerTest extends KernelTestCase
+class EntityTransformerTest extends TestCase
 {
     public static function getReverseTransformValues(): \Generator
     {
@@ -55,9 +55,9 @@ class EntityTransformerTest extends KernelTestCase
         }
         $transformer = $this->createTransformer($group);
         $actual = $transformer->reverseTransform($value);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
         if ($exception) {
-            $this->fail('A exception must be raised.');
+            self::fail('A exception must be raised.');
         }
     }
 
@@ -70,7 +70,7 @@ class EntityTransformerTest extends KernelTestCase
         $transformer = $this->createTransformer($group);
         $value = $group->getId();
         $actual = $transformer->reverseTransform($value);
-        $this->assertSame($group, $actual);
+        self::assertSame($group, $actual);
     }
 
     /**
@@ -89,9 +89,9 @@ class EntityTransformerTest extends KernelTestCase
         }
         $transformer = $this->createTransformer($group);
         $actual = $transformer->transform($value);
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
         if ($exception) {
-            $this->fail('A exception must be raised.');
+            self::fail('A exception must be raised.');
         }
     }
 
@@ -104,7 +104,7 @@ class EntityTransformerTest extends KernelTestCase
         $transformer = $this->createTransformer($group);
         $actual = $transformer->transform($group);
         $expected = $group->getId();
-        $this->assertSame($expected, $actual);
+        self::assertSame($expected, $actual);
     }
 
     private function createGroup(): Group

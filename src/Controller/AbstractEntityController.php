@@ -208,10 +208,7 @@ abstract class AbstractEntityController extends AbstractController
     protected function getEntities(string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
         $sortedFields = null !== $field ? [$field => $mode] : [];
-
-        /** @psalm-var \Doctrine\ORM\Query<int, T> $query */
-        $query = $this->repository
-            ->getSearchQuery($sortedFields, $criteria, $alias);
+        $query = $this->repository->getSearchQuery($sortedFields, $criteria, $alias);
 
         return $query->getResult();
     }
@@ -277,7 +274,7 @@ abstract class AbstractEntityController extends AbstractController
     protected function saveToDatabase(AbstractEntity $item): void
     {
         if ($item->isNew()) {
-            $this->repository->add($item);
+            $this->repository->persist($item);
         } else {
             $this->repository->flush();
         }

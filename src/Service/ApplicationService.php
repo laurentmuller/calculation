@@ -591,7 +591,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         } else {
             if (!$property instanceof Property) {
                 $property = Property::instance($name);
-                $repository->add($property, false);
+                $repository->persist($property, false);
             }
             $property->setValue($value);
         }

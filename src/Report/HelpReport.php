@@ -224,56 +224,119 @@ class HelpReport extends AbstractReport
         $id = $item['id'];
         $this->addBookmark($this->trans($id), true, 1);
         $this->outputTitle($id);
-        if (isset($item['description'])) {
-            $this->MultiCell(txt: $item['description']);
+        $this->outputDialogDescription($item);
+        $this->outputDialogImage($item);
+        $this->outputDialogDetails($item);
+        $this->outputDialogEntityAndFields($item);
+        $this->outputDialogEditActions($item);
+        $this->outputDialogGlobalActions($item);
+        $this->outputDialogForbidden($item);
+    }
+
+    /**
+     * @psalm-param HelpDialogType $item
+     */
+    private function outputDialogDescription(array $item): void
+    {
+        if (!isset($item['description'])) {
+            return;
         }
-        if (isset($item['image'])) {
-            $this->Ln(3);
-            $this->outputText('help.labels.screenshot');
-            $this->outputImage($item['image']);
+        $this->MultiCell(txt: $item['description']);
+    }
+
+    /**
+     * @psalm-param HelpDialogType $item
+     */
+    private function outputDialogDetails(array $item): void
+    {
+        if (!isset($item['details'])) {
+            return;
         }
-        if (isset($item['details'])) {
-            $this->Ln(3);
-            $this->outputText('help.labels.description');
-            $this->outputDetails($item['details']);
+        $this->Ln(3);
+        $this->outputText('help.labels.description');
+        $this->outputDetails($item['details']);
+    }
+
+    /**
+     * @psalm-param HelpDialogType $item
+     */
+    private function outputDialogEditActions(array $item): void
+    {
+        if (!isset($item['editActions'])) {
+            return;
         }
+        $this->outputActions($item['editActions'], 'help.labels.edit_actions');
+    }
+
+    /**
+     * @psalm-param HelpDialogType $item
+     */
+    private function outputDialogEntityAndFields(array $item): void
+    {
         $entity = $this->findEntity($item);
         $fields = $this->findFields($entity);
-        if (null !== $entity && null !== $fields) {
-            if (isset($item['displayEntityColumns'])) {
-                $this->Ln(3);
-                $this->outputText('help.labels.edit_columns');
-                $this->outputColumns($entity, $fields);
-            }
-            if (isset($item['displayEntityFields'])) {
-                $this->Ln(3);
-                $this->outputText('help.labels.edit_fields');
-                $this->outputFields($entity, $fields);
-            }
-            $displayEntityActions = $item['displayEntityActions'] ?? false;
-            if ($displayEntityActions && isset($entity['actions'])) {
-                $this->outputActions($entity['actions'], 'help.labels.entity_actions');
-            }
+        if (null === $entity || null === $fields) {
+            return;
         }
-        if (isset($item['editActions'])) {
-            $this->outputActions($item['editActions'], 'help.labels.edit_actions');
-        }
-        if (isset($item['globalActions'])) {
-            $this->outputActions($item['globalActions'], 'help.labels.global_actions');
-        }
-        if (isset($item['forbidden'])) {
-            $forbidden = $item['forbidden'];
+        if (isset($item['displayEntityColumns'])) {
             $this->Ln(3);
-            $text = $forbidden['text'] ?? $this->trans('help.labels.forbidden_text');
-            $this->outputText($text, false);
-            $image = $forbidden['image'] ?? null;
-            if (null !== $image) {
-                $this->outputImage($image);
-            }
-            if (isset($forbidden['action'])) {
-                $this->outputActions([$forbidden['action']], 'help.labels.edit_actions');
-            }
+            $this->outputText('help.labels.edit_columns');
+            $this->outputColumns($entity, $fields);
         }
+        if (isset($item['displayEntityFields'])) {
+            $this->Ln(3);
+            $this->outputText('help.labels.edit_fields');
+            $this->outputFields($entity, $fields);
+        }
+        $displayEntityActions = $item['displayEntityActions'] ?? false;
+        if ($displayEntityActions && isset($entity['actions'])) {
+            $this->outputActions($entity['actions'], 'help.labels.entity_actions');
+        }
+    }
+
+    /**
+     * @psalm-param HelpDialogType $item
+     */
+    private function outputDialogForbidden(array $item): void
+    {
+        if (!isset($item['forbidden'])) {
+            return;
+        }
+        $forbidden = $item['forbidden'];
+        $this->Ln(3);
+        $text = $forbidden['text'] ?? $this->trans('help.labels.forbidden_text');
+        $this->outputText($text, false);
+        $image = $forbidden['image'] ?? null;
+        if (null !== $image) {
+            $this->outputImage($image);
+        }
+        if (isset($forbidden['action'])) {
+            $this->outputActions([$forbidden['action']], 'help.labels.edit_actions');
+        }
+    }
+
+    /**
+     * @psalm-param HelpDialogType $item
+     */
+    private function outputDialogGlobalActions(array $item): void
+    {
+        if (!isset($item['globalActions'])) {
+            return;
+        }
+        $this->outputActions($item['globalActions'], 'help.labels.global_actions');
+    }
+
+    /**
+     * @psalm-param HelpDialogType $item
+     */
+    private function outputDialogImage(array $item): void
+    {
+        if (!isset($item['image'])) {
+            return;
+        }
+        $this->Ln(3);
+        $this->outputText('help.labels.screenshot');
+        $this->outputImage($item['image']);
     }
 
     /**

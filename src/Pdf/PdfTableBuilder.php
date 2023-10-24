@@ -411,6 +411,18 @@ class PdfTableBuilder
     }
 
     /**
+     * Sets the alignment.
+     *
+     * This value is used only when the full width property is false
+     */
+    public function setAlignment(PdfTextAlignment $alignment): static
+    {
+        $this->alignment = $alignment;
+
+        return $this;
+    }
+
+    /**
      * Sets the draw cell background listener.
      */
     public function setBackgroundListener(?PdfDrawCellBackgroundInterface $backgroundListener): static

@@ -16,8 +16,10 @@ use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
+use App\Pdf\PdfChartSectorTrait;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
+use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
@@ -33,26 +35,32 @@ use App\Utils\FormatUtils;
  * @psalm-import-type QueryCalculationType from CalculationStateRepository
  *
  * @extends AbstractArrayReport<QueryCalculationType>
+ *
+ * @psalm-type PieEntryType = array{
+ *        label?: string|null,
+ *        color: PdfFillColor|string,
+ *        value: int|float}
  */
 class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCellTextInterface
 {
     use MathTrait;
+    use PdfChartSectorTrait;
 
     /** @psalm-var QueryCalculationType|null */
     private ?array $currentRow = null;
+    private float $minMargin = 100.0;
 
     public function drawCellText(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): bool
     {
         if (0 !== $index || null === $this->currentRow) {
             return false;
         }
-        $color = PdfFillColor::create($this->currentRow['color']);
-        if (!$color instanceof PdfFillColor) {
+        if (!$this->applyFillColor($this->currentRow)) {
             return false;
         }
 
         $parent = $builder->getParent();
-        $this->drawStateRect($parent, $bounds, $color);
+        $this->drawStateRect($parent, $bounds);
         $this->drawStateText($parent, $bounds, $text, $align, $height);
 
         return true;
@@ -61,8 +69,110 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     protected function doRender(array $entities): bool
     {
         $this->SetTitle($this->transChart('title_by_state'));
+        $this->minMargin = $this->controller->getMinMargin();
+        $this->outputChart($entities);
+        $this->outputTable($entities);
 
+        return true;
+    }
+
+    /**
+     * @psalm-param QueryCalculationType $entity
+     */
+    private function applyFillColor(array $entity): bool
+    {
+        $color = PdfFillColor::create($entity['color']);
+        if (!$color instanceof PdfFillColor) {
+            return false;
+        }
+        $color->apply($this);
+
+        return true;
+    }
+
+    private function createTable(): PdfTableBuilder
+    {
+        return PdfTableBuilder::instance($this)
+            ->setTextListener($this)
+            ->addColumns(
+                PdfColumn::left($this->transChart('fields.state'), 20),
+                PdfColumn::right($this->transChart('fields.count'), 25, true),
+                PdfColumn::right('%', 15, true),
+                PdfColumn::right($this->transChart('fields.net'), 20, true),
+                PdfColumn::right($this->transChart('fields.margin_amount'), 20, true),
+                PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
+                PdfColumn::right($this->transChart('fields.total'), 20, true),
+                PdfColumn::right('%', 15, true)
+            )->outputHeaders();
+    }
+
+    private function drawStateRect(PdfDocument $parent, PdfRectangle $bounds): void
+    {
+        $margin = $parent->getCellMargin();
+        $parent->Rect(
+            $bounds->x() + $margin,
+            $bounds->y() + $margin,
+            5.0,
+            $bounds->height() - 2.0 * $margin,
+            PdfBorder::BOTH
+        );
+    }
+
+    private function drawStateText(PdfDocument $parent, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): void
+    {
+        $offset = 6.0;
+        $parent->SetX($parent->GetX() + $offset);
+        $parent->Cell(
+            w: $bounds->width() - $offset,
+            h: $height,
+            txt: $text,
+            align: $align
+        );
+    }
+
+    private function formatPercent(float $value, int $decimals = 1, bool $useStyle = false, bool $bold = false): PdfCell
+    {
+        $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
+        $cell = new PdfCell(FormatUtils::formatPercent($value, false, $decimals, \NumberFormatter::ROUND_HALFEVEN));
+        if ($useStyle && $this->isMinMargin($value)) {
+            $style->setTextColor(PdfTextColor::red());
+        }
+        $cell->setStyle($style);
+
+        return $cell;
+    }
+
+    private function isMinMargin(float $value): bool
+    {
+        return !$this->isFloatZero($value) && $value < $this->minMargin;
+    }
+
+    /**
+     * @psalm-param QueryCalculationType[] $entities
+     */
+    private function outputChart(array $entities): void
+    {
         $this->AddPage();
+        PdfDrawColor::cellBorder()->apply($this);
+        $radius = $this->GetPageWidth() / 3.0;
+        $centerX = $this->GetPageWidth() / 2.0;
+        $centerY = $this->GetPageHeight() / 3.0;
+        $rows = \array_map(function (array $entity): array {
+            return [
+                'color' => $entity['color'],
+                'value' => $entity['percentAmount'],
+            ];
+        }, $entities);
+        $this->pieChart($centerX, $centerY, $radius, $rows);
+        $this->SetY($centerY + $radius + self::LINE_HEIGHT);
+        $this->resetStyle();
+    }
+
+    /**
+     * @psalm-param QueryCalculationType[] $entities
+     */
+    private function outputTable(array $entities): void
+    {
         $table = $this->createTable();
 
         foreach ($entities as $entity) {
@@ -100,66 +210,6 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
             FormatUtils::formatInt($total),
             $this->formatPercent($percentAmount, 2, bold: true)
         );
-
-        return true;
-    }
-
-    private function createTable(): PdfTableBuilder
-    {
-        return PdfTableBuilder::instance($this)
-            ->setTextListener($this)
-            ->addColumns(
-                PdfColumn::left($this->transChart('fields.state'), 20),
-                PdfColumn::right($this->transChart('fields.count'), 25, true),
-                PdfColumn::right('%', 15, true),
-                PdfColumn::right($this->transChart('fields.net'), 20, true),
-                PdfColumn::right($this->transChart('fields.margin_amount'), 20, true),
-                PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
-                PdfColumn::right($this->transChart('fields.total'), 20, true),
-                PdfColumn::right('%', 15, true)
-            )->outputHeaders();
-    }
-
-    private function drawStateRect(PdfDocument $parent, PdfRectangle $bounds, PdfFillColor $color): void
-    {
-        $color->apply($parent);
-        $margin = $parent->getCellMargin();
-        $parent->Rect(
-            $bounds->x() + $margin,
-            $bounds->y() + $margin,
-            5.0,
-            $bounds->height() - 2.0 * $margin,
-            PdfBorder::BOTH
-        );
-    }
-
-    private function drawStateText(PdfDocument $parent, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): void
-    {
-        $offset = 6.0;
-        $parent->SetX($parent->GetX() + $offset);
-        $parent->Cell(
-            w: $bounds->width() - $offset,
-            h: $height,
-            txt: $text,
-            align: $align
-        );
-    }
-
-    private function formatPercent(float $value, int $decimals = 1, bool $useStyle = false, bool $bold = false): PdfCell
-    {
-        $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
-        $cell = new PdfCell(FormatUtils::formatPercent($value, false, $decimals, \NumberFormatter::ROUND_HALFEVEN));
-        if ($useStyle && $this->isMinMargin($value)) {
-            $style->setTextColor(PdfTextColor::red());
-        }
-        $cell->setStyle($style);
-
-        return $cell;
-    }
-
-    private function isMinMargin(float $value): bool
-    {
-        return !$this->isFloatZero($value) && $value < $this->controller->getMinMargin();
     }
 
     private function sum(array $entities, string $key): float

@@ -35,22 +35,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
     final public const DEFAULT_ALIAS = 'e';
 
     /**
-     * Add the given entity to the database.
-     *
-     * @param AbstractEntity $entity the entity to add
-     * @param bool           $flush  true to flush change to the database
-     *
-     * @see AbstractRepository::flush()
-     */
-    public function add(AbstractEntity $entity, bool $flush = true): void
-    {
-        $this->getEntityManager()->persist($entity);
-        if ($flush) {
-            $this->flush();
-        }
-    }
-
-    /**
      * Creates a default query builder.
      *
      * @param literal-string $alias the entity alias
@@ -90,27 +74,23 @@ abstract class AbstractRepository extends ServiceEntityRepository
      *
      * @param string $field the field name (column) to get values for
      * @param string $value a value to search within the column or an empty string for all
-     * @param int    $limit the maximum number of results to retrieve (the 'limit') or <code>-1</code> for all
+     * @param int    $limit the maximum number of results to retrieve (the 'limit') or -1 for all
      *
      * @return array an array, maybe empty; of matching values
      */
     public function getDistinctValues(string $field, string $value = '', int $limit = -1): array
     {
-        $name = self::DEFAULT_ALIAS . '.' . $field;
+        $name = \sprintf('%s.%s', self::DEFAULT_ALIAS, $field);
         $builder = $this->createQueryBuilder(self::DEFAULT_ALIAS)
             ->select($name)
             ->distinct()
             ->orderBy($name);
-        $expr = $builder->expr();
         if (StringUtils::isString($value)) {
             $param = 'search';
-            $like = $expr->like($name, ':' . $param);
-            $builder->where($like)
+            $builder->where("$name LIKE :$param")
                 ->setParameter($param, "%$value%");
         } else {
-            /** @psalm-var literal-string $where */
-            $where = $expr->isNotNull($name);
-            $builder->where($where);
+            $builder->where("$name IS NOT NULL");
         }
         if ($limit > 0) {
             $builder->setMaxResults($limit);
@@ -138,7 +118,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Creates a search query.
      *
-     * @param array<string, string>  $sortedFields the sorted fields where key is the field name and value is the sort mode ('ASC' or 'DESC')
+     * @param array<string, string>  $sortedFields the sorted fields where key is the field name and value is the sort
+     *                                             mode ('ASC' or 'DESC')
      * @param array<Criteria|string> $criteria     the filter criteria (the where clause)
      * @param literal-string         $alias        the entity alias
      *
@@ -148,8 +129,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
      *
      * @psalm-return Query<TEntity>
      */
-    public function getSearchQuery(array $sortedFields = [], array $criteria = [], string $alias = self::DEFAULT_ALIAS): Query
-    {
+    public function getSearchQuery(
+        array $sortedFields = [],
+        array $criteria = [],
+        string $alias = self::DEFAULT_ALIAS
+    ): Query {
         $builder = $this->createDefaultQueryBuilder($alias);
         if ([] !== $criteria) {
             foreach ($criteria as $criterion) {
@@ -171,10 +155,11 @@ abstract class AbstractRepository extends ServiceEntityRepository
     }
 
     /**
-     * Gets the name of the single identifier field. Note that this only works on
-     * entity classes that have a single-field primary key.
+     * Gets the name of the single identifier field. Note that this only works on entity classes that have a
+     * single-field primary key.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException if the class doesn't have an identifier, or it has a composite primary key
+     * @throws \Doctrine\ORM\Exception\ORMException if the class doesn't have an identifier, or it has a composite
+     *                                              primary key
      */
     public function getSingleIdentifierFieldName(): string
     {
@@ -194,6 +179,22 @@ abstract class AbstractRepository extends ServiceEntityRepository
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return "$alias.$field";
+    }
+
+    /**
+     * Persist the given entity to the database.
+     *
+     * @param AbstractEntity $entity the entity to persist
+     * @param bool           $flush  true to flush change to the database
+     *
+     * @see AbstractRepository::flush()
+     */
+    public function persist(AbstractEntity $entity, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($entity);
+        if ($flush) {
+            $this->flush();
+        }
     }
 
     /**

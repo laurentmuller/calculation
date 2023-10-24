@@ -45,8 +45,12 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      *
      * @psalm-param User $user
      */
-    public function createResetPasswordRequest(object $user, \DateTimeInterface $expiresAt, string $selector, string $hashedToken): ResetPasswordRequestInterface
-    {
+    public function createResetPasswordRequest(
+        object $user,
+        \DateTimeInterface $expiresAt,
+        string $selector,
+        string $hashedToken
+    ): ResetPasswordRequestInterface {
         $expiresAt = \DateTimeImmutable::createFromInterface($expiresAt);
 
         return $user->setResetPasswordRequest($expiresAt, $selector, $hashedToken);
@@ -130,7 +134,12 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
      */
     public function getSuperAdminFilter(string $alias = self::DEFAULT_ALIAS): string
     {
-        return \sprintf("IFNULL(%s.role, '%s') <> '%s'", $alias, RoleInterface::ROLE_USER, RoleInterface::ROLE_SUPER_ADMIN);
+        return \sprintf(
+            "IFNULL(%s.role, '%s') <> '%s'",
+            $alias,
+            RoleInterface::ROLE_USER,
+            RoleInterface::ROLE_SUPER_ADMIN
+        );
     }
 
     /**

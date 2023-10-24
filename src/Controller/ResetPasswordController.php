@@ -143,9 +143,6 @@ class ResetPasswordController extends AbstractController
         return $this->redirectToHomePage();
     }
 
-    /**
-     * Send email to the user for resetting the password.
-     */
     private function sendEmail(Request $request, string $user): RedirectResponse
     {
         $result = $this->service->sendEmail($request, $user);

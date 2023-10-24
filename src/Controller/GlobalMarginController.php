@@ -63,7 +63,7 @@ class GlobalMarginController extends AbstractEntityController
         if ($this->handleRequestForm($request, $form)) {
             $newMargins = $root->getMargins()->toArray();
             foreach ($newMargins as $margin) {
-                $repository->add($margin, false);
+                $repository->persist($margin, false);
             }
             $deletedMargins = \array_diff($existingMargins, $newMargins);
             foreach ($deletedMargins as $margin) {

@@ -64,7 +64,7 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(UserRegistrationType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
-            $this->repository->add($user);
+            $this->repository->persist($user);
 
             try {
                 $email = $this->createEmail($user);

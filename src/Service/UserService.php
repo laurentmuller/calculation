@@ -224,7 +224,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         } else {
             if (!$property instanceof UserProperty) {
                 $property = UserProperty::instance($name, $user);
-                $this->repository->add($property, false);
+                $this->repository->persist($property, false);
             }
             $property->setValue($value);
         }

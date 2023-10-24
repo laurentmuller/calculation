@@ -14,13 +14,11 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Mime\RegistrationEmail;
-use App\Traits\TranslatorAwareTrait;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
@@ -28,18 +26,16 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 /**
  * Email verifier used for register new user.
  */
-class EmailVerifier implements ServiceSubscriberInterface
+readonly class EmailVerifier
 {
-    use ServiceSubscriberTrait;
-    use TranslatorAwareTrait;
-
     /**
      * Constructor.
      */
     public function __construct(
-        private readonly VerifyEmailHelperInterface $helper,
-        private readonly MailerInterface $mailer,
-        private readonly EntityManagerInterface $manager
+        private VerifyEmailHelperInterface $helper,
+        private MailerInterface $mailer,
+        private UserRepository $repository,
+        private TranslatorInterface $translator
     ) {
     }
 
@@ -52,8 +48,7 @@ class EmailVerifier implements ServiceSubscriberInterface
     {
         $this->validateEmail($request, $user);
         $user->setVerified(true);
-        $this->manager->persist($user);
-        $this->manager->flush();
+        $this->repository->persist($user);
     }
 
     /**
@@ -73,16 +68,13 @@ class EmailVerifier implements ServiceSubscriberInterface
         $this->mailer->send($email);
     }
 
-    /**
-     * Generate signature.
-     */
     private function generateSignature(string $routeName, User $user): VerifyEmailSignatureComponents
     {
-        $userId = (string) $user->getId();
-        $userEmail = (string) $user->getEmail();
-        $parameters = ['id' => $userId];
+        $id = (string) $user->getId();
+        $email = (string) $user->getEmail();
+        $parameters = ['id' => $id];
 
-        return $this->helper->generateSignature($routeName, $userId, $userEmail, $parameters);
+        return $this->helper->generateSignature($routeName, $id, $email, $parameters);
     }
 
     private function getExpiresLifeTime(VerifyEmailSignatureComponents $signature): string
@@ -94,16 +86,19 @@ class EmailVerifier implements ServiceSubscriberInterface
         );
     }
 
+    private function trans(string $id, array $parameters = [], string $domain = null): string
+    {
+        return $this->translator->trans($id, $parameters, $domain);
+    }
+
     /**
-     * Validate email confirmation.
-     *
      * @throws VerifyEmailExceptionInterface
      */
     private function validateEmail(Request $request, User $user): void
     {
-        $signedUrl = $request->getUri();
-        $userId = (string) $user->getId();
-        $userEmail = (string) $user->getEmail();
-        $this->helper->validateEmailConfirmation($signedUrl, $userId, $userEmail);
+        $url = $request->getUri();
+        $id = (string) $user->getId();
+        $email = (string) $user->getEmail();
+        $this->helper->validateEmailConfirmation($url, $id, $email);
     }
 }

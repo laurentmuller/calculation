@@ -156,7 +156,7 @@ class ResetPasswordService
 
     private function createEmail(User $user, ResetPasswordToken $token): ResetPasswordEmail
     {
-        $context = [
+        $parameters = [
             'token' => $token->getToken(),
             'username' => $user->getUserIdentifier(),
             'expires_date' => $token->getExpiresAt(),
@@ -164,14 +164,15 @@ class ResetPasswordService
             'throttle_date' => $this->getThrottleAt($token),
             'throttle_life_time' => $this->getThrottleLifeTime(),
         ];
+        $email = new ResetPasswordEmail();
 
-        return (new ResetPasswordEmail())
+        return $email
             ->to($user->getEmailAddress())
             ->from($this->getAddressFrom())
             ->subject($this->trans('resetting.request.title'))
             ->update(Importance::HIGH, $this->translator)
             ->action($this->trans('resetting.request.submit'), $this->getResetAction($token))
-            ->context($context);
+            ->context(\array_merge($email->getContext(), $parameters));
     }
 
     private function getAddressFrom(): Address

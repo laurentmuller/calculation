@@ -175,13 +175,28 @@ class StringUtilsTest extends TestCase
         self::assertSame($expected, $result);
     }
 
-    public function testDecodeJson(): void
+    public function testDecodeJsonArray(): void
     {
         $expected = ['key' => 'value'];
         /** @psalm-var string $encoded */
         $encoded = \json_encode($expected);
         $actual = StringUtils::decodeJson($encoded);
         self::assertSame($expected, $actual);
+    }
+
+    public function testDecodeJsonObject(): void
+    {
+        $expected = new \stdClass();
+        $expected->key = 'value';
+        $expected->date = 'date';
+        /** @psalm-var string $encoded */
+        $encoded = \json_encode($expected);
+        $actual = StringUtils::decodeJson($encoded, false);
+        self::assertObjectHasProperty('key', $actual);
+        self::assertObjectHasProperty('date', $actual);
+        self::assertSame($expected->key, $actual->key);
+        self::assertSame($expected->date, $actual->date);
+        self::assertEqualsCanonicalizing($expected, $actual);
     }
 
     public function testDecodeJsonWidthException(): void

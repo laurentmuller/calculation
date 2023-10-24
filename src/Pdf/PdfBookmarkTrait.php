@@ -54,12 +54,12 @@ trait PdfBookmarkTrait
     /**
      * Add a bookmark.
      *
-     * @param string $text       the bookmark text
-     * @param bool   $isUTF8     indicates if the text is encoded in ISO-8859-1 (false) or UTF-8 (true)
-     * @param int    $level      the outline level (0 is top level, 1 is just below, and so on)
-     * @param bool   $useCurrent indicate if the ordinate of the outline destination in the current page
-     *                           is the current position (true) or the top of the page (false)
-     * @param bool   $link       true to create and add a link at the given ordinate position and page
+     * @param string $text     the bookmark text
+     * @param bool   $isUTF8   indicates if the text is encoded in ISO-8859-1 (false) or UTF-8 (true)
+     * @param int    $level    the outline level (0 is top level, 1 is just below, and so on)
+     * @param bool   $currentY indicate if the ordinate of the outline destination in the current page
+     *                         is the current position (true) or the top of the page (false)
+     * @param bool   $link     true to create and add a link at the given ordinate position and page
      *
      * @throws PdfException if the given level is invalid. A level is not valid if:
      *                      <ul>
@@ -76,7 +76,7 @@ trait PdfBookmarkTrait
         string $text,
         bool $isUTF8 = false,
         int $level = 0,
-        bool $useCurrent = true,
+        bool $currentY = true,
         bool $link = true
     ): self {
         // validate
@@ -89,7 +89,7 @@ trait PdfBookmarkTrait
 
         // add
         $page = $this->page;
-        $y = $useCurrent ? $this->y : 0.0;
+        $y = $currentY ? $this->y : 0.0;
         $id = $link ? $this->CreateLink($y, $page) : '';
         $y = ($this->h - $y) * $this->k;
         $this->bookmarks[] = [

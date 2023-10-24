@@ -17,31 +17,27 @@ use App\Entity\User;
 use App\Enums\Importance;
 use App\Mime\NotificationEmail;
 use App\Model\Comment;
-use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Extra\Markdown\MarkdownInterface;
 
 /**
  * Service to send notifications.
  */
-class MailerService implements ServiceSubscriberInterface
+readonly class MailerService
 {
-    use ServiceSubscriberTrait;
-    use TranslatorAwareTrait;
-
     /**
      * Constructor.
      */
     public function __construct(
-        private readonly UrlGeneratorInterface $generator,
-        private readonly MarkdownInterface $markdown,
-        private readonly MailerInterface $mailer
+        private UrlGeneratorInterface $generator,
+        private MarkdownInterface $markdown,
+        private MailerInterface $mailer,
+        private TranslatorInterface $translator,
     ) {
     }
 
@@ -55,7 +51,6 @@ class MailerService implements ServiceSubscriberInterface
         $notification = $this->createNotification($comment->getImportance());
         $notification->subject((string) $comment->getSubject())
             ->markdown($this->convert((string) $comment->getMessage()))
-            ->action($this->trans('index.title'), $this->getHomeUrl())
             ->attachFromUploadedFiles(...$comment->getAttachments());
         $address = $comment->getFromAddress();
         if ($address instanceof Address) {
@@ -65,7 +60,8 @@ class MailerService implements ServiceSubscriberInterface
         if ($address instanceof Address) {
             $notification->to($address);
         }
-        $this->mailer->send($notification);
+
+        $this->send($notification);
     }
 
     /**
@@ -85,7 +81,8 @@ class MailerService implements ServiceSubscriberInterface
         foreach ($attachments as $attachment) {
             $notification->attachFromUploadedFile($attachment);
         }
-        $this->mailer->send($notification);
+
+        $this->send($notification);
     }
 
     private function convert(string $message): string
@@ -97,11 +94,24 @@ class MailerService implements ServiceSubscriberInterface
     {
         return (new NotificationEmail())
             ->action($this->trans('index.title'), $this->getHomeUrl())
-            ->update($importance, $this->getTranslator());
+            ->update($importance, $this->translator);
     }
 
     private function getHomeUrl(): string
     {
         return $this->generator->generate(AbstractController::HOME_PAGE, [], UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     */
+    private function send(NotificationEmail $notification): void
+    {
+        $this->mailer->send($notification);
+    }
+
+    private function trans(string $id): string
+    {
+        return $this->translator->trans($id);
     }
 }

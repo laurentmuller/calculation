@@ -84,10 +84,6 @@ use App\Utils\StringUtils;
  *      n: int,
  *      rotation: int,
  *      size: PdfPageSizeType}
- * @psalm-type PdfColorType = array{
- *      0: int<0, 255>,
- *      1: int<0, 255>,
- *      2: int<0, 255>}
  */
 #[\AllowDynamicProperties]
 class PdfDocument extends \FPDF

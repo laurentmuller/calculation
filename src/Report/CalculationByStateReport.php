@@ -16,11 +16,11 @@ use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
-use App\Pdf\PdfChartSectorTrait;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfFillColor;
+use App\Pdf\PdfPieChartTrait;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -44,7 +44,7 @@ use App\Utils\FormatUtils;
 class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCellTextInterface
 {
     use MathTrait;
-    use PdfChartSectorTrait;
+    use PdfPieChartTrait;
 
     /** @psalm-var QueryCalculationType|null */
     private ?array $currentRow = null;
@@ -142,6 +142,11 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
         return $cell;
     }
 
+    private function getHeaderHeight(): float
+    {
+        return $this->getHeader()->getHeight();
+    }
+
     private function isMinMargin(float $value): bool
     {
         return !$this->isFloatZero($value) && $value < $this->minMargin;
@@ -154,9 +159,12 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     {
         $this->AddPage();
         PdfDrawColor::cellBorder()->apply($this);
-        $radius = $this->GetPageWidth() / 3.0;
+
+        $top = $this->getTopMargin() + $this->getHeaderHeight() + self::LINE_HEIGHT;
+        $radius = $this->GetPageWidth() / 4.0;
         $centerX = $this->GetPageWidth() / 2.0;
-        $centerY = $this->GetPageHeight() / 3.0;
+        $centerY = $top + $radius;
+
         $rows = \array_map(function (array $entity): array {
             return [
                 'color' => $entity['color'],

@@ -15,66 +15,12 @@ namespace App\Pdf;
 use App\Pdf\Enums\PdfRectangleStyle;
 
 /*
- * Trait to draw pie chart and sector.
- *
- * @psalm-type PieEntryType = array{
- *        label?: string|null,
- *        color: PdfFillColor|string,
- *        value: int|float}
+ * Trait to draw sector.
  */
-trait PdfChartSectorTrait
+trait PdfSectorTrait
 {
     private const HALF_PI = \M_PI / 2.0;
     private const TWO_PI = \M_PI * 2.0;
-
-    /**
-     * Draw a pie chart.
-     *
-     * Each row to draw must contain a 'color' and a 'value' entry. Do nothing if the radius is not positive, the rows
-     * are empty or if the sum of values is equal to 0.
-     *
-     * @param float                    $centerX   the abscissa of the center
-     * @param float                    $centerY   the ordinate of the center
-     * @param float                    $radius    the sector radius
-     * @param array                    $rows      the data to draw
-     * @param PdfRectangleStyle|string $style     the draw and fill style
-     * @param bool                     $clockwise indicates whether to go clockwise (true) or counter-clockwise (false)
-     * @param float                    $origin    the origin of angles (0 for right, 90 for top, 180 for left, 270 for bottom)
-     *
-     * @psalm-param array<array{color: PdfFillColor|string, value: int|float}> $rows
-     */
-    public function pieChart(
-        float $centerX,
-        float $centerY,
-        float $radius,
-        array $rows,
-        PdfRectangleStyle|string $style = PdfRectangleStyle::BOTH,
-        bool $clockwise = true,
-        float $origin = 90
-    ): void {
-        // validate
-        if ($radius <= 0 || [] === $rows) {
-            return;
-        }
-        $total = \array_sum(\array_column($rows, 'value'));
-        if (0.0 === $total) {
-            return;
-        }
-        $startAngle = 0.0;
-        foreach ($rows as $row) {
-            $color = $row['color'];
-            if (\is_string($color)) {
-                $color = PdfFillColor::create($color);
-            }
-            if (!$color instanceof PdfFillColor) {
-                $color = PdfFillColor::white();
-            }
-            $color->apply($this);
-            $endAngle = $startAngle + 360.0 * (float) $row['value'] / $total;
-            $this->sector($centerX, $centerY, $radius, $startAngle, $endAngle, $style, $clockwise, $origin);
-            $startAngle = $endAngle;
-        }
-    }
 
     /**
      * Draw a sector.
@@ -88,7 +34,7 @@ trait PdfChartSectorTrait
      * @param float                    $endAngle   the ending angle in degrees
      * @param PdfRectangleStyle|string $style      the draw and fill style
      * @param bool                     $clockwise  indicates whether to go clockwise (true) or counter-clockwise (false)
-     * @param float                    $origin     the origin of angles (0 for right, 90 for top, 180 for left, 270 for bottom)
+     * @param float                    $origin     the origin of angles (0=right, 90=top, 180=left, 270=for bottom)
      */
     public function sector(
         float $centerX,

@@ -477,6 +477,14 @@ class PdfDocument extends \FPDF
     }
 
     /**
+     * Gets the top margin.
+     */
+    public function getTopMargin(): float
+    {
+        return $this->tMargin;
+    }
+
+    /**
      * Gets the current X and Y position.
      *
      * @return float[] the X and Y position

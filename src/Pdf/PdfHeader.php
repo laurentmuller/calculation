@@ -15,6 +15,7 @@ namespace App\Pdf;
 use App\Model\CustomerInformation;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Utils\StringUtils;
 
 /**
  * Class to output header in PDF documents.
@@ -59,21 +60,40 @@ class PdfHeader
     }
 
     /**
+     * Gets the required height.
+     */
+    public function getHeight(): float
+    {
+        $height = PdfDocument::LINE_HEIGHT;
+        if ($this->isPrintAddress()) {
+            $height += 2.0 * self::SMALL_HEIGHT;
+        }
+        if (StringUtils::isString($this->description)) {
+            $width = $this->parent->getPrintableWidth();
+            $lines = $this->parent->getLinesCount($this->description, $width);
+            $height += self::SMALL_HEIGHT * (float) $lines;
+        }
+
+        return $height;
+    }
+
+    /**
      * Output this content to the parent document.
      */
     public function output(): void
     {
         $parent = $this->parent;
-        $parent->useCellMargin(function () use ($parent): void {
+        $printableWidth = $parent->getPrintableWidth();
+        $parent->useCellMargin(function () use ($printableWidth): void {
             $isAddress = $this->isPrintAddress();
-            $printableWidth = $parent->getPrintableWidth();
             $this->line1($printableWidth, $isAddress);
             if ($isAddress) {
                 $this->line2($printableWidth);
                 $this->line3($printableWidth);
             }
-            $parent->resetStyle()->Ln(2);
+            $this->outputDescription();
         });
+        $parent->resetStyle()->Ln(2);
     }
 
     /**
@@ -120,41 +140,6 @@ class PdfHeader
         $this->titleStyle->apply($this->parent);
     }
 
-    private function getAddress(): string
-    {
-        return $this->customer?->getAddress() ?? '';
-    }
-
-    private function getEmail(): string
-    {
-        return $this->customer?->getEmail() ?? '';
-    }
-
-    private function getFax(): string
-    {
-        return $this->customer?->getTranslatedFax($this->parent) ?? '';
-    }
-
-    private function getName(): string
-    {
-        return $this->customer?->getName() ?? '';
-    }
-
-    private function getPhone(): string
-    {
-        return $this->customer?->getTranslatedPhone($this->parent) ?? '';
-    }
-
-    private function getUrl(): string
-    {
-        return $this->customer?->getUrl() ?? '';
-    }
-
-    private function getZipCity(): string
-    {
-        return $this->customer?->getZipCity() ?? '';
-    }
-
     private function isPrintAddress(): bool
     {
         return $this->customer instanceof CustomerInformation && $this->customer->isPrintAddress();
@@ -163,7 +148,7 @@ class PdfHeader
     private function line1(float $printableWidth, bool $isAddress): void
     {
         if ($isAddress) {
-            // name + title + phone
+            // customer + title + phone
             $cellWidth = $printableWidth / 3.0;
             $this->outputName($cellWidth, true);
             $this->outputTitle($cellWidth, true);
@@ -173,25 +158,13 @@ class PdfHeader
             $cellWidth = $printableWidth / 2.0;
             $this->outputTitle($cellWidth, false);
             $this->outputName($cellWidth, false);
-            // description
-            $this->outputDescription($printableWidth, false);
         }
     }
 
     private function line2(float $printableWidth): void
     {
-        if (null !== $this->description) {
-            // address + description + fax
-            $cellWidth = $printableWidth / 3.0;
-            $this->outputAddress($cellWidth);
-            // description
-            $this->outputDescription($cellWidth, true);
-        } else {
-            // address
-            $cellWidth = $printableWidth / 2.0;
-            $this->outputAddress($cellWidth);
-        }
-        // fax
+        $cellWidth = $printableWidth / 2.0;
+        $this->outputAddress($cellWidth);
         $this->outputFax($cellWidth);
     }
 
@@ -206,54 +179,54 @@ class PdfHeader
     private function outputAddress(float $width): void
     {
         $this->applySmallStyle();
-        $text = $this->getAddress();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::none(), PdfTextAlignment::LEFT);
+        $text = $this->customer?->getAddress() ?? '';
+        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::NONE, PdfTextAlignment::LEFT);
     }
 
-    private function outputDescription(float $width, bool $isAddress): void
+    private function outputDescription(): void
     {
-        if (!empty($this->description)) {
-            $this->applySmallStyle();
-            $align = $isAddress ? PdfTextAlignment::CENTER : PdfTextAlignment::LEFT;
-            $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
-            $this->outputText($width, self::SMALL_HEIGHT, $this->description, PdfBorder::none(), $align, $move);
+        $description = $this->description ?? '';
+        if ('' === $description) {
+            return;
         }
+        $this->applySmallStyle();
+        $this->parent->MultiCell(h: self::SMALL_HEIGHT, txt: $description, align: PdfTextAlignment::LEFT);
     }
 
     private function outputEmail(float $width): void
     {
         $this->applySmallStyle();
-        $text = $this->getEmail();
-
+        $text = $this->customer?->getEmail() ?? '';
         $link = '' === $text ? '' : "mailto:$text";
-        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::bottom(), PdfTextAlignment::RIGHT, PdfMove::NEW_LINE, $link);
+        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::BOTTOM, PdfTextAlignment::RIGHT, PdfMove::NEW_LINE, $link);
     }
 
     private function outputFax(float $width): void
     {
         $this->applySmallStyle();
-        $text = $this->getFax();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::none(), PdfTextAlignment::RIGHT, PdfMove::NEW_LINE);
+        $text = $this->customer?->getTranslatedFax($this->parent) ?? '';
+        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::NONE, PdfTextAlignment::RIGHT, PdfMove::NEW_LINE);
     }
 
     private function outputName(float $width, bool $isAddress): void
     {
         $this->applyNameStyle();
-        $name = $this->getName();
+        $name = $this->customer?->getName() ?? '';
+        $link = $this->customer?->getUrl() ?? '';
         $align = $isAddress ? PdfTextAlignment::LEFT : PdfTextAlignment::RIGHT;
-        $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
+        $border = $isAddress ? PdfBorder::NONE : PdfBorder::BOTTOM;
         $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
-        $this->outputText($width, PdfDocument::LINE_HEIGHT, $name, $border, $align, $move, $this->getUrl());
+        $this->outputText($width, PdfDocument::LINE_HEIGHT, $name, $border, $align, $move, $link);
     }
 
     private function outputPhone(float $width): void
     {
         $this->applySmallStyle();
-        $text = $this->getPhone();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::none(), PdfTextAlignment::RIGHT, PdfMove::NEW_LINE);
+        $text = $this->customer?->getTranslatedPhone($this->parent) ?? '';
+        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::NONE, PdfTextAlignment::RIGHT, PdfMove::NEW_LINE);
     }
 
-    private function outputText(float $width, float $height, ?string $text, PdfBorder $border, PdfTextAlignment $align, PdfMove $move = PdfMove::RIGHT, string $link = ''): void
+    private function outputText(float $width, float $height, ?string $text, string|int $border, PdfTextAlignment $align, PdfMove $move = PdfMove::RIGHT, string $link = ''): void
     {
         $this->parent->Cell(
             w: $width,
@@ -271,14 +244,14 @@ class PdfHeader
         $this->applyTitleStyle();
         $title = $this->parent->getTitle() ?? '';
         $align = $isAddress ? PdfTextAlignment::CENTER : PdfTextAlignment::LEFT;
-        $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
+        $border = $isAddress ? PdfBorder::NONE : PdfBorder::BOTTOM;
         $this->outputText($width, PdfDocument::LINE_HEIGHT, $title, $border, $align);
     }
 
     private function outputZipCity(float $width): void
     {
         $this->applySmallStyle();
-        $text = $this->getZipCity();
-        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::bottom(), PdfTextAlignment::LEFT);
+        $text = $this->customer?->getZipCity() ?? '';
+        $this->outputText($width, self::SMALL_HEIGHT, $text, PdfBorder::BOTTOM, PdfTextAlignment::LEFT);
     }
 }

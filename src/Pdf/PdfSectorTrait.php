@@ -14,7 +14,7 @@ namespace App\Pdf;
 
 use App\Pdf\Enums\PdfRectangleStyle;
 
-/*
+/**
  * Trait to draw sector.
  */
 trait PdfSectorTrait
@@ -25,11 +25,11 @@ trait PdfSectorTrait
     /**
      * Draw a sector.
      *
-     * Do nothing if the radius is not positive or if the start angle and the end angle have the same value.
+     * Do nothing if the radius is not positive or if the start angle is equal to the end angle.
      *
      * @param float                    $centerX    the abscissa of the center
      * @param float                    $centerY    the ordinate of the center
-     * @param float                    $radius     the sector radius
+     * @param float                    $radius     the radius
      * @param float                    $startAngle the starting angle in degrees
      * @param float                    $endAngle   the ending angle in degrees
      * @param PdfRectangleStyle|string $style      the draw and fill style

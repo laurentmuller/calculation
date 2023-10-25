@@ -368,12 +368,13 @@ class PdfDocument extends \FPDF
      *
      * Computes the number of lines a MultiCell of the given width will take.
      *
-     * @param ?string $text  the text to compute
-     * @param float   $width the desired width. If 0, the width extends up to the right margin.
+     * @param ?string $text       the text to compute
+     * @param float   $width      the desired width. If 0, the width extends up to the right margin.
+     * @param ?float  $cellMargin the desired cell margin or null to use current value
      *
      * @return int the number of lines
      */
-    public function getLinesCount(?string $text, float $width = 0): int
+    public function getLinesCount(?string $text, float $width = 0, float $cellMargin = null): int
     {
         if (null === $text || '' === $text) {
             return 0;
@@ -393,7 +394,8 @@ class PdfDocument extends \FPDF
         $linesCount = 1;
         $currentWidth = 0.0;
         $cw = $this->CurrentFont['cw'];
-        $maxWidth = ($width - 2.0 * $this->cMargin) * 1000.0 / $this->FontSize;
+        $cellMargin ??= $this->cMargin;
+        $maxWidth = ($width - 2.0 * $cellMargin) * 1000.0 / $this->FontSize;
 
         while ($index < $len) {
             $ch = $text[$index];
@@ -600,9 +602,9 @@ class PdfDocument extends \FPDF
     /**
      * This method allows printing text with line breaks.
      *
-     * They can be automatic (as soon as the text reaches the right border of the cell) or explicit (via the \n character).
-     * As many cells as necessary are output, one below the other. Text can be aligned, centered or justified.
-     * The cell block can be framed and the background painted.
+     * They can be automatic (as soon as the text reaches the right border of the cell) or explicit
+     * (via the \n character). As many cells as necessary are output, one below the other. Text can be aligned,
+     * centered or justified. The cell block can be framed and the background painted.
      *
      * @param float                   $w      the cell width. If 0, the cell extends up to the right margin.
      * @param float                   $h      the cell height

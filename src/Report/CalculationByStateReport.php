@@ -35,11 +35,6 @@ use App\Utils\FormatUtils;
  * @psalm-import-type QueryCalculationType from CalculationStateRepository
  *
  * @extends AbstractArrayReport<QueryCalculationType>
- *
- * @psalm-type PieEntryType = array{
- *        label?: string|null,
- *        color: PdfFillColor|string,
- *        value: int|float}
  */
 class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCellTextInterface
 {
@@ -159,14 +154,13 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     {
         $this->AddPage();
         PdfDrawColor::cellBorder()->apply($this);
-
         $top = $this->getTopMargin() + $this->getHeaderHeight() + self::LINE_HEIGHT;
         $radius = $this->GetPageWidth() / 4.0;
         $centerX = $this->GetPageWidth() / 2.0;
         $centerY = $top + $radius;
-
         $rows = \array_map(function (array $entity): array {
             return [
+                'label' => $entity['code'],
                 'color' => $entity['color'],
                 'value' => $entity['percentAmount'],
             ];
@@ -174,6 +168,11 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
         $this->pieChart($centerX, $centerY, $radius, $rows);
         $this->SetY($centerY + $radius + self::LINE_HEIGHT);
         $this->resetStyle();
+
+        // for testing purpose
+        $this->pieLegendHorizontal($rows);
+        $this->pieLegendVertical($rows, $this->getLeftMargin(), $top);
+        $this->ln();
     }
 
     /**

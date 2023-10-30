@@ -34,7 +34,7 @@ trait GlobalMarginTrait
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function getGlobalMargin(float $minimum = 1.0, float $maximum = 100.0, float $margin = 0.1): GlobalMargin
+    protected function getGlobalMargin(float $minimum = 0.0, float $maximum = 1_000_000.0, float $margin = 1.1): GlobalMargin
     {
         if (!$this->globalMargin instanceof GlobalMargin) {
             $this->globalMargin = new GlobalMargin();

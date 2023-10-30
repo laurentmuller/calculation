@@ -1,9 +1,9 @@
 {%- set key = constant('App\\Controller\\PolicyController::POLICY_ACCEPTED') -%}
-{% if app.user and not app.request.cookies.getBoolean(key) %}
-{% from 'macros/_icons.html.twig' import link %}
-<footer class="navbar navbar-footer {{ navigation_class }} py-1 justify-content-md-end fixed-bottom small d-print-none" style="z-index: 1031;">
-    <span class="navbar-text pe-0"> {{- 'cookie_banner.message'|trans }}</span>
-    {{ link(path('about_policy'), 'cookie_banner.link', 'flex-fill ', null, 'cookie_banner.link_title') }}
-    {{ link(path('policy_accept'), 'cookie_banner.accept', 'px-3', null, 'cookie_banner.accept_title') }}
-</footer>
+{% if app.user and not app.request.cookies.boolean(key) %}
+    {% from 'macros/_icons.html.twig' import link %}
+    <footer class="navbar navbar-footer {{ navigation_class }} py-1 justify-content-md-end fixed-bottom small d-print-none" style="z-index: 1031;">
+        <span class="navbar-text pe-0"> {{- 'cookie_banner.message'|trans }}</span>
+        {{ link(path('about_policy'), 'cookie_banner.link', 'flex-fill ', null, 'cookie_banner.link_title') }}
+        {{ link(path('policy_accept'), 'cookie_banner.accept', 'px-3', null, 'cookie_banner.accept_title') }}
+    </footer>
 {% endif %}

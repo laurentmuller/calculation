@@ -38,6 +38,9 @@ class CalculationByMonthReport extends AbstractArrayReport
     use MathTrait;
     use PdfBarChartTrait;
 
+    private const PATTERN_CHART = 'MMM Y';
+    private const PATTERN_TABLE = 'MMMM Y';
+
     private float $minMargin = 100.0;
 
     /**
@@ -80,14 +83,11 @@ class CalculationByMonthReport extends AbstractArrayReport
             )->outputHeaders();
     }
 
-    private function formatDateChart(\DateTimeInterface $date): string
+    private function formatDate(\DateTimeInterface $date, bool $forTable): string
     {
-        return \ucfirst(FormatUtils::formatDate(date: $date, pattern: 'MMM Y'));
-    }
+        $pattern = $forTable ? self::PATTERN_TABLE : self::PATTERN_CHART;
 
-    private function formatDateTable(\DateTimeInterface $date): string
-    {
-        return \ucfirst(FormatUtils::formatDate(date: $date, pattern: 'MMMM Y'));
+        return \ucfirst(FormatUtils::formatDate(date: $date, pattern: $pattern));
     }
 
     private function formatPercent(float $value, bool $bold = false): PdfCell
@@ -115,9 +115,9 @@ class CalculationByMonthReport extends AbstractArrayReport
         $top = $this->getTopMargin() + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
         $rows = \array_map(function (array $entity): array {
             return [
-                'label' => $this->formatDateChart($entity['date']),
+                'label' => $this->formatDate($entity['date'], false),
                 'values' => [
-                    ['color' => '#006400', 'value' => $entity['items']],
+                    ['color' => '#006400', 'value' => $entity['items'] / 4.0],
                     ['color' => '#8B0000', 'value' => $entity['total'] - $entity['items']],
                 ],
             ];
@@ -144,7 +144,7 @@ class CalculationByMonthReport extends AbstractArrayReport
 
         foreach ($entities as $entity) {
             $table->addRow(
-                $this->formatDateTable($entity['date']),
+                $this->formatDate($entity['date'], true),
                 FormatUtils::formatInt($entity['count']),
                 FormatUtils::formatInt($entity['items']),
                 FormatUtils::formatInt($entity['total'] - $entity['items']),

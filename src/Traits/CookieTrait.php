@@ -21,15 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 trait CookieTrait
 {
-    /**
-     * Clears a cookie in the browser.
-     */
-    protected function clearCookie(Response $response, string $key, string $prefix = '', string $path = '/', bool $httpOnly = true): void
-    {
-        $name = $this->getCookieName($key, $prefix);
-        $response->headers->clearCookie(name: $name, path: $path, httpOnly: $httpOnly);
-    }
-
     protected function getCookieBoolean(Request $request, string $key, string $prefix = '', bool $default = false): bool
     {
         $name = $this->getCookieName($key, $prefix);
@@ -46,22 +37,34 @@ trait CookieTrait
      *
      * @psalm-return EnumType
      */
-    protected function getCookieEnum(Request $request, string $key, \BackedEnum $default, string $prefix = ''): \BackedEnum
-    {
+    protected function getCookieEnum(
+        Request $request,
+        string $key,
+        \BackedEnum $default,
+        string $prefix = ''
+    ): \BackedEnum {
         $name = $this->getCookieName($key, $prefix);
 
         return $request->cookies->getEnum($name, $default::class, $default) ?? $default;
     }
 
-    protected function getCookieFloat(Request $request, string $key, string $prefix = '', float $default = 0): float
-    {
+    protected function getCookieFloat(
+        Request $request,
+        string $key,
+        string $prefix = '',
+        float $default = 0
+    ): float {
         $name = $this->getCookieName($key, $prefix);
 
         return (float) $request->cookies->get($name, (string) $default);
     }
 
-    protected function getCookieInt(Request $request, string $key, string $prefix = '', int $default = 0): int
-    {
+    protected function getCookieInt(
+        Request $request,
+        string $key,
+        string $prefix = '',
+        int $default = 0
+    ): int {
         $name = $this->getCookieName($key, $prefix);
 
         return $request->cookies->getInt($name, $default);
@@ -75,39 +78,71 @@ trait CookieTrait
         return '' === $prefix ? \strtoupper($key) : \strtoupper($prefix . '_' . $key);
     }
 
-    protected function getCookieString(Request $request, string $key, string $prefix = '', string $default = ''): string
-    {
+    protected function getCookieString(
+        Request $request,
+        string $key,
+        string $prefix = '',
+        string $default = ''
+    ): string {
         $name = $this->getCookieName($key, $prefix);
 
         return $request->cookies->getString($name, $default);
     }
 
     /**
+     * Add or remove a cookie depending on the value. If value is null or empty ('') the cookie is removed.
+     */
+    protected function updateCookie(
+        Response $response,
+        string $key,
+        mixed $value,
+        string $prefix = '',
+        string $path = '/',
+        string $modify = '+1 year',
+        bool $httpOnly = true
+    ): void {
+        if ($value instanceof \BackedEnum || \is_bool($value) || '' !== (string) $value) {
+            $this->setCookie($response, $key, $value, $prefix, $path, $modify, $httpOnly);
+        } else {
+            $this->clearCookie($response, $key, $prefix, $path, $httpOnly);
+        }
+    }
+
+    /**
+     * Clears a cookie in the browser.
+     */
+    private function clearCookie(
+        Response $response,
+        string $key,
+        string $prefix = '',
+        string $path = '/',
+        bool $httpOnly = true
+    ): void {
+        $name = $this->getCookieName($key, $prefix);
+        $response->headers->clearCookie(name: $name, path: $path, httpOnly: $httpOnly);
+    }
+
+    /**
      * Sets a cookie in the browser.
      */
-    protected function setCookie(Response $response, string $key, mixed $value, string $prefix = '', string $path = '/', string $modify = '+1 year', bool $httpOnly = true): void
-    {
+    private function setCookie(
+        Response $response,
+        string $key,
+        mixed $value,
+        string $prefix = '',
+        string $path = '/',
+        string $modify = '+1 year',
+        bool $httpOnly = true
+    ): void {
         if ($value instanceof \BackedEnum) {
             $value = $value->value;
         } elseif (\is_bool($value)) {
-            $value = (int) $value;
+            $value = \json_encode($value);
         }
 
         $name = $this->getCookieName($key, $prefix);
         $expire = (new \DateTime())->modify($modify);
         $cookie = new Cookie(name: $name, value: (string) $value, expire: $expire, path: $path, httpOnly: $httpOnly);
         $response->headers->setCookie($cookie);
-    }
-
-    /**
-     * Add or remove a cookie depending on the value. If value is null or empty ('') the cookie is removed.
-     */
-    protected function updateCookie(Response $response, string $key, mixed $value, string $prefix = '', string $path = '/', string $modify = '+1 year', bool $httpOnly = true): void
-    {
-        if ($value instanceof \BackedEnum || \is_bool($value) || '' !== (string) $value) {
-            $this->setCookie($response, $key, $value, $prefix, $path, $modify, $httpOnly);
-        } else {
-            $this->clearCookie($response, $key, $prefix, $path, $httpOnly);
-        }
     }
 }

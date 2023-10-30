@@ -57,6 +57,7 @@
         entry += `expires=${date.toUTCString()};`;
         entry += `path=${path};`;
         entry += 'samesite=lax;';
+        entry += 'secure';
         document.cookie = entry;
     };
 

@@ -35,7 +35,7 @@ class PolicyController extends AbstractController
      * Accept the license agreement.
      */
     #[Route(path: '/accept', name: 'policy_accept')]
-    public function invoke(): RedirectResponse
+    public function accept(): RedirectResponse
     {
         $path = $this->getCookiePath();
         $response = $this->redirectToHomePage('cookie_banner.success');

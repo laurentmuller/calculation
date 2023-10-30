@@ -1,7 +1,7 @@
 {# admin menu #}
 {% from 'macros/_icons.html.twig' import icon, dropdownSeparator, navItem, navItemExternal %}
 {% set id = 'MENU_SIDEBAR_TEST' %}
-{% set expanded = app.request.cookies.getBoolean(id) %}
+{% set expanded = app.request.cookies.boolean(id) %}
 {% set toggle_class = expanded ? ' active' : '' %}
 {% set collapse_class = expanded ? ' show' : '' %}
 {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
@@ -13,7 +13,7 @@
     <div class="collapse{{ collapse_class }}" id="{{ id }}">
         <ul class="list-unstyled">
             {% set id = 'MENU_SIDEBAR_TEST_SERVICE' %}
-            {% set expanded = app.request.cookies.getBoolean(id) %}
+            {% set expanded = app.request.cookies.boolean(id) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}
             {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
@@ -32,7 +32,7 @@
             </li>
 
             {% set id = 'MENU_SIDEBAR_TEST_PAGE' %}
-            {% set expanded = app.request.cookies.getBoolean(id) %}
+            {% set expanded = app.request.cookies.boolean(id) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}
             {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
@@ -51,7 +51,7 @@
             </li>
 
             {% set id = 'MENU_SIDEBAR_TEST_ADMIN' %}
-            {% set expanded = app.request.cookies.getBoolean(id) %}
+            {% set expanded = app.request.cookies.boolean(id) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}
             {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
@@ -68,7 +68,7 @@
             </li>
 
             {% set id = 'MENU_SIDEBAR_TEST_CHART' %}
-            {% set expanded = app.request.cookies.getBoolean(id) %}
+            {% set expanded = app.request.cookies.boolean(id) %}
             {% set toggle_class = expanded ? ' active' : '' %}
             {% set collapse_class = expanded ? ' show' : '' %}
             {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}

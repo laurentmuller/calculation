@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\EntityTrait;
 
 use App\Entity\Group;
+use App\Entity\GroupMargin;
 
 /**
  * Trait to manage a group.
@@ -29,6 +30,11 @@ trait GroupTrait
         if (!$this->group instanceof Group) {
             $this->group = new Group();
             $this->group->setCode($code);
+            $margin = new GroupMargin();
+            $margin->setMinimum(0)
+                ->setMaximum(1_000_000)
+                ->setMargin(0.1);
+            $this->group->addMargin($margin);
             $this->addEntity($this->group);
         }
 

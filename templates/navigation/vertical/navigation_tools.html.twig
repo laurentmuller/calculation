@@ -1,7 +1,7 @@
 {# tools menu #}
 {% from 'macros/_icons.html.twig' import icon, navItem, dropdownSeparator %}
 {% set id = 'MENU_SIDEBAR_TOOLS' %}
-{% set expanded = app.request.cookies.getBoolean(id) %}
+{% set expanded = app.request.cookies.boolean(id) %}
 {% set toggle_class = expanded ? ' active' : '' %}
 {% set collapse_class = expanded ? ' show' : '' %}
 {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}

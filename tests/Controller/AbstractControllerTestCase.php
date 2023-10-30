@@ -43,6 +43,9 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
     {
         $this->addEntities();
         $this->checkRoute($url, $username, $expected, $method, $xmlHttpRequest);
+        if ($this->mustDeleteEntities()) {
+            $this->deleteEntities();
+        }
     }
 
     /**
@@ -116,6 +119,11 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
         }
 
         return null;
+    }
+
+    protected function mustDeleteEntities(): bool
+    {
+        return false;
     }
 
     private function isOfficeDocument(string $url): bool

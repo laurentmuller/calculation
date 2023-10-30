@@ -32,7 +32,6 @@
          */
         destroy() {
             this.$element.off('shown.bs.collapse hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
-            this.$element.off('click', '.nav-link-toggle', this.toggleClickProxy);
             this.$showSidebarButton.off('click', this.showSidebarProxy);
             this.$hideSidebarButton.off('click', this.hideSidebarProxy);
             $(window).off('resize', this.resizeProxy);
@@ -67,20 +66,15 @@
             // highlight url
             this._highlightPath();
 
-            // save state
-            /** @type {Array<string, boolean>} */
-            this.oldState = this._getState();
-
             // create proxies
             this.toggleCollapseProxy = () => this._updateToggleButtons();
-            this.toggleClickProxy = (e) => this._toggleClick(e);
+            //this.toggleClickProxy = (e) => this._toggleClick(e);
             this.showSidebarProxy = (e) => this._showSidebar(e);
             this.hideSidebarProxy = (e) => this._hideSidebar(e);
             this.resizeProxy = (e) => this._resize(e);
 
             // bind events
             this.$element.on('shown.bs.collapse hidden.bs.collapse', 'div.collapse', this.toggleCollapseProxy);
-            this.$element.on('click', '.nav-link-toggle', this.toggleClickProxy);
             this.$showSidebarButton.on('click', this.showSidebarProxy);
             this.$hideSidebarButton.on('click', this.hideSidebarProxy);
             $(window).on('resize', this.resizeProxy);
@@ -158,7 +152,6 @@
          */
         _hideSidebar(e) {
             if (this._isSideBarVisible()) {
-                this.$element.removeTimer();
                 this._toggleSidebar(e);
             }
         }
@@ -171,7 +164,6 @@
          */
         _showSidebar(e) {
             if (!this._isSideBarVisible()) {
-                this.$element.removeTimer();
                 this._toggleSidebar(e);
             }
         }
@@ -199,21 +191,6 @@
         }
 
         /**
-         * Handle the toggle button click events.
-         *
-         * @param {Event} [e] - the event.
-         * @private
-         */
-        _toggleClick(e) {
-            const that = this;
-            const $this = $(e.currentTarget);
-            $this.createTimer(function () {
-                $this.removeTimer();
-                that._saveState();
-            }, 750);
-        }
-
-        /**
          * Update toggle buttons.
          * @private
          */
@@ -226,6 +203,7 @@
                 const $button = $element.prev('.nav-link-toggle');
                 $button.toggleClass('active', show).attr('title', title);
             });
+            this._saveState();
         }
 
         /**
@@ -320,18 +298,18 @@
          * @private
          */
         _saveState() {
-            if (!this.options.url) {
-                return;
+            const state = this._getState();
+            const date = new Date();
+            date.setFullYear(date.getFullYear() + 1);
+            const path = document.body.dataset.cookiePath || '/';
+            for (const [key, value] of Object.entries(state)) {
+                let entry = `${key}=${JSON.stringify(value)};`;
+                entry += `expires=${date.toUTCString()};`;
+                entry += `path=${path};`;
+                entry += 'samesite=lax;';
+                entry += 'secure';
+                document.cookie = entry;
             }
-            const oldState = this.oldState;
-            const newState = this._getState();
-            if (oldState && JSON.stringify(oldState) === JSON.stringify(newState)) {
-                return;
-            }
-            this.oldState = newState;
-            $.ajaxSetup({global: false});
-            $.post(this.options.url, newState)
-                .always(() => $.ajaxSetup({global: true}));
         }
     };
 

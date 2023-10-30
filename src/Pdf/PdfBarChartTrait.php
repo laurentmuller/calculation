@@ -19,20 +19,20 @@ use App\Traits\MathTrait;
 /**
  * Trait to draw bar chart.
  *
- * @psalm-type BarChartAxisType = array{
- *     min?: int|float,
- *     max?: int|float,
- *     step?: int|float,
- *     formatter?: callable(int|float): string}
  * @psalm-type BarChartValueType = array{
  *     color: PdfFillColor|string,
  *     value: int|float}
- *  @psalm-type BarChartRowType = array{
+ * @psalm-type BarChartRowType = array{
  *      label: string,
  *      values: BarChartValueType[]}
+ * @psalm-type BarChartAxisType = array{
+ *      min?: int|float,
+ *      max?: int|float,
+ *      step?: int|float,
+ *      formatter?: callable(int|float): string}
  * @psalm-type BarChartDataType = array{
- *      color: PdfFillColor|string,
- *      value: int|float,
+ *      color: PdfFillColor,
+ *      value: float,
  *      y: float,
  *      h: float}
  * @psalm-type BarChartRowDataType = array{
@@ -84,8 +84,9 @@ trait PdfBarChartTrait
         $y ??= $this->GetY();
         $w ??= $this->getPrintableWidth();
         $h ??= 200.0;
-
         $endY = $y + $h;
+
+        // init
         PdfStyle::getCellStyle()->apply($this);
         $cellMargin = $this->getCellMargin();
         $this->setCellMargin(0.0);
@@ -99,12 +100,12 @@ trait PdfBarChartTrait
         $formatter = $axis['formatter'] ?? fn (int|float $value): string => (string) $value;
 
         $labelsY = $this->_barGetLabelsY($min, $max, $step, $formatter);
-        $widthY = \max(\array_column($labelsY, 'label_width'));
+        $widthY = $this->_barGetMaxLabelsWidth($labelsY);
 
         $labelsX = $this->_barGetLabelsX($rows);
-        $widthX = \max(\array_column($labelsX, 'label_width'));
+        $widthX = $this->_barGetMaxLabelsWidth($labelsX);
 
-        $barWidth = $this->_barGetBarWidth($rows, $w - $widthY);
+        $barWidth = $this->_barGetBarWidth($rows, $w - $widthY - 1.0);
         $rotation = $barWidth < $widthX;
 
         // draw Y axis
@@ -117,60 +118,42 @@ trait PdfBarChartTrait
         $this->_barDrawAxisY($labelsY, $widthY, $x, $y, $w, $h);
 
         // restrict data area
-        $widthY += 1.0;
-        $x += $widthY;
-        $w -= $widthY;
+        $x += $widthY + 1.0 + self::SEP_BARS;
         $y += self::LINE_HEIGHT / 2.0;
-
-        // compute data
-        $data = $this->_barComputeData($rows, $x, $y, $w, $h, $min, $max);
 
         // draw axis X and data
         $this->_barDrawAxisX($labelsX, $barWidth, $rotation, $x, $y + $h);
+
+        // compute and draw data
+        $data = $this->_barComputeData($rows, $barWidth, $x, $y, $h, $min, $max);
         $this->_barDrawData($data);
 
-        // reset values
+        // reset
         $this->setCellMargin($cellMargin)
             ->resetStyle()
             ->SetY($endY);
     }
 
     /**
-     * @psalm-param (BarChartValueType|BarChartDataType) $row
-     */
-    private function _barApplyFillColor(array $row): void
-    {
-        $color = $row['color'];
-        if (\is_string($color)) {
-            $color = PdfFillColor::create($color);
-        }
-        if (!$color instanceof PdfFillColor) {
-            $color = PdfFillColor::white();
-        }
-        $color->apply($this);
-    }
-
-    /**
-     * @psalm-param BarChartRowType[] $rows
+     * @psalm-param non-empty-array<BarChartRowType> $rows
      *
-     * @psalm-return BarChartRowDataType[]
+     * @psalm-return non-empty-array<BarChartRowDataType>
      */
     private function _barComputeData(
         array $rows,
+        float $barWidth,
         float $x,
         float $y,
-        float $w,
         float $h,
         float $min,
         float $max
     ): array {
-        $barWidth = $this->_barGetBarWidth($rows, $w);
-        $step = self::SEP_BARS + $barWidth;
-        $delta = $max - $min;
-        $bottom = $y + $h;
-
         $result = [];
-        $currentX = $x + self::SEP_BARS;
+        $bottom = $y + $h;
+        $delta = $max - $min;
+        $step = self::SEP_BARS + $barWidth;
+
+        $currentX = $x;
         foreach ($rows as $row) {
             $entry = [
                 'label' => $row['label'],
@@ -183,42 +166,47 @@ trait PdfBarChartTrait
             foreach ($row['values'] as $value) {
                 $currentValue = $this->validateRange((float) $value['value'], $min, $max);
                 $heightValue = $this->safeDivide($h * ($currentValue - $min), $delta);
+                if (($startY - $heightValue) < $y) {
+                    continue;
+                }
                 $entry['values'][] = [
-                    'color' => $value['color'],
+                    'color' => $this->_barGetFillColor($value),
                     'value' => $currentValue,
                     'y' => $startY - $heightValue,
                     'h' => $heightValue,
                 ];
                 $startY -= $heightValue;
             }
-            $currentX += $step;
             $result[] = $entry;
+            $currentX += $step;
         }
 
         return $result;
     }
 
     /**
-     * @psalm-param BarChartRowType[] $rows
+     * @psalm-param non-empty-array<BarChartRowType> $rows
      */
     private function _barComputeMaxValue(array $rows): float
     {
-        $result = \PHP_FLOAT_MIN;
+        $result = null;
         foreach ($rows as $row) {
-            $result = \max($result, \array_sum(\array_column($row['values'], 'value')));
+            $values = \array_sum(\array_column($row['values'], 'value'));
+            $result = null === $result ? $values : \max($result, $values);
         }
 
         return $result;
     }
 
     /**
-     * @psalm-param BarChartRowType[] $rows
+     * @psalm-param non-empty-array<BarChartRowType> $rows
      */
     private function _barComputeMinValue(array $rows): float
     {
-        $result = \PHP_FLOAT_MAX;
+        $result = null;
         foreach ($rows as $row) {
-            $result = \min($result, \array_sum(\array_column($row['values'], 'value')));
+            $values = \array_sum(\array_column($row['values'], 'value'));
+            $result = null === $result ? $values : \min($result, $values);
         }
 
         return $result;
@@ -234,7 +222,6 @@ trait PdfBarChartTrait
         float $x,
         float $y
     ): void {
-        $x += self::SEP_BARS;
         foreach ($labels as $label) {
             $text = $label['label'];
             if ($rotation) {
@@ -251,7 +238,7 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param  BarChartLabelType[] $labels
+     * @psalm-param  non-empty-array<BarChartLabelType> $labels
      */
     private function _barDrawAxisY(
         array $labels,
@@ -273,14 +260,14 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param BarChartRowDataType[] $data
+     * @psalm-param non-empty-array<BarChartRowDataType> $data
      */
     private function _barDrawData(array $data): void
     {
         foreach ($data as $row) {
             foreach ($row['values'] as $value) {
-                $this->_barApplyFillColor($value);
-                $this->Rect($row['x'], $value['y'], $row['w'], $value['h'], PdfRectangleStyle::BOTH);
+                $value['color']->apply($this);
+                $this->Rect($row['x'], $value['y'], $row['w'], $value['h'], PdfRectangleStyle::FILL);
             }
         }
     }
@@ -289,7 +276,20 @@ trait PdfBarChartTrait
     {
         $countRows = (float) \count($rows);
 
-        return ($w - self::SEP_BARS * $countRows) / $countRows;
+        return ($w - ($countRows + 1.0) * self::SEP_BARS) / $countRows;
+    }
+
+    /**
+     * @psalm-param BarChartValueType $row
+     */
+    private function _barGetFillColor(array $row): PdfFillColor
+    {
+        $color = $row['color'];
+        if (\is_string($color)) {
+            $color = PdfFillColor::create($color);
+        }
+
+        return $color instanceof PdfFillColor ? $color : PdfFillColor::white();
     }
 
     /**
@@ -331,6 +331,14 @@ trait PdfBarChartTrait
         return $result;
     }
 
+    /**
+     * @psalm-param non-empty-array<BarChartLabelType> $labels
+     */
+    private function _barGetMaxLabelsWidth(array $labels): float
+    {
+        return \max(\array_column($labels, 'label_width'));
+    }
+
     private function _barGetTicks(float $value): int
     {
         $str = \rtrim((string) (int) $value, '0');
@@ -339,6 +347,7 @@ trait PdfBarChartTrait
             '12' => 6,
             '14' => 7,
             '16' => 8,
+            '18' => 3,
             '25' => 10,
             default => match (\substr($str, -1)) {
                 '1',
@@ -362,7 +371,8 @@ trait PdfBarChartTrait
         if ($max >= $value) {
             return $max;
         }
-        $step = $this->safeDivide($max, $this->_barGetTicks($max));
+        $tick = $this->_barGetTicks($max);
+        $step = $this->safeDivide($max, $tick);
         if ($this->isFloatZero($step)) {
             return $max;
         }

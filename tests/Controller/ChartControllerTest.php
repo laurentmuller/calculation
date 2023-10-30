@@ -14,6 +14,7 @@ namespace App\Tests\Controller;
 
 use App\Controller\ChartController;
 use App\Tests\EntityTrait\CalculationTrait;
+use App\Tests\EntityTrait\GlobalMarginTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ChartControllerTest extends AbstractControllerTestCase
 {
     use CalculationTrait;
+    use GlobalMarginTrait;
     use ProductTrait;
 
     public static function getRoutes(): \Generator
@@ -51,6 +53,7 @@ class ChartControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
+        $this->getGlobalMargin();
         $group = $this->getGroup();
         $category = $this->getCategory($group);
         $product = $this->getProduct($category);
@@ -65,7 +68,13 @@ class ChartControllerTest extends AbstractControllerTestCase
      */
     protected function deleteEntities(): void
     {
+        $this->deleteGlobalMargin();
         $this->deleteCalculation();
         $this->deleteProduct();
+    }
+
+    protected function mustDeleteEntities(): bool
+    {
+        return true;
     }
 }

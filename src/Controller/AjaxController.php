@@ -116,25 +116,6 @@ class AjaxController extends AbstractController
     }
 
     /**
-     * Save the state of the sidebar to cookies.
-     */
-    #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/navigation', name: 'ajax_save_navigation', methods: Request::METHOD_POST)]
-    public function saveNavigationState(Request $request): JsonResponse
-    {
-        $input = $request->request;
-        $response = $this->json(true);
-        $path = $this->getCookiePath();
-
-        /** @psalm-var string $key */
-        foreach ($input->keys() as $key) {
-            $this->updateCookie($response, $key, $input->getBoolean($key), path: $path);
-        }
-
-        return $response;
-    }
-
-    /**
      * Sets a session attribute.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]

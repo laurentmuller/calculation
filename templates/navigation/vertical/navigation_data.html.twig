@@ -1,7 +1,7 @@
 {# data menu #}
 {% from 'macros/_icons.html.twig' import icon, navItem %}
 {% set id = 'MENU_SIDEBAR_DATA' %}
-{% set expanded = app.request.cookies.getBoolean(id, true) %}
+{% set expanded = app.request.cookies.boolean(id, true) %}
 {% set toggle_class = expanded ? ' active' : '' %}
 {% set collapse_class = expanded ? ' show' : '' %}
 {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}

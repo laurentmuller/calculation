@@ -73,48 +73,29 @@ trait MathTrait
     /**
      * Execute a safe division operation. Returns the default value when the divisor is equal to 0.
      *
-     * @param float $dividend the dividend (numerator)
-     * @param float $divisor  the divisor (denominator)
-     * @param float $default  the default value to return when divisor is equal to 0
+     * @param float $default the default value to return when divisor is equal to 0
      *
      * @return float the division result
      */
-    protected function safeDivide(float $dividend, float $divisor, float $default = 0.0): float
+    protected function safeDivide(float|int $dividend, float|int $divisor, float $default = 0.0): float
     {
-        return 0.0 === $divisor ? $default : $dividend / $divisor;
-    }
+        $divisor = (float) $divisor;
 
-    /**
-     * Ensure that the given value is within the given range.
-     *
-     * @param float $value the value to be tested
-     * @param float $min   the minimum value allowed (inclusive)
-     * @param float $max   the maximum value allowed (inclusive)
-     *
-     * @return float the checked value
-     */
-    protected function validateFloatRange(float $value, float $min, float $max): float
-    {
-        if ($value < $min) {
-            return $min;
-        }
-        if ($value > $max) {
-            return $max;
-        }
-
-        return $value;
+        return 0.0 === $divisor ? $default : (float) $dividend / $divisor;
     }
 
     /**
      * Ensure that the given value is within the given inclusive range.
      *
-     * @param int $value the value to be tested
-     * @param int $min   the minimum value allowed (inclusive)
-     * @param int $max   the maximum value allowed (inclusive)
+     * @param int|float $value the value to be tested
+     * @param int|float $min   the minimum value allowed (inclusive)
+     * @param int|float $max   the maximum value allowed (inclusive)
      *
-     * @return int checked value
+     * @return int|float checked value
+     *
+     * @psalm-return ($value is float ? float : int)
      */
-    protected function validateIntRange(int $value, int $min, int $max): int
+    protected function validateRange(int|float $value, int|float $min, int|float $max): int|float
     {
         if ($value < $min) {
             return $min;

@@ -208,11 +208,6 @@ trait PdfBookmarkTrait
         $this->_endobj();
     }
 
-    private function _endobj(): void
-    {
-        $this->_put('endobj');
-    }
-
     private function _outputIndexLevel(int $level): float
     {
         $offset = 0;
@@ -321,11 +316,6 @@ trait PdfBookmarkTrait
         $this->_putParams('/Dest [%d 0 R /XYZ 0 %.2F null]', $page, $bookmark['y']);
         $this->_put('/Count 0>>');
         $this->_endobj();
-    }
-
-    private function _putParams(string $format, float|int|string ...$values): void
-    {
-        $this->_put(\sprintf($format, ...$values));
     }
 
     private function _updateBookmarks(): int

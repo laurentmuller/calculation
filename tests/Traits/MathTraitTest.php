@@ -154,14 +154,14 @@ class MathTraitTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getValidateFloatRange')]
     public function testValidateFloatRange(float $value, float $min, float $max, float $expected): void
     {
-        $actual = $this->validateFloatRange($value, $min, $max);
+        $actual = $this->validateRange($value, $min, $max);
         self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getValidateIntRange')]
     public function testValidateIntRange(int $value, int $min, int $max, int $expected): void
     {
-        $actual = $this->validateIntRange($value, $min, $max);
+        $actual = $this->validateRange($value, $min, $max);
         self::assertSame($expected, $actual);
     }
 }

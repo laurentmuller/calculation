@@ -18,7 +18,6 @@ use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
-use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfPieChartTrait;
 use App\Pdf\PdfRectangle;
@@ -65,8 +64,9 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     {
         $this->SetTitle($this->transChart('title_by_state'));
         $this->minMargin = $this->controller->getMinMargin();
-        $this->outputChart($entities);
-        $this->outputTable($entities);
+        $this->AddPage();
+        $this->renderChart($entities);
+        $this->renderTable($entities);
 
         return true;
     }
@@ -137,11 +137,6 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
         return $cell;
     }
 
-    private function getHeaderHeight(): float
-    {
-        return $this->getHeader()->getHeight();
-    }
-
     private function isMinMargin(float $value): bool
     {
         return !$this->isFloatZero($value) && $value < $this->minMargin;
@@ -150,11 +145,9 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     /**
      * @psalm-param QueryCalculationType[] $entities
      */
-    private function outputChart(array $entities): void
+    private function renderChart(array $entities): void
     {
-        $this->AddPage();
-        PdfDrawColor::cellBorder()->apply($this);
-        $top = $this->getTopMargin() + $this->getHeaderHeight() + self::LINE_HEIGHT;
+        $top = $this->getTopMargin() + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
         $radius = $this->GetPageWidth() / 4.0;
         $centerX = $this->GetPageWidth() / 2.0;
         $centerY = $top + $radius;
@@ -178,7 +171,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     /**
      * @psalm-param QueryCalculationType[] $entities
      */
-    private function outputTable(array $entities): void
+    private function renderTable(array $entities): void
     {
         $table = $this->createTable();
 

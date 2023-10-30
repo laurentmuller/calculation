@@ -12,12 +12,10 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Intl\Currencies;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Exchange rate service.
@@ -40,11 +38,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      date: \DateTimeInterface,
  *      documentation: string}
  */
-class ExchangeRateService extends AbstractHttpClientService implements ServiceSubscriberInterface
+class ExchangeRateService extends AbstractHttpClientService
 {
-    use ServiceSubscriberTrait;
-    use TranslatorAwareTrait;
-
     /**
      * The default cache timeout (15 minutes).
      */
@@ -98,7 +93,8 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
     public function __construct(
         #[\SensitiveParameter]
         #[Autowire('%exchange_rate_key%')]
-        string $key
+        string $key,
+        private readonly TranslatorInterface $translator
     ) {
         parent::__construct($key);
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
@@ -424,6 +420,6 @@ class ExchangeRateService extends AbstractHttpClientService implements ServiceSu
 
     private function translateError(string $id): string
     {
-        return $this->trans($id, [], 'exchange_rate');
+        return $this->translator->trans($id, [], 'exchange_rate');
     }
 }

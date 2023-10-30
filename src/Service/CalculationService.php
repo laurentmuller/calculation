@@ -102,28 +102,30 @@ final class CalculationService implements ServiceSubscriberInterface
      *
      * @psalm-suppress UnsupportedReferenceUsage
      */
-    public function adjustUserMargin(array &$parameters): void
+    public function adjustUserMargin(array $parameters): array
     {
         $parameters['overall_below'] = false;
         $groups = &$parameters['groups'];
-        $total_group = &$this->findGroup($groups, self::ROW_TOTAL_GROUP);
-        $net_group = &$this->findGroup($groups, self::ROW_TOTAL_NET);
-        $user_group = &$this->findGroup($groups, self::ROW_USER_MARGIN);
-        $overall_group = &$this->findGroup($groups, self::ROW_OVERALL_TOTAL);
+        $total_group = &$this->findOrCreateGroup($groups, self::ROW_TOTAL_GROUP);
+        $net_group = &$this->findOrCreateGroup($groups, self::ROW_TOTAL_NET);
+        $user_group = &$this->findOrCreateGroup($groups, self::ROW_USER_MARGIN);
+        $overall_group = &$this->findOrCreateGroup($groups, self::ROW_OVERALL_TOTAL);
         $min_margin = $parameters['min_margin'];
         $total_amount = $total_group['amount'];
         $net_total = $net_group['total'];
         if ($this->isFloatZero($net_total)) {
-            return;
+            return $parameters;
         }
         $user_margin = (($total_amount * $min_margin) - $net_total) / $net_total;
-        $user_margin = \ceil($user_margin * 100.0) / 100.0;
+        $user_margin = $this->ceil($user_margin);
         $user_group['margin'] = $user_margin;
         $user_group['total'] = $net_total * $user_margin;
         $overall_group['total'] = $net_total + $user_group['total'];
-        $overall_group['margin'] = \floor($overall_group['total'] / $total_amount * 100.0) / 100.0;
+        $overall_group['margin'] = $this->floor($overall_group['total'] / $total_amount);
         $overall_group['margin_amount'] = $overall_group['total'] - $total_amount;
         $parameters['user_margin'] = (int) \floor(100.0 * $user_margin);
+
+        return $parameters;
     }
 
     /**
@@ -189,7 +191,7 @@ final class CalculationService implements ServiceSubscriberInterface
             if (empty($value)) {
                 continue;
             }
-            $group = $this->getGroup($key);
+            $group = $this->findGroup($key);
             if (!$group instanceof Group) {
                 continue;
             }
@@ -280,18 +282,13 @@ final class CalculationService implements ServiceSubscriberInterface
     }
 
     /**
-     * Finds a groups for the given identifier.
-     *
-     * @param array<array> $groups the groups to search in
-     * @param int          $id     the identifier to search for
-     *
-     * @return array the group, if found, a new empty group otherwise
+     * Finds or create a groups for the given identifier.
      *
      * @psalm-param ServiceGroupType[] $groups
      *
      * @psalm-return ServiceGroupType
      */
-    private function &findGroup(array &$groups, int $id): array
+    private function &findOrCreateGroup(array &$groups, int $id): array
     {
         foreach ($groups as &$group) {
             if ($group['id'] === $id) {
@@ -301,6 +298,11 @@ final class CalculationService implements ServiceSubscriberInterface
         $groups[] = $new_group = $this->createGroup($id, $this->trans('common.value_unknown'));
 
         return $new_group;
+    }
+
+    private function ceil(float $value): float
+    {
+        return \ceil($value * 100.0) / 100.0;
     }
 
     /**
@@ -317,8 +319,12 @@ final class CalculationService implements ServiceSubscriberInterface
      *
      * @psalm-return non-empty-array<ServiceGroupType>
      */
-    private function computeGroups(array $groups, float $user_margin, callable $callback = null, float $global_margin = null): array
-    {
+    private function computeGroups(
+        array $groups,
+        float $user_margin,
+        callable $callback = null,
+        float $global_margin = null
+    ): array {
         /** @psalm-var array<ServiceGroupType> $result */
         $result = $callback ? \array_map($callback, $groups) : $groups;
         $groups_amount = $this->round($this->getGroupsAmount($result));
@@ -356,7 +362,7 @@ final class CalculationService implements ServiceSubscriberInterface
         $overall_total = $total_net + $user_amount;
         $overall_amount = $overall_total - $groups_amount;
         $overall_margin = $this->safeDivide($overall_amount, $groups_amount);
-        $overall_margin = \floor((1.0 + $overall_margin) * 100.0) / 100.0;
+        $overall_margin = $this->floor(1.0 + $overall_margin);
         $overall_below = [] !== $groups && !$this->isFloatZero($overall_total) && $this->service->isMarginBelow($overall_margin);
         $result[] = $this->createGroup(
             id: self::ROW_OVERALL_TOTAL,
@@ -400,8 +406,15 @@ final class CalculationService implements ServiceSubscriberInterface
     /**
      * @psalm-return ServiceGroupType
      */
-    private function createGroup(int $id, string $description, float $amount = 0.0, float $margin = 0.0, float $margin_amount = 0.0, float $total = 0.0, bool $overall_below = null): array
-    {
+    private function createGroup(
+        int $id,
+        string $description,
+        float $amount = 0.0,
+        float $margin = 0.0,
+        float $margin_amount = 0.0,
+        float $total = 0.0,
+        bool $overall_below = null
+    ): array {
         $result = [
             'id' => $id,
             'description' => $description,
@@ -415,6 +428,19 @@ final class CalculationService implements ServiceSubscriberInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Find a group for the given identifier.
+     */
+    private function findGroup(int $id): ?Group
+    {
+        return $this->groupRepository->find($id);
+    }
+
+    private function floor(float $value): float
+    {
+        return \floor($value * 100.0) / 100.0;
     }
 
     private function getArrayByKey(array $array, string $key): ?array
@@ -437,14 +463,6 @@ final class CalculationService implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the group for the given identifier.
-     */
-    private function getGroup(int $id): ?Group
-    {
-        return $this->groupRepository->find($id);
-    }
-
-    /**
      * Gets the margin, in percent, for the given group and amount.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
@@ -463,7 +481,12 @@ final class CalculationService implements ServiceSubscriberInterface
      */
     private function getGroupsAmount(array $groups): float
     {
-        return \array_reduce($groups, fn (float $carry, array $group): float => $carry + (float) $group['amount'], 0);
+        return \array_reduce(
+            $groups,
+            /** @psalm-param array{amount: float} $group */
+            static fn (float $carry, array $group): float => $carry + $group['amount'],
+            0
+        );
     }
 
     /**
@@ -471,14 +494,24 @@ final class CalculationService implements ServiceSubscriberInterface
      */
     private function getGroupsMargin(array $groups): float
     {
-        return \array_reduce($groups, fn (float $carry, array $group): float => $carry + (float) $group['margin_amount'], 0);
+        return \array_reduce(
+            $groups,
+            /** @psalm-param array{margin_amount: float} $group */
+            static fn (float $carry, array $group): float => $carry + $group['margin_amount'],
+            0
+        );
     }
 
     private function reduceCategory(array $category): float
     {
         $items = $this->getArrayByKey($category, 'items');
         if (\is_array($items)) {
-            return \array_reduce($items, fn (float $carry, array $item): float => $carry + ((float) $item['price'] * (float) $item['quantity']), 0);
+            return \array_reduce(
+                $items,
+                /** @psalm-param array{price: float, quantity: float} $item */
+                static fn (float $carry, array $item): float => $carry + ($item['price'] * $item['quantity']),
+                0
+            );
         }
 
         return 0;
@@ -488,7 +521,11 @@ final class CalculationService implements ServiceSubscriberInterface
     {
         $categories = $this->getArrayByKey($group, 'categories');
         if (\is_array($categories)) {
-            return \array_reduce($categories, fn (float $carry, array $category): float => $carry + $this->reduceCategory($category), 0);
+            return \array_reduce(
+                $categories,
+                fn (float $carry, array $category): float => $carry + $this->reduceCategory($category),
+                0
+            );
         }
 
         return 0;

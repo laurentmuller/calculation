@@ -12,11 +12,9 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to get IP lookup.
@@ -35,11 +33,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *
  * @see https://ipstack.com/documentation
  */
-class IpStackService extends AbstractHttpClientService implements ServiceSubscriberInterface
+class IpStackService extends AbstractHttpClientService
 {
-    use ServiceSubscriberTrait;
-    use TranslatorAwareTrait;
-
     /**
      * The cache timeout (1 hour).
      */
@@ -64,7 +59,8 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
         #[\SensitiveParameter]
         #[Autowire('%ip_stack_key%')]
         string $key,
-        private readonly PositionService $service
+        private readonly PositionService $service,
+        private readonly TranslatorInterface $translator
     ) {
         parent::__construct($key);
     }
@@ -153,7 +149,7 @@ class IpStackService extends AbstractHttpClientService implements ServiceSubscri
 
     private function translateError(string $id): string
     {
-        return $this->trans($id, [], 'ipstack');
+        return $this->translator->trans($id, [], 'ipstack');
     }
 
     /**

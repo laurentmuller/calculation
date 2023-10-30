@@ -55,13 +55,13 @@ trait PdfPieChartTrait
         if ($radius <= 0 || [] === $rows) {
             return;
         }
-
         $total = \array_sum(\array_column($rows, 'value'));
         if (0.0 === $total) {
             return;
         }
 
         $startAngle = 0.0;
+        PdfDrawColor::cellBorder()->apply($this);
         foreach ($rows as $row) {
             $this->_pieApplyFillColor($row);
             $endAngle = $startAngle + 360.0 * (float) $row['value'] / $total;

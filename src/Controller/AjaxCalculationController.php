@@ -74,7 +74,7 @@ class AjaxCalculationController extends AbstractController
             $parameters['min_margin'] = $service->getMinMargin();
             $adjust = $this->getRequestBoolean($request, 'adjust');
             if ($adjust && $parameters['overall_below']) {
-                $service->adjustUserMargin($parameters);
+                $parameters = $service->adjustUserMargin($parameters);
             }
             $body = $this->renderView('calculation/calculation_ajax_totals.html.twig', $parameters);
 
@@ -82,7 +82,7 @@ class AjaxCalculationController extends AbstractController
                 'result' => true,
                 'body' => $body,
                 'adjust' => $adjust,
-                'user_margin' => $parameters['user_margin'] ?? 0,
+                'user_margin' => $parameters['user_margin'],
                 'overall_margin' => $parameters['overall_margin'],
                 'overall_total' => $parameters['overall_total'],
                 'overall_below' => $parameters['overall_below'],

@@ -12,26 +12,21 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\TranslatorAwareTrait;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to check spams with the Akismet.
  *
  * @see https://akismet.com/
  */
-class AkismetService extends AbstractHttpClientService implements ServiceSubscriberInterface
+class AkismetService extends AbstractHttpClientService
 {
-    use ServiceSubscriberTrait;
-    use TranslatorAwareTrait;
-
     /**
      * The cache timeout (15 minutes).
      */
@@ -73,8 +68,9 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
         #[\SensitiveParameter]
         #[Autowire('%akismet_key%')]
         string $key,
+        private readonly Security $security,
         private readonly RequestStack $stack,
-        private readonly Security $security
+        private readonly TranslatorInterface $translator
     ) {
         parent::__construct($key);
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
@@ -173,9 +169,9 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
         $headers = $response->getHeaders();
         $code = (int) ($headers['X-akismet-alert-code'][0] ?? 0);
         if (0 !== $code) {
-            $message = $this->trans((string) $code, [], 'akismet');
+            $message = $this->trans((string) $code);
             if ($message === (string) $code) {
-                $message = $headers['X-akismet-alert-msg'][0] ?? $this->trans('unknown', [], 'akismet');
+                $message = $headers['X-akismet-alert-msg'][0] ?? $this->trans('unknown');
             }
 
             return $this->setLastError($code, $message);
@@ -231,5 +227,10 @@ class AkismetService extends AbstractHttpClientService implements ServiceSubscri
              'blog_charset' => 'UTF-8',
              'is_test' => true,
          ], $options));
+    }
+
+    private function trans(string $id): string
+    {
+        return $this->translator->trans($id, [], 'akismet');
     }
 }

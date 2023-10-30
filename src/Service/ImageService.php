@@ -220,6 +220,9 @@ class ImageService
      * @param int $height the image height
      *
      * @return ?ImageService an image handler on success, <code>null</code> on error
+     *
+     * @psalm-param positive-int $width
+     * @psalm-param positive-int $height
      */
     public static function fromTrueColor(int $width, int $height): ?self
     {

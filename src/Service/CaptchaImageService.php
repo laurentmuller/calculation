@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\ImageExtension;
+use App\Traits\MathTrait;
 use App\Traits\SessionAwareTrait;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -30,6 +31,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  */
 class CaptchaImageService implements ServiceSubscriberInterface
 {
+    use MathTrait;
     use ServiceSubscriberTrait;
     use SessionAwareTrait;
 
@@ -82,7 +84,11 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     public function clear(): self
     {
-        $this->removeSessionValues(self::KEY_TEXT, self::KEY_TIME, self::KEY_DATA);
+        $this->removeSessionValues(
+            self::KEY_TEXT,
+            self::KEY_TIME,
+            self::KEY_DATA
+        );
 
         return $this;
     }
@@ -95,9 +101,13 @@ class CaptchaImageService implements ServiceSubscriberInterface
      * @param int  $width  the image width
      * @param int  $height the image height
      *
-     * @return string|null the image encoded with the base 64 or null if the image can not be created
+     * @return ?string the image encoded with the base 64 or null if the image can not be created
      *
      * @throws \Exception
+     *
+     * @psalm-param positive-int $length
+     * @psalm-param positive-int $width
+     * @psalm-param positive-int $height
      */
     public function generateImage(bool $force = false, int $length = 6, int $width = 150, int $height = 30): ?string
     {
@@ -139,13 +149,19 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     public function validateToken(?string $token): bool
     {
-        return null !== $token && StringUtils::equalIgnoreCase($token, $this->getSessionString(self::KEY_TEXT, ''));
+        if (null === $token || '' === $token) {
+            return false;
+        }
+        $sessionToken = $this->getSessionString(self::KEY_TEXT);
+        if (null === $sessionToken) {
+            return false;
+        }
+
+        return StringUtils::equalIgnoreCase($token, $sessionToken);
     }
 
     /**
      * Compute the text layout.
-     *
-     * @pslam-return non-empty-array<ComputeTextType>
      *
      * @throws \Exception
      */
@@ -168,6 +184,9 @@ class CaptchaImageService implements ServiceSubscriberInterface
      * Create an image.
      *
      * @throws \Exception
+     *
+     * @psalm-param positive-int $width
+     * @psalm-param positive-int $height
      */
     private function createImage(string $text, int $width, int $height): ?ImageService
     {
@@ -244,12 +263,12 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     private function drawText(ImageService $image, int $width, int $height, string $text): void
     {
-        $font = $this->font;
         $color = $image->allocateBlack();
         if (!\is_int($color)) {
             return;
         }
 
+        $font = $this->font;
         $size = (int) ((float) $height * 0.7);
         /** @psalm-var non-empty-array<ComputeTextType> $items */
         $items = $this->computeText($image, $size, $font, $text);
@@ -281,7 +300,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     private function generateRandomString(int $length): string
     {
-        $length = \min(\max($length, 2), \strlen(self::ALLOWED_VALUES));
+        $length = $this->validateRange($length, 2, \strlen(self::ALLOWED_VALUES));
         $result = \str_shuffle(self::ALLOWED_VALUES);
 
         return \substr($result, 0, $length);

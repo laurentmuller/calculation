@@ -74,7 +74,7 @@ class RecaptchaService
 
     public function setScoreThreshold(float $scoreThreshold): self
     {
-        $this->scoreThreshold = $this->validateFloatRange($scoreThreshold, 0, 1);
+        $this->scoreThreshold = $this->validateRange($scoreThreshold, 0, 1);
 
         return $this;
     }

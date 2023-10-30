@@ -27,14 +27,21 @@ trait PdfSectorTrait
      *
      * Do nothing if the radius is not positive or if the start angle is equal to the end angle.
      *
-     * @param float                    $centerX    the abscissa of the center
-     * @param float                    $centerY    the ordinate of the center
-     * @param float                    $radius     the radius
-     * @param float                    $startAngle the starting angle in degrees
-     * @param float                    $endAngle   the ending angle in degrees
-     * @param PdfRectangleStyle|string $style      the draw and fill style
-     * @param bool                     $clockwise  indicates whether to go clockwise (true) or counter-clockwise (false)
-     * @param float                    $origin     the origin of angles (0=right, 90=top, 180=left, 270=for bottom)
+     * @param float                              $centerX    the abscissa of the center
+     * @param float                              $centerY    the ordinate of the center
+     * @param float                              $radius     the radius
+     * @param float                              $startAngle the starting angle in degrees
+     * @param float                              $endAngle   the ending angle in degrees
+     * @param PdfBorder|PdfRectangleStyle|string $style      the style of rendering. Possible values are:
+     *                                                       <ul>
+     *                                                       <li>A PdfBorder instance.</li>
+     *                                                       <li>A PdfRectangleStyle enumeration.</li>
+     *                                                       <li><code>'D'</code> or an empty string (""): Draw (default value).</li>
+     *                                                       <li><code>'F'</code>: Fill.</li>
+     *                                                       <li><code>'DF'</code>: Draw and fill.</li>
+     *                                                       </ul>
+     * @param bool                               $clockwise  indicates whether to go clockwise (true) or counter-clockwise (false)
+     * @param float                              $origin     the origin of angles (0=right, 90=top, 180=left, 270=for bottom)
      */
     public function sector(
         float $centerX,
@@ -42,7 +49,7 @@ trait PdfSectorTrait
         float $radius,
         float $startAngle,
         float $endAngle,
-        PdfRectangleStyle|string $style = PdfRectangleStyle::BOTH,
+        PdfBorder|PdfRectangleStyle|string $style = PdfRectangleStyle::BOTH,
         bool $clockwise = true,
         float $origin = 90
     ): void {
@@ -86,11 +93,6 @@ trait PdfSectorTrait
 
         // terminate drawing
         $this->_sectorTerminate($style);
-    }
-
-    private function _outParams(string $format, float|int|string ...$values): void
-    {
-        $this->_out(\sprintf($format, ...$values));
     }
 
     /**
@@ -165,9 +167,18 @@ trait PdfSectorTrait
         );
     }
 
-    private function _sectorTerminate(PdfRectangleStyle|string $style): void
+    private function _sectorTerminate(PdfBorder|PdfRectangleStyle|string $style): void
     {
+        if ($style instanceof PdfBorder) {
+            if (!$style->isRectangleStyle()) {
+                return;
+            }
+            $style = $style->getRectangleStyle();
+        }
         if ($style instanceof PdfRectangleStyle) {
+            if (!$style->isApplicable()) {
+                return;
+            }
             $style = $style->value;
         }
         $style = \strtoupper($style);

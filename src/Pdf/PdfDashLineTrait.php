@@ -96,7 +96,7 @@ trait PdfDashLineTrait
     public function setDashPattern(float $black = null, float $white = null): void
     {
         if (null !== $black && null !== $white) {
-            $this->_out(\sprintf('[%.3F %.3F] 0 d', $black * $this->k, $white * $this->k));
+            $this->_outParams('[%.3F %.3F] 0 d', $black * $this->k, $white * $this->k);
         } else {
             $this->_out('[] 0 d');
         }

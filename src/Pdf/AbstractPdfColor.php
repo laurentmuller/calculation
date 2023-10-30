@@ -369,7 +369,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     private function checkColor(int $value): int
     {
         /** @psalm-var int<0, 255> $value */
-        $value = $this->validateIntRange($value, self::MIN_VALUE, self::MAX_VALUE);
+        $value = $this->validateRange($value, self::MIN_VALUE, self::MAX_VALUE);
 
         return $value;
     }

@@ -741,7 +741,7 @@ class PdfDocument extends \FPDF
             $style = $style->value;
         }
 
-        parent::Rect($x, $y, $w, $h, $style);
+        parent::Rect($x, $y, $w, $h, \strtoupper($style));
     }
 
     /**
@@ -978,6 +978,34 @@ class PdfDocument extends \FPDF
     public function Write($h, $txt, $link = ''): void
     {
         parent::Write($h, $this->_cleanText($txt), $link);
+    }
+
+    /**
+     * Put end object.
+     */
+    protected function _endobj(): void
+    {
+        $this->_put('endobj');
+    }
+
+    /**
+     * Output the formatted string.
+     *
+     * @param string $format a string produced according to the formatting string format
+     */
+    protected function _outParams(string $format, float|int|string ...$values): void
+    {
+        $this->_out(\sprintf($format, ...$values));
+    }
+
+    /**
+     * Put the formatted string.
+     *
+     * @param string $format a string produced according to the formatting string format
+     */
+    protected function _putParams(string $format, float|int|string ...$values): void
+    {
+        $this->_put(\sprintf($format, ...$values));
     }
 
     /**

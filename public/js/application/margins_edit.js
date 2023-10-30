@@ -47,7 +47,7 @@ function getMinMargin() {
     $("input[name$='[margin]']").each(function () {
         minimum = Math.min(minimum, $(this).intVal());
     });
-    return minimum === Number.MAX_VALUE ? 0 : minimum;
+    return minimum === Number.MAX_VALUE ? 1 : minimum;
 }
 
 /**

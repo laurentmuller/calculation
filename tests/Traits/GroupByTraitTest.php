@@ -27,9 +27,9 @@ class GroupByTraitTest extends TestCase
     {
         /** @psalm-var UtilsType[] $array */
         $array = [
-            self::createObject(1, '1'),
-            self::createObject(2, '2'),
-            self::createObject(2, '3'),
+            $this->createObject(1, '1'),
+            $this->createObject(2, '2'),
+            $this->createObject(2, '3'),
         ];
         $result = $this->groupBy($array, 'id');
 
@@ -43,9 +43,9 @@ class GroupByTraitTest extends TestCase
     {
         /** @psalm-var UtilsType[] $array */
         $array = [
-            self::createObject(1, '1'),
-            self::createObject(2, '2'),
-            self::createObject(2, '3'),
+            $this->createObject(1, '1'),
+            $this->createObject(2, '2'),
+            $this->createObject(2, '3'),
         ];
         $key = fn (array $value): int => (int) $value['id'];
         $result = $this->groupBy($array, $key);
@@ -94,9 +94,9 @@ class GroupByTraitTest extends TestCase
     public function testGroupByObjectInt(): void
     {
         $array = [
-            (object) self::createObject(1, '1'),
-            (object) self::createObject(2, '2'),
-            (object) self::createObject(2, '3'),
+            (object) $this->createObject(1, '1'),
+            (object) $this->createObject(2, '2'),
+            (object) $this->createObject(2, '3'),
         ];
         $key = 'id';
         $result = $this->groupBy($array, $key);
@@ -112,9 +112,9 @@ class GroupByTraitTest extends TestCase
     public function testGroupByObjectStrings(): void
     {
         $array = [
-            self::createObject(1, '1'),
-            self::createObject(2, '2'),
-            self::createObject(3, '2'),
+            $this->createObject(1, '1'),
+            $this->createObject(2, '2'),
+            $this->createObject(3, '2'),
         ];
         $key = 'value';
         $result = $this->groupBy($array, $key);
@@ -128,7 +128,7 @@ class GroupByTraitTest extends TestCase
     /**
      * @psalm-return UtilsType
      */
-    private static function createObject(int $id, string $value): array
+    private function createObject(int $id, string $value): array
     {
         return ['id' => $id, 'value' => $value];
     }

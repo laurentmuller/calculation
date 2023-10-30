@@ -13,9 +13,11 @@ declare(strict_types=1);
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
-use Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\AddSeeTestAnnotationRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Set\TwigSetList;
 
@@ -32,8 +34,10 @@ return static function (RectorConfig $rectorConfig): void {
 
     // rules to skip
     $rectorConfig->skip([
-       AddSeeTestAnnotationRector::class,
-       FlipTypeControlToUseExclusiveTypeRector::class => [
+        AddSeeTestAnnotationRector::class,
+        DisallowedEmptyRuleFixerRector::class,
+        PreferPHPUnitThisCallRector::class,
+        FlipTypeControlToUseExclusiveTypeRector::class => [
             __DIR__ . '/src/Form/DataTransformer/EntityTransformer.php',
         ],
     ]);

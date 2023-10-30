@@ -308,21 +308,21 @@ class FormHelper
     /**
      * Add a percent type to the builder and reset all values to default.
      *
-     * @param int   $min  the minimum value allowed (inclusive) or <code>PHP_INT_MIN</code> if none
-     * @param int   $max  the maximum value allowed (inclusive) or <code>PHP_INT_MAX</code> if none
-     * @param float $step the step increment or -1 if none
+     * @param ?int  $min  the minimum value allowed (inclusive) or null if none
+     * @param ?int  $max  the maximum value allowed (inclusive) or null if none
+     * @param float $step the step increment or a negative value if none
      */
-    public function addPercentType(int $min = \PHP_INT_MIN, int $max = \PHP_INT_MAX, float $step = 1.0): self
+    public function addPercentType(int $min = null, int $max = null, float $step = 1.0): self
     {
         $this->widgetClass('text-end')
             ->updateAttribute('inputmode', 'decimal')
             ->updateOption('html5', true)
             ->autocomplete('off');
 
-        if (\PHP_INT_MIN !== $min) {
+        if (null !== $min) {
             $this->updateAttribute('min', $min);
         }
-        if (\PHP_INT_MAX !== $max) {
+        if (null !== $max) {
             $this->updateAttribute('max', $max);
         }
         if ($step > 0) {

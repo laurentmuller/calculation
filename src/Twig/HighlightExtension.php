@@ -116,7 +116,7 @@ class HighlightExtension extends AbstractExtension
 
     private function getDumper(Environment $env): HtmlDumper
     {
-        if (!isset($this->dumper)) {
+        if (!$this->dumper instanceof HtmlDumper) {
             $this->dumper = new HtmlDumper();
             $this->dumper->setDumpHeader('');
             $this->dumper->setCharset($env->getCharset());

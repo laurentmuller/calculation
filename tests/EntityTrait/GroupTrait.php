@@ -33,7 +33,7 @@ trait GroupTrait
             $margin = new GroupMargin();
             $margin->setMinimum(0)
                 ->setMaximum(1_000_000)
-                ->setMargin(0.1);
+                ->setMargin(1.1);
             $this->group->addMargin($margin);
             $this->addEntity($this->group);
         }

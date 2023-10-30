@@ -65,7 +65,7 @@ readonly class LogSorter
         $fieldSorter = $this->getFieldSorter();
 
         return \uasort($logs, function (Log $a, Log $b) use ($dateSorter, $fieldSorter, $order): int {
-            if (null === $fieldSorter) {
+            if (!$fieldSorter instanceof \Closure) {
                 return -$dateSorter($a, $b);
             }
             $result = $order * $fieldSorter($a, $b);

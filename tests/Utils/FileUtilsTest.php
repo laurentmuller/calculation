@@ -73,7 +73,7 @@ class FileUtilsTest extends TestCase
 
             [$gb, '1.0 GB'],
             [$gb * 2, '2.0 GB'],
-            [$gb * $kb, '1024.0 GB'],
+            [$gb * $kb, '1.0 TB'],
 
             [__FILE__, $thisText],
 

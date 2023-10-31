@@ -56,7 +56,7 @@ trait PdfBarChartTrait
     /**
      * Draw a bar chart.
      *
-     * Does nothing if the rows are empty.
+     * Does nothing if rows are empty.
      *
      * @param array      $rows the data to draw
      * @param array      $axis the Y axis
@@ -88,23 +88,18 @@ trait PdfBarChartTrait
 
         // init
         PdfStyle::getCellStyle()->apply($this);
-        $cellMargin = $this->getCellMargin();
+        $margin = $this->getCellMargin();
         $this->setCellMargin(0.0);
 
-        // y axis values
-        $min = (float) ($axis['min'] ?? 0.0);
-        $max = (float) ($axis['max'] ?? $this->_barComputeMaxValue($rows));
-        $max = $this->_barRoundMaxValue($max);
-        $ticks = $this->_barGetTicks($max);
-        $step = (float) ($axis['step'] ?? $max / (float) $ticks);
+        // y axis
+        $scale = new PdfNiceScale(0.0, $this->_barComputeMaxValue($rows));
         $formatter = $axis['formatter'] ?? fn (int|float $value): string => (string) $value;
-
-        $labelsY = $this->_barGetLabelsY($min, $max, $step, $formatter);
+        $labelsY = $this->_barGetLabelsY($scale, $formatter);
         $widthY = $this->_barGetMaxLabelsWidth($labelsY);
 
+        // x axis
         $labelsX = $this->_barGetLabelsX($rows);
         $widthX = $this->_barGetMaxLabelsWidth($labelsX);
-
         $barWidth = $this->_barGetBarWidth($rows, $w - $widthY - 1.0);
         $rotation = $barWidth < $widthX;
 
@@ -117,19 +112,17 @@ trait PdfBarChartTrait
         }
         $this->_barDrawAxisY($labelsY, $widthY, $x, $y, $w, $h);
 
-        // restrict data area
+        // restrict axis x area
         $x += $widthY + 1.0 + self::SEP_BARS;
         $y += self::LINE_HEIGHT / 2.0;
 
         // draw axis X and data
         $this->_barDrawAxisX($labelsX, $barWidth, $rotation, $x, $y + $h);
-
-        // compute and draw data
-        $data = $this->_barComputeData($rows, $barWidth, $x, $y, $h, $min, $max);
+        $data = $this->_barComputeData($rows, $barWidth, $x, $y, $h, $scale);
         $this->_barDrawData($data);
 
         // reset
-        $this->setCellMargin($cellMargin)
+        $this->setCellMargin($margin)
             ->resetStyle()
             ->SetY($endY);
     }
@@ -145,11 +138,12 @@ trait PdfBarChartTrait
         float $x,
         float $y,
         float $h,
-        float $min,
-        float $max
+        PdfNiceScale $scale
     ): array {
         $result = [];
         $bottom = $y + $h;
+        $min = $scale->getLowerBound();
+        $max = $scale->getUpperBound();
         $delta = $max - $min;
         $step = self::SEP_BARS + $barWidth;
 
@@ -289,7 +283,7 @@ trait PdfBarChartTrait
             $color = PdfFillColor::create($color);
         }
 
-        return $color instanceof PdfFillColor ? $color : PdfFillColor::white();
+        return $color instanceof PdfFillColor ? $color : PdfFillColor::darkGray();
     }
 
     /**
@@ -312,15 +306,11 @@ trait PdfBarChartTrait
      *
      * @psalm-return non-empty-array<BarChartLabelType>
      */
-    private function _barGetLabelsY(
-        float $min,
-        float $max,
-        float $step,
-        callable $formatter
-    ): array {
+    private function _barGetLabelsY(PdfNiceScale $scale, callable $formatter): array
+    {
         /** @phpstan-var non-empty-array<BarChartLabelType> $result */
         $result = [];
-        foreach (\range($max, $min, -$step) as $value) {
+        foreach (\range($scale->getUpperBound(), $scale->getLowerBound(), -$scale->getTickSpacing()) as $value) {
             $text = $formatter($value);
             $result[] = [
                 'label' => $text,
@@ -337,49 +327,5 @@ trait PdfBarChartTrait
     private function _barGetMaxLabelsWidth(array $labels): float
     {
         return \max(\array_column($labels, 'label_width'));
-    }
-
-    private function _barGetTicks(float $value): int
-    {
-        $str = \rtrim((string) (int) $value, '0');
-
-        return match (\substr($str, -2)) {
-            '12' => 6,
-            '14' => 7,
-            '16' => 8,
-            '18' => 3,
-            '25' => 10,
-            default => match (\substr($str, -1)) {
-                '1',
-                '5' => 10,
-                '2',
-                '4',
-                '8' => 8,
-                '3',
-                '6' => 6,
-                '7' => 7,
-                '9' => 9,
-                default => 5,
-            },
-        };
-    }
-
-    private function _barRoundMaxValue(float $value): float
-    {
-        $len = \strlen((string) (int) $value);
-        $max = \round($value, 1 - $len);
-        if ($max >= $value) {
-            return $max;
-        }
-        $tick = $this->_barGetTicks($max);
-        $step = $this->safeDivide($max, $tick);
-        if ($this->isFloatZero($step)) {
-            return $max;
-        }
-        while ($max < $value) {
-            $max += $step;
-        }
-
-        return $max;
     }
 }

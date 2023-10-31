@@ -38,13 +38,15 @@ class CalculationByMonthReport extends AbstractArrayReport
     use MathTrait;
     use PdfBarChartTrait;
 
+    private const COLOR_ITEM = '#006400';
+    private const COLOR_MARGIN = '#8B0000';
     private const PATTERN_CHART = 'MMM Y';
     private const PATTERN_TABLE = 'MMMM Y';
 
-    private float $minMargin = 100.0;
+    private float $minMargin;
 
     /**
-     * @param CalculationByMonthType[] $entities
+     * @psalm-param CalculationByMonthType[] $entities
      */
     public function __construct(
         AbstractController $controller,
@@ -57,12 +59,12 @@ class CalculationByMonthReport extends AbstractArrayReport
             $orientation = PdfDocumentOrientation::LANDSCAPE;
         }
         parent::__construct($controller, $entities, $orientation, $unit, $size);
+        $this->SetTitle($this->transChart('title_by_month'));
+        $this->minMargin = $controller->getMinMargin();
     }
 
     protected function doRender(array $entities): bool
     {
-        $this->SetTitle($this->transChart('title_by_month'));
-        $this->minMargin = $this->controller->getMinMargin();
         $this->AddPage();
         $this->renderChart($entities);
         $this->renderTable($entities);
@@ -97,9 +99,8 @@ class CalculationByMonthReport extends AbstractArrayReport
         if ($this->isMinMargin($value)) {
             $style->setTextColor(PdfTextColor::red());
         }
-        $cell->setStyle($style);
 
-        return $cell;
+        return $cell->setStyle($style);
     }
 
     private function isMinMargin(float $value): bool
@@ -117,8 +118,8 @@ class CalculationByMonthReport extends AbstractArrayReport
             return [
                 'label' => $this->formatDate($entity['date'], false),
                 'values' => [
-                    ['color' => '#006400', 'value' => $entity['items'] / 4.0],
-                    ['color' => '#8B0000', 'value' => $entity['total'] - $entity['items']],
+                    ['color' => self::COLOR_ITEM, 'value' => $entity['items']],
+                    ['color' => self::COLOR_MARGIN, 'value' => $entity['total'] - $entity['items']],
                 ],
             ];
         }, $entities);

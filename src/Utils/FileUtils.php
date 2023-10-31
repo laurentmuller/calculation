@@ -22,10 +22,12 @@ use Symfony\Component\Filesystem\Path;
 final class FileUtils
 {
     private const SIZES = [
-        1_073_741_824 => '%.1f GB',
-        1_048_576 => '%.1f MB',
-        1024 => '%.0f KB',
-        0 => '%.0f B',
+        '%.0f B',
+        '%.0f KB',
+        '%.1f MB',
+        '%.1f GB',
+        '%.1f TB',
+        '%.1f PB',
     ];
 
     private static ?Filesystem $filesystem = null;
@@ -138,16 +140,10 @@ final class FileUtils
         if (0 === $size) {
             return 'Empty';
         }
-        foreach (self::SIZES as $minSize => $format) {
-            if ($size >= $minSize) {
-                $value = 0 !== $minSize ? $size / $minSize : $size;
 
-                return \sprintf($format, $value);
-            }
-        }
+        $index = (int) \floor(\log($size) / \log(1024));
 
-        // must never reach
-        return 'unknown';
+        return \sprintf(self::SIZES[$index], $size / 1024 ** $index);
     }
 
     /**

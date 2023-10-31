@@ -68,7 +68,6 @@
 
             // create proxies
             this.toggleCollapseProxy = () => this._updateToggleButtons();
-            //this.toggleClickProxy = (e) => this._toggleClick(e);
             this.showSidebarProxy = (e) => this._showSidebar(e);
             this.hideSidebarProxy = (e) => this._hideSidebar(e);
             this.resizeProxy = (e) => this._resize(e);
@@ -294,21 +293,36 @@
         }
 
         /**
+         * Gets the cookie path.
+         * @return {string}
+         * @private
+         */
+        _getCookiePath() {
+            return document.body.dataset.cookiePath || '/';
+        }
+
+        /**
+         * Gets the cookie date.
+         * @return {string}
+         * @private
+         */
+        _getCookieDate() {
+            const date = new Date();
+            date.setFullYear(date.getFullYear() + 1);
+            return date.toUTCString();
+        }
+
+        /**
          * Save the navigation state.
          * @private
          */
         _saveState() {
+            const date = this._getCookieDate();
+            const path = this._getCookiePath();
+            const suffix = `expires=${date};path=${path};samesite=lax;secure`;
             const state = this._getState();
-            const date = new Date();
-            date.setFullYear(date.getFullYear() + 1);
-            const path = document.body.dataset.cookiePath || '/';
             for (const [key, value] of Object.entries(state)) {
-                let entry = `${key}=${JSON.stringify(value)};`;
-                entry += `expires=${date.toUTCString()};`;
-                entry += `path=${path};`;
-                entry += 'samesite=lax;';
-                entry += 'secure';
-                document.cookie = entry;
+                document.cookie = `${key}=${JSON.stringify(value)};${suffix}`;
             }
         }
     };
@@ -317,34 +331,21 @@
     // Default options
     // -----------------------------------
     Sidebar.DEFAULTS = {
-        // url to save menu states
-        url: null,
         // the sidebar key used to save state
-        menuShow: 'MENU_SIDEBAR_SHOW',
-        // the menus prefix used to save state
-        menuPrefix: 'MENU_SIDEBAR_',
-        // show sidebar button selector
-        showSidebarSelector: '.show-sidebar',
-        // hide sidebar button selector
-        hideSidebarSelector: '.hide-sidebar',
-        // horizontal navigation bar selector
-        horizontalNavbarSelector: '.navbar-horizontal',
-        // page content selector
-        pageContentSelector: '.page-content',
-        // the timeout to display/hide sidebar automatically (0 = disabled)
-        timeout: 1500,
-        // the duration to show / hide menus
-        duration: 350,
-        // the minimum width to hide sidebar
-        minWidth: 1200,
-        // texts
+        menuShow: 'MENU_SIDEBAR_SHOW', // the menus prefix used to save state
+        menuPrefix: 'MENU_SIDEBAR_', // show sidebar button selector
+        showSidebarSelector: '.show-sidebar', // hide sidebar button selector
+        hideSidebarSelector: '.hide-sidebar', // horizontal navigation bar selector
+        horizontalNavbarSelector: '.navbar-horizontal', // page content selector
+        pageContentSelector: '.page-content', // the timeout to display/hide sidebar automatically (0 = disabled)
+        timeout: 1500, // the duration to show / hide menus
+        duration: 350, // the minimum client width to hide sidebar
+        minWidth: 1200, // texts
         showSidebar: 'Show sidebar',
         hideSidebar: 'Hide sidebar',
         showMenu: 'Expand menu',
-        hideMenu: 'Collapse menu',
-        // the path name to search in query parameters to highlight URL
-        pathname: null,
-        // collapse siblings menus
+        hideMenu: 'Collapse menu', // the path name to search in query parameters to highlight URL
+        pathname: null, // collapse siblings menus
         collapseSiblingMenus: true
     };
 

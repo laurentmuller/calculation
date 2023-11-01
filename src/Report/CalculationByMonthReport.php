@@ -163,7 +163,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
             ];
         }, $entities);
         $axis = [
-            'min' => 0.0,
+            'min' => 0,
             'formatter' => fn (float $value): string => FormatUtils::formatInt($value),
         ];
 

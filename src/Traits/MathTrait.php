@@ -79,9 +79,9 @@ trait MathTrait
      */
     protected function safeDivide(float|int $dividend, float|int $divisor, float $default = 0.0): float
     {
-        $divisor = (float) $divisor;
+        $result = \fdiv($dividend, $divisor);
 
-        return 0.0 === $divisor ? $default : (float) $dividend / $divisor;
+        return \is_finite($result) ? $result : $default;
     }
 
     /**

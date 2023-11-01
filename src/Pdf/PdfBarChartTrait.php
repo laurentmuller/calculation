@@ -21,15 +21,15 @@ use App\Traits\MathTrait;
  *
  * @psalm-type BarChartValueType = array{
  *     color: PdfFillColor|string,
- *     value: int|float}
+ *     value: float}
  * @psalm-type BarChartRowType = array{
  *      label: string,
  *      values: BarChartValueType[]}
  * @psalm-type BarChartAxisType = array{
- *      min?: int|float,
- *      max?: int|float,
- *      step?: int|float,
- *      formatter?: callable(int|float): string}
+ *      min?: float,
+ *      max?: float,
+ *      step?: float,
+ *      formatter?: callable(float): string}
  * @psalm-type BarChartDataType = array{
  *      color: PdfFillColor,
  *      value: float,
@@ -106,7 +106,7 @@ trait PdfBarChartTrait
         // y axis
         $min = $axis['min'] ?? $this->_barComputeMinValue($rows);
         $max = $axis['max'] ?? $this->_barComputeMaxValue($rows);
-        $formatter = $axis['formatter'] ?? fn (int|float $value): string => (string) $value;
+        $formatter = $axis['formatter'] ?? fn (float $value): string => (string) $value;
         $scale = new PdfBarScale($min, $max);
         $labelsY = $this->_barGetLabelsY($scale, $formatter);
         $widthY = $this->_barGetMaxLabelsWidth($labelsY);
@@ -154,6 +154,7 @@ trait PdfBarChartTrait
         float $h,
         PdfBarScale $scale
     ): array {
+        /** @psalm-var BarChartRowDataType[] $result */
         $result = [];
         $bottom = $y + $h;
         $min = $scale->getLowerBound();
@@ -172,7 +173,7 @@ trait PdfBarChartTrait
             ];
             $startY = $bottom;
             foreach ($row['values'] as $value) {
-                $currentValue = $this->validateRange((float) $value['value'], $min, $max);
+                $currentValue = $this->validateRange($value['value'], $min, $max);
                 $heightValue = $this->safeDivide($h * ($currentValue - $min), $delta);
                 if (($startY - $heightValue) < $y) {
                     continue;
@@ -314,12 +315,13 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param callable(int|float): string $formatter
+     * @psalm-param callable(float): string $formatter
      *
      * @psalm-return BarChartLabelType[]
      */
     private function _barGetLabelsY(PdfBarScale $scale, callable $formatter): array
     {
+        /** @psalm-var BarChartLabelType[] $result */
         $result = [];
         foreach (\range($scale->getUpperBound(), $scale->getLowerBound(), -$scale->getTickSpacing()) as $value) {
             $text = $formatter($value);

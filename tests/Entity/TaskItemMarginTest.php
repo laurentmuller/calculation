@@ -21,31 +21,35 @@ class TaskItemMarginTest extends AbstractEntityValidatorTestCase
     public function testAllLessZero(): void
     {
         $margin = $this->getTaskItemMargin(-2, -1, -1);
-        $this->validate($margin, 3);
+        $results = $this->validate($margin, 3);
+        $this->validatePaths($results, 'maximum', 'minimum', 'value');
     }
 
     public function testMaxLessMin(): void
     {
         $margin = $this->getTaskItemMargin(10, 9, 0);
-        $this->validate($margin, 1);
+        $results = $this->validate($margin, 1);
+        $this->validatePaths($results, 'maximum');
     }
 
     public function testMinLessZero(): void
     {
         $margin = $this->getTaskItemMargin(-1, 1, 0);
-        $this->validate($margin, 1);
+        $results = $this->validate($margin, 1);
+        $this->validatePaths($results, 'minimum');
     }
 
     public function testValid(): void
     {
         $margin = $this->getTaskItemMargin(0, 10, 0);
-        $this->validate($margin, 0);
+        $this->validate($margin);
     }
 
     public function testValueLessZero(): void
     {
         $margin = $this->getTaskItemMargin(0, 1, -1);
-        $this->validate($margin, 1);
+        $results = $this->validate($margin, 1);
+        $this->validatePaths($results, 'value');
     }
 
     public function testValues(): void
@@ -54,7 +58,6 @@ class TaskItemMarginTest extends AbstractEntityValidatorTestCase
         self::assertSame(0.0, $margin->getMinimum());
         self::assertSame(100.0, $margin->getMaximum());
         self::assertSame(10.0, $margin->getValue());
-
         self::assertFalse($margin->contains(-1));
         self::assertTrue($margin->contains(0));
         self::assertTrue($margin->contains(99));

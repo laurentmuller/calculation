@@ -22,11 +22,10 @@ use App\Pdf\Enums\PdfRectangleStyle;
  */
 trait PdfPieChartTrait
 {
+    use PdfEllipseTrait;
     use PdfSectorTrait;
 
-    private const RECT_HEIGHT = 3.0;
-    private const RECT_OFFSET = 1.0;
-    private const RECT_WIDTH = 5.0;
+    private const SEP_WIDTH = 1.5;
 
     /**
      * Draw a pie chart.
@@ -60,6 +59,13 @@ trait PdfPieChartTrait
             return;
         }
 
+        // check new page
+        $this->SetY($centerY + $radius);
+        if (!$this->isPrintable($radius)) {
+            $this->AddPage();
+            $centerY = $this->GetY() + $radius;
+        }
+
         $startAngle = 0.0;
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($rows as $row) {
@@ -89,16 +95,19 @@ trait PdfPieChartTrait
             return;
         }
 
-        $widths = \array_map(fn (array $row): float => $this->GetStringWidth($row['label']) + self::RECT_WIDTH, $rows);
+        $diameter = 2.0 * $this->_pieGetRadius();
+        $margins = 2.0 * $this->getCellMargin();
+        $offset = $diameter + $margins + self::SEP_WIDTH;
+        $widths = \array_map(fn (array $row): float => $this->GetStringWidth($row['label']) + $offset, $rows);
         if (null === $x) {
-            $width = \array_sum($widths) + (float) \count($rows) * self::RECT_WIDTH;
+            $width = \array_sum($widths) - self::SEP_WIDTH;
             $x = $this->getLeftMargin() + ($this->getPrintableWidth() - $width) / 2.0;
         }
         $y ??= $this->GetY();
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($rows as $index => $row) {
             $this->_pieOutputLegend($x, $y, $row);
-            $x += $widths[$index] + self::RECT_WIDTH;
+            $x += $widths[$index];
         }
 
         $this->resetStyle()
@@ -152,15 +161,25 @@ trait PdfPieChartTrait
         $color->apply($this);
     }
 
+    private function _pieGetRadius(): float
+    {
+        return (self::LINE_HEIGHT - 2.0 * $this->getCellMargin()) / 2.0;
+    }
+
     /**
      * @psalm-param PieChartLegendType $row
      */
     private function _pieOutputLegend(float $x, float $y, array $row): void
     {
-        $this->SetXY($x, $y);
         $this->_pieApplyFillColor($row);
-        $this->Rect($x, $y + self::RECT_OFFSET, self::RECT_WIDTH, self::RECT_HEIGHT, PdfRectangleStyle::BOTH);
-        $this->SetXY($x + self::RECT_WIDTH, $y);
+        $radius = $this->_pieGetRadius();
+        $this->circle(
+            $x + $radius,
+            $y + $radius + $this->getCellMargin(),
+            $radius,
+            PdfRectangleStyle::BOTH
+        );
+        $this->SetXY($x + 2.0 * $radius, $y);
         $this->Cell(txt: $row['label']);
     }
 }

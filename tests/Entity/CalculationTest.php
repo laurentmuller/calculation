@@ -21,7 +21,8 @@ class CalculationTest extends AbstractEntityValidatorTestCase
     public function testInvalidAll(): void
     {
         $calculation = new Calculation();
-        $this->validate($calculation, 3);
+        $results = $this->validate($calculation, 3);
+        $this->validatePaths($results, 'customer', 'description', 'state');
     }
 
     public function testInvalidCustomer(): void
@@ -37,7 +38,8 @@ class CalculationTest extends AbstractEntityValidatorTestCase
         $calculation = new Calculation();
         $calculation->setCustomer('my customer')
             ->setState($this->getState());
-        $this->validate($calculation, 1);
+        $results = $this->validate($calculation, 1);
+        $this->validatePaths($results, 'description');
     }
 
     public function testInvalidState(): void
@@ -45,7 +47,8 @@ class CalculationTest extends AbstractEntityValidatorTestCase
         $calculation = new Calculation();
         $calculation->setDescription('my description')
             ->setCustomer('my customer');
-        $this->validate($calculation, 1);
+        $results = $this->validate($calculation, 1);
+        $this->validatePaths($results, 'state');
     }
 
     public function testValid(): void
@@ -54,7 +57,7 @@ class CalculationTest extends AbstractEntityValidatorTestCase
         $calculation->setDescription('my description')
             ->setCustomer('my customer')
             ->setState($this->getState());
-        $this->validate($calculation, 0);
+        $this->validate($calculation);
     }
 
     private function getState(): CalculationState

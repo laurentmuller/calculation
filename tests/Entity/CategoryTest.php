@@ -32,12 +32,11 @@ class CategoryTest extends AbstractEntityValidatorTestCase
         try {
             $this->saveEntity($group);
             $this->saveEntity($first);
-
             $second = new Category();
             $second->setCode('code')
                 ->setGroup($group);
-
-            $this->validate($second, 1);
+            $results = $this->validate($second, 1);
+            $this->validatePaths($results, 'code');
         } finally {
             $this->deleteEntity($first);
             $this->deleteEntity($group);
@@ -50,7 +49,8 @@ class CategoryTest extends AbstractEntityValidatorTestCase
         $group->setCode('group');
         $object = new Category();
         $object->setGroup($group);
-        $this->validate($object, 1);
+        $results = $this->validate($object, 1);
+        $this->validatePaths($results, 'code');
     }
 
     /**
@@ -72,7 +72,7 @@ class CategoryTest extends AbstractEntityValidatorTestCase
             $second->setCode('code2')
                 ->setGroup($group);
 
-            $this->validate($second, 0);
+            $this->validate($second);
         } finally {
             $this->deleteEntity($first);
         }
@@ -85,6 +85,6 @@ class CategoryTest extends AbstractEntityValidatorTestCase
         $object = new Category();
         $object->setCode('code');
         $object->setGroup($group);
-        $this->validate($object, 0);
+        $this->validate($object);
     }
 }

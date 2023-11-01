@@ -27,9 +27,9 @@ abstract class AbstractMargin extends AbstractEntity implements MarginInterface
     /**
      * The margin in percent (%) to use when an amount is within this range.
      */
-    #[Assert\GreaterThanOrEqual(0)]
+    #[Assert\GreaterThanOrEqual(1.0)]
     #[ORM\Column(type: FixedFloatType::NAME)]
-    private float $margin = 0.0;
+    private float $margin = 1.0;
 
     /**
      * The maximum amount (exclusive) to apply within this margin.

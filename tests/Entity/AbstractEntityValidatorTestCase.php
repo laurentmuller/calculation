@@ -55,18 +55,24 @@ abstract class AbstractEntityValidatorTestCase extends KernelTestCase
         $manager->flush();
     }
 
-    /**
-     * Validates the given value.
-     *
-     * @param mixed $object   the value to validate
-     * @param int   $expected the number of expected errors
-     */
-    protected function validate(mixed $object, int $expected): ConstraintViolationListInterface
+    protected function validate(mixed $object, int $expected = 0): ConstraintViolationListInterface
     {
         self::assertNotNull($this->validator);
         $result = $this->validator->validate($object);
         self::assertCount($expected, $result);
 
         return $result;
+    }
+
+    protected function validatePaths(ConstraintViolationListInterface $results, string ...$paths): void
+    {
+        $sources = [];
+        foreach ($results as $result) {
+            $sources[] = $result->getPropertyPath();
+        }
+        $diff = \array_diff($paths, $sources);
+        if ([] !== $diff) {
+            self::fail(\sprintf('Unable to find constraint violation for path: "%s".', \implode('", "', $diff)));
+        }
     }
 }

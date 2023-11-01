@@ -18,34 +18,47 @@ use App\Entity\GroupMargin;
 #[\PHPUnit\Framework\Attributes\CoversClass(GroupMargin::class)]
 class GroupMarginsTest extends AbstractEntityValidatorTestCase
 {
+    public function testInvalidMargin(): void
+    {
+        $group = $this->createGroup();
+        $this->addMargin($group, 0, 100, 0.0);
+        $results = $this->validate($group, 1);
+        $this->validatePaths($results, 'margins[0].margin');
+    }
+
     public function testInvalidMaximum(): void
     {
         $group = $this->createGroup();
-        $group->addMargin($this->createMargin(0, 100, 0.1));
-        $group->addMargin($this->createMargin(100, 99, 0.2));
-
+        $this->addMargin($group, 0, 100, 1.1);
+        $this->addMargin($group, 100, 99, 1.2);
         $results = $this->validate($group, 2);
-        $path = $results->get(0)->getPropertyPath();
-        self::assertSame('margins[1].maximum', $path);
+        $this->validatePaths($results, 'margins[1].maximum', 'margins[1].maximum');
     }
 
     public function testInvalidMinimum(): void
     {
         $group = $this->createGroup();
-        $group->addMargin($this->createMargin(0, 100, 0.1));
-        $group->addMargin($this->createMargin(99, 200, 0.2));
-
+        $this->addMargin($group, 0, 100, 1.1);
+        $this->addMargin($group, 99, 200, 1.2);
         $results = $this->validate($group, 1);
-        $path = $results->get(0)->getPropertyPath();
-        self::assertSame('margins[1].minimum', $path);
+        $this->validatePaths($results, 'margins[1].minimum');
     }
 
     public function testValid(): void
     {
         $group = $this->createGroup();
-        $group->addMargin($this->createMargin(0, 100, 0.1));
-        $group->addMargin($this->createMargin(100, 200, 0.2));
-        $this->validate($group, 0);
+        $this->addMargin($group, 0, 100, 1.1);
+        $this->addMargin($group, 100, 200, 1.2);
+        $this->validate($group);
+    }
+
+    private function addMargin(Group $group, float $minimum, float $maximum, float $margin): void
+    {
+        $groupMargin = new GroupMargin();
+        $groupMargin->setMinimum($minimum)
+            ->setMaximum($maximum)
+            ->setMargin($margin);
+        $group->addMargin($groupMargin);
     }
 
     private function createGroup(): Group
@@ -54,15 +67,5 @@ class GroupMarginsTest extends AbstractEntityValidatorTestCase
         $group->setCode('code');
 
         return $group;
-    }
-
-    private function createMargin(float $minimum, float $maximum, float $margin): GroupMargin
-    {
-        $entity = new GroupMargin();
-        $entity->setMinimum($minimum)
-            ->setMaximum($maximum)
-            ->setMargin($margin);
-
-        return $entity;
     }
 }

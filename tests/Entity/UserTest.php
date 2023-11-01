@@ -29,13 +29,12 @@ class UserTest extends AbstractEntityValidatorTestCase
 
         try {
             $this->saveEntity($first);
-
             $second = new User();
             $second->setUsername('user')
                 ->setPassword('password')
                 ->setEmail('email@email.com');
-
-            $this->validate($second, 2);
+            $results = $this->validate($second, 2);
+            $this->validatePaths($results, 'email', 'username');
         } finally {
             $this->deleteEntity($first);
         }
@@ -53,13 +52,12 @@ class UserTest extends AbstractEntityValidatorTestCase
 
         try {
             $this->saveEntity($first);
-
             $second = new User();
             $second->setUsername('other')
                 ->setPassword('password')
                 ->setEmail('email@email.com');
-
-            $this->validate($second, 1);
+            $results = $this->validate($second, 1);
+            $this->validatePaths($results, 'email');
         } finally {
             $this->deleteEntity($first);
         }
@@ -77,13 +75,12 @@ class UserTest extends AbstractEntityValidatorTestCase
 
         try {
             $this->saveEntity($first);
-
             $second = new User();
             $second->setUsername('user')
                 ->setPassword('password')
                 ->setEmail('other@email.com');
-
-            $this->validate($second, 1);
+            $results = $this->validate($second, 1);
+            $this->validatePaths($results, 'username');
         } finally {
             $this->deleteEntity($first);
         }
@@ -92,7 +89,8 @@ class UserTest extends AbstractEntityValidatorTestCase
     public function testInvalidAll(): void
     {
         $user = new User();
-        $this->validate($user, 3);
+        $results = $this->validate($user, 3);
+        $this->validatePaths($results, 'email', 'password', 'username');
     }
 
     public function testInvalidEmail(): void
@@ -101,9 +99,9 @@ class UserTest extends AbstractEntityValidatorTestCase
         $user->setUsername('user')
             ->setPassword('password');
         $this->validate($user, 1);
-
-        $user->setEmail('fake-email');
-        $this->validate($user, 1);
+        $user->setEmail('invalid-email');
+        $results = $this->validate($user, 1);
+        $this->validatePaths($results, 'email');
     }
 
     public function testInvalidPassword(): void
@@ -111,7 +109,8 @@ class UserTest extends AbstractEntityValidatorTestCase
         $user = new User();
         $user->setUsername('user')
             ->setEmail('email@email.com');
-        $this->validate($user, 1);
+        $results = $this->validate($user, 1);
+        $this->validatePaths($results, 'password');
     }
 
     public function testInvalidUserName(): void
@@ -119,7 +118,8 @@ class UserTest extends AbstractEntityValidatorTestCase
         $user = new User();
         $user->setPassword('password')
             ->setEmail('email@email.com');
-        $this->validate($user, 1);
+        $results = $this->validate($user, 1);
+        $this->validatePaths($results, 'username');
     }
 
     /**
@@ -134,13 +134,11 @@ class UserTest extends AbstractEntityValidatorTestCase
 
         try {
             $this->saveEntity($first);
-
             $second = new User();
             $second->setUsername('user 2')
                 ->setPassword('password 2')
                 ->setEmail('email2@email.com');
-
-            $this->validate($second, 0);
+            $this->validate($second);
         } finally {
             $this->deleteEntity($first);
         }
@@ -152,6 +150,6 @@ class UserTest extends AbstractEntityValidatorTestCase
         $user->setUsername('user')
             ->setPassword('password')
             ->setEmail('email@email.com');
-        $this->validate($user, 0);
+        $this->validate($user);
     }
 }

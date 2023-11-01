@@ -15,7 +15,7 @@ namespace App\Pdf;
 /**
  * Class to compute axis bounds and step spacing.
  */
-class PdfNiceScale
+class PdfBarScale
 {
     private float $lowerBound = 0.0;
     private float $tickSpacing = 10.0;
@@ -43,6 +43,8 @@ class PdfNiceScale
 
     private function calculate(float $lowerBound, float $upperBound, int $maxTicks): void
     {
+        [$lowerBound, $upperBound] = $this->fixBounds($lowerBound, $upperBound);
+
         $maxTicks = \max(2, $maxTicks);
         $range = $this->calculateValue($upperBound - $lowerBound, false);
         $this->tickSpacing = $this->calculateValue($range / (float) ($maxTicks - 1), true);
@@ -71,5 +73,45 @@ class PdfNiceScale
         }
 
         return $factor * 10.0 ** $exponent;
+    }
+
+    /**
+     * @psalm-return array{0: float, 1: float}
+     */
+    private function fixBounds(float $lowerBound, float $upperBound): array
+    {
+        // same?
+        if ($lowerBound === $upperBound) {
+            $lowerBound *= 0.99;
+            $upperBound *= 1.01;
+        }
+        // lower greater than upper?
+        if ($lowerBound > $upperBound) {
+            $temp = $upperBound;
+            $upperBound = $lowerBound;
+            $lowerBound = $temp;
+        }
+        // fix upper
+        if ($upperBound > 0.0) {
+            $upperBound += ($upperBound - $lowerBound) * 0.01;
+        } elseif ($upperBound < 0.0) {
+            $upperBound = \min($upperBound + ($upperBound - $lowerBound) * 0.01, 0.0);
+        } else {
+            $upperBound = 0.0;
+        }
+        // fix lower
+        if ($lowerBound > 0.0) {
+            $lowerBound = \max($lowerBound - ($upperBound - $lowerBound) * 0.01, 0.0);
+        } elseif ($lowerBound < 0.0) {
+            $lowerBound -= ($upperBound - $lowerBound) * 0.01;
+        } else {
+            $lowerBound = 0.0;
+        }
+        // both 0?
+        if (0.0 === $lowerBound && 0.0 === $upperBound) {
+            $upperBound = 1.0;
+        }
+
+        return [$lowerBound, $upperBound];
     }
 }

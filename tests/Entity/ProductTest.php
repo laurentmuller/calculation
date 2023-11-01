@@ -34,12 +34,11 @@ class ProductTest extends AbstractEntityValidatorTestCase
             $this->saveEntity($group);
             $this->saveEntity($category);
             $this->saveEntity($first);
-
             $second = new Product();
             $second->setDescription('My Product')
                 ->setCategory($category);
-
-            $this->validate($second, 1);
+            $results = $this->validate($second, 1);
+            $this->validatePaths($results, 'description');
         } finally {
             $this->deleteEntity($first);
             $this->deleteEntity($category);
@@ -50,14 +49,16 @@ class ProductTest extends AbstractEntityValidatorTestCase
     public function testInvalidBoth(): void
     {
         $product = new Product();
-        $this->validate($product, 2);
+        $results = $this->validate($product, 2);
+        $this->validatePaths($results, 'category', 'description');
     }
 
     public function testInvalidCategory(): void
     {
         $product = new Product();
         $product->setDescription('My Product');
-        $this->validate($product, 1);
+        $results = $this->validate($product, 1);
+        $this->validatePaths($results, 'category');
     }
 
     public function testInvalidDescription(): void
@@ -66,7 +67,8 @@ class ProductTest extends AbstractEntityValidatorTestCase
         $category = $this->getCategory($group);
         $product = new Product();
         $product->setCategory($category);
-        $this->validate($product, 1);
+        $results = $this->validate($product, 1);
+        $this->validatePaths($results, 'description');
     }
 
     /**
@@ -77,7 +79,6 @@ class ProductTest extends AbstractEntityValidatorTestCase
         $group = $this->getGroup();
         $category = $this->getCategory($group);
         $category->setGroup($group);
-
         $first = new Product();
         $first->setDescription('My Product')
             ->setCategory($category);
@@ -86,12 +87,10 @@ class ProductTest extends AbstractEntityValidatorTestCase
             $this->saveEntity($group);
             $this->saveEntity($category);
             $this->saveEntity($first);
-
             $second = new Product();
             $second->setDescription('My Product 2')
                 ->setCategory($category);
-
-            $this->validate($second, 0);
+            $this->validate($second);
         } finally {
             $this->deleteEntity($first);
             $this->deleteEntity($category);
@@ -106,7 +105,7 @@ class ProductTest extends AbstractEntityValidatorTestCase
         $product = new Product();
         $product->setDescription('product')
             ->setCategory($category);
-        $this->validate($product, 0);
+        $this->validate($product);
     }
 
     private function getCategory(Group $group): Category

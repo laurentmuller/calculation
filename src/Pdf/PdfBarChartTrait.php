@@ -44,6 +44,10 @@ use App\Traits\MathTrait;
  * @psalm-type BarChartLabelType = array{
  *     label: string,
  *     label_width: float}
+ * @psalm-type  BarChartScaleType = array{
+ *     top: float,
+ *     bottom: float,
+ *     spacing: float}
  */
 trait PdfBarChartTrait
 {
@@ -86,14 +90,24 @@ trait PdfBarChartTrait
         $h ??= 200.0;
         $endY = $y + $h;
 
+        // check new page
+        $this->SetY($y);
+        if (!$this->isPrintable($h)) {
+            $this->AddPage();
+            $y = $this->GetY();
+            $endY = $y + $h;
+        }
+
         // init
         PdfStyle::getCellStyle()->apply($this);
         $margin = $this->getCellMargin();
         $this->setCellMargin(0.0);
 
         // y axis
-        $scale = new PdfNiceScale(0.0, $this->_barComputeMaxValue($rows));
+        $min = $axis['min'] ?? $this->_barComputeMinValue($rows);
+        $max = $axis['max'] ?? $this->_barComputeMaxValue($rows);
         $formatter = $axis['formatter'] ?? fn (int|float $value): string => (string) $value;
+        $scale = new PdfBarScale($min, $max);
         $labelsY = $this->_barGetLabelsY($scale, $formatter);
         $widthY = $this->_barGetMaxLabelsWidth($labelsY);
 
@@ -138,7 +152,7 @@ trait PdfBarChartTrait
         float $x,
         float $y,
         float $h,
-        PdfNiceScale $scale
+        PdfBarScale $scale
     ): array {
         $result = [];
         $bottom = $y + $h;
@@ -306,7 +320,7 @@ trait PdfBarChartTrait
      *
      * @psalm-return non-empty-array<BarChartLabelType>
      */
-    private function _barGetLabelsY(PdfNiceScale $scale, callable $formatter): array
+    private function _barGetLabelsY(PdfBarScale $scale, callable $formatter): array
     {
         /** @phpstan-var non-empty-array<BarChartLabelType> $result */
         $result = [];

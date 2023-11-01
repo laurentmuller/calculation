@@ -31,12 +31,11 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
 
         try {
             $this->saveEntity($first);
-
             $second = new UserProperty('name');
             $second->setValue('value');
             $first->setUser($this->getUser());
-
-            $this->validate($second, 1);
+            $results = $this->validate($second, 1);
+            $this->validatePaths($results, 'user');
         } finally {
             $this->deleteEntity($first);
         }
@@ -79,9 +78,7 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         try {
             $actual = $this->getRepository()->findByUser($user);
             self::assertCount(0, $actual);
-
             $this->saveEntity($expected);
-
             $actual = $this->getRepository()->findByUser($user);
             self::assertCount(1, $actual);
         } finally {
@@ -92,9 +89,8 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
     public function testInvalidAll(): void
     {
         $object = new UserProperty();
-        self::assertNotNull($this->validator);
-        $result = $this->validator->validate($object);
-        self::assertCount(3, $result);
+        $results = $this->validate($object, 3);
+        $this->validatePaths($results, 'user', 'name', 'value');
     }
 
     /**
@@ -105,18 +101,16 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         $object = new UserProperty();
         $object->setString('value');
         $object->setUser($this->getUser());
-        self::assertNotNull($this->validator);
-        $result = $this->validator->validate($object);
-        self::assertCount(1, $result);
+        $results = $this->validate($object, 1);
+        $this->validatePaths($results, 'name');
     }
 
     public function testInvalidUser(): void
     {
         $object = new UserProperty('name');
         $object->setString('value');
-        self::assertNotNull($this->validator);
-        $result = $this->validator->validate($object);
-        self::assertCount(1, $result);
+        $results = $this->validate($object, 1);
+        $this->validatePaths($results, 'user');
     }
 
     /**
@@ -126,9 +120,8 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
     {
         $object = new UserProperty('name');
         $object->setUser($this->getUser());
-        self::assertNotNull($this->validator);
-        $result = $this->validator->validate($object);
-        self::assertCount(1, $result);
+        $results = $this->validate($object, 1);
+        $this->validatePaths($results, 'value');
     }
 
     /**
@@ -143,12 +136,10 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
 
         try {
             $this->saveEntity($first);
-
             $second = new UserProperty('name2');
             $second->setValue('value');
             $second->setUser($user);
-
-            $this->validate($second, 0);
+            $this->validate($second);
         } finally {
             $this->deleteEntity($first);
         }
@@ -162,9 +153,7 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         $object = new UserProperty('name');
         $object->setString('value');
         $object->setUser($this->getUser());
-        self::assertNotNull($this->validator);
-        $result = $this->validator->validate($object);
-        self::assertCount(0, $result);
+        $this->validate($object);
     }
 
     /**

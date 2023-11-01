@@ -30,7 +30,8 @@ class GroupTest extends AbstractEntityValidatorTestCase
             $this->saveEntity($first);
             $second = new Group();
             $second->setCode('code');
-            $this->validate($second, 1);
+            $results = $this->validate($second, 1);
+            $this->validatePaths($results, 'code');
         } finally {
             $this->deleteEntity($first);
         }
@@ -48,7 +49,7 @@ class GroupTest extends AbstractEntityValidatorTestCase
     {
         $group = new Group();
         $group->addMargin($this->createMargin());
-        self::assertEqualsWithDelta(0.1, $group->findPercent(50), 0.01);
+        self::assertEqualsWithDelta(1.1, $group->findPercent(50), 0.01);
         self::assertEqualsWithDelta(0, $group->findPercent(100), 0.01);
     }
 
@@ -57,13 +58,14 @@ class GroupTest extends AbstractEntityValidatorTestCase
         $margin = $this->createMargin();
         self::assertTrue($margin->contains(0));
         self::assertFalse($margin->contains(100));
-        self::assertEqualsWithDelta(1.0, $margin->getMarginAmount(10), 0.1);
+        self::assertEqualsWithDelta(11.0, $margin->getMarginAmount(10), 0.1);
     }
 
     public function testInvalidCode(): void
     {
         $object = new Group();
-        $this->validate($object, 1);
+        $results = $this->validate($object, 1);
+        $this->validatePaths($results, 'code');
     }
 
     /**
@@ -76,11 +78,9 @@ class GroupTest extends AbstractEntityValidatorTestCase
 
         try {
             $this->saveEntity($first);
-
             $second = new Group();
             $second->setCode('code2');
-
-            $this->validate($second, 0);
+            $this->validate($second);
         } finally {
             $this->deleteEntity($first);
         }
@@ -90,16 +90,16 @@ class GroupTest extends AbstractEntityValidatorTestCase
     {
         $object = new Group();
         $object->setCode('code');
-        $this->validate($object, 0);
+        $this->validate($object);
     }
 
     private function createMargin(): GroupMargin
     {
-        $cm = new GroupMargin();
-        $cm->setMinimum(0)
+        $margin = new GroupMargin();
+        $margin->setMinimum(0)
             ->setMaximum(100)
-            ->setMargin(0.1);
+            ->setMargin(1.1);
 
-        return $cm;
+        return $margin;
     }
 }

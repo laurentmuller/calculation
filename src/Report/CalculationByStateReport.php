@@ -147,9 +147,11 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
      */
     private function renderChart(array $entities): void
     {
+        $margin = $this->getLeftMargin();
+        $printableWidth = $this->getPrintableWidth();
         $top = $this->getTopMargin() + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
-        $radius = $this->GetPageWidth() / 4.0;
-        $centerX = $this->GetPageWidth() / 2.0;
+        $radius = $printableWidth / 4.0;
+        $centerX = $margin + $printableWidth / 2.0;
         $centerY = $top + $radius;
         $rows = \array_map(function (array $entity): array {
             return [
@@ -164,7 +166,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
 
         // for testing purpose
         $this->pieLegendHorizontal($rows);
-        $this->pieLegendVertical($rows, $this->getLeftMargin(), $top);
+        $this->pieLegendVertical($rows, $margin, $top);
         $this->ln();
     }
 

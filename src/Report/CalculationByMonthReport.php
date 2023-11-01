@@ -16,9 +16,13 @@ use App\Controller\AbstractController;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
+use App\Pdf\Enums\PdfRectangleStyle;
+use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\PdfBarChartTrait;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
+use App\Pdf\PdfFillColor;
+use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
@@ -33,7 +37,7 @@ use App\Utils\FormatUtils;
  *
  * @extends AbstractArrayReport<CalculationByMonthType>
  */
-class CalculationByMonthReport extends AbstractArrayReport
+class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface
 {
     use MathTrait;
     use PdfBarChartTrait;
@@ -42,6 +46,7 @@ class CalculationByMonthReport extends AbstractArrayReport
     private const COLOR_MARGIN = '#8B0000';
     private const PATTERN_CHART = 'MMM Y';
     private const PATTERN_TABLE = 'MMMM Y';
+    private const RECT_MARGIN = 1.25;
 
     private float $minMargin;
 
@@ -63,6 +68,15 @@ class CalculationByMonthReport extends AbstractArrayReport
         $this->minMargin = $controller->getMinMargin();
     }
 
+    public function drawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool
+    {
+        return match ($index) {
+            2 => $this->drawHeaderCell($builder, $bounds, self::COLOR_ITEM),
+            3 => $this->drawHeaderCell($builder, $bounds, self::COLOR_MARGIN),
+            default => false,
+        };
+    }
+
     protected function doRender(array $entities): bool
     {
         $this->AddPage();
@@ -82,7 +96,32 @@ class CalculationByMonthReport extends AbstractArrayReport
                 PdfColumn::right($this->transChart('fields.margin_amount'), 25, true),
                 PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
                 PdfColumn::right($this->transChart('fields.total'), 25, true),
-            )->outputHeaders();
+            );
+    }
+
+    private function drawHeaderCell(PdfTableBuilder $builder, PdfRectangle $bounds, string $rgb): bool
+    {
+        // get color
+        $color = PdfFillColor::create($rgb);
+        if (!$color instanceof PdfFillColor) {
+            return false;
+        }
+
+        // default
+        $parent = $builder->getParent();
+        $parent->rectangle($bounds, PdfRectangleStyle::FILL);
+
+        // fill
+        $color->apply($parent);
+        $parent->Rect(
+            $bounds->x() + self::RECT_MARGIN,
+            $bounds->y() + self::RECT_MARGIN,
+            4.5,
+            $bounds->height() - 2.0 * self::RECT_MARGIN,
+            PdfRectangleStyle::BOTH
+        );
+
+        return true;
     }
 
     private function formatDate(\DateTimeInterface $date, bool $forTable): string
@@ -124,6 +163,7 @@ class CalculationByMonthReport extends AbstractArrayReport
             ];
         }, $entities);
         $axis = [
+            'min' => 0,
             'formatter' => fn (int|float $value): string => FormatUtils::formatInt($value),
         ];
 
@@ -143,6 +183,12 @@ class CalculationByMonthReport extends AbstractArrayReport
     {
         $table = $this->createTable();
 
+        // headers
+        $table->setBackgroundListener($this);
+        $table->outputHeaders();
+        $table->setBackgroundListener(null);
+
+        // entities
         foreach ($entities as $entity) {
             $table->addRow(
                 $this->formatDate($entity['date'], true),

@@ -27,20 +27,20 @@ class CalculationStateTest extends AbstractEntityValidatorTestCase
 
         try {
             $this->saveEntity($first);
-
             $second = new CalculationState();
             $second->setCode('code');
-
-            $this->validate($second, 1);
+            $results = $this->validate($second, 1);
+            $this->validatePaths($results, 'code');
         } finally {
             $this->deleteEntity($first);
         }
     }
 
-    public function testInvalidAll(): void
+    public function testInvalidCode(): void
     {
         $state = new CalculationState();
-        $this->validate($state, 1);
+        $results = $this->validate($state, 1);
+        $this->validatePaths($results, 'code');
     }
 
     /**
@@ -53,11 +53,9 @@ class CalculationStateTest extends AbstractEntityValidatorTestCase
 
         try {
             $this->saveEntity($first);
-
             $second = new CalculationState();
             $second->setCode('code 2');
-
-            $this->validate($second, 0);
+            $this->validate($second);
         } finally {
             $this->deleteEntity($first);
         }
@@ -67,6 +65,6 @@ class CalculationStateTest extends AbstractEntityValidatorTestCase
     {
         $state = new CalculationState();
         $state->setCode('code');
-        $this->validate($state, 0);
+        $this->validate($state);
     }
 }

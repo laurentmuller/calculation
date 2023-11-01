@@ -28,12 +28,11 @@ class PropertyTest extends AbstractEntityValidatorTestCase
 
         try {
             $this->saveEntity($first);
-
             $second = new Property();
             $second->setName('name')
                 ->setValue('value');
-
-            $this->validate($second, 1);
+            $results = $this->validate($second, 1);
+            $this->validatePaths($results, 'name');
         } finally {
             $this->deleteEntity($first);
         }
@@ -42,21 +41,24 @@ class PropertyTest extends AbstractEntityValidatorTestCase
     public function testInvalidBoth(): void
     {
         $object = new Property();
-        $this->validate($object, 2);
+        $results = $this->validate($object, 2);
+        $this->validatePaths($results, 'name', 'value');
     }
 
     public function testInvalidName(): void
     {
         $object = new Property();
         $object->setValue('value');
-        $this->validate($object, 1);
+        $results = $this->validate($object, 1);
+        $this->validatePaths($results, 'name');
     }
 
     public function testInvalidValue(): void
     {
         $object = new Property();
         $object->setName('name');
-        $this->validate($object, 1);
+        $results = $this->validate($object, 1);
+        $this->validatePaths($results, 'value');
     }
 
     /**
@@ -70,12 +72,10 @@ class PropertyTest extends AbstractEntityValidatorTestCase
 
         try {
             $this->saveEntity($first);
-
             $second = new Property();
             $second->setName('name2')
                 ->setValue('value');
-
-            $this->validate($second, 0);
+            $this->validate($second);
         } finally {
             $this->deleteEntity($first);
         }

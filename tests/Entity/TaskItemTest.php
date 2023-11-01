@@ -38,7 +38,8 @@ class TaskItemTest extends AbstractEntityValidatorTestCase
             $this->saveEntity($category);
             $this->saveEntity($task);
             $second = $this->createTaskItem($task)->setName('name');
-            $this->validate($second, 1);
+            $results = $this->validate($second, 1);
+            $this->validatePaths($results, 'name');
         } finally {
             $this->deleteEntity($task);
             $this->deleteEntity($category);
@@ -80,7 +81,7 @@ class TaskItemTest extends AbstractEntityValidatorTestCase
             $this->saveEntity($category);
             $this->saveEntity($task);
             $second = $this->createTaskItem($task)->setName('name2');
-            $this->validate($second, 0);
+            $this->validate($second);
         } finally {
             $this->deleteEntity($task);
             $this->deleteEntity($category);
@@ -95,7 +96,7 @@ class TaskItemTest extends AbstractEntityValidatorTestCase
         $task = $this->createTask($category);
         $item = $this->createTaskItem($task);
         $item->setName('name');
-        $this->validate($task, 0);
+        $this->validate($task);
     }
 
     private function createCategory(Group $group): Category

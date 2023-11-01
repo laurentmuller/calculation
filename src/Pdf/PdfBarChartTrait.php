@@ -142,9 +142,9 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param non-empty-array<BarChartRowType> $rows
+     * @psalm-param BarChartRowType[] $rows
      *
-     * @psalm-return non-empty-array<BarChartRowDataType>
+     * @psalm-return BarChartRowDataType[]
      */
     private function _barComputeData(
         array $rows,
@@ -193,28 +193,26 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param non-empty-array<BarChartRowType> $rows
+     * @psalm-param BarChartRowType[] $rows
      */
     private function _barComputeMaxValue(array $rows): float
     {
-        $result = null;
+        $result = -\PHP_FLOAT_MAX;
         foreach ($rows as $row) {
-            $values = \array_sum(\array_column($row['values'], 'value'));
-            $result = null === $result ? $values : \max($result, $values);
+            $result = \max($result, \array_sum(\array_column($row['values'], 'value')));
         }
 
         return $result;
     }
 
     /**
-     * @psalm-param non-empty-array<BarChartRowType> $rows
+     * @psalm-param BarChartRowType[] $rows
      */
     private function _barComputeMinValue(array $rows): float
     {
-        $result = null;
+        $result = \PHP_FLOAT_MAX;
         foreach ($rows as $row) {
-            $values = \array_sum(\array_column($row['values'], 'value'));
-            $result = null === $result ? $values : \min($result, $values);
+            $result = \min($result, \array_sum(\array_column($row['values'], 'value')));
         }
 
         return $result;
@@ -246,7 +244,7 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param  non-empty-array<BarChartLabelType> $labels
+     * @psalm-param  BarChartLabelType[] $labels
      */
     private function _barDrawAxisY(
         array $labels,
@@ -268,7 +266,7 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param non-empty-array<BarChartRowDataType> $data
+     * @psalm-param BarChartRowDataType[] $data
      */
     private function _barDrawData(array $data): void
     {
@@ -301,9 +299,9 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param non-empty-array<BarChartRowType> $rows
+     * @psalm-param BarChartRowType[] $rows
      *
-     * @psalm-return non-empty-array<BarChartLabelType>
+     * @psalm-return BarChartLabelType[]
      */
     private function _barGetLabelsX(array $rows): array
     {
@@ -318,11 +316,10 @@ trait PdfBarChartTrait
     /**
      * @psalm-param callable(int|float): string $formatter
      *
-     * @psalm-return non-empty-array<BarChartLabelType>
+     * @psalm-return BarChartLabelType[]
      */
     private function _barGetLabelsY(PdfBarScale $scale, callable $formatter): array
     {
-        /** @phpstan-var non-empty-array<BarChartLabelType> $result */
         $result = [];
         foreach (\range($scale->getUpperBound(), $scale->getLowerBound(), -$scale->getTickSpacing()) as $value) {
             $text = $formatter($value);
@@ -336,10 +333,10 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param non-empty-array<BarChartLabelType> $labels
+     * @psalm-param BarChartLabelType[] $labels
      */
     private function _barGetMaxLabelsWidth(array $labels): float
     {
-        return \max(\array_column($labels, 'label_width'));
+        return [] === $labels ? 0.0 : \max(\array_column($labels, 'label_width'));
     }
 }

@@ -12,6 +12,10 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Controller\AbstractController;
+use App\Pdf\Enums\PdfDocumentOrientation;
+use App\Pdf\Enums\PdfDocumentSize;
+use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfBorder;
@@ -42,7 +46,22 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
 
     /** @psalm-var QueryCalculationType|null */
     private ?array $currentRow = null;
-    private float $minMargin = 100.0;
+    private float $minMargin;
+
+    /**
+     * @psalm-param QueryCalculationType[] $entities
+     */
+    public function __construct(
+        AbstractController $controller,
+        array $entities,
+        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
+        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
+        PdfDocumentSize $size = PdfDocumentSize::A4
+    ) {
+        parent::__construct($controller, $entities, $orientation, $unit, $size);
+        $this->SetTitle($this->transChart('title_by_state'));
+        $this->minMargin = $controller->getMinMargin();
+    }
 
     public function drawCellText(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): bool
     {
@@ -62,8 +81,6 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
 
     protected function doRender(array $entities): bool
     {
-        $this->SetTitle($this->transChart('title_by_state'));
-        $this->minMargin = $this->controller->getMinMargin();
         $this->AddPage();
         $this->renderChart($entities);
         $this->renderTable($entities);

@@ -34,3 +34,5 @@ row_by_state: Afficher les calculations pour le statut %name%
 row_show_all: Afficher toutes les calculations
 title_by_month: Calculations par mois
 title_by_state: Calculations par statut
+error:
+  month: Le nombre de mois à afficher doit être positif.

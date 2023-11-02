@@ -13,15 +13,17 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Pdf\Enums\PdfRectangleStyle;
+use App\Traits\MathTrait;
 
 /**
  * Trait to draw pie chart.
  *
- * @psalm-type PieChartRowType = array{color: PdfFillColor|string, value: int|float, ...}
+ * @psalm-type PieChartRowType = array{color: PdfFillColor|string, value: float, ...}
  * @psalm-type PieChartLegendType = array{color: PdfFillColor|string, label: string, ...}
  */
 trait PdfPieChartTrait
 {
+    use MathTrait;
     use PdfEllipseTrait;
     use PdfSectorTrait;
 
@@ -55,13 +57,12 @@ trait PdfPieChartTrait
             return;
         }
         $total = \array_sum(\array_column($rows, 'value'));
-        if (0.0 === $total) {
+        if ($this->isFloatZero($total)) {
             return;
         }
 
         // check new page
-        $this->SetY($centerY + $radius);
-        if (!$this->isPrintable($radius)) {
+        if (!$this->isPrintable($radius, $centerY + $radius)) {
             $this->AddPage();
             $centerY = $this->GetY() + $radius;
         }
@@ -70,7 +71,7 @@ trait PdfPieChartTrait
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($rows as $row) {
             $this->_pieApplyFillColor($row);
-            $endAngle = $startAngle + 360.0 * (float) $row['value'] / $total;
+            $endAngle = $startAngle + 360.0 * $row['value'] / $total;
             $this->sector($centerX, $centerY, $radius, $startAngle, $endAngle, $style, $clockwise, $origin);
             $startAngle = $endAngle;
         }
@@ -80,33 +81,34 @@ trait PdfPieChartTrait
     /**
      * Draw the horizontal pie chart legend.
      *
-     * This function output a horizontal list where each entry contain the color and the label. Does nothing if rows
-     * are empty.
+     * This function output a horizontal list where each entry contain the color and the label.
      *
-     * @param array  $rows the legends to draw
-     * @param ?float $x    the abscissa of the legend or null to center the list
-     * @param ?float $y    the ordinate of the legend or null to use current position
+     * Does nothing if legends are empty.
      *
-     * @psalm-param PieChartLegendType[] $rows
+     * @param array  $legends the legends to draw
+     * @param ?float $x       the abscissa of the legend or null to center the list
+     * @param ?float $y       the ordinate of the legend or null to use current position
+     *
+     * @psalm-param PieChartLegendType[] $legends
      */
-    public function pieLegendHorizontal(array $rows, float $x = null, float $y = null): void
+    public function pieLegendHorizontal(array $legends, float $x = null, float $y = null): void
     {
-        if ([] === $rows) {
+        if ([] === $legends) {
             return;
         }
 
-        $diameter = 2.0 * $this->_pieGetRadius();
+        $diameter = 2.0 * $this->_pieGetLegendRadius();
         $margins = 2.0 * $this->getCellMargin();
         $offset = $diameter + $margins + self::SEP_WIDTH;
-        $widths = \array_map(fn (array $row): float => $this->GetStringWidth($row['label']) + $offset, $rows);
+        $widths = \array_map(fn (array $row): float => $this->GetStringWidth($row['label']) + $offset, $legends);
         if (null === $x) {
             $width = \array_sum($widths) - self::SEP_WIDTH;
             $x = $this->getLeftMargin() + ($this->getPrintableWidth() - $width) / 2.0;
         }
         $y ??= $this->GetY();
         PdfDrawColor::cellBorder()->apply($this);
-        foreach ($rows as $index => $row) {
-            $this->_pieOutputLegend($x, $y, $row);
+        foreach ($legends as $index => $legend) {
+            $this->_pieOutputLegend($x, $y, $legend);
             $x += $widths[$index];
         }
 
@@ -117,18 +119,18 @@ trait PdfPieChartTrait
     /**
      * Draw the vertical pie chart legend.
      *
-     * This function output a vertical list where each line contain the color and the label. Does nothing if rows are
-     * empty. After this call, the position is the same as before.
+     * This function output a vertical list where each line contain the color and the label. Does nothing if legends
+     * are empty. After this call, the position is the same as before.
      *
-     * @param array  $rows the legends to draw
-     * @param ?float $x    the abscissa of the legend or null to use current position
-     * @param ?float $y    the ordinate of the legend or null to use current position
+     * @param array  $legends the legends to draw
+     * @param ?float $x       the abscissa of the legend or null to use current position
+     * @param ?float $y       the ordinate of the legend or null to use current position
      *
-     * @psalm-param PieChartLegendType[] $rows
+     * @psalm-param PieChartLegendType[] $legends
      */
-    public function pieLegendVertical(array $rows, float $x = null, float $y = null): void
+    public function pieLegendVertical(array $legends, float $x = null, float $y = null): void
     {
-        if ([] === $rows) {
+        if ([] === $legends) {
             return;
         }
 
@@ -137,8 +139,8 @@ trait PdfPieChartTrait
         $y ??= $oldY;
 
         PdfDrawColor::cellBorder()->apply($this);
-        foreach ($rows as $row) {
-            $this->_pieOutputLegend($x, $y, $row);
+        foreach ($legends as $legend) {
+            $this->_pieOutputLegend($x, $y, $legend);
             $y += self::LINE_HEIGHT;
         }
 
@@ -156,23 +158,23 @@ trait PdfPieChartTrait
             $color = PdfFillColor::create($color);
         }
         if (!$color instanceof PdfFillColor) {
-            $color = PdfFillColor::white();
+            $color = PdfFillColor::darkGray();
         }
         $color->apply($this);
     }
 
-    private function _pieGetRadius(): float
+    private function _pieGetLegendRadius(): float
     {
         return (self::LINE_HEIGHT - 2.0 * $this->getCellMargin()) / 2.0;
     }
 
     /**
-     * @psalm-param PieChartLegendType $row
+     * @psalm-param PieChartLegendType $legend
      */
-    private function _pieOutputLegend(float $x, float $y, array $row): void
+    private function _pieOutputLegend(float $x, float $y, array $legend): void
     {
-        $this->_pieApplyFillColor($row);
-        $radius = $this->_pieGetRadius();
+        $this->_pieApplyFillColor($legend);
+        $radius = $this->_pieGetLegendRadius();
         $this->circle(
             $x + $radius,
             $y + $radius + $this->getCellMargin(),
@@ -180,6 +182,6 @@ trait PdfPieChartTrait
             PdfRectangleStyle::BOTH
         );
         $this->SetXY($x + 2.0 * $radius, $y);
-        $this->Cell(txt: $row['label']);
+        $this->Cell(txt: $legend['label']);
     }
 }

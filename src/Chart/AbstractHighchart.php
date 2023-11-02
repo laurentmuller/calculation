@@ -64,13 +64,24 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         parent::__construct();
         $this->setRenderTo()
             ->hideCredits()
+            ->hideAccessibility()
             ->initFontStyle()
             ->initLangOptions()
             ->setBackground('var(--bs-body-bg)');
     }
 
     /**
-     * Hides the credits text.
+     * Disable the accessibility.
+     */
+    public function hideAccessibility(): static
+    {
+        $this->accessibility['enabled'] = false;
+
+        return $this;
+    }
+
+    /**
+     * Disable the credits text.
      */
     public function hideCredits(): static
     {
@@ -80,7 +91,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Hides the series legend.
+     * Disable the series legend.
      */
     public function hideLegend(): static
     {
@@ -98,7 +109,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Sets the chart font style.
+     * Initialize the chart font style.
      */
     public function initFontStyle(): static
     {
@@ -127,6 +138,9 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         return $this;
     }
 
+    /**
+     * Sets the series.
+     */
     public function setSeries(array $series): static
     {
         $this->series = $series;
@@ -136,6 +150,8 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
 
     /**
      * Sets the chart title.
+     *
+     * @param ?string $title the title to set or null to hide
      */
     public function setTitle(?string $title): static
     {
@@ -156,6 +172,9 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         return $this;
     }
 
+    /**
+     * Sets the x-axis.
+     */
     public function setXAxis(ChartOption|array $xAxis): static
     {
         $this->xAxis = $xAxis;
@@ -185,6 +204,9 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         return $this;
     }
 
+    /**
+     * Sets the y-axis.
+     */
     public function setYAxis(ChartOption|array $yAxis): static
     {
         $this->yAxis = $yAxis;
@@ -204,6 +226,9 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         return $this;
     }
 
+    /**
+     * Gets the border color.
+     */
     protected function getBorderColor(): string
     {
         return 'var(--bs-border-color)';

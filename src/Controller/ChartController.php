@@ -26,6 +26,7 @@ use App\Traits\MathTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -41,6 +42,8 @@ class ChartController extends AbstractController
 {
     use MathTrait;
 
+    private const KEY_MONTHS = 'chart_by_month';
+
     /**
      * Gets the calculations by month.
      *
@@ -51,10 +54,12 @@ class ChartController extends AbstractController
     public function month(Request $request, MonthChart $chart): Response
     {
         $this->checkAccess();
-        $key = 'chart_by_month';
         $months = $this->getMonths($request);
+        if ($months <= 0) {
+            throw new BadRequestHttpException($this->trans('error.month', [], 'chart'));
+        }
         $parameters = $chart->generate($months);
-        $this->setSessionValue($key, $parameters['months']);
+        $this->setSessionValue(self::KEY_MONTHS, $parameters['months']);
 
         return $this->render('chart/chart_month.html.twig', $parameters);
     }
@@ -67,6 +72,9 @@ class ChartController extends AbstractController
     {
         $this->checkAccess(EntityPermission::EXPORT);
         $months = $this->getMonths($request);
+        if ($months <= 0) {
+            throw new BadRequestHttpException($this->trans('error.month', [], 'chart'));
+        }
         $data = $repository->getByMonth($months);
         $report = new CalculationByMonthReport($this, $data);
 
@@ -103,7 +111,7 @@ class ChartController extends AbstractController
 
     private function getMonths(Request $request): int
     {
-        $count = $this->getSessionInt('chart_by_month', 6);
+        $count = $this->getSessionInt(self::KEY_MONTHS, 6);
 
         return $this->getRequestInt($request, 'count', $count);
     }

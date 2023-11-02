@@ -44,10 +44,6 @@ use App\Traits\MathTrait;
  * @psalm-type BarChartLabelType = array{
  *     label: string,
  *     label_width: float}
- * @psalm-type BarChartScaleType = array{
- *     top: float,
- *     bottom: float,
- *     spacing: float}
  */
 trait PdfBarChartTrait
 {
@@ -91,8 +87,7 @@ trait PdfBarChartTrait
         $endY = $y + $h;
 
         // check new page
-        $this->SetY($y);
-        if (!$this->isPrintable($h)) {
+        if (!$this->isPrintable($h, $y)) {
             $this->AddPage();
             $y = $this->GetY();
             $endY = $y + $h;
@@ -103,10 +98,12 @@ trait PdfBarChartTrait
         $margin = $this->getCellMargin();
         $this->setCellMargin(0.0);
 
-        // y axis
-        $min = $axis['min'] ?? $this->_barComputeMinValue($rows);
-        $max = $axis['max'] ?? $this->_barComputeMaxValue($rows);
+        // y axis values
+        $min = $axis['min'] ?? $this->_barComputeRowsValues($rows, fn (float $a, float $b): float => \min($a, $b));
+        $max = $axis['max'] ?? $this->_barComputeRowsValues($rows, fn (float $a, float $b): float => \max($a, $b));
         $formatter = $axis['formatter'] ?? fn (float $value): string => (string) $value;
+
+        // y axis
         $scale = new PdfBarScale($min, $max);
         $labelsY = $this->_barGetLabelsY($scale, $formatter);
         $widthY = $this->_barGetMaxLabelsWidth($labelsY);
@@ -131,8 +128,8 @@ trait PdfBarChartTrait
         $y += self::LINE_HEIGHT / 2.0;
 
         // draw axis X and data
-        $this->_barDrawAxisX($labelsX, $barWidth, $rotation, $x, $y + $h);
         $data = $this->_barComputeData($rows, $barWidth, $x, $y, $h, $scale);
+        $this->_barDrawAxisX($labelsX, $barWidth, $rotation, $x, $y + $h);
         $this->_barDrawData($data);
 
         // reset
@@ -194,27 +191,14 @@ trait PdfBarChartTrait
 
     /**
      * @psalm-param non-empty-array<BarChartRowType> $rows
+     * @psalm-param callable(float, float): float $callback
      */
-    private function _barComputeMaxValue(array $rows): float
+    private function _barComputeRowsValues(array $rows, callable $callback): float
     {
         $result = null;
         foreach ($rows as $row) {
             $values = \array_sum(\array_column($row['values'], 'value'));
-            $result = null === $result ? $values : \max($result, $values);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @psalm-param non-empty-array<BarChartRowType> $rows
-     */
-    private function _barComputeMinValue(array $rows): float
-    {
-        $result = null;
-        foreach ($rows as $row) {
-            $values = \array_sum(\array_column($row['values'], 'value'));
-            $result = null === $result ? $values : \min($result, $values);
+            $result = null === $result ? $values : $callback($result, $values);
         }
 
         return $result;

@@ -445,7 +445,7 @@ class PdfDocument extends \FPDF
     /**
      * Gets the remaining printable width.
      *
-     * @return float the value from the current position (x) to the right margin
+     * @return float the value from the current abscissa (x) to the right margin
      */
     public function getRemainingWidth(): float
     {
@@ -572,16 +572,17 @@ class PdfDocument extends \FPDF
     /**
      * Returns if the given height would not cause an overflow (new page).
      *
-     * @param float $height the desired height
+     * @param float  $height the desired height
+     * @param ?float $y      the ordinate position or null to use the current position
      *
      * @return bool true if printable within the current page; false if a new page is
      *              needed
      *
      * @see PdfDocument::AddPage()
      */
-    public function isPrintable(float $height): bool
+    public function isPrintable(float $height, float $y = null): bool
     {
-        return ($this->y + $height) <= $this->PageBreakTrigger;
+        return (($y ?? $this->y) + $height) <= $this->PageBreakTrigger;
     }
 
     /**

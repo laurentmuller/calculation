@@ -1,4 +1,6 @@
 {
+    "source_cdnjs": "https://cdnjs.cloudflare.com/ajax/libs/",
+    "format_cdnjs" : "{source}/{name}/{version}/{file}",
     "source": "https://cdn.jsdelivr.net/npm/",
     "target": "js/vendor/",
     "format": "{source}{name}@{version}/{file}",
@@ -55,9 +57,7 @@
             "version": "11.1.0",
             "files": [
                 "highcharts.js",
-                "highcharts.js.map",
-                "modules/accessibility.js",
-                "modules/accessibility.js.map"
+                "highcharts.js.map"
             ]
         },
         {

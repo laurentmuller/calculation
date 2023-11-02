@@ -16,12 +16,16 @@ use App\Controller\AbstractController;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
+use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfRectangleStyle;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
+use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfBarChartTrait;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFillColor;
+use App\Pdf\PdfFont;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -37,16 +41,27 @@ use App\Utils\FormatUtils;
  *
  * @extends AbstractArrayReport<CalculationByMonthType>
  */
-class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface
+class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface
 {
     use MathTrait;
     use PdfBarChartTrait;
 
+    private const ARROW_DOWN = 116;
+    private const ARROW_RIGHT = 117;
+    private const ARROW_UP = 115;
+
     private const COLOR_ITEM = '#006400';
     private const COLOR_MARGIN = '#8B0000';
+
     private const PATTERN_CHART = 'MMM Y';
     private const PATTERN_TABLE = 'MMMM Y';
+
     private const RECT_MARGIN = 1.25;
+
+    /*** @psalm-var CalculationByMonthType|null */
+    private ?array $currentItem = null;
+    /*** @psalm-var CalculationByMonthType|null */
+    private ?array $lastItem = null;
 
     private float $minMargin;
 
@@ -74,6 +89,28 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
             2 => $this->drawHeaderCell($builder, $bounds, self::COLOR_ITEM),
             3 => $this->drawHeaderCell($builder, $bounds, self::COLOR_MARGIN),
             default => false,
+        };
+    }
+
+    public function drawCellText(
+        PdfTableBuilder $builder,
+        int $index,
+        PdfRectangle $bounds,
+        string $text,
+        PdfTextAlignment $align,
+        float $height
+    ): bool {
+        if (null === $this->currentItem) {
+            return false;
+        }
+
+        return match ($index) {
+            1 => $this->outputArrow($bounds, 'count'),
+            2 => $this->outputArrow($bounds, 'items'),
+            3 => $this->outputArrow($bounds, 'marginAmount'),
+            4 => $this->outputArrow($bounds, 'margin', true),
+            5 => $this->outputArrow($bounds, 'total'),
+            default => false
         };
     }
 
@@ -147,6 +184,33 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
         return !$this->isFloatZero($value) && $value < $this->minMargin;
     }
 
+    private function outputArrow(PdfRectangle $bounds, string $key, bool $percent = false): bool
+    {
+        $chr = \chr(self::ARROW_RIGHT);
+        $color = PdfTextColor::darkGray();
+        if (null !== $this->lastItem && null !== $this->currentItem) {
+            $precision = $percent ? 2 : 0;
+            $oldValue = $this->roundValue((float) $this->lastItem[$key], $precision);
+            $newValue = $this->roundValue((float) $this->currentItem[$key], $precision);
+            if ($oldValue < $newValue) {
+                $chr = \chr(self::ARROW_UP);
+                $color = PdfTextColor::darkGreen();
+            } elseif ($oldValue > $newValue) {
+                $chr = \chr(self::ARROW_DOWN);
+                $color = PdfTextColor::darkRed();
+            }
+        }
+
+        $color->apply($this);
+        $this->SetFont(PdfFontName::ZAPFDINGBATS);
+        $this->Cell(txt: $chr);
+        $this->SetXY($bounds->x(), $bounds->y());
+        PdfTextColor::black()->apply($this);
+        PdfFont::default()->apply($this);
+
+        return false;
+    }
+
     /**
      * @psalm-param CalculationByMonthType[] $entities
      */
@@ -189,16 +253,21 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
         $table->setBackgroundListener(null);
 
         // entities
+        $table->setTextListener($this);
         foreach ($entities as $entity) {
+            $this->currentItem = $entity;
             $table->addRow(
                 $this->formatDate($entity['date'], true),
                 FormatUtils::formatInt($entity['count']),
                 FormatUtils::formatInt($entity['items']),
-                FormatUtils::formatInt($entity['total'] - $entity['items']),
+                FormatUtils::formatInt($entity['marginAmount']),
                 $this->formatPercent($entity['margin']),
                 FormatUtils::formatInt($entity['total'])
             );
+            $this->lastItem = $entity;
         }
+        $this->currentItem = $this->lastItem = null;
+        $table->setTextListener(null);
 
         // total
         $count = $this->sum($entities, 'count');
@@ -206,7 +275,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
         $total = $this->sum($entities, 'total');
         $net = $total - $items;
         $margin = 1.0 + $this->safeDivide($net, $items);
-
         $table->addHeaderRow(
             $this->transChart('fields.total'),
             FormatUtils::formatInt($count),
@@ -215,6 +283,17 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
             $this->formatPercent($margin, true),
             FormatUtils::formatInt($total)
         );
+    }
+
+    private function roundValue(float $value, int $precision = 0): float
+    {
+        if (0 === $precision) {
+            return \round($value, $precision);
+        }
+
+        $power = 10.0 ** (float) $precision;
+
+        return \floor($value * $power) / $power;
     }
 
     private function sum(array $entities, string $key): float

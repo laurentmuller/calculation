@@ -32,6 +32,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *        year: int,
  *        month: int,
  *        margin: float,
+ *        marginAmount: float,
  *        date: \DateTimeInterface}
  */
 class CalculationRepository extends AbstractRepository
@@ -235,6 +236,7 @@ class CalculationRepository extends AbstractRepository
         /** @psalm-var array $item */
         foreach ($result as &$item) {
             $item['date'] = $this->convertToDate($item);
+            $item['marginAmount'] = $item['total'] - $item['items'];
         }
 
         return \array_reverse($result);

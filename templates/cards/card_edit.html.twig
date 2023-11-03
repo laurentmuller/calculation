@@ -49,9 +49,9 @@
 {% block javascripts -%}
 {% if app.debug %}
     {{- parent() -}}
-    {{- asset_js('js/vendor/jquery-validation/jquery.validate.js') }}
-    {{- asset_js('js/vendor/jquery-validation/additional-methods.js') }}
-    {{- asset_js('js/vendor/jquery-validation/localization/messages_fr.js') }}
+    {{- asset_js('js/vendor/jquery-validate/jquery.validate.js') }}
+    {{- asset_js('js/vendor/jquery-validate/additional-methods.js') }}
+    {{- asset_js('js/vendor/jquery-validate/localization/messages_fr.js') }}
     {{- asset_js('js/extensions/validator-extensions.js') }}
     {{- asset_js('js/extensions/validator-extensions-fr.js') -}}
 {% else %}

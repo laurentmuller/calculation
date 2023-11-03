@@ -1,13 +1,25 @@
 {
-    "source_cdnjs": "https://cdnjs.cloudflare.com/ajax/libs/",
-    "format_cdnjs" : "{source}/{name}/{version}/{file}",
-    "versionUrl_cdnjs": "https://api.cdnjs.com/libraries/{name}?fields=version",
-    "versionPaths_cdnjs": ["version"],
-    "source": "https://cdn.jsdelivr.net/npm/",
-    "format": "{source}{name}@{version}/{file}",
+    "sources": {
+        "cdnjs": {
+            "source": "https://cdnjs.cloudflare.com/ajax/libs/",
+            "format": "{source}{name}/{version}/{file}",
+            "versionUrl": "https://api.cdnjs.com/libraries/{name}?fields=version",
+            "versionPaths": [
+                "version"
+            ]
+        },
+        "jsdelivr": {
+            "source": "https://cdn.jsdelivr.net/npm/",
+            "format": "{source}{name}@{version}/{file}",
+            "target": "js/vendor/",
+            "versionUrl": "https://data.jsdelivr.com/v1/package/npm/{name}",
+            "versionPaths": [
+                "tags",
+                "latest"
+            ]
+        }
+    },
     "target": "js/vendor/",
-    "versionUrl": "https://data.jsdelivr.com/v1/package/npm/{name}",
-    "versionPaths": ["tags", "latest"],
     "prefixes": {
         "js": "/**! compression tag for ftp-deployment */\n\n",
         "css": "/**! compression tag for ftp-deployment */\n\n"
@@ -16,25 +28,24 @@
         {
             "name": "jquery",
             "version": "3.7.1",
+            "source": "cdnjs",
             "files": [
-                "dist/jquery.js"
+                "jquery.js"
             ]
         },
         {
             "name": "bootstrap",
             "version": "5.3.2",
+            "source": "cdnjs",
             "files": [
-                "dist/js/bootstrap.bundle.js",
-                "dist/js/bootstrap.bundle.js.map",
-                "dist/css/bootstrap.css",
-                "dist/css/bootstrap.css.map"
+                "js/bootstrap.bundle.js",
+                "css/bootstrap.css"
             ]
         },
         {
-            "name": "@fortawesome/fontawesome-free",
-            "display": "fontawesome-free",
+            "name": "font-awesome",
             "version": "6.4.2",
-            "target": "font-awesome",
+            "source": "cdnjs",
             "files": [
                 "css/all.css",
                 "webfonts/fa-brands-400.ttf",
@@ -48,94 +59,105 @@
             ]
         },
         {
-            "name": "jquery-validation",
+            "name": "jquery-validate",
             "version": "1.20.0",
+            "source": "cdnjs",
+            "remark": "use jquery-validation and jquery-validate target for jsdelivr.",
             "files": [
-                "dist/jquery.validate.js",
-                "dist/additional-methods.js",
-                "dist/localization/messages_fr.js"
+                "jquery.validate.js",
+                "additional-methods.js",
+                "localization/messages_fr.js"
             ]
         },
         {
             "name": "highcharts",
-            "version": "11.1.0",
+            "version": "11.2.0",
+            "source": "cdnjs",
             "files": [
-                "highcharts.js",
-                "highcharts.js.map"
+                "highcharts.js"
             ]
         },
         {
             "name": "html5sortable",
             "version": "0.13.3",
+            "source": "cdnjs",
             "files": [
-                "dist/html5sortable.js"
+                "html5sortable.js"
             ]
         },
         {
             "name": "mark.js",
             "version": "8.11.1",
+            "source": "cdnjs",
             "target": "jquery-mark",
             "files": [
-                "dist/jquery.mark.js"
+                "jquery.mark.js"
             ]
         },
         {
             "name": "zxcvbn",
             "version": "4.4.2",
+            "source": "cdnjs",
             "files": [
-                "dist/zxcvbn.js",
-                "dist/zxcvbn.js.map"
+                "zxcvbn.js"
             ]
         },
         {
             "name": "jquery-contextmenu",
             "version": "2.9.2",
+            "source": "cdnjs",
             "files": [
-                "dist/jquery.contextMenu.css",
-                "dist/jquery.contextMenu.js",
-                "dist/font/context-menu-icons.eot",
-                "dist/font/context-menu-icons.ttf",
-                "dist/font/context-menu-icons.woff",
-                "dist/font/context-menu-icons.woff2"
+                "jquery.contextMenu.css",
+                "jquery.contextMenu.js",
+                "font/context-menu-icons.eot",
+                "font/context-menu-icons.ttf",
+                "font/context-menu-icons.woff",
+                "font/context-menu-icons.woff2"
             ]
         },
         {
-            "name": "clipboard",
+            "name": "clipboard.js",
             "version": "2.0.11",
+            "source": "cdnjs",
+            "target": "clipboard",
             "files": [
-                "dist/clipboard.js"
+                "clipboard.js"
             ]
         },
         {
             "name": "bootstrap-table",
             "version": "1.22.1",
+            "source": "cdnjs",
             "files": [
-                "dist/bootstrap-table.js",
-                "dist/bootstrap-table.css",
-                "dist/extensions/defer-url/bootstrap-table-defer-url.js",
-                "dist/extensions/custom-view/bootstrap-table-custom-view.js"
+                "bootstrap-table.js",
+                "bootstrap-table.css",
+                "extensions/defer-url/bootstrap-table-defer-url.js",
+                "extensions/custom-view/bootstrap-table-custom-view.js"
             ]
         },
         {
             "name": "select2",
             "version": "4.1.0-rc.0",
+            "source": "cdnjs",
             "files": [
-                "dist/js/select2.js",
-                "dist/js/i18n/fr.js",
-                "dist/css/select2.css"
+                "js/select2.js",
+                "js/i18n/fr.js",
+                "css/select2.css"
             ]
         },
         {
             "name": "select2-bootstrap-5-theme",
             "version": "1.3.0",
+            "source": "cdnjs",
             "target": "select2/css",
             "files": [
-                "dist/select2-bootstrap-5-theme.css"
+                "select2-bootstrap-5-theme.css"
             ]
         },
         {
             "name": "currency-flags",
             "version": "4.0.7",
+            "source": "jsdelivr",
             "files": [
                 "dist/currency-flags.css"
             ]
@@ -143,12 +165,13 @@
         {
             "name": "font-mfizz",
             "version": "2.4.1",
+            "source": "cdnjs",
             "files": [
-                "dist/font-mfizz.css",
-                "dist/font-mfizz.eot",
-                "dist/font-mfizz.svg",
-                "dist/font-mfizz.ttf",
-                "dist/font-mfizz.woff"
+                "font-mfizz.css",
+                "font-mfizz.eot",
+                "font-mfizz.svg",
+                "font-mfizz.ttf",
+                "font-mfizz.woff"
             ]
         }
     ]

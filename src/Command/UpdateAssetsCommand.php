@@ -28,23 +28,23 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * @psalm-type PluginType = array{
  *     name: string,
  *     version: string,
- *     display?: string,
- *     source?: string,
+ *     source: string,
  *     target?: string,
- *     format?: string,
  *     disabled?: bool,
  *     files: string[]}
  * @psalm-type CopyEntryType = array{
  *     source: string,
  *     target: string,
  *     entries: string[]}
- * @psalm-type ConfigurationType = array{
+ * @psalm-type SourceType = array{
  *     source: string,
- *     target: string,
  *     format: string,
  *     versionUrl: string,
- *     versionPaths: string[],
+ *     versionPaths: string[]}
+ * @psalm-type ConfigurationType = array{
+ *     target: string,
  *     plugins: PluginType[],
+ *     sources: array<string, SourceType>,
  *     prefixes?: array<string, string>}
  */
 #[AsCommand(name: 'app:update-assets', description: 'Update Javascript and CSS dependencies.')]
@@ -90,14 +90,14 @@ class UpdateAssetsCommand extends Command
         if (null === $configuration) {
             return Command::INVALID;
         }
-        if (!$this->propertyExists($configuration, ['source', 'target', 'format', 'plugins'], true)) {
+        if (!$this->propertyExists($configuration, ['target', 'plugins', 'sources'], true)) {
             return Command::INVALID;
         }
         $dry_run = $input->getOption(self::DRY_RUN_OPTION);
         if ($dry_run) {
-            return $this->executeDryRun($configuration);
+            return $this->dryRun($configuration);
         }
-        $source = $configuration['source'];
+
         $target = FileUtils::buildPath($publicDir, $configuration['target']);
         $targetTemp = $this->getTargetTemp($publicDir);
         if (false === $targetTemp) {
@@ -106,27 +106,37 @@ class UpdateAssetsCommand extends Command
 
         $countFiles = 0;
         $countPlugins = 0;
-        $format = $configuration['format'];
         $plugins = $configuration['plugins'];
-        $versionUrl = $configuration['versionUrl'];
-        $versionPaths = $configuration['versionPaths'];
         $prefixes = $this->getConfigArray($configuration, 'prefixes');
 
         try {
             foreach ($plugins as $plugin) {
                 $name = $plugin['name'];
                 $version = $plugin['version'];
-                $display = $plugin['display'] ?? $name;
                 if ($this->isPluginDisabled($plugin)) {
-                    $this->writeVerbose(\sprintf('Skip   : %s v%s', $display, $version), 'fg=gray');
+                    $this->writeVerbose(\sprintf('Skip   : %s %s', $name, $version), 'fg=gray');
                     continue;
                 }
                 $files = $plugin['files'];
                 if ([] === $files) {
-                    $this->writeVerbose(\sprintf('Skip   : %s v%s (No file)', $display, $version), 'fg=gray');
+                    $this->writeVerbose(\sprintf('Skip   : %s %s (No file defined)', $name, $version), 'fg=gray');
                     continue;
                 }
-                $this->writeVerbose(\sprintf('Install: %s v%s', $display, $version));
+
+                $pluginSource = $plugin['source'];
+                if (!isset($configuration['sources'][$pluginSource])) {
+                    $this->writeError("Unable to get source '$pluginSource' for the plugin '$name'.");
+
+                    return Command::FAILURE;
+                }
+
+                $definition = $configuration['sources'][$pluginSource];
+                $source = $definition['source'];
+                $format = $definition['format'];
+                $versionUrl = $definition['versionUrl'];
+                $versionPaths = $definition['versionPaths'];
+
+                $this->writeVerbose(\sprintf('Install: %s %s', $name, $version));
                 foreach ($files as $file) {
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
                     $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
@@ -162,33 +172,14 @@ class UpdateAssetsCommand extends Command
     /**
      * @psalm-param string[] $paths
      */
-    private function checkVersion(string $url, array $paths, string $name, string $version): bool
+    private function checkVersion(string $url, array $paths, string $name, string $version): void
     {
-        $url = \str_replace('{name}', $name, $url);
-        $content = $this->loadJson($url);
-        if (null === $content) {
-            $this->write("Unable to find the URL '$url' for the plugin '$name'.", 'error');
-
-            return false;
+        $newVersion = $this->getLastVersion($url, $paths, $name);
+        if (null === $newVersion) {
+            $this->write("Unable to find last version for the plugin '$name'.", 'error');
+        } elseif (\version_compare($version, $newVersion, '<')) {
+            $this->write("The plugin '$name' version '$version' can be updated to the version '$newVersion'.", 'fg=red');
         }
-        foreach ($paths as $path) {
-            if (!isset($content[$path])) {
-                $this->write("Unable to find the path '$path' for the plugin '$name'.", 'error');
-
-                return false;
-            }
-            /** @psalm-var array $content */
-            $content = $content[$path];
-        }
-        /** @var string $newVersion */
-        $newVersion = $content;
-        if (\version_compare($version, $newVersion, '<')) {
-            $this->write("The plugin '$name' version '$version' can be updated to the version '$newVersion'.", 'error');
-
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -220,6 +211,41 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
+     * @psalm-param  ConfigurationType $configuration
+     */
+    private function dryRun(array $configuration): int
+    {
+        $this->write('Check versions:');
+        $pattern = '%s %-30s %-12s %s';
+
+        $plugins = $configuration['plugins'];
+        foreach ($plugins as $plugin) {
+            $name = $plugin['name'];
+            $version = $plugin['version'];
+            if ($this->isPluginDisabled($plugin)) {
+                $this->write(\sprintf($pattern, '✗', $name, $version, 'Disabled.'), 'fg=gray');
+                continue;
+            }
+
+            $source = $plugin['source'];
+            $definition = $configuration['sources'][$source];
+            $versionUrl = $definition['versionUrl'];
+            $versionPaths = $definition['versionPaths'];
+            $newVersion = $this->getLastVersion($versionUrl, $versionPaths, $name);
+
+            if (null === $newVersion) {
+                $this->write(\sprintf($pattern, '✗', $name, $version, 'Unable to find version.'), 'fg=red');
+            } elseif (\version_compare($version, $newVersion, '<')) {
+                $this->write(\sprintf('✗ %-30s %-12s Version %s available.', $name, $version, $newVersion), 'fg=red');
+            } else {
+                $this->write(\sprintf('✓ %-30s %-12s', $name, $version));
+            }
+        }
+
+        return Command::SUCCESS;
+    }
+
+    /**
      * @psalm-param array<string, string> $prefixes
      */
     private function dumpFile(string $content, string $targetFile, array $prefixes): bool
@@ -240,33 +266,6 @@ class UpdateAssetsCommand extends Command
     }
 
     /**
-     * @psalm-param  ConfigurationType $configuration
-     */
-    private function executeDryRun(array $configuration): int
-    {
-        $this->write('Check versions');
-        $plugins = $configuration['plugins'];
-        $versionUrl = $configuration['versionUrl'];
-        $versionPaths = $configuration['versionPaths'];
-
-        foreach ($plugins as $plugin) {
-            $name = $plugin['name'];
-            $version = $plugin['version'];
-            $display = $plugin['display'] ?? $name;
-            if ($this->isPluginDisabled($plugin)) {
-                $this->write("- $display v$version disabled.", 'fg=gray');
-                continue;
-            }
-            if ($this->checkVersion($versionUrl, $versionPaths, $name, $version)) {
-                continue;
-            }
-            $this->write("- $display v$version is up to date.");
-        }
-
-        return Command::SUCCESS;
-    }
-
-    /**
      * @psalm-return array<string, string>
      */
     private function getConfigArray(array $configuration, string $name): array
@@ -281,16 +280,40 @@ class UpdateAssetsCommand extends Command
         return [];
     }
 
+    /**
+     * @psalm-param string[] $paths
+     */
+    private function getLastVersion(string $url, array $paths, string $name): ?string
+    {
+        try {
+            $url = \str_ireplace('{name}', $name, $url);
+            $content = FileUtils::decodeJson($url);
+            foreach ($paths as $path) {
+                if (!isset($content[$path])) {
+                    return null;
+                }
+                /** @psalm-var array $content */
+                $content = $content[$path];
+            }
+
+            /** @var string $newVersion */
+            $newVersion = $content;
+
+            return $newVersion;
+        } catch (\Exception) {
+            return null;
+        }
+    }
+
     private function getPublicDir(): ?string
     {
         $publicDir = FileUtils::buildPath($this->projectDir, 'public');
-        if (!FileUtils::exists($publicDir)) {
-            $this->writeNote('No public directory found.');
-
-            return null;
+        if (FileUtils::exists($publicDir)) {
+            return $publicDir;
         }
+        $this->writeNote('No public directory found.');
 
-        return $publicDir;
+        return null;
     }
 
     /**
@@ -300,12 +323,12 @@ class UpdateAssetsCommand extends Command
     {
         $name = $plugin['name'];
         $version = $plugin['version'];
-        $source = $plugin['source'] ?? $source;
-        $format = $plugin['format'] ?? $format;
-        $search = ['{source}', '{name}', '{version}', '{file}'];
-        $replace = [$source, $name, $version, $file];
 
-        return \str_ireplace($search, $replace, $format);
+        return \str_ireplace(
+            ['{source}', '{name}', '{version}', '{file}'],
+            [$source, $name, $version, $file],
+            $format
+        );
     }
 
     /**
@@ -374,7 +397,7 @@ class UpdateAssetsCommand extends Command
 
         try {
             return StringUtils::decodeJson($content);
-        } catch (\InvalidArgumentException $e) {
+        } catch (\Exception $e) {
             $this->writeError($e->getMessage());
             $this->writeError("Unable to decode file '$filename'.");
 

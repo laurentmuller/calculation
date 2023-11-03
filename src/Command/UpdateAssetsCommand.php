@@ -42,6 +42,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  *     source: string,
  *     target: string,
  *     format: string,
+ *     versionUrl: string,
+ *     versionPaths: string[],
  *     plugins: PluginType[],
  *     prefixes?: array<string, string>}
  */
@@ -106,6 +108,8 @@ class UpdateAssetsCommand extends Command
         $countPlugins = 0;
         $format = $configuration['format'];
         $plugins = $configuration['plugins'];
+        $versionUrl = $configuration['versionUrl'];
+        $versionPaths = $configuration['versionPaths'];
         $prefixes = $this->getConfigArray($configuration, 'prefixes');
 
         try {
@@ -131,7 +135,7 @@ class UpdateAssetsCommand extends Command
                     }
                 }
                 ++$countPlugins;
-                $this->checkVersion($name, $version);
+                $this->checkVersion($versionUrl, $versionPaths, $name, $version);
             }
             $expected = $this->countFiles($plugins);
             if ($expected !== $countFiles) {
@@ -155,16 +159,19 @@ class UpdateAssetsCommand extends Command
         }
     }
 
-    private function checkVersion(string $name, string $version): bool
+    /**
+     * @psalm-param string[] $paths
+     */
+    private function checkVersion(string $url, array $paths, string $name, string $version): bool
     {
-        $url = "https://data.jsdelivr.com/v1/package/npm/$name";
+        $url = \str_replace('{name}', $name, $url);
         $content = $this->loadJson($url);
         if (null === $content) {
-            $this->write("Unable to find the URL '$url' for the plugin '$name'.");
+            $this->write("Unable to find the URL '$url' for the plugin '$name'.", 'error');
 
             return false;
         }
-        foreach (['tags', 'latest'] as $path) {
+        foreach ($paths as $path) {
             if (!isset($content[$path])) {
                 $this->write("Unable to find the path '$path' for the plugin '$name'.", 'error');
 
@@ -239,6 +246,9 @@ class UpdateAssetsCommand extends Command
     {
         $this->write('Check versions');
         $plugins = $configuration['plugins'];
+        $versionUrl = $configuration['versionUrl'];
+        $versionPaths = $configuration['versionPaths'];
+
         foreach ($plugins as $plugin) {
             $name = $plugin['name'];
             $version = $plugin['version'];
@@ -247,7 +257,7 @@ class UpdateAssetsCommand extends Command
                 $this->write("- $display v$version disabled.", 'fg=gray');
                 continue;
             }
-            if ($this->checkVersion($name, $version)) {
+            if ($this->checkVersion($versionUrl, $versionPaths, $name, $version)) {
                 continue;
             }
             $this->write("- $display v$version is up to date.");

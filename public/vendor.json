@@ -1,9 +1,13 @@
 {
     "source_cdnjs": "https://cdnjs.cloudflare.com/ajax/libs/",
     "format_cdnjs" : "{source}/{name}/{version}/{file}",
+    "versionUrl_cdnjs": "https://api.cdnjs.com/libraries/{name}?fields=version",
+    "versionPaths_cdnjs": ["version"],
     "source": "https://cdn.jsdelivr.net/npm/",
-    "target": "js/vendor/",
     "format": "{source}{name}@{version}/{file}",
+    "target": "js/vendor/",
+    "versionUrl": "https://data.jsdelivr.com/v1/package/npm/{name}",
+    "versionPaths": ["tags", "latest"],
     "prefixes": {
         "js": "/**! compression tag for ftp-deployment */\n\n",
         "css": "/**! compression tag for ftp-deployment */\n\n"
@@ -103,15 +107,6 @@
             ]
         },
         {
-            "display": "iconify",
-            "name": "@iconify/iconify",
-            "version": "1.0.7",
-            "disabled": true,
-            "files": [
-                "dist/iconify.js"
-            ]
-        },
-        {
             "name": "bootstrap-table",
             "version": "1.22.1",
             "files": [
@@ -131,8 +126,6 @@
             ]
         },
         {
-            "see": "https://apalfrey.github.io/select2-bootstrap-5-theme",
-            "example": "https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.css",
             "name": "select2-bootstrap-5-theme",
             "version": "1.3.0",
             "target": "select2/css",

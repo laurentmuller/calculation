@@ -71,12 +71,12 @@
     {%- endfor %}
 </table>
 {% endblock %}
-
+{# stylesheets #}
 {% block stylesheets -%}
 {{ parent() }}
 {{ asset_css('css/calendar.css') }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {{ parent() }}
 {{ asset_js('js/test/calendar.js') }}

@@ -21,16 +21,16 @@
 {% endblock %}
 {# footer #}
 {% block card_footer -%}
-    {{ parent() }}
-    {{ timestampable_footer(item) }}
+{{ parent() }}
+{{ timestampable_footer(item) }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
-    {% if app.debug %}
-        {{ parent() }}
-        {{ asset_js('js/plugins/plugin-color-picker.js') }}
-        {{ asset_js('js/application/calculationstate_edit.js') }}
-    {% else %}
-        {{ asset_js('js/calculationstate_edit.js') }}
-    {% endif %}
+{% if app.debug %}
+    {{ parent() }}
+    {{ asset_js('js/plugins/plugin-color-picker.js') }}
+    {{ asset_js('js/application/calculationstate_edit.js') }}
+{% else %}
+    {{ asset_js('js/compiled/calculationstate_edit.js') }}
+{% endif %}
 {% endblock %}

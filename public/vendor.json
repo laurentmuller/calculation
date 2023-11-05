@@ -19,7 +19,7 @@
             ]
         }
     },
-    "target": "js/vendor/",
+    "target": "vendor/",
     "prefixes": {
         "js": "/**! compression tag for ftp-deployment */\n\n",
         "css": "/**! compression tag for ftp-deployment */\n\n"

@@ -16,17 +16,17 @@
 </div>
 {{ form_row(form.description) }}
 {% endblock %}
-
+{# footer #}
 {% block card_footer -%}
 {{ parent() }}
 {{ timestampable_footer(item) }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/application/validation_edit.js') }}
+    {{ parent() }}
+    {{ asset_js('js/application/validation_edit.js') }}
 {% else %}
-{{ asset_js('js/validation_edit.js') }}
+    {{ asset_js('js/compiled/validation_edit.js') }}
 {% endif %}
 {% endblock %}

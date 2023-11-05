@@ -17,6 +17,8 @@ use App\Traits\MathTrait;
 
 /**
  * Define a RGB color.
+ *
+ * @psalm-type RgbType = array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}
  */
 abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 {
@@ -110,18 +112,22 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Creates a new instance.
      *
-     * @param int[]|string|null $rgb an array containing the red, green and blue values or a hexadecimal string
+     * @param int[]|string|null $rgb an array containing the red, green and blue values or a hexadecimal string like
+     *                               <code>'#FF8040'</code> or <code>'FFF'</code>
      *
      * @return static|null the color or null if the RGB value can not be parsed
-     *
-     * @see AbstractPdfColor::parse()
      */
     public static function create(array|string|null $rgb): ?static
     {
+        if (null === $rgb || '' === $rgb) {
+            return null;
+        }
+
         if (\is_string($rgb)) {
             $rgb = self::parse($rgb);
         }
-        /** @psalm-var array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}|false $rgb */
+
+        /** @psalm-var RgbType|false $rgb */
         if (\is_array($rgb) && 3 === \count($rgb)) {
             return new static($rgb[0], $rgb[1], $rgb[2]);
         }
@@ -198,7 +204,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the red, the green and the blue values.
      *
-     * @psalm-return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}
+     * @psalm-return RgbType
      */
     public function getRGB(): array
     {
@@ -346,22 +352,18 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * The value must be a hexadecimal string like <code>'#FF8040'</code> or <code>'FFF'</code>.
      *
-     * @param ?string $value a hexadecimal string
+     * @param string $value a hexadecimal string
      *
      * @return ?array the RGB array (<code>red, green, blue</code>) or <code>null</code> if the value can not be converted
      *
-     * @psalm-return array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}|null
+     * @psalm-return RgbType|null
      */
-    private static function parse(?string $value): ?array
+    private static function parse(string $value): ?array
     {
-        if (null === $value || '' === $value) {
-            return null;
-        }
-
-        $parsed = (string) \preg_replace('/[^0-9A-Fa-f]/', '', $value);
-        switch (\strlen($parsed)) {
+        $value = (string) \preg_replace('/[^0-9A-Fa-f]/', '', $value);
+        switch (\strlen($value)) {
             case 6:
-                $color = \hexdec($parsed);
+                $color = \hexdec($value);
                 /** @psalm-var int<0, 255> $r */
                 $r = 0xFF & ($color >> 0x10);
                 /** @psalm-var int<0, 255> $g */
@@ -373,11 +375,11 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 
             case 3:
                 /** @psalm-var int<0, 255> $r */
-                $r = \hexdec(\str_repeat(\substr($parsed, 0, 1), 2));
+                $r = \hexdec(\str_repeat(\substr($value, 0, 1), 2));
                 /** @psalm-var int<0, 255> $g */
-                $g = \hexdec(\str_repeat(\substr($parsed, 1, 1), 2));
+                $g = \hexdec(\str_repeat(\substr($value, 1, 1), 2));
                 /** @psalm-var int<0, 255> $b */
-                $b = \hexdec(\str_repeat(\substr($parsed, 2, 1), 2));
+                $b = \hexdec(\str_repeat(\substr($value, 2, 1), 2));
 
                 return [$r, $g, $b];
 

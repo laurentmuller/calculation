@@ -51,7 +51,7 @@
 {{- _self.item_external(path('log_excel'), 'log.list.excel_title', ICON_EXCEL) }}
 {{- _self.item_external(path('log_download'), 'log.list.download_title', 'file-arrow-down') }}
 {%- endblock %}
-
+{# show_actions #}
 {% block show_actions -%}
 {{- _self.item_path(path('log_show', params), 'log.show.title', ICON_SHOW, 'btn-show btn-default') }}
 {%- endblock %}

@@ -112,6 +112,6 @@
 {%- endblock %}
 {# javascripts #}
 {% block javascripts %}
-    {{ parent() }}
-    {{- asset_js('js/plugins/plugin-rowlink.js') }}
+{{ parent() }}
+{{ asset_js('js/plugins/plugin-rowlink.js') }}
 {% endblock %}

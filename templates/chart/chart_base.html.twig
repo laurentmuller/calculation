@@ -32,12 +32,12 @@
 {# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/vendor/highcharts/highcharts.js') }}
-{{ asset_js('js/plugins/plugin-rowlink.js') }}
-{{ asset_js('js/application/chart.js') }}
+    {{ parent() }}
+    {{ asset_js('js/vendor/highcharts/highcharts.js') }}
+    {{ asset_js('js/plugins/plugin-rowlink.js') }}
+    {{ asset_js('js/application/chart.js') }}
 {% else %}
-{{ asset_js('js/chart.js') }}
+    {{ asset_js('js/compiled/chart.js') }}
 {% endif %}
 <script nonce="{{ csp_nonce() }}">
     {{- chart(chart) -}}

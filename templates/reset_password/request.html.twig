@@ -14,11 +14,11 @@
 {# javascripts #}
 {% block javascripts -%}
 {% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/extensions/password-extensions.js') }}
-{{ asset_js('js/application/user_recaptcha.js') }}
-{{ asset_js('js/application/user_request.js') }}
+    {{ parent() }}
+    {{ asset_js('js/extensions/password-extensions.js') }}
+    {{ asset_js('js/application/user_recaptcha.js') }}
+    {{ asset_js('js/application/user_request.js') }}
 {% else %}
-{{ asset_js('js/user_request.js') }}
+    {{ asset_js('js/compiled/user_request.js') }}
 {% endif %}
 {%- endblock %}

@@ -1,6 +1,6 @@
 @import 'style.css';
-@import '../js/vendor/select2/css/select2.css';
-@import '../js/vendor/select2/css/select2-bootstrap-5-theme.css';
+@import '../vendor/select2/css/select2.css';
+@import '../vendor/select2/css/select2-bootstrap-5-theme.css';
 
 /**! compression tag for ftp-deployment */
 

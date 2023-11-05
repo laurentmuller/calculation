@@ -292,20 +292,20 @@
 {# javascripts #}
 {% block javascripts -%}
 {% if app.debug %}
-{{ parent() -}}
-{{ asset_js('js/vendor/jquery-mark/jquery.mark.js') }}
-{{ asset_js('js/vendor/bootstrap-table/bootstrap-table.js') }}
-{{ asset_js('js/vendor/bootstrap-table/extensions/defer-url/bootstrap-table-defer-url.js') }}
-{{ asset_js('js/vendor/bootstrap-table/extensions/custom-view/bootstrap-table-custom-view.js') }}
-{{ asset_js('js/vendor/jquery-contextmenu/jquery.contextMenu.js') }}
-{{ asset_js('js/plugins/plugin-drag-modal.js') }}
-{{ asset_js('js/plugins/plugin-rowlink.js') }}
-{{ asset_js('js/plugins/plugin-drop-down.js') }}
-{{ asset_js('js/extensions/bootstrap-table-extensions.js') }}
-{{ asset_js('js/extensions/bootstrap-table-fr-CH.js') }}
-{{ asset_js('js/extensions/contextmenu-extensions.js') }}
-{{ asset_js('js/application/bootstrap_table.js') }}
+    {{ parent() -}}
+    {{ asset_js('js/vendor/jquery-mark/jquery.mark.js') }}
+    {{ asset_js('js/vendor/bootstrap-table/bootstrap-table.js') }}
+    {{ asset_js('js/vendor/bootstrap-table/extensions/defer-url/bootstrap-table-defer-url.js') }}
+    {{ asset_js('js/vendor/bootstrap-table/extensions/custom-view/bootstrap-table-custom-view.js') }}
+    {{ asset_js('js/vendor/jquery-contextmenu/jquery.contextMenu.js') }}
+    {{ asset_js('js/plugins/plugin-drag-modal.js') }}
+    {{ asset_js('js/plugins/plugin-rowlink.js') }}
+    {{ asset_js('js/plugins/plugin-drop-down.js') }}
+    {{ asset_js('js/extensions/bootstrap-table-extensions.js') }}
+    {{ asset_js('js/extensions/bootstrap-table-fr-CH.js') }}
+    {{ asset_js('js/extensions/contextmenu-extensions.js') }}
+    {{ asset_js('js/application/bootstrap_table.js') }}
 {% else %}
-{{ asset_js('js/bootstrap_tables.js') }}
+    {{ asset_js('js/compiled/bootstrap_tables.js') }}
 {% endif %}
 {%- endblock -%}

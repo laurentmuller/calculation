@@ -13,13 +13,13 @@
 {# javascripts #}
 {% block javascripts -%}
 {% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/vendor/zxcvbn/zxcvbn.js') }}
-{{ asset_js('js/plugins/plugin-password-strength.js') }}
-{{ asset_js('js/extensions/password-extensions.js') }}
-{{ asset_js('js/application/user_recaptcha.js') }}
-{{ asset_js('js/application/user_reset.js') }}
+    {{ parent() }}
+    {{ asset_js('js/vendor/zxcvbn/zxcvbn.js') }}
+    {{ asset_js('js/plugins/plugin-password-strength.js') }}
+    {{ asset_js('js/extensions/password-extensions.js') }}
+    {{ asset_js('js/application/user_recaptcha.js') }}
+    {{ asset_js('js/application/user_reset.js') }}
 {% else %}
-{{ asset_js('js/user_reset.js') }}
+    {{ asset_js('js/compiled/user_reset.js') }}
 {% endif %}
 {%- endblock %}

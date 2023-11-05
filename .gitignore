@@ -23,9 +23,12 @@ symfony.lock
 .php-cs-fixer.cache
 ###< php-cs-fixer ###
 
-###> application ###
+###> public ###
 /public/images/users/
-/public/js/vendor
+/public/vendor/
+###< public ###
+
+###> application ###
 /resources/data/swiss.sqlite
 /resources/data/openweather.sqlite
 ###< application ###

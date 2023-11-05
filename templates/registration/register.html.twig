@@ -5,21 +5,21 @@
 {%- set submit_text = 'registration.register.submit' -%}
 {%- set cancel_path = false -%}
 {%- set form_attr = form_attr|default({})|merge({'data-equal_to': 'password.mismatch'|trans([], 'validators')}) -%}
-
+{# actions #}
 {% block actions_form %}
 {{ parent() }}
 <a href="{{ path('app_login') }}" class="align-self-center" title="{{ 'security.login.description'|trans }}">{{ 'security.login.submit'|trans }}</a>
 <a href="{{ path('app_forgot_password_request') }}" class="align-self-center" title="{{ 'resetting.request.description'|trans }}">{{ 'resetting.link'|trans }}</a>
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts -%}
 {% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/vendor/zxcvbn/zxcvbn.js') }}
-{{ asset_js('js/plugins/plugin-password-strength.js') }}
-{{ asset_js('js/extensions/password-extensions.js') }}
-{{ asset_js('js/application/user_register.js') }}
+    {{ parent() }}
+    {{ asset_js('js/vendor/zxcvbn/zxcvbn.js') }}
+    {{ asset_js('js/plugins/plugin-password-strength.js') }}
+    {{ asset_js('js/extensions/password-extensions.js') }}
+    {{ asset_js('js/application/user_register.js') }}
 {% else %}
-{{ asset_js('js/user_register.js') }}
+    {{ asset_js('js/compiled/user_register.js') }}
 {% endif %}
 {%- endblock %}

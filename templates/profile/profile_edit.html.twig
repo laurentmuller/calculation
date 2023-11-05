@@ -1,5 +1,4 @@
 {% extends 'cards/card_edit.html.twig' %}
-
 {# parameters #}
 {%- set title = 'profile.edit.title' -%}
 {%- set title_icon = 'user-gear' -%}
@@ -7,19 +6,19 @@
 {%- set form_attr = form_attr|default({})|merge({
                         'data-check-name': url('ajax_check_user_name'),
                         'data-check-email': url('ajax_check_user_email')}) -%}
-
+{# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/fileinput.css') }}
 {% endblock %}
-
+{# javascripts #}
 {% block javascripts -%}
 {% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/plugins/plugin-input-file.js') }}
-{{ asset_js('js/extensions/file-input-extensions.js') }}
-{{ asset_js('js/extensions/password-extensions.js') }}
-{{ asset_js('js/application/user_profile.js') }}
+    {{ parent() }}
+    {{ asset_js('js/plugins/plugin-input-file.js') }}
+    {{ asset_js('js/extensions/file-input-extensions.js') }}
+    {{ asset_js('js/extensions/password-extensions.js') }}
+    {{ asset_js('js/application/user_profile.js') }}
 {% else %}
-{{ asset_js('js/user_profile.js') }}
+    {{ asset_js('js/compiled/user_profile.js') }}
 {% endif %}
 {%- endblock %}

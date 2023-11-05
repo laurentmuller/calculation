@@ -42,8 +42,8 @@
 {%- endblock %}
 {# end container #}
 {% block end_card_container -%}
-    {% block end_form -%}{{ form_end(form) }}{%- endblock %}
-    {{ parent() }}
+{% block end_form -%}{{ form_end(form) }}{%- endblock %}
+{{ parent() }}
 {%- endblock %}
 {# javascript #}
 {% block javascripts -%}
@@ -55,6 +55,6 @@
     {{- asset_js('js/extensions/validator-extensions.js') }}
     {{- asset_js('js/extensions/validator-extensions-fr.js') -}}
 {% else %}
-    {{- asset_js('js/core_edit.js') }}
+    {{- asset_js('js/compiled/core_edit.js') }}
 {% endif %}
 {%- endblock %}

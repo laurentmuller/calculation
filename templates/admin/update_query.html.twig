@@ -25,7 +25,6 @@
     <hr class="my-2">
     <p class="mb-0 text-end text-body-secondary small">{{ 'calculation.update.last_update'|trans({'%date%': date}) }}</p>
 {% endif %}
-
 {% endblock %}
 {# javascripts #}
 {% block javascripts %}
@@ -34,6 +33,6 @@
     {{ asset_js('js/plugins/plugin-simulate.js') }}
     {{ asset_js('js/application/calculation_update.js') }}
 {% else %}
-    {{ asset_js('js/calculation_update.js') }}
+    {{ asset_js('js/compiled/calculation_update.js') }}
 {% endif %}
 {% endblock %}

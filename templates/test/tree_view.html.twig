@@ -239,17 +239,17 @@
 {%- endblock %}
 {# stylesheets #}
 {% block stylesheets -%}
-{{ asset_css('js/vendor/currency-flags/currency-flags.css') }}
+{{ asset_css('vendor/currency-flags/currency-flags.css') }}
 {{ asset_css('css/select2.css') }}
 {{ asset_css('css/flags.css') }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts -%}
 {{ parent() }}
+{{ asset_js('vendor/select2/js/select2.js') }}
+{{ asset_js('vendor/select2/js/i18n/fr.js') }}
 {{ asset_js('js/plugins/plugin-treeview.js') }}
 {{ asset_js('js/plugins/plugin-drag-modal.js') }}
-{{ asset_js('js/vendor/select2/js/select2.js') }}
-{{ asset_js('js/vendor/select2/js/i18n/fr.js') }}
 {{ asset_js('js/extensions/select2-extensions.js') }}
 {{ asset_js('js/test/treeview.js') }}
 {% endblock %}

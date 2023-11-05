@@ -18,9 +18,9 @@
 {# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/application/import_file.js') }}
+    {{ parent() }}
+    {{ asset_js('js/application/import_file.js') }}
 {% else %}
-{{ asset_js('js/import_file.js') }}
+    {{ asset_js('js/compiled/import_file.js') }}
 {% endif %}
 {% endblock %}

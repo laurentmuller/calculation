@@ -87,7 +87,7 @@
 {% endblock %}
 {# javascript #}
 {% block javascripts %}
-    {{ parent() }}
-    {{ asset_js('js/vendor/clipboard/clipboard.js') }}
-    {{ asset_js('js/application/dialog_raw_data.js') }}
+{{ parent() }}
+{{ asset_js('vendor/clipboard/clipboard.js') }}
+{{ asset_js('js/application/dialog_raw_data.js') }}
 {% endblock %}

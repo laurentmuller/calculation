@@ -139,7 +139,6 @@
 <small class="text-body-secondary empty-items{% if form.vars.value.count > 0 %} d-none{% endif %}">{{- 'task.edit.empty_items'|trans -}}</small>
 {% endblock %}
 {# footer #}
-
 {% block card_footer -%}
 {{ parent() }}
 {{ timestampable_footer(item) }}
@@ -147,13 +146,13 @@
 {# javascripts #}
 {% block javascripts %}
 {% if app.debug %}
-{{ parent() }}
-{{ asset_js('js/vendor/html5sortable/html5sortable.js') }}
-{{ asset_js('js/plugins/plugin-typeahead.js') }}
-{{ asset_js('js/plugins/plugin-input-number.js') }}
-{{ asset_js('js/extensions/typeahead-extensions.js') }}
-{{ asset_js('js/application/task_edit.js') }}
+    {{ parent() }}
+    {{ asset_js('js/vendor/html5sortable/html5sortable.js') }}
+    {{ asset_js('js/plugins/plugin-typeahead.js') }}
+    {{ asset_js('js/plugins/plugin-input-number.js') }}
+    {{ asset_js('js/extensions/typeahead-extensions.js') }}
+    {{ asset_js('js/application/task_edit.js') }}
 {% else %}
-{{ asset_js('js/task_edit.js') }}
+    {{ asset_js('js/compiled/task_edit.js') }}
 {% endif %}
 {% endblock %}

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
+use App\Attribute\PostRoute;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
@@ -35,7 +37,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -69,7 +70,7 @@ class IndexController extends AbstractController
     /**
      * Hide the catalog panel.
      */
-    #[Route(path: '/hide/catalog', name: 'homepage_hide_catalog', methods: Request::METHOD_POST)]
+    #[PostRoute(path: '/hide/catalog', name: 'homepage_hide_catalog')]
     public function hideCatalog(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_CATALOG, 'index.panel_catalog_hide_success');
@@ -78,7 +79,7 @@ class IndexController extends AbstractController
     /**
      * Hide the month panel.
      */
-    #[Route(path: '/hide/month', name: 'homepage_hide_month', methods: Request::METHOD_POST)]
+    #[PostRoute(path: '/hide/month', name: 'homepage_hide_month')]
     public function hideMonth(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_MONTH, 'index.panel_month_hide_success');
@@ -87,7 +88,7 @@ class IndexController extends AbstractController
     /**
      * Hide the state panel.
      */
-    #[Route(path: '/hide/state', name: 'homepage_hide_state', methods: Request::METHOD_POST)]
+    #[PostRoute(path: '/hide/state', name: 'homepage_hide_state')]
     public function hideState(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_STATE, 'index.panel_state_hide_success');
@@ -98,7 +99,7 @@ class IndexController extends AbstractController
      *
      * @throws \Exception
      */
-    #[Route(path: '/', name: self::HOME_PAGE, methods: Request::METHOD_GET)]
+    #[GetRoute(path: '/', name: self::HOME_PAGE)]
     public function index(
         Request $request,
         #[MapQueryParameter]
@@ -149,7 +150,7 @@ class IndexController extends AbstractController
     /**
      * Update the number of displayed calculations.
      */
-    #[Route(path: '/update/count', name: 'homepage_calculation', methods: Request::METHOD_POST)]
+    #[PostRoute(path: '/update/count', name: 'homepage_calculation')]
     public function updateCalculation(Request $request): JsonResponse
     {
         $this->checkAjaxRequest($request);

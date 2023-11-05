@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
@@ -32,7 +33,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AboutLicenceController extends AbstractController
 {
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/content', name: 'about_licence_content')]
+    #[GetRoute(path: '/content', name: 'about_licence_content')]
     public function content(): JsonResponse
     {
         $content = $this->renderView('about/licence_content.html.twig');
@@ -41,14 +42,14 @@ class AboutLicenceController extends AbstractController
     }
 
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Route(path: '', name: 'about_licence')]
+    #[GetRoute(path: '', name: 'about_licence')]
     public function index(): Response
     {
         return $this->render('about/licence.html.twig', ['link' => true]);
     }
 
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Route(path: '/pdf', name: 'about_licence_pdf')]
+    #[GetRoute(path: '/pdf', name: 'about_licence_pdf')]
     public function pdf(): PdfResponse
     {
         $content = $this->renderView('about/licence_content.html.twig', ['link' => false]);
@@ -63,7 +64,7 @@ class AboutLicenceController extends AbstractController
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/word', name: 'about_licence_word')]
+    #[GetRoute(path: '/word', name: 'about_licence_word')]
     public function word(): WordResponse
     {
         $content = $this->renderView('about/licence_content.html.twig', ['link' => false]);

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
+use App\Attribute\PostRoute;
 use App\Form\Dialog\EditItemDialogType;
 use App\Form\Dialog\EditTaskDialogType;
 use App\Interfaces\RoleInterface;
@@ -35,7 +37,7 @@ class AjaxCalculationController extends AbstractController
     /**
      * Return the edit item dialog template.
      */
-    #[Route(path: '/dialog/item', name: 'ajax_dialog_item', methods: Request::METHOD_GET)]
+    #[GetRoute(path: '/dialog/item', name: 'ajax_dialog_item')]
     public function renderItemDialog(): JsonResponse
     {
         $parameters = [
@@ -48,7 +50,7 @@ class AjaxCalculationController extends AbstractController
     /**
      * Return the edit task dialog template.
      */
-    #[Route(path: '/dialog/task', name: 'ajax_dialog_task', methods: Request::METHOD_GET)]
+    #[GetRoute(path: '/dialog/task', name: 'ajax_dialog_task')]
     public function renderTaskDialog(TaskRepository $repository): JsonResponse
     {
         $parameters = [
@@ -62,7 +64,7 @@ class AjaxCalculationController extends AbstractController
     /**
      * Update the total of a calculation.
      */
-    #[Route(path: '/update', name: 'ajax_update', methods: Request::METHOD_POST)]
+    #[PostRoute(path: '/update', name: 'ajax_update')]
     public function update(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
     {
         try {

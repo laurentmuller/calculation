@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Service\ExchangeRateService;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -44,7 +44,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Display the view.
      */
-    #[Route(path: '', name: 'exchange_display')]
+    #[GetRoute(path: '', name: 'exchange_display')]
     public function display(): Response
     {
         return $this->render('test/exchange_rate.html.twig', [
@@ -57,7 +57,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Gets the supported currency codes.
      */
-    #[Route(path: '/codes', name: 'exchange_codes')]
+    #[GetRoute(path: '/codes', name: 'exchange_codes')]
     public function getCodes(): JsonResponse
     {
         $codes = $this->service->getSupportedCodes();
@@ -73,7 +73,7 @@ class ExchangeRateController extends AbstractController
      *
      * @param string $code the base currency code
      */
-    #[Route(path: '/latest/{code}', name: 'exchange_latest')]
+    #[GetRoute(path: '/latest/{code}', name: 'exchange_latest')]
     public function getLatest(string $code): JsonResponse
     {
         $latest = $this->service->getLatest($code);
@@ -87,7 +87,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Gets the exchange rate from the base currency code to the target currency code.
      */
-    #[Route(path: '/rate', name: 'exchange_rate', methods: Request::METHOD_GET)]
+    #[GetRoute(path: '/rate', name: 'exchange_rate')]
     public function getRate(
         #[MapQueryParameter]
         string $baseCode = '',

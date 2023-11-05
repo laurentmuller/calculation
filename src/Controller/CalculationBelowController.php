@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Entity\Calculation;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
@@ -46,7 +47,7 @@ class CalculationBelowController extends AbstractController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/excel', name: 'below_excel')]
+    #[GetRoute(path: '/excel', name: 'below_excel')]
     public function excel(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();
@@ -67,7 +68,7 @@ class CalculationBelowController extends AbstractController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/pdf', name: 'below_pdf')]
+    #[GetRoute(path: '/pdf', name: 'below_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();
@@ -86,7 +87,7 @@ class CalculationBelowController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'below_table')]
+    #[GetRoute(path: '', name: 'below_table')]
     public function table(Request $request, CalculationBelowTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

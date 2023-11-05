@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Traits\CookieTrait;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -34,7 +35,7 @@ class PolicyController extends AbstractController
     /**
      * Accept the license agreement.
      */
-    #[Route(path: '/accept', name: 'policy_accept')]
+    #[GetRoute(path: '/accept', name: 'policy_accept')]
     public function accept(): RedirectResponse
     {
         $path = $this->getCookiePath();

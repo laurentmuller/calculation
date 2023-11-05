@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\EditRoute;
+use App\Attribute\GetRoute;
 use App\Generator\CalculationGenerator;
 use App\Generator\CustomerGenerator;
 use App\Generator\ProductGenerator;
@@ -40,7 +42,7 @@ class GeneratorController extends AbstractController
     private const KEY_ENTITY = 'admin.generate.entity';
     private const KEY_SIMULATE = 'admin.generate.simulate';
 
-    #[Route(path: '', name: 'generate')]
+    #[EditRoute(path: '', name: 'generate')]
     public function generate(): Response
     {
         $data = $this->getSessionData();
@@ -66,7 +68,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more calculations with random data.
      */
-    #[Route(path: '/calculation', name: self::ROUTE_CALCULATION)]
+    #[GetRoute(path: '/calculation', name: self::ROUTE_CALCULATION)]
     public function generateCalculations(Request $request, CalculationGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);
@@ -75,7 +77,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more customers with random data.
      */
-    #[Route(path: '/customer', name: self::ROUTE_CUSTOMER)]
+    #[GetRoute(path: '/customer', name: self::ROUTE_CUSTOMER)]
     public function generateCustomers(Request $request, CustomerGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);
@@ -84,7 +86,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more products with random data.
      */
-    #[Route(path: '/product', name: self::ROUTE_PRODUCT)]
+    #[GetRoute(path: '/product', name: self::ROUTE_PRODUCT)]
     public function generateProducts(Request $request, ProductGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);

@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\DeleteRoute;
+use App\Attribute\EditRoute;
+use App\Attribute\GetRoute;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Form\Category\CategoryType;
@@ -55,7 +58,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Add a category.
      */
-    #[Route(path: '/add', name: 'category_add')]
+    #[EditRoute(path: '/add', name: 'category_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new Category());
@@ -64,7 +67,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Clone (copy) a category.
      */
-    #[Route(path: '/clone/{id}', name: 'category_clone', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/clone/{id}', name: 'category_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Category $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -81,7 +84,7 @@ class CategoryController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/delete/{id}', name: 'category_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[DeleteRoute(path: '/delete/{id}', name: 'category_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
     {
         $tasks = $taskRepository->countCategoryReferences($item);
@@ -118,7 +121,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Edit a category.
      */
-    #[Route(path: '/edit/{id}', name: 'category_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/edit/{id}', name: 'category_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Category $item): Response
     {
         return $this->editEntity($request, $item);
@@ -131,7 +134,7 @@ class CategoryController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/excel', name: 'category_excel')]
+    #[GetRoute(path: '/excel', name: 'category_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -150,7 +153,7 @@ class CategoryController extends AbstractEntityController
      * @throws NotFoundHttpException                if no category is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/pdf', name: 'category_pdf')]
+    #[GetRoute(path: '/pdf', name: 'category_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -166,7 +169,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Show properties of a category.
      */
-    #[Route(path: '/show/{id}', name: 'category_show', requirements: ['id' => Requirement::DIGITS])]
+    #[GetRoute(path: '/show/{id}', name: 'category_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Category $item): Response
     {
         return $this->showEntity($item);
@@ -175,7 +178,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'category_table')]
+    #[GetRoute(path: '', name: 'category_table')]
     public function table(Request $request, CategoryTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

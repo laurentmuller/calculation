@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\EditRoute;
+use App\Attribute\GetRoute;
 use App\Entity\GlobalMargin;
 use App\Enums\EntityPermission;
 use App\Form\GlobalMargin\GlobalMarginsType;
@@ -50,7 +52,7 @@ class GlobalMarginController extends AbstractEntityController
         parent::__construct($repository);
     }
 
-    #[Route(path: '/edit', name: 'globalmargin_edit')]
+    #[EditRoute(path: '/edit', name: 'globalmargin_edit')]
     public function edit(Request $request): Response
     {
         $this->checkPermission(EntityPermission::ADD, EntityPermission::EDIT, EntityPermission::DELETE);
@@ -86,7 +88,7 @@ class GlobalMarginController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/excel', name: 'globalmargin_excel')]
+    #[GetRoute(path: '/excel', name: 'globalmargin_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('minimum');
@@ -105,7 +107,7 @@ class GlobalMarginController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/pdf', name: 'globalmargin_pdf')]
+    #[GetRoute(path: '/pdf', name: 'globalmargin_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('minimum');
@@ -121,7 +123,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Show properties of a global margin.
      */
-    #[Route(path: '/show/{id}', name: 'globalmargin_show', requirements: ['id' => Requirement::DIGITS])]
+    #[GetRoute(path: '/show/{id}', name: 'globalmargin_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(GlobalMargin $item): Response
     {
         return $this->showEntity($item);
@@ -130,7 +132,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'globalmargin_table')]
+    #[GetRoute(path: '', name: 'globalmargin_table')]
     public function table(Request $request, GlobalMarginTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

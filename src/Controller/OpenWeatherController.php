@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\EditRoute;
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Service\OpenWeatherCityUpdater;
 use App\Service\OpenWeatherService;
@@ -101,7 +103,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns current conditions data for a specific location.
      */
-    #[Route(path: '/api/current', name: 'openweather_api_current')]
+    #[GetRoute(path: '/api/current', name: 'openweather_api_current')]
     public function apiCurrent(Request $request): JsonResponse
     {
         try {
@@ -121,7 +123,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns 16 day / daily forecast conditions data for a specific location.
      */
-    #[Route(path: '/api/daily', name: 'openweather_api_daily')]
+    #[GetRoute(path: '/api/daily', name: 'openweather_api_daily')]
     public function apiDaily(Request $request): JsonResponse
     {
         try {
@@ -142,7 +144,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns 5 days / 3 hours forecast conditions data for a specific location.
      */
-    #[Route(path: '/api/forecast', name: 'openweather_api_forecast')]
+    #[GetRoute(path: '/api/forecast', name: 'openweather_api_forecast')]
     public function apiForecast(Request $request): JsonResponse
     {
         try {
@@ -163,7 +165,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns all essential weather data for a specific location.
      */
-    #[Route(path: '/api/onecall', name: 'openweather_api_onecall')]
+    #[GetRoute(path: '/api/onecall', name: 'openweather_api_onecall')]
     public function apiOneCall(Request $request): JsonResponse
     {
         try {
@@ -186,7 +188,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns an array of cities that match the query text.
      */
-    #[Route(path: '/api/search', name: 'openweather_api_search')]
+    #[GetRoute(path: '/api/search', name: 'openweather_api_search')]
     public function apiSearch(Request $request, UrlGeneratorInterface $generator): JsonResponse
     {
         try {
@@ -226,7 +228,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns current conditions data for a specific location.
      */
-    #[Route(path: '/current', name: 'openweather_current')]
+    #[GetRoute(path: '/current', name: 'openweather_current')]
     public function current(Request $request): Response
     {
         $id = $this->getRequestId($request);
@@ -252,7 +254,7 @@ class OpenWeatherController extends AbstractController
      * Data can be downloaded from the <a href="https://bulk.openweathermap.org/sample/">sample directory</a>.
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Route(path: '/import', name: 'openweather_import')]
+    #[EditRoute(path: '/import', name: 'openweather_import')]
     public function import(Request $request, OpenWeatherCityUpdater $updater): Response
     {
         $form = $updater->createForm();
@@ -274,7 +276,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the search city view.
      */
-    #[Route(path: '/search', name: 'openweather_search')]
+    #[EditRoute(path: '/search', name: 'openweather_search')]
     public function search(Request $request): Response
     {
         $data = [
@@ -284,7 +286,6 @@ class OpenWeatherController extends AbstractController
             self::KEY_COUNT => $this->getSessionCount($request),
         ];
         $form = $this->createSearchForm($data);
-
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var OpenWeatherSearchType $data */
             $data = $form->getData();
@@ -342,7 +343,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the current weather, if applicable, the search cities otherwise.
      */
-    #[Route(path: '', name: 'openweather_weather')]
+    #[GetRoute(path: '', name: 'openweather_weather')]
     public function weather(Request $request): Response
     {
         $id = $this->getSessionId($request);

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\SchemaReport;
 use App\Response\PdfResponse;
@@ -32,7 +33,7 @@ class SchemaController extends AbstractController
     /**
      * Display information for tables.
      */
-    #[Route(path: '', name: 'schema')]
+    #[GetRoute(path: '', name: 'schema')]
     public function index(SchemaService $service): Response
     {
         return $this->render('schema/index.html.twig', [
@@ -43,7 +44,7 @@ class SchemaController extends AbstractController
     /**
      * Export the schema to a PDF document.
      */
-    #[Route(path: '/pdf', name: 'schema_pdf')]
+    #[GetRoute(path: '/pdf', name: 'schema_pdf')]
     public function pdf(SchemaService $service): PdfResponse
     {
         $report = new SchemaReport($this, $service);
@@ -56,7 +57,7 @@ class SchemaController extends AbstractController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    #[Route(path: '/{name}', name: 'schema_table')]
+    #[GetRoute(path: '/{name}', name: 'schema_table')]
     public function table(string $name, SchemaService $service): Response
     {
         try {

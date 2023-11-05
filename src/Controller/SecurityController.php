@@ -12,13 +12,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\EditRoute;
+use App\Attribute\GetRoute;
 use App\Entity\User;
 use App\Form\User\UserLoginType;
 use App\Interfaces\RoleInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -33,7 +34,7 @@ class SecurityController extends AbstractController
     private const LOGIN_ROUTE = 'app_login';
 
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Route(path: '/login', name: self::LOGIN_ROUTE)]
+    #[EditRoute(path: '/login', name: self::LOGIN_ROUTE)]
     public function login(#[CurrentUser] ?User $user, AuthenticationUtils $utils): Response
     {
         if ($user instanceof User) {
@@ -51,14 +52,14 @@ class SecurityController extends AbstractController
     }
 
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/logout', name: 'app_logout')]
+    #[GetRoute(path: '/logout', name: 'app_logout')]
     public function logout(): never
     {
         throw new \LogicException('This method should never be reached.');
     }
 
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Route(path: '/logout/success', name: 'app_logout_success')]
+    #[GetRoute(path: '/logout/success', name: 'app_logout_success')]
     public function logoutSuccess(): RedirectResponse
     {
         $this->successTrans('security.logout.success', ['%app_name%' => $this->getApplicationName()]);

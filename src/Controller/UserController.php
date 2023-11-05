@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\DeleteRoute;
+use App\Attribute\EditRoute;
+use App\Attribute\GetRoute;
 use App\Entity\User;
 use App\Enums\EntityPermission;
 use App\Form\User\ResetAllPasswordType;
@@ -73,7 +76,7 @@ class UserController extends AbstractEntityController
     /**
      * Add a user.
      */
-    #[Route(path: '/add', name: 'user_add')]
+    #[EditRoute(path: '/add', name: 'user_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new User());
@@ -82,7 +85,7 @@ class UserController extends AbstractEntityController
     /**
      * Delete an user.
      */
-    #[Route(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[DeleteRoute(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, User $item, Security $security, LoggerInterface $logger): Response
     {
         if ($this->isConnectedUser($item) || $this->isOriginalUser($item, $security)) {
@@ -97,7 +100,7 @@ class UserController extends AbstractEntityController
     /**
      * Edit a user.
      */
-    #[Route(path: '/edit/{id}', name: 'user_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/edit/{id}', name: 'user_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, User $item): Response
     {
         return $this->editEntity($request, $item);
@@ -110,7 +113,7 @@ class UserController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/excel', name: 'user_excel')]
+    #[GetRoute(path: '/excel', name: 'user_excel')]
     public function excel(StorageInterface $storage): SpreadsheetResponse
     {
         $entities = $this->getEntities('username');
@@ -126,7 +129,7 @@ class UserController extends AbstractEntityController
     /**
      * Send an email from the current user to the selected user.
      */
-    #[Route(path: '/message/{id}', name: 'user_message', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/message/{id}', name: 'user_message', requirements: ['id' => Requirement::DIGITS])]
     public function message(Request $request, User $user, MailerService $service, LoggerInterface $logger): Response
     {
         if ($this->isConnectedUser($user)) {
@@ -163,7 +166,7 @@ class UserController extends AbstractEntityController
     /**
      * Change password for an existing user.
      */
-    #[Route(path: '/password/{id}', name: 'user_password', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/password/{id}', name: 'user_password', requirements: ['id' => Requirement::DIGITS])]
     public function password(Request $request, User $item): Response
     {
         $form = $this->createForm(UserChangePasswordType::class, $item);
@@ -187,7 +190,7 @@ class UserController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no user is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/pdf', name: 'user_pdf')]
+    #[GetRoute(path: '/pdf', name: 'user_pdf')]
     public function pdf(StorageInterface $storage): PdfResponse
     {
         $entities = $this->getEntities('username');
@@ -203,7 +206,7 @@ class UserController extends AbstractEntityController
     /**
      * Clear all requested reset passwords.
      */
-    #[Route(path: '/reset', name: 'user_reset_all')]
+    #[EditRoute(path: '/reset', name: 'user_reset_all')]
     public function resetAllPasswordRequest(Request $request): Response
     {
         /** @var UserRepository $repository */
@@ -241,7 +244,7 @@ class UserController extends AbstractEntityController
     /**
      * Clear the request reset password.
      */
-    #[Route(path: '/reset/{id}', name: 'user_reset', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/reset/{id}', name: 'user_reset', requirements: ['id' => Requirement::DIGITS])]
     public function resetPasswordRequest(Request $request, User $item): Response
     {
         $form = $this->createForm(FormType::class);
@@ -270,7 +273,7 @@ class UserController extends AbstractEntityController
     /**
      * Edit user access rights.
      */
-    #[Route(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => Requirement::DIGITS])]
     public function rights(Request $request, User $item, RoleBuilderService $builder, RoleHierarchyService $service, EntityManagerInterface $manager): Response
     {
         if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
@@ -308,7 +311,7 @@ class UserController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/rights/excel', name: 'user_rights_excel')]
+    #[GetRoute(path: '/rights/excel', name: 'user_rights_excel')]
     public function rightsExcel(RoleBuilderService $builder): SpreadsheetResponse
     {
         $entities = $this->getEntities('username');
@@ -327,7 +330,7 @@ class UserController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/rights/pdf', name: 'user_rights_pdf')]
+    #[GetRoute(path: '/rights/pdf', name: 'user_rights_pdf')]
     public function rightsPdf(RoleBuilderService $builder): PdfResponse
     {
         $entities = $this->getEntities('username');
@@ -343,7 +346,7 @@ class UserController extends AbstractEntityController
     /**
      * Sends an email to the user for reset its password.
      */
-    #[Route(path: '/reset/send/{id}', name: 'user_reset_send', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/reset/send/{id}', name: 'user_reset_send', requirements: ['id' => Requirement::DIGITS])]
     public function sendPasswordRequest(Request $request, User $item, ResetPasswordService $service): Response
     {
         $form = $this->createForm(FormType::class);
@@ -374,7 +377,7 @@ class UserController extends AbstractEntityController
     /**
      * Show the properties of a user.
      */
-    #[Route(path: '/show/{id}', name: 'user_show', requirements: ['id' => Requirement::DIGITS])]
+    #[GetRoute(path: '/show/{id}', name: 'user_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(User $item): Response
     {
         return $this->showEntity($item);
@@ -383,7 +386,7 @@ class UserController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'user_table')]
+    #[GetRoute(path: '', name: 'user_table')]
     public function table(Request $request, UserTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

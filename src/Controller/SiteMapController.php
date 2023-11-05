@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -36,7 +36,7 @@ class SiteMapController extends AbstractController
         $this->content = FileUtils::decodeJson($file);
     }
 
-    #[Route(path: '/sitemap', name: 'site_map')]
+    #[GetRoute(path: '/sitemap', name: 'site_map')]
     public function invoke(): Response
     {
         return $this->render('sitemap/sitemap.html.twig', ['content' => $this->content]);

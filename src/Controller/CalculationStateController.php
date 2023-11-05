@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\DeleteRoute;
+use App\Attribute\EditRoute;
+use App\Attribute\GetRoute;
 use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
 use App\Form\CalculationState\CalculationStateType;
@@ -52,7 +55,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Add a new calculation state.
      */
-    #[Route(path: '/add', name: 'calculationstate_add')]
+    #[EditRoute(path: '/add', name: 'calculationstate_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new CalculationState());
@@ -61,7 +64,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Clone (copy) a calculation state.
      */
-    #[Route(path: '/clone/{id}', name: 'calculationstate_clone', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/clone/{id}', name: 'calculationstate_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, CalculationState $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -75,7 +78,7 @@ class CalculationStateController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[DeleteRoute(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
     {
         $count = $repository->countStateReferences($item);
@@ -103,7 +106,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Edit a calculation state.
      */
-    #[Route(path: '/edit/{id}', name: 'calculationstate_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/edit/{id}', name: 'calculationstate_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, CalculationState $item): Response
     {
         return $this->editEntity($request, $item);
@@ -116,7 +119,7 @@ class CalculationStateController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/excel', name: 'calculationstate_excel')]
+    #[GetRoute(path: '/excel', name: 'calculationstate_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -135,7 +138,7 @@ class CalculationStateController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/pdf', name: 'calculationstate_pdf')]
+    #[GetRoute(path: '/pdf', name: 'calculationstate_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -151,7 +154,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Show properties of a calculation state.
      */
-    #[Route(path: '/show/{id}', name: 'calculationstate_show', requirements: ['id' => Requirement::DIGITS])]
+    #[GetRoute(path: '/show/{id}', name: 'calculationstate_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(CalculationState $item): Response
     {
         return $this->showEntity($item);
@@ -160,7 +163,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'calculationstate_table')]
+    #[GetRoute(path: '', name: 'calculationstate_table')]
     public function table(Request $request, CalculationStateTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\EditRoute;
 use App\Enums\TableView;
 use App\Form\User\UserParametersType;
 use App\Interfaces\PropertyServiceInterface;
@@ -35,7 +36,7 @@ class UserParametersController extends AbstractController
 {
     use CookieTrait;
 
-    #[Route(path: '/parameters', name: 'user_parameters')]
+    #[EditRoute(path: '/parameters', name: 'user_parameters')]
     public function invoke(Request $request, UserService $userService): Response
     {
         $form = $this->createForm(UserParametersType::class, $userService->getProperties());

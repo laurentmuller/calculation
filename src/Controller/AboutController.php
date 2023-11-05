@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
@@ -31,13 +32,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class AboutController extends AbstractController
 {
-    #[Route(path: '', name: 'about')]
+    #[GetRoute(path: '', name: 'about')]
     public function index(): Response
     {
         return $this->render('about/about.html.twig');
     }
 
-    #[Route(path: '/pdf', name: 'about_pdf')]
+    #[GetRoute(path: '/pdf', name: 'about_pdf')]
     public function pdf(#[Autowire('%app_name%')] string $appName): PdfResponse
     {
         $parameters = [
@@ -59,7 +60,7 @@ class AboutController extends AbstractController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
-    #[Route(path: '/word', name: 'about_word')]
+    #[GetRoute(path: '/word', name: 'about_word')]
     public function word(#[Autowire('%app_name%')] string $appName): WordResponse
     {
         $parameters = [

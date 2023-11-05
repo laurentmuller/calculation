@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\DeleteRoute;
+use App\Attribute\EditRoute;
+use App\Attribute\GetRoute;
 use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Entity\Product;
@@ -52,7 +55,7 @@ class ProductController extends AbstractEntityController
     /**
      * Add a product.
      */
-    #[Route(path: '/add', name: 'product_add')]
+    #[EditRoute(path: '/add', name: 'product_add')]
     public function add(Request $request): Response
     {
         $item = new Product();
@@ -67,7 +70,7 @@ class ProductController extends AbstractEntityController
     /**
      * Clone (copy) a product.
      */
-    #[Route(path: '/clone/{id}', name: 'product_clone', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/clone/{id}', name: 'product_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Product $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -82,7 +85,7 @@ class ProductController extends AbstractEntityController
     /**
      * Delete a product.
      */
-    #[Route(path: '/delete/{id}', name: 'product_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[DeleteRoute(path: '/delete/{id}', name: 'product_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Product $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -91,7 +94,7 @@ class ProductController extends AbstractEntityController
     /**
      * Edit a product.
      */
-    #[Route(path: '/edit/{id}', name: 'product_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[EditRoute(path: '/edit/{id}', name: 'product_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Product $item): Response
     {
         return $this->editEntity($request, $item);
@@ -103,7 +106,7 @@ class ProductController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/excel', name: 'product_excel')]
+    #[GetRoute(path: '/excel', name: 'product_excel')]
     public function excel(ProductRepository $repository): SpreadsheetResponse
     {
         $entities = $repository->findByDescription();
@@ -121,7 +124,7 @@ class ProductController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no product is found
      */
-    #[Route(path: '/pdf', name: 'product_pdf')]
+    #[GetRoute(path: '/pdf', name: 'product_pdf')]
     public function pdf(ProductRepository $repository): PdfResponse
     {
         $entities = $repository->findByGroup();
@@ -137,7 +140,7 @@ class ProductController extends AbstractEntityController
     /**
      * Show properties of a product.
      */
-    #[Route(path: '/show/{id}', name: 'product_show', requirements: ['id' => Requirement::DIGITS])]
+    #[GetRoute(path: '/show/{id}', name: 'product_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Product $item): Response
     {
         return $this->showEntity($item);
@@ -146,7 +149,7 @@ class ProductController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'product_table')]
+    #[GetRoute(path: '', name: 'product_table')]
     public function table(Request $request, ProductTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

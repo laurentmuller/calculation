@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\EditRoute;
 use App\Entity\User;
 use App\Form\User\UserCommentType;
 use App\Interfaces\RoleInterface;
@@ -37,7 +38,7 @@ class CommentController extends AbstractController
      * Send a comment to the webmaster.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/comment', name: 'user_comment')]
+    #[EditRoute(path: '/comment', name: 'user_comment')]
     public function invoke(Request $request, MailerService $service, LoggerInterface $logger): Response
     {
         /** @psalm-var User|Address $from */

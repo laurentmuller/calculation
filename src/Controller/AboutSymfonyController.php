@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
@@ -33,7 +34,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AboutSymfonyController extends AbstractController
 {
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[Route(path: '/content', name: 'about_symfony_content')]
+    #[GetRoute(path: '/content', name: 'about_symfony_content')]
     public function content(SymfonyInfoService $service): JsonResponse
     {
         $parameters = [
@@ -49,7 +50,7 @@ class AboutSymfonyController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[Route(path: '/excel', name: 'about_symfony_excel')]
+    #[GetRoute(path: '/excel', name: 'about_symfony_excel')]
     public function excel(SymfonyInfoService $service, #[Autowire('%app_mode%')] string $appMode): SpreadsheetResponse
     {
         $doc = new SymfonyDocument($this, $service, $this->getLocaleName(), $appMode);
@@ -58,7 +59,7 @@ class AboutSymfonyController extends AbstractController
     }
 
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[Route(path: '/pdf', name: 'about_symfony_pdf')]
+    #[GetRoute(path: '/pdf', name: 'about_symfony_pdf')]
     public function pdf(SymfonyInfoService $service, #[Autowire('%app_mode%')] string $appMode): PdfResponse
     {
         $report = new SymfonyReport($this, $service, $this->getLocaleName(), $appMode);

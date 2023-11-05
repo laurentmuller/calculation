@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotFieldFactory;
@@ -44,7 +45,7 @@ class PivotController extends AbstractController
     /**
      * Show the pivot data table.
      */
-    #[Route(path: '', name: 'calculation_pivot')]
+    #[GetRoute(path: '', name: 'calculation_pivot')]
     public function index(): Response
     {
         return $this->render('calculation/calculation_pivot.html.twig', [
@@ -57,7 +58,7 @@ class PivotController extends AbstractController
     /**
      * Export pivot data to CSV.
      */
-    #[Route(path: '/csv', name: 'calculation_pivot_csv')]
+    #[GetRoute(path: '/csv', name: 'calculation_pivot_csv')]
     public function toCsv(): CsvResponse
     {
         $dataset = $this->getDataset();
@@ -83,7 +84,7 @@ class PivotController extends AbstractController
     /**
      * Export pivot data to JSON.
      */
-    #[Route(path: '/json', name: 'calculation_pivot_json')]
+    #[GetRoute(path: '/json', name: 'calculation_pivot_json')]
     public function toJson(): JsonResponse
     {
         $table = $this->getTable();

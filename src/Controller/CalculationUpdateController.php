@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\EditRoute;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Interfaces\RoleInterface;
 use App\Model\CalculationUpdateQuery;
@@ -37,7 +38,7 @@ class CalculationUpdateController extends AbstractController
     /**
      * @throws ORMException
      */
-    #[Route(path: '/update', name: 'admin_update')]
+    #[EditRoute(path: '/update', name: 'admin_update')]
     public function update(Request $request, CalculationUpdateService $service): Response
     {
         $query = $service->createQuery();

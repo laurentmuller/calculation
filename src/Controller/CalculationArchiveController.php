@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\EditRoute;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Interfaces\RoleInterface;
 use App\Model\CalculationArchiveQuery;
@@ -36,7 +37,7 @@ class CalculationArchiveController extends AbstractController
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/archive', name: 'admin_archive')]
+    #[EditRoute(path: '/archive', name: 'admin_archive')]
     public function invoke(Request $request, CalculationArchiveService $service): Response
     {
         if (!$service->isEditableStates()) {

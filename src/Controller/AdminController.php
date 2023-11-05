@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\EditRoute;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Form\Admin\ApplicationParametersType;
@@ -44,7 +45,7 @@ class AdminController extends AbstractController
     /**
      * Clear the application cache.
      */
-    #[Route(path: '/clear', name: 'admin_clear')]
+    #[EditRoute(path: '/clear', name: 'admin_clear')]
     public function clearCache(Request $request, SymfonyInfoService $info, ClearCacheService $service, LoggerInterface $logger): Response
     {
         $form = $this->createForm(FormType::class);
@@ -72,7 +73,7 @@ class AdminController extends AbstractController
     /**
      * Edit the application parameters.
      */
-    #[Route(path: '/parameters', name: 'admin_parameters')]
+    #[EditRoute(path: '/parameters', name: 'admin_parameters')]
     public function parameters(Request $request): Response
     {
         $application = $this->getApplication();
@@ -96,7 +97,7 @@ class AdminController extends AbstractController
      * Edit rights for the administrator role (@see RoleInterface::ROLE_ADMIN).
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[Route(path: '/rights/admin', name: 'admin_rights_admin')]
+    #[EditRoute(path: '/rights/admin', name: 'admin_rights_admin')]
     public function rightsAdmin(Request $request, RoleBuilderService $builder): Response
     {
         $roleName = RoleInterface::ROLE_ADMIN;
@@ -110,7 +111,7 @@ class AdminController extends AbstractController
     /**
      * Edit rights for the user role (@see RoleInterface::ROLE_USER).
      */
-    #[Route(path: '/rights/user', name: 'admin_rights_user')]
+    #[EditRoute(path: '/rights/user', name: 'admin_rights_user')]
     public function rightsUser(Request $request, RoleBuilderService $builder): Response
     {
         $roleName = RoleInterface::ROLE_USER;

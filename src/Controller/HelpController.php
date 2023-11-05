@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\HelpReport;
 use App\Response\PdfResponse;
@@ -35,7 +36,7 @@ class HelpController extends AbstractController
     /**
      * Display the help for a dialog.
      */
-    #[Route(path: '/dialog/{id}', name: 'help_dialog')]
+    #[GetRoute(path: '/dialog/{id}', name: 'help_dialog')]
     public function dialog(string $id, HelpService $service): Response
     {
         /** @psalm-var HelpDialogType|null $dialog */
@@ -56,7 +57,7 @@ class HelpController extends AbstractController
     /**
      * Display the help for an entity.
      */
-    #[Route(path: '/entity/{id}', name: 'help_entity')]
+    #[GetRoute(path: '/entity/{id}', name: 'help_entity')]
     public function entity(string $id, HelpService $service): Response
     {
         /** @psalm-var HelpEntityType|null $entity */
@@ -74,7 +75,7 @@ class HelpController extends AbstractController
     /**
      * Display the help index.
      */
-    #[Route(path: '', name: 'help')]
+    #[GetRoute(path: '', name: 'help')]
     public function index(HelpService $service): Response
     {
         return $this->render('help/help_index.html.twig', [
@@ -85,7 +86,7 @@ class HelpController extends AbstractController
     /**
      * Export the help to a PDF document.
      */
-    #[Route(path: '/pdf', name: 'help_pdf')]
+    #[GetRoute(path: '/pdf', name: 'help_pdf')]
     public function pdf(HelpService $service): PdfResponse
     {
         $doc = new HelpReport($this, $service);

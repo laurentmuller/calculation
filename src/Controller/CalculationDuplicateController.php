@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationDuplicateReport;
@@ -43,7 +44,7 @@ class CalculationDuplicateController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/excel', name: 'duplicate_excel')]
+    #[GetRoute(path: '/excel', name: 'duplicate_excel')]
     public function excel(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -61,7 +62,7 @@ class CalculationDuplicateController extends AbstractController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/pdf', name: 'duplicate_pdf')]
+    #[GetRoute(path: '/pdf', name: 'duplicate_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -77,7 +78,7 @@ class CalculationDuplicateController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'duplicate_table')]
+    #[GetRoute(path: '', name: 'duplicate_table')]
     public function table(Request $request, CalculationDuplicateTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

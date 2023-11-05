@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\MySqlReport;
 use App\Response\PdfResponse;
@@ -31,7 +32,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AboutMySqlController extends AbstractController
 {
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[Route(path: '/content', name: 'about_mysql_content')]
+    #[GetRoute(path: '/content', name: 'about_mysql_content')]
     public function content(DatabaseInfoService $service): JsonResponse
     {
         $content = $this->renderView('about/mysql_content.html.twig', ['service' => $service]);
@@ -43,7 +44,7 @@ class AboutMySqlController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[Route(path: '/excel', name: 'about_mysql_excel')]
+    #[GetRoute(path: '/excel', name: 'about_mysql_excel')]
     public function excel(DatabaseInfoService $service): SpreadsheetResponse
     {
         $doc = new MySqlDocument($this, $service);
@@ -52,7 +53,7 @@ class AboutMySqlController extends AbstractController
     }
 
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[Route(path: '/pdf', name: 'about_mysql_pdf')]
+    #[GetRoute(path: '/pdf', name: 'about_mysql_pdf')]
     public function pdf(DatabaseInfoService $service): PdfResponse
     {
         $report = new MySqlReport($this, $service);

@@ -23,9 +23,7 @@ trait CookieTrait
 {
     protected function getCookieBoolean(Request $request, string $key, string $prefix = '', bool $default = false): bool
     {
-        $name = $this->getCookieName($key, $prefix);
-
-        return $request->cookies->getBoolean($name, $default);
+        return $request->cookies->getBoolean($this->getCookieName($key, $prefix), $default);
     }
 
     /**
@@ -43,9 +41,7 @@ trait CookieTrait
         \BackedEnum $default,
         string $prefix = ''
     ): \BackedEnum {
-        $name = $this->getCookieName($key, $prefix);
-
-        return $request->cookies->getEnum($name, $default::class, $default) ?? $default;
+        return $request->cookies->getEnum($this->getCookieName($key, $prefix), $default::class, $default) ?? $default;
     }
 
     protected function getCookieFloat(
@@ -54,9 +50,7 @@ trait CookieTrait
         string $prefix = '',
         float $default = 0
     ): float {
-        $name = $this->getCookieName($key, $prefix);
-
-        return (float) $request->cookies->get($name, (string) $default);
+        return (float) $request->cookies->get($this->getCookieName($key, $prefix), (string) $default);
     }
 
     protected function getCookieInt(
@@ -65,17 +59,7 @@ trait CookieTrait
         string $prefix = '',
         int $default = 0
     ): int {
-        $name = $this->getCookieName($key, $prefix);
-
-        return $request->cookies->getInt($name, $default);
-    }
-
-    /**
-     * Gets the cookie name.
-     */
-    protected function getCookieName(string $key, string $prefix = ''): string
-    {
-        return '' === $prefix ? \strtoupper($key) : \strtoupper($prefix . '_' . $key);
+        return $request->cookies->getInt($this->getCookieName($key, $prefix), $default);
     }
 
     protected function getCookieString(
@@ -84,9 +68,7 @@ trait CookieTrait
         string $prefix = '',
         string $default = ''
     ): string {
-        $name = $this->getCookieName($key, $prefix);
-
-        return $request->cookies->getString($name, $default);
+        return $request->cookies->getString($this->getCookieName($key, $prefix), $default);
     }
 
     /**
@@ -101,10 +83,10 @@ trait CookieTrait
         string $modify = '+1 year',
         bool $httpOnly = true
     ): void {
-        if ($value instanceof \BackedEnum || \is_bool($value) || '' !== (string) $value) {
-            $this->setCookie($response, $key, $value, $prefix, $path, $modify, $httpOnly);
-        } else {
+        if (null === $value || '' === $value) {
             $this->clearCookie($response, $key, $prefix, $path, $httpOnly);
+        } else {
+            $this->setCookie($response, $key, $value, $prefix, $path, $modify, $httpOnly);
         }
     }
 
@@ -114,12 +96,25 @@ trait CookieTrait
     private function clearCookie(
         Response $response,
         string $key,
-        string $prefix = '',
-        string $path = '/',
-        bool $httpOnly = true
+        string $prefix,
+        string $path,
+        bool $httpOnly
     ): void {
         $name = $this->getCookieName($key, $prefix);
         $response->headers->clearCookie(name: $name, path: $path, httpOnly: $httpOnly);
+    }
+
+    private function getCookieExpire(string $modify): \DateTimeInterface
+    {
+        return (new \DateTime())->modify($modify);
+    }
+
+    /**
+     * Gets the cookie name.
+     */
+    private function getCookieName(string $key, string $prefix = ''): string
+    {
+        return '' === $prefix ? \strtoupper($key) : \strtoupper($prefix . '_' . $key);
     }
 
     /**
@@ -129,20 +124,23 @@ trait CookieTrait
         Response $response,
         string $key,
         mixed $value,
-        string $prefix = '',
-        string $path = '/',
-        string $modify = '+1 year',
-        bool $httpOnly = true
+        string $prefix,
+        string $path,
+        string $modify,
+        bool $httpOnly
     ): void {
         if ($value instanceof \BackedEnum) {
             $value = $value->value;
         } elseif (\is_bool($value)) {
             $value = \json_encode($value);
         }
-
-        $name = $this->getCookieName($key, $prefix);
-        $expire = (new \DateTime())->modify($modify);
-        $cookie = new Cookie(name: $name, value: (string) $value, expire: $expire, path: $path, httpOnly: $httpOnly);
+        $cookie = new Cookie(
+            name: $this->getCookieName($key, $prefix),
+            value: (string) $value,
+            expire: $this->getCookieExpire($modify),
+            path: $path,
+            httpOnly: $httpOnly
+        );
         $response->headers->setCookie($cookie);
     }
 }

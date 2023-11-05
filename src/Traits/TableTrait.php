@@ -17,7 +17,6 @@ use App\Enums\FlashType;
 use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\TableInterface;
-use App\Service\UserService;
 use App\Table\AbstractTable;
 use App\Table\DataResults;
 use Psr\Log\LoggerInterface;
@@ -36,7 +35,7 @@ trait TableTrait
     /**
      * Handles a table request.
      */
-    protected function handleTableRequest(Request $request, AbstractTable $table, string $template, LoggerInterface $logger, UserService $service): Response
+    protected function handleTableRequest(Request $request, AbstractTable $table, LoggerInterface $logger, string $template): Response
     {
         $subject = $table->getEntityClassName();
         if (null !== $subject) {
@@ -53,7 +52,7 @@ trait TableTrait
             $response = $query->callback ? $this->json($results) : $this->render($template, (array) $results);
             $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);
             $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $table->getPrefix());
-            $service->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $query->view);
+            $this->getUserService()->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $query->view);
 
             return $response;
         } catch (\Throwable $e) {

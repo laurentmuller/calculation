@@ -80,7 +80,12 @@ class CalculationDuplicateController extends AbstractController
     #[Route(path: '', name: 'duplicate_table')]
     public function table(Request $request, CalculationDuplicateTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_duplicate.html.twig', $logger, $this->getUserService());
+        return $this->handleTableRequest(
+            $request,
+            $table,
+            $logger,
+            'calculation/calculation_table_duplicate.html.twig'
+        );
     }
 
     /**

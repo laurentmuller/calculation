@@ -48,11 +48,10 @@ class LogController extends AbstractController
     #[Route(path: '/delete', name: 'log_delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
     {
-        $logFile = $service->getLogFile();
-        if (!$logFile instanceof LogFile || $logFile->isEmpty()) {
+        $file = $this->getLogFile($service)?->getFile();
+        if (null === $file) {
             return $this->getEmptyResponse();
         }
-        $file = $logFile->getFile();
         $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
             try {
@@ -97,8 +96,8 @@ class LogController extends AbstractController
     #[Route(path: '/excel', name: 'log_excel')]
     public function excel(LogService $service): Response
     {
-        $logFile = $service->getLogFile();
-        if (!$logFile instanceof LogFile || $logFile->isEmpty()) {
+        $logFile = $this->getLogFile($service);
+        if (!$logFile instanceof LogFile) {
             return $this->getEmptyResponse();
         }
         $doc = new LogsDocument($this, $logFile);
@@ -112,8 +111,8 @@ class LogController extends AbstractController
     #[Route(path: '/pdf', name: 'log_pdf')]
     public function pdf(LogService $service): Response
     {
-        $logFile = $service->getLogFile();
-        if (!$logFile instanceof LogFile || $logFile->isEmpty()) {
+        $logFile = $this->getLogFile($service);
+        if (!$logFile instanceof LogFile) {
             return $this->getEmptyResponse();
         }
         $doc = new LogsReport($this, $logFile);
@@ -156,7 +155,12 @@ class LogController extends AbstractController
     #[Route(path: '', name: 'log_table')]
     public function table(Request $request, LogTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'log/log_table.html.twig', $logger, $this->getUserService());
+        return $this->handleTableRequest(
+            $request,
+            $table,
+            $logger,
+            'log/log_table.html.twig'
+        );
     }
 
     /**
@@ -167,8 +171,20 @@ class LogController extends AbstractController
         return $this->getRequestString($request, 'route', 'log_table');
     }
 
-    private function getEmptyResponse(string $message = 'log.list.empty', FlashType $type = FlashType::INFO): RedirectResponse
-    {
+    private function getEmptyResponse(
+        string $message = 'log.list.empty',
+        FlashType $type = FlashType::INFO
+    ): RedirectResponse {
         return $this->redirectToHomePage($message, [], $type);
+    }
+
+    private function getLogFile(LogService $service): ?LogFile
+    {
+        $logFile = $service->getLogFile();
+        if (!$logFile instanceof LogFile || $logFile->isEmpty()) {
+            return null;
+        }
+
+        return $logFile;
     }
 }

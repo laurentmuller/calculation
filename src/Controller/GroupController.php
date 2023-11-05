@@ -173,7 +173,12 @@ class GroupController extends AbstractEntityController
     #[Route(path: '', name: 'group_table')]
     public function table(Request $request, GroupTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'group/group_table.html.twig', $logger, $this->getUserService());
+        return $this->handleTableRequest(
+            $request,
+            $table,
+            $logger,
+            'group/group_table.html.twig'
+        );
     }
 
     protected function getEditFormType(): string

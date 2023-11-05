@@ -97,8 +97,8 @@
 <noscript>{{ 'common.no_script_support'|trans }}</noscript>
 {% block javascripts %}
 {% if app.debug %}
-    {{- asset_js('js/vendor/jquery/jquery.js') }}
-    {{- asset_js('js/vendor/bootstrap/js/bootstrap.bundle.js') }}
+    {{- asset_js('vendor/jquery/jquery.js') }}
+    {{- asset_js('vendor/bootstrap/js/bootstrap.bundle.js') }}
     {{- asset_js('js/extensions/array-extensions.js') }}
     {{- asset_js('js/extensions/jquery-extensions.js') }}
     {{- asset_js('js/extensions/params-extensions.js') }}

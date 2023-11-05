@@ -149,7 +149,12 @@ class ProductController extends AbstractEntityController
     #[Route(path: '', name: 'product_table')]
     public function table(Request $request, ProductTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'product/product_table.html.twig', $logger, $this->getUserService());
+        return $this->handleTableRequest(
+            $request,
+            $table,
+            $logger,
+            'product/product_table.html.twig'
+        );
     }
 
     /**

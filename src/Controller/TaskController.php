@@ -185,7 +185,12 @@ class TaskController extends AbstractEntityController
     #[Route(path: '', name: 'task_table')]
     public function table(Request $request, TaskTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'task/task_table.html.twig', $logger, $this->getUserService());
+        return $this->handleTableRequest(
+            $request,
+            $table,
+            $logger,
+            'task/task_table.html.twig'
+        );
     }
 
     /**

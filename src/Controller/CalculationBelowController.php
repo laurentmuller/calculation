@@ -89,7 +89,12 @@ class CalculationBelowController extends AbstractController
     #[Route(path: '', name: 'below_table')]
     public function table(Request $request, CalculationBelowTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'calculation/calculation_table_below.html.twig', $logger, $this->getUserService());
+        return $this->handleTableRequest(
+            $request,
+            $table,
+            $logger,
+            'calculation/calculation_table_below.html.twig'
+        );
     }
 
     private function getDescription(float $minMargin): string

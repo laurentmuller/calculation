@@ -37,6 +37,11 @@ class SearchController extends AbstractController
     #[Route(path: '/search', name: 'search')]
     public function search(Request $request, SearchTable $table, LoggerInterface $logger): Response
     {
-        return $this->handleTableRequest($request, $table, 'search/search.html.twig', $logger, $this->getUserService());
+        return $this->handleTableRequest(
+            $request,
+            $table,
+            $logger,
+            'search/search.html.twig'
+        );
     }
 }

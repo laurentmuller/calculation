@@ -1,34 +1,21 @@
 ###> symfony/framework-bundle ###
 /.env.local
-/.env.local.php
 /.env.*.local
 symfony.lock
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
 
-###> phpunit ###
-.phpunit
-.phpunit.cache
-.phpunit.result.cache
-/phpunit.xml
-/tests/Data/db_test.sqlite
-###< phpunit ###
-
-###> psalm ###
-.psalm.cache
-###< psalm ###
-
-###> php-cs-fixer ###
-.php-cs-fixer.cache
-###< php-cs-fixer ###
-
 ###> public ###
 /public/images/users/
 /public/vendor/
 ###< public ###
 
-###> application ###
+###> tests ###
+/tests/Data/db_test.sqlite
+###< phpunit ###
+
+###> data ###
 /resources/data/swiss.sqlite
 /resources/data/openweather.sqlite
 ###< application ###

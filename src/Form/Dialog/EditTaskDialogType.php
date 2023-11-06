@@ -30,6 +30,7 @@ class EditTaskDialogType extends AbstractHelperType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('task')
+            ->updateOption('query_all', false)
             ->add(TaskListType::class);
 
         $helper->field('category')

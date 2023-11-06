@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Form\Extension;
 
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 /**
  * Extends the FileType to use within the FileInput plugin.
@@ -23,40 +23,32 @@ use Symfony\Component\Form\FormInterface;
  */
 class FileTypeExtension extends AbstractFileTypeExtension
 {
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        $options = $this->updateOptions($form, $options);
+        parent::buildView($view, $form, $options);
+    }
+
     public static function getExtendedTypes(): iterable
     {
         return [FileType::class];
     }
 
-    /**
-     * @psalm-param FormInterface<FileType> $form
-     * @psalm-param array<array-key, mixed> $attributes
-     * @psalm-param array<array-key, mixed> $options
-     */
-    protected function updateAttributes(FormInterface $form, array &$attributes, array &$options): void
+    /** @psalm-suppress MixedAssignment */
+    protected function updateOptions(FormInterface $form, array $options): array
     {
-        // merge options from parent (VichFileType or VichImageType)
         $parent = $form->getParent();
-        if ($parent instanceof FormInterface) {
-            $configuration = $parent->getConfig();
-            foreach (['placeholder', 'maxfiles', 'maxsize'] as $name) {
-                $this->updateOption($configuration, $options, $name);
+        if (!$parent instanceof FormInterface) {
+            return $options;
+        }
+
+        $configuration = $parent->getConfig();
+        foreach (['placeholder', 'maxfiles', 'maxsize', 'maxsizetotal'] as $name) {
+            if ($configuration->hasOption($name)) {
+                $options[$name] = $configuration->getOption($name);
             }
         }
 
-        // default
-        parent::updateAttributes($form, $attributes, $options);
-    }
-
-    /**
-     * Update an option.
-     */
-    private function updateOption(FormConfigInterface $configuration, array &$options, string $name): void
-    {
-        if ($configuration->hasOption($name)) {
-            /** @psalm-var string $value */
-            $value = $configuration->getOption($name);
-            $options[$name] = $value;
-        }
+        return $options;
     }
 }

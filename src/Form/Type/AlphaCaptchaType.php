@@ -66,10 +66,6 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
         $this->setSessionValue(self::SESSION_KEY, $nextAnswer);
     }
 
-    /**
-     * @psalm-param FormView<TextType> $view
-     * @psalm-param FormInterface<TextType> $form
-     */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['question'] = $this->question;

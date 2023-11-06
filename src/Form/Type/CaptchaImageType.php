@@ -33,14 +33,8 @@ class CaptchaImageType extends AbstractType
     {
     }
 
-    /**
-     * @psalm-param FormView<TextType> $view
-     * @psalm-param FormInterface<TextType> $form
-     */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        parent::buildView($view, $form, $options);
-
         $view->vars = \array_replace($view->vars, [
             'image' => $options['image'],
             'remote' => $options['remote'],
@@ -50,8 +44,6 @@ class CaptchaImageType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
-
         $resolver->setDefaults([
             'refresh' => $this->generate('captcha_image'),
             'remote' => $this->generate('captcha_validate'),

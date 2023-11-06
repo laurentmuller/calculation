@@ -30,7 +30,6 @@ class CurrentPasswordType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
         $resolver->setDefaults([
             'mapped' => false,
             'label' => 'user.password.current',

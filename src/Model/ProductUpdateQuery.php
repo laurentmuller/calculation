@@ -32,18 +32,12 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     final public const UPDATE_PERCENT = 'percent';
 
     private bool $allProducts = true;
-
     private ?Category $category = null;
-
     private float $fixed = 0;
-
     private float $percent = 0;
-
     /** @var Product[] */
     private array $products = [];
-
     private bool $round = false;
-
     /** @psalm-var ProductUpdateQuery::UPDATE_* */
     private string $type = self::UPDATE_PERCENT;
 

@@ -18,7 +18,7 @@
             $this.data('loaded', true);
             const url = $this.data('url');
             if (url) {
-                $.getJSON(url).done(function (response) {
+                $.getJSON(url, function (response) {
                     if (response.result && response.content) {
                         $this.html(response.content);
                     } else {
@@ -33,9 +33,9 @@
         },
 
         showError: function () {
-            const content = $configuration.data("error");
+            const content = $configuration.data('error');
             const html = `<i class='fas fa-lg fa-exclamation-triangle me-2'></i>${content}`;
-            $(this).find(".alert:first").toggleClass('py-0 alert-danger py-3').html(html);
+            $(this).find('.alert:first').toggleClass('py-0 alert-danger py-3').html(html);
         },
 
         /**

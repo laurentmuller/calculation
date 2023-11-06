@@ -66,6 +66,22 @@ class TaskRepository extends AbstractCategoryItemRepository
         return $builder;
     }
 
+    /**
+     * Gets the list of tasks sorted by name.
+     *
+     * @param bool           $all   true to return all, false to return only tasks that contains at least one operation
+     *                              with one margin
+     * @param literal-string $alias the entity alias
+     *
+     * @return Task[]
+     */
+    public function getSortedTask(bool $all = true, string $alias = self::DEFAULT_ALIAS): array
+    {
+        return $this->getSortedBuilder($all, $alias)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
     {
         return match ($field) {

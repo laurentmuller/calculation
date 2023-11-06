@@ -25,16 +25,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class TaskServiceType extends AbstractHelperType
 {
-    /**
-     * @psalm-param FormView<\Symfony\Component\Form\FormTypeInterface> $view
-     * @psalm-param FormInterface<\Symfony\Component\Form\FormTypeInterface> $form
-     *
-     * @phpstan-param FormView<\Symfony\Component\Form\FormTypeInterface<mixed>> $view
-     * @phpstan-param FormInterface<\Symfony\Component\Form\FormTypeInterface<mixed>> $form
-     */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        parent::buildView($view, $form, $options);
         if ($options['simple_widget']) {
             $form->remove('task')
                 ->add('task', PlainType::class, $this->getPlainTypeOptions());
@@ -44,7 +36,6 @@ class TaskServiceType extends AbstractHelperType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
         $resolver->setDefault('simple_widget', false)
             ->setAllowedTypes('simple_widget', 'bool');
     }
@@ -57,6 +48,7 @@ class TaskServiceType extends AbstractHelperType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('task')
+            ->updateOption('query_all', false)
             ->add(TaskListType::class);
 
         $helper->field('quantity')

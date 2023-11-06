@@ -110,7 +110,7 @@
             if (!url) {
                 return;
             }
-            $.get(url, function (data) {
+            $.getJSON(url, function (data) {
                 if (data) {
                     const $dialog = $(data);
                     $dialog.appendTo($(options.targetId));

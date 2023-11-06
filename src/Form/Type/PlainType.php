@@ -30,6 +30,27 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * If the 'expanded' option is set to true, a div tag is added around the span tag.
  *
  * @extends AbstractType<mixed>
+ *
+ * @psalm-type OptionsType = array{
+ *     hidden_input: bool,
+ *     read_only: bool,
+ *     disabled: bool,
+ *     required: bool,
+ *     expanded: bool,
+ *     text_class: string|null,
+ *     percent_sign: bool,
+ *     percent_decimals: int,
+ *     percent_rounding_mode: \NumberFormatter::ROUND_*,
+ *     number_pattern: self::NUMBER_*|null,
+ *     date_format: self::FORMAT_*|null,
+ *     time_format: self::FORMAT_*|null,
+ *     date_pattern: string|null,
+ *     time_zone: string|null,
+ *     calendar: self::CALENDAR_*|null,
+ *     empty_value: callable(mixed):string|string|null,
+ *     display_transformer: callable(mixed):string|null,
+ *     value_transformer: callable(mixed):mixed|null,
+ *     ...}
  */
 class PlainType extends AbstractType implements ServiceSubscriberInterface
 {
@@ -92,18 +113,12 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
     final public const NUMBER_PERCENT = 'percent';
 
     /**
-     * @psalm-param FormView<\Symfony\Component\Form\FormTypeInterface> $view
-     * @psalm-param FormInterface<\Symfony\Component\Form\FormTypeInterface> $form
-     *
      * @psalm-suppress InvalidPropertyAssignmentValue
      *
-     * @phpstan-param FormView<\Symfony\Component\Form\FormTypeInterface<mixed>> $view
-     * @phpstan-param FormInterface<\Symfony\Component\Form\FormTypeInterface<mixed>> $form
+     * @psalm-param OptionsType $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        parent::buildView($view, $form, $options);
-
         /** @psalm-var mixed $data */
         $data = $form->getViewData();
         $value = $this->getDataValue($data, $options);
@@ -118,7 +133,6 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
         $this->configureDefaults($resolver);
         $this->configureNumber($resolver);
         $this->configureDate($resolver);
@@ -261,6 +275,9 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
             ]);
     }
 
+    /**
+     * @psalm-param OptionsType $options
+     */
     private function formatPercent(float|int|string $value, array $options): string
     {
         $includeSign = $this->isOptionBool($options, 'percent_sign', true);
@@ -272,6 +289,8 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
 
     /**
      * @throws TransformationFailedException if the value can not be mapped to a string
+     *
+     * @psalm-param OptionsType $options
      */
     private function getDataValue(mixed $value, array $options): string
     {
@@ -318,10 +337,13 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         throw new TransformationFailedException(\sprintf('Unable to map the instance of "%s" to a string.', \get_debug_type($value)));
     }
 
+    /**
+     * @psalm-param OptionsType $options
+     */
     private function getDisplayValue(mixed $value, array $options): ?string
     {
         if (\is_callable($options['display_transformer'])) {
-            return (string) \call_user_func($options['display_transformer'], $value);
+            return \call_user_func($options['display_transformer'], $value);
         }
 
         return null;
@@ -355,6 +377,9 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         return $defaultValue;
     }
 
+    /**
+     * @psalm-param OptionsType $options
+     */
     private function transformArray(array $value, array $options): string
     {
         $callback = fn (mixed $item): string => $this->getDataValue($item, $options);
@@ -369,6 +394,9 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         return $value ? $this->trans('common.value_true') : $this->trans('common.value_false');
     }
 
+    /**
+     * @psalm-param OptionsType $options
+     */
     private function transformDate(\DateTimeInterface|int|null $value, array $options): string
     {
         $timezone = $this->getOptionString($options, 'time_zone');
@@ -380,22 +408,20 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         return (string) FormatUtils::formatDateTime($value, $date_type, $time_type, $timezone, $calendar, $pattern);
     }
 
+    /**
+     * @psalm-param OptionsType $options
+     */
     private function transformEmpty(mixed $value, array $options): string
     {
         if (\is_callable($options['empty_value'])) {
-            return (string) \call_user_func($options['empty_value'], $value);
+            return \call_user_func($options['empty_value'], $value);
         }
 
         return $this->getOptionString($options, 'empty_value', 'common.value_null', true);
     }
 
     /**
-     * Formats the given value as number.
-     *
-     * @param float|int|string $value   the value to transform
-     * @param array            $options the options
-     *
-     * @return string the formatted number
+     * @psalm-param OptionsType $options
      */
     private function transformNumber(float|int|string $value, array $options): string
     {
@@ -410,6 +436,9 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
         };
     }
 
+    /**
+     * @psalm-param OptionsType $options
+     */
     private function transformValue(mixed $value, array $options): mixed
     {
         if (\is_callable($options['value_transformer'])) {

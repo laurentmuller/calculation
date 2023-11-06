@@ -220,7 +220,7 @@ function handleService() {
     const data = {
         'service': $service.val()
     };
-    $.get(url, data, function (response) {
+    $.getJSON(url, data, function (response) {
         const $to = $('#to');
         const $from = $('#from');
         // save values

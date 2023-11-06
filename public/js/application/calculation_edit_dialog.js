@@ -260,7 +260,7 @@ class EditDialog {
             return;
         }
         const that = this;
-        $.get(url, function (data) {
+        $.getJSON(url, function (data) {
             const $dialog = $(data);
             $dialog.appendTo('.page-content');
             that._init();

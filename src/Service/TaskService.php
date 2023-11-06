@@ -17,7 +17,6 @@ use App\Model\TaskComputeQuery;
 use App\Model\TaskComputeResult;
 use App\Repository\TaskRepository;
 use App\Traits\RequestTrait;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Service to compute a task.
@@ -33,39 +32,21 @@ class TaskService
     /**
      * Compute result for the given query.
      */
-    public function computeQuery(TaskComputeQuery $query): TaskComputeResult
+    public function computeQuery(TaskComputeQuery $query): ?TaskComputeResult
     {
-        $task = $query->getTask();
-        $quantity = $query->getQuantity();
-        $result = new TaskComputeResult($task, $quantity);
-        $keys = $query->getItems();
-        $items = $task->getItems();
-        foreach ($items as $item) {
-            $result->addItem($item, \in_array($item->getId(), $keys, true));
-        }
-
-        return $result;
-    }
-
-    /**
-     * Create a query for the given request.
-     */
-    public function createQuery(Request $request): ?TaskComputeQuery
-    {
-        $payload = $request->getPayload();
-        $id = $payload->getInt('id');
-        $task = $this->repository->find($id);
+        $task = $this->repository->find($query->getId());
         if (!$task instanceof Task) {
             return null;
         }
 
-        $quantity = (float) $payload->getString('quantity', '1.0');
-        $items = \array_map('intval', $payload->all('items'));
-        $query = new TaskComputeQuery($task);
-        $query->setQuantity($quantity)
-            ->setItems($items);
+        $quantity = $query->getQuantity();
+        $selectedItems = $query->getItems();
+        $result = new TaskComputeResult($task, $quantity);
+        foreach ($task->getItems() as $item) {
+            $result->addItem($item, \in_array($item->getId(), $selectedItems, true));
+        }
 
-        return $query;
+        return $result;
     }
 
     /**
@@ -73,10 +54,6 @@ class TaskService
      */
     public function getSortedTasks(): array
     {
-        /** @psalm-var \Doctrine\ORM\Query<int, Task> $query */
-        $query = $this->repository->getSortedBuilder(false)
-            ->getQuery();
-
-        return $query->getResult();
+        return $this->repository->getSortedTask(false);
     }
 }

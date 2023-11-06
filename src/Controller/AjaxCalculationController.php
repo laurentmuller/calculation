@@ -55,7 +55,7 @@ class AjaxCalculationController extends AbstractController
     {
         $parameters = [
             'form' => $this->createForm(EditTaskDialogType::class),
-            'tasks' => $repository->getSortedBuilder(false)->getQuery()->getResult(),
+            'tasks' => $repository->getSortedTask(false),
         ];
 
         return $this->renderDialog('dialog/dialog_edit_task.html.twig', $parameters);

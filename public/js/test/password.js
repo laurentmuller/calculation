@@ -33,7 +33,7 @@
     // image
     const url = $captcha.data('refresh');
     $('.captcha-refresh').on('click', function () {
-        $.get(url, function (response) {
+        $.getJSON(url, function (response) {
             if (response.result) {
                 $('.captcha-image').attr('src', response.data);
                 $captcha.val('').trigger('focus');

@@ -18,7 +18,12 @@ use App\Entity\TaskItem;
 /**
  * Contains result of a computed task.
  *
- * @psalm-type ResultType array{id: int, name: string, value: float, amount: float, checked: bool}
+ * @psalm-type ResultType = array{
+ *     id: int,
+ *     name: string,
+ *     value: float,
+ *     amount: float,
+ *     checked: bool}
  */
 class TaskComputeResult implements \JsonSerializable
 {

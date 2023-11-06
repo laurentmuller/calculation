@@ -36,8 +36,6 @@ class UserCommentType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
-
         $helper = new FormHelper($builder, 'user.fields.');
 
         /** @var Comment $data */

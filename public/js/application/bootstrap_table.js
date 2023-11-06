@@ -411,7 +411,7 @@ function showPageDialog($table, $button, $source) {
     const $dialog = $('#modal-page');
     if ($dialog.length === 0) {
         const url = $button.data('url');
-        $.get(url, function (data) {
+        $.getJSON(url, function (data) {
             $(data).appendTo('.page-content');
             $table.initPageDialog();
             $('#modal-page').data('source', $source).modal('show');

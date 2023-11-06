@@ -18,20 +18,22 @@ use App\Entity\TaskItem;
 /**
  * Contains parameters to compute a task.
  */
-class TaskComputeQuery
+readonly class TaskComputeQuery
 {
-    /**
-     * @var int[]
-     */
-    private array $items = [];
+    /** @psalm-var int[] */
+    private array $items;
 
-    private float $quantity = 1.0;
+    public function __construct(
+        private int $id,
+        private float $quantity = 1.0,
+        array $items = []
+    ) {
+        $this->items = \array_map('intval', $items);
+    }
 
-    public function __construct(private readonly Task $task, bool $selectAll = false)
+    public function getId(): int
     {
-        if ($selectAll) {
-            $this->updateItems();
-        }
+        return $this->id;
     }
 
     /**
@@ -47,35 +49,10 @@ class TaskComputeQuery
         return $this->quantity;
     }
 
-    public function getTask(): Task
+    public static function instance(Task $task, float $quantity = 1.0): self
     {
-        return $this->task;
-    }
+        $items = $task->getItems()->map(static fn (TaskItem $item): int => (int) $item->getId())->toArray();
 
-    public function getUnit(): ?string
-    {
-        return $this->task->getUnit();
-    }
-
-    /**
-     * @param int[] $items
-     */
-    public function setItems(array $items): self
-    {
-        $this->items = $items;
-
-        return $this;
-    }
-
-    public function setQuantity(float $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    private function updateItems(): void
-    {
-        $this->items = $this->task->getItems()->map(static fn (TaskItem $item): int => (int) $item->getId())->toArray();
+        return new self((int) $task->getId(), $quantity, $items);
     }
 }

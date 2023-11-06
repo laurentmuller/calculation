@@ -49,7 +49,6 @@ abstract class AbstractParametersType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
         $helper = new FormHelper($builder, self::LABEL_PREFIX);
         $this->addSections($helper);
     }

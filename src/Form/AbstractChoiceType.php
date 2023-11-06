@@ -27,8 +27,6 @@ abstract class AbstractChoiceType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
-
         $resolver->setDefault('choices', $this->getChoices());
     }
 

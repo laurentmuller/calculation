@@ -21,37 +21,31 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Base extension for FileType.
  *
- * @template T of \Symfony\Component\Form\FormTypeInterface
+ * @psalm-template T of \Symfony\Component\Form\FormTypeInterface
  *
  * @extends AbstractTypeExtension<T>
  */
 abstract class AbstractFileTypeExtension extends AbstractTypeExtension
 {
-    /**
-     * @psalm-param FormView<T> $view
-     * @psalm-param FormInterface<T> $form
-     * @psalm-param array<array-key, mixed> $options
-     */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        /** @psalm-param array<array-key, mixed> $attributes */
-        $attributes = &$view->vars['attr'];
-        $this->updateAttributes($form, $attributes, $options);
+        $attributes = $this->updateAttributes($options, $view->vars['attr'] ?? []);
+        $view->vars['attr'] = $attributes;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         // the number of files
         $resolver->setDefined('maxfiles')
-            ->setAllowedTypes('maxfiles', 'integer');
+            ->setAllowedTypes('maxfiles', 'int');
 
         // the size of each file
         $resolver->setDefined('maxsize')
-            ->setAllowedTypes('maxsize', ['integer', 'string']);
+            ->setAllowedTypes('maxsize', ['int', 'string']);
 
         // the total size of all files
         $resolver->setDefined('maxsizetotal')
-            ->setAllowedTypes('maxsizetotal', ['integer', 'string']);
+            ->setAllowedTypes('maxsizetotal', ['int', 'string']);
 
         // the placeholder
         $resolver->setDefined('placeholder')
@@ -61,12 +55,8 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
 
     /**
      * Updates attributes.
-     *
-     * @psalm-param FormInterface<T> $form
-     * @psalm-param array<array-key, mixed> $attributes
-     * @psalm-param array<array-key, mixed> $options
      */
-    protected function updateAttributes(FormInterface $form, array &$attributes, array &$options): void
+    protected function updateAttributes(array $options, array $attributes): array
     {
         if (isset($options['placeholder'])) {
             /** @var string $placeholder */
@@ -89,6 +79,8 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
             $maxsizetotal = $options['maxsizetotal'];
             $attributes['maxsizetotal'] = $this->normalizeSize($maxsizetotal);
         }
+
+        return $attributes;
     }
 
     /**

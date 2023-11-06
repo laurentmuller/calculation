@@ -24,7 +24,6 @@ abstract class AbstractHelperType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        parent::buildForm($builder, $options);
         $helper = $this->createFormHelper($builder);
         $this->addFormFields($helper);
     }

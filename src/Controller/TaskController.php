@@ -89,21 +89,17 @@ class TaskController extends AbstractEntityController
     /**
      * Display the page to compute a task.
      */
-    #[EditRoute(path: '/compute/{id?}', name: 'task_compute', requirements: ['id' => Requirement::DIGITS])]
+    #[GetRoute(path: '/compute/{id?}', name: 'task_compute', requirements: ['id' => Requirement::DIGITS])]
     public function compute(Request $request, TaskService $service, Task $task = null): Response
     {
-        if (!$task instanceof Task || $task->isEmpty()) {
-            $tasks = $service->getSortedTasks();
-            if ([] === $tasks) {
-                $this->warningTrans('task.list.empty');
+        [$tasks, $task] = $this->getTasks($service, $task);
+        if (null === $task) {
+            $this->warningTrans('task.list.empty');
 
-                return $this->redirectToDefaultRoute($request);
-            }
-            $task = $tasks[0];
-        } else {
-            $tasks = [$task];
+            return $this->redirectToDefaultRoute($request);
         }
-        $query = new TaskComputeQuery($task, true);
+
+        $query = TaskComputeQuery::instance($task);
         $result = $service->computeQuery($query);
         $simple_widget = 1 === \count($tasks);
         $form = $this->createForm(TaskServiceType::class, $result, ['simple_widget' => $simple_widget]);
@@ -210,5 +206,23 @@ class TaskController extends AbstractEntityController
     protected function getEditFormType(): string
     {
         return TaskType::class;
+    }
+
+    /**
+     * @return array{0: Task[], 1: Task|null}
+     */
+    private function getTasks(TaskService $service, ?Task $task): array
+    {
+        if (!$task instanceof Task || $task->isEmpty()) {
+            $tasks = $service->getSortedTasks();
+            if ([] === $tasks) {
+                return [[], null];
+            }
+            $task = $tasks[0];
+        } else {
+            $tasks = [$task];
+        }
+
+        return [$tasks, $task];
     }
 }

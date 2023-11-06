@@ -28,14 +28,14 @@ class RouteAttributeTest extends TestCase
 {
     public function testRoutes(): void
     {
-        $this->validate([Request::METHOD_GET, Request::METHOD_DELETE], new DeleteRoute());
-        $this->validate([Request::METHOD_GET, Request::METHOD_POST], new EditRoute());
-        $this->validate([Request::METHOD_GET], new GetRoute());
-        $this->validate([Request::METHOD_POST], new PostRoute());
+        $this->validate(new DeleteRoute(), Request::METHOD_GET, Request::METHOD_DELETE);
+        $this->validate(new EditRoute(), Request::METHOD_GET, Request::METHOD_POST);
+        $this->validate(new GetRoute(), Request::METHOD_GET);
+        $this->validate(new PostRoute(), Request::METHOD_POST);
     }
 
-    private function validate(array $expected, Route $route): void
+    private function validate(Route $route, string ...$expected): void
     {
-        self::assertSame($expected, $route->getMethods());
+        self::assertEqualsCanonicalizing($expected, $route->getMethods());
     }
 }

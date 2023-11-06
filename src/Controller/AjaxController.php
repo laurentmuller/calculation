@@ -21,6 +21,7 @@ use App\Interfaces\TableInterface;
 use App\Model\PasswordQuery;
 use App\Model\SessionQuery;
 use App\Model\TaskComputeQuery;
+use App\Model\TaskComputeResult;
 use App\Service\FakerService;
 use App\Service\PasswordService;
 use App\Service\TaskService;
@@ -50,15 +51,15 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[PostRoute(path: '/task', name: 'ajax_task')]
-    public function computeTask(Request $request, TaskService $service): JsonResponse
+    public function computeTask(#[MapRequestPayload] TaskComputeQuery $query, TaskService $service): JsonResponse
     {
-        $query = $service->createQuery($request);
-        if (!$query instanceof TaskComputeQuery) {
-            return $this->jsonFalse([
-                'message' => $this->trans('task_compute.error.task'),
-            ]);
-        }
         $result = $service->computeQuery($query);
+        if (!$result instanceof TaskComputeResult) {
+            return $this->jsonFalse(
+                ['message' => $this->trans('task_compute.error.task')]
+            );
+        }
+
         $data = \array_merge($result->jsonSerialize(), [
             'message' => $this->trans('task_compute.success'),
         ]);
@@ -110,11 +111,7 @@ class AjaxController extends AbstractController
     #[PostRoute(path: '/dialog/sort', name: 'ajax_dialog_sort')]
     public function renderDialogSort(Request $request): JsonResponse
     {
-        $parameters = [
-            'columns' => $request->toArray(),
-        ];
-
-        return $this->renderDialog('dialog/dialog_table_sort.html.twig', $parameters);
+        return $this->renderDialog('dialog/dialog_table_sort.html.twig', ['columns' => $request->toArray()]);
     }
 
     /**

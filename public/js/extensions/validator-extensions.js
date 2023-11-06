@@ -51,7 +51,7 @@
                 const $image = $parent.find('.captcha-image');
                 const $refresh = $parent.find('.captcha-refresh');
                 $refresh.on('click', function () {
-                    $.get(url, function (response) {
+                    $.getJSON(url, function (response) {
                         if (response.result) {
                             $image.attr('src', response.data);
                             $that.val('').trigger('focus');

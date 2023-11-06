@@ -17,4 +17,4 @@ parameters:
     ignoreErrors:
         -
             message: '#@extends contains generic type#'
-            path: src/Form/Extension/*
+            path: src/Form/*

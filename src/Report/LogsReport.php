@@ -18,6 +18,7 @@ use App\Model\LogFile;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\Events\PdfCellBorderEvent;
 use App\Pdf\Html\HtmlBootstrapColors;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\PdfBorder;
@@ -95,7 +96,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $this->started = false;
     }
 
-    public function drawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, PdfBorder $border): bool
+    public function drawCellBorder(PdfCellBorderEvent $event): bool
     {
         if (!$this->started) {
             $this->started = true;
@@ -103,15 +104,15 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
             return false;
         }
         if ($this->drawCards) {
-            $text = $builder->getColumns()[$index]->getText();
+            $text = $event->builder->getColumns()[$event->index]->getText();
             if (self::TOTAL === $text) {
                 return false;
             }
 
-            return $this->drawBorder($builder, $text, $bounds, $border);
+            return $this->drawBorder($event->builder, $text, $event->bounds, $event->border);
         }
 
-        return (0 === $index) && $this->drawBorder($builder, $this->level, $bounds, $border);
+        return (0 === $event->index) && $this->drawBorder($event->builder, $this->level, $event->bounds, $event->border);
     }
 
     /**

@@ -17,6 +17,7 @@ use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
@@ -63,18 +64,18 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
         $this->minMargin = $controller->getMinMargin();
     }
 
-    public function drawCellText(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): bool
+    public function drawCellText(PdfCellTextEvent $event): bool
     {
-        if (0 !== $index || null === $this->currentRow) {
+        if (0 !== $event->index || null === $this->currentRow) {
             return false;
         }
         if (!$this->applyFillColor($this->currentRow)) {
             return false;
         }
 
-        $parent = $builder->getParent();
-        $this->drawStateRect($parent, $bounds);
-        $this->drawStateText($parent, $bounds, $text, $align, $height);
+        $parent = $event->builder->getParent();
+        $this->drawStateRect($parent, $event->bounds);
+        $this->drawStateText($parent, $event->bounds, $event->text, $event->align, $event->height);
 
         return true;
     }

@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Interfaces;
 
-use App\Pdf\PdfGroup;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\Events\PdfGroupEvent;
 
 /**
  * Class implementing this interface deals with group render.
@@ -23,10 +22,9 @@ interface PdfGroupListenerInterface
     /**
      * Called when a group must be rendered.
      *
-     * @param PdfGroupTableBuilder $parent the parent's table
-     * @param PdfGroup             $group  the group to output
+     * @param PdfGroupEvent $event the event
      *
      * @return bool true if the listener handle the output; false to use the default output
      */
-    public function outputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool;
+    public function outputGroup(PdfGroupEvent $event): bool;
 }

@@ -14,10 +14,10 @@ namespace App\Report;
 
 use App\Entity\CalculationState;
 use App\Pdf\Enums\PdfRectangleStyle;
+use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFillColor;
-use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Utils\FormatUtils;
@@ -31,17 +31,17 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
 {
     private ?CalculationState $currentState = null;
 
-    public function drawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool
+    public function drawCellBackground(PdfCellBackgroundEvent $event): bool
     {
-        if (3 !== $index || !$this->currentState instanceof CalculationState) {
+        if (3 !== $event->index || !$this->currentState instanceof CalculationState) {
             return false;
         }
 
-        $parent = $builder->getParent();
+        $parent = $event->builder->getParent();
         $margin = $parent->getCellMargin();
-        $bounds->inflateXY(-3.0 * $margin, -$margin)
+        $event->bounds->inflateXY(-3.0 * $margin, -$margin)
             ->setHeight(self::LINE_HEIGHT - 2.0 * $margin);
-        $parent->rectangle($bounds, PdfRectangleStyle::BOTH);
+        $parent->rectangle($event->bounds, PdfRectangleStyle::BOTH);
 
         return true;
     }

@@ -19,11 +19,11 @@ use App\Enums\EntityPermission;
 use App\Model\Role;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
-use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
@@ -62,14 +62,14 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         parent::__construct($controller, $entities);
     }
 
-    public function outputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool
+    public function outputGroup(PdfGroupEvent $event): bool
     {
         /** @var Role|User|null $key */
-        $key = $group->getKey();
+        $key = $event->group->getKey();
         if ($key instanceof Role) {
             $description = $this->trans('user.fields.role') . ' ';
             $description .= $this->translateRole($key);
-            $parent->singleLine($description, $group->getStyle());
+            $event->builder->singleLine($description, $event->group->getStyle());
 
             return true;
         }
@@ -78,7 +78,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             $text = $key->getUserIdentifier();
             $description = $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
             [$x, $y] = $this->GetXY();
-            $group->apply($this);
+            $event->group->apply($this);
             $this->Cell(border: PdfBorder::all());
             $this->SetXY($x, $y);
             $width = $this->GetStringWidth($text);

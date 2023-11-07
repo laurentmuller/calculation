@@ -7,31 +7,24 @@
     {{- 'counters.months'|trans({'count': value}, 'messages') -}}
 </option>
 {%- endmacro %}
-{# format the percent with arrow #}
-{% macro cell_percent(value, previous) -%}
-{% set icon = 'right' %}
-{% set color = 'var(--bs-secondary)' %}
-{% if previous and previous < value %}
-    {% set icon = 'up' %}
-    {% set color = 'var(--bs-success)' %}
-{% elseif previous and previous > value %}
-    {% set icon = 'down' %}
-    {% set color = 'var(--bs-danger)' %}
-{% endif %}
-<i class="fa-fw fa-solid fa-caret-{{ icon }} position-absolute top-50 start-0 translate-middle-y" style="color:{{ color }}"></i>{{ value|percent(false) -}}
-{%- endmacro %}
-{# format the integer with arrow #}
-{% macro cell_integer(value, previous) -%}
+{# format the value with arrow #}
+{% macro cell_value(value, previous, user_percent=false) -%}
+{% if not previous %}
+    {% set icon = false %}
+{% elseif previous == value %}
     {% set icon = 'right' %}
-    {% set color = 'var(--bs-secondary)' %}
-    {% if previous and previous < value %}
-        {% set icon = 'up' %}
-        {% set color = 'var(--bs-success)' %}
-    {% elseif previous and previous > value %}
-        {% set icon = 'down' %}
-        {% set color = 'var(--bs-danger)' %}
-    {% endif %}
-<i class="fa-fw fa-solid fa-caret-{{ icon }} position-absolute top-50 start-0 translate-middle-y" style="color:{{ color }}"></i>{{ value|integer -}}
+    {% set color = 'text-secondary' %}
+{% elseif previous < value %}
+    {% set icon = 'up' %}
+    {% set color = 'text-success' %}
+{% elseif previous > value %}
+    {% set icon = 'down' %}
+    {% set color = 'text-danger' %}
+{% endif %}
+{% if icon %}
+    <i class="fa-fw fa-solid fa-caret-{{ icon }} position-absolute top-50 start-0 translate-middle-y {{ color }}"></i>
+{% endif %}
+{{- user_percent ? value|percent(false) : value|integer -}}
 {%- endmacro %}
 {# parameters #}
 {%- set title = 'title_by_month' -%}
@@ -75,23 +68,23 @@
             <a href="{{ path(list_path, parameters) }}">{{ month }}</a>
         </td>
         <td class="text-currency position-relative ps-4">
-            {{- _self.cell_integer(item.count|round, last_count|default) -}}
+            {{- _self.cell_value(item.count|round, last_count|default) -}}
             {%- set last_count = item.count|round -%}
         </td>
         <td class="text-currency position-relative ps-4">
-            {{- _self.cell_integer(item.items|round, last_items|default) -}}
+            {{- _self.cell_value(item.items|round, last_items|default) -}}
             {%- set last_items = item.items|round -%}
         </td>
         <td class="text-currency position-relative ps-4">
-            {{- _self.cell_integer(item.margin_amount|round, last_amount|default) -}}
+            {{- _self.cell_value(item.margin_amount|round, last_amount|default) -}}
             {%- set last_amount = item.margin_amount|round -%}
         </td>
         <td class="text-percent position-relative ps-4{{ _self.margin_below_class(item.margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(item.margin_percent, min_margin) }}>
-            {{- _self.cell_percent(item.margin_percent|round(2, 'floor'), last_percent|default) -}}
+            {{- _self.cell_value(item.margin_percent|round(2, 'floor'), last_percent|default, true) -}}
             {%- set last_percent = item.margin_percent|round(2, 'floor') -%}
         </td>
         <td class="text-currency position-relative ps-4">
-            {{- _self.cell_integer(item.sum|round, last_sum|default) -}}
+            {{- _self.cell_value(item.sum|round, last_sum|default) -}}
             {%- set last_sum = item.sum|round -%}
         </td>
     </tr>

@@ -14,6 +14,9 @@ namespace App\Pdf;
 
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\Events\PdfCellBackgroundEvent;
+use App\Pdf\Events\PdfCellBorderEvent;
+use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
@@ -599,8 +602,11 @@ class PdfTableBuilder
      */
     protected function drawCellBackground(PdfDocument $parent, int $index, PdfRectangle $bounds): void
     {
-        if ($this->backgroundListener instanceof PdfDrawCellBackgroundInterface && $this->backgroundListener->drawCellBackground($this, $index, $bounds)) {
-            return;
+        if ($this->backgroundListener instanceof PdfDrawCellBackgroundInterface) {
+            $event = new PdfCellBackgroundEvent($this, $index, $bounds);
+            if ($this->backgroundListener->drawCellBackground($event)) {
+                return;
+            }
         }
         $parent->rectangle($bounds, PdfRectangleStyle::FILL);
     }
@@ -615,9 +621,13 @@ class PdfTableBuilder
      */
     protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfBorder $border): void
     {
-        if ($this->borderListener instanceof PdfDrawCellBorderInterface && $this->borderListener->drawCellBorder($this, $index, $bounds, $border)) {
-            return;
+        if ($this->borderListener instanceof PdfDrawCellBorderInterface) {
+            $event = new PdfCellBorderEvent($this, $index, $bounds, $border);
+            if ($this->borderListener->drawCellBorder($event)) {
+                return;
+            }
         }
+
         $x = $bounds->x();
         $y = $bounds->y();
         if ($border->isRectangleStyle()) {
@@ -665,8 +675,11 @@ class PdfTableBuilder
      */
     protected function drawCellText(PdfDocument $parent, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $alignment, float $height): void
     {
-        if ($this->textListener instanceof PdfDrawCellTextInterface && $this->textListener->drawCellText($this, $index, $bounds, $text, $alignment, $height)) {
-            return;
+        if ($this->textListener instanceof PdfDrawCellTextInterface) {
+            $event = new PdfCellTextEvent($this, $index, $bounds, $text, $alignment, $height);
+            if ($this->textListener->drawCellText($event)) {
+                return;
+            }
         }
         $parent->MultiCell(w: $bounds->width(), h: $height, txt: $text, align: $alignment);
     }

@@ -12,9 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Interfaces;
 
-use App\Pdf\PdfBorder;
-use App\Pdf\PdfRectangle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\Events\PdfCellBorderEvent;
 
 /**
  * Class implementing this interface handle the draw cell border event.
@@ -24,12 +22,9 @@ interface PdfDrawCellBorderInterface
     /**
      * Called when a cell border must be drawn.
      *
-     * @param PdfTableBuilder $builder the parent's table
-     * @param int             $index   the column index
-     * @param PdfRectangle    $bounds  the cell bounds
-     * @param PdfBorder       $border  the border style
+     * @param PdfCellBorderEvent $event the event
      *
      * @return bool true if listener handle the draw function; false to call the default behavior
      */
-    public function drawCellBorder(PdfTableBuilder $builder, int $index, PdfRectangle $bounds, PdfBorder $border): bool;
+    public function drawCellBorder(PdfCellBorderEvent $event): bool;
 }

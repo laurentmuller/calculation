@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Interfaces;
 
-use App\Pdf\PdfRectangle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\Events\PdfCellBackgroundEvent;
 
 /**
  * Class implementing this interface handle the draw cell background event.
@@ -23,11 +22,9 @@ interface PdfDrawCellBackgroundInterface
     /**
      * Called when a cell must be filled.
      *
-     * @param PdfTableBuilder $builder the parent's table
-     * @param int             $index   the column index
-     * @param PdfRectangle    $bounds  the cell bounds
+     * @param PdfCellBackgroundEvent $event the event
      *
      * @return bool true if listener handle the draw function; false to call the default behavior
      */
-    public function drawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool;
+    public function drawCellBackground(PdfCellBackgroundEvent $event): bool;
 }

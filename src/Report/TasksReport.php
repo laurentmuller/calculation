@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Task;
+use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfGroup;
 use App\Pdf\PdfGroupTableBuilder;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
@@ -28,19 +28,19 @@ use App\Utils\FormatUtils;
  */
 class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterface
 {
-    public function outputGroup(PdfGroupTableBuilder $parent, PdfGroup $group): bool
+    public function outputGroup(PdfGroupEvent $event): bool
     {
         /** @var Task $task */
-        $task = $group->getKey();
+        $task = $event->group->getKey();
         $category = \sprintf('%s / %s', $task->getGroupCode(), $task->getCategoryCode());
-        $parent->startRow()
-            ->add(text: $task->getName(), style: $group->getStyle())
+        $event->builder->startRow()
+            ->add(text: $task->getName(), style: $event->group->getStyle())
             ->add($category)
             ->add($task->getUnit());
         if ($task->isEmpty()) {
-            $parent->add($this->trans('task.edit.empty_items'), 3);
+            $event->builder->add($this->trans('task.edit.empty_items'), 3);
         }
-        $parent->completeRow();
+        $event->builder->completeRow();
 
         return true;
     }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 
 /**
@@ -123,8 +124,11 @@ class PdfGroupTableBuilder extends PdfTableBuilder
     {
         if ($this->group->hasKey() && !$this->inProgress) {
             $this->inProgress = true;
-            if (!$this->groupListener instanceof PdfGroupListenerInterface || !$this->groupListener->outputGroup($this, $this->group)) {
-                $this->group->output($this);
+            if ($this->groupListener instanceof PdfGroupListenerInterface) {
+                $event = new PdfGroupEvent($this, $this->group);
+                if (!$this->groupListener->outputGroup($event)) {
+                    $this->group->output($this);
+                }
             }
             $this->inProgress = false;
         }

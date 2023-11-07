@@ -1341,16 +1341,16 @@
         },
         {
             "name": "dukecity/doctrineextensions",
-            "version": "v2.0.1",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Dukecity/DoctrineExtensions.git",
-                "reference": "f6202d2284e91b4fa873b3d3c9a9d3b03096dccb"
+                "reference": "118896aec10dfcdd7934de69bbab42498bc0ca53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dukecity/DoctrineExtensions/zipball/f6202d2284e91b4fa873b3d3c9a9d3b03096dccb",
-                "reference": "f6202d2284e91b4fa873b3d3c9a9d3b03096dccb",
+                "url": "https://api.github.com/repos/Dukecity/DoctrineExtensions/zipball/118896aec10dfcdd7934de69bbab42498bc0ca53",
+                "reference": "118896aec10dfcdd7934de69bbab42498bc0ca53",
                 "shasum": ""
             },
             "require": {
@@ -1358,12 +1358,12 @@
                 "php": "^8.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^3.17",
-                "nesbot/carbon": "^2.67",
+                "friendsofphp/php-cs-fixer": "^3.38",
+                "nesbot/carbon": "^2.71",
                 "phpstan/phpstan": "^1.10",
-                "phpunit/phpunit": "^10.2",
-                "symfony/cache": "^5.4 || ^6.2",
-                "symfony/yaml": "^5.4 || ^6.2"
+                "phpunit/phpunit": "^10.4",
+                "symfony/cache": "^6.3 || ^7.0",
+                "symfony/yaml": "^6.3 || ^7.0"
             },
             "type": "library",
             "autoload": {
@@ -1393,9 +1393,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Dukecity/DoctrineExtensions/issues",
-                "source": "https://github.com/Dukecity/DoctrineExtensions/tree/v2.0.1"
+                "source": "https://github.com/Dukecity/DoctrineExtensions/tree/v2.0.2"
             },
-            "time": "2023-06-22T13:29:15+00:00"
+            "time": "2023-11-07T18:59:22+00:00"
         },
         {
             "name": "egulias/email-validator",

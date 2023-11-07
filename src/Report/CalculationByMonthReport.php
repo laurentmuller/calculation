@@ -18,7 +18,8 @@ use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfRectangleStyle;
-use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\Events\PdfCellBackgroundEvent;
+use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Html\HtmlBootstrapColors;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
@@ -82,33 +83,23 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
         $this->minMargin = $controller->getMinMargin();
     }
 
-    public function drawCellBackground(PdfTableBuilder $builder, int $index, PdfRectangle $bounds): bool
+    public function drawCellBackground(PdfCellBackgroundEvent $event): bool
     {
-        return match ($index) {
-            2 => $this->drawHeaderCell($builder, $bounds, self::COLOR_ITEM),
-            3 => $this->drawHeaderCell($builder, $bounds, self::COLOR_MARGIN),
+        return match ($event->index) {
+            2 => $this->drawHeaderCell($event->builder, $event->bounds, self::COLOR_ITEM),
+            3 => $this->drawHeaderCell($event->builder, $event->bounds, self::COLOR_MARGIN),
             default => false,
         };
     }
 
-    public function drawCellText(
-        PdfTableBuilder $builder,
-        int $index,
-        PdfRectangle $bounds,
-        string $text,
-        PdfTextAlignment $align,
-        float $height
-    ): bool {
-        if (null === $this->currentItem) {
-            return false;
-        }
-
-        return match ($index) {
-            1 => $this->outputArrow($bounds, 'count'),
-            2 => $this->outputArrow($bounds, 'items'),
-            3 => $this->outputArrow($bounds, 'margin_amount'),
-            4 => $this->outputArrow($bounds, 'margin_percent', true),
-            5 => $this->outputArrow($bounds, 'total'),
+    public function drawCellText(PdfCellTextEvent $event): bool
+    {
+        return match ($event->index) {
+            1 => $this->outputArrow($event->bounds, 'count'),
+            2 => $this->outputArrow($event->bounds, 'items'),
+            3 => $this->outputArrow($event->bounds, 'margin_amount'),
+            4 => $this->outputArrow($event->bounds, 'margin_percent', true),
+            5 => $this->outputArrow($event->bounds, 'total'),
             default => false
         };
     }
@@ -185,22 +176,24 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
 
     private function outputArrow(PdfRectangle $bounds, string $key, bool $percent = false): bool
     {
+        if (null === $this->lastItem || null === $this->currentItem) {
+            return false;
+        }
+
         $rotate = true;
         $chr = \chr(self::ARROW_RIGHT);
         $color = HtmlBootstrapColors::SECONDARY;
-        if (null !== $this->lastItem && null !== $this->currentItem) {
-            $precision = $percent ? 2 : 0;
-            $oldValue = $this->roundValue((float) $this->lastItem[$key], $precision);
-            $newValue = $this->roundValue((float) $this->currentItem[$key], $precision);
-            if ($oldValue < $newValue) {
-                $rotate = false;
-                $chr = \chr(self::ARROW_UP);
-                $color = HtmlBootstrapColors::SUCCESS;
-            } elseif ($oldValue > $newValue) {
-                $rotate = false;
-                $chr = \chr(self::ARROW_DOWN);
-                $color = HtmlBootstrapColors::DANGER;
-            }
+        $precision = $percent ? 2 : 0;
+        $oldValue = $this->roundValue((float) $this->lastItem[$key], $precision);
+        $newValue = $this->roundValue((float) $this->currentItem[$key], $precision);
+        if ($oldValue < $newValue) {
+            $rotate = false;
+            $chr = \chr(self::ARROW_UP);
+            $color = HtmlBootstrapColors::SUCCESS;
+        } elseif ($oldValue > $newValue) {
+            $rotate = false;
+            $chr = \chr(self::ARROW_DOWN);
+            $color = HtmlBootstrapColors::DANGER;
         }
 
         $color->applyTextColor($this);

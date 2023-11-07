@@ -132,7 +132,7 @@ class PdfHeader
     private function applyNameStyle(): void
     {
         if (!$this->nameStyle instanceof PdfStyle) {
-            $this->nameStyle = PdfStyle::getDefaultStyle()
+            $this->nameStyle = PdfStyle::default()
                 ->setFontSize(self::NORMAL_FONT_SIZE)
                 ->setFontBold();
         }
@@ -142,7 +142,7 @@ class PdfHeader
     private function applySmallStyle(): void
     {
         if (!$this->smallStyle instanceof PdfStyle) {
-            $this->smallStyle = PdfStyle::getDefaultStyle()
+            $this->smallStyle = PdfStyle::default()
                 ->setFontSize(self::NORMAL_FONT_SIZE);
         }
         $this->smallStyle->apply($this->parent);
@@ -151,7 +151,7 @@ class PdfHeader
     private function applyTitleStyle(): void
     {
         if (!$this->titleStyle instanceof PdfStyle) {
-            $this->titleStyle = PdfStyle::getDefaultStyle()
+            $this->titleStyle = PdfStyle::default()
                 ->setFontSize(self::TITLE_FONT_SIZE)
                 ->setFontBold();
         }

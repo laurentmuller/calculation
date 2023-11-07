@@ -479,7 +479,7 @@ class HelpReport extends AbstractReport
     {
         PdfDrawColor::cellBorder()->apply($this);
         $this->horizontalLine();
-        PdfStyle::getDefaultStyle()->apply($this);
+        PdfStyle::default()->apply($this);
     }
 
     /**
@@ -561,7 +561,7 @@ class HelpReport extends AbstractReport
     {
         PdfStyle::getHeaderStyle()->setFontSize($size)->apply($this);
         $this->outputText($id);
-        PdfStyle::getDefaultStyle()->apply($this);
+        PdfStyle::default()->apply($this);
     }
 
     private function splitTrans(string $id): string

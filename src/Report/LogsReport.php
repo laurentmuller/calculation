@@ -233,7 +233,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
 
         $this->started = true;
         $this->drawCards = true;
-        $titleStyle = PdfStyle::getDefaultStyle()->setBorder(PdfBorder::NONE)->setFontBold();
+        $titleStyle = PdfStyle::default()->setBorder(PdfBorder::NONE)->setFontBold();
 
         PdfTableBuilder::instance($this)
             ->addColumns(...$columns)

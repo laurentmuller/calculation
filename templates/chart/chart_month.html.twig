@@ -74,23 +74,23 @@
         <td class="text-nowrap">
             <a href="{{ path(list_path, parameters) }}">{{ month }}</a>
         </td>
-        <td class="text-currency caret-left position-relative">
+        <td class="text-currency position-relative ps-4">
             {{- _self.cell_integer(item.count|round, last_count|default) -}}
             {%- set last_count = item.count|round -%}
         </td>
-        <td class="text-currency caret-left position-relative">
+        <td class="text-currency position-relative ps-4">
             {{- _self.cell_integer(item.items|round, last_items|default) -}}
             {%- set last_items = item.items|round -%}
         </td>
-        <td class="text-currency caret-left position-relative">
-            {{- _self.cell_integer(item.marginAmount|round, last_amount|default) -}}
-            {%- set last_amount = item.marginAmount|round -%}
+        <td class="text-currency position-relative ps-4">
+            {{- _self.cell_integer(item.margin_amount|round, last_amount|default) -}}
+            {%- set last_amount = item.margin_amount|round -%}
         </td>
-        <td class="text-percent caret-left position-relative{{ _self.margin_below_class(item.marginPercent, min_margin) }}"{{ _self.margin_below_tooltip(item.marginPercent, min_margin) }}>
-            {{- _self.cell_percent(item.marginPercent|round(2, 'floor'), last_percent|default) -}}
-            {%- set last_percent = item.marginPercent|round(2, 'floor') -%}
+        <td class="text-percent position-relative ps-4{{ _self.margin_below_class(item.margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(item.margin_percent, min_margin) }}>
+            {{- _self.cell_percent(item.margin_percent|round(2, 'floor'), last_percent|default) -}}
+            {%- set last_percent = item.margin_percent|round(2, 'floor') -%}
         </td>
-        <td class="text-currency caret-left position-relative">
+        <td class="text-currency position-relative ps-4">
             {{- _self.cell_integer(item.sum|round, last_sum|default) -}}
             {%- set last_sum = item.sum|round -%}
         </td>
@@ -102,8 +102,8 @@
         </td>
         <td class="fw-bold text-currency">{{ count|integer }}</td>
         <td class="fw-bold text-currency">{{ items|integer }}</td>
-        <td class="fw-bold text-currency">{{ marginAmount|integer }}</td>
-        <td class="fw-bold text-percent{{ _self.margin_below_class(marginPercent, min_margin) }}"{{ _self.margin_below_tooltip(marginPercent, min_margin) }}>{{ marginPercent|percent(false) }}</td>
+        <td class="fw-bold text-currency">{{ margin_amount|integer }}</td>
+        <td class="fw-bold text-percent{{ _self.margin_below_class(margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(margin_percent, min_margin) }}>{{ margin_percent|percent(false) }}</td>
         <td class="fw-bold text-currency">{{ total|integer }}</td>
     </tr>
 </tbody>

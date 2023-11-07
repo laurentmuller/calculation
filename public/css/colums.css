@@ -75,7 +75,7 @@
     text-overflow: ellipsis;
 }
 
-.text-supplier{
+.text-supplier {
     width: 160px;
     overflow: hidden;
     white-space: nowrap;
@@ -86,6 +86,7 @@
     width: 75px;
     text-align: center;
 }
+
 .text-image span.user-image {
     display: flex;
     width: 32px;
@@ -94,6 +95,7 @@
     margin-right: auto;
     align-items: center;
 }
+
 .text-image span.user-image img {
     margin-left: auto;
     margin-right: auto;
@@ -107,6 +109,7 @@
     margin-right: auto;
     align-items: center;
 }
+
 .card-view-value span.user-image img {
     margin-left: auto;
     margin-right: auto;
@@ -119,6 +122,7 @@
     height: 32px;
     margin-right: 0.25rem;
 }
+
 .custom-item span.user-image img {
     margin-left: auto;
     margin-right: auto;
@@ -141,10 +145,6 @@
     width: 100px;
 }
 
-.text-nowrap {
-    white-space: nowrap;
-}
-
 .text-cell {
     overflow: hidden;
     white-space: nowrap;
@@ -164,7 +164,7 @@
     white-space: nowrap;
 }
 
-.text-editable{
+.text-editable {
     width: 110px;
 }
 
@@ -205,10 +205,7 @@
 .f-300 {
     width: 200px;
 }
+
 .f-400 {
     width: 400px;
-}
-
-.caret-left {
-    padding-left: 25px;
 }

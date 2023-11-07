@@ -216,7 +216,7 @@ class HtmlStyle extends PdfStyle
 
     private function getDefaultBorderColor(): PdfDrawColor
     {
-        return PdfDrawColor::create('#808080') ?? PdfDrawColor::black();
+        return PdfDrawColor::create('#808080') ?? PdfDrawColor::default();
     }
 
     private function updateAlignment(string $class): self

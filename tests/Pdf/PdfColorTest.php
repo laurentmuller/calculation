@@ -77,6 +77,13 @@ class PdfColorTest extends TestCase
         $this->validateColor($color, $red, $green, $blue);
     }
 
+    public function testDefaultColors(): void
+    {
+        self::assertEqualsCanonicalizing(PdfDrawColor::black(), PdfDrawColor::default());
+        self::assertEqualsCanonicalizing(PdfFillColor::white(), PdfFillColor::default());
+        self::assertEqualsCanonicalizing(PdfTextColor::black(), PdfTextColor::default());
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getNamedColors')]
     public function testDrawColor(string $name, int $red, int $green, int $blue): void
     {

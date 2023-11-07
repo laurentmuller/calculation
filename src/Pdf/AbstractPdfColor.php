@@ -172,6 +172,11 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     }
 
     /**
+     * Gets the default color.
+     */
+    abstract public static function default(): self;
+
+    /**
      * Gets the blue component.
      *
      * @psalm-return int<0, 255>

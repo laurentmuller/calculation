@@ -62,7 +62,7 @@ class PdfFooter
             $parent->SetY(-PdfDocument::FOOTER_OFFSET);
             $cellWidth = $parent->getPrintableWidth() / 3.0;
             // style
-            PdfStyle::getDefaultStyle()->setFontSize(8)->apply($parent);
+            PdfStyle::default()->setFontSize(8)->apply($parent);
             // pages (left) +  text and url (center) + date (right)
             $this->outputText($this->getPage(), $cellWidth, PdfTextAlignment::LEFT)
                 ->outputText($this->content ?? '', $cellWidth, PdfTextAlignment::CENTER, $this->url ?? '')

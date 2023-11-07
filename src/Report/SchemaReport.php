@@ -260,7 +260,7 @@ class SchemaReport extends AbstractReport
     private function outputTitle(string $id, array $parameters = []): void
     {
         $text = $this->trans($id, $parameters);
-        PdfStyle::getDefaultStyle()->setFontBold()->apply($this);
+        PdfStyle::default()->setFontBold()->apply($this);
         $this->addBookmark(text: $text, isUTF8: false, level: 0, currentY: false);
         $this->useCellMargin(fn () => $this->Cell(txt: $text, ln: PdfMove::NEW_LINE));
         $this->Ln($this->getCellMargin());

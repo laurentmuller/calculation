@@ -40,11 +40,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SimpleEditorType extends AbstractType
 {
-    /*
-     * the shared default actions.
-     */
-    private static ?array $defaultActions = null;
-
     /**
      * Constructor.
      */
@@ -84,15 +79,11 @@ class SimpleEditorType extends AbstractType
      */
     private function getDefaultActions(): array
     {
-        if (empty(self::$defaultActions)) {
-            try {
-                self::$defaultActions = FileUtils::decodeJson($this->actionsPath);
-            } catch (\InvalidArgumentException) {
-                self::$defaultActions = [];
-            }
+        try {
+            return FileUtils::decodeJson($this->actionsPath);
+        } catch (\InvalidArgumentException) {
+            return [];
         }
-
-        return self::$defaultActions;
     }
 
     /**

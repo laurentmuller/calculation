@@ -178,15 +178,31 @@
                 e.preventDefault();
             }
             $.hideDropDownMenus();
-            const duration = this.options.duration;
-            this.$element.add(this.$pageContent).toggleClass('sidebar-show');
+            const that = this;
+            const duration = that.options.duration;
             if (this._isSideBarVisible()) {
-                this.$navbarHorizontal.hide(); // duration
+                // hide sidebar then show horizontal bar
+                that.$element.add(that.$pageContent).toggleClass('sidebar-show', duration).promise().done(() => {
+                    that.$navbarHorizontal.toggle(that.options.duration);
+                    that.$element.trigger('toggle.' + Sidebar.NAME);
+                    that._saveState();
+                });
             } else {
-                this.$navbarHorizontal.show(duration);
+                // hide horizontal bar then show sidebar
+                that.$navbarHorizontal.toggle(duration, () => {
+                    that.$element.add(that.$pageContent).toggleClass('sidebar-show');
+                    that.$element.trigger('toggle.' + Sidebar.NAME);
+                    that._saveState();
+                });
             }
-            this._saveState();
-            this.$element.trigger('toggle.' + Sidebar.NAME);
+            // that.$element.add(this.$pageContent).toggleClass('sidebar-show');
+            // if (that._isSideBarVisible()) {
+            //     that.$navbarHorizontal.hide(); // duration
+            // } else {
+            //     that.$navbarHorizontal.show(duration);
+            // }
+            // that._saveState();
+            // that.$element.trigger('toggle.' + Sidebar.NAME);
         }
 
         /**

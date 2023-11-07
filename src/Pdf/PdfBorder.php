@@ -115,6 +115,14 @@ class PdfBorder
     }
 
     /**
+     * Gets the default border.
+     */
+    public static function default(): self
+    {
+        return self::all();
+    }
+
+    /**
      * Creates a new instance with fill set.
      */
     public static function fill(): self

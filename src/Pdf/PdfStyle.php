@@ -70,10 +70,10 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     {
         $this->font = PdfFont::default();
         $this->line = PdfLine::default();
-        $this->border = PdfBorder::all();
-        $this->textColor = PdfTextColor::black();
-        $this->drawColor = PdfDrawColor::black();
-        $this->fillColor = PdfFillColor::white();
+        $this->border = PdfBorder::default();
+        $this->textColor = PdfTextColor::default();
+        $this->drawColor = PdfDrawColor::default();
+        $this->fillColor = PdfFillColor::default();
     }
 
     public function __clone()
@@ -94,6 +94,22 @@ class PdfStyle implements PdfDocumentUpdaterInterface
         $this->drawColor->apply($doc);
         $this->fillColor->apply($doc);
         $this->textColor->apply($doc);
+    }
+
+    /**
+     * Gets the default style.
+     *
+     * The style has the following properties:
+     *
+     * - Font: Arial 9pt Regular.
+     * - Line width: 0.2mm.
+     * - Fill color: White.
+     * - Draw color: Black.
+     * - Text color: Black.
+     */
+    public static function default(): self
+    {
+        return new self();
     }
 
     /**
@@ -176,25 +192,8 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      */
     public static function getCellStyle(): self
     {
-        return self::getDefaultStyle()
-            ->setFillColor(PdfFillColor::white())
+        return self::default()
             ->setDrawColor(PdfDrawColor::cellBorder());
-    }
-
-    /**
-     * Gets the default style.
-     *
-     * The style has the following properties:
-     *
-     * - Font: Arial 9pt Regular.
-     * - Line width: 0.2mm.
-     * - Fill color: White.
-     * - Draw color: Black.
-     * - Text color: Black.
-     */
-    public static function getDefaultStyle(): self
-    {
-        return new self();
     }
 
     /**
@@ -268,7 +267,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      */
     public static function getLinkStyle(): self
     {
-        return self::getDefaultStyle()
+        return self::default()
             ->setTextColor(PdfTextColor::link());
     }
 
@@ -285,7 +284,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      */
     public static function getNoBorderStyle(): self
     {
-        return self::getDefaultStyle()
+        return self::default()
             ->setBorder(PdfBorder::NONE);
     }
 
@@ -348,9 +347,9 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      */
     public function resetColors(): static
     {
-        return $this->setFillColor(PdfFillColor::white())
-            ->setDrawColor(PdfDrawColor::black())
-            ->setTextColor(PdfTextColor::black());
+        return $this->setFillColor(PdfFillColor::default())
+            ->setDrawColor(PdfDrawColor::default())
+            ->setTextColor(PdfTextColor::default());
     }
 
     /**

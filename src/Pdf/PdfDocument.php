@@ -769,7 +769,7 @@ class PdfDocument extends \FPDF
      */
     public function resetStyle(): self
     {
-        PdfStyle::getDefaultStyle()->apply($this);
+        PdfStyle::default()->apply($this);
 
         return $this;
     }

@@ -31,8 +31,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *        total: float,
  *        year: int,
  *        month: int,
- *        margin: float,
- *        marginAmount: float,
+ *        margin_percent: float,
+ *        margin_amount: float,
  *        date: \DateTimeInterface}
  */
 class CalculationRepository extends AbstractRepository
@@ -225,7 +225,7 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('SUM(c.overallTotal) as total')
             ->addSelect('YEAR(c.date) as year')
             ->addSelect('MONTH(c.date) as month')
-            ->addSelect('SUM(c.overallTotal) / SUM(c.itemsTotal) as margin')
+            ->addSelect('SUM(c.overallTotal) / SUM(c.itemsTotal) as margin_percent')
             ->groupBy('year')
             ->addGroupBy('month')
             ->orderBy('year', Criteria::DESC)
@@ -233,10 +233,11 @@ class CalculationRepository extends AbstractRepository
             ->setMaxResults($maxResults);
 
         $result = $builder->getQuery()->getArrayResult();
+
         /** @psalm-var array $item */
         foreach ($result as &$item) {
             $item['date'] = $this->convertToDate($item);
-            $item['marginAmount'] = $item['total'] - $item['items'];
+            $item['margin_amount'] = $item['total'] - $item['items'];
         }
 
         return \array_reverse($result);

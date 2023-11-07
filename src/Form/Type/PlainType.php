@@ -13,15 +13,13 @@ declare(strict_types=1);
 namespace App\Form\Type;
 
 use App\Entity\AbstractEntity;
-use App\Traits\TranslatorAwareTrait;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * A form type that just renders the field as a span tag.
@@ -46,18 +44,15 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *     date_format: self::FORMAT_*|null,
  *     time_format: self::FORMAT_*|null,
  *     date_pattern: string|null,
- *     time_zone: string|null,
- *     calendar: self::CALENDAR_*,
+ *     time_zone: \IntlTimeZone|\DateTimeZone|string|null,
+ *     calendar: self::CALENDAR_*|null,
  *     empty_value: callable(mixed):string|string|null,
- *     display_transformer: callable(mixed):string|null,
- *     value_transformer: callable(mixed):mixed|null,
+ *     display_transformer: (callable(mixed):(string|null))|null,
+ *     value_transformer: (callable(mixed):mixed)|null,
  *     ...}
  */
-class PlainType extends AbstractType implements ServiceSubscriberInterface
+class PlainType extends AbstractType
 {
-    use ServiceSubscriberTrait;
-    use TranslatorAwareTrait;
-
     /**
      * The gregorian calendar type.
      */
@@ -113,23 +108,29 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
      */
     final public const NUMBER_PERCENT = 'percent';
 
+    public function __construct(private readonly TranslatorInterface $translator)
+    {
+    }
+
     /**
-     * @psalm-suppress InvalidPropertyAssignmentValue
-     *
      * @psalm-param OptionsType $options
+     *
+     * @psalm-suppress InvalidPropertyAssignmentValue
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         /** @psalm-var mixed $data */
         $data = $form->getViewData();
         $value = $this->getDataValue($data, $options);
-        $display_value = $this->getDisplayValue($data, $options) ?? $value;
+        $display_value = $this->getDisplayValue($data, $options, $value);
 
-        $view->vars['value'] = $value;
-        $view->vars['display_value'] = $display_value;
-        $view->vars['expanded'] = $options['expanded'];
-        $view->vars['text_class'] = $options['text_class'];
-        $view->vars['hidden_input'] = $options['hidden_input'];
+        $view->vars = \array_replace($view->vars, [
+            'value' => $value,
+            'display_value' => $display_value,
+            'expanded' => $options['expanded'],
+            'text_class' => $options['text_class'],
+            'hidden_input' => $options['hidden_input'],
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -141,137 +142,127 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
 
     private function configureDate(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'date_format' => null,
-            'time_format' => null,
-            'date_pattern' => null,
-            'time_zone' => null,
-            'calendar' => self::CALENDAR_GREGORIAN,
-        ]);
+        $resolver->define('date_format')
+            ->default(null)
+            ->allowedTypes('null', 'int')
+            ->allowedValues(
+                null,
+                self::FORMAT_FULL,
+                self::FORMAT_LONG,
+                self::FORMAT_MEDIUM,
+                self::FORMAT_SHORT,
+                self::FORMAT_NONE
+            );
 
-        $resolver->setAllowedTypes('date_format', [
-            'null',
-            'int',
-        ])->setAllowedValues('date_format', [
-            null,
-            self::FORMAT_FULL,
-            self::FORMAT_LONG,
-            self::FORMAT_MEDIUM,
-            self::FORMAT_SHORT,
-            self::FORMAT_NONE,
-        ]);
+        $resolver->define('time_format')
+            ->default(null)
+            ->allowedTypes('null', 'int')
+            ->allowedValues(
+                null,
+                self::FORMAT_FULL,
+                self::FORMAT_LONG,
+                self::FORMAT_MEDIUM,
+                self::FORMAT_SHORT,
+                self::FORMAT_NONE
+            );
 
-        $resolver->setAllowedTypes('time_format', [
-            'null',
-            'int',
-        ])->setAllowedValues('time_format', [
-            null,
-            self::FORMAT_FULL,
-            self::FORMAT_LONG,
-            self::FORMAT_MEDIUM,
-            self::FORMAT_SHORT,
-            self::FORMAT_NONE,
-        ]);
+        $resolver->define('date_pattern')
+            ->default(null)
+            ->allowedTypes('null', 'string');
 
-        $resolver->setAllowedTypes('date_pattern', [
-            'null',
-            'string',
-        ]);
+        $resolver->define('time_zone')
+            ->default(null)
+            ->allowedTypes(
+                'null',
+                'string',
+                'IntlTimeZone',
+                'DateTimeZone'
+            );
 
-        $resolver->setAllowedTypes('time_zone', [
-            'null',
-            'string',
-        ]);
-
-        $resolver->setAllowedTypes('calendar', [
-            'null',
-            'int',
-        ])->setAllowedValues('calendar', [
-            self::CALENDAR_GREGORIAN,
-            self::CALENDAR_TRADITIONAL,
-        ]);
+        $resolver->define('calendar')
+            ->default(null)
+            ->allowedTypes('null', 'int')
+            ->allowedValues(
+                null,
+                self::CALENDAR_GREGORIAN,
+                self::CALENDAR_TRADITIONAL
+            );
     }
 
     private function configureDefaults(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'hidden_input' => false,
-            'read_only' => true,
             'disabled' => true,
-            'required' => false,
-            'expanded' => false,
-            'empty_value' => null,
             'compound' => false,
-            'separator' => ', ',
-            'value_transformer' => null,
-            'display_transformer' => null,
-            'text_class' => null,
+            'required' => false,
         ]);
 
-        $resolver->setAllowedTypes('hidden_input', 'bool')
-            ->setAllowedTypes('read_only', 'bool')
-            ->setAllowedTypes('disabled', 'bool')
-            ->setAllowedTypes('required', 'bool')
-            ->setAllowedTypes('expanded', 'bool');
+        $resolver->define('hidden_input')
+            ->default(false)
+            ->allowedTypes('bool');
 
-        $resolver->setAllowedTypes('empty_value', [
-            'null',
-            'string',
-            'callable',
-        ]);
+        $resolver->define('read_only')
+            ->default(true)
+            ->allowedTypes('bool');
 
-        $resolver->setAllowedTypes('separator', [
-            'string',
-        ]);
+        $resolver->define('expanded')
+            ->default(false)
+            ->allowedTypes('bool');
 
-        $resolver->setAllowedTypes('value_transformer', [
-            'null',
-            'callable',
-        ]);
+        $resolver->define('empty_value')
+            ->default(null)
+            ->allowedTypes('null', 'string', 'callable');
 
-        $resolver->setAllowedTypes('display_transformer', [
-            'null',
-            'callable',
-        ]);
+        $resolver->define('separator')
+            ->default(', ')
+            ->allowedTypes('string');
 
-        $resolver->setAllowedTypes('text_class', [
-            'null',
-            'string',
-        ]);
+        $resolver->define('value_transformer')
+            ->default(null)
+            ->allowedTypes('null', 'callable');
+
+        $resolver->define('display_transformer')
+            ->default(null)
+            ->allowedTypes('null', 'callable');
+
+        $resolver->define('text_class')
+            ->default(null)
+            ->allowedTypes('null', 'string');
     }
 
     private function configureNumber(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'number_pattern' => null,
-            'percent_sign' => true,
-            'percent_decimals' => 2,
-            'percent_rounding_mode' => \NumberFormatter::ROUND_HALFEVEN,
-        ]);
+        $resolver->define('number_pattern')
+            ->default(null)
+            ->allowedTypes('null', 'string')
+            ->allowedValues(
+                null,
+                self::NUMBER_IDENTIFIER,
+                self::NUMBER_INTEGER,
+                self::NUMBER_PERCENT,
+                self::NUMBER_AMOUNT
+            );
 
-        $resolver->setAllowedTypes('number_pattern', [
-            'null',
-            'string',
-        ])->setAllowedValues('number_pattern', [
-            null,
-            self::NUMBER_IDENTIFIER,
-            self::NUMBER_INTEGER,
-            self::NUMBER_PERCENT,
-            self::NUMBER_AMOUNT,
-        ]);
+        $resolver->define('percent_sign')
+            ->default(true)
+            ->allowedTypes('bool');
 
-        $resolver->setAllowedTypes('percent_sign', 'bool')
-            ->setAllowedTypes('percent_decimals', 'int')
-            ->setAllowedTypes('percent_rounding_mode', 'int')
-            ->setAllowedValues('percent_rounding_mode', [
+        $resolver->define('percent_decimals')
+            ->default(2)
+            ->allowedTypes('int');
+
+        $resolver->define('percent_rounding_mode')
+            ->default(\NumberFormatter::ROUND_HALFEVEN)
+            ->allowedTypes('int')
+            ->allowedValues(
                 \NumberFormatter::ROUND_CEILING,
                 \NumberFormatter::ROUND_FLOOR,
                 \NumberFormatter::ROUND_DOWN,
                 \NumberFormatter::ROUND_UP,
                 \NumberFormatter::ROUND_HALFEVEN,
                 \NumberFormatter::ROUND_HALFDOWN,
-                \NumberFormatter::ROUND_HALFUP,
-            ]);
+                \NumberFormatter::ROUND_HALFUP
+            );
     }
 
     /**
@@ -279,10 +270,9 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
      */
     private function formatArray(array $value, array $options): string
     {
-        $separator = $options['separator'];
         $values = \array_map(fn (mixed $item): string => $this->getDataValue($item, $options), $value);
 
-        return \implode($separator, $values);
+        return \implode($options['separator'], $values);
     }
 
     private function formatBool(bool $value): string
@@ -295,13 +285,14 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
      */
     private function formatDate(\DateTimeInterface|int|null $value, array $options): string
     {
-        $calendar = $options['calendar'];
-        $timezone = $options['time_zone'];
-        $pattern = $options['date_pattern'];
-        $date_type = $options['date_format'];
-        $time_type = $options['time_format'];
-
-        return (string) FormatUtils::formatDateTime($value, $date_type, $time_type, $timezone, $calendar, $pattern);
+        return (string) FormatUtils::formatDateTime(
+            $value,
+            $options['date_format'],
+            $options['time_format'],
+            $options['time_zone'],
+            $options['calendar'],
+            $options['date_pattern']
+        );
     }
 
     /**
@@ -321,9 +312,7 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
      */
     private function formatNumber(float|int|string $value, array $options): string
     {
-        $type = $options['number_pattern'];
-
-        return match ($type) {
+        return match ($options['number_pattern']) {
             self::NUMBER_IDENTIFIER => FormatUtils::formatId($value),
             self::NUMBER_INTEGER => FormatUtils::formatInt($value),
             self::NUMBER_AMOUNT => FormatUtils::formatAmount($value),
@@ -337,11 +326,12 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
      */
     private function formatPercent(float|int|string $value, array $options): string
     {
-        $includeSign = $options['percent_sign'];
-        $decimals = $options['percent_decimals'];
-        $roundingMode = $options['percent_rounding_mode'];
-
-        return FormatUtils::formatPercent($value, $includeSign, $decimals, $roundingMode);
+        return FormatUtils::formatPercent(
+            $value,
+            $options['percent_sign'],
+            $options['percent_decimals'],
+            $options['percent_rounding_mode']
+        );
     }
 
     /**
@@ -389,13 +379,18 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
     /**
      * @psalm-param OptionsType $options
      */
-    private function getDisplayValue(mixed $value, array $options): ?string
+    private function getDisplayValue(mixed $value, array $options, string $default): string
     {
         if (\is_callable($options['display_transformer'])) {
-            return \call_user_func($options['display_transformer'], $value);
+            return \call_user_func($options['display_transformer'], $value) ?? $default;
         }
 
-        return null;
+        return $default;
+    }
+
+    private function trans(string $id): string
+    {
+        return $this->translator->trans($id);
     }
 
     /**
@@ -404,7 +399,7 @@ class PlainType extends AbstractType implements ServiceSubscriberInterface
     private function transformValue(mixed $value, array $options): mixed
     {
         if (\is_callable($options['value_transformer'])) {
-            return \call_user_func($options['value_transformer'], $value);
+            return \call_user_func($options['value_transformer'], $value) ?? $value;
         }
 
         return $value;

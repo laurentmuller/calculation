@@ -41,22 +41,8 @@ class MonthChart extends AbstractHighchart
     /**
      * Generate the chart data.
      *
-     * @param int $months the number of months to display
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \Exception
-     *
-     * @psalm-return array{
-     *     chart: MonthChart&static,
-     *     data: list<array{count: int, date: int, items: float, marginAmount: float, marginPercent: float, sum: float}>,
-     *     count: int,
-     *     items: float,
-     *     months: int,
-     *     marginPercent: float,
-     *     marginAmount: float,
-     *     total: float,
-     *     allowed_months: int[],
-     *     min_margin: float}
      */
     public function generate(int $months): array
     {
@@ -80,8 +66,8 @@ class MonthChart extends AbstractHighchart
                 'count' => $countValues[$index],
                 'sum' => $sumValues[$index],
                 'items' => $itemValues[$index],
-                'marginAmount' => $marginAmounts[$index],
-                'marginPercent' => $marginPercents[$index],
+                'margin_amount' => $marginAmounts[$index],
+                'margin_percent' => $marginPercents[$index],
             ];
         }
         $count = \array_sum($countValues);
@@ -105,8 +91,8 @@ class MonthChart extends AbstractHighchart
             'count' => $count,
             'items' => $items,
             'months' => $months,
-            'marginPercent' => $marginPercent,
-            'marginAmount' => $marginAmount,
+            'margin_percent' => $marginPercent,
+            'margin_amount' => $marginAmount,
             'total' => $total,
             'allowed_months' => $allowedMonths,
             'min_margin' => $this->getMinMargin(),
@@ -288,7 +274,7 @@ class MonthChart extends AbstractHighchart
      */
     private function getMarginPercents(array $data): array
     {
-        return \array_map(static fn (array $item): float => $item['margin'], $data);
+        return \array_map(static fn (array $item): float => $item['margin_percent'], $data);
     }
 
     /**

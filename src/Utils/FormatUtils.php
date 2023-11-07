@@ -58,7 +58,7 @@ final class FormatUtils
      * @param \DateTimeInterface|int|null             $date     the date to format
      * @param ?int                                    $datetype the type of date formatting, one of the format type constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
-     * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
+     * @param ?int                                    $calendar the calendar to use or null to use Gregorian calendar
      * @param ?string                                 $pattern  the optional pattern to use when formatting
      * @param ?string                                 $locale   the local or null to use default locale
      *
@@ -66,7 +66,7 @@ final class FormatUtils
      *
      * @psalm-return ($date is null ? (string|null) : string)
      */
-    public static function formatDate(\DateTimeInterface|int|null $date, int $datetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = \IntlDateFormatter::GREGORIAN, string $pattern = null, string $locale = null): ?string
+    public static function formatDate(\DateTimeInterface|int|null $date, int $datetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = null, string $pattern = null, string $locale = null): ?string
     {
         return self::formatDateTime($date, $datetype, \IntlDateFormatter::NONE, $timezone, $calendar, $pattern, $locale);
     }
@@ -78,7 +78,7 @@ final class FormatUtils
      * @param ?int                                    $datetype the type of date formatting, one of the format type constants or null to use default
      * @param ?int                                    $timetype the type of time formatting, one of the format type constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
-     * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
+     * @param ?int                                    $calendar the calendar to use or null to use Gregorian calendar
      * @param ?string                                 $pattern  the optional pattern to use when formatting
      * @param ?string                                 $locale   the local or null to use default locale
      *
@@ -86,7 +86,7 @@ final class FormatUtils
      *
      * @psalm-return ($date is null ? (string|null) : string)
      */
-    public static function formatDateTime(\DateTimeInterface|int|null $date, int $datetype = null, int $timetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = \IntlDateFormatter::GREGORIAN, string $pattern = null, string $locale = null): ?string
+    public static function formatDateTime(\DateTimeInterface|int|null $date, int $datetype = null, int $timetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = null, string $pattern = null, string $locale = null): ?string
     {
         if (null === $date) {
             return null;
@@ -151,7 +151,7 @@ final class FormatUtils
      * @param \DateTimeInterface|int|null             $date     the time to format
      * @param ?int                                    $timetype the type of date formatting, one of the format type constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
-     * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
+     * @param ?int                                    $calendar the calendar to use or null to use Gregorian calendar
      * @param ?string                                 $pattern  the optional pattern to use when formatting
      * @param ?string                                 $locale   the local or null to use default locale
      *
@@ -159,7 +159,7 @@ final class FormatUtils
      *
      * @psalm-return ($date is null ? (string|null) : string)
      */
-    public static function formatTime(\DateTimeInterface|int|null $date, int $timetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = \IntlDateFormatter::GREGORIAN, string $pattern = null, string $locale = null): ?string
+    public static function formatTime(\DateTimeInterface|int|null $date, int $timetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = null, string $pattern = null, string $locale = null): ?string
     {
         return self::formatDateTime($date, \IntlDateFormatter::NONE, $timetype, $timezone, $calendar, $pattern, $locale);
     }
@@ -170,16 +170,17 @@ final class FormatUtils
      * @param ?int                                    $datetype the type of date formatting, one of the format type constants or null to use default
      * @param ?int                                    $timetype the type of time formatting, one of the format type constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
-     * @param int                                     $calendar the calendar to use for formatting; default is Gregorian
+     * @param ?int                                    $calendar the calendar to use or null to use Gregorian calendar
      * @param ?string                                 $pattern  the optional pattern to use when formatting
      * @param ?string                                 $locale   the local or null to use default locale
      */
-    public static function getDateFormatter(int $datetype = null, int $timetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = \IntlDateFormatter::GREGORIAN, string $pattern = null, string $locale = null): \IntlDateFormatter
+    public static function getDateFormatter(int $datetype = null, int $timetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = null, string $pattern = null, string $locale = null): \IntlDateFormatter
     {
         // check values
         $datetype ??= self::getDateType();
         $timetype ??= self::getTimeType();
         $locale ??= \Locale::getDefault();
+        $calendar ??= \IntlDateFormatter::GREGORIAN;
         $pattern ??= '';
         $hash = self::getHashCode($locale, $datetype, $timetype, $timezone, $calendar, $pattern);
 

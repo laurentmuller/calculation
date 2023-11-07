@@ -59,6 +59,7 @@ class ChartController extends AbstractController
         if ($months <= 0) {
             throw new BadRequestHttpException($this->trans('error.month', [], 'chart'));
         }
+        /** @psalm-var array{months: int} $parameters */
         $parameters = $chart->generate($months);
         $this->setSessionValue(self::KEY_MONTHS, $parameters['months']);
 

@@ -83,7 +83,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             $this->SetXY($x, $y);
             $width = $this->GetStringWidth($text);
             $this->Cell(w: $width, txt: $text);
-            PdfStyle::getDefaultStyle()->setFontItalic()->apply($this);
+            PdfStyle::default()->setFontItalic()->apply($this);
             $this->Cell(txt: ' - ' . $description, ln: PdfMove::NEW_LINE);
 
             return true;

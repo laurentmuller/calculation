@@ -19,6 +19,7 @@ use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\Html\HtmlBootstrapColors;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfBarChartTrait;
@@ -31,7 +32,6 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTableBuilder;
 use App\Pdf\PdfTextColor;
 use App\Repository\CalculationRepository;
-use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
 
 /**
@@ -43,11 +43,10 @@ use App\Utils\FormatUtils;
  */
 class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface
 {
-    use MathTrait;
     use PdfBarChartTrait;
 
     private const ARROW_DOWN = 116;
-    private const ARROW_RIGHT = 117;
+    private const ARROW_RIGHT = 116; // same as down but with 90 degrees rotation
     private const ARROW_UP = 115;
 
     private const COLOR_ITEM = '#006400';
@@ -107,8 +106,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
         return match ($index) {
             1 => $this->outputArrow($bounds, 'count'),
             2 => $this->outputArrow($bounds, 'items'),
-            3 => $this->outputArrow($bounds, 'marginAmount'),
-            4 => $this->outputArrow($bounds, 'margin', true),
+            3 => $this->outputArrow($bounds, 'margin_amount'),
+            4 => $this->outputArrow($bounds, 'margin_percent', true),
             5 => $this->outputArrow($bounds, 'total'),
             default => false
         };
@@ -186,26 +185,34 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
 
     private function outputArrow(PdfRectangle $bounds, string $key, bool $percent = false): bool
     {
+        $rotate = true;
         $chr = \chr(self::ARROW_RIGHT);
-        $color = PdfTextColor::darkGray();
+        $color = HtmlBootstrapColors::SECONDARY;
         if (null !== $this->lastItem && null !== $this->currentItem) {
             $precision = $percent ? 2 : 0;
             $oldValue = $this->roundValue((float) $this->lastItem[$key], $precision);
             $newValue = $this->roundValue((float) $this->currentItem[$key], $precision);
             if ($oldValue < $newValue) {
+                $rotate = false;
                 $chr = \chr(self::ARROW_UP);
-                $color = PdfTextColor::darkGreen();
+                $color = HtmlBootstrapColors::SUCCESS;
             } elseif ($oldValue > $newValue) {
+                $rotate = false;
                 $chr = \chr(self::ARROW_DOWN);
-                $color = PdfTextColor::darkRed();
+                $color = HtmlBootstrapColors::DANGER;
             }
         }
 
-        $color->apply($this);
+        $color->applyTextColor($this);
         $this->SetFont(PdfFontName::ZAPFDINGBATS);
-        $this->Cell(txt: $chr);
+        if ($rotate) {
+            $delta = $this->getCellMargin() + $this->GetStringWidth($chr);
+            $this->RotateText($chr, 90.0, $bounds->x() + $delta, $bounds->y() + $delta);
+        } else {
+            $this->Cell(txt: $chr);
+        }
         $this->SetXY($bounds->x(), $bounds->y());
-        PdfTextColor::black()->apply($this);
+        PdfTextColor::default()->apply($this);
         PdfFont::default()->apply($this);
 
         return false;
@@ -260,8 +267,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
                 $this->formatDate($entity['date'], true),
                 FormatUtils::formatInt($entity['count']),
                 FormatUtils::formatInt($entity['items']),
-                FormatUtils::formatInt($entity['marginAmount']),
-                $this->formatPercent($entity['margin']),
+                FormatUtils::formatInt($entity['margin_amount']),
+                $this->formatPercent($entity['margin_percent']),
                 FormatUtils::formatInt($entity['total'])
             );
             $this->lastItem = $entity;

@@ -23,6 +23,14 @@ class PdfFillColor extends AbstractPdfColor
     }
 
     /**
+     * The default fill color is white.
+     */
+    public static function default(): self
+    {
+        return self::white();
+    }
+
+    /**
      * Gets a value indicating if the fill color is set.
      *
      * To be true, this color must be different from the white color.

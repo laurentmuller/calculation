@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Pdf\PdfDocument;
 use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfTextColor;
@@ -33,7 +34,45 @@ enum HtmlBootstrapColors: string
     case WARNING = '#FFC107';
 
     /**
+     * Apply this draw color to the given document.
+     *
+     * @throws \RuntimeException if the color can not be created
+     *
+     * @see HtmlBootstrapColors::getDrawColor()
+     */
+    public function applyDrawColor(PdfDocument $doc): void
+    {
+        $this->getDrawColor()->apply($doc);
+    }
+
+    /**
+     * Apply this fill color to the given document.
+     *
+     * @throws \RuntimeException if the color can not be created
+     *
+     * @see HtmlBootstrapColors::getFillColor()
+     */
+    public function applyFillColor(PdfDocument $doc): void
+    {
+        $this->getFillColor()->apply($doc);
+    }
+
+    /**
+     * Apply this text color to the given document.
+     *
+     * @throws \RuntimeException if the color can not be created
+     *
+     * @see HtmlBootstrapColors::getTextColor()
+     */
+    public function applyTextColor(PdfDocument $doc): void
+    {
+        $this->getTextColor()->apply($doc);
+    }
+
+    /**
      * Gets this value as draw color.
+     *
+     * @throws \RuntimeException if the color can not be created
      */
     public function getDrawColor(): PdfDrawColor
     {
@@ -47,6 +86,8 @@ enum HtmlBootstrapColors: string
 
     /**
      * Gets this value as fill color.
+     *
+     * @throws \RuntimeException if the color can not be created
      */
     public function getFillColor(): PdfFillColor
     {
@@ -68,6 +109,8 @@ enum HtmlBootstrapColors: string
 
     /**
      * Gets this value as text color.
+     *
+     * @throws \RuntimeException if the color can not be created
      */
     public function getTextColor(): PdfTextColor
     {

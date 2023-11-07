@@ -137,7 +137,7 @@ trait PdfBookmarkTrait
         $titleBookmark = $this->_outputIndexTitle($title, $titleStyle, $addBookmark);
 
         // content style
-        $contentStyle ??= PdfStyle::getDefaultStyle();
+        $contentStyle ??= PdfStyle::default();
         $contentStyle->apply($this);
 
         $height = $this->getFontSize() + self::SPACE;

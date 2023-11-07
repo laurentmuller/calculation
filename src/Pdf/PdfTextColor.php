@@ -21,4 +21,12 @@ class PdfTextColor extends AbstractPdfColor
     {
         $doc->SetTextColor($this->getRed(), $this->getGreen(), $this->getBlue());
     }
+
+    /**
+     * The default draw color is black.
+     */
+    public static function default(): self
+    {
+        return self::black();
+    }
 }

@@ -87,7 +87,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
                 ->add(text: $this->formatItems($entity['items']), style: $style)
                 ->endRow();
         }
-        PdfStyle::getDefaultStyle()->apply($this);
+        PdfStyle::default()->apply($this);
         $parameters = [
             '%calculations%' => \count($entities),
             '%items%' => $this->computeItemsCount($entities),

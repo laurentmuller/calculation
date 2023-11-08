@@ -54,7 +54,7 @@ class PdfGroupTable extends PdfTable
 
     public function checkNewPage(float $height): bool
     {
-        if ($this->groupBeforeHeader && $this->isRepeatHeader()) {
+        if ($this->isGroupBeforeHeader() && $this->isRepeatHeader()) {
             $this->setRepeatHeader(false);
             $result = parent::checkNewPage($height);
             if ($result) {
@@ -122,15 +122,17 @@ class PdfGroupTable extends PdfTable
      */
     public function outputGroup(): static
     {
-        if ($this->group->hasKey() && !$this->inProgress) {
-            $this->inProgress = true;
+        if ($this->group->hasKey() && !$this->isInProgress()) {
+            $output = false;
+            $this->setInProgress(true);
             if ($this->groupListener instanceof PdfGroupListenerInterface) {
                 $event = new PdfGroupEvent($this, $this->group);
-                if (!$this->groupListener->outputGroup($event)) {
-                    $this->group->output($this);
-                }
+                $output = $this->groupListener->outputGroup($event);
             }
-            $this->inProgress = false;
+            if (!$output) {
+                $this->group->output($this);
+            }
+            $this->setInProgress(false);
         }
 
         return $this;

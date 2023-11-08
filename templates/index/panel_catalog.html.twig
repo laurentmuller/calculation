@@ -6,13 +6,14 @@
 <div class="border index-child m-1">
     <div class="position-relative p-2">
         {%- if list_path -%}
-            {{- link(path(list_path), title, '', icon, 'index.panel_title_' ~ entity) -}}
+            {{- link(path(list_path), title, 'stretched-link', icon, 'index.panel_title_' ~ entity) -}}
         {%- else -%}
             {{- title|trans -}}
         {%- endif -%}
         <div class="h4 fw-normal my-1">
             <span title="{{ counter|trans }}">{{- count|integer -}}</span>
         </div>
+
     </div>
 </div>
 {%- endmacro %}
@@ -31,7 +32,7 @@
                 {{ icon('database', 'index.panel_catalog') }}
             </h1>
             <a href="#" class="d-print-none hide-panel" title="{{ 'index.panel_catalog_hide'|trans }}">
-                {{- icon('xmark fa-fw') -}}
+                {{- icon('xmark') -}}
             </a>
         </div>
     </div>

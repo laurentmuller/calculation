@@ -37,7 +37,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
             return false;
         }
 
-        $parent = $event->getParent();
+        $parent = $event->getDocument();
         $margin = $parent->getCellMargin();
         $event->bounds->inflateXY(-3.0 * $margin, -$margin)
             ->setHeight(self::LINE_HEIGHT - 2.0 * $margin);

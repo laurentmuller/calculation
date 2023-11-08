@@ -118,7 +118,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     private function drawStateRect(PdfCellTextEvent $event): void
     {
         $bounds = $event->bounds;
-        $parent = $event->getParent();
+        $parent = $event->getDocument();
         $margin = $parent->getCellMargin();
         $parent->Rect(
             $bounds->x() + $margin,
@@ -132,7 +132,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     private function drawStateText(PdfCellTextEvent $event): void
     {
         $offset = 6.0;
-        $parent = $event->getParent();
+        $parent = $event->getDocument();
         $parent->SetX($event->bounds->x() + $offset);
         $parent->Cell(
             w: $event->bounds->width() - $offset,

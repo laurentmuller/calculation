@@ -1,5 +1,5 @@
 {# import #}
-{% from 'macros/_icons.html.twig' import icon, link %}
+{% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
 {% import 'index/_macros.html.twig' as macros %}
 {# macros #}
 {% macro cardEntry(month, list_path, min_margin) -%}
@@ -8,7 +8,7 @@
         {%- set text = month.date|locale_date('none', null, null, 'MMMM Y')|capitalize -%}
         {%- if list_path -%}
             {%- set list_title = 'index.panel_month_title'|trans({'%month%': text}) -%}
-            <a href="{{ path(list_path, {'search': month.date|locale_date('none', null, null, 'MM.Y')}) }}" title="{{ list_title }}">
+            <a href="{{ path(list_path, {'search': month.date|locale_date('none', null, null, 'MM.Y')}) }}" class="stretched-link" title="{{ list_title }}">
                 {{- text -}}
             </a>
         {%- else -%}
@@ -33,9 +33,12 @@
             <h1 class="card-title flex-fill">{{ icon('calendar-alt far', 'index.panel_month') }}</h1>
             {%- if list_path and is_months -%}
                 {{ link(path('chart_by_month'), null, 'd-print-none', 'chart-column fa-fw', 'index.menu_chart_title') }}
+                {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
+                    {{ linkExternal(path('chart_by_month_pdf', {'count': months|length}), null, 'd-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
+                {% endif %}
             {%- endif -%}
             <a href="#" class="hide-panel d-print-none" title="{{ 'index.panel_month_hide'|trans }}">
-                {{- icon('xmark fa-fw') -}}
+                {{- icon('xmark') -}}
             </a>
         </div>
     </div>

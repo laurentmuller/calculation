@@ -60,6 +60,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         private readonly RoleBuilderService $builder
     ) {
         parent::__construct($controller, $entities);
+        $this->setTitleTrans('user.rights.title', [], true);
     }
 
     public function outputGroup(PdfGroupEvent $event): bool
@@ -97,14 +98,14 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      */
     protected function doRender(array $entities): bool
     {
-        $this->setTitleTrans('user.rights.title', [], true);
-
         $this->AddPage();
         $this->rightStyle = PdfStyle::getBulletStyle();
         $this->titleStyle = PdfStyle::getCellStyle()->setIndent(2);
         $table = $this->createTableBuilder();
+        $this->addBookmark($this->trans('user.roles.name'), true);
         $this->outputRoleAdmin($table);
         $this->outputRoleUser($table);
+        $this->addBookmark($this->trans('user.list.title'));
         $this->outputUsers($entities, $table);
         $this->renderTotal($table, $entities);
 
@@ -180,9 +181,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             $this->AddPage();
         }
         if ($role instanceof User) {
-            $this->addBookmark($role->getUserIdentifier(), true);
+            $this->addBookmark($role->getUserIdentifier(), true, 1);
         } else {
-            $this->addBookmark($this->translateRole($role));
+            $this->addBookmark($this->translateRole($role), level: 1);
         }
         $table->setGroupKey($role);
         foreach ($entities as $entity) {

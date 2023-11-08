@@ -240,12 +240,11 @@ class PdfTable
      */
     public function checkNewPage(float $height): bool
     {
-        $parent = $this->parent;
-        if ($parent->isPrintable($height)) {
+        if ($this->parent->isPrintable($height)) {
             return false;
         }
-        $parent->AddPage();
-        if ($this->repeatHeader) {
+        $this->parent->AddPage();
+        if ($this->isRepeatHeader()) {
             $this->outputHeaders();
         }
 

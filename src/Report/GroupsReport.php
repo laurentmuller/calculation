@@ -78,15 +78,20 @@ class GroupsReport extends AbstractArrayReport
         return $this->trans($id, ['count' => \is_array($value) ? \count($value) : $value]);
     }
 
+    private function formatInt(int $value): string
+    {
+        return 0 === $value ? '' : FormatUtils::formatInt($value);
+    }
+
     private function outputGroup(PdfTable $table, Group $group): void
     {
         $emptyValue = \array_fill(0, 5, '');
         $table->startRow()
             ->add($group->getCode())
             ->add($group->getDescription())
-            ->add(FormatUtils::formatInt($group->countCategories()))
-            ->add(FormatUtils::formatInt($group->countProducts()))
-            ->add(FormatUtils::formatInt($group->countTasks()));
+            ->add($this->formatInt($group->countCategories()))
+            ->add($this->formatInt($group->countProducts()))
+            ->add($this->formatInt($group->countTasks()));
         if ($group->hasMargins()) {
             $skip = false;
             $margins = $group->getMargins();

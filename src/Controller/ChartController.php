@@ -106,7 +106,7 @@ class ChartController extends AbstractController
         return $this->renderPdfDocument($report);
     }
 
-    private function checkAccess(EntityPermission $permission = EntityPermission::SHOW): void
+    private function checkAccess(EntityPermission $permission = EntityPermission::LIST): void
     {
         $this->denyAccessUnlessGranted($permission, Calculation::class);
     }

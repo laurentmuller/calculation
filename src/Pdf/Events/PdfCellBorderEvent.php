@@ -42,7 +42,7 @@ readonly class PdfCellBorderEvent
     /**
      * Gets the parent's document.
      */
-    public function getParent(): PdfDocument
+    public function getDocument(): PdfDocument
     {
         return $this->table->getParent();
     }

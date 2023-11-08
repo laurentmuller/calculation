@@ -14,8 +14,8 @@ parameters:
     app_mode:           '%env(string:APP_MODE)%'
 
     # mailer
-    mailer_user_name: Calculation
-    mailer_user_email: calculation@bibi.nu
+    mailer_user_name: '%app_name%'
+    mailer_user_email: '%env(string:MAILER_EMAIL)%'
 
     # cookies
     cookie_path: '%env(string:COOKIE_PATH)%'

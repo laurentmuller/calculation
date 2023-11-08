@@ -104,5 +104,8 @@
 {# footer #}
 {% block card_footer -%}
     {{ parent() }}
-    {{ button_pdf('chart_by_month_pdf', {'count': months}, 'common.button_export_pdf') }}
+    {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
+        {{ button_pdf('chart_by_month_pdf', {'count': months}, 'common.button_export_pdf') }}
+    {% endif %}
+
 {%- endblock %}

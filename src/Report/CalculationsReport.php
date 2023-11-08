@@ -62,7 +62,7 @@ class CalculationsReport extends AbstractArrayReport
      * @param Calculation[]      $entities   the calculations to render
      * @param bool               $grouped    true if calculations are grouped by state
      */
-    public function __construct(AbstractController $controller, array $entities, protected bool $grouped = true)
+    public function __construct(AbstractController $controller, array $entities, private readonly bool $grouped = true)
     {
         parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE);
         $this->minMargin = $controller->getMinMargin();
@@ -100,11 +100,6 @@ class CalculationsReport extends AbstractArrayReport
         return true;
     }
 
-    /**
-     * Creates the table.
-     *
-     * @param bool $grouped true if calculations are grouped by state
-     */
     private function createTable(bool $grouped): PdfGroupTable
     {
         $columns = [
@@ -127,13 +122,6 @@ class CalculationsReport extends AbstractArrayReport
             ->outputHeaders();
     }
 
-    /**
-     * Gets the style for the margin below.
-     *
-     * @param Calculation $calculation the calculation to get style for
-     *
-     * @return PdfStyle|null the margin style, if applicable, null otherwise
-     */
     private function getMarginStyle(Calculation $calculation): ?PdfStyle
     {
         if ($calculation->isMarginBelow($this->minMargin)) {
@@ -148,24 +136,57 @@ class CalculationsReport extends AbstractArrayReport
     }
 
     /**
-     * Outputs the calculations grouped by state.
+     * @psalm-param Calculation[] $entities
      *
-     * @param Calculation[] $entities the calculations to render
-     *
-     * @return PdfGroupTable the table builder
+     * @psalm-return array<string, Calculation[]>
+     */
+    private function groupEntities(array $entities): array
+    {
+        \usort($entities, function (Calculation $a, Calculation $b): int {
+            // editable ascending
+            $result = $a->isEditable() <=> $b->isEditable();
+            if (0 !== $result) {
+                return -$result;
+            }
+
+            // code ascending
+            $result = $a->getStateCode() <=> $b->getStateCode();
+            if (0 !== $result) {
+                return $result;
+            }
+
+            // id descending
+            return $b->getId() <=> $a->getId();
+        });
+
+        /** @psalm-var array<string, Calculation[]> $groups */
+        $groups = $this->groupBy($entities, fn (Calculation $c): string => (string) $c->getStateCode());
+
+        return $groups;
+    }
+
+    /**
+     * @psalm-param Calculation[] $entities
      *
      * @throws PdfException
      */
     private function outputByGroup(array $entities): PdfGroupTable
     {
-        /** @var array<string, Calculation[]> $groups */
-        $groups = $this->groupBy($entities, fn (Calculation $c): string => (string) $c->getStateCode());
-
+        $editable = null;
+        $lastGroup = null;
         $table = $this->createTable(true);
+        $groups = $this->groupEntities($entities);
         foreach ($groups as $group => $items) {
-            $this->addBookmark($group);
-            $table->setGroupKey($group);
             foreach ($items as $item) {
+                if (null === $editable || $editable !== $item->isEditable()) {
+                    $editable = $item->isEditable();
+                    $this->addBookmark($this->transEditable($editable));
+                }
+                if (null === $lastGroup || $lastGroup !== $group) {
+                    $this->addBookmark(text: $group, level: 1);
+                    $table->setGroupKey($group);
+                    $lastGroup = $group;
+                }
                 $this->outputItem($table, $item, true);
             }
         }
@@ -174,11 +195,7 @@ class CalculationsReport extends AbstractArrayReport
     }
 
     /**
-     * Output the calculations as list.
-     *
-     * @param Calculation[] $entities the calculations to render
-     *
-     * @return PdfGroupTable the table builder
+     * @psalm-param Calculation[] $entities
      */
     private function outputByList(array $entities): PdfGroupTable
     {
@@ -190,13 +207,6 @@ class CalculationsReport extends AbstractArrayReport
         return $table;
     }
 
-    /**
-     * Output a single calculation.
-     *
-     * @param PdfGroupTable $table        the table to write in
-     * @param Calculation   $c            the calculation to output
-     * @param bool          $groupByState true if grouped by state
-     */
     private function outputItem(PdfGroupTable $table, Calculation $c, bool $groupByState): void
     {
         $style = $this->getMarginStyle($c);
@@ -215,5 +225,10 @@ class CalculationsReport extends AbstractArrayReport
 
         $this->items += $c->getItemsTotal();
         $this->overall += $c->getOverallTotal();
+    }
+
+    private function transEditable(bool $editable): string
+    {
+        return $this->trans($editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable');
     }
 }

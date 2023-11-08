@@ -1,14 +1,18 @@
 {% extends 'calculation/calculation_table.html.twig' %}
-
 {# parameters #}
 {%- set title = 'below.title' -%}
 {%- set title_icon = ICON_GLOBAL_MARGIN -%}
 {%- set allow_add = false -%}
-
-{% block header_actions -%}
-<small>{{ 'below.description'|trans({'%margin%': customData.min_margin|percent}) }}</small>
+{# header #}
+{% block card_header -%}
+    {{ parent() }}
+    <small>{{ 'below.description'|trans({'%margin%': customData.min_margin|percent}) }}</small>
 {%- endblock %}
-
+{# actions #}
+{% block header_actions -%}
+<small>{{ 'below.count'|trans({'%calculations%': totalNotFiltered|integer}) }}</small>
+{%- endblock %}
+{# global actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('below_pdf'), 'calculation.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('below_excel'), 'calculation.list.excel_title', ICON_EXCEL) }}

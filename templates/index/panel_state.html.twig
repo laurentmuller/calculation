@@ -1,4 +1,4 @@
-{% from 'macros/_icons.html.twig' import icon, link %}
+{% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
 {% import 'index/_macros.html.twig' as macros %}
 {# macros #}
 {% macro cardEntry(state, table_path, parameters=[], min_margin) -%}
@@ -7,7 +7,7 @@
     <div class="position-relative body-tooltip p-2">
         {%- if table_path -%}
             {%- set list_title = parameters|length ? 'index.panel_state_title'|trans({'%code%': state.code}) : 'index.panel_state_title_all'|trans -%}
-            <a href="{{ path(table_path, parameters) }}" title="{{ list_title }}">
+            <a href="{{ path(table_path, parameters) }}" title="{{ list_title }}" class="stretched-link">
                 {{- state.code -}}
             </a>
         {%- else -%}
@@ -32,9 +32,12 @@
             <h1 class="card-title flex-fill">{{ icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
             {%- if table_path and is_states -%}
                 {{ link(path('chart_by_state'), null, 'd-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}
+                {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
+                    {{ linkExternal(path('chart_by_state_pdf'), null, 'd-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
+                {% endif %}
             {%- endif -%}
             <a href="#" class="hide-panel d-print-none" title="{{ 'index.panel_state_hide'|trans }}">
-                {{- icon('xmark fa-fw') -}}
+                {{- icon('xmark') -}}
             </a>
         </div>
     </div>

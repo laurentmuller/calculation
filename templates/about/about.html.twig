@@ -15,10 +15,10 @@
             {{ linkExternal(path(word_route), null, null, ICON_WORD, 'common.button_export_word') }}
         {% endif %}
     </div>
-    <div class="card-body collapse" id="{{ id }}" data-bs-parent="#aboutAccordion" data-url="{{ route }}">
+    <div class="card-body collapse" id="{{ id }}" data-bs-parent="#aboutAccordion">
         <div class="collapse-content" data-url="{{ route }}">
             <div class="alert py-0 mb-0" role="alert">
-                <span class="spinner-border spinner-border-sm text-secondary me-2" role="status"></span><span>{{ 'about.loading'|trans }}</span>
+                <span class="spinner-border spinner-border-sm me-2" role="status"></span><span>{{ 'about.loading'|trans }}</span>
             </div>
         </div>
     </div>

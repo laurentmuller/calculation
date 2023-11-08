@@ -16,7 +16,6 @@ use App\Entity\Category;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTable;
 use App\Traits\GroupByTrait;
 use App\Utils\FormatUtils;
 
@@ -45,8 +44,8 @@ class CategoriesReport extends AbstractArrayReport
                 $table->startRow()
                     ->add($item->getCode(), 1, $style)
                     ->add($item->getDescription())
-                    ->add(FormatUtils::formatInt($item->countProducts()))
-                    ->add(FormatUtils::formatInt($item->countTasks()))
+                    ->add($this->formatInt($item->countProducts()))
+                    ->add($this->formatInt($item->countTasks()))
                     ->endRow();
             }
         }
@@ -87,6 +86,11 @@ class CategoriesReport extends AbstractArrayReport
         return $this->trans($id, ['count' => \is_array($value) ? \count($value) : $value]);
     }
 
+    private function formatInt(int $value): string
+    {
+        return 0 === $value ? '' : FormatUtils::formatInt($value);
+    }
+
     /**
      * @param Category[] $entities
      */
@@ -101,7 +105,7 @@ class CategoriesReport extends AbstractArrayReport
     /**
      * @param Category[] $entities
      */
-    private function renderTotal(PdfTable $table, array $entities): void
+    private function renderTotal(PdfGroupTable $table, array $entities): void
     {
         $categories = $this->formatCount('counters.categories', $entities);
         $products = $this->formatCount('counters.products', $this->countProducts($entities));

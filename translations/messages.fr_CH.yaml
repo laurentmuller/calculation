@@ -1376,6 +1376,7 @@ user:
     toggle_title: Inverser les droits
     action: Modifier les droits d'accès
   roles:
+    name: Rôles
     admin: Administrateur
     super_admin: Administrateur du site
     user: Utilisateur

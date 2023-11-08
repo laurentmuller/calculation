@@ -16,18 +16,15 @@ use App\Controller\AbstractController;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfPieChartTrait;
-use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Pdf\PdfTextColor;
 use App\Repository\CalculationStateRepository;
 use App\Traits\MathTrait;
@@ -73,9 +70,8 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
             return false;
         }
 
-        $parent = $event->builder->getParent();
-        $this->drawStateRect($parent, $event->bounds);
-        $this->drawStateText($parent, $event->bounds, $event->text, $event->align, $event->height);
+        $this->drawStateRect($event);
+        $this->drawStateText($event);
 
         return true;
     }
@@ -103,9 +99,9 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
         return true;
     }
 
-    private function createTable(): PdfTableBuilder
+    private function createTable(): PdfTable
     {
-        return PdfTableBuilder::instance($this)
+        return PdfTable::instance($this)
             ->setTextListener($this)
             ->addColumns(
                 PdfColumn::left($this->transChart('fields.state'), 20),
@@ -119,8 +115,10 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
             )->outputHeaders();
     }
 
-    private function drawStateRect(PdfDocument $parent, PdfRectangle $bounds): void
+    private function drawStateRect(PdfCellTextEvent $event): void
     {
+        $bounds = $event->bounds;
+        $parent = $event->getParent();
         $margin = $parent->getCellMargin();
         $parent->Rect(
             $bounds->x() + $margin,
@@ -131,15 +129,16 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
         );
     }
 
-    private function drawStateText(PdfDocument $parent, PdfRectangle $bounds, string $text, PdfTextAlignment $align, float $height): void
+    private function drawStateText(PdfCellTextEvent $event): void
     {
         $offset = 6.0;
-        $parent->SetX($parent->GetX() + $offset);
+        $parent = $event->getParent();
+        $parent->SetX($event->bounds->x() + $offset);
         $parent->Cell(
-            w: $bounds->width() - $offset,
-            h: $height,
-            txt: $text,
-            align: $align
+            w: $event->bounds->width() - $offset,
+            h: $event->height,
+            txt: $event->text,
+            align: $event->align
         );
     }
 

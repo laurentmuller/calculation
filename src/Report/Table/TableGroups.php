@@ -17,7 +17,7 @@ use App\Entity\CalculationGroup;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
@@ -26,7 +26,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Table to render the totals by group of a calculation.
  */
-class TableGroups extends PdfTableBuilder
+class TableGroups extends PdfTable
 {
     use TranslatorTrait;
 

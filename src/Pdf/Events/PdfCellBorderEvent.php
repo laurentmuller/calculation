@@ -14,8 +14,9 @@ namespace App\Pdf\Events;
 
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\PdfBorder;
+use App\Pdf\PdfDocument;
 use App\Pdf\PdfRectangle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 
 /**
  * The event raised when a cell border must be drawn.
@@ -25,16 +26,24 @@ use App\Pdf\PdfTableBuilder;
 readonly class PdfCellBorderEvent
 {
     /**
-     * @param PdfTableBuilder $builder the parent's table
-     * @param int             $index   the column index
-     * @param PdfRectangle    $bounds  the cell bounds
-     * @param PdfBorder       $border  the border style
+     * @param PdfTable     $table  the parent's table
+     * @param int          $index  the column index
+     * @param PdfRectangle $bounds the cell bounds
+     * @param PdfBorder    $border the border style
      */
     public function __construct(
-        public PdfTableBuilder $builder,
+        public PdfTable $table,
         public int $index,
         public PdfRectangle $bounds,
         public PdfBorder $border
     ) {
+    }
+
+    /**
+     * Gets the parent's document.
+     */
+    public function getParent(): PdfDocument
+    {
+        return $this->table->getParent();
     }
 }

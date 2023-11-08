@@ -18,7 +18,7 @@ use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
 use App\Traits\GroupByTrait;
@@ -105,7 +105,7 @@ class CalculationsReport extends AbstractArrayReport
      *
      * @param bool $grouped true if calculations are grouped by state
      */
-    private function createTable(bool $grouped): PdfGroupTableBuilder
+    private function createTable(bool $grouped): PdfGroupTable
     {
         $columns = [
             PdfColumn::center($this->trans('calculation.fields.id'), 17, true),
@@ -122,7 +122,7 @@ class CalculationsReport extends AbstractArrayReport
             PdfColumn::right($this->trans('calculation.fields.total'), 25, true),
         ]);
 
-        return PdfGroupTableBuilder::instance($this)
+        return PdfGroupTable::instance($this)
             ->addColumns(...$columns)
             ->outputHeaders();
     }
@@ -152,11 +152,11 @@ class CalculationsReport extends AbstractArrayReport
      *
      * @param Calculation[] $entities the calculations to render
      *
-     * @return PdfGroupTableBuilder the table builder
+     * @return PdfGroupTable the table builder
      *
      * @throws PdfException
      */
-    private function outputByGroup(array $entities): PdfGroupTableBuilder
+    private function outputByGroup(array $entities): PdfGroupTable
     {
         /** @var array<string, Calculation[]> $groups */
         $groups = $this->groupBy($entities, fn (Calculation $c): string => (string) $c->getStateCode());
@@ -178,9 +178,9 @@ class CalculationsReport extends AbstractArrayReport
      *
      * @param Calculation[] $entities the calculations to render
      *
-     * @return PdfGroupTableBuilder the table builder
+     * @return PdfGroupTable the table builder
      */
-    private function outputByList(array $entities): PdfGroupTableBuilder
+    private function outputByList(array $entities): PdfGroupTable
     {
         $table = $this->createTable(false);
         foreach ($entities as $entity) {
@@ -193,11 +193,11 @@ class CalculationsReport extends AbstractArrayReport
     /**
      * Output a single calculation.
      *
-     * @param PdfGroupTableBuilder $table        the table to write in
-     * @param Calculation          $c            the calculation to output
-     * @param bool                 $groupByState true if grouped by state
+     * @param PdfGroupTable $table        the table to write in
+     * @param Calculation   $c            the calculation to output
+     * @param bool          $groupByState true if grouped by state
      */
-    private function outputItem(PdfGroupTableBuilder $table, Calculation $c, bool $groupByState): void
+    private function outputItem(PdfGroupTable $table, Calculation $c, bool $groupByState): void
     {
         $style = $this->getMarginStyle($c);
         $table->startRow()

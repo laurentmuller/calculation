@@ -17,7 +17,7 @@ use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Pdf\PdfTextColor;
 use App\Utils\FormatUtils;
 
@@ -127,9 +127,9 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
     /**
      * Creates the table.
      */
-    private function createTable(): PdfTableBuilder
+    private function createTable(): PdfTable
     {
-        return PdfTableBuilder::instance($this)
+        return PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::center($this->trans('calculation.fields.id'), 17, true),
                 PdfColumn::center($this->trans('calculation.fields.date'), 20, true),

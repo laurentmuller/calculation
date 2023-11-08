@@ -15,11 +15,11 @@ namespace App\Tests\Pdf;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(PdfTableBuilder::class)]
-class PdfTableBuilderTest extends TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(PdfTable::class)]
+class PdfTableTest extends TestCase
 {
     public function testAddCellNoRowStarted(): void
     {
@@ -81,10 +81,10 @@ class PdfTableBuilderTest extends TestCase
             ->startRow();
     }
 
-    private function createTable(): PdfTableBuilder
+    private function createTable(): PdfTable
     {
         $document = new PdfDocument();
 
-        return new PdfTableBuilder($document);
+        return new PdfTable($document);
     }
 }

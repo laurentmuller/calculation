@@ -19,7 +19,7 @@ use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Report\Table\TableGroups;
 use App\Report\Table\TableItems;
 use App\Report\Table\TableOverall;
@@ -141,7 +141,7 @@ class CalculationReport extends AbstractReport
             ->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::LEFT);
         $rightStyle = PdfStyle::getHeaderStyle()
             ->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::RIGHT);
-        PdfTableBuilder::instance($this)
+        PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left(null, 100),
                 PdfColumn::right(null, 40, true)

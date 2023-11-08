@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace App\Pdf\Events;
 
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
+use App\Pdf\PdfDocument;
 use App\Pdf\PdfGroup;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfGroupTable;
 
 /**
  * The event raised when a group must be rendered.
@@ -24,12 +25,20 @@ use App\Pdf\PdfGroupTableBuilder;
 readonly class PdfGroupEvent
 {
     /**
-     * @param PdfGroupTableBuilder $builder the parent's table
-     * @param PdfGroup             $group   the group to output
+     * @param PdfGroupTable $table the parent's table
+     * @param PdfGroup      $group the group to output
      */
     public function __construct(
-        public PdfGroupTableBuilder $builder,
+        public PdfGroupTable $table,
         public PdfGroup $group
     ) {
+    }
+
+    /**
+     * Gets the parent's document.
+     */
+    public function getParent(): PdfDocument
+    {
+        return $this->table->getParent();
     }
 }

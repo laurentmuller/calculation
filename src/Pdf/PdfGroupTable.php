@@ -16,9 +16,9 @@ use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 
 /**
- * Extends the PDF table builder by adding a group row when headers and/or new pages are output.
+ * Extends the PDF table by adding a group row when headers and/or new pages are output.
  */
-class PdfGroupTableBuilder extends PdfTableBuilder
+class PdfGroupTable extends PdfTable
 {
     /**
      * The current group.

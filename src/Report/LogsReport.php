@@ -28,9 +28,8 @@ use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfException;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfLine;
-use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use Psr\Log\LogLevel;
@@ -50,11 +49,6 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
      */
     private const HALF_WIDTH = 0.25;
 
-    /*
-     * The total card text.
-     */
-    private const TOTAL = 'total';
-
     /**
      * The border colors.
      *
@@ -65,7 +59,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     /**
      * The draw cards state.
      */
-    private ?bool $drawCards = null;
+    private bool $drawCards = false;
 
     /**
      * The current level.
@@ -73,9 +67,9 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     private ?string $level = null;
 
     /**
-     * The started page state.
+     * The total text.
      */
-    private ?bool $started = null;
+    private string $total;
 
     /**
      * Constructor.
@@ -88,31 +82,19 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
             '%file%' => $this->logFile->getFile(),
         ]);
         $this->getHeader()->setDescription($description);
-    }
-
-    public function AddPage($orientation = '', $size = '', $rotation = 0): void
-    {
-        parent::AddPage($orientation, $size, $rotation);
-        $this->started = false;
+        $this->total = $this->trans('report.total');
     }
 
     public function drawCellBorder(PdfCellBorderEvent $event): bool
     {
-        if (!$this->started) {
-            $this->started = true;
-
-            return false;
-        }
         if ($this->drawCards) {
-            $text = $event->builder->getColumns()[$event->index]->getText();
-            if (self::TOTAL === $text) {
-                return false;
-            }
+            $columns = $event->table->getColumns();
+            $text = $columns[$event->index]->getText();
 
-            return $this->drawBorder($event->builder, $text, $event->bounds, $event->border);
+            return $this->drawBorder($event, $text);
         }
 
-        return (0 === $event->index) && $this->drawBorder($event->builder, $this->level, $event->bounds, $event->border);
+        return (0 === $event->index) && $this->drawBorder($event, $this->level);
     }
 
     /**
@@ -120,8 +102,8 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
      */
     public function render(): bool
     {
-        $logFile = $this->logFile;
         $this->AddPage();
+        $logFile = $this->logFile;
         if ($logFile->isEmpty()) {
             $this->Cell(txt: $this->trans('log.list.empty'));
 
@@ -149,10 +131,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $this->resetStyle();
     }
 
-    /**
-     * Draws the left border if applicable.
-     */
-    private function drawBorder(PdfTableBuilder $builder, ?string $level, PdfRectangle $bounds, PdfBorder $border): bool
+    private function drawBorder(PdfCellBorderEvent $event, ?string $level): bool
     {
         if (null === $level || '' === $level) {
             return false;
@@ -163,23 +142,22 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
             return false;
         }
 
+        $bounds = $event->bounds;
         $x = $bounds->x() + self::HALF_WIDTH;
         $y = $bounds->y() + self::HALF_WIDTH;
         $h = $bounds->height() - self::FULL_WIDTH;
-        $doc = $builder->getParent();
-        $doc->rectangle($bounds, $border);
-        $color->apply($doc);
-        $doc->SetLineWidth(self::FULL_WIDTH);
-        $doc->Line($x, $y, $x, $y + $h);
-        PdfLine::default()->apply($doc);
-        PdfDrawColor::cellBorder()->apply($doc);
+
+        $parent = $event->getParent();
+        $parent->rectangle($bounds, $event->border);
+        $color->apply($parent);
+        $parent->SetLineWidth(self::FULL_WIDTH);
+        $parent->Line($x, $y, $x, $y + $h);
+        PdfLine::default()->apply($parent);
+        PdfDrawColor::cellBorder()->apply($parent);
 
         return true;
     }
 
-    /**
-     * Gets the border color for the given level.
-     */
     private function getLevelColor(string $level): ?PdfDrawColor
     {
         if (!\array_key_exists($level, $this->colors)) {
@@ -218,25 +196,24 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $sepCol = PdfColumn::center(null, 3);
         $emptyCol = PdfColumn::center(null, 1);
         $emptyCell = new PdfCell(cols: 1, style: PdfStyle::getNoBorderStyle());
-        $this->outputCardsEntries($levels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
 
+        $this->updateCardsEntries($levels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
         $columns[] = $sepCol;
         $textCells[] = $emptyCell;
         $valueCells[] = $emptyCell;
-        $this->outputCardsEntries($channels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
 
+        $this->updateCardsEntries($channels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
         $columns[] = $sepCol;
         $textCells[] = $emptyCell;
         $valueCells[] = $emptyCell;
-        $columns[] = PdfColumn::center(self::TOTAL, 30);
-        $textCells[] = new PdfCell(StringUtils::capitalize(self::TOTAL));
+
+        $columns[] = PdfColumn::center($this->total, 30);
+        $textCells[] = new PdfCell($this->total);
         $valueCells[] = new PdfCell(FormatUtils::formatInt($this->logFile->count()));
 
-        $this->started = true;
         $this->drawCards = true;
         $titleStyle = PdfStyle::default()->setBorder(PdfBorder::NONE)->setFontBold();
-
-        PdfTableBuilder::instance($this)
+        PdfTable::instance($this)
             ->addColumns(...$columns)
             ->startRow()
             ->add($this->trans('log.fields.level'), \count($levels) * 2, $titleStyle, PdfTextAlignment::LEFT)
@@ -244,54 +221,31 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
             ->endRow()
             ->setBorderListener($this)
             ->addStyledRow($textCells, PdfStyle::getHeaderStyle()->resetFont())
-            ->addStyledRow($valueCells, PdfStyle::getCellStyle()->setFontSize(14));
+            ->addStyledRow($valueCells, PdfStyle::getCellStyle()->setFontSize(14))
+            ->setBorderListener(null);
+        $this->drawCards = false;
         $this->Ln(3);
     }
 
     /**
-     * @param array<string, int> $values
-     * @param PdfColumn[]        $columns
-     * @param PdfCell[]          $textCells
-     * @param PdfCell[]          $valueCells
-     */
-    private function outputCardsEntries(array $values, array &$columns, array &$textCells, array &$valueCells, PdfColumn $emptyCol, PdfCell $emptyCell): void
-    {
-        $index = \count($values) - 1;
-        foreach ($values as $key => $value) {
-            $columns[] = PdfColumn::center($key, 30);
-            $textCells[] = new PdfCell(StringUtils::capitalize($key));
-            $valueCells[] = new PdfCell(FormatUtils::formatInt($value));
-            if ($index-- > 0) {
-                $columns[] = $emptyCol;
-                $textCells[] = $emptyCell;
-                $valueCells[] = $emptyCell;
-            }
-        }
-    }
-
-    /**
-     * Output logs.
-     *
-     * @param Log[] $logs the logs
-     *
-     * @return bool true on success
+     * @psalm-param Log[] $logs the logs
      *
      * @throws PdfException
      */
     private function outputLogs(array $logs): bool
     {
         $date = 0;
-        $this->drawCards = false;
         $this->cellTitle();
-        $table = PdfTableBuilder::instance($this)
-            ->setBorderListener($this)
+        $table = PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('log.fields.level'), 20, true),
                 PdfColumn::left($this->trans('log.fields.channel'), 20, true),
                 PdfColumn::left($this->trans('log.fields.createdAt'), 34, true),
                 PdfColumn::left($this->trans('log.fields.message'), 150),
                 PdfColumn::left($this->trans('log.fields.user'), 20, true)
-            )->outputHeaders();
+            )
+            ->outputHeaders()
+            ->setBorderListener($this);
 
         foreach ($logs as $log) {
             $this->level = $log->getLevel();
@@ -311,5 +265,32 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $table->setBorderListener(null);
 
         return $this->renderCount($table, $logs, 'counters.logs');
+    }
+
+    /**
+     * @psalm-param array<string, int> $values
+     * @psalm-param PdfColumn[]        $columns
+     * @psalm-param PdfCell[]          $textCells
+     * @psalm-param PdfCell[]          $valueCells
+     */
+    private function updateCardsEntries(
+        array $values,
+        array &$columns,
+        array &$textCells,
+        array &$valueCells,
+        PdfColumn $emptyCol,
+        PdfCell $emptyCell
+    ): void {
+        $index = \count($values) - 1;
+        foreach ($values as $key => $value) {
+            $columns[] = PdfColumn::center($key, 30);
+            $textCells[] = new PdfCell(StringUtils::capitalize($key));
+            $valueCells[] = new PdfCell(FormatUtils::formatInt($value));
+            if ($index-- > 0) {
+                $columns[] = $emptyCol;
+                $textCells[] = $emptyCell;
+                $valueCells[] = $emptyCell;
+            }
+        }
     }
 }

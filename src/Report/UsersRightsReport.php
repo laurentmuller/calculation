@@ -24,9 +24,9 @@ use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
@@ -69,7 +69,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         if ($key instanceof Role) {
             $description = $this->trans('user.fields.role') . ' ';
             $description .= $this->translateRole($key);
-            $event->builder->singleLine($description, $event->group->getStyle());
+            $event->table->singleLine($description, $event->group->getStyle());
 
             return true;
         }
@@ -79,7 +79,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             $description = $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
             [$x, $y] = $this->GetXY();
             $event->group->apply($this);
-            $this->Cell(border: PdfBorder::all());
+            $this->Cell(border: PdfBorder::default());
             $this->SetXY($x, $y);
             $width = $this->GetStringWidth($text);
             $this->Cell(w: $width, txt: $text);
@@ -114,21 +114,21 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * Creates the right table builder.
      *
-     * @return PdfGroupTableBuilder the table builder
+     * @return PdfGroupTable the table builder
      */
-    private function createTableBuilder(): PdfGroupTableBuilder
+    private function createTableBuilder(): PdfGroupTable
     {
-        $builder = PdfGroupTableBuilder::instance($this)
+        $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getCellStyle()->setFontBold())
             ->setGroupListener($this)
             ->addColumn(PdfColumn::left($this->trans('user.rights.table_title'), 50));
         $permissions = EntityPermission::sorted();
         foreach ($permissions as $permission) {
-            $builder->addColumn(PdfColumn::center($this->trans($permission), 25, true));
+            $table->addColumn(PdfColumn::center($this->trans($permission), 25, true));
         }
-        $builder->outputHeaders();
+        $table->outputHeaders();
 
-        return $builder;
+        return $table;
     }
 
     private function getApplication(): ApplicationService
@@ -151,7 +151,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      *
      * @psalm-param FlagBag<EntityPermission>|null $rights
      */
-    private function outputRights(PdfGroupTableBuilder $table, EntityName $entity, ?FlagBag $rights): self
+    private function outputRights(PdfGroupTable $table, EntityName $entity, ?FlagBag $rights): self
     {
         $table->startRow()
             ->add(text: $this->trans($entity), style: $this->titleStyle);
@@ -168,7 +168,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      *
      * @throws PdfException
      */
-    private function outputRole(PdfGroupTableBuilder $table, Role|User $role): void
+    private function outputRole(PdfGroupTable $table, Role|User $role): void
     {
         $outputUsers = $role->isAdmin();
         $entities = EntityName::sorted();
@@ -201,11 +201,11 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * Output default rights for the administrator role.
      *
-     * @param PdfGroupTableBuilder $table the builder to output to
+     * @param PdfGroupTable $table the builder to output to
      *
      * @throws PdfException
      */
-    private function outputRoleAdmin(PdfGroupTableBuilder $table): void
+    private function outputRoleAdmin(PdfGroupTable $table): void
     {
         $this->outputRole($table, $this->getApplication()->getAdminRole());
     }
@@ -213,11 +213,11 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * Output default rights for the user role.
      *
-     * @param PdfGroupTableBuilder $table the builder to output to
+     * @param PdfGroupTable $table the builder to output to
      *
      * @throws PdfException
      */
-    private function outputRoleUser(PdfGroupTableBuilder $table): void
+    private function outputRoleUser(PdfGroupTable $table): void
     {
         $this->outputRole($table, $this->getApplication()->getUserRole());
     }
@@ -225,12 +225,12 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * Output rights for users.
      *
-     * @param User[]               $users the users
-     * @param PdfGroupTableBuilder $table the builder to output to
+     * @param User[]        $users the users
+     * @param PdfGroupTable $table the builder to output to
      *
      * @throws PdfException
      */
-    private function outputUsers(array $users, PdfGroupTableBuilder $table): void
+    private function outputUsers(array $users, PdfGroupTable $table): void
     {
         if ([] === $users) {
             return;
@@ -244,7 +244,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         }
     }
 
-    private function renderTotal(PdfTableBuilder $table, array $entities): void
+    private function renderTotal(PdfTable $table, array $entities): void
     {
         $roles = $this->translateCount(2, 'counters.roles');
         $users = $this->translateCount($entities, 'counters.users');

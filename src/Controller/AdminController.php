@@ -98,11 +98,11 @@ class AdminController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[EditRoute(path: '/rights/admin', name: 'admin_rights_admin')]
-    public function rightsAdmin(Request $request, RoleBuilderService $builder): Response
+    public function rightsAdmin(Request $request, RoleBuilderService $service): Response
     {
         $roleName = RoleInterface::ROLE_ADMIN;
         $rights = $this->getApplication()->getAdminRights();
-        $default = $builder->getRoleAdmin();
+        $default = $service->getRoleAdmin();
         $property = PropertyServiceInterface::P_ADMIN_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);
@@ -112,11 +112,11 @@ class AdminController extends AbstractController
      * Edit rights for the user role (@see RoleInterface::ROLE_USER).
      */
     #[EditRoute(path: '/rights/user', name: 'admin_rights_user')]
-    public function rightsUser(Request $request, RoleBuilderService $builder): Response
+    public function rightsUser(Request $request, RoleBuilderService $service): Response
     {
         $roleName = RoleInterface::ROLE_USER;
         $rights = $this->getApplication()->getUserRights();
-        $default = $builder->getRoleUser();
+        $default = $service->getRoleUser();
         $property = PropertyServiceInterface::P_USER_RIGHTS;
 
         return $this->editRights($request, $roleName, $rights, $default, $property);

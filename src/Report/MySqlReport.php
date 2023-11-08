@@ -15,7 +15,7 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Service\DatabaseInfoService;
 
@@ -45,7 +45,7 @@ class MySqlReport extends AbstractReport
         }
 
         $this->AddPage();
-        $table = PdfGroupTableBuilder::instance($this)
+        $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 40),
@@ -63,7 +63,7 @@ class MySqlReport extends AbstractReport
      *
      * @throws PdfException
      */
-    private function outputArray(PdfGroupTableBuilder $table, string $title, array $values): void
+    private function outputArray(PdfGroupTable $table, string $title, array $values): void
     {
         if ([] !== $values) {
             $this->addBookmark($title);

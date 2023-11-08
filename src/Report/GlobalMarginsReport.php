@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
 
 /**
@@ -28,7 +28,7 @@ class GlobalMarginsReport extends AbstractArrayReport
         $this->setTitleTrans('globalmargin.list.title');
         $this->AddPage();
 
-        $table = PdfTableBuilder::instance($this)
+        $table = PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::right($this->trans('globalmargin.fields.minimum'), 50),
                 PdfColumn::right($this->trans('globalmargin.fields.maximum'), 50),

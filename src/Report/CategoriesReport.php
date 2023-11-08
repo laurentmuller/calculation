@@ -14,9 +14,9 @@ namespace App\Report;
 
 use App\Entity\Category;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Traits\GroupByTrait;
 use App\Utils\FormatUtils;
 
@@ -71,9 +71,9 @@ class CategoriesReport extends AbstractArrayReport
         return \array_reduce($entities, static fn (int $carry, Category $c): int => $carry + $c->countTasks(), 0);
     }
 
-    private function createTable(): PdfGroupTableBuilder
+    private function createTable(): PdfGroupTable
     {
-        return PdfGroupTableBuilder::instance($this)
+        return PdfGroupTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('category.fields.code'), 45, true),
                 PdfColumn::left($this->trans('category.fields.description'), 50),
@@ -101,7 +101,7 @@ class CategoriesReport extends AbstractArrayReport
     /**
      * @param Category[] $entities
      */
-    private function renderTotal(PdfTableBuilder $table, array $entities): void
+    private function renderTotal(PdfTable $table, array $entities): void
     {
         $categories = $this->formatCount('counters.categories', $entities);
         $products = $this->formatCount('counters.products', $this->countProducts($entities));

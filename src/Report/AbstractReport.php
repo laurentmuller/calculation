@@ -19,7 +19,7 @@ use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Traits\TranslatorTrait;
 use App\Twig\FormatExtension;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -109,7 +109,7 @@ abstract class AbstractReport extends PdfDocument
      *
      * @return bool true if the given number of elements is greater than 0
      */
-    public function renderCount(PdfTableBuilder $table, \Countable|array|int $count, string $message = 'common.count'): bool
+    public function renderCount(PdfTable $table, \Countable|array|int $count, string $message = 'common.count'): bool
     {
         $this->resetStyle();
         $text = $this->translateCount($count, $message);

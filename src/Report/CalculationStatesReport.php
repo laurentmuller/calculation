@@ -19,7 +19,7 @@ use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
 
 /**
@@ -37,7 +37,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
             return false;
         }
 
-        $parent = $event->builder->getParent();
+        $parent = $event->getParent();
         $margin = $parent->getCellMargin();
         $event->bounds->inflateXY(-3.0 * $margin, -$margin)
             ->setHeight(self::LINE_HEIGHT - 2.0 * $margin);
@@ -68,9 +68,9 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
         return $this->renderCount($table, $entities, 'counters.states');
     }
 
-    private function createTable(): PdfTableBuilder
+    private function createTable(): PdfTable
     {
-        return PdfTableBuilder::instance($this)
+        return PdfTable::instance($this)
             ->setBackgroundListener($this)
             ->addColumns(
                 PdfColumn::left($this->trans('calculationstate.fields.code'), 20),

@@ -15,7 +15,7 @@ namespace App\Report\Table;
 use App\Entity\Calculation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Pdf\PdfTextColor;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
@@ -25,7 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Table to render the overall totals of a calculation.
  */
-class TableOverall extends PdfTableBuilder
+class TableOverall extends PdfTable
 {
     use TranslatorTrait;
 

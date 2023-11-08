@@ -16,7 +16,7 @@ use App\Controller\AbstractController;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Service\SymfonyInfoService;
 
@@ -85,7 +85,7 @@ class SymfonyReport extends AbstractReport
     private function outputBundles(array $bundles): void
     {
         $this->addBookmark('Bundles');
-        $table = PdfGroupTableBuilder::instance($this)
+        $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 30),
@@ -109,7 +109,7 @@ class SymfonyReport extends AbstractReport
     {
         $this->addBookmark('Kernel');
         $app = $this->controller->getApplication();
-        $table = PdfGroupTableBuilder::instance($this)
+        $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 30),
@@ -150,7 +150,7 @@ class SymfonyReport extends AbstractReport
     private function outputPackages(string $title, array $packages): void
     {
         $this->addBookmark($title);
-        $table = PdfGroupTableBuilder::instance($this)
+        $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 30),
@@ -177,7 +177,7 @@ class SymfonyReport extends AbstractReport
     private function outputRoutes(string $title, array $routes): void
     {
         $this->addBookmark($title);
-        $table = PdfGroupTableBuilder::instance($this)
+        $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 30),
@@ -191,14 +191,14 @@ class SymfonyReport extends AbstractReport
         }
     }
 
-    private function outputRow(PdfGroupTableBuilder $table, string $key, string $value): self
+    private function outputRow(PdfGroupTable $table, string $key, string $value): self
     {
         $table->addRow($key, $value);
 
         return $this;
     }
 
-    private function outputRowEnabled(PdfGroupTableBuilder $table, string $key, bool $enabled): self
+    private function outputRowEnabled(PdfGroupTable $table, string $key, bool $enabled): self
     {
         return $this->outputRow($table, $key, $enabled ? 'Enabled' : 'Disabled');
     }

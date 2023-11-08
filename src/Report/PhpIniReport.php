@@ -16,7 +16,7 @@ use App\Controller\AbstractController;
 use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
 use App\Service\PhpInfoService;
@@ -58,7 +58,7 @@ class PhpIniReport extends AbstractReport
         }
 
         \ksort($content, \SORT_STRING | \SORT_FLAG_CASE);
-        $table = PdfGroupTableBuilder::instance($this)
+        $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Directive', 40),
@@ -108,7 +108,7 @@ class PhpIniReport extends AbstractReport
      *
      * @throws PdfException
      */
-    private function outputEntries(PdfGroupTableBuilder $table, string $key, array $entries): void
+    private function outputEntries(PdfGroupTable $table, string $key, array $entries): void
     {
         $this->addBookmark($key);
         $table->setGroupKey($key);

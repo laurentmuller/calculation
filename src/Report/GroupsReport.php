@@ -20,7 +20,7 @@ use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
 
 /**
@@ -57,9 +57,9 @@ class GroupsReport extends AbstractArrayReport
         return true;
     }
 
-    private function createTable(): PdfTableBuilder
+    private function createTable(): PdfTable
     {
-        return PdfTableBuilder::instance($this)
+        return PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('group.fields.code'), 40, true),
                 PdfColumn::left($this->trans('group.fields.description'), 50),
@@ -78,7 +78,7 @@ class GroupsReport extends AbstractArrayReport
         return $this->trans($id, ['count' => \is_array($value) ? \count($value) : $value]);
     }
 
-    private function outputGroup(PdfTableBuilder $table, Group $group): void
+    private function outputGroup(PdfTable $table, Group $group): void
     {
         $emptyValue = \array_fill(0, 5, '');
         $table->startRow()
@@ -111,7 +111,7 @@ class GroupsReport extends AbstractArrayReport
     /**
      * @param Group[] $entities
      */
-    private function renderTotal(PdfTableBuilder $table, array $entities): void
+    private function renderTotal(PdfTable $table, array $entities): void
     {
         $margins = 0;
         $categories = 0;

@@ -18,7 +18,7 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfException;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Service\HelpService;
 use App\Traits\ImageSizeTrait;
 use App\Utils\FileUtils;
@@ -148,7 +148,7 @@ class HelpReport extends AbstractReport
             $this->Ln(3);
         }
         $this->outputText($description);
-        $table = PdfTableBuilder::instance($this)
+        $table = PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('help.fields.action'), 70, true),
                 PdfColumn::left($this->trans('help.fields.description'), 50)
@@ -172,7 +172,7 @@ class HelpReport extends AbstractReport
             return;
         }
 
-        $table = PdfTableBuilder::instance($this)
+        $table = PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('help.fields.column'), 30, true),
                 PdfColumn::left($this->trans('help.fields.description'), 50)
@@ -442,7 +442,7 @@ class HelpReport extends AbstractReport
             return;
         }
 
-        $table = PdfTableBuilder::instance($this)
+        $table = PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('help.fields.field'), 30, true),
                 PdfColumn::left($this->trans('help.fields.description'), 50),
@@ -511,7 +511,7 @@ class HelpReport extends AbstractReport
         }
         $this->Ln(3);
         $this->outputText('help.labels.edit_actions');
-        $table = PdfTableBuilder::instance($this)
+        $table = PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('help.fields.action'), 60, true),
                 PdfColumn::left($this->trans('help.fields.description'), 50)
@@ -524,7 +524,7 @@ class HelpReport extends AbstractReport
     /**
      * @psalm-param HelpMenuType[] $menus
      */
-    private function outputMenus(PdfTableBuilder $table, array $menus, int $indent = 0): void
+    private function outputMenus(PdfTable $table, array $menus, int $indent = 0): void
     {
         if ([] === $menus) {
             return;

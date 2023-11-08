@@ -19,7 +19,7 @@ use App\Utils\StringUtils;
 /**
  * Represent a group in the grouping table.
  *
- * @see PdfGroupTableBuilder
+ * @see PdfGroupTable
  */
 class PdfGroup implements PdfDocumentUpdaterInterface
 {
@@ -41,9 +41,13 @@ class PdfGroup implements PdfDocumentUpdaterInterface
      * @param ?PdfBorder       $border    the group border or null to use default
      * @param ?PdfStyle        $style     the group style or null to use default
      */
-    public function __construct(private mixed $key = null, private PdfTextAlignment $alignment = PdfTextAlignment::LEFT, PdfBorder $border = null, PdfStyle $style = null)
-    {
-        $this->border = $border ?? PdfBorder::all();
+    public function __construct(
+        private mixed $key = null,
+        private PdfTextAlignment $alignment = PdfTextAlignment::LEFT,
+        PdfBorder $border = null,
+        PdfStyle $style = null
+    ) {
+        $this->border = $border ?? PdfBorder::default();
         $this->style = $style ?? PdfStyle::getCellStyle()->setFontBold();
     }
 
@@ -109,7 +113,7 @@ class PdfGroup implements PdfDocumentUpdaterInterface
     /**
      * Output this group to the given parent table.
      */
-    public function output(PdfGroupTableBuilder $parent): void
+    public function output(PdfGroupTable $parent): void
     {
         $oldBorder = $parent->getBorder();
         $parent->setBorder($this->border);

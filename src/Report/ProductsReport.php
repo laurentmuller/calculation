@@ -14,7 +14,7 @@ namespace App\Report;
 
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
 use App\Utils\FormatUtils;
@@ -67,9 +67,9 @@ class ProductsReport extends AbstractArrayReport
     /**
      * Creates the table.
      */
-    private function createTable(): PdfGroupTableBuilder
+    private function createTable(): PdfGroupTable
     {
-        return PdfGroupTableBuilder::instance($this)
+        return PdfGroupTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('product.fields.description'), 90),
                 PdfColumn::right($this->trans('product.fields.price'), 20, true),

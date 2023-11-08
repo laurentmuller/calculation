@@ -30,7 +30,7 @@ use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Pdf\PdfTextColor;
 use App\Repository\CalculationRepository;
 use App\Utils\FormatUtils;
@@ -86,8 +86,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
     public function drawCellBackground(PdfCellBackgroundEvent $event): bool
     {
         return match ($event->index) {
-            2 => $this->drawHeaderCell($event->builder, $event->bounds, self::COLOR_ITEM),
-            3 => $this->drawHeaderCell($event->builder, $event->bounds, self::COLOR_MARGIN),
+            2 => $this->drawHeaderCell($event->table, $event->bounds, self::COLOR_ITEM),
+            3 => $this->drawHeaderCell($event->table, $event->bounds, self::COLOR_MARGIN),
             default => false,
         };
     }
@@ -113,9 +113,9 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
         return true;
     }
 
-    private function createTable(): PdfTableBuilder
+    private function createTable(): PdfTable
     {
-        return PdfTableBuilder::instance($this)
+        return PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->transChart('fields.month'), 20),
                 PdfColumn::right($this->transChart('fields.count'), 25, true),
@@ -126,7 +126,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
             );
     }
 
-    private function drawHeaderCell(PdfTableBuilder $builder, PdfRectangle $bounds, string $rgb): bool
+    private function drawHeaderCell(PdfTable $table, PdfRectangle $bounds, string $rgb): bool
     {
         // get color
         $color = PdfFillColor::create($rgb);
@@ -135,7 +135,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
         }
 
         // default
-        $parent = $builder->getParent();
+        $parent = $table->getParent();
         $parent->rectangle($bounds, PdfRectangleStyle::FILL);
 
         // fill

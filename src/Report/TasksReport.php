@@ -16,7 +16,7 @@ use App\Entity\Task;
 use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
 use App\Utils\FormatUtils;
@@ -33,14 +33,14 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         /** @var Task $task */
         $task = $event->group->getKey();
         $category = \sprintf('%s / %s', $task->getGroupCode(), $task->getCategoryCode());
-        $event->builder->startRow()
+        $event->table->startRow()
             ->add(text: $task->getName(), style: $event->group->getStyle())
             ->add($category)
             ->add($task->getUnit());
         if ($task->isEmpty()) {
-            $event->builder->add($this->trans('task.edit.empty_items'), 3);
+            $event->table->add($this->trans('task.edit.empty_items'), 3);
         }
-        $event->builder->completeRow();
+        $event->table->completeRow();
 
         return true;
     }
@@ -103,9 +103,9 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     /**
      * Creates the table builder.
      */
-    private function createTable(): PdfGroupTableBuilder
+    private function createTable(): PdfGroupTable
     {
-        return PdfGroupTableBuilder::instance($this)
+        return PdfGroupTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('task.fields.name'), 40),
                 PdfColumn::left($this->trans('task.fields.category'), 50, true),

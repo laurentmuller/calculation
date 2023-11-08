@@ -28,7 +28,7 @@ use App\Utils\StringUtils;
  *
  * @see PdfColumn
  */
-class PdfTableBuilder
+class PdfTable
 {
     use MathTrait;
 
@@ -94,7 +94,7 @@ class PdfTableBuilder
      */
     public function __construct(private readonly PdfDocument $parent, private readonly bool $fullWidth = true)
     {
-        $this->border = PdfBorder::all();
+        $this->border = PdfBorder::default();
     }
 
     /**
@@ -135,7 +135,7 @@ class PdfTableBuilder
      *
      * Do nothing if the column is null.
      *
-     * @see PdfTableBuilder::addColumns()
+     * @see PdfTable::addColumns()
      */
     public function addColumn(?PdfColumn $column): static
     {
@@ -151,7 +151,7 @@ class PdfTableBuilder
      *
      * The null columns are not added.
      *
-     * @see PdfTableBuilder::addColumn()
+     * @see PdfTable::addColumn()
      */
     public function addColumns(PdfColumn ...$columns): static
     {
@@ -183,7 +183,7 @@ class PdfTableBuilder
      * @throws \LengthException     if values parameter is empty
      * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
      *
-     * @see PdfTableBuilder::addStyledRow()
+     * @see PdfTable::addStyledRow()
      */
     public function addRow(PdfCell|string|null ...$values): static
     {
@@ -202,7 +202,7 @@ class PdfTableBuilder
      * @throws \LengthException     if  cells parameter is empty
      * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
      *
-     * @see PdfTableBuilder::addRow()
+     * @see PdfTable::addRow()
      */
     public function addStyledRow(array $cells, PdfStyle $style = null): static
     {
@@ -484,13 +484,12 @@ class PdfTableBuilder
      * @param ?PdfStyle         $style     the row style to use or null to use the default cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
      *
-     * @throws \LogicException if a row is already started
-     *
-     * @see PdfTableBuilder::add()
-     *
+     * @throws \LogicException      if a row is already started
      * @throws \LogicException      if the row is already started
      * @throws \LengthException     if no column is defined
      * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
+     *
+     *@see PdfTable::add()
      */
     public function singleLine(string $text = null, PdfStyle $style = null, PdfTextAlignment $alignment = null): static
     {
@@ -502,10 +501,10 @@ class PdfTableBuilder
     /**
      * Starts a new row with the custom header style, if set; with the default header style otherwise.
      *
-     * @see PdfTableBuilder::getHeaderStyle()
-     * @see PdfStyle::getHeaderStyle()
-     *
      * @throws \LogicException if a row is already started
+     *
+     *@see PdfStyle::getHeaderStyle()
+     * @see PdfTable::getHeaderStyle()
      */
     public function startHeaderRow(): static
     {
@@ -779,7 +778,7 @@ class PdfTableBuilder
      * @param PdfStyle[] $styles the cell styles
      * @param PdfCell[]  $cells  the cells
      *
-     * @see PdfTableBuilder::getCellHeight()
+     * @see PdfTable::getCellHeight()
      */
     protected function getRowHeight(array $texts, array $widths, array $styles, array $cells): float
     {

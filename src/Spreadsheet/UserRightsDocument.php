@@ -36,7 +36,7 @@ class UserRightsDocument extends AbstractArrayDocument
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    public function __construct(AbstractController $controller, private readonly RoleBuilderService $builder, array $entities)
+    public function __construct(AbstractController $controller, private readonly RoleBuilderService $service, array $entities)
     {
         parent::__construct($controller, $entities);
     }
@@ -146,7 +146,7 @@ class UserRightsDocument extends AbstractArrayDocument
     private function outputUser(WorksheetDocument $sheet, User $user, int &$row): void
     {
         if (!$user->isOverwrite()) {
-            $rights = $this->builder->getRole($user)->getRights();
+            $rights = $this->service->getRole($user)->getRights();
             $user->setRights($rights);
         }
         $this->outputRole($sheet, $user, $row);

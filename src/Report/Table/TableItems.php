@@ -17,7 +17,7 @@ use App\Entity\CalculationCategory;
 use App\Entity\CalculationItem;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTextColor;
 use App\Report\CalculationReport;
@@ -28,7 +28,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Table to render the groups, categories and items of a calculation.
  */
-class TableItems extends PdfGroupTableBuilder
+class TableItems extends PdfGroupTable
 {
     use TranslatorTrait;
     /**

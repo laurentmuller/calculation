@@ -18,7 +18,7 @@ use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Pdf\PdfTextColor;
 use App\Traits\RoleTranslatorTrait;
 use App\Utils\FormatUtils;
@@ -58,9 +58,9 @@ class UsersReport extends AbstractArrayReport
         return $this->renderCount($table, $entities, 'counters.users');
     }
 
-    private function createTable(): PdfTableBuilder
+    private function createTable(): PdfTable
     {
-        return PdfTableBuilder::instance($this)
+        return PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::center($this->trans('user.fields.imageFile'), 18, true),
                 PdfColumn::left($this->trans('user.fields.username'), 25),
@@ -106,7 +106,7 @@ class UsersReport extends AbstractArrayReport
         return $cell;
     }
 
-    private function outputEntity(PdfTableBuilder $table, User $entity, PdfStyle $enabledStyle, PdfStyle $disabledStyle): void
+    private function outputEntity(PdfTable $table, User $entity, PdfStyle $enabledStyle, PdfStyle $disabledStyle): void
     {
         $enabled = $entity->isEnabled();
         $style = $enabled ? $enabledStyle : $disabledStyle;

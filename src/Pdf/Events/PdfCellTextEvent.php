@@ -14,8 +14,9 @@ namespace App\Pdf\Events;
 
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
+use App\Pdf\PdfDocument;
 use App\Pdf\PdfRectangle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 
 /**
  * The event raised when a cell text must be drawn.
@@ -25,20 +26,28 @@ use App\Pdf\PdfTableBuilder;
 readonly class PdfCellTextEvent
 {
     /**
-     * @param PdfTableBuilder  $builder the parent's table
-     * @param int              $index   the column index
-     * @param PdfRectangle     $bounds  the cell bounds
-     * @param string           $text    the cell text
-     * @param PdfTextAlignment $align   the text alignment
-     * @param float            $height  the line height
+     * @param PdfTable         $table  the parent's table
+     * @param int              $index  the column index
+     * @param PdfRectangle     $bounds the cell bounds
+     * @param string           $text   the cell text
+     * @param PdfTextAlignment $align  the text alignment
+     * @param float            $height the line height
      */
     public function __construct(
-        public PdfTableBuilder $builder,
+        public PdfTable $table,
         public int $index,
         public PdfRectangle $bounds,
         public string $text,
         public PdfTextAlignment $align,
         public float $height
     ) {
+    }
+
+    /**
+     * Gets the parent's document.
+     */
+    public function getParent(): PdfDocument
+    {
+        return $this->table->getParent();
     }
 }

@@ -17,7 +17,7 @@ use App\Entity\Customer;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
-use App\Pdf\PdfGroupTableBuilder;
+use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Utils\StringUtils;
 
@@ -50,7 +50,7 @@ class CustomersReport extends AbstractArrayReport
     {
         $this->setTitleTrans('customer.list.title');
         $this->AddPage();
-        $table = PdfGroupTableBuilder::instance($this)
+        $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left($this->trans('customer.fields.nameAndCompany'), 50),
@@ -102,7 +102,7 @@ class CustomersReport extends AbstractArrayReport
         return $result;
     }
 
-    private function outputCustomer(PdfGroupTableBuilder $table, Customer $customer): void
+    private function outputCustomer(PdfGroupTable $table, Customer $customer): void
     {
         $table->addRow(
             $customer->getNameAndCompany(),
@@ -116,7 +116,7 @@ class CustomersReport extends AbstractArrayReport
      *
      * @throws PdfException
      */
-    private function outputGrouped(PdfGroupTableBuilder $table, array $entities): void
+    private function outputGrouped(PdfGroupTable $table, array $entities): void
     {
         $groups = $this->groupCustomers($entities);
         foreach ($groups as $key => $customers) {
@@ -131,7 +131,7 @@ class CustomersReport extends AbstractArrayReport
     /**
      * @param Customer[] $entities
      */
-    private function outputList(PdfGroupTableBuilder $table, array $entities): void
+    private function outputList(PdfGroupTable $table, array $entities): void
     {
         foreach ($entities as $entity) {
             $this->outputCustomer($table, $entity);

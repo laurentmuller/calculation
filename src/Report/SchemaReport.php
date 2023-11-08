@@ -19,7 +19,7 @@ use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTableBuilder;
+use App\Pdf\PdfTable;
 use App\Service\SchemaService;
 use App\Utils\FormatUtils;
 
@@ -86,9 +86,9 @@ class SchemaReport extends AbstractReport
         }
     }
 
-    private function createTableBuilder(string $id, PdfColumn ...$columns): PdfTableBuilder
+    private function createTable(string $id, PdfColumn ...$columns): PdfTable
     {
-        return PdfTableBuilder::instance($this)
+        return PdfTable::instance($this)
             ->addColumns(...$columns)
             ->startHeaderRow()
             ->add($this->trans($id), \count($columns))
@@ -134,18 +134,18 @@ class SchemaReport extends AbstractReport
         if ([] === $associations) {
             return;
         }
-        $builder = $this->createTableBuilder(
+        $table = $this->createTable(
             'schema.fields.associations',
             PdfColumn::left($this->trans('schema.fields.name'), 100),
             PdfColumn::left($this->trans('schema.fields.table'), 100),
             PdfColumn::left($this->trans('schema.fields.relation'), 55, true)
         );
         foreach ($associations as $association) {
-            $table = $association['table'];
-            $link = $this->findLink($table);
-            $builder->startRow()
+            $name = $association['table'];
+            $link = $this->findLink($name);
+            $table->startRow()
                 ->add($association['name'])
-                ->addCell(new PdfCell(text: $table, link: $link))
+                ->addCell(new PdfCell(text: $name, link: $link))
                 ->add($this->formatInverse($association['inverse']))
                 ->completeRow();
         }
@@ -159,7 +159,7 @@ class SchemaReport extends AbstractReport
         if ([] === $columns) {
             return;
         }
-        $builder = $this->createTableBuilder(
+        $table = $this->createTable(
             'schema.fields.columns',
             PdfColumn::left($this->trans('schema.fields.name'), 100),
             PdfColumn::left($this->trans('schema.fields.type'), 35, true),
@@ -168,7 +168,7 @@ class SchemaReport extends AbstractReport
         );
         foreach ($columns as $column) {
             $link = $this->findLink($column['foreign_table']);
-            $builder->startRow()
+            $table->startRow()
                 ->addCell(new PdfCell(text: $column['name'], link: $link))
                 ->add($this->formatType($column))
                 ->add(text: $this->formatBool($column['required']), style: $this->booleanStyle)
@@ -186,7 +186,7 @@ class SchemaReport extends AbstractReport
         if ([] === $indexes) {
             return;
         }
-        $builder = $this->createTableBuilder(
+        $table = $this->createTable(
             'schema.fields.indexes',
             PdfColumn::left($this->trans('schema.fields.name'), 100),
             PdfColumn::left($this->trans('schema.fields.columns'), 100),
@@ -194,7 +194,7 @@ class SchemaReport extends AbstractReport
             PdfColumn::center($this->trans('schema.fields.unique'), 30, true),
         );
         foreach ($indexes as $index) {
-            $builder->startRow()
+            $table->startRow()
                 ->add($index['name'])
                 ->add(\implode(', ', $index['columns']))
                 ->add(text: $this->formatBool($index['primary']), style: $this->booleanStyle)
@@ -231,7 +231,7 @@ class SchemaReport extends AbstractReport
     private function outputTables(array $tables): void
     {
         $this->outputTitle('schema.index.title');
-        $builder = PdfTableBuilder::instance($this)
+        $instance = PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('schema.fields.name'), 100),
                 PdfColumn::right($this->trans('schema.fields.columns'), 19, true),
@@ -242,7 +242,7 @@ class SchemaReport extends AbstractReport
         foreach ($tables as $table) {
             $name = $table['name'];
             $link = $this->findLink($name);
-            $builder->startRow()
+            $instance->startRow()
                 ->addCell(new PdfCell(text: $name, link: $link))
                 ->addValues(
                     FormatUtils::formatInt($table['columns']),

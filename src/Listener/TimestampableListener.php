@@ -17,6 +17,7 @@ use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Traits\DisableListenerTrait;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\UnitOfWork;
@@ -37,9 +38,6 @@ class TimestampableListener implements DisableListenerInterface
 
     private readonly string $emptyUser;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly Security $security, TranslatorInterface $translator)
     {
         $this->emptyUser = $translator->trans('common.empty_user');
@@ -62,9 +60,7 @@ class TimestampableListener implements DisableListenerInterface
         $date = new \DateTimeImmutable();
         foreach ($entities as $entity) {
             if ($entity->updateTimestampable($date, $user)) {
-                $em->persist($entity);
-                $metadata = $em->getClassMetadata($entity::class);
-                $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
+                $this->persist($em, $unitOfWork, $entity);
             }
         }
     }
@@ -123,5 +119,12 @@ class TimestampableListener implements DisableListenerInterface
         }
 
         return $this->emptyUser;
+    }
+
+    private function persist(EntityManagerInterface $em, UnitOfWork $unitOfWork, TimestampableInterface $entity): void
+    {
+        $em->persist($entity);
+        $metadata = $em->getClassMetadata($entity::class);
+        $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
     }
 }

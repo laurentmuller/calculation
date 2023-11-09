@@ -1,10 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/*
- * ------------------------------------------------
- * Tooltips with custom background colors and sizes
- * ------------------------------------------------
- */
+/* tooltips with custom background colors and sizes */
 .tooltip-danger {
     --bs-tooltip-bg: var(--bs-danger);
     --bs-tooltip-color: var(--bs-white);

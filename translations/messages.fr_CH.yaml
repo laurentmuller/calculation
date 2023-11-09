@@ -329,7 +329,7 @@ common:
   save_data: Sauvegarde des données...
   data_changed: Données modifiées
   api_documentation: Documentation (API)
-  api_documentation_help: 'Accéder à la documentation de l''interface d''application'
+  api_documentation_help: Accéder à la documentation de l'interface d'application
 simulate:
   label: Simuler la mise à jour
   help: Simule une mise à jour sans enregistrer les changements dans la base de données.

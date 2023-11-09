@@ -1,8 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/**
- * Common for PHP light and dark mode.
- */
+/* common for PHP light and dark mode */
 .pre-scrollable.pre-scrollable-highlight-php {
     max-height: 400px;
     padding: 0.5rem;
@@ -42,9 +40,7 @@ pre.highlight-php .highlight-php-index {
     color: #1299DA
 }
 
-/*
- * PHP light (copied from HtmlDumper light mode).
- */
+/* PHP light (copied from HtmlDumper light mode) */
 .pre-scrollable-highlight-php {
     background-color: initial;
 }
@@ -77,9 +73,7 @@ pre.highlight-php .highlight-php-ellipsis {
     color: #CC7832
 }
 
-/*
- *  PHP Dark (copied from HtmlDumper dark mode).
- */
+/* PHP Dark (copied from HtmlDumper dark mode) */
 html[data-bs-theme=dark] .pre-scrollable-highlight-php {
     background-color: #18171B;
 }
@@ -121,9 +115,7 @@ html[data-bs-theme=dark] pre.highlight-php .highlight-php-ellipsis {
     color: #FF8400
 }
 
-/**
- * SQL highlight light mode.
- */
+/* SQL highlight light mode */
 pre.highlight-sql {
     font: 13px Menlo, Monaco, Consolas, monospace;
     line-height: 1.2em;
@@ -172,9 +164,7 @@ pre.highlight-sql .highlight-sql-error {
     color: #C82829;
 }
 
-/**
- * SQL highlight dark mode.
- */
+/* SQL highlight dark mode */
 html[data-bs-theme=dark] pre.highlight-sql .highlight-sql-keyword {
     color: #1299DA;
 }

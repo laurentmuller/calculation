@@ -71,7 +71,7 @@
 }
 
 .file-input .form-group .file-input-filename {
-    width: 90%;
+    /* width: 90%; */
     width: calc(100% - 20px);
 }
 

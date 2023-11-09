@@ -66,10 +66,13 @@ class CalculationUpdateController extends AbstractController
     private function createQueryForm(CalculationUpdateQuery $query): FormInterface
     {
         $helper = $this->createFormHelper('calculation.update.', $query);
+
         $helper->field('dateFrom')
             ->addDateType();
+
         $helper->field('dateTo')
             ->addDateType();
+
         $helper->field('states')
             ->updateOptions([
                 'multiple' => true,
@@ -79,6 +82,7 @@ class CalculationUpdateController extends AbstractController
             ])
             ->labelClass('checkbox-inline checkbox-switch')
             ->add(CalculationStateListType::class);
+
         $helper->addSimulateAndConfirmType($this->getTranslator(), $query->isSimulate());
 
         return $helper->createForm();

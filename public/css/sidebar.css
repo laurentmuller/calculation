@@ -28,18 +28,6 @@
     margin-left: calc(var(--sidebar-width) * -1);
 }
 
-/* page-content */
-.page-content.sidebar-show {
-    width: calc(100% - var(--sidebar-width));
-    margin-top: 0.75rem;
-    margin-left: var(--sidebar-width);
-}
-
-.page-content:not(.sidebar-show) {
-    width: 100%;
-    margin: 0;
-}
-
 /* menus */
 .navbar-vertical .navbar-nav {
     list-style: none;
@@ -87,9 +75,7 @@
     cursor: default;
 }
 
-/*
- * Toggle menu arrow
- */
+/* toggle menu arrow */
 .navbar-vertical .nav-link-toggle::after {
     font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
@@ -101,13 +87,6 @@
 
 .navbar-vertical .nav-link-toggle[aria-expanded="true"]::after {
     transform: rotate(-90deg);
-}
-
-@media print {
-    .page-content {
-        width: 100%;
-        margin: 0;
-    }
 }
 
 /* scrollbar */

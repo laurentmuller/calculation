@@ -139,10 +139,8 @@ class CalculationArchiveService implements ServiceSubscriberInterface
             return $result;
         }
 
-        $this->service->suspendListeners(function () use ($query, $result): void {
-            $this->calculationRepository->flush();
-            $this->logResult($query, $result);
-        });
+        $this->service->suspendListeners(fn () => $this->calculationRepository->flush());
+        $this->logResult($query, $result);
 
         return $result;
     }

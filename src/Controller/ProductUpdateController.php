@@ -64,14 +64,17 @@ class ProductUpdateController extends AbstractController
     private function createQueryForm(ProductUpdateService $service, ProductUpdateQuery $query): FormInterface
     {
         $helper = $this->createFormHelper('product.update.', $query);
+
         $helper->field('category')
             ->label('product.fields.category')
             ->updateOption('query_builder', static fn (CategoryRepository $repository): QueryBuilder => $repository->getQueryBuilderByGroup(CategoryRepository::FILTER_PRODUCTS))
             ->add(CategoryListType::class);
+
         $helper->field('allProducts')
             ->updateRowAttribute('class', 'form-group mb-0')
             ->updateAttribute('data-error', $this->trans('product.update.products_error'))
             ->addCheckboxType();
+
         $helper->field('products')
             ->label('product.list.title')
             ->updateOptions([
@@ -86,21 +89,26 @@ class ProductUpdateController extends AbstractController
                 ],
             ])
             ->add(EntityType::class);
+
         $helper->field('percent')
             ->updateAttribute('data-type', ProductUpdateQuery::UPDATE_PERCENT)
             ->updateAttribute('aria-label', $this->trans('product.update.percent'))
             ->help('product.update.percent_help')
             ->addPercentType();
+
         $helper->field('fixed')
             ->updateAttribute('data-type', ProductUpdateQuery::UPDATE_FIXED)
             ->updateAttribute('aria-label', $this->trans('product.update.fixed'))
             ->help('product.update.fixed_help')
             ->addNumberType();
+
         $helper->field('round')
             ->help('product.update.round_help')
             ->helpClass('ms-4')
             ->addCheckboxType();
+
         $helper->addSimulateAndConfirmType($this->getTranslator(), $query->isSimulate());
+
         $helper->field('type')
             ->addHiddenType();
 

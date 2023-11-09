@@ -33,9 +33,7 @@
     }
 }
 
-/*
- * reset header group colors when selected
- */
+/* reset header group colors when selected */
 thead.group tr.table-success th.bg-body-tertiary,
 thead.group tr.table-primary th.bg-body-tertiary {
     color: var(--bs-table-color) !important;
@@ -44,24 +42,18 @@ thead.group tr.table-primary th.bg-body-tertiary {
     background-color: var(--bs-table-border-color) !important;
 }
 
-/*
- * Height for input and center vertically
- */
+/* height for input and center vertically */
 #data-table-edit tr.item {
     height: 40px;
     vertical-align: middle !important;
 }
 
-/*
- * no line for the last item
- */
+/* no line for the last item */
 #data-table-edit tbody:last-child tr.item:last-child td {
     border-bottom-width: 0 !important;
 }
 
-/*
- * card view
- */
+/* card view */
 .row-item.table-primary {
     background-color: var(--bs-table-bg);
 }

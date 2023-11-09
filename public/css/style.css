@@ -9,15 +9,40 @@
 
 /**! compression tag for ftp-deployment */
 
-.navbar.navbar-horizontal {
-    margin-bottom: 0.75rem;
-    transition: top 0.3s ease-in-out;
+/* page-content */
+.page-content {
+    transition: margin-top 0.35s ease-in-out, margin-left 0.35s ease-in-out;
 }
 
+.page-content.sidebar-show {
+    width: calc(100% - var(--sidebar-width));
+    margin-left: var(--sidebar-width);
+    margin-top: 0.75rem;
+}
+
+.page-content:not(.sidebar-show) {
+    width: 100%;
+    margin: 0;
+}
+
+@media print {
+    .page-content {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+/* navbar-horizontal */
+.navbar.navbar-horizontal {
+    margin-bottom: 0.75rem;
+}
+
+/* navbar-vertical */
 body.status-bar .navbar.navbar-vertical {
     height: calc(100vh - 29px);
 }
 
+/* hide-sidebar */
 .navbar.navbar-vertical .hide-sidebar {
     position: absolute;
     top: 1rem;
@@ -29,16 +54,12 @@ body.status-bar .navbar.navbar-vertical .hide-sidebar {
     right: 0.75rem;
 }
 
-/**
- * Update bottom margin when the status-bar is visible.
- */
+/* update bottom margin when the status-bar is visible*/
 body.status-bar {
     margin-bottom: 30px;
 }
 
-/**
- * footer
- */
+/* footer */
 footer a,
 footer span {
     padding: 0 0.5rem !important;
@@ -59,9 +80,7 @@ html:has(.sidebar-show) footer:before {
     width: calc(100% - var(--sidebar-width));
 }
 
-/*
- * buttons for edit form
- */
+/* buttons for edit form */
 .btn-form {
     min-width: 120px;
 }
@@ -70,17 +89,13 @@ html:has(.sidebar-show) footer:before {
     min-width: 90px;
 }
 
-/*
- * required
- */
+/* required */
 .required:not(.form-check-label):after {
     content: "*";
     color: var(--bs-danger);
 }
 
-/*
- * Read-only widget
- */
+/* read-only widget */
 .form-control-plaintext.form-control-readonly {
     padding: 0.375rem 0.75rem;
     border-radius: var(--bs-border-radius);
@@ -88,9 +103,7 @@ html:has(.sidebar-show) footer:before {
     color: var(--bs-secondary-color) !important;
 }
 
-/*
- * card-title (same as h5)
- */
+/* card-title (same as h5) */
 h1.card-title {
     font-size: 1rem;
     font-weight: 500;
@@ -98,9 +111,7 @@ h1.card-title {
     margin-bottom: 0;
 }
 
-/*
- * table overview within a parent card-body
- */
+/* table overview within a parent card-body */
 .table-overview {
     margin-bottom: 0;
 }
@@ -110,9 +121,7 @@ h1.card-title {
     border-top-width: 0;
 }
 
-/*
- * table edit for children entities
- */
+/* table edit for children entities */
 .table-edit {
     margin-bottom: 0;
 }
@@ -146,9 +155,7 @@ h1.card-title {
     margin-bottom: 0;
 }
 
-/*
- * button edit in table
- */
+/* button edit in table */
 .btn-edit {
     line-height: 0.8 !important;
 }
@@ -161,9 +168,7 @@ a.btn-list {
     margin-bottom: 0;
 }
 
-/*
- * exception table
- */
+/* exception table */
 .table-exception td {
     word-break: break-word;
     hyphens: auto;
@@ -189,9 +194,7 @@ a.btn-list {
     border-top-style: none;
 }
 
-/*
- * span for calculation state color in show page
- */
+/* span for calculation state color in show page */
 span.state-color {
     width: 1.5rem;
     height: 1rem;
@@ -199,9 +202,7 @@ span.state-color {
     vertical-align: middle;
 }
 
-/*
- * Print media
- */
+/* print media */
 @media print {
     span.required:after,
     label.required:after,
@@ -215,25 +216,19 @@ span.state-color {
     }
 }
 
-/*
- * Bottom width for header in bordered table
- */
+/* bottom width for header in bordered table */
 .table-bordered thead td,
 .table-bordered thead th {
     border-bottom-width: inherit;
 }
 
-/*
- * No bottom width for header in table
- */
+/* no bottom width for header in table */
 .table-no-bottom thead td,
 .table-no-bottom thead th {
     border-bottom-width: inherit;
 }
 
-/*
- * Back to top button
- */
+/* back to top button */
 .btn-back-to-top {
     display: none;
     position: fixed;
@@ -253,9 +248,7 @@ body:not(.status-bar) .btn-back-to-top {
     bottom: 15px;
 }
 
-/*
- * Row link
- */
+/* row link */
 .table.rowlink td:not(.rowlink-skip),
 .table .rowlink td:not(.rowlink-skip) {
     cursor: pointer;
@@ -268,9 +261,7 @@ body:not(.status-bar) .btn-back-to-top {
     text-decoration: inherit;
 }
 
-/*
- * states and months cards in home page
- */
+/* states and months cards in home page */
 @media (min-width: 0px) {
     .card-index {
         flex: 1 0 calc(100% - 30px);
@@ -295,9 +286,7 @@ body:not(.status-bar) .btn-back-to-top {
     }
 }
 
-/**
- * Calculation (duplicate items, empty values and below margin)
- */
+/* calculation (duplicate items, empty values and below margin) */
 .duplicate-cell:after {
     content: " (D) ";
     color: var(--bs-danger);
@@ -326,9 +315,7 @@ body:not(.status-bar) .btn-back-to-top {
     vertical-align: super;
 }
 
-/**
- * textarea
- */
+/* textarea */
 textarea.resizable {
     min-height: 7rem;
     max-height: 16rem;
@@ -343,9 +330,7 @@ textarea.fixed {
     resize: none;
 }
 
-/**
- * Cursors
- */
+/* cursors */
 .cursor-wait {
     cursor: wait !important;
 }
@@ -370,9 +355,7 @@ textarea.fixed {
     cursor: cell;
 }
 
-/**
- * Remove spin buttons for number type
- */
+/* Remove spin buttons for number type */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -383,9 +366,7 @@ input[type="number"] {
     -moz-appearance: textfield;
 }
 
-/**
- * Remove red and green cross for invalid field
- */
+/* Remove red and green cross for invalid field */
 .was-validated .form-control:invalid, .form-control.is-invalid {
     background-image: none !important;
     padding-right: 0.75rem !important;
@@ -397,9 +378,7 @@ input[type="number"] {
 }
 
 
-/**
- * Custom file input
- */
+/* Custom file input */
 .custom-file-input:lang(fr) ~ .custom-file-label::after {
     content: "Parcourir";
 }
@@ -408,9 +387,7 @@ input[type="number"] {
     cursor: pointer;
 }
 
-/*
- * Avatar images
- */
+/* avatar images */
 .avatar {
     max-width: 32px;
     max-height: 32px;
@@ -426,9 +403,7 @@ input[type="number"] {
     max-height: 96px;
 }
 
-/**
- * widths 25%, 50%, 75% and 100% are already set by Boostrap
- */
+/* widths 25%, 50%, 75% and 100% are already set by Boostrap */
 .w-15 {
     width: 15% !important;
 }
@@ -487,9 +462,7 @@ input[type="number"] {
     border-right-width: 1px !important;
 }
 
-/**
- * horizontal line on the right of a label or a link
- */
+/* horizontal line on the right of a label or a link */
 .horizontal-line {
     display: flex !important;
     flex-direction: row;
@@ -503,9 +476,7 @@ input[type="number"] {
     margin: auto auto auto 0.5rem;
 }
 
-/**
- * Toggle icon (angle-right) before the element
- */
+/* Toggle icon (angle-right) before the element */
 .drop-down-icon-left:before {
     font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
@@ -519,9 +490,7 @@ input[type="number"] {
     transform: rotate(90deg);
 }
 
-/**
- * Toggle icon (angle-left) after the element
- */
+/* Toggle icon (angle-left) after the element */
 .drop-down-icon-right {
     flex: 1 1 auto !important;
 }
@@ -540,9 +509,7 @@ input[type="number"] {
 }
 
 
-/**
- * Reset the table hover row.
- */
+/* reset the table hover row */
 .table-hover tbody tr.not-hover:hover {
     color: inherit !important;
     background-color: inherit !important;
@@ -559,9 +526,7 @@ tr.text-body-secondary.table-primary td {
     color: var(--bs-table-color);
 }
 
-/**
- * strikeout the row
- */
+/* strikeout the row */
 tr.strikeout-danger td {
     position: relative;
 }
@@ -575,9 +540,7 @@ tr.strikeout-danger td:before {
     border-bottom: 1px solid var(--bs-danger);
 }
 
-/**
- * Fixed table header
- */
+/* fixed table header */
 div.overflow-auto.table-fixed-header {
     max-height: 330px;
 }
@@ -596,9 +559,7 @@ table.table-fixed-header th {
     background-color: var(--bs-light-bg-subtle) !important;
 }
 
-/**
- * Cards in index page.
- */
+/* cards in index page */
 .index-parent {
     display: flex;
     flex-wrap: wrap;
@@ -635,9 +596,7 @@ table.table-fixed-header th {
     }
 }
 
-/**
- * bold font for default action
- */
+/* bold font for default action */
 .dropdown-menu .btn-default {
     font-weight: bolder !important;
 }
@@ -646,9 +605,7 @@ table.table-fixed-header th {
     font-weight: bolder !important;
 }
 
-/**
- * small scrollbar
- */
+/* small scrollbar */
 .small-scrollbar {
     overflow: auto;
 }
@@ -704,9 +661,7 @@ html[data-bs-theme=dark] .small-scrollbar::-webkit-scrollbar-thumb {
     font-family: 'NotoColorEmojiLimited', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-/*
- * remove last line
- */
+/* remove last line */
 table.table-no-end-line:not(:has(tfoot tr)) tbody tr:last-child th,
 table.table-no-end-line:not(:has(tfoot tr)) tbody tr:last-child td,
 table.table-no-end-line tfoot tr:last-child th,
@@ -719,9 +674,7 @@ table.table-no-end-line tfoot tr:last-child td {
     overflow-y: scroll;
 }
 
-/**
- * Remove left space when no label is displayed
- */
+/* remove left space when no label is displayed */
 .form-check:has(.form-check-input.form-check-no-label) {
     padding-left: 0;
     margin-bottom: 0;
@@ -752,24 +705,18 @@ table.table-no-end-line tfoot tr:last-child td {
     box-shadow: 0 0 0 0.25rem rgba(var(--bs-danger-rgb), 0.25);
 }
 
-/**
- * Re-implement text justify
- */
+/* re-implement text justify */
 .text-justify {
     text-align: justify !important
 }
 
-/**
- * Override default behavior
- */
+/* override default behavior */
 a,
 .btn-link {
     text-decoration: none;
 }
 
-/**
- * Negative margins
- */
+/* negative margins */
 .mx-n1 {
     margin-left: -0.25rem !important;
     margin-right: -0.25rem !important;
@@ -795,9 +742,7 @@ a,
     margin-right: -3rem !important;
 }
 
-/**
- * dropdown menu with checked item on the right
- */
+/* dropdown menu with checked item on the right */
 .navbar-menu:has(.dropdown-item-checked-right),
 .dropdown-menu:has(.dropdown-item-checked-right) {
     min-width: 14rem;
@@ -811,10 +756,7 @@ a,
     float: right;
 }
 
-
-/**
- * dropdown menu with checked item on the left
- */
+/* dropdown menu with checked item on the left */
 .dropdown-item-checked-left {
     padding-left: calc((2 * var(--bs-dropdown-item-padding-x)) + 6px);
 }
@@ -875,7 +817,7 @@ span.form-label {
 }
 */
 
-/* ============ Password strength ============ */
+/* password strength */
 .bottom-border-gradient {
     position: relative !important;
 }

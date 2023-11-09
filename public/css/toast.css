@@ -3,12 +3,9 @@
 .toast-plugin {
     padding: 1.25rem;
     transition: all 0.35s ease-in-out;
-    /*transition: margin-top 0.35s ease-in-out, margin-left 0.35s ease-in-out;*/
 }
 
-/**
- * positions
- */
+/* positions */
 .toast-plugin.top-left {
     top: 0;
     left: 0;
@@ -59,9 +56,7 @@
     right: 0;
 }
 
-/**
- * center of small size
- */
+/* center of small size */
 @media only screen and (max-width: 576px) {
     .toast-plugin {
         left: 0 !important;
@@ -80,31 +75,23 @@
     }
 }
 
-/**
-  * colors
-  */
+/* colors */
 .toast-plugin .toast-body {
     background-color: var(--bs-body-bg);
 }
 
-/*
- * close button
- */
+/* close button */
 html[data-bs-theme=dark] .toast-plugin .toast.border-info .btn-close,
 html[data-bs-theme=dark] .toast-plugin .toast.border-warning .btn-close {
     filter: inherit;
 }
 
-/*
- * border for dark toast
- */
+/* border for dark toast */
 html[data-bs-theme=dark] .toast-plugin .toast.border-dark {
     border-color: var(--bs-border-color) !important;
 }
 
-/**
-  * margins
-  */
+/* margins */
 .page-content:not(.sidebar-show) .toast-plugin.top-left,
 .page-content:not(.sidebar-show) .toast-plugin.top-center,
 .page-content:not(.sidebar-show) .toast-plugin.top-right {

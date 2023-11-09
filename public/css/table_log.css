@@ -42,9 +42,7 @@ td.user {
     white-space: nowrap;
 }
 
-/**
- * Level icons
- */
+/* level icons */
 .icon-level {
     width: 1.25em;
     text-align: center;
@@ -94,9 +92,7 @@ td.user {
     content: "\f071";
 }
 
-/**
- * Channel icons
- */
+/* channel icons */
 .icon-channel {
     width: 1.25em;
     text-align: center;
@@ -146,9 +142,8 @@ td.user {
 .icon-channel.console:before {
     content: '\f11c';
 }
-/**
- * PHP array
- */
+
+/* PHP array */
 pre.highlight-php {
     background-color: initial !important;
 }

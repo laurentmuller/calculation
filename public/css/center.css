@@ -2,9 +2,7 @@
 
 /**! compression tag for ftp-deployment */
 
-/**
- * full height
- */
+/* full height */
 html, body, main, .container, .row {
     height: 100%;
 }

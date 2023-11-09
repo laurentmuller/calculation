@@ -4,9 +4,7 @@
 
 /**! compression tag for ftp-deployment */
 
-/**
- * Global styles
- */
+/* global styles */
 .bootstrap-table .fixed-table-container .fixed-table-body .table {
     table-layout: fixed !important;
 }
@@ -19,9 +17,7 @@
     background: initial;
 }
 
-/**
- * Card View
- */
+/* card view */
 .bootstrap-table .fixed-table-container .fixed-table-body .table tbody tr .card-views {
     cursor: pointer;
 }
@@ -41,16 +37,12 @@
     text-align: left;
 }
 
-/**
- * Reset color for colored headers
- */
+/* reset color for colored headers */
 .bootstrap-table .fixed-table-container .table thead th.text-danger {
     color: inherit !important;
 }
 
-/**
- * Use sort arrows from FontAwesome
- */
+/* use sort arrows from Font Awesome */
 .bootstrap-table .fixed-table-container .table thead th .sortable {
     padding-right: 0 !important;
 }
@@ -82,9 +74,7 @@
     opacity: 1;
 }
 
-/*
- * Hide icons on print
- */
+/* hide icons on print */
 @media print {
     .bootstrap-table .fixed-table-container .table thead th .sortable:after,
     .bootstrap-table .fixed-table-container .table thead th .both:after,
@@ -94,23 +84,17 @@
     }
 }
 
-/**
- * Page informations
- */
+/* page informations */
 .pagination-detail {
     line-height: 2rem;
 }
 
-/*
- * Calculation overall margin below
- */
+/* calculation overall margin below */
 tr.text-body-secondary td .text-danger {
     opacity: 0.75;
 }
 
-/*
- * Loading message
- */
+/* loading message */
 .loading-message {
     width: 50%;
 }
@@ -127,16 +111,12 @@ tr.text-body-secondary td .text-danger {
     }
 }
 
-/*
- * text muted in card view
- */
+/* text muted in card view */
 .bootstrap-table .custom-item.text-body-secondary a.text-body {
     color: var(--bs-secondary-color) !important;
 }
 
-/*
- * selection
- */
+/* selection */
 .bootstrap-table .custom-item.table-primary {
     background-color: var(--bs-table-bg) !important;
 }
@@ -148,9 +128,7 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body
     color: var(--bs-table-color) !important;
 }
 
-/**
- * no record found
- */
+/* no record found */
 .bootstrap-table:has(tr.no-records-found) {
     margin-bottom: 1rem;
 }
@@ -168,9 +146,7 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body
     color: var(--bs-secondary) !important;
 }
 
-/**
- * pagination
- */
+/* pagination */
 .fixed-table-pagination {
     display: flex;
     flex-wrap: wrap;
@@ -183,21 +159,12 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body
     line-height: initial;
 }
 
-/*
-.fixed-table-pagination .float-right {
-}
-*/
-
-/**
- * search control
- */
+/* search control */
 .form-control.form-control-search {
     width: 130px;
 }
 
-/**
- * drop-down second level
- */
+/* drop-down second level */
 .dropdown-item.dropdown-child {
     padding-left: calc(2 * var(--bs-dropdown-item-padding-x)) !important;
 }

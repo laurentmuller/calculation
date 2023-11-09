@@ -100,10 +100,8 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             return $result;
         }
 
-        $this->listenerService->suspendListeners(function () use ($query, $result): void {
-            $this->calculationRepository->flush();
-            $this->logResult($query, $result);
-        });
+        $this->listenerService->suspendListeners(fn () => $this->calculationRepository->flush());
+        $this->logResult($query, $result);
 
         return $result;
     }

@@ -1,8 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/**
- * form-check-input checked
- */
+/* form-check-input checked */
 .form-check.form-primary .form-check-input:checked {
     background-color: var(--bs-primary);
     border-color: var(--bs-primary);
@@ -38,9 +36,7 @@
     border-color: var(--bs-dark);
 }
 
-/**
- * special case for dark theme and dark color
- */
+/* special case for dark theme and dark color */
 html[data-bs-theme=dark] .form-check.form-dark .form-check-input:checked {
     border-color: var(--bs-border-color);
 }

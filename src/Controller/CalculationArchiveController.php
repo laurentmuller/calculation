@@ -78,6 +78,7 @@ class CalculationArchiveController extends AbstractController
                 'max' => $service->getDateMaxConstraint(),
             ])
             ->addDateType();
+
         $helper->field('sources')
             ->updateOptions([
                 'multiple' => true,
@@ -87,12 +88,14 @@ class CalculationArchiveController extends AbstractController
             ])
             ->labelClass('checkbox-inline checkbox-switch')
             ->add(CalculationStateListType::class);
+
         $helper->field('target')
             ->updateOptions([
                 'group_by' => fn () => null,
                 'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getNotEditableQueryBuilder(),
             ])
             ->add(CalculationStateListType::class);
+
         $helper->addSimulateAndConfirmType($this->getTranslator(), $query->isSimulate());
 
         return $helper->createForm();

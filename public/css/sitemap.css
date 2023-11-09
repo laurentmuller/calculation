@@ -2,9 +2,7 @@
 
 /**! compression tag for ftp-deployment */
 
-/* ------------------------------------------------------------
-	Reset Styles
------------------------------------------------------------- */
+/* reset styles */
 .sitemap ul,
 .sitemap li,
 .sitemap span {
@@ -19,21 +17,13 @@
     vertical-align: baseline;
 }
 
-/* ------------------------------------------------------------
-	Root Styles
------------------------------------------------------------- */
+/* root styles */
 .sitemap,
 .sitemap ul {
-    /*font-family: "Proxima Nova", Helvetica, Arial, sans-serif;*/
-    /*font-size: 16px;*/
     line-height: 1;
 }
 
-/* ------------------------------------------------------------
-	Page Styles
------------------------------------------------------------- */
-
-/* -------- Top Level --------- */
+/* top level */
 
 .primary-nav {
     clear: both;
@@ -101,7 +91,7 @@
     text-decoration: none;
 }
 
-/* -------- Second Level --------- */
+/* second level */
 
 .primary-nav ul ul {
     display: block;
@@ -124,7 +114,7 @@
     padding-top: 2em;
 }
 
-/* -------- Third Level --------- */
+/* third level */
 
 .primary-nav ul ul ul {
     margin-top: .6em;
@@ -139,7 +129,6 @@
 
 .primary-nav ul ul ul li a {
     background-color: #ff9d00;
-    /*font-size: .9em;*/
     padding: .75em;
     width: 90%;
     margin-right: 0;
@@ -154,12 +143,7 @@
     padding-top: 1em;
 }
 
-.primary-nav ul ul ul li a:link:after,
-.primary-nav ul ul ul li a:visited:after {
-    /*font-size: .75em;*/
-}
-
-/* --------	Fourth Level --------- */
+/* fourth level */
 
 .primary-nav ul ul ul ul {
     margin-top: 0;
@@ -182,9 +166,7 @@
     display: none;
 }
 
-/* ------------------------------------------------------------
-	Connecting Lines:
------------------------------------------------------------- */
+/* connecting lines */
 .primary-nav ul:before,
 .primary-nav ul:after,
 .primary-nav ul li:before,
@@ -274,9 +256,7 @@
     /* border-color: red; */
 }
 
-/* ------------------------------------------------------------
-	Utility Navigation
------------------------------------------------------------- */
+/* utility navigation */
 .utility-nav {
     float: right;
     margin-top: 0;
@@ -292,7 +272,6 @@
 
 .utility-nav li a {
     display: block;
-    /*font-size: .75em;*/
     padding: .75em 1em;
     text-align: left;
     color: white;
@@ -308,13 +287,10 @@
 .utility-nav li a:link:after,
 .utility-nav li a:visited:after {
     color: rgba(255, 255, 255, .75);
-    /*font-size: .75em;*/
     margin-top: .25em;
 }
 
-/* ------------------------------------------------------------
-	Responsive Styles
------------------------------------------------------------- */
+/* responsive styles */
 @media screen and (max-width: 30em) {
     .primary-nav ul {
         display: block;
@@ -342,11 +318,13 @@
     }
 }
 
-/* The media queries below keep the grid column widths intact when
+/*
+The media queries below keep the grid column widths intact when
 a column wraps. This prevents the wrapped column from displaying at
 100% width. These queries also make the homepage line item flex
 appropriately. When your sitemap is complete, remove the queries
-that you don't need, and your sitemap layout will work perfectly. */
+that you don't need, and your sitemap layout will work perfectly.
+ */
 
 /* two column */
 @media screen and (min-width: 30em) {

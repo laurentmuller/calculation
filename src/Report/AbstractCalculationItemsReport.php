@@ -93,9 +93,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
             '%items%' => $this->computeItemsCount($entities),
         ];
         $text = $this->transCount($parameters);
-        $this->useCellMargin(function () use ($text): void {
-            $this->Cell(txt: $text, ln: PdfMove::NEW_LINE);
-        });
+        $this->useCellMargin(fn () => $this->Cell(txt: $text, ln: PdfMove::NEW_LINE));
 
         return true;
     }

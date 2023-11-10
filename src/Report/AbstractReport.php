@@ -42,7 +42,7 @@ abstract class AbstractReport extends PdfDocument
      * @param PdfDocumentSize        $size        the document size
      */
     public function __construct(
-        protected AbstractController $controller,
+        protected readonly AbstractController $controller,
         PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
         PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
         PdfDocumentSize $size = PdfDocumentSize::A4

@@ -13,9 +13,6 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfDocumentSize;
-use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfBorder;
@@ -26,14 +23,13 @@ use App\Pdf\PdfPieChartTrait;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\PdfTextColor;
-use App\Repository\CalculationStateRepository;
 use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
 
 /**
  * Report for calculations by states.
  *
- * @psalm-import-type QueryCalculationType from CalculationStateRepository
+ * @psalm-import-type QueryCalculationType from \App\Repository\CalculationStateRepository
  *
  * @extends AbstractArrayReport<QueryCalculationType>
  */
@@ -49,14 +45,9 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     /**
      * @psalm-param QueryCalculationType[] $entities
      */
-    public function __construct(
-        AbstractController $controller,
-        array $entities,
-        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
-        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
-        PdfDocumentSize $size = PdfDocumentSize::A4
-    ) {
-        parent::__construct($controller, $entities, $orientation, $unit, $size);
+    public function __construct(AbstractController $controller, array $entities)
+    {
+        parent::__construct($controller, $entities);
         $this->SetTitle($this->transChart('title_by_state'));
         $this->minMargin = $controller->getMinMargin();
     }
@@ -166,7 +157,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     {
         $margin = $this->getLeftMargin();
         $printableWidth = $this->getPrintableWidth();
-        $top = $this->getTopMargin() + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
+        $top = $this->tMargin + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
         $radius = $printableWidth / 4.0;
         $centerX = $margin + $printableWidth / 2.0;
         $centerY = $top + $radius;

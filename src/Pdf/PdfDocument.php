@@ -30,32 +30,33 @@ use App\Utils\StringUtils;
 /**
  * PDF document with default header, footer, outline and index capabilities.
  *
- * @property int                         $page           The current page number.
- * @property PdfPageSizeType             $DefPageSize    The default page size (width and height) in the user unit.
- * @property PdfPageSizeType             $CurPageSize    The current page size (width and height) in the user unit.
- * @property float                       $lMargin        The left margin.
- * @property float                       $tMargin        The top margin.
- * @property float                       $rMargin        The right margin.
- * @property float                       $bMargin        The bottom margin.
- * @property float                       $cMargin        The cell margin.
- * @property float                       $k              The scale factor (number of points in user unit).
- * @property float                       $x              The current X position in user unit.
- * @property float                       $y              The current Y position in user unit.
- * @property float                       $w              The width of current page in user unit.
- * @property float                       $h              The height of current page in user unit.
- * @property string                      $FontFamily     The current font family.
- * @property string                      $FontStyle      The current font style.
- * @property float                       $FontSizePt     The current font size in points.
- * @property float                       $FontSize       The current font size in user unit.
- * @property PdfFontType                 $CurrentFont    The current font information.
- * @property array<string, PdfFontType>  $fonts          The array of used fonts.
- * @property string                      $DefOrientation The default orientation.
- * @property string                      $CurOrientation The current orientation.
- * @property int                         $CurRotation    The current page rotation in degrees.
- * @property float                       $lasth          The height of last printed cell.
- * @property int                         $n              The current object number.
- * @property array<int, PdfPageInfoType> $PageInfo       The page-related data.
- * @property float                       $LineWidth      the line width.
+ * @property int                         $page             The current page number.
+ * @property PdfPageSizeType             $DefPageSize      The default page size (width and height) in the user unit.
+ * @property PdfPageSizeType             $CurPageSize      The current page size (width and height) in the user unit.
+ * @property float                       $lMargin          The left margin.
+ * @property float                       $tMargin          The top margin.
+ * @property float                       $rMargin          The right margin.
+ * @property float                       $bMargin          The bottom margin.
+ * @property float                       $cMargin          The cell margin.
+ * @property float                       $k                The scale factor (number of points in user unit).
+ * @property float                       $x                The current X position in user unit.
+ * @property float                       $y                The current Y position in user unit.
+ * @property float                       $w                The width of current page in user unit.
+ * @property float                       $h                The height of current page in user unit.
+ * @property string                      $FontFamily       The current font family.
+ * @property string                      $FontStyle        The current font style.
+ * @property float                       $FontSizePt       The current font size in points.
+ * @property float                       $FontSize         The current font size in user unit.
+ * @property PdfFontType                 $CurrentFont      The current font information.
+ * @property array<string, PdfFontType>  $fonts            The array of used fonts.
+ * @property string                      $DefOrientation   The default orientation.
+ * @property string                      $CurOrientation   The current orientation.
+ * @property int                         $CurRotation      The current page rotation in degrees.
+ * @property float                       $lasth            The height of last printed cell.
+ * @property int                         $n                The current object number.
+ * @property array<int, PdfPageInfoType> $PageInfo         The page-related data.
+ * @property float                       $LineWidth        the line width.
+ * @property float                       $PageBreakTrigger the threshold used to trigger page breaks
  *
  * @method float  GetX()                                                  Gets the current X position in user unit.
  * @method float  GetY()                                                  Gets the current Y position in user unit.
@@ -301,6 +302,14 @@ class PdfDocument extends \FPDF
     }
 
     /**
+     * Get the bottom margin.
+     */
+    public function getBottomMargin(): float
+    {
+        return $this->bMargin;
+    }
+
+    /**
      * Gets the cell margin.
      *
      * The default value is 1 mm.
@@ -476,14 +485,6 @@ class PdfDocument extends \FPDF
     public function getTitle(): ?string
     {
         return $this->title;
-    }
-
-    /**
-     * Gets the top margin.
-     */
-    public function getTopMargin(): float
-    {
-        return $this->tMargin;
     }
 
     /**

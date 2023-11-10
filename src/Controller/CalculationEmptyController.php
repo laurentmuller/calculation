@@ -30,6 +30,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for calculations where items have the price or the quantity is equal to 0.
+ *
+ * @psalm-import-type CalculationItemType from CalculationRepository
  */
 #[AsController]
 #[Route(path: '/empty')]
@@ -106,18 +108,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Gets items to display.
      *
-     * @psalm-return array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}>
-     *      }>
+     * @psalm-return CalculationItemType[]
      */
     private function getItems(CalculationRepository $repository): array
     {

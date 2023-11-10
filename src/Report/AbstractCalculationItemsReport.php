@@ -24,40 +24,21 @@ use App\Utils\FormatUtils;
 /**
  * Report for calculations with invalid items.
  *
- * @extends AbstractArrayReport<array{
- *      id: int,
- *      date: \DateTimeInterface,
- *      stateCode: string,
- *      customer: string,
- *      description: string,
- *      items: array<array{
- *          description: string,
- *          quantity: float,
- *          price: float,
- *          count: int}>
- *      }>
+ * @psalm-import-type CalculationItemEntry from \App\Repository\CalculationRepository
+ * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
+ *
+ * @extends AbstractArrayReport<CalculationItemType>
  */
 abstract class AbstractCalculationItemsReport extends AbstractArrayReport
 {
     /**
      * Constructor.
      *
-     * @psalm-param array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}>
-     *      }> $items
+     * @psalm-param CalculationItemType[] $entities
      */
-    protected function __construct(AbstractController $controller, array $items, string $title, string $description)
+    protected function __construct(AbstractController $controller, array $entities, string $title, string $description)
     {
-        parent::__construct($controller, $items, PdfDocumentOrientation::LANDSCAPE);
+        parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE);
         $this->getHeader()->setDescription($this->trans($description));
         $this->setTitleTrans($title, [], true);
     }
@@ -65,11 +46,11 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
     /**
      * Compute the number of items.
      *
-     * @param array $items the calculations
+     * @param CalculationItemType[] $entities the calculations
      *
      * @return int the number of items
      */
-    abstract protected function computeItemsCount(array $items): int;
+    abstract protected function computeItemsCount(array $entities): int;
 
     protected function doRender(array $entities): bool
     {
@@ -105,11 +86,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
      *
      * @return string the formatted items
      *
-     * @psalm-param array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}> $items
+     * @psalm-param CalculationItemEntry[] $items
      */
     abstract protected function formatItems(array $items): string;
 

@@ -14,15 +14,15 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfDocumentSize;
-use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Events\PdfCellTextEvent;
+use App\Pdf\Events\PdfHeadersEvent;
 use App\Pdf\Html\HtmlBootstrapColors;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
+use App\Pdf\Interfaces\PdfOutputHeadersListener;
 use App\Pdf\PdfBarChartTrait;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
@@ -32,59 +32,58 @@ use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\PdfTextColor;
-use App\Repository\CalculationRepository;
 use App\Utils\FormatUtils;
 
 /**
  * Report for calculations by months.
  *
- * @psalm-import-type CalculationByMonthType from CalculationRepository
+ * @psalm-import-type CalculationByMonthType from \App\Repository\CalculationRepository
  *
  * @extends AbstractArrayReport<CalculationByMonthType>
  */
-class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface
+class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface, PdfOutputHeadersListener
 {
     use PdfBarChartTrait;
 
     private const ARROW_DOWN = 116;
     private const ARROW_RIGHT = 116; // same as down but with 90 degrees rotation
     private const ARROW_UP = 115;
-
     private const COLOR_ITEM = '#006400';
     private const COLOR_MARGIN = '#8B0000';
-
     private const PATTERN_CHART = 'MMM Y';
     private const PATTERN_TABLE = 'MMMM Y';
-
     private const RECT_MARGIN = 1.25;
 
     /*** @psalm-var CalculationByMonthType|null */
     private ?array $currentItem = null;
+
+    private bool $drawHeaders = false;
+
     /*** @psalm-var CalculationByMonthType|null */
     private ?array $lastItem = null;
 
     private float $minMargin;
 
     /**
-     * @psalm-param CalculationByMonthType[] $entities
+     * @param CalculationByMonthType[] $entities
      */
-    public function __construct(
-        AbstractController $controller,
-        array $entities,
-        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
-        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
-        PdfDocumentSize $size = PdfDocumentSize::A4
-    ) {
+    public function __construct(AbstractController $controller, array $entities)
+    {
+        $orientation = PdfDocumentOrientation::PORTRAIT;
         if (\count($entities) > 12) {
             $orientation = PdfDocumentOrientation::LANDSCAPE;
         }
-        parent::__construct($controller, $entities, $orientation, $unit, $size);
+        parent::__construct($controller, $entities, $orientation);
         $this->SetTitle($this->transChart('title_by_month'));
         $this->minMargin = $controller->getMinMargin();
     }
 
     public function drawCellBackground(PdfCellBackgroundEvent $event): bool
     {
+        if (!$this->drawHeaders) {
+            return false;
+        }
+
         return match ($event->index) {
             2 => $this->drawHeaderCell($event->table, $event->bounds, self::COLOR_ITEM),
             3 => $this->drawHeaderCell($event->table, $event->bounds, self::COLOR_MARGIN),
@@ -94,6 +93,10 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
 
     public function drawCellText(PdfCellTextEvent $event): bool
     {
+        if ($this->drawHeaders) {
+            return false;
+        }
+
         return match ($event->index) {
             1 => $this->outputArrow($event->bounds, 'count'),
             2 => $this->outputArrow($event->bounds, 'items'),
@@ -102,6 +105,11 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
             5 => $this->outputArrow($event->bounds, 'total'),
             default => false
         };
+    }
+
+    public function outputHeaders(PdfHeadersEvent $event): void
+    {
+        $this->drawHeaders = $event->start;
     }
 
     protected function doRender(array $entities): bool
@@ -123,7 +131,9 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
                 PdfColumn::right($this->transChart('fields.margin_amount'), 25, true),
                 PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
                 PdfColumn::right($this->transChart('fields.total'), 25, true),
-            );
+            )
+            ->setBackgroundListener($this)
+            ->setHeadersListener($this);
     }
 
     private function drawHeaderCell(PdfTable $table, PdfRectangle $bounds, string $rgb): bool
@@ -216,7 +226,11 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
      */
     private function renderChart(array $entities): void
     {
-        $top = $this->getTopMargin() + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
+        $h = 120;
+        $top = $this->tMargin + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
+        if (\count($entities) > 12) {
+            $h = $this->PageBreakTrigger - $top - self::LINE_HEIGHT;
+        }
         $rows = \array_map(function (array $entity): array {
             return [
                 'label' => $this->formatDate($entity['date'], false),
@@ -226,6 +240,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
                 ],
             ];
         }, $entities);
+
         $axis = [
             'min' => 0,
             'formatter' => fn (float $value): string => FormatUtils::formatInt($value),
@@ -235,7 +250,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
             rows: $rows,
             axis: $axis,
             y: $top,
-            h: 120
+            h: $h
         );
         $this->ln();
     }
@@ -248,9 +263,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
         $table = $this->createTable();
 
         // headers
-        $table->setBackgroundListener($this);
         $table->outputHeaders();
-        $table->setBackgroundListener(null);
 
         // entities
         $table->setTextListener($this);
@@ -275,14 +288,15 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
         $total = $this->sum($entities, 'total');
         $net = $total - $items;
         $margin = 1.0 + $this->safeDivide($net, $items);
-        $table->addHeaderRow(
-            $this->transChart('fields.total'),
-            FormatUtils::formatInt($count),
-            FormatUtils::formatInt($items),
-            FormatUtils::formatInt($net),
-            $this->formatPercent($margin, true),
-            FormatUtils::formatInt($total)
-        );
+        $table->setHeadersListener(null)
+            ->addHeaderRow(
+                $this->transChart('fields.total'),
+                FormatUtils::formatInt($count),
+                FormatUtils::formatInt($items),
+                FormatUtils::formatInt($net),
+                $this->formatPercent($margin, true),
+                FormatUtils::formatInt($total)
+            );
     }
 
     private function roundValue(float $value, int $precision = 0): float

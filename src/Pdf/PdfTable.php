@@ -17,9 +17,11 @@ use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Events\PdfCellBorderEvent;
 use App\Pdf\Events\PdfCellTextEvent;
+use App\Pdf\Events\PdfHeadersEvent;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
+use App\Pdf\Interfaces\PdfOutputHeadersListener;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
 
@@ -67,9 +69,19 @@ class PdfTable
     private array $columns = [];
 
     /**
+     * The output headers listener.
+     */
+    private ?PdfOutputHeadersListener $headersListener = null;
+
+    /**
      * The header style.
      */
     private ?PdfStyle $headerStyle = null;
+
+    /**
+     * The output headers state.
+     */
+    private bool $isHeaders = false;
 
     /**
      * Print headers when a new page is added.
@@ -171,9 +183,11 @@ class PdfTable
      */
     public function addHeaderRow(PdfCell|string|null ...$values): static
     {
-        return $this->startHeaderRow()
+        $this->startHeaderRow()
             ->addValues(...$values)
             ->completeRow();
+
+        return $this;
     }
 
     /**
@@ -243,8 +257,9 @@ class PdfTable
         if ($this->parent->isPrintable($height)) {
             return false;
         }
+
         $this->parent->AddPage();
-        if ($this->isRepeatHeader()) {
+        if (!$this->isHeaders && $this->isRepeatHeader()) {
             $this->outputHeaders();
         }
 
@@ -313,6 +328,12 @@ class PdfTable
 
         // output
         $this->drawRow($parent, $height, $texts, $widths, $styles, $aligns, $cells);
+
+        if ($this->isHeaders && $this->headersListener instanceof PdfOutputHeadersListener) {
+            $event = new PdfHeadersEvent($this, false);
+            $this->headersListener->outputHeaders($event);
+        }
+        $this->isHeaders = false;
 
         return $this;
     }
@@ -416,6 +437,8 @@ class PdfTable
      * Sets the alignment.
      *
      * This value is used only when the full width property is false
+     *
+     * @see PdfTable::isFullWidth()
      */
     public function setAlignment(PdfTextAlignment $alignment): static
     {
@@ -455,7 +478,17 @@ class PdfTable
     }
 
     /**
-     * Sets if the header row is printed when a new page is added.
+     * Sets the output headers listener.
+     */
+    public function setHeadersListener(?PdfOutputHeadersListener $headersListener): static
+    {
+        $this->headersListener = $headersListener;
+
+        return $this;
+    }
+
+    /**
+     * Sets a value indicating if the header row is printed when a new page is added.
      *
      * @param bool $repeatHeader true to print the header on each new pages
      */
@@ -483,12 +516,10 @@ class PdfTable
      * @param ?PdfStyle         $style     the row style to use or null to use the default cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
      *
-     * @throws \LogicException      if a row is already started
-     * @throws \LogicException      if the row is already started
-     * @throws \LengthException     if no column is defined
-     * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
+     * @throws \LogicException  if a row is already started
+     * @throws \LengthException if no column is defined
      *
-     *@see PdfTable::add()
+     * @see PdfTable::add()
      */
     public function singleLine(string $text = null, PdfStyle $style = null, PdfTextAlignment $alignment = null): static
     {
@@ -502,11 +533,18 @@ class PdfTable
      *
      * @throws \LogicException if a row is already started
      *
-     *@see PdfStyle::getHeaderStyle()
+     * @see PdfStyle::getHeaderStyle()
      * @see PdfTable::getHeaderStyle()
      */
     public function startHeaderRow(): static
     {
+        $this->checkStartRow();
+        $this->isHeaders = true;
+        if ($this->headersListener instanceof PdfOutputHeadersListener) {
+            $event = new PdfHeadersEvent($this, true);
+            $this->headersListener->outputHeaders($event);
+        }
+
         return $this->startRow($this->getHeaderStyle());
     }
 
@@ -519,9 +557,7 @@ class PdfTable
      */
     public function startRow(PdfStyle $style = null): static
     {
-        if ($this->isRowStarted()) {
-            throw new \LogicException('Row already started.');
-        }
+        $this->checkStartRow();
         $this->rowStyle = $style ?? PdfStyle::getCellStyle();
 
         return $this;
@@ -818,6 +854,18 @@ class PdfTable
                     $widths[$i] *= $factor;
                 }
             }
+        }
+    }
+
+    /**
+     * Check if output row is already started.
+     *
+     * @throws \LogicException
+     */
+    private function checkStartRow(): void
+    {
+        if ($this->isRowStarted()) {
+            throw new \LogicException('Row already started.');
         }
     }
 

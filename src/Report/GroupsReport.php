@@ -31,7 +31,7 @@ use App\Utils\FormatUtils;
 class GroupsReport extends AbstractArrayReport
 {
     /**
-     * @psalm-param Group[] $entities
+     * @param Group[] $entities
      */
     public function __construct(AbstractController $controller, array $entities, PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize $size = PdfDocumentSize::A4)
     {

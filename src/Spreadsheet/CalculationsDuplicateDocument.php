@@ -17,6 +17,8 @@ use App\Traits\DuplicateItemsTrait;
 
 /**
  * Spreadsheet document for the list of calculations with duplicate items.
+ *
+ * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
  */
 class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
 {
@@ -27,18 +29,7 @@ class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      *
-     * @psalm-param array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}>
-     *      }> $entities
+     * @psalm-param CalculationItemType[] $entities
      */
     public function __construct(AbstractController $controller, array $entities)
     {

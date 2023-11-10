@@ -145,7 +145,8 @@ class CalculationReport extends AbstractReport
             ->addColumns(
                 PdfColumn::left(null, 100),
                 PdfColumn::right(null, 40, true)
-            )->startHeaderRow()
+            )
+            ->startHeaderRow()
             ->add(text: $calculation->getCustomer(), style: $leftStyle)
             ->add(text: $calculation->getStateCode(), style: $rightStyle)
             ->endRow()

@@ -16,15 +16,13 @@ use App\Utils\StringUtils;
 
 /**
  * Trait to format duplicate items for table, PDF report and Excel document.
+ *
+ * @psalm-import-type CalculationItemEntry from \App\Repository\CalculationRepository
  */
 trait DuplicateItemsTrait
 {
     /**
-     * @psalm-param array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}> $items
+     * @psalm-param CalculationItemEntry[] $items
      */
     public function formatItems(array $items): string
     {

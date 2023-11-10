@@ -18,6 +18,8 @@ use App\Traits\MathTrait;
 
 /**
  * Report for calculations with empty items.
+ *
+ * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
  */
 class CalculationEmptyReport extends AbstractCalculationItemsReport
 {
@@ -37,29 +39,21 @@ class CalculationEmptyReport extends AbstractCalculationItemsReport
     /**
      * Constructor.
      *
-     * @psalm-param array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}>
-     *      }> $items
+     * @psalm-param CalculationItemType[] $entities
      */
-    public function __construct(AbstractController $controller, array $items)
+    public function __construct(AbstractController $controller, array $entities)
     {
-        parent::__construct($controller, $items, 'empty.title', 'empty.description');
+        parent::__construct($controller, $entities, 'empty.title', 'empty.description');
         $this->priceLabel = $this->trans('calculationitem.fields.price');
         $this->quantityLabel = $this->trans('calculationitem.fields.quantity');
     }
 
-    protected function computeItemsCount(array $items): int
+    /**
+     * @param CalculationItemType[] $entities
+     */
+    protected function computeItemsCount(array $entities): int
     {
-        return \array_reduce($items, fn (int $carry, array $item): int => $carry + \count((array) $item['items']), 0);
+        return \array_reduce($entities, fn (int $carry, array $item): int => $carry + \count((array) $item['items']), 0);
     }
 
     protected function getPriceLabel(): string

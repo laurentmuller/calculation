@@ -17,6 +17,8 @@ use App\Traits\DuplicateItemsTrait;
 
 /**
  * Report for calculations with duplicate items.
+ *
+ * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
  */
 class CalculationDuplicateReport extends AbstractCalculationItemsReport
 {
@@ -25,27 +27,19 @@ class CalculationDuplicateReport extends AbstractCalculationItemsReport
     /**
      * Constructor.
      *
-     * @psalm-param array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}>
-     *      }> $items
+     * @psalm-param CalculationItemType[] $entities
      */
-    public function __construct(AbstractController $controller, array $items)
+    public function __construct(AbstractController $controller, array $entities)
     {
-        parent::__construct($controller, $items, 'duplicate.title', 'duplicate.description');
+        parent::__construct($controller, $entities, 'duplicate.title', 'duplicate.description');
     }
 
-    protected function computeItemsCount(array $items): int
+    /**
+     * @param CalculationItemType[] $entities
+     */
+    protected function computeItemsCount(array $entities): int
     {
-        return \array_reduce($items, function (int $carry, array $item) {
+        return \array_reduce($entities, function (int $carry, array $item) {
             /** @var array $child */
             foreach ($item['items'] as $child) {
                 $carry += (int) $child['count'];

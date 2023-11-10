@@ -18,6 +18,8 @@ use Doctrine\Common\Collections\Criteria;
 
 /**
  * Abstract Calculation table to display items.
+ *
+ * @psalm-import-type CalculationItemType from CalculationRepository
  */
 abstract class AbstractCalculationItemsTable extends AbstractTable implements \Countable
 {
@@ -72,18 +74,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
-     * @psalm-return array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}>
-     *      }>
+     * @psalm-return CalculationItemType[]
      */
     abstract protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array;
 
@@ -92,18 +83,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      *
      * @param array $items the invalid calculation items
      *
-     * @psalm-param array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}>
-     *      }> $items
+     * @psalm-param CalculationItemType[] $items
      */
     abstract protected function getItemsCount(array $items): int;
 

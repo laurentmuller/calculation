@@ -34,6 +34,18 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *        margin_percent: float,
  *        margin_amount: float,
  *        date: \DateTimeInterface}
+ * @psalm-type CalculationItemEntry = array{
+ *             description: string,
+ *             quantity: float,
+ *             price: float,
+ *             count: int}
+ * @psalm-type CalculationItemType = array{
+ *        id: int,
+ *        date: \DateTimeInterface,
+ *        stateCode: string,
+ *        customer: string,
+ *        description: string,
+ *        items: CalculationItemEntry[]}
  */
 class CalculationRepository extends AbstractRepository
 {
@@ -385,18 +397,7 @@ class CalculationRepository extends AbstractRepository
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
-     * @psalm-return array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}>
-     *      }>
+     * @psalm-return CalculationItemType[]
      */
     public function getItemsDuplicate(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
@@ -428,21 +429,10 @@ class CalculationRepository extends AbstractRepository
             ->having('item_count > 1');
         $this->updateOrder($builder, $orderColumn, $orderDirection);
         $items = $builder->getQuery()->getArrayResult();
-        /**
-         * @psalm-var array<int, array{
-         *      id: int,
-         *      date: \DateTimeInterface,
-         *      stateCode: string,
-         *      customer: string,
-         *      description: string,
-         *      items: array<array{
-         *          description: string,
-         *          quantity: float,
-         *          price: float,
-         *          count: int}>
-         *      }> $result
-         */
+
+        /** @psalm-var CalculationItemType[] $result */
         $result = [];
+
         /** @psalm-var array{
          *      calculation_id: int,
          *      calculation_date: \DateTimeInterface,
@@ -470,18 +460,7 @@ class CalculationRepository extends AbstractRepository
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
-     * @psalm-return array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}>
-     *      }>
+     * @psalm-return CalculationItemType[]
      */
     public function getItemsEmpty(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
     {
@@ -515,21 +494,10 @@ class CalculationRepository extends AbstractRepository
             ->orHaving('item_quantity = 0');
         $this->updateOrder($builder, $orderColumn, $orderDirection);
         $items = $builder->getQuery()->getArrayResult();
-        /**
-         * @var array<int, array{
-         *      id: int,
-         *      date: \DateTimeInterface,
-         *      stateCode: string,
-         *      customer: string,
-         *      description: string,
-         *      items: array<array{
-         *          description: string,
-         *          quantity: float,
-         *          price: float,
-         *          count: int}>
-         *      }> $result
-         */
+
+        /** @psalm-var CalculationItemType[] $result */
         $result = [];
+
         /** @psalm-var array{
          *      calculation_id: int,
          *      calculation_date: \DateTimeInterface,

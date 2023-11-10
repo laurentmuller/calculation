@@ -80,6 +80,7 @@ trait PdfBarChartTrait
             return;
         }
 
+        // get values
         $x ??= $this->getLeftMargin();
         $y ??= $this->GetY();
         $w ??= $this->getPrintableWidth();

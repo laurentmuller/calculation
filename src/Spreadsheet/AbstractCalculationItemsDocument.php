@@ -19,18 +19,9 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 /**
  * Abstract Spreadsheet document for the list of calculations with invalid items.
  *
- * @extends AbstractArrayDocument<array{
- *      id: int,
- *      date: \DateTimeInterface,
- *      stateCode: string,
- *      customer: string,
- *      description: string,
- *      items: array<array{
- *          description: string,
- *          quantity: float,
- *          price: float,
- *          count: int}>
- *      }>
+ * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
+ *
+ * @extends AbstractArrayDocument<CalculationItemType>
  */
 abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
 {
@@ -39,18 +30,7 @@ abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      *
-     * @psalm-param array<int, array{
-     *      id: int,
-     *      date: \DateTimeInterface,
-     *      stateCode: string,
-     *      customer: string,
-     *      description: string,
-     *      items: array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}>
-     *      }> $entities
+     * @psalm-param CalculationItemType[] $entities
      */
     public function __construct(AbstractController $controller, array $entities, string $title)
     {

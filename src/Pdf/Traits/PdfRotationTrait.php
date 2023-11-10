@@ -10,15 +10,18 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Traits;
 
 use App\Pdf\Enums\PdfRectangleStyle;
+use App\Pdf\PdfBorder;
 
 /**
  * Trait to perform a rotation around a given center.
  *
  * The rotation affects all elements which are printed after the method call (except clickable areas). Rotation is not
  * kept from page to page. Each page begins with no rotation.
+ *
+ * @psalm-require-extends \App\Pdf\PdfDocument
  */
 trait PdfRotationTrait
 {

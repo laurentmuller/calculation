@@ -24,6 +24,7 @@ use App\Pdf\Enums\PdfImageType;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\Traits\PdfBookmarkTrait;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
 

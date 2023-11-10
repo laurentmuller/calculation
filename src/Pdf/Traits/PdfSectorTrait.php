@@ -10,12 +10,15 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Traits;
 
 use App\Pdf\Enums\PdfRectangleStyle;
+use App\Pdf\PdfBorder;
 
 /**
  * Trait to draw sector.
+ *
+ * @psalm-require-extends \App\Pdf\PdfDocument
  */
 trait PdfSectorTrait
 {

@@ -10,10 +10,13 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Traits;
 
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\PdfBarScale;
+use App\Pdf\PdfFillColor;
+use App\Pdf\PdfStyle;
 use App\Traits\MathTrait;
 
 /**
@@ -44,6 +47,8 @@ use App\Traits\MathTrait;
  * @psalm-type BarChartLabelType = array{
  *     label: string,
  *     label_width: float}
+ *
+ * @psalm-require-extends \App\Pdf\PdfDocument
  */
 trait PdfBarChartTrait
 {
@@ -59,7 +64,7 @@ trait PdfBarChartTrait
      * Does nothing if rows are empty.
      *
      * @param array      $rows the data to draw
-     * @param array      $axis the Y axis
+     * @param array      $axis the Y axis definition
      * @param float|null $x    the abscissa position or null to use the left margin
      * @param float|null $y    the ordinate position or null to use the current position
      * @param float|null $w    the width of null to use all the printable width

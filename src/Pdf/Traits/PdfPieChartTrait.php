@@ -10,9 +10,11 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Traits;
 
 use App\Pdf\Enums\PdfRectangleStyle;
+use App\Pdf\PdfDrawColor;
+use App\Pdf\PdfFillColor;
 use App\Traits\MathTrait;
 
 /**
@@ -20,6 +22,8 @@ use App\Traits\MathTrait;
  *
  * @psalm-type PieChartRowType = array{color: PdfFillColor|string, value: float, ...}
  * @psalm-type PieChartLegendType = array{color: PdfFillColor|string, label: string, ...}
+ *
+ * @psalm-require-extends \App\Pdf\PdfDocument
  */
 trait PdfPieChartTrait
 {

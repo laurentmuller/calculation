@@ -19,10 +19,10 @@ use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFillColor;
-use App\Pdf\PdfPieChartTrait;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\PdfTextColor;
+use App\Pdf\Traits\PdfPieChartTrait;
 use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
 

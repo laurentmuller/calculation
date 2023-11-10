@@ -10,21 +10,24 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Traits;
 
 use App\Pdf\Enums\PdfRectangleStyle;
+use App\Pdf\PdfBorder;
 
 /**
  * Trait to draw circles and ellipses.
+ *
+ * @psalm-require-extends \App\Pdf\PdfDocument
  */
 trait PdfEllipseTrait
 {
     /**
      * Draw a circle.
      *
-     * @param                                    $x     the abscissa position
-     * @param                                    $y     the ordinate position
-     * @param                                    $r     the radius
+     * @param float                              $x     the abscissa position
+     * @param float                              $y     the ordinate position
+     * @param float                              $r     the radius
      * @param PdfBorder|PdfRectangleStyle|string $style the style of rendering. Possible values are:
      *                                                  <ul>
      *                                                  <li>A PdfBorder instance.</li>

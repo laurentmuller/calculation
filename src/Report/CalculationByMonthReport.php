@@ -23,7 +23,6 @@ use App\Pdf\Html\HtmlBootstrapColors;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfOutputHeadersInterface;
-use App\Pdf\PdfBarChartTrait;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFillColor;
@@ -32,6 +31,7 @@ use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\PdfTextColor;
+use App\Pdf\Traits\PdfBarChartTrait;
 use App\Utils\FormatUtils;
 
 /**

@@ -10,10 +10,13 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Traits;
 
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\PdfDocument;
+use App\Pdf\PdfException;
+use App\Pdf\PdfStyle;
 use App\Utils\FormatUtils;
 
 /**

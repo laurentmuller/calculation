@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace App\Pdf\Events;
 
-use App\Pdf\Interfaces\PdfOutputHeadersListener;
+use App\Pdf\Interfaces\PdfOutputHeadersInterface;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfTable;
 
 /**
  * The event raised when headers are drawn.
  *
- * @see PdfOutputHeadersListener
+ * @see PdfOutputHeadersInterface
  */
 readonly class PdfHeadersEvent
 {

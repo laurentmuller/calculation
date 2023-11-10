@@ -17,7 +17,7 @@ use App\Pdf\Events\PdfHeadersEvent;
 /**
  * Class implementing this interface deals with table headers.
  */
-interface PdfOutputHeadersListener
+interface PdfOutputHeadersInterface
 {
     /**
      * Raised before or after headers are rendered.

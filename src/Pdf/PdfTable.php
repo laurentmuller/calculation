@@ -21,7 +21,7 @@ use App\Pdf\Events\PdfHeadersEvent;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
-use App\Pdf\Interfaces\PdfOutputHeadersListener;
+use App\Pdf\Interfaces\PdfOutputHeadersInterface;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
 
@@ -71,7 +71,7 @@ class PdfTable
     /**
      * The output headers listener.
      */
-    private ?PdfOutputHeadersListener $headersListener = null;
+    private ?PdfOutputHeadersInterface $headersListener = null;
 
     /**
      * The header style.
@@ -329,7 +329,7 @@ class PdfTable
         // output
         $this->drawRow($parent, $height, $texts, $widths, $styles, $aligns, $cells);
 
-        if ($this->isHeaders && $this->headersListener instanceof PdfOutputHeadersListener) {
+        if ($this->isHeaders && $this->headersListener instanceof PdfOutputHeadersInterface) {
             $event = new PdfHeadersEvent($this, false);
             $this->headersListener->outputHeaders($event);
         }
@@ -480,7 +480,7 @@ class PdfTable
     /**
      * Sets the output headers listener.
      */
-    public function setHeadersListener(?PdfOutputHeadersListener $headersListener): static
+    public function setHeadersListener(?PdfOutputHeadersInterface $headersListener): static
     {
         $this->headersListener = $headersListener;
 
@@ -540,7 +540,7 @@ class PdfTable
     {
         $this->checkStartRow();
         $this->isHeaders = true;
-        if ($this->headersListener instanceof PdfOutputHeadersListener) {
+        if ($this->headersListener instanceof PdfOutputHeadersInterface) {
             $event = new PdfHeadersEvent($this, true);
             $this->headersListener->outputHeaders($event);
         }

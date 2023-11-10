@@ -22,7 +22,7 @@ use App\Pdf\Events\PdfHeadersEvent;
 use App\Pdf\Html\HtmlBootstrapColors;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
-use App\Pdf\Interfaces\PdfOutputHeadersListener;
+use App\Pdf\Interfaces\PdfOutputHeadersInterface;
 use App\Pdf\PdfBarChartTrait;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
@@ -41,7 +41,7 @@ use App\Utils\FormatUtils;
  *
  * @extends AbstractArrayReport<CalculationByMonthType>
  */
-class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface, PdfOutputHeadersListener
+class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface, PdfOutputHeadersInterface
 {
     use PdfBarChartTrait;
 

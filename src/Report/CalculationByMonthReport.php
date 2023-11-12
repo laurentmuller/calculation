@@ -56,12 +56,9 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
 
     /*** @psalm-var CalculationByMonthType|null */
     private ?array $currentItem = null;
-
     private bool $drawHeaders = false;
-
     /*** @psalm-var CalculationByMonthType|null */
     private ?array $lastItem = null;
-
     private float $minMargin;
 
     /**
@@ -210,7 +207,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
         $this->SetFont(PdfFontName::ZAPFDINGBATS);
         if ($rotate) {
             $delta = $this->getCellMargin() + $this->GetStringWidth($chr);
-            $this->RotateText($chr, 90.0, $bounds->x() + $delta, $bounds->y() + $delta);
+            $this->rotateText($chr, 90.0, $bounds->x() + $delta, $bounds->y() + $delta);
         } else {
             $this->Cell(txt: $chr);
         }

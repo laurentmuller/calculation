@@ -15,7 +15,6 @@ namespace App\Pdf\Traits;
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfFillColor;
-use App\Traits\MathTrait;
 
 /**
  * Trait to draw pie chart.
@@ -27,7 +26,6 @@ use App\Traits\MathTrait;
  */
 trait PdfPieChartTrait
 {
-    use MathTrait;
     use PdfEllipseTrait;
     use PdfSectorTrait;
 

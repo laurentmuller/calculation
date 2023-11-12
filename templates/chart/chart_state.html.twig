@@ -25,7 +25,10 @@
     {% for item in data -%}
     <tr title="{{ 'row_by_state'|trans({'%name%': item.code}) }}">
         <td class="text-nowrap">
-            <span class="text-border" style="border-left-width: 2rem !important; {{ stateCss(item.color) }}"></span><a href="{{ path(list_path, {'stateId': item.id}) }}">{{- item.code }}</a>
+            <div class="d-flex align-items-center">
+                <span class="border me-1" style="width: 1.5rem; height: 1rem; background: {{ item.color }}"></span>
+                <a href="{{ path(list_path, {'stateId': item.id}) }}">{{- item.code }}</a>
+            </div>
         </td>
         <td class="text-currency">{{ item.count|integer }}</td>
         <td class="text-percent">{{ item.percentCalculation|percent(false, 2, 4) }}</td>

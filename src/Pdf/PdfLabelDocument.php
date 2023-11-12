@@ -15,6 +15,7 @@ namespace App\Pdf;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
+use App\Pdf\Traits\PdfDashLineTrait;
 use App\Utils\StringUtils;
 
 /**

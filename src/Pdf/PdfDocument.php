@@ -58,6 +58,7 @@ use App\Utils\StringUtils;
  * @property array<int, PdfPageInfoType> $PageInfo         The page-related data.
  * @property float                       $LineWidth        the line width.
  * @property float                       $PageBreakTrigger the threshold used to trigger page breaks
+ * @property string                      $PDFVersion       the PDF version
  *
  * @method float  GetX()                                                  Gets the current X position in user unit.
  * @method float  GetY()                                                  Gets the current Y position in user unit.
@@ -300,14 +301,6 @@ class PdfDocument extends \FPDF
     public function Footer(): void
     {
         $this->footer->output();
-    }
-
-    /**
-     * Get the bottom margin.
-     */
-    public function getBottomMargin(): float
-    {
-        return $this->bMargin;
     }
 
     /**
@@ -950,6 +943,18 @@ class PdfDocument extends \FPDF
     public function Text($x, $y, $txt): void
     {
         parent::Text($x, $y, $this->_cleanText($txt));
+    }
+
+    /**
+     * Ensure that this version is equal to or greater than the given version.
+     *
+     * @param string $version the minimum version to set
+     */
+    public function updateVersion(string $version): void
+    {
+        if (\version_compare($this->PDFVersion, $version, '<')) {
+            $this->PDFVersion = $version;
+        }
     }
 
     /**

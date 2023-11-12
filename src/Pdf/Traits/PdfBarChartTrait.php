@@ -17,7 +17,6 @@ use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBarScale;
 use App\Pdf\PdfFillColor;
 use App\Pdf\PdfStyle;
-use App\Traits\MathTrait;
 
 /**
  * Trait to draw bar chart.
@@ -52,7 +51,6 @@ use App\Traits\MathTrait;
  */
 trait PdfBarChartTrait
 {
-    use MathTrait;
     use PdfRotationTrait;
 
     private const SEP_BARS = 3.0;

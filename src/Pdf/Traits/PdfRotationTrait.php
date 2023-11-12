@@ -27,18 +27,12 @@ trait PdfRotationTrait
 {
     private float $angle = 0.0;
 
-    public function _endpage(): void
-    {
-        $this->EndRotate();
-        parent::_endpage();
-    }
-
     /**
      * Reset the rotation angle to 0.0.
      */
-    public function EndRotate(): void
+    public function endRotate(): void
     {
-        if (0.0 !== $this->angle) {
+        if (!$this->isFloatZero($this->angle)) {
             $this->_out('Q');
             $this->angle = 0.0;
         }
@@ -51,15 +45,14 @@ trait PdfRotationTrait
      * @param float|null $x     the abscissa position or null to use the current abscissa
      * @param float|null $y     the ordinate position or null to use the current ordinate
      */
-    public function Rotate(float $angle, float $x = null, float $y = null): void
+    public function rotate(float $angle, float $x = null, float $y = null): void
     {
-        $this->EndRotate();
+        $this->endRotate();
         $angle = \fmod($angle, 360.0);
-        if (0.0 === $angle) {
+        if ($this->isFloatZero($angle)) {
             return;
         }
         $this->angle = $angle;
-
         $x ??= $this->GetX();
         $y ??= $this->GetY();
         $angle *= \M_PI / 180.0;
@@ -99,14 +92,14 @@ trait PdfRotationTrait
      *                                                  <li><code>'DF'</code>: Draw and fill.</li>
      *                                                  </ul>
      */
-    public function RotateRect(float $x, float $y, float $w, float $h, float $angle, PdfBorder|PdfRectangleStyle|string $style = ''): void
+    public function rotateRect(float $x, float $y, float $w, float $h, float $angle, PdfBorder|PdfRectangleStyle|string $style = ''): void
     {
-        if (0.0 === $angle) {
+        if ($this->isFloatZero($angle)) {
             return;
         }
-        $this->Rotate($angle, $x, $y);
+        $this->rotate($angle, $x, $y);
         $this->Rect($x, $y, $w, $h, $style);
-        $this->EndRotate();
+        $this->endRotate();
     }
 
     /**
@@ -119,15 +112,21 @@ trait PdfRotationTrait
      * @param float|null $x     the abscissa position or null to use the current abscissa
      * @param float|null $y     the ordinate position or null to use the current ordinate
      */
-    public function RotateText(string $txt, float $angle, float $x = null, float $y = null): void
+    public function rotateText(string $txt, float $angle, float $x = null, float $y = null): void
     {
-        if ('' === $txt || 0.0 === $angle) {
+        if ('' === $txt || $this->isFloatZero($angle)) {
             return;
         }
         $x ??= $this->GetX();
         $y ??= $this->GetY();
-        $this->Rotate($angle, $x, $y);
+        $this->rotate($angle, $x, $y);
         $this->Text($x, $y, $txt);
-        $this->EndRotate();
+        $this->endRotate();
+    }
+
+    protected function _endpage(): void
+    {
+        $this->endRotate();
+        parent::_endpage();
     }
 }

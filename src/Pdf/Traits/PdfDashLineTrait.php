@@ -10,7 +10,10 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Traits;
+
+use App\Pdf\PdfLine;
+use App\Pdf\PdfRectangle;
 
 /**
  * Trait to draw dash lines.

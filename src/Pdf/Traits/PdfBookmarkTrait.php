@@ -175,30 +175,22 @@ trait PdfBookmarkTrait
         return $this->resetStyle();
     }
 
-    /**
-     * Update catalog.
-     */
     protected function _putcatalog(): void
     {
         parent::_putcatalog();
         if ([] === $this->bookmarks) {
             return;
         }
-
         $this->_putParams('/Outlines %d 0 R', $this->bookmarkRoot);
         $this->_put('/PageMode /UseOutlines');
     }
 
-    /**
-     * Update resources.
-     */
     protected function _putresources(): void
     {
         parent::_putresources();
         if ([] === $this->bookmarks) {
             return;
         }
-
         $n = $this->n + 1;
         $lastReference = $this->_updateBookmarks();
         foreach ($this->bookmarks as $bookmark) {

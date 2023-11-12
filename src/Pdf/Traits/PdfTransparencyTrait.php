@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
-use App\Traits\MathTrait;
+use App\Pdf\Enums\PdfBlendMode;
 
 /**
  * Trait to add transparency support.
@@ -20,52 +20,49 @@ use App\Traits\MathTrait;
  * The alpha channel can be from 0 (fully transparent) to 1 (fully opaque). It applies to all
  * elements (text, drawings, images).
  *
- * @psalm-type ParameterType = array{
- *     stroking: float,
- *     blend_mode: string}
- * @psalm-type GsStateType = array{
- *     index: int,
- *     parameters: ParameterType}
+ * @psalm-type GStateType = array{
+ *      key: int,
+ *      object: int,
+ *      alpha: float,
+ *      blend_mode: string}
  *
  * @psalm-require-extends \App\Pdf\PdfDocument
  */
 trait PdfTransparencyTrait
 {
-    use MathTrait;
-
-    /** @psalm-var array<int, GsStateType> */
-    private array $gsStates = [];
+    /** @psalm-var GStateType[] */
+    private array $gStates = [];
 
     /**
      * Reset the alpha mode to default (1.0).
      */
-    public function resetAlpha(): static
+    public function resetAlpha(): void
     {
-        return $this->setAlpha(1.0);
+        $this->setAlpha(1.0);
     }
 
     /**
      * Set the alpha mode.
      *
-     * @param float  $alpha     the alpha channel from 0 (fully transparent) to 1 (fully opaque)
-     * @param string $blendMode the blend mode. One of the following:
-     *                          Normal, Multiply, Screen, Overlay, Darken, Lighten, ColorDodge, ColorBurn,
-     *                          HardLight, SoftLight, Difference, Exclusion, Hue, Saturation, Color, Luminosity
-     *
-     * @psalm-param non-empty-string $blendMode
+     * @param float        $alpha     the alpha channel from 0 (fully transparent) to 1 (fully opaque)
+     * @param PdfBlendMode $blendMode the blend mode
      */
-    public function setAlpha(float $alpha, string $blendMode = 'Normal'): static
+    public function setAlpha(float $alpha, PdfBlendMode $blendMode = PdfBlendMode::NORMAL): void
     {
-        $alpha = $this->validateRange($alpha, 0.0, 1.0);
-        $index = $this->_addGsState(['stroking' => $alpha, 'blend_mode' => $blendMode]);
-        $this->_setGsState($index);
-
-        return $this;
+        $key = \count($this->gStates) + 1;
+        $gState = [
+            'key' => $key,
+            'object' => 0,
+            'blend_mode' => $blendMode->camel(),
+            'alpha' => $this->validateRange($alpha, 0.0, 1.0),
+        ];
+        $this->gStates[] = $gState;
+        $this->_outParams('/GS%d gs', $key);
     }
 
     protected function _enddoc(): void
     {
-        if ([] !== $this->gsStates && $this->PDFVersion < '1.4') {
+        if ([] !== $this->gStates && $this->PDFVersion < '1.4') {
             $this->PDFVersion = '1.4';
         }
         parent::_enddoc();
@@ -74,10 +71,10 @@ trait PdfTransparencyTrait
     protected function _putresourcedict(): void
     {
         parent::_putresourcedict();
-        if ([] !== $this->gsStates) {
+        if ([] !== $this->gStates) {
             $this->_put('/ExtGState <<');
-            foreach ($this->gsStates as $key => $gsState) {
-                $this->_putParams('/GS%d %d 0 R', $key, $gsState['index']);
+            foreach ($this->gStates as $gState) {
+                $this->_putParams('/GS%d %d 0 R', $gState['key'], $gState['object']);
             }
             $this->_put('>>');
         }
@@ -85,40 +82,24 @@ trait PdfTransparencyTrait
 
     protected function _putresources(): void
     {
-        if ([] !== $this->gsStates) {
-            $this->_putGsStates();
+        foreach ($this->gStates as &$gState) {
+            $this->_newobj();
+            $gState['object'] = $this->n;
+            $this->_put('<</Type /ExtGState');
+            $this->_putParams('/ca %.3F', $gState['alpha']);
+            $this->_putParams('/CA %.3F', $gState['alpha']);
+            $this->_putParams('/BM /%s', $gState['blend_mode']);
+            $this->_put('>>');
+            $this->_endobj();
         }
         parent::_putresources();
     }
 
-    /**
-     * @psalm-param ParameterType $parameters
-     */
-    private function _addGsState(array $parameters): int
+    protected function updateTransparenceEnddoc(): void
     {
-        $index = \count($this->gsStates) + 1;
-        $this->gsStates[$index]['parameters'] = $parameters;
-
-        return $index;
-    }
-
-    private function _putGsStates(): void
-    {
-        foreach (\array_keys($this->gsStates) as $key) {
-            $this->_newobj();
-            $this->gsStates[$key]['index'] = $this->n;
-            $this->_put('<</Type /ExtGState');
-            $parameters = $this->gsStates[$key]['parameters'];
-            $this->_putParams('/ca %.3F', $parameters['stroking']);
-            $this->_putParams('/CA %.3F', $parameters['stroking']);
-            $this->_putParams('/BM /%s', $parameters['blend_mode']);
-            $this->_put('>>');
-            $this->_endobj();
+        if ([] !== $this->gStates) {
+            $this->updateVersion('1.4');
         }
-    }
-
-    private function _setGsState(int $index): void
-    {
-        $this->_outParams('/GS%d gs', $index);
+        parent::_enddoc();
     }
 }

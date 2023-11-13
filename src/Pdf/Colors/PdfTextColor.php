@@ -10,7 +10,9 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Colors;
+
+use App\Pdf\PdfDocument;
 
 /**
  * Color used for drawing text operations.
@@ -19,7 +21,7 @@ class PdfTextColor extends AbstractPdfColor
 {
     public function apply(PdfDocument $doc): void
     {
-        $doc->SetTextColor($this->getRed(), $this->getGreen(), $this->getBlue());
+        $doc->SetTextColor($this->red, $this->green, $this->blue);
     }
 
     /**

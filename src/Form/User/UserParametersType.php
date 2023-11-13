@@ -28,9 +28,6 @@ class UserParametersType extends AbstractParametersType
      */
     final public const THEME_FIELD = 'theme';
 
-    /**
-     * Constructor.
-     */
     public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $service)
     {
         parent::__construct($security, $translator, $service->getProperties());

@@ -10,20 +10,15 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Colors;
 
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
-use App\Traits\MathTrait;
 
 /**
  * Define a RGB color.
- *
- * @psalm-type RgbType = array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}
  */
 abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
 {
-    use MathTrait;
-
     /**
      * The maximum value allowed for a component (inclusive).
      */
@@ -35,29 +30,6 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     final protected const MIN_VALUE = 0;
 
     /**
-     * The blue component.
-     *
-     * @psalm-var int<0, 255>
-     */
-    private int $blue = 0;
-
-    /**
-     * The green component.
-     *
-     * @psalm-var int<0, 255>
-     */
-    private int $green = 0;
-
-    /**
-     * The red component.
-     *
-     * @psalm-var int<0, 255>
-     */
-    private int $red = 0;
-
-    /**
-     * Constructor.
-     *
      * All values must be between 0 and 255 inclusive.
      *
      * @param int $red   the red component
@@ -68,9 +40,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * @psalm-param int<0, 255> $green
      * @psalm-param int<0, 255> $blue
      */
-    final public function __construct(int $red = 0, int $green = 0, int $blue = 0)
+    final public function __construct(public readonly int $red = 0, public readonly int $green = 0, public readonly int $blue = 0)
     {
-        $this->setRGB($red, $green, $blue);
     }
 
     /**
@@ -124,10 +95,10 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
         }
 
         if (\is_string($rgb)) {
-            $rgb = self::parse($rgb);
+            return self::parse($rgb);
         }
 
-        /** @psalm-var RgbType|false $rgb */
+        /** @psalm-var array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}|false $rgb */
         if (\is_array($rgb) && 3 === \count($rgb)) {
             return new static($rgb[0], $rgb[1], $rgb[2]);
         }
@@ -207,16 +178,6 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Gets the red, the green and the blue values.
-     *
-     * @psalm-return RgbType
-     */
-    public function getRGB(): array
-    {
-        return [$this->red, $this->green, $this->blue];
-    }
-
-    /**
      * Gets the green color.
      *
      * Value is RGB(0, 255, 0).
@@ -265,68 +226,6 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Sets the blue component.
-     *
-     * @param int $blue the value to set. Must be between 0 and 255 inclusive.
-     *
-     * @psalm-param int<0, 255> $blue
-     */
-    public function setBlue(int $blue): static
-    {
-        $this->blue = self::checkColor($blue);
-
-        return $this;
-    }
-
-    /**
-     * Sets the green component.
-     *
-     * @param int $green the value to set. Must be between 0 and 255 inclusive.
-     *
-     * @psalm-param int<0, 255> $green
-     */
-    public function setGreen(int $green): static
-    {
-        $this->green = self::checkColor($green);
-
-        return $this;
-    }
-
-    /**
-     * Sets the red component.
-     *
-     * @param int $red the value to set. Must be between 0 and 255 inclusive.
-     *
-     * @psalm-param int<0, 255> $red
-     */
-    public function setRed(int $red): static
-    {
-        $this->red = self::checkColor($red);
-
-        return $this;
-    }
-
-    /**
-     * Sets the red, the green and the blue values.
-     *
-     * All values must be between 0 and 255 inclusive.
-     *
-     * @param int $red   the red component
-     * @param int $green the green component
-     * @param int $blue  the blue component
-     *
-     * @psalm-param int<0, 255> $red
-     * @psalm-param int<0, 255> $green
-     * @psalm-param int<0, 255> $blue
-     */
-    public function setRGB(int $red, int $green, int $blue): static
-    {
-        return $this->setRed($red)
-            ->setGreen($green)
-            ->setBlue($blue);
-    }
-
-    /**
      * Gets the white color.
      *
      * Value is RGB(255, 255, 255).
@@ -338,35 +237,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
         return new static(self::MAX_VALUE, self::MAX_VALUE, self::MAX_VALUE);
     }
 
-    /**
-     * Checks if the given value is between 0 and 255 (inclusive).
-     *
-     * @param int $value the value to verify
-     *
-     * @return int the validate value
-     *
-     * @psalm-return int<0, 255>
-     */
-    private function checkColor(int $value): int
-    {
-        /** @psalm-var int<0, 255> $value */
-        $value = $this->validateRange($value, self::MIN_VALUE, self::MAX_VALUE);
-
-        return $value;
-    }
-
-    /**
-     * Converts the value to the RGB array.
-     *
-     * The value must be a hexadecimal string like <code>'#FF8040'</code> or <code>'FFF'</code>.
-     *
-     * @param string $value a hexadecimal string
-     *
-     * @return ?array the RGB array (<code>red, green, blue</code>) or <code>null</code> if the value can not be converted
-     *
-     * @psalm-return RgbType|null
-     */
-    private static function parse(string $value): ?array
+    private static function parse(string $value): ?static
     {
         $value = (string) \preg_replace('/[^0-9A-Fa-f]/', '', $value);
         switch (\strlen($value)) {
@@ -379,8 +250,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
                 /** @psalm-var int<0, 255> $b */
                 $b = 0xFF & $color;
 
-                return [$r, $g, $b];
-
+                return new static($r, $g, $b);
             case 3:
                 /** @psalm-var int<0, 255> $r */
                 $r = \hexdec(\str_repeat(\substr($value, 0, 1), 2));
@@ -389,8 +259,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
                 /** @psalm-var int<0, 255> $b */
                 $b = \hexdec(\str_repeat(\substr($value, 2, 1), 2));
 
-                return [$r, $g, $b];
-
+                return new static($r, $g, $b);
             default:
                 return null;
         }

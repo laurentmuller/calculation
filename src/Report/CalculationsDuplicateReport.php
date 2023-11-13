@@ -20,13 +20,11 @@ use App\Traits\DuplicateItemsTrait;
  *
  * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
  */
-class CalculationDuplicateReport extends AbstractCalculationItemsReport
+class CalculationsDuplicateReport extends AbstractCalculationItemsReport
 {
     use DuplicateItemsTrait;
 
     /**
-     * Constructor.
-     *
      * @psalm-param CalculationItemType[] $entities
      */
     public function __construct(AbstractController $controller, array $entities)

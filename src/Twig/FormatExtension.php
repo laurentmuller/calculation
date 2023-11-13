@@ -40,9 +40,6 @@ final class FormatExtension extends AbstractExtension
         'full' => \IntlDateFormatter::FULL,
     ];
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly TranslatorInterface $translator)
     {
     }

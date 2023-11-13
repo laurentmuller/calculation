@@ -34,9 +34,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class ExchangeRateController extends AbstractController
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly ExchangeRateService $service)
     {
     }

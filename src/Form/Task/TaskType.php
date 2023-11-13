@@ -25,9 +25,6 @@ use App\Interfaces\EntityInterface;
  */
 class TaskType extends AbstractEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(Task::class);

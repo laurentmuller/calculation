@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\Attribute\GetRoute;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
-use App\Report\CalculationDuplicateReport;
+use App\Report\CalculationsDuplicateReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDuplicateDocument;
 use App\Table\CalculationDuplicateTable;
@@ -72,7 +72,7 @@ class CalculationDuplicateController extends AbstractController
             return $response;
         }
         $items = $this->getItems($repository);
-        $doc = new CalculationDuplicateReport($this, $items);
+        $doc = new CalculationsDuplicateReport($this, $items);
 
         return $this->renderPdfDocument($doc);
     }

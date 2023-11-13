@@ -23,9 +23,6 @@ use App\Form\FormHelper;
  */
 class TaskItemMarginType extends AbstractEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(TaskItemMargin::class);

@@ -60,9 +60,6 @@ class IndexController extends AbstractController
      */
     final public const PARAM_RESTRICT = 'restrict';
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly EntityManagerInterface $manager)
     {
     }

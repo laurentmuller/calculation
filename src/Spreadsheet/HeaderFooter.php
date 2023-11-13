@@ -51,8 +51,6 @@ class HeaderFooter
     private string $rightText = '';
 
     /**
-     * Constructor.
-     *
      * @param bool $isHeader true to apply to the worksheet header, false for worksheet footer
      */
     private function __construct(private readonly bool $isHeader, private readonly int $fontSize)

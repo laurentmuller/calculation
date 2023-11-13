@@ -18,9 +18,8 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfException;
-use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
+use App\Pdf\PdfTable;
 use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
 
@@ -29,7 +28,7 @@ use App\Utils\FormatUtils;
  *
  * @extends AbstractArrayReport<Calculation>
  */
-class CalculationsReport extends AbstractArrayReport
+class CalculationsBelowReport extends AbstractArrayReport
 {
     use MathTrait;
 
@@ -37,16 +36,6 @@ class CalculationsReport extends AbstractArrayReport
      * The sum of items calculations.
      */
     private float $items = 0.0;
-
-    /**
-     * The minimum margin style.
-     */
-    private ?PdfStyle $marginStyle = null;
-
-    /**
-     * The minimum margin.
-     */
-    private readonly float $minMargin;
 
     /**
      * The sum of overall calculations.
@@ -60,13 +49,8 @@ class CalculationsReport extends AbstractArrayReport
     public function __construct(AbstractController $controller, array $entities)
     {
         parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE);
-        $this->minMargin = $controller->getMinMargin();
-        $this->setTitleTrans('calculation.list.title');
     }
 
-    /**
-     * @throws PdfException
-     */
     protected function doRender(array $entities): bool
     {
         $this->AddPage();
@@ -77,12 +61,13 @@ class CalculationsReport extends AbstractArrayReport
         return true;
     }
 
-    private function createTable(): PdfGroupTable
+    private function createTable(): PdfTable
     {
-        return PdfGroupTable::instance($this)
+        return PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::center($this->trans('calculation.fields.id'), 17, true),
                 PdfColumn::center($this->trans('calculation.fields.date'), 20, true),
+                PdfColumn::left($this->trans('calculation.fields.state'), 20, true),
                 PdfColumn::left($this->trans('calculation.fields.customer'), 35),
                 PdfColumn::left($this->trans('calculation.fields.description'), 65),
                 PdfColumn::right($this->trans('report.calculation.amount'), 25, true),
@@ -91,68 +76,42 @@ class CalculationsReport extends AbstractArrayReport
             )->outputHeaders();
     }
 
-    private function getMarginStyle(Calculation $calculation): ?PdfStyle
-    {
-        if (!$calculation->isMarginBelow($this->minMargin)) {
-            return null;
-        }
-        if ($this->marginStyle instanceof PdfStyle) {
-            return $this->marginStyle;
-        }
-
-        return $this->marginStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
-    }
-
     /**
      * @psalm-param Calculation[] $entities
-     *
-     * @throws PdfException
      */
-    private function outputEntities(PdfGroupTable $table, array $entities): void
+    private function outputEntities(PdfTable $table, array $entities): void
     {
-        $editable = null;
-        $stateCode = null;
         $this->items = $this->overall = 0.0;
+        $style = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
         foreach ($entities as $entity) {
-            if ($editable !== $entity->isEditable()) {
-                $editable = $entity->isEditable();
-                $this->addBookmark($this->transEditable($editable));
-            }
-            if ($stateCode !== $entity->getStateCode()) {
-                $stateCode = $entity->getStateCode();
-                $this->addBookmark(text: (string) $stateCode, level: 1);
-                $table->setGroupKey($stateCode);
-            }
-            $this->outputEntity($table, $entity);
+            $this->outputEntity($table, $entity, $style);
         }
     }
 
-    private function outputEntity(PdfGroupTable $table, Calculation $entity): void
+    private function outputEntity(PdfTable $table, Calculation $entity, PdfStyle $style): void
     {
         $items = $entity->getItemsTotal();
         $overall = $entity->getOverallTotal();
-        $style = $this->getMarginStyle($entity);
         $table->startRow()
             ->add($entity->getFormattedId())
             ->add($entity->getFormattedDate())
+            ->add($entity->getStateCode())
             ->add($entity->getCustomer())
             ->add($entity->getDescription())
             ->add(FormatUtils::formatAmount($items))
             ->add(text: FormatUtils::formatPercent($entity->getOverallMargin()), style: $style)
             ->add(FormatUtils::formatAmount($overall))
             ->endRow();
+
         $this->items += $items;
         $this->overall += $overall;
     }
 
-    private function outputTotal(PdfGroupTable $table, array $entities): void
+    private function outputTotal(PdfTable $table, array $entities): void
     {
-        $style = null;
         $margins = $this->safeDivide($this->overall, $this->items);
-        if (!$this->isFloatZero($margins) && $margins < $this->minMargin) {
-            $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
-        }
         $text = $this->translateCount($entities, 'counters.calculations');
+        $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         $columns = $table->getColumnsCount() - 3;
         $table->getColumns()[0]->setAlignment(PdfTextAlignment::LEFT)
             ->setFixed(false);
@@ -162,10 +121,5 @@ class CalculationsReport extends AbstractArrayReport
             ->add(FormatUtils::formatPercent($margins), style: $style)
             ->add(FormatUtils::formatAmount($this->overall))
             ->endRow();
-    }
-
-    private function transEditable(bool $editable): string
-    {
-        return $this->trans($editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable');
     }
 }

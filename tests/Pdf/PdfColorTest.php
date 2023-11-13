@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Pdf;
 
-use App\Pdf\AbstractPdfColor;
-use App\Pdf\PdfDrawColor;
-use App\Pdf\PdfFillColor;
-use App\Pdf\PdfTextColor;
+use App\Pdf\Colors\AbstractPdfColor;
+use App\Pdf\Colors\PdfDrawColor;
+use App\Pdf\Colors\PdfFillColor;
+use App\Pdf\Colors\PdfTextColor;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(PdfDrawColor::class)]
@@ -30,6 +30,7 @@ class PdfColorTest extends TestCase
         yield [[255]];
         yield [[255, 255]];
         yield [[255, 255, 255, 255]];
+        yield ['xyz'];
     }
 
     public static function getColorsValid(): \Generator
@@ -111,8 +112,8 @@ class PdfColorTest extends TestCase
     private function validateColor(?AbstractPdfColor $color, int $red, int $green, int $blue): void
     {
         self::assertNotNull($color);
-        self::assertSame($red, $color->getRed());
-        self::assertSame($green, $color->getGreen());
-        self::assertSame($blue, $color->getBlue());
+        self::assertSame($red, $color->red);
+        self::assertSame($green, $color->green);
+        self::assertSame($blue, $color->blue);
     }
 }

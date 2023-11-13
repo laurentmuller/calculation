@@ -43,8 +43,6 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     private const PARAM_GROUP = CategoryTable::PARAM_GROUP;
 
     /**
-     * Constructor.
-     *
      * @psalm-param AbstractCategoryItemRepository<T> $repository
      */
     public function __construct(// phpcs:ignore

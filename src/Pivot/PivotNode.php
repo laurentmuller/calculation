@@ -46,8 +46,6 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     private ?string $title = null;
 
     /**
-     * Constructor.
-     *
      * @param AbstractAggregator $aggregator the aggregator function
      * @param mixed              $key        the key
      * @param mixed              $value      the initial value

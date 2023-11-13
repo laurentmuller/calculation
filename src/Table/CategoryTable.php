@@ -47,9 +47,6 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      */
     final public const PARAM_GROUP = 'groupId';
 
-    /**
-     * Constructor.
-     */
     public function __construct(// phpcs:ignore
         CategoryRepository $repository,
         protected readonly Environment $twig,

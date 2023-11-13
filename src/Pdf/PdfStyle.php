@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Colors\PdfDrawColor;
+use App\Pdf\Colors\PdfFillColor;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
@@ -63,9 +66,6 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      */
     private PdfTextColor $textColor;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->font = PdfFont::default();

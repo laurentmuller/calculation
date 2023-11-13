@@ -14,12 +14,12 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Pdf\PdfTextColor;
 use App\Traits\RoleTranslatorTrait;
 use App\Utils\FormatUtils;
 use Vich\UploaderBundle\Storage\StorageInterface;
@@ -34,8 +34,6 @@ class UsersReport extends AbstractArrayReport
     use RoleTranslatorTrait;
 
     /**
-     * Constructor.
-     *
      * @param User[] $entities
      */
     public function __construct(AbstractController $controller, array $entities, private readonly StorageInterface $storage)

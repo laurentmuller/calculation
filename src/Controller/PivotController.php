@@ -35,9 +35,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class PivotController extends AbstractController
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly CalculationRepository $repository)
     {
     }

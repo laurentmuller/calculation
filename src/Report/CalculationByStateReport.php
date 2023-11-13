@@ -13,15 +13,15 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Colors\PdfFillColor;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfFillColor;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Pdf\PdfTextColor;
 use App\Pdf\Traits\PdfPieChartTrait;
 use App\Traits\MathTrait;
 use App\Utils\FormatUtils;

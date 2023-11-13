@@ -87,8 +87,6 @@ class HelpService implements ServiceSubscriberInterface
     private const CACHE_TIMEOUT = 60 * 15;
 
     /**
-     * Constructor.
-     *
      * @param string $file      the absolute path to the JSON help file
      * @param string $imagePath the absolute path to images
      */

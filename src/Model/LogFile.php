@@ -34,9 +34,6 @@ class LogFile implements \Countable
      */
     private array $logs = [];
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly string $file)
     {
     }

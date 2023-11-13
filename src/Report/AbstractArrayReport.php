@@ -25,8 +25,6 @@ use App\Pdf\Enums\PdfDocumentUnit;
 abstract class AbstractArrayReport extends AbstractReport
 {
     /**
-     * Constructor.
-     *
      * @param AbstractController     $controller  the parent controller
      * @param T[]                    $entities    the entities to render
      * @param PdfDocumentOrientation $orientation the page orientation

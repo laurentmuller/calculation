@@ -53,8 +53,6 @@ abstract class AbstractHtmlChunk
     private ?HtmlStyle $style = null;
 
     /**
-     * Constructor.
-     *
      * @param string           $name      the tag name
      * @param ?HtmlParentChunk $parent    the parent chunk
      * @param ?string          $className the class name

@@ -57,9 +57,6 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
     #[ORM\JoinColumn(name: 'task_id', nullable: false)]
     private ?Task $task = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->margins = new ArrayCollection();

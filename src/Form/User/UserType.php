@@ -25,9 +25,6 @@ use Symfony\Component\Form\Event\PreSetDataEvent;
  */
 class UserType extends AbstractEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(User::class);

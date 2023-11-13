@@ -44,9 +44,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class GlobalMarginController extends AbstractEntityController
 {
-    /**
-     * Constructor.
-     */
     public function __construct(GlobalMarginRepository $repository) // phpcs:ignore
     {
         parent::__construct($repository);

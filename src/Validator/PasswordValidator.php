@@ -22,9 +22,6 @@ use Symfony\Component\Validator\Constraint;
  */
 class PasswordValidator extends AbstractConstraintValidator
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(Password::class);

@@ -24,9 +24,6 @@ class RoleExtension extends AbstractExtension
 {
     use RoleTranslatorTrait;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly TranslatorInterface $translator)
     {
     }

@@ -45,8 +45,6 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
     private ?string $question = null;
 
     /**
-     * Constructor.
-     *
      * @param iterable<AlphaCaptchaInterface> $captchas
      */
     public function __construct(

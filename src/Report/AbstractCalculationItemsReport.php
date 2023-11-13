@@ -13,12 +13,12 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Pdf\PdfTextColor;
 use App\Utils\FormatUtils;
 
 /**
@@ -32,8 +32,6 @@ use App\Utils\FormatUtils;
 abstract class AbstractCalculationItemsReport extends AbstractArrayReport
 {
     /**
-     * Constructor.
-     *
      * @psalm-param CalculationItemType[] $entities
      */
     protected function __construct(AbstractController $controller, array $entities, string $title, string $description)

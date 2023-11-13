@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
+use App\Pdf\Colors\PdfDrawColor;
+use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Enums\PdfRectangleStyle;
-use App\Pdf\PdfDrawColor;
-use App\Pdf\PdfFillColor;
 
 /**
  * Trait to draw pie chart.

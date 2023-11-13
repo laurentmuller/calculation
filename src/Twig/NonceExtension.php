@@ -21,9 +21,6 @@ use Twig\TwigFunction;
  */
 final class NonceExtension extends AbstractExtension
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly NonceService $service)
     {
     }

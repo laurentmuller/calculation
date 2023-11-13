@@ -72,9 +72,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     #[ORM\OrderBy(['position' => Criteria::ASC])]
     private Collection $items;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->items = new ArrayCollection();

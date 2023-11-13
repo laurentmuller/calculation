@@ -72,9 +72,6 @@ class UrlGeneratorService
         SearchTable::PARAM_ENTITY,
     ];
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly UrlGeneratorInterface $generator)
     {
     }

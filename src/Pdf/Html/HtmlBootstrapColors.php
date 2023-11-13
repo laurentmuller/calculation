@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Pdf\Colors\PdfDrawColor;
+use App\Pdf\Colors\PdfFillColor;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfDocument;
-use App\Pdf\PdfDrawColor;
-use App\Pdf\PdfFillColor;
-use App\Pdf\PdfTextColor;
 
 /**
  * Bootstrap color enumeration.

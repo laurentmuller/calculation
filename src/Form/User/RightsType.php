@@ -25,9 +25,6 @@ use Symfony\Component\Form\Event\PreSetDataEvent;
  */
 class RightsType extends AbstractHelperType
 {
-    /**
-     * Constructor.
-     */
     public function __construct(
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,

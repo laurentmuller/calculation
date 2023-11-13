@@ -40,8 +40,6 @@ abstract class AbstractEntityTable extends AbstractTable
     private const JOIN_PART = 'join';
 
     /**
-     * Constructor.
-     *
      * @param AbstractRepository<T> $repository
      */
     public function __construct(protected readonly AbstractRepository $repository)

@@ -74,9 +74,6 @@ class PdfBorder
      */
     private string|int $value = self::ALL;
 
-    /**
-     * Constructor.
-     */
     public function __construct(string|int $value = self::ALL)
     {
         $this->setValue($value);

@@ -26,9 +26,6 @@ abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface, ServiceSub
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly DictionaryService $dictionary)
     {
     }

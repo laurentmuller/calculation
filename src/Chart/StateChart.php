@@ -25,9 +25,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class StateChart extends AbstractHighchart
 {
-    /**
-     * Constructor.
-     */
     public function __construct(
         ApplicationService $application,
         private readonly CalculationStateRepository $repository,

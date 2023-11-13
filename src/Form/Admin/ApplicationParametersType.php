@@ -28,9 +28,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ApplicationParametersType extends AbstractParametersType
 {
-    /**
-     * Constructor.
-     */
     public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $service)
     {
         parent::__construct($security, $translator, $service->getDefaultValues());

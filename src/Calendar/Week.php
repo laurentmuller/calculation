@@ -30,8 +30,6 @@ class Week extends AbstractCalendarItem
     final public const KEY_FORMAT = 'Y.W';
 
     /**
-     * Constructor.
-     *
      * @param Calendar $calendar the parent calendar
      * @param int      $number   the week number (1 - 53)
      *

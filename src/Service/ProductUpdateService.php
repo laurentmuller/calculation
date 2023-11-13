@@ -43,9 +43,6 @@ class ProductUpdateService implements ServiceSubscriberInterface
     private const KEY_ROUND = 'product.update.round';
     private const KEY_TYPE = 'product.update.type';
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         private readonly ProductRepository $productRepository,
         private readonly CategoryRepository $categoryRepository,

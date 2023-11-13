@@ -59,8 +59,6 @@ class PivotTableFactory
     private array $rowFields = [];
 
     /**
-     * Constructor.
-     *
      * @psalm-param class-string<T>|null $aggregatorClass
      *
      * @throws \InvalidArgumentException if the given aggregator class name is not a subclass of the AbstractAggregator class

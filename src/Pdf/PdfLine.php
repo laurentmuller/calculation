@@ -25,8 +25,6 @@ class PdfLine implements PdfDocumentUpdaterInterface
     final public const DEFAULT_WIDTH = 0.2;
 
     /**
-     * Constructor.
-     *
      * @param float $width the line width
      */
     public function __construct(private float $width = self::DEFAULT_WIDTH)

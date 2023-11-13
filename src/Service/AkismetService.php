@@ -60,8 +60,6 @@ class AkismetService extends AbstractHttpClientService
     private readonly string $endpoint;
 
     /**
-     * Constructor.
-     *
      * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
      */
     public function __construct(

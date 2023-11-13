@@ -97,9 +97,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $userMargin = 0.0;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->date = new \DateTime();

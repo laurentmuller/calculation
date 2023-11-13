@@ -31,9 +31,6 @@ class LoginListener implements ServiceSubscriberInterface
     use ServiceSubscriberTrait;
     use TranslatorFlashMessageAwareTrait;
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         private readonly UserRepository $repository,
         #[Autowire('%app_version%')]

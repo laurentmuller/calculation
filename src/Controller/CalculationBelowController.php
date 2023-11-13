@@ -16,7 +16,7 @@ use App\Attribute\GetRoute;
 use App\Entity\Calculation;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
-use App\Report\CalculationsReport;
+use App\Report\CalculationsBelowReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationBelowTable;
@@ -77,7 +77,7 @@ class CalculationBelowController extends AbstractController
             return $response;
         }
         $items = $this->getItems($repository, $minMargin);
-        $doc = new CalculationsReport($this, $items);
+        $doc = new CalculationsBelowReport($this, $items);
         $doc->setTitleTrans('below.title')
             ->setDescription($this->getDescription($minMargin));
 

@@ -15,11 +15,11 @@ namespace App\Report\Table;
 use App\Entity\Calculation;
 use App\Entity\CalculationCategory;
 use App\Entity\CalculationItem;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTextColor;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
@@ -39,9 +39,6 @@ class TableItems extends PdfGroupTable
     private readonly Calculation $calculation;
     private readonly TranslatorInterface $translator;
 
-    /**
-     * Constructor.
-     */
     public function __construct(CalculationReport $parent)
     {
         parent::__construct($parent);

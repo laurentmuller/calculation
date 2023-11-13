@@ -29,9 +29,6 @@ final class DatabaseInfoService
 
     private ?string $version = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly EntityManagerInterface $manager)
     {
     }

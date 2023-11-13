@@ -48,9 +48,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class TaskController extends AbstractEntityController
 {
-    /**
-     * Constructor.
-     */
     public function __construct(TaskRepository $repository) // phpcs:ignore
     {
         parent::__construct($repository);

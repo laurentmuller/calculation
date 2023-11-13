@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfException;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
@@ -39,8 +39,6 @@ class HelpReport extends AbstractReport
     use ImageSizeTrait;
 
     /**
-     * Constructor.
-     *
      * @param AbstractController $controller the parent controller
      * @param HelpService        $service    the help service
      */

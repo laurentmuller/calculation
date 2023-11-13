@@ -20,8 +20,6 @@ use App\Utils\StringUtils;
 abstract class AbstractCalendarItem implements \JsonSerializable, \Stringable
 {
     /**
-     * Constructor.
-     *
      * @param Calendar $calendar the parent's calendar
      * @param string   $key      the unique key
      */

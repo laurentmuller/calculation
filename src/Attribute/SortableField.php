@@ -21,8 +21,6 @@ use App\Interfaces\SortModeInterface;
 readonly class SortableField
 {
     /**
-     * Constructor.
-     *
      * @param string $order the field order
      *
      * @psalm-param SortModeInterface::* $order

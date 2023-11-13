@@ -21,8 +21,6 @@ use PhpOffice\PhpWord\Shared\Html;
 class HtmlDocument extends AbstractWordDocument
 {
     /**
-     * Constructor.
-     *
      * @param AbstractController $controller the parent's controller
      * @param string             $content    the HTML content to render
      */

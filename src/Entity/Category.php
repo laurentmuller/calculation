@@ -71,9 +71,6 @@ class Category extends AbstractEntity implements TimestampableInterface
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Task::class)]
     private Collection $tasks;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->products = new ArrayCollection();

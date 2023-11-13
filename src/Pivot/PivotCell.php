@@ -20,8 +20,6 @@ use App\Pivot\Aggregator\AbstractAggregator;
 class PivotCell extends AbstractPivotAggregator
 {
     /**
-     * Constructor.
-     *
      * @param AbstractAggregator $aggregator the aggregator function
      * @param PivotNode          $column     the parent column
      * @param PivotNode          $row        the parent row

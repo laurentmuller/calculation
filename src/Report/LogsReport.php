@@ -15,6 +15,7 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Entity\Log;
 use App\Model\LogFile;
+use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
@@ -24,7 +25,6 @@ use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfDrawColor;
 use App\Pdf\PdfException;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfLine;
@@ -71,9 +71,6 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
      */
     private string $total;
 
-    /**
-     * Constructor.
-     */
     public function __construct(AbstractController $controller, private readonly LogFile $logFile)
     {
         parent::__construct($controller, PdfDocumentOrientation::LANDSCAPE);

@@ -25,9 +25,6 @@ use App\Interfaces\EntityInterface;
  */
 class CalculationType extends AbstractEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(Calculation::class);

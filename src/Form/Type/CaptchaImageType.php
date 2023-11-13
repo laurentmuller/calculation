@@ -26,9 +26,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class CaptchaImageType extends AbstractType
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly UrlGeneratorInterface $generator)
     {
     }

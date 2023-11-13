@@ -38,8 +38,6 @@ class CalculationDocument extends AbstractDocument
     private const COLOR_BORDER = 'DDDDDD';
 
     /**
-     * Constructor.
-     *
      * @param AbstractController $controller  the parent controller
      * @param Calculation        $calculation the calculation to render
      *

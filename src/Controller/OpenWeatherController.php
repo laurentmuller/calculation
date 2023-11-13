@@ -93,9 +93,6 @@ class OpenWeatherController extends AbstractController
      */
     private const PREFIX_KEY = 'openweather.';
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly OpenWeatherService $service)
     {
     }

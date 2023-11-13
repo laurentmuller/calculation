@@ -37,7 +37,6 @@ use App\Service\RoleHierarchyService;
 use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
 use App\Table\UserTable;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -65,9 +64,6 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class UserController extends AbstractEntityController
 {
-    /**
-     * Constructor.
-     */
     public function __construct(UserRepository $repository) // phpcs:ignore
     {
         parent::__construct($repository);
@@ -402,7 +398,7 @@ class UserController extends AbstractEntityController
         return UserType::class;
     }
 
-    protected function getEntities(string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
+    protected function getEntities(array|string $sortedFields = [], array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
         if (!$this->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
             /** @psalm-var UserRepository $repository */
@@ -410,7 +406,7 @@ class UserController extends AbstractEntityController
             $criteria[] = $repository->getSuperAdminFilter($alias);
         }
 
-        return parent::getEntities($field, $mode, $criteria, $alias);
+        return parent::getEntities($sortedFields, $criteria, $alias);
     }
 
     /**

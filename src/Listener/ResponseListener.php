@@ -85,8 +85,6 @@ class ResponseListener
     private readonly array $csp;
 
     /**
-     * Constructor.
-     *
      * @throws \Exception
      */
     public function __construct(

@@ -131,9 +131,6 @@ class SearchService implements ServiceSubscriberInterface
      */
     private array $queries = [];
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         private readonly EntityManagerInterface $manager,
         #[Autowire('%kernel.debug%')]

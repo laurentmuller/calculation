@@ -31,9 +31,6 @@ class ProductProvider extends EntityProvider
     /** @var string[] */
     private static array $product = ['tabouret', 'camion', 'ordinateur', 'gants', 'pantalon', 'chemisier', 'tabouret', 'chausse-pied', 'chapeau', 'vase', 'couteau', 'récipient', 'manteau', 'carnet', 'clavier', 'sac', 'banc', 'stylo', 'boîtier', 'portefeuille'];
 
-    /**
-     * Constructor.
-     */
     public function __construct(Generator $generator, EntityManagerInterface $manager)
     {
         parent::__construct($generator, $manager, Product::class);

@@ -53,8 +53,6 @@ abstract class AbstractEntityController extends AbstractController
     private readonly string $lowerName;
 
     /**
-     * Constructor.
-     *
      * @param AbstractRepository<T> $repository the repository
      */
     public function __construct(protected readonly AbstractRepository $repository)
@@ -194,10 +192,10 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the entities to display.
      *
-     * @param ?string                $field    the optional sorted field
-     * @param string                 $mode     the optional sort mode ("ASC" or "DESC")
-     * @param array<Criteria|string> $criteria the filter criteria
-     * @param literal-string         $alias    the entity alias
+     * @param array<string, string>|string $sortedFields the sorted fields where key is the field name and value is the sort
+     *                                                   mode ('ASC' or 'DESC') or a string for a single ascending sorted field
+     * @param array<Criteria|string>       $criteria     the filter criteria
+     * @param literal-string               $alias        the entity alias
      *
      * @return AbstractEntity[] the entities
      *
@@ -205,9 +203,12 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function getEntities(string $field = null, string $mode = Criteria::ASC, array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
+    protected function getEntities(array|string $sortedFields = [], array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
-        $sortedFields = null !== $field ? [$field => $mode] : [];
+        if (\is_string($sortedFields)) {
+            $sortedFields = [$sortedFields => Criteria::ASC];
+        }
+
         /** @psalm-var \Doctrine\ORM\Query<int, T> $query */
         $query = $this->repository->getSearchQuery($sortedFields, $criteria, $alias);
 

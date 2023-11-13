@@ -26,9 +26,6 @@ readonly class ApplicationInfo
     private string $ownerUrl;
     private string $version;
 
-    /**
-     * Constructor.
-     */
     public function __construct(ParameterBagInterface $parameter)
     {
         $this->name = $this->getParameter($parameter, 'app_name');

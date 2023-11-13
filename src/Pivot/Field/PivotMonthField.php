@@ -27,8 +27,6 @@ class PivotMonthField extends PivotDateField
     private readonly array $names;
 
     /**
-     * Constructor.
-     *
      * @param string  $name  the field name
      * @param ?string $title the field title
      * @param bool    $short true to display the short month name, false to display the full month name

@@ -49,16 +49,13 @@ class ChartController extends AbstractController
      * Gets the calculations by month.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
-     * @throws \Exception
+     * @throws BadRequestHttpException
      */
     #[GetRoute(path: '/month', name: 'chart_by_month', methods: Request::METHOD_GET)]
     public function month(Request $request, MonthChart $chart): Response
     {
         $this->checkAccess();
         $months = $this->getMonths($request);
-        if ($months <= 0) {
-            throw new BadRequestHttpException($this->trans('error.month', [], 'chart'));
-        }
         /** @psalm-var array{months: int} $parameters */
         $parameters = $chart->generate($months);
         $this->setSessionValue(self::KEY_MONTHS, $parameters['months']);
@@ -67,6 +64,7 @@ class ChartController extends AbstractController
     }
 
     /**
+     * @throws BadRequestHttpException
      * @throws \Exception
      */
     #[GetRoute(path: '/month/pdf', name: 'chart_by_month_pdf', methods: Request::METHOD_GET)]
@@ -74,9 +72,6 @@ class ChartController extends AbstractController
     {
         $this->checkAccess(EntityPermission::EXPORT);
         $months = $this->getMonths($request);
-        if ($months <= 0) {
-            throw new BadRequestHttpException($this->trans('error.month', [], 'chart'));
-        }
         $data = $repository->getByMonth($months);
         $report = new CalculationByMonthReport($this, $data);
 
@@ -111,10 +106,17 @@ class ChartController extends AbstractController
         $this->denyAccessUnlessGranted($permission, Calculation::class);
     }
 
+    /**
+     * @throws BadRequestHttpException
+     */
     private function getMonths(Request $request): int
     {
         $count = $this->getSessionInt(self::KEY_MONTHS, 6);
+        $months = $this->getRequestInt($request, 'count', $count);
+        if ($months <= 0) {
+            throw new BadRequestHttpException($this->trans('error.month', [], 'chart'));
+        }
 
-        return $this->getRequestInt($request, 'count', $count);
+        return $months;
     }
 }

@@ -35,9 +35,6 @@ class ImageResizer implements ServiceSubscriberInterface
 
     private ?ImagineInterface $imagine = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         try {

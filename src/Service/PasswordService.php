@@ -33,9 +33,6 @@ class PasswordService
 
     private ?Zxcvbn $service = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly ZxcvbnFactoryInterface $factory, private readonly TranslatorInterface $translator)
     {
     }

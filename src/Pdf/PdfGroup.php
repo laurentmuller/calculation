@@ -24,30 +24,20 @@ use App\Utils\StringUtils;
 class PdfGroup implements PdfDocumentUpdaterInterface
 {
     /**
-     * The border style.
-     */
-    private PdfBorder $border;
-
-    /**
      * The style.
      */
     private ?PdfStyle $style;
 
     /**
-     * Constructor.
-     *
      * @param ?mixed           $key       the group key
      * @param PdfTextAlignment $alignment the group alignment
-     * @param ?PdfBorder       $border    the group border or null to use default
      * @param ?PdfStyle        $style     the group style or null to use default
      */
     public function __construct(
         private mixed $key = null,
         private PdfTextAlignment $alignment = PdfTextAlignment::LEFT,
-        PdfBorder $border = null,
         PdfStyle $style = null
     ) {
-        $this->border = $border ?? PdfBorder::default();
         $this->style = $style ?? PdfStyle::getCellStyle()->setFontBold();
     }
 
@@ -62,14 +52,6 @@ class PdfGroup implements PdfDocumentUpdaterInterface
     public function getAlignment(): PdfTextAlignment
     {
         return $this->alignment;
-    }
-
-    /**
-     * Gets the border.
-     */
-    public function getBorder(): PdfBorder
-    {
-        return $this->border;
     }
 
     /**
@@ -116,7 +98,6 @@ class PdfGroup implements PdfDocumentUpdaterInterface
     public function output(PdfGroupTable $parent): void
     {
         $oldBorder = $parent->getBorder();
-        $parent->setBorder($this->border);
         $parent->singleLine($this->getName(), $this->getStyle(), $this->getAlignment());
         $parent->setBorder($oldBorder);
     }
@@ -127,16 +108,6 @@ class PdfGroup implements PdfDocumentUpdaterInterface
     public function setAlignment(PdfTextAlignment $alignment): self
     {
         $this->alignment = $alignment;
-
-        return $this;
-    }
-
-    /**
-     * Sets the border.
-     */
-    public function setBorder(PdfBorder|string|int $border): self
-    {
-        $this->border = \is_string($border) || \is_int($border) ? new PdfBorder($border) : $border;
 
         return $this;
     }

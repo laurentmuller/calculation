@@ -135,8 +135,6 @@ class PdfDocument extends \FPDF
     private ?string $title = null;
 
     /**
-     * Constructor.
-     *
      * @param PdfDocumentOrientation $orientation the page orientation
      * @param PdfDocumentUnit        $unit        the user unit
      * @param PdfDocumentSize        $size        the document size

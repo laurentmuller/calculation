@@ -26,8 +26,6 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 abstract class AbstractCalculationItemsDocument extends AbstractArrayDocument
 {
     /**
-     * Constructor.
-     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      *
      * @psalm-param CalculationItemType[] $entities

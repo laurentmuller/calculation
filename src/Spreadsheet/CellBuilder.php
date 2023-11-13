@@ -65,8 +65,6 @@ class CellBuilder
     private string $vertical = '';
 
     /**
-     * Constructor.
-     *
      * @param Worksheet $sheet the sheet used to set cell values and styles
      */
     public function __construct(private readonly Worksheet $sheet)

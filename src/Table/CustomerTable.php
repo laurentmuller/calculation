@@ -22,9 +22,6 @@ use App\Utils\FileUtils;
  */
 class CustomerTable extends AbstractEntityTable
 {
-    /**
-     * Constructor.
-     */
     public function __construct(CustomerRepository $repository) // phpcs:ignore
     {
         parent::__construct($repository);

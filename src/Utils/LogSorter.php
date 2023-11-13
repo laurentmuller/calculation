@@ -30,8 +30,6 @@ readonly class LogSorter
     private const COLUMN_USER = 'user';
 
     /**
-     * Constructor.
-     *
      * @param string $field     the field to sort
      * @param bool   $ascending true to sort in ascending mode false to sort in descending mode
      */

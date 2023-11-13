@@ -23,9 +23,6 @@ use App\Form\FormHelper;
  */
 class UserChangePasswordType extends AbstractEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(User::class);

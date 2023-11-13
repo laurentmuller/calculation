@@ -29,9 +29,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CalculationEditStateType extends AbstractEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly ApplicationService $service, private readonly TranslatorInterface $translator)
     {
         parent::__construct(Calculation::class);

@@ -23,9 +23,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class GlobalMarginTable extends AbstractEntityTable
 {
-    /**
-     * Constructor.
-     */
     public function __construct(GlobalMarginRepository $repository) // phpcs:ignore
     {
         parent::__construct($repository);

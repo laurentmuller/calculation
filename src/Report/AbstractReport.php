@@ -35,8 +35,6 @@ abstract class AbstractReport extends PdfDocument
     private readonly TranslatorInterface $translator;
 
     /**
-     * Constructor.
-     *
      * @param PdfDocumentOrientation $orientation the page orientation
      * @param PdfDocumentUnit        $unit        the user unit
      * @param PdfDocumentSize        $size        the document size

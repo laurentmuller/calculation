@@ -30,8 +30,6 @@ class Month extends AbstractCalendarItem implements \Stringable
     final public const KEY_FORMAT = 'Y.m';
 
     /**
-     * Constructor.
-     *
      * @param Calendar $calendar the parent calendar
      * @param int      $number   the month number (1 - 12)
      *

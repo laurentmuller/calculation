@@ -52,9 +52,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CalculationController extends AbstractEntityController
 {
-    /**
-     * Constructor.
-     */
     public function __construct(CalculationRepository $repository, private readonly CalculationService $service)// phpcs:ignore
     {
         parent::__construct($repository);
@@ -132,7 +129,7 @@ class CalculationController extends AbstractEntityController
     #[GetRoute(path: '/excel', name: 'calculation_excel')]
     public function excel(): SpreadsheetResponse
     {
-        $entities = $this->getEntities('id', Criteria::DESC);
+        $entities = $this->getEntities(['id' => Criteria::DESC]);
         if ([] === $entities) {
             $message = $this->trans('calculation.list.empty');
             throw $this->createNotFoundException($message);
@@ -162,15 +159,18 @@ class CalculationController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[GetRoute(path: '/pdf', name: 'calculation_pdf')]
-    public function pdf(Request $request): PdfResponse
+    public function pdf(): PdfResponse
     {
-        $entities = $this->getEntities('id', Criteria::DESC);
+        $entities = $this->getEntities([
+            'editable' => Criteria::DESC,
+            'code' => Criteria::ASC,
+            'id' => Criteria::DESC,
+        ]);
         if ([] === $entities) {
             $message = $this->trans('calculation.list.empty');
             throw $this->createNotFoundException($message);
         }
-        $grouped = $this->getRequestBoolean($request, 'grouped', true);
-        $doc = new CalculationsReport($this, $entities, $grouped);
+        $doc = new CalculationsReport($this, $entities);
 
         return $this->renderPdfDocument($doc);
     }

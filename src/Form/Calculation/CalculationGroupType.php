@@ -30,9 +30,6 @@ class CalculationGroupType extends AbstractEntityType
      */
     private readonly EntityTransformer $transformer;
 
-    /**
-     * Constructor.
-     */
     public function __construct(GroupRepository $repository)
     {
         parent::__construct(CalculationGroup::class);

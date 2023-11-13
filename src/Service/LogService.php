@@ -49,9 +49,6 @@ class LogService implements ServiceSubscriberInterface
      */
     private const VALUES_SEP = '|';
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         #[Autowire('%kernel.logs_dir%/%kernel.environment%.log')]
         private readonly string $fileName,

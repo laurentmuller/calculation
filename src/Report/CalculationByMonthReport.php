@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Colors\PdfFillColor;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfRectangleStyle;
@@ -25,12 +27,10 @@ use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfOutputHeadersInterface;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfFillColor;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Pdf\PdfTextColor;
 use App\Pdf\Traits\PdfBarChartTrait;
 use App\Utils\FormatUtils;
 

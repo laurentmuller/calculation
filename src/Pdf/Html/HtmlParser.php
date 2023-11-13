@@ -18,8 +18,6 @@ namespace App\Pdf\Html;
 readonly class HtmlParser
 {
     /**
-     * Constructor.
-     *
      * @param string $html the HTML content to parse
      */
     public function __construct(private string $html)

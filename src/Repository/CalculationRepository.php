@@ -634,11 +634,21 @@ class CalculationRepository extends AbstractRepository
     {
         return match ($field) {
             'overallMargin' => $this->getOverallMargin($alias),
+            'stateId',
+            'state_id',
             'state.id',
+            'code',
             'stateCode',
+            'state_code',
             'state.code' => parent::getSortField('code', self::STATE_ALIAS),
+            'color',
             'stateColor',
+            'state_color',
             'state.color' => parent::getSortField('color', self::STATE_ALIAS),
+            'editable',
+            'stateEditable',
+            'state_editable',
+            'state.editable' => parent::getSortField('editable', self::STATE_ALIAS),
             default => parent::getSortField($field, $alias),
         };
     }

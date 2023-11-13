@@ -39,9 +39,6 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
     use ServiceSubscriberTrait;
     use TableCellTrait;
 
-    /**
-     * Constructor.
-     */
     public function __construct(// phpcs:ignore
         GroupRepository $repository,
         protected readonly Environment $twig

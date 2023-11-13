@@ -26,9 +26,6 @@ class MonthChart extends AbstractHighchart
 {
     private readonly string $url;
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         ApplicationService $application,
         private readonly CalculationRepository $repository,

@@ -23,9 +23,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 readonly class UserRequestProcessor implements ProcessorInterface
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private Security $security)
     {
     }

@@ -25,8 +25,6 @@ class CalculationsDuplicateDocument extends AbstractCalculationItemsDocument
     use DuplicateItemsTrait;
 
     /**
-     * Constructor.
-     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      *
      * @psalm-param CalculationItemType[] $entities

@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
+use App\Pdf\Colors\PdfDrawColor;
+use App\Pdf\Colors\PdfFillColor;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
-use App\Pdf\PdfDrawColor;
-use App\Pdf\PdfFillColor;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTextColor;
 
 /**
  * The HTML style.
@@ -216,7 +216,7 @@ class HtmlStyle extends PdfStyle
 
     private function getDefaultBorderColor(): PdfDrawColor
     {
-        return PdfDrawColor::create('#808080') ?? PdfDrawColor::default();
+        return new PdfDrawColor(128, 128, 128);
     }
 
     private function updateAlignment(string $class): self

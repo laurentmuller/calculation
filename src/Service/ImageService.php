@@ -35,8 +35,6 @@ class ImageService
     private array $colors = [];
 
     /**
-     * Constructor.
-     *
      * @param \GdImage $image    the image to handle
      * @param ?string  $filename the file name, the URL or null if none
      */

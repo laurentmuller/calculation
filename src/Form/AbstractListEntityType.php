@@ -30,8 +30,6 @@ abstract class AbstractListEntityType extends AbstractType
     use CheckSubClassTrait;
 
     /**
-     * Constructor.
-     *
      * @param string $className the entity class name
      *
      * @psalm-param class-string<T> $className

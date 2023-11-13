@@ -40,8 +40,6 @@ class TranslatorFactory implements ServiceSubscriberInterface
     private const KEY_LAST_SERVICE = 'translator_service';
 
     /**
-     * Constructor.
-     *
      * @param iterable<TranslatorServiceInterface> $translators
      */
     public function __construct(

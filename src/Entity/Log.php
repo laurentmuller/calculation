@@ -71,9 +71,6 @@ class Log extends AbstractEntity
     #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT)]
     private string $message = '';
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();

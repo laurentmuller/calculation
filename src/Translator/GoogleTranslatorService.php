@@ -43,8 +43,6 @@ class GoogleTranslatorService extends AbstractTranslatorService
     private const URI_TRANSLATE = '';
 
     /**
-     * Constructor.
-     *
      * @throws \InvalidArgumentException if the API key is not defined, is null or is empty
      */
     public function __construct(// phpcs:ignore

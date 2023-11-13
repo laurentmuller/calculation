@@ -22,9 +22,6 @@ class PivotQuarterField extends PivotDateField
      */
     private $formatter;
 
-    /**
-     * Constructor.
-     */
     public function __construct(protected string $name, protected ?string $title = null)
     {
         parent::__construct($name, self::PART_MONTH, $title);

@@ -26,8 +26,6 @@ abstract class AbstractHeaderFooter
     protected const TOTAL_WIDTH = 12000;
 
     /**
-     * Constructor.
-     *
      * @param AbstractWordDocument $parent the parent's document
      */
     public function __construct(private readonly AbstractWordDocument $parent)

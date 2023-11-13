@@ -35,9 +35,6 @@ class StrengthValidator extends AbstractConstraintValidator
     private readonly PropertyAccessorInterface $propertyAccessor;
     private ?Zxcvbn $service = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly ZxcvbnFactoryInterface $factory,

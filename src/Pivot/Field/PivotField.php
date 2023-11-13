@@ -33,8 +33,6 @@ class PivotField implements \JsonSerializable
     final public const METHOD_STRING = 0;
 
     /**
-     * Constructor.
-     *
      * @param string  $name  the field name
      * @param ?string $title the field title
      */

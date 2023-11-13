@@ -20,8 +20,6 @@ use App\Controller\AbstractController;
 abstract class AbstractDocument extends SpreadsheetDocument
 {
     /**
-     * Constructor.
-     *
      * @param AbstractController $controller the parent controller
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception

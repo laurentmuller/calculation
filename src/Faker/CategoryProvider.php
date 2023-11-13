@@ -22,9 +22,6 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CategoryProvider extends EntityProvider
 {
-    /**
-     * Constructor.
-     */
     public function __construct(Generator $generator, EntityManagerInterface $manager)
     {
         parent::__construct($generator, $manager, Category::class);

@@ -22,8 +22,6 @@ use App\Controller\AbstractController;
 abstract class AbstractArrayDocument extends AbstractDocument
 {
     /**
-     * Constructor.
-     *
      * @param AbstractController $controller the parent controller
      * @param T[]                $entities   the entities to render
      *

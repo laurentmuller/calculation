@@ -29,8 +29,6 @@ class SuspendEventListenerService
     private bool $disabled = false;
 
     /**
-     * Constructor.
-     *
      * @param iterable<DisableListenerInterface> $listeners
      */
     public function __construct(

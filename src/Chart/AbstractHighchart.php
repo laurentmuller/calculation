@@ -56,9 +56,6 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
      */
     final public const TYPE_SP_LINE = 'spline';
 
-    /**
-     * Constructor.
-     */
     public function __construct(protected readonly ApplicationService $application)
     {
         parent::__construct();

@@ -13,12 +13,12 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTextColor;
 use App\Service\PhpInfoService;
 use App\Utils\StringUtils;
 
@@ -29,9 +29,6 @@ use App\Utils\StringUtils;
  */
 class PhpIniReport extends AbstractReport
 {
-    /**
-     * Constructor.
-     */
     public function __construct(AbstractController $controller, private readonly PhpInfoService $service)
     {
         parent::__construct($controller);

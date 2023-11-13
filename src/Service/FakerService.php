@@ -33,9 +33,6 @@ class FakerService
 {
     private ?Generator $generator = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly EntityManagerInterface $manager)
     {
     }

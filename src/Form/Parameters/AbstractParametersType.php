@@ -36,8 +36,6 @@ abstract class AbstractParametersType extends AbstractType
     private const LABEL_PREFIX = 'parameters.fields.';
 
     /**
-     * Constructor.
-     *
      * @param array<string, mixed> $defaultValues
      */
     public function __construct(

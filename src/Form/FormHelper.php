@@ -108,8 +108,6 @@ class FormHelper
     private array $rowAttributes = ['class' => 'mb-3 form-group'];
 
     /**
-     * Constructor.
-     *
      * @param FormBuilderInterface $builder     the parent builder
      * @param ?string              $labelPrefix the label prefix. If the prefix is not null,
      *                                          the label is automatically added when the field property is

@@ -6,6 +6,7 @@ doctrine:
     orm:
         auto_mapping: true
         validate_xml_mapping: true
+        enable_lazy_ghost_objects: true
         auto_generate_proxy_classes: true
         report_fields_where_declared: true
         proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'

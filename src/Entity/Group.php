@@ -69,9 +69,6 @@ class Group extends AbstractEntity implements TimestampableInterface
     #[ORM\OrderBy(['minimum' => Criteria::ASC])]
     private Collection $margins;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->margins = new ArrayCollection();

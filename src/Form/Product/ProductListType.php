@@ -25,9 +25,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ProductListType extends AbstractListEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(Product::class);

@@ -38,8 +38,6 @@ class PivotDateField extends PivotField
     final public const PART_YEAR = 'Y';
 
     /**
-     * Constructor.
-     *
      * @param string  $name   the field name
      * @param string  $format the format used to extract the date part
      * @param ?string $title  the field title

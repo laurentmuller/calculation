@@ -28,9 +28,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 class ProductTable extends AbstractCategoryItemTable
 {
-    /**
-     * Constructor.
-     */
     public function __construct(// phpcs:ignore
         ProductRepository $repository,
         CategoryRepository $categoryRepository,

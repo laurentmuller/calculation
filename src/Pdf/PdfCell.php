@@ -20,8 +20,6 @@ use App\Pdf\Enums\PdfTextAlignment;
 class PdfCell
 {
     /**
-     * Constructor.
-     *
      * @param ?string           $text      the cell text
      * @param int               $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style

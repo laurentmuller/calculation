@@ -24,9 +24,6 @@ use App\Interfaces\EntityInterface;
  */
 class TaskItemType extends AbstractEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(TaskItem::class);

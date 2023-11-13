@@ -23,9 +23,6 @@ use Doctrine\Common\Collections\Criteria;
  */
 abstract class AbstractCalculationItemsTable extends AbstractTable implements \Countable
 {
-    /**
-     * Constructor.
-     */
     public function __construct(protected readonly CalculationRepository $repository)
     {
     }

@@ -29,9 +29,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class ProfileChangePasswordType extends AbstractEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(User::class);

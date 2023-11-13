@@ -30,9 +30,6 @@ class EntityVoter extends Voter
 {
     use MathTrait;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly ApplicationService $service)
     {
     }

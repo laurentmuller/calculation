@@ -22,8 +22,6 @@ use App\Utils\StringUtils;
 abstract class AbstractAggregator implements \JsonSerializable, \Stringable
 {
     /**
-     * Constructor.
-     *
      * @param mixed|null $value the initial value
      */
     public function __construct(mixed $value = null)

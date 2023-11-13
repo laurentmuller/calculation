@@ -59,9 +59,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
     #[ORM\Column]
     private ?string $name = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->items = new ArrayCollection();

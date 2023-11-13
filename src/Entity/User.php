@@ -105,9 +105,6 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
     #[ORM\Column(options: ['default' => false])]
     private bool $verified = false;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->properties = new ArrayCollection();

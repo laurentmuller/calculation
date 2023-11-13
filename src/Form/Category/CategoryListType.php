@@ -25,9 +25,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CategoryListType extends AbstractListEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(Category::class);

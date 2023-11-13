@@ -84,9 +84,6 @@ final class CalculationService implements ServiceSubscriberInterface
      */
     public const ROW_USER_MARGIN = 5;
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         private readonly GlobalMarginRepository $globalRepository,
         private readonly GroupMarginRepository $marginRepository,

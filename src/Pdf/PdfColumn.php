@@ -20,8 +20,6 @@ use App\Pdf\Enums\PdfTextAlignment;
 class PdfColumn
 {
     /**
-     * Constructor.
-     *
      * @param ?string           $text      the column text
      * @param float             $width     the column width
      * @param ?PdfTextAlignment $alignment the column alignment

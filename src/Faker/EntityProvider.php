@@ -47,8 +47,6 @@ class EntityProvider extends Base
     private readonly AbstractRepository $repository;
 
     /**
-     * Constructor.
-     *
      * @psalm-param class-string<T> $className the entity class name.
      */
     public function __construct(Generator $generator, EntityManagerInterface $manager, string $className)

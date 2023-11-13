@@ -28,8 +28,6 @@ class PdfResponse extends Response implements MimeTypeInterface
     use MimeTypeTrait;
 
     /**
-     * Constructor.
-     *
      * @param PdfDocument $doc    the document to output
      * @param bool        $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if available.
      *                            <code>false</code> to send to the browser and force a file download with the name given.

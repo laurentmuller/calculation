@@ -67,8 +67,6 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     private ?HttpClientError $lastError = null;
 
     /**
-     * Constructor.
-     *
      * @throws \InvalidArgumentException if the API key is null or empty
      */
     public function __construct(#[\SensitiveParameter] protected readonly string $key)

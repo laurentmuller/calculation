@@ -24,9 +24,6 @@ use App\Service\DatabaseInfoService;
  */
 class MySqlReport extends AbstractReport
 {
-    /**
-     * Constructor.
-     */
     public function __construct(AbstractController $controller, private readonly DatabaseInfoService $service)
     {
         parent::__construct($controller);

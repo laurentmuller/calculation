@@ -41,9 +41,6 @@ class CalculationReport extends AbstractReport
 
     private const QR_CODE_SIZE = 38.0;
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         AbstractController $controller,
         private readonly Calculation $calculation,

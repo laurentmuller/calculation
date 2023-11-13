@@ -70,9 +70,6 @@ class CaptchaImageService implements ServiceSubscriberInterface
      */
     private const MAX_TIME_OUT = 180;
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/fonts/captcha.ttf')]
         private readonly string $font

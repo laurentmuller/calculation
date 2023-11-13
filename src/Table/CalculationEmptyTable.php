@@ -34,9 +34,6 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
      */
     private readonly string $quantityLabel;
 
-    /**
-     * Constructor.
-     */
     public function __construct(CalculationRepository $repository, TranslatorInterface $translator)
     {
         parent::__construct($repository);

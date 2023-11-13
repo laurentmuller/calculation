@@ -40,9 +40,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SimpleEditorType extends AbstractType
 {
-    /**
-     * Constructor.
-     */
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/simple_editor_actions.json')]
         private readonly string $actionsPath

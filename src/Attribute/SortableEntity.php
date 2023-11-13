@@ -21,8 +21,6 @@ use App\Interfaces\SortModeInterface;
 readonly class SortableEntity
 {
     /**
-     * Constructor.
-     *
      * @param string $name  the property name
      * @param string $order the sort order
      *

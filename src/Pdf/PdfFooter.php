@@ -43,9 +43,6 @@ class PdfFooter
      */
     private ?string $url = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly PdfDocument $parent)
     {
         $this->border = PdfBorder::top();

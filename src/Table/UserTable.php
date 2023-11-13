@@ -34,9 +34,6 @@ class UserTable extends AbstractEntityTable
 {
     use RoleTranslatorTrait;
 
-    /**
-     * Constructor.
-     */
     public function __construct(// phpcs:ignore
         UserRepository $repository,
         private readonly TranslatorInterface $translator,

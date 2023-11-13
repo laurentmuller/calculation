@@ -31,8 +31,6 @@ class SpreadsheetDocument extends Spreadsheet
     private ?string $title = null;
 
     /**
-     * Constructor.
-     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function __construct(private readonly TranslatorInterface $translator)

@@ -51,8 +51,6 @@ class IpStackService extends AbstractHttpClientService
     private const URI_CHECK = 'check';
 
     /**
-     * Constructor.
-     *
      * @throws \InvalidArgumentException if the API key is not defined, is null or empty
      */
     public function __construct(

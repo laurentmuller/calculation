@@ -22,8 +22,6 @@ class HttpClientError implements \JsonSerializable, \Stringable
     use ExceptionContextTrait;
 
     /**
-     * Constructor.
-     *
      * @param int             $code      the error code
      * @param string          $message   the error message
      * @param \Throwable|null $exception the optional source exception

@@ -24,9 +24,6 @@ use Twig\Environment;
  */
 class CalculationBelowTable extends CalculationTable implements \Countable
 {
-    /**
-     * Constructor.
-     */
     public function __construct(// phpcs:ignore
         CalculationRepository $repository,
         CalculationStateRepository $stateRepository,

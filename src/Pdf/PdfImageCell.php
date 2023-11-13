@@ -46,8 +46,6 @@ class PdfImageCell extends PdfCell
     private int $width;
 
     /**
-     * Constructor.
-     *
      * @param string            $path      the full image path
      * @param int               $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style

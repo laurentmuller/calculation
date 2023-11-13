@@ -62,9 +62,6 @@ class PdfHeader
      */
     private ?PdfStyle $titleStyle = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly PdfDocument $parent)
     {
     }

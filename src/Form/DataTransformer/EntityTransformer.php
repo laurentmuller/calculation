@@ -33,8 +33,6 @@ readonly class EntityTransformer implements DataTransformerInterface
     private string $className;
 
     /**
-     * Constructor.
-     *
      * @param AbstractRepository<T> $repository
      */
     public function __construct(private AbstractRepository $repository)

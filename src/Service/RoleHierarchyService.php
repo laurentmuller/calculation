@@ -21,9 +21,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 readonly class RoleHierarchyService
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private RoleHierarchyInterface $service)
     {
     }

@@ -24,8 +24,6 @@ class CsvResponse extends StreamedResponse implements MimeTypeInterface
     use MimeTypeTrait;
 
     /**
-     * Constructor.
-     *
      * @param callable|null $callback the callback to output content
      * @param bool          $inline   <code>true</code> to send the file inline to the browser. The CSV viewer is used if available.
      *                                <code>false</code> to send to the browser and force a file download with the name given.

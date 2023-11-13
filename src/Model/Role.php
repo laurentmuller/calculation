@@ -23,8 +23,6 @@ class Role implements \Stringable, RoleInterface
     use RoleTrait;
 
     /**
-     * Constructor.
-     *
      * @param string  $role the role
      * @param ?string $name the optional name
      */

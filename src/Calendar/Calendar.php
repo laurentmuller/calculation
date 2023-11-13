@@ -94,8 +94,6 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     private ?int $year = null;
 
     /**
-     * Constructor.
-     *
      * @param ?int $year the year to generate
      *
      * @throws CalendarException

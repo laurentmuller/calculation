@@ -22,9 +22,6 @@ use App\Form\AbstractMarginType;
  */
 class GlobalMarginType extends AbstractMarginType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(GlobalMargin::class);

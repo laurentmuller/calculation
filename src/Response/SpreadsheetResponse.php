@@ -28,8 +28,6 @@ class SpreadsheetResponse extends StreamedResponse implements MimeTypeInterface
     use MimeTypeTrait;
 
     /**
-     * Constructor.
-     *
      * @param SpreadsheetDocument $doc    the document to output
      * @param bool                $inline <code>true</code> to send the file inline to the browser. The Spreadsheet viewer is used if available.
      *                                    <code>false</code> to send to the browser and force a file download with the name given.

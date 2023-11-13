@@ -25,9 +25,6 @@ use App\Interfaces\EntityInterface;
  */
 class CustomerType extends AbstractEntityType
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         parent::__construct(Customer::class);

@@ -17,9 +17,6 @@ namespace App\Pdf;
  */
 class PdfRectangle
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private float $x, private float $y, private float $width, private float $height)
     {
     }

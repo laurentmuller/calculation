@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
+use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;

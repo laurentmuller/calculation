@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
+use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBarScale;
-use App\Pdf\PdfFillColor;
 use App\Pdf\PdfStyle;
 
 /**

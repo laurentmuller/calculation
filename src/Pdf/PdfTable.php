@@ -99,8 +99,6 @@ class PdfTable
     private ?PdfDrawCellTextInterface $textListener = null;
 
     /**
-     * Constructor.
-     *
      * @param PdfDocument $parent    the parent document to print in
      * @param bool        $fullWidth a value indicating if the table take all the printable width
      */

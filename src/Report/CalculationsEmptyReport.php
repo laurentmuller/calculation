@@ -21,7 +21,7 @@ use App\Traits\MathTrait;
  *
  * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
  */
-class CalculationEmptyReport extends AbstractCalculationItemsReport
+class CalculationsEmptyReport extends AbstractCalculationItemsReport
 {
     use EmptyItemsTrait;
     use MathTrait;
@@ -37,8 +37,6 @@ class CalculationEmptyReport extends AbstractCalculationItemsReport
     private readonly string $quantityLabel;
 
     /**
-     * Constructor.
-     *
      * @psalm-param CalculationItemType[] $entities
      */
     public function __construct(AbstractController $controller, array $entities)

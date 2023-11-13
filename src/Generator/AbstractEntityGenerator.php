@@ -36,9 +36,6 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
 
     private readonly Generator $generator;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly EntityManagerInterface $manager, FakerService $fakerService)
     {
         $this->generator = $fakerService->getGenerator();

@@ -95,9 +95,6 @@ final class SymfonyInfoService
      */
     private ?array $routes = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         private readonly KernelInterface $kernel,
         private readonly RouterInterface $router,

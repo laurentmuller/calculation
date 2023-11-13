@@ -34,8 +34,6 @@ abstract class AbstractEntityType extends AbstractHelperType
     protected string $className;
 
     /**
-     * Constructor.
-     *
      * @param class-string<T> $className the entity class name
      *
      * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractEntity class

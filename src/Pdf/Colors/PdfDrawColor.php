@@ -10,7 +10,9 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Colors;
+
+use App\Pdf\PdfDocument;
 
 /**
  * Color used color for all drawing operations (lines, rectangles and cell borders).
@@ -19,7 +21,7 @@ class PdfDrawColor extends AbstractPdfColor
 {
     public function apply(PdfDocument $doc): void
     {
-        $doc->SetDrawColor($this->getRed(), $this->getGreen(), $this->getBlue());
+        $doc->SetDrawColor($this->red, $this->green, $this->blue);
     }
 
     /**

@@ -63,8 +63,6 @@ class Comment
     private ?Address $toAddress = null;
 
     /**
-     * Constructor.
-     *
      * @param bool $mail true to send an email, false to send a comment
      */
     public function __construct(private readonly bool $mail = true)

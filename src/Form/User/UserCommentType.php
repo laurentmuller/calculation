@@ -27,9 +27,6 @@ use Symfony\Component\Form\FormBuilderInterface;
  */
 class UserCommentType extends AbstractType
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly AddressTransformer $transformer)
     {
     }

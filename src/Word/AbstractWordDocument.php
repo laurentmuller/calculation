@@ -37,8 +37,6 @@ abstract class AbstractWordDocument extends WordDocument
     private readonly TranslatorInterface $translator;
 
     /**
-     * Constructor.
-     *
      * @param AbstractController $controller the parent's controller
      */
     public function __construct(protected readonly AbstractController $controller)

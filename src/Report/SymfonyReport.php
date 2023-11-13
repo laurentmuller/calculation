@@ -29,9 +29,6 @@ use App\Service\SymfonyInfoService;
  */
 class SymfonyReport extends AbstractReport
 {
-    /**
-     * Constructor.
-     */
     public function __construct(AbstractController $controller, private readonly SymfonyInfoService $service, private readonly string $locale, private readonly string $mode)
     {
         parent::__construct($controller);

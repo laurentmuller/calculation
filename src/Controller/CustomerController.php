@@ -44,9 +44,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CustomerController extends AbstractEntityController
 {
-    /**
-     * Constructor.
-     */
     public function __construct(CustomerRepository $repository) // phpcs:ignore
     {
         parent::__construct($repository);

@@ -37,9 +37,6 @@ class LogTable extends AbstractTable implements \Countable
      */
     final public const PARAM_LEVEL = 'level';
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly LogService $service, private readonly Environment $twig)
     {
     }

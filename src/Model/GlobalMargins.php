@@ -32,8 +32,6 @@ class GlobalMargins
     private Collection $margins;
 
     /**
-     * Constructor.
-     *
      * @param GlobalMargin[] $margins
      */
     public function __construct(array $margins = [])

@@ -26,8 +26,6 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 class SymfonyDocument extends AbstractDocument
 {
     /**
-     * Constructor.
-     *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     public function __construct(AbstractController $controller, private readonly SymfonyInfoService $service, private readonly string $locale, private readonly string $mode)

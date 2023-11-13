@@ -20,9 +20,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  */
 readonly class SwissPostService
 {
-    /**
-     * Constructor.
-     */
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/swiss.sqlite')]
         private string $databaseName

@@ -10,7 +10,9 @@
 
 declare(strict_types=1);
 
-namespace App\Pdf;
+namespace App\Pdf\Colors;
+
+use App\Pdf\PdfDocument;
 
 /**
  * Color used color for filling operations (filled rectangles and cell backgrounds).
@@ -19,7 +21,7 @@ class PdfFillColor extends AbstractPdfColor
 {
     public function apply(PdfDocument $doc): void
     {
-        $doc->SetFillColor($this->getRed(), $this->getGreen(), $this->getBlue());
+        $doc->SetFillColor($this->red, $this->green, $this->blue);
     }
 
     /**
@@ -39,8 +41,8 @@ class PdfFillColor extends AbstractPdfColor
      */
     public function isFillColor(): bool
     {
-        return self::MAX_VALUE !== $this->getRed()
-            || self::MAX_VALUE !== $this->getGreen()
-            || self::MAX_VALUE !== $this->getBlue();
+        return self::MAX_VALUE !== $this->red
+            || self::MAX_VALUE !== $this->green
+            || self::MAX_VALUE !== $this->blue;
     }
 }

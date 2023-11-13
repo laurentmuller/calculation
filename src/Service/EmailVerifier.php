@@ -28,9 +28,6 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
  */
 readonly class EmailVerifier
 {
-    /**
-     * Constructor.
-     */
     public function __construct(
         private VerifyEmailHelperInterface $helper,
         private MailerInterface $mailer,

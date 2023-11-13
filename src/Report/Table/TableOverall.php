@@ -13,10 +13,10 @@ declare(strict_types=1);
 namespace App\Report\Table;
 
 use App\Entity\Calculation;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Pdf\PdfTextColor;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
@@ -33,9 +33,6 @@ class TableOverall extends PdfTable
     private readonly float $minMargin;
     private readonly TranslatorInterface $translator;
 
-    /**
-     * Constructor.
-     */
     public function __construct(CalculationReport $parent)
     {
         parent::__construct($parent);

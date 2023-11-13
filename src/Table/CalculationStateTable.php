@@ -39,9 +39,6 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
     use TableCellTrait;
     use TranslatorAwareTrait;
 
-    /**
-     * Constructor.
-     */
     public function __construct(// phpcs:ignore
         CalculationStateRepository $repository,
         protected readonly Environment $twig

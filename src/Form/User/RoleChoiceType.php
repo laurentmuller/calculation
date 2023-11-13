@@ -21,9 +21,6 @@ use Symfony\Bundle\SecurityBundle\Security;
  */
 class RoleChoiceType extends AbstractChoiceType
 {
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly Security $security)
     {
     }

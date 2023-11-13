@@ -41,9 +41,6 @@ class CalculationTable extends AbstractEntityTable
      */
     final public const PARAM_STATE = 'stateId';
 
-    /**
-     * Constructor.
-     */
     public function __construct(// phpcs:ignore
         CalculationRepository $repository,
         protected readonly CalculationStateRepository $stateRepository,

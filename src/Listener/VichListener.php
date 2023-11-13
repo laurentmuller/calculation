@@ -37,9 +37,6 @@ class VichListener
 {
     use FileExtensionTrait;
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly ImageResizer $resizer)
     {
     }

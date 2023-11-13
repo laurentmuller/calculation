@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTextColor;
 use App\Utils\FormatUtils;
 
 /**

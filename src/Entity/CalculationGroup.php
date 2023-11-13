@@ -78,9 +78,6 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     #[ORM\Column(type: FixedFloatType::NAME)]
     private float $margin = 0.0;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->categories = new ArrayCollection();

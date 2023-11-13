@@ -51,9 +51,6 @@ final class FunctionExtension extends AbstractExtension
      */
     private readonly string $webDir;
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         #[Autowire('%kernel.project_dir%/composer.lock')]
         string $composer_file,

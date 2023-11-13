@@ -51,9 +51,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
         SearchService::COLUMN_FIELD_NAME,
     ];
 
-    /**
-     * Constructor.
-     */
     public function __construct(private readonly SearchService $service)
     {
     }

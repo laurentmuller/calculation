@@ -44,9 +44,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class GroupController extends AbstractEntityController
 {
-    /**
-     * Constructor.
-     */
     public function __construct(GroupRepository $repository) // phpcs:ignore
     {
         parent::__construct($repository);

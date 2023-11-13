@@ -21,8 +21,6 @@ use App\Utils\StringUtils;
 abstract class AbstractPivotAggregator implements \JsonSerializable, \Stringable
 {
     /**
-     * Constructor.
-     *
      * @param AbstractAggregator $aggregator the aggregator function
      * @param mixed              $value      the initial value
      */

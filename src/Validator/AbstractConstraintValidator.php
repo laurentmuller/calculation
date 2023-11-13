@@ -25,8 +25,6 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 abstract class AbstractConstraintValidator extends ConstraintValidator
 {
     /**
-     * Constructor.
-     *
      * @param class-string<T> $className the constraint class
      */
     public function __construct(private readonly string $className)

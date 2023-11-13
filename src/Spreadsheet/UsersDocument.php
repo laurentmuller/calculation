@@ -34,8 +34,6 @@ class UsersDocument extends AbstractArrayDocument
     use RoleTranslatorTrait;
 
     /**
-     * Constructor.
-     *
      * @param User[] $entities
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception

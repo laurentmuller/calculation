@@ -33,9 +33,6 @@ class TableGroups extends PdfTable
     private readonly Calculation $calculation;
     private readonly TranslatorInterface $translator;
 
-    /**
-     * Constructor.
-     */
     public function __construct(CalculationReport $parent)
     {
         parent::__construct($parent);

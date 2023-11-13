@@ -43,9 +43,6 @@ class OpenWeatherCityUpdater
      */
     private const FILE_EXTENSION = 'gz';
 
-    /**
-     * Constructor.
-     */
     public function __construct(
         private readonly OpenWeatherService $service,
         private readonly FormFactoryInterface $factory,

@@ -75,9 +75,6 @@ class CalculationState extends AbstractEntity implements TimestampableInterface
     #[ORM\Column(options: ['default' => true])]
     private bool $editable = true;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->calculations = new ArrayCollection();

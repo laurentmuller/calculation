@@ -26,8 +26,6 @@ class WordResponse extends StreamedResponse implements MimeTypeInterface
     use MimeTypeTrait;
 
     /**
-     * Constructor.
-     *
      * @param WordDocument $doc    the document to output
      * @param bool         $inline <code>true</code> to send the file inline to the browser. The document viewer is used if available.
      *                             <code>false</code> to send to the browser and force a file download with the name given.

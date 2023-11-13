@@ -22,9 +22,6 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class CalculationStateProvider extends EntityProvider
 {
-    /**
-     * Constructor.
-     */
     public function __construct(Generator $generator, EntityManagerInterface $manager)
     {
         parent::__construct($generator, $manager, CalculationState::class);

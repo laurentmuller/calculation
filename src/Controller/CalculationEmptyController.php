@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\Attribute\GetRoute;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
-use App\Report\CalculationEmptyReport;
+use App\Report\CalculationsEmptyReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsEmptyDocument;
 use App\Table\CalculationEmptyTable;
@@ -72,7 +72,7 @@ class CalculationEmptyController extends AbstractController
             return $response;
         }
         $items = $this->getItems($repository);
-        $doc = new CalculationEmptyReport($this, $items);
+        $doc = new CalculationsEmptyReport($this, $items);
 
         return $this->renderPdfDocument($doc);
     }

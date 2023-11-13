@@ -30,9 +30,6 @@ use Twig\Extra\Markdown\MarkdownInterface;
  */
 readonly class MailerService
 {
-    /**
-     * Constructor.
-     */
     public function __construct(
         private UrlGeneratorInterface $generator,
         private MarkdownInterface $markdown,

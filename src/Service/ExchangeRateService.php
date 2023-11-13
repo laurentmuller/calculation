@@ -86,8 +86,6 @@ class ExchangeRateService extends AbstractHttpClientService
     private ?int $timeout = null;
 
     /**
-     * Constructor.
-     *
      * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
      */
     public function __construct(

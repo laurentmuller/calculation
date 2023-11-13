@@ -35,13 +35,10 @@ class CustomerTypeTest extends AbstractEntityTypeTestCase
             'zipCode' => 'zipCode',
             'city' => 'city',
             'country' => 'CH',
-            'email' => 'email',
+            'email' => 'email@email.com',
         ];
     }
 
-    /**
-     * @psalm-return class-string<Customer>
-     */
     protected function getEntityClass(): string
     {
         return Customer::class;
@@ -57,9 +54,6 @@ class CustomerTypeTest extends AbstractEntityTypeTestCase
         return $extensions;
     }
 
-    /**
-     * @psalm-return class-string<CustomerType>
-     */
     protected function getFormTypeClass(): string
     {
         return CustomerType::class;

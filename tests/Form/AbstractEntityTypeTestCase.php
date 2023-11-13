@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Form;
 
-use App\Entity\AbstractEntity;
 use App\Form\Extension\FileTypeExtension;
 use App\Form\Extension\TextTypeExtension;
 use App\Form\Extension\UrlTypeExtension;
@@ -23,7 +22,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 /**
  * Test for entity type class.
  *
- * @template TEntity of AbstractEntity
+ * @template TEntity of \App\Entity\AbstractEntity
  * @template TForm of \App\Form\AbstractEntityType<TEntity>
  */
 abstract class AbstractEntityTypeTestCase extends TypeTestCase
@@ -34,10 +33,11 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     public function testSubmitValidData(): void
     {
         $className = $this->getEntityClass();
+        $typeClass = $this->getFormTypeClass();
 
         // create model and form
         $model = new $className();
-        $form = $this->factory->create($this->getFormTypeClass(), $model);
+        $form = $this->factory->create($typeClass, $model);
 
         // populate form data
         $data = $this->getData();

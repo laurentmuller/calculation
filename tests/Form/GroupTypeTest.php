@@ -31,17 +31,11 @@ class GroupTypeTest extends AbstractEntityTypeTestCase
         ];
     }
 
-    /**
-     * @psalm-return class-string<Group>
-     */
     protected function getEntityClass(): string
     {
         return Group::class;
     }
 
-    /**
-     * @psalm-return class-string<GroupType>
-     */
     protected function getFormTypeClass(): string
     {
         return GroupType::class;

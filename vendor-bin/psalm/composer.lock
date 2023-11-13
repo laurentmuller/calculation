@@ -1254,22 +1254,22 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v5.04",
+            "version": "v5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "2a3f81e62278f488a21b70603df4cfb845af70ad"
+                "reference": "f23ec3439743fb24f5c1101e52d032f23d5befa6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/2a3f81e62278f488a21b70603df4cfb845af70ad",
-                "reference": "2a3f81e62278f488a21b70603df4cfb845af70ad",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/f23ec3439743fb24f5c1101e52d032f23d5befa6",
+                "reference": "f23ec3439743fb24f5c1101e52d032f23d5befa6",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
                 "php": "^7.4 || ^8.0",
-                "symfony/framework-bundle": "^5.0 || ^6.0",
+                "symfony/framework-bundle": "^5.0 || ^6.0 || ^7.0",
                 "vimeo/psalm": "^5.1"
             },
             "require-dev": {
@@ -1278,10 +1278,10 @@
                 "phpunit/phpunit": "~7.5 || ~9.5",
                 "symfony/cache-contracts": "^1.0 || ^2.0",
                 "symfony/console": "*",
-                "symfony/form": "^5.0 || ^6.0",
-                "symfony/messenger": "^5.0 || ^6.0",
+                "symfony/form": "^5.0 || ^6.0 || ^7.0",
+                "symfony/messenger": "^5.0 || ^6.0 || ^7.0",
                 "symfony/security-guard": "*",
-                "symfony/serializer": "^5.0 || ^6.0",
+                "symfony/serializer": "^5.0 || ^6.0 || ^7.0",
                 "symfony/validator": "*",
                 "twig/twig": "^2.10 || ^3.0",
                 "weirdan/codeception-psalm-module": "dev-master"
@@ -1313,9 +1313,9 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.04"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v5.1.0"
             },
-            "time": "2023-11-10T07:14:46+00:00"
+            "time": "2023-11-12T10:04:27+00:00"
         },
         {
             "name": "psr/cache",

@@ -67,7 +67,7 @@ class CategoryTypeTest extends AbstractEntityTypeTestCase
         return CategoryType::class;
     }
 
-    private static function getGroup(): Group
+    private function getGroup(): Group
     {
         if (!self::$group instanceof Group) {
             self::$group = new Group();
@@ -90,7 +90,7 @@ class CategoryTypeTest extends AbstractEntityTypeTestCase
 
         $query = $this->createMock(AbstractQuery::class);
         $query->method('execute')
-            ->willReturn([self::getGroup()]);
+            ->willReturn([$this->getGroup()]);
 
         $query->method('getSQL')
             ->willReturn('FakeSQL');

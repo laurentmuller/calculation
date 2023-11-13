@@ -5,10 +5,10 @@ doctrine:
             fixed_float: 'App\Types\FixedFloatType'
     orm:
         auto_mapping: true
-        validate_xml_mapping: true
-        enable_lazy_ghost_objects: true
+        validate_xml_mapping: true        
         auto_generate_proxy_classes: true
         report_fields_where_declared: true
+        enable_lazy_ghost_objects: '%kernel.debug%'
         proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         mappings:

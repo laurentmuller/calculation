@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Form;
 
 use App\Entity\Category;
-use App\Entity\Group;
-use App\Form\Category\CategoryType;
-use App\Repository\GroupRepository;
+use App\Entity\Product;
+use App\Form\Product\ProductType;
+use App\Repository\CategoryRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -23,25 +23,27 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\PreloadedExtension;
 
 /**
- * @extends AbstractEntityTypeTestCase<Category, CategoryType>
+ * @extends AbstractEntityTypeTestCase<Product, ProductType>
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(CategoryType::class)]
-class CategoryTypeTest extends AbstractEntityTypeTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(ProductType::class)]
+class ProductTypeTest extends AbstractEntityTypeTestCase
 {
-    private static ?Group $group = null;
+    private static ?Category $category = null;
 
     protected function getData(): array
     {
         return [
-            'code' => 'code',
             'description' => 'description',
-            'group' => null,
+            'unit' => 'unit',
+            'price' => 1.25,
+            'category' => null,
+            'supplier' => 'supplier',
         ];
     }
 
     protected function getEntityClass(): string
     {
-        return Category::class;
+        return Product::class;
     }
 
     /**
@@ -61,19 +63,19 @@ class CategoryTypeTest extends AbstractEntityTypeTestCase
 
     protected function getFormTypeClass(): string
     {
-        return CategoryType::class;
+        return ProductType::class;
     }
 
-    private function getGroup(): Group
+    private function getCategory(): Category
     {
-        if (!self::$group instanceof Group) {
-            self::$group = new Group();
-            self::$group->setCode('group');
-            $property = new \ReflectionProperty(Group::class, 'id');
-            $property->setValue(self::$group, 1);
+        if (!self::$category instanceof Category) {
+            self::$category = new Category();
+            self::$category->setCode('category');
+            $property = new \ReflectionProperty(Category::class, 'id');
+            $property->setValue(self::$category, 1);
         }
 
-        return self::$group;
+        return self::$category;
     }
 
     /**
@@ -84,13 +86,13 @@ class CategoryTypeTest extends AbstractEntityTypeTestCase
         $query = $this->createQuery();
         $builder = $this->createQueryBuilder($query);
         $manager = $this->createEntityManager();
-        $repository = $this->createRepository(GroupRepository::class);
+        $repository = $this->createRepository(CategoryRepository::class);
         $registry = $this->createRegistry($manager);
 
         $query->method('execute')
-            ->willReturn([$this->getGroup()]);
+            ->willReturn([$this->getCategory()]);
 
-        $repository->method('getSortedBuilder')
+        $repository->method('getQueryBuilderByGroup')
             ->willReturn($builder);
 
         $manager->method('getRepository')

@@ -67,8 +67,6 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
     public function __clone()
     {
         parent::__clone();
-
-        // clone items
         $this->items = $this->items->map(fn (TaskItem $item): TaskItem => (clone $item)->setTask($this));
     }
 

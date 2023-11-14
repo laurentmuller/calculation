@@ -40,7 +40,7 @@ class CalculationState extends AbstractEntity implements TimestampableInterface
     /**
      * The calculations.
      *
-     * @var Collection<int, Calculation>
+     * @var ArrayCollection<int, Calculation>
      */
     #[ORM\OneToMany(mappedBy: 'state', targetEntity: Calculation::class)]
     private Collection $calculations;

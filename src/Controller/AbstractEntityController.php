@@ -177,7 +177,7 @@ abstract class AbstractEntityController extends AbstractController
      *
      * @return class-string<\Symfony\Component\Form\FormTypeInterface>
      *
-     * @phpstan-return class-string<\Symfony\Component\Form\FormTypeInterface<T>>
+     * @phpstan-return class-string<\Symfony\Component\Form\FormTypeInterface>
      */
     abstract protected function getEditFormType(): string;
 
@@ -209,7 +209,11 @@ abstract class AbstractEntityController extends AbstractController
             $sortedFields = [$sortedFields => Criteria::ASC];
         }
 
-        /** @psalm-var \Doctrine\ORM\Query<int, T> $query */
+        /**
+         * @psalm-var \Doctrine\ORM\Query<int, T> $query
+         *
+         * @phpstan-var \Doctrine\ORM\Query $query
+         */
         $query = $this->repository->getSearchQuery($sortedFields, $criteria, $alias);
 
         return $query->getResult();

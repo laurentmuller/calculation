@@ -12,10 +12,20 @@ declare(strict_types=1);
 
 namespace App\Tests\Form;
 
+use App\Entity\AbstractEntity;
 use App\Form\Extension\FileTypeExtension;
 use App\Form\Extension\TextTypeExtension;
 use App\Form\Extension\UrlTypeExtension;
 use App\Form\Extension\VichImageTypeExtension;
+use App\Repository\AbstractRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -32,16 +42,16 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
      */
     public function testSubmitValidData(): void
     {
-        $className = $this->getEntityClass();
-        $typeClass = $this->getFormTypeClass();
+        $entityClass = $this->getEntityClass();
+        $formTypeClass = $this->getFormTypeClass();
 
         // create model and form
-        $model = new $className();
-        $form = $this->factory->create($typeClass, $model);
+        $model = new $entityClass();
+        $form = $this->factory->create($formTypeClass, $model);
 
         // populate form data
         $data = $this->getData();
-        $expected = $this->populate($className, $data);
+        $expected = $this->populate($entityClass, $data);
 
         // submit the data to the form directly
         $form->submit($data);
@@ -61,9 +71,74 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     }
 
     /**
+     * @throws Exception
+     */
+    protected function createEntityManager(): MockObject&EntityManager
+    {
+        $manager = $this->createMock(EntityManager::class);
+        $manager->method('getClassMetadata')
+            ->willReturn(new ClassMetadata($this->getEntityClass()));
+
+        return $manager;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function createQuery(): MockObject&AbstractQuery
+    {
+        $query = $this->createMock(AbstractQuery::class);
+        $query->method('getSQL')
+            ->willReturn('FakeSQL');
+
+        return $query;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function createQueryBuilder(AbstractQuery $query): MockObject&QueryBuilder
+    {
+        $parameters = new ArrayCollection();
+        $builder = $this->createMock(QueryBuilder::class);
+        $builder->method('getParameters')
+            ->willReturn($parameters);
+        $builder->method('getQuery')
+            ->willReturn($query);
+
+        return $builder;
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function createRegistry(EntityManager $manager): MockObject&ManagerRegistry
+    {
+        $registry = $this->createMock(ManagerRegistry::class);
+        $registry->method('getManagerForClass')
+            ->willReturn($manager);
+
+        return $registry;
+    }
+
+    /**
+     * @template TRepository of AbstractRepository
+     *
+     * @param class-string<TRepository> $repositoryClass
+     *
+     * @return MockObject&TRepository
+     *
+     * @throws Exception
+     */
+    protected function createRepository(string $repositoryClass): MockObject&AbstractRepository
+    {
+        return $this->createMock($repositoryClass);
+    }
+
+    /**
      * Gets the data to test.
      *
-     * @return array<string, mixed> an array where keys are field
+     * @return array<string, mixed> an array where keys are field names
      */
     abstract protected function getData(): array;
 
@@ -94,7 +169,7 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     /**
      * Update the given entity with the given data.
      *
-     * @psalm-param class-string<TEntity> $className
+     * @psalm-param class-string<TEntity> $entityClass
      * @psalm-param array<string, mixed>  $data
      *
      * @psalm-return TEntity
@@ -102,9 +177,9 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
      * @psalm-suppress InvalidReturnStatement
      * @psalm-suppress InvalidReturnType
      */
-    protected function populate(string $className, array $data): mixed
+    protected function populate(string $entityClass, array $data): AbstractEntity
     {
-        $entity = new $className();
+        $entity = new $entityClass();
         $accessor = PropertyAccess::createPropertyAccessor();
         /** @psalm-var mixed $value */
         foreach ($data as $key => $value) {

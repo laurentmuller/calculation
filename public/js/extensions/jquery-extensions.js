@@ -398,9 +398,9 @@
             // check type (copied from accept method)
             let type = $(this).attr('accept') || false;
             if (type) {
-                type = type.replace(/[\-\[\]\/\{\}\(\)\+\?\.\\\^\$\|]/g, "\\$&")
-                    .replace(/,/g, "|")
-                    .replace(/\/\*/g, "/.*");
+                type = type.replace(/[\-\[\]\/\{\}\(\)\+\?\.\\\^\$\|]/g, '\\$&')
+                    .replace(/,/g, '|')
+                    .replace(/\/\*/g, '/.*');
                 const pattern = `.?(${type})$`;
                 const regex = new RegExp(pattern, 'i');
                 for (let i = 0, len = files.length; i < len; i++) {
@@ -573,11 +573,18 @@
         };
     }
 
+    // if (!$.fn.dropdown) {
+    //     $.fn.dropdown = function (options = {}) {
+    //         return this.each(function () {
+    //             return new bootstrap.Dropdown(this, options);
+    //         });
+    //     };
+    // }
+
     // if (!$.fn.toast) {
     //     $.fn.toast = function (options = {}) {
     //         return this.each(function () {
-    //             const data = new bootstrap.Toast(this, options);
-    //             return data;
+    //             return new bootstrap.Toast(this, options);
     //         });
     //     };
     // }

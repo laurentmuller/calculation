@@ -34,9 +34,6 @@ abstract class AbstractEntity implements EntityInterface
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
-    /**
-     * Magic method called after clone.
-     */
     public function __clone()
     {
         $this->id = null;

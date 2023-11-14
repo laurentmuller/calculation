@@ -35,7 +35,7 @@
             const that = this;
             const $element = this.$element;
             $element.off('blur', that.blurProxy)
-                .off('input', this.inputProxy)
+                .off('input', that.inputProxy)
                 .off('focus', that.focusProxy)
                 .off('keyup', that.keyUpProxy)
                 .off('keydown', that.keyDownProxy)
@@ -43,8 +43,8 @@
                 .removeData(Typeahead.NAME);
 
             // remove menu handlers
-            const $menu = this.$menu;
-            const selector = this.options.selector;
+            const $menu = that.$menu;
+            const selector = that.options.selector;
             $menu.off('click', that.clickProxy)
                 .off('mouseenter', selector, that.mouseEnterProxy)
                 .off('mouseleave', selector, that.mouseLeaveProxy)
@@ -73,7 +73,6 @@
                 width: width
             });
             this.$menu.show();
-            this.visible = true;
             return this;
         }
 
@@ -83,9 +82,8 @@
          * @return {Typeahead} this instance for chaining.
          */
         hide() {
-            if (this.visible) {
+            if (this._isVisible()) {
                 this.$menu.hide();
-                this.visible = false;
             }
             return this;
         }
@@ -107,9 +105,6 @@
                 throw new Error('The ajax option must be set!');
             }
 
-            // create menu
-            this.$menu = $(this.options.menu).insertAfter(this.$element);
-
             // method overrides
             this.onSelect = this.options.onSelect || null;
             this.onError = this.options.onError || null;
@@ -129,11 +124,13 @@
             if (!this.ajax.url) {
                 throw new Error('The ajax URL option must be set!');
             }
-
             this.ajaxExecuteProxy = () => this._ajaxExecute();
             this.ajaxSuccessProxy = (data) => this._ajaxSuccess(data);
             this.ajaxErrorProxy = (jqXHR, textStatus, errorThrown) => this._ajaxError(jqXHR, textStatus, errorThrown);
-            this.visible = false;
+
+            // create menu
+            this.$menu = $(this.options.menu).insertAfter(this.$element);
+
             this.query = '';
             this._listen();
             return this;
@@ -279,6 +276,15 @@
         }
 
         /**
+         * Returns if the menu is visible.
+         * @return {boolean} true if visible; false otherwise.
+         * @private
+         */
+        _isVisible() {
+            return this.$menu && this.$menu.length && this.$menu.css('display') === 'block';
+        }
+
+        /**
          * Returns if the given data is a string.
          * @param {*} data - the data to test.
          * @return {boolean} true if a string.
@@ -346,7 +352,7 @@
             }
             const query = this._getQueryText();
             if (query === this.query) {
-                if (!this.visible) {
+                if (!this._isVisible()) {
                     this._first().show();
                 }
                 return this;
@@ -382,6 +388,9 @@
             const data = this._isFunction(this.ajax.preDispatch) ? this.ajax.preDispatch(query) : {
                 query: query
             };
+            if (!this.options.waitCursor) {
+                $.ajaxSetup({global: false});
+            }
             this.ajax.xhr = $.getJSON({
                 success: this.ajaxSuccessProxy,
                 error: this.ajaxErrorProxy,
@@ -584,7 +593,7 @@
          * @private
          */
         _move(e) {
-            if (!this.visible) {
+            if (!this._isVisible()) {
                 return;
             }
             switch (e.key) {
@@ -645,7 +654,7 @@
         _keyup(e) {
             switch (e.key) {
                 case 'ArrowDown':
-                    if (e.altKey && !this.visible && this._hasItems() && this._isQueryText()) {
+                    if (e.altKey && !this._isVisible() && this._hasItems() && this._isQueryText()) {
                         this.show();
                     }
                     break;
@@ -653,7 +662,7 @@
                     break;
                 case 'Tab':
                 case 'Enter':
-                    if (this.visible) {
+                    if (this._isVisible()) {
                         this._select();
                     }
                     break;
@@ -693,7 +702,7 @@
          */
         _blur() {
             this.focused = false;
-            if (!this.isMouseOver && this.visible) {
+            if (!this.isMouseOver && this._isVisible()) {
                 this.hide();
             }
         }
@@ -728,7 +737,7 @@
          */
         _mouseleave() {
             this.isMouseOver = false;
-            if (!this.focused && this.visible) {
+            if (!this.focused && this._isVisible()) {
                 this.hide();
             }
         }
@@ -754,6 +763,9 @@
          * @private
          */
         _abortAjax() {
+            if (!this.options.waitCursor) {
+                $.ajaxSetup({global: true});
+            }
             if (this.ajax && this.ajax.xhr) {
                 this.ajax.xhr.abort();
                 this.ajax.xhr = null;
@@ -779,7 +791,7 @@
         item: '<button class="dropdown-item" type="button" role="option" />',
         header: '<h6 class="dropdown-header text-uppercase" />',
         divider: '<hr class="dropdown-divider">',
-        highlight: '<span class="text-success fw-bold">$&</span>',
+        highlight: '<span class="text-success">$&</span>',
 
         // functions
         onSelect: null,
@@ -795,7 +807,8 @@
             method: 'get',
             triggerLength: 1,
             preDispatch: null,
-            preProcess: null
+            preProcess: null,
+            waitCursor: false
         }
     };
 

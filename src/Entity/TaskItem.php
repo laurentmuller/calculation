@@ -65,8 +65,6 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
     public function __clone()
     {
         parent::__clone();
-
-        // clone margins
         $this->margins = $this->margins->map(fn (TaskItemMargin $margin): TaskItemMargin => (clone $margin)->setTaskItem($this));
     }
 

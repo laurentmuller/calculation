@@ -128,6 +128,8 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * @see AbstractRepository::createDefaultQueryBuilder()
      *
      * @psalm-return Query<TEntity>
+     *
+     * @phpstan-return Query
      */
     public function getSearchQuery(
         array $sortedFields = [],

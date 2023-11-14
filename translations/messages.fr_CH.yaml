@@ -315,6 +315,7 @@ common:
   id: Numéro
   no_script_support: Votre navigateur ne supporte pas JavaScript !
   other_actions: Autre actions
+  global_actions: Actions globales
   required: <span class="text-danger">*</span> = Valeur requise
   show_password: Afficher le mot de passe
   toggle_password: Afficher/Masquer le mot de passe

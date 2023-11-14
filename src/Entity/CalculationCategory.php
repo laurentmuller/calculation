@@ -80,8 +80,6 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     public function __clone()
     {
         parent::__clone();
-
-        // clone items
         $this->items = $this->items->map(fn (CalculationItem $item): CalculationItem => (clone $item)->setCategory($this));
     }
 

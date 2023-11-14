@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* global bootstrap */
+
 /**
  * Format the country entry.
  *
@@ -278,7 +280,61 @@ function updatePosition($radio) {
             updatePosition($(this));
         }
     });
-    $('.dropdown-position').parent().find('.form-label').on('click', function (){
+    $('.dropdown-position').parent().find('.form-label').on('click', function () {
         $('.btn-position').trigger('focus');
+    });
+
+    const getItems = function () {
+        return document.querySelectorAll('.dropdown-input .dropdown-menu .dropdown-item');
+    };
+
+    const input = document.querySelector('#first_name');
+    input.setAttribute('data-bs-toggle', 'dropdown');
+    input.setAttribute('aria-expanded', 'false');
+
+    const dropdownMenu = document.createElement('ul');
+    dropdownMenu.classList.add('dropdown-menu');
+    input.after(dropdownMenu);
+    for (let index = 1; index < 10; index++) {
+        const liElement = document.createElement('li');
+        const btnElement= document.createElement('button');
+        btnElement.classList.add('dropdown-item');
+        btnElement.setAttribute('role', 'button');
+        btnElement.textContent = 'Item ' + index;
+        liElement.append(btnElement);
+        dropdownMenu.append(liElement);
+    }
+
+    let focused = false;
+    const dropdown = new bootstrap.Dropdown(input);
+    input.addEventListener('focus', (e) => focused = true);
+    input.addEventListener('blur', (e) => focused = false);
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+            focused = false;
+            dropdown.show();
+        }
+    });
+    input.addEventListener('show.bs.dropdown', (e) => {
+        window.console.log('show.bs.dropdown', e);
+        if (focused || getItems().length === 0) {
+            e.preventDefault();
+        }
+    });
+    input.addEventListener('shown.bs.dropdown', (e) => {
+        window.console.log('shown.bs.dropdown', e);
+        getItems()[0].focus();
+        focused = true;
+    });
+
+    getItems().forEach(function (item) {
+        item.addEventListener('click', () => {
+            input.value  = item.innerText ;
+            item.removeEventListener('click', this);
+            item.remove();
+            dropdown.hide();
+            input.select();
+            input.focus();
+        });
     });
 }(jQuery));

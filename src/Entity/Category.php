@@ -58,7 +58,7 @@ class Category extends AbstractEntity implements TimestampableInterface
     /**
      * The products that belong to this category.
      *
-     * @var Collection<int, Product>
+     * @var ArrayCollection<int, Product>
      */
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
     private Collection $products;
@@ -66,7 +66,7 @@ class Category extends AbstractEntity implements TimestampableInterface
     /**
      * The tasks that belong to this category.
      *
-     * @var Collection<int, Task>
+     * @var ArrayCollection<int, Task>
      */
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Task::class)]
     private Collection $tasks;

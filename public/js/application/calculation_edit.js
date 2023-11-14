@@ -124,10 +124,8 @@ const Application = {
      */
     initMenus: function () {
         'use strict';
-
-        const that = this;
-
         // adjust button
+        const that = this;
         const $buttonAdjust = $('.btn-adjust');
         if ($buttonAdjust.length) {
             $buttonAdjust.on('click', function (e) {

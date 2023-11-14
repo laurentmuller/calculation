@@ -38,7 +38,7 @@ class Group extends AbstractEntity implements TimestampableInterface
     /**
      * The children categories.
      *
-     * @var Collection<int, Category>
+     * @var ArrayCollection<int, Category>
      */
     #[ORM\OneToMany(mappedBy: 'group', targetEntity: Category::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['code' => Criteria::ASC])]
@@ -62,7 +62,7 @@ class Group extends AbstractEntity implements TimestampableInterface
     /**
      * The children margins.
      *
-     * @var Collection<int, GroupMargin>
+     * @var ArrayCollection<int, GroupMargin>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'group', targetEntity: GroupMargin::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
@@ -73,6 +73,12 @@ class Group extends AbstractEntity implements TimestampableInterface
     {
         $this->margins = new ArrayCollection();
         $this->categories = new ArrayCollection();
+    }
+
+    public function __clone()
+    {
+        parent::__clone();
+        $this->margins = $this->margins->map(fn (GroupMargin $margin): GroupMargin => (clone $margin)->setGroup($this));
     }
 
     /**

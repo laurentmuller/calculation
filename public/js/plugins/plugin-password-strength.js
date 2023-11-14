@@ -82,7 +82,6 @@
                 if (email) {
                     inputs.push(email);
                 }
-
                 // const url = that.$element.data('url');
                 // if (url) {
                 //     let strength = that.$element.data('strength') || 0;

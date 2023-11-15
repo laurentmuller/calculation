@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals MenuBuilder, Toaster, setCookie */
+/* globals MenuBuilder, Toaster, Cookie */
 
 /**
  * -------------- jQuery extensions --------------
@@ -273,19 +273,22 @@ function selectRow($source) {
 }
 
 /**
- * Handle a collapse element.
+ * Handle a collapse panel.
  *
- * @param {string} selector the content selector.
+ * @param {jQuery} $link the content selector.
  */
-function initCollapseState(selector) {
+function initCollapsePanel($link) {
     'use strict';
-    const $element = $(selector);
+    const href= $link.attr('href');
+    const $element = $(href);
     const path = $('body').data('cookie-path');
     const key = $element.attr('id').toUpperCase();
-    $element.on('shown.bs.collapse', function () {
-        setCookie(key, true, path);
-    }).on('hidden.bs.collapse', function () {
-        setCookie(key, false, path);
+    $element.on('show.bs.collapse', function () {
+        $link.attr('title', $link.data('collapse'));
+        Cookie.setValue(key, true, path);
+    }).on('hide.bs.collapse', function () {
+        $link.attr('title', $link.data('expand'));
+        Cookie.setValue(key, false, path);
     });
 }
 
@@ -330,7 +333,7 @@ function initCollapseState(selector) {
         // handle key down event
         const $body = $('body');
         const handler = createKeydownHandler($calculations);
-        const selector = ':input, .btn, .dropdown-item, .rowlink-skip, .modal';
+        const selector = ':input, .btn, .dropdown-item, .rowlink-skip, .modal, a';
         $body.on('focus', selector, function () {
             $body.off('keydown', handler);
         }).on('blur', selector, function () {
@@ -373,8 +376,8 @@ function initCollapseState(selector) {
         });
     }
 
-    // collapse contents
+    // initialize collapse panels
     $('.card a.drop-down-icon-left[data-bs-toggle="collapse"]').each(function () {
-        initCollapseState($(this).attr('href'));
+        initCollapsePanel($(this));
     });
 }(jQuery));

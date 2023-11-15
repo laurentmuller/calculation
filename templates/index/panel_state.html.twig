@@ -25,13 +25,14 @@
 {# parameters #}
 {%- set state_key = 'DISPLAY_STATE' -%}
 {%- set state_show = app.request.cookies.boolean(state_key, true) -%}
+{%- set state_title = state_show ? 'about.collapse' : 'about.expand' -%}
 {%- set is_states = states|length -%}
 {%- set table_path = is_granted_calculation ? 'calculation_table' : false -%}
 {# content #}
 <div class="card card-collapse card-state mb-2" data-path="{{ path('homepage_hide_state') }}">
     <div class="card-header d-flex-wrap-center">
-        <a class="drop-down-icon-left card-title flex-fill fw-medium mb-0" href="#{{ state_key }}" data-bs-toggle="collapse" aria-expanded="{{ state_show|json_encode }}">
-            {{ icon(ICON_CALCULATION_STATE ~ ' ms-1', 'index.panel_state') }}
+        <a class="drop-down-icon-left card-title flex-fill h1" href="#{{ state_key }}" title="{{ state_title|trans }}" data-bs-toggle="collapse" aria-expanded="{{ state_show|json_encode }}" data-collapse="{{ 'about.collapse'|trans }}" data-expand="{{ 'about.expand'|trans }}">
+            {{- icon(ICON_CALCULATION_STATE ~ ' ms-1', 'index.panel_state') -}}
         </a>
         {%- if table_path and is_states -%}
             {{ link(path('chart_by_state'), null, 'd-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}

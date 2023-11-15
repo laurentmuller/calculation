@@ -1,0 +1,90 @@
+/**! compression tag for ftp-deployment */
+
+(() => {
+    'use strict';
+
+    window.Cookie = {
+
+        /**
+         * Sets a cookie value.
+         *
+         * @param {string} key - the cookie key.
+         * @param {string|number|boolean} value - the cookie value.
+         * @param {string} path - the cookie path.
+         * @param {string|Date} [expires] - the expires date or null to use default (+1 year).
+         * @param {string} samesite - the same site behavior.
+         * @param {boolean} secure - true if secure.
+         */
+        setValue: function (key, value, path = '/', expires = null, samesite = 'lax', secure = true) {
+            if (!expires) {
+                expires = new Date();
+                expires.setFullYear(expires.getFullYear() + 1);
+            }
+            if (expires instanceof Date) {
+                expires = expires.toUTCString();
+            }
+            if (typeof value === 'boolean' || typeof value === 'number') {
+                value = JSON.stringify(value);
+            }
+            let cookie = `${key.toUpperCase()}=${value};expires=${expires};path=${path};samesite=${samesite};`;
+            if (secure) {
+                cookie += 'secure';
+            }
+            document.cookie = cookie;
+        },
+
+        /**
+         * Gets a cookie value.
+         *
+         * @param {string} key the cookie key.
+         * @param {string} [defaultValue] the default value.
+         *
+         * @return {string} the cookie value, if found; the default value otherwise.
+         */
+        getValue: function (key, defaultValue) {
+            key = `${key.toUpperCase()}=`;
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const entries = decodedCookie.split(';');
+            for (let i = 0; i < entries.length; i++) {
+                const entry = entries[i].trim();
+                if (entry.startsWith(key)) {
+                    return entry.substring(key.length);
+                }
+            }
+            return defaultValue;
+        },
+
+        /**
+         * Gets a cookie value as integer.
+         *
+         * @param {string} key - the cookie key.
+         * @param {number} defaultValue - the default value.
+         *
+         * @return {number} the cookie value, if found; the default value otherwise.
+         */
+        getInteger: function (key, defaultValue = 0) {
+            const str = this.getValue(key, defaultValue.toString(10));
+            const value = Number.parseInt(str, 10);
+            return Number.isNaN(value) ? defaultValue : value;
+        },
+
+        /**
+         * Gets a cookie value as boolean.
+         *
+         * @param {string} key - the cookie key.
+         * @param {boolean} defaultValue - the default value.
+         *
+         * @return {boolean} the cookie value, if found; the default value otherwise.
+         */
+        getBoolean: function (key, defaultValue = false) {
+            const str = this.getValue(key, JSON.stringify(defaultValue)).toLowerCase();
+            if (str === 'true') {
+                return true;
+            } else if (str === 'false') {
+                return false;
+            } else {
+                return defaultValue;
+            }
+        }
+    };
+})();

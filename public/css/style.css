@@ -104,10 +104,10 @@ html:has(.sidebar-show) footer:before {
 }
 
 /* card-title (same as h5) */
-h1.card-title {
+h1.card-title,
+.h1.card-title {
     font-size: 1rem;
     font-weight: 500;
-    line-height: 1.5;
     margin-bottom: 0;
 }
 

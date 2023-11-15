@@ -14,12 +14,12 @@
  * ../plugins files
  */
 <!--#include file="../plugins/plugin-rowlink.js" -->
+<!--#include file="../plugins/plugin-cookie.js" -->
 
 /**
  * Extension files
  */
 <!--#include file="../extensions/contextmenu-extensions.js" -->
-<!--#include file="../extensions/cookie-extensions.js" -->
 
 /**
  * Specific Files

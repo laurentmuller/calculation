@@ -17,9 +17,10 @@
     </div>
 </div>
 {%- endmacro %}
-{# list access #}
+{# parameters #}
 {%- set state_key = 'DISPLAY_CATALOG' -%}
 {%- set state_show = app.request.cookies.boolean(state_key, true) -%}
+{%- set state_title = state_show ? 'about.collapse' : 'about.expand' -%}
 {%- set task_path = is_granted_task ? 'task_table' : false -%}
 {%- set group_path = is_granted_group ? 'group_table' : false -%}
 {%- set product_path = is_granted_product ? 'product_table' : false -%}
@@ -27,10 +28,10 @@
 {%- set margin_path = is_granted_global_margin ? 'globalmargin_table' : false -%}
 {%- set state_path = is_granted_calculation_state ? 'calculationstate_table' : false -%}
 {# content #}
-<div class="card card-collapse card-catalog card-state mb-2" data-path="{{ path('homepage_hide_catalog') }}">
+<div class="card card-collapse card-catalog mb-2" data-path="{{ path('homepage_hide_catalog') }}">
     <div class="card-header d-flex-wrap-center">
-        <a class="drop-down-icon-left card-title flex-fill fw-medium mb-0" href="#{{ state_key }}" data-bs-toggle="collapse" aria-expanded="{{ state_show|json_encode }}">
-            {{ icon('database ms-1', 'index.panel_catalog') }}
+        <a class="drop-down-icon-left card-title flex-fill h1" href="#{{ state_key }}" title="{{ state_title|trans }}" data-bs-toggle="collapse" aria-expanded="{{ state_show|json_encode }}" data-collapse="{{ 'about.collapse'|trans }}" data-expand="{{ 'about.expand'|trans }}">
+            {{- icon('database ms-1', 'index.panel_catalog') -}}
         </a>
         <a href="#" class="d-print-none hide-panel text-body" title="{{ 'index.panel_catalog_hide'|trans }}">
             {{- icon('xmark') -}}

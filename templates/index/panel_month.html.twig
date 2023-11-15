@@ -26,13 +26,14 @@
 {# parameters #}
 {%- set state_key = 'DISPLAY_MONTH' -%}
 {%- set state_show = app.request.cookies.boolean(state_key, true) -%}
+{%- set state_title = state_show ? 'about.collapse' : 'about.expand' -%}
 {%- set list_path = is_granted_calculation ? 'calculation_table' : false -%}
 {%- set is_months = months|length -%}
 {# content #}
 <div class="card card-collapse card-month mb-2" data-path="{{ path('homepage_hide_month') }}">
     <div class="card-header d-flex-wrap-center">
-        <a class="drop-down-icon-left card-title flex-fill fw-medium mb-0" href="#{{ state_key }}" data-bs-toggle="collapse" aria-expanded="{{ state_show|json_encode }}">
-            {{ icon('calendar-alt ms-1 far', 'index.panel_month') }}
+        <a class="drop-down-icon-left card-title flex-fill h1" href="#{{ state_key }}" title="{{ state_title|trans }}" data-bs-toggle="collapse" aria-expanded="{{ state_show|json_encode }}" data-collapse="{{ 'about.collapse'|trans }}" data-expand="{{ 'about.expand'|trans }}">
+            {{- icon('calendar-alt ms-1 far', 'index.panel_month') -}}
         </a>
         {%- if list_path and is_months -%}
             {{ link(path('chart_by_month'), null, 'd-print-none', 'chart-column fa-fw', 'index.menu_chart_title') }}

@@ -1,9 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/**
- * Ready function
- */
-(function (window) {
+(() => {
     'use strict';
 
     window.Logger = {
@@ -115,5 +112,4 @@
             return window.console && window.console[method];
         }
     };
-
-}(window));
+})();

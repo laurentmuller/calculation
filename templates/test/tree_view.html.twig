@@ -190,16 +190,9 @@
 <div class="row">
     <div class="col-md-8 offset-md-2 my-2">
         <div class="row dropdown-input">
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label for="first_name" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="first_name" name="first_name">
-                    <ul class="dropdown-menu">
-                        <li><button class="dropdown-item" role="button">Action</button></li>
-                        <li><button class="dropdown-item" role="button">Another action</button></li>
-                        <li><button class="dropdown-item" role="button">Something else here</button></li>
-                    </ul>
-                </div>
+            <div class="col-lg-6 mb-3">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name">
             </div>
         </div>
     </div>
@@ -207,27 +200,23 @@
 <div class="row">
     <div class="col-md-8 offset-md-2 my-2">
         <div class="row">
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label" for="search">Drop-down menu</label>
-                    <div class="input-group">
-                        <input class="form-control" type="search" id="search" name="search" autocomplete="off">
-                        <button class="btn btn-outline-secondary dropdown-toggle ps-2" type="button" data-bs-toggle="dropdown" data-bs-reference="parent" aria-expanded="false"></button>
-                        <ul class="dropdown-menu">
-                        {% for i in range(0, 100, 20) %}
-                            <li><button class="dropdown-item dropdown-item-gradient" data-value="{{ i }}">{{ (i / 100)|percent }}</button></li>
-                        {% endfor %}
-                        </ul>
-                    </div>
-                    <span class="bottom-border-gradient bottom-border-gradient-100"></span>
+            <div class="col-lg-6 mb-3">
+                <label class="form-label" for="search">Drop-down menu</label>
+                <div class="input-group">
+                    <input class="form-control" type="search" id="search" name="search" autocomplete="off">
+                    <button class="btn btn-outline-secondary dropdown-toggle ps-2" type="button" data-bs-toggle="dropdown" data-bs-reference="parent" aria-expanded="false"></button>
+                    <ul class="dropdown-menu">
+                    {% for i in range(0, 100, 20) %}
+                        <li><button class="dropdown-item dropdown-item-gradient" data-value="{{ i }}">{{ (i / 100)|percent }}</button></li>
+                    {% endfor %}
+                    </ul>
                 </div>
+                <span class="bottom-border-gradient bottom-border-gradient-100"></span>
             </div>
-            <div class="col-lg-6">
-                <div class="mb-3">
-                    <label class="form-label" for="gradient">Border gradient</label>
-                    <input class="form-control bottom-border-gradient bottom-border-gradient-80" id="gradient" name="gradient">
-                    <span class="bottom-border-gradient bottom-border-gradient-100"></span>
-                </div>
+            <div class="col-lg-6 mb-3">
+                <label class="form-label" for="gradient">Border gradient</label>
+                <input class="form-control bottom-border-gradient bottom-border-gradient-80" id="gradient" name="gradient">
+                <span class="bottom-border-gradient bottom-border-gradient-100"></span>
             </div>
         </div>
     </div>

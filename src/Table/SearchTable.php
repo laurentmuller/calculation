@@ -79,7 +79,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
         /** @psalm-var SearchType[] $items */
         $items = [];
         $search = $query->search;
-        $entity = (string) $query->customData[self::PARAM_ENTITY];
+        $entity = $query->getCustomData(self::PARAM_ENTITY, '');
         $results = parent::handleQuery($query);
         if (\strlen($search) > 1) {
             $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);

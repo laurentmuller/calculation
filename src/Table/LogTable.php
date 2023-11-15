@@ -99,10 +99,7 @@ class LogTable extends AbstractTable implements \Countable
     {
         $results = parent::handleQuery($query);
         $logFile = $this->service->getLogFile();
-        if (!$logFile instanceof LogFile) {
-            return $results->setStatus(Response::HTTP_PRECONDITION_FAILED);
-        }
-        if ($logFile->isEmpty()) {
+        if (!$logFile instanceof LogFile || $logFile->isEmpty()) {
             return $results->setStatus(Response::HTTP_PRECONDITION_FAILED);
         }
         $entities = $logFile->getLogs();
@@ -113,8 +110,8 @@ class LogTable extends AbstractTable implements \Countable
         $entities = \array_slice($entities, $query->offset, $query->limit);
         $results->rows = $this->mapEntities($entities);
         if (!$query->callback) {
-            $level = (string) $query->customData[self::PARAM_LEVEL];
-            $channel = (string) $query->customData[self::PARAM_CHANNEL];
+            $level = $query->getCustomData(self::PARAM_LEVEL, '');
+            $channel = $query->getCustomData(self::PARAM_CHANNEL, '');
             $results->params = [
                 self::PARAM_LEVEL => $level,
                 self::PARAM_CHANNEL => $channel,
@@ -141,8 +138,8 @@ class LogTable extends AbstractTable implements \Countable
     private function filter(DataQuery $query, array $entities): array
     {
         $search = $query->search;
-        $level = (string) $query->customData[self::PARAM_LEVEL];
-        $channel = (string) $query->customData[self::PARAM_CHANNEL];
+        $level = $query->getCustomData(self::PARAM_LEVEL, '');
+        $channel = $query->getCustomData(self::PARAM_CHANNEL, '');
         if (LogFilter::isFilter($search, $level, $channel)) {
             $filter = new LogFilter($search, $level, $channel);
 

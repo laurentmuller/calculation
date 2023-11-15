@@ -1,7 +1,9 @@
 /**! compression tag for ftp-deployment */
 
+/* global bootstrap */
+
 /**
- * Ready function
+ * Plugin to look ahead values.
  */
 (function ($) {
     'use strict';
@@ -17,7 +19,6 @@
 
         /**
          * Constructor.
-         *
          * @param {HTMLElement} element - the element to handle.
          * @param {Object|string} [options] - the options.
          */
@@ -40,7 +41,13 @@
                 .off('keyup', that.keyUpProxy)
                 .off('keydown', that.keyDownProxy)
                 .off('keypress', that.keyPressProxy)
+                .off('show.bs.dropdown', that.dropdownProxy)
                 .removeData(Typeahead.NAME);
+
+            // remove dropdown
+            if (this.dropdown) {
+                this.dropdown.dispose();
+            }
 
             // remove menu handlers
             const $menu = that.$menu;
@@ -53,37 +60,27 @@
 
         /**
          * Show the drop-down menu.
-         *
          * @return {Typeahead} this instance for chaining.
          */
         show() {
             if (!this._hasItems()) {
                 return this;
             }
-            const pos = $.extend({}, this.$element.position(), {
-                height: this.$element[0].offsetHeight + 2
-            });
-            let width = '';
             if (this.options.alignWidth) {
-                width = $(this.$element[0]).outerWidth();
+                const width = $(this.$element[0]).outerWidth();
+                this.$menu.css('width', width);
             }
-            this.$menu.css({
-                top: pos.top + pos.height,
-                left: pos.left,
-                width: width
-            });
-            this.$menu.show();
+            this.dropdown.show();
             return this;
         }
 
         /**
          * Hide the drop-down menu.
-         *
          * @return {Typeahead} this instance for chaining.
          */
         hide() {
             if (this._isVisible()) {
-                this.$menu.hide();
+                this.dropdown.hide();
             }
             return this;
         }
@@ -94,7 +91,6 @@
 
         /**
          * Initialize.
-         *
          * @return {Typeahead} this instance for chaining.
          * @throws {Error} if the Ajax URL is not defined.
          * @private
@@ -106,6 +102,7 @@
             }
 
             // method overrides
+            this.query = '';
             this.onSelect = this.options.onSelect || null;
             this.onError = this.options.onError || null;
             this.select = this.options.select || this.select;
@@ -131,14 +128,20 @@
             // create menu
             this.$menu = $(this.options.menu).insertAfter(this.$element);
 
-            this.query = '';
-            this._listen();
-            return this;
+            // create dropdown
+            this.$element.attr({
+                // 'data-bs-auto-close': 'inside',
+                'data-bs-toggle': 'dropdown',
+                'aria-expanded': 'false'
+            });
+            this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$element[0]);
+
+            // bind events
+            return this._listen();
         }
 
         /**
          * Start listen events.
-         *
          * @return {Typeahead} this instance for chaining.
          * @private
          */
@@ -151,12 +154,14 @@
             this.keyUpProxy = (e) => this._keyup(e);
             this.keyDownProxy = (e) => this._keydown(e);
             this.keyPressProxy = (e) => this._keypress(e);
+            this.dropdownProxy = (e) => this._dropdownShow(e);
             $element.on('blur', this.blurProxy)
                 .on('input', this.inputProxy)
                 .on('focus', this.focusProxy)
                 .on('keyup', this.keyUpProxy)
                 .on('keydown', this.keyPressProxy)
-                .on('keypress', this.keyPressProxy);
+                .on('keypress', this.keyPressProxy)
+                .on('show.bs.dropdown', this.dropdownProxy);
 
             // add menu handlers
             const $menu = this.$menu;
@@ -173,7 +178,6 @@
 
         /**
          * Render the items.
-         *
          * @param {Array.<Object>} items - the items to render.
          * @return {Typeahead} this instance for chaining.
          */
@@ -204,8 +208,7 @@
                 // inject category
                 if (newSeparator && (index === 0 || newSeparator !== oldSeparator)) {
                     data.push({
-                        __type__: 'category',
-                        name: newSeparator
+                        __type__: 'category', name: newSeparator
                     });
                 }
                 // inject value
@@ -233,7 +236,6 @@
 
         /**
          * Render a category.
-         *
          * @param {RegExp} regex
          * @param {Object} item
          * @return {jQuery}
@@ -246,7 +248,6 @@
 
         /**
          * Render a separator.
-         *
          * @return {jQuery}
          * @private
          */
@@ -256,7 +257,6 @@
 
         /**
          * Render an item.
-         *
          * @param {RegExp} regex
          * @param {Object} item
          * @param {boolean} isStringDisplay
@@ -281,7 +281,7 @@
          * @private
          */
         _isVisible() {
-            return this.$menu && this.$menu.length && this.$menu.css('display') === 'block';
+            return this.$menu && this.$menu.length && this.$menu.hasClass('show');
         }
 
         /**
@@ -316,7 +316,6 @@
 
         /**
          * Select the active menu item.
-         *
          * @return {Typeahead}  this instance for chaining.
          * @private
          */
@@ -342,7 +341,6 @@
 
         /**
          * Call ajax function.
-         *
          * @return {Typeahead} this instance for chaining.
          * @private
          */
@@ -377,7 +375,6 @@
 
         /**
          * Execute the ajax function.
-         *
          * @return {Typeahead} this instance for chaining.
          * @private
          */
@@ -392,10 +389,7 @@
                 $.ajaxSetup({global: false});
             }
             this.ajax.xhr = $.getJSON({
-                success: this.ajaxSuccessProxy,
-                error: this.ajaxErrorProxy,
-                url: this.ajax.url,
-                data: data
+                success: this.ajaxSuccessProxy, error: this.ajaxErrorProxy, url: this.ajax.url, data: data
             });
             this.ajax.timerId = null;
             return this;
@@ -403,7 +397,6 @@
 
         /**
          * Handle the ajax success call.
-         *
          * @param {Object} data - the ajax data.
          * @return {Typeahead} this instance for chaining.
          * @private
@@ -423,8 +416,7 @@
             }
             if (this.options.empty) {
                 const $item = $('<span/>', {
-                    class: 'dropdown-item disabled',
-                    text: this.options.empty
+                    class: 'dropdown-item disabled', text: this.options.empty
                 });
                 this.$menu.addClass('py-0').html($item);
                 return this.show();
@@ -434,7 +426,6 @@
 
         /**
          * Handle the ajax error.
-         *
          * @param {XMLHttpRequest} jqXHR the ajax request.
          * @param {String} textStatus - the text status.
          * @param {Error} errorThrown - the ajax error.
@@ -450,7 +441,6 @@
 
         /**
          * Gets the menu items.
-         *
          * @return {jQuery} the items.
          * @private
          */
@@ -460,7 +450,6 @@
 
         /**
          * Returns if one or more menu items are found.
-         *
          * @return {boolean} true if menu items are found.
          * @private
          */
@@ -470,7 +459,6 @@
 
         /**
          * Gets the selected item.
-         *
          * @return {jQuery} the selected item.
          * @private
          */
@@ -480,7 +468,6 @@
 
         /**
          * Gets the trimmed element text.
-         *
          * @return {string} the text.
          * @private
          */
@@ -490,7 +477,6 @@
 
         /**
          * Returns the trimmed element text is not empty.
-         *
          * @return {boolean} true if not empty.
          * @private
          */
@@ -500,7 +486,6 @@
 
         /**
          * Highlight the given text.
-         *
          * @param {RegExp} regex - the regular expression.
          * @param {string} text - the text to highlight
          * @return {string} the highlighted text.
@@ -512,7 +497,6 @@
 
         /**
          * Gets the regular expression used to highlight text.
-         *
          * @return {RegExp}
          * @private
          */
@@ -524,7 +508,6 @@
 
         /**
          * Select the next menu item.
-         *
          * @return {Typeahead} this instance for chaining.
          * @private
          */
@@ -541,7 +524,6 @@
 
         /**
          * Select the previous menu item.
-         *
          * @return {Typeahead} this instance for chaining.
          * @private
          */
@@ -558,7 +540,6 @@
 
         /**
          * Select the first menu item.
-         *
          * @return {Typeahead} this instance for chaining.
          * @private
          */
@@ -573,7 +554,6 @@
 
         /**
          * Select the last menu item.
-         *
          * @return {Typeahead} this instance for chaining.
          * @private
          */
@@ -588,7 +568,6 @@
 
         /**
          * Handle the key event.
-         *
          * @param {KeyboardEvent} e - the event.
          * @private
          */
@@ -624,7 +603,6 @@
 
         /**
          * Handle the key down event.
-         *
          * @param {KeyboardEvent} e - the event.
          * @private
          */
@@ -635,7 +613,6 @@
 
         /**
          * Handle the key press event.
-         *
          * @param {KeyboardEvent} e - the event.
          * @private
          */
@@ -647,15 +624,18 @@
 
         /**
          * Handle the key up event.
-         *
          * @param {KeyboardEvent} e - the event.
          * @private
          */
         _keyup(e) {
             switch (e.key) {
                 case 'ArrowDown':
-                    if (e.altKey && !this._isVisible() && this._hasItems() && this._isQueryText()) {
-                        this.show();
+                    if (!this._isVisible()) {
+                        if (this._hasItems()) {
+                            this.show();
+                        } else if (this._isQueryText()) {
+                            this._ajaxLookup();
+                        }
                     }
                     break;
                 case 'ArrowUp':
@@ -689,6 +669,17 @@
         }
 
         /**
+         * Handle the dropdown show event.
+         * @param {Event} e - the event.
+         * @private
+         */
+        _dropdownShow(e) {
+            if (!this._isQueryText() || !this._hasItems()) {
+                e.preventDefault();
+            }
+        }
+
+        /**
          * Handle the focus event.
          * @private
          */
@@ -709,7 +700,6 @@
 
         /**
          * Handle the item click event.
-         *
          * @param {Event} e - the event.
          * @private
          */
@@ -721,7 +711,6 @@
 
         /**
          * Handle the item mouse enter event.
-         *
          * @param {Event} e - the event.
          * @private
          */
@@ -744,7 +733,6 @@
 
         /**
          * Cancel last timer if set.
-         *
          * @return {Typeahead} this instance for chaining.
          * @private
          */
@@ -758,7 +746,6 @@
 
         /**
          * Abort the ajax call if applicable.
-         *
          * @return {Typeahead} this instance for chaining.
          * @private
          */
@@ -854,5 +841,4 @@
             e.preventDefault();
         }
     });
-
 }(jQuery));

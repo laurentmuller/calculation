@@ -29,8 +29,6 @@ use Symfony\Component\HttpFoundation\Response;
 trait TableTrait
 {
     use CookieTrait;
-    use ExceptionContextTrait;
-    use RequestTrait;
 
     /**
      * Handles a table request.
@@ -41,14 +39,14 @@ trait TableTrait
         if (null !== $subject) {
             $this->denyAccessUnlessGranted(EntityPermission::LIST, $subject);
         }
+        $message = $table->getEmptyMessage();
+        if (null !== $message) {
+            return $this->redirectToHomePage(message: $message, type: FlashType::INFO);
+        }
 
         try {
-            $message = $table->getEmptyMessage();
-            if (null !== $message) {
-                return $this->redirectToHomePage(message: $message, type: FlashType::INFO);
-            }
             $query = $table->getDataQuery($request);
-            $results = $table->processQuery($query);
+            $results = $table->processDataQuery($query);
             $response = $query->callback ? $this->json($results) : $this->render($template, (array) $results);
             $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);
             $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $table->getPrefix());
@@ -78,11 +76,10 @@ trait TableTrait
     /**
      * Save the given parameter from the data result to a cookie.
      */
-    protected function saveCookie(Response $response, DataResults $results, string $key, mixed $default = null, string $prefix = ''): void
+    protected function saveCookie(Response $response, DataResults $results, string $key, string|bool|int|\BackedEnum $default = null, string $prefix = ''): void
     {
-        /** @psalm-var mixed $value */
-        $value = $results->getParams($key, $default);
         $path = $this->getCookiePath();
+        $value = $results->getParameter($key, $default);
         $this->updateCookie($response, $key, $value, $prefix, $path);
     }
 }

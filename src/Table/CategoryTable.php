@@ -122,12 +122,10 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::search($query, $builder, $alias);
-        /** @psalm-var int $groupId */
         $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
         if (0 === $groupId) {
             return $result;
         }
-
         /** @psalm-var string $field */
         $field = $this->repository->getSearchFields('group.id', $alias);
         $builder->andWhere($field . '=:' . self::PARAM_GROUP)
@@ -140,7 +138,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $groupId = (int) $query->getCustomData(self::PARAM_GROUP, 0);
+            $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
             $results->addParameter(self::PARAM_GROUP, $groupId);
             $results->addCustomData('group', $this->getGroup($groupId));
             $results->addCustomData('dropdown', $this->getDropDownValues());

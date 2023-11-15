@@ -83,7 +83,9 @@ interface TableInterface
     final public const PARAM_TOTAL_NOT_FILTERED = 'totalNotFiltered';
 
     /**
-     * The display view parameter name (string: 'table', 'custom' or 'card').
+     * The display view parameter name (string: 'table' or 'custom').
+     *
+     * @see \App\Enums\TableView
      */
     final public const PARAM_VIEW = 'view';
 }

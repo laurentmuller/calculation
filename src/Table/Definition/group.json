@@ -20,7 +20,7 @@
         "sortable": false,
         "searchable": false,
         "class": "text-currency",
-        "fieldFormatter": "formatCountable"
+        "fieldFormatter": "formatInt"
     },
     {
         "field": "categories",

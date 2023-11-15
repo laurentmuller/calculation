@@ -79,7 +79,7 @@ trait CookieTrait
     protected function updateCookie(
         Response $response,
         string $key,
-        mixed $value,
+        string|bool|int|float|\BackedEnum|null $value,
         string $prefix = '',
         string $path = '/',
         string $modify = '+1 year',
@@ -125,7 +125,7 @@ trait CookieTrait
     private function setCookie(
         Response $response,
         string $key,
-        mixed $value,
+        string|bool|int|float|\BackedEnum|null $value,
         string $prefix,
         string $path,
         string $modify,

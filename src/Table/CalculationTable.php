@@ -103,7 +103,6 @@ class CalculationTable extends AbstractEntityTable
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::search($query, $builder, $alias);
-        /** @psalm-var int $stateId */
         $stateId = $query->getCustomData(self::PARAM_STATE, 0);
         if (0 !== $stateId) {
             /** @psalm-var string $field */
@@ -114,7 +113,6 @@ class CalculationTable extends AbstractEntityTable
             return true;
         }
 
-        /** @psalm-var int $stateEditable */
         $stateEditable = $query->getCustomData(self::PARAM_EDITABLE, 0);
         if (0 !== $stateEditable) {
             /** @psalm-var string $field */
@@ -133,7 +131,6 @@ class CalculationTable extends AbstractEntityTable
         parent::updateResults($query, $results);
         if (!$query->callback) {
             $results->addAttribute('row-style', 'styleTextMuted');
-            /** @psalm-var int $stateId */
             $stateId = $query->getCustomData(self::PARAM_STATE, 0);
             $results->addParameter(self::PARAM_STATE, $stateId);
 

@@ -100,11 +100,9 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            /** @psalm-var int $categoryId */
             $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0);
             $results->addParameter(self::PARAM_CATEGORY, $categoryId);
 
-            /** @psalm-var int $groupId */
             $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
             $results->addParameter(self::PARAM_GROUP, $groupId);
 

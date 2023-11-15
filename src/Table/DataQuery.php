@@ -92,14 +92,14 @@ class DataQuery implements SortModeInterface
     /**
      * Gets a custom data.
      *
-     * @param string          $name    the custom data name to get value for
-     * @param string|int|null $default the default value to return if the custom data is not present
-     *
-     * @return string|int|null the custom data, if present; the default value otherwise
+     * @psalm-return ($default is null ? (string|int|null) : ($default is string ? string : int))
      */
     public function getCustomData(string $name, string|int $default = null): string|int|null
     {
-        return $this->customData[$name] ?? $default;
+        /** @psalm-var string|int|null $value */
+        $value = $this->customData[$name] ?? $default;
+
+        return $value;
     }
 
     /**

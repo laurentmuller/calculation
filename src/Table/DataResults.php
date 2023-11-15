@@ -22,18 +22,22 @@ class DataResults implements \JsonSerializable
 {
     /**
      * The table attributes.
+     *
+     * @var array<string, string|bool|int>
      */
     public array $attributes = [];
 
     /**
      * The column definitions.
      *
-     * @var array<Column>
+     * @var Column[]
      */
     public array $columns = [];
 
     /**
      * The custom datas.
+     *
+     * @var array<string, mixed>
      */
     public array $customData = [];
 
@@ -45,12 +49,14 @@ class DataResults implements \JsonSerializable
     /**
      * The pages list.
      *
-     * @var array<int>
+     * @var int[]
      */
     public array $pageList = TableInterface::PAGE_LIST;
 
     /**
-     * The action parameters.
+     * The parameters.
+     *
+     * @var array<string, string|bool|int|\BackedEnum>
      */
     public array $params = [];
 
@@ -73,11 +79,8 @@ class DataResults implements \JsonSerializable
 
     /**
      * Adds an attribute to this list of attributes.
-     *
-     * @param string $name  the attribute name
-     * @param mixed  $value attribute value
      */
-    public function addAttribute(string $name, mixed $value): self
+    public function addAttribute(string $name, string|bool|int $value): self
     {
         $this->attributes[$name] = $value;
 
@@ -86,9 +89,6 @@ class DataResults implements \JsonSerializable
 
     /**
      * Adds a custom data to this list of custom datas.
-     *
-     * @param string $name  the custom data name
-     * @param mixed  $value custom data value
      */
     public function addCustomData(string $name, mixed $value): self
     {
@@ -99,11 +99,8 @@ class DataResults implements \JsonSerializable
 
     /**
      * Adds a parameter to this list of parameters.
-     *
-     * @param string $name  the parameter name
-     * @param mixed  $value parameter value
      */
-    public function addParameter(string $name, mixed $value): self
+    public function addParameter(string $name, string|bool|int|\BackedEnum $value): self
     {
         $this->params[$name] = $value;
 
@@ -112,11 +109,6 @@ class DataResults implements \JsonSerializable
 
     /**
      * Gets a custom data value for the given name.
-     *
-     * @param string     $name    the custom data name to get value for
-     * @param mixed|null $default the default value to return if the custom data is nof found
-     *
-     * @return mixed|null the custom data value, if found; the default value otherwise
      */
     public function getCustomData(string $name, mixed $default = null): mixed
     {
@@ -126,14 +118,18 @@ class DataResults implements \JsonSerializable
     /**
      * Gets a parameter value for the given name.
      *
-     * @param string     $name    the parameter name to get value for
-     * @param mixed|null $default the default value to return if the parameter is nof found
-     *
-     * @return mixed the parameter value, if found; the default value otherwise
+     * @psalm-return ($default is null ? (bool|string|int|\BackedEnum|null)
+     * : ($default is bool ? bool
+     * : ($default is string ? string
+     * : ($default is int ? int
+     * : \BackedEnum))))
      */
-    public function getParams(string $name, mixed $default = null): mixed
+    public function getParameter(string $name, bool|string|int|\BackedEnum $default = null): bool|string|int|\BackedEnum|null
     {
-        return $this->params[$name] ?? $default;
+        /** @psalm-var bool|string|int|\BackedEnum|null $value */
+        $value = $this->params[$name] ?? $default;
+
+        return $value;
     }
 
     public function jsonSerialize(): array
@@ -145,6 +141,11 @@ class DataResults implements \JsonSerializable
         ];
     }
 
+    /**
+     * Set the response status.
+     *
+     * @param int<100, 511> $status one of the Response::HTTP_* status
+     */
     public function setStatus(int $status): self
     {
         $this->status = $status;

@@ -35,6 +35,6 @@
         "sortable": false,
         "searchable": false,
         "class": "text-operation",
-        "fieldFormatter": "formatCountable"
+        "fieldFormatter": "formatInt"
     }
 ]

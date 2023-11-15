@@ -17,7 +17,7 @@
 .page-content.sidebar-show {
     width: calc(100% - var(--sidebar-width));
     margin-left: var(--sidebar-width);
-    margin-top: 0.75rem;
+    margin-top: 1rem;
 }
 
 .page-content:not(.sidebar-show) {

@@ -49,15 +49,6 @@ abstract class AbstractTable implements SortModeInterface
         return FormatUtils::formatAmount($value);
     }
 
-    public function formatCountable(\Countable|int $value): string
-    {
-        if ($value instanceof \Countable) {
-            return $this->formatInt($value->count());
-        }
-
-        return $this->formatInt($value);
-    }
-
     public function formatDate(\DateTimeInterface $value): string
     {
         return FormatUtils::formatDate($value);
@@ -68,7 +59,7 @@ abstract class AbstractTable implements SortModeInterface
         return FormatUtils::formatId($value);
     }
 
-    public function formatInt(int $value): string
+    public function formatInt(\Countable|array|int $value): string
     {
         return FormatUtils::formatInt($value);
     }
@@ -148,7 +139,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Process the given query and returns the results.
      */
-    public function processQuery(DataQuery $query): DataResults
+    public function processDataQuery(DataQuery $query): DataResults
     {
         $results = $this->handleQuery($query);
         $this->updateResults($query, $results);

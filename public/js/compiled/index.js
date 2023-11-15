@@ -19,6 +19,7 @@
  * Extension files
  */
 <!--#include file="../extensions/contextmenu-extensions.js" -->
+<!--#include file="../extensions/cookie-extensions.js" -->
 
 /**
  * Specific Files

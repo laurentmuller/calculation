@@ -18,6 +18,8 @@
 </div>
 {%- endmacro %}
 {# list access #}
+{%- set state_key = 'DISPLAY_CATALOG' -%}
+{%- set state_show = app.request.cookies.boolean(state_key, true) -%}
 {%- set task_path = is_granted_task ? 'task_table' : false -%}
 {%- set group_path = is_granted_group ? 'group_table' : false -%}
 {%- set product_path = is_granted_product ? 'product_table' : false -%}
@@ -25,23 +27,23 @@
 {%- set margin_path = is_granted_global_margin ? 'globalmargin_table' : false -%}
 {%- set state_path = is_granted_calculation_state ? 'calculationstate_table' : false -%}
 {# content #}
-<div class="card card-catalog mb-2" data-path="{{ path('homepage_hide_catalog') }}">
-    <div class="card-header">
-        <div class="d-flex-wrap-center">
-            <h1 class="card-title flex-fill">
-                {{ icon('database', 'index.panel_catalog') }}
-            </h1>
-            <a href="#" class="d-print-none hide-panel" title="{{ 'index.panel_catalog_hide'|trans }}">
-                {{- icon('xmark') -}}
-            </a>
-        </div>
+<div class="card card-collapse card-catalog card-state mb-2" data-path="{{ path('homepage_hide_catalog') }}">
+    <div class="card-header d-flex-wrap-center">
+        <a class="drop-down-icon-left card-title flex-fill fw-medium mb-0" href="#{{ state_key }}" data-bs-toggle="collapse" aria-expanded="{{ state_show|json_encode }}">
+            {{ icon('database ms-1', 'index.panel_catalog') }}
+        </a>
+        <a href="#" class="d-print-none hide-panel text-body" title="{{ 'index.panel_catalog_hide'|trans }}">
+            {{- icon('xmark') -}}
+        </a>
     </div>
-    <div class="card-body index-parent g-0 p-1">
-        {{ _self.cardEntry('product', product_count, product_path, ICON_PRODUCT) }}
-        {{ _self.cardEntry('task', task_count, task_path, ICON_TASK) }}
-        {{ _self.cardEntry('category', category_count, category_path, ICON_CATEGORY) }}
-        {{ _self.cardEntry('group', group_count, group_path, ICON_GROUP) }}
-        {{ _self.cardEntry('calculationstate', state_count, state_path, ICON_CALCULATION_STATE) }}
-        {{ _self.cardEntry('globalmargin', margin_count, margin_path, ICON_GLOBAL_MARGIN) }}
+    <div class="collapse{% if state_show %} show{% endif %}" id="{{ state_key }}">
+        <div class="card-body index-parent g-0 p-1">
+            {{ _self.cardEntry('product', product_count, product_path, ICON_PRODUCT) }}
+            {{ _self.cardEntry('task', task_count, task_path, ICON_TASK) }}
+            {{ _self.cardEntry('category', category_count, category_path, ICON_CATEGORY) }}
+            {{ _self.cardEntry('group', group_count, group_path, ICON_GROUP) }}
+            {{ _self.cardEntry('calculationstate', state_count, state_path, ICON_CALCULATION_STATE) }}
+            {{ _self.cardEntry('globalmargin', margin_count, margin_path, ICON_GLOBAL_MARGIN) }}
+        </div>
     </div>
 </div>

@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals MenuBuilder, Toaster */
+/* globals MenuBuilder, Toaster, setCookie */
 
 /**
  * -------------- jQuery extensions --------------
@@ -273,6 +273,23 @@ function selectRow($source) {
 }
 
 /**
+ * Handle a collapse element.
+ *
+ * @param {string} selector the content selector.
+ */
+function initCollapseState(selector) {
+    'use strict';
+    const $element = $(selector);
+    const path = $('body').data('cookie-path');
+    const key = $element.attr('id').toUpperCase();
+    $element.on('shown.bs.collapse', function () {
+        setCookie(key, true, path);
+    }).on('hidden.bs.collapse', function () {
+        setCookie(key, false, path);
+    });
+}
+
+/**
  * Ready function
  */
 (function ($) {
@@ -355,4 +372,9 @@ function selectRow($source) {
             $parent.find('.active').trigger('focus');
         });
     }
+
+    // collapse contents
+    $('.card a.drop-down-icon-left[data-bs-toggle="collapse"]').each(function () {
+        initCollapseState($(this).attr('href'));
+    });
 }(jQuery));

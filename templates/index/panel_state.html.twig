@@ -23,32 +23,36 @@
 </div>
 {%- endmacro %}
 {# parameters #}
+{%- set state_key = 'DISPLAY_STATE' -%}
+{%- set state_show = app.request.cookies.boolean(state_key, true) -%}
 {%- set is_states = states|length -%}
 {%- set table_path = is_granted_calculation ? 'calculation_table' : false -%}
 {# content #}
-<div class="card card-state mb-2" data-path="{{ path('homepage_hide_state') }}">
-    <div class="card-header">
-        <div class="d-flex-wrap-center">
-            <h1 class="card-title flex-fill">{{ icon(ICON_CALCULATION_STATE, 'index.panel_state') }}</h1>
-            {%- if table_path and is_states -%}
-                {{ link(path('chart_by_state'), null, 'd-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}
-                {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
-                    {{ linkExternal(path('chart_by_state_pdf'), null, 'd-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
-                {% endif %}
-            {%- endif -%}
-            <a href="#" class="hide-panel d-print-none" title="{{ 'index.panel_state_hide'|trans }}">
-                {{- icon('xmark') -}}
-            </a>
-        </div>
+<div class="card card-collapse card-state mb-2" data-path="{{ path('homepage_hide_state') }}">
+    <div class="card-header d-flex-wrap-center">
+        <a class="drop-down-icon-left card-title flex-fill fw-medium mb-0" href="#{{ state_key }}" data-bs-toggle="collapse" aria-expanded="{{ state_show|json_encode }}">
+            {{ icon(ICON_CALCULATION_STATE ~ ' ms-1', 'index.panel_state') }}
+        </a>
+        {%- if table_path and is_states -%}
+            {{ link(path('chart_by_state'), null, 'd-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}
+            {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
+                {{ linkExternal(path('chart_by_state_pdf'), null, 'd-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
+            {% endif %}
+        {%- endif -%}
+        <a href="#" class="hide-panel d-print-none text-body" title="{{ 'index.panel_state_hide'|trans }}">
+            {{- icon('xmark') -}}
+        </a>
     </div>
+    <div class="collapse{% if state_show %} show{% endif %}" id="{{ state_key }}">
     {% if is_states %}
         <div class="card-body index-parent g-0 p-1">
-            {% for state in states %}
-                {% set parameters = state.id ? {'stateId': state.id} : {} %}
-                {{ _self.cardEntry(state, table_path, parameters, min_margin) }}
-            {% endfor %}
+        {% for state in states %}
+            {% set parameters = state.id ? {'stateId': state.id} : {} %}
+            {{ _self.cardEntry(state, table_path, parameters, min_margin) }}
+        {% endfor %}
         </div>
     {% else %}
         {{ macros.empty() }}
     {% endif %}
+    </div>
 </div>

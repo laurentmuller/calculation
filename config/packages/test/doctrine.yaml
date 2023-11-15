@@ -1,3 +1,5 @@
 doctrine:
   dbal:
     logging: false
+  orm:
+    enable_lazy_ghost_objects: true

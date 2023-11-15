@@ -19,15 +19,15 @@
 <div class="row">
 {% if enabled %}
     <div class="col">
-        {{- include('index/panel_calculation.html.twig') }}
-        {% if user_service.panelState %}
-            {{ include('index/panel_state.html.twig') }}
-        {% endif %}
+        {{ include('index/panel_calculation.html.twig') }}
         {% if user_service.panelMonth %}
             {{ include('index/panel_month.html.twig') }}
         {% endif %}
+        {% if user_service.panelState %}
+            {{ include('index/panel_state.html.twig') }}
+        {% endif %}
         {% if user_service.panelCatalog %}
-        {{ include('index/panel_catalog.html.twig') }}
+            {{ include('index/panel_catalog.html.twig') }}
         {% endif %}
         {{ include('user/user_switch.html.twig') }}
     </div>
@@ -51,6 +51,7 @@
         {{ asset_js('vendor/jquery-contextmenu/jquery.contextMenu.js') }}
         {{ asset_js('js/plugins/plugin-rowlink.js') }}
         {{ asset_js('js/extensions/contextmenu-extensions.js') }}
+        {{ asset_js('js/extensions/cookie-extensions.js') }}
         {{ asset_js('js/application/index.js') }}
     {% else %}
         {{ asset_js('js/compiled/index.js') }}

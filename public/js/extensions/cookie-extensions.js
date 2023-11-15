@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+'use strict';
+
 /**
  * Sets a cookie value.
  *
@@ -11,7 +13,6 @@
  * @param {boolean} secure true if secure.
  */
 function setCookie(key, value, path = '/', expires = null, samesite = 'lax', secure = true) {
-    'use strict';
     if (!expires) {
         expires = new Date();
         expires.setFullYear(expires.getFullYear() + 1);
@@ -35,7 +36,6 @@ function setCookie(key, value, path = '/', expires = null, samesite = 'lax', sec
  * @return {string} the cookie value, if found; the default value otherwise.
  */
 function getCookie(key, defaultValue) {
-    'use strict';
     key = `${key}=`;
     const decodedCookie = decodeURIComponent(document.cookie);
     const entries = decodedCookie.split(';');
@@ -57,7 +57,6 @@ function getCookie(key, defaultValue) {
  * @return {number} the cookie value, if found; the default value otherwise.
  */
 function getCookieInt(key, defaultValue = 0) {
-    'use strict';
     const str = getCookie(key, defaultValue.toString(10));
     const value = Number.parseInt(str, 10);
     return Number.isNaN(value) ? defaultValue : value;

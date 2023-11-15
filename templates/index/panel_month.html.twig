@@ -24,31 +24,35 @@
 </div>
 {%- endmacro %}
 {# parameters #}
+{%- set state_key = 'DISPLAY_MONTH' -%}
+{%- set state_show = app.request.cookies.boolean(state_key, true) -%}
 {%- set list_path = is_granted_calculation ? 'calculation_table' : false -%}
 {%- set is_months = months|length -%}
 {# content #}
-<div class="card card-month mb-2" data-path="{{ path('homepage_hide_month') }}">
-    <div class="card-header">
-        <div class="d-flex-wrap-center">
-            <h1 class="card-title flex-fill">{{ icon('calendar-alt far', 'index.panel_month') }}</h1>
-            {%- if list_path and is_months -%}
-                {{ link(path('chart_by_month'), null, 'd-print-none', 'chart-column fa-fw', 'index.menu_chart_title') }}
-                {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
-                    {{ linkExternal(path('chart_by_month_pdf', {'count': months|length}), null, 'd-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
-                {% endif %}
-            {%- endif -%}
-            <a href="#" class="hide-panel d-print-none" title="{{ 'index.panel_month_hide'|trans }}">
-                {{- icon('xmark') -}}
-            </a>
-        </div>
+<div class="card card-collapse card-month mb-2" data-path="{{ path('homepage_hide_month') }}">
+    <div class="card-header d-flex-wrap-center">
+        <a class="drop-down-icon-left card-title flex-fill fw-medium mb-0" href="#{{ state_key }}" data-bs-toggle="collapse" aria-expanded="{{ state_show|json_encode }}">
+            {{ icon('calendar-alt ms-1 far', 'index.panel_month') }}
+        </a>
+        {%- if list_path and is_months -%}
+            {{ link(path('chart_by_month'), null, 'd-print-none', 'chart-column fa-fw', 'index.menu_chart_title') }}
+            {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
+                {{ linkExternal(path('chart_by_month_pdf', {'count': months|length}), null, 'd-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
+            {% endif %}
+        {%- endif -%}
+        <a href="#" class="hide-panel d-print-none text-body" title="{{ 'index.panel_month_hide'|trans }}">
+            {{- icon('xmark') -}}
+        </a>
     </div>
+    <div class="collapse{% if state_show %} show{% endif %}" id="{{ state_key }}">
     {% if is_months %}
-    <div class="card-body index-parent g-0 p-1">
-    {% for month in months %}
-        {{ _self.cardEntry(month, list_path, min_margin) }}
-    {% endfor %}
-    </div>
+        <div class="card-body index-parent g-0 p-1">
+            {% for month in months %}
+                {{ _self.cardEntry(month, list_path, min_margin) }}
+            {% endfor %}
+        </div>
     {% else %}
         {{ macros.empty() }}
     {% endif %}
+    </div>
 </div>

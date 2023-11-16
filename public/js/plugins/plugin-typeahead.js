@@ -35,13 +35,15 @@
             // remove element handlers and data
             const that = this;
             const $element = this.$element;
-            $element.off('blur', that.blurProxy)
+            $element.removeAttr('data-bs-toggle aria-expanded')
+                .off('blur', that.blurProxy)
                 .off('input', that.inputProxy)
                 .off('focus', that.focusProxy)
                 .off('keyup', that.keyUpProxy)
                 .off('keydown', that.keyDownProxy)
                 .off('keypress', that.keyPressProxy)
-                .off('show.bs.dropdown', that.dropdownProxy)
+                .off('show.bs.dropdown', that.dropdownShowProxy)
+                .off('hidden.bs.dropdown', this.dropdownHiddenProxy)
                 .removeData(Typeahead.NAME);
 
             // remove dropdown
@@ -70,7 +72,12 @@
                 const width = $(this.$element[0]).outerWidth();
                 this.$menu.css('width', width);
             }
+            if (!this.dropdown) {
+                this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$element[0]);
+                this.dropdown.update();
+            }
             this.dropdown.show();
+
             return this;
         }
 
@@ -79,8 +86,9 @@
          * @return {Typeahead} this instance for chaining.
          */
         hide() {
-            if (this._isVisible()) {
+            if (this.dropdown) {
                 this.dropdown.hide();
+                this.dropdown = null;
             }
             return this;
         }
@@ -128,13 +136,13 @@
             // create menu
             this.$menu = $(this.options.menu).insertAfter(this.$element);
 
-            // create dropdown
+            // add dropdown attributes
             this.$element.attr({
-                // 'data-bs-auto-close': 'inside',
-                'data-bs-toggle': 'dropdown',
-                'aria-expanded': 'false'
+                'aria-expanded': 'false',
+                'data-bs-toggle': 'dropdown'
+                //'aria-controls': '.typeahead.dropdown-menu'
+
             });
-            this.dropdown = bootstrap.Dropdown.getOrCreateInstance(this.$element[0]);
 
             // bind events
             return this._listen();
@@ -154,14 +162,16 @@
             this.keyUpProxy = (e) => this._keyup(e);
             this.keyDownProxy = (e) => this._keydown(e);
             this.keyPressProxy = (e) => this._keypress(e);
-            this.dropdownProxy = (e) => this._dropdownShow(e);
+            this.dropdownShowProxy = (e) => this._dropdownShow(e);
+            this.dropdownHiddenProxy = (e) => this._dropdownHidden();
             $element.on('blur', this.blurProxy)
                 .on('input', this.inputProxy)
                 .on('focus', this.focusProxy)
                 .on('keyup', this.keyUpProxy)
                 .on('keydown', this.keyPressProxy)
                 .on('keypress', this.keyPressProxy)
-                .on('show.bs.dropdown', this.dropdownProxy);
+                .on('show.bs.dropdown', this.dropdownShowProxy)
+                .on('hidden.bs.dropdown', this.dropdownHiddenProxy);
 
             // add menu handlers
             const $menu = this.$menu;
@@ -217,7 +227,8 @@
 
             // render categories, separators and items
             const regex = that._getHighlighter();
-            /** @type {Array.<jQuery>} */
+
+            /** @type {JQuery.TypeOrArray<JQuery.Node>} */
             const $items = data.map(function (item) {
                 if (item.__type__ === 'category') {
                     return that._renderCategory(regex, item);
@@ -228,6 +239,7 @@
                 }
             });
             that.$menu.empty().append($items);
+            //that.dropdown.update();
             if (that.options.autoSelect) {
                 return that._first();
             }
@@ -281,7 +293,7 @@
          * @private
          */
         _isVisible() {
-            return this.$menu && this.$menu.length && this.$menu.hasClass('show');
+            return this.$element.hasClass('show');
         }
 
         /**
@@ -389,7 +401,10 @@
                 $.ajaxSetup({global: false});
             }
             this.ajax.xhr = $.getJSON({
-                success: this.ajaxSuccessProxy, error: this.ajaxErrorProxy, url: this.ajax.url, data: data
+                success: this.ajaxSuccessProxy,
+                error: this.ajaxErrorProxy,
+                url: this.ajax.url,
+                data: data
             });
             this.ajax.timerId = null;
             return this;
@@ -416,7 +431,8 @@
             }
             if (this.options.empty) {
                 const $item = $('<span/>', {
-                    class: 'dropdown-item disabled', text: this.options.empty
+                    class: 'dropdown-item disabled',
+                    text: this.options.empty
                 });
                 this.$menu.addClass('py-0').html($item);
                 return this.show();
@@ -516,10 +532,9 @@
             const $next = $active.nextAll(this.options.selector).first();
             if ($next.length) {
                 $next.addClass('active');
-            } else {
-                this._first();
+                return this;
             }
-            return this;
+            return this._first();
         }
 
         /**
@@ -532,10 +547,9 @@
             const $prev = $active.prevAll(this.options.selector).first();
             if ($prev.length) {
                 $prev.addClass('active');
-            } else {
-                this._last();
+                return this;
             }
-            return this;
+            this._last();
         }
 
         /**
@@ -630,6 +644,7 @@
         _keyup(e) {
             switch (e.key) {
                 case 'ArrowDown':
+                case 'ArrowUp':
                     if (!this._isVisible()) {
                         if (this._hasItems()) {
                             this.show();
@@ -637,8 +652,6 @@
                             this._ajaxLookup();
                         }
                     }
-                    break;
-                case 'ArrowUp':
                     break;
                 case 'Tab':
                 case 'Enter':
@@ -674,9 +687,17 @@
          * @private
          */
         _dropdownShow(e) {
-            if (!this._isQueryText() || !this._hasItems()) {
+            if (!this._isQueryText() || !this._hasItems() || !this.dropdown) {
                 e.preventDefault();
             }
+        }
+
+        /**
+         * Handle the dropdown hidden event.
+         * @private
+         */
+        _dropdownHidden() {
+            this.dropdown = null;
         }
 
         /**

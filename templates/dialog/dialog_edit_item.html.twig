@@ -9,7 +9,12 @@
 {% block modal_body %}
 <div class="row" id="item_search_row">
     <div class="col-md-4 form-group mb-3">
-        <input type="search" class="form-control" id="item_search_input" name="item_search_input" aria-label="{{ 'list.search_placeholder'|trans }}" placeholder="{{ 'list.search_placeholder'|trans }}">
+        <div class="input-group">
+            <input type="text" class="form-control" id="item_search_input" name="item_search_input" aria-label="{{ 'list.search_placeholder'|trans }}" placeholder="{{ 'list.search_placeholder'|trans }}">
+            <button class="btn btn-outline-secondary" type="button" id="item_search_clear" disabled title="{{ 'help.actions.clear'|trans }}">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
     </div>
 </div>
 <div class="row">

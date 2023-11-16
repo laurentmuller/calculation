@@ -59,7 +59,7 @@ class EditTaskDialog extends EditDialog {
         that.$itemsEmpty = $('.task-items-empty');
 
         // handle type ahead search
-        that._initSearchUnits('#task_unit');
+        that._initSearchUnits(that.$unit);
 
         // handle input events
         that.taskProxy = () => that._onTaskChanged();

@@ -39,6 +39,20 @@
         },
 
         /**
+         * Validate the form.
+         *
+         * @return {jQuery}
+         */
+        validateForm() {
+            return this.each(() => {
+                const validator = $(this).getValidator();
+                if (validator) {
+                    validator.form();
+                }
+            });
+        },
+
+        /**
          * Initialize captcha.
          *
          * @return {jQuery} the caller for chaining.

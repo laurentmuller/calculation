@@ -167,26 +167,28 @@ class FormHelper
     /**
      * Add a collection type to the builder with the given entry type and reset all values to default.
      *
-     * @param string $entryType   the entry type class, must be a subclass of FormTypeInterface class
-     * @param bool   $allowAdd    true to allow user to add a new entry
-     * @param bool   $allowDelete true to allow user to delete an entry
+     * @param string               $entryType the entry type class, must be a subclass of FormTypeInterface class
+     * @param array<string, mixed> $options   the default options to override
      *
      * @throws UnexpectedValueException if the entry type is not an instance of FormTypeInterface class
      */
-    public function addCollectionType(string $entryType, bool $allowAdd = true, bool $allowDelete = true): self
+    public function addCollectionType(string $entryType, array $options = []): self
     {
         if (!\is_a($entryType, FormTypeInterface::class, true)) {
             throw new UnexpectedValueException($entryType, FormTypeInterface::class);
         }
 
-        return $this->updateOptions([
-                'entry_type' => $entryType,
-                'entry_options' => ['label' => false],
-                'allow_delete' => $allowDelete,
-                'allow_add' => $allowAdd,
-                'by_reference' => false,
-                'label' => false,
-            ])->add(CollectionType::class);
+        $options = \array_merge([
+            'label' => false,
+            'allow_add' => true,
+            'allow_delete' => true,
+            'by_reference' => false,
+            'entry_type' => $entryType,
+            'entry_options' => ['label' => false],
+        ], $options);
+
+        return $this->updateOptions($options)
+            ->add(CollectionType::class);
     }
 
     /**

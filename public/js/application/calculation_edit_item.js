@@ -4,7 +4,6 @@
 
 /**
  * Edit item dialog class.
- *
  * @class EditItemDialog
  * @extends {EditDialog}
  */
@@ -12,7 +11,6 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Gets the selected item.
-     *
      * @returns {{description: string, unit: string, price: number, quantity: number, total: number}} the item.
      */
     getItem() {
@@ -34,9 +32,7 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Initialize the dialog add.
-     *
      * @param {jQuery} $row - the selected row.
-     *
      * @return {this} This instance for chaining.
      * @private
      */
@@ -49,7 +45,6 @@ class EditItemDialog extends EditDialog {
                 this.$category.val($input.val());
             }
         }
-
         // set values
         this.$price.floatVal(1);
         this.$quantity.floatVal(1);
@@ -60,9 +55,7 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Initialize the dialog edit.
-     *
      * @param {jQuery} $row - the selected row.
-     *
      * @return {this} This instance for chaining.
      * @private
      */
@@ -82,7 +75,6 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Initialize.
-     *
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -98,14 +90,15 @@ class EditItemDialog extends EditDialog {
         that.$price = $('#item_price').inputNumberFormat();
         that.$quantity = $('#item_quantity').inputNumberFormat();
         that.$total = $('#item_total');
-        that.$search = $('#item_search_input');
         that.$searchRow = $('#item_search_row');
-        that.$cancelButton = $('#item_cancel_button');
         that.$deleteButton = $('#item_delete_button');
+        that.$cancelButton = $('#item_cancel_button');
+        that.$search = $('#item_search_input');
+        that.$clearButton = $('#item_search_clear');
 
         // handle type ahead search
         that._initSearchProduct();
-        that._initSearchUnits('#item_unit');
+        that._initSearchUnits(that.$unit);
 
         // handle input events
         that.$price.on('input', () => that._updateTotal());
@@ -157,7 +150,6 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Handles the dialog show event.
-     *
      * @return {this} This instance for chaining.
      * @private
      */
@@ -175,7 +167,6 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Handles the dialog visible event.
-     *
      * @return {this} This instance for chaining.
      * @private
      */
@@ -197,7 +188,6 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Returns if the dialog is loaded.
-     *
      * @return {boolean} true if loaded; false otherwise.
      * @protected
      */
@@ -208,7 +198,6 @@ class EditItemDialog extends EditDialog {
 
     /**
      * Gets the URL to load dialog content.
-     *
      * @return {string} - the URL.
      * @protected
      */
@@ -223,16 +212,16 @@ class EditItemDialog extends EditDialog {
     _initSearchProduct() {
         'use strict';
         const $form = $('#edit-form');
-        const $element = $('#item_search_input');
-        const $price = $('#item_price');
-        $element.initTypeahead({
-            alignWidth: false,
+        const that = this;
+        that.$search.initTypeahead({
             copyText: false,
+            alignWidth: false,
             valueField: 'description',
             displayField: 'description',
             url: $form.data('search-product'),
             error: $form.data('error-product'),
             empty: $form.data('item-empty'),
+
             /**
              * @param {Object} item
              * @param {string} item.description
@@ -242,19 +231,32 @@ class EditItemDialog extends EditDialog {
              */
             onSelect: function (item) {
                 // copy values
-                $('#item_description').val(item.description);
-                $('#item_unit').val(item.unit);
-                $('#item_category').val(item.categoryId);
-                $price.floatVal(item.price);
-                $price.trigger('input');
+                that.$description.val(item.description);
+                that.$unit.val(item.unit);
+                that.$category.val(item.categoryId);
+                that.$price.floatVal(item.price);
+                that.$price.trigger('input');
+                that.$form.validateForm();
 
                 // select
                 if (item.price) {
-                    $('#item_quantity').selectFocus();
+                    that.$quantity.selectFocus();
                 } else {
-                    $price.selectFocus();
+                    that.$price.selectFocus();
                 }
             }
+        });
+
+        that.$search.on('input', () => {
+            if ('' === that.$search.val()) {
+                that.$clearButton.attr('disabled', 'disabled');
+            } else {
+                that.$clearButton.attr('disabled', null);
+            }
+        });
+        that.$clearButton.on('click', () => {
+            that.$search.val('').trigger('focus');
+            that.$clearButton.attr('disabled', 'disabled');
         });
     }
 }

@@ -2,7 +2,6 @@
 
 /**
  * Abstract edit dialog class.
- *
  * @property {jQuery} $form
  * @property {jQuery} $modal
  * @property {jQuery} $category
@@ -12,7 +11,6 @@ class EditDialog {
 
     /**
      * Constructor.
-     *
      * @param {Application} application - the parent application.
      */
     constructor(application) {
@@ -25,7 +23,6 @@ class EditDialog {
 
     /**
      * Display the add item dialog.
-     *
      * @param {jQuery} $row - the selected row.
      * @return {this} This instance for chaining.
      */
@@ -50,7 +47,6 @@ class EditDialog {
 
     /**
      * Display the edit dialog.
-     *
      * @param {jQuery} $row - the selected row.
      * @return {this} This instance for chaining.
      */
@@ -75,7 +71,6 @@ class EditDialog {
 
     /**
      * Hide the dialog.
-     *
      * @return {this} This instance for chaining.
      */
     hide() {
@@ -86,7 +81,6 @@ class EditDialog {
 
     /**
      * Gets the selected group.
-     *
      * @returns {{id: number, code: string}}  the group.
      */
     getGroup() {
@@ -103,7 +97,6 @@ class EditDialog {
 
     /**
      * Gets the selected category.
-     *
      * @returns {{id: number, code: string}} the category.
      */
     getCategory() {
@@ -120,7 +113,6 @@ class EditDialog {
 
     /**
      * Gets the editing row.
-     *
      * @return {jQuery} the row or null if none.
      */
     getEditingRow() {
@@ -130,7 +122,6 @@ class EditDialog {
 
     /**
      * Initialize.
-     *
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -143,9 +134,7 @@ class EditDialog {
 
     /**
      * Initialize the modal dialog.
-     *
      * @param {jQuery} $modal - the modal dialog.
-     *
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -168,9 +157,7 @@ class EditDialog {
 
     /**
      * Initialize this dialog when adding a new item.
-     *
      * @param {jQuery} $row - the selected row.
-     *
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -182,9 +169,7 @@ class EditDialog {
 
     /**
      * Initialize this dialog when editing an item.
-     *
      * @param {jQuery} $row - the selected row.
-     *
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -196,7 +181,6 @@ class EditDialog {
 
     /**
      * Handles the dialog show event.
-     *
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -210,7 +194,6 @@ class EditDialog {
 
     /**
      * Handles the dialog visible event.
-     *
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -224,7 +207,6 @@ class EditDialog {
 
     /**
      * Handles the dialog hide event.
-     *
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -236,7 +218,6 @@ class EditDialog {
 
     /**
      * Reset the form validator.
-     *
      * @return {this} This instance for chaining.
      * @protected
      */
@@ -248,7 +229,6 @@ class EditDialog {
 
     /**
      * Load the modal dialog.
-     *
      * @param {string} callback - the function name to call after dialog is loaded.
      * @param {jQuery} $row - the editing row.
      * @protected
@@ -270,7 +250,6 @@ class EditDialog {
 
     /**
      * Gets the URL to load dialog content.
-     *
      * @return {string} - the URL.
      * @protected
      */
@@ -281,7 +260,6 @@ class EditDialog {
 
     /**
      * Returns if the dialog is loaded.
-     *
      * @return {boolean} true if loaded; false otherwise.
      * @protected
      */
@@ -292,17 +270,15 @@ class EditDialog {
 
     /**
      * Initialize the type ahead search units.
-     *
-     * @param {string} selector - the input selector.
+     * @param {jQuery} selector - the input.
      * @protected
      */
-    _initSearchUnits(selector) {
-        //task_unit
+    _initSearchUnits($input) {
         'use strict';
-        const $form = $('#edit-form');
-        $(selector).initTypeahead({
-            url: $form.data('search-unit'),
-            error: $form.data('error-unit')
+        const $editForm = $('#edit-form');
+        $input.initTypeahead({
+            url: $editForm.data('search-unit'),
+            error: $editForm.data('error-unit')
         });
     }
 }

@@ -4,12 +4,12 @@
 {% set edit_class = editable ? 'text-editable text-currency rowlink-skip' : 'text-currency' %}
 <tr class="item">
     {# hidden inputs #}
+    {{ form_widget(item.position) -}}
+    {{ form_widget(item.description) -}}
     {{ form_widget(item.unit) }}
     {{ form_widget(item.price) }}
     {{ form_widget(item.quantity) }}
     {{ form_widget(item.total) }}
-    {{ form_widget(item.description) -}}
-    {{ form_widget(item.position) -}}
     {% if editable %}
     <td class="text-description text-cell ps-3"><a href='#' class="btn-edit-item">{{ item.description.vars.value }}</a></td>
     <td class="text-unit">{{ item.unit.vars.value }}</td>

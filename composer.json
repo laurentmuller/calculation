@@ -37,7 +37,7 @@
         "ext-zlib": "*",
         "createnl/zxcvbn-bundle": "^3.0",
         "doctrine/doctrine-bundle": "^2.0",
-        "doctrine/orm": "^2.0",
+        "doctrine/orm": "2.16.*",
         "dukecity/doctrineextensions": "^2.0",
         "elao/enum": "^2.x-dev",
         "endroid/qr-code": "^5.0",
@@ -166,7 +166,7 @@
         },
         "cs-fixer": "vendor/bin/php-cs-fixer fix --diff --dry-run",
         "psalm": "vendor/bin/psalm --config=psalm.xml",
-        "phpstan": "vendor/bin/phpstan analyse --memory-limit=2G --configuration=phpstan.neon",
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit 2G -c phpstan.neon",
         "rector": "vendor/bin/rector process --dry-run --config=rector.php",
         "twigcs": "vendor/bin/twigcs --config .twig_cs.dist.php",
         "run-all": [

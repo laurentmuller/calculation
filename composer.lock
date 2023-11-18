@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "903238dc2d22b8ce2bdb58a6445953ff",
+    "content-hash": "6224a64809027235367301446df03a61",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1093,16 +1093,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.16.3",
+            "version": "2.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "609647a51a1b28a674de270204a5cea3af57d554"
+                "reference": "1a4fe6e0bb67762370937a7e6cee3da40a9122d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/609647a51a1b28a674de270204a5cea3af57d554",
-                "reference": "609647a51a1b28a674de270204a5cea3af57d554",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/1a4fe6e0bb67762370937a7e6cee3da40a9122d1",
+                "reference": "1a4fe6e0bb67762370937a7e6cee3da40a9122d1",
                 "shasum": ""
             },
             "require": {
@@ -1120,7 +1120,7 @@
                 "ext-ctype": "*",
                 "php": "^7.1 || ^8.0",
                 "psr/cache": "^1 || ^2 || ^3",
-                "symfony/console": "^4.2 || ^5.0 || ^6.0",
+                "symfony/console": "^4.2 || ^5.0 || ^6.0 || ^7.0",
                 "symfony/polyfill-php72": "^1.23",
                 "symfony/polyfill-php80": "^1.16"
             },
@@ -1188,9 +1188,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.16.3"
+                "source": "https://github.com/doctrine/orm/tree/2.17.1"
             },
-            "time": "2023-10-21T17:35:18+00:00"
+            "time": "2023-11-17T06:25:40+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -1684,20 +1684,20 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.16.0",
+            "version": "v4.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "523407fb06eb9e5f3d59889b3978d5bfe94299c8"
+                "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/523407fb06eb9e5f3d59889b3978d5bfe94299c8",
-                "reference": "523407fb06eb9e5f3d59889b3978d5bfe94299c8",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/bbc513d79acf6691fa9cf10f192c90dd2957f18c",
+                "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c",
                 "shasum": ""
             },
             "require": {
-                "php": "~5.6.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0"
+                "php": "~5.6.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0"
             },
             "require-dev": {
                 "cerdic/css-tidy": "^1.7 || ^2.0",
@@ -1739,9 +1739,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ezyang/htmlpurifier/issues",
-                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.16.0"
+                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.17.0"
             },
-            "time": "2022-09-18T07:06:19+00:00"
+            "time": "2023-11-17T15:01:25+00:00"
         },
         {
             "name": "fakerphp/faker",
@@ -2114,16 +2114,16 @@
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.9.12",
+            "version": "2.9.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/HighchartsBundle.git",
-                "reference": "acc9cbb7eba82d351879f6cd8fa6cf560573a389"
+                "reference": "da7bbd43237695fd7a20b430a202aecbea4d3a95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/acc9cbb7eba82d351879f6cd8fa6cf560573a389",
-                "reference": "acc9cbb7eba82d351879f6cd8fa6cf560573a389",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/da7bbd43237695fd7a20b430a202aecbea4d3a95",
+                "reference": "da7bbd43237695fd7a20b430a202aecbea4d3a95",
                 "shasum": ""
             },
             "require": {
@@ -2165,6 +2165,27 @@
                     "HighchartsBundle\\Tests\\": "tests/"
                 }
             },
+            "scripts": {
+                "cs-fixer": [
+                    "vendor/bin/php-cs-fixer fix --diff --dry-run"
+                ],
+                "psalm": [
+                    "vendor/bin/psalm --config=psalm.xml"
+                ],
+                "phpstan": [
+                    "vendor/bin/phpstan analyse --memory-limit 2G -c phpstan.neon"
+                ],
+                "rector": [
+                    "vendor/bin/rector process --dry-run --config=rector.php"
+                ],
+                "run-all": [
+                    "@cs-fixer",
+                    "@psalm",
+                    "@phpstan",
+                    "@rector",
+                    "phpunit"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -2188,9 +2209,9 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/laurentmuller/HighchartsBundle/tree/2.9.12"
+                "source": "https://github.com/laurentmuller/HighchartsBundle/tree/2.9.13"
             },
-            "time": "2023-11-02T13:27:00+00:00"
+            "time": "2023-11-17T06:00:08+00:00"
         },
         {
             "name": "lorenzo/pinky",

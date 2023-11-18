@@ -18,6 +18,7 @@ use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -31,7 +32,8 @@ class SiteMapController extends AbstractController
 
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/site_map.json')]
-        string $file
+        string $file,
+        private readonly RouterInterface $router
     ) {
         $this->content = FileUtils::decodeJson($file);
     }
@@ -39,6 +41,49 @@ class SiteMapController extends AbstractController
     #[GetRoute(path: '/sitemap', name: 'site_map')]
     public function invoke(): Response
     {
+        $missingRoutes = $this->getMissingRoutes();
+        if ([] !== $missingRoutes) {
+            $message = \sprintf('Unable to generate URL for the named route: "%s".', \implode('", "', $missingRoutes));
+            throw $this->createNotFoundException($message);
+        }
+
         return $this->render('sitemap/sitemap.html.twig', ['content' => $this->content]);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getMissingRoutes(): array
+    {
+        $existing = $this->getRouteNames();
+        $routes = $this->loadRoutes($this->content);
+
+        return \array_diff($routes, $existing);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getRouteNames(): array
+    {
+        return \array_keys($this->router->getRouteCollection()->all());
+    }
+
+    /**
+     * @psalm-return string[]
+     */
+    private function loadRoutes(array $values): array
+    {
+        $results = [];
+        /** @psalm-var string|array $value */
+        foreach ($values as $key => $value) {
+            if ('route' === $key && \is_string($value)) {
+                $results[] = $value;
+            } elseif (\is_array($value)) {
+                $results = \array_merge($results, $this->loadRoutes($value));
+            }
+        }
+
+        return $results;
     }
 }

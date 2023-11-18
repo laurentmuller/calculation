@@ -57,6 +57,6 @@
 {% block card_footer -%}
     {{ parent() }}
     {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
-        {{ button_pdf('chart_by_state_pdf', {}, 'common.button_export_pdf') }}
+        {{ button_pdf('chart_state_pdf', {}, 'common.button_export_pdf') }}
     {% endif %}
 {%- endblock %}

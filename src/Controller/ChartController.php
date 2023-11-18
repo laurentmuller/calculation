@@ -43,15 +43,13 @@ class ChartController extends AbstractController
 {
     use MathTrait;
 
-    private const KEY_MONTHS = 'chart_by_month';
+    private const KEY_MONTHS = 'chart_month';
 
     /**
-     * Gets the calculations by month.
-     *
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws BadRequestHttpException
      */
-    #[GetRoute(path: '/month', name: 'chart_by_month', methods: Request::METHOD_GET)]
+    #[GetRoute(path: '/month', name: 'chart_month', methods: Request::METHOD_GET)]
     public function month(Request $request, MonthChart $chart): Response
     {
         $this->checkAccess();
@@ -67,7 +65,7 @@ class ChartController extends AbstractController
      * @throws BadRequestHttpException
      * @throws \Exception
      */
-    #[GetRoute(path: '/month/pdf', name: 'chart_by_month_pdf', methods: Request::METHOD_GET)]
+    #[GetRoute(path: '/month/pdf', name: 'chart_month_pdf', methods: Request::METHOD_GET)]
     public function monthPdf(Request $request, CalculationRepository $repository): PdfResponse
     {
         $this->checkAccess(EntityPermission::EXPORT);
@@ -79,19 +77,18 @@ class ChartController extends AbstractController
     }
 
     /**
-     * Gets the calculations by state.
-     *
      * @throws \Exception
      */
-    #[GetRoute(path: '/state', name: 'chart_by_state', methods: Request::METHOD_GET)]
+    #[GetRoute(path: '/state', name: 'chart_state', methods: Request::METHOD_GET)]
     public function state(StateChart $chart): Response
     {
         $this->checkAccess();
+        $parameters = $chart->generate();
 
-        return $this->render('chart/chart_state.html.twig', $chart->generate());
+        return $this->render('chart/chart_state.html.twig', $parameters);
     }
 
-    #[GetRoute(path: '/state/pdf', name: 'chart_by_state_pdf', methods: Request::METHOD_GET)]
+    #[GetRoute(path: '/state/pdf', name: 'chart_state_pdf', methods: Request::METHOD_GET)]
     public function statePdf(CalculationStateRepository $repository): PdfResponse
     {
         $this->checkAccess(EntityPermission::EXPORT);

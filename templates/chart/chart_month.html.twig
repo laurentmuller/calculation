@@ -33,19 +33,23 @@
 {% block card_container_class '' -%}
 {# header #}
 {% block card_header %}
-<div class="d-flex-wrap-center">
-    <h1 class="card-title me-auto">
-        {{- icon(title_icon, title, title_domain|default(null), title_parameters|default({})) -}}
-    </h1>
-    <div class="d-flex-wrap-center d-print-none">
-        <label class="form-label ms-sm-auto mb-0" for="months">{{ 'last_month.period'|trans }}</label>
-        <select class="form-select form-select-sm w-auto d-print-none" id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_by_month') }}">
-            {% for current in allowed_months %}
-                {{ _self.month(current, current == months) }}
-            {% endfor %}
-        </select>
+{% if allowed_months|length > 1 %}
+    <div class="d-flex-wrap-center">
+        <h1 class="card-title me-auto">
+            {{- icon(title_icon, title, title_domain|default(null), title_parameters|default({})) -}}
+        </h1>
+        <div class="d-flex-wrap-center d-print-none">
+            <label class="form-label ms-sm-auto mb-0" for="months">{{ 'last_month.period'|trans }}</label>
+            <select class="form-select form-select-sm w-auto d-print-none" id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_month') }}">
+                {% for current in allowed_months %}
+                    {{ _self.month(current, current == months) }}
+                {% endfor %}
+            </select>
+        </div>
     </div>
-</div>
+{% else %}
+    {{ parent() }}
+{% endif %}
 {%- endblock %}
 {# data #}
 {% block data %}
@@ -115,7 +119,7 @@
 {% block card_footer -%}
     {{ parent() }}
     {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
-        {{ button_pdf('chart_by_month_pdf', {'count': months}, 'common.button_export_pdf') }}
+        {{ button_pdf('chart_month_pdf', {'count': months}, 'common.button_export_pdf') }}
     {% endif %}
 
 {%- endblock %}

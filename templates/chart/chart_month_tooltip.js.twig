@@ -1,0 +1,58 @@
+/* global Highcharts */
+{% trans_default_domain 'chart' %}
+/**
+ * @typedef Point
+ * @property {string} color
+ * @property {string} calculations
+ * @property {string} net_amount
+ * @property {string} margin_amount
+ * @property {string} margin_percent
+ * @property {string} total_amount
+ */
+function renderTooltip () {
+    'use strict';
+    const ptMargin = this.points[0];
+    const ptAmount = this.points[1];
+    const values = ptMargin.point;
+    let html = '<table class="m-1">';
+        html +=
+            '<tr class="border-bottom border-dark">' +
+                '<th>{{ 'fields.month'|trans }}</th>' +
+                '<th>&nbsp:&nbsp</th>' +
+                '<th class="text-calculation">' + values.date + '</th>' +
+            '</tr>';
+        html +=
+            '<tr>' +
+                '<td class="text-category">{{ 'fields.count'|trans }}</td>' +
+                '<td>&nbsp:&nbsp</td>' +
+                '<td class="text-calculation">' + values.calculations + '</td>' +
+            '</tr>';
+        let color = 'color:' + ptAmount.color + ';';
+        html +=
+            '<tr>' +
+                '<td class="text-category" style="' + color + '">{{ 'fields.net'|trans }}</td>' +
+                '<td>&nbsp:&nbsp</td>' +
+                '<td class="text-calculation">' + Highcharts.numberFormat(ptAmount.y, 0) + '</td>' +
+            '</tr>';
+        color = 'color:' + ptMargin.color + ';';
+        html +=
+            '<tr>' +
+                '<td class="text-category" style="' + color + '">{{ 'fields.margin_amount'|trans }}</td>' +
+                '<td>&nbsp:&nbsp</td>' +
+                '<td class="text-calculation">' + Highcharts.numberFormat(ptMargin.y, 0) + '</td>' +
+            '</tr>';
+        html +=
+            '<tr>' +
+                '<td class="text-category">{{ 'fields.margin_percent'|trans }}</td>' +
+                '<td>&nbsp:&nbsp</td>' +
+                '<td class="text-calculation">' + values.margin_percent + '</td>' +
+            '</tr>';
+        html +=
+            '<tr class="border-top border-dark">' +
+                '<th>{{ 'fields.total'|trans }}</th>' +
+                '<th>&nbsp:&nbsp</th>' +
+                '<th class="text-calculation">' + values.total_amount + '</th>' +
+            '</tr>';
+        html += '</table>';
+    return html;
+}

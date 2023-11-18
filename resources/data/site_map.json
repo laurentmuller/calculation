@@ -249,12 +249,12 @@
             "icon": "chart-area",
             "entries": [
                 {
-                    "route": "chart_by_month",
+                    "route": "chart_month",
                     "text": "index.menu_graphics_month",
                     "icon": "calendar-alt far"
                 },
                 {
-                    "route": "chart_by_state",
+                    "route": "chart_state",
                     "text": "index.menu_graphics_state",
                     "icon": "flag"
                 },

@@ -15,8 +15,10 @@ namespace App\Chart;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
 use App\Table\CalculationTable;
+use App\Utils\FormatUtils;
 use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 /**
  * Chart to display calculations by state.
@@ -25,10 +27,14 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class StateChart extends AbstractHighchart
 {
+    private const COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
+    private const TEMPLATE_NAME = 'chart/chart_state_tooltip.js.twig';
+
     public function __construct(
         ApplicationService $application,
         private readonly CalculationStateRepository $repository,
-        private readonly UrlGeneratorInterface $generator
+        private readonly UrlGeneratorInterface $generator,
+        private readonly Environment $twig
     ) {
         parent::__construct($application);
     }
@@ -42,22 +48,15 @@ class StateChart extends AbstractHighchart
         $count = \array_sum(\array_column($states, 'count'));
         $total = \array_sum(\array_column($states, 'total'));
         $items = \array_sum(\array_column($states, 'items'));
-        $data = \array_map(function (array $state): array {
-            $url = $this->generator->generate('calculation_table', [CalculationTable::PARAM_STATE => $state['id']]);
-
-            return [
-                'name' => $state['code'],
-                'y' => $state['total'],
-                'url' => $url,
-            ];
-        }, $states);
+        $data = $this->mapData($states);
+        $series = $this->getSeries($data);
 
         $this->setType(self::TYPE_PIE)
             ->hideTitle()
             ->setPlotOptions()
             ->setLegendOptions()
             ->setTooltipOptions()
-            ->setSeries($this->getSeries($data));
+            ->setSeries($series);
         $this->colors = $this->getColors($states);
 
         return [
@@ -76,8 +75,9 @@ class StateChart extends AbstractHighchart
     {
         parent::setTooltipOptions();
         $this->tooltip->merge([
-            'headerFormat' => '',
-            'pointFormat' => '<span><b>{point.name} : {point.y:,.0f}</b> ({point.percentage:.1f}%)</span>',
+            'shared' => true,
+            'useHTML' => true,
+            'formatter' => $this->getTooltipFormatter(),
         ]);
 
         return $this;
@@ -95,7 +95,7 @@ class StateChart extends AbstractHighchart
     }
 
     /**
-     * @psalm-param QueryCalculationType[] $states
+     * @param QueryCalculationType[] $states
      *
      * @return string[]
      */
@@ -104,9 +104,6 @@ class StateChart extends AbstractHighchart
         return \array_map(static fn (array $state): string => $state['color'], $states);
     }
 
-    /**
-     * Gets the pie options.
-     */
     private function getPieOptions(): array
     {
         return [
@@ -134,24 +131,72 @@ class StateChart extends AbstractHighchart
         ];
     }
 
+    private function getTooltipFormatter(): ?Expr
+    {
+        try {
+            $content = $this->twig->render(self::TEMPLATE_NAME);
+            $content = (string) \preg_replace(self::COMMENT_REGEX, '', $content);
+
+            return $this->createExpression($content);
+        } catch (\Exception) {
+            return null;
+        }
+    }
+
+    private function getURL(int $id): string
+    {
+        return $this->generator->generate('calculation_table', [CalculationTable::PARAM_STATE => $id]);
+    }
+
     /**
-     * Sets the legend options.
+     * @psalm-param QueryCalculationType[] $states
      */
+    private function mapData(array $states): array
+    {
+        return \array_map(function (array $state): array {
+            return [
+                'name' => $state['code'],
+                'y' => $state['total'],
+                'calculations' => FormatUtils::formatInt($state['count']),
+                'net_amount' => FormatUtils::formatInt($state['items']),
+                'margin_amount' => FormatUtils::formatInt($state['marginAmount']),
+                'margin_percent' => FormatUtils::formatPercent($state['margin'], false),
+                'total_amount' => FormatUtils::formatInt($state['total']),
+                'url' => $this->getURL($state['id']),
+            ];
+        }, $states);
+    }
+
     private function setLegendOptions(): self
     {
         $style = $this->getFontStyle();
-        $this->legend['itemStyle'] = $style;
-        $this->legend['itemHoverStyle'] = $style;
+        $this->legend->merge([
+            'align' => 'left',
+            'layout' => 'vertical',
+            'verticalAlign' => 'top',
+            'itemStyle' => $style,
+            'itemHoverStyle' => $style,
+        ]);
 
         return $this;
     }
 
-    /**
-     * Sets the plot options.
-     */
     private function setPlotOptions(): self
     {
-        $this->plotOptions['pie'] = $this->getPieOptions();
+        $this->plotOptions->merge([
+            'pie' => $this->getPieOptions(),
+            'series' => [
+                'keys' => [
+                    'name',
+                    'y',
+                    'calculations',
+                    'net_amount',
+                    'margin_amount',
+                    'margin_percent',
+                    'total_amount',
+                ],
+            ],
+        ]);
 
         return $this;
     }

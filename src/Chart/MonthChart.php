@@ -14,8 +14,10 @@ namespace App\Chart;
 
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
+use App\Utils\FormatUtils;
 use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Twig\Environment;
 
 /**
  * Chart to display calculations by month.
@@ -24,12 +26,16 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class MonthChart extends AbstractHighchart
 {
+    private const COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
+    private const TEMPLATE_NAME = 'chart/chart_month_tooltip.js.twig';
+
     private readonly string $url;
 
     public function __construct(
         ApplicationService $application,
         private readonly CalculationRepository $repository,
-        UrlGeneratorInterface $generator
+        UrlGeneratorInterface $generator,
+        private readonly Environment $twig,
     ) {
         parent::__construct($application);
         $this->url = $generator->generate('calculation_table');
@@ -102,7 +108,7 @@ class MonthChart extends AbstractHighchart
         $this->tooltip->merge([
             'shared' => true,
             'useHTML' => true,
-            'formatter' => $this->getFormatterExpression(),
+            'formatter' => $this->getTooltipFormatter(),
         ]);
 
         return $this;
@@ -120,9 +126,12 @@ class MonthChart extends AbstractHighchart
         return \max(1, $count);
     }
 
+    private function formatDate(\DateTimeInterface $date): string
+    {
+        return \ucfirst(FormatUtils::formatDate($date, pattern: 'MMMM Y'));
+    }
+
     /**
-     * Gets the allowed months to display.
-     *
      * @return int[]
      *
      * @throws \Doctrine\ORM\Exception\ORMException
@@ -175,73 +184,14 @@ class MonthChart extends AbstractHighchart
         return \array_map(static fn (array $item): int => $item['date']->getTimestamp() * 1000, $data);
     }
 
-    private function getFormatterExpression(): Expr
-    {
-        $month = $this->transChart('fields.month');
-        $count = $this->transChart('fields.count');
-        $amount = $this->transChart('fields.net');
-        $total = $this->transChart('fields.total');
-        $marginAmount = $this->transChart('fields.margin_amount');
-        $marginPercent = $this->transChart('fields.margin_percent');
-        $sep = '&nbsp:&nbsp';
-        $function = <<<JAVA_SCRIPT
-            function () {
-                const ptMargin = this.points[0];
-                const ptAmount = this.points[1];
-                let html = '<table class="m-1">';
-                html += '<tr class="border-bottom border-dark">' +
-                            '<th>$month</th>' +
-                            '<th>$sep</th>' +
-                            '<th class="text-calculation">' + Highcharts.dateFormat("%B %Y", this.x) + '</th>' +
-                        '</tr>';
-                let value = Highcharts.numberFormat(ptAmount.point.custom.count, 0);
-                html += '<tr>' +
-                            '<td class="text-category">$count</td>' +
-                            '<td>$sep</td>' +
-                            '<td class="text-calculation">' + value + '</td>' +
-                        '</tr>';
-                let color = 'color:' + ptAmount.color + ';';
-                value = Highcharts.numberFormat(ptAmount.y, 0);
-                html += '<tr>' +
-                            '<td class="text-category" style="' + color + '">$amount</td>' +
-                            '<td>$sep</td>' +
-                            '<td class="text-calculation">' + value + '</td>' +
-                        '</tr>';
-                color = 'color:' + ptMargin.color + ';';
-                value = Highcharts.numberFormat(ptMargin.y, 0);
-                html += '<tr>' +
-                            '<td class="text-category" style="' + color + '">$marginAmount</td>' +
-                            '<td>$sep</td>' +
-                            '<td class="text-calculation">' + value + '</td>' +
-                        '</tr>';
-                value =  Highcharts.numberFormat(100 + Math.floor(ptMargin.y * 100 / ptAmount.y), 0);
-                html += '<tr>' +
-                            '<td class="text-category">$marginPercent</td>' +
-                            '<td>$sep</td>' +
-                            '<td class="text-calculation">' + value + '</td>' +
-                        '</tr>';
-                value = Highcharts.numberFormat(ptAmount.y + ptMargin.y, 0);
-                html += '<tr class="border-top border-dark">' +
-                            '<th>$total</th>' +
-                            '<th>$sep</th>' +
-                            '<th class="text-calculation">' + value + '</th>' +
-                        '</tr>';
-                html += '</table>';
-                return html;
-            }
-            JAVA_SCRIPT;
-
-        return $this->createExpression($function);
-    }
-
     /**
-     * @param CalculationByMonthType[] $data
+     * Only y value is returned.
      *
-     * @return array<array-key, array{float, int}>
+     * @param CalculationByMonthType[] $data
      */
     private function getItemsSeries(array $data): array
     {
-        return \array_map(static fn (array $item): array => [$item['items'], $item['count']], $data);
+        return \array_map(static fn (array $item): array => ['y' => $item['items']], $data);
     }
 
     /**
@@ -275,13 +225,23 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param CalculationByMonthType[] $data
+     * The y value and all data needed by custom tooltip are returned.
      *
-     * @return array<array-key, array{float, int}>
+     * @param CalculationByMonthType[] $data
      */
     private function getMarginsSeries(array $data): array
     {
-        return \array_map(static fn (array $item): array => [$item['total'] - $item['items'], $item['count']], $data);
+        return \array_map(function (array $item): array {
+            return [
+                'y' => $item['total'] - $item['items'],
+                'date' => $this->formatDate($item['date']),
+                'calculations' => FormatUtils::formatInt($item['count']),
+                'net_amount' => FormatUtils::formatInt($item['items']),
+                'margin_percent' => FormatUtils::formatPercent($item['margin_percent'], false),
+                'margin_amount' => FormatUtils::formatInt($item['margin_amount']),
+                'total_amount' => FormatUtils::formatInt($item['total']),
+            ];
+        }, $data);
     }
 
     /**
@@ -311,6 +271,18 @@ class MonthChart extends AbstractHighchart
     private function getSumValues(array $data): array
     {
         return \array_map(static fn (array $item): float => $item['total'], $data);
+    }
+
+    private function getTooltipFormatter(): ?Expr
+    {
+        try {
+            $content = $this->twig->render(self::TEMPLATE_NAME);
+            $content = (string) \preg_replace(self::COMMENT_REGEX, '', $content);
+
+            return $this->createExpression($content);
+        } catch (\Exception) {
+            return null;
+        }
     }
 
     private function getXAxis(array $dates): array
@@ -349,20 +321,27 @@ class MonthChart extends AbstractHighchart
         ];
     }
 
-    /**
-     * Sets the plot options.
-     */
     private function setPlotOptions(): self
     {
         $this->plotOptions['series'] = [
             'pointPadding' => 0,
             'cursor' => 'pointer',
             'stacking' => 'normal',
-            'keys' => ['y', 'custom.count'],
             'borderRadius' => ['radius' => 0],
             'borderColor' => $this->getBorderColor(),
             'point' => [
-                'events' => ['click' => $this->getClickExpression()],
+                'events' => [
+                    'click' => $this->getClickExpression(),
+                ],
+            ],
+            'keys' => [
+                'y',
+                'date',
+                'calculations',
+                'net_amount',
+                'margin_percent',
+                'margin_amount',
+                'total_amount',
             ],
         ];
 

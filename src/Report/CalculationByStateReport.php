@@ -170,12 +170,8 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
         }, $entities);
         $this->pieChart($centerX, $centerY, $radius, $rows);
         $this->SetY($centerY + $radius + self::LINE_HEIGHT);
-        $this->resetStyle();
-
-        // for testing purpose
-        $this->pieLegendHorizontal($rows);
         $this->pieLegendVertical($rows, $margin, $top);
-        $this->ln();
+        $this->resetStyle();
     }
 
     /**

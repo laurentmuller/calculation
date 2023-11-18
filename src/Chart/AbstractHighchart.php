@@ -257,7 +257,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     protected function setTooltipOptions(): static
     {
         $this->tooltip->merge([
-            'borderRadius' => 4,
+            'borderRadius' => 5,
             'style' => $this->getFontStyle(12),
             'backgroundColor' => 'var(--bs-light)',
             'borderColor' => $this->getBorderColor(),
@@ -284,17 +284,14 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
      */
     private function initLangOptions(): static
     {
-        $options = [
+        $this->lang->merge([
             'thousandsSep' => FormatUtils::getGrouping(),
             'decimalPoint' => FormatUtils::getDecimal(),
             'months' => \array_values(DateUtils::getMonths()),
             'weekdays' => \array_values(DateUtils::getWeekdays()),
             'shortMonths' => \array_values(DateUtils::getShortMonths()),
             'shortWeekdays' => \array_values(DateUtils::getShortWeekdays()),
-        ];
-        foreach ($options as $id => $value) {
-            $this->lang[$id] = $value;
-        }
+        ]);
 
         return $this;
     }

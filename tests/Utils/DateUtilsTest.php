@@ -18,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(DateUtils::class)]
 class DateUtilsTest extends TestCase
 {
+    private const LOCALE_FR_CH = 'fr_CH';
+
     public static function getCompletYears(): array
     {
         return [
@@ -275,7 +277,8 @@ class DateUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getMonthNames')]
     public function testMonthNames(string $name, int $index): void
     {
-        \setlocale(\LC_TIME, 'fr_CH');
+        \Locale::setDefault(self::LOCALE_FR_CH);
+        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $values = DateUtils::getMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -297,7 +300,8 @@ class DateUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getShortMonthNames')]
     public function testShortMonthNames(string $name, int $index): void
     {
-        \setlocale(\LC_TIME, 'fr_CH');
+        \Locale::setDefault(self::LOCALE_FR_CH);
+        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $values = DateUtils::getShortMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -305,7 +309,6 @@ class DateUtilsTest extends TestCase
 
     public function testShortMonthsCount(): void
     {
-        \setlocale(\LC_TIME, 'fr_CH');
         $values = DateUtils::getShortMonths();
         self::assertCount(12, $values);
     }
@@ -313,7 +316,8 @@ class DateUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getShortWeekdayNames')]
     public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
-        \setlocale(\LC_TIME, 'fr_CH');
+        \Locale::setDefault(self::LOCALE_FR_CH);
+        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $values = DateUtils::getShortWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
@@ -321,7 +325,6 @@ class DateUtilsTest extends TestCase
 
     public function testShortWeekdaysCount(): void
     {
-        \setlocale(\LC_TIME, 'fr_CH');
         $values = DateUtils::getShortWeekdays();
         self::assertCount(7, $values);
     }
@@ -350,7 +353,8 @@ class DateUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getWeekdayNames')]
     public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
-        \setlocale(\LC_ALL, 'fr_CH');
+        \Locale::setDefault(self::LOCALE_FR_CH);
+        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $values = DateUtils::getWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);

@@ -107,7 +107,6 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
         $table->addRow(...$cells);
 
         return true;
-        //        return false;
     }
 
     protected function doRender(array $entities): bool

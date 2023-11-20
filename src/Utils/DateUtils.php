@@ -270,12 +270,23 @@ final class DateUtils
     private static function getDayNames(string $pattern, string $firstDay): array
     {
         $result = [];
+        $formatter = self::getFormatter($pattern);
         for ($i = 0; $i <= 6; ++$i) {
             $time = (int) \strtotime("last $firstDay + $i day");
-            $result[$i + 1] = FormatUtils::formatDateTime($time, pattern: $pattern);
+            $result[$i + 1] = \ucfirst((string) $formatter->format($time));
         }
 
         return $result;
+    }
+
+    private static function getFormatter(string $pattern): \IntlDateFormatter
+    {
+        return new \IntlDateFormatter(
+            locale: \Locale::getDefault(),
+            dateType: \IntlDateFormatter::NONE,
+            timeType: \IntlDateFormatter::NONE,
+            pattern: $pattern
+        );
     }
 
     /**
@@ -288,8 +299,9 @@ final class DateUtils
         $result = [];
         $date = new \DateTime('2000-01-01');
         $interval = new \DateInterval('P1M');
+        $formatter = self::getFormatter($pattern);
         for ($i = 1; $i <= 12; ++$i) {
-            $result[$i] = FormatUtils::formatDateTime($date, pattern: $pattern);
+            $result[$i] = \ucfirst((string) $formatter->format($date));
             $date = $date->add($interval);
         }
 

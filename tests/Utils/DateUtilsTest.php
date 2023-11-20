@@ -273,9 +273,9 @@ class DateUtilsTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getMonthNames')]
-    public function testMonthNames(string $name, int $index, string $locale = 'fr_CH'): void
+    public function testMonthNames(string $name, int $index): void
     {
-        $values = DateUtils::getMonths($locale);
+        $values = DateUtils::getMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
     }
@@ -294,9 +294,9 @@ class DateUtilsTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getShortMonthNames')]
-    public function testShortMonthNames(string $name, int $index, string $locale = 'fr_CH'): void
+    public function testShortMonthNames(string $name, int $index): void
     {
-        $values = DateUtils::getShortMonths($locale);
+        $values = DateUtils::getShortMonths();
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
     }
@@ -308,9 +308,9 @@ class DateUtilsTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getShortWeekdayNames')]
-    public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'sunday', string $locale = 'fr_CH'): void
+    public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
-        $values = DateUtils::getShortWeekdays($firstDay, $locale);
+        $values = DateUtils::getShortWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
     }
@@ -343,9 +343,9 @@ class DateUtilsTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getWeekdayNames')]
-    public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday', string $locale = 'fr_CH'): void
+    public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
-        $values = DateUtils::getWeekdays($firstDay, $locale);
+        $values = DateUtils::getWeekdays($firstDay);
         self::assertArrayHasKey($index, $values);
         self::assertSame($name, $values[$index]);
     }

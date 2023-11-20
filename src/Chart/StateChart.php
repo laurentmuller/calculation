@@ -148,7 +148,7 @@ class StateChart extends AbstractHighchart
                 'calculations_percent' => FormatUtils::formatPercent($state['percentCalculation'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
                 'net_amount' => FormatUtils::formatInt($state['items']),
                 'margin_amount' => FormatUtils::formatInt($state['marginAmount']),
-                'margin_percent' => FormatUtils::formatPercent($state['margin'], false),
+                'margin_percent' => FormatUtils::formatPercent($state['margin']),
                 'total_amount' => FormatUtils::formatInt($state['total']),
                 'total_percent' => FormatUtils::formatPercent($state['percentAmount'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
                 'url' => $this->getURL($state['id']),

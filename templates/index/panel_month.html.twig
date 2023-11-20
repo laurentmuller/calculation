@@ -5,7 +5,7 @@
 {% macro cardEntry(month, list_path, min_margin) -%}
 <div class="border index-child m-1">
     <div class="position-relative body-tooltip p-2">
-        {%- set text = month.date|locale_date('none', null, null, 'MMMM Y')|capitalize -%}
+        {%- set text = month.date|locale_date('none', null, null, 'MMMM Y') -%}
         {%- if list_path -%}
             {%- set list_title = 'index.panel_month_title'|trans({'%month%': text}) -%}
             <a href="{{ path(list_path, {'search': month.date|locale_date('none', null, null, 'MM.Y')}) }}" class="stretched-link" title="{{ list_title }}">

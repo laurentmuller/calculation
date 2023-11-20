@@ -97,6 +97,9 @@ final class FormatUtils
         if (false === $result) {
             return null;
         }
+        if (null !== $pattern && '' !== $pattern) {
+            return \ucfirst($result);
+        }
 
         return $result;
     }

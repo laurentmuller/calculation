@@ -192,7 +192,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $valueCells = [];
         $sepCol = PdfColumn::center(null, 3);
         $emptyCol = PdfColumn::center(null, 1);
-        $emptyCell = new PdfCell(cols: 1, style: PdfStyle::getNoBorderStyle());
+        $emptyCell = new PdfCell(style: PdfStyle::getNoBorderStyle());
 
         $this->updateCardsEntries($levels, $columns, $textCells, $valueCells, $emptyCol, $emptyCell);
         $columns[] = $sepCol;

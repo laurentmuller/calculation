@@ -127,7 +127,7 @@ class MonthChart extends AbstractHighchart
 
     private function formatDate(\DateTimeInterface $date): string
     {
-        return \ucfirst(FormatUtils::formatDate($date, pattern: 'MMMM Y'));
+        return FormatUtils::formatDate($date, pattern: 'MMMM Y');
     }
 
     /**
@@ -236,7 +236,7 @@ class MonthChart extends AbstractHighchart
                 'date' => $this->formatDate($item['date']),
                 'calculations' => FormatUtils::formatInt($item['count']),
                 'net_amount' => FormatUtils::formatInt($item['items']),
-                'margin_percent' => FormatUtils::formatPercent($item['margin_percent'], false),
+                'margin_percent' => FormatUtils::formatPercent($item['margin_percent']),
                 'margin_amount' => FormatUtils::formatInt($item['margin_amount']),
                 'total_amount' => FormatUtils::formatInt($item['total']),
             ];

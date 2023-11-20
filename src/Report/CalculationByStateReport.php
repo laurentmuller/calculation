@@ -15,8 +15,11 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Events\PdfCellTextEvent;
+use App\Pdf\Events\PdfPdfDrawHeadersEvent;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
+use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
@@ -33,7 +36,7 @@ use App\Utils\FormatUtils;
  *
  * @extends AbstractArrayReport<QueryCalculationType>
  */
-class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCellTextInterface
+class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
     use MathTrait;
     use PdfPieChartTrait;
@@ -67,6 +70,46 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
         return true;
     }
 
+    public function drawHeaders(PdfPdfDrawHeadersEvent $event): bool
+    {
+        $cells = [];
+        $table = $event->table;
+        $style = $event->headerStyle;
+        $columns = $event->getColumns();
+        foreach ($columns as $index => $column) {
+            switch ($index) {
+                case 1:
+                case 4:
+                case 6:
+                    $cols = 2;
+                    $alignment = PdfTextAlignment::CENTER;
+                    $cells[] = new PdfCell(
+                        $column->getText(),
+                        $cols,
+                        $style,
+                        $alignment
+                    );
+                    break;
+                case 2:
+                case 5:
+                case 7:
+                    break;
+                default: // 0, 3, 6
+                    $cells[] = new PdfCell(
+                        $column->getText(),
+                        1,
+                        $style,
+                        $column->getAlignment()
+                    );
+                    break;
+            }
+        }
+        $table->addRow(...$cells);
+
+        return true;
+        //        return false;
+    }
+
     protected function doRender(array $entities): bool
     {
         $this->AddPage();
@@ -93,14 +136,15 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     private function createTable(): PdfTable
     {
         return PdfTable::instance($this)
+            ->setHeadersListener($this)
             ->setTextListener($this)
             ->addColumns(
                 PdfColumn::left($this->transChart('fields.state'), 20),
                 PdfColumn::right($this->transChart('fields.count'), 25, true),
                 PdfColumn::right(FormatUtils::getPercent(), 15, true),
                 PdfColumn::right($this->transChart('fields.net'), 20, true),
-                PdfColumn::right($this->transChart('fields.margin_amount'), 20, true),
-                PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
+                PdfColumn::right($this->transChart('fields.margin'), 20, true),
+                PdfColumn::right($this->transChart('fields.margin_percent'), 15, true),
                 PdfColumn::right($this->transChart('fields.total'), 20, true),
                 PdfColumn::right(FormatUtils::getPercent(), 15, true)
             )->outputHeaders();
@@ -136,7 +180,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
     private function formatPercent(float $value, int $decimals = 1, bool $useStyle = false, bool $bold = false): PdfCell
     {
         $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
-        $cell = new PdfCell(FormatUtils::formatPercent($value, false, $decimals, \NumberFormatter::ROUND_HALFEVEN));
+        $cell = new PdfCell(FormatUtils::formatPercent($value, true, $decimals, \NumberFormatter::ROUND_HALFEVEN));
         if ($useStyle && $this->isMinMargin($value)) {
             $style->setTextColor(PdfTextColor::red());
         }

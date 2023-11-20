@@ -12,23 +12,28 @@ declare(strict_types=1);
 
 namespace App\Pdf\Events;
 
-use App\Pdf\Interfaces\PdfOutputHeadersInterface;
+use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
+use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 
 /**
- * The event raised when headers are drawn.
- *
- * @see PdfOutputHeadersInterface
+ * The event raised when headers must be drawn.
  */
-readonly class PdfHeadersEvent
+class PdfPdfDrawHeadersEvent
 {
+    public function __construct(
+        public PdfTable $table,
+        public PdfStyle $headerStyle
+    ) {
+    }
+
     /**
-     * @param PdfTable $table the parent's table
-     * @param bool     $start true if starting output headers; false if ending
+     * @return PdfColumn[]
      */
-    public function __construct(public PdfTable $table, public bool $start)
+    public function getColumns(): array
     {
+        return $this->table->getColumns();
     }
 
     /**

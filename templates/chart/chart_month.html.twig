@@ -24,7 +24,7 @@
 {% if icon %}
     <i class="fa-fw fa-solid fa-caret-{{ icon }} position-absolute top-50 start-0 translate-middle-y {{ color }}"></i>
 {% endif %}
-{{- user_percent ? value|percent(false) : value|integer -}}
+{{- user_percent ? value|percent : value|integer -}}
 {%- endmacro %}
 {# parameters #}
 {%- set title = 'title_by_month' -%}
@@ -57,25 +57,24 @@
     <tr>
         <th class="text-nowrap">{{ 'fields.month'|trans }}</th>
         <th class="text-currency">{{ 'fields.count'|trans }}</th>
-        <th class="text-currency">
-            <div class="d-flex align-items-center">
-                <span class="border me-1" style="width: 1.25rem; height: 0.9rem; background: darkgreen;"></span>
+        <th class="text-center">
+            <div class="d-inline-flex align-items-baseline justify-content-center">
+                <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: darkgreen;"></span>
                 <span class="ms-auto">{{ 'fields.net'|trans }}</span>
             </div>
         </th>
-        <th class="text-currency">
-            <div class="d-flex align-items-center">
-                <span class="border me-1" style="width: 1.25rem; height: 0.9rem; background: darkred;"></span>
-                <span class="ms-auto">{{ 'fields.margin_amount'|trans }}</span>
+        <th class="text-center" colspan="2">
+            <div class="d-inline-flex align-items-baseline justify-content-center">
+                <span class="border me-1" style="width: 1.25rem; height: 0.75rem; background: darkred;"></span>
+                <span>{{ 'fields.margin'|trans }}</span>
             </div>
         </th>
-        <th class="text-percent">{{ 'fields.margin_percent'|trans }}</th>
         <th class="text-currency">{{ 'fields.total'|trans }}</th>
     </tr>
 </thead>
 <tbody data-link="row" class="rowlink">
     {% for item in data -%}
-    {%- set month = item.date|locale_date('none', null, null, 'MMMM Y')|capitalize -%}
+    {%- set month = item.date|locale_date('none', null, null, 'MMMM Y') -%}
     {%- set parameters = {'search': item.date|locale_date('none', null, null, 'MM.Y')} -%}
     <tr title="{{ 'row_by_month'|trans({'%name%': month}) }}">
         <td class="text-nowrap">
@@ -110,7 +109,7 @@
         <td class="fw-bold text-currency">{{ count|integer }}</td>
         <td class="fw-bold text-currency">{{ items|integer }}</td>
         <td class="fw-bold text-currency">{{ margin_amount|integer }}</td>
-        <td class="fw-bold text-percent{{ _self.margin_below_class(margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(margin_percent, min_margin) }}>{{ margin_percent|percent(false) }}</td>
+        <td class="fw-bold text-percent{{ _self.margin_below_class(margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(margin_percent, min_margin) }}>{{ margin_percent|percent }}</td>
         <td class="fw-bold text-currency">{{ total|integer }}</td>
     </tr>
 </tbody>

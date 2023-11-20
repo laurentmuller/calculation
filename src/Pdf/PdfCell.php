@@ -26,13 +26,13 @@ class PdfCell
      * @param ?PdfTextAlignment $alignment the cell alignment
      * @param string|int        $link      the cell link. A URL or identifier returned by AddLink().
      */
-    public function __construct(private ?string $text = null, private int $cols = 1, private ?PdfStyle $style = null, private ?PdfTextAlignment $alignment = null, private string|int $link = '')
-    {
-        $this->setText($text)
-            ->setCols($cols)
-            ->setStyle($style)
-            ->setAlignment($alignment)
-            ->setLink($link);
+    public function __construct(
+        private readonly ?string $text = null,
+        private readonly int $cols = 1,
+        private ?PdfStyle $style = null,
+        private readonly ?PdfTextAlignment $alignment = null,
+        private readonly string|int $link = ''
+    ) {
     }
 
     public function __clone()
@@ -91,51 +91,11 @@ class PdfCell
     }
 
     /**
-     * Sets the cell alignment.
-     */
-    public function setAlignment(?PdfTextAlignment $alignment): self
-    {
-        $this->alignment = $alignment;
-
-        return $this;
-    }
-
-    /**
-     * Sets the columns span.
-     */
-    public function setCols(int $cols): self
-    {
-        $this->cols = \max(1, $cols);
-
-        return $this;
-    }
-
-    /**
-     * Sets the link.
-     */
-    public function setLink(string|int $link = ''): self
-    {
-        $this->link = $link;
-
-        return $this;
-    }
-
-    /**
      * Sets the style.
      */
     public function setStyle(?PdfStyle $style): self
     {
         $this->style = $style;
-
-        return $this;
-    }
-
-    /**
-     * Sets the text.
-     */
-    public function setText(?string $text): self
-    {
-        $this->text = $text;
 
         return $this;
     }

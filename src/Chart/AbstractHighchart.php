@@ -19,8 +19,10 @@ use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use HighchartsBundle\Highcharts\ChartOption;
 use HighchartsBundle\Highcharts\Highchart;
+use Laminas\Json\Expr;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
+use Twig\Environment;
 
 /**
  * Extends the Highchart with method shortcuts.
@@ -55,6 +57,8 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
      * The spline chart type.
      */
     final public const TYPE_SP_LINE = 'spline';
+
+    private const COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
 
     public function __construct(protected readonly ApplicationService $application)
     {
@@ -224,6 +228,21 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
+     * Render the given template and create an expression from the content.
+     */
+    protected function createTemplateExpression(Environment $twig, string $template): ?Expr
+    {
+        try {
+            $content = $twig->render($template);
+            $content = (string) \preg_replace(self::COMMENT_REGEX, '', $content);
+
+            return $this->createExpression($content);
+        } catch (\Exception) {
+            return null;
+        }
+    }
+
+    /**
      * Gets the border color.
      */
     protected function getBorderColor(): string
@@ -232,13 +251,13 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the font style.
+     * Gets the font style for the given font size.
      */
-    protected function getFontStyle(int $fontSize = 16): array
+    protected function getFontStyle(string $fontSize = null): array
     {
         return [
-            'fontWeight' => 'normal',
-            'fontSize' => "{$fontSize}px",
+            'fontSize' => $fontSize ?? 'var(--bs-body-font-size)',
+            'fontWeight' => 'var(--bs-body-font-weight)',
             'fontFamily' => 'var(--bs-body-font-family)',
         ];
     }
@@ -258,7 +277,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     {
         $this->tooltip->merge([
             'borderRadius' => 5,
-            'style' => $this->getFontStyle(12),
+            'style' => $this->getFontStyle('0.75rem'),
             'backgroundColor' => 'var(--bs-light)',
             'borderColor' => $this->getBorderColor(),
         ]);

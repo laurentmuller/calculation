@@ -39,8 +39,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  * @psalm-type SourceType = array{
  *     source: string,
  *     format: string,
- *     versionUrl: string,
- *     versionPaths: string[]}
+ *     versionUrl?: string,
+ *     versionPaths?: string[]}
  * @psalm-type ConfigurationType = array{
  *     target: string,
  *     plugins: PluginType[],
@@ -133,8 +133,6 @@ class UpdateAssetsCommand extends Command
                 $definition = $configuration['sources'][$pluginSource];
                 $source = $definition['source'];
                 $format = $definition['format'];
-                $versionUrl = $definition['versionUrl'];
-                $versionPaths = $definition['versionPaths'];
 
                 $this->writeVerbose(\sprintf('Install: %s %s', $name, $version));
                 foreach ($files as $file) {
@@ -145,7 +143,14 @@ class UpdateAssetsCommand extends Command
                     }
                 }
                 ++$countPlugins;
-                $this->checkVersion($versionUrl, $versionPaths, $name, $version);
+
+                $versionUrl = $definition['versionUrl'] ?? null;
+                $versionPaths = $definition['versionPaths'] ?? null;
+                if (\is_string($versionUrl) && \is_array($versionPaths)) {
+                    $this->checkVersion($versionUrl, $versionPaths, $name, $version);
+                } else {
+                    $this->writeVerbose(\sprintf('Check  : %s %s - No version information.', $name, $version), 'fg=gray');
+                }
             }
             $expected = $this->countFiles($plugins);
             if ($expected !== $countFiles) {
@@ -229,16 +234,19 @@ class UpdateAssetsCommand extends Command
 
             $source = $plugin['source'];
             $definition = $configuration['sources'][$source];
-            $versionUrl = $definition['versionUrl'];
-            $versionPaths = $definition['versionPaths'];
-            $newVersion = $this->getLastVersion($versionUrl, $versionPaths, $name);
-
-            if (null === $newVersion) {
-                $this->write(\sprintf($pattern, '✗', $name, $version, 'Unable to find version.'), 'fg=red');
-            } elseif (\version_compare($version, $newVersion, '<')) {
-                $this->write(\sprintf('✗ %-30s %-12s Version %s available.', $name, $version, $newVersion), 'fg=red');
+            $versionUrl = $definition['versionUrl'] ?? null;
+            $versionPaths = $definition['versionPaths'] ?? null;
+            if (\is_string($versionUrl) && \is_array($versionPaths)) {
+                $newVersion = $this->getLastVersion($versionUrl, $versionPaths, $name);
+                if (null === $newVersion) {
+                    $this->write(\sprintf($pattern, '✗', $name, $version, 'Unable to find version.'), 'fg=red');
+                } elseif (\version_compare($version, $newVersion, '<')) {
+                    $this->write(\sprintf('✗ %-30s %-12s Version %s available.', $name, $version, $newVersion), 'fg=red');
+                } else {
+                    $this->write(\sprintf('✓ %-30s %-12s', $name, $version));
+                }
             } else {
-                $this->write(\sprintf('✓ %-30s %-12s', $name, $version));
+                $this->write(\sprintf($pattern, '✗', $name, $version, 'No version information.'), 'fg=gray');
             }
         }
 

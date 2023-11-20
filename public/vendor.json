@@ -17,6 +17,11 @@
                 "tags",
                 "latest"
             ]
+        },
+        "highcharts": {
+            "example": "https://code.highcharts.com/11.2.0/highcharts.js",
+            "source": "https://code.highcharts.com/",
+            "format": "{source}{version}/{file}"
         }
     },
     "target": "vendor/",

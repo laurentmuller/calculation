@@ -27,7 +27,6 @@ use Twig\Environment;
  */
 class StateChart extends AbstractHighchart
 {
-    private const COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
     private const TEMPLATE_NAME = 'chart/chart_state_tooltip.js.twig';
 
     public function __construct(
@@ -77,7 +76,7 @@ class StateChart extends AbstractHighchart
         $this->tooltip->merge([
             'shared' => true,
             'useHTML' => true,
-            'formatter' => $this->getTooltipFormatter(),
+            'formatter' => $this->createTemplateExpression($this->twig, self::TEMPLATE_NAME),
         ]);
 
         return $this;
@@ -131,18 +130,6 @@ class StateChart extends AbstractHighchart
         ];
     }
 
-    private function getTooltipFormatter(): ?Expr
-    {
-        try {
-            $content = $this->twig->render(self::TEMPLATE_NAME);
-            $content = (string) \preg_replace(self::COMMENT_REGEX, '', $content);
-
-            return $this->createExpression($content);
-        } catch (\Exception) {
-            return null;
-        }
-    }
-
     private function getURL(int $id): string
     {
         return $this->generator->generate('calculation_table', [CalculationTable::PARAM_STATE => $id]);
@@ -158,10 +145,12 @@ class StateChart extends AbstractHighchart
                 'name' => $state['code'],
                 'y' => $state['total'],
                 'calculations' => FormatUtils::formatInt($state['count']),
+                'calculations_percent' => FormatUtils::formatPercent($state['percentCalculation'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
                 'net_amount' => FormatUtils::formatInt($state['items']),
                 'margin_amount' => FormatUtils::formatInt($state['marginAmount']),
                 'margin_percent' => FormatUtils::formatPercent($state['margin'], false),
                 'total_amount' => FormatUtils::formatInt($state['total']),
+                'total_percent' => FormatUtils::formatPercent($state['percentAmount'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
                 'url' => $this->getURL($state['id']),
             ];
         }, $states);
@@ -190,10 +179,12 @@ class StateChart extends AbstractHighchart
                     'name',
                     'y',
                     'calculations',
+                    'calculations_percent',
                     'net_amount',
                     'margin_amount',
                     'margin_percent',
                     'total_amount',
+                    'total_percent',
                 ],
             ],
         ]);

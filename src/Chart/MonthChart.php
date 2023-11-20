@@ -26,7 +26,6 @@ use Twig\Environment;
  */
 class MonthChart extends AbstractHighchart
 {
-    private const COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
     private const TEMPLATE_NAME = 'chart/chart_month_tooltip.js.twig';
 
     private readonly string $url;
@@ -108,7 +107,7 @@ class MonthChart extends AbstractHighchart
         $this->tooltip->merge([
             'shared' => true,
             'useHTML' => true,
-            'formatter' => $this->getTooltipFormatter(),
+            'formatter' => $this->createTemplateExpression($this->twig, self::TEMPLATE_NAME),
         ]);
 
         return $this;
@@ -273,18 +272,6 @@ class MonthChart extends AbstractHighchart
         return \array_map(static fn (array $item): float => $item['total'], $data);
     }
 
-    private function getTooltipFormatter(): ?Expr
-    {
-        try {
-            $content = $this->twig->render(self::TEMPLATE_NAME);
-            $content = (string) \preg_replace(self::COMMENT_REGEX, '', $content);
-
-            return $this->createExpression($content);
-        } catch (\Exception) {
-            return null;
-        }
-    }
-
     private function getXAxis(array $dates): array
     {
         return [
@@ -293,7 +280,7 @@ class MonthChart extends AbstractHighchart
             'lineColor' => $this->getBorderColor(),
             'labels' => [
                 'format' => '{value:%b %Y}',
-                'style' => $this->getFontStyle(14),
+                'style' => $this->getFontStyle('0.875rem'),
             ],
         ];
     }
@@ -312,7 +299,7 @@ class MonthChart extends AbstractHighchart
                 'gridLineColor' => $this->getBorderColor(),
                 'labels' => [
                     'formatter' => $formatter,
-                    'style' => $this->getFontStyle(14),
+                    'style' => $this->getFontStyle('0.875rem'),
                 ],
                 'title' => [
                     'text' => null,

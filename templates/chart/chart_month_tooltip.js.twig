@@ -17,41 +17,49 @@ function renderTooltip () {
     let html = '<table class="m-1">';
         html +=
             '<tr class="border-bottom border-dark">' +
-                '<th>{{ 'fields.month'|trans }}</th>' +
-                '<th>&nbsp:&nbsp</th>' +
-                '<th class="text-calculation">' + values.date + '</th>' +
+            '<th>{{ 'fields.month'|trans }}</th>' +
+            '<th class="p-1">:</th>' +
+            '<th class="text-calculation">' + values.date + '</th>' +
             '</tr>';
         html +=
             '<tr>' +
-                '<td class="text-category">{{ 'fields.count'|trans }}</td>' +
-                '<td>&nbsp:&nbsp</td>' +
-                '<td class="text-calculation">' + values.calculations + '</td>' +
-            '</tr>';
-        let color = 'color:' + ptAmount.color + ';';
-        html +=
-            '<tr>' +
-                '<td class="text-category" style="' + color + '">{{ 'fields.net'|trans }}</td>' +
-                '<td>&nbsp:&nbsp</td>' +
-                '<td class="text-calculation">' + Highcharts.numberFormat(ptAmount.y, 0) + '</td>' +
-            '</tr>';
-        color = 'color:' + ptMargin.color + ';';
-        html +=
-            '<tr>' +
-                '<td class="text-category" style="' + color + '">{{ 'fields.margin_amount'|trans }}</td>' +
-                '<td>&nbsp:&nbsp</td>' +
-                '<td class="text-calculation">' + Highcharts.numberFormat(ptMargin.y, 0) + '</td>' +
+            '<td class="text-category">{{ 'fields.count'|trans }}</td>' +
+            '<td class="p-1">:</td>' +
+            '<td class="text-calculation">' + values.calculations + '</td>' +
             '</tr>';
         html +=
             '<tr>' +
-                '<td class="text-category">{{ 'fields.margin_percent'|trans }}</td>' +
-                '<td>&nbsp:&nbsp</td>' +
-                '<td class="text-calculation">' + values.margin_percent + '</td>' +
+            '<td class="text-category">' +
+                '<div class="d-flex align-items-center">' +
+                    '<span class="border me-1" style="width: 1rem; height: 0.75rem; background:' + ptAmount.color + '"></span>' +
+                    '<span>{{ 'fields.net'|trans }}</span>' +
+                '</div>' +
+            '</td>' +
+            '<td class="p-1">:</td>' +
+            '<td class="text-calculation">' + Highcharts.numberFormat(ptAmount.y, 0) + '</td>' +
+            '</tr>';
+        html +=
+            '<tr>' +
+            '<td class="text-category">' +
+                '<div class="d-flex align-items-center">' +
+                    '<span class="border me-1" style="width: 1rem; height: 0.75rem; background:' + ptMargin.color + '"></span>' +
+                    '<span>{{ 'fields.margin_amount'|trans }}</span>' +
+                '</div>' +
+            '</td>' +
+            '<td class="p-1">:</td>' +
+            '<td class="text-calculation">' + Highcharts.numberFormat(ptMargin.y, 0) + '</td>' +
+            '</tr>';
+        html +=
+            '<tr>' +
+            '<td class="text-category">{{ 'fields.margin_percent'|trans }}</td>' +
+            '<td class="p-1">:</td>' +
+            '<td class="text-calculation">' + values.margin_percent + '</td>' +
             '</tr>';
         html +=
             '<tr class="border-top border-dark">' +
-                '<th>{{ 'fields.total'|trans }}</th>' +
-                '<th>&nbsp:&nbsp</th>' +
-                '<th class="text-calculation">' + values.total_amount + '</th>' +
+            '<th>{{ 'fields.total'|trans }}</th>' +
+            '<th class="p-1">:</th>' +
+            '<th class="text-calculation">' + values.total_amount + '</th>' +
             '</tr>';
         html += '</table>';
     return html;

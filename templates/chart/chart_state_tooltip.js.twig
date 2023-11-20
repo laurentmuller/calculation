@@ -4,56 +4,63 @@
  * @typedef Point
  * @property {string} color
  * @property {string} calculations
+ * @property {string} calculations_percent
  * @property {string} net_amount
  * @property {string} margin_amount
  * @property {string} margin_percent
  * @property {string} total_amount
+ * @property {string} total_percent
  */
 function renderTooltip () {
     /** @var Point point */
     const point = this.point;
-    const color = point.color;
     let html = '<table class="m-1" style="padding: 5px">';
     html +=
         '<tr class="border-bottom border-dark">' +
         '<th>{{ 'fields.state'|trans }}</th>' +
-        '<th>&nbsp:&nbsp</th>' +
+        '<th class="p-1">:</th>' +
         '<th class="text-calculation">' +
             '<div class="d-flex align-items-center">' +
-                '<span class="border me-1" style="width: 1rem; height: 0.75rem; background:' + color + '"></span>' +
+                '<span class="border me-1" style="width: 1rem; height: 0.75rem; background:' + point.color + '"></span>' +
                 '<span>' + point.name + '</span>' +
             '</div>' +
         '</th>' +
+        '<th class="text-calculation">&nbsp;</th>' +
     '</tr>';
     html +=
         '<tr>' +
-            '<td>{{ 'fields.count'|trans }}</td>' +
-            '<td>&nbsp:&nbsp</td>' +
-            '<td class="text-calculation">' + point.calculations + '</td>' +
+        '<td>{{ 'fields.count'|trans }}</td>' +
+        '<td class="p-1">:</td>' +
+        '<td class="text-calculation">' + point.calculations + '</td>' +
+        '<td class="text-calculation ps-3">' + point.calculations_percent + '</td>' +
         '</tr>';
     html +=
         '<tr>' +
-            '<td>{{ 'fields.net'|trans }}</td>' +
-            '<td>&nbsp:&nbsp</td>' +
-            '<td class="text-calculation">' + point.net_amount + '</td>' +
+        '<td>{{ 'fields.net'|trans }}</td>' +
+        '<td class="p-1">:</td>' +
+        '<td class="text-calculation">' + point.net_amount + '</td>' +
+        '<td class="text-calculation">&nbsp;</td>' +
         '</tr>';
     html +=
         '<tr>' +
-            '<td>{{ 'fields.margin_amount'|trans }}</td>' +
-            '<td>&nbsp:&nbsp</td>' +
-            '<td class="text-calculation">' + point.margin_amount + '</td>' +
+        '<td>{{ 'fields.margin_amount'|trans }}</td>' +
+        '<td class="p-1">:</td>' +
+        '<td class="text-calculation">' + point.margin_amount + '</td>' +
+        '<td class="text-calculation">&nbsp;</td>' +
         '</tr>';
     html +=
         '<tr>' +
-            '<td>{{ 'fields.margin_percent'|trans }}</td>' +
-            '<td>&nbsp:&nbsp</td>' +
-            '<td class="text-calculation">' + point.margin_percent + '</td>' +
+        '<td>{{ 'fields.margin_percent'|trans }}</td>' +
+        '<td class="p-1">:</td>' +
+        '<td class="text-calculation">' + point.margin_percent + '</td>' +
+        '<td class="text-calculation">&nbsp;</td>' +
         '</tr>';
     html +=
         '<tr class="border-top border-dark">' +
-            '<th>{{ 'fields.total'|trans }}</th>' +
-            '<th>&nbsp:&nbsp</th>' +
-            '<th class="text-calculation">' + point.total_amount + '</th>' +
+        '<th>{{ 'fields.total'|trans }}</th>' +
+        '<th class="p-1">:</th>' +
+        '<th class="text-calculation">' + point.total_amount + '</th>' +
+        '<th class="text-calculation ps-3">' + point.total_percent + '</th>' +
         '</tr>';
     html += '</table>';
 

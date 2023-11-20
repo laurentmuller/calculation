@@ -153,6 +153,7 @@ class CalculationsReport extends AbstractArrayReport
             $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         }
         $text = $this->translateCount($entities, 'counters.calculations');
+        /** @psalm-var positive-int $columns */
         $columns = $table->getColumnsCount() - 3;
         $table->getColumns()[0]->setAlignment(PdfTextAlignment::LEFT)
             ->setFixed(false);

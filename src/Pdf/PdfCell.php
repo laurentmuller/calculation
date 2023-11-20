@@ -25,6 +25,8 @@ class PdfCell
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
      * @param string|int        $link      the cell link. A URL or identifier returned by AddLink().
+     *
+     * @psalm-param positive-int $cols
      */
     public function __construct(
         private readonly ?string $text = null,

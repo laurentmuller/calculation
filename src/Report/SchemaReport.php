@@ -88,10 +88,13 @@ class SchemaReport extends AbstractReport
 
     private function createTable(string $id, PdfColumn ...$columns): PdfTable
     {
+        /** @psalm-var positive-int $cols */
+        $cols = \count($columns);
+
         return PdfTable::instance($this)
             ->addColumns(...$columns)
             ->startHeaderRow()
-            ->add($this->trans($id), \count($columns))
+            ->add($this->trans($id), $cols)
             ->completeRow()
             ->outputHeaders();
     }

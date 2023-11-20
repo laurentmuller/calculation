@@ -209,12 +209,15 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $valueCells[] = new PdfCell(FormatUtils::formatInt($this->logFile->count()));
 
         $this->drawCards = true;
+        /** @psalm-var positive-int $levelsCount */
+        $levelsCount = \count($levels) * 2;
+        $channelsCount = \count($channels) * 2 + 1;
         $titleStyle = PdfStyle::default()->setBorder(PdfBorder::NONE)->setFontBold();
         PdfTable::instance($this)
             ->addColumns(...$columns)
             ->startRow()
-            ->add($this->trans('log.fields.level'), \count($levels) * 2, $titleStyle, PdfTextAlignment::LEFT)
-            ->add($this->trans('log.fields.channel'), \count($channels) * 2 + 1, $titleStyle, PdfTextAlignment::LEFT)
+            ->add($this->trans('log.fields.level'), $levelsCount, $titleStyle, PdfTextAlignment::LEFT)
+            ->add($this->trans('log.fields.channel'), $channelsCount, $titleStyle, PdfTextAlignment::LEFT)
             ->endRow()
             ->setBorderListener($this)
             ->addStyledRow($textCells, PdfStyle::getHeaderStyle()->resetFont())

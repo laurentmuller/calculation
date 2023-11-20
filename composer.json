@@ -169,13 +169,14 @@
         "phpstan": "vendor/bin/phpstan analyse --memory-limit 2G -c phpstan.neon",
         "rector": "vendor/bin/rector process --dry-run --config=rector.php",
         "twigcs": "vendor/bin/twigcs --config .twig_cs.dist.php",
+        "test": "phpunit --colors=auto",
         "run-all": [
             "@cs-fixer",
             "@psalm",
             "@phpstan",
             "@rector",
             "@twigcs",
-            "phpunit"
+            "@test"
         ]
     },
     "repositories": [

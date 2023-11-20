@@ -115,6 +115,8 @@ class PdfTable
      * @param ?PdfStyle         $style     the cell style to use or null to use the default cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
      * @param string|int        $link      the cell link. A URL or identifier returned by AddLink().
+     *
+     * @psalm-param positive-int $cols
      */
     public function add(string $text = null, int $cols = 1, PdfStyle $style = null, PdfTextAlignment $alignment = null, string|int $link = ''): static
     {
@@ -526,8 +528,11 @@ class PdfTable
      */
     public function singleLine(string $text = null, PdfStyle $style = null, PdfTextAlignment $alignment = null): static
     {
+        /** @psalm-var positive-int $cols */
+        $cols = $this->getColumnsCount();
+
         return $this->startRow()
-            ->add($text, $this->getColumnsCount(), $style, $alignment)
+            ->add($text, $cols, $style, $alignment)
             ->endRow();
     }
 

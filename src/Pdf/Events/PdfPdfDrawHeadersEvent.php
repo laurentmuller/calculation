@@ -22,6 +22,10 @@ use App\Pdf\PdfTable;
  */
 class PdfPdfDrawHeadersEvent
 {
+    /**
+     * @param PdfTable $table       the parent's table
+     * @param PdfStyle $headerStyle the header style
+     */
     public function __construct(
         public PdfTable $table,
         public PdfStyle $headerStyle
@@ -29,6 +33,8 @@ class PdfPdfDrawHeadersEvent
     }
 
     /**
+     * Gets the table's columns.
+     *
      * @return PdfColumn[]
      */
     public function getColumns(): array

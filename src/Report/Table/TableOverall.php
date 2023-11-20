@@ -78,6 +78,9 @@ class TableOverall extends PdfTable
         return $table;
     }
 
+    /**
+     * @psalm-param positive-int $cols
+     */
     private function addAmount(float $number, int $cols = 1): self
     {
         return $this->add(FormatUtils::formatAmount($number), $cols);

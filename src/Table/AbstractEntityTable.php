@@ -203,6 +203,7 @@ abstract class AbstractEntityTable extends AbstractTable
         if (0 === $whereExpr->count()) {
             return false;
         }
+        // @phpstan-ignore-next-line
         $builder->andWhere($whereExpr)
             ->setParameter(TableInterface::PARAM_SEARCH, "%$search%", Types::STRING);
 

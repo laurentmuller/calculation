@@ -93,11 +93,11 @@ preneur de licence ou à son siège.
 
 ## Nous contacter
 
-Pour toute question relative au présent accord de licence, veuillez nous 
+Pour toute question relative au présent accord de licence, veuillez nous
 contacter par [courrier électronique](mailto:calculation@bibi.nu?subject=Calculation).
 
 Montévraz, octobre 2023
 
-### Voir aussi :
+### Voir aussi
 
 [Politique de confidentialité](POLICY.md)

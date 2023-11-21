@@ -220,6 +220,6 @@ veuillez nous contacter par [courrier électronique](mailto:calculation@bibi.nu?
 
 Montévraz, octobre 2023
 
-### Voir aussi :
+### Voir aussi
 
 [Accord de licence](LICENSE.md)

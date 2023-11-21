@@ -93,7 +93,11 @@ preneur de licence ou à son siège.
 
 ## Nous contacter
 
-Pour toute question relative à la présente politique de confidentialité,
-veuillez nous contacter par [courrier électronique](mailto:calculation@bibi.nu?subject=Calculation).
+Pour toute question relative au présent accord de licence, veuillez nous 
+contacter par [courrier électronique](mailto:calculation@bibi.nu?subject=Calculation).
 
 Montévraz, octobre 2023
+
+### Voir aussi :
+
+[Politique de confidentialité](POLICY.md)

@@ -20,8 +20,6 @@ class FormatUtilsTest extends TestCase
 {
     private const DATE_TIME = '2022-02-20 12:59:59';
 
-    private const LOCALE_FR_CH = 'fr_CH';
-
     private const PERCENT_SIGN = '%';
 
     private const TIME_STAMP = 1_645_358_399;
@@ -30,8 +28,8 @@ class FormatUtilsTest extends TestCase
 
     protected function setUp(): void
     {
-        \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
+        \Locale::setDefault(FormatUtils::LOCALE_FR_CH);
+        \setlocale(\LC_TIME, FormatUtils::LOCALE_FR_CH);
     }
 
     /**
@@ -221,10 +219,14 @@ class FormatUtilsTest extends TestCase
         ];
     }
 
+    /**
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $dateType
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $timeType
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getDateFormatterPatterns')]
-    public function testDateFormatterPattern(string $pattern, string $expected, int $datetype = null, int $timetype = null): void
+    public function testDateFormatterPattern(string $pattern, string $expected, int $dateType = null, int $timeType = null): void
     {
-        $actual = FormatUtils::getDateFormatter($datetype, $timetype, self::TIME_ZONE, \IntlDateFormatter::GREGORIAN, $pattern);
+        $actual = FormatUtils::getDateFormatter($dateType, $timeType, self::TIME_ZONE, \IntlDateFormatter::GREGORIAN, $pattern);
         self::assertSame($expected, $actual->getPattern());
     }
 
@@ -241,22 +243,28 @@ class FormatUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getAmounts')]
     public function testFormatAmount(string|int|float $number, string $expected): void
     {
-        \Locale::setDefault(self::LOCALE_FR_CH);
         $actual = FormatUtils::formatAmount($number);
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $dateType
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getDates')]
-    public function testFormatDate(\DateTimeInterface|int|null $date, string|null $expected, int $datetype = null): void
+    public function testFormatDate(\DateTimeInterface|int|null $date, string|null $expected, int $dateType = null): void
     {
-        $actual = FormatUtils::formatDate($date, $datetype, self::TIME_ZONE);
+        $actual = FormatUtils::formatDate($date, $dateType, self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $dateType
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $timeType
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getDateTimes')]
-    public function testFormatDateTime(\DateTimeInterface|int|null $date, string|null $expected, int $datetype = null, int $timetype = null): void
+    public function testFormatDateTime(\DateTimeInterface|int|null $date, string|null $expected, int $dateType = null, int $timeType = null): void
     {
-        $actual = FormatUtils::formatDateTime($date, $datetype, $timetype, self::TIME_ZONE);
+        $actual = FormatUtils::formatDateTime($date, $dateType, $timeType, self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 
@@ -287,10 +295,13 @@ class FormatUtilsTest extends TestCase
         self::assertSame($ends_with, $contains);
     }
 
+    /**
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $timeType
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTimes')]
-    public function testFormatTime(\DateTimeInterface|int|null $date, string|null $expected, int $timetype = null): void
+    public function testFormatTime(\DateTimeInterface|int|null $date, string|null $expected, int $timeType = null): void
     {
-        $actual = FormatUtils::formatTime($date, $timetype, self::TIME_ZONE);
+        $actual = FormatUtils::formatTime($date, $timeType, self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 

@@ -20,17 +20,17 @@ final class FormatUtils
     /**
      * The Swiss French locale.
      */
-    private const LOCALE_FR_CH = 'fr_CH';
+    final public const LOCALE_FR_CH = 'fr_CH';
 
     /**
-     * The date formatters.
+     * The date formatters cache.
      *
      * @var \IntlDateFormatter[]
      */
     private static array $dateFormatters = [];
 
     /**
-     * The number formatters.
+     * The number formatters cache.
      *
      * @var \NumberFormatter[]
      */
@@ -56,7 +56,8 @@ final class FormatUtils
      * Format a date for the current locale; ignoring the time part.
      *
      * @param \DateTimeInterface|int|null             $date     the date to format
-     * @param ?int                                    $datetype the type of date formatting, one of the format type constants or null to use default
+     * @param ?int                                    $dateType the type of date formatting, one of the format type
+     *                                                          constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
      * @param ?int                                    $calendar the calendar to use or null to use Gregorian calendar
      * @param ?string                                 $pattern  the optional pattern to use when formatting
@@ -64,19 +65,30 @@ final class FormatUtils
      *
      * @return string|null the formatted date or null if formatting failed or if the date is null
      *
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $dateType
+     * @psalm-param \IntlDateFormatter::GREGORIAN|\IntlDateFormatter::TRADITIONAL|null $calendar
+     *
      * @psalm-return ($date is null ? (string|null) : string)
      */
-    public static function formatDate(\DateTimeInterface|int|null $date, int $datetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = null, string $pattern = null, string $locale = null): ?string
-    {
-        return self::formatDateTime($date, $datetype, \IntlDateFormatter::NONE, $timezone, $calendar, $pattern, $locale);
+    public static function formatDate(
+        \DateTimeInterface|int|null $date,
+        int $dateType = null,
+        \IntlTimeZone|\DateTimeZone|string $timezone = null,
+        int $calendar = null,
+        string $pattern = null,
+        string $locale = null
+    ): ?string {
+        return self::formatDateTime($date, $dateType, \IntlDateFormatter::NONE, $timezone, $calendar, $pattern, $locale);
     }
 
     /**
      * Format a date and time for the current locale.
      *
      * @param \DateTimeInterface|int|null             $date     the date and time to format
-     * @param ?int                                    $datetype the type of date formatting, one of the format type constants or null to use default
-     * @param ?int                                    $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param ?int                                    $dateType the type of date formatting, one of the format type
+     *                                                          constants or null to use default
+     * @param ?int                                    $timeType the type of time formatting, one of the format type
+     *                                                          constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
      * @param ?int                                    $calendar the calendar to use or null to use Gregorian calendar
      * @param ?string                                 $pattern  the optional pattern to use when formatting
@@ -84,15 +96,26 @@ final class FormatUtils
      *
      * @return string|null the formatted date and time or null if formatting failed or if the date is null
      *
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $dateType
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $timeType
+     * @psalm-param \IntlDateFormatter::GREGORIAN|\IntlDateFormatter::TRADITIONAL|null $calendar
+     *
      * @psalm-return ($date is null ? (string|null) : string)
      */
-    public static function formatDateTime(\DateTimeInterface|int|null $date, int $datetype = null, int $timetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = null, string $pattern = null, string $locale = null): ?string
-    {
+    public static function formatDateTime(
+        \DateTimeInterface|int|null $date,
+        int $dateType = null,
+        int $timeType = null,
+        \IntlTimeZone|\DateTimeZone|string $timezone = null,
+        int $calendar = null,
+        string $pattern = null,
+        string $locale = null
+    ): ?string {
         if (null === $date) {
             return null;
         }
 
-        $formatter = self::getDateFormatter($datetype, $timetype, $timezone, $calendar, $pattern, $locale);
+        $formatter = self::getDateFormatter($dateType, $timeType, $timezone, $calendar, $pattern, $locale);
         $result = $formatter->format($date);
         if (false === $result) {
             return null;
@@ -135,8 +158,12 @@ final class FormatUtils
      * @param int                   $decimals     the number of decimals
      * @param int                   $roundingMode the rounding mode
      */
-    public static function formatPercent(float|int|string|null $number, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): string
-    {
+    public static function formatPercent(
+        float|int|string|null $number,
+        bool $includeSign = true,
+        int $decimals = 0,
+        int $roundingMode = \NumberFormatter::ROUND_DOWN
+    ): string {
         $style = \NumberFormatter::PERCENT;
         $extraHash = $includeSign ? '1' : '0';
         $formatter = self::getNumberFormatter($style, $decimals, $roundingMode, $extraHash);
@@ -152,7 +179,8 @@ final class FormatUtils
      * Format a time for the current locale; ignoring the date part.
      *
      * @param \DateTimeInterface|int|null             $date     the time to format
-     * @param ?int                                    $timetype the type of date formatting, one of the format type constants or null to use default
+     * @param ?int                                    $timeType the type of date formatting, one of the format type
+     *                                                          constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
      * @param ?int                                    $calendar the calendar to use or null to use Gregorian calendar
      * @param ?string                                 $pattern  the optional pattern to use when formatting
@@ -160,36 +188,56 @@ final class FormatUtils
      *
      * @return string|null the formatted time or null if formatting failed or if the date is null
      *
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $timeType
+     * @psalm-param \IntlDateFormatter::GREGORIAN|\IntlDateFormatter::TRADITIONAL|null $calendar
+     *
      * @psalm-return ($date is null ? (string|null) : string)
      */
-    public static function formatTime(\DateTimeInterface|int|null $date, int $timetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = null, string $pattern = null, string $locale = null): ?string
-    {
-        return self::formatDateTime($date, \IntlDateFormatter::NONE, $timetype, $timezone, $calendar, $pattern, $locale);
+    public static function formatTime(
+        \DateTimeInterface|int|null $date,
+        int $timeType = null,
+        \IntlTimeZone|\DateTimeZone|string $timezone = null,
+        int $calendar = null,
+        string $pattern = null,
+        string $locale = null
+    ): ?string {
+        return self::formatDateTime($date, \IntlDateFormatter::NONE, $timeType, $timezone, $calendar, $pattern, $locale);
     }
 
     /**
      * Creates a date formatter for the current locale.
      *
-     * @param ?int                                    $datetype the type of date formatting, one of the format type constants or null to use default
-     * @param ?int                                    $timetype the type of time formatting, one of the format type constants or null to use default
+     * @param ?int                                    $dateType the type of date formatting, one of the format type
+     *                                                          constants or null to use default
+     * @param ?int                                    $timeType the type of time formatting, one of the format type
+     *                                                          constants or null to use default
      * @param \IntlTimeZone|\DateTimeZone|string|null $timezone the timezone identifier
      * @param ?int                                    $calendar the calendar to use or null to use Gregorian calendar
      * @param ?string                                 $pattern  the optional pattern to use when formatting
      * @param ?string                                 $locale   the local or null to use default locale
+     *
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $dateType
+     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $timeType
+     * @psalm-param \IntlDateFormatter::GREGORIAN|\IntlDateFormatter::TRADITIONAL|null $calendar
      */
-    public static function getDateFormatter(int $datetype = null, int $timetype = null, \IntlTimeZone|\DateTimeZone|string $timezone = null, int $calendar = null, string $pattern = null, string $locale = null): \IntlDateFormatter
-    {
+    public static function getDateFormatter(
+        int $dateType = null,
+        int $timeType = null,
+        \IntlTimeZone|\DateTimeZone|string $timezone = null,
+        int $calendar = null,
+        string $pattern = null,
+        string $locale = null
+    ): \IntlDateFormatter {
         // check values
-        $datetype ??= self::getDateType();
-        $timetype ??= self::getTimeType();
+        $dateType ??= self::getDateType();
+        $timeType ??= self::getTimeType();
         $locale ??= \Locale::getDefault();
         $calendar ??= \IntlDateFormatter::GREGORIAN;
         $pattern ??= '';
-        $hash = self::getHashCode($locale, $datetype, $timetype, $timezone, $calendar, $pattern);
+        $hash = self::getHashCode($locale, $dateType, $timeType, $timezone, $calendar, $pattern);
 
         if (!isset(self::$dateFormatters[$hash])) {
-            /** @var \IntlDateFormatter $formatter */
-            $formatter = \IntlDateFormatter::create($locale, $datetype, $timetype, $timezone, $calendar, $pattern);
+            $formatter = new \IntlDateFormatter($locale, $dateType, $timeType, $timezone, $calendar, $pattern);
             $pattern = $formatter->getPattern();
             if (self::LOCALE_FR_CH === $locale && !\str_contains($pattern, 'yyyy') && \str_contains($pattern, 'yy')) {
                 $pattern = \str_replace('yy', 'yyyy', $pattern);
@@ -223,8 +271,7 @@ final class FormatUtils
         if (self::LOCALE_FR_CH === $locale) {
             $decimal = '.';
         } else {
-            /** @var \NumberFormatter $formatter */
-            $formatter = \NumberFormatter::create($locale, \NumberFormatter::PATTERN_DECIMAL);
+            $formatter = new \NumberFormatter($locale, \NumberFormatter::PATTERN_DECIMAL);
             $decimal = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
         }
 
@@ -245,8 +292,7 @@ final class FormatUtils
         if (self::LOCALE_FR_CH === $locale) {
             $grouping = '\'';
         } else {
-            /** @var \NumberFormatter $formatter */
-            $formatter = \NumberFormatter::create($locale, \NumberFormatter::PATTERN_DECIMAL);
+            $formatter = new \NumberFormatter($locale, \NumberFormatter::PATTERN_DECIMAL);
             $grouping = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
         }
         if (2 === \strlen($grouping) && 194 === \ord($grouping[0]) && 160 === \ord($grouping[1])) {
@@ -264,12 +310,15 @@ final class FormatUtils
      * @param int    $roundingMode the rounding mode
      * @param string $extraHash    an optional extra hash code used to check if the formatter is already created
      */
-    public static function getNumberFormatter(int $style, int $digits, int $roundingMode = \NumberFormatter::ROUND_HALFEVEN, string $extraHash = ''): \NumberFormatter
-    {
+    public static function getNumberFormatter(
+        int $style,
+        int $digits,
+        int $roundingMode = \NumberFormatter::ROUND_HALFEVEN,
+        string $extraHash = ''
+    ): \NumberFormatter {
         $hash = self::getHashCode($style, $digits, $roundingMode, $extraHash);
         if (!isset(self::$numberFormatters[$hash])) {
-            /** @var \NumberFormatter $formatter */
-            $formatter = \NumberFormatter::create(\Locale::getDefault(), $style);
+            $formatter = new \NumberFormatter(\Locale::getDefault(), $style);
             $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $digits);
             $formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, $roundingMode);
             $formatter->setSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL, self::getGrouping());
@@ -281,7 +330,7 @@ final class FormatUtils
     }
 
     /**
-     * Gets the percent symbol for the current locale.
+     * Gets the percent symbol.
      */
     public static function getPercent(): string
     {
@@ -290,8 +339,7 @@ final class FormatUtils
         if ($percent) {
             return $percent;
         }
-        /** @var \NumberFormatter $formatter */
-        $formatter = \NumberFormatter::create(\Locale::getDefault(), \NumberFormatter::PATTERN_DECIMAL);
+        $formatter = new \NumberFormatter(\Locale::getDefault(), \NumberFormatter::PATTERN_DECIMAL);
         $percent = $formatter->getSymbol(\NumberFormatter::PERCENT_SYMBOL);
 
         return $percent;
@@ -305,9 +353,6 @@ final class FormatUtils
         return \IntlDateFormatter::SHORT;
     }
 
-    /**
-     * Check the given value.
-     */
     private static function checkNegativeZero(int|float|string|null $number): float
     {
         return empty($number) ? 0.0 : (float) $number;

@@ -14,6 +14,7 @@ namespace App\Twig;
 
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Error\RuntimeError;
@@ -104,8 +105,14 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the date format or the calendar is invalid
      */
-    private function dateFilter(Environment $env, \DateTimeInterface|string|null $date, string $dateFormat = null, \DateTimeZone|string $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
-    {
+    private function dateFilter(
+        Environment $env,
+        \DateTimeInterface|string|null $date,
+        string $dateFormat = null,
+        \DateTimeZone|string $timezone = null,
+        ?string $calendar = 'gregorian',
+        string $pattern = null
+    ): string {
         return $this->dateTimeFilter($env, $date, $dateFormat, 'none', $timezone, $calendar, $pattern);
     }
 
@@ -124,13 +131,21 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the date format, the time format or the calendar is invalid
      */
-    private function dateTimeFilter(Environment $env, \DateTimeInterface|string|null $date, string $dateFormat = null, string $timeFormat = null, \DateTimeZone|string $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
-    {
+    private function dateTimeFilter(
+        Environment $env,
+        \DateTimeInterface|string|null $date,
+        string $dateFormat = null,
+        string $timeFormat = null,
+        \DateTimeZone|string $timezone = null,
+        ?string $calendar = 'gregorian',
+        string $pattern = null
+    ): string {
         // check types and calendar
         $date_type = $this->validateDateFormat($dateFormat);
         $time_type = $this->validateTimeFormat($timeFormat);
         $calendar = $this->validateCalendar($calendar);
-        if (\IntlDateFormatter::NONE === $date_type && \IntlDateFormatter::NONE === $time_type && null === $pattern) {
+        if (\IntlDateFormatter::NONE === $date_type && \IntlDateFormatter::NONE === $time_type
+                && !StringUtils::isString($pattern)) {
             return '';
         }
         /** @psalm-var \DateTimeInterface $date */
@@ -153,8 +168,14 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the time format or the calendar is invalid
      */
-    private function timeFilter(Environment $env, \DateTimeInterface|string|null $date, string $timeFormat = null, \DateTimeZone|string $timezone = null, ?string $calendar = 'gregorian', string $pattern = null): string
-    {
+    private function timeFilter(
+        Environment $env,
+        \DateTimeInterface|string|null $date,
+        string $timeFormat = null,
+        \DateTimeZone|string $timezone = null,
+        ?string $calendar = 'gregorian',
+        string $pattern = null
+    ): string {
         return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $timezone, $calendar, $pattern);
     }
 
@@ -162,6 +183,8 @@ final class FormatExtension extends AbstractExtension
      * Check the calendar.
      *
      * @throws RuntimeError
+     *
+     * @psalm-return \IntlDateFormatter::GREGORIAN|\IntlDateFormatter::TRADITIONAL
      */
     private function validateCalendar(?string $calendar): int
     {
@@ -179,6 +202,8 @@ final class FormatExtension extends AbstractExtension
      * Check the date format.
      *
      * @throws RuntimeError
+     *
+     * @psalm-return \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null
      */
     private function validateDateFormat(?string $dateFormat): ?int
     {
@@ -196,6 +221,8 @@ final class FormatExtension extends AbstractExtension
      * Check the time format.
      *
      * @throws RuntimeError
+     *
+     * @psalm-return \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null
      */
     private function validateTimeFormat(?string $timeFormat): ?int
     {

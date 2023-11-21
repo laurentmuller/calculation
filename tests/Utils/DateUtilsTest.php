@@ -13,17 +13,16 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Utils\DateUtils;
+use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(DateUtils::class)]
 class DateUtilsTest extends TestCase
 {
-    private const LOCALE_FR_CH = 'fr_CH';
-
     protected function setUp(): void
     {
-        \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
+        \Locale::setDefault(FormatUtils::LOCALE_FR_CH);
+        \setlocale(\LC_TIME, FormatUtils::LOCALE_FR_CH);
     }
 
     public static function getCompletYears(): array

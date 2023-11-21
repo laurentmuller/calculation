@@ -281,8 +281,7 @@ final class DateUtils
 
     private static function getFormatter(string $pattern): \IntlDateFormatter
     {
-        return new \IntlDateFormatter(
-            locale: \Locale::getDefault(),
+        return FormatUtils::getDateFormatter(
             dateType: \IntlDateFormatter::NONE,
             timeType: \IntlDateFormatter::NONE,
             pattern: $pattern

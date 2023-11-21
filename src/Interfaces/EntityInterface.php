@@ -18,6 +18,11 @@ namespace App\Interfaces;
 interface EntityInterface extends \Stringable
 {
     /**
+     * The extra lazy fetch mode.
+     */
+    final public const EXTRA_LAZY = 'EXTRA_LAZY';
+
+    /**
      * The maximum length for a code property.
      */
     final public const MAX_CODE_LENGTH = 30;

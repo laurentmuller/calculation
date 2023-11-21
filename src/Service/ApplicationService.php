@@ -30,7 +30,6 @@ use App\Traits\MathTrait;
 use App\Traits\PropertyServiceTrait;
 use App\Utils\StringUtils;
 use App\Validator\Password;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -45,7 +44,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     use PropertyServiceTrait;
 
     public function __construct(
-        private readonly EntityManagerInterface $manager,
+        private readonly PropertyRepository $repository,
         private readonly RoleBuilderService $builder,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
@@ -472,11 +471,9 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function removeProperty(string $name): self
     {
-        /** @psalm-var PropertyRepository $repository */
-        $repository = $this->manager->getRepository(Property::class);
-        $property = $repository->findOneByName($name);
+        $property = $this->repository->findOneByName($name);
         if ($property instanceof Property) {
-            $repository->remove($property);
+            $this->repository->remove($property);
             $this->updateAdapter();
         }
 
@@ -515,15 +512,17 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         if ([] === $properties) {
             return $this;
         }
+        if (!$this->isPropertiesChanged($properties, new Property())) {
+            return $this;
+        }
 
-        /** @psalm-var PropertyRepository $repository */
-        $repository = $this->manager->getRepository(Property::class);
         $defaultValues = $this->getDefaultValues();
+        $existingProperties = $this->getExistingProperties();
         /** @psalm-var mixed $value */
         foreach ($properties as $key => $value) {
-            $this->saveProperty($key, $value, $defaultValues, $repository);
+            $this->saveProperty($key, $value, $defaultValues, $existingProperties);
         }
-        $repository->flush();
+        $this->repository->flush();
         $this->updateAdapter();
 
         return $this;
@@ -555,8 +554,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     protected function updateAdapter(): void
     {
-        $properties = $this->manager->getRepository(Property::class)->findAll();
-        $this->saveProperties($properties);
+        $this->saveProperties($this->repository->findAll());
     }
 
     /**
@@ -573,27 +571,41 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             return null;
         }
 
-        return $this->manager->getRepository($entityName)->find($id);
+        return $this->repository
+            ->getEntityManager()
+            ->getRepository($entityName)
+            ->find($id);
     }
 
     /**
-     * Update a property without saving changes to database.
-     *
-     * @param array<string, mixed> $defaultValues
+     * @psalm-return  array<string, Property>
      */
-    private function saveProperty(string $name, mixed $value, array $defaultValues, PropertyRepository $repository): void
+    private function getExistingProperties(): array
     {
-        $property = $repository->findOneByName($name);
+        $properties = $this->repository->findAll();
+
+        return \array_reduce(
+            $properties,
+            /** @psalm-param array<string, Property> $carry */
+            fn (array $carry, Property $property) => $carry + [$property->getName() => $property],
+            []
+        );
+    }
+
+    /**
+     * @psalm-param array<string, mixed> $defaultValues
+     * @psalm-param array<string, Property> $existingProperties
+     */
+    private function saveProperty(string $name, mixed $value, array $defaultValues, array $existingProperties): void
+    {
         if ($this->isDefaultValue($defaultValues, $name, $value)) {
-            if ($property instanceof Property) {
-                $repository->remove($property, false);
+            if (isset($existingProperties[$name])) {
+                $this->repository->remove($existingProperties[$name], false);
             }
         } else {
-            if (!$property instanceof Property) {
-                $property = Property::instance($name);
-                $repository->persist($property, false);
-            }
+            $property = $existingProperties[$name] ?? Property::instance($name);
             $property->setValue($value);
+            $this->repository->persist($property, false);
         }
     }
 

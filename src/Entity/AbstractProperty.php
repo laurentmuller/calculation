@@ -180,8 +180,6 @@ abstract class AbstractProperty extends AbstractEntity
      * Sets the property value.
      *
      * This function try first to convert the value to an appropriate type (bool, int, etc...).
-     *
-     * @param mixed $value the value to set
      */
     public function setValue(mixed $value): static
     {

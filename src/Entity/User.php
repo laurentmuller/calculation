@@ -86,7 +86,7 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
     /**
      * @var ArrayCollection<int, UserProperty>
      */
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProperty::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProperty::class, cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
     private Collection $properties;
 
     #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE, nullable: true)]

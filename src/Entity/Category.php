@@ -60,7 +60,7 @@ class Category extends AbstractEntity implements TimestampableInterface
      *
      * @var ArrayCollection<int, Product>
      */
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class, fetch: self::EXTRA_LAZY)]
     private Collection $products;
 
     /**
@@ -68,7 +68,7 @@ class Category extends AbstractEntity implements TimestampableInterface
      *
      * @var ArrayCollection<int, Task>
      */
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Task::class)]
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Task::class, fetch: self::EXTRA_LAZY)]
     private Collection $tasks;
 
     public function __construct()
@@ -221,7 +221,7 @@ class Category extends AbstractEntity implements TimestampableInterface
      */
     public function hasProducts(): bool
     {
-        return !$this->products->isEmpty();
+        return 0 !== $this->products->count();
     }
 
     /**
@@ -229,7 +229,7 @@ class Category extends AbstractEntity implements TimestampableInterface
      */
     public function hasTasks(): bool
     {
-        return !$this->tasks->isEmpty();
+        return 0 !== $this->tasks->count();
     }
 
     /**

@@ -28,6 +28,12 @@ class FormatUtilsTest extends TestCase
 
     private const TIME_ZONE = 'Europe/Zurich';
 
+    protected function setUp(): void
+    {
+        \Locale::setDefault(self::LOCALE_FR_CH);
+        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
+    }
+
     /**
      * @return array<array{0: string|int|float, 1: string}>
      */
@@ -218,8 +224,6 @@ class FormatUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getDateFormatterPatterns')]
     public function testDateFormatterPattern(string $pattern, string $expected, int $datetype = null, int $timetype = null): void
     {
-        \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $actual = FormatUtils::getDateFormatter($datetype, $timetype, self::TIME_ZONE, \IntlDateFormatter::GREGORIAN, $pattern);
         self::assertSame($expected, $actual->getPattern());
     }
@@ -231,8 +235,6 @@ class FormatUtilsTest extends TestCase
 
     public function testDecimal(): void
     {
-        \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
         self::assertSame('.', FormatUtils::getDecimal());
     }
 
@@ -247,8 +249,6 @@ class FormatUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getDates')]
     public function testFormatDate(\DateTimeInterface|int|null $date, string|null $expected, int $datetype = null): void
     {
-        \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $actual = FormatUtils::formatDate($date, $datetype, self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
@@ -256,8 +256,6 @@ class FormatUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getDateTimes')]
     public function testFormatDateTime(\DateTimeInterface|int|null $date, string|null $expected, int $datetype = null, int $timetype = null): void
     {
-        \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $actual = FormatUtils::formatDateTime($date, $datetype, $timetype, self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
@@ -279,8 +277,6 @@ class FormatUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getPercents')]
     public function testFormatPercent(int|float|string|null $number, string $expected, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): void
     {
-        \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
         $actual = FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode);
         self::assertSame($expected, $actual);
 
@@ -294,23 +290,17 @@ class FormatUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getTimes')]
     public function testFormatTime(\DateTimeInterface|int|null $date, string|null $expected, int $timetype = null): void
     {
-        \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_TIME, self::LOCALE_FR_CH);
         $actual = FormatUtils::formatTime($date, $timetype, self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 
     public function testGrouping(): void
     {
-        \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
         self::assertSame("'", FormatUtils::getGrouping());
     }
 
     public function testPercent(): void
     {
-        \Locale::setDefault(self::LOCALE_FR_CH);
-        \setlocale(\LC_NUMERIC, self::LOCALE_FR_CH);
         self::assertSame(self::PERCENT_SIGN, FormatUtils::getPercent());
     }
 

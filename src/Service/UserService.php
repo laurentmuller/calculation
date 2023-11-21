@@ -178,15 +178,19 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         if ([] === $properties) {
             return $this;
         }
+        if (!$this->isPropertiesChanged($properties, new UserProperty())) {
+            return $this;
+        }
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this;
         }
 
         $defaultValues = $this->service->getProperties();
+        $existingProperties = $this->getExistingProperties($user);
         /** @psalm-var mixed $value */
         foreach ($properties as $key => $value) {
-            $this->saveProperty($key, $value, $defaultValues, $user);
+            $this->saveProperty($key, $value, $defaultValues, $existingProperties, $user);
         }
         $this->repository->flush();
         $this->updateAdapter();
@@ -204,29 +208,45 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         $this->saveProperties($properties);
     }
 
+    /**
+     * @psalm-return array<string, UserProperty>
+     */
+    private function getExistingProperties(UserInterface $user): array
+    {
+        $properties = $this->repository->findByUser($user);
+
+        return \array_reduce(
+            $properties,
+            /** @psalm-param array<string, UserProperty> $carry */
+            fn (array $carry, UserProperty $property) => $carry + [$property->getName() => $property],
+            []
+        );
+    }
+
     private function getUser(): ?UserInterface
     {
         return $this->security->getUser();
     }
 
     /**
-     * Update a property without saving changes to database.
-     *
-     * @param array<string, mixed> $defaultValues
+     * @psalm-param array<string, mixed> $defaultValues
+     * @psalm-param array<string, UserProperty> $existingProperties
      */
-    private function saveProperty(string $name, mixed $value, array $defaultValues, UserInterface $user): void
-    {
-        $property = $this->repository->findOneByUserAndName($user, $name);
+    private function saveProperty(
+        string $name,
+        mixed $value,
+        array $defaultValues,
+        array $existingProperties,
+        UserInterface $user
+    ): void {
         if ($this->isDefaultValue($defaultValues, $name, $value)) {
-            if ($property instanceof UserProperty) {
-                $this->repository->remove($property, false);
+            if (isset($existingProperties[$name])) {
+                $this->repository->remove($existingProperties[$name], false);
             }
         } else {
-            if (!$property instanceof UserProperty) {
-                $property = UserProperty::instance($name, $user);
-                $this->repository->persist($property, false);
-            }
+            $property = $existingProperties[$name] ?? UserProperty::instance($name, $user);
             $property->setValue($value);
+            $this->repository->persist($property, false);
         }
     }
 }

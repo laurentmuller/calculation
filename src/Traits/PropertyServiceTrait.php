@@ -20,7 +20,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
- * Trait for class implementing the <code>PropertyServiceInterface</code> interface.
+ * Trait for class implementing <code>PropertyServiceInterface</code>.
  *
  * @psalm-require-implements \App\Interfaces\PropertyServiceInterface
  */
@@ -246,6 +246,28 @@ trait PropertyServiceTrait
     protected function isDefaultValue(array $defaultProperties, string $name, mixed $value): bool
     {
         return \array_key_exists($name, $defaultProperties) && $defaultProperties[$name] === $value;
+    }
+
+    /**
+     * @psalm-template TProperty of AbstractProperty
+     *
+     * @param array<string, mixed> $properties
+     *
+     * @psalm-param TProperty $property
+     */
+    protected function isPropertiesChanged(array $properties, AbstractProperty $property): bool
+    {
+        /** @psalm-var mixed $value */
+        foreach ($properties as $key => $value) {
+            /** @psalm-var string|null $oldValue */
+            $oldValue = $this->getCacheValue($key);
+            $newValue = $property->setValue($value)->getString();
+            if ($newValue !== $oldValue) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

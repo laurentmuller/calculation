@@ -170,7 +170,7 @@ abstract class AbstractParametersType extends AbstractType
             return $value->value;
         }
         if (\is_bool($value)) {
-            return \json_encode($value);
+            return $value ? 1 : 0;
         }
 
         return $value;

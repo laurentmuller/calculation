@@ -40,7 +40,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      *
      * @var ArrayCollection<int, Category>
      */
-    #[ORM\OneToMany(mappedBy: 'group', targetEntity: Category::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: Category::class, cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
     #[ORM\OrderBy(['code' => Criteria::ASC])]
     private Collection $categories;
 
@@ -65,7 +65,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      * @var ArrayCollection<int, GroupMargin>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(mappedBy: 'group', targetEntity: GroupMargin::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: GroupMargin::class, cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
     #[ORM\OrderBy(['minimum' => Criteria::ASC])]
     private Collection $margins;
 
@@ -254,7 +254,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     public function hasCategories(): bool
     {
-        return !$this->categories->isEmpty();
+        return 0 !== $this->categories->count();
     }
 
     /**
@@ -262,7 +262,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     public function hasMargins(): bool
     {
-        return !$this->margins->isEmpty();
+        return 0 !== $this->margins->count();
     }
 
     /**

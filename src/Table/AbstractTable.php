@@ -278,15 +278,16 @@ abstract class AbstractTable implements SortModeInterface
      */
     protected function mapValues(AbstractEntity|array $objectOrArray, array $columns, PropertyAccessor $accessor): array
     {
-        $callback = static function (array $result, Column $column) use ($objectOrArray, $accessor): array {
-            $result[$column->getAlias()] = $column->mapValue($objectOrArray, $accessor);
+        return \array_reduce(
+            $columns,
+            /** @psalm-param array<string, string> $result */
+            static function (array $result, Column $column) use ($objectOrArray, $accessor): array {
+                $result[$column->getAlias()] = $column->mapValue($objectOrArray, $accessor);
 
-            return $result;
-        };
-        /** @var array<string, string> $mappings */
-        $mappings = \array_reduce($columns, $callback, []);
-
-        return $mappings;
+                return $result;
+            },
+            []
+        );
     }
 
     /**

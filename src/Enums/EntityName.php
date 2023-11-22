@@ -26,6 +26,7 @@ use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
  * The entity name enumeration.
  *
  * @implements EnumSortableInterface<EntityName>
+ * @implements EnumConstantsInterface<string>
  */
 #[ReadableEnum(suffix: '.name')]
 enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface, TranslatableEnumInterface
@@ -99,20 +100,16 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
     private const ENTITY_PREFIX = 'Entity';
 
     /**
-     * Gets this enumeration as constant.
-     *
-     * @return array<string, string>
+     * Gets this enumeration as constants.
      */
     public static function constants(): array
     {
-        /** @psalm-var array<string, string> $result */
-        $result = \array_reduce(
+        return \array_reduce(
             self::cases(),
+            /** @psalm-param array<string, string> $choices */
             static fn (array $choices, self $type): array => $choices + ['ENTITY_' . $type->name => $type->value],
             [],
         );
-
-        return $result;
     }
 
     /**

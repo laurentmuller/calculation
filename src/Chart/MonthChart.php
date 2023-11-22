@@ -127,7 +127,7 @@ class MonthChart extends AbstractHighchart
 
     private function formatDate(\DateTimeInterface $date): string
     {
-        return FormatUtils::formatDate($date, pattern: 'MMMM Y');
+        return FormatUtils::formatDate($date, \IntlDateFormatter::NONE, 'MMMM Y');
     }
 
     /**

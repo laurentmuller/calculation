@@ -79,6 +79,9 @@
  le tribunal au domicile du preneur de licence ou à son siège.
 </p>
 
-{% if show_date is defined ? show_date : true %}
- <p class="mb-0 text-end">{{ app_owner_city }}, {{ 'now'|locale_date('none', null, null, 'MMMM Y') }}</p>
-{% endif %}
+{% set comments = comments is defined and comments and app.user ? true : false %}
+<h4 class="bookmark bookmark-{{ level }}">Nous contacter</h4>
+<p class="text-justify">Pour toute question relative au présent accord de licence, veuillez nous contacter par
+ {% if comments %}<a href="{{ path('user_comment') }}">courrier électronique</a>{% else %}courrier électronique{% endif %}.</p>
+
+<p class="mb-0 text-end">{{ app_owner_city }}, {{ 'now'|locale_date('none', 'MMMM Y') }}</p>

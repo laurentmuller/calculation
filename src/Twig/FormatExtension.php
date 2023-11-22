@@ -28,11 +28,6 @@ final class FormatExtension extends AbstractExtension
 {
     use TranslatorTrait;
 
-    private const CALENDARS = [
-        'gregorian' => \IntlDateFormatter::GREGORIAN,
-        'traditional' => \IntlDateFormatter::TRADITIONAL,
-    ];
-
     private const DATE_FORMATS = [
         'none' => \IntlDateFormatter::NONE,
         'short' => \IntlDateFormatter::SHORT,
@@ -96,24 +91,20 @@ final class FormatExtension extends AbstractExtension
      *
      * @param Environment                    $env        the Twig environment
      * @param \DateTimeInterface|string|null $date       the date
-     * @param ?string                        $dateFormat the date format
-     * @param \DateTimeZone|string|null      $timezone   the time zone
-     * @param ?string                        $calendar   the calendar type
-     * @param ?string                        $pattern    the optional pattern to use when formatting
+     * @param string|null                    $dateFormat the date format
+     * @param string|null                    $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
-     * @throws RuntimeError if the date format or the calendar is invalid
+     * @throws RuntimeError if the date format is invalid
      */
     private function dateFilter(
         Environment $env,
         \DateTimeInterface|string|null $date,
         string $dateFormat = null,
-        \DateTimeZone|string $timezone = null,
-        ?string $calendar = 'gregorian',
         string $pattern = null
     ): string {
-        return $this->dateTimeFilter($env, $date, $dateFormat, 'none', $timezone, $calendar, $pattern);
+        return $this->dateTimeFilter($env, $date, $dateFormat, 'none', $pattern);
     }
 
     /**
@@ -121,37 +112,33 @@ final class FormatExtension extends AbstractExtension
      *
      * @param Environment                    $env        the Twig environment
      * @param \DateTimeInterface|string|null $date       the date
-     * @param ?string                        $dateFormat the date format
-     * @param ?string                        $timeFormat the time format
-     * @param \DateTimeZone|string|null      $timezone   the time zone
-     * @param ?string                        $calendar   the calendar type
-     * @param ?string                        $pattern    the optional pattern to use when formatting
+     * @param string|null                    $dateFormat the date format
+     * @param string|null                    $timeFormat the time format
+     * @param string|null                    $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
-     * @throws RuntimeError if the date format, the time format or the calendar is invalid
+     * @throws RuntimeError if the date format or the time format is invalid
      */
     private function dateTimeFilter(
         Environment $env,
         \DateTimeInterface|string|null $date,
         string $dateFormat = null,
         string $timeFormat = null,
-        \DateTimeZone|string $timezone = null,
-        ?string $calendar = 'gregorian',
         string $pattern = null
     ): string {
-        // check types and calendar
-        $date_type = $this->validateDateFormat($dateFormat);
-        $time_type = $this->validateTimeFormat($timeFormat);
-        $calendar = $this->validateCalendar($calendar);
-        if (\IntlDateFormatter::NONE === $date_type && \IntlDateFormatter::NONE === $time_type
+        // check types
+        $dateType = $this->translateFormat($dateFormat);
+        $timeType = $this->translateFormat($timeFormat);
+        if (\IntlDateFormatter::NONE === $dateType && \IntlDateFormatter::NONE === $timeType
                 && !StringUtils::isString($pattern)) {
             return '';
         }
-        /** @psalm-var \DateTimeInterface $date */
-        $date = twig_date_converter($env, $date, $timezone);
 
-        return FormatUtils::formatDateTime($date, $date_type, $time_type, $timezone, $calendar, $pattern);
+        /** @psalm-var \DateTimeInterface $date */
+        $date = twig_date_converter($env, $date);
+
+        return FormatUtils::formatDateTime($date, $dateType, $timeType, $pattern);
     }
 
     /**
@@ -159,62 +146,20 @@ final class FormatExtension extends AbstractExtension
      *
      * @param Environment                    $env        the Twig environment
      * @param \DateTimeInterface|string|null $date       the date
-     * @param ?string                        $timeFormat the time format
-     * @param \DateTimeZone|string|null      $timezone   the time zone
-     * @param ?string                        $calendar   the calendar type
-     * @param ?string                        $pattern    the optional pattern to use when formatting
+     * @param string|null                    $timeFormat the time format
+     * @param string|null                    $pattern    the optional pattern to use when formatting
      *
      * @return string the formatted date
      *
-     * @throws RuntimeError if the time format or the calendar is invalid
+     * @throws RuntimeError if the time format is invalid
      */
     private function timeFilter(
         Environment $env,
         \DateTimeInterface|string|null $date,
         string $timeFormat = null,
-        \DateTimeZone|string $timezone = null,
-        ?string $calendar = 'gregorian',
         string $pattern = null
     ): string {
-        return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $timezone, $calendar, $pattern);
-    }
-
-    /**
-     * Check the calendar.
-     *
-     * @throws RuntimeError
-     *
-     * @psalm-return \IntlDateFormatter::GREGORIAN|\IntlDateFormatter::TRADITIONAL
-     */
-    private function validateCalendar(?string $calendar): int
-    {
-        if (null === $calendar) {
-            return \IntlDateFormatter::GREGORIAN;
-        }
-        if (!isset(self::CALENDARS[$calendar])) {
-            throw new RuntimeError(\sprintf('The calendar "%s" does not exist. Known calendars are: "%s"', $calendar, \implode('", "', \array_keys(self::CALENDARS))));
-        }
-
-        return self::CALENDARS[$calendar];
-    }
-
-    /**
-     * Check the date format.
-     *
-     * @throws RuntimeError
-     *
-     * @psalm-return \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null
-     */
-    private function validateDateFormat(?string $dateFormat): ?int
-    {
-        if (null === $dateFormat) {
-            return null;
-        }
-        if (!isset(self::DATE_FORMATS[$dateFormat])) {
-            throw new RuntimeError(\sprintf('The date format "%s" does not exist. Known formats are: "%s"', $dateFormat, \implode('", "', \array_keys(self::DATE_FORMATS))));
-        }
-
-        return self::DATE_FORMATS[$dateFormat];
+        return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $pattern);
     }
 
     /**
@@ -222,17 +167,19 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError
      *
-     * @psalm-return \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null
+     * @psalm-return int<-1,3>|null
      */
-    private function validateTimeFormat(?string $timeFormat): ?int
+    private function translateFormat(string $format = null): ?int
     {
-        if (null === $timeFormat) {
+        if (null === $format || '' === $format) {
             return null;
         }
-        if (!isset(self::DATE_FORMATS[$timeFormat])) {
-            throw new RuntimeError(\sprintf('The time format "%s" does not exist. Known formats are: "%s"', $timeFormat, \implode('", "', \array_keys(self::DATE_FORMATS))));
+        if (!isset(self::DATE_FORMATS[$format])) {
+            $formats = \implode('", "', \array_keys(self::DATE_FORMATS));
+            $message = \sprintf('The date/time type "%s" does not exist. Allowed values are: "%s".', $format, $formats);
+            throw new RuntimeError($message);
         }
 
-        return self::DATE_FORMATS[$timeFormat];
+        return self::DATE_FORMATS[$format];
     }
 }

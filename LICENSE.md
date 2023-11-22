@@ -100,4 +100,5 @@ Montévraz, octobre 2023
 
 ### Voir aussi
 
-[Politique de confidentialité](POLICY.md)
+- [Politique de confidentialité](POLICY.md)
+- [Page d'accueil](README.md)

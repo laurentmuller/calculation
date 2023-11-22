@@ -44,8 +44,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *     date_format: self::FORMAT_*|null,
  *     time_format: self::FORMAT_*|null,
  *     date_pattern: string|null,
- *     time_zone: \IntlTimeZone|\DateTimeZone|string|null,
- *     calendar: self::CALENDAR_*|null,
+ *     time_zone: \DateTimeZone|string|null,
  *     empty_value: callable(mixed):string|string|null,
  *     display_transformer: (callable(mixed):(string|null))|null,
  *     value_transformer: (callable(mixed):mixed)|null,
@@ -53,16 +52,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class PlainType extends AbstractType
 {
-    /**
-     * The gregorian calendar type.
-     */
-    final public const CALENDAR_GREGORIAN = \IntlDateFormatter::GREGORIAN;
-
-    /**
-     * The traditional calendar type.
-     */
-    final public const CALENDAR_TRADITIONAL = \IntlDateFormatter::TRADITIONAL;
-
     /**
      * The full date or time format.
      */
@@ -175,17 +164,7 @@ class PlainType extends AbstractType
             ->allowedTypes(
                 'null',
                 'string',
-                'IntlTimeZone',
                 'DateTimeZone'
-            );
-
-        $resolver->define('calendar')
-            ->default(null)
-            ->allowedTypes('null', 'int')
-            ->allowedValues(
-                null,
-                self::CALENDAR_GREGORIAN,
-                self::CALENDAR_TRADITIONAL
             );
     }
 
@@ -289,9 +268,8 @@ class PlainType extends AbstractType
             $value,
             $options['date_format'],
             $options['time_format'],
-            $options['time_zone'],
-            $options['calendar'],
-            $options['date_pattern']
+            $options['date_pattern'],
+            $options['time_zone']
         );
     }
 

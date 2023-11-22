@@ -12,7 +12,7 @@
                     {%- if loop.index == 1 -%}
                         {{- 'openweather.current.today'|trans -}}
                     {%- else -%}
-                        {{- data.dt|locale_date(pattern='eeee') }}
+                        {{- data.dt|locale_date('none', 'eeee') }}
                     {%- endif -%}
                     <br><span class="small text-body-secondary">{{ data.dt_date }}</span>
                 </td>

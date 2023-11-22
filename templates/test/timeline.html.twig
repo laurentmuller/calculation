@@ -23,8 +23,8 @@
 {%- set title = 'timeline.title' -%}
 {%- set title_icon = 'stream' -%}
 {%- set route = 'calculation_table' -%}
-{%- set min_date_locale = min_date|locale_date(null, null, null, 'yyyy-MM-dd') -%}
-{%- set max_date_locale = max_date|locale_date(null, null, null, 'yyyy-MM-dd') -%}
+{%- set min_date_locale = min_date|locale_date('none', 'yyyy-MM-dd') -%}
+{%- set max_date_locale = max_date|locale_date('none', 'yyyy-MM-dd') -%}
 {# body #}
 {% block body -%}
 <form name="search" id="search" action="{{ path('timeline') }}">

@@ -222,4 +222,5 @@ Montévraz, octobre 2023
 
 ### Voir aussi
 
-[Accord de licence](LICENSE.md)
+- [Accord de licence](LICENSE.md)
+- [Page d'accueil](README.md)

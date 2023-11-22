@@ -50,7 +50,7 @@ class AboutPolicyController extends AbstractController
     public function index(): Response
     {
         $parameters = [
-            'comments' => false,
+            'comments' => true,
             'link' => true,
         ];
 

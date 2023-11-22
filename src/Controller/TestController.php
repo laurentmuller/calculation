@@ -525,7 +525,7 @@ class TestController extends AbstractController
             } elseif ('challenge_ts' === $key) {
                 $time = \strtotime($value);
                 if (false !== $time) {
-                    $value = FormatUtils::formatDateTime($time, null, \IntlDateFormatter::MEDIUM);
+                    $value = FormatUtils::formatDateTime($time, timeType: \IntlDateFormatter::MEDIUM);
                 }
             }
             $html .= "<tr><td>$key</td><td>:</td><td>$value</td></tr>";

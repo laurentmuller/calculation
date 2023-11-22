@@ -220,13 +220,13 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $dateType
-     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $timeType
+     * @psalm-param int<-1,3>|null $dateType
+     * @psalm-param int<-1,3>|null $timeType
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getDateFormatterPatterns')]
     public function testDateFormatterPattern(string $pattern, string $expected, int $dateType = null, int $timeType = null): void
     {
-        $actual = FormatUtils::getDateFormatter($dateType, $timeType, self::TIME_ZONE, \IntlDateFormatter::GREGORIAN, $pattern);
+        $actual = FormatUtils::getDateFormatter($dateType, $timeType, $pattern, self::TIME_ZONE);
         self::assertSame($expected, $actual->getPattern());
     }
 
@@ -248,23 +248,23 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $dateType
+     * @psalm-param int<-1,3>|null $dateType
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getDates')]
     public function testFormatDate(\DateTimeInterface|int|null $date, string|null $expected, int $dateType = null): void
     {
-        $actual = FormatUtils::formatDate($date, $dateType, self::TIME_ZONE);
+        $actual = FormatUtils::formatDate($date, $dateType, timezone: self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 
     /**
-     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $dateType
-     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $timeType
+     * @psalm-param int<-1,3>|null $dateType
+     * @psalm-param int<-1,3>|null $timeType
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getDateTimes')]
     public function testFormatDateTime(\DateTimeInterface|int|null $date, string|null $expected, int $dateType = null, int $timeType = null): void
     {
-        $actual = FormatUtils::formatDateTime($date, $dateType, $timeType, self::TIME_ZONE);
+        $actual = FormatUtils::formatDateTime($date, $dateType, $timeType, timezone: self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 
@@ -296,12 +296,12 @@ class FormatUtilsTest extends TestCase
     }
 
     /**
-     * @psalm-param \IntlDateFormatter::FULL|\IntlDateFormatter::LONG|\IntlDateFormatter::MEDIUM|\IntlDateFormatter::SHORT|\IntlDateFormatter::NONE|null $timeType
+     * @psalm-param int<-1,3>|null $timeType
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTimes')]
     public function testFormatTime(\DateTimeInterface|int|null $date, string|null $expected, int $timeType = null): void
     {
-        $actual = FormatUtils::formatTime($date, $timeType, self::TIME_ZONE);
+        $actual = FormatUtils::formatTime(date: $date, timeType: $timeType, timezone: self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 

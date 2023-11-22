@@ -122,9 +122,9 @@ abstract class AbstractReport extends PdfDocument
      * @param string $id     the title id (may also be an object that can be cast to string)
      * @param bool   $isUTF8 indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true)
      */
-    public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false, string $domain = null, string $locale = null): static
+    public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false, string $domain = null): static
     {
-        $title = $this->trans($id, $parameters, $domain, $locale);
+        $title = $this->trans($id, $parameters, $domain);
         $this->SetTitle($title, $isUTF8);
 
         return $this;

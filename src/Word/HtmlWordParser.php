@@ -74,9 +74,9 @@ class HtmlWordParser
      */
     private function getBootstrapStyles(): array
     {
-        /** @psalm-var array<string, string> $result */
-        $result = \array_reduce(
+        return \array_reduce(
             HtmlBootstrapColors::cases(),
+            /** @psalm-param array<string, string> $carry  */
             function (array $carry, HtmlBootstrapColors $color): array {
                 $name = \strtolower($color->name);
                 $value = $color->value;
@@ -90,8 +90,6 @@ class HtmlWordParser
             },
             []
         );
-
-        return $result;
     }
 
     /**

@@ -36,7 +36,11 @@ class AboutLicenceController extends AbstractController
     #[GetRoute(path: '/content', name: 'about_licence_content')]
     public function content(): JsonResponse
     {
-        $content = $this->renderView('about/licence_content.html.twig');
+        $parameters = [
+            'comments' => true,
+            'link' => false,
+        ];
+        $content = $this->renderView('about/licence_content.html.twig', $parameters);
 
         return $this->jsonTrue(['content' => $content]);
     }
@@ -45,14 +49,23 @@ class AboutLicenceController extends AbstractController
     #[GetRoute(path: '', name: 'about_licence')]
     public function index(): Response
     {
-        return $this->render('about/licence.html.twig', ['link' => true]);
+        $parameters = [
+            'comments' => true,
+            'link' => true,
+        ];
+
+        return $this->render('about/licence.html.twig', $parameters);
     }
 
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[GetRoute(path: '/pdf', name: 'about_licence_pdf')]
     public function pdf(): PdfResponse
     {
-        $content = $this->renderView('about/licence_content.html.twig', ['link' => false]);
+        $parameters = [
+            'comments' => false,
+            'link' => false,
+        ];
+        $content = $this->renderView('about/licence_content.html.twig', $parameters);
         $report = new HtmlReport($this, $content);
         $report->setTitleTrans('about.licence', [], true);
 
@@ -67,7 +80,11 @@ class AboutLicenceController extends AbstractController
     #[GetRoute(path: '/word', name: 'about_licence_word')]
     public function word(): WordResponse
     {
-        $content = $this->renderView('about/licence_content.html.twig', ['link' => false]);
+        $parameters = [
+            'comments' => false,
+            'link' => false,
+        ];
+        $content = $this->renderView('about/licence_content.html.twig', $parameters);
         $doc = new HtmlDocument($this, $content);
         $doc->setTitleTrans('about.licence');
 

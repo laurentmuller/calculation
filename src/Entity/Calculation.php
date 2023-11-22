@@ -289,16 +289,21 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         // merge duplicated items
-        /** @psalm-var CalculationItem[] $result */
-        $result = \array_reduce($array, function (array $current, array $items): array {
-            if (\count($items) > 1) {
-                return \array_merge($current, \array_values($items));
-            }
+        return \array_reduce(
+            $array,
+            /**
+             * @psalm-param CalculationItem[] $current
+             * @psalm-param CalculationItem[] $items
+             */
+            function (array $current, array $items): array {
+                if (\count($items) > 1) {
+                    return \array_merge($current, \array_values($items));
+                }
 
-            return $current;
-        }, []);
-
-        return $result;
+                return $current;
+            },
+            []
+        );
     }
 
     /**

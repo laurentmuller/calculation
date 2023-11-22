@@ -44,7 +44,6 @@ class AboutController extends AbstractController
         $parameters = [
             'link' => false,
             'comments' => false,
-            'show_date' => false,
         ];
         $titleParameters = [
             '%app_name%' => $appName,
@@ -66,7 +65,6 @@ class AboutController extends AbstractController
         $parameters = [
             'link' => false,
             'comments' => false,
-            'show_date' => false,
         ];
         $titleParameters = [
             '%app_name%' => $appName,

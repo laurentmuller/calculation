@@ -22,6 +22,7 @@ use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Events\PdfPdfDrawHeadersEvent;
 use App\Pdf\Html\HtmlBootstrapColors;
+use App\Pdf\Interfaces\PdfChartInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Pdf\PdfCell;
@@ -31,18 +32,21 @@ use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfBarChartTrait;
+use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Utils\FormatUtils;
 
 /**
  * Report for calculations by months.
  *
- * @psalm-import-type CalculationByMonthType from \App\Repository\CalculationRepository
- *
  * @extends AbstractArrayReport<CalculationByMonthType>
+ *
+ * @psalm-import-type CalculationByMonthType from \App\Repository\CalculationRepository
+ * @psalm-import-type ColorStringType from PdfChartInterface
  */
-class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCellTextInterface, PdfDrawHeadersInterface
+class CalculationByMonthReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
     use PdfBarChartTrait;
+    use PdfChartLegendTrait;
 
     private const ARROW_DOWN = 116;
     private const ARROW_RIGHT = 116; // same as down but with 90 degrees rotation
@@ -196,6 +200,17 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
         return $cell->setStyle($style);
     }
 
+    /**
+     * @psalm-return ColorStringType[]
+     */
+    private function getLegends(): array
+    {
+        return [
+            ['color' => self::COLOR_ITEM, 'label' => $this->transChart('fields.net')],
+            ['color' => self::COLOR_MARGIN, 'label' => $this->transChart('fields.margin')],
+        ];
+    }
+
     private function isMinMargin(float $value): bool
     {
         return !$this->isFloatZero($value) && $value < $this->minMargin;
@@ -253,23 +268,22 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfDrawCel
                 'label' => $this->formatDate($entity['date'], false),
                 'values' => [
                     ['color' => self::COLOR_ITEM, 'value' => $entity['items']],
-                    ['color' => self::COLOR_MARGIN, 'value' => $entity['total'] - $entity['items']],
+                    ['color' => self::COLOR_MARGIN, 'value' => $entity['margin_amount']],
                 ],
             ];
         }, $entities);
-
         $axis = [
             'min' => 0,
             'formatter' => fn (float $value): string => FormatUtils::formatInt($value),
         ];
 
-        $this->barChart(
-            rows: $rows,
-            axis: $axis,
-            y: $top,
-            h: $h
-        );
+        $legends = $this->getLegends();
+        $width = $this->getLegendsWidth($legends, true);
+        $x = $this->getLeftMargin() + $this->getPrintableWidth() - $width;
+        $this->legends($legends, true, $x, $top, false);
         $this->ln();
+
+        $this->barChart(rows: $rows, axis: $axis, y: $top + self::LINE_HEIGHT, h: $h);
     }
 
     /**

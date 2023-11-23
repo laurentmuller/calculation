@@ -18,6 +18,7 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Events\PdfPdfDrawHeadersEvent;
+use App\Pdf\Interfaces\PdfChartInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Pdf\PdfBorder;
@@ -25,6 +26,7 @@ use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Pdf\Traits\PdfPieChartTrait;
 use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
@@ -36,9 +38,10 @@ use App\Utils\FormatUtils;
  *
  * @extends AbstractArrayReport<QueryCalculationType>
  */
-class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCellTextInterface, PdfDrawHeadersInterface
+class CalculationByStateReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
     use MathTrait;
+    use PdfChartLegendTrait;
     use PdfPieChartTrait;
 
     /** @psalm-var QueryCalculationType|null */
@@ -140,12 +143,12 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
             ->addColumns(
                 PdfColumn::left($this->transChart('fields.state'), 20),
                 PdfColumn::right($this->transChart('fields.count'), 25, true),
-                PdfColumn::right(FormatUtils::getPercent(), 15, true),
+                PdfColumn::right(FormatUtils::getPercent(), 20, true),
                 PdfColumn::right($this->transChart('fields.net'), 20, true),
                 PdfColumn::right($this->transChart('fields.margin'), 20, true),
-                PdfColumn::right($this->transChart('fields.margin_percent'), 15, true),
+                PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
                 PdfColumn::right($this->transChart('fields.total'), 20, true),
-                PdfColumn::right(FormatUtils::getPercent(), 15, true)
+                PdfColumn::right(FormatUtils::getPercent(), 20, true)
             )->outputHeaders();
     }
 
@@ -211,10 +214,11 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfDrawCel
                 'value' => $entity['percentAmount'],
             ];
         }, $entities);
+
         $this->pieChart($centerX, $centerY, $radius, $rows);
         $this->SetY($centerY + $radius + self::LINE_HEIGHT);
-        $this->pieLegendVertical($rows, $margin, $top);
-        $this->resetStyle();
+        $this->legends($rows, true);
+        $this->Ln();
     }
 
     /**

@@ -413,7 +413,7 @@ class SearchService implements ServiceSubscriberInterface
     /**
      * Gets the SQL queries.
      *
-     * @return string[] the SQL queries
+     * @return array<string, string> the SQL queries
      */
     private function getQueries(): array
     {

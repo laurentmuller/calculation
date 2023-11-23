@@ -63,42 +63,8 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     public function __construct(protected readonly ApplicationService $application)
     {
         parent::__construct();
-        $this->setRenderTo()
-            ->hideCredits()
-            ->hideAccessibility()
-            ->initFontStyle()
-            ->initLangOptions()
-            ->setBackground('var(--bs-body-bg)');
-    }
-
-    /**
-     * Disable the accessibility.
-     */
-    public function hideAccessibility(): static
-    {
-        $this->accessibility['enabled'] = false;
-
-        return $this;
-    }
-
-    /**
-     * Disable the credits text.
-     */
-    public function hideCredits(): static
-    {
-        $this->credits['enabled'] = false;
-
-        return $this;
-    }
-
-    /**
-     * Disable the series legend.
-     */
-    public function hideLegend(): static
-    {
-        $this->legend['enabled'] = false;
-
-        return $this;
+        $this->initializeChart()
+            ->initializeLanguage();
     }
 
     /**
@@ -107,36 +73,6 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     public function hideTitle(): static
     {
         return $this->setTitle(null);
-    }
-
-    /**
-     * Initialize the chart font style.
-     */
-    public function initFontStyle(): static
-    {
-        $this->chart['style'] = $this->getFontStyle();
-
-        return $this;
-    }
-
-    /**
-     * Sets the chart background color.
-     */
-    public function setBackground(string $color): static
-    {
-        $this->chart['backgroundColor'] = $color;
-
-        return $this;
-    }
-
-    /**
-     * Sets the HTML element where the chart will be rendered.
-     */
-    public function setRenderTo(string $id = self::CONTAINER): static
-    {
-        $this->chart['renderTo'] = $id;
-
-        return $this;
     }
 
     /**
@@ -277,8 +213,8 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     {
         $this->tooltip->merge([
             'borderRadius' => 5,
-            'style' => $this->getFontStyle('0.75rem'),
             'backgroundColor' => 'var(--bs-light)',
+            'style' => $this->getFontStyle('0.75rem'),
             'borderColor' => $this->getBorderColor(),
         ]);
 
@@ -299,9 +235,27 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
+     * Initialize the chart options and disable accessibility and credits.
+     */
+    private function initializeChart(): static
+    {
+        $this->chart->merge(
+            [
+                'backgroundColor' => 'var(--bs-body-bg)',
+                'style' => $this->getFontStyle(),
+                'renderTo' => self::CONTAINER,
+            ]
+        );
+        $this->accessibility['enabled'] = false;
+        $this->credits['enabled'] = false;
+
+        return $this;
+    }
+
+    /**
      * Initialize the language options.
      */
-    private function initLangOptions(): static
+    private function initializeLanguage(): static
     {
         $this->lang->merge([
             'thousandsSep' => FormatUtils::getGrouping(),

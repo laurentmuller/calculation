@@ -80,8 +80,8 @@ class MonthChart extends AbstractHighchart
 
         $this->setType(self::TYPE_COLUMN)
             ->hideTitle()
-            ->hideLegend()
             ->setPlotOptions()
+            ->setLegendOptions()
             ->setTooltipOptions()
             ->setXAxis($xAxis)
             ->setYAxis($yAxis)
@@ -306,6 +306,21 @@ class MonthChart extends AbstractHighchart
                 ],
             ],
         ];
+    }
+
+    private function setLegendOptions(): self
+    {
+        $style = $this->getFontStyle();
+        $this->legend->merge([
+            'align' => 'right',
+            'verticalAlign' => 'top',
+            'symbolRadius' => 0,
+            'reversed' => true,
+            'itemStyle' => $style,
+            'itemHoverStyle' => $style,
+        ]);
+
+        return $this;
     }
 
     private function setPlotOptions(): self

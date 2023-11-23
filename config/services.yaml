@@ -35,6 +35,7 @@ parameters:
     link_prod: '%env(string:LINK_PROD)%'
 
     # optimize
+    debug.container.dump: '%kernel.debug%'
     .container.dumper.inline_factories: true
 
     # the date format for log

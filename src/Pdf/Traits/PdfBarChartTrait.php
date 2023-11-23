@@ -21,17 +21,10 @@ use App\Pdf\PdfStyle;
 /**
  * Trait to draw bar chart.
  *
- * @psalm-type BarChartValueType = array{
- *     color: PdfFillColor|string,
- *     value: float}
- * @psalm-type BarChartRowType = array{
- *      label: string,
- *      values: BarChartValueType[]}
- * @psalm-type BarChartAxisType = array{
- *      min?: float,
- *      max?: float,
- *      step?: float,
- *      formatter?: callable(float): string}
+ * @psalm-import-type ColorValueType from \App\Pdf\Interfaces\PdfChartInterface
+ * @psalm-import-type BarChartRowType from \App\Pdf\Interfaces\PdfChartInterface
+ * @psalm-import-type BarChartAxisType from \App\Pdf\Interfaces\PdfChartInterface
+ *
  * @psalm-type BarChartDataType = array{
  *      color: PdfFillColor,
  *      value: float,
@@ -39,15 +32,17 @@ use App\Pdf\PdfStyle;
  *      h: float}
  * @psalm-type BarChartRowDataType = array{
  *      label: string,
- *      label_width: float,
+ *      width: float,
  *      x: float,
  *      w: float,
  *      values: BarChartDataType[]}
  * @psalm-type BarChartLabelType = array{
  *     label: string,
- *     label_width: float}
+ *     width: float}
  *
  * @psalm-require-extends \App\Pdf\PdfDocument
+ *
+ * @psalm-require-implements \App\Pdf\Interfaces\PdfChartInterface
  */
 trait PdfBarChartTrait
 {
@@ -65,8 +60,8 @@ trait PdfBarChartTrait
      * @param array      $axis the Y axis definition
      * @param float|null $x    the abscissa position or null to use the left margin
      * @param float|null $y    the ordinate position or null to use the current position
-     * @param float|null $w    the width of null to use all the printable width
-     * @param float|null $h    the height of null to use the default value (200)
+     * @param float|null $w    the width or null to use all the printable width
+     * @param float|null $h    the height or null to use the default value (200)
      *
      * @psalm-param BarChartRowType[] $rows
      * @psalm-param BarChartAxisType $axis
@@ -166,7 +161,7 @@ trait PdfBarChartTrait
         foreach ($rows as $row) {
             $entry = [
                 'label' => $row['label'],
-                'label_width' => $this->GetStringWidth($row['label']),
+                'width' => $this->GetStringWidth($row['label']),
                 'x' => $currentX,
                 'w' => $barWidth,
                 'values' => [],
@@ -221,7 +216,7 @@ trait PdfBarChartTrait
         foreach ($labels as $label) {
             $text = $label['label'];
             if ($rotation) {
-                $width = $label['label_width'];
+                $width = $label['width'];
                 $dx = $barWidth / 2.0 - \cos(self::TEXT_ANGLE) * ($width + self::LINE_HEIGHT);
                 $dy = \sin(self::TEXT_ANGLE) * ($width + 1.0);
                 $this->RotateText($text, self::TEXT_ANGLE, $x + $dx, $y + $dy);
@@ -276,7 +271,7 @@ trait PdfBarChartTrait
     }
 
     /**
-     * @psalm-param BarChartValueType $row
+     * @psalm-param ColorValueType $row
      */
     private function _barGetFillColor(array $row): PdfFillColor
     {
@@ -298,7 +293,7 @@ trait PdfBarChartTrait
         return \array_map(function (array $row): array {
             return [
                 'label' => $row['label'],
-                'label_width' => $this->GetStringWidth($row['label']),
+                'width' => $this->GetStringWidth($row['label']),
             ];
         }, $rows);
     }
@@ -316,7 +311,7 @@ trait PdfBarChartTrait
             $text = $formatter($value);
             $result[] = [
                 'label' => $text,
-                'label_width' => $this->GetStringWidth($text),
+                'width' => $this->GetStringWidth($text),
             ];
         }
 
@@ -328,6 +323,6 @@ trait PdfBarChartTrait
      */
     private function _barGetMaxLabelsWidth(array $labels): float
     {
-        return \max(\array_column($labels, 'label_width'));
+        return \max(\array_column($labels, 'width'));
     }
 }

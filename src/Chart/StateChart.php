@@ -160,9 +160,6 @@ class StateChart extends AbstractHighchart
     {
         $style = $this->getFontStyle();
         $this->legend->merge([
-            'align' => 'left',
-            'layout' => 'vertical',
-            'verticalAlign' => 'top',
             'itemStyle' => $style,
             'itemHoverStyle' => $style,
         ]);

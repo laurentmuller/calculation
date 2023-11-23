@@ -514,6 +514,7 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         $hours = \intdiv($offset, 3600);
         $minutes = \abs(\intdiv($offset, 60) % 60);
+        /** @psalm-var non-empty-string $timezone */
         $timezone = \sprintf('%+03d%02d', $hours, $minutes);
 
         return new \DateTimeZone($timezone);

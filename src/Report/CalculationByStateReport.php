@@ -211,7 +211,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             return [
                 'label' => $entity['code'],
                 'color' => $entity['color'],
-                'value' => $entity['percentAmount'],
+                'value' => $entity['percent_amount'],
             ];
         }, $entities);
 
@@ -233,25 +233,25 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             $table->addRow(
                 $entity['code'],
                 FormatUtils::formatInt($entity['count']),
-                $this->formatPercent($entity['percentCalculation'], 2),
+                $this->formatPercent($entity['percent_calculation'], 2),
                 FormatUtils::formatInt($entity['items']),
-                FormatUtils::formatInt($entity['marginAmount']),
+                FormatUtils::formatInt($entity['margin_amount']),
                 $this->formatPercent($entity['margin'], 0, true),
                 FormatUtils::formatInt($entity['total']),
-                $this->formatPercent($entity['percentAmount'], 2)
+                $this->formatPercent($entity['percent_amount'], 2)
             );
             $this->currentRow = null;
         }
 
         // total
         $count = $this->sum($entities, 'count');
-        $percentCalculation = $this->sum($entities, 'percentCalculation');
+        $percentCalculation = $this->sum($entities, 'percent_calculation');
         $items = $this->sum($entities, 'items');
-        $marginAmount = $this->sum($entities, 'marginAmount');
+        $marginAmount = $this->sum($entities, 'margin_amount');
         $total = $this->sum($entities, 'total');
         $net = $total - $items;
         $margin = 1.0 + $this->safeDivide($net, $items);
-        $percentAmount = $this->sum($entities, 'percentAmount');
+        $percentAmount = $this->sum($entities, 'percent_amount');
 
         $table->addHeaderRow(
             $this->transChart('fields.total'),

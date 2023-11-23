@@ -44,29 +44,20 @@ class StateChart extends AbstractHighchart
     public function generate(): array
     {
         $states = $this->repository->getCalculations();
-        $count = \array_sum(\array_column($states, 'count'));
-        $total = \array_sum(\array_column($states, 'total'));
-        $items = \array_sum(\array_column($states, 'items'));
-        $data = $this->mapData($states);
-        $series = $this->getSeries($data);
+        $series = $this->mapData($states);
 
         $this->setType(self::TYPE_PIE)
             ->hideTitle()
             ->setPlotOptions()
-            ->setLegendOptions()
             ->setTooltipOptions()
+            ->setColors($states)
             ->setSeries($series);
-        $this->colors = $this->getColors($states);
 
         return [
             'chart' => $this,
             'data' => $states,
-            'count' => $count,
-            'items' => $items,
-            'total' => $total,
-            'margin' => $this->safeDivide($total, $items),
-            'marginAmount' => $total - $items,
             'min_margin' => $this->getMinMargin(),
+            'totals' => $this->getTotals($states),
         ];
     }
 
@@ -93,16 +84,6 @@ class StateChart extends AbstractHighchart
         return $this->createExpression($function);
     }
 
-    /**
-     * @param QueryCalculationType[] $states
-     *
-     * @return string[]
-     */
-    private function getColors(array $states): array
-    {
-        return \array_map(static fn (array $state): string => $state['color'], $states);
-    }
-
     private function getPieOptions(): array
     {
         return [
@@ -120,13 +101,21 @@ class StateChart extends AbstractHighchart
         ];
     }
 
-    private function getSeries(array $data): array
+    /**
+     * @param QueryCalculationType[] $states
+     */
+    private function getTotals(array $states): array
     {
+        $count = \array_sum(\array_column($states, 'count'));
+        $total = \array_sum(\array_column($states, 'total'));
+        $items = \array_sum(\array_column($states, 'items'));
+
         return [
-            [
-                'data' => $data,
-                'name' => $this->transChart('title_by_state'),
-            ],
+            'count' => $count,
+            'items' => $items,
+            'total' => $total,
+            'margin' => $this->safeDivide($total, $items),
+            'margin_amount' => $total - $items,
         ];
     }
 
@@ -145,24 +134,23 @@ class StateChart extends AbstractHighchart
                 'name' => $state['code'],
                 'y' => $state['total'],
                 'calculations' => FormatUtils::formatInt($state['count']),
-                'calculations_percent' => FormatUtils::formatPercent($state['percentCalculation'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
+                'calculations_percent' => FormatUtils::formatPercent($state['percent_calculation'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
                 'net_amount' => FormatUtils::formatInt($state['items']),
-                'margin_amount' => FormatUtils::formatInt($state['marginAmount']),
+                'margin_amount' => FormatUtils::formatInt($state['margin_amount']),
                 'margin_percent' => FormatUtils::formatPercent($state['margin']),
                 'total_amount' => FormatUtils::formatInt($state['total']),
-                'total_percent' => FormatUtils::formatPercent($state['percentAmount'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
+                'total_percent' => FormatUtils::formatPercent($state['percent_amount'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
                 'url' => $this->getURL($state['id']),
             ];
         }, $states);
     }
 
-    private function setLegendOptions(): self
+    /**
+     * @param QueryCalculationType[] $states
+     */
+    private function setColors(array $states): self
     {
-        $style = $this->getFontStyle();
-        $this->legend->merge([
-            'itemStyle' => $style,
-            'itemHoverStyle' => $style,
-        ]);
+        $this->colors = \array_map(static fn (array $state): string => $state['color'], $states);
 
         return $this;
     }
@@ -187,5 +175,15 @@ class StateChart extends AbstractHighchart
         ]);
 
         return $this;
+    }
+
+    private function setSeries(array $data): void
+    {
+        $this->series->merge([
+            [
+                'data' => $data,
+                'name' => $this->transChart('title_by_state'),
+            ],
+        ]);
     }
 }

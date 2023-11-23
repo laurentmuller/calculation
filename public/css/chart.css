@@ -7,8 +7,3 @@ div.chart {
     min-height: 500px;
     margin: 0 auto;
 }
-
-body div.chart .highcharts-axis-labels text,
-body div.chart .highcharts-legend-item text {
-    fill: var(--bs-body-color) !important;
-}

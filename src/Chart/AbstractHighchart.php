@@ -17,7 +17,6 @@ use App\Traits\MathTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
-use HighchartsBundle\Highcharts\ChartOption;
 use HighchartsBundle\Highcharts\Highchart;
 use Laminas\Json\Expr;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
@@ -76,16 +75,6 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Sets the series.
-     */
-    public function setSeries(array $series): static
-    {
-        $this->series = $series;
-
-        return $this;
-    }
-
-    /**
      * Sets the chart title.
      *
      * @param ?string $title the title to set or null to hide
@@ -110,60 +99,6 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Sets the x-axis.
-     */
-    public function setXAxis(ChartOption|array $xAxis): static
-    {
-        $this->xAxis = $xAxis;
-
-        return $this;
-    }
-
-    /**
-     * Sets the x-axis categories.
-     */
-    public function setXAxisCategories(mixed $categories): self
-    {
-        $this->xAxis['categories'] = $categories;
-
-        return $this;
-    }
-
-    /**
-     * Sets the x-axis title.
-     *
-     * @param ?string $title the title to set or null to hide
-     */
-    public function setXAxisTitle(?string $title): self
-    {
-        $this->xAxis['title'] = ['text' => $title];
-
-        return $this;
-    }
-
-    /**
-     * Sets the y-axis.
-     */
-    public function setYAxis(ChartOption|array $yAxis): static
-    {
-        $this->yAxis = $yAxis;
-
-        return $this;
-    }
-
-    /**
-     * Sets the y-axis title.
-     *
-     * @param ?string $title the title to set or null to hide
-     */
-    public function setYAxisTitle(?string $title): self
-    {
-        $this->yAxis['title'] = ['text' => $title];
-
-        return $this;
-    }
-
-    /**
      * Render the given template and create an expression from the content.
      */
     protected function createTemplateExpression(Environment $twig, string $template): ?Expr
@@ -179,6 +114,14 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
+     * Gets the body color.
+     */
+    protected function getBodyColor(): string
+    {
+        return 'var(--bs-body-color)';
+    }
+
+    /**
      * Gets the border color.
      */
     protected function getBorderColor(): string
@@ -187,7 +130,27 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the font style for the given font size.
+     * Gets the font style for the given color and an optional font size.
+     *
+     * @param string  $color    the font color
+     * @param ?string $fontSize the font size or null to use the body font size
+     *
+     * @return array an array with a font color, a font size, a font weight and a font family
+     */
+    protected function getColorFontStyle(string $color, string $fontSize = null): array
+    {
+        return \array_merge(
+            $this->getFontStyle($fontSize),
+            ['color' => $color],
+        );
+    }
+
+    /**
+     * Gets the font style for the optional font size.
+     *
+     * @param ?string $fontSize the font size or null to use the body font size
+     *
+     * @return array an array with a font size, a font weight and a font family
      */
     protected function getFontStyle(string $fontSize = null): array
     {
@@ -195,6 +158,17 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
             'fontSize' => $fontSize ?? 'var(--bs-body-font-size)',
             'fontWeight' => 'var(--bs-body-font-weight)',
             'fontFamily' => 'var(--bs-body-font-family)',
+        ];
+    }
+
+    /**
+     * Gets the link color style.
+     */
+    protected function getLinkColor(): array
+    {
+        return [
+            'color' => 'var(--bs-link-hover-color)',
+            // 'fill' => 'var(--bs-link-hover-color)',
         ];
     }
 
@@ -234,18 +208,36 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         return $this->trans($id, $parameters, 'chart');
     }
 
+    private function getAxisOptions(): array
+    {
+        return [
+            'labels' => [
+                'style' => $this->getColorFontStyle($this->getBodyColor(), '0.875rem'),
+            ],
+            'gridLineColor' => $this->getBorderColor(),
+        ];
+    }
+
     /**
-     * Initialize the chart options and disable accessibility and credits.
+     * Initialize the chart, the legend and the axes options. Disable accessibility and credits.
      */
     private function initializeChart(): static
     {
-        $this->chart->merge(
-            [
-                'backgroundColor' => 'var(--bs-body-bg)',
-                'style' => $this->getFontStyle(),
-                'renderTo' => self::CONTAINER,
-            ]
-        );
+        $this->chart->merge([
+            'backgroundColor' => 'var(--bs-body-bg)',
+            'style' => $this->getFontStyle(),
+            'renderTo' => self::CONTAINER,
+        ]);
+
+        $this->legend->merge([
+            'itemHoverStyle' => $this->getLinkColor(),
+            'itemStyle' => $this->getColorFontStyle($this->getBodyColor()),
+        ]);
+
+        $axisOptions = $this->getAxisOptions();
+        $this->xAxis->merge($axisOptions);
+        $this->yAxis->merge($axisOptions);
+
         $this->accessibility['enabled'] = false;
         $this->credits['enabled'] = false;
 

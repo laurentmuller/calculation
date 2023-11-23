@@ -35,7 +35,10 @@ parameters:
     link_prod: '%env(string:LINK_PROD)%'
 
     # optimize
+    #see https://symfony.com/doc/current/performance.html#dump-the-service-container-into-a-single-file
     .container.dumper.inline_factories: true
+    # see https://symfony.com/doc/current/performance.html#disable-dumping-the-container-as-xml-in-debug-mode
+    debug.container.dump: false
 
     # the date format for log
     log_date_format: 'd.m.Y H:i:s.v'

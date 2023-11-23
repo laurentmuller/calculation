@@ -50,54 +50,25 @@ class MonthChart extends AbstractHighchart
     {
         $allowedMonths = $this->getAllowedMonths();
         $months = $this->checkMonth($months, $allowedMonths);
-        $data = $this->repository->getByMonth($months);
-        $dateValues = $this->getDateValues($data);
-        $countValues = $this->getCountValues($data);
-        $itemValues = $this->getItemValues($data);
-        $sumValues = $this->getSumValues($data);
-        $marginPercents = $this->getMarginPercents($data);
-        $marginAmounts = $this->getMarginAmounts($data);
-        $series = $this->getSeries($data);
-        $yAxis = $this->getYaxis();
-        $xAxis = $this->getXAxis($dateValues);
-
-        $data = [];
-        foreach ($dateValues as $index => $date) {
-            $data[] = [
-                'date' => (int) ($date / 1_000),
-                'count' => $countValues[$index],
-                'sum' => $sumValues[$index],
-                'items' => $itemValues[$index],
-                'margin_amount' => $marginAmounts[$index],
-                'margin_percent' => $marginPercents[$index],
-            ];
-        }
-        $count = \array_sum($countValues);
-        $total = (float) \array_sum($sumValues);
-        $items = (float) \array_sum($itemValues);
-        $marginAmount = $total - $items;
-        $marginPercent = $this->safeDivide($total, $items);
+        $series = $this->repository->getByMonth($months);
+        $categories = $this->getCategories($series);
 
         $this->setType(self::TYPE_COLUMN)
             ->hideTitle()
             ->setPlotOptions()
             ->setLegendOptions()
             ->setTooltipOptions()
-            ->setXAxis($xAxis)
-            ->setYAxis($yAxis)
+            ->setXAxis($categories)
+            ->setYAxis()
             ->setSeries($series);
 
         return [
             'chart' => $this,
-            'data' => $data,
-            'count' => $count,
-            'items' => $items,
+            'data' => $series,
             'months' => $months,
-            'margin_percent' => $marginPercent,
-            'margin_amount' => $marginAmount,
-            'total' => $total,
             'allowed_months' => $allowedMonths,
             'min_margin' => $this->getMinMargin(),
+            'totals' => $this->getTotals($series),
         ];
     }
 
@@ -151,6 +122,16 @@ class MonthChart extends AbstractHighchart
         return \range($step, $maxMonths, $step);
     }
 
+    /**
+     * @param CalculationByMonthType[] $series
+     *
+     * @return int[]
+     */
+    private function getCategories(array $series): array
+    {
+        return \array_map(static fn (array $item): int => $item['date']->getTimestamp() * 1000, $series);
+    }
+
     private function getClickExpression(): Expr
     {
         $function = <<<JAVA_SCRIPT
@@ -164,26 +145,6 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param CalculationByMonthType[] $data
-     *
-     * @return int[]
-     */
-    private function getCountValues(array $data): array
-    {
-        return \array_map(fn (array $item): int => $item['count'], $data);
-    }
-
-    /**
-     * @param CalculationByMonthType[] $data
-     *
-     * @return int[]
-     */
-    private function getDateValues(array $data): array
-    {
-        return \array_map(static fn (array $item): int => $item['date']->getTimestamp() * 1000, $data);
-    }
-
-    /**
      * Only y value is returned.
      *
      * @param CalculationByMonthType[] $data
@@ -191,36 +152,6 @@ class MonthChart extends AbstractHighchart
     private function getItemsSeries(array $data): array
     {
         return \array_map(static fn (array $item): array => ['y' => $item['items']], $data);
-    }
-
-    /**
-     * @param CalculationByMonthType[] $data
-     *
-     * @return float[]
-     */
-    private function getItemValues(array $data): array
-    {
-        return \array_map(fn (array $item): float => $item['items'], $data);
-    }
-
-    /**
-     * @param CalculationByMonthType[] $data
-     *
-     * @return float[]
-     */
-    private function getMarginAmounts(array $data): array
-    {
-        return \array_map(static fn (array $item): float => $item['total'] - $item['items'], $data);
-    }
-
-    /**
-     * @param CalculationByMonthType[] $data
-     *
-     * @return float[]
-     */
-    private function getMarginPercents(array $data): array
-    {
-        return \array_map(static fn (array $item): float => $item['margin_percent'], $data);
     }
 
     /**
@@ -244,80 +175,32 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * @param CalculationByMonthType[] $data
+     * @param CalculationByMonthType[] $series
      */
-    private function getSeries(array $data): array
+    private function getTotals(array $series): array
     {
-        return [
-            [
-                'name' => $this->transChart('fields.margin'),
-                'data' => $this->getMarginsSeries($data),
-                'color' => 'darkred',
-            ],
-            [
-                'name' => $this->transChart('fields.net'),
-                'data' => $this->getItemsSeries($data),
-                'color' => 'darkgreen',
-            ],
-        ];
-    }
-
-    /**
-     * @param CalculationByMonthType[] $data
-     *
-     * @return float[]
-     */
-    private function getSumValues(array $data): array
-    {
-        return \array_map(static fn (array $item): float => $item['total'], $data);
-    }
-
-    private function getXAxis(array $dates): array
-    {
-        return [
-            'type' => 'datetime',
-            'categories' => $dates,
-            'lineColor' => $this->getBorderColor(),
-            'labels' => [
-                'format' => '{value:%b %Y}',
-                'style' => $this->getFontStyle('0.875rem'),
-            ],
-        ];
-    }
-
-    private function getYaxis(): array
-    {
-        $function = <<<JAVA_SCRIPT
-            function() {
-               return Highcharts.numberFormat(this.value, 0);
-            }
-            JAVA_SCRIPT;
-        $formatter = $this->createExpression($function);
+        $count = \array_sum(\array_column($series, 'count'));
+        $total = \array_sum(\array_column($series, 'total'));
+        $items = \array_sum(\array_column($series, 'items'));
+        $margin_amount = $total - $items;
+        $margin_percent = $this->safeDivide($total, $items);
 
         return [
-            [
-                'gridLineColor' => $this->getBorderColor(),
-                'labels' => [
-                    'formatter' => $formatter,
-                    'style' => $this->getFontStyle('0.875rem'),
-                ],
-                'title' => [
-                    'text' => null,
-                ],
-            ],
+            'count' => $count,
+            'items' => $items,
+            'margin_percent' => $margin_percent,
+            'margin_amount' => $margin_amount,
+            'total' => $total,
         ];
     }
 
     private function setLegendOptions(): self
     {
-        $style = $this->getFontStyle();
         $this->legend->merge([
             'align' => 'right',
             'verticalAlign' => 'top',
             'symbolRadius' => 0,
             'reversed' => true,
-            'itemStyle' => $style,
-            'itemHoverStyle' => $style,
         ]);
 
         return $this;
@@ -346,6 +229,58 @@ class MonthChart extends AbstractHighchart
                 'total_amount',
             ],
         ];
+
+        return $this;
+    }
+
+    /**
+     * @param CalculationByMonthType[] $series
+     */
+    private function setSeries(array $series): void
+    {
+        $this->series->merge([
+            [
+                'name' => $this->transChart('fields.margin'),
+                'data' => $this->getMarginsSeries($series),
+                'color' => 'darkred',
+            ],
+            [
+                'name' => $this->transChart('fields.net'),
+                'data' => $this->getItemsSeries($series),
+                'color' => 'darkgreen',
+            ],
+        ]);
+    }
+
+    private function setXAxis(array $categories): self
+    {
+        $this->xAxis->merge([
+            'type' => 'datetime',
+            'categories' => $categories,
+            'labels' => [
+                'format' => '{value:%b %Y}',
+            ],
+        ]);
+
+        return $this;
+    }
+
+    private function setYAxis(): self
+    {
+        $function = <<<JAVA_SCRIPT
+            function() {
+               return Highcharts.numberFormat(this.value, 0);
+            }
+            JAVA_SCRIPT;
+
+        $this->yAxis->merge([
+            'labels' => [
+                'formatter' => $this->createExpression($function),
+            ],
+            'title' => [
+                'text' => null,
+            ],
+        ]);
 
         return $this;
     }

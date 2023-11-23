@@ -97,8 +97,8 @@
             {%- set last_percent = item.margin_percent|round(2, 'floor') -%}
         </td>
         <td class="text-currency position-relative ps-4">
-            {{- _self.cell_value(item.sum|round, last_sum|default) -}}
-            {%- set last_sum = item.sum|round -%}
+            {{- _self.cell_value(item.total|round, last_sum|default) -}}
+            {%- set last_sum = item.total|round -%}
         </td>
     </tr>
     {% endfor -%}
@@ -106,11 +106,11 @@
         <td class="fw-bold text-nowrap">
             <a href="{{ path(list_path) }}">{{ 'fields.total'|trans }}</a>
         </td>
-        <td class="fw-bold text-currency">{{ count|integer }}</td>
-        <td class="fw-bold text-currency">{{ items|integer }}</td>
-        <td class="fw-bold text-currency">{{ margin_amount|integer }}</td>
-        <td class="fw-bold text-percent{{ _self.margin_below_class(margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(margin_percent, min_margin) }}>{{ margin_percent|percent }}</td>
-        <td class="fw-bold text-currency">{{ total|integer }}</td>
+        <td class="fw-bold text-currency">{{ totals.count|integer }}</td>
+        <td class="fw-bold text-currency">{{ totals.items|integer }}</td>
+        <td class="fw-bold text-currency">{{ totals.margin_amount|integer }}</td>
+        <td class="fw-bold text-percent{{ _self.margin_below_class(totals.margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(totals.margin_percent, min_margin) }}>{{ totals.margin_percent|percent }}</td>
+        <td class="fw-bold text-currency">{{ totals.total|integer }}</td>
     </tr>
 </tbody>
 {% endblock %}

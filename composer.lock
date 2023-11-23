@@ -2114,16 +2114,16 @@
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.9.13",
+            "version": "2.19.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/HighchartsBundle.git",
-                "reference": "da7bbd43237695fd7a20b430a202aecbea4d3a95"
+                "reference": "06fa86d19f2df6bc81f331338588a60bb5ba4e91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/da7bbd43237695fd7a20b430a202aecbea4d3a95",
-                "reference": "da7bbd43237695fd7a20b430a202aecbea4d3a95",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/06fa86d19f2df6bc81f331338588a60bb5ba4e91",
+                "reference": "06fa86d19f2df6bc81f331338588a60bb5ba4e91",
                 "shasum": ""
             },
             "require": {
@@ -2209,9 +2209,9 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/laurentmuller/HighchartsBundle/tree/2.9.13"
+                "source": "https://github.com/laurentmuller/HighchartsBundle/tree/2.19.16"
             },
-            "time": "2023-11-17T06:00:08+00:00"
+            "time": "2023-11-23T17:32:28+00:00"
         },
         {
             "name": "lorenzo/pinky",
@@ -9001,16 +9001,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "10.1.8",
+            "version": "10.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "84838eed9ded511f61dc3e8b5944a52d9017b297"
+                "reference": "a56a9ab2f680246adcf3db43f38ddf1765774735"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/84838eed9ded511f61dc3e8b5944a52d9017b297",
-                "reference": "84838eed9ded511f61dc3e8b5944a52d9017b297",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/a56a9ab2f680246adcf3db43f38ddf1765774735",
+                "reference": "a56a9ab2f680246adcf3db43f38ddf1765774735",
                 "shasum": ""
             },
             "require": {
@@ -9067,7 +9067,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/10.1.8"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/10.1.9"
             },
             "funding": [
                 {
@@ -9075,7 +9075,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-15T13:31:15+00:00"
+            "time": "2023-11-23T12:23:20+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",

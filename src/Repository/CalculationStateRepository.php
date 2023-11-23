@@ -31,9 +31,9 @@ use Doctrine\Persistence\ManagerRegistry;
  *      items: float,
  *      total: float,
  *      margin: float,
- *      marginAmount: float,
- *      percentCalculation :float,
- *      percentAmount:float}
+ *      margin_amount: float,
+ *      percent_calculation :float,
+ *      percent_amount:float}
  * @psalm-type DropDownType = array<int, array{
  *     id: int,
  *     icon: string,
@@ -75,8 +75,8 @@ class CalculationStateRepository extends AbstractRepository
         $count = \array_sum(\array_column($result, 'count'));
         $total = \array_sum(\array_column($result, 'total'));
         foreach ($result as &$data) {
-            $data['percentCalculation'] = $this->safeDivide($data['count'], $count);
-            $data['percentAmount'] = $this->safeDivide($data['total'], $total);
+            $data['percent_calculation'] = $this->safeDivide($data['count'], $count);
+            $data['percent_amount'] = $this->safeDivide($data['total'], $total);
         }
 
         return $result;
@@ -242,7 +242,7 @@ class CalculationStateRepository extends AbstractRepository
             ->addSelect('SUM(c.itemsTotal) as items')
             ->addSelect('SUM(c.overallTotal) as total')
             ->addSelect('SUM(c.overallTotal) / sum(c.itemsTotal) as margin')
-            ->addSelect('SUM(c.overallTotal) - sum(c.itemsTotal) as marginAmount')
+            ->addSelect('SUM(c.overallTotal) - sum(c.itemsTotal) as margin_amount')
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
             ->orderBy('s.code', Criteria::ASC);

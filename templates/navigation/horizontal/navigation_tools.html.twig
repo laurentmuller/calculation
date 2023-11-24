@@ -1,21 +1,30 @@
 {# tool menu #}
 {% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem %}
-{% set id = 'dropdown_tools' %}
-<li class="nav-item dropdown">
-    <button class="nav-link dropdown-toggle" id="{{ id }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        {{ icon('tools', 'index.menu_tools') }}
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="{{ id }}">
-        {{ dropdownItem(path('search'), 'search.title', 'search') }}
-        {% if is_admin %}
-            <li>{{ dropdownSeparator() }}</li>
-            <li>{{ dropdownItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}</li>
-            <li>{{ dropdownItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}</li>
-            <li>{{ dropdownItem(path('empty_table'), 'empty.title', 'file-code far') }}</li>
+{% set show_navigation_menu = is_granted_data and show_navigation_search ?? false %}
+{% if show_navigation_menu or is_admin or is_granted_task %}
+    {% set id = 'dropdown_tools' %}
+    <li class="nav-item dropdown">
+        <button class="nav-link dropdown-toggle" id="{{ id }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ icon('tools', 'index.menu_tools') }}
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="{{ id }}">
+            {% if show_navigation_menu -%}
+                {{ dropdownItem(path('search'), 'search.title', 'search') }}
+            {% endif %}
+            {% if is_admin %}
+                {% if show_navigation_menu %}
+                    <li>{{ dropdownSeparator() }}</li>
+                {% endif %}
+                <li>{{ dropdownItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}</li>
+                <li>{{ dropdownItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}</li>
+                <li>{{ dropdownItem(path('empty_table'), 'empty.title', 'file-code far') }}</li>
+            {% endif -%}
             {%- if is_granted_task -%}
-                <li>{{ dropdownSeparator() }}</li>
+                {% if show_navigation_menu or is_admin -%}
+                    <li>{{ dropdownSeparator() }}</li>
+                {% endif %}
                 <li>{{ dropdownItem(path('task_compute'), 'task_compute.title', 'keyboard') }}</li>
             {% endif -%}
-        {% endif -%}
-    </ul>
-</li>
+        </ul>
+    </li>
+{% endif %}

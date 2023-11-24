@@ -76,43 +76,6 @@
     }
 
     /**
-     * Handle vertical search form.
-     */
-    function initVerticalSearch() {
-        const $form = $('#search-form-vertical');
-        if ($form.length === 0) {
-            return;
-        }
-        const $input = $('#search-form-vertical #search');
-        const $label = $('#search-form-vertical #invalid');
-        const hideInvalid = () => {
-            $input.removeClass('is-invalid');
-            $label.hide();
-        };
-        const showInvalid = () => {
-            $input.addClass('is-invalid');
-            $label.show();
-        };
-        $input.on('input', () => {
-            if ($input.val().trim().length < 2) {
-                showInvalid();
-            } else {
-                hideInvalid();
-            }
-        }).on('blur', () => {
-            $input.val('');
-            hideInvalid();
-        });
-        $form.on('submit', (e) => {
-            if ($input.val().trim().length < 2) {
-                e.preventDefault();
-                $input.trigger('select').trigger('focus');
-                showInvalid();
-            }
-        });
-    }
-
-    /**
      * Initialize the sidebar.
      */
     function initSidebar() {
@@ -167,48 +130,7 @@
         }
     }
 
-    /**
-     * Handle sub-menu.
-     */
-    // function handleSubMenus() {
-    //     // prevent closing from click inside dropdown
-    //     document.querySelectorAll('.dropdown-menu').forEach(function (element) {
-    //         element.addEventListener('click', function (e) {
-    //             if (this.querySelectorAll('.submenu').length) {
-    //                 e.stopPropagation();
-    //             }
-    //         });
-    //     });
-    //
-    //     // close all inner dropdowns when parent is closed
-    //     document.querySelectorAll('.navbar .dropdown').forEach(function (dropdown) {
-    //         dropdown.addEventListener('hidden.bs.dropdown', function () {
-    //             // after dropdown is hidden, hide all submenus too
-    //             this.querySelectorAll('.submenu').forEach(function (submenu) {
-    //                 submenu.style.display = 'none';
-    //             });
-    //         });
-    //     });
-    //
-    //     // toggle submenu style
-    //     document.querySelectorAll('.dropdown-menu a').forEach(function (element) {
-    //         element.addEventListener('click', function (e) {
-    //             const nextElement = this.nextElementSibling;
-    //             if (nextElement && nextElement.classList.contains('submenu')) {
-    //                 // prevent opening link if link needs to open dropdown
-    //                 e.preventDefault();
-    //                 if (nextElement.style.display === 'block') {
-    //                     nextElement.style.display = 'none';
-    //                 } else {
-    //                     nextElement.style.display = 'block';
-    //                 }
-    //             }
-    //         });
-    //     });
-    // }
-
     initHorizontalSearch();
-    initVerticalSearch();
     initBackToTop();
     initSidebar();
 

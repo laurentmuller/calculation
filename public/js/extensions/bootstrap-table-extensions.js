@@ -718,6 +718,9 @@ function loadingTemplate(message) {
         selectPreviousRow: function () {
             const $this = $(this);
             const $row = $this.getSelection();
+            if (!$row) {
+                return false;
+            }
             const $prev = $row.prev('tr[data-index]');
             if ($row.length && $prev.length) {
                 return $prev.updateRow($this);
@@ -734,6 +737,9 @@ function loadingTemplate(message) {
         selectNextRow: function () {
             const $this = $(this);
             const $row = $this.getSelection();
+            if (!$row) {
+                return false;
+            }
             const $next = $row.next('tr[data-index]');
             if ($row.length && $next.length) {
                 return $next.updateRow($this);

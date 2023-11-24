@@ -256,6 +256,8 @@ interface PropertyServiceInterface
 
     /**
      * The property name for the minimum password strength level (int).
+     *
+     * @psalm-api
      */
     final public const P_MIN_STRENGTH = 'min_strength';
 

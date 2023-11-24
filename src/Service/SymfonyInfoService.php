@@ -283,6 +283,8 @@ final class SymfonyInfoService
 
     /**
      * Get the release date.
+     *
+     * @psalm-api
      */
     public function getReleaseDate(): string
     {

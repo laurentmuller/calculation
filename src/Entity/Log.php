@@ -83,6 +83,8 @@ class Log extends AbstractEntity
 
     /**
      * Gets the message with the context and extra properties if available.
+     *
+     * @psalm-api
      */
     public function formatMessage(SqlFormatter $formatter): string
     {
@@ -107,6 +109,8 @@ class Log extends AbstractEntity
 
     /**
      * Gets the channel's icon.
+     *
+     * @psalm-api
      */
     public function getChannelIcon(): string
     {
@@ -157,6 +161,9 @@ class Log extends AbstractEntity
         return $capitalize ? StringUtils::capitalize($this->level) : $this->level;
     }
 
+    /**
+     * @psalm-api
+     */
     public function getLevelColor(): string
     {
         return match ($this->level) {
@@ -170,6 +177,9 @@ class Log extends AbstractEntity
         };
     }
 
+    /**
+     * @psalm-api
+     */
     public function getLevelIcon(): string
     {
         return match ($this->level) {

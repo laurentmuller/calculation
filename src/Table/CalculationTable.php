@@ -55,6 +55,8 @@ class CalculationTable extends AbstractEntityTable
      * @throws \Twig\Error\Error
      *
      * @psalm-param Calculation|array{groups: int} $entity
+     *
+     * @psalm-api
      */
     public function formatOverallMargin(float $margin, Calculation|array $entity): string
     {

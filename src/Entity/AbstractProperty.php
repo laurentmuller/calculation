@@ -58,6 +58,8 @@ abstract class AbstractProperty extends AbstractEntity
 
     /**
      * Gets this property value as an array. Internally the array is decoded from a JSON string.
+     *
+     * @psalm-api
      */
     public function getArray(): ?array
     {
@@ -73,6 +75,8 @@ abstract class AbstractProperty extends AbstractEntity
 
     /**
      * Gets this property value as boolean.
+     *
+     * @psalm-api
      */
     public function getBoolean(): bool
     {

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CalculationState;
+use App\Traits\ArrayTrait;
 use App\Traits\GroupByTrait;
 use App\Traits\MathTrait;
 use Doctrine\Common\Collections\Criteria;
@@ -30,7 +31,7 @@ use Doctrine\Persistence\ManagerRegistry;
  *      count: int,
  *      items: float,
  *      total: float,
- *      margin: float,
+ *      margin_percent: float,
  *      margin_amount: float,
  *      percent_calculation :float,
  *      percent_amount:float}
@@ -44,6 +45,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class CalculationStateRepository extends AbstractRepository
 {
+    use ArrayTrait;
     use GroupByTrait;
     use MathTrait;
 
@@ -72,8 +74,8 @@ class CalculationStateRepository extends AbstractRepository
             ->getQuery()
             ->getArrayResult();
 
-        $count = \array_sum(\array_column($result, 'count'));
-        $total = \array_sum(\array_column($result, 'total'));
+        $count = $this->getColumnSum($result, 'count');
+        $total = $this->getColumnSum($result, 'total');
         foreach ($result as &$data) {
             $data['percent_calculation'] = $this->safeDivide($data['count'], $count);
             $data['percent_amount'] = $this->safeDivide($data['total'], $total);
@@ -241,7 +243,7 @@ class CalculationStateRepository extends AbstractRepository
             ->addSelect('COUNT(c.id) as count')
             ->addSelect('SUM(c.itemsTotal) as items')
             ->addSelect('SUM(c.overallTotal) as total')
-            ->addSelect('SUM(c.overallTotal) / sum(c.itemsTotal) as margin')
+            ->addSelect('SUM(c.overallTotal) / sum(c.itemsTotal) as margin_percent')
             ->addSelect('SUM(c.overallTotal) - sum(c.itemsTotal) as margin_amount')
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')

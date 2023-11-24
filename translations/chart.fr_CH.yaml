@@ -36,3 +36,7 @@ title_by_month: Calculations par mois
 title_by_state: Calculations par statut
 error:
   month: Le nombre de mois à afficher doit être positif.
+state_chart:
+  tooltip: '<b>Note :</b> Cliquez sur un secteur du graphique ou une ligne de la table pour afficher la liste correspondante des calculations.'
+month_chart:
+  tooltip: '<b>Note :</b> Cliquez sur une colonne du graphique ou une ligne de la table pour afficher la liste correspondante des calculations.'

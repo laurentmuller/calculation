@@ -130,6 +130,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * @return bool true if equal
      *
      * @see PivotNode::getKeys()
+     *
+     * @psalm-api
      */
     public function equalsKeys(array $keys): bool
     {
@@ -160,6 +162,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * @param array $keys the node keys to search for
      *
      * @return self|null the child node, if found; null otherwise
+     *
+     * @psalm-api
      */
     public function findByKeys(array $keys): ?self
     {
@@ -182,6 +186,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * @param mixed $key the node key to search for
      *
      * @return self|null the node, if found; null otherwise
+     *
+     * @psalm-api
      */
     public function findRecursive(mixed $key): ?self
     {
@@ -204,6 +210,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * @param int $index the index
      *
      * @return self|null the child, if index is valid; null otherwise
+     *
+     * @psalm-api
      */
     public function getChild(int $index): ?self
     {
@@ -230,6 +238,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * @param int $level the level
      *
      * @return PivotNode[]
+     *
+     * @psalm-api
      */
     public function getChildrenAtLevel(int $level): array
     {
@@ -283,6 +293,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * Gets all children from the last level.
      *
      * @return PivotNode[]
+     *
+     * @psalm-api
      */
     public function getLastChildren(): array
     {
@@ -320,6 +332,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * Gets the maximum deep level.
      *
      * @return int the deep level
+     *
+     * @psalm-api
      */
     public function getMaxLevel(): int
     {
@@ -361,6 +375,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * Gets the sort mode.
      *
      * @psalm-return SortModeInterface::*
+     *
+     * @psalm-api
      */
     public function getSortMode(): string
     {
@@ -433,6 +449,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * A leaf node is a node without children.
      *
      * @return bool true if leaf
+     *
+     * @psalm-api
      */
     public function isLeaf(): bool
     {
@@ -455,6 +473,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      * Returns if this title is defined.
      *
      * @return bool true if defined
+     *
+     * @psalm-api
      */
     public function isTitle(): bool
     {
@@ -483,6 +503,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
 
     /**
      * Sets the sort mode and sort values if different from current sort mode.
+     *
+     * @psalm-api
      */
     public function setSortMode(string $sortMode): self
     {

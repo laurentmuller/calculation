@@ -128,6 +128,8 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
 
     /**
      * Add a property.
+     *
+     * @psalm-api
      */
     public function addProperty(UserProperty $property): self
     {
@@ -179,6 +181,8 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
      * @param int $background the background set (only used if the value is between 1 and 2 inclusive)
      *
      * @see https://robohash.org/
+     *
+     * @psalm-api
      */
     public function getAvatar(int $size = 32, int $set = 0, int $background = 0): string
     {
@@ -235,6 +239,8 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
      * Gets the image file.
      *
      * @return File|UploadedFile
+     *
+     * @psalm-api
      */
     public function getImageFile(): ?File
     {
@@ -243,6 +249,8 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
 
     /**
      * Gets the image name.
+     *
+     * @psalm-api
      */
     public function getImageName(): ?string
     {
@@ -278,6 +286,8 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
 
     /**
      * Gets the username and e-mail.
+     *
+     * @psalm-api
      */
     public function getNameAndEmail(): string
     {
@@ -304,6 +314,9 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
         return $this->requestedAt ?? new \DateTimeImmutable();
     }
 
+    /**
+     * @psalm-api
+     */
     public function getRoleIcon(): string
     {
         return match ($this->getRole()) {
@@ -311,6 +324,11 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
             RoleInterface::ROLE_ADMIN => 'fa-solid fa-user-shield',
             default => 'fa-solid fa-user',
         };
+    }
+
+    public function getSelector(): ?string
+    {
+        return $this->selector;
     }
 
     public function getUser(): self
@@ -330,6 +348,8 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
 
     /**
      * Gets username.
+     *
+     * @psalm-api
      */
     public function getUsername(): string
     {
@@ -359,6 +379,8 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
 
     /**
      * Returns a value indicating if this user is verified.
+     *
+     * @psalm-api
      */
     public function isVerified(): bool
     {
@@ -367,6 +389,8 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
 
     /**
      * Remove a property.
+     *
+     * @psalm-api
      */
     public function removeProperty(UserProperty $property): self
     {
@@ -408,6 +432,8 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
      *
      * @param ?File $imageFile the file
      * @param bool  $update    true to update the modification date
+     *
+     * @psalm-api
      */
     public function setImageFile(File $imageFile = null, bool $update = true): self
     {
@@ -421,6 +447,8 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
 
     /**
      * Sets the image name.
+     *
+     * @psalm-api
      */
     public function setImageName(?string $imageName): self
     {

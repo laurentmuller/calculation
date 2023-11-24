@@ -107,6 +107,8 @@ class CalculationState extends AbstractEntity implements TimestampableInterface
      * Gets the calculations.
      *
      * @return Collection<int, Calculation>
+     *
+     * @psalm-api
      */
     public function getCalculations(): Collection
     {
@@ -144,10 +146,12 @@ class CalculationState extends AbstractEntity implements TimestampableInterface
 
     /**
      * Returns if this state contains one or more calculations.
+     *
+     * @psalm-api
      */
     public function hasCalculations(): bool
     {
-        return !$this->calculations->isEmpty();
+        return 0 !== $this->calculations->count();
     }
 
     /**

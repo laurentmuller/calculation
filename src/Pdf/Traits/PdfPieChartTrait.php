@@ -15,6 +15,7 @@ namespace App\Pdf\Traits;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Enums\PdfRectangleStyle;
+use App\Traits\ArrayTrait;
 
 /**
  * Trait to draw pie chart.
@@ -27,6 +28,7 @@ use App\Pdf\Enums\PdfRectangleStyle;
  */
 trait PdfPieChartTrait
 {
+    use ArrayTrait;
     use PdfSectorTrait;
 
     /**
@@ -54,7 +56,7 @@ trait PdfPieChartTrait
         if ($radius <= 0 || [] === $rows) {
             return;
         }
-        $total = \array_sum(\array_column($rows, 'value'));
+        $total = $this->getColumnSum($rows, 'value');
         if ($this->isFloatZero($total)) {
             return;
         }

@@ -676,6 +676,8 @@ class PdfDocument extends \FPDF
      * @param float     $dpi    the dot per inch
      *
      * @return float the converted value as millimeters
+     *
+     * @psalm-api
      */
     public function pixels2mm(float|int $pixels, float $dpi = 72): float
     {

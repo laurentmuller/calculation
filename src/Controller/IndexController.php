@@ -28,6 +28,7 @@ use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Traits\ArrayTrait;
 use App\Traits\MathTrait;
 use App\Traits\ParameterTrait;
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,6 +48,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class IndexController extends AbstractController
 {
+    use ArrayTrait;
     use MathTrait;
     use ParameterTrait;
 
@@ -210,9 +212,9 @@ class IndexController extends AbstractController
         $repository = $this->manager->getRepository(CalculationState::class);
 
         $results = $repository->getCalculations();
-        $count = \array_sum(\array_column($results, 'count'));
-        $total = \array_sum(\array_column($results, 'total'));
-        $items = \array_sum(\array_column($results, 'items'));
+        $count = $this->getColumnSum($results, 'count');
+        $total = $this->getColumnSum($results, 'total');
+        $items = $this->getColumnSum($results, 'items');
         $margin = $this->safeDivide($total, $items);
 
         $results[] = [
@@ -221,7 +223,7 @@ class IndexController extends AbstractController
             'color' => false,
             'count' => $count,
             'total' => $total,
-            'margin' => $margin,
+            'margin_percent' => $margin,
         ];
 
         return $results;

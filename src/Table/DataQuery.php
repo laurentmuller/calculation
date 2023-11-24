@@ -112,6 +112,8 @@ class DataQuery implements SortModeInterface
 
     /**
      * Returns if the values must be shown as table.
+     *
+     * @psalm-api
      */
     public function isViewTable(): bool
     {

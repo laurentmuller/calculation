@@ -56,11 +56,17 @@ class TaskComputeResult implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @psalm-api
+     */
     public function getOverall(): float
     {
         return $this->overall;
     }
 
+    /**
+     * @psalm-api
+     */
     public function getQuantity(): float
     {
         return $this->quantity;
@@ -68,12 +74,17 @@ class TaskComputeResult implements \JsonSerializable
 
     /**
      * @psalm-return ResultType[]
+     *
+     * @psalm-api
      */
     public function getResults(): array
     {
         return $this->results;
     }
 
+    /**
+     * @psalm-api
+     */
     public function getTask(): Task
     {
         return $this->task;

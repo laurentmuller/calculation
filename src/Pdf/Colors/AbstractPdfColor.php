@@ -136,6 +136,8 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Value is RGB(128, 0, 0).
      *
      * @return static
+     *
+     * @psalm-api
      */
     public static function darkRed(): self
     {

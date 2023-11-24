@@ -65,6 +65,8 @@ abstract class AbstractWordDocument extends WordDocument
 
     /**
      * Set a value indicating if the customer address is printed.
+     *
+     * @psalm-api
      */
     public function setPrintAddress(bool $printAddress): static
     {

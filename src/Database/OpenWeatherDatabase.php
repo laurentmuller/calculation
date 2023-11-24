@@ -89,6 +89,8 @@ class OpenWeatherDatabase extends AbstractDatabase
      * Delete all cities.
      *
      * @return bool true on success
+     *
+     * @psalm-api
      */
     public function deleteCities(): bool
     {

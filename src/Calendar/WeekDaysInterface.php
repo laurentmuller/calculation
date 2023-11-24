@@ -19,11 +19,15 @@ interface WeekDaysInterface
 {
     /**
      * The number of week days.
+     *
+     * @psalm-api
      */
     public const DAYS_COUNT = 7;
 
     /**
      * ISO-8601 numeric representation of friday.
+     *
+     * @psalm-api
      */
     public const FRIDAY = 5;
 
@@ -44,16 +48,22 @@ interface WeekDaysInterface
 
     /**
      * ISO-8601 numeric representation of thursday.
+     *
+     * @psalm-api
      */
     public const THURSDAY = 4;
 
     /**
      * ISO-8601 numeric representation of tuesday.
+     *
+     * @psalm-api
      */
     public const TUESDAY = 2;
 
     /**
      * ISO-8601 numeric representation of wednesday.
+     *
+     * @psalm-api
      */
     public const WEDNESDAY = 3;
 }

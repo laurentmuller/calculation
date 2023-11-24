@@ -199,6 +199,8 @@ class PdfRectangle
      * Sets the x coordinate.
      *
      * @return self this instance
+     *
+     * @psalm-api
      */
     public function setX(float $x): self
     {
@@ -211,6 +213,8 @@ class PdfRectangle
      * Sets the y coordinate.
      *
      * @return self this instance
+     *
+     * @psalm-api
      */
     public function setY(float $y): self
     {

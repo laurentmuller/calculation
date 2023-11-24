@@ -1,6 +1,6 @@
 {% extends 'chart/chart_base.html.twig' %}
 {% from 'macros/_properties.html.twig' import stateCss %}
-{% from 'macros/_icons.html.twig' import button_pdf %}
+{% from 'macros/_icons.html.twig' import homepage, button_pdf %}
 {% trans_default_domain 'chart' %}
 {# parameters #}
 {%- set title = 'title_by_state' -%}
@@ -31,7 +31,7 @@
         <td class="text-percent">{{ item.percent_calculation|percent(true, 2, 4) }}</td>
         <td class="text-currency">{{ item.items|integer }}</td>
         <td class="text-currency">{{ item.margin_amount|integer }}</td>
-        <td class="text-percent{{ _self.margin_below_class(item.margin, min_margin) }}"{{ _self.margin_below_tooltip(item.margin, min_margin) }}>{{ item.margin|percent }}</td>
+        <td class="text-percent{{ _self.margin_below_class(item.margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(item.margin_percent, min_margin) }}>{{ item.margin_percent|percent }}</td>
         <td class="text-currency">{{ item.total|integer }}</td>
         <td class="text-percent">{{ item.percent_amount|percent(true, 2, 4) }}</td>
     </tr>
@@ -44,7 +44,7 @@
         <td class="fw-bold text-percent">{{ 1.0|percent(false, 2, 4) }}</td>
         <td class="fw-bold text-currency">{{ totals.items|integer }}</td>
         <td class="fw-bold text-currency">{{ totals.margin_amount|integer }}</td>
-        <td class="fw-bold text-percent{{ _self.margin_below_class(totals.margin, min_margin) }}"{{ _self.margin_below_tooltip(totals.margin, min_margin) }}>{{- totals.margin|percent -}}</td>
+        <td class="fw-bold text-percent{{ _self.margin_below_class(totals.margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(totals.margin_percent, min_margin) }}>{{- totals.margin_percent|percent -}}</td>
         <td class="fw-bold text-currency">{{ totals.total|integer }}</td>
         <td class="fw-bold text-percent">{{ 1.0|percent(true, 2, 4) }}</td>
     </tr>
@@ -52,8 +52,11 @@
 {% endblock %}
 {# footer #}
 {% block card_footer -%}
-    {{ parent() }}
+<div class="d-flex-wrap">
+    {{ homepage() }}
     {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
         {{ button_pdf('chart_state_pdf', {}, 'common.button_export_pdf') }}
     {% endif %}
+    <small class="ms-xl-auto">{{ 'state_chart.tooltip'|trans|raw }}</small>
+</div>
 {%- endblock %}

@@ -118,6 +118,8 @@ class PivotTable extends AbstractPivotAggregator
      * @param mixed $rowKey    the row key to search for
      *
      * @return PivotCell|null the cell, if found; null otherwise
+     *
+     * @psalm-api
      */
     public function findCellByKey(mixed $columnKey, mixed $rowKey): ?PivotCell
     {
@@ -156,6 +158,8 @@ class PivotTable extends AbstractPivotAggregator
      * @param string $rowPath    the row path to search for
      *
      * @return PivotCell|null the cell, if found; null otherwise
+     *
+     * @psalm-api
      */
     public function findCellByPath(string $columnPath, string $rowPath): ?PivotCell
     {
@@ -172,6 +176,8 @@ class PivotTable extends AbstractPivotAggregator
      * Gets the cells.
      *
      * @return PivotCell[]
+     *
+     * @psalm-api
      */
     public function getCells(): array
     {
@@ -190,6 +196,8 @@ class PivotTable extends AbstractPivotAggregator
      * Gets the column fields.
      *
      * @return PivotField[]|null
+     *
+     * @psalm-api
      */
     public function getColumnFields(): ?array
     {
@@ -198,6 +206,8 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * Gets the data field.
+     *
+     * @psalm-api
      */
     public function getDataField(): ?PivotField
     {
@@ -206,6 +216,8 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * Gets the key field.
+     *
+     * @psalm-api
      */
     public function getKeyField(): ?PivotField
     {
@@ -224,6 +236,8 @@ class PivotTable extends AbstractPivotAggregator
      * Gets the row fields.
      *
      * @return PivotField[]|null
+     *
+     * @psalm-api
      */
     public function getRowFields(): ?array
     {
@@ -240,6 +254,8 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * Gets the total title.
+     *
+     * @psalm-api
      */
     public function getTotalTitle(): ?string
     {
@@ -318,6 +334,8 @@ class PivotTable extends AbstractPivotAggregator
 
     /**
      * Sets the total title.
+     *
+     * @psalm-api
      */
     public function setTotalTitle(?string $totalTitle): self
     {

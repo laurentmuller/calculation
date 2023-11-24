@@ -200,6 +200,9 @@ class Column implements \Stringable, SortModeInterface
         return $result;
     }
 
+    /**
+     * @psalm-api
+     */
     public function getCellFormatter(): ?string
     {
         return $this->cellFormatter;
@@ -220,6 +223,9 @@ class Column implements \Stringable, SortModeInterface
         return $this->field;
     }
 
+    /**
+     * @psalm-api
+     */
     public function getFieldFormatter(): string|callable|null
     {
         return $this->fieldFormatter;
@@ -235,6 +241,9 @@ class Column implements \Stringable, SortModeInterface
         return $this->order;
     }
 
+    /**
+     * @psalm-api
+     */
     public function getStyleFormatter(): ?string
     {
         return $this->styleFormatter;
@@ -324,6 +333,8 @@ class Column implements \Stringable, SortModeInterface
 
     /**
      * @psalm-param string|callable(mixed, AbstractEntity|array): string|null $fieldFormatter
+     *
+     * @psalm-api
      */
     public function setFieldFormatter(string|callable|null $fieldFormatter): self
     {
@@ -332,6 +343,9 @@ class Column implements \Stringable, SortModeInterface
         return $this;
     }
 
+    /**
+     * @psalm-api
+     */
     public function setNumeric(bool $numeric): self
     {
         $this->numeric = $numeric;
@@ -341,6 +355,8 @@ class Column implements \Stringable, SortModeInterface
 
     /**
      * Sets the default sorting order.
+     *
+     * @psalm-api
      */
     public function setOrder(string $order): self
     {
@@ -368,6 +384,9 @@ class Column implements \Stringable, SortModeInterface
         return $this;
     }
 
+    /**
+     * @psalm-api
+     */
     public function setStyleFormatter(?string $styleFormatter): self
     {
         $this->styleFormatter = $styleFormatter;

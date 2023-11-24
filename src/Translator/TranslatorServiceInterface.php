@@ -69,6 +69,8 @@ interface TranslatorServiceInterface
      * Returns if the last error is set.
      *
      * @psalm-assert-if-true HttpClientError $this->getLastError()
+     *
+     * @psalm-api
      */
     public function hasLastError(): bool;
 

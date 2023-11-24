@@ -28,6 +28,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Pdf\Traits\PdfPieChartTrait;
+use App\Traits\ArrayTrait;
 use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
 
@@ -40,6 +41,7 @@ use App\Utils\FormatUtils;
  */
 class CalculationByStateReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
+    use ArrayTrait;
     use MathTrait;
     use PdfChartLegendTrait;
     use PdfPieChartTrait;
@@ -236,7 +238,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
                 $this->formatPercent($entity['percent_calculation'], 2),
                 FormatUtils::formatInt($entity['items']),
                 FormatUtils::formatInt($entity['margin_amount']),
-                $this->formatPercent($entity['margin'], 0, true),
+                $this->formatPercent($entity['margin_percent'], 0, true),
                 FormatUtils::formatInt($entity['total']),
                 $this->formatPercent($entity['percent_amount'], 2)
             );
@@ -244,14 +246,14 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         }
 
         // total
-        $count = $this->sum($entities, 'count');
-        $percentCalculation = $this->sum($entities, 'percent_calculation');
-        $items = $this->sum($entities, 'items');
-        $marginAmount = $this->sum($entities, 'margin_amount');
-        $total = $this->sum($entities, 'total');
+        $count = $this->getColumnSum($entities, 'count');
+        $percentCalculation = $this->getColumnSum($entities, 'percent_calculation');
+        $items = $this->getColumnSum($entities, 'items');
+        $marginAmount = $this->getColumnSum($entities, 'margin_amount');
+        $total = $this->getColumnSum($entities, 'total');
         $net = $total - $items;
         $margin = 1.0 + $this->safeDivide($net, $items);
-        $percentAmount = $this->sum($entities, 'percent_amount');
+        $percentAmount = $this->getColumnSum($entities, 'percent_amount');
 
         $table->addHeaderRow(
             $this->transChart('fields.total'),
@@ -263,11 +265,6 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             FormatUtils::formatInt($total),
             $this->formatPercent($percentAmount, 2, bold: true)
         );
-    }
-
-    private function sum(array $entities, string $key): float
-    {
-        return \array_sum(\array_column($entities, $key));
     }
 
     private function transChart(string $key): string

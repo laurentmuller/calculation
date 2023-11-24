@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\ImageExtension;
+use App\Traits\ArrayTrait;
 use App\Traits\MathTrait;
 use App\Traits\SessionAwareTrait;
 use App\Utils\StringUtils;
@@ -31,6 +32,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  */
 class CaptchaImageService implements ServiceSubscriberInterface
 {
+    use ArrayTrait;
     use MathTrait;
     use ServiceSubscriberTrait;
     use SessionAwareTrait;
@@ -269,8 +271,8 @@ class CaptchaImageService implements ServiceSubscriberInterface
         $size = (int) ((float) $height * 0.7);
         /** @psalm-var non-empty-array<ComputeTextType> $items */
         $items = $this->computeText($image, $size, $font, $text);
-        $textHeight = \max(\array_column($items, 'height'));
-        $textWidth = \array_sum(\array_column($items, 'width')) + (\count($items) - 1) * self::CHAR_SPACE;
+        $textHeight = (int) $this->getColumnMax($items, 'height');
+        $textWidth = (int) $this->getColumnSum($items, 'width') + (\count($items) - 1) * self::CHAR_SPACE;
         $x = \intdiv($width - $textWidth, 2);
         $y = \intdiv($height - $textHeight, 2) + $size;
         foreach ($items as $item) {

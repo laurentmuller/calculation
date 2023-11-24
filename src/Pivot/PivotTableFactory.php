@@ -122,6 +122,8 @@ class PivotTableFactory
      * Gets the aggregator class name.
      *
      * @psalm-return class-string<T>
+     *
+     * @psalm-api
      */
     public function getAggregatorClass(): string
     {
@@ -132,6 +134,8 @@ class PivotTableFactory
      * Gets the column fields.
      *
      * @return PivotField[]
+     *
+     * @psalm-api
      */
     public function getColumnFields(): array
     {
@@ -140,6 +144,8 @@ class PivotTableFactory
 
     /**
      * Gets the data field.
+     *
+     * @psalm-api
      */
     public function getDataField(): ?PivotField
     {
@@ -148,6 +154,8 @@ class PivotTableFactory
 
     /**
      * Gets the dataset.
+     *
+     * @psalm-api
      */
     public function getDataset(): array
     {
@@ -156,6 +164,8 @@ class PivotTableFactory
 
     /**
      * Returns the unique key field.
+     *
+     * @psalm-api
      */
     public function getKeyField(): ?PivotField
     {
@@ -166,6 +176,8 @@ class PivotTableFactory
      * Gets the row fields.
      *
      * @return PivotField[]
+     *
+     * @psalm-api
      */
     public function getRowFields(): array
     {
@@ -212,6 +224,8 @@ class PivotTableFactory
      * @psalm-param class-string<T> $aggregatorClass
      *
      * @psalm-return PivotTableFactory<T>
+     *
+     * @psalm-api
      */
     public function setAggregatorClass(string $aggregatorClass): self
     {

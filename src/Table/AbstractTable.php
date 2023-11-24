@@ -54,6 +54,9 @@ abstract class AbstractTable implements SortModeInterface
         return FormatUtils::formatDate($value);
     }
 
+    /**
+     * @psalm-api
+     */
     public function formatId(int $value): string
     {
         return FormatUtils::formatId($value);

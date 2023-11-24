@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Traits\ArrayTrait;
 use App\Utils\DateUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Intl\Currencies;
@@ -40,6 +41,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ExchangeRateService extends AbstractHttpClientService
 {
+    use ArrayTrait;
+
     /**
      * The default cache timeout (15 minutes).
      */
@@ -404,7 +407,7 @@ class ExchangeRateService extends AbstractHttpClientService
     private function mapCodes(array $codes): array
     {
         /** @psalm-var string[] $codes */
-        $codes = \array_filter(\array_column($codes, 0), Currencies::exists(...));
+        $codes = $this->getColumnFilter($codes, 0, Currencies::exists(...));
         /** @psalm-var array<string, ExchangeRateType> $result */
         $result = \array_reduce($codes, function (array $carry, string $code): array {
             $carry[$code] = $this->mapCode($code);

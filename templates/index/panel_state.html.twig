@@ -14,7 +14,7 @@
             <span>{{ state.code }}</span>
         {%- endif -%}
         <div class="h4 fw-normal my-1">
-            <span title="{{ 'index.panel_title_total'|trans }}">{{- state.total|integer }}</span> {{ macros.margin(state.margin, min_margin) -}}
+            <span title="{{ 'index.panel_title_total'|trans }}">{{- state.total|integer }}</span> {{ macros.margin(state.margin_percent, min_margin) -}}
         </div>
         <p class="mb-0" title="{{ 'index.panel_title_count'|trans }}">
             {{- 'counters.calculations'|trans({'count': state.count}) -}}

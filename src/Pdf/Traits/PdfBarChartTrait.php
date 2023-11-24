@@ -17,6 +17,7 @@ use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBarScale;
 use App\Pdf\PdfStyle;
+use App\Traits\ArrayTrait;
 
 /**
  * Trait to draw bar chart.
@@ -46,6 +47,7 @@ use App\Pdf\PdfStyle;
  */
 trait PdfBarChartTrait
 {
+    use ArrayTrait;
     use PdfRotationTrait;
 
     private const SEP_BARS = 3.0;
@@ -105,11 +107,11 @@ trait PdfBarChartTrait
         // y axis
         $scale = new PdfBarScale($min, $max);
         $labelsY = $this->_barGetLabelsY($scale, $formatter);
-        $widthY = $this->_barGetMaxLabelsWidth($labelsY);
+        $widthY = $this->getColumnMax($labelsY, 'width');
 
         // x axis
         $labelsX = $this->_barGetLabelsX($rows);
-        $widthX = $this->_barGetMaxLabelsWidth($labelsX);
+        $widthX = $this->getColumnMax($labelsX, 'width');
         $barWidth = $this->_barGetBarWidth($rows, $w - $widthY - 1.0);
         $rotation = $barWidth < $widthX;
 
@@ -196,7 +198,7 @@ trait PdfBarChartTrait
     {
         $result = null;
         foreach ($rows as $row) {
-            $values = \array_sum(\array_column($row['values'], 'value'));
+            $values = $this->getColumnSum($row['values'], 'value');
             $result = null === $result ? $values : $callback($result, $values);
         }
 
@@ -316,13 +318,5 @@ trait PdfBarChartTrait
         }
 
         return $result;
-    }
-
-    /**
-     * @psalm-param non-empty-array<BarChartLabelType> $labels
-     */
-    private function _barGetMaxLabelsWidth(array $labels): float
-    {
-        return \max(\array_column($labels, 'width'));
     }
 }

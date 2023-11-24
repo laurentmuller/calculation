@@ -14,6 +14,7 @@ namespace App\Chart;
 
 use App\Repository\CalculationRepository;
 use App\Service\ApplicationService;
+use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
 use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -26,7 +27,9 @@ use Twig\Environment;
  */
 class MonthChart extends AbstractHighchart
 {
-    private const TEMPLATE_NAME = 'chart/chart_month_tooltip.js.twig';
+    use ArrayTrait;
+
+    private const TEMPLATE_NAME = 'chart/_month_tooltip.js.twig';
 
     private readonly string $url;
 
@@ -66,9 +69,9 @@ class MonthChart extends AbstractHighchart
             'chart' => $this,
             'data' => $series,
             'months' => $months,
+            'totals' => $this->getTotals($series),
             'allowed_months' => $allowedMonths,
             'min_margin' => $this->getMinMargin(),
-            'totals' => $this->getTotals($series),
         ];
     }
 
@@ -179,11 +182,11 @@ class MonthChart extends AbstractHighchart
      */
     private function getTotals(array $series): array
     {
-        $count = \array_sum(\array_column($series, 'count'));
-        $total = \array_sum(\array_column($series, 'total'));
-        $items = \array_sum(\array_column($series, 'items'));
-        $margin_amount = $total - $items;
+        $count = $this->getColumnSum($series, 'count');
+        $total = $this->getColumnSum($series, 'total');
+        $items = $this->getColumnSum($series, 'items');
         $margin_percent = $this->safeDivide($total, $items);
+        $margin_amount = $total - $items;
 
         return [
             'count' => $count,
@@ -196,12 +199,7 @@ class MonthChart extends AbstractHighchart
 
     private function setLegendOptions(): self
     {
-        $this->legend->merge([
-            'align' => 'right',
-            'verticalAlign' => 'top',
-            'symbolRadius' => 0,
-            'reversed' => true,
-        ]);
+        $this->legend->merge(['enabled' => false]);
 
         return $this;
     }

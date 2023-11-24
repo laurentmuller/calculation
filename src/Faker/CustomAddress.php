@@ -36,6 +36,8 @@ class CustomAddress extends \Faker\Provider\fr_CH\Address
 
     /**
      * Returns the postal code (zip) and the city name.
+     *
+     * @psalm-api
      */
     public function zipCity(): string
     {

@@ -90,6 +90,8 @@
             <errorLevel type="suppress">
                 <file name="src/Model/TaskComputeQuery.php" />
                 <referencedFunction name="updateItems" />
+                <file name="src/Traits/ArrayTrait.php" />
+                <referencedFunction name="getColumnMax" />
             </errorLevel>
         </MixedArgumentTypeCoercion>
     </issueHandlers>

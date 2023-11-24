@@ -1,5 +1,5 @@
 {% extends 'chart/chart_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import icon, button_pdf %}
+{% from 'macros/_icons.html.twig' import homepage, button_pdf %}
 {% trans_default_domain 'chart' %}
 {# add a month option #}
 {% macro month(value, selected) -%}
@@ -33,23 +33,19 @@
 {% block card_container_class '' -%}
 {# header #}
 {% block card_header %}
-{% if allowed_months|length > 1 %}
-    <div class="d-flex-wrap-center">
-        <h1 class="card-title me-auto">
-            {{- icon(title_icon, title, title_domain|default(null), title_parameters|default({})) -}}
-        </h1>
-        <div class="d-flex-wrap-center d-print-none">
-            <label class="form-label ms-sm-auto mb-0" for="months">{{ 'last_month.period'|trans }}</label>
+<div class="d-flex-wrap-center">
+    {{ parent() }}
+    {% if allowed_months|length > 1 %}
+        <div class="d-flex-wrap-center ms-sm-auto">
+            <label class="form-label mb-0" for="months">{{ 'last_month.period'|trans }}</label>
             <select class="form-select form-select-sm w-auto d-print-none" id="months" name="months" data-months="{{ months }}" data-url="{{ url('chart_month') }}">
-                {% for current in allowed_months %}
-                    {{ _self.month(current, current == months) }}
-                {% endfor %}
+            {% for current in allowed_months %}
+                {{ _self.month(current, current == months) }}
+            {% endfor %}
             </select>
         </div>
-    </div>
-{% else %}
-    {{ parent() }}
-{% endif %}
+    {% endif %}
+</div>
 {%- endblock %}
 {# data #}
 {% block data %}
@@ -116,9 +112,11 @@
 {% endblock %}
 {# footer #}
 {% block card_footer -%}
-    {{ parent() }}
+<div class="d-flex-wrap">
+    {{ homepage() }}
     {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
         {{ button_pdf('chart_month_pdf', {'count': months}, 'common.button_export_pdf') }}
     {% endif %}
-
+    <small class="ms-xl-auto">{{ 'month_chart.tooltip'|trans|raw }}</small>
+</div>
 {%- endblock %}

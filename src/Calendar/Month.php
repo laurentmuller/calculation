@@ -128,6 +128,8 @@ class Month extends AbstractCalendarItem implements \Stringable
      * @param Week $week the week to be tested
      *
      * @return bool true if within; false otherwise
+     *
+     * @psalm-api
      */
     public function isInWeek(Week $week): bool
     {

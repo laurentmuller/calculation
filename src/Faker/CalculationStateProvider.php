@@ -37,6 +37,8 @@ class CalculationStateProvider extends EntityProvider
 
     /**
      * Gets the number of calculation states.
+     *
+     * @psalm-api
      */
     public function statesCount(): int
     {

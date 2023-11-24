@@ -16,7 +16,7 @@ function renderTooltip () {
     const point = this.point;
     let html = '<table class="m-1">';
     html +=
-        '<tr class="border-bottom border-dark">' +
+        '<tr>' +
         '<th>{{ 'fields.state'|trans }}</th>' +
         '<th class="px-1">:</th>' +
         '<th class="text-calculation">' +
@@ -26,7 +26,8 @@ function renderTooltip () {
             '</div>' +
         '</th>' +
         '<th class="text-calculation">&nbsp;</th>' +
-    '</tr>';
+        '</tr>';
+    html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
     html +=
         '<tr>' +
         '<td>{{ 'fields.count'|trans }}</td>' +
@@ -48,14 +49,14 @@ function renderTooltip () {
         '<td class="text-calculation">' + point.margin_amount + '</td>' +
         '<td class="text-calculation">' + point.margin_percent + '</td>' +
         '</tr>';
+    html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
     html +=
-        '<tr class="border-top border-dark">' +
+        '<tr>' +
         '<th>{{ 'fields.total'|trans }}</th>' +
         '<th class="px-1">:</th>' +
         '<th class="text-calculation">' + point.total_amount + '</th>' +
         '<th class="text-calculation ps-3">' + point.total_percent + '</th>' +
         '</tr>';
     html += '</table>';
-
     return html;
 }

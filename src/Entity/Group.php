@@ -83,6 +83,8 @@ class Group extends AbstractEntity implements TimestampableInterface
 
     /**
      * Add a category.
+     *
+     * @psalm-api
      */
     public function addCategory(Category $category): self
     {
@@ -267,6 +269,8 @@ class Group extends AbstractEntity implements TimestampableInterface
 
     /**
      * Returns if this group contains one or more products.
+     *
+     * @psalm-api
      */
     public function hasProducts(): bool
     {
@@ -284,6 +288,8 @@ class Group extends AbstractEntity implements TimestampableInterface
 
     /**
      * Returns if this category contains one or more tasks.
+     *
+     * @psalm-api
      */
     public function hasTasks(): bool
     {
@@ -301,6 +307,8 @@ class Group extends AbstractEntity implements TimestampableInterface
 
     /**
      * Remove a category.
+     *
+     * @psalm-api
      */
     public function removeCategory(Category $category): self
     {
@@ -313,6 +321,8 @@ class Group extends AbstractEntity implements TimestampableInterface
 
     /**
      * Remove a margin.
+     *
+     * @psalm-api
      */
     public function removeMargin(GroupMargin $margin): self
     {

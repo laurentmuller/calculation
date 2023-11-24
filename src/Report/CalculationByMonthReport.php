@@ -33,6 +33,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfBarChartTrait;
 use App\Pdf\Traits\PdfChartLegendTrait;
+use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
 
 /**
@@ -45,6 +46,7 @@ use App\Utils\FormatUtils;
  */
 class CalculationByMonthReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
+    use ArrayTrait;
     use PdfBarChartTrait;
     use PdfChartLegendTrait;
 
@@ -200,17 +202,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return $cell->setStyle($style);
     }
 
-    /**
-     * @psalm-return ColorStringType[]
-     */
-    private function getLegends(): array
-    {
-        return [
-            ['color' => self::COLOR_ITEM, 'label' => $this->transChart('fields.net')],
-            ['color' => self::COLOR_MARGIN, 'label' => $this->transChart('fields.margin')],
-        ];
-    }
-
     private function isMinMargin(float $value): bool
     {
         return !$this->isFloatZero($value) && $value < $this->minMargin;
@@ -258,10 +249,11 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
      */
     private function renderChart(array $entities): void
     {
-        $h = 120;
-        $top = $this->tMargin + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
-        if (\count($entities) > 12) {
-            $h = $this->PageBreakTrigger - $top - self::LINE_HEIGHT;
+        $h = 100;
+        $newPage = \count($entities) > 12;
+        $top = $this->tMargin + $this->getHeader()->getHeight();
+        if ($newPage) {
+            $h = $this->PageBreakTrigger - $top - 2.0 * self::LINE_HEIGHT;
         }
         $rows = \array_map(function (array $entity): array {
             return [
@@ -276,14 +268,12 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             'min' => 0,
             'formatter' => fn (float $value): string => FormatUtils::formatInt($value),
         ];
-
-        $legends = $this->getLegends();
-        $width = $this->getLegendsWidth($legends, true);
-        $x = $this->getLeftMargin() + $this->getPrintableWidth() - $width;
-        $this->legends($legends, true, $x, $top, false);
-        $this->ln();
-
         $this->barChart(rows: $rows, axis: $axis, y: $top + self::LINE_HEIGHT, h: $h);
+        if ($newPage) {
+            $this->AddPage();
+        } else {
+            $this->Ln();
+        }
     }
 
     /**
@@ -311,9 +301,9 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             ->setTextListener(null);
 
         // total
-        $count = $this->sum($entities, 'count');
-        $items = $this->sum($entities, 'items');
-        $total = $this->sum($entities, 'total');
+        $count = $this->getColumnSum($entities, 'count');
+        $items = $this->getColumnSum($entities, 'items');
+        $total = $this->getColumnSum($entities, 'total');
         $net = $total - $items;
         $margin = 1.0 + $this->safeDivide($net, $items);
         $table->addHeaderRow(
@@ -335,11 +325,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $power = 10.0 ** (float) $precision;
 
         return \floor($value * $power) / $power;
-    }
-
-    private function sum(array $entities, string $key): float
-    {
-        return \array_sum(\array_column($entities, $key));
     }
 
     private function transChart(string $key): string

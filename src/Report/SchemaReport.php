@@ -21,6 +21,7 @@ use App\Pdf\PdfException;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Service\SchemaService;
+use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
 
 /**
@@ -34,6 +35,8 @@ use App\Utils\FormatUtils;
  */
 class SchemaReport extends AbstractReport
 {
+    use ArrayTrait;
+
     private ?PdfStyle $booleanStyle = null;
 
     /**
@@ -63,7 +66,7 @@ class SchemaReport extends AbstractReport
             ->setFontName(PdfFontName::ZAPFDINGBATS);
 
         /** @psalm-var string[] $names */
-        $names = \array_column($tables, 'name');
+        $names = $this->getColumn($tables, 'name');
         $this->createLinks($names);
 
         $this->outputTables($tables);

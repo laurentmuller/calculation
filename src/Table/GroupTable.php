@@ -52,6 +52,8 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      * @throws \Twig\Error\Error
      *
      * @psalm-param array{id: int} $entity
+     *
+     * @psalm-api
      */
     public function formatCategories(int $value, array $entity): string
     {
@@ -72,6 +74,8 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      * @throws \Twig\Error\Error
      *
      * @psalm-param array{id: int} $entity
+     *
+     * @psalm-api
      */
     public function formatProducts(int $value, array $entity): string
     {
@@ -92,6 +96,8 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      * @throws \Twig\Error\Error
      *
      * @psalm-param array{id: int} $entity
+     *
+     * @psalm-api
      */
     public function formatTasks(int $value, array $entity): string
     {

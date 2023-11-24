@@ -61,6 +61,8 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      * @throws \Twig\Error\Error
      *
      * @psalm-param array{id: int} $entity
+     *
+     * @psalm-api
      */
     public function formatProducts(int $value, array $entity): string
     {
@@ -81,6 +83,8 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      * @throws \Twig\Error\Error
      *
      * @psalm-param array{id: int} $entity
+     *
+     * @psalm-api
      */
     public function formatTasks(int $value, array $entity): string
     {

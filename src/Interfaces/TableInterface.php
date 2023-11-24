@@ -24,6 +24,8 @@ interface TableInterface
 
     /**
      * The column's parameter name (array of columns).
+     *
+     * @psalm-api
      */
     final public const PARAM_COLUMNS = 'columns';
 
@@ -49,11 +51,15 @@ interface TableInterface
 
     /**
      * The page parameter name (int).
+     *
+     * @psalm-api
      */
     final public const PARAM_PAGE = 'page';
 
     /**
      * The page list parameter name (array of integers).
+     *
+     * @psalm-api
      */
     final public const PARAM_PAGE_LIST = 'pageList';
 

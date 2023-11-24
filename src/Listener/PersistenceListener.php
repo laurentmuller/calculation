@@ -82,6 +82,8 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
 
     /**
      * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     *
+     * @psalm-api
      */
     public function postPersist(LifecycleEventArgs $args): void
     {
@@ -94,6 +96,8 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
 
     /**
      * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     *
+     * @psalm-api
      */
     public function postRemove(LifecycleEventArgs $args): void
     {
@@ -106,6 +110,8 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
 
     /**
      * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     *
+     * @psalm-api
      */
     public function postUpdate(LifecycleEventArgs $args): void
     {

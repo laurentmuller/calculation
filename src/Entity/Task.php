@@ -161,6 +161,8 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
 
     /**
      * Remove the given item.
+     *
+     * @psalm-api
      */
     public function removeItem(TaskItem $item): self
     {

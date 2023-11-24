@@ -15,6 +15,7 @@ namespace App\Chart;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
 use App\Table\CalculationTable;
+use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
 use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -27,7 +28,9 @@ use Twig\Environment;
  */
 class StateChart extends AbstractHighchart
 {
-    private const TEMPLATE_NAME = 'chart/chart_state_tooltip.js.twig';
+    use ArrayTrait;
+
+    private const TEMPLATE_NAME = 'chart/_state_tooltip.js.twig';
 
     public function __construct(
         ApplicationService $application,
@@ -44,20 +47,19 @@ class StateChart extends AbstractHighchart
     public function generate(): array
     {
         $states = $this->repository->getCalculations();
-        $series = $this->mapData($states);
 
         $this->setType(self::TYPE_PIE)
             ->hideTitle()
             ->setPlotOptions()
             ->setTooltipOptions()
             ->setColors($states)
-            ->setSeries($series);
+            ->setSeries($states);
 
         return [
             'chart' => $this,
             'data' => $states,
-            'min_margin' => $this->getMinMargin(),
             'totals' => $this->getTotals($states),
+            'min_margin' => $this->getMinMargin(),
         ];
     }
 
@@ -106,16 +108,18 @@ class StateChart extends AbstractHighchart
      */
     private function getTotals(array $states): array
     {
-        $count = \array_sum(\array_column($states, 'count'));
-        $total = \array_sum(\array_column($states, 'total'));
-        $items = \array_sum(\array_column($states, 'items'));
+        $count = $this->getColumnSum($states, 'count');
+        $total = $this->getColumnSum($states, 'total');
+        $items = $this->getColumnSum($states, 'items');
+        $margin_percent = $this->safeDivide($total, $items);
+        $margin_amount = $total - $items;
 
         return [
             'count' => $count,
             'items' => $items,
             'total' => $total,
-            'margin' => $this->safeDivide($total, $items),
-            'margin_amount' => $total - $items,
+            'margin_percent' => $margin_percent,
+            'margin_amount' => $margin_amount,
         ];
     }
 
@@ -137,7 +141,7 @@ class StateChart extends AbstractHighchart
                 'calculations_percent' => FormatUtils::formatPercent($state['percent_calculation'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
                 'net_amount' => FormatUtils::formatInt($state['items']),
                 'margin_amount' => FormatUtils::formatInt($state['margin_amount']),
-                'margin_percent' => FormatUtils::formatPercent($state['margin']),
+                'margin_percent' => FormatUtils::formatPercent($state['margin_percent']),
                 'total_amount' => FormatUtils::formatInt($state['total']),
                 'total_percent' => FormatUtils::formatPercent($state['percent_amount'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
                 'url' => $this->getURL($state['id']),
@@ -177,11 +181,14 @@ class StateChart extends AbstractHighchart
         return $this;
     }
 
-    private function setSeries(array $data): void
+    /**
+     * @psalm-param QueryCalculationType[] $states
+     */
+    private function setSeries(array $states): void
     {
         $this->series->merge([
             [
-                'data' => $data,
+                'data' => $this->mapData($states),
                 'name' => $this->transChart('title_by_state'),
             ],
         ]);

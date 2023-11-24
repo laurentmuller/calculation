@@ -158,6 +158,8 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
 
     /**
      * Remove a margin.
+     *
+     * @psalm-api
      */
     public function removeMargin(TaskItemMargin $margin): self
     {

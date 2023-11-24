@@ -29,6 +29,8 @@ class CategoryProvider extends EntityProvider
 
     /**
      * Gets the number of users.
+     *
+     * @psalm-api
      */
     public function categoriesCount(): int
     {

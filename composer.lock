@@ -2114,16 +2114,16 @@
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.19.16",
+            "version": "2.19.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/HighchartsBundle.git",
-                "reference": "06fa86d19f2df6bc81f331338588a60bb5ba4e91"
+                "reference": "72a6fc789d92e33dbc851bef5b4abc3cd474f24d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/06fa86d19f2df6bc81f331338588a60bb5ba4e91",
-                "reference": "06fa86d19f2df6bc81f331338588a60bb5ba4e91",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/72a6fc789d92e33dbc851bef5b4abc3cd474f24d",
+                "reference": "72a6fc789d92e33dbc851bef5b4abc3cd474f24d",
                 "shasum": ""
             },
             "require": {
@@ -2166,23 +2166,23 @@
                 }
             },
             "scripts": {
-                "cs-fixer": [
+                "php-fixer": [
                     "vendor/bin/php-cs-fixer fix --diff --dry-run"
                 ],
-                "psalm": [
+                "php-psalm": [
                     "vendor/bin/psalm --config=psalm.xml"
                 ],
-                "phpstan": [
+                "php-stan": [
                     "vendor/bin/phpstan analyse --memory-limit 2G -c phpstan.neon"
                 ],
-                "rector": [
+                "php-rector": [
                     "vendor/bin/rector process --dry-run --config=rector.php"
                 ],
-                "run-all": [
-                    "@cs-fixer",
-                    "@psalm",
-                    "@phpstan",
-                    "@rector",
+                "php-all": [
+                    "@php-fixer",
+                    "@php-psalm",
+                    "@php-stan",
+                    "@php-rector",
                     "phpunit"
                 ]
             },
@@ -2197,8 +2197,8 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Symfony Bundle that ease the use of highcharts to display rich graph and charts in your app",
-            "homepage": "https://github.com/laurentmuller/ObHighchartsBundle",
+            "description": "Symfony Bundle that ease the use of highcharts to display rich graph and charts in your application.",
+            "homepage": "https://github.com/laurentmuller/HighchartsBundle",
             "keywords": [
                 "chart",
                 "charting",
@@ -2209,9 +2209,11 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/laurentmuller/HighchartsBundle/tree/2.19.16"
+                "email": "bibi@bibi.nu",
+                "issues": "https://github.com/laurentmuller/HighchartsBundle/issues",
+                "source": "https://github.com/laurentmuller/HighchartsBundle"
             },
-            "time": "2023-11-23T17:32:28+00:00"
+            "time": "2023-11-24T06:00:47+00:00"
         },
         {
             "name": "lorenzo/pinky",

@@ -67,6 +67,8 @@ class SwissPostUpdateResult
      * Gets the error entries.
      *
      * @return SwissPostResultType
+     *
+     * @psalm-api
      */
     public function getInvalidEntries(): array
     {
@@ -75,6 +77,8 @@ class SwissPostUpdateResult
 
     /**
      * Gets the total number of invalid entries.
+     *
+     * @psalm-api
      */
     public function getInvalidEntriesCount(): int
     {
@@ -101,6 +105,8 @@ class SwissPostUpdateResult
      * Gets the valid entries.
      *
      * @return SwissPostResultType
+     *
+     * @psalm-api
      */
     public function getValidEntries(): array
     {

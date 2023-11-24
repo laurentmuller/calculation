@@ -1,5 +1,4 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage %}
 {% trans_default_domain 'chart' %}
 {# macros #}
 {% macro margin_below_class(margin, min_margin) -%}
@@ -21,10 +20,6 @@
     </table>
 </div>
 {% endblock %}
-{# footer #}
-{% block card_footer -%}
-{{ homepage() }}
-{%- endblock %}
 {# stylesheets #}
 {% block stylesheets %}
 {{ asset_css('css/chart.css') }}

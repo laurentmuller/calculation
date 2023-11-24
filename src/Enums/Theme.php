@@ -77,6 +77,8 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, Trans
 
     /**
      * Gets the icon for dark mode.
+     *
+     * @psalm-api
      */
     public function getIconDark(): string
     {
@@ -85,6 +87,8 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, Trans
 
     /**
      * Gets the icon for light mode.
+     *
+     * @psalm-api
      */
     public function getIconLight(): string
     {

@@ -14,12 +14,13 @@ function renderTooltip () {
     const values = this.points[0].point;
     let html = '<table class="m-1">';
         html +=
-            '<tr class="border-bottom border-dark">' +
+            '<tr>' +
             '<th>{{ 'fields.month'|trans }}</th>' +
             '<th class="px-1">:</th>' +
             '<th class="text-calculation">' + values.date + '</th>' +
             '<th class="text-calculation">&nbsp;</th>' +
             '</tr>';
+        html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
         html +=
             '<tr>' +
             '<td class="text-category">{{ 'fields.count'|trans }}</td>' +
@@ -51,8 +52,9 @@ function renderTooltip () {
             '<td class="text-calculation">' + values.margin_amount + '</td>' +
             '<td class="text-calculation ps-3">' + values.margin_percent + '</td>' +
             '</tr>';
+        html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
         html +=
-            '<tr class="border-top border-dark">' +
+            '<tr>' +
             '<th>{{ 'fields.total'|trans }}</th>' +
             '<th class="px-1">:</th>' +
             '<th class="text-calculation">' + values.total_amount + '</th>' +

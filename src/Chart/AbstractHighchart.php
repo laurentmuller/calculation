@@ -164,11 +164,10 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     /**
      * Gets the link color style.
      */
-    protected function getLinkColor(): array
+    protected function getLinkStyle(): array
     {
         return [
             'color' => 'var(--bs-link-hover-color)',
-            // 'fill' => 'var(--bs-link-hover-color)',
         ];
     }
 
@@ -230,7 +229,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         ]);
 
         $this->legend->merge([
-            'itemHoverStyle' => $this->getLinkColor(),
+            'itemHoverStyle' => $this->getLinkStyle(),
             'itemStyle' => $this->getColorFontStyle($this->getBodyColor()),
         ]);
 

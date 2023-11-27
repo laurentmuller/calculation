@@ -31,7 +31,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route(path: '/about/mysql')]
 class AboutMySqlController extends AbstractController
 {
-    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
+    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[GetRoute(path: '/content', name: 'about_mysql_content')]
     public function content(DatabaseInfoService $service): JsonResponse
     {
@@ -43,7 +43,7 @@ class AboutMySqlController extends AbstractController
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
+    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[GetRoute(path: '/excel', name: 'about_mysql_excel')]
     public function excel(DatabaseInfoService $service): SpreadsheetResponse
     {
@@ -52,7 +52,7 @@ class AboutMySqlController extends AbstractController
         return $this->renderSpreadsheetDocument($doc);
     }
 
-    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
+    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[GetRoute(path: '/pdf', name: 'about_mysql_pdf')]
     public function pdf(DatabaseInfoService $service): PdfResponse
     {

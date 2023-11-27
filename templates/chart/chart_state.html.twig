@@ -5,8 +5,6 @@
 {# parameters #}
 {%- set title = 'title_by_state' -%}
 {%- set title_icon = ICON_CALCULATION_STATE -%}
-{# class #}
-{% block card_container_class '' -%}
 {# data #}
 {% block data %}
 <thead>
@@ -50,6 +48,11 @@
     </tr>
 </tbody>
 {% endblock %}
+{# body #}
+{% block card_body %}
+    {{ parent() }}
+    <p class="small mb-0">{{ 'state_chart.tooltip'|trans|raw }}</p>
+{%- endblock %}
 {# footer #}
 {% block card_footer -%}
 <div class="d-flex-wrap">
@@ -57,6 +60,5 @@
     {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
         {{ button_pdf('chart_state_pdf', {}, 'common.button_export_pdf') }}
     {% endif %}
-    <small class="ms-xl-auto">{{ 'state_chart.tooltip'|trans|raw }}</small>
 </div>
 {%- endblock %}

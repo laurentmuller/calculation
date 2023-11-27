@@ -33,7 +33,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route(path: '/about/symfony')]
 class AboutSymfonyController extends AbstractController
 {
-    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
+    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[GetRoute(path: '/content', name: 'about_symfony_content')]
     public function content(SymfonyInfoService $service): JsonResponse
     {
@@ -49,7 +49,7 @@ class AboutSymfonyController extends AbstractController
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
+    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[GetRoute(path: '/excel', name: 'about_symfony_excel')]
     public function excel(SymfonyInfoService $service, #[Autowire('%app_mode%')] string $appMode): SpreadsheetResponse
     {
@@ -58,7 +58,7 @@ class AboutSymfonyController extends AbstractController
         return $this->renderSpreadsheetDocument($doc);
     }
 
-    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
+    #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[GetRoute(path: '/pdf', name: 'about_symfony_pdf')]
     public function pdf(SymfonyInfoService $service, #[Autowire('%app_mode%')] string $appMode): PdfResponse
     {

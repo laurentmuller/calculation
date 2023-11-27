@@ -64,27 +64,27 @@ class AboutControllerTest extends AbstractControllerTestCase
             ['/about/licence/word', self::ROLE_SUPER_ADMIN],
 
             ['/about/mysql/content', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/mysql/content', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/mysql/content', self::ROLE_ADMIN],
             ['/about/mysql/content', self::ROLE_SUPER_ADMIN],
 
             ['/about/mysql/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/mysql/excel', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/mysql/excel', self::ROLE_ADMIN],
             ['/about/mysql/excel', self::ROLE_SUPER_ADMIN],
 
             ['/about/mysql/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/mysql/pdf', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/mysql/pdf', self::ROLE_ADMIN],
             ['/about/mysql/pdf', self::ROLE_SUPER_ADMIN],
 
             ['/about/php/content', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/php/content', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/php/content', self::ROLE_ADMIN],
             ['/about/php/content', self::ROLE_SUPER_ADMIN],
 
             ['/about/php/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/php/excel', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/php/excel', self::ROLE_ADMIN],
             ['/about/php/excel', self::ROLE_SUPER_ADMIN],
 
             ['/about/php/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/php/pdf', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/php/pdf', self::ROLE_ADMIN],
             ['/about/php/pdf', self::ROLE_SUPER_ADMIN],
 
             ['/about/policy'],
@@ -107,15 +107,15 @@ class AboutControllerTest extends AbstractControllerTestCase
             ['/about/policy/word', self::ROLE_SUPER_ADMIN],
 
             ['/about/symfony/content', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/symfony/content', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/symfony/content', self::ROLE_ADMIN],
             ['/about/symfony/content', self::ROLE_SUPER_ADMIN],
 
             ['/about/symfony/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/symfony/excel', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/symfony/excel', self::ROLE_ADMIN],
             ['/about/symfony/excel', self::ROLE_SUPER_ADMIN],
 
             ['/about/symfony/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/symfony/pdf', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
+            ['/about/symfony/pdf', self::ROLE_ADMIN],
             ['/about/symfony/pdf', self::ROLE_SUPER_ADMIN],
         ];
     }

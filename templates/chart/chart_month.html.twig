@@ -110,6 +110,11 @@
     </tr>
 </tbody>
 {% endblock %}
+{# body #}
+{% block card_body %}
+    {{ parent() }}
+    <p class="small mb-0">{{ 'month_chart.tooltip'|trans|raw }}</p>
+{%- endblock %}
 {# footer #}
 {% block card_footer -%}
 <div class="d-flex-wrap">
@@ -117,6 +122,5 @@
     {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
         {{ button_pdf('chart_month_pdf', {'count': months}, 'common.button_export_pdf') }}
     {% endif %}
-    <small class="ms-xl-auto">{{ 'month_chart.tooltip'|trans|raw }}</small>
 </div>
 {%- endblock %}

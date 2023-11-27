@@ -46,8 +46,8 @@ class WebpCommand extends Command
     {
         $this->addOption(self::OPTION_SOURCE, 's', InputOption::VALUE_REQUIRED, 'The source directory relative to the root project directory.');
         $this->addOption(self::OPTION_DEPTH, 'r', InputOption::VALUE_OPTIONAL, 'The depth to search in directory.', 0);
-        $this->addOption(self::OPTION_OVERWRITE, 'o', InputOption::VALUE_NONE, 'Overwrite existing files.');
-        $this->addOption(self::OPTION_DRY_RUN, 'd', InputOption::VALUE_NONE, 'Check only without generate files.');
+        $this->addOption(self::OPTION_OVERWRITE, 'o', InputOption::VALUE_NONE, 'Overwrite existing files.', false);
+        $this->addOption(self::OPTION_DRY_RUN, 'd', InputOption::VALUE_NONE, 'Check only without generate files.', false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -73,9 +73,7 @@ class WebpCommand extends Command
         $skip = 0;
         $error = 0;
         $success = 0;
-        /** @var bool $dryRun */
         $dryRun = $input->getOption(self::OPTION_DRY_RUN);
-        /** @var bool $overwrite */
         $overwrite = $input->getOption(self::OPTION_OVERWRITE);
         $this->writeVerbose($io, \sprintf('Process images in "%s"', $source));
         foreach ($finder as $file) {

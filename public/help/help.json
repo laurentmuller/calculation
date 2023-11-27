@@ -490,7 +490,7 @@
 		}
 	],
 	"mainMenu": {
-		"image": "navigation.png",
+		"image": "navigation",
 		"description": "Le menu principal est une partie de l'interface d'utilisateur permettant de parcourir les pages du site.",
 		"menus": [
 			{
@@ -610,7 +610,7 @@
 	"dialogs": [
 		{
 			"id": "index.title",
-			"image": "home.png",
+			"image": "home",
 			"description": "Page principale de l'application.",
 			"details": [
 				"Cette page est divisée en quatre parties<br>",
@@ -623,7 +623,7 @@
 		{
 			"id": "calculation.list.title",
 			"entity": "calculation",
-			"image": "calculation/calculation_list.png",
+			"image": "calculation/calculation_list",
 			"description": "Gestion des calculations.",
 			"displayEntityColumns": true,
 			"displayEntityActions": true,
@@ -673,7 +673,7 @@
 		{
 			"id": "calculation.show.title",
 			"entity": "calculation",
-			"image": "calculation/calculation_show.png",
+			"image": "calculation/calculation_show",
 			"icon": "tv",
 			"description": "Cette page affiche les propriétés de la calculation.",
 			"editActions": [
@@ -701,7 +701,7 @@
 		{
 			"id": "calculation.edit.title_short",
 			"entity": "calculation",
-			"image": "calculation/calculation_edit_main.png",
+			"image": "calculation/calculation_edit_main",
 			"description": "Cette page permet de modifier une calculation.",
 			"displayEntityFields": true,
 			"editActions": [
@@ -718,7 +718,7 @@
 		{
 			"id": "calculation.add.title",
 			"entity": "calculation",
-			"image": "calculation/calculation_edit_new.png",
+			"image": "calculation/calculation_edit_new",
 			"description": "Cette page permet de créer une nouvelle calculation.",
 			"displayEntityFields": true,
 			"editActions": [
@@ -735,7 +735,7 @@
 		{
 			"id": "calculation.delete.title",
 			"entity": "calculation",
-			"image": "calculation/calculation_delete.png",
+			"image": "calculation/calculation_delete",
 			"icon": "times",
 			"description": "Cette page permet de confirmer la suppression d'une calculation.",
 			"editActions": [
@@ -752,7 +752,7 @@
 		{
 			"id": "calculation.list.state_title",
 			"entity": "calculation",
-			"image": "calculation/calculation_edit_state.png",
+			"image": "calculation/calculation_edit_state",
 			"description": "Permet de modifier le statut d'une calculation.",
 			"editActions": [
 				{
@@ -768,7 +768,7 @@
 		{
 			"id": "product.list.title",
 			"entity": "product",
-			"image": "product/product_list.png",
+			"image": "product/product_list",
 			"description": "Gestion des articles du catalogue.",
 			"displayEntityColumns": true,
 			"displayEntityActions": true,
@@ -818,7 +818,7 @@
 		{
 			"id": "product.show.title",
 			"entity": "product",
-			"image": "product/product_show.png",
+			"image": "product/product_show",
 			"icon": "tv",
 			"description": "Cette page affiche les propriétés de l'article.",
 			"editActions": [
@@ -841,7 +841,7 @@
 		{
 			"id": "product.add.title",
 			"entity": "product",
-			"image": "product/product_add.png",
+			"image": "product/product_add",
 			"description": "Cette page permet de créer un nouvel article.",
 			"displayEntityFields": true,
 			"editActions": [
@@ -858,7 +858,7 @@
 		{
 			"id": "product.edit.title",
 			"entity": "product",
-			"image": "product/product_edit.png",
+			"image": "product/product_edit",
 			"description": "Cette page permet de modifier un article.",
 			"displayEntityFields": true,
 			"editActions": [
@@ -875,7 +875,7 @@
 		{
 			"id": "product.delete.title",
 			"entity": "product",
-			"image": "product/product_delete.png",
+			"image": "product/product_delete",
 			"icon": "times",
 			"description": "Cette page permet de confirmer la suppression d'un article.",
 			"editActions": [
@@ -891,7 +891,7 @@
 		},
 		{
 			"id": "product.update.title",
-			"image": "product/product_update.png",
+			"image": "product/product_update",
 			"icon": "file-alt far",
 			"entity": "product",
 			"description": "Cette page permet de mettre jour le prix des articles pour une catégorie.",
@@ -916,7 +916,7 @@
 		{
 			"id": "product.result.description",
 			"name": "product.result.description",
-			"image": "product/product_result.png",
+			"image": "product/product_result",
 			"icon": "file-alt far",
 			"entity": "product",
 			"description": "Cette page affiche le résultat de la mise à jour des articles.",
@@ -942,7 +942,7 @@
 		},
 		{
 			"id": "archive.title",
-			"image": "calculation/calculation_archive_query.png",
+			"image": "calculation/calculation_archive_query",
 			"icon": "calendar-xmark far",
 			"entity": "calculation",
 			"description": "Cette page vous permet d'archiver des calculations en modifiant leur statut.",
@@ -966,7 +966,7 @@
 		},
 		{
 			"id": "archive.result.description",
-			"image": "calculation/calculation_archive_result.png",
+			"image": "calculation/calculation_archive_result",
 			"icon": "calendar-xmark far",
 			"description": "Cette page affiche le résultat de l'archivage des calculations.",
 			"links": [
@@ -979,7 +979,7 @@
 		{
 			"id": "task.list.title",
 			"entity": "task",
-			"image": "task/task_list.png",
+			"image": "task/task_list",
 			"description": "Gestion des tâches du catalogue.",
 			"displayEntityColumns": true,
 			"displayEntityActions": true,
@@ -1009,7 +1009,7 @@
 		{
 			"id": "task.show.title",
 			"entity": "task",
-			"image": "task/task_show.png",
+			"image": "task/task_show",
 			"icon": "tv",
 			"description": "Cette page affiche les propriétés de la tâche.",
 			"editActions": [
@@ -1032,7 +1032,7 @@
 		{
 			"id": "task.add.title",
 			"entity": "task",
-			"image": "task/task_add.png",
+			"image": "task/task_add",
 			"description": "Cette page permet de créer un nouvelle tâche.",
 			"displayEntityFields": true,
 			"editActions": [
@@ -1049,7 +1049,7 @@
 		{
 			"id": "task.edit.title",
 			"entity": "task",
-			"image": "task/task_edit.png",
+			"image": "task/task_edit",
 			"description": "Cette page permet de modifier une tâche.",
 			"displayEntityFields": true,
 			"editActions": [
@@ -1066,7 +1066,7 @@
 		{
 			"id": "task.delete.title",
 			"entity": "task",
-			"image": "task/task_delete.png",
+			"image": "task/task_delete",
 			"icon": "times",
 			"description": "Cette page permet de confirmer la suppression d'une tâche.",
 			"editActions": [
@@ -1083,7 +1083,7 @@
 		{
 			"id": "task_compute.title",
 			"entity": "task",
-			"image": "task/task_compute.png",
+			"image": "task/task_compute",
 			"icon": "keyboard",
 			"description": "Permet de calculer une tâche.",
 			"details": [
@@ -1101,7 +1101,7 @@
 		{
 			"id": "category.list.title",
 			"entity": "category",
-			"image": "category/category_list.png",
+			"image": "category/category_list",
 			"description": "Gestion des catégories du catalogue.",
 			"displayEntityColumns": true,
 			"displayEntityActions": true,
@@ -1131,7 +1131,7 @@
 		{
 			"id": "category.show.title",
 			"entity": "category",
-			"image": "category/category_show.png",
+			"image": "category/category_show",
 			"icon": "tv",
 			"description": "Cette page affiche les propriétés de la catégorie.",
 			"editActions": [
@@ -1154,7 +1154,7 @@
 		{
 			"id": "category.add.title",
 			"entity": "category",
-			"image": "category/category_add.png",
+			"image": "category/category_add",
 			"description": "Cette page permet de créer une nouvelle catégorie.",
 			"displayEntityFields": true,
 			"editActions": [
@@ -1171,7 +1171,7 @@
 		{
 			"id": "category.edit.title",
 			"entity": "category",
-			"image": "category/category_edit.png",
+			"image": "category/category_edit",
 			"description": "Cette page permet de modifier une catégorie.",
 			"displayEntityFields": true,
 			"editActions": [
@@ -1188,9 +1188,9 @@
 		{
 			"id": "category.delete.title",
 			"entity": "category",
-			"image": "category/category_delete.png",
+			"image": "category/category_delete",
 			"forbidden": {
-				"image": "category/category_delete_forbidden.png",
+				"image": "category/category_delete_forbidden",
 				"text": "Si la catégorie sélectionnée ne peut pas être supprimée, l'avertissement ci-dessous est affiché.",
 				"action": {
 					"id": "common.button_back_list",
@@ -1214,7 +1214,7 @@
 		{
 			"id": "group.list.title",
 			"entity": "group",
-			"image": "group/group_list.png",
+			"image": "group/group_list",
 			"description": "Gestion des groupes du catalogue.",
 			"displayEntityColumns": true,
 			"displayEntityActions": true,
@@ -1244,7 +1244,7 @@
 		{
 			"id": "group.show.title",
 			"entity": "group",
-			"image": "group/group_show.png",
+			"image": "group/group_show",
 			"icon": "tv",
 			"description": "Cette page affiche les propriétés du groupe.",
 			"editActions": [
@@ -1267,7 +1267,7 @@
 		{
 			"id": "group.add.title",
 			"entity": "group",
-			"image": "group/group_add.png",
+			"image": "group/group_add",
 			"description": "Cette page permet de créer un nouveau group.",
 			"displayEntityFields": true,
 			"editActions": [
@@ -1284,7 +1284,7 @@
 		{
 			"id": "group.edit.title",
 			"entity": "group",
-			"image": "group/group_edit.png",
+			"image": "group/group_edit",
 			"description": "Cette page permet de modifier un groupe.",
 			"displayEntityFields": true,
 			"editActions": [
@@ -1301,7 +1301,7 @@
 		{
 			"id": "group.delete.title",
 			"entity": "group",
-			"image": "group/group_delete.png",
+			"image": "group/group_delete",
 			"icon": "times",
 			"description": "Cette page permet de confirmer la suppression d'un groupe.",
 			"editActions": [
@@ -1315,7 +1315,7 @@
 				}
 			],
 			"forbidden": {
-				"image": "group/group_delete_forbidden.png",
+				"image": "group/group_delete_forbidden",
 				"text": "Si le groupe sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.",
 				"action": {
 					"id": "common.button_back_list",
@@ -1327,7 +1327,7 @@
 		{
 			"id": "globalmargin.list.title",
 			"entity": "globalmargin",
-			"image": "globalmargin/globalmargin_list.png",
+			"image": "globalmargin/globalmargin_list",
 			"description": "Gestion des marges globales du catalogue.",
 			"displayEntityColumns": true,
 			"displayEntityActions": true,
@@ -1357,7 +1357,7 @@
 		{
 			"id": "globalmargin.show.title",
 			"entity": "globalmargin",
-			"image": "globalmargin/globalmargin_show.png",
+			"image": "globalmargin/globalmargin_show",
 			"icon": "tv",
 			"description": "Cette page affiche les propriétés de la marge globale.",
 			"editActions": [
@@ -1375,7 +1375,7 @@
 		{
 			"id": "globalmargin.edit.title",
 			"entity": "globalmargin",
-			"image": "globalmargin/globalmargin_edit.png",
+			"image": "globalmargin/globalmargin_edit",
 			"description": "Cette page permet de modifier les marges globales.",
 			"displayEntityFields": true,
 			"editActions": [
@@ -1391,7 +1391,7 @@
 		},
 		{
 			"id": "search.title",
-			"image": "search.png",
+			"image": "search",
 			"description": "Permet de rechercher des données.",
 			"displayEntityColumns": true,
 			"globalActions": [
@@ -1410,7 +1410,7 @@
 		{
 			"id": "log.list.title",
 			"entity": "log",
-			"image": "log/log_list.png",
+			"image": "log/log_list",
 			"description": "Affichage des entrées du journal de l'application. Cette page est accessible uniquement aux administrateurs.",
 			"displayEntityColumns": true,
 			"displayEntityActions": true,
@@ -1450,7 +1450,7 @@
 		{
 			"id": "log.show.title",
 			"entity": "log",
-			"image": "log/log_show.png",
+			"image": "log/log_show",
 			"icon": "tv",
 			"description": "Cette page affiche les propriétés d'une entrée dans le journal de l'application. Cette page est accessible uniquement aux administrateurs.",
 			"editActions": [
@@ -1464,7 +1464,7 @@
 		{
 			"id": "log.delete.title",
 			"entity": "log",
-			"image": "log/log_delete.png",
+			"image": "log/log_delete",
 			"icon": "times",
 			"description": "Cette page permet de confirmer la suppression du journal de l'application. Cette page est accessible uniquement aux administrateurs.",
 			"editActions": [

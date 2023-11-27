@@ -13,7 +13,7 @@
 {%- endmacro %}
 
 {% macro output_image(path, screenshot=true) -%}
-{%- set full_path = 'help/images/' ~ path -%}
+{%- set full_path = 'help/images/' ~ path ~ '.webp' -%}
 {% if asset_exists(full_path) %}
     {% if screenshot %}<p class="mb-2">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
     <img src="{{ asset(full_path) }}" class="img-fluid rounded d-block" alt="{{ 'help.labels.screenshot'|trans }}">

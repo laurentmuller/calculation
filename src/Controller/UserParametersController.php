@@ -44,9 +44,9 @@ class UserParametersController extends AbstractController
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
             $userService->setProperties($data);
-            $response = $this->redirectToHomePage('user.parameters.success');
+            $this->successTrans('user.parameters.success');
 
-            // save display mode
+            $response = $this->getUrlGenerator()->redirect($request);
             if (isset($data[PropertyServiceInterface::P_DISPLAY_MODE])) {
                 /** @psalm-var TableView $display */
                 $display = $data[PropertyServiceInterface::P_DISPLAY_MODE];

@@ -27,6 +27,36 @@ class ImageExtensionTest extends TestCase
         }
     }
 
+    public static function getTryFromTypes(): array
+    {
+        return [
+            [\IMAGETYPE_BMP, ImageExtension::BMP],
+            [\IMAGETYPE_GIF, ImageExtension::GIF],
+            [\IMAGETYPE_JPEG, ImageExtension::JPEG],
+            [\IMAGETYPE_PNG, ImageExtension::PNG],
+            [\IMAGETYPE_WBMP, ImageExtension::WBMP],
+            [\IMAGETYPE_WEBP, ImageExtension::WEBP],
+            [\IMAGETYPE_XBM, ImageExtension::XBM],
+            [\IMAGETYPE_UNKNOWN],
+            [-1],
+        ];
+    }
+
+    public static function getTypes(): array
+    {
+        return [
+            [ImageExtension::BMP, \IMAGETYPE_BMP],
+            [ImageExtension::GIF, \IMAGETYPE_GIF],
+            [ImageExtension::JPEG, \IMAGETYPE_JPEG],
+            [ImageExtension::JPG, \IMAGETYPE_JPEG],
+            [ImageExtension::PNG, \IMAGETYPE_PNG],
+            [ImageExtension::WBMP, \IMAGETYPE_WBMP],
+            [ImageExtension::WEBP, \IMAGETYPE_WEBP],
+            [ImageExtension::XBM, \IMAGETYPE_XBM],
+            [ImageExtension::XPM, \IMAGETYPE_UNKNOWN],
+        ];
+    }
+
     public static function getValidOptions(): \Generator
     {
         yield [ImageExtension::BMP, ['compressed' => true]];
@@ -94,6 +124,20 @@ class ImageExtensionTest extends TestCase
         } finally {
             \imagedestroy($image);
         }
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFromTypes')]
+    public function testTryFromType(int $type, ImageExtension $expected = null): void
+    {
+        $actual = ImageExtension::tryFromType($type);
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTypes')]
+    public function testType(ImageExtension $extension, int $expected): void
+    {
+        $actual = $extension->getImageType();
+        self::assertSame($expected, $actual);
     }
 
     /**

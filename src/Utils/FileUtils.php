@@ -184,6 +184,14 @@ final class FileUtils
     }
 
     /**
+     * Tells whether the given file is a directory.
+     */
+    public static function isDir(string|\SplFileInfo $file): bool
+    {
+        return \is_dir(self::realPath($file));
+    }
+
+    /**
      * Tells whether the given file is a regular file.
      */
     public static function isFile(string|\SplFileInfo $file): bool

@@ -282,6 +282,9 @@ class FormatUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @psalm-param \NumberFormatter::ROUND_* $roundingMode
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getPercents')]
     public function testFormatPercent(int|float|string|null $number, string $expected, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): void
     {

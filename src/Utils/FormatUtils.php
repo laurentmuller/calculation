@@ -142,6 +142,8 @@ final class FormatUtils
      * @param bool                  $includeSign  true to include the percent sign
      * @param int                   $decimals     the number of decimals
      * @param int                   $roundingMode the rounding mode
+     *
+     * @psalm-param \NumberFormatter::ROUND_* $roundingMode
      */
     public static function formatPercent(
         float|int|string|null $number,
@@ -277,6 +279,8 @@ final class FormatUtils
      * @param int    $digits       the number of fraction digits
      * @param int    $roundingMode the rounding mode
      * @param string $extraHash    an optional extra hash code used to check if the formatter is already created
+     *
+     * @psalm-param \NumberFormatter::ROUND_* $roundingMode
      */
     public static function getNumberFormatter(
         int $style,

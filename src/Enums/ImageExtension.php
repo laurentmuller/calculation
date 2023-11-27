@@ -116,11 +116,31 @@ enum ImageExtension: string implements EnumDefaultInterface
             ImageExtension::BMP => ['compressed' => true],
             ImageExtension::JPEG,
             ImageExtension::JPG,
-            ImageExtension::WEBP => ['quality' => -1],
+            ImageExtension::WEBP => ['quality' => 80],
             ImageExtension::PNG => ['quality' => -1, 'filters' => -1],
             ImageExtension::WBMP,
             ImageExtension::XBM => ['foreground_color' => null],
             default => [],
+        };
+    }
+
+    /**
+     * Gets the image type.
+     *
+     * @return int the image type or 0 if unknown
+     */
+    public function getImageType(): int
+    {
+        return match ($this) {
+            ImageExtension::BMP => \IMAGETYPE_BMP,
+            ImageExtension::GIF => \IMAGETYPE_GIF,
+            ImageExtension::JPEG,
+            ImageExtension::JPG => \IMAGETYPE_JPEG,
+            ImageExtension::PNG => \IMAGETYPE_PNG,
+            ImageExtension::WEBP => \IMAGETYPE_WEBP,
+            ImageExtension::WBMP => \IMAGETYPE_WBMP,
+            ImageExtension::XBM => \IMAGETYPE_XBM,
+            ImageExtension::XPM => \IMAGETYPE_UNKNOWN,
         };
     }
 
@@ -164,6 +184,23 @@ enum ImageExtension: string implements EnumDefaultInterface
             ImageExtension::WBMP => \imagewbmp($image, $file, $options['foreground_color']),
             ImageExtension::XBM => \imagexbm($image, (string) $file, $options['foreground_color']),
             ImageExtension::XPM => false,
+        };
+    }
+
+    /**
+     * Gets the image extension for the given image type.
+     */
+    public static function tryFromType(int $type): ?ImageExtension
+    {
+        return match ($type) {
+            \IMAGETYPE_BMP => ImageExtension::BMP,
+            \IMAGETYPE_GIF => ImageExtension::GIF,
+            \IMAGETYPE_JPEG => ImageExtension::JPEG,
+            \IMAGETYPE_PNG => ImageExtension::PNG,
+            \IMAGETYPE_WEBP => ImageExtension::WEBP,
+            \IMAGETYPE_WBMP => ImageExtension::WBMP,
+            \IMAGETYPE_XBM => ImageExtension::XBM,
+            default => null,
         };
     }
 }

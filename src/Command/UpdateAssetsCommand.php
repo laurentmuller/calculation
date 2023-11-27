@@ -183,7 +183,7 @@ class UpdateAssetsCommand extends Command
         if (null === $newVersion) {
             $this->write("Unable to find last version for the plugin '$name'.", 'error');
         } elseif (\version_compare($version, $newVersion, '<')) {
-            $this->write("The plugin '$name' version '$version' can be updated to the version '$newVersion'.", 'fg=red');
+            $this->write("The plugin '$name' version '$version' can be updated to the version '$newVersion'.", 'bg=red');
         }
     }
 

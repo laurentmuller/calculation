@@ -85,17 +85,32 @@
         "vich/uploader-bundle": "^2.0"
     },
     "require-dev": {
-        "bamarni/composer-bin-plugin": "^1.0",
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "friendsoftwig/twigcs": "^6.0",
+        "orklah/psalm-insane-comparison": "^2.0",
+        "orklah/psalm-not-empty": "^1.0",
+        "orklah/psalm-strict-equality": "^2.0",
         "phpdocumentor/reflection-docblock": "^5.0",
+        "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan": "^1.0",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-doctrine": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpstan/phpstan-symfony": "^1.0",
         "phpunit/phpunit": "^10.0",
+        "psalm/plugin-phpunit": "^0.18",
+        "psalm/plugin-symfony": "^5.0",
+        "rector/rector": "^0.18",
         "symfony/browser-kit": "6.3.*",
         "symfony/css-selector": "6.3.*",
         "symfony/debug-bundle": "6.3.*",
         "symfony/maker-bundle": "^1.0",
-        "symfony/phpunit-bridge": "^6.0",
+        "symfony/phpunit-bridge": "6.3.*",
         "symfony/stopwatch": "6.3.*",
         "symfony/var-dumper": "6.3.*",
-        "symfony/web-profiler-bundle": "6.3.*"
+        "symfony/web-profiler-bundle": "6.3.*",
+        "vimeo/psalm": "^5.0",
+        "weirdan/doctrine-psalm-plugin": "^2.0"
     },
     "replace": {
         "symfony/polyfill-ctype": "*",
@@ -130,16 +145,12 @@
         "discard-changes": true,
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
-            "bamarni/composer-bin-plugin": true,
             "symfony/runtime": true,
-            "symfony/flex": true
+            "symfony/flex": true,
+            "phpstan/extension-installer": true
         }
     },
     "extra": {
-        "bamarni-bin": {
-            "bin-links": true,
-            "forward-command": false
-        },
         "symfony": {
             "allow-contrib": true,
             "require": "6.3.*",
@@ -157,13 +168,6 @@
         }
     },
     "scripts": {
-        "bin": "echo 'bin not installed'",
-        "post-install-cmd": "@composer bin all install --ansi",
-        "post-update-cmd": "@composer bin all update --ansi",
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
-        },
         "php-fixer": "vendor/bin/php-cs-fixer fix --diff --dry-run",
         "php-psalm": "vendor/bin/psalm --config=psalm.xml",
         "php-stan": "vendor/bin/phpstan analyse --memory-limit 2G --configuration phpstan.neon",

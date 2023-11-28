@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Enums\ImageExtension;
+use App\Traits\MathTrait;
 use App\Utils\FileUtils;
+use App\Utils\FormatUtils;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,10 +32,14 @@ use Symfony\Component\Finder\SplFileInfo;
 #[AsCommand(name: 'app:update-images', description: 'Convert images, from the given directory, to Webp format.')]
 class WebpCommand extends Command
 {
+    use MathTrait;
+
     private const OPTION_DEPTH = 'depth';
     private const OPTION_DRY_RUN = 'dry-run';
     private const OPTION_OVERWRITE = 'overwrite';
     private const OPTION_SOURCE = 'source';
+
+    private ?SymfonyStyle $io = null;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
@@ -52,25 +58,25 @@ class WebpCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $this->io = new SymfonyStyle($input, $output);
 
         $source = \trim((string) $input->getOption(self::OPTION_SOURCE));
         if ('' === $source) {
-            $io->error('The "--source" option requires a non-empty value.');
+            $this->io->error('The "--source" option requires a non-empty value.');
 
             return Command::INVALID;
         }
         $fullPath = FileUtils::buildPath($this->projectDir, $source);
-        if (!$this->validateSource($io, $fullPath)) {
+        if (!$this->validateSource($fullPath)) {
             return Command::INVALID;
         }
 
         $depth = $input->getOption(self::OPTION_DEPTH);
-        if (!$this->validateDepth($io, $depth)) {
+        if (!$this->validateDepth($depth)) {
             return Command::INVALID;
         }
 
-        $finder = $this->createFinder($io, $fullPath, (int) $depth);
+        $finder = $this->createFinder($fullPath, (int) $depth);
         if (!$finder instanceof Finder) {
             return Command::SUCCESS;
         }
@@ -78,27 +84,28 @@ class WebpCommand extends Command
         $skip = 0;
         $error = 0;
         $success = 0;
+        $oldSize = 0;
+        $newSize = 0;
         $dryRun = $input->getOption(self::OPTION_DRY_RUN);
         $overwrite = $input->getOption(self::OPTION_OVERWRITE);
-        $this->writeVerbose($io, \sprintf('Process images in "%s"', $source));
+        $this->writeVerbose(\sprintf('Process images in "%s"', $source));
         foreach ($finder as $file) {
             $path = $file->getRealPath();
             $name = $file->getFilename();
             if (!$this->isImage($path)) {
                 continue;
             }
-
-            $this->writeVerbose($io, \sprintf('Process : %s', $name));
+            $this->writeVerbose(\sprintf('Load : %s', $name));
             $extension = $this->getImageExtension($file);
             if (!$extension instanceof ImageExtension) {
-                $this->writeVerbose($io, \sprintf('Skip    : %s', $name));
+                $this->writeVerbose(\sprintf('Skip : %s', $name));
                 ++$skip;
                 continue;
             }
 
             $image = $extension->createImage($path);
             if (!$image instanceof \GdImage) {
-                $this->writeVerbose($io, \sprintf('<error>Skip    : %s - Unable to load image.</error>', $name));
+                $this->writeError(\sprintf('Skip : %s - Unable to load image.', $name));
                 ++$error;
                 continue;
             }
@@ -106,48 +113,63 @@ class WebpCommand extends Command
             $targetFile = $this->getTargetFile($file);
             $targetName = \basename($targetFile);
             if (!$overwrite && FileUtils::exists($targetFile)) {
-                $this->writeVerbose($io, \sprintf('Skip    : %s - Image already exist.', $targetName));
+                $this->writeVerbose(\sprintf('Skip : %s - Image already exist.', $targetName));
                 \imagedestroy($image);
                 ++$skip;
                 continue;
             }
 
             if ($dryRun) {
-                if ($this->saveImageTemp($image)) {
-                    $this->writeVerbose($io, \sprintf('Save    : %s - Simulate.', $targetName));
+                [$result, $size] = $this->saveImageTemp($image);
+                if ($result) {
+                    $this->writeVerbose(\sprintf('Save : %s (Simulate)', $targetName));
+                    $oldSize += FileUtils::size($path);
+                    $newSize += $size;
                     ++$success;
                 } else {
-                    $io->writeln(\sprintf('<error>Error   : %s - Unable to convert image.</error>', $targetName));
+                    $this->writeError(\sprintf('Error: %s - Unable to convert image.', $targetName));
                     ++$error;
                 }
                 \imagedestroy($image);
                 continue;
             }
 
-            $this->writeVerbose($io, \sprintf('Save    : %s.', $targetName));
+            $this->writeVerbose(\sprintf('Save    : %s.', $targetName));
             if (!$this->saveImage($image, $targetFile)) {
-                $io->writeln(\sprintf('<error>Error   : %s - Unable to convert image.</error>', $targetName));
+                $this->writeError(\sprintf('Error: %s - Unable to convert image.', $targetName));
                 \imagedestroy($image);
                 ++$error;
                 continue;
             }
 
+            $oldSize += FileUtils::size($path);
+            $newSize += FileUtils::size($targetFile);
             \imagedestroy($image);
             ++$success;
         }
-        $message = \sprintf('Conversion: %d, Skip: %d, Error: %d.', $success, $skip, $error);
+        $percent = $this->safeDivide($newSize - $oldSize, $oldSize);
+        $message = \sprintf(
+            'Conversion: %s, Skip: %s, Error: %s, Old Size: %s, New Size: %s, Size reduction: %s.',
+            FormatUtils::formatInt($success),
+            FormatUtils::formatInt($skip),
+            FormatUtils::formatInt($error),
+            FormatUtils::formatInt($oldSize),
+            FormatUtils::formatInt($newSize),
+            FormatUtils::formatPercent($percent, decimals: 1)
+        );
         if (0 !== $error) {
-            $io->error($message);
+            // @phpstan-ignore-next-line
+            $this->io->error($message);
 
             return Command::FAILURE;
         }
-
-        $io->success($message);
+        // @phpstan-ignore-next-line
+        $this->io->success($message);
 
         return Command::SUCCESS;
     }
 
-    private function createFinder(SymfonyStyle $io, string $path, int $depth): ?Finder
+    private function createFinder(string $path, int $depth): ?Finder
     {
         $callback = static fn (ImageExtension $extension): string => \sprintf('*.%s', $extension->value);
         $name = \array_map($callback, ImageExtension::cases());
@@ -163,7 +185,7 @@ class WebpCommand extends Command
         if ($finder->hasResults()) {
             return $finder;
         }
-        $io->warning(\sprintf('No image found in directory "%s".', $path));
+        $this->io?->warning(\sprintf('No image found in directory "%s".', $path));
 
         return null;
     }
@@ -203,29 +225,35 @@ class WebpCommand extends Command
         return \imagewebp($image, $path);
     }
 
-    private function saveImageTemp(\GdImage $image): bool
+    /**
+     * @return array{0: bool, 1: int}
+     */
+    private function saveImageTemp(\GdImage $image): array
     {
         $temp = FileUtils::tempFile();
         if (!\is_string($temp)) {
-            return false;
+            return [false, 0];
         }
 
         try {
-            return $this->saveImage($image, $temp);
+            $result = $this->saveImage($image, $temp);
+            $size = FileUtils::size($temp);
+
+            return [$result, $size];
         } finally {
             FileUtils::remove($temp);
         }
     }
 
-    private function validateDepth(SymfonyStyle $io, mixed $depth): bool
+    private function validateDepth(mixed $depth): bool
     {
         if (!\is_numeric($depth)) {
-            $io->error(\sprintf('Depth argument must be of type int, %s given.', \get_debug_type($depth)));
+            $this->io?->error(\sprintf('Depth argument must be of type int, %s given.', \get_debug_type($depth)));
 
             return false;
         }
         if ((int) $depth < 0) {
-            $io->error(\sprintf('Depth argument must be greater than or equal to 0, %d given.', $depth));
+            $this->io?->error(\sprintf('Depth argument must be greater than or equal to 0, %d given.', $depth));
 
             return false;
         }
@@ -233,15 +261,15 @@ class WebpCommand extends Command
         return true;
     }
 
-    private function validateSource(SymfonyStyle $io, string $path): bool
+    private function validateSource(string $path): bool
     {
         if (!FileUtils::exists($path)) {
-            $io->error(\sprintf('Unable to find the source directory: "%s".', $path));
+            $this->io?->error(\sprintf('Unable to find the source directory: "%s".', $path));
 
             return false;
         }
         if (!FileUtils::isDir($path)) {
-            $io->error(\sprintf('The source "%s" is not a directory.', $path));
+            $this->io?->error(\sprintf('The source "%s" is not a directory.', $path));
 
             return false;
         }
@@ -249,10 +277,15 @@ class WebpCommand extends Command
         return true;
     }
 
-    private function writeVerbose(SymfonyStyle $io, string $message): void
+    private function writeError(string $message): void
     {
-        if ($io->isVerbose()) {
-            $io->writeln($message);
+        $this->io?->writeln('<error>' . $message . '</error>');
+    }
+
+    private function writeVerbose(string $message): void
+    {
+        if ($this->io?->isVerbose()) {
+            $this->io->writeln($message);
         }
     }
 }

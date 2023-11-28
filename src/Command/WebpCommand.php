@@ -27,7 +27,7 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * Command to convert images to Webp format.
  */
-#[AsCommand(name: 'app:update-images', description: 'Convert images to Webp format.')]
+#[AsCommand(name: 'app:update-images', description: 'Convert images, from the given directory, to Webp format.')]
 class WebpCommand extends Command
 {
     private const OPTION_DEPTH = 'depth';
@@ -44,28 +44,33 @@ class WebpCommand extends Command
 
     protected function configure(): void
     {
-        $this->addOption(self::OPTION_SOURCE, 's', InputOption::VALUE_REQUIRED, 'The source directory relative to the root project directory.');
-        $this->addOption(self::OPTION_DEPTH, 'r', InputOption::VALUE_OPTIONAL, 'The depth to search in directory.', 0);
-        $this->addOption(self::OPTION_OVERWRITE, 'o', InputOption::VALUE_NONE, 'Overwrite existing files.', false);
-        $this->addOption(self::OPTION_DRY_RUN, 'd', InputOption::VALUE_NONE, 'Check only without generate files.', false);
+        $this->addOption(self::OPTION_SOURCE, null, InputOption::VALUE_REQUIRED, 'The source directory relative to the project directory.');
+        $this->addOption(self::OPTION_DEPTH, null, InputOption::VALUE_REQUIRED, 'The depth to search in directory.', 0);
+        $this->addOption(self::OPTION_OVERWRITE, null, InputOption::VALUE_NONE, 'Overwrite existing files.');
+        $this->addOption(self::OPTION_DRY_RUN, null, InputOption::VALUE_NONE, 'Simulate conversion without generate images.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $source = (string) $input->getOption(self::OPTION_SOURCE);
+        $source = \trim((string) $input->getOption(self::OPTION_SOURCE));
+        if ('' === $source) {
+            $io->error('The "--source" option requires a non-empty value.');
+
+            return Command::INVALID;
+        }
         $fullPath = FileUtils::buildPath($this->projectDir, $source);
         if (!$this->validateSource($io, $fullPath)) {
             return Command::INVALID;
         }
 
-        $depth = (int) $input->getOption(self::OPTION_DEPTH);
+        $depth = $input->getOption(self::OPTION_DEPTH);
         if (!$this->validateDepth($io, $depth)) {
             return Command::INVALID;
         }
 
-        $finder = $this->createFinder($io, $fullPath, $depth);
+        $finder = $this->createFinder($io, $fullPath, (int) $depth);
         if (!$finder instanceof Finder) {
             return Command::SUCCESS;
         }
@@ -93,7 +98,7 @@ class WebpCommand extends Command
 
             $image = $extension->createImage($path);
             if (!$image instanceof \GdImage) {
-                $this->writeVerbose($io, \sprintf('Skip    : %s - Unable to load image.', $name));
+                $this->writeVerbose($io, \sprintf('<error>Skip    : %s - Unable to load image.</error>', $name));
                 ++$error;
                 continue;
             }
@@ -112,7 +117,7 @@ class WebpCommand extends Command
                     $this->writeVerbose($io, \sprintf('Save    : %s - Simulate.', $targetName));
                     ++$success;
                 } else {
-                    $io->writeln(\sprintf('<bg=red>Error   : %s - Unable to convert image.</>', $targetName));
+                    $io->writeln(\sprintf('<error>Error   : %s - Unable to convert image.</error>', $targetName));
                     ++$error;
                 }
                 \imagedestroy($image);
@@ -121,7 +126,7 @@ class WebpCommand extends Command
 
             $this->writeVerbose($io, \sprintf('Save    : %s.', $targetName));
             if (!$this->saveImage($image, $targetFile)) {
-                $io->writeln(\sprintf('<bg=red>Error   : %s - Unable to convert image.</>', $targetName));
+                $io->writeln(\sprintf('<error>Error   : %s - Unable to convert image.</error>', $targetName));
                 \imagedestroy($image);
                 ++$error;
                 continue;
@@ -212,9 +217,14 @@ class WebpCommand extends Command
         }
     }
 
-    private function validateDepth(SymfonyStyle $io, int $depth): bool
+    private function validateDepth(SymfonyStyle $io, mixed $depth): bool
     {
-        if ($depth < 0) {
+        if (!\is_numeric($depth)) {
+            $io->error(\sprintf('Depth argument must be of type int, %s given.', \get_debug_type($depth)));
+
+            return false;
+        }
+        if ((int) $depth < 0) {
             $io->error(\sprintf('Depth argument must be greater than or equal to 0, %d given.', $depth));
 
             return false;

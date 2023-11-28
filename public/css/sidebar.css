@@ -50,11 +50,6 @@
     padding-left: 1.5rem;
 }
 
-.navbar-vertical .nav-link-toggle {
-    width: 100%;
-    text-align: left;
-}
-
 .navbar-vertical .dropup .nav-link {
     color: var(--bs-navbar-color);
 }
@@ -75,14 +70,19 @@
     cursor: default;
 }
 
-/* toggle menu arrow */
+/* toggle menu with drop-down arrow on the right */
+.navbar-vertical .nav-link-toggle {
+    text-align: left;
+    width: 100%;
+}
+
 .navbar-vertical .nav-link-toggle::after {
     font-family: "Font Awesome 6 Free", sans-serif;
     font-weight: 900;
     float: right;
     margin-left: 6px;
-    transition: transform 0.15s ease-in-out;
     content: "\f104";
+    transition: transform 0.15s ease-in-out;
 }
 
 .navbar-vertical .nav-link-toggle[aria-expanded="true"]::after {

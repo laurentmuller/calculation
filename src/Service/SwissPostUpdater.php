@@ -292,7 +292,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             }
             switch ($data[0]) {
                 case self::REC_00_VALIDITY:
-                    if (!$this->processValidity($result, $data)) { // @phpstan-ignore-line
+                    if (!$this->processValidity($result, $data)) {
                         return false;
                     }
                     break;

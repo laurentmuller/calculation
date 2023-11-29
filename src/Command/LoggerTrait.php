@@ -41,19 +41,19 @@ trait LoggerTrait
     }
 
     /**
-     * Writes the given information message.
-     */
-    protected function write(string $message, string $style = 'info'): void
-    {
-        $this->io?->writeln("<$style>$message</>");
-    }
-
-    /**
      * Writes the given error message.
      */
     protected function writeError(string $message): void
     {
         $this->io?->error($message);
+    }
+
+    /**
+     * Writes the given information message.
+     */
+    protected function writeln(string $message, string $style = 'info'): void
+    {
+        $this->io?->writeln("<$style>$message</>");
     }
 
     /**
@@ -78,7 +78,7 @@ trait LoggerTrait
     protected function writeVerbose(string $message, string $style = 'info'): void
     {
         if ($this->isVerbose()) {
-            $this->write($message, $style);
+            $this->writeln($message, $style);
         }
     }
 
@@ -88,7 +88,7 @@ trait LoggerTrait
     protected function writeVeryVerbose(string $message, string $style = 'info'): void
     {
         if ($this->isVeryVerbose()) {
-            $this->write($message, $style);
+            $this->writeln($message, $style);
         }
     }
 

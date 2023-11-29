@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfException;
@@ -197,6 +198,13 @@ class SymfonyReport extends AbstractReport
 
     private function outputRowEnabled(PdfGroupTable $table, string $key, bool $enabled): self
     {
-        return $this->outputRow($table, $key, $enabled ? 'Enabled' : 'Disabled');
+        $text = $enabled ? 'Enabled' : 'Disabled';
+        $style = $enabled ? null : PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
+        $table->startRow()
+            ->add($key)
+            ->add($text, style: $style)
+            ->endRow();
+
+        return $this;
     }
 }

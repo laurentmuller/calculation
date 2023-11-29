@@ -181,9 +181,9 @@ class UpdateAssetsCommand extends Command
     {
         $newVersion = $this->getLastVersion($url, $paths, $name);
         if (null === $newVersion) {
-            $this->write("Unable to find last version for the plugin '$name'.", 'error');
+            $this->writeln("Unable to find last version for the plugin '$name'.", 'error');
         } elseif (\version_compare($version, $newVersion, '<')) {
-            $this->write("The plugin '$name' version '$version' can be updated to the version '$newVersion'.", 'bg=red');
+            $this->writeln("The plugin '$name' version '$version' can be updated to the version '$newVersion'.", 'bg=red');
         }
     }
 
@@ -220,7 +220,7 @@ class UpdateAssetsCommand extends Command
      */
     private function dryRun(array $configuration): int
     {
-        $this->write('Check versions:');
+        $this->writeln('Check versions:');
         $pattern = '%s %-30s %-12s %s';
 
         $plugins = $configuration['plugins'];
@@ -228,7 +228,7 @@ class UpdateAssetsCommand extends Command
             $name = $plugin['name'];
             $version = $plugin['version'];
             if ($this->isPluginDisabled($plugin)) {
-                $this->write(\sprintf($pattern, '✗', $name, $version, 'Disabled.'), 'fg=gray');
+                $this->writeln(\sprintf($pattern, '✗', $name, $version, 'Disabled.'), 'fg=gray');
                 continue;
             }
 
@@ -239,14 +239,14 @@ class UpdateAssetsCommand extends Command
             if (\is_string($versionUrl) && \is_array($versionPaths)) {
                 $newVersion = $this->getLastVersion($versionUrl, $versionPaths, $name);
                 if (null === $newVersion) {
-                    $this->write(\sprintf($pattern, '✗', $name, $version, 'Unable to find version.'), 'fg=red');
+                    $this->writeln(\sprintf($pattern, '✗', $name, $version, 'Unable to find version.'), 'fg=red');
                 } elseif (\version_compare($version, $newVersion, '<')) {
-                    $this->write(\sprintf('✗ %-30s %-12s Version %s available.', $name, $version, $newVersion), 'fg=red');
+                    $this->writeln(\sprintf('✗ %-30s %-12s Version %s available.', $name, $version, $newVersion), 'fg=red');
                 } else {
-                    $this->write(\sprintf('✓ %-30s %-12s', $name, $version));
+                    $this->writeln(\sprintf('✓ %-30s %-12s', $name, $version));
                 }
             } else {
-                $this->write(\sprintf($pattern, '✗', $name, $version, 'No version information.'), 'fg=gray');
+                $this->writeln(\sprintf($pattern, '✗', $name, $version, 'No version information.'), 'fg=gray');
             }
         }
 

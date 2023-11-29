@@ -15,7 +15,7 @@ symfony.lock
 /tests/Data/db_test.sqlite
 ###< phpunit ###
 
-###> data ###
+###> databases ###
 /resources/data/swiss.sqlite
 /resources/data/openweather.sqlite
 ###< application ###
@@ -30,3 +30,8 @@ symfony.lock
 /deployment.phar
 /deploy/
 ###< deploy ###
+
+###> ci ###
+.php-cs-fixer.cache
+.phpunit.result.cache
+###< ci ###

@@ -8,7 +8,6 @@
 }
 
 .phpversion td {
-    -ms-word-break: break-word;
     word-break: break-word;
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
@@ -31,7 +30,6 @@
 .phpversion td > p {
     margin-bottom: 5px;
 }
-
 
 .phpversion h1,
 .phpversion h2,
@@ -77,15 +75,15 @@
     line-height: 1em;
 }
 
+.phpversion td.v.disabled {
+    color: var(--bs-secondary);
+}
+
 .phpversion td.enabled:before {
     content: '✓';
     font-weight: bold;
     margin-right: 0.25rem;
     color: var(--bs-success);
-}
-
-.phpversion td.v.disabled {
-    color: var(--bs-secondary);
 }
 
 .phpversion td.v.disabled:before {

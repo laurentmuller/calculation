@@ -71,10 +71,10 @@
         <div class="collapse" id="extensions" aria-labelledby="extensions-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-hover table-sm mb-0">
                 <tbody>
-                {{ tools.rowInfoBoolean('Debug', app.debug ? 'Enabled' : 'Disabled', app.debug, 'ps-3') }}
-                {{ tools.rowInfoBoolean('OP Cache', service.zendCacheLoaded ? 'Enabled' : 'Disabled', service.zendCacheLoaded, 'ps-3') }}
-                {{ tools.rowInfoBoolean('APCu', service.apcuLoaded ? 'Enabled' : 'Disabled', service.apcuLoaded, 'ps-3') }}
-                {{ tools.rowInfoBoolean('Xdebug', service.xdebugLoaded ? 'Enabled' : 'Disabled', service.xdebugLoaded, 'ps-3') }}
+                {{ tools.rowInfoBoolean('Debug', app.debug ? 'Enabled' : 'Disabled', app.debug) }}
+                {{ tools.rowInfoBoolean('OP Cache', service.zendCacheLoaded ? 'Enabled' : 'Disabled', service.zendCacheLoaded) }}
+                {{ tools.rowInfoBoolean('APCu', service.apcuLoaded ? 'Enabled' : 'Disabled', service.apcuLoaded) }}
+                {{ tools.rowInfoBoolean('Xdebug', service.xdebugLoaded ? 'Enabled' : 'Disabled', service.xdebugLoaded) }}
                 </tbody>
             </table>
         </div>

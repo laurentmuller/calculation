@@ -94,7 +94,7 @@ final class PhpInfoService
         $info = (string) \preg_replace('/<a\s(.+?)>(.+?)<\/a>/mi', '<p>$2</p>', $info);
         $info = \str_ireplace('background-color: white; text-align: center', '', $info);
         $info = \str_ireplace('<i>no value</i>', '<i class="text-secondary">No value</i>', $info);
-        $info = \str_ireplace('(none)', '<i class="text-body-secondary">None</i>', $info);
+        $info = \str_ireplace('(none)', '<i class="text-secondary">None</i>', $info);
         $info = \str_ireplace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
 
         foreach (['Directive', 'Local Value', 'Master Value'] as $value) {

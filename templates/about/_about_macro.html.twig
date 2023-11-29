@@ -29,15 +29,11 @@
 </tr>
 {%- endmacro %}
 
-{% macro rowInfoBoolean(name, value, enabled, name_class='') -%}
-{%- set check_text = enabled ? '✓' : '✗' -%}
-{%- set check_class = enabled ? 'success' : 'secondary' -%}
- {%- set name_class = ('e ' ~ name_class|default(''))|trim -%}
+{% macro rowInfoBoolean(name, value, enabled) -%}
+{%- set class = enabled ? 'enabled' : 'disabled' -%}
 <tr>
-    <td class="{{ name_class }}">{{ name }}</td>
-    <td class="v">
-        <span class="fw-bold me-1 text-{{ check_class }}">{{ check_text }}</span><span>{{ value }}</span>
-    </td>
+    <td class="e">{{ name }}</td>
+    <td class="v {{ class }}">{{ value }}</td>
 </tr>
 {%- endmacro %}
 

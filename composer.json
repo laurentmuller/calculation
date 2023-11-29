@@ -189,7 +189,7 @@
         "php-stan": "Run PHPStan for validation.",
         "php-rector": "Run Rector for validation.",
         "php-twigcs": "Run Twigcs to validate templates.",
-        "php-test": "Run all tests with PHPUnit.",
+        "php-test": "Run tests with PHPUnit.",
         "php-all": "Run all validation scripts."
     },
     "repositories": [

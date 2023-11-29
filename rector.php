@@ -42,9 +42,6 @@ return static function (RectorConfig $rectorConfig): void {
         ],
     ]);
 
-    // cache
-    $rectorConfig->cacheDirectory('./var/ci/rector');
-
     // rules to apply
     $rectorConfig->sets([
         // global
@@ -56,7 +53,6 @@ return static function (RectorConfig $rectorConfig): void {
         DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
         // PHP-Unit
         PHPUnitSetList::PHPUNIT_100,
-        PHPUnitSetList::PHPUNIT_EXCEPTION,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
         PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
         // Symfony

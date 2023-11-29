@@ -32,14 +32,13 @@ use Symfony\Component\Finder\SplFileInfo;
 #[AsCommand(name: 'app:update-images', description: 'Convert images, from the given directory, to Webp format.')]
 class WebpCommand extends Command
 {
+    use LoggerTrait;
     use MathTrait;
 
-    private const OPTION_DEPTH = 'depth';
     private const OPTION_DRY_RUN = 'dry-run';
+    private const OPTION_LEVEL = 'level';
     private const OPTION_OVERWRITE = 'overwrite';
-    private const OPTION_SOURCE = 'source';
-
-    private ?SymfonyStyle $io = null;
+    private const SOURCE_ARGUMENT = 'source';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
@@ -50,19 +49,19 @@ class WebpCommand extends Command
 
     protected function configure(): void
     {
-        $this->addOption(self::OPTION_SOURCE, null, InputOption::VALUE_REQUIRED, 'The source directory relative to the project directory.');
-        $this->addOption(self::OPTION_DEPTH, null, InputOption::VALUE_REQUIRED, 'The depth to search in directory.', 0);
-        $this->addOption(self::OPTION_OVERWRITE, null, InputOption::VALUE_NONE, 'Overwrite existing files.');
-        $this->addOption(self::OPTION_DRY_RUN, null, InputOption::VALUE_NONE, 'Simulate conversion without generate images.');
+        $this->addArgument(self::SOURCE_ARGUMENT, InputOption::VALUE_REQUIRED, 'The source directory relative to the project directory.');
+        $this->addOption(self::OPTION_LEVEL, 'l', InputOption::VALUE_REQUIRED, 'The level (depth) to search in directory.', 0);
+        $this->addOption(self::OPTION_OVERWRITE, 'o', InputOption::VALUE_NONE, 'Overwrite existing files.');
+        $this->addOption(self::OPTION_DRY_RUN, 'd', InputOption::VALUE_NONE, 'Simulate conversion without generate images.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
 
-        $source = \trim((string) $input->getOption(self::OPTION_SOURCE));
+        $source = \trim((string) $input->getArgument(self::SOURCE_ARGUMENT));
         if ('' === $source) {
-            $this->io->error('The "--source" option requires a non-empty value.');
+            $this->writeError('The "--source" argument requires a non-empty value.');
 
             return Command::INVALID;
         }
@@ -71,13 +70,16 @@ class WebpCommand extends Command
             return Command::INVALID;
         }
 
-        $depth = $input->getOption(self::OPTION_DEPTH);
-        if (!$this->validateDepth($depth)) {
+        /** @psalm-var mixed $level */
+        $level = $input->getOption(self::OPTION_LEVEL);
+        if (!$this->validateLevel($level)) {
             return Command::INVALID;
         }
 
-        $finder = $this->createFinder($fullPath, (int) $depth);
-        if (!$finder instanceof Finder) {
+        $finder = $this->createFinder($fullPath, (int) $level);
+        if (!$finder->hasResults()) {
+            $this->writeWarning(\sprintf('No image found in directory "%s".', $source));
+
             return Command::SUCCESS;
         }
 
@@ -86,9 +88,12 @@ class WebpCommand extends Command
         $success = 0;
         $oldSize = 0;
         $newSize = 0;
+        /** @psalm-var  bool $dryRun */
         $dryRun = $input->getOption(self::OPTION_DRY_RUN);
+        /** @psalm-var  bool $overwrite */
         $overwrite = $input->getOption(self::OPTION_OVERWRITE);
         $this->writeVerbose(\sprintf('Process images in "%s"', $source));
+
         foreach ($finder as $file) {
             $path = $file->getRealPath();
             $name = $file->getFilename();
@@ -105,7 +110,7 @@ class WebpCommand extends Command
 
             $image = $extension->createImage($path);
             if (!$image instanceof \GdImage) {
-                $this->writeError(\sprintf('Skip : %s - Unable to load image.', $name));
+                $this->writeln(\sprintf('Skip : %s - Unable to load image.', $name), 'error');
                 ++$error;
                 continue;
             }
@@ -120,33 +125,23 @@ class WebpCommand extends Command
             }
 
             if ($dryRun) {
-                [$result, $size] = $this->saveImageTemp($image);
-                if ($result) {
-                    $this->writeVerbose(\sprintf('Save : %s (Simulate)', $targetName));
-                    $oldSize += FileUtils::size($path);
-                    $newSize += $size;
-                    ++$success;
-                } else {
-                    $this->writeError(\sprintf('Error: %s - Unable to convert image.', $targetName));
-                    ++$error;
-                }
-                \imagedestroy($image);
-                continue;
+                $this->writeVerbose(\sprintf('Save : %s (Simulate)', $targetName));
+                [$result, $size] = $this->saveImage($image);
+            } else {
+                $this->writeVerbose(\sprintf('Save : %s', $targetName));
+                [$result, $size] = $this->saveImage($image, $targetFile);
             }
-
-            $this->writeVerbose(\sprintf('Save    : %s.', $targetName));
-            if (!$this->saveImage($image, $targetFile)) {
-                $this->writeError(\sprintf('Error: %s - Unable to convert image.', $targetName));
-                \imagedestroy($image);
+            if ($result) {
+                $oldSize += FileUtils::size($path);
+                $newSize += $size;
+                ++$success;
+            } else {
+                $this->writeln(\sprintf('Error: %s - Unable to convert image.', $targetName), 'error');
                 ++$error;
-                continue;
             }
-
-            $oldSize += FileUtils::size($path);
-            $newSize += FileUtils::size($targetFile);
             \imagedestroy($image);
-            ++$success;
         }
+
         $percent = $this->safeDivide($newSize - $oldSize, $oldSize);
         $message = \sprintf(
             'Conversion: %s, Skip: %s, Error: %s, Old Size: %s, New Size: %s, Size reduction: %s.',
@@ -158,36 +153,33 @@ class WebpCommand extends Command
             FormatUtils::formatPercent($percent, decimals: 1)
         );
         if (0 !== $error) {
-            // @phpstan-ignore-next-line
-            $this->io->error($message);
+            $this->writeError($message);
 
             return Command::FAILURE;
         }
-        // @phpstan-ignore-next-line
-        $this->io->success($message);
+        if ($percent > 0) {
+            $this->writeWarning($message);
+        } else {
+            $this->writeSuccess($message);
+        }
 
         return Command::SUCCESS;
     }
 
-    private function createFinder(string $path, int $depth): ?Finder
+    private function createFinder(string $path, int $level): Finder
     {
         $callback = static fn (ImageExtension $extension): string => \sprintf('*.%s', $extension->value);
         $name = \array_map($callback, ImageExtension::cases());
         $notName = $callback(ImageExtension::WEBP);
 
         $finder = new Finder();
-        $finder->ignoreUnreadableDirs()
+
+        return $finder->ignoreUnreadableDirs()
             ->in($path)
-            ->depth("<= $depth")
+            ->depth("<= $level")
             ->files()
             ->name($name)
             ->notName($notName);
-        if ($finder->hasResults()) {
-            return $finder;
-        }
-        $this->io?->warning(\sprintf('No image found in directory "%s".', $path));
-
-        return null;
     }
 
     private function getImageExtension(SplFileInfo $file): ?ImageExtension
@@ -216,44 +208,45 @@ class WebpCommand extends Command
         return false !== $info && ImageExtension::tryFromType($info[2]) instanceof ImageExtension;
     }
 
-    private function saveImage(\GdImage $image, string $path): bool
-    {
-        \imagepalettetotruecolor($image);
-        \imagealphablending($image, true);
-        \imagesavealpha($image, true);
-
-        return \imagewebp($image, $path);
-    }
-
     /**
      * @return array{0: bool, 1: int}
      */
-    private function saveImageTemp(\GdImage $image): array
+    private function saveImage(\GdImage $image, string $path = null): array
     {
-        $temp = FileUtils::tempFile();
-        if (!\is_string($temp)) {
-            return [false, 0];
+        $temp = null;
+        if (null === $path) {
+            $temp = FileUtils::tempFile();
+            if (null === $temp) {
+                return [false, 0];
+            }
+            $path = $temp;
         }
 
         try {
-            $result = $this->saveImage($image, $temp);
-            $size = FileUtils::size($temp);
+            \imagepalettetotruecolor($image);
+            \imagealphablending($image, true);
+            \imagesavealpha($image, true);
+
+            $result = \imagewebp($image, $path);
+            $size = FileUtils::size($path);
 
             return [$result, $size];
         } finally {
-            FileUtils::remove($temp);
+            if (null !== $temp) {
+                FileUtils::remove($temp);
+            }
         }
     }
 
-    private function validateDepth(mixed $depth): bool
+    private function validateLevel(mixed $level): bool
     {
-        if (!\is_numeric($depth)) {
-            $this->io?->error(\sprintf('Depth argument must be of type int, %s given.', \get_debug_type($depth)));
+        if (!\is_numeric($level)) {
+            $this->writeError(\sprintf('The level argument must be of type int, %s given.', \get_debug_type($level)));
 
             return false;
         }
-        if ((int) $depth < 0) {
-            $this->io?->error(\sprintf('Depth argument must be greater than or equal to 0, %d given.', $depth));
+        if ((int) $level < 0) {
+            $this->writeError(\sprintf('The level argument must be greater than or equal to 0, %d given.', $level));
 
             return false;
         }
@@ -264,28 +257,16 @@ class WebpCommand extends Command
     private function validateSource(string $path): bool
     {
         if (!FileUtils::exists($path)) {
-            $this->io?->error(\sprintf('Unable to find the source directory: "%s".', $path));
+            $this->writeError(\sprintf('Unable to find the source directory: "%s".', $path));
 
             return false;
         }
         if (!FileUtils::isDir($path)) {
-            $this->io?->error(\sprintf('The source "%s" is not a directory.', $path));
+            $this->writeError(\sprintf('The source "%s" is not a directory.', $path));
 
             return false;
         }
 
         return true;
-    }
-
-    private function writeError(string $message): void
-    {
-        $this->io?->writeln('<error>' . $message . '</error>');
-    }
-
-    private function writeVerbose(string $message): void
-    {
-        if ($this->io?->isVerbose()) {
-            $this->io->writeln($message);
-        }
     }
 }

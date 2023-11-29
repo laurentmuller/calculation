@@ -93,8 +93,7 @@ class UpdateAssetsCommand extends Command
         if (!$this->propertyExists($configuration, ['target', 'plugins', 'sources'], true)) {
             return Command::INVALID;
         }
-        $dry_run = $input->getOption(self::DRY_RUN_OPTION);
-        if ($dry_run) {
+        if ($input->getOption(self::DRY_RUN_OPTION)) {
             return $this->dryRun($configuration);
         }
 

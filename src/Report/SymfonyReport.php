@@ -30,6 +30,8 @@ use App\Service\SymfonyInfoService;
  */
 class SymfonyReport extends AbstractReport
 {
+    private ?PdfStyle $style = null;
+
     public function __construct(AbstractController $controller, private readonly SymfonyInfoService $service, private readonly string $locale, private readonly string $mode)
     {
         parent::__construct($controller);
@@ -41,31 +43,35 @@ class SymfonyReport extends AbstractReport
      */
     public function render(): bool
     {
-        $info = $this->service;
         $this->AddPage();
-        $this->outputInfo($info);
-        $bundles = $info->getBundles();
+        $this->outputInfo($this->service);
+
+        $bundles = $this->service->getBundles();
         if ([] !== $bundles) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputBundles($bundles);
         }
-        $packages = $info->getPackages();
+
+        $packages = $this->service->getPackages();
         $runtimePackages = $packages[SymfonyInfoService::KEY_RUNTIME] ?? [];
         if ([] !== $runtimePackages) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputPackages('Packages', $runtimePackages);
         }
+
         $debugPackages = $packages[SymfonyInfoService::KEY_DEBUG] ?? [];
         if ([] !== $debugPackages) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputPackages('Debug Packages', $debugPackages);
         }
-        $routes = $info->getRoutes();
+
+        $routes = $this->service->getRoutes();
         $runtimeRoutes = $routes[SymfonyInfoService::KEY_RUNTIME] ?? [];
         if ([] !== $runtimeRoutes) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputRoutes('Routes', $runtimeRoutes);
         }
+
         $debugRoutes = $routes[SymfonyInfoService::KEY_DEBUG] ?? [];
         if ([] !== $debugRoutes) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
@@ -75,8 +81,21 @@ class SymfonyReport extends AbstractReport
         return true;
     }
 
+    private function getStyle(bool $enabled): ?PdfStyle
+    {
+        if ($enabled) {
+            return null;
+        }
+
+        if (!$this->style instanceof PdfStyle) {
+            $this->style = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
+        }
+
+        return $this->style;
+    }
+
     /**
-     * @param BundleType[] $bundles
+     * @psalm-param non-empty-array<BundleType> $bundles
      *
      * @throws PdfException
      */
@@ -141,7 +160,7 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @param array<string, PackageType> $packages
+     * @psalm-param non-empty-array<string, PackageType> $packages
      *
      * @throws PdfException
      */
@@ -168,7 +187,7 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @param RouteType[] $routes
+     * @psalm-param non-empty-array<RouteType> $routes
      *
      * @throws PdfException
      */
@@ -198,8 +217,8 @@ class SymfonyReport extends AbstractReport
 
     private function outputRowEnabled(PdfGroupTable $table, string $key, bool $enabled): self
     {
+        $style = $this->getStyle($enabled);
         $text = $enabled ? 'Enabled' : 'Disabled';
-        $style = $enabled ? null : PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
         $table->startRow()
             ->add($key)
             ->add($text, style: $style)

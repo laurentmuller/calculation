@@ -76,9 +76,6 @@ class PhpIniReport extends AbstractReport
         return \htmlspecialchars_decode((string) $var);
     }
 
-    /**
-     * Gets the cell style for the given value.
-     */
     private function getCellStyle(string $var): ?PdfStyle
     {
         $color = null;
@@ -107,6 +104,10 @@ class PhpIniReport extends AbstractReport
      */
     private function outputEntries(PdfGroupTable $table, string $key, array $entries): void
     {
+        if ([] === $entries) {
+            return;
+        }
+
         $this->addBookmark($key);
         $table->setGroupKey($key);
         $this->sortEntries($entries);

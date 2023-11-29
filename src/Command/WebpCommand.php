@@ -88,9 +88,7 @@ class WebpCommand extends Command
         $success = 0;
         $oldSize = 0;
         $newSize = 0;
-        /** @psalm-var  bool $dryRun */
-        $dryRun = $input->getOption(self::OPTION_DRY_RUN);
-        /** @psalm-var  bool $overwrite */
+        $dry_run = $input->getOption(self::OPTION_DRY_RUN);
         $overwrite = $input->getOption(self::OPTION_OVERWRITE);
         $this->writeVerbose(\sprintf('Process images in "%s"', $source));
 
@@ -124,7 +122,7 @@ class WebpCommand extends Command
                 continue;
             }
 
-            if ($dryRun) {
+            if ($dry_run) {
                 $this->writeVerbose(\sprintf('Save : %s (Simulate)', $targetName));
                 [$result, $size] = $this->saveImage($image);
             } else {

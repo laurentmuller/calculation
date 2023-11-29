@@ -32,9 +32,5 @@ jobs:
       - name: Install dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Install twigcs
-        working-directory: ./vendor-bin/twigcs
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
       - name: Run twigcs
-        run: vendor-bin/twigcs/vendor/bin/twigcs --config .twig_cs.dist.php
+        run: vendor/bin/twigcs --config .twig_cs.dist.php

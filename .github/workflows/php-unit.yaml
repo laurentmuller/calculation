@@ -32,9 +32,5 @@ jobs:
       - name: Install dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Install phpunit
-        working-directory: ./vendor-bin/phpunit
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
       - name: Run phpunit
-        run: vendor-bin/phpunit/vendor/bin/phpunit
+        run: vendor/bin/phpunit

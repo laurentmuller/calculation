@@ -5,7 +5,6 @@ monolithic: true
 finder:
   exclude:
     - "vendor"
-    - "vendor-bin"
   name: "*.php"
 enabled:
   - native_function_invocation

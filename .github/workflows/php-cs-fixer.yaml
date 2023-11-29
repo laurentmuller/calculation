@@ -35,9 +35,5 @@ jobs:
       - name: Install dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Install php-cs-fixer
-        working-directory: ./vendor-bin/php-cs-fixer
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
       - name: Run php-cs-fixer
-        run: vendor-bin/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --dry-run --verbose
+        run: vendor/bin/php-cs-fixer fix --diff --dry-run --verbose

@@ -32,9 +32,5 @@ jobs:
       - name: Install dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Install rector
-        working-directory: ./vendor-bin/rector
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
       - name: Run rector
-        run:  vendor-bin/rector/vendor/bin/rector process --dry-run
+        run:  vendor/bin/rector process --dry-run

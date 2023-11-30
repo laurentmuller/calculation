@@ -12,14 +12,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditRoute;
 use App\Interfaces\RoleInterface;
 use App\Service\SwissPostUpdater;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -35,7 +34,7 @@ class ImportAddressController extends AbstractController
      */
     private const DATA_URL = 'https://www.post.ch/fr/espace-clients/services-en-ligne/zopa/adress-und-geodaten/info';
 
-    #[EditRoute(path: '/import', name: 'admin_import')]
+    #[Route(path: '/import', name: 'admin_import', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function invoke(Request $request, SwissPostUpdater $updater): Response
     {
         $form = $updater->createForm();

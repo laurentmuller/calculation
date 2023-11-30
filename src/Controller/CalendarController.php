@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Calendar\CalculationsDay;
 use App\Calendar\CalculationsMonth;
 use App\Calendar\CalculationsWeek;
@@ -24,10 +23,11 @@ use App\Entity\Calculation;
 use App\Interfaces\RoleInterface;
 use App\Repository\CalculationRepository;
 use App\Utils\DateUtils;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -51,7 +51,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[GetRoute(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => Requirement::DIGITS, 'month' => Requirement::DIGITS])]
+    #[Route(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => Requirement::DIGITS, 'month' => Requirement::DIGITS], methods: Request::METHOD_GET)]
     public function month(int $year = null, int $month = null): Response
     {
         $year = $this->validateYear($year);
@@ -87,7 +87,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[GetRoute(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => Requirement::DIGITS, 'week' => Requirement::DIGITS])]
+    #[Route(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => Requirement::DIGITS, 'week' => Requirement::DIGITS], methods: Request::METHOD_GET)]
     public function week(int $year = null, int $week = null): Response
     {
         $year = $this->validateYear($year);
@@ -128,7 +128,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[GetRoute(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => Requirement::DIGITS])]
+    #[Route(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => Requirement::DIGITS], methods: Request::METHOD_GET)]
     public function year(int $year = null): Response
     {
         $year = $this->validateYear($year);

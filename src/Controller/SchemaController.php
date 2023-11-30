@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\SchemaReport;
 use App\Response\PdfResponse;
 use App\Service\SchemaService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -33,7 +33,7 @@ class SchemaController extends AbstractController
     /**
      * Display information for tables.
      */
-    #[GetRoute(path: '', name: 'schema')]
+    #[Route(path: '', name: 'schema', methods: Request::METHOD_GET)]
     public function index(SchemaService $service): Response
     {
         return $this->render('schema/index.html.twig', [
@@ -44,7 +44,7 @@ class SchemaController extends AbstractController
     /**
      * Export the schema to a PDF document.
      */
-    #[GetRoute(path: '/pdf', name: 'schema_pdf')]
+    #[Route(path: '/pdf', name: 'schema_pdf', methods: Request::METHOD_GET)]
     public function pdf(SchemaService $service): PdfResponse
     {
         $report = new SchemaReport($this, $service);
@@ -57,7 +57,7 @@ class SchemaController extends AbstractController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    #[GetRoute(path: '/{name}', name: 'schema_table')]
+    #[Route(path: '/{name}', name: 'schema_table', methods: Request::METHOD_GET)]
     public function table(string $name, SchemaService $service): Response
     {
         try {

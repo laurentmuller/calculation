@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditRoute;
-use App\Attribute\GetRoute;
 use App\Entity\Log;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
@@ -30,7 +28,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -47,7 +45,7 @@ class LogController extends AbstractController
     /**
      * Delete the content of the log file (if any).
      */
-    #[EditRoute(path: '/delete', name: 'log_delete')]
+    #[Route(path: '/delete', name: 'log_delete', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
     {
         $file = $this->getLogFile($service)?->getFile();
@@ -80,7 +78,7 @@ class LogController extends AbstractController
     /**
      * Download the file.
      */
-    #[GetRoute(path: '/download', name: 'log_download')]
+    #[Route(path: '/download', name: 'log_download', methods: Request::METHOD_GET)]
     public function download(LogService $service): Response
     {
         if (!$service->isFileValid()) {
@@ -95,7 +93,7 @@ class LogController extends AbstractController
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[GetRoute(path: '/excel', name: 'log_excel')]
+    #[Route(path: '/excel', name: 'log_excel', methods: Request::METHOD_GET)]
     public function excel(LogService $service): Response
     {
         $logFile = $this->getLogFile($service);
@@ -110,7 +108,7 @@ class LogController extends AbstractController
     /**
      * Export to PDF the content of the log file.
      */
-    #[GetRoute(path: '/pdf', name: 'log_pdf')]
+    #[Route(path: '/pdf', name: 'log_pdf', methods: Request::METHOD_GET)]
     public function pdf(LogService $service): Response
     {
         $logFile = $this->getLogFile($service);
@@ -125,7 +123,7 @@ class LogController extends AbstractController
     /**
      * Clear the log file cache.
      */
-    #[GetRoute(path: '/refresh', name: 'log_refresh')]
+    #[Route(path: '/refresh', name: 'log_refresh', methods: Request::METHOD_GET)]
     public function refresh(Request $request, LogService $service): Response
     {
         $service->clearCache();
@@ -137,7 +135,7 @@ class LogController extends AbstractController
     /**
      * Show properties of a log entry.
      */
-    #[GetRoute(path: '/show/{id}', name: 'log_show', requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'log_show', requirements: ['id' => Requirement::DIGITS], methods: Request::METHOD_GET)]
     public function show(Request $request, int $id, LogService $service): Response
     {
         $item = $service->getLog($id);
@@ -154,7 +152,7 @@ class LogController extends AbstractController
     /**
      * Render the table view.
      */
-    #[GetRoute(path: '', name: 'log_table')]
+    #[Route(path: '', name: 'log_table', methods: Request::METHOD_GET)]
     public function table(Request $request, LogTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

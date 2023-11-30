@@ -125,6 +125,14 @@ enum ImageExtension: string implements EnumDefaultInterface
     }
 
     /**
+     * Get the pattern for the finder.
+     */
+    public function getFilter(): string
+    {
+        return \sprintf('*.%s', $this->value);
+    }
+
+    /**
      * Gets the image type.
      *
      * @return int the image type or 0 if unknown

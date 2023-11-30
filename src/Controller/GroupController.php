@@ -12,9 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\DeleteRoute;
-use App\Attribute\EditRoute;
-use App\Attribute\GetRoute;
 use App\Entity\Group;
 use App\Form\Group\GroupType;
 use App\Interfaces\RoleInterface;
@@ -30,7 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -52,7 +49,7 @@ class GroupController extends AbstractEntityController
     /**
      * Add a group.
      */
-    #[EditRoute(path: '/add', name: 'group_add')]
+    #[Route(path: '/add', name: 'group_add', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new Group());
@@ -61,7 +58,7 @@ class GroupController extends AbstractEntityController
     /**
      * Clone (copy) a group.
      */
-    #[EditRoute(path: '/clone/{id}', name: 'group_clone', requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/clone/{id}', name: 'group_clone', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function clone(Request $request, Group $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -78,7 +75,7 @@ class GroupController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[DeleteRoute(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_DELETE])]
     public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
     {
         // external references?
@@ -113,7 +110,7 @@ class GroupController extends AbstractEntityController
     /**
      * Edit a group.
      */
-    #[EditRoute(path: '/edit/{id}', name: 'group_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/edit/{id}', name: 'group_edit', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function edit(Request $request, Group $item): Response
     {
         return $this->editEntity($request, $item);
@@ -126,7 +123,7 @@ class GroupController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[GetRoute(path: '/excel', name: 'group_excel')]
+    #[Route(path: '/excel', name: 'group_excel', methods: Request::METHOD_GET)]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -145,7 +142,7 @@ class GroupController extends AbstractEntityController
      * @throws NotFoundHttpException                if no group is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetRoute(path: '/pdf', name: 'group_pdf')]
+    #[Route(path: '/pdf', name: 'group_pdf', methods: Request::METHOD_GET)]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -161,7 +158,7 @@ class GroupController extends AbstractEntityController
     /**
      * Show properties of a group.
      */
-    #[GetRoute(path: '/show/{id}', name: 'group_show', requirements: ['id' => Requirement::DIGITS])]
+    #[Route(path: '/show/{id}', name: 'group_show', requirements: ['id' => Requirement::DIGITS], methods: Request::METHOD_GET)]
     public function show(Group $item): Response
     {
         return $this->showEntity($item);
@@ -170,7 +167,7 @@ class GroupController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[GetRoute(path: '', name: 'group_table')]
+    #[Route(path: '', name: 'group_table', methods: Request::METHOD_GET)]
     public function table(Request $request, GroupTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

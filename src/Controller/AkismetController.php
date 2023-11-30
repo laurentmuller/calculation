@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Service\AkismetService;
 use App\Service\FakerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -32,7 +32,7 @@ class AkismetController extends AbstractController
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    #[GetRoute(path: '/spam', name: 'akismet_comment')]
+    #[Route(path: '/spam', name: 'akismet_comment', methods: Request::METHOD_GET)]
     public function verifyComment(AkismetService $service, FakerService $faker): JsonResponse
     {
         $comment = $faker->getGenerator()->realText(145);
@@ -47,7 +47,7 @@ class AkismetController extends AbstractController
         ]);
     }
 
-    #[GetRoute(path: '/verify', name: 'akismet_key')]
+    #[Route(path: '/verify', name: 'akismet_key', methods: Request::METHOD_GET)]
     public function verifyKey(AkismetService $service): JsonResponse
     {
         $results = $service->verifyKey();

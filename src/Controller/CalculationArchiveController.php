@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditRoute;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Interfaces\RoleInterface;
 use App\Model\CalculationArchiveQuery;
@@ -23,7 +22,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -37,7 +36,7 @@ class CalculationArchiveController extends AbstractController
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[EditRoute(path: '/archive', name: 'admin_archive')]
+    #[Route(path: '/archive', name: 'admin_archive', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function invoke(Request $request, CalculationArchiveService $service): Response
     {
         if (!$service->isEditableStates()) {

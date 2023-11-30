@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditRoute;
-use App\Attribute\GetRoute;
 use App\Entity\User;
 use App\Form\User\RequestChangePasswordType;
 use App\Form\User\ResetChangePasswordType;
@@ -23,7 +21,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -59,7 +57,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Confirmation page after a user has requested a password reset.
      */
-    #[GetRoute(path: '/check-email', name: self::ROUTE_CHECK)]
+    #[Route(path: '/check-email', name: self::ROUTE_CHECK, methods: Request::METHOD_GET)]
     public function checkEmail(): Response
     {
         $token = $this->getTokenObjectFromSession();
@@ -78,7 +76,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Display and process form to request a password reset.
      */
-    #[EditRoute(path: '', name: self::ROUTE_REQUEST)]
+    #[Route(path: '', name: self::ROUTE_REQUEST, methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function request(Request $request, AuthenticationUtils $utils): Response
     {
         $form = $this->createForm(RequestChangePasswordType::class);
@@ -97,7 +95,7 @@ class ResetPasswordController extends AbstractController
     /**
      * Validates and process the reset URL that the user clicked in their email.
      */
-    #[EditRoute(path: '/reset/{token}', name: self::ROUTE_RESET)]
+    #[Route(path: '/reset/{token}', name: self::ROUTE_RESET, methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function reset(Request $request, Security $security, string $token = null): Response
     {
         if (null !== $token) {

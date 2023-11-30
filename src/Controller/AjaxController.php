@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
-use App\Attribute\PostRoute;
 use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
@@ -33,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -50,7 +48,7 @@ class AjaxController extends AbstractController
      * Compute a task.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[PostRoute(path: '/task', name: 'ajax_task')]
+    #[Route(path: '/task', name: 'ajax_task', methods: Request::METHOD_POST)]
     public function computeTask(#[MapRequestPayload] TaskComputeQuery $query, TaskService $service): JsonResponse
     {
         $result = $service->computeQuery($query);
@@ -71,7 +69,7 @@ class AjaxController extends AbstractController
      * Validate a strength password.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[PostRoute(path: '/password', name: 'ajax_password')]
+    #[Route(path: '/password', name: 'ajax_password', methods: Request::METHOD_POST)]
     public function password(#[MapRequestPayload] PasswordQuery $query, PasswordService $service): JsonResponse
     {
         $results = $service->validate($query);
@@ -83,7 +81,7 @@ class AjaxController extends AbstractController
      * Gets random text used to display notifications.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetRoute(path: '/random/text', name: 'ajax_random_text')]
+    #[Route(path: '/random/text', name: 'ajax_random_text', methods: Request::METHOD_GET)]
     public function randomText(FakerService $service, #[MapQueryParameter] int $maxNbChars = 150): JsonResponse
     {
         $generator = $service->getGenerator();
@@ -98,7 +96,7 @@ class AjaxController extends AbstractController
      * Render the page selection dialog for data table.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetRoute(path: '/dialog/page', name: 'ajax_dialog_page')]
+    #[Route(path: '/dialog/page', name: 'ajax_dialog_page', methods: Request::METHOD_GET)]
     public function renderDialogPage(): JsonResponse
     {
         return $this->renderDialog('dialog/dialog_table_page.html.twig');
@@ -108,7 +106,7 @@ class AjaxController extends AbstractController
      * Render the sort dialog for data table.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[PostRoute(path: '/dialog/sort', name: 'ajax_dialog_sort')]
+    #[Route(path: '/dialog/sort', name: 'ajax_dialog_sort', methods: Request::METHOD_POST)]
     public function renderDialogSort(Request $request): JsonResponse
     {
         return $this->renderDialog('dialog/dialog_table_sort.html.twig', ['columns' => $request->toArray()]);
@@ -118,7 +116,7 @@ class AjaxController extends AbstractController
      * Sets a session attribute.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[PostRoute(path: '/session/set', name: 'ajax_session_set')]
+    #[Route(path: '/session/set', name: 'ajax_session_set', methods: Request::METHOD_POST)]
     public function saveSession(#[MapRequestPayload] SessionQuery $query): JsonResponse
     {
         try {
@@ -134,7 +132,7 @@ class AjaxController extends AbstractController
      * Save table parameters.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[PostRoute(path: '/save', name: 'ajax_save_table')]
+    #[Route(path: '/save', name: 'ajax_save_table', methods: Request::METHOD_POST)]
     public function saveTable(Request $request, UserService $service): JsonResponse
     {
         $default = $service->getDisplayMode();

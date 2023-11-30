@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
+use App\Enums\ImageExtension;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
@@ -44,6 +45,18 @@ final class FileUtils
     public static function buildPath(string ...$paths): string
     {
         return Path::join(...$paths);
+    }
+
+    /**
+     * Changes the extension of the given file.
+     */
+    public static function changeExtension(string|\SplFileInfo $file, string|ImageExtension $extension): string
+    {
+        if ($extension instanceof ImageExtension) {
+            $extension = $extension->value;
+        }
+
+        return Path::changeExtension(self::realPath($file), $extension);
     }
 
     /**

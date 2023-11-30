@@ -12,16 +12,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Service\ExchangeRateService;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -41,7 +41,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Display the view.
      */
-    #[GetRoute(path: '', name: 'exchange_display')]
+    #[Route(path: '', name: 'exchange_display', methods: Request::METHOD_GET)]
     public function display(): Response
     {
         return $this->render('test/exchange_rate.html.twig', [
@@ -54,7 +54,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Gets the supported currency codes.
      */
-    #[GetRoute(path: '/codes', name: 'exchange_codes')]
+    #[Route(path: '/codes', name: 'exchange_codes', methods: Request::METHOD_GET)]
     public function getCodes(): JsonResponse
     {
         $codes = $this->service->getSupportedCodes();
@@ -70,7 +70,7 @@ class ExchangeRateController extends AbstractController
      *
      * @param string $code the base currency code
      */
-    #[GetRoute(path: '/latest/{code}', name: 'exchange_latest')]
+    #[Route(path: '/latest/{code}', name: 'exchange_latest', methods: Request::METHOD_GET)]
     public function getLatest(string $code): JsonResponse
     {
         $latest = $this->service->getLatest($code);
@@ -84,7 +84,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Gets the exchange rate from the base currency code to the target currency code.
      */
-    #[GetRoute(path: '/rate', name: 'exchange_rate')]
+    #[Route(path: '/rate', name: 'exchange_rate', methods: Request::METHOD_GET)]
     public function getRate(
         #[MapQueryParameter]
         string $baseCode = '',

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditRoute;
 use App\Entity\User;
 use App\Form\User\UserCommentType;
 use App\Interfaces\RoleInterface;
@@ -24,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -38,7 +37,7 @@ class CommentController extends AbstractController
      * Send a comment to the webmaster.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[EditRoute(path: '/comment', name: 'user_comment')]
+    #[Route(path: '/comment', name: 'user_comment', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function invoke(Request $request, MailerService $service, LoggerInterface $logger): Response
     {
         /** @psalm-var User|Address $from */

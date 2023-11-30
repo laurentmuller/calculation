@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditRoute;
 use App\Entity\User;
 use App\Form\User\ProfileChangePasswordType;
 use App\Form\User\ProfileEditType;
@@ -21,7 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -36,7 +35,7 @@ class ProfileController extends AbstractController
     /**
      * Change password of the current user (if any).
      */
-    #[EditRoute(path: '/change-password', name: 'user_profile_change_password')]
+    #[Route(path: '/change-password', name: 'user_profile_change_password', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function changePassword(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(ProfileChangePasswordType::class, $user);
@@ -55,7 +54,7 @@ class ProfileController extends AbstractController
     /**
      * Edit the profile of the current user (if any).
      */
-    #[EditRoute(path: '/edit', name: 'user_profile_edit')]
+    #[Route(path: '/edit', name: 'user_profile_edit', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function editProfil(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(ProfileEditType::class, $user);

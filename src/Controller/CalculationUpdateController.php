@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditRoute;
 use App\Form\CalculationState\CalculationStateListType;
 use App\Interfaces\RoleInterface;
 use App\Model\CalculationUpdateQuery;
@@ -24,7 +23,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -38,7 +37,7 @@ class CalculationUpdateController extends AbstractController
     /**
      * @throws ORMException
      */
-    #[EditRoute(path: '/update', name: 'admin_update')]
+    #[Route(path: '/update', name: 'admin_update', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function update(Request $request, CalculationUpdateService $service): Response
     {
         $query = $service->createQuery();

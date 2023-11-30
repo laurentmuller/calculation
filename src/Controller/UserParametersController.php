@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditRoute;
 use App\Enums\TableView;
 use App\Form\User\UserParametersType;
 use App\Interfaces\PropertyServiceInterface;
@@ -23,7 +22,7 @@ use App\Traits\CookieTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -36,7 +35,7 @@ class UserParametersController extends AbstractController
 {
     use CookieTrait;
 
-    #[EditRoute(path: '/parameters', name: 'user_parameters')]
+    #[Route(path: '/parameters', name: 'user_parameters', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function invoke(Request $request, UserService $userService): Response
     {
         $form = $this->createForm(UserParametersType::class, $userService->getProperties());

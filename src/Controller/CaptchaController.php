@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Form\Type\CaptchaImageType;
 use App\Service\CaptchaImageService;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -37,7 +37,7 @@ class CaptchaController extends AbstractController
      *
      * @throws \Exception
      */
-    #[GetRoute(path: '/image', name: 'captcha_image')]
+    #[Route(path: '/image', name: 'captcha_image', methods: Request::METHOD_GET)]
     public function image(CaptchaImageService $service): JsonResponse
     {
         $data = $service->generateImage(true);
@@ -55,7 +55,7 @@ class CaptchaController extends AbstractController
     /**
      * Validate a captcha image.
      */
-    #[GetRoute(path: '/validate', name: 'captcha_validate')]
+    #[Route(path: '/validate', name: 'captcha_validate', methods: Request::METHOD_GET)]
     public function validate(
         CaptchaImageService $service,
         #[MapQueryParameter]

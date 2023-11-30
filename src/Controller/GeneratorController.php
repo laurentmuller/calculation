@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditRoute;
-use App\Attribute\GetRoute;
 use App\Generator\CalculationGenerator;
 use App\Generator\CustomerGenerator;
 use App\Generator\ProductGenerator;
@@ -23,7 +21,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -42,7 +40,7 @@ class GeneratorController extends AbstractController
     private const KEY_ENTITY = 'admin.generate.entity';
     private const KEY_SIMULATE = 'admin.generate.simulate';
 
-    #[EditRoute(path: '', name: 'generate')]
+    #[Route(path: '', name: 'generate', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function generate(): Response
     {
         $data = $this->getSessionData();
@@ -68,7 +66,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more calculations with random data.
      */
-    #[GetRoute(path: '/calculation', name: self::ROUTE_CALCULATION)]
+    #[Route(path: '/calculation', name: self::ROUTE_CALCULATION, methods: Request::METHOD_GET)]
     public function generateCalculations(Request $request, CalculationGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);
@@ -77,7 +75,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more customers with random data.
      */
-    #[GetRoute(path: '/customer', name: self::ROUTE_CUSTOMER)]
+    #[Route(path: '/customer', name: self::ROUTE_CUSTOMER, methods: Request::METHOD_GET)]
     public function generateCustomers(Request $request, CustomerGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);
@@ -86,7 +84,7 @@ class GeneratorController extends AbstractController
     /**
      * Create one or more products with random data.
      */
-    #[GetRoute(path: '/product', name: self::ROUTE_PRODUCT)]
+    #[Route(path: '/product', name: self::ROUTE_PRODUCT, methods: Request::METHOD_GET)]
     public function generateProducts(Request $request, ProductGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);

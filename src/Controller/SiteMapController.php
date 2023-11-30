@@ -12,12 +12,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -38,7 +39,7 @@ class SiteMapController extends AbstractController
         $this->content = FileUtils::decodeJson($file);
     }
 
-    #[GetRoute(path: '/sitemap', name: 'site_map')]
+    #[Route(path: '/sitemap', name: 'site_map', methods: Request::METHOD_GET)]
     public function invoke(): Response
     {
         $missingRoutes = $this->getMissingRoutes();

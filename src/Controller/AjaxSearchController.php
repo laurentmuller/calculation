@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
@@ -22,9 +21,10 @@ use App\Service\SwissPostService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -38,7 +38,7 @@ class AjaxSearchController extends AbstractController
      * Search address.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetRoute(path: '/search/address', name: 'ajax_search_address')]
+    #[Route(path: '/search/address', name: 'ajax_search_address', methods: Request::METHOD_GET)]
     public function searchAddress(
         SwissPostService $service,
         #[MapQueryParameter]
@@ -68,7 +68,7 @@ class AjaxSearchController extends AbstractController
      * Search distinct calculation's customers in existing calculations.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetRoute(path: '/search/customer', name: 'ajax_search_customer')]
+    #[Route(path: '/search/customer', name: 'ajax_search_customer', methods: Request::METHOD_GET)]
     public function searchCustomer(
         CalculationRepository $repository,
         #[MapQueryParameter]
@@ -83,7 +83,7 @@ class AjaxSearchController extends AbstractController
      * Search products.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetRoute(path: '/search/product', name: 'ajax_search_product')]
+    #[Route(path: '/search/product', name: 'ajax_search_product', methods: Request::METHOD_GET)]
     public function searchProduct(
         ProductRepository $repository,
         #[MapQueryParameter]
@@ -102,7 +102,7 @@ class AjaxSearchController extends AbstractController
      * Search distinct product and task suppliers.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetRoute(path: '/search/supplier', name: 'ajax_search_supplier')]
+    #[Route(path: '/search/supplier', name: 'ajax_search_supplier', methods: Request::METHOD_GET)]
     public function searchSupplier(
         EntityManagerInterface $manager,
         #[MapQueryParameter]
@@ -117,7 +117,7 @@ class AjaxSearchController extends AbstractController
      * Search distinct customer's titles.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetRoute(path: '/search/title', name: 'ajax_search_title')]
+    #[Route(path: '/search/title', name: 'ajax_search_title', methods: Request::METHOD_GET)]
     public function searchTitle(
         CustomerRepository $repository,
         #[MapQueryParameter]
@@ -132,7 +132,7 @@ class AjaxSearchController extends AbstractController
      * Search distinct units from products and tasks.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetRoute(path: '/search/unit', name: 'ajax_search_unit')]
+    #[Route(path: '/search/unit', name: 'ajax_search_unit', methods: Request::METHOD_GET)]
     public function searchUnit(
         EntityManagerInterface $manager,
         #[MapQueryParameter]

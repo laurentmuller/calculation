@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Table\SearchTable;
 use App\Traits\TableTrait;
@@ -20,6 +19,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -34,7 +34,7 @@ class SearchController extends AbstractController
     /**
      * Render the table view.
      */
-    #[GetRoute(path: '/search', name: 'search')]
+    #[Route(path: '/search', name: 'search', methods: Request::METHOD_GET)]
     public function search(Request $request, SearchTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

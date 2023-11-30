@@ -19,7 +19,6 @@ use App\Service\ImageResizer;
 use App\Service\UserNamer;
 use App\Utils\FileUtils;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Event\Event;
@@ -105,9 +104,8 @@ class VichListener
         $this->resizer->resizeDefault($source, $source);
 
         // rename if not PNG
-        $png = ImageExtension::PNG->value;
-        if ($png !== $this->getFileExtension($file)) {
-            $newName = Path::changeExtension($name, $png);
+        if (ImageExtension::PNG->value !== $this->getFileExtension($file)) {
+            $newName = FileUtils::changeExtension($name, ImageExtension::PNG);
             $mapping->setFileName($user, $newName);
         }
     }

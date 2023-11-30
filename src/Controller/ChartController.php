@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Chart\MonthChart;
 use App\Chart\StateChart;
 use App\Entity\Calculation;
@@ -28,7 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -49,7 +48,7 @@ class ChartController extends AbstractController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws BadRequestHttpException
      */
-    #[GetRoute(path: '/month', name: 'chart_month', methods: Request::METHOD_GET)]
+    #[Route(path: '/month', name: 'chart_month', methods: Request::METHOD_GET)]
     public function month(Request $request, MonthChart $chart): Response
     {
         $this->checkAccess();
@@ -65,7 +64,7 @@ class ChartController extends AbstractController
      * @throws BadRequestHttpException
      * @throws \Exception
      */
-    #[GetRoute(path: '/month/pdf', name: 'chart_month_pdf', methods: Request::METHOD_GET)]
+    #[Route(path: '/month/pdf', name: 'chart_month_pdf', methods: Request::METHOD_GET)]
     public function monthPdf(Request $request, CalculationRepository $repository): PdfResponse
     {
         $this->checkAccess(EntityPermission::EXPORT);
@@ -79,7 +78,7 @@ class ChartController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[GetRoute(path: '/state', name: 'chart_state', methods: Request::METHOD_GET)]
+    #[Route(path: '/state', name: 'chart_state', methods: Request::METHOD_GET)]
     public function state(StateChart $chart): Response
     {
         $this->checkAccess();
@@ -88,7 +87,7 @@ class ChartController extends AbstractController
         return $this->render('chart/chart_state.html.twig', $parameters);
     }
 
-    #[GetRoute(path: '/state/pdf', name: 'chart_state_pdf', methods: Request::METHOD_GET)]
+    #[Route(path: '/state/pdf', name: 'chart_state_pdf', methods: Request::METHOD_GET)]
     public function statePdf(CalculationStateRepository $repository): PdfResponse
     {
         $this->checkAccess(EntityPermission::EXPORT);

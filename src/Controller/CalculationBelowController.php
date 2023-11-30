@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Entity\Calculation;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
@@ -27,7 +26,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -47,7 +46,7 @@ class CalculationBelowController extends AbstractController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[GetRoute(path: '/excel', name: 'below_excel')]
+    #[Route(path: '/excel', name: 'below_excel', methods: Request::METHOD_GET)]
     public function excel(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();
@@ -68,7 +67,7 @@ class CalculationBelowController extends AbstractController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetRoute(path: '/pdf', name: 'below_pdf')]
+    #[Route(path: '/pdf', name: 'below_pdf', methods: Request::METHOD_GET)]
     public function pdf(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();
@@ -87,7 +86,7 @@ class CalculationBelowController extends AbstractController
     /**
      * Render the table view.
      */
-    #[GetRoute(path: '', name: 'below_table')]
+    #[Route(path: '', name: 'below_table', methods: Request::METHOD_GET)]
     public function table(Request $request, CalculationBelowTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

@@ -12,18 +12,17 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
-use App\Attribute\PostRoute;
 use App\Interfaces\RoleInterface;
 use App\Model\HttpClientError;
 use App\Model\TranslateQuery;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -43,7 +42,7 @@ class AjaxTranslateController extends AbstractController
      * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetRoute(path: '/detect', name: 'ajax_detect')]
+    #[Route(path: '/detect', name: 'ajax_detect', methods: Request::METHOD_GET)]
     public function detect(
         #[MapQueryParameter]
         string $text = null,
@@ -78,7 +77,7 @@ class AjaxTranslateController extends AbstractController
      * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetRoute(path: '/languages', name: 'ajax_languages')]
+    #[Route(path: '/languages', name: 'ajax_languages', methods: Request::METHOD_GET)]
     public function languages(#[MapQueryParameter(name: 'service')] string $class = null): JsonResponse
     {
         try {
@@ -102,7 +101,7 @@ class AjaxTranslateController extends AbstractController
      * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[PostRoute(path: '/translate', name: 'ajax_translate')]
+    #[Route(path: '/translate', name: 'ajax_translate', methods: Request::METHOD_POST)]
     public function translate(#[MapRequestPayload] TranslateQuery $query): JsonResponse
     {
         if (empty($query->text)) {

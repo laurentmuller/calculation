@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\PhpIniReport;
 use App\Response\PdfResponse;
@@ -22,7 +21,7 @@ use App\Spreadsheet\PhpIniDocument;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -33,7 +32,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AboutPhpController extends AbstractController
 {
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[GetRoute(path: '/content', name: 'about_php_content')]
+    #[Route(path: '/content', name: 'about_php_content', methods: Request::METHOD_GET)]
     public function content(Request $request, PhpInfoService $service): JsonResponse
     {
         $parameters = [
@@ -51,7 +50,7 @@ class AboutPhpController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[GetRoute(path: '/excel', name: 'about_php_excel')]
+    #[Route(path: '/excel', name: 'about_php_excel', methods: Request::METHOD_GET)]
     public function excel(PhpInfoService $service): SpreadsheetResponse
     {
         $doc = new PhpIniDocument($this, $service);
@@ -60,7 +59,7 @@ class AboutPhpController extends AbstractController
     }
 
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[GetRoute(path: '/pdf', name: 'about_php_pdf')]
+    #[Route(path: '/pdf', name: 'about_php_pdf', methods: Request::METHOD_GET)]
     public function pdf(PhpInfoService $service): PdfResponse
     {
         $report = new PhpIniReport($this, $service);

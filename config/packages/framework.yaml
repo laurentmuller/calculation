@@ -2,14 +2,16 @@ framework:
     # global
     secret: '%app_secret%'
     http_method_override: true
+    handle_all_throwables: true
 
-    # session
+# session
     session:
         enabled: true
         cookie_secure: true
         cookie_httponly: true
         cookie_samesite: 'lax'
         cookie_path: '%cookie_path%'
+        handler_id: session.handler.native_file
         storage_factory_id: session.storage.factory.native
 
     # errors

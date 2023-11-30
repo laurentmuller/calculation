@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
@@ -21,9 +20,10 @@ use App\Service\SymfonyInfoService;
 use App\Spreadsheet\SymfonyDocument;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Intl\Locales;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -34,7 +34,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AboutSymfonyController extends AbstractController
 {
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[GetRoute(path: '/content', name: 'about_symfony_content')]
+    #[Route(path: '/content', name: 'about_symfony_content', methods: Request::METHOD_GET)]
     public function content(SymfonyInfoService $service): JsonResponse
     {
         $parameters = [
@@ -50,7 +50,7 @@ class AboutSymfonyController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[GetRoute(path: '/excel', name: 'about_symfony_excel')]
+    #[Route(path: '/excel', name: 'about_symfony_excel', methods: Request::METHOD_GET)]
     public function excel(SymfonyInfoService $service, #[Autowire('%app_mode%')] string $appMode): SpreadsheetResponse
     {
         $doc = new SymfonyDocument($this, $service, $this->getLocaleName(), $appMode);
@@ -59,7 +59,7 @@ class AboutSymfonyController extends AbstractController
     }
 
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[GetRoute(path: '/pdf', name: 'about_symfony_pdf')]
+    #[Route(path: '/pdf', name: 'about_symfony_pdf', methods: Request::METHOD_GET)]
     public function pdf(SymfonyInfoService $service, #[Autowire('%app_mode%')] string $appMode): PdfResponse
     {
         $report = new SymfonyReport($this, $service, $this->getLocaleName(), $appMode);

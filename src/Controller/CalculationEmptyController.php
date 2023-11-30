@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationsEmptyReport;
@@ -25,7 +24,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -46,7 +45,7 @@ class CalculationEmptyController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetRoute(path: '/excel', name: 'empty_excel')]
+    #[Route(path: '/excel', name: 'empty_excel', methods: Request::METHOD_GET)]
     public function excel(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -64,7 +63,7 @@ class CalculationEmptyController extends AbstractController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetRoute(path: '/pdf', name: 'empty_pdf')]
+    #[Route(path: '/pdf', name: 'empty_pdf', methods: Request::METHOD_GET)]
     public function pdf(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -80,7 +79,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Render the table view.
      */
-    #[GetRoute(path: '', name: 'empty_table')]
+    #[Route(path: '', name: 'empty_table', methods: Request::METHOD_GET)]
     public function table(Request $request, CalculationEmptyTable $table, LoggerInterface $logger): Response
     {
         return $this->handleTableRequest(

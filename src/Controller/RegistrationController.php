@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditRoute;
-use App\Attribute\GetRoute;
 use App\Entity\User;
 use App\Enums\Importance;
 use App\Form\User\UserRegistrationType;
@@ -28,7 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
@@ -60,7 +58,7 @@ class RegistrationController extends AbstractController
     /**
      * Display and process form to register a new user.
      */
-    #[EditRoute(path: '', name: self::ROUTE_REGISTER)]
+    #[Route(path: '', name: self::ROUTE_REGISTER, methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function register(Request $request, AuthenticationUtils $utils): Response
     {
         $user = new User();
@@ -89,7 +87,7 @@ class RegistrationController extends AbstractController
     /**
      * Verify the user e-mail.
      */
-    #[GetRoute(path: '/verify', name: self::ROUTE_VERIFY)]
+    #[Route(path: '/verify', name: self::ROUTE_VERIFY, methods: Request::METHOD_GET)]
     public function verify(Request $request): RedirectResponse
     {
         $user = $this->findUser($request);

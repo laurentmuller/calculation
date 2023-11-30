@@ -12,14 +12,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Enums\Theme;
 use App\Service\ThemeService;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -30,7 +29,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(new Expression('is_granted("ROLE_USER") and user.isEnabled()'))]
 class ThemeController extends AbstractController
 {
-    #[GetRoute(path: '/dialog', name: 'theme_dialog')]
+    #[Route(path: '/dialog', name: 'theme_dialog', methods: Request::METHOD_GET)]
     public function dialog(Request $request, ThemeService $service): JsonResponse
     {
         $result = $this->renderView('dialog/dialog_theme.html.twig', [
@@ -41,7 +40,7 @@ class ThemeController extends AbstractController
         return $this->json($result);
     }
 
-    #[GetRoute(path: '/save', name: 'theme_save')]
+    #[Route(path: '/save', name: 'theme_save', methods: Request::METHOD_GET)]
     public function saveTheme(Request $request, ThemeService $service): JsonResponse
     {
         /** @psalm-var Theme $theme */

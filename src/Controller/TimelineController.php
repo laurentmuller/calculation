@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Service\TimelineService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -36,7 +36,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[GetRoute(path: '', name: 'timeline')]
+    #[Route(path: '', name: 'timeline', methods: Request::METHOD_GET)]
     public function current(
         #[MapQueryParameter]
         string $date = null,
@@ -51,7 +51,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[GetRoute(path: '/first', name: 'timeline_first')]
+    #[Route(path: '/first', name: 'timeline_first', methods: Request::METHOD_GET)]
     public function first(#[MapQueryParameter] string $interval = null): Response
     {
         $parameters = $this->service->first($interval);
@@ -62,7 +62,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[GetRoute(path: '/last', name: 'timeline_last')]
+    #[Route(path: '/last', name: 'timeline_last', methods: Request::METHOD_GET)]
     public function last(#[MapQueryParameter] string $interval = null): Response
     {
         $parameters = $this->service->last($interval);

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\EditRoute;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Form\Admin\ApplicationParametersType;
@@ -29,7 +28,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -45,7 +44,7 @@ class AdminController extends AbstractController
     /**
      * Clear the application cache.
      */
-    #[EditRoute(path: '/clear', name: 'admin_clear')]
+    #[Route(path: '/clear', name: 'admin_clear', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function clearCache(Request $request, SymfonyInfoService $info, ClearCacheService $service, LoggerInterface $logger): Response
     {
         $form = $this->createForm(FormType::class);
@@ -73,7 +72,7 @@ class AdminController extends AbstractController
     /**
      * Edit the application parameters.
      */
-    #[EditRoute(path: '/parameters', name: 'admin_parameters')]
+    #[Route(path: '/parameters', name: 'admin_parameters', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function parameters(Request $request): Response
     {
         $application = $this->getApplication();
@@ -97,7 +96,7 @@ class AdminController extends AbstractController
      * Edit rights for the administrator role (@see RoleInterface::ROLE_ADMIN).
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[EditRoute(path: '/rights/admin', name: 'admin_rights_admin')]
+    #[Route(path: '/rights/admin', name: 'admin_rights_admin', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function rightsAdmin(Request $request, RoleBuilderService $service): Response
     {
         $roleName = RoleInterface::ROLE_ADMIN;
@@ -111,7 +110,7 @@ class AdminController extends AbstractController
     /**
      * Edit rights for the user role (@see RoleInterface::ROLE_USER).
      */
-    #[EditRoute(path: '/rights/user', name: 'admin_rights_user')]
+    #[Route(path: '/rights/user', name: 'admin_rights_user', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function rightsUser(Request $request, RoleBuilderService $service): Response
     {
         $roleName = RoleInterface::ROLE_USER;

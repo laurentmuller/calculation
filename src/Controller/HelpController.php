@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Attribute\GetRoute;
 use App\Interfaces\RoleInterface;
 use App\Report\HelpReport;
 use App\Response\PdfResponse;
 use App\Service\HelpService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -36,7 +36,7 @@ class HelpController extends AbstractController
     /**
      * Display the help for a dialog.
      */
-    #[GetRoute(path: '/dialog/{id}', name: 'help_dialog')]
+    #[Route(path: '/dialog/{id}', name: 'help_dialog', methods: Request::METHOD_GET)]
     public function dialog(string $id, HelpService $service): Response
     {
         /** @psalm-var HelpDialogType|null $dialog */
@@ -57,7 +57,7 @@ class HelpController extends AbstractController
     /**
      * Display the help for an entity.
      */
-    #[GetRoute(path: '/entity/{id}', name: 'help_entity')]
+    #[Route(path: '/entity/{id}', name: 'help_entity', methods: Request::METHOD_GET)]
     public function entity(string $id, HelpService $service): Response
     {
         /** @psalm-var HelpEntityType|null $entity */
@@ -75,7 +75,7 @@ class HelpController extends AbstractController
     /**
      * Display the help index.
      */
-    #[GetRoute(path: '', name: 'help')]
+    #[Route(path: '', name: 'help', methods: Request::METHOD_GET)]
     public function index(HelpService $service): Response
     {
         return $this->render('help/help_index.html.twig', [
@@ -86,7 +86,7 @@ class HelpController extends AbstractController
     /**
      * Export the help to a PDF document.
      */
-    #[GetRoute(path: '/pdf', name: 'help_pdf')]
+    #[Route(path: '/pdf', name: 'help_pdf', methods: Request::METHOD_GET)]
     public function pdf(HelpService $service): PdfResponse
     {
         $doc = new HelpReport($this, $service);

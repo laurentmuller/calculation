@@ -166,18 +166,15 @@ class WebpCommand extends Command
 
     private function createFinder(string $path, int $level): Finder
     {
-        $callback = static fn (ImageExtension $extension): string => \sprintf('*.%s', $extension->value);
-        $name = \array_map($callback, ImageExtension::cases());
-        $notName = $callback(ImageExtension::WEBP);
+        $filtered = \array_filter(ImageExtension::cases(), fn (ImageExtension $e): bool => ImageExtension::WEBP !== $e);
+        $extensions = \array_map(fn (ImageExtension $e): string => $e->getFilter(), $filtered);
+        $depth = "<= $level";
 
-        $finder = new Finder();
-
-        return $finder->ignoreUnreadableDirs()
+        return (new Finder())->ignoreUnreadableDirs()
             ->in($path)
-            ->depth("<= $level")
+            ->depth($depth)
             ->files()
-            ->name($name)
-            ->notName($notName);
+            ->name($extensions);
     }
 
     private function getImageExtension(SplFileInfo $file): ?ImageExtension
@@ -192,11 +189,7 @@ class WebpCommand extends Command
 
     private function getTargetFile(SplFileInfo $info): string
     {
-        $name = $info->getFilenameWithoutExtension();
-        $extension = ImageExtension::WEBP->value;
-        $full_name = \sprintf('%s.%s', $name, $extension);
-
-        return FileUtils::buildPath($info->getPath(), $full_name);
+        return FileUtils::changeExtension($info, ImageExtension::WEBP);
     }
 
     private function isImage(string $path): bool

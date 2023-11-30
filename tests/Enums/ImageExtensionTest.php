@@ -19,6 +19,36 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(ImageExtension::class)]
 class ImageExtensionTest extends TestCase
 {
+    public static function getFilters(): array
+    {
+        return [
+            [ImageExtension::BMP, '*.bmp'],
+            [ImageExtension::GIF, '*.gif'],
+            [ImageExtension::JPEG, '*.jpeg'],
+            [ImageExtension::JPG, '*.jpg'],
+            [ImageExtension::PNG, '*.png'],
+            [ImageExtension::WBMP, '*.wbmp'],
+            [ImageExtension::WEBP, '*.webp'],
+            [ImageExtension::XBM, '*.xbm'],
+            [ImageExtension::XPM, '*.xpm'],
+        ];
+    }
+
+    public static function getImageTypes(): array
+    {
+        return [
+            [ImageExtension::BMP,  \IMAGETYPE_BMP],
+            [ImageExtension::GIF, \IMAGETYPE_GIF],
+            [ImageExtension::JPEG, \IMAGETYPE_JPEG],
+            [ImageExtension::JPG, \IMAGETYPE_JPEG],
+            [ImageExtension::PNG, \IMAGETYPE_PNG],
+            [ImageExtension::WBMP,  \IMAGETYPE_WBMP],
+            [ImageExtension::WEBP,  \IMAGETYPE_WEBP],
+            [ImageExtension::XBM,  \IMAGETYPE_XBM],
+            [ImageExtension::XPM,  \IMAGETYPE_UNKNOWN],
+        ];
+    }
+
     public static function getInvalidOptions(): \Generator
     {
         $values = ImageExtension::cases();
@@ -100,8 +130,22 @@ class ImageExtensionTest extends TestCase
 
     public function testDefault(): void
     {
-        $default = ImageExtension::getDefault();
-        self::assertSame(ImageExtension::PNG, $default);
+        $actual = ImageExtension::getDefault();
+        self::assertSame(ImageExtension::PNG, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getFilters')]
+    public function testFilter(ImageExtension $imageExtension, string $expected): void
+    {
+        $actual = $imageExtension->getFilter();
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getImageTypes')]
+    public function testImageType(ImageExtension $extension, int $expected): void
+    {
+        $actual = $extension->getImageType();
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -168,6 +212,7 @@ class ImageExtensionTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
     public function testValues(ImageExtension $imageExtension, string $expected): void
     {
-        self::assertSame($expected, $imageExtension->value);
+        $actual = $imageExtension->value;
+        self::assertSame($expected, $actual);
     }
 }

@@ -11,6 +11,7 @@ function updateUI() {
     $('#items input[name$="[minimum]"]').inputNumberFormat();
     $('#items input[name$="[maximum]"]').inputNumberFormat();
     $('#items input[name$="[value]"]').inputNumberFormat();
+
     // update tables
     $('#items .table-edit').each(function () {
         const $table = $(this);
@@ -21,9 +22,10 @@ function updateUI() {
     });
     const $items = $('#items .item');
     $('.empty-items').toggleClass('d-none', $items.length !== 0);
+
     // update actions, rules and positions
     let position = 0;
-    const isValidator = $("#edit-form").data('validator') || false;
+    const isValidator = $('#edit-form').data('validator') || false;
     $items.each(function (_index, item) {
         const $item = $(item);
         $item.find('.btn-up-item').toggleDisabled($item.is(':first-of-type'));
@@ -33,6 +35,7 @@ function updateUI() {
             $item.find('.unique-name').rules('add', {unique: '.unique-name'});
         }
     });
+
     // update edit message
     $('#edit-form :input:first').trigger('input');
 }
@@ -42,13 +45,15 @@ function updateUI() {
  */
 function startDragItems() {
     'use strict';
-    const $items = $("#items");
+    const $items = $('#items');
+
     // destroy
     if ($items.data('sortable')) {
         $items.off('sortupdate', updateUI);
         $items.data('sortable', false);
         sortable($items, 'destroy');
     }
+
     // items?
     if ($items.find('.item').length > 1) {
         sortable($items, {
@@ -130,16 +135,22 @@ function addItem() {
     const index = getNextItemIndex();
     const prototype = $items.data('prototype');
     const $item = $(prototype.replace(/__itemIndex__/g, index));
+
     // append
     $items.append($item);
+
     // update UI
     updateUI();
+
     // hide all except last
     $('#items .collapse.show:not(:last)').collapse('hide');
+
     // expand
     $('#items .collapse:last').collapse('show');
+
     // focus
     $item.find('input[name$="[name]"]:last').selectFocus().scrollInViewport();
+
     // drag and drop
     startDragItems();
     return $item;
@@ -172,11 +183,13 @@ function moveUpItem($caller) {
     if ($source.is(':first-of-type')) {
         return $source;
     }
+
     // previous?
     const $target = $source.prev('.item');
     if (0 === $target.length || $source === $target) {
         return $source;
     }
+
     // move
     $target.insertAfter($source);
     updateUI();
@@ -196,11 +209,13 @@ function moveDownItem($caller) {
     if ($source.is(':last-of-type')) {
         return $source;
     }
+
     // next?
     const $target = $source.next('.item');
     if (0 === $target.length || $source === $target) {
         return $source;
     }
+
     // move
     $target.insertBefore($source);
     updateUI();
@@ -219,17 +234,21 @@ function addMargin($caller) {
     if ($table.length === 0) {
         return;
     }
+
     // get values before inserting the row
     const value = getMinValue($table);
     const minimum = getMaxValue($table);
     const maximum = Math.max(minimum * 2, 1);
+
     // create and add margin
     const index = getNextMarginIndex();
     const prototype = $table.data('prototype');
     const $row = $(prototype.replace(/__marginIndex__/g, index));
     $table.find('tbody').append($row);
+
     // update UI
     updateUI();
+
     // set values
     $table.find('input[name$="[minimum]"]:last').floatVal(minimum).selectFocus().scrollInViewport();
     $table.find('input[name$="[maximum]"]:last').floatVal(maximum);
@@ -279,7 +298,7 @@ function sortMargins($caller) {
 }
 
 /**
- * Update the toggle button.
+ * Update the toggle label title.
  *
  * @param {jQuery} $caller - the caller
  * @param {boolean} show - true if shown, false if hidden.
@@ -287,9 +306,9 @@ function sortMargins($caller) {
 function updateToggle($caller, show) {
     'use strict';
     const $form = $('#edit-form');
-    const $link = $caller.parents('.item').find('.btn-toggle');
+    const $label = $caller.parents('.item').find('.label-toggle');
     const title = show ? $form.data('show') : $form.data('hide');
-    $link.attr('title', title).find('i').toggleClass('fa-caret-down fa-caret-up');
+    $label.attr('title', title);
 }
 
 /**
@@ -301,7 +320,7 @@ function collapseAll() {
 }
 
 /**
- * Expand margins.
+ * Expand collapsed margins.
  *
  * @param $caller {jQuery} $caller - the caller
  */
@@ -323,24 +342,19 @@ function expand($caller) {
         e.preventDefault();
         addItem();
     });
+
     // handle item buttons
     $('#items').on('click', '.btn-delete-item', function (e) {
-        e.preventDefault();
         removeItem($(this));
     }).on('click', '.btn-up-item', function (e) {
-        e.preventDefault();
         moveUpItem($(this));
     }).on('click', '.btn-down-item', function (e) {
-        e.preventDefault();
         moveDownItem($(this));
     }).on('click', '.btn-add-margin', function (e) {
-        e.preventDefault();
         addMargin($(this));
     }).on('click', '.btn-delete-margin', function (e) {
-        e.preventDefault();
         removeMargin($(this));
     }).on('click', '.btn-sort-margin', function (e) {
-        e.preventDefault();
         sortMargins($(this));
     }).on('show.bs.collapse', '.collapse', function () {
         collapseAll();
@@ -353,18 +367,25 @@ function expand($caller) {
     }).on('dblclick', '.item-header', function () {
         $(this).parents('.item').find('.collapse').collapse('toggle');
     });
+
     // initialize search
-    const $form = $("#edit-form");
-    $("#task_unit").initTypeahead({
-        url: $form.data("unit-search"), error: $form.data("unit-error")
+    const $form = $('#edit-form');
+    $('#task_unit').initTypeahead({
+        url: $form.data('unit-search'),
+        error: $form.data('unit-error')
     });
-    $("#task_supplier").initTypeahead({
-        url: $form.data("supplier-search"), error: $form.data("supplier-error")
+    $('#task_supplier').initTypeahead({
+        url: $form.data('supplier-search'),
+        error: $form.data('supplier-error')
     });
+
     // start drag & drop
     startDragItems();
+
     // update UI
     updateUI();
+
     // initialize validation
     $form.initValidator();
+
 }(jQuery));

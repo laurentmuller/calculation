@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use App\Interfaces\MarginInterface;
 use App\Interfaces\ParentTimestampableInterface;
-use App\Interfaces\TimestampableInterface;
 use App\Repository\TaskItemMarginRepository;
 use App\Types\FixedFloatType;
 use Doctrine\ORM\Mapping as ORM;
@@ -72,10 +71,7 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTi
         return $this->minimum;
     }
 
-    /**
-     * @return Task|null
-     */
-    public function getParentTimestampable(): ?TimestampableInterface
+    public function getParentTimestampable(): ?Task
     {
         return $this->taskItem?->getParentTimestampable();
     }

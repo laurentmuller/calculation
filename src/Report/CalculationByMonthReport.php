@@ -153,13 +153,11 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
 
     private function drawHeaderCell(PdfCellTextEvent $event, string $rgb): bool
     {
-        // get color
         $color = PdfFillColor::create($rgb);
         if (!$color instanceof PdfFillColor) {
             return false;
         }
 
-        // default
         $text = $event->text;
         $table = $event->table;
         $bounds = $event->bounds;
@@ -167,7 +165,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $textWidth = $parent->GetStringWidth($text) + $parent->getCellMargin();
         $offset = ($bounds->width() - $textWidth - self::RECT_WIDTH) / 2.0;
 
-        // rectangle
         $color->apply($parent);
         $parent->Rect(
             $bounds->x() + $offset,
@@ -177,7 +174,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             PdfRectangleStyle::BOTH
         );
 
-        // text
         $parent->SetX($bounds->x() + $offset + self::RECT_WIDTH);
         $parent->Cell(w: $textWidth, txt: $text);
 
@@ -237,8 +233,13 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         } else {
             $this->Cell(txt: $chr);
         }
+
         $this->SetXY($bounds->x(), $bounds->y());
-        PdfTextColor::default()->apply($this);
+        if ($percent && $this->isMinMargin($newValue)) {
+            PdfTextColor::red()->apply($this);
+        } else {
+            PdfTextColor::default()->apply($this);
+        }
         PdfFont::default()->apply($this);
 
         return false;

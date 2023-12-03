@@ -31,7 +31,7 @@ abstract class AbstractMarginType extends AbstractEntityType
 
         $helper->field('margin')
             ->percent(false)
-            ->addPercentType(1);
+            ->addPercentType(100);
     }
 
     protected function getLabelPrefix(): string

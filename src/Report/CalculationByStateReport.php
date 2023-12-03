@@ -242,8 +242,8 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
                 FormatUtils::formatInt($entity['total']),
                 $this->formatPercent($entity['percent_amount'], 2)
             );
-            $this->currentRow = null;
         }
+        $this->currentRow = null;
 
         // total
         $count = $this->getColumnSum($entities, 'count');

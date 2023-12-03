@@ -600,15 +600,15 @@ class PdfTable
             $parent->SetXY($x, $y);
         }
 
-        $margins = $parent->getCellMargin();
+        $margin = $parent->getCellMargin();
         if ($cell instanceof PdfImageCell) {
             $imageBounds = clone $bounds;
-            $imageBounds->inflate(-$margins);
+            $imageBounds->inflate(-$margin);
             $cell->drawImage($parent, $imageBounds, $alignment);
         } elseif (StringUtils::isString($text)) {
             $line_height = PdfDocument::LINE_HEIGHT;
             if (!$style->getFont()->isDefaultSize()) {
-                $line_height = $parent->getFontSize() + 2.0 * $margins;
+                $line_height = $parent->getFontSize() + 2.0 * $margin;
             }
             $textBounds = clone $bounds;
             $indent = $style->getIndent();
@@ -620,9 +620,9 @@ class PdfTable
 
             if ($cell->isLink()) {
                 $linkBounds = clone $textBounds;
-                $linkBounds->inflate(-$margins);
+                $linkBounds->inflate(-$margin);
                 $linkWidth = $parent->GetStringWidth($text);
-                $linkHeight = (float) $parent->getLinesCount($text, $textBounds->width()) * $line_height - 2.0 * $margins;
+                $linkHeight = (float) $parent->getLinesCount($text, $textBounds->width()) * $line_height - 2.0 * $margin;
                 $linkBounds->setSize($linkWidth, $linkHeight);
                 $this->drawCellLink($parent, $linkBounds, $cell->getLink());
             }

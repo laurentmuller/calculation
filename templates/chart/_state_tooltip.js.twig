@@ -6,8 +6,9 @@
  * @property {string} calculations
  * @property {string} calculations_percent
  * @property {string} net_amount
- * @property {string} margin_amount
  * @property {string} margin_percent
+ * @property {string} margin_amount
+ * @property {string} margin_color
  * @property {string} total_amount
  * @property {string} total_percent
  */
@@ -47,7 +48,7 @@ function renderTooltip () {
         '<td>{{ 'fields.margin'|trans }}</td>' +
         '<td class="px-1">:</td>' +
         '<td class="text-calculation">' + point.margin_amount + '</td>' +
-        '<td class="text-calculation">' + point.margin_percent + '</td>' +
+        '<td class="text-calculation" style="color:'+ point.margin_color + '">' + point.margin_percent + '</td>' +
         '</tr>';
     html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
     html +=

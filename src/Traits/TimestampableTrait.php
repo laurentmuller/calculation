@@ -116,9 +116,6 @@ trait TimestampableTrait
         return $changed;
     }
 
-    /**
-     * Format the date and username.
-     */
     private function formatDateAndUser(?\DateTimeInterface $date, ?string $user, TranslatorInterface $translator, string $id): string
     {
         $date = $date instanceof \DateTimeInterface ? FormatUtils::formatDateTime($date) : $translator->trans('common.empty_date');
@@ -126,9 +123,6 @@ trait TimestampableTrait
             $user = $translator->trans('common.empty_user');
         }
 
-        return $translator->trans($id, [
-            '%date%' => $date,
-            '%user%' => $user,
-        ]);
+        return $translator->trans($id, ['%date%' => $date, '%user%' => $user]);
     }
 }

@@ -17,12 +17,15 @@ use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
+use App\Traits\ArrayTrait;
 
 /**
  * Represents an HTML chunk.
  */
 abstract class AbstractHtmlChunk
 {
+    use ArrayTrait;
+
     /**
      * The bookmark.
      */
@@ -216,7 +219,7 @@ abstract class AbstractHtmlChunk
     {
         $this->classes = [];
         if (null !== $className && '' !== $className) {
-            $this->classes = \array_unique(\array_filter(\explode(' ', \strtolower($className))));
+            $this->classes = $this->getUniqueFiltered(\explode(' ', \strtolower($className)));
         }
 
         return $this->updateStyle();

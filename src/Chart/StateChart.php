@@ -39,6 +39,7 @@ class StateChart extends AbstractHighchart
         private readonly Environment $twig
     ) {
         parent::__construct($application);
+        $this->chart['height'] = 550;
     }
 
     /**
@@ -75,15 +76,24 @@ class StateChart extends AbstractHighchart
         return $this;
     }
 
+    private function formatPercent(float $value): string
+    {
+        return FormatUtils::formatPercent($value, true, 2, \NumberFormatter::ROUND_HALFEVEN);
+    }
+
     private function getClickExpression(): Expr
     {
-        $function = <<<JAVA_SCRIPT
-            function() {
-                location.href = this.url;
-            }
-            JAVA_SCRIPT;
+        return $this->createExpression('function() {location.href = this.url;}');
+    }
 
-        return $this->createExpression($function);
+    private function getMarginColor(float $value): string
+    {
+        $minMargin = $this->getMinMargin();
+        if (!$this->isFloatZero($value) && $value < $minMargin) {
+            return 'var(--bs-danger)';
+        }
+
+        return 'inherit';
     }
 
     private function getPieOptions(): array
@@ -99,6 +109,25 @@ class StateChart extends AbstractHighchart
                 'events' => [
                     'click' => $this->getClickExpression(),
                 ],
+            ],
+        ];
+    }
+
+    private function getSeriesOptions(): array
+    {
+        return [
+            'keys' => [
+                'name',
+                'y',
+                'calculations',
+                'calculations_percent',
+                'net_amount',
+                'margin_percent',
+                'margin_amount',
+                'margin_color',
+                'total_amount',
+                'total_percent',
+                'url',
             ],
         ];
     }
@@ -138,12 +167,13 @@ class StateChart extends AbstractHighchart
                 'name' => $state['code'],
                 'y' => $state['total'],
                 'calculations' => FormatUtils::formatInt($state['count']),
-                'calculations_percent' => FormatUtils::formatPercent($state['percent_calculation'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
+                'calculations_percent' => $this->formatPercent($state['percent_calculation']),
                 'net_amount' => FormatUtils::formatInt($state['items']),
-                'margin_amount' => FormatUtils::formatInt($state['margin_amount']),
                 'margin_percent' => FormatUtils::formatPercent($state['margin_percent']),
+                'margin_amount' => FormatUtils::formatInt($state['margin_amount']),
+                'margin_color' => $this->getMarginColor($state['margin_percent']),
                 'total_amount' => FormatUtils::formatInt($state['total']),
-                'total_percent' => FormatUtils::formatPercent($state['percent_amount'], true, 2, \NumberFormatter::ROUND_HALFEVEN),
+                'total_percent' => $this->formatPercent($state['percent_amount']),
                 'url' => $this->getURL($state['id']),
             ];
         }, $states);
@@ -163,19 +193,7 @@ class StateChart extends AbstractHighchart
     {
         $this->plotOptions->merge([
             'pie' => $this->getPieOptions(),
-            'series' => [
-                'keys' => [
-                    'name',
-                    'y',
-                    'calculations',
-                    'calculations_percent',
-                    'net_amount',
-                    'margin_amount',
-                    'margin_percent',
-                    'total_amount',
-                    'total_percent',
-                ],
-            ],
+            'series' => $this->getSeriesOptions(),
         ]);
 
         return $this;

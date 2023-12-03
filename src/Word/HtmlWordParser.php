@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Word;
 
 use App\Pdf\Html\HtmlBootstrapColors;
+use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
 
 /**
@@ -20,6 +21,7 @@ use App\Utils\StringUtils;
  */
 class HtmlWordParser
 {
+    use ArrayTrait;
     /**
      * The pattern to extract classes.
      */
@@ -212,6 +214,6 @@ class HtmlWordParser
      */
     private function splitClassName(string $className): array
     {
-        return \array_unique(\array_filter(\explode(' ', \strtolower($className))));
+        return $this->getUniqueFiltered(\explode(' ', \strtolower($className)));
     }
 }

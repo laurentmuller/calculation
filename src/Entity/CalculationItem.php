@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
-use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationItemRepository;
 use App\Traits\MathTrait;
 use App\Traits\PositionTrait;
@@ -106,10 +105,7 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
         return (string) $this->getDescription();
     }
 
-    /**
-     * @return Calculation|null
-     */
-    public function getParentTimestampable(): ?TimestampableInterface
+    public function getParentTimestampable(): ?Calculation
     {
         return $this->category?->getParentTimestampable();
     }

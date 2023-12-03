@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
@@ -24,24 +23,27 @@ use App\Entity\Task;
 use App\Entity\User;
 use App\Enums\FlashType;
 use App\Interfaces\DisableListenerInterface;
+use App\Interfaces\EntityInterface;
+use App\Interfaces\ParentTimestampableInterface;
+use App\Traits\ArrayTrait;
 use App\Traits\DisableListenerTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\UnitOfWork;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Listener to add flash messages when entities are created, updated or deleted.
  */
-#[AsDoctrineListener(Events::postPersist)]
-#[AsDoctrineListener(Events::postRemove)]
-#[AsDoctrineListener(Events::postUpdate)]
-#[AsDoctrineListener(Events::preRemove)]
+#[AsDoctrineListener(Events::onFlush)]
 class PersistenceListener implements DisableListenerInterface, ServiceSubscriberInterface
 {
+    use ArrayTrait;
     use DisableListenerTrait;
     use ServiceSubscriberTrait;
     use TranslatorFlashMessageAwareTrait;
@@ -62,155 +64,142 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     ];
 
     /**
-     * The field names to skip.
-     */
-    private const SKIP_FIELDS = [
-        // TimestampableInterface
-        'createdAt',
-        'createdBy',
-        'updatedAt',
-        'updatedBy',
-        // User
-        'requestedAt',
-        'expiresAt',
-        'selector',
-        'hashedToken',
-        'lastLogin',
-    ];
-
-    private ?string $previousDisplay = null;
-
-    /**
-     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
-     *
      * @psalm-api
      */
-    public function postPersist(LifecycleEventArgs $args): void
+    public function onFlush(OnFlushEventArgs $args): void
     {
-        $entity = $this->getEntity($args);
-        if (!$entity instanceof AbstractEntity) {
-            return;
-        }
-        $this->notify($entity, '.add.success', 'common.add_success');
-    }
-
-    /**
-     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
-     *
-     * @psalm-api
-     */
-    public function postRemove(LifecycleEventArgs $args): void
-    {
-        $entity = $this->getEntity($args);
-        if (!$entity instanceof AbstractEntity) {
-            return;
-        }
-        $this->notify($entity, '.delete.success', 'common.delete_success', FlashType::WARNING);
-    }
-
-    /**
-     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
-     *
-     * @psalm-api
-     */
-    public function postUpdate(LifecycleEventArgs $args): void
-    {
-        $entity = $this->getEntity($args);
-        if (!$entity instanceof AbstractEntity) {
+        if (!$this->isEnabled()) {
             return;
         }
 
         $manager = $args->getObjectManager();
         $unitOfWork = $manager->getUnitOfWork();
-        $changeSet = \array_keys($unitOfWork->getEntityChangeSet($entity));
-        if ($this->isSkipFields($changeSet)) {
-            return;
+        $updates = $this->filterEntities($unitOfWork->getScheduledEntityUpdates());
+        $deletions = $this->filterEntities($unitOfWork->getScheduledEntityDeletions());
+        $insertions = $this->filterEntities($unitOfWork->getScheduledEntityInsertions());
+
+        $collectionUpdates = $this->filterCollections($unitOfWork->getScheduledCollectionUpdates());
+        if ([] !== $collectionUpdates) {
+            $updates = \array_unique(\array_merge($updates, $collectionUpdates));
+        }
+        $updates = \array_diff($updates, $insertions);
+
+        $collectionDeletions = $this->filterCollections($unitOfWork->getScheduledCollectionDeletions());
+        if ([] !== $collectionDeletions) {
+            $deletions = \array_unique(\array_merge($deletions, $collectionDeletions));
         }
 
-        if ($this->isUserRights($entity, $changeSet)) {
-            $this->notify($entity, '', 'user.rights.success');
-        } elseif ($this->isUserPassword($entity, $changeSet)) {
-            $this->notify($entity, '', 'user.change_password.change_success');
-        } else {
-            $this->notify($entity, '.edit.success', 'common.edit_success');
-        }
+        $this->notifyEntities($unitOfWork, $updates, '.edit.success', 'common.edit_success');
+        $this->notifyEntities($unitOfWork, $deletions, '.delete.success', 'common.delete_success', FlashType::WARNING);
+        $this->notifyEntities($unitOfWork, $insertions, '.add.success', 'common.add_success');
     }
 
     /**
-     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     * @psalm-param array<int, PersistentCollection<array-key, object>> $collections
+     *
+     * @psalm-return EntityInterface[]
      */
-    public function preRemove(LifecycleEventArgs $args): void
+    private function filterCollections(array $collections): array
     {
-        $this->previousDisplay = null;
-        $entity = $this->getEntity($args);
-        if (!$entity instanceof Calculation) {
-            return;
+        $result = [];
+        foreach ($collections as $collection) {
+            $entities = $this->filterEntities($collection);
+            if ([] !== $entities) {
+                $result = \array_unique(\array_merge($result, $entities));
+            }
         }
-        $this->previousDisplay = $entity->getDisplay();
+
+        return $result;
     }
 
     /**
-     * @psalm-param LifecycleEventArgs<\Doctrine\ORM\EntityManagerInterface> $args
+     * @psalm-param array|PersistentCollection<array-key, object> $entities
+     *
+     * @psalm-return EntityInterface[]
      */
-    private function getEntity(LifecycleEventArgs $args): ?AbstractEntity
+    private function filterEntities(array|PersistentCollection $entities): array
     {
-        if (!$this->isEnabled()) {
-            return null;
+        if ($entities instanceof PersistentCollection) {
+            $entities = $entities->toArray();
         }
 
-        /** @var AbstractEntity $entity */
-        $entity = $args->getObject();
-        if (\in_array($entity::class, self::CLASS_NAMES, true)) {
+        return $this->getUniqueFiltered(\array_map(
+            fn (object $entity): ?EntityInterface => $this->filterEntity($entity),
+            $entities
+        ));
+    }
+
+    private function filterEntity(?object $entity): ?EntityInterface
+    {
+        if ($entity instanceof EntityInterface && \in_array($entity::class, self::CLASS_NAMES, true)) {
             return $entity;
+        }
+
+        if ($entity instanceof ParentTimestampableInterface) {
+            return $this->filterEntity($entity->getParentTimestampable());
         }
 
         return null;
     }
 
-    private function getId(AbstractEntity $entity, string $suffix, string $default): string
+    private function getId(EntityInterface $entity, string $suffix, string $default): string
     {
         $id = \strtolower(StringUtils::getShortName($entity)) . $suffix;
 
         return $this->isTransDefined($id) ? $id : $default;
     }
 
-    private function isObjectChange(object $object, string $class, array $changeSet, string ...$fields): bool
+    private function isObjectChange(array $changeSet, string ...$fields): bool
     {
-        if ($object::class !== $class) {
-            return false;
-        }
-        foreach ($fields as $field) {
-            if (\in_array($field, $changeSet, true)) {
-                return true;
-            }
-        }
-
-        return false;
+        return [] !== \array_intersect($changeSet, $fields);
     }
 
-    private function isSkipFields(array $changeSet): bool
+    private function isUserPassword(array $changeSet): bool
     {
-        $intersect = \array_intersect($changeSet, self::SKIP_FIELDS);
-
-        return $intersect === $changeSet;
+        return $this->isObjectChange($changeSet, 'password');
     }
 
-    private function isUserPassword(object $object, array $changeSet): bool
+    private function isUserRights(array $changeSet): bool
     {
-        return $this->isObjectChange($object, User::class, $changeSet, 'password');
+        return $this->isObjectChange($changeSet, 'rights', 'overwrite');
     }
 
-    private function isUserRights(object $object, array $changeSet): bool
-    {
-        return $this->isObjectChange($object, User::class, $changeSet, 'rights', 'overwrite');
-    }
-
-    private function notify(AbstractEntity $entity, string $suffix, string $default, FlashType $type = FlashType::SUCCESS): void
-    {
-        $id = $this->getId($entity, $suffix, $default);
-        $display = $this->previousDisplay ?? $entity->getDisplay();
-        $message = $this->trans($id, ['%name%' => $display]);
+    private function notify(
+        EntityInterface $entity,
+        string $suffix,
+        string $default,
+        FlashType $type = FlashType::SUCCESS
+    ): void {
+        $id = '' === $suffix ? $default : $this->getId($entity, $suffix, $default);
+        $message = $this->trans($id, ['%name%' => $entity->getDisplay()]);
         $this->addFlashMessage($type, $message);
-        $this->previousDisplay = null;
+    }
+
+    /**
+     * @psalm-param EntityInterface[] $entities
+     */
+    private function notifyEntities(
+        UnitOfWork $unitOfWork,
+        array $entities,
+        string $suffix,
+        string $default,
+        FlashType $type = FlashType::SUCCESS
+    ): void {
+        if ([] === $entities) {
+            return;
+        }
+        foreach ($entities as $entity) {
+            if (User::class === $entity::class) {
+                $changeSet = \array_keys($unitOfWork->getEntityChangeSet($entity));
+                if ($this->isUserRights($changeSet)) {
+                    $this->notify($entity, '', 'user.rights.success');
+                    continue;
+                } elseif ($this->isUserPassword($changeSet)) {
+                    $this->notify($entity, '', 'user.change_password.change_success');
+                    continue;
+                }
+            }
+            $this->notify($entity, $suffix, $default, $type);
+        }
     }
 }

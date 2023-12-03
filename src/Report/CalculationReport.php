@@ -206,11 +206,11 @@ class CalculationReport extends AbstractReport
         PdfStyle::getNoBorderStyle()
             ->setFontSize(6)
             ->apply($this);
-        $translator = $this->getTranslator();
-        $created = $calculation->getCreatedText($translator);
-        $updated = $calculation->getUpdatedText($translator);
         $width = $this->getPrintableWidth() / 2.0;
-        $this->useCellMargin(function () use ($width, $created, $updated): void {
+        $this->useCellMargin(function () use ($calculation, $width): void {
+            $translator = $this->getTranslator();
+            $created = $calculation->getCreatedText($translator);
+            $updated = $calculation->getUpdatedText($translator);
             $this->Cell(w: $width, txt: $created);
             $this->Cell(w: $width, txt: $updated, align: PdfTextAlignment::RIGHT);
         })->resetStyle();

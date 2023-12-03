@@ -4,12 +4,15 @@
 {% form_theme form with _self %}
 {# item label #}
 {% block _task_items_entry_name_label -%}
+    {%- set label_attributes = {
+        'class': 'label-toggle drop-down-icon-left flex-fill mb-0',
+        'data-bs-toggle': 'collapse',
+        'data-bs-target': '#' ~ id_content,
+        'aria-expanded': show|json_encode,
+        'title': title|trans} -%}
     <div class="d-flex-wrap-center mb-2">
-        {{ form_label(form, null, {'label_attr': {'class': 'flex-fill mb-0'}}) }}
+        {{ form_label(form, null, {'label_attr': label_attributes}) }}
         <div class="btn-group btn-group-sm d-print-none" role="group">
-            <button class="btn btn-edit btn-outline-secondary btn-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id_content }}" title="{{ title|trans }}">
-                <i class="d-print-none fa-solid fa-caret-{% if show %}up{% else %}down{% endif %}"></i>
-            </button>
             <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'task.edit.move_up_item'|trans }}" disabled="disabled">
                 <i class="fa-solid fa-angle-up"></i>
             </button>
@@ -44,9 +47,9 @@
         </div>
     </td>
     <td class="actions align-middle pt-0 d-print-none">
-        <a href="#" type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'taskitem.edit.delete_item'|trans }}">
+        <button type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'taskitem.edit.delete_item'|trans }}">
             {{- icon(ICON_DELETE) -}}
-        </a>
+        </button>
     </td>
 </tr>
 {% endmacro -%}
@@ -59,7 +62,7 @@
 {%- set name = item.vars.value.name|default('taskitem.fields.name'|trans) -%}
 {%- set title = show ? 'taskitem.edit.items_hide' : 'taskitem.edit.items_show' %}
 <div class="item list-group-item px-0">
-        <div class="item-header card-header-item px-3" id="{{ id_header }}">
+    <div class="item-header card-header-item px-3" id="{{ id_header }}">
         {{ form_row(item.name, {id_content: id_content, title: title, show: show}) }}
         {{ form_widget(item.position) }}
     </div>

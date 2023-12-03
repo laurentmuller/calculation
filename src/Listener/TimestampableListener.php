@@ -15,6 +15,7 @@ namespace App\Listener;
 use App\Interfaces\DisableListenerInterface;
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\TimestampableInterface;
+use App\Traits\ArrayTrait;
 use App\Traits\DisableListenerTrait;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,6 +35,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsDoctrineListener(Events::onFlush)]
 class TimestampableListener implements DisableListenerInterface
 {
+    use ArrayTrait;
     use DisableListenerTrait;
 
     private readonly string $emptyUser;
@@ -73,10 +75,10 @@ class TimestampableListener implements DisableListenerInterface
      */
     private function filterEntities(array $entities, bool $includeChildren = true): array
     {
-        return \array_unique(\array_filter(\array_map(
+        return $this->getUniqueFiltered(\array_map(
             fn (object $entity): ?TimestampableInterface => $this->getTimestampable($entity, $includeChildren),
             $entities
-        )));
+        ));
     }
 
     /**

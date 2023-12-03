@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
-use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationGroupRepository;
 use App\Traits\PositionTrait;
 use App\Types\FixedFloatType;
@@ -187,10 +186,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
         return $this->amount * ($this->margin - 1.0);
     }
 
-    /**
-     * @return Calculation|null
-     */
-    public function getParentTimestampable(): ?TimestampableInterface
+    public function getParentTimestampable(): ?Calculation
     {
         return $this->calculation;
     }

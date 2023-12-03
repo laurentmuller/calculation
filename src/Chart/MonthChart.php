@@ -31,16 +31,13 @@ class MonthChart extends AbstractHighchart
 
     private const TEMPLATE_NAME = 'chart/_month_tooltip.js.twig';
 
-    private readonly string $url;
-
     public function __construct(
         ApplicationService $application,
         private readonly CalculationRepository $repository,
-        UrlGeneratorInterface $generator,
+        private readonly UrlGeneratorInterface $generator,
         private readonly Environment $twig,
     ) {
         parent::__construct($application);
-        $this->url = $generator->generate('calculation_table');
     }
 
     /**
@@ -137,28 +134,36 @@ class MonthChart extends AbstractHighchart
 
     private function getClickExpression(): Expr
     {
-        $function = <<<JAVA_SCRIPT
-            function() {
-                const href = "$this->url?search=" + Highcharts.dateFormat("%m.%Y", this.category);
-                location.href = href;
-            }
-            JAVA_SCRIPT;
-
-        return $this->createExpression($function);
+        return $this->createExpression('function() {location.href = this.url;}');
     }
 
     /**
-     * Only y value is returned.
+     * Only y and url values are returned.
      *
      * @param CalculationByMonthType[] $data
      */
     private function getItemsSeries(array $data): array
     {
-        return \array_map(static fn (array $item): array => ['y' => $item['items']], $data);
+        return \array_map(function (array $item): array {
+            return [
+                'y' => $item['items'],
+                'url' => $this->getURL($item['date']),
+            ];
+        }, $data);
+    }
+
+    private function getMarginColor(float $value): string
+    {
+        $minMargin = $this->getMinMargin();
+        if (!$this->isFloatZero($value) && $value < $minMargin) {
+            return 'var(--bs-danger)';
+        }
+
+        return 'inherit';
     }
 
     /**
-     * The y value and all data needed by custom tooltip are returned.
+     * The y value, the url and all data needed by custom tooltip are returned.
      *
      * @param CalculationByMonthType[] $data
      */
@@ -166,15 +171,44 @@ class MonthChart extends AbstractHighchart
     {
         return \array_map(function (array $item): array {
             return [
-                'y' => $item['total'] - $item['items'],
+                'y' => $item['margin_amount'],
                 'date' => $this->formatDate($item['date']),
                 'calculations' => FormatUtils::formatInt($item['count']),
                 'net_amount' => FormatUtils::formatInt($item['items']),
                 'margin_percent' => FormatUtils::formatPercent($item['margin_percent']),
                 'margin_amount' => FormatUtils::formatInt($item['margin_amount']),
+                'margin_color' => $this->getMarginColor($item['margin_percent']),
                 'total_amount' => FormatUtils::formatInt($item['total']),
+                'url' => $this->getURL($item['date']),
             ];
         }, $data);
+    }
+
+    private function getSeriesOptions(): array
+    {
+        return [
+            'pointPadding' => 0,
+            'cursor' => 'pointer',
+            'stacking' => 'normal',
+            'borderRadius' => ['radius' => 0],
+            'borderColor' => $this->getBorderColor(),
+            'point' => [
+                'events' => [
+                    'click' => $this->getClickExpression(),
+                ],
+            ],
+            'keys' => [
+                'y',
+                'date',
+                'calculations',
+                'net_amount',
+                'margin_percent',
+                'margin_amount',
+                'margin_color',
+                'total_amount',
+                'url',
+            ],
+        ];
     }
 
     /**
@@ -197,6 +231,13 @@ class MonthChart extends AbstractHighchart
         ];
     }
 
+    private function getURL(\DateTimeInterface $date): string
+    {
+        return $this->generator->generate('calculation_table', [
+            'search' => $date->format('m.Y'),
+        ]);
+    }
+
     private function setLegendOptions(): self
     {
         $this->legend->merge(['enabled' => false]);
@@ -206,27 +247,9 @@ class MonthChart extends AbstractHighchart
 
     private function setPlotOptions(): self
     {
-        $this->plotOptions['series'] = [
-            'pointPadding' => 0,
-            'cursor' => 'pointer',
-            'stacking' => 'normal',
-            'borderRadius' => ['radius' => 0],
-            'borderColor' => $this->getBorderColor(),
-            'point' => [
-                'events' => [
-                    'click' => $this->getClickExpression(),
-                ],
-            ],
-            'keys' => [
-                'y',
-                'date',
-                'calculations',
-                'net_amount',
-                'margin_percent',
-                'margin_amount',
-                'total_amount',
-            ],
-        ];
+        $this->plotOptions->merge([
+            'series' => $this->getSeriesOptions(),
+        ]);
 
         return $this;
     }

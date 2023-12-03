@@ -132,6 +132,20 @@ class ArrayTraitTest extends TestCase
         yield [$values, 3.0];
     }
 
+    public static function getUniqueFilter(): \Generator
+    {
+        $expected = [];
+        $values = [];
+        yield [$values, $expected];
+
+        $values = [null, '', [], false, 0, '0'];
+        yield [$values, $expected];
+
+        $values = ['value', 'value'];
+        $expected = ['value'];
+        yield [$values, $expected];
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getColumns')]
     public function testColumn(array $values, array $expected): void
     {
@@ -160,6 +174,18 @@ class ArrayTraitTest extends TestCase
     public function testColumnSum(array $values, float $expected, float $default = 0.0): void
     {
         $actual = $this->getColumnSum($values, self::KEY, $default);
+        self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @psalm-param 0|1|2 $mode
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getUniqueFilter')]
+    public function testUniqueFiltered(array $values, array $expected, callable $callback = null, int $mode = 0): void
+    {
+        $actual = $this->getUniqueFiltered($values, $callback, $mode);
+        $expectedCount = \count($expected);
+        self::assertCount($expectedCount, $actual);
         self::assertSame($expected, $actual);
     }
 }

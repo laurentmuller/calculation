@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
-use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationCategoryRepository;
 use App\Traits\PositionTrait;
 use App\Types\FixedFloatType;
@@ -173,10 +172,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
         return $this->items;
     }
 
-    /**
-     * @return Calculation|null
-     */
-    public function getParentTimestampable(): ?TimestampableInterface
+    public function getParentTimestampable(): ?Calculation
     {
         return $this->group?->getParentTimestampable();
     }

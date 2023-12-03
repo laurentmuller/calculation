@@ -14,7 +14,6 @@ namespace App\Entity;
 
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
-use App\Interfaces\TimestampableInterface;
 use App\Repository\TaskItemRepository;
 use App\Traits\PositionTrait;
 use App\Traits\ValidateMarginsTrait;
@@ -140,10 +139,7 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
         return $this->name;
     }
 
-    /**
-     * @return Task|null
-     */
-    public function getParentTimestampable(): ?TimestampableInterface
+    public function getParentTimestampable(): ?Task
     {
         return $this->task;
     }

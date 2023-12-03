@@ -52,4 +52,36 @@ trait ArrayTrait
     {
         return [] === $values ? $default : (float) \array_sum($this->getColumn($values, $key));
     }
+
+    /**
+     * Gets filtered and uniques values.
+     *
+     * @param array         $values   the values to filter and to get unique values for
+     * @param callable|null $callback the callback function to use. If no callback is supplied, all empty entries
+     *                                of array will be removed.
+     * @param int           $mode     a flag determining what arguments are sent to callback:
+     *                                <ul>
+     *                                <li>ARRAY_FILTER_USE_KEY - pass key as the only argument to callback instead
+     *                                of the value</li>
+     *                                <li>ARRAY_FILTER_USE_BOTH - pass both value and key as arguments to callback
+     *                                instead of the value</li>
+     *                                </ul>
+     *
+     * @psalm-template T
+     *
+     * @psalm-param array<T|null> $values
+     * @psalm-param 0|1|2 $mode
+     *
+     * @psalm-return T[]
+     */
+    public function getUniqueFiltered(array $values, callable $callback = null, int $mode = 0): array
+    {
+        if (\is_callable($callback)) {
+            // @phpstan-ignore-next-line
+            return \array_unique(\array_filter($values, $callback, $mode));
+        }
+
+        // @phpstan-ignore-next-line
+        return \array_unique(\array_filter($values, mode: $mode));
+    }
 }

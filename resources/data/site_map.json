@@ -257,11 +257,6 @@
                     "route": "chart_state",
                     "text": "index.menu_graphics_state",
                     "icon": "flag"
-                },
-                {
-                    "route": "calculation_pivot",
-                    "text": "pivot.title",
-                    "icon": "table"
                 }
             ]
         },
@@ -354,6 +349,11 @@
             "route": "user_profile_edit",
             "text": "profile.edit.title",
             "icon": "pencil"
+        },
+        {
+            "route": "user_parameters",
+            "text": "user.parameters.title",
+            "icon": "user-gear"
         },
         {
             "route": "app_logout",

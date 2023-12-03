@@ -24,20 +24,24 @@
     {% set route = entry.route|default(false) %}
     {% set entity = entry.entity|default(entity) %}
     {% set permission = entry.permission|default(false) %}
-    {% if route and entity and permission %}
-        {% set route = is_granted(permission, entity) ? route : false %}
-    {% endif %}
-    {% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : null %}
-    {% if route %}
-        {% if entry.external|default(false) %}
-            {{ linkExternal(path(route), entry.text, null, icon) }}
-        {% else %}
-            {{ link(path(route, {'caller': path('site_map')}), entry.text, null, icon) }}
-        {% endif %}
-    {% elseif icon %}
-        <span>{{- icon(icon, entry.text) -}}</span>
+    {% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : false %}
+    {% if route == 'app_logout' %}
+        <a href="{{ logout_path() }}">{{ icon(icon, entry.text) }}</a>
     {% else %}
-        <span>{{ entry.text|trans }}</span>
+        {% if route and entity and permission %}
+            {% set route = is_granted(permission, entity) ? route : false %}
+        {% endif %}
+        {% if route %}
+            {% if entry.external|default(false) %}
+                {{ linkExternal(path(route), entry.text, null, icon) }}
+            {% else %}
+                {{ link(path(route, {'caller': path('site_map')}), entry.text, null, icon) }}
+            {% endif %}
+        {% elseif icon %}
+            <span>{{- icon(icon, entry.text) -}}</span>
+        {% else %}
+            <span>{{ entry.text|trans }}</span>
+        {% endif %}
     {% endif %}
 {% endif %}
 {%- endmacro %}

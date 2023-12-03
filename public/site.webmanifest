@@ -48,15 +48,16 @@
         {
             "src": "images/icons/favicon-512x512.png",
             "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any maskable"
-     }
+            "type": "image/png"
+        }
     ],
     "screenshots": [
         {
             "src": "help/images/home.png",
             "sizes": "1110x800",
-            "type": "image/png"
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Ecran d'accueil de l'application Calculation"
         }
     ]
 }

@@ -23,7 +23,6 @@ use App\Utils\StringUtils;
 use Symfony\Bridge\Twig\Extension\AssetExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Kernel;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
@@ -34,28 +33,10 @@ use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 final class FunctionExtension extends AbstractExtension
 {
     use ImageSizeTrait;
-    /**
-     * The default file version.
-     */
-    private int $version = Kernel::VERSION_ID;
 
-    /**
-     * The asset versions.
-     *
-     * @var array<string, int>
-     */
-    private array $versions = [];
-
-    /**
-     * The public directory.
-     */
     private readonly string $webDir;
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%/composer.lock')]
-        string $composer_file,
-        #[Autowire('%kernel.debug%')]
-        private readonly bool $debug,
         #[Autowire('%kernel.project_dir%/public')]
         string $webDir,
         #[Autowire(service: 'twig.extension.assets')]
@@ -64,12 +45,6 @@ final class FunctionExtension extends AbstractExtension
         private readonly UploaderHelper $helper,
         private readonly UrlGeneratorService $generator,
     ) {
-        if (FileUtils::exists($composer_file)) {
-            $version = \filemtime($composer_file);
-            if (\is_int($version)) {
-                $this->version = $version;
-            }
-        }
         $this->webDir = FileUtils::normalize($webDir);
     }
 
@@ -84,7 +59,6 @@ final class FunctionExtension extends AbstractExtension
             new TwigFunction('asset_css', $this->assetCss(...), $options),
             new TwigFunction('asset_icon', $this->assetIcon(...), $options),
             new TwigFunction('asset_image', $this->assetImage(...), $options),
-            new TwigFunction('asset_versioned', $this->versionedAsset(...), $options),
             new TwigFunction('asset_image_user', $this->assetImageUser(...), $options),
 
             // routes
@@ -94,19 +68,18 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a link style sheet tag with a version and nonce.
+     * Output a link style sheet tag with a nonce.
      *
      * @param array<string, string|int> $parameters
      *
      * @throws \Exception
      */
-    private function assetCss(string $path, array $parameters = [], string $packageName = null): string
+    private function assetCss(string $path, array $parameters = []): string
     {
-        $href = $this->versionedAsset($path, $packageName);
         $parameters = \array_merge([
-            'href' => $href,
-            'rel' => 'stylesheet',
+            'href' => $this->getAssetUrl($path),
             'nonce' => $this->getNonce(),
+            'rel' => 'stylesheet',
         ], $parameters);
         $attributes = $this->reduceParams($parameters);
 
@@ -129,11 +102,11 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Gets an application icon.
      */
-    private function assetIcon(int $size, string $packageName = null): string
+    private function assetIcon(int $size): string
     {
         $path = \sprintf('images/icons/favicon-%1$dx%1$d.png', $size);
 
-        return $this->assetUrl($path, $packageName);
+        return $this->getAssetUrl($path);
     }
 
     /**
@@ -141,11 +114,11 @@ final class FunctionExtension extends AbstractExtension
      *
      * @param array<string, string|int> $parameters
      */
-    private function assetImage(string $path, array $parameters = [], string $packageName = null): string
+    private function assetImage(string $path, array $parameters = []): string
     {
         [$width, $height] = $this->imageSize($path);
         $parameters = \array_merge([
-            'src' => $this->versionedAsset($path, $packageName),
+            'src' => $this->getAssetUrl($path),
             'height' => $height,
             'width' => $width,
         ], $parameters);
@@ -179,16 +152,16 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Output a javascript source tag with a version and nonce.
+     * Output a javascript source tag with a nonce.
      *
      * @param array<string, string|int> $parameters
      *
      * @throws \Exception
      */
-    private function assetJs(string $path, array $parameters = [], string $packageName = null): string
+    private function assetJs(string $path, array $parameters = []): string
     {
         $parameters = \array_merge([
-            'src' => $this->versionedAsset($path, $packageName),
+            'src' => $this->getAssetUrl($path),
             'nonce' => $this->getNonce(),
         ], $parameters);
         $attributes = $this->reduceParams($parameters);
@@ -197,38 +170,22 @@ final class FunctionExtension extends AbstractExtension
     }
 
     /**
-     * Returns the public url/path of an asset.
-     */
-    private function assetUrl(string $path, string $packageName = null): string
-    {
-        return $this->extension->getAssetUrl($path, $packageName);
-    }
-
-    /**
-     * Gets the version for the given path.
-     */
-    private function assetVersion(?string $path): int
-    {
-        if ($this->debug) {
-            return $this->version;
-        }
-        $realPath = $this->getRealPath($path);
-        if (null === $realPath) {
-            return $this->version;
-        }
-        if (!isset($this->versions[$realPath])) {
-            $this->versions[$realPath] = (int) \filemtime($realPath);
-        }
-
-        return $this->versions[$realPath];
-    }
-
-    /**
      * Gets the cancel URL.
      */
-    private function cancelUrl(Request $request, AbstractEntity|int|null $id = 0, string $defaultRoute = AbstractController::HOME_PAGE): string
-    {
+    private function cancelUrl(
+        Request $request,
+        AbstractEntity|int|null $id = 0,
+        string $defaultRoute = AbstractController::HOME_PAGE
+    ): string {
         return $this->generator->cancelUrl($request, $id, $defaultRoute);
+    }
+
+    /**
+     * Returns the public url/path of an asset.
+     */
+    private function getAssetUrl(string $path): string
+    {
+        return $this->extension->getAssetUrl($path);
     }
 
     /**
@@ -289,16 +246,5 @@ final class FunctionExtension extends AbstractExtension
     private function routeParams(Request $request, AbstractEntity|int|null $id = 0): array
     {
         return $this->generator->routeParams($request, $id);
-    }
-
-    /**
-     * Gets an asset with version.
-     */
-    private function versionedAsset(string $path, string $packageName = null): string
-    {
-        $url = $this->assetUrl($path, $packageName);
-        $version = $this->assetVersion($path);
-
-        return \sprintf('%s?version=%d', $url, $version);
     }
 }

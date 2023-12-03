@@ -248,9 +248,7 @@ final class FileUtils
      */
     public static function normalize(string|\SplFileInfo $file): string
     {
-        $file = self::realPath($file);
-
-        return Path::normalize($file);
+        return Path::normalize(self::realPath($file));
     }
 
     /**

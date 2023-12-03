@@ -12,6 +12,10 @@ framework:
         cookie_samesite: 'lax'
         cookie_path: '%cookie_path%'
 
+    # assets
+    assets:
+        version_strategy: 'App\Service\StaticVersionStrategy'
+
     # errors
     php_errors:
         log: true

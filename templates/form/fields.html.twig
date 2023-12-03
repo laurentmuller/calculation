@@ -149,7 +149,7 @@
 {% block vich_image_widget -%}
 {# file #}
 {%- set alt = 'user.image.title' -%}
-{%- set src = asset_exists(image_uri) ? asset_versioned(image_uri|trim('/', 'left')) : false -%}
+{%- set src = asset_exists(image_uri) ? asset(image_uri|trim('/', 'left')) : false -%}
 {{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt}) -}}
 {# delete #}
 {% if form.delete is defined -%}

@@ -7,7 +7,10 @@
     "orientation": "landscape",
     "theme_color": "#212529",
     "background_color": "#212529",
-    "start_url": ".",
+    "start_url": "./index.php",
+    "display_override": [
+        "window-controls-overlay"
+    ],
     "icons": [
         {
             "src": "images/icons/favicon-36x36.png",
@@ -55,9 +58,7 @@
         {
             "src": "help/images/home.png",
             "sizes": "1110x800",
-            "type": "image/png",
-            "form_factor": "wide",
-            "label": "Ecran d'accueil de l'application Calculation"
+            "type": "image/png"
         }
     ]
 }

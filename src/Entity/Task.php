@@ -167,7 +167,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
     public function removeItem(TaskItem $item): self
     {
         if ($this->items->removeElement($item)) {
-            if ($item->getParentTimestampable() === $this) {
+            if ($item->getParentEntity() === $this) {
                 $item->setTask(null);
             }
 

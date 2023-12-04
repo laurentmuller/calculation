@@ -23,6 +23,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents an item of a calculation category.
+ *
+ * @implements ParentTimestampableInterface<Calculation>
  */
 #[ORM\Table(name: 'sy_CalculationItem')]
 #[ORM\Entity(repositoryClass: CalculationItemRepository::class)]
@@ -105,9 +107,9 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
         return (string) $this->getDescription();
     }
 
-    public function getParentTimestampable(): ?Calculation
+    public function getParentEntity(): ?Calculation
     {
-        return $this->category?->getParentTimestampable();
+        return $this->category?->getParentEntity();
     }
 
     /**

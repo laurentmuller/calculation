@@ -24,7 +24,7 @@ use App\Entity\User;
 use App\Enums\FlashType;
 use App\Interfaces\DisableListenerInterface;
 use App\Interfaces\EntityInterface;
-use App\Interfaces\ParentTimestampableInterface;
+use App\Interfaces\ParentEntityInterface;
 use App\Traits\ArrayTrait;
 use App\Traits\DisableListenerTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
@@ -132,8 +132,8 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
             return $entity;
         }
 
-        if ($entity instanceof ParentTimestampableInterface) {
-            return $this->filterEntity($entity->getParentTimestampable());
+        if ($entity instanceof ParentEntityInterface) {
+            return $this->filterEntity($entity->getParentEntity());
         }
 
         return null;

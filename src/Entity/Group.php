@@ -326,7 +326,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     public function removeMargin(GroupMargin $margin): self
     {
-        if ($this->margins->removeElement($margin) && $margin->getParentTimestampable() === $this) {
+        if ($this->margins->removeElement($margin) && $margin->getParentEntity() === $this) {
             $margin->setGroup(null);
         }
 

@@ -19,6 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a margin within a group.
+ *
+ * @implements ParentTimestampableInterface<Group>
  */
 #[ORM\Table(name: 'sy_GroupMargin')]
 #[ORM\Entity(repositoryClass: GroupMarginRepository::class)]
@@ -32,7 +34,7 @@ class GroupMargin extends AbstractMargin implements ParentTimestampableInterface
     #[ORM\JoinColumn(name: 'group_id', nullable: false, onDelete: 'cascade')]
     private ?Group $group = null;
 
-    public function getParentTimestampable(): ?Group
+    public function getParentEntity(): ?Group
     {
         return $this->group;
     }

@@ -26,6 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents an item of a task.
+ *
+ * @implements ParentTimestampableInterface<Task>
  */
 #[ORM\Table(name: 'sy_TaskItem')]
 #[ORM\Entity(repositoryClass: TaskItemRepository::class)]
@@ -139,7 +141,7 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
         return $this->name;
     }
 
-    public function getParentTimestampable(): ?Task
+    public function getParentEntity(): ?Task
     {
         return $this->task;
     }

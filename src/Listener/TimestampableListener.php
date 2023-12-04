@@ -28,9 +28,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Listener to update timestampable entities.
- *
- * @see TimestampableInterface
- * @see ParentTimestampableInterface
  */
 #[AsDoctrineListener(Events::onFlush)]
 class TimestampableListener implements DisableListenerInterface
@@ -45,9 +42,6 @@ class TimestampableListener implements DisableListenerInterface
         $this->emptyUser = $translator->trans('common.empty_user');
     }
 
-    /**
-     * @psalm-api
-     */
     public function onFlush(OnFlushEventArgs $args): void
     {
         if (!$this->isEnabled()) {
@@ -110,7 +104,8 @@ class TimestampableListener implements DisableListenerInterface
         }
 
         if ($includeChildren && $entity instanceof ParentTimestampableInterface) {
-            return $entity->getParentTimestampable();
+            // @phpstan-ignore-next-line
+            return $entity->getParentEntity();
         }
 
         return null;

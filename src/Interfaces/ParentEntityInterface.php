@@ -13,12 +13,16 @@ declare(strict_types=1);
 namespace App\Interfaces;
 
 /**
- * Class implementing this interface deals with the parent's timestampable.
+ * Class implementing this interface deals with the parent's entity.
  *
- * @template T of EntityInterface&TimestampableInterface
- *
- * @extends ParentEntityInterface<T>
+ * @template T of EntityInterface
  */
-interface ParentTimestampableInterface extends ParentEntityInterface
+interface ParentEntityInterface
 {
+    /**
+     * Gets the parent's entity or null if none.
+     *
+     * @psalm-return T|null
+     */
+    public function getParentEntity(): ?EntityInterface;
 }

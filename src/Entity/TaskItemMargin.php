@@ -21,6 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a margin of a task item.
+ *
+ * @implements ParentTimestampableInterface<Task>
  */
 #[ORM\Table(name: 'sy_TaskItemMargin')]
 #[ORM\Entity(repositoryClass: TaskItemMarginRepository::class)]
@@ -71,9 +73,9 @@ class TaskItemMargin extends AbstractEntity implements MarginInterface, ParentTi
         return $this->minimum;
     }
 
-    public function getParentTimestampable(): ?Task
+    public function getParentEntity(): ?Task
     {
-        return $this->taskItem?->getParentTimestampable();
+        return $this->taskItem?->getParentEntity();
     }
 
     /**

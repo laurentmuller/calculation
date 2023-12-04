@@ -28,8 +28,12 @@ class SymfonyDocument extends AbstractDocument
     /**
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    public function __construct(AbstractController $controller, private readonly SymfonyInfoService $service, private readonly string $locale, private readonly string $mode)
-    {
+    public function __construct(
+        AbstractController $controller,
+        private readonly SymfonyInfoService $service,
+        private readonly string $locale,
+        private readonly string $mode
+    ) {
         parent::__construct($controller);
     }
 
@@ -109,8 +113,8 @@ class SymfonyDocument extends AbstractDocument
             'Value' => HeaderFormat::instance(),
         ]);
         $this->outputGroup($sheet, $row++, 'Kernel')
-            ->outputRow($sheet, $row++, 'Environment', $info->getEnvironment())
-            ->outputRow($sheet, $row++, 'Mode', $this->mode)
+            ->outputRow($sheet, $row++, 'Environment', $this->transEnvironment($info->getEnvironment()))
+            ->outputRow($sheet, $row++, 'Running Mode', $this->transEnvironment($this->mode))
             ->outputRow($sheet, $row++, 'Version status', $info->getMaintenanceStatus())
             ->outputRow($sheet, $row++, 'End of maintenance', $info->getEndOfMaintenance())
             ->outputRow($sheet, $row++, 'End of product life', $info->getEndOfLife());
@@ -195,5 +199,10 @@ class SymfonyDocument extends AbstractDocument
     private function outputRowEnabled(WorksheetDocument $sheet, int $row, string $key, bool $enabled): self
     {
         return $this->outputRow($sheet, $row, $key, $enabled ? 'Enabled' : 'Disabled');
+    }
+
+    private function transEnvironment(string $environment): string
+    {
+        return $this->trans('environment.' . $environment);
     }
 }

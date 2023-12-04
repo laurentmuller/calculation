@@ -63,9 +63,6 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         User::class,
     ];
 
-    /**
-     * @psalm-api
-     */
     public function onFlush(OnFlushEventArgs $args): void
     {
         if (!$this->isEnabled()) {
@@ -80,13 +77,13 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
 
         $collectionUpdates = $this->filterCollections($unitOfWork->getScheduledCollectionUpdates());
         if ([] !== $collectionUpdates) {
-            $updates = \array_unique(\array_merge($updates, $collectionUpdates));
+            $updates = $this->getUniqueMerged($updates, $collectionUpdates);
         }
         $updates = \array_diff($updates, $insertions);
 
         $collectionDeletions = $this->filterCollections($unitOfWork->getScheduledCollectionDeletions());
         if ([] !== $collectionDeletions) {
-            $deletions = \array_unique(\array_merge($deletions, $collectionDeletions));
+            $deletions = $this->getUniqueMerged($deletions, $collectionDeletions);
         }
 
         $this->notifyEntities($unitOfWork, $updates, '.edit.success', 'common.edit_success');
@@ -105,7 +102,7 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         foreach ($collections as $collection) {
             $entities = $this->filterEntities($collection);
             if ([] !== $entities) {
-                $result = \array_unique(\array_merge($result, $entities));
+                $result = $this->getUniqueMerged($result, $entities);
             }
         }
 
@@ -149,19 +146,24 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         return $this->isTransDefined($id) ? $id : $default;
     }
 
-    private function isObjectChange(array $changeSet, string ...$fields): bool
+    private function isObjectChanged(array $changeSet, string ...$fields): bool
     {
         return [] !== \array_intersect($changeSet, $fields);
     }
 
+    private function isUserLogin(array $changeSet): bool
+    {
+        return $this->isObjectChanged($changeSet, 'lastLogin');
+    }
+
     private function isUserPassword(array $changeSet): bool
     {
-        return $this->isObjectChange($changeSet, 'password');
+        return $this->isObjectChanged($changeSet, 'password');
     }
 
     private function isUserRights(array $changeSet): bool
     {
-        return $this->isObjectChange($changeSet, 'rights', 'overwrite');
+        return $this->isObjectChanged($changeSet, 'rights', 'overwrite');
     }
 
     private function notify(
@@ -196,6 +198,8 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
                     continue;
                 } elseif ($this->isUserPassword($changeSet)) {
                     $this->notify($entity, '', 'user.change_password.change_success');
+                    continue;
+                } elseif ($this->isUserLogin($changeSet)) {
                     continue;
                 }
             }

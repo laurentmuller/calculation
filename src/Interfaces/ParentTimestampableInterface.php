@@ -18,7 +18,7 @@ namespace App\Interfaces;
 interface ParentTimestampableInterface
 {
     /**
-     * Gets the parent's timestampable interface.
+     * Gets the parent's timestampable or null if none.
      */
     public function getParentTimestampable(): ?TimestampableInterface;
 }

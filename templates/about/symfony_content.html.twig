@@ -44,8 +44,8 @@
                 </td>
             </tr>
             {{ tools.headerInfo('Kernel') }}
-            {{ tools.rowInfo('Environment', app.environment) }}
-            {{ tools.rowInfo('Mode', app_mode) }}
+            {{ tools.rowInfo('Environment', ('environment.' ~ app.environment)|trans) }}
+            {{ tools.rowInfo('Running Mode', ('environment.' ~ app_mode)|trans) }}
             {{ tools.rowInfo('Status', service.maintenanceStatus) }}
             {{ tools.rowInfo('Release', service.releaseDate) }}
             {{ tools.rowInfo('End of maintenance', service.endOfMaintenance) }}

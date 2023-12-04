@@ -32,8 +32,12 @@ class SymfonyReport extends AbstractReport
 {
     private ?PdfStyle $style = null;
 
-    public function __construct(AbstractController $controller, private readonly SymfonyInfoService $service, private readonly string $locale, private readonly string $mode)
-    {
+    public function __construct(
+        AbstractController $controller,
+        private readonly SymfonyInfoService $service,
+        private readonly string $locale,
+        private readonly string $mode
+    ) {
         parent::__construct($controller);
         $this->setTitleTrans('about.symfony_version', ['%version%' => $this->service->getVersion()]);
     }
@@ -133,8 +137,8 @@ class SymfonyReport extends AbstractReport
                 PdfColumn::left('Value', 70)
             );
         $table->setGroupKey('Kernel')->outputHeaders();
-        $this->outputRow($table, 'Environment', $info->getEnvironment())
-            ->outputRow($table, 'Mode', $this->mode)
+        $this->outputRow($table, 'Environment', $this->transEnvironment($info->getEnvironment()))
+            ->outputRow($table, 'Running Mode', $this->transEnvironment($this->mode))
             ->outputRow($table, 'Version status', $info->getMaintenanceStatus())
             ->outputRow($table, 'End of maintenance', $info->getEndOfMaintenance())
             ->outputRow($table, 'End of product life', $info->getEndOfLife());
@@ -225,5 +229,10 @@ class SymfonyReport extends AbstractReport
             ->endRow();
 
         return $this;
+    }
+
+    private function transEnvironment(string $environment): string
+    {
+        return $this->trans('environment.' . $environment);
     }
 }

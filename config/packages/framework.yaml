@@ -14,7 +14,7 @@ framework:
 
     # assets
     assets:
-        version_strategy: 'App\Service\StaticVersionStrategy'
+        version_strategy: 'App\Service\AssetVersionStrategy'
 
     # errors
     php_errors:

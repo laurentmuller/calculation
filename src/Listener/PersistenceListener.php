@@ -48,9 +48,6 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     use ServiceSubscriberTrait;
     use TranslatorFlashMessageAwareTrait;
 
-    /**
-     * The entity class names to listen for.
-     */
     private const CLASS_NAMES = [
         Calculation::class,
         CalculationState::class,
@@ -63,6 +60,29 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         User::class,
     ];
 
+    private const USER_LOGIN = [
+        'lastLogin',
+    ];
+
+    private const USER_PASSWORD = [
+        'password',
+    ];
+
+    private const USER_RESET = [
+        'expiresAt',
+        'selector',
+        'hashedToken',
+        'requestedAt',
+    ];
+
+    private const USER_RIGHTS = [
+        'rights',
+        'overwrite',
+    ];
+
+    /**
+     * @psalm-api
+     */
     public function onFlush(OnFlushEventArgs $args): void
     {
         if (!$this->isEnabled()) {
@@ -146,24 +166,29 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         return $this->isTransDefined($id) ? $id : $default;
     }
 
-    private function isObjectChanged(array $changeSet, string ...$fields): bool
+    private function isMatchFields(array $changeSet, array $fields): bool
     {
         return [] !== \array_intersect($changeSet, $fields);
     }
 
     private function isUserLogin(array $changeSet): bool
     {
-        return $this->isObjectChanged($changeSet, 'lastLogin');
+        return $this->isMatchFields($changeSet, self::USER_LOGIN);
     }
 
     private function isUserPassword(array $changeSet): bool
     {
-        return $this->isObjectChanged($changeSet, 'password');
+        return $this->isMatchFields($changeSet, self::USER_PASSWORD);
+    }
+
+    private function isUserReset(array $changeSet): bool
+    {
+        return $this->isMatchFields($changeSet, self::USER_RESET);
     }
 
     private function isUserRights(array $changeSet): bool
     {
-        return $this->isObjectChanged($changeSet, 'rights', 'overwrite');
+        return $this->isMatchFields($changeSet, self::USER_RIGHTS);
     }
 
     private function notify(
@@ -193,13 +218,13 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         foreach ($entities as $entity) {
             if (User::class === $entity::class) {
                 $changeSet = \array_keys($unitOfWork->getEntityChangeSet($entity));
-                if ($this->isUserRights($changeSet)) {
+                if ($this->isUserLogin($changeSet) || $this->isUserReset($changeSet)) {
+                    continue;
+                } elseif ($this->isUserRights($changeSet)) {
                     $this->notify($entity, '', 'user.rights.success');
                     continue;
                 } elseif ($this->isUserPassword($changeSet)) {
                     $this->notify($entity, '', 'user.change_password.change_success');
-                    continue;
-                } elseif ($this->isUserLogin($changeSet)) {
                     continue;
                 }
             }

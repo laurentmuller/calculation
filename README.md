@@ -15,6 +15,7 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 [![Symfony](https://img.shields.io/badge/Symfony-6.4.1-informational?logo=symfony)](https://symfony.com)
 [![PHP](https://img.shields.io/badge/PHP-8.2.9-informational?logo=php)](https://www.php.net)
 [![MySQL](https://img.shields.io/badge/MySQL-5.7.32-informational?logo=mysql)](https://www.mysql.com)
+[![Apache](https://img.shields.io/badge/Apache-2.4.51-informational?logo=apache)](https://httpd.apache.org)
 
 ## Qualité du code
 

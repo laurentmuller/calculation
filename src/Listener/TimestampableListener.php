@@ -42,6 +42,9 @@ class TimestampableListener implements DisableListenerInterface
         $this->emptyUser = $translator->trans('common.empty_user');
     }
 
+    /**
+     * @psalm-api
+     */
     public function onFlush(OnFlushEventArgs $args): void
     {
         if (!$this->isEnabled()) {

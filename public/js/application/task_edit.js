@@ -344,17 +344,17 @@ function expand($caller) {
     });
 
     // handle item buttons
-    $('#items').on('click', '.btn-delete-item', function (e) {
+    $('#items').on('click', '.btn-delete-item', function () {
         removeItem($(this));
-    }).on('click', '.btn-up-item', function (e) {
+    }).on('click', '.btn-up-item', function () {
         moveUpItem($(this));
-    }).on('click', '.btn-down-item', function (e) {
+    }).on('click', '.btn-down-item', function () {
         moveDownItem($(this));
-    }).on('click', '.btn-add-margin', function (e) {
+    }).on('click', '.btn-add-margin', function () {
         addMargin($(this));
-    }).on('click', '.btn-delete-margin', function (e) {
+    }).on('click', '.btn-delete-margin', function () {
         removeMargin($(this));
-    }).on('click', '.btn-sort-margin', function (e) {
+    }).on('click', '.btn-sort-margin', function () {
         sortMargins($(this));
     }).on('show.bs.collapse', '.collapse', function () {
         collapseAll();

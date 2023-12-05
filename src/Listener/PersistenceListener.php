@@ -30,9 +30,9 @@ use App\Traits\DisableListenerTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
-use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\UnitOfWork;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -89,38 +89,41 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
             return;
         }
 
-        $manager = $args->getObjectManager();
-        $unitOfWork = $manager->getUnitOfWork();
-        $updates = $this->filterEntities($unitOfWork->getScheduledEntityUpdates());
-        $deletions = $this->filterEntities($unitOfWork->getScheduledEntityDeletions());
-        $insertions = $this->filterEntities($unitOfWork->getScheduledEntityInsertions());
+        $uow = $args->getObjectManager()->getUnitOfWork();
+        $updates = $this->filterEntities($uow->getScheduledEntityUpdates());
+        $deletions = $this->filterEntities($uow->getScheduledEntityDeletions());
+        $insertions = $this->filterEntities($uow->getScheduledEntityInsertions());
 
-        $collectionUpdates = $this->filterCollections($unitOfWork->getScheduledCollectionUpdates());
-        if ([] !== $collectionUpdates) {
-            $updates = $this->getUniqueMerged($updates, $collectionUpdates);
+        $collections = $this->filterCollections($uow->getScheduledCollectionUpdates());
+        if ([] !== $collections) {
+            $updates = $this->getUniqueMerged($updates, $collections);
         }
         $updates = \array_diff($updates, $insertions);
 
-        $collectionDeletions = $this->filterCollections($unitOfWork->getScheduledCollectionDeletions());
-        if ([] !== $collectionDeletions) {
-            $deletions = $this->getUniqueMerged($deletions, $collectionDeletions);
+        $collections = $this->filterCollections($uow->getScheduledCollectionDeletions());
+        if ([] !== $collections) {
+            $deletions = $this->getUniqueMerged($deletions, $collections);
         }
 
-        $this->notifyEntities($unitOfWork, $updates, '.edit.success', 'common.edit_success');
-        $this->notifyEntities($unitOfWork, $deletions, '.delete.success', 'common.delete_success', FlashType::WARNING);
-        $this->notifyEntities($unitOfWork, $insertions, '.add.success', 'common.add_success');
+        $this->notifyEntities($uow, $updates, '.edit.success', 'common.edit_success');
+        $this->notifyEntities($uow, $deletions, '.delete.success', 'common.delete_success', FlashType::WARNING);
+        $this->notifyEntities($uow, $insertions, '.add.success', 'common.add_success');
     }
 
     /**
-     * @psalm-param array<int, PersistentCollection<array-key, object>> $collections
+     * @psalm-param Collection<array-key, object>[] $collections
      *
      * @psalm-return EntityInterface[]
      */
     private function filterCollections(array $collections): array
     {
+        if ([] === $collections) {
+            return [];
+        }
+
         $result = [];
         foreach ($collections as $collection) {
-            $entities = $this->filterEntities($collection);
+            $entities = $this->filterEntities($collection, true);
             if ([] !== $entities) {
                 $result = $this->getUniqueMerged($result, $entities);
             }
@@ -130,29 +133,29 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     }
 
     /**
-     * @psalm-param array|PersistentCollection<array-key, object> $entities
+     * @psalm-param array|Collection<array-key, object> $entities
      *
      * @psalm-return EntityInterface[]
      */
-    private function filterEntities(array|PersistentCollection $entities): array
+    private function filterEntities(array|Collection $entities, bool $includeChildren = false): array
     {
-        if ($entities instanceof PersistentCollection) {
+        if ($entities instanceof Collection) {
             $entities = $entities->toArray();
         }
 
         return $this->getUniqueFiltered(\array_map(
-            fn (object $entity): ?EntityInterface => $this->filterEntity($entity),
+            fn (object $entity): ?EntityInterface => $this->filterEntity($entity, $includeChildren),
             $entities
         ));
     }
 
-    private function filterEntity(?object $entity): ?EntityInterface
+    private function filterEntity(?object $entity, bool $includeChildren = false): ?EntityInterface
     {
         if ($entity instanceof EntityInterface && \in_array($entity::class, self::CLASS_NAMES, true)) {
             return $entity;
         }
 
-        if ($entity instanceof ParentEntityInterface) {
+        if ($includeChildren && $entity instanceof ParentEntityInterface) {
             return $this->filterEntity($entity->getParentEntity());
         }
 
@@ -206,7 +209,7 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
      * @psalm-param EntityInterface[] $entities
      */
     private function notifyEntities(
-        UnitOfWork $unitOfWork,
+        UnitOfWork $uow,
         array $entities,
         string $suffix,
         string $default,
@@ -217,7 +220,7 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         }
         foreach ($entities as $entity) {
             if (User::class === $entity::class) {
-                $changeSet = \array_keys($unitOfWork->getEntityChangeSet($entity));
+                $changeSet = \array_keys($uow->getEntityChangeSet($entity));
                 if ($this->isUserLogin($changeSet) || $this->isUserReset($changeSet)) {
                     continue;
                 } elseif ($this->isUserRights($changeSet)) {

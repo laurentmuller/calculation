@@ -32,8 +32,12 @@ trait TranslatorFlashMessageAwareTrait
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      */
-    protected function errorTrans(string $id, array $parameters = [], string $domain = null, string $locale = null): string
-    {
+    protected function errorTrans(
+        string $id,
+        array $parameters = [],
+        string $domain = null,
+        string $locale = null
+    ): string {
         $message = $this->trans($id, $parameters, $domain, $locale);
         $this->error($message);
 
@@ -52,8 +56,12 @@ trait TranslatorFlashMessageAwareTrait
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      */
-    protected function infoTrans(string $id, array $parameters = [], string $domain = null, string $locale = null): string
-    {
+    protected function infoTrans(
+        string $id,
+        array $parameters = [],
+        string $domain = null,
+        string $locale = null
+    ): string {
         $message = $this->trans($id, $parameters, $domain, $locale);
         $this->info($message);
 
@@ -72,8 +80,12 @@ trait TranslatorFlashMessageAwareTrait
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      */
-    protected function successTrans(string $id, array $parameters = [], string $domain = null, string $locale = null): string
-    {
+    protected function successTrans(
+        string $id,
+        array $parameters = [],
+        string $domain = null,
+        string $locale = null
+    ): string {
         $message = $this->trans($id, $parameters, $domain, $locale);
         $this->success($message);
 
@@ -92,8 +104,12 @@ trait TranslatorFlashMessageAwareTrait
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      */
-    protected function warningTrans(string $id, array $parameters = [], string $domain = null, string $locale = null): string
-    {
+    protected function warningTrans(
+        string $id,
+        array $parameters = [],
+        string $domain = null,
+        string $locale = null
+    ): string {
         $message = $this->trans($id, $parameters, $domain, $locale);
         $this->warning($message);
 

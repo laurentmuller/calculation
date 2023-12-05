@@ -5,7 +5,7 @@
 {# item label #}
 {% block _task_items_entry_name_label -%}
     {%- set label_attributes = {
-        'class': 'label-toggle drop-down-icon-left flex-fill mb-0',
+        'class': 'label-toggle drop-down-icon-left cursor-pointer flex-fill mb-0',
         'data-bs-toggle': 'collapse',
         'data-bs-target': '#' ~ id_content,
         'aria-expanded': show|json_encode,

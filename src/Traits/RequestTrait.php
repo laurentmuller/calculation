@@ -79,8 +79,11 @@ trait RequestTrait
      *
      * @psalm-return ($default is null ? (string|int|float|bool|null) : string|int|float|bool)
      */
-    protected function getRequestValue(Request $request, string $key, string|int|float|bool $default = null): string|int|float|bool|null
-    {
+    protected function getRequestValue(
+        Request $request,
+        string $key,
+        string|int|float|bool $default = null
+    ): string|int|float|bool|null {
         /** @psalm-var scalar $value */
         $value = $this->getRequestBag($request, $key)?->get($key, $default) ?? $default;
 

@@ -99,11 +99,13 @@ trait CacheAwareTrait
      * Gets the value from this cache for the given key.
      *
      * @param string                 $key     The key for which to return the corresponding value
-     * @param mixed                  $default The default value to return or a callable function to get the default value.
-     *                                        If the callable function returns a not null value, this value is saved to the cache.
-     * @param \DateInterval|int|null $time    The period of time from the present after which the item must be considered
-     *                                        expired. An integer parameter is understood to be the time in seconds until
-     *                                        expiration. If null is passed, the expiration time is not set.
+     * @param mixed                  $default The default value to return or a callable function to get the default
+     *                                        value. If the callable function returns a not null value, this value is
+     *                                        saved to the cache.
+     * @param \DateInterval|int|null $time    The period of time from the present after which the item must be
+     *                                        considered expired. An integer parameter is understood to be the time in
+     *                                        seconds until expiration. If null is passed, the expiration time is not
+     *                                        set.
      *
      * @return mixed the value, if found; the default otherwise
      */

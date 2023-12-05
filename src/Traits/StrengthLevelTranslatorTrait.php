@@ -26,8 +26,12 @@ trait StrengthLevelTranslatorTrait
     /**
      * Add a violation.
      */
-    public function addStrengthLevelViolation(ExecutionContextInterface $context, Strength $constraint, StrengthLevel $minimum, StrengthLevel $score): void
-    {
+    public function addStrengthLevelViolation(
+        ExecutionContextInterface $context,
+        Strength $constraint,
+        StrengthLevel $minimum,
+        StrengthLevel $score
+    ): void {
         $parameters = [
             '%minimum%' => $this->translateLevel($minimum),
             '%score%' => $this->translateLevel($score),

@@ -589,23 +589,22 @@ class PdfTable
         $style->apply($parent);
         $bounds = new PdfRectangle($x, $y, $width, $height);
 
-        if ($style->isFillColor()) {
-            $this->drawCellBackground($parent, $index, clone $bounds);
-            $parent->SetXY($x, $y);
-        }
+        // background
+        $this->drawCellBackground($parent, $index, clone $bounds, $style);
+        $parent->SetXY($x, $y);
 
+        // border
         $border = $style->getBorder()->isInherited() ? $this->border : $style->getBorder();
-        if ($border->isDrawable()) {
-            $this->drawCellBorder($parent, $index, clone $bounds, $border);
-            $parent->SetXY($x, $y);
-        }
+        $this->drawCellBorder($parent, $index, $bounds, $border);
+        $parent->SetXY($x, $y);
 
+        // image or text
         $margin = $parent->getCellMargin();
         if ($cell instanceof PdfImageCell) {
             $imageBounds = clone $bounds;
             $imageBounds->inflate(-$margin);
             $cell->drawImage($parent, $imageBounds, $alignment);
-        } elseif (StringUtils::isString($text)) {
+        } else {
             $line_height = PdfDocument::LINE_HEIGHT;
             if (!$style->getFont()->isDefaultSize()) {
                 $line_height = $parent->getFontSize() + 2.0 * $margin;
@@ -638,15 +637,17 @@ class PdfTable
      * @param int          $index  the column index
      * @param PdfRectangle $bounds the cell bounds
      */
-    protected function drawCellBackground(PdfDocument $parent, int $index, PdfRectangle $bounds): void
+    protected function drawCellBackground(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfStyle $style): void
     {
         if ($this->backgroundListener instanceof PdfDrawCellBackgroundInterface) {
-            $event = new PdfCellBackgroundEvent($this, $index, $bounds);
+            $event = new PdfCellBackgroundEvent($this, $index, clone $bounds);
             if ($this->backgroundListener->drawCellBackground($event)) {
                 return;
             }
         }
-        $parent->rectangle($bounds, PdfRectangleStyle::FILL);
+        if ($style->isFillColor()) {
+            $parent->rectangle($bounds, PdfRectangleStyle::FILL);
+        }
     }
 
     /**
@@ -660,10 +661,14 @@ class PdfTable
     protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfBorder $border): void
     {
         if ($this->borderListener instanceof PdfDrawCellBorderInterface) {
-            $event = new PdfCellBorderEvent($this, $index, $bounds, $border);
+            $event = new PdfCellBorderEvent($this, $index, clone $bounds, $border);
             if ($this->borderListener->drawCellBorder($event)) {
                 return;
             }
+        }
+
+        if (!$border->isDrawable()) {
+            return;
         }
 
         $x = $bounds->x();
@@ -714,12 +719,14 @@ class PdfTable
     protected function drawCellText(PdfDocument $parent, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $alignment, float $height): void
     {
         if ($this->textListener instanceof PdfDrawCellTextInterface) {
-            $event = new PdfCellTextEvent($this, $index, $bounds, $text, $alignment, $height);
+            $event = new PdfCellTextEvent($this, $index, clone $bounds, $text, $alignment, $height);
             if ($this->textListener->drawCellText($event)) {
                 return;
             }
         }
-        $parent->MultiCell(w: $bounds->width(), h: $height, txt: $text, align: $alignment);
+        if (StringUtils::isString($text)) {
+            $parent->MultiCell(w: $bounds->width(), h: $height, txt: $text, align: $alignment);
+        }
     }
 
     /**

@@ -56,6 +56,7 @@ use App\Word\HtmlDocument;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormError;
@@ -429,7 +430,7 @@ class TestController extends AbstractController
     /**
      * Show the translation page.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
+     * @throws ServiceNotFoundException if the service is not found
      */
     #[Route(path: '/translate', name: 'test_translate', methods: Request::METHOD_GET)]
     public function translate(TranslatorFactory $factory): Response

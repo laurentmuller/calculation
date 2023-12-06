@@ -22,7 +22,7 @@ use App\Pdf\PdfDocument;
  *
  * @version 4.4.1
  */
-enum HtmlBootstrapColors: string
+enum HtmlBootstrapColor: string
 {
     case DANGER = '#DC3545';
     case DARK = '#343A40';
@@ -36,9 +36,9 @@ enum HtmlBootstrapColors: string
     /**
      * Apply this draw color to the given document.
      *
-     * @throws \RuntimeException if the color can not be created
+     * @throws \InvalidArgumentException if the color can not be created
      *
-     * @see HtmlBootstrapColors::getDrawColor()
+     * @see HtmlBootstrapColor::getDrawColor()
      */
     public function applyDrawColor(PdfDocument $doc): void
     {
@@ -48,9 +48,9 @@ enum HtmlBootstrapColors: string
     /**
      * Apply this fill color to the given document.
      *
-     * @throws \RuntimeException if the color can not be created
+     * @throws \InvalidArgumentException if the color can not be created
      *
-     * @see HtmlBootstrapColors::getFillColor()
+     * @see HtmlBootstrapColor::getFillColor()
      */
     public function applyFillColor(PdfDocument $doc): void
     {
@@ -60,9 +60,9 @@ enum HtmlBootstrapColors: string
     /**
      * Apply this text color to the given document.
      *
-     * @throws \RuntimeException if the color can not be created
+     * @throws \InvalidArgumentException if the color can not be created
      *
-     * @see HtmlBootstrapColors::getTextColor()
+     * @see HtmlBootstrapColor::getTextColor()
      */
     public function applyTextColor(PdfDocument $doc): void
     {
@@ -72,13 +72,13 @@ enum HtmlBootstrapColors: string
     /**
      * Gets this value as draw color.
      *
-     * @throws \RuntimeException if the color can not be created
+     * @throws \InvalidArgumentException if the color can not be created
      */
     public function getDrawColor(): PdfDrawColor
     {
         $color = PdfDrawColor::create($this->value);
         if (!$color instanceof PdfDrawColor) {
-            throw new \RuntimeException('Unable to create draw color.');
+            throw new \InvalidArgumentException('Unable to create draw color.');
         }
 
         return $color;
@@ -87,13 +87,13 @@ enum HtmlBootstrapColors: string
     /**
      * Gets this value as fill color.
      *
-     * @throws \RuntimeException if the color can not be created
+     * @throws \InvalidArgumentException if the color can not be created
      */
     public function getFillColor(): PdfFillColor
     {
         $color = PdfFillColor::create($this->value);
         if (!$color instanceof PdfFillColor) {
-            throw new \RuntimeException('Unable to create fill color.');
+            throw new \InvalidArgumentException('Unable to create fill color.');
         }
 
         return $color;
@@ -110,13 +110,13 @@ enum HtmlBootstrapColors: string
     /**
      * Gets this value as text color.
      *
-     * @throws \RuntimeException if the color can not be created
+     * @throws \InvalidArgumentException if the color can not be created
      */
     public function getTextColor(): PdfTextColor
     {
         $color = PdfTextColor::create($this->value);
         if (!$color instanceof PdfTextColor) {
-            throw new \RuntimeException('Unable to create text color.');
+            throw new \InvalidArgumentException('Unable to create text color.');
         }
 
         return $color;
@@ -128,14 +128,14 @@ enum HtmlBootstrapColors: string
     public static function parseBorderColor(string $class): ?PdfDrawColor
     {
         $color = match ($class) {
-            'border-primary' => HtmlBootstrapColors::PRIMARY,
-            'border-secondary' => HtmlBootstrapColors::SECONDARY,
-            'border-success' => HtmlBootstrapColors::SUCCESS,
-            'border-danger' => HtmlBootstrapColors::DANGER,
-            'border-warning' => HtmlBootstrapColors::WARNING,
-            'border-info' => HtmlBootstrapColors::INFO,
-            'border-light' => HtmlBootstrapColors::LIGHT,
-            'border-dark' => HtmlBootstrapColors::DARK,
+            'border-primary' => HtmlBootstrapColor::PRIMARY,
+            'border-secondary' => HtmlBootstrapColor::SECONDARY,
+            'border-success' => HtmlBootstrapColor::SUCCESS,
+            'border-danger' => HtmlBootstrapColor::DANGER,
+            'border-warning' => HtmlBootstrapColor::WARNING,
+            'border-info' => HtmlBootstrapColor::INFO,
+            'border-light' => HtmlBootstrapColor::LIGHT,
+            'border-dark' => HtmlBootstrapColor::DARK,
             default => null,
         };
 
@@ -149,21 +149,21 @@ enum HtmlBootstrapColors: string
     {
         $color = match ($class) {
             'bg-primary',
-            'text-bg-primary' => HtmlBootstrapColors::PRIMARY,
+            'text-bg-primary' => HtmlBootstrapColor::PRIMARY,
             'bg-secondary',
-            'text-bg-secondary' => HtmlBootstrapColors::SECONDARY,
+            'text-bg-secondary' => HtmlBootstrapColor::SECONDARY,
             'bg-success',
-            'text-bg-success' => HtmlBootstrapColors::SUCCESS,
+            'text-bg-success' => HtmlBootstrapColor::SUCCESS,
             'bg-danger',
-            'text-bg-danger' => HtmlBootstrapColors::DANGER,
+            'text-bg-danger' => HtmlBootstrapColor::DANGER,
             'bg-warning',
-            'text-bg-warning' => HtmlBootstrapColors::WARNING,
+            'text-bg-warning' => HtmlBootstrapColor::WARNING,
             'bg-info',
-            'text-bg-info' => HtmlBootstrapColors::INFO,
+            'text-bg-info' => HtmlBootstrapColor::INFO,
             'bg-light',
-            'text-bg-light' => HtmlBootstrapColors::LIGHT,
+            'text-bg-light' => HtmlBootstrapColor::LIGHT,
             'bg-dark',
-            'text-bg-dark' => HtmlBootstrapColors::DARK,
+            'text-bg-dark' => HtmlBootstrapColor::DARK,
             default => null,
         };
 
@@ -176,14 +176,14 @@ enum HtmlBootstrapColors: string
     public static function parseTextColor(string $class): ?PdfTextColor
     {
         $color = match ($class) {
-            'text-primary' => HtmlBootstrapColors::PRIMARY,
-            'text-secondary' => HtmlBootstrapColors::SECONDARY,
-            'text-success' => HtmlBootstrapColors::SUCCESS,
-            'text-danger' => HtmlBootstrapColors::DANGER,
-            'text-warning' => HtmlBootstrapColors::WARNING,
-            'text-info' => HtmlBootstrapColors::INFO,
-            'text-light' => HtmlBootstrapColors::LIGHT,
-            'text-dark' => HtmlBootstrapColors::DARK,
+            'text-primary' => HtmlBootstrapColor::PRIMARY,
+            'text-secondary' => HtmlBootstrapColor::SECONDARY,
+            'text-success' => HtmlBootstrapColor::SUCCESS,
+            'text-danger' => HtmlBootstrapColor::DANGER,
+            'text-warning' => HtmlBootstrapColor::WARNING,
+            'text-info' => HtmlBootstrapColor::INFO,
+            'text-light' => HtmlBootstrapColor::LIGHT,
+            'text-dark' => HtmlBootstrapColor::DARK,
             default => null,
         };
 

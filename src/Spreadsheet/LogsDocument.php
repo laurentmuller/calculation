@@ -14,7 +14,7 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Model\LogFile;
-use App\Pdf\Html\HtmlBootstrapColors;
+use App\Pdf\Html\HtmlBootstrapColor;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use Psr\Log\LogLevel;
@@ -84,11 +84,11 @@ class LogsDocument extends AbstractDocument
                 LogLevel::ALERT,
                 LogLevel::CRITICAL,
                 LogLevel::EMERGENCY,
-                LogLevel::ERROR => HtmlBootstrapColors::DANGER->getPhpOfficeColor(),
-                LogLevel::WARNING => HtmlBootstrapColors::WARNING->getPhpOfficeColor(),
-                LogLevel::DEBUG => HtmlBootstrapColors::SECONDARY->getPhpOfficeColor(),
+                LogLevel::ERROR => HtmlBootstrapColor::DANGER->getPhpOfficeColor(),
+                LogLevel::WARNING => HtmlBootstrapColor::WARNING->getPhpOfficeColor(),
+                LogLevel::DEBUG => HtmlBootstrapColor::SECONDARY->getPhpOfficeColor(),
                 // info, notice
-                default => HtmlBootstrapColors::INFO->getPhpOfficeColor(),
+                default => HtmlBootstrapColor::INFO->getPhpOfficeColor(),
             };
         }
 

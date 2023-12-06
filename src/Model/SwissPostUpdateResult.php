@@ -20,13 +20,13 @@ namespace App\Model;
 class SwissPostUpdateResult
 {
     private ?string $error = null;
-    /** @var SwissPostResultType */
+    /** @psalm-var SwissPostResultType */
     private array $invalidEntries = ['state' => 0, 'city' => 0, 'street' => 0];
     private int $invalidEntriesCount = 0;
     private bool $overwrite = false;
     private string $sourceFile = '';
     private string $sourceName = '';
-    /** @var SwissPostResultType */
+    /** @psalm-var SwissPostResultType */
     private array $validEntries = ['state' => 0, 'city' => 0, 'street' => 0];
     private int $validEntriesCount = 0;
     private ?\DateTimeInterface $validity = null;
@@ -66,7 +66,7 @@ class SwissPostUpdateResult
     /**
      * Gets the error entries.
      *
-     * @return SwissPostResultType
+     * @psalm-return SwissPostResultType
      *
      * @psalm-api
      */
@@ -104,7 +104,7 @@ class SwissPostUpdateResult
     /**
      * Gets the valid entries.
      *
-     * @return SwissPostResultType
+     * @psalm-return SwissPostResultType
      *
      * @psalm-api
      */

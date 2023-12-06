@@ -38,19 +38,33 @@ trait ArrayTrait
     /**
      * Gets the maximum of the given column.
      *
-     * @psalm-suppress ArgumentTypeCoercion
+     * @psalm-return ($default is int ? int : float)
      */
-    public function getColumnMax(array $values, string|int $key, float $default = 0.0): float
+    public function getColumnMax(array $values, string|int $key, int|float $default = 0.0): int|float
     {
-        return [] === $values ? $default : (float) \max($this->getColumn($values, $key));
+        if ([] === $values) {
+            return $default;
+        }
+
+        /** @psalm-var non-empty-array $values */
+        $values = $this->getColumn($values, $key);
+
+        return \is_int($default) ? (int) \max($values) : (float) \max($values);
     }
 
     /**
      * Gets the sum of the given column.
+     *
+     * @psalm-return ($default is int ? int : float)
      */
-    public function getColumnSum(array $values, string|int $key, float $default = 0.0): float
+    public function getColumnSum(array $values, string|int $key, int|float $default = 0.0): int|float
     {
-        return [] === $values ? $default : (float) \array_sum($this->getColumn($values, $key));
+        if ([] === $values) {
+            return $default;
+        }
+        $values = $this->getColumn($values, $key);
+
+        return \is_int($default) ? (int) \array_sum($values) : (float) \array_sum($values);
     }
 
     /**
@@ -69,20 +83,24 @@ trait ArrayTrait
      *                                <li>ARRAY_FILTER_USE_BOTH - pass both value and key as arguments to callback
      *                                instead of the value</li>
      *                                </ul>
+     * @param int           $flags    the flags to be used to modify the comparison behavior
      *
      * @return T[]
      *
+     * @psalm-param callable(?T|array-key|array{array-key, ?T}):bool|null $callable
      * @psalm-param 0|1|2 $mode
+     * @psalm-param 0|1|2|5 $flags
      */
-    public function getUniqueFiltered(array $values, callable $callback = null, int $mode = 0): array
-    {
-        if (\is_callable($callback)) {
-            // @phpstan-ignore-next-line
-            return \array_unique(\array_filter($values, $callback, $mode));
-        }
+    public function getUniqueFiltered(
+        array $values,
+        callable $callback = null,
+        int $mode = 0,
+        int $flags = \SORT_STRING
+    ): array {
+        /** @psalm-var T[] $values */
+        $values = \is_callable($callback) ? \array_filter($values, $callback, $mode) : \array_filter($values);
 
-        // @phpstan-ignore-next-line
-        return \array_unique(\array_filter($values, mode: $mode));
+        return \array_unique($values, $flags);
     }
 
     /**
@@ -92,11 +110,14 @@ trait ArrayTrait
      *
      * @param T[] $first  the first array to merge
      * @param T[] $second the second array to merge
+     * @param int $flags  the flags to be used to modify the comparison behavior
      *
      * @return T[]
+     *
+     * @psalm-param 0|1|2|5 $flags
      */
-    public function getUniqueMerged(array $first, array $second): array
+    public function getUniqueMerged(array $first, array $second, int $flags = \SORT_STRING): array
     {
-        return \array_unique(\array_merge($first, $second));
+        return \array_unique(\array_merge($first, $second), $flags);
     }
 }

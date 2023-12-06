@@ -568,165 +568,15 @@ class PdfTable
     }
 
     /**
-     * Output a single cell.
-     *
-     * The default behavior is to draw the cell border (if any), fill the cell (if applicable) and draw the text.
-     *
-     * After this call, the current position is at the top/right of the cell.
-     *
-     * @param PdfDocument      $parent    the parent document
-     * @param int              $index     the column index
-     * @param float            $width     the cell width
-     * @param float            $height    the cell height
-     * @param string           $text      the cell text
-     * @param PdfTextAlignment $alignment the cell alignment
-     * @param PdfStyle         $style     the cell style
-     * @param PdfCell          $cell      the cell
-     */
-    protected function drawCell(PdfDocument $parent, int $index, float $width, float $height, string $text, PdfTextAlignment $alignment, PdfStyle $style, PdfCell $cell): void
-    {
-        [$x, $y] = $parent->GetXY();
-        $style->apply($parent);
-        $bounds = new PdfRectangle($x, $y, $width, $height);
-
-        // background
-        $this->drawCellBackground($parent, $index, clone $bounds, $style);
-        $parent->SetXY($x, $y);
-
-        // border
-        $border = $style->getBorder()->isInherited() ? $this->border : $style->getBorder();
-        $this->drawCellBorder($parent, $index, $bounds, $border);
-        $parent->SetXY($x, $y);
-
-        // image or text
-        $margin = $parent->getCellMargin();
-        if ($cell instanceof PdfImageCell) {
-            $imageBounds = clone $bounds;
-            $imageBounds->inflate(-$margin);
-            $cell->drawImage($parent, $imageBounds, $alignment);
-        } else {
-            $line_height = PdfDocument::LINE_HEIGHT;
-            if (!$style->getFont()->isDefaultSize()) {
-                $line_height = $parent->getFontSize() + 2.0 * $margin;
-            }
-            $textBounds = clone $bounds;
-            $indent = $style->getIndent();
-            if ($indent > 0) {
-                $parent->SetX($x + $indent);
-                $textBounds->indent($indent);
-            }
-            $this->drawCellText($parent, $index, $textBounds, $text, $alignment, $line_height);
-
-            if ($cell->isLink()) {
-                $linkBounds = clone $textBounds;
-                $linkBounds->inflate(-$margin);
-                $linkWidth = $parent->GetStringWidth($text);
-                $linkHeight = (float) $parent->getLinesCount($text, $textBounds->width()) * $line_height - 2.0 * $margin;
-                $linkBounds->setSize($linkWidth, $linkHeight);
-                $this->drawCellLink($parent, $linkBounds, $cell->getLink());
-            }
-        }
-
-        $parent->SetXY($x + $width, $y);
-    }
-
-    /**
-     * Draws the cell background.
-     *
-     * @param PdfDocument  $parent the parent document
-     * @param int          $index  the column index
-     * @param PdfRectangle $bounds the cell bounds
-     */
-    protected function drawCellBackground(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfStyle $style): void
-    {
-        if ($this->backgroundListener instanceof PdfDrawCellBackgroundInterface) {
-            $event = new PdfCellBackgroundEvent($this, $index, clone $bounds);
-            if ($this->backgroundListener->drawCellBackground($event)) {
-                return;
-            }
-        }
-        if ($style->isFillColor()) {
-            $parent->rectangle($bounds, PdfRectangleStyle::FILL);
-        }
-    }
-
-    /**
-     * Draws the cell border.
-     *
-     * @param PdfDocument  $parent the parent document
-     * @param int          $index  the column index
-     * @param PdfRectangle $bounds the cell bounds
-     * @param PdfBorder    $border the border style
-     */
-    protected function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfBorder $border): void
-    {
-        if ($this->borderListener instanceof PdfDrawCellBorderInterface) {
-            $event = new PdfCellBorderEvent($this, $index, clone $bounds, $border);
-            if ($this->borderListener->drawCellBorder($event)) {
-                return;
-            }
-        }
-
-        if (!$border->isDrawable()) {
-            return;
-        }
-
-        $x = $bounds->x();
-        $y = $bounds->y();
-        if ($border->isRectangleStyle()) {
-            $parent->rectangle($bounds, $border);
-        } else {
-            // draw each applicable border side
-            $right = $bounds->right();
-            $bottom = $bounds->bottom();
-            if ($border->isLeft()) {
-                $parent->Line($x, $y, $x, $bottom);
-            }
-            if ($border->isRight()) {
-                $parent->Line($right, $y, $right, $bottom);
-            }
-            if ($border->isTop()) {
-                $parent->Line($x, $y, $right, $y);
-            }
-            if ($border->isBottom()) {
-                $parent->Line($x, $bottom, $right, $bottom);
-            }
-        }
-    }
-
-    /**
      * Draws the cell link.
      *
      * @param PdfDocument  $parent the parent document
      * @param PdfRectangle $bounds the link bounds
-     * @param string|int   $link   the link URL. A URL or identifier returned by AddLink().
+     * @param string|int   $link   the link URL
      */
     protected function drawCellLink(PdfDocument $parent, PdfRectangle $bounds, string|int $link): void
     {
         $parent->Link($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $link);
-    }
-
-    /**
-     * Draws the cell text.
-     *
-     * @param PdfDocument      $parent    the parent document
-     * @param int              $index     the column index
-     * @param PdfRectangle     $bounds    the cell bounds
-     * @param string           $text      the cell text
-     * @param PdfTextAlignment $alignment the text alignment
-     * @param float            $height    the line height
-     */
-    protected function drawCellText(PdfDocument $parent, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $alignment, float $height): void
-    {
-        if ($this->textListener instanceof PdfDrawCellTextInterface) {
-            $event = new PdfCellTextEvent($this, $index, clone $bounds, $text, $alignment, $height);
-            if ($this->textListener->drawCellText($event)) {
-                return;
-            }
-        }
-        if (StringUtils::isString($text)) {
-            $parent->MultiCell(w: $bounds->width(), h: $height, txt: $text, align: $alignment);
-        }
     }
 
     /**
@@ -950,5 +800,155 @@ class PdfTable
         }
 
         return [$fixedWidth, $resizableWidth];
+    }
+
+    /**
+     * Output a single cell.
+     *
+     * After this call, the current position is at the top/right of the cell.
+     *
+     * @param PdfDocument      $parent    the parent document
+     * @param int              $index     the column index
+     * @param float            $width     the cell width
+     * @param float            $height    the cell height
+     * @param string           $text      the cell text
+     * @param PdfTextAlignment $alignment the cell alignment
+     * @param PdfStyle         $style     the cell style
+     * @param PdfCell          $cell      the cell
+     */
+    private function drawCell(PdfDocument $parent, int $index, float $width, float $height, string $text, PdfTextAlignment $alignment, PdfStyle $style, PdfCell $cell): void
+    {
+        [$x, $y] = $parent->GetXY();
+        $bounds = new PdfRectangle($x, $y, $width, $height);
+
+        // background
+        $style->apply($parent);
+        $this->drawCellBackground($parent, $index, $bounds, $style);
+
+        // border
+        $style->apply($parent);
+        $parent->SetXY($x, $y);
+        $border = $style->getBorder()->isInherited() ? $this->border : $style->getBorder();
+        $this->drawCellBorder($parent, $index, $bounds, $border);
+
+        // image or text
+        $style->apply($parent);
+        $parent->SetXY($x, $y);
+        $margin = $parent->getCellMargin();
+        $textBounds = clone $bounds;
+        $line_height = PdfDocument::LINE_HEIGHT;
+        if ($cell instanceof PdfImageCell) {
+            $textBounds->inflate(-$margin);
+            $cell->drawImage($parent, clone $textBounds, $alignment);
+            $textBounds->inflate($margin);
+        } else {
+            if (!$style->getFont()->isDefaultSize()) {
+                $line_height = $parent->getFontSize() + 2.0 * $margin;
+            }
+            $indent = $style->getIndent();
+            if ($indent > 0) {
+                $parent->SetX($x + $indent);
+                $textBounds->indent($indent);
+            }
+            $this->drawCellText($parent, $index, $textBounds, $text, $alignment, $line_height);
+        }
+
+        if ($cell->isLink()) {
+            $textBounds->inflate(-$margin);
+            $linkWidth = $parent->GetStringWidth($text);
+            $linesCount = \max(1, $parent->getLinesCount($text, $textBounds->width()));
+            $linkHeight = (float) $linesCount * $line_height - 2.0 * $margin;
+            $textBounds->setSize($linkWidth, $linkHeight);
+            $this->drawCellLink($parent, $textBounds, $cell->getLink());
+        }
+
+        $parent->SetXY($x + $width, $y);
+    }
+
+    /**
+     * Draws the cell background.
+     *
+     * @param PdfDocument  $parent the parent document
+     * @param int          $index  the column index
+     * @param PdfRectangle $bounds the cell bounds
+     */
+    private function drawCellBackground(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfStyle $style): void
+    {
+        if ($this->backgroundListener instanceof PdfDrawCellBackgroundInterface) {
+            $event = new PdfCellBackgroundEvent($this, $index, clone $bounds);
+            if ($this->backgroundListener->drawCellBackground($event)) {
+                return;
+            }
+        }
+        if ($style->isFillColor()) {
+            $parent->rectangle($bounds, PdfRectangleStyle::FILL);
+        }
+    }
+
+    /**
+     * Draws the cell border.
+     *
+     * @param PdfDocument  $parent the parent document
+     * @param int          $index  the column index
+     * @param PdfRectangle $bounds the cell bounds
+     * @param PdfBorder    $border the border style
+     */
+    private function drawCellBorder(PdfDocument $parent, int $index, PdfRectangle $bounds, PdfBorder $border): void
+    {
+        if ($this->borderListener instanceof PdfDrawCellBorderInterface) {
+            $event = new PdfCellBorderEvent($this, $index, clone $bounds, clone $border);
+            if ($this->borderListener->drawCellBorder($event)) {
+                return;
+            }
+        }
+
+        if (!$border->isDrawable()) {
+            return;
+        }
+
+        $x = $bounds->x();
+        $y = $bounds->y();
+        if ($border->isRectangleStyle()) {
+            $parent->rectangle($bounds, $border);
+        } else {
+            // draw each applicable border side
+            $right = $bounds->right();
+            $bottom = $bounds->bottom();
+            if ($border->isLeft()) {
+                $parent->Line($x, $y, $x, $bottom);
+            }
+            if ($border->isRight()) {
+                $parent->Line($right, $y, $right, $bottom);
+            }
+            if ($border->isTop()) {
+                $parent->Line($x, $y, $right, $y);
+            }
+            if ($border->isBottom()) {
+                $parent->Line($x, $bottom, $right, $bottom);
+            }
+        }
+    }
+
+    /**
+     * Draws the cell text.
+     *
+     * @param PdfDocument      $parent    the parent document
+     * @param int              $index     the column index
+     * @param PdfRectangle     $bounds    the cell bounds
+     * @param string           $text      the cell text
+     * @param PdfTextAlignment $alignment the text alignment
+     * @param float            $height    the line height
+     */
+    private function drawCellText(PdfDocument $parent, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $alignment, float $height): void
+    {
+        if ($this->textListener instanceof PdfDrawCellTextInterface) {
+            $event = new PdfCellTextEvent($this, $index, clone $bounds, $text, $alignment, $height);
+            if ($this->textListener->drawCellText($event)) {
+                return;
+            }
+        }
+        if (StringUtils::isString($text)) {
+            $parent->MultiCell(w: $bounds->width(), h: $height, txt: $text, align: $alignment);
+        }
     }
 }

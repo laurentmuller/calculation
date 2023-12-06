@@ -217,7 +217,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             ];
         }, $entities);
 
-        $this->pieChart($centerX, $centerY, $radius, $rows);
+        $this->renderPieChart($centerX, $centerY, $radius, $rows);
         $this->SetY($centerY + $radius + self::LINE_HEIGHT);
         $this->legends($rows, true);
         $this->Ln();

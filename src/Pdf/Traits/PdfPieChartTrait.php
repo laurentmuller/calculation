@@ -44,7 +44,7 @@ trait PdfPieChartTrait
      * @param bool                     $clockwise indicates whether to go clockwise (true) or counter-clockwise (false)
      * @param float                    $origin    the origin of angles (0=right, 90=top, 180=left, 270=for bottom)
      */
-    public function pieChart(
+    public function renderPieChart(
         float $centerX,
         float $centerY,
         float $radius,

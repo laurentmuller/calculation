@@ -19,15 +19,16 @@ use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfFontName;
 use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Events\PdfPdfDrawHeadersEvent;
-use App\Pdf\Html\HtmlBootstrapColors;
+use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\Interfaces\PdfChartInterface;
+use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfFont;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
@@ -44,7 +45,7 @@ use App\Utils\FormatUtils;
  * @psalm-import-type CalculationByMonthType from \App\Repository\CalculationRepository
  * @psalm-import-type ColorStringType from PdfChartInterface
  */
-class CalculationByMonthReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
+class CalculationByMonthReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellBackgroundInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
     use ArrayTrait;
     use PdfBarChartTrait;
@@ -59,7 +60,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     private const PATTERN_TABLE = 'MMMM Y';
     private const RECT_MARGIN = 1.25;
     private const RECT_WIDTH = 4.5;
-
+    /** @psalm-var \WeakMap<HtmlBootstrapColor, PdfTextColor>  */
+    private \WeakMap $colors;
     /*** @psalm-var CalculationByMonthType|null */
     private ?array $currentItem = null;
     private bool $drawHeaders = false;
@@ -79,18 +81,11 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         parent::__construct($controller, $entities, $orientation);
         $this->SetTitle($this->transChart('title_by_month'));
         $this->minMargin = $controller->getMinMargin();
+        $this->colors = new \WeakMap();
     }
 
-    public function drawCellText(PdfCellTextEvent $event): bool
+    public function drawCellBackground(PdfCellBackgroundEvent $event): bool
     {
-        if ($this->drawHeaders) {
-            return match ($event->index) {
-                2 => $this->drawHeaderCell($event, self::COLOR_ITEM),
-                3 => $this->drawHeaderCell($event, self::COLOR_MARGIN),
-                default => false,
-            };
-        }
-
         return match ($event->index) {
             1 => $this->outputArrow($event->bounds, 'count'),
             2 => $this->outputArrow($event->bounds, 'items'),
@@ -98,6 +93,19 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             4 => $this->outputArrow($event->bounds, 'margin_percent', true),
             5 => $this->outputArrow($event->bounds, 'total'),
             default => false
+        };
+    }
+
+    public function drawCellText(PdfCellTextEvent $event): bool
+    {
+        if (!$this->drawHeaders) {
+            return false;
+        }
+
+        return match ($event->index) {
+            2 => $this->drawHeaderCell($event, self::COLOR_ITEM),
+            3 => $this->drawHeaderCell($event, self::COLOR_MARGIN),
+            default => false,
         };
     }
 
@@ -198,6 +206,15 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return $cell->setStyle($style);
     }
 
+    private function getArrowColor(HtmlBootstrapColor $color): PdfTextColor
+    {
+        if (!isset($this->colors[$color])) {
+            return $this->colors[$color] = $color->getTextColor();
+        }
+
+        return $this->colors[$color];
+    }
+
     private function isMinMargin(float $value): bool
     {
         return !$this->isFloatZero($value) && $value < $this->minMargin;
@@ -211,36 +228,32 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
 
         $rotate = true;
         $chr = \chr(self::ARROW_RIGHT);
-        $color = HtmlBootstrapColors::SECONDARY;
+        $color = HtmlBootstrapColor::SECONDARY;
         $precision = $percent ? 2 : 0;
         $oldValue = $this->roundValue((float) $this->lastItem[$key], $precision);
         $newValue = $this->roundValue((float) $this->currentItem[$key], $precision);
         if ($oldValue < $newValue) {
             $rotate = false;
             $chr = \chr(self::ARROW_UP);
-            $color = HtmlBootstrapColors::SUCCESS;
+            $color = HtmlBootstrapColor::SUCCESS;
         } elseif ($oldValue > $newValue) {
             $rotate = false;
             $chr = \chr(self::ARROW_DOWN);
-            $color = HtmlBootstrapColors::DANGER;
+            $color = HtmlBootstrapColor::DANGER;
         }
 
-        $color->applyTextColor($this);
+        $this->getArrowColor($color)->apply($this);
+        // $color->applyTextColor($this);
+        $oldFont = $this->getCurrentFont();
         $this->SetFont(PdfFontName::ZAPFDINGBATS);
+        $width = $this->GetStringWidth($chr);
         if ($rotate) {
-            $delta = $this->getCellMargin() + $this->GetStringWidth($chr);
+            $delta = $this->getCellMargin() + $width;
             $this->rotateText($chr, 90.0, $bounds->x() + $delta, $bounds->y() + $delta);
         } else {
-            $this->Cell(txt: $chr);
+            $this->Cell(w: $width, txt: $chr);
         }
-
-        $this->SetXY($bounds->x(), $bounds->y());
-        if ($percent && $this->isMinMargin($newValue)) {
-            PdfTextColor::red()->apply($this);
-        } else {
-            PdfTextColor::default()->apply($this);
-        }
-        PdfFont::default()->apply($this);
+        $oldFont->apply($this);
 
         return false;
     }
@@ -269,7 +282,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             'min' => 0,
             'formatter' => fn (float $value): string => FormatUtils::formatInt($value),
         ];
-        $this->barChart(rows: $rows, axis: $axis, y: $top + self::LINE_HEIGHT, h: $h);
+        $this->renderBarChart(rows: $rows, axis: $axis, y: $top + self::LINE_HEIGHT, h: $h);
         if ($newPage) {
             $this->AddPage();
         } else {
@@ -285,6 +298,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $table = $this->createTable();
 
         // entities
+        $table->setBackgroundListener($this);
         foreach ($entities as $entity) {
             $this->currentItem = $entity;
             $table->addRow(
@@ -298,7 +312,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             $this->lastItem = $entity;
         }
         $this->currentItem = $this->lastItem = null;
-        $table->setHeadersListener(null)
+        $table->setBackgroundListener(null)
+            ->setHeadersListener(null)
             ->setTextListener(null);
 
         // total

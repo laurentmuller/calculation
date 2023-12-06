@@ -92,6 +92,13 @@
                 <referencedFunction name="getColumnMax" />
             </errorLevel>
         </MixedArgumentTypeCoercion>
+
+        <PropertyTypeCoercion>
+            <errorLevel type="suppress">
+                <file name="src/Report/CalculationByMonthReport.php" />
+                <referencedProperty name="colors" />
+            </errorLevel>
+        </PropertyTypeCoercion>
     </issueHandlers>
 
     <plugins>

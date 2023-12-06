@@ -20,7 +20,7 @@ use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\Enums\PdfMove;
 use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Events\PdfCellBorderEvent;
-use App\Pdf\Html\HtmlBootstrapColors;
+use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
@@ -162,11 +162,11 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
                 LogLevel::ALERT,
                 LogLevel::CRITICAL,
                 LogLevel::EMERGENCY,
-                LogLevel::ERROR => HtmlBootstrapColors::DANGER->getDrawColor(),
-                LogLevel::WARNING => HtmlBootstrapColors::WARNING->getDrawColor(),
-                LogLevel::DEBUG => HtmlBootstrapColors::SECONDARY->getDrawColor(),
+                LogLevel::ERROR => HtmlBootstrapColor::DANGER->getDrawColor(),
+                LogLevel::WARNING => HtmlBootstrapColor::WARNING->getDrawColor(),
+                LogLevel::DEBUG => HtmlBootstrapColor::SECONDARY->getDrawColor(),
                 LogLevel::INFO,
-                LogLevel::NOTICE => HtmlBootstrapColors::INFO->getDrawColor(),
+                LogLevel::NOTICE => HtmlBootstrapColor::INFO->getDrawColor(),
                 default => null
             };
         }

@@ -68,7 +68,7 @@ trait PdfBarChartTrait
      * @psalm-param BarChartRowType[] $rows
      * @psalm-param BarChartAxisType $axis
      */
-    public function barChart(
+    public function renderBarChart(
         array $rows,
         array $axis,
         float $x = null,

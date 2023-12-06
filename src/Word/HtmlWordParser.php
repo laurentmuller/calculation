@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Word;
 
-use App\Pdf\Html\HtmlBootstrapColors;
+use App\Pdf\Html\HtmlBootstrapColor;
 use App\Traits\ArrayTrait;
 use App\Utils\StringUtils;
 
@@ -77,9 +77,9 @@ class HtmlWordParser
     private function getBootstrapStyles(): array
     {
         return \array_reduce(
-            HtmlBootstrapColors::cases(),
+            HtmlBootstrapColor::cases(),
             /** @psalm-param array<string, string> $carry  */
-            function (array $carry, HtmlBootstrapColors $color): array {
+            function (array $carry, HtmlBootstrapColor $color): array {
                 $name = \strtolower($color->name);
                 $value = $color->value;
 

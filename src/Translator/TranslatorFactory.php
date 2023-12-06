@@ -86,7 +86,7 @@ class TranslatorFactory implements ServiceSubscriberInterface
      *
      * @return TranslatorServiceInterface the translator service
      *
-     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
+     * @throws ServiceNotFoundException if the service is not found
      */
     public function getService(string $classOrName): TranslatorServiceInterface
     {
@@ -104,7 +104,7 @@ class TranslatorFactory implements ServiceSubscriberInterface
      *
      * @return TranslatorServiceInterface the translator service or the default (Bing) if not found
      *
-     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
+     * @throws ServiceNotFoundException if the service is not found
      */
     public function getSessionService(): TranslatorServiceInterface
     {

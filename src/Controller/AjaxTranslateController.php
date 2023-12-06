@@ -17,6 +17,7 @@ use App\Model\HttpClientError;
 use App\Model\TranslateQuery;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -39,7 +40,7 @@ class AjaxTranslateController extends AbstractController
     /**
      * Identifies the language of a piece of text.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
+     * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/detect', name: 'ajax_detect', methods: Request::METHOD_GET)]
@@ -74,7 +75,7 @@ class AjaxTranslateController extends AbstractController
     /**
      * Gets the list of translate languages.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
+     * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/languages', name: 'ajax_languages', methods: Request::METHOD_GET)]
@@ -98,7 +99,7 @@ class AjaxTranslateController extends AbstractController
     /**
      * Translate a text.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
+     * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/translate', name: 'ajax_translate', methods: Request::METHOD_POST)]
@@ -132,7 +133,7 @@ class AjaxTranslateController extends AbstractController
     }
 
     /**
-     * @throws \Psr\Container\ContainerExceptionInterface if the service is not found
+     * @throws ServiceNotFoundException if the service is not found
      */
     private function getService(string $class = null): TranslatorServiceInterface
     {

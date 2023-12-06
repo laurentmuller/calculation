@@ -597,8 +597,7 @@ class PdfTable
             switch ($this->alignment) {
                 case PdfTextAlignment::CENTER:
                 case PdfTextAlignment::JUSTIFIED:
-                    /** @psalm-var float $w */
-                    $w = \array_sum($widths);
+                    $w = (float) \array_sum($widths);
                     $x = $parent->getLeftMargin() + ($parent->getPrintableWidth() - $w) / 2.0;
                     $parent->SetX($x);
                     break;
@@ -614,8 +613,7 @@ class PdfTable
         }
 
         // output cells
-        $count = \count($texts);
-        for ($i = 0; $i < $count; ++$i) {
+        for ($i = 0, $len = \count($texts); $i < $len; ++$i) {
             $this->drawCell($parent, $i, $widths[$i], $height, $texts[$i], $aligns[$i], $styles[$i], $cells[$i]);
         }
 

@@ -104,28 +104,23 @@ class ResponseListener
      */
     public function onKernelResponse(ResponseEvent $event): void
     {
-        // master request ?
         if (!$event->isMainRequest()) {
             return;
         }
 
-        // development firewall ?
         $request = $event->getRequest();
         if ($this->debug && $this->isDevRequest($request)) {
             return;
         }
 
-        // CSP
         $response = $event->getResponse();
         $headers = $response->headers;
+        $headers->add(self::DEFAULT_HEADERS);
         $csp = $this->getCSP($response);
         if ('' !== $csp) {
             foreach (self::CSP_HEADERS as $key) {
                 $headers->set($key, $csp);
             }
-        }
-        foreach (self::DEFAULT_HEADERS as $key => $value) {
-            $headers->set($key, $value);
         }
     }
 

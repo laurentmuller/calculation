@@ -243,7 +243,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         }
 
         $this->getArrowColor($color)->apply($this);
-        // $color->applyTextColor($this);
         $oldFont = $this->getCurrentFont();
         $this->SetFont(PdfFontName::ZAPFDINGBATS);
         $width = $this->GetStringWidth($chr);

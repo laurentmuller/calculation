@@ -17,7 +17,6 @@ use App\Entity\AbstractEntity;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
@@ -99,11 +98,6 @@ abstract class AbstractRepository extends ServiceEntityRepository
 
         return $builder->getQuery()
             ->getSingleColumnResult();
-    }
-
-    public function getEntityManager(): EntityManagerInterface
-    {
-        return parent::getEntityManager();
     }
 
     /**

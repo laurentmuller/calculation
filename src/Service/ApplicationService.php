@@ -30,6 +30,7 @@ use App\Traits\MathTrait;
 use App\Traits\PropertyServiceTrait;
 use App\Utils\StringUtils;
 use App\Validator\Password;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
@@ -44,7 +45,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     use PropertyServiceTrait;
 
     public function __construct(
-        private readonly PropertyRepository $repository,
+        private readonly EntityManagerInterface $manager,
         private readonly RoleBuilderService $builder,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
@@ -297,6 +298,8 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     /**
      * Create a password contraint with this security properties.
+     *
+     * @psalm-api
      */
     public function getPasswordConstraint(): Password
     {
@@ -471,9 +474,10 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     public function removeProperty(string $name): self
     {
-        $property = $this->repository->findOneByName($name);
+        $repository = $this->getPropertyRepository();
+        $property = $repository->findOneByName($name);
         if ($property instanceof Property) {
-            $this->repository->remove($property);
+            $repository->remove($property);
             $this->updateAdapter();
         }
 
@@ -516,13 +520,15 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             return $this;
         }
 
+        $repository = $this->getPropertyRepository();
         $defaultValues = $this->getDefaultValues();
         $existingProperties = $this->getExistingProperties();
+
         /** @psalm-var mixed $value */
         foreach ($properties as $key => $value) {
-            $this->saveProperty($key, $value, $defaultValues, $existingProperties);
+            $this->saveProperty($repository, $key, $value, $defaultValues, $existingProperties);
         }
-        $this->repository->flush();
+        $this->manager->flush();
         $this->updateAdapter();
 
         return $this;
@@ -554,7 +560,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     protected function updateAdapter(): void
     {
-        $this->saveProperties($this->repository->findAll());
+        $this->saveProperties($this->getPropertyRepository()->findAll());
     }
 
     /**
@@ -571,9 +577,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             return null;
         }
 
-        return $this->repository
-            ->getEntityManager()
-            ->getRepository($entityName)
+        return $this->manager->getRepository($entityName)
             ->find($id);
     }
 
@@ -582,7 +586,10 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      */
     private function getExistingProperties(): array
     {
-        $properties = $this->repository->findAll();
+        /** @psalm-var Property[] $properties */
+        $properties = $this->manager
+            ->getRepository(Property::class)
+            ->findAll();
 
         return \array_reduce(
             $properties,
@@ -592,20 +599,33 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         );
     }
 
+    private function getPropertyRepository(): PropertyRepository
+    {
+        /** @psalm-var PropertyRepository $repository */
+        $repository = $this->manager->getRepository(Property::class);
+
+        return $repository;
+    }
+
     /**
      * @psalm-param array<string, mixed> $defaultValues
      * @psalm-param array<string, Property> $existingProperties
      */
-    private function saveProperty(string $name, mixed $value, array $defaultValues, array $existingProperties): void
-    {
+    private function saveProperty(
+        PropertyRepository $repository,
+        string $name,
+        mixed $value,
+        array $defaultValues,
+        array $existingProperties
+    ): void {
         if ($this->isDefaultValue($defaultValues, $name, $value)) {
             if (isset($existingProperties[$name])) {
-                $this->repository->remove($existingProperties[$name], false);
+                $repository->remove($existingProperties[$name], false);
             }
         } else {
             $property = $existingProperties[$name] ?? Property::instance($name);
             $property->setValue($value);
-            $this->repository->persist($property, false);
+            $repository->persist($property, false);
         }
     }
 

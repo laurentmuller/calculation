@@ -226,9 +226,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             return false;
         }
 
-        $rotate = true;
-        $chr = \chr(self::ARROW_RIGHT);
-        $color = HtmlBootstrapColor::SECONDARY;
         $precision = $percent ? 2 : 0;
         $oldValue = $this->roundValue((float) $this->lastItem[$key], $precision);
         $newValue = $this->roundValue((float) $this->currentItem[$key], $precision);
@@ -240,6 +237,10 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             $rotate = false;
             $chr = \chr(self::ARROW_DOWN);
             $color = HtmlBootstrapColor::DANGER;
+        } else {
+            $rotate = true;
+            $chr = \chr(self::ARROW_RIGHT);
+            $color = HtmlBootstrapColor::SECONDARY;
         }
 
         $this->getArrowColor($color)->apply($this);

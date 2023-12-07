@@ -442,19 +442,21 @@
             const settings = $.extend(true, {
                 parent: $this,
                 text: $this.data('save') || 'Saving data...',
-                alertClass: 'alert bg-body-secondary border border-secondary-subtle text-center position-absolute top-50 start-50 translate-middle z-3',
+                alertClass: 'alert bg-body-secondary border border-secondary-subtle text-center position-absolute start-50 translate-middle z-3',
                 iconClass: 'fa-solid fa-spinner fa-spin me-2',
                 css: {
                     width: '90%',
                     zIndex: 2
                 },
                 maxWidth: 600,
+                hide: 1500,
                 show: 150
             }, options);
 
             // check width
+            const parent = settings.parent;
             let width = settings.css.width;
-            const parentWidth = settings.parent.width();
+            const parentWidth = parent.width();
             const windowWidth = Math.floor($(window).width() * 0.9);
             if (width.endsWith('%')) {
                 width = $.parseInt(width);
@@ -463,6 +465,13 @@
                 width = $.parseInt(width, 10);
             }
             settings.css.width = Math.min(width, windowWidth, settings.maxWidth) + 'px';
+
+            // check height
+            if (window.innerHeight < parent.height()) {
+                settings.css.top = '25%';
+            } else {
+                settings.alertClass += ' top-50';
+            }
 
             // build alert
             const $alert = $('<div />', {
@@ -477,11 +486,9 @@
                 });
                 $alert.prepend($icon);
             }
-            settings.parent.addClass('position-relative');
-            $alert.appendTo($(settings.parent)).show(settings.show);
-            setTimeout(() => {
-                $alert.remove();
-            }, 1500);
+            parent.addClass('position-relative');
+            $alert.appendTo($(parent)).show(settings.show);
+            setTimeout(() => $alert.remove(), settings.hide);
 
             return $this;
         }

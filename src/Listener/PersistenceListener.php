@@ -123,7 +123,7 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
 
         $result = [];
         foreach ($collections as $collection) {
-            $entities = $this->filterEntities($collection, true);
+            $entities = $this->filterEntities($collection);
             if ([] !== $entities) {
                 $result = $this->getUniqueMerged($result, $entities);
             }
@@ -137,25 +137,25 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
      *
      * @psalm-return EntityInterface[]
      */
-    private function filterEntities(array|Collection $entities, bool $includeChildren = false): array
+    private function filterEntities(array|Collection $entities): array
     {
         if ($entities instanceof Collection) {
             $entities = $entities->toArray();
         }
 
         return $this->getUniqueFiltered(\array_map(
-            fn (object $entity): ?EntityInterface => $this->filterEntity($entity, $includeChildren),
+            fn (object $entity): ?EntityInterface => $this->filterEntity($entity),
             $entities
         ));
     }
 
-    private function filterEntity(?object $entity, bool $includeChildren = false): ?EntityInterface
+    private function filterEntity(?object $entity): ?EntityInterface
     {
         if ($entity instanceof EntityInterface && \in_array($entity::class, self::CLASS_NAMES, true)) {
             return $entity;
         }
 
-        if ($includeChildren && $entity instanceof ParentEntityInterface) {
+        if ($entity instanceof ParentEntityInterface) {
             return $this->filterEntity($entity->getParentEntity());
         }
 

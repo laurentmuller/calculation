@@ -46,6 +46,15 @@
     border-top: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color-translucent) !important;
 }
 
+html[data-bs-theme=light] .navbar-vertical.navbar-dark .dropdown-divider,
+html[data-bs-theme=light] .navbar-vertical.navbar-dark .border-top {
+    border-top-color: var(--bs-gray-700) !important;
+}
+
+html[data-bs-theme=light] .navbar-vertical.navbar-dark .border-bottom {
+    border-bottom-color: var(--bs-gray-700) !important;
+}
+
 .navbar-vertical ul ul {
     padding-left: 1.5rem;
 }

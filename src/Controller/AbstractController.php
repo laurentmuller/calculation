@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Form\FormHelper;
@@ -91,14 +90,6 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets the application owner.
-     */
-    public function getApplicationOwner(): string
-    {
-        return $this->getParameterString('app_owner');
-    }
-
-    /**
      * Gets the application owner URL.
      */
     public function getApplicationOwnerUrl(): string
@@ -157,19 +148,6 @@ abstract class AbstractController extends BaseController
         }
 
         return $this->generatorService;
-    }
-
-    /**
-     * Gets the connected user e-mail.
-     *
-     * @return string|null the user e-mail or null if not connected
-     */
-    public function getUserEmail(): ?string
-    {
-        /** @psalm-var User|null $user */
-        $user = $this->getUser();
-
-        return $user?->getEmail();
     }
 
     /**

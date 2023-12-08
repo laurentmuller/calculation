@@ -99,6 +99,25 @@
                 <referencedProperty name="colors" />
             </errorLevel>
         </PropertyTypeCoercion>
+
+        <InvalidReturnType>
+            <errorLevel type="suppress">
+                <file name="src/Service/RoleBuilderService.php" />
+            </errorLevel>
+        </InvalidReturnType>
+
+        <InvalidReturnStatement>
+            <errorLevel type="suppress">
+                <file name="src/Service/RoleBuilderService.php" />
+            </errorLevel>
+        </InvalidReturnStatement>
+
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <file name="src/Service/RoleBuilderService.php" />
+                <referencedFunction name="getAllPermissions" />
+            </errorLevel>
+        </InvalidArgument>
     </issueHandlers>
 
     <plugins>

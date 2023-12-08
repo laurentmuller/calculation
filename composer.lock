@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "00231faaa97ec1190370c16c4801b56e",
+    "content-hash": "7561087656facf0ed1be6928ce4c8e65",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1472,13 +1472,13 @@
             "version": "2.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://github.com/laurentmuller/PhpEnums.git",
-                "reference": "587e512b46bcec9a6431e24de320ae5b6d617cfe"
+                "url": "https://github.com/Elao/PhpEnums.git",
+                "reference": "8b09a3a2efa38e57b54a335063844604beea4afa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/PhpEnums/zipball/587e512b46bcec9a6431e24de320ae5b6d617cfe",
-                "reference": "587e512b46bcec9a6431e24de320ae5b6d617cfe",
+                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/8b09a3a2efa38e57b54a335063844604beea4afa",
+                "reference": "8b09a3a2efa38e57b54a335063844604beea4afa",
                 "shasum": ""
             },
             "require": {
@@ -1512,19 +1512,14 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Elao\\Enum\\": "src/"
-                },
                 "files": [
                     "src/Bridge/Symfony/VarDumper/Resources/register_caster.php"
-                ]
-            },
-            "autoload-dev": {
+                ],
                 "psr-4": {
-                    "Elao\\Enum\\Tests\\": "tests/",
-                    "App\\": "tests/Fixtures/Integration/Symfony/src"
+                    "Elao\\Enum\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1547,15 +1542,16 @@
                 "symfony"
             ],
             "support": {
-                "source": "https://github.com/laurentmuller/PhpEnums/tree/2.x"
+                "issues": "https://github.com/Elao/PhpEnums/issues",
+                "source": "https://github.com/Elao/PhpEnums/tree/2.x"
             },
             "funding": [
                 {
-                    "type": "github",
-                    "url": "https://github.com/ogizanagi"
+                    "url": "https://github.com/ogizanagi",
+                    "type": "github"
                 }
             ],
-            "time": "2023-10-05T18:00:32+00:00"
+            "time": "2023-07-05T13:45:49+00:00"
         },
         {
             "name": "endroid/qr-code",
@@ -2114,16 +2110,16 @@
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.20.3",
+            "version": "2.20.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/HighchartsBundle.git",
-                "reference": "a8bd965be5436f93faf58bc04ea2a4a186f75025"
+                "reference": "88a0eeca96d9871d783f21bbe839f69fe651ba20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/a8bd965be5436f93faf58bc04ea2a4a186f75025",
-                "reference": "a8bd965be5436f93faf58bc04ea2a4a186f75025",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/88a0eeca96d9871d783f21bbe839f69fe651ba20",
+                "reference": "88a0eeca96d9871d783f21bbe839f69fe651ba20",
                 "shasum": ""
             },
             "require": {
@@ -2213,7 +2209,7 @@
                 "issues": "https://github.com/laurentmuller/HighchartsBundle/issues",
                 "source": "https://github.com/laurentmuller/HighchartsBundle"
             },
-            "time": "2023-11-28T10:35:52+00:00"
+            "time": "2023-12-08T18:09:15+00:00"
         },
         {
             "name": "lorenzo/pinky",
@@ -7946,23 +7942,23 @@
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
-            "version": "2.2.6",
+            "version": "v2.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tijsverkoyen/CssToInlineStyles.git",
-                "reference": "c42125b83a4fa63b187fdf29f9c93cb7733da30c"
+                "reference": "83ee6f38df0a63106a9e4536e3060458b74ccedb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tijsverkoyen/CssToInlineStyles/zipball/c42125b83a4fa63b187fdf29f9c93cb7733da30c",
-                "reference": "c42125b83a4fa63b187fdf29f9c93cb7733da30c",
+                "url": "https://api.github.com/repos/tijsverkoyen/CssToInlineStyles/zipball/83ee6f38df0a63106a9e4536e3060458b74ccedb",
+                "reference": "83ee6f38df0a63106a9e4536e3060458b74ccedb",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-libxml": "*",
                 "php": "^5.5 || ^7.0 || ^8.0",
-                "symfony/css-selector": "^2.7 || ^3.0 || ^4.0 || ^5.0 || ^6.0"
+                "symfony/css-selector": "^2.7 || ^3.0 || ^4.0 || ^5.0 || ^6.0 || ^7.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.0 || ^7.5 || ^8.5.21 || ^9.5.10"
@@ -7993,9 +7989,9 @@
             "homepage": "https://github.com/tijsverkoyen/CssToInlineStyles",
             "support": {
                 "issues": "https://github.com/tijsverkoyen/CssToInlineStyles/issues",
-                "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/2.2.6"
+                "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.2.7"
             },
-            "time": "2023-01-03T09:29:04+00:00"
+            "time": "2023-12-08T13:03:43+00:00"
         },
         {
             "name": "twig/cssinliner-extra",
@@ -10023,16 +10019,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.47",
+            "version": "1.10.48",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "84dbb33b520ea28b6cf5676a3941f4bae1c1ff39"
+                "reference": "087ed4b5f4a7a6e8f3bbdfbfe98ce5c181380bc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/84dbb33b520ea28b6cf5676a3941f4bae1c1ff39",
-                "reference": "84dbb33b520ea28b6cf5676a3941f4bae1c1ff39",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/087ed4b5f4a7a6e8f3bbdfbfe98ce5c181380bc6",
+                "reference": "087ed4b5f4a7a6e8f3bbdfbfe98ce5c181380bc6",
                 "shasum": ""
             },
             "require": {
@@ -10081,7 +10077,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-01T15:19:17+00:00"
+            "time": "2023-12-08T14:34:28+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",

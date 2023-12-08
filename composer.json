@@ -184,11 +184,11 @@
         ]
     },
     "scripts-descriptions": {
-        "php-fixer": "Run PHP-CS-Fixer for validation.",
-        "php-psalm": "Run Pslam for validation.",
-        "php-stan": "Run PHPStan for validation.",
-        "php-rector": "Run Rector for validation.",
-        "php-twigcs": "Run Twigcs to validate templates.",
+        "php-fixer": "Run PHP-CS-Fixer.",
+        "php-psalm": "Run Pslam.",
+        "php-stan": "Run PHPStan.",
+        "php-rector": "Run Rector.",
+        "php-twigcs": "Run Twigcs.",
         "php-test": "Run tests with PHPUnit.",
         "php-all": "Run all validation scripts."
     },
@@ -196,10 +196,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/laurentmuller/HighchartsBundle"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/laurentmuller/PhpEnums"
         }
     ]
 }

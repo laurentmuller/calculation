@@ -93,7 +93,7 @@ class RoleBuilderService
     }
 
     /**
-     * @return FlagBag<EntityPermission>
+     * @psalm-return FlagBag<EntityPermission>
      */
     private function getAllPermissions(): FlagBag
     {
@@ -101,7 +101,7 @@ class RoleBuilderService
     }
 
     /**
-     * @return FlagBag<EntityPermission>
+     * @psalm-return FlagBag<EntityPermission>
      */
     private function getDefaultPermissions(): FlagBag
     {
@@ -113,7 +113,7 @@ class RoleBuilderService
     }
 
     /**
-     * @return FlagBag<EntityPermission>
+     * @psalm-return FlagBag<EntityPermission>
      */
     private function getNonePermissions(): FlagBag
     {

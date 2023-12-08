@@ -70,6 +70,7 @@ use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -92,10 +93,15 @@ class TestController extends AbstractController
      * Test sending notification mail.
      */
     #[Route(path: '/editor', name: 'test_editor', methods: [Request::METHOD_GET, Request::METHOD_POST])]
-    public function editor(Request $request, MailerService $service, LoggerInterface $logger): Response
-    {
+    public function editor(
+        Request $request,
+        #[CurrentUser]
+        User $user,
+        MailerService $service,
+        LoggerInterface $logger
+    ): Response {
         $data = [
-            'email' => $this->getUserEmail(),
+            'email' => $user->getEmail(),
             'importance' => Importance::MEDIUM,
         ];
         $helper = $this->createFormHelper('user.fields.', $data);
@@ -118,8 +124,6 @@ class TestController extends AbstractController
         $form = $helper->createForm();
 
         if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var User $user */
-            $user = $this->getUser();
             /** @psalm-var array{email: string, message: string, importance: Importance, attachments: UploadedFile[]}  $data */
             $data = $form->getData();
             $email = $data['email'];

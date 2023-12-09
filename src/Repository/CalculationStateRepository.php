@@ -70,15 +70,27 @@ class CalculationStateRepository extends AbstractRepository
      */
     public function getCalculations(): array
     {
-        $result = $this->getCalculationsQueryBuilder()
-            ->getQuery()
-            ->getArrayResult();
+        $builder = $this->createQueryBuilder('s')
+            ->select('s.id')
+            ->addSelect('s.code')
+            ->addSelect('s.editable')
+            ->addSelect('s.color')
+            ->addSelect('COUNT(c.id) as count')
+            ->addSelect('ROUND(SUM(c.itemsTotal), 2) as items')
+            ->addSelect('ROUND(SUM(c.overallTotal), 2) as total')
+            ->addSelect('ROUND(SUM(c.overallTotal) / sum(c.itemsTotal), 4) as margin_percent')
+            ->addSelect('ROUND(SUM(c.overallTotal) - sum(c.itemsTotal), 2) as margin_amount')
+            ->innerJoin('s.calculations', 'c')
+            ->groupBy('s.id')
+            ->orderBy('s.code', Criteria::ASC);
+
+        $result = $builder->getQuery()->getArrayResult();
 
         $count = $this->getColumnSum($result, 'count');
         $total = $this->getColumnSum($result, 'total');
         foreach ($result as &$data) {
-            $data['percent_calculation'] = $this->safeDivide($data['count'], $count);
-            $data['percent_amount'] = $this->safeDivide($data['total'], $total);
+            $data['percent_calculation'] = $this->round($this->safeDivide($data['count'], $count), 4);
+            $data['percent_amount'] = $this->round($this->safeDivide($data['total'], $total), 4);
         }
 
         return $result;
@@ -228,26 +240,6 @@ class CalculationStateRepository extends AbstractRepository
             ->resetDQLPart('orderBy')
             ->getQuery()
             ->getSingleScalarResult();
-    }
-
-    /**
-     * Gets the query builder for calculations statistics.
-     */
-    private function getCalculationsQueryBuilder(): QueryBuilder
-    {
-        return $this->createQueryBuilder('s')
-            ->select('s.id')
-            ->addSelect('s.code')
-            ->addSelect('s.editable')
-            ->addSelect('s.color')
-            ->addSelect('COUNT(c.id) as count')
-            ->addSelect('SUM(c.itemsTotal) as items')
-            ->addSelect('SUM(c.overallTotal) as total')
-            ->addSelect('SUM(c.overallTotal) / sum(c.itemsTotal) as margin_percent')
-            ->addSelect('SUM(c.overallTotal) - sum(c.itemsTotal) as margin_amount')
-            ->innerJoin('s.calculations', 'c')
-            ->groupBy('s.id')
-            ->orderBy('s.code', Criteria::ASC);
     }
 
     private function getDropDownQuery(): QueryBuilder

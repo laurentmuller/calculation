@@ -137,19 +137,24 @@ class MonthChart extends AbstractHighchart
         return $this->createExpression('function() {location.href = this.url;}');
     }
 
+    private function getFormatterExpression(): Expr
+    {
+        return $this->createExpression('function() {return Highcharts.numberFormat(this.value, 0);}');
+    }
+
     /**
      * Only y and url values are returned.
      *
-     * @param CalculationByMonthType[] $data
+     * @param CalculationByMonthType[] $series
      */
-    private function getItemsSeries(array $data): array
+    private function getItemsSeries(array $series): array
     {
         return \array_map(function (array $item): array {
             return [
                 'y' => $item['items'],
                 'url' => $this->getURL($item['date']),
             ];
-        }, $data);
+        }, $series);
     }
 
     private function getMarginColor(float $value): string
@@ -165,9 +170,9 @@ class MonthChart extends AbstractHighchart
     /**
      * The y value, the url and all data needed by custom tooltip are returned.
      *
-     * @param CalculationByMonthType[] $data
+     * @param CalculationByMonthType[] $series
      */
-    private function getMarginsSeries(array $data): array
+    private function getMarginsSeries(array $series): array
     {
         return \array_map(function (array $item): array {
             return [
@@ -181,7 +186,7 @@ class MonthChart extends AbstractHighchart
                 'total_amount' => FormatUtils::formatInt($item['total']),
                 'url' => $this->getURL($item['date']),
             ];
-        }, $data);
+        }, $series);
     }
 
     private function getSeriesOptions(): array
@@ -219,7 +224,7 @@ class MonthChart extends AbstractHighchart
         $count = $this->getColumnSum($series, 'count');
         $total = $this->getColumnSum($series, 'total');
         $items = $this->getColumnSum($series, 'items');
-        $margin_percent = $this->safeDivide($total, $items);
+        $margin_percent = $this->round($this->safeDivide($total, $items), 4);
         $margin_amount = $total - $items;
 
         return [
@@ -288,15 +293,9 @@ class MonthChart extends AbstractHighchart
 
     private function setYAxis(): self
     {
-        $function = <<<JAVA_SCRIPT
-            function() {
-               return Highcharts.numberFormat(this.value, 0);
-            }
-            JAVA_SCRIPT;
-
         $this->yAxis->merge([
             'labels' => [
-                'formatter' => $this->createExpression($function),
+                'formatter' => $this->getFormatterExpression(),
             ],
             'title' => [
                 'text' => null,

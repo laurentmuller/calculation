@@ -140,7 +140,7 @@ class StateChart extends AbstractHighchart
         $count = $this->getColumnSum($states, 'count');
         $total = $this->getColumnSum($states, 'total');
         $items = $this->getColumnSum($states, 'items');
-        $margin_percent = $this->safeDivide($total, $items);
+        $margin_percent = $this->round($this->safeDivide($total, $items), 4);
         $margin_amount = $total - $items;
 
         return [

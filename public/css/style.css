@@ -939,3 +939,11 @@ span.bottom-border-gradient {
 .card.card-collapse .card-header .drop-down-icon-right {
     margin-bottom: 0 !important;
 }
+
+/**
+ * Form errors in header
+ */
+.card-header .alert.alert-danger {
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+}

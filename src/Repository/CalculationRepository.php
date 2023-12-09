@@ -233,11 +233,11 @@ class CalculationRepository extends AbstractRepository
     {
         $builder = $this->createQueryBuilder('c')
             ->select('COUNT(c.id) as count')
-            ->addSelect('SUM(c.itemsTotal) as items')
-            ->addSelect('SUM(c.overallTotal) as total')
+            ->addSelect('ROUND(SUM(c.itemsTotal), 2) as items')
+            ->addSelect('ROUND(SUM(c.overallTotal), 2) as total')
             ->addSelect('YEAR(c.date) as year')
             ->addSelect('MONTH(c.date) as month')
-            ->addSelect('SUM(c.overallTotal) / SUM(c.itemsTotal) as margin_percent')
+            ->addSelect('ROUND(SUM(c.overallTotal) / SUM(c.itemsTotal), 4) as margin_percent')
             ->groupBy('year')
             ->addGroupBy('month')
             ->orderBy('year', Criteria::DESC)
@@ -246,7 +246,7 @@ class CalculationRepository extends AbstractRepository
 
         $result = $builder->getQuery()->getArrayResult();
 
-        /** @psalm-var array $item */
+        /** @psalm-var CalculationByMonthType $item */
         foreach ($result as &$item) {
             $item['date'] = $this->convertToDate($item);
             $item['margin_amount'] = $item['total'] - $item['items'];

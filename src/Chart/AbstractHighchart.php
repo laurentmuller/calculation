@@ -108,7 +108,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
             $content = (string) \preg_replace(self::COMMENT_REGEX, '', $content);
 
             return $this->createExpression($content);
-        } catch (\Exception) {
+        } catch (\Twig\Error\Error) {
             return null;
         }
     }

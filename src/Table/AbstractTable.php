@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Table;
 
-use App\Entity\AbstractEntity;
 use App\Enums\TableView;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Traits\MathTrait;
@@ -254,7 +254,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Maps the given entities.
      *
-     * @param array<AbstractEntity|array> $entities the entities to map
+     * @param array<EntityInterface|array> $entities the entities to map
      *
      * @return array<array<string, string>> the mapped entities
      */
@@ -264,7 +264,7 @@ abstract class AbstractTable implements SortModeInterface
             $columns = $this->getColumns();
             $accessor = PropertyAccess::createPropertyAccessor();
 
-            return \array_map(fn (AbstractEntity|array $entity): array => $this->mapValues($entity, $columns, $accessor), $entities);
+            return \array_map(fn (EntityInterface|array $entity): array => $this->mapValues($entity, $columns, $accessor), $entities);
         }
 
         return [];
@@ -273,13 +273,13 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Map the given entity or array to an array where the keys are the column field.
      *
-     * @param AbstractEntity|array $objectOrArray the entity or array to map
-     * @param array<Column>        $columns       the column definitions
-     * @param PropertyAccessor     $accessor      the property accessor to get the values
+     * @param EntityInterface|array $objectOrArray the entity or array to map
+     * @param array<Column>         $columns       the column definitions
+     * @param PropertyAccessor      $accessor      the property accessor to get the values
      *
      * @return array<string, string> the mapped object
      */
-    protected function mapValues(AbstractEntity|array $objectOrArray, array $columns, PropertyAccessor $accessor): array
+    protected function mapValues(EntityInterface|array $objectOrArray, array $columns, PropertyAccessor $accessor): array
     {
         return \array_reduce(
             $columns,

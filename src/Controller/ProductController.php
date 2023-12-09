@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Form\Product\ProductType;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\ProductsReport;
 use App\Repository\ProductRepository;
@@ -157,7 +157,7 @@ class ProductController extends AbstractEntityController
     /**
      * @psalm-param Product $item
      */
-    protected function deleteFromDatabase(AbstractEntity $item): void
+    protected function deleteFromDatabase(EntityInterface $item): void
     {
         $this->getApplication()->updateDeletedProduct($item);
         parent::deleteFromDatabase($item);

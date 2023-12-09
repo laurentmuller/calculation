@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Attribute\SortableEntity;
-use App\Entity\AbstractEntity;
+use App\Interfaces\EntityInterface;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -23,7 +23,7 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * Base repository.
  *
- * @template TEntity of AbstractEntity
+ * @template TEntity of EntityInterface
  *
  * @template-extends ServiceEntityRepository<TEntity>
  */
@@ -186,12 +186,12 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Persist the given entity to the database.
      *
-     * @param AbstractEntity $entity the entity to persist
-     * @param bool           $flush  true to flush change to the database
+     * @param EntityInterface $entity the entity to persist
+     * @param bool            $flush  true to flush change to the database
      *
      * @see AbstractRepository::flush()
      */
-    public function persist(AbstractEntity $entity, bool $flush = true): void
+    public function persist(EntityInterface $entity, bool $flush = true): void
     {
         $this->getEntityManager()->persist($entity);
         if ($flush) {
@@ -202,10 +202,10 @@ abstract class AbstractRepository extends ServiceEntityRepository
     /**
      * Remove the given entity from the database.
      *
-     * @param AbstractEntity $entity the entity to remove
-     * @param bool           $flush  true to flush change to the database
+     * @param EntityInterface $entity the entity to remove
+     * @param bool            $flush  true to flush change to the database
      */
-    public function remove(AbstractEntity $entity, bool $flush = true): void
+    public function remove(EntityInterface $entity, bool $flush = true): void
     {
         $this->getEntityManager()->remove($entity);
         if ($flush) {

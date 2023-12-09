@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Faker;
 
+use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Provider\Base;
@@ -19,7 +20,7 @@ use Faker\Provider\Base;
 /**
  * Entity provider.
  *
- * @template T of \App\Entity\AbstractEntity
+ * @template TEntity of EntityInterface
  *
  * @property \Faker\UniqueGenerator $unique
  */
@@ -35,25 +36,25 @@ class EntityProvider extends Base
     /**
      * The cached entities.
      *
-     * @psalm-var T[]
+     * @psalm-var TEntity[]
      */
     private ?array $entities = null;
 
     /**
      * The repository.
      *
-     * @psalm-var AbstractRepository<T>
+     * @psalm-var AbstractRepository<TEntity>
      */
     private readonly AbstractRepository $repository;
 
     /**
-     * @psalm-param class-string<T> $className the entity class name.
+     * @psalm-param class-string<TEntity> $className the entity class name.
      */
     public function __construct(Generator $generator, EntityManagerInterface $manager, string $className)
     {
         parent::__construct($generator);
 
-        /** @psalm-var AbstractRepository<T> $repository */
+        /** @psalm-var AbstractRepository<TEntity> $repository */
         $repository = $manager->getRepository($className);
 
         $this->repository = $repository;
@@ -92,11 +93,11 @@ class EntityProvider extends Base
     /**
      * Gets a random entity.
      *
-     * @psalm-return T|null
+     * @psalm-return TEntity|null
      */
     protected function entity()
     {
-        /** @psalm-var T|null $entity */
+        /** @psalm-var TEntity|null $entity */
         $entity = static::randomElement($this->getEntities());
 
         return $entity;
@@ -113,7 +114,7 @@ class EntityProvider extends Base
     /**
      * Gets all entities.
      *
-     * @psalm-return T[]
+     * @psalm-return TEntity[]
      */
     protected function getEntities(): array
     {
@@ -127,7 +128,7 @@ class EntityProvider extends Base
     }
 
     /**
-     * @return AbstractRepository<T>
+     * @return AbstractRepository<TEntity>
      */
     protected function getRepository(): AbstractRepository
     {

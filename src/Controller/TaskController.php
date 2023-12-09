@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Entity\Task;
 use App\Form\Task\TaskServiceType;
 use App\Form\Task\TaskType;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\TaskComputeQuery;
 use App\Report\TasksReport;
@@ -189,7 +189,7 @@ class TaskController extends AbstractEntityController
     /**
      * @param Task $item
      */
-    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         $parameters['item_index'] = $item->count();
         $parameters['margin_index'] = $item->countMargins();

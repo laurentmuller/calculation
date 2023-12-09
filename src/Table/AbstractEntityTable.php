@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
-use App\Entity\AbstractEntity;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
 use App\Utils\StringUtils;
@@ -25,7 +25,7 @@ use Doctrine\ORM\Tools\Pagination\CountWalker;
 /**
  * Abstract table for entities.
  *
- * @template T of AbstractEntity
+ * @template TEntity of EntityInterface
  */
 abstract class AbstractEntityTable extends AbstractTable
 {
@@ -40,7 +40,7 @@ abstract class AbstractEntityTable extends AbstractTable
     private const JOIN_PART = 'join';
 
     /**
-     * @param AbstractRepository<T> $repository
+     * @param AbstractRepository<TEntity> $repository
      */
     public function __construct(protected readonly AbstractRepository $repository)
     {
@@ -54,7 +54,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Gets the repository.
      *
-     * @return AbstractRepository<T> $repository
+     * @return AbstractRepository<TEntity> $repository
      */
     public function getRepository(): AbstractRepository
     {
@@ -127,7 +127,7 @@ abstract class AbstractEntityTable extends AbstractTable
         if (empty($builder->getDQLPart(self::JOIN_PART))) {
             $q->setHint(CountWalker::HINT_DISTINCT, false);
         }
-        /** @var AbstractEntity[]|array<array{id: int}> $entities */
+        /** @var EntityInterface[]|array<array{id: int}> $entities */
         $entities = $q->getResult();
         $this->addSelection($entities, $query);
         $results->rows = $this->mapEntities($entities);
@@ -212,8 +212,8 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Add selected entity if missing.
      *
-     * @param AbstractEntity[]|array<array{id: int}> $entities the entities to search in or to update
-     * @param DataQuery                              $query    the query to get values from
+     * @param EntityInterface[]|array<array{id: int}> $entities the entities to search in or to update
+     * @param DataQuery                               $query    the query to get values from
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -230,7 +230,7 @@ abstract class AbstractEntityTable extends AbstractTable
             }
         }
 
-        /** @psalm-var AbstractEntity|array{id: int}|null $entity */
+        /** @psalm-var EntityInterface|array{id: int}|null $entity */
         $entity = $this->createDefaultQueryBuilder()
             ->where(AbstractRepository::DEFAULT_ALIAS . '.id = :id')
             ->setParameter('id', $id, Types::INTEGER)

@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Entity\CalculationState;
 use App\Form\CalculationState\CalculationStateType;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationStatesReport;
 use App\Repository\CalculationRepository;
@@ -171,7 +171,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * @psalm-param CalculationState $item
      */
-    protected function deleteFromDatabase(AbstractEntity $item): void
+    protected function deleteFromDatabase(EntityInterface $item): void
     {
         $this->getApplication()->updateDeletedState($item);
         parent::deleteFromDatabase($item);

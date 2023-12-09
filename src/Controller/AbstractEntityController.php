@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Interfaces\EntityInterface;
 use App\Pdf\PdfDocument;
 use App\Repository\AbstractRepository;
 use App\Response\PdfResponse;
@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Abstract controller for entities management.
  *
- * @template T of AbstractEntity
+ * @template TEntity of EntityInterface
  */
 abstract class AbstractEntityController extends AbstractController
 {
@@ -43,7 +43,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * The entity class name.
      *
-     * @var class-string<T>
+     * @var class-string<TEntity>
      */
     private readonly string $className;
 
@@ -53,7 +53,7 @@ abstract class AbstractEntityController extends AbstractController
     private readonly string $lowerName;
 
     /**
-     * @param AbstractRepository<T> $repository the repository
+     * @param AbstractRepository<TEntity> $repository the repository
      */
     public function __construct(protected readonly AbstractRepository $repository)
     {
@@ -82,13 +82,13 @@ abstract class AbstractEntityController extends AbstractController
      * Delete an entity.
      *
      * @param request         $request the request
-     * @param AbstractEntity  $item    the entity to delete
+     * @param EntityInterface $item    the entity to delete
      * @param LoggerInterface $logger  the logger to log any exception
      *
-     * @psalm-param T $item
+     * @psalm-param TEntity $item
      * @psalm-param array{route?: string|null, ...} $parameters
      */
-    protected function deleteEntity(Request $request, AbstractEntity $item, LoggerInterface $logger, array $parameters = []): Response
+    protected function deleteEntity(Request $request, EntityInterface $item, LoggerInterface $logger, array $parameters = []): Response
     {
         $this->checkPermission(EntityPermission::DELETE);
         $options = [
@@ -124,11 +124,11 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * This function delete the given entity from the database.
      *
-     * @param AbstractEntity $item the entity to delete
+     * @param EntityInterface $item the entity to delete
      *
-     * @psalm-param T $item
+     * @psalm-param TEntity $item
      */
-    protected function deleteFromDatabase(AbstractEntity $item): void
+    protected function deleteFromDatabase(EntityInterface $item): void
     {
         $this->repository->remove($item);
     }
@@ -136,14 +136,14 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Edit an entity.
      *
-     * @param request        $request    the request
-     * @param AbstractEntity $item       the entity to edit
-     * @param array          $parameters the optional parameters
+     * @param request         $request    the request
+     * @param EntityInterface $item       the entity to edit
+     * @param array           $parameters the optional parameters
      *
-     * @psalm-param T $item
+     * @psalm-param TEntity $item
      * @psalm-param array{route?: string|null, ...} $parameters
      */
-    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         $isNew = $item->isNew();
         $this->checkPermission($isNew ? EntityPermission::ADD : EntityPermission::EDIT);
@@ -197,9 +197,9 @@ abstract class AbstractEntityController extends AbstractController
      * @param array<Criteria|string>       $criteria     the filter criteria
      * @param literal-string               $alias        the entity alias
      *
-     * @return AbstractEntity[] the entities
+     * @return EntityInterface[] the entities
      *
-     * @psalm-return T[]
+     * @psalm-return TEntity[]
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -210,7 +210,7 @@ abstract class AbstractEntityController extends AbstractController
         }
 
         /**
-         * @psalm-var \Doctrine\ORM\Query<int, T> $query
+         * @psalm-var \Doctrine\ORM\Query<int, TEntity> $query
          *
          * @phpstan-var \Doctrine\ORM\Query $query
          */
@@ -230,7 +230,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Redirect to the default route.
      */
-    protected function redirectToDefaultRoute(Request $request, AbstractEntity|int|null $item = 0, string $route = null): RedirectResponse
+    protected function redirectToDefaultRoute(Request $request, EntityInterface|int|null $item = 0, string $route = null): RedirectResponse
     {
         return $this->getUrlGenerator()->redirect($request, $item, $route ?? $this->getDefaultRoute());
     }
@@ -273,11 +273,11 @@ abstract class AbstractEntityController extends AbstractController
      *
      * Derived class can update entity before it is saved to the database.
      *
-     * @param AbstractEntity $item the entity to save
+     * @param EntityInterface $item the entity to save
      *
-     * @psalm-param T $item
+     * @psalm-param TEntity $item
      */
-    protected function saveToDatabase(AbstractEntity $item): void
+    protected function saveToDatabase(EntityInterface $item): void
     {
         if ($item->isNew()) {
             $this->repository->persist($item);
@@ -289,14 +289,14 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Show properties of an entity.
      *
-     * @param AbstractEntity $item       the entity to show
-     * @param array          $parameters the additional parameters to pass to the template
+     * @param EntityInterface $item       the entity to show
+     * @param array           $parameters the additional parameters to pass to the template
      *
      * @throws \Symfony\Component\Finder\Exception\AccessDeniedException if the access is denied
      *
-     * @psalm-param T $item
+     * @psalm-param TEntity $item
      */
-    protected function showEntity(AbstractEntity $item, array $parameters = []): Response
+    protected function showEntity(EntityInterface $item, array $parameters = []): Response
     {
         $this->checkPermission(EntityPermission::SHOW);
         $parameters['item'] = $item;
@@ -307,18 +307,18 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Update the parameters by adding the request query values.
      *
-     * @param Request                 $request    the request to get the query values
-     * @param array                   $parameters the parameters to update
-     * @param AbstractEntity|int|null $id         an optional entity identifier
+     * @param Request                  $request    the request to get the query values
+     * @param array                    $parameters the parameters to update
+     * @param EntityInterface|int|null $id         an optional entity identifier
      */
-    protected function updateQueryParameters(Request $request, array &$parameters, AbstractEntity|int|null $id = 0): void
+    protected function updateQueryParameters(Request $request, array &$parameters, EntityInterface|int|null $id = 0): void
     {
         /** @psalm-var array $existing */
         $existing = $parameters['params'] ?? [];
         $queryParameters = $request->query->all();
         $parameters['params'] = $existing + $queryParameters;
 
-        if ($id instanceof AbstractEntity) {
+        if ($id instanceof EntityInterface) {
             $id = $id->getId();
         }
         if (null !== $id && 0 !== $id && !isset($parameters['params']['id'])) {
@@ -329,7 +329,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets delete token identifier for the given entity.
      */
-    private function getDeleteToken(AbstractEntity $entity): string
+    private function getDeleteToken(EntityInterface $entity): string
     {
         return \sprintf('delete_%d', (int) $entity->getId());
     }

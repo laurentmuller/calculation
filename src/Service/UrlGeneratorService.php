@@ -14,7 +14,7 @@ namespace App\Service;
 
 use App\Controller\AbstractController;
 use App\Controller\IndexController;
-use App\Entity\AbstractEntity;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\TableInterface;
 use App\Table\AbstractCategoryItemTable;
 use App\Table\CalculationTable;
@@ -79,7 +79,7 @@ class UrlGeneratorService
     /**
      * Generate the cancel URL.
      */
-    public function cancelUrl(Request $request, AbstractEntity|int|null $id = 0, string $defaultRoute = AbstractController::HOME_PAGE, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
+    public function cancelUrl(Request $request, EntityInterface|int|null $id = 0, string $defaultRoute = AbstractController::HOME_PAGE, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
     {
         $params = $this->routeParams($request, $id);
         $caller = $this->getCaller($params);
@@ -99,7 +99,7 @@ class UrlGeneratorService
     /**
      * Generate the cancel URL and returns a redirect response.
      */
-    public function redirect(Request $request, AbstractEntity|int|null $id = 0, string $defaultRoute = AbstractController::HOME_PAGE, int $status = Response::HTTP_FOUND, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): RedirectResponse
+    public function redirect(Request $request, EntityInterface|int|null $id = 0, string $defaultRoute = AbstractController::HOME_PAGE, int $status = Response::HTTP_FOUND, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): RedirectResponse
     {
         $url = $this->cancelUrl($request, $id, $defaultRoute, $referenceType);
 
@@ -111,7 +111,7 @@ class UrlGeneratorService
      *
      * @psalm-return array<string, string|int|float|bool>
      */
-    public function routeParams(Request $request, AbstractEntity|int|null $id = 0): array
+    public function routeParams(Request $request, EntityInterface|int|null $id = 0): array
     {
         $params = [];
         foreach (self::PARAMETER_NAMES as $name) {
@@ -120,7 +120,7 @@ class UrlGeneratorService
                 $params[$name] = $value;
             }
         }
-        if ($id instanceof AbstractEntity) {
+        if ($id instanceof EntityInterface) {
             $id = $id->getId();
         }
         if (null !== $id && 0 !== $id) {

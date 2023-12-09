@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\DataTransformer;
 
-use App\Entity\AbstractEntity;
+use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
 use Doctrine\Common\Util\ClassUtils;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -21,19 +21,19 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 /**
  * Data transformer to convert entity to identifier.
  *
- * @template T of AbstractEntity
+ * @template TEntity of EntityInterface
  *
- * @template-implements DataTransformerInterface<T, int>
+ * @template-implements DataTransformerInterface<TEntity, int>
  */
 readonly class EntityTransformer implements DataTransformerInterface
 {
     /**
-     * @var class-string<T>
+     * @var class-string<TEntity>
      */
     private string $className;
 
     /**
-     * @param AbstractRepository<T> $repository
+     * @param AbstractRepository<TEntity> $repository
      */
     public function __construct(private AbstractRepository $repository)
     {
@@ -43,9 +43,9 @@ readonly class EntityTransformer implements DataTransformerInterface
     /**
      * @param int|string|null $value
      *
-     * @psalm-return T|null
+     * @psalm-return TEntity|null
      */
-    public function reverseTransform(mixed $value): ?AbstractEntity
+    public function reverseTransform(mixed $value): ?EntityInterface
     {
         if (null === $value || '' === $value) {
             return null;
@@ -66,7 +66,7 @@ readonly class EntityTransformer implements DataTransformerInterface
     }
 
     /**
-     * @psalm-param AbstractEntity|null $value
+     * @psalm-param EntityInterface|null $value
      */
     public function transform(mixed $value): ?int
     {

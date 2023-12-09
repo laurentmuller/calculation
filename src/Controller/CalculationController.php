@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Product;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Form\Calculation\CalculationType;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
@@ -241,7 +241,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function editEntity(Request $request, AbstractEntity $item, array $parameters = []): Response
+    protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
         $parameters['min_margin'] = $this->getMinMargin();
         $parameters['empty_items'] = $item->hasEmptyItems();
@@ -269,7 +269,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function saveToDatabase(AbstractEntity $item): void
+    protected function saveToDatabase(EntityInterface $item): void
     {
         $this->service->updateTotal($item);
         parent::saveToDatabase($item);

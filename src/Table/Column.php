@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
-use App\Entity\AbstractEntity;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\SortModeInterface;
 use App\Utils\FileUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -58,7 +58,7 @@ class Column implements \Stringable, SortModeInterface
      *
      * @var string|callable|null
      *
-     * @psalm-var string|callable(mixed, AbstractEntity|array): string|null
+     * @psalm-var string|callable(mixed, EntityInterface|array): string|null
      */
     private $fieldFormatter;
 
@@ -282,12 +282,12 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Map the given entity or array to a string value using this field property.
      *
-     * @param AbstractEntity|array $objectOrArray the entity or array to map
-     * @param PropertyAccessor     $accessor      the property accessor to get the value
+     * @param EntityInterface|array $objectOrArray the entity or array to map
+     * @param PropertyAccessor      $accessor      the property accessor to get the value
      *
      * @return string the mapped value
      */
-    public function mapValue(AbstractEntity|array $objectOrArray, PropertyAccessor $accessor): string
+    public function mapValue(EntityInterface|array $objectOrArray, PropertyAccessor $accessor): string
     {
         $property = \is_array($objectOrArray) ? $this->property : $this->field;
         /** @psalm-var mixed $value */
@@ -332,7 +332,7 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * @psalm-param string|callable(mixed, AbstractEntity|array): string|null $fieldFormatter
+     * @psalm-param string|callable(mixed, EntityInterface|array): string|null $fieldFormatter
      *
      * @psalm-api
      */
@@ -411,12 +411,12 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Formats the given value using the field formatter if applicable.
      *
-     * @param AbstractEntity|array $objectOrArray the parent entity or array
-     * @param mixed                $value         the value to format
+     * @param EntityInterface|array $objectOrArray the parent entity or array
+     * @param mixed                 $value         the value to format
      *
      * @return string the formatted value
      */
-    private function formatValue(AbstractEntity|array $objectOrArray, mixed $value): string
+    private function formatValue(EntityInterface|array $objectOrArray, mixed $value): string
     {
         if (\is_callable($this->fieldFormatter)) {
             return \call_user_func($this->fieldFormatter, $value, $objectOrArray);

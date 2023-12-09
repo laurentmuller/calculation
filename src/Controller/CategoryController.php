@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Form\Category\CategoryType;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\CategoriesReport;
 use App\Repository\CalculationCategoryRepository;
@@ -186,7 +186,7 @@ class CategoryController extends AbstractEntityController
     /**
      * @psalm-param Category $item
      */
-    protected function deleteFromDatabase(AbstractEntity $item): void
+    protected function deleteFromDatabase(EntityInterface $item): void
     {
         $this->getApplication()->updateDeletedCategory($item);
         parent::deleteFromDatabase($item);

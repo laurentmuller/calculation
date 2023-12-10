@@ -12,11 +12,13 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Enums\Environment;
 use App\Utils\FileUtils;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Intl\Locales;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -63,20 +65,17 @@ final class SymfonyInfoService
      */
     private const UNKNOWN = 'Unknown';
 
-    /**
-     * The bundles.
-     *
-     * @var array<string, BundleType>|null
-     */
+    /** @psalm-var array<string, BundleType>|null */
     private ?array $bundles = null;
 
+    private readonly Environment $environment;
+
+    private readonly Environment $mode;
+
     /**
-     * The packages.
-     *
-     * @var null|array{
+     * @psalm-var null|array{
      *     runtime?: array<string, PackageType>,
-     *     debug?: array<string, PackageType>
-     * }
+     *     debug?: array<string, PackageType>}
      */
     private ?array $packages = null;
 
@@ -88,10 +87,9 @@ final class SymfonyInfoService
     /**
      * The routes.
      *
-     * @var null|array{
+     * @psalm-var null|array{
      *     runtime?: array<string, RouteType>,
-     *     debug?: array<string, RouteType>
-     * }
+     *     debug?: array<string, RouteType>}
      */
     private ?array $routes = null;
 
@@ -101,8 +99,12 @@ final class SymfonyInfoService
         private readonly CacheItemPoolInterface $cache,
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
+        #[Autowire('%app_mode%')]
+        string $app_mode
     ) {
         $this->projectDir = FileUtils::normalizeDirectory($projectDir);
+        $this->environment = Environment::from($this->kernel->getEnvironment());
+        $this->mode = Environment::from($app_mode);
     }
 
     /**
@@ -155,6 +157,8 @@ final class SymfonyInfoService
 
     /**
      * Gets the formatted size of the cache directory.
+     *
+     * @psalm-api
      */
     public function getCacheSize(): string
     {
@@ -163,6 +167,8 @@ final class SymfonyInfoService
 
     /**
      * Gets the charset of the application.
+     *
+     * @psalm-api
      */
     public function getCharset(): string
     {
@@ -179,6 +185,8 @@ final class SymfonyInfoService
 
     /**
      * Gets the end of maintenance.
+     *
+     * @psalm-api
      */
     public function getEndOfMaintenance(): string
     {
@@ -188,9 +196,20 @@ final class SymfonyInfoService
     /**
      * Gets the kernel environment.
      */
-    public function getEnvironment(): string
+    public function getEnvironment(): Environment
     {
-        return $this->kernel->getEnvironment();
+        return $this->environment;
+    }
+
+    /**
+     * Get the local name.
+     */
+    public function getLocaleName(): string
+    {
+        $locale = \Locale::getDefault();
+        $name = Locales::getName($locale, 'en');
+
+        return "$name - $locale";
     }
 
     /**
@@ -211,6 +230,8 @@ final class SymfonyInfoService
 
     /**
      * Gets the formatted size of the log directory.
+     *
+     * @psalm-api
      */
     public function getLogSize(): string
     {
@@ -240,6 +261,14 @@ final class SymfonyInfoService
     }
 
     /**
+     * Gets the application mode.
+     */
+    public function getMode(): Environment
+    {
+        return $this->mode;
+    }
+
+    /**
      * Gets packages information.
      *
      * @return array{
@@ -255,7 +284,7 @@ final class SymfonyInfoService
             if (FileUtils::exists($path)) {
                 try {
                     /**
-                     * @var array{
+                     * @psalm-var array{
                      *     packages: array<string, PackageType>,
                      *     'dev-package-names': string[]|null
                      * } $content
@@ -283,8 +312,6 @@ final class SymfonyInfoService
 
     /**
      * Get the release date.
-     *
-     * @psalm-api
      */
     public function getReleaseDate(): string
     {
@@ -301,8 +328,7 @@ final class SymfonyInfoService
      *
      * @return array{
      *     runtime?: array<string, RouteType>,
-     *     debug?: array<string, RouteType>
-     * }
+     *     debug?: array<string, RouteType>}
      */
     public function getRoutes(): array
     {
@@ -402,8 +428,6 @@ final class SymfonyInfoService
      * Format a date.
      *
      * @param string $date the date (month/year) to format
-     *
-     * @return string the formatted date, if applicable; 'Unknown' otherwise
      */
     private function formatMonthYear(string $date): string
     {
@@ -494,8 +518,7 @@ final class SymfonyInfoService
      *
      * @return array{
      *          runtime?: array<string, PackageType>,
-     *          debug?: array<string, PackageType>
-     *          }
+     *          debug?: array<string, PackageType>}
      */
     private function processPackages(array $runtimePackages, array $debugPackages): array
     {

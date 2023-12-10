@@ -30,9 +30,7 @@ class SymfonyDocument extends AbstractDocument
      */
     public function __construct(
         AbstractController $controller,
-        private readonly SymfonyInfoService $service,
-        private readonly string $locale,
-        private readonly string $mode
+        private readonly SymfonyInfoService $service
     ) {
         parent::__construct($controller);
     }
@@ -113,14 +111,14 @@ class SymfonyDocument extends AbstractDocument
             'Value' => HeaderFormat::instance(),
         ]);
         $this->outputGroup($sheet, $row++, 'Kernel')
-            ->outputRow($sheet, $row++, 'Environment', $this->transEnvironment($info->getEnvironment()))
-            ->outputRow($sheet, $row++, 'Running Mode', $this->transEnvironment($this->mode))
+            ->outputRow($sheet, $row++, 'Environment', $this->trans($info->getEnvironment()))
+            ->outputRow($sheet, $row++, 'Running Mode', $this->trans($info->getMode()))
             ->outputRow($sheet, $row++, 'Version status', $info->getMaintenanceStatus())
             ->outputRow($sheet, $row++, 'End of maintenance', $info->getEndOfMaintenance())
             ->outputRow($sheet, $row++, 'End of product life', $info->getEndOfLife());
 
         $this->outputGroup($sheet, $row++, 'Parameters')
-            ->outputRow($sheet, $row++, 'Intl Locale', $this->locale)
+            ->outputRow($sheet, $row++, 'Intl Locale', $info->getLocaleName())
             ->outputRow($sheet, $row++, 'Timezone', $info->getTimeZone())
             ->outputRow($sheet, $row++, 'Charset', $info->getCharset());
 
@@ -199,10 +197,5 @@ class SymfonyDocument extends AbstractDocument
     private function outputRowEnabled(WorksheetDocument $sheet, int $row, string $key, bool $enabled): self
     {
         return $this->outputRow($sheet, $row, $key, $enabled ? 'Enabled' : 'Disabled');
-    }
-
-    private function transEnvironment(string $environment): string
-    {
-        return $this->trans('environment.' . $environment);
     }
 }

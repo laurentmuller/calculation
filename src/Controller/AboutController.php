@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\Environment;
 use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
@@ -33,9 +34,16 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AboutController extends AbstractController
 {
     #[Route(path: '', name: 'about', methods: Request::METHOD_GET)]
-    public function index(): Response
-    {
-        return $this->render('about/about.html.twig');
+    public function index(
+        #[Autowire('%kernel.environment%')]
+        string $app_env,
+        #[Autowire('%app_mode%')]
+        string $app_mode
+    ): Response {
+        return $this->render('about/about.html.twig', [
+            'env' => Environment::from($app_env),
+            'mode' => Environment::from($app_mode),
+        ]);
     }
 
     #[Route(path: '/pdf', name: 'about_pdf', methods: Request::METHOD_GET)]

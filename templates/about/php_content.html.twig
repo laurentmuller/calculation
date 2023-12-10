@@ -4,7 +4,7 @@
         {{- tools.content_header_link('https://www.php.net', version, 'php-alt', -15) -}}
     </div>
     {{ phpInfo|raw }}
-    <table id="data-table-extra" class="table table-hover table-sm mb-0">
+    <table id="data-table-extra" class="table table-sm mb-0">
         <tbody>
             {{ tools.headerInfo('Configuration') }}
             {% if apache -%}{{ tools.rowInfo('Apache Version', apache) }}{%- endif %}

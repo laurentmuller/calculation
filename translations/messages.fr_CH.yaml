@@ -8,6 +8,7 @@ about:
   app_mode: Mode d'exécution
   app_name: Application
   app_owner: Concepteur
+  app_description: Description
   app_version: Version
   app_github: Code source
   app_github_url: GitHub

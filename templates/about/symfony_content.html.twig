@@ -36,7 +36,7 @@
 {%- set debug_routes = service.routes.debug|default([]) -%}
 {# content #}
 <div class="phpversion">
-    <table id="data-table-symfony" class="table table-hover table-sm mb-0">
+    <table id="data-table-symfony" class="table table-sm mb-0">
         <tbody>
             <tr class="h">
                 <td colspan="2" class="position-relative">
@@ -44,8 +44,8 @@
                 </td>
             </tr>
             {{ tools.headerInfo('Kernel') }}
-            {{ tools.rowInfo('Environment', ('environment.' ~ app.environment)|trans) }}
-            {{ tools.rowInfo('Running Mode', ('environment.' ~ app_mode)|trans) }}
+            {{ tools.rowInfo('Environment', service.environment|trans) }}
+            {{ tools.rowInfo('Running Mode', service.mode|trans) }}
             {{ tools.rowInfo('Status', service.maintenanceStatus) }}
             {{ tools.rowInfo('Release', service.releaseDate) }}
             {{ tools.rowInfo('End of maintenance', service.endOfMaintenance) }}
@@ -58,9 +58,9 @@
         {# parameters #}
         {{ _self.headerLinkInfo('Parameters', 'parameters') }}
         <div class="collapse" id="parameters" aria-labelledby="parameters-header" data-bs-parent="#symfonyAccordion">
-            <table class="table table-hover table-sm mb-0">
+            <table class="table table-sm mb-0">
                 <tbody>
-                {{ tools.rowInfo('Locale', locale, 'ps-3') }}
+                {{ tools.rowInfo('Locale', service.localeName, 'ps-3') }}
                 {{ tools.rowInfo('Timezone', service.timezone, 'ps-3') }}
                 {{ tools.rowInfo('Charset', service.charset, 'ps-3') }}
                 </tbody>
@@ -69,7 +69,7 @@
         {# extensions #}
         {{ _self.headerLinkInfo('Extensions', 'extensions') }}
         <div class="collapse" id="extensions" aria-labelledby="extensions-header" data-bs-parent="#symfonyAccordion">
-            <table class="table table-hover table-sm mb-0">
+            <table class="table table-sm mb-0">
                 <tbody>
                 {{ tools.rowInfoBoolean('Debug', app.debug ? 'Enabled' : 'Disabled', app.debug) }}
                 {{ tools.rowInfoBoolean('OP Cache', service.zendCacheLoaded ? 'Enabled' : 'Disabled', service.zendCacheLoaded) }}
@@ -81,7 +81,7 @@
         {# directories #}
         {{ _self.headerLinkInfo('Directories', 'directories') }}
         <div class="collapse" id="directories" aria-labelledby="directories-header" data-bs-parent="#symfonyAccordion">
-            <table class="table table-hover table-sm mb-0">
+            <table class="table table-sm mb-0">
                 <tbody>
                 {{ tools.rowInfo('Project', service.projectDir, 'ps-3') }}
                 {{ tools.rowInfo('Logs', service.logInfo, 'ps-3') }}
@@ -93,7 +93,7 @@
         {% if bundles|length %}
             {{ _self.headerLinkInfo('Bundles', 'bundles', bundles) }}
             <div class="collapse" id="bundles" aria-labelledby="bundles-header" data-bs-parent="#symfonyAccordion">
-                <table class="table table-hover table-sm mb-0">
+                <table class="table table-sm mb-0">
                     <tbody>
                     {% for bundle in service.bundles %}
                         {{ _self.rowBundle(bundle) }}
@@ -105,8 +105,8 @@
         {# runtime packages #}
         {% if runtime_packages|length %}
             {{ _self.headerLinkInfo('Packages', 'runtime-packages', runtime_packages) }}
-            <div class="accordion-collapse collapse" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
-                <table class="table table-hover table-no-end-line table-sm mb-0">
+            <div class="accordion-collapse collapse table-responsive" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
+                <table class="table table-no-end-line table-sm mb-0">
                     <tbody>
                     {% for package in runtime_packages %}
                         {{ _self.rowPackage(package) }}
@@ -119,7 +119,7 @@
         {% if debug_packages|length %}
             {{ _self.headerLinkInfo('Debug Packages', 'dev-packages', debug_packages) }}
             <div class="accordion-collapse collapse" id="dev-packages" aria-labelledby="dev-packages-header" data-bs-parent="#symfonyAccordion">
-                <table class="table table-hover table-no-end-line table-sm mb-0">
+                <table class="table table-no-end-line table-sm mb-0">
                     <tbody>
                     {% for package in debug_packages %}
                         {{ _self.rowPackage(package) }}
@@ -132,7 +132,7 @@
         {% if runtime_routes|length %}
             {{ _self.headerLinkInfo('Routes', 'runtime-routes', runtime_routes) }}
             <div class="accordion-collapse collapse" id="runtime-routes" aria-labelledby="runtime-routes-header" data-bs-parent="#symfonyAccordion">
-                <table class="table table-hover table-no-end-line table-sm mb-0">
+                <table class="table table-no-end-line table-sm mb-0">
                     <tbody>
                     {% for route in runtime_routes %}
                         {{ tools.rowInfo(route.name, route.path, 'ps-3') }}
@@ -145,7 +145,7 @@
         {% if debug_routes|length %}
             {{ _self.headerLinkInfo('Debug Routes', 'debug-routes', debug_routes) }}
             <div class="accordion-collapse collapse" id="debug-routes" aria-labelledby="debug-routes-header" data-bs-parent="#symfonyAccordion">
-                <table class="table table-hover table-no-end-line table-sm mb-0">
+                <table class="table table-no-end-line table-sm mb-0">
                     <tbody>
                     {% for route in debug_routes %}
                         {{ tools.rowInfo(route.name, route.path, 'ps-3') }}

@@ -8,7 +8,7 @@ parameters:
     app_owner:          bibi.nu
     app_owner_url:      https://www.bibi.nu
     app_owner_city:     Montévraz
-    app_description:    Programme de calculation.
+    app_description:    Programme de calcul basé sur l'environnement de développement Symfony 6.x.
 
     app_secret:         '%env(string:APP_SECRET)%'
     app_mode:           '%env(string:APP_MODE)%'

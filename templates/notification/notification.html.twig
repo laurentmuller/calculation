@@ -12,8 +12,8 @@
                 <img src="{{ email.image('@images/icons/favicon-36x36.png') }}" alt="{{ app_description }}">
             </columns>
             <columns large="11" small="10" valign="middle">
-                {% if importance_text is defined and importance_text %}<small>
-                    <strong>{{ importance_text }}</strong></small>
+                {% if importance_text is defined and importance_text %}
+                    <small><strong>{{ importance_text }}</strong></small>
                 {% endif %}
                 <p class="lead">
                     {{- email.subject -}}

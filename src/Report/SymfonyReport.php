@@ -34,9 +34,7 @@ class SymfonyReport extends AbstractReport
 
     public function __construct(
         AbstractController $controller,
-        private readonly SymfonyInfoService $service,
-        private readonly string $locale,
-        private readonly string $mode
+        private readonly SymfonyInfoService $service
     ) {
         parent::__construct($controller);
         $this->setTitleTrans('about.symfony_version', ['%version%' => $this->service->getVersion()]);
@@ -137,15 +135,15 @@ class SymfonyReport extends AbstractReport
                 PdfColumn::left('Value', 70)
             );
         $table->setGroupKey('Kernel')->outputHeaders();
-        $this->outputRow($table, 'Environment', $this->transEnvironment($info->getEnvironment()))
-            ->outputRow($table, 'Running Mode', $this->transEnvironment($this->mode))
+        $this->outputRow($table, 'Environment', $this->trans($info->getEnvironment()))
+            ->outputRow($table, 'Running Mode', $this->trans($info->getMode()))
             ->outputRow($table, 'Version status', $info->getMaintenanceStatus())
             ->outputRow($table, 'End of maintenance', $info->getEndOfMaintenance())
             ->outputRow($table, 'End of product life', $info->getEndOfLife());
 
         $this->addBookmark('Parameters', false, 1);
         $table->setGroupKey('Parameters');
-        $this->outputRow($table, 'Intl Locale', $this->locale)
+        $this->outputRow($table, 'Intl Locale', $info->getLocaleName())
             ->outputRow($table, 'Timezone', $info->getTimeZone())
             ->outputRow($table, 'Charset', $info->getCharset());
 
@@ -229,10 +227,5 @@ class SymfonyReport extends AbstractReport
             ->endRow();
 
         return $this;
-    }
-
-    private function transEnvironment(string $environment): string
-    {
-        return $this->trans('environment.' . $environment);
     }
 }

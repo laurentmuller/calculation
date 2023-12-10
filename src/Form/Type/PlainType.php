@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
-use App\Entity\AbstractEntity;
+use App\Interfaces\EntityInterface;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -335,7 +335,7 @@ class PlainType extends AbstractType
             return $this->formatArray($value, $options);
         }
 
-        if ($value instanceof AbstractEntity) {
+        if ($value instanceof EntityInterface) {
             return $value->getDisplay();
         }
 

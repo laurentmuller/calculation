@@ -99,9 +99,6 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
         return $this->description;
     }
 
-    /**
-     * @see AbstractEntity::getDisplay()
-     */
     public function getDisplay(): string
     {
         return (string) $this->getDescription();

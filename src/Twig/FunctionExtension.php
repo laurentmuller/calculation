@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Controller\AbstractController;
-use App\Entity\AbstractEntity;
 use App\Entity\User;
+use App\Interfaces\EntityInterface;
 use App\Service\NonceService;
 use App\Service\UrlGeneratorService;
 use App\Traits\ImageSizeTrait;
@@ -174,7 +174,7 @@ final class FunctionExtension extends AbstractExtension
      */
     private function cancelUrl(
         Request $request,
-        AbstractEntity|int|null $id = 0,
+        EntityInterface|int|null $id = 0,
         string $defaultRoute = AbstractController::HOME_PAGE
     ): string {
         return $this->generator->cancelUrl($request, $id, $defaultRoute);
@@ -243,7 +243,7 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Gets the route parameters.
      */
-    private function routeParams(Request $request, AbstractEntity|int|null $id = 0): array
+    private function routeParams(Request $request, EntityInterface|int|null $id = 0): array
     {
         return $this->generator->routeParams($request, $id);
     }

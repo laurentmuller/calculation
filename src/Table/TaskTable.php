@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Entity\Task;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
@@ -22,13 +23,11 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * The tasks table.
  *
- * @method TaskRepository getRepository()
- *
- * @template-extends AbstractCategoryItemTable<\App\Entity\Task>
+ * @template-extends AbstractCategoryItemTable<Task, TaskRepository>
  */
 class TaskTable extends AbstractCategoryItemTable
 {
-    public function __construct(// phpcs:ignore
+    public function __construct(
         TaskRepository $repository,
         CategoryRepository $categoryRepository,
         GroupRepository $groupRepository

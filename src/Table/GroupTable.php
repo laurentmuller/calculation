@@ -29,9 +29,7 @@ use Twig\Environment;
 /**
  * The groups table.
  *
- * @method GroupRepository getRepository()
- *
- * @template-extends AbstractEntityTable<Group>
+ * @template-extends AbstractEntityTable<Group, GroupRepository>
  */
 class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {
@@ -39,7 +37,7 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
     use ServiceSubscriberTrait;
     use TableCellTrait;
 
-    public function __construct(// phpcs:ignore
+    public function __construct(
         GroupRepository $repository,
         protected readonly Environment $twig
     ) {

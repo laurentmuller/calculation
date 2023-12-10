@@ -42,14 +42,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for calculation entities.
  *
- * @template-extends AbstractEntityController<Calculation>
+ * @template-extends AbstractEntityController<Calculation, CalculationRepository>
  */
 #[AsController]
 #[Route(path: '/calculation')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CalculationController extends AbstractEntityController
 {
-    public function __construct(CalculationRepository $repository, private readonly CalculationService $service)// phpcs:ignore
+    public function __construct(CalculationRepository $repository, private readonly CalculationService $service)
     {
         parent::__construct($repository);
     }

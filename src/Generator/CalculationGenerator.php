@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Generator;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\CalculationItem;
 use App\Entity\Category;
 use App\Faker\Generator;
+use App\Interfaces\EntityInterface;
 use App\Service\CalculationService;
 use App\Service\FakerService;
 use App\Utils\FormatUtils;
@@ -53,7 +53,7 @@ class CalculationGenerator extends AbstractEntityGenerator
         return $this->trans('counters.calculations_generate', ['count' => $count]);
     }
 
-    protected function mapEntity(AbstractEntity $entity): array
+    protected function mapEntity(EntityInterface $entity): array
     {
         return [
             'date' => $entity->getFormattedDate(),

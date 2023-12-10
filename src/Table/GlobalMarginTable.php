@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Entity\GlobalMargin;
 use App\Repository\GlobalMarginRepository;
 use App\Utils\FileUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,11 +20,11 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * The global margins table.
  *
- * @template-extends AbstractEntityTable<\App\Entity\GlobalMargin>
+ * @template-extends AbstractEntityTable<GlobalMargin, GlobalMarginRepository>
  */
 class GlobalMarginTable extends AbstractEntityTable
 {
-    public function __construct(GlobalMarginRepository $repository) // phpcs:ignore
+    public function __construct(GlobalMarginRepository $repository)
     {
         parent::__construct($repository);
     }

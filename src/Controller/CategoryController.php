@@ -37,14 +37,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for category entities.
  *
- * @template-extends AbstractEntityController<Category>
+ * @template-extends AbstractEntityController<Category, CategoryRepository>
  */
 #[AsController]
 #[Route(path: '/category')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CategoryController extends AbstractEntityController
 {
-    public function __construct(CategoryRepository $repository) // phpcs:ignore
+    public function __construct(CategoryRepository $repository)
     {
         parent::__construct($repository);
     }

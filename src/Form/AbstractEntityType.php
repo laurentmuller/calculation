@@ -12,15 +12,15 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\AbstractEntity;
+use App\Interfaces\EntityInterface;
 use App\Traits\CheckSubClassTrait;
 use App\Utils\StringUtils;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Edition type to use within an <code>AbstractEntity</code> class.
+ * Type to edit an <code>EntityInterface</code> class.
  *
- * @template T of AbstractEntity
+ * @template TEntity of EntityInterface
  */
 abstract class AbstractEntityType extends AbstractHelperType
 {
@@ -29,18 +29,18 @@ abstract class AbstractEntityType extends AbstractHelperType
     /**
      * The entity class name.
      *
-     * @psalm-var class-string<T> $className
+     * @psalm-var class-string<TEntity> $className
      */
     protected string $className;
 
     /**
-     * @param class-string<T> $className the entity class name
+     * @param class-string<TEntity> $className the entity class name
      *
-     * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractEntity class
+     * @throws \InvalidArgumentException if the given class name is not a subclass of the entity interface class
      */
     protected function __construct(string $className)
     {
-        $this->checkSubClass($className, AbstractEntity::class);
+        $this->checkSubClass($className, EntityInterface::class);
         $this->className = $className;
     }
 

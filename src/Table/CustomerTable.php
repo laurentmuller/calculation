@@ -12,17 +12,18 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Entity\Customer;
 use App\Repository\CustomerRepository;
 use App\Utils\FileUtils;
 
 /**
  * The customers table.
  *
- * @template-extends AbstractEntityTable<\App\Entity\Customer>
+ * @template-extends AbstractEntityTable<Customer, CustomerRepository>
  */
 class CustomerTable extends AbstractEntityTable
 {
-    public function __construct(CustomerRepository $repository) // phpcs:ignore
+    public function __construct(CustomerRepository $repository)
     {
         parent::__construct($repository);
     }

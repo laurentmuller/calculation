@@ -34,14 +34,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for product entities.
  *
- * @template-extends AbstractEntityController<Product>
+ * @template-extends AbstractEntityController<Product, ProductRepository>
  */
 #[AsController]
 #[Route(path: '/product')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class ProductController extends AbstractEntityController
 {
-    public function __construct(ProductRepository $repository) // phpcs:ignore
+    public function __construct(ProductRepository $repository)
     {
         parent::__construct($repository);
     }

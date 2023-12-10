@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\EntityInterface;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -199,7 +200,7 @@ abstract class AbstractProperty extends AbstractEntity
         if ($value instanceof \DateTimeInterface) {
             return $this->setDate($value);
         }
-        if ($value instanceof AbstractEntity) {
+        if ($value instanceof EntityInterface) {
             return $this->setInteger((int) $value->getId());
         }
         if ($value instanceof \BackedEnum) {

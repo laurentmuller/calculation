@@ -21,6 +21,7 @@ use App\Entity\GlobalMargin;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
+use App\Interfaces\EntityInterface;
 use App\Repository\GlobalMarginRepository;
 use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
@@ -196,17 +197,17 @@ class CalculationServiceTest extends KernelTestCase
     }
 
     /**
-     * @psalm-template T of \App\Entity\AbstractEntity
+     * @psalm-template TEntity of EntityInterface
      *
-     * @psalm-param class-string<T> $entityName
+     * @psalm-param class-string<TEntity> $entityName
      *
-     * @psalm-return EntityRepository<T> $repository
+     * @psalm-return EntityRepository<TEntity> $repository
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     protected function initRepository(EntityManager $manager, string $entityName): EntityRepository
     {
-        /** @psalm-var \App\Repository\AbstractRepository<T> $repository */
+        /** @psalm-var \App\Repository\AbstractRepository<TEntity> $repository */
         $repository = $manager->getRepository($entityName);
 
         $items = $repository->findAll();

@@ -54,14 +54,14 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 /**
  * The controller for user entities.
  *
- * @template-extends AbstractEntityController<User>
+ * @template-extends AbstractEntityController<User, UserRepository>
  */
 #[AsController]
 #[Route(path: '/user')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class UserController extends AbstractEntityController
 {
-    public function __construct(UserRepository $repository) // phpcs:ignore
+    public function __construct(UserRepository $repository)
     {
         parent::__construct($repository);
     }
@@ -202,8 +202,7 @@ class UserController extends AbstractEntityController
     #[Route(path: '/reset', name: 'user_reset_all', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function resetAllPasswordRequest(Request $request): Response
     {
-        /** @var UserRepository $repository */
-        $repository = $this->repository;
+        $repository = $this->getRepository();
         $users = $repository->getResettableUsers();
         $generator = $this->getUrlGenerator();
         if ([] === $users) {
@@ -243,9 +242,7 @@ class UserController extends AbstractEntityController
         $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
             if ($item->isResetPassword()) {
-                /** @psalm-var UserRepository $repository */
-                $repository = $this->repository;
-                $repository->removeResetPasswordRequest($item);
+                $this->getRepository()->removeResetPasswordRequest($item);
                 $this->successResetPassword([$item]);
             } else {
                 $this->warningTrans('user.reset.error', ['%name%' => $item]);
@@ -398,9 +395,7 @@ class UserController extends AbstractEntityController
     protected function getEntities(array|string $sortedFields = [], array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
     {
         if (!$this->isGranted(RoleInterface::ROLE_SUPER_ADMIN)) {
-            /** @psalm-var UserRepository $repository */
-            $repository = $this->repository;
-            $criteria[] = $repository->getSuperAdminFilter($alias);
+            $criteria[] = $this->getRepository()->getSuperAdminFilter($alias);
         }
 
         return parent::getEntities($sortedFields, $criteria, $alias);

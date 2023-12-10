@@ -107,7 +107,6 @@ class TimestampableListener implements DisableListenerInterface
         }
 
         if ($includeChildren && $entity instanceof ParentTimestampableInterface) {
-            // @phpstan-ignore-next-line
             return $entity->getParentEntity();
         }
 

@@ -28,13 +28,13 @@ use Twig\Environment;
 /**
  * The users table.
  *
- * @template-extends AbstractEntityTable<User>
+ * @template-extends AbstractEntityTable<User, UserRepository>
  */
 class UserTable extends AbstractEntityTable
 {
     use RoleTranslatorTrait;
 
-    public function __construct(// phpcs:ignore
+    public function __construct(
         UserRepository $repository,
         private readonly TranslatorInterface $translator,
         private readonly Environment $twig,
@@ -103,9 +103,7 @@ class UserTable extends AbstractEntityTable
         $query = parent::createDefaultQueryBuilder($alias);
         $user = $this->security->getUser();
         if (!$user instanceof User || !$user->isSuperAdmin()) {
-            /** @psalm-var UserRepository $repository */
-            $repository = $this->repository;
-            $criteria = $repository->getSuperAdminFilter($alias);
+            $criteria = $this->getRepository()->getSuperAdminFilter($alias);
             $query->andWhere($criteria);
         }
 
@@ -148,9 +146,6 @@ class UserTable extends AbstractEntityTable
 
     private function isResettableUsers(): bool
     {
-        /** @psalm-var UserRepository $repository */
-        $repository = $this->repository;
-
-        return $repository->isResettableUsers();
+        return $this->getRepository()->isResettableUsers();
     }
 }

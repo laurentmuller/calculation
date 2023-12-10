@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Entity\Product;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
@@ -22,13 +23,11 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * The products table.
  *
- * @method ProductRepository getRepository()
- *
- * @template-extends AbstractCategoryItemTable<\App\Entity\Product>
+ * @template-extends AbstractCategoryItemTable<Product, ProductRepository>
  */
 class ProductTable extends AbstractCategoryItemTable
 {
-    public function __construct(// phpcs:ignore
+    public function __construct(
         ProductRepository $repository,
         CategoryRepository $categoryRepository,
         GroupRepository $groupRepository

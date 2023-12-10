@@ -24,7 +24,7 @@ use Twig\Environment;
  */
 class CalculationBelowTable extends CalculationTable implements \Countable
 {
-    public function __construct(// phpcs:ignore
+    public function __construct(
         CalculationRepository $repository,
         CalculationStateRepository $stateRepository,
         Environment $twig,
@@ -38,10 +38,7 @@ class CalculationBelowTable extends CalculationTable implements \Countable
      */
     public function count(): int
     {
-        /** @psalm-var CalculationRepository $repository */
-        $repository = $this->repository;
-
-        return $repository->countItemsBelow($this->getMinMargin());
+        return $this->getRepository()->countItemsBelow($this->getMinMargin());
     }
 
     /**

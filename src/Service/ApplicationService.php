@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
@@ -22,6 +21,7 @@ use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
 use App\Enums\StrengthLevel;
 use App\Enums\TableView;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\PropertyServiceInterface;
 use App\Model\CustomerInformation;
 use App\Model\Role;
@@ -564,13 +564,13 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
-     * @template T of AbstractEntity
+     * @template TEntity of EntityInterface
      *
-     * @psalm-param class-string<T> $entityName
+     * @psalm-param class-string<TEntity> $entityName
      *
-     * @psalm-return T|null
+     * @psalm-return TEntity|null
      */
-    private function findEntity(string $propertyName, string $entityName): ?AbstractEntity
+    private function findEntity(string $propertyName, string $entityName): ?EntityInterface
     {
         $id = $this->getPropertyInteger($propertyName);
         if (0 === $id) {
@@ -629,7 +629,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         }
     }
 
-    private function updateDeletedEntity(string $name, AbstractEntity $entity): void
+    private function updateDeletedEntity(string $name, EntityInterface $entity): void
     {
         if ($this->getPropertyInteger($name) === $entity->getId()) {
             $this->setProperty($name, null);

@@ -34,14 +34,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  *
  * @see Customer
  *
- * @template-extends AbstractEntityController<Customer>
+ * @template-extends AbstractEntityController<Customer, CustomerRepository>
  */
 #[AsController]
 #[Route(path: '/customer')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CustomerController extends AbstractEntityController
 {
-    public function __construct(CustomerRepository $repository) // phpcs:ignore
+    public function __construct(CustomerRepository $repository)
     {
         parent::__construct($repository);
     }

@@ -26,6 +26,7 @@ use Doctrine\ORM\Tools\Pagination\CountWalker;
  * Abstract table for entities.
  *
  * @template TEntity of EntityInterface
+ * @template TRepository of AbstractRepository<TEntity>
  */
 abstract class AbstractEntityTable extends AbstractTable
 {
@@ -40,25 +41,15 @@ abstract class AbstractEntityTable extends AbstractTable
     private const JOIN_PART = 'join';
 
     /**
-     * @param AbstractRepository<TEntity> $repository
+     * @psalm-param TRepository $repository
      */
-    public function __construct(protected readonly AbstractRepository $repository)
+    public function __construct(private readonly AbstractRepository $repository)
     {
     }
 
     public function getEntityClassName(): ?string
     {
         return $this->repository->getClassName();
-    }
-
-    /**
-     * Gets the repository.
-     *
-     * @return AbstractRepository<TEntity> $repository
-     */
-    public function getRepository(): AbstractRepository
-    {
-        return $this->repository;
     }
 
     /**
@@ -107,6 +98,14 @@ abstract class AbstractEntityTable extends AbstractTable
     protected function getDefaultOrder(): array
     {
         return [];
+    }
+
+    /**
+     * @psalm-return TRepository
+     */
+    protected function getRepository(): AbstractRepository
+    {
+        return $this->repository;
     }
 
     /**

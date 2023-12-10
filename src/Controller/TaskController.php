@@ -38,14 +38,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for task entities.
  *
- * @template-extends AbstractEntityController<Task>
+ * @template-extends AbstractEntityController<Task, TaskRepository>
  */
 #[AsController]
 #[Route(path: '/task')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class TaskController extends AbstractEntityController
 {
-    public function __construct(TaskRepository $repository) // phpcs:ignore
+    public function __construct(TaskRepository $repository)
     {
         parent::__construct($repository);
     }

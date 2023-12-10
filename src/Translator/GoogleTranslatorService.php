@@ -45,7 +45,7 @@ class GoogleTranslatorService extends AbstractTranslatorService
     /**
      * @throws \InvalidArgumentException if the API key is not defined, is null or is empty
      */
-    public function __construct(// phpcs:ignore
+    public function __construct(
         #[\SensitiveParameter]
         #[Autowire('%google_translator_key%')]
         string $key

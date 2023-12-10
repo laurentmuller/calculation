@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Generator;
 
-use App\Entity\AbstractEntity;
 use App\Faker\Generator;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\GeneratorInterface;
 use App\Service\FakerService;
 use App\Traits\LoggerAwareTrait;
@@ -26,7 +26,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Class to generate entities.
  *
- * @template T of AbstractEntity
+ * @template TEntity of EntityInterface
  */
 abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSubscriberInterface
 {
@@ -81,21 +81,21 @@ abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSub
     /**
      * Create entities.
      *
-     * @return T[]
+     * @return TEntity[]
      */
     abstract protected function createEntities(int $count, bool $simulate, Generator $generator): array;
 
     abstract protected function getCountMessage(int $count): string;
 
     /**
-     * @psalm-param T $entity
+     * @psalm-param TEntity $entity
      *
      * @return array<string, mixed>
      */
-    abstract protected function mapEntity(AbstractEntity $entity): array;
+    abstract protected function mapEntity(EntityInterface $entity): array;
 
     /**
-     * @param T[] $entities
+     * @param TEntity[] $entities
      */
     private function saveAndMapEntities(array $entities, bool $simulate): array
     {

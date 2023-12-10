@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Entity\AbstractCategoryItemEntity;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Repository\AbstractCategoryItemRepository;
@@ -24,9 +25,10 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Common abstract table for products and tasks.
  *
- * @template T of \App\Entity\AbstractCategoryItemEntity
+ * @template TEntity of AbstractCategoryItemEntity
+ * @template TRepository of AbstractCategoryItemRepository<TEntity>
  *
- * @template-extends AbstractEntityTable<T>
+ * @template-extends AbstractEntityTable<TEntity, TRepository>
  *
  * @psalm-import-type DropDownType from CategoryRepository
  */
@@ -43,9 +45,9 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     private const PARAM_GROUP = CategoryTable::PARAM_GROUP;
 
     /**
-     * @psalm-param AbstractCategoryItemRepository<T> $repository
+     * @psalm-param TRepository $repository
      */
-    public function __construct(// phpcs:ignore
+    public function __construct(
         AbstractCategoryItemRepository $repository,
         protected readonly CategoryRepository $categoryRepository,
         protected readonly GroupRepository $groupRepository
@@ -73,11 +75,12 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
 
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
+        $repository = $this->getRepository();
         $result = parent::search($query, $builder, $alias);
         $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0);
         if (0 !== $categoryId) {
             /** @psalm-var string $field */
-            $field = $this->repository->getSearchFields('category.id', $alias);
+            $field = $repository->getSearchFields('category.id', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_CATEGORY)
                 ->setParameter(self::PARAM_CATEGORY, $categoryId, Types::INTEGER);
 
@@ -86,7 +89,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
         if (0 !== $groupId) {
             /** @psalm-var string $field */
-            $field = $this->repository->getSearchFields('group.id', $alias);
+            $field = $repository->getSearchFields('group.id', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_GROUP)
                 ->setParameter(self::PARAM_GROUP, $groupId, Types::INTEGER);
 

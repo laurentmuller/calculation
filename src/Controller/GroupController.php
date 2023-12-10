@@ -34,14 +34,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for group entities.
  *
- * @template-extends AbstractEntityController<Group>
+ * @template-extends AbstractEntityController<Group, GroupRepository>
  */
 #[AsController]
 #[Route(path: '/group')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class GroupController extends AbstractEntityController
 {
-    public function __construct(GroupRepository $repository) // phpcs:ignore
+    public function __construct(GroupRepository $repository)
     {
         parent::__construct($repository);
     }

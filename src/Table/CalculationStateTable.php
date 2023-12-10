@@ -28,9 +28,7 @@ use Twig\Environment;
 /**
  * The calculation states table.
  *
- * @method CalculationStateRepository getRepository()
- *
- * @template-extends AbstractEntityTable<CalculationState>
+ * @template-extends AbstractEntityTable<CalculationState, CalculationStateRepository>
  */
 class CalculationStateTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {
@@ -39,7 +37,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
     use TableCellTrait;
     use TranslatorAwareTrait;
 
-    public function __construct(// phpcs:ignore
+    public function __construct(
         CalculationStateRepository $repository,
         protected readonly Environment $twig
     ) {

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Interfaces\EntityInterface;
 use App\Interfaces\TableInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -63,7 +64,7 @@ class DataResults implements \JsonSerializable
     /**
      * The rows to display.
      *
-     * @var array<\App\Entity\AbstractEntity|array>
+     * @var array<EntityInterface|array>
      */
     public array $rows = [];
 

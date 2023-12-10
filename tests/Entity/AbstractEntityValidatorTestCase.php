@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
-use App\Entity\AbstractEntity;
+use App\Interfaces\EntityInterface;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -20,7 +20,7 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Unit test for validate {@link AbstractEntity} class.
+ * Unit test for validate {@link EntityInterface} class.
  */
 abstract class AbstractEntityValidatorTestCase extends KernelTestCase
 {
@@ -38,7 +38,7 @@ abstract class AbstractEntityValidatorTestCase extends KernelTestCase
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function deleteEntity(AbstractEntity $object): void
+    protected function deleteEntity(EntityInterface $object): void
     {
         $manager = $this->getManager();
         $manager->remove($object);
@@ -48,7 +48,7 @@ abstract class AbstractEntityValidatorTestCase extends KernelTestCase
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function saveEntity(AbstractEntity $object): void
+    protected function saveEntity(EntityInterface $object): void
     {
         $manager = $this->getManager();
         $manager->persist($object);

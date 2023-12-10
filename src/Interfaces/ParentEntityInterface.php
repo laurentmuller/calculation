@@ -15,14 +15,14 @@ namespace App\Interfaces;
 /**
  * Class implementing this interface deals with the parent's entity.
  *
- * @template T of EntityInterface
+ * @template TEntity of EntityInterface
  */
 interface ParentEntityInterface
 {
     /**
      * Gets the parent's entity or null if none.
      *
-     * @psalm-return T|null
+     * @psalm-return TEntity|null
      */
     public function getParentEntity(): ?EntityInterface;
 }

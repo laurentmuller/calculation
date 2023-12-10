@@ -34,14 +34,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller for calculation state entities.
  *
- * @template-extends AbstractEntityController<CalculationState>
+ * @template-extends AbstractEntityController<CalculationState, CalculationStateRepository>
  */
 #[AsController]
 #[Route(path: '/calculationstate')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CalculationStateController extends AbstractEntityController
 {
-    public function __construct(CalculationStateRepository $repository) // phpcs:ignore
+    public function __construct(CalculationStateRepository $repository)
     {
         parent::__construct($repository);
     }

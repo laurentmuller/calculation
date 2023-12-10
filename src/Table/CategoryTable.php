@@ -32,9 +32,7 @@ use Twig\Environment;
 /**
  * The categories table.
  *
- * @method CategoryRepository getRepository()
- *
- * @template-extends AbstractEntityTable<Category>
+ * @template-extends AbstractEntityTable<Category, CategoryRepository>
  */
 class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {
@@ -47,7 +45,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      */
     final public const PARAM_GROUP = 'groupId';
 
-    public function __construct(// phpcs:ignore
+    public function __construct(
         CategoryRepository $repository,
         protected readonly Environment $twig,
         private readonly GroupRepository $groupRepository
@@ -131,7 +129,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
             return $result;
         }
         /** @psalm-var string $field */
-        $field = $this->repository->getSearchFields('group.id', $alias);
+        $field = $this->getRepository()->getSearchFields('group.id', $alias);
         $builder->andWhere($field . '=:' . self::PARAM_GROUP)
             ->setParameter(self::PARAM_GROUP, $groupId, Types::INTEGER);
 

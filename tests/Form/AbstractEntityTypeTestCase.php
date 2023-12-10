@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Form;
 
-use App\Entity\AbstractEntity;
 use App\Form\Extension\FileTypeExtension;
 use App\Form\Extension\TextTypeExtension;
 use App\Form\Extension\UrlTypeExtension;
 use App\Form\Extension\VichImageTypeExtension;
+use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
@@ -32,7 +32,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 /**
  * Test for entity type class.
  *
- * @template TEntity of \App\Entity\AbstractEntity
+ * @template TEntity of EntityInterface
  * @template TForm of \App\Form\AbstractEntityType<TEntity>
  */
 abstract class AbstractEntityTypeTestCase extends TypeTestCase
@@ -177,7 +177,7 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
      * @psalm-suppress InvalidReturnStatement
      * @psalm-suppress InvalidReturnType
      */
-    protected function populate(string $entityClass, array $data): AbstractEntity
+    protected function populate(string $entityClass, array $data): EntityInterface
     {
         $entity = new $entityClass();
         $accessor = PropertyAccess::createPropertyAccessor();

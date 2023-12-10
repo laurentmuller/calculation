@@ -12,16 +12,16 @@ declare(strict_types=1);
 
 namespace App\Form;
 
-use App\Entity\AbstractEntity;
+use App\Interfaces\EntityInterface;
 use App\Traits\CheckSubClassTrait;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Abstract type to display a list of entities.
+ * Type to display a list of code>EntityInterface</code> class.
  *
- * @template T of AbstractEntity
+ * @template TEntity of EntityInterface
  *
  * @extends AbstractType<EntityType>
  */
@@ -30,15 +30,13 @@ abstract class AbstractListEntityType extends AbstractType
     use CheckSubClassTrait;
 
     /**
-     * @param string $className the entity class name
-     *
-     * @psalm-param class-string<T> $className
+     * @psalm-param class-string<TEntity> $className
      *
      * @throws \InvalidArgumentException if the given class name is not a subclass of the AbstractEntity class
      */
     public function __construct(private readonly string $className)
     {
-        $this->checkSubClass($this->className, AbstractEntity::class);
+        $this->checkSubClass($this->className, EntityInterface::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

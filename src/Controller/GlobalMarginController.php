@@ -35,14 +35,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * The controller for global margins entities.
  *
- * @template-extends AbstractEntityController<GlobalMargin>
+ * @template-extends AbstractEntityController<GlobalMargin, GlobalMarginRepository>
  */
 #[AsController]
 #[Route(path: '/globalmargin')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class GlobalMarginController extends AbstractEntityController
 {
-    public function __construct(GlobalMarginRepository $repository) // phpcs:ignore
+    public function __construct(GlobalMarginRepository $repository)
     {
         parent::__construct($repository);
     }
@@ -52,8 +52,7 @@ class GlobalMarginController extends AbstractEntityController
     {
         $this->checkPermission(EntityPermission::ADD, EntityPermission::EDIT, EntityPermission::DELETE);
 
-        /** @var GlobalMarginRepository $repository */
-        $repository = $this->repository;
+        $repository = $this->getRepository();
         $existingMargins = $repository->findByMinimum();
         $root = new GlobalMargins($existingMargins);
         $form = $this->createForm(GlobalMarginsType::class, $root);

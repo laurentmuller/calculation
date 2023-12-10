@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
@@ -211,9 +212,9 @@ class AjaxSearchController extends AbstractController
     /**
      * Search distinct values from the given repository.
      *
-     * @template T of \App\Entity\AbstractEntity
+     * @template TEntity of EntityInterface
      *
-     * @param AbstractRepository<T> $repository
+     * @param AbstractRepository<TEntity> $repository
      */
     private function getValuesFromRepository(AbstractRepository $repository, string $field, string $query = null, int $limit = null): JsonResponse
     {

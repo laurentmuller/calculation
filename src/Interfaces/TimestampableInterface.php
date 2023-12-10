@@ -15,7 +15,7 @@ namespace App\Interfaces;
 /**
  * Class implementing this interface deals with the creation and update information.
  */
-interface TimestampableInterface
+interface TimestampableInterface extends EntityInterface
 {
     /**
      * Gets the creation date.

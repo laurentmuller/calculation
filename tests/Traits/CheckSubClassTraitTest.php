@@ -14,6 +14,7 @@ namespace App\Tests\Traits;
 
 use App\Entity\AbstractEntity;
 use App\Entity\Calculation;
+use App\Interfaces\EntityInterface;
 use App\Traits\CheckSubClassTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -27,12 +28,15 @@ class CheckSubClassTraitTest extends TestCase
         return [
             [Calculation::class, Calculation::class],
             [Calculation::class, AbstractEntity::class],
+            [Calculation::class, EntityInterface::class],
 
             [new Calculation(), Calculation::class],
             [new Calculation(), AbstractEntity::class],
+            [new Calculation(), EntityInterface::class],
 
             ['\App\Entity\Calculation', Calculation::class],
             ['\App\Entity\Calculation', AbstractEntity::class],
+            ['\App\Entity\Calculation', EntityInterface::class],
 
             ['ZZ', AbstractEntity::class, true],
         ];

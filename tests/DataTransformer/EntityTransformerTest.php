@@ -14,6 +14,7 @@ namespace App\Tests\DataTransformer;
 
 use App\Entity\Group;
 use App\Form\DataTransformer\EntityTransformer;
+use App\Interfaces\EntityInterface;
 use App\Repository\GroupRepository;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -74,7 +75,7 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @psalm-param \App\Entity\AbstractEntity|null $value
+     * @psalm-param EntityInterface|null $value
      *
      * @throws Exception
      */

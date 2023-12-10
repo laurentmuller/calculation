@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\AbstractEntity;
+use App\Interfaces\EntityInterface;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,9 +60,9 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      *
      * @throws ORMException
      */
-    protected function addEntity(?AbstractEntity $entity): void
+    protected function addEntity(?EntityInterface $entity): void
     {
-        if ($entity instanceof AbstractEntity) {
+        if ($entity instanceof EntityInterface) {
             $em = self::getManager();
             $em->persist($entity);
             $em->flush();
@@ -110,9 +110,9 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      *
      * @throws ORMException
      */
-    protected function deleteEntity(?AbstractEntity $entity): null
+    protected function deleteEntity(?EntityInterface $entity): null
     {
-        if ($entity instanceof AbstractEntity) {
+        if ($entity instanceof EntityInterface) {
             $em = self::getManager();
             $em->remove($entity);
             $em->flush();

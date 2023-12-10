@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Web;
 
 use App\Entity\User;
+use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationGroupRepository;
@@ -96,9 +97,9 @@ class DatabaseTest extends KernelTestCase
     }
 
     /**
-     * @template T of \App\Entity\AbstractEntity
+     * @template TEntity of EntityInterface
      *
-     * @param class-string<T> $className
+     * @param class-string<TEntity> $className
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getRepositories')]
     public function testRepository(string $className, int $expected): void
@@ -106,7 +107,7 @@ class DatabaseTest extends KernelTestCase
         /**
          * @var AbstractRepository $repository
          *
-         * @psalm-var AbstractRepository<T> $repository
+         * @psalm-var AbstractRepository<TEntity> $repository
          */
         $repository = $this->getService($className);
         $result = $repository->findAll();

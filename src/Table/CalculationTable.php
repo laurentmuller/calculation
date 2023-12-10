@@ -26,9 +26,7 @@ use Twig\Environment;
 /**
  * The calculations table.
  *
- * @method CalculationRepository getRepository()
- *
- * @template-extends AbstractEntityTable<Calculation>
+ * @template-extends AbstractEntityTable<Calculation, CalculationRepository>
  */
 class CalculationTable extends AbstractEntityTable
 {
@@ -41,7 +39,7 @@ class CalculationTable extends AbstractEntityTable
      */
     final public const PARAM_STATE = 'stateId';
 
-    public function __construct(// phpcs:ignore
+    public function __construct(
         CalculationRepository $repository,
         protected readonly CalculationStateRepository $stateRepository,
         protected readonly Environment $twig
@@ -104,11 +102,12 @@ class CalculationTable extends AbstractEntityTable
 
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
+        $repository = $this->getRepository();
         $result = parent::search($query, $builder, $alias);
         $stateId = $query->getCustomData(self::PARAM_STATE, 0);
         if (0 !== $stateId) {
             /** @psalm-var string $field */
-            $field = $this->repository->getSearchFields('state.id', $alias);
+            $field = $repository->getSearchFields('state.id', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_STATE)
                 ->setParameter(self::PARAM_STATE, $stateId, Types::INTEGER);
 
@@ -118,7 +117,7 @@ class CalculationTable extends AbstractEntityTable
         $stateEditable = $query->getCustomData(self::PARAM_EDITABLE, 0);
         if (0 !== $stateEditable) {
             /** @psalm-var string $field */
-            $field = $this->repository->getSearchFields('state.editable', $alias);
+            $field = $repository->getSearchFields('state.editable', $alias);
             $builder->andWhere($field . '=:' . self::PARAM_EDITABLE)
                 ->setParameter(self::PARAM_EDITABLE, $this->isEditable($stateEditable), Types::BOOLEAN);
 

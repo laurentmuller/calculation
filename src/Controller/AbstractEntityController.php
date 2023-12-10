@@ -35,6 +35,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Abstract controller for entities management.
  *
  * @template TEntity of EntityInterface
+ * @template TRepository of AbstractRepository<TEntity>
  */
 abstract class AbstractEntityController extends AbstractController
 {
@@ -53,9 +54,9 @@ abstract class AbstractEntityController extends AbstractController
     private readonly string $lowerName;
 
     /**
-     * @param AbstractRepository<TEntity> $repository the repository
+     * @psalm-param TRepository $repository
      */
-    public function __construct(protected readonly AbstractRepository $repository)
+    public function __construct(private readonly AbstractRepository $repository)
     {
         $this->className = $this->repository->getClassName();
         $this->lowerName = \strtolower(StringUtils::getShortName($this->className));
@@ -217,6 +218,14 @@ abstract class AbstractEntityController extends AbstractController
         $query = $this->repository->getSearchQuery($sortedFields, $criteria, $alias);
 
         return $query->getResult();
+    }
+
+    /**
+     * @psalm-return TRepository
+     */
+    protected function getRepository(): AbstractRepository
+    {
+        return $this->repository;
     }
 
     /**

@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace App\Faker;
 
 use App\Entity\Category;
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Category provider.
  *
- * @template-extends EntityProvider<Category>
+ * @template-extends EntityProvider<Category, CategoryRepository>
  */
 class CategoryProvider extends EntityProvider
 {

@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace App\Faker;
 
 use App\Entity\Product;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Product provider.
  *
- * @template-extends EntityProvider<Product>
+ * @template-extends EntityProvider<Product, ProductRepository>
  */
 class ProductProvider extends EntityProvider
 {
@@ -51,7 +52,7 @@ class ProductProvider extends EntityProvider
      */
     public function productExist(string $description): bool
     {
-        return $this->getRepository()->findOneBy(['description' => $description]) instanceof Product;
+        return $this->repository->findOneBy(['description' => $description]) instanceof Product;
     }
 
     /**

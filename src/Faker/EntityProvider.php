@@ -21,11 +21,19 @@ use Faker\Provider\Base;
  * Entity provider.
  *
  * @template TEntity of EntityInterface
+ * @template TRepository of AbstractRepository<TEntity>
  *
  * @property \Faker\UniqueGenerator $unique
  */
 class EntityProvider extends Base
 {
+    /**
+     * The repository.
+     *
+     * @psalm-var TRepository
+     */
+    protected readonly AbstractRepository $repository;
+
     /**
      * The cached distinct values.
      *
@@ -41,23 +49,13 @@ class EntityProvider extends Base
     private ?array $entities = null;
 
     /**
-     * The repository.
-     *
-     * @psalm-var AbstractRepository<TEntity>
-     */
-    private readonly AbstractRepository $repository;
-
-    /**
      * @psalm-param class-string<TEntity> $className the entity class name.
      */
     public function __construct(Generator $generator, EntityManagerInterface $manager, string $className)
     {
         parent::__construct($generator);
-
-        /** @psalm-var AbstractRepository<TEntity> $repository */
-        $repository = $manager->getRepository($className);
-
-        $this->repository = $repository;
+        // @phpstan-ignore-next-line
+        $this->repository = $manager->getRepository($className);
     }
 
     /**
@@ -80,7 +78,7 @@ class EntityProvider extends Base
     {
         // already loaded?
         if (!\array_key_exists($field, $this->distinctValues) || empty($this->distinctValues[$field])) {
-            $this->distinctValues[$field] = $this->getRepository()->getDistinctValues($field);
+            $this->distinctValues[$field] = $this->repository->getDistinctValues($field);
         }
 
         if ($allowNull) {
@@ -120,18 +118,10 @@ class EntityProvider extends Base
     {
         if (empty($this->entities)) {
             $criteria = $this->getCriteria();
-            $repository = $this->getRepository();
+            $repository = $this->repository;
             $this->entities = [] === $criteria ? $repository->findAll() : $repository->findBy($criteria);
         }
 
         return $this->entities;
-    }
-
-    /**
-     * @return AbstractRepository<TEntity>
-     */
-    protected function getRepository(): AbstractRepository
-    {
-        return $this->repository;
     }
 }

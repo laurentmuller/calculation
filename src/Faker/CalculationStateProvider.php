@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace App\Faker;
 
 use App\Entity\CalculationState;
+use App\Repository\CalculationStateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Calculation state provider.
  *
- * @template-extends EntityProvider<CalculationState>
+ * @template-extends EntityProvider<CalculationState, CalculationStateRepository>
  */
 class CalculationStateProvider extends EntityProvider
 {

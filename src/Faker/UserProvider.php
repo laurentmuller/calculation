@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace App\Faker;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * User provider.
  *
- * @template-extends EntityProvider<User>
+ * @template-extends EntityProvider<User, UserRepository>
  */
 class UserProvider extends EntityProvider
 {

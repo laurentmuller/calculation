@@ -27,10 +27,12 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  *
  * @psalm-type PluginType = array{
  *     name: string,
+ *     display?: string,
  *     version: string,
  *     source: string,
  *     target?: string,
  *     disabled?: bool,
+ *     prefix?: string,
  *     files: string[]}
  * @psalm-type CopyEntryType = array{
  *     source: string,
@@ -51,11 +53,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class UpdateAssetsCommand extends Command
 {
     use LoggerTrait;
-
-    /**
-     * The distribution directory prefix.
-     */
-    private const DIST_PREFIX = 'dist/';
 
     /**
      * The dry-run option.
@@ -112,19 +109,20 @@ class UpdateAssetsCommand extends Command
             foreach ($plugins as $plugin) {
                 $name = $plugin['name'];
                 $version = $plugin['version'];
+                $display = $plugin['display'] ?? $name;
                 if ($this->isPluginDisabled($plugin)) {
-                    $this->writeVerbose(\sprintf('Skip   : %s %s', $name, $version), 'fg=gray');
+                    $this->writeVerbose(\sprintf('Skip   : %s %s', $display, $version), 'fg=gray');
                     continue;
                 }
                 $files = $plugin['files'];
                 if ([] === $files) {
-                    $this->writeVerbose(\sprintf('Skip   : %s %s (No file defined)', $name, $version), 'fg=gray');
+                    $this->writeVerbose(\sprintf('Skip   : %s %s (No file defined)', $display, $version), 'fg=gray');
                     continue;
                 }
 
                 $pluginSource = $plugin['source'];
                 if (!isset($configuration['sources'][$pluginSource])) {
-                    $this->writeError("Unable to get source '$pluginSource' for the plugin '$name'.");
+                    $this->writeError("Unable to get source '$pluginSource' for the plugin '$display'.");
 
                     return Command::FAILURE;
                 }
@@ -133,7 +131,7 @@ class UpdateAssetsCommand extends Command
                 $source = $definition['source'];
                 $format = $definition['format'];
 
-                $this->writeVerbose(\sprintf('Install: %s %s', $name, $version));
+                $this->writeVerbose(\sprintf('Install: %s %s', $display, $version));
                 foreach ($files as $file) {
                     $sourceFile = $this->getSourceFile($source, $format, $plugin, $file);
                     $targetFile = $this->getTargetFile($targetTemp, $plugin, $file);
@@ -146,9 +144,9 @@ class UpdateAssetsCommand extends Command
                 $versionUrl = $definition['versionUrl'] ?? null;
                 $versionPaths = $definition['versionPaths'] ?? null;
                 if (\is_string($versionUrl) && \is_array($versionPaths)) {
-                    $this->checkVersion($versionUrl, $versionPaths, $name, $version);
+                    $this->checkVersion($versionUrl, $versionPaths, $name, $version, $display);
                 } else {
-                    $this->writeVerbose(\sprintf('Check  : %s %s - No version information.', $name, $version), 'fg=gray');
+                    $this->writeVerbose(\sprintf('Check  : %s %s - No version information.', $display, $version), 'fg=gray');
                 }
             }
             $expected = $this->countFiles($plugins);
@@ -176,13 +174,13 @@ class UpdateAssetsCommand extends Command
     /**
      * @psalm-param string[] $paths
      */
-    private function checkVersion(string $url, array $paths, string $name, string $version): void
+    private function checkVersion(string $url, array $paths, string $name, string $version, string $display): void
     {
         $newVersion = $this->getLastVersion($url, $paths, $name);
         if (null === $newVersion) {
-            $this->writeln("Unable to find last version for the plugin '$name'.", 'error');
+            $this->writeln("Unable to find last version for the plugin '$display'.", 'error');
         } elseif (\version_compare($version, $newVersion, '<')) {
-            $this->writeln("The plugin '$name' version '$version' can be updated to the version '$newVersion'.", 'bg=red');
+            $this->writeln("The plugin '$display' version '$version' can be updated to the version '$newVersion'.", 'bg=red');
         }
     }
 
@@ -226,8 +224,9 @@ class UpdateAssetsCommand extends Command
         foreach ($plugins as $plugin) {
             $name = $plugin['name'];
             $version = $plugin['version'];
+            $display = $plugin['display'] ?? $name;
             if ($this->isPluginDisabled($plugin)) {
-                $this->writeln(\sprintf($pattern, '✗', $name, $version, 'Disabled.'), 'fg=gray');
+                $this->writeln(\sprintf($pattern, '✗', $display, $version, 'Disabled.'), 'fg=gray');
                 continue;
             }
 
@@ -238,14 +237,14 @@ class UpdateAssetsCommand extends Command
             if (\is_string($versionUrl) && \is_array($versionPaths)) {
                 $newVersion = $this->getLastVersion($versionUrl, $versionPaths, $name);
                 if (null === $newVersion) {
-                    $this->writeln(\sprintf($pattern, '✗', $name, $version, 'Unable to find version.'), 'fg=red');
+                    $this->writeln(\sprintf($pattern, '✗', $display, $version, 'Unable to find version.'), 'fg=red');
                 } elseif (\version_compare($version, $newVersion, '<')) {
-                    $this->writeln(\sprintf('✗ %-30s %-12s Version %s available.', $name, $version, $newVersion), 'fg=red');
+                    $this->writeln(\sprintf('✗ %-30s %-12s Version %s available.', $display, $version, $newVersion), 'fg=red');
                 } else {
-                    $this->writeln(\sprintf('✓ %-30s %-12s', $name, $version));
+                    $this->writeln(\sprintf('✓ %-30s %-12s', $display, $version));
                 }
             } else {
-                $this->writeln(\sprintf($pattern, '✗', $name, $version, 'No version information.'), 'fg=gray');
+                $this->writeln(\sprintf($pattern, '✗', $display, $version, 'No version information.'), 'fg=gray');
             }
         }
 
@@ -258,8 +257,8 @@ class UpdateAssetsCommand extends Command
     private function dumpFile(string $content, string $targetFile, array $prefixes): bool
     {
         // prefix file
-        $extension = \pathinfo($targetFile, \PATHINFO_EXTENSION);
-        if (\array_key_exists($extension, $prefixes)) {
+        $extension = FileUtils::getExtension($targetFile);
+        if ('' !== $extension && \array_key_exists($extension, $prefixes)) {
             $content = $prefixes[$extension] . $content;
         }
 
@@ -344,8 +343,9 @@ class UpdateAssetsCommand extends Command
     private function getTargetFile(string $target, array $plugin, string $file): string
     {
         $name = $plugin['target'] ?? $plugin['name'];
-        if (StringUtils::startWith($file, self::DIST_PREFIX)) {
-            $file = \substr($file, \strlen(self::DIST_PREFIX));
+        $prefix = $plugin['prefix'] ?? '';
+        if ('' !== $prefix && StringUtils::startWith($file, $prefix)) {
+            $file = \substr($file, \strlen($prefix));
         }
 
         return FileUtils::buildPath($target, $name, $file);

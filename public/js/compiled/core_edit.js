@@ -10,7 +10,7 @@
  */
 <!--#include file="../../vendor/jquery-validate/jquery.validate.js" -->
 <!--#include file="../../vendor/jquery-validate/additional-methods.js" -->
-<!--#include file="../../vendor/jquery-validate/localization/messages_fr.js" -->
+<!--#include file="../../vendor/jquery-validate/messages_fr.js" -->
 
 /**
  * Extensions

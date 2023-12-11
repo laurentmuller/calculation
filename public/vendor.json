@@ -72,7 +72,16 @@
             "remark": "use jquery-validation and jquery-validate target for jsdelivr.",
             "files": [
                 "jquery.validate.js",
-                "additional-methods.js",
+                "additional-methods.js"
+            ]
+        },
+        {
+            "name": "jquery-validate",
+            "display": "jquery-validate-localization",
+            "version": "1.20.0",
+            "source": "cdnjs",
+            "prefix": "localization/",
+            "files": [
                 "localization/messages_fr.js"
             ]
         },
@@ -137,8 +146,26 @@
             "source": "cdnjs",
             "files": [
                 "bootstrap-table.js",
-                "bootstrap-table.css",
-                "extensions/defer-url/bootstrap-table-defer-url.js",
+                "bootstrap-table.css"
+            ]
+        },
+        {
+            "name": "bootstrap-table",
+            "display": "bootstrap-table-defer-url",
+            "version": "1.22.1",
+            "source": "cdnjs",
+            "prefix": "extensions/defer-url/",
+            "files": [
+                "extensions/defer-url/bootstrap-table-defer-url.js"
+            ]
+        },
+        {
+            "name": "bootstrap-table",
+            "display": "bootstrap-table-custom-view",
+            "version": "1.22.1",
+            "source": "cdnjs",
+            "prefix": "extensions/custom-view/",
+            "files": [
                 "extensions/custom-view/bootstrap-table-custom-view.js"
             ]
         },
@@ -165,6 +192,7 @@
             "name": "currency-flags",
             "version": "4.0.7",
             "source": "jsdelivr",
+            "prefix": "dist/",
             "files": [
                 "dist/currency-flags.css"
             ]

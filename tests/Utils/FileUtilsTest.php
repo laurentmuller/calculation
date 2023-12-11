@@ -36,6 +36,18 @@ class FileUtilsTest extends TestCase
         ];
     }
 
+    public static function getExtension(): array
+    {
+        return [
+            ['', ''],
+            ['file', ''],
+            ['file.', ''],
+            ['file.txt', 'txt'],
+            ['file.TXT', 'TXT'],
+            ['file.TXT', 'txt', true],
+        ];
+    }
+
     /**
      * @return array<array{0: string|\SplFileInfo|int, 1: string}>
      */
@@ -49,7 +61,7 @@ class FileUtilsTest extends TestCase
         $linesFile = self::getLinesFile();
         $lineSize = \filesize($linesFile) ?: 0;
 
-        $thisSize = \filesize(__FILE__) / $kb;
+        $thisSize = \round(\filesize(__FILE__) / $kb);
         $thisText = \sprintf('%d KB', $thisSize);
 
         return [
@@ -112,6 +124,13 @@ class FileUtilsTest extends TestCase
     public function testFormatSize(string|\SplFileInfo|int $path, string $expected): void
     {
         $actual = FileUtils::formatSize($path);
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getExtension')]
+    public function testGetExtension(string $file, string $expected, bool $forceLowerCase = false): void
+    {
+        $actual = FileUtils::getExtension($file, $forceLowerCase);
         self::assertSame($expected, $actual);
     }
 

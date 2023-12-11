@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Enums\ImageExtension;
+use App\Utils\FileUtils;
 
 /**
  * Service to manipulate image.
@@ -197,7 +198,7 @@ class ImageService
      */
     public static function fromFile(string $filename): ?self
     {
-        $file_extension = \strtolower(\pathinfo($filename, \PATHINFO_EXTENSION));
+        $file_extension = FileUtils::getExtension($filename, true);
         $image_extension = ImageExtension::tryFrom($file_extension);
         if (!$image_extension instanceof ImageExtension) {
             return null;

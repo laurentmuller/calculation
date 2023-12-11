@@ -160,6 +160,16 @@ final class FileUtils
     }
 
     /**
+     * Returns the extension from a file path (without leading dot).
+     *
+     * @param bool $forceLowerCase forces the extension to be lower-case
+     */
+    public static function getExtension(string|\SplFileInfo $file, bool $forceLowerCase = false): string
+    {
+        return Path::getExtension(self::realPath($file), $forceLowerCase);
+    }
+
+    /**
      * Gets the shared file system instance.
      */
     public static function getFilesystem(): Filesystem

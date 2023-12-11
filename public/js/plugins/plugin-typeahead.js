@@ -136,13 +136,12 @@
             // create menu
             this.$menu = $(this.options.menu).insertAfter(this.$element);
 
-            // add dropdown attributes
-            this.$element.attr({
-                'aria-expanded': 'false',
-                'data-bs-toggle': 'dropdown'
-                //'aria-controls': '.typeahead.dropdown-menu'
-
-            });
+            // add dropdown attribute
+            this.$element.attr('data-bs-toggle', 'dropdown');
+            // this.$element.attr({
+            //     'data-bs-toggle': 'dropdown',
+            //     'aria-expanded': 'false'
+            // });
 
             // bind events
             return this._listen();
@@ -239,7 +238,7 @@
                 }
             });
             that.$menu.empty().append($items);
-            //that.dropdown.update();
+            // that.dropdown.update();
             if (that.options.autoSelect) {
                 return that._first();
             }
@@ -795,10 +794,14 @@
 
         // UI
         selector: '.dropdown-item',
-        menu: '<div class="typeahead dropdown-menu" role="listbox" />',
-        item: '<button class="dropdown-item" type="button" role="option" />',
-        header: '<h6 class="dropdown-header text-uppercase" />',
-        divider: '<hr class="dropdown-divider">',
+        menu: '<ul class="typeahead dropdown-menu" />',
+        item: '<li class="dropdown-item" type="button" />',
+        header: '<li class="h6 dropdown-header text-uppercase pb-1"></li>',
+        divider: '<li><hr class="dropdown-divider"></li>',
+        // menu: '<div class="typeahead dropdown-menu" role="listbox" />',
+        // item: '<button class="dropdown-item" type="button" role="option" />',
+        // header: '<h6 class="dropdown-header text-uppercase" />',
+        // divider: '<hr class="dropdown-divider">',
         highlight: '<span class="text-success">$&</span>',
 
         // functions

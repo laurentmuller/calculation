@@ -140,7 +140,7 @@ enum HtmlListType: string
         if ($number > 3999) {
             return '';
         }
-        $formatter = new \NumberFormatter('@numbers=roman', \NumberFormatter::DECIMAL);
+        $formatter = new \NumberFormatter('@numbers=roman', \NumberFormatter::DEFAULT_STYLE);
 
         return $formatter->format($number) . $suffix;
     }

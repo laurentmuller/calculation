@@ -162,7 +162,7 @@
             this.keyDownProxy = (e) => this._keydown(e);
             this.keyPressProxy = (e) => this._keypress(e);
             this.dropdownShowProxy = (e) => this._dropdownShow(e);
-            this.dropdownHiddenProxy = (e) => this._dropdownHidden();
+            this.dropdownHiddenProxy = () => this._dropdownHidden();
             $element.on('blur', this.blurProxy)
                 .on('input', this.inputProxy)
                 .on('focus', this.focusProxy)
@@ -393,19 +393,28 @@
             // cancel last call if already in progress
             this._abortAjax();
             const query = this.query;
-            const data = this._isFunction(this.ajax.preDispatch) ? this.ajax.preDispatch(query) : {
-                query: query
-            };
+            const data = this._isFunction(this.ajax.preDispatch) ?
+                this.ajax.preDispatch(query) : {query: query};
+
             if (!this.options.waitCursor) {
                 $.ajaxSetup({global: false});
             }
-            this.ajax.xhr = $.getJSON({
-                success: this.ajaxSuccessProxy,
-                error: this.ajaxErrorProxy,
-                url: this.ajax.url,
-                data: data
-            });
+
             this.ajax.timerId = null;
+            this.ajax.xhr = $.getJSON(
+                this.ajax.url,
+                data,
+                this.ajaxSuccessProxy)
+                .fail(this.ajaxErrorProxy);
+                //.always(function() {
+
+            // this.ajax.xhr = $.getJSON({
+            //     success: this.ajaxSuccessProxy,
+            //     error: this.ajaxErrorProxy,
+            //     url: this.ajax.url,
+            //     data: data
+            // });
+
             return this;
         }
 
@@ -798,10 +807,6 @@
         item: '<li class="dropdown-item" type="button" />',
         header: '<li class="h6 dropdown-header text-uppercase pb-1"></li>',
         divider: '<li><hr class="dropdown-divider"></li>',
-        // menu: '<div class="typeahead dropdown-menu" role="listbox" />',
-        // item: '<button class="dropdown-item" type="button" role="option" />',
-        // header: '<h6 class="dropdown-header text-uppercase" />',
-        // divider: '<hr class="dropdown-divider">',
         highlight: '<span class="text-success">$&</span>',
 
         // functions

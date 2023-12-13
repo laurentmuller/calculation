@@ -5,6 +5,13 @@
 {%- set title = new ? 'group.add.title' : 'group.edit.title' -%}
 {%- set title_icon = ICON_GROUP -%}
 {%- set page_list = 'group_table' -%}
+{%- set form_attr = form_attr|default({})|merge({
+    'data-minimum_smaller_maximum': 'margin.minimum_smaller_maximum'|trans([], 'validators'),
+    'data-maximum_greater_minimum': 'margin.maximum_greater_minimum'|trans([], 'validators'),
+    'data-minimum_overlap': 'margin.minimum_overlap'|trans([], 'validators'),
+    'data-maximum_overlap': 'margin.maximum_overlap'|trans([], 'validators'),
+    'data-minimum_discontinued': 'margin.minimum_discontinued'|trans([], 'validators'),
+    'data-maximum_discontinued': 'margin.maximum_discontinued'|trans([], 'validators')}) -%}
 {# body #}
 {% block card_body %}
 {{ form_row(form.code) }}
@@ -21,6 +28,7 @@
 {% if app.debug %}
     {{ parent() }}
     {{ asset_js('js/plugins/plugin-input-number.js') }}
+    {{ asset_js('js/extensions/validator-margins-extension.js') }}
     {{ asset_js('js/application/margins_edit.js') }}
 {% else %}
     {{ asset_js('js/compiled/margins_edit.js') }}

@@ -24,9 +24,11 @@ abstract class AbstractMarginType extends AbstractEntityType
     protected function addFormFields(FormHelper $helper): void
     {
         $helper->field('minimum')
+            ->widgetClass('validate-minimum')
             ->addNumberType();
 
         $helper->field('maximum')
+            ->widgetClass('validate-maximum')
             ->addNumberType();
 
         $helper->field('margin')

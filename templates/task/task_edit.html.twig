@@ -105,23 +105,27 @@
 {%- set title_icon = ICON_TASK -%}
 {%- set page_list = 'task_table' -%}
 {%- set form_attr = form_attr|default({})|merge({
-                     'data-title': title|trans,
-                     'data-category': 'taskitem.fields.name'|trans,
-                     'data-show': 'taskitem.edit.items_show'|trans,
-                     'data-hide': 'taskitem.edit.items_hide'|trans,
-                     'data-unit-search': url('ajax_search_unit'),
-                     'data-unit-error': 'product.edit.error_search_unit'|trans,
-                     'data-supplier-search': url('ajax_search_supplier'),
-                     'data-supplier-error': 'product.edit.error_search_supplier'|trans,
-                     'data-maximum_greater_minimum': 'margin.maximum_greater_minimum'|trans([], 'validators'),
-                     'data-minimum_overlap': 'margin.minimum_overlap'|trans([], 'validators'),
-                     'data-maximum_overlap': 'margin.maximum_overlap'|trans([], 'validators'),
-                     'data-minimum_discontinued': 'margin.maximum_overlap'|trans([], 'validators')}) -%}
+     'data-title': title|trans,
+     'data-category': 'taskitem.fields.name'|trans,
+     'data-show': 'taskitem.edit.items_show'|trans,
+     'data-hide': 'taskitem.edit.items_hide'|trans,
+     'data-unit-search': url('ajax_search_unit'),
+     'data-unit-error': 'product.edit.error_search_unit'|trans,
+     'data-supplier-search': url('ajax_search_supplier'),
+     'data-supplier-error': 'product.edit.error_search_supplier'|trans,
+     'data-minimum_smaller_maximum': 'margin.minimum_smaller_maximum'|trans([], 'validators'),
+     'data-maximum_greater_minimum': 'margin.maximum_greater_minimum'|trans([], 'validators'),
+     'data-minimum_overlap': 'margin.minimum_overlap'|trans([], 'validators'),
+     'data-maximum_overlap': 'margin.maximum_overlap'|trans([], 'validators'),
+     'data-minimum_discontinued': 'margin.minimum_discontinued'|trans([], 'validators'),
+     'data-maximum_discontinued': 'margin.maximum_discontinued'|trans([], 'validators')}) -%}
 {# header #}
 {% block card_header %}
 <div class="row">
     <div class="col-auto me-auto">{{ parent() }}</div>
-    <div class="col-auto d-print-none"><a href="#" class="btn-add-item p-0" role="button">{{ 'task.edit.add_item'|trans }}</a></div>
+    <div class="col-auto d-print-none">
+        <a href="#" class="btn-add-item p-0" role="button">{{ 'task.edit.add_item'|trans }}</a>
+    </div>
 </div>
 {% endblock %}
 {# body #}
@@ -158,6 +162,7 @@
     {{ asset_js('js/plugins/plugin-typeahead.js') }}
     {{ asset_js('js/plugins/plugin-input-number.js') }}
     {{ asset_js('js/extensions/typeahead-extensions.js') }}
+    {{ asset_js('js/extensions/validator-margins-extension.js') }}
     {{ asset_js('js/application/task_edit.js') }}
 {% else %}
     {{ asset_js('js/compiled/task_edit.js') }}

@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* globals addMarginsMethods */
+
 /**
  * Update the user interface.
  */
@@ -136,5 +138,8 @@ function sortMargins() {
     updateUI();
 
     // validation
+    if (typeof addMarginsMethods !== 'undefined') {
+        addMarginsMethods();
+    }
     $('form').initValidator();
 }(jQuery));

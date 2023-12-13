@@ -30,16 +30,16 @@ class TaskItemMarginType extends AbstractEntityType
 
     protected function addFormFields(FormHelper $helper): void
     {
+        // must-validate class ?
         $helper->field('minimum')
-            ->widgetClass('must-validate check-minimum')
+            ->widgetClass('validate-minimum')
             ->addNumberType();
 
         $helper->field('maximum')
-            ->widgetClass('must-validate check-maximum')
+            ->widgetClass('validate-maximum')
             ->addNumberType();
 
         $helper->field('value')
-            ->widgetClass('must-validate')
             ->addNumberType();
     }
 }

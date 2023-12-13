@@ -36,7 +36,7 @@ abstract class AbstractEntityType extends AbstractHelperType
     /**
      * @param class-string<TEntity> $className the entity class name
      *
-     * @throws \InvalidArgumentException if the given class name is not a subclass of the entity interface class
+     * @throws \InvalidArgumentException if the given class name is not a subclass of the entity interface
      */
     protected function __construct(string $className)
     {

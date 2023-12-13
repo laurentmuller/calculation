@@ -2,14 +2,14 @@
 <psalm xmlns="https://getpsalm.org/schema/config"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-       errorLevel="1"
-       phpVersion="8.2"
        allowStringToStandInForClass="true"
-       findUnusedBaselineEntry="true"
-       findUnusedCode="false"
-       findUnusedPsalmSuppress="true"
        findUnusedVariablesAndParams="true"
-       strictBinaryOperands="true">
+       findUnusedBaselineEntry="true"
+       findUnusedPsalmSuppress="true"
+       strictBinaryOperands="true"
+       findUnusedCode="false"
+       phpVersion="8.2"
+       errorLevel="1">
 
     <projectFiles>
         <directory name="src"/>

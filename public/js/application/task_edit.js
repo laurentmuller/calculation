@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals sortable */
+/* globals sortable, addMarginsMethods */
 
 /**
  * Update the user interface.
@@ -333,77 +333,6 @@ function expand($caller) {
 }
 
 /**
- * @param {JQuery} $element
- * @param {boolean} minimum
- * @return {boolean}
- */
-function validateMinMax($element, minimum) {
-    'use strict';
-    const $table = $element.parents('.item').find('.table-edit');
-    const $body = $table.find('tbody');
-    const $rows = $body.find('tr');
-
-    let error = null;
-    let $lastMax = null;
-    $rows.each(function () {
-        const $row = $(this);
-        const $min = $row.find('input[name$="[minimum]"]');
-        const $max = $row.find('input[name$="[maximum]"]');
-        // $min.removeData('last-error');
-        // $max.removeData('last-error');
-        const min = $min.floatVal();
-        const max = $max.floatVal();
-        if (max <= min) {
-            if (!minimum) {
-                error = 'maximum_greater_minimum';
-            }
-            // $max.data('last-error', 'maximum_greater_minimum');
-            return false;
-        }
-        if (null === $lastMax) {
-            $lastMax = max;
-            return;
-        }
-        if (min < $lastMax) {
-            if (minimum) {
-                error = 'minimum_overlap';
-            }
-            // $min.data('last-error', 'minimum_overlap');
-            return false;
-        }
-        if (max < $lastMax) {
-            if (!minimum) {
-                error = 'maximum_overlap';
-            }
-            // $max.data('last-error', 'maximum_overlap');
-            return false;
-        }
-        if (min !== $lastMax) {
-            if (minimum) {
-                error = 'minimum_discontinued';
-            }
-            // $min.data('last-error', 'minimum_discontinued');
-            return false;
-        }
-        $lastMax = max;
-    });
-    $element.data('last-error', error);
-    return error === null;
-}
-
-/**
- * @param {JQuery} $element
- * @return {string}
- */
-function displayMinMaxError($element) {
-    'use strict';
-    const id = $element.data('last-error');
-    $element.removeData('last-error');
-
-    return String($('#edit-form').data(id));
-}
-
-/**
  * Ready function
  */
 (function ($) {
@@ -457,24 +386,9 @@ function displayMinMaxError($element) {
     updateUI();
 
     // initialize validation
-    // $.validator.addMethod('check-minimum', function (value, element) {
-    //     if (this.optional(element)) {
-    //         return true;
-    //     }
-    //     return validateMinMax($(element), true);
-    // }, function (value, element) {
-    //     return displayMinMaxError($(element));
-    // });
-    //
-    // $.validator.addMethod('check-maximum', function (value, element) {
-    //     if (this.optional(element)) {
-    //         return true;
-    //     }
-    //     return validateMinMax($(element), false);
-    // }, function (value, element) {
-    //     return displayMinMaxError($(element));
-    // });
-
+    if (typeof addMarginsMethods !== 'undefined') {
+        addMarginsMethods();
+    }
     $form.initValidator();
 
 }(jQuery));

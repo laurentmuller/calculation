@@ -20,6 +20,7 @@
  * Extensions
  */
 <!--#include file="../extensions/typeahead-extensions.js" -->
+<!--#include file="../extensions/validator-margins-extension.js" -->
 
 /**
  * Specific Files

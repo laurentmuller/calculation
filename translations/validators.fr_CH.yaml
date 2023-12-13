@@ -21,10 +21,12 @@ group:
   id_not_found: Le groupe avec l'identifiant "%id%" n'existe pas.
   unique_code: Ce nom est déjà utilisé par un autre groupe.
 margin:
+  minimum_smaller_maximum: La valeur minimale doit être inférieure à la valeur maximale.
   maximum_greater_minimum: La valeur maximale doit être supérieure à la valeur minimale.
   minimum_overlap: La valeur minimale chevauche une marge existante.
   maximum_overlap: La valeur maximale chevauche une marge existante.
-  minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximal précédente.
+  minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximale précédente.
+  maximum_discontinued: La valeur maximale n'est pas égale à la valeur minimale suivante.
 new_password:
   blank: Un nouveau mot de passe est requis.
   short: Le nouveau mot de passe est trop court.

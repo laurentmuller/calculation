@@ -227,7 +227,7 @@
             // render categories, separators and items
             const regex = that._getHighlighter();
 
-            /** @type {JQuery.TypeOrArray<JQuery.Node>} */
+            /** @type {jQuery.TypeOrArray<jQuery.Node>} */
             const $items = data.map(function (item) {
                 if (item.__type__ === 'category') {
                     return that._renderCategory(regex, item);

@@ -359,7 +359,7 @@ function loadingTemplate(message) {
         /**
          * Gets the search input.
          *
-         * @return {jquery} the search input.
+         * @return {jQuery} the search input.
          */
         getSearchInput: function () {
             const options = $(this).getOptions();

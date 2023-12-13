@@ -9,7 +9,7 @@ const KEY_LAST_ERROR = 'margin-error';
 /**
  * Gets a margin error message.
  *
- * @param {JQuery} $element
+ * @param {jQuery} $element
  * @return {string}
  */
 function getMarginError($element) {

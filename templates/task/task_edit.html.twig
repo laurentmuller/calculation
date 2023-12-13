@@ -112,7 +112,11 @@
                      'data-unit-search': url('ajax_search_unit'),
                      'data-unit-error': 'product.edit.error_search_unit'|trans,
                      'data-supplier-search': url('ajax_search_supplier'),
-                     'data-supplier-error': 'product.edit.error_search_supplier'|trans}) -%}
+                     'data-supplier-error': 'product.edit.error_search_supplier'|trans,
+                     'data-maximum_greater_minimum': 'margin.maximum_greater_minimum'|trans([], 'validators'),
+                     'data-minimum_overlap': 'margin.minimum_overlap'|trans([], 'validators'),
+                     'data-maximum_overlap': 'margin.maximum_overlap'|trans([], 'validators'),
+                     'data-minimum_discontinued': 'margin.maximum_overlap'|trans([], 'validators')}) -%}
 {# header #}
 {% block card_header %}
 <div class="row">

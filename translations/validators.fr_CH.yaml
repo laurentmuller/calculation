@@ -23,8 +23,8 @@ group:
 margin:
   minimum_smaller_maximum: La valeur minimale doit être inférieure à la valeur maximale.
   maximum_greater_minimum: La valeur maximale doit être supérieure à la valeur minimale.
-  minimum_overlap: La valeur minimale chevauche une marge existante.
-  maximum_overlap: La valeur maximale chevauche une marge existante.
+  minimum_overlap: La valeur maximale chevauche la valeur minimale précédente.
+  maximum_overlap: La valeur minimale chevauche la valeur maximale suivante.
   minimum_discontinued: La valeur minimale n'est pas égale à la valeur maximale précédente.
   maximum_discontinued: La valeur maximale n'est pas égale à la valeur minimale suivante.
 new_password:

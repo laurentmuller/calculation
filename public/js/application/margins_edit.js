@@ -1,6 +1,22 @@
 /**! compression tag for ftp-deployment */
 
-/* globals addMarginsMethods */
+/*  globals
+    getSortedMargins,
+    addMarginsMethods,
+    validateOtherMargins,
+    getMinimumInput, getMaximumInput,
+    getMinimumSelector, getMaximumSelector
+*/
+
+/**
+ * Gets the value input selector.
+ *
+ * @return {string}
+ */
+function getMarginSelector() {
+    'use strict';
+    return 'input[name$=\'[margin]\']';
+}
 
 /**
  * Update the user interface.
@@ -8,9 +24,9 @@
 function updateUI() {
     'use strict';
     // initialize the number input formats
-    $("input[name$='[minimum]']").inputNumberFormat();
-    $("input[name$='[maximum]']").inputNumberFormat();
-    $("input[name$='[margin]']").inputNumberFormat({
+    $(getMinimumSelector()).inputNumberFormat();
+    $(getMaximumSelector()).inputNumberFormat();
+    $(getMarginSelector()).inputNumberFormat({
         decimal: 0,
         decimalAuto: 0
     });
@@ -25,28 +41,30 @@ function updateUI() {
 }
 
 /**
- * Gets the maximum value.
+ * Gets the maximum value of the maximum column.
  *
  * @returns {number} the maximum value.
  */
 function getMaxValue() {
     'use strict';
     let maximum = 0;
-    $("input[name$='[maximum]']").each(function () {
+    const selector = getMaximumSelector();
+    $(selector).each(function () {
         maximum = Math.max(maximum, $(this).floatVal());
     });
     return maximum;
 }
 
 /**
- * Gets the minimum margin value.
+ * Gets the minimum margin value of the minimum column.
  *
  * @returns {number} the minimum margin value.
  */
 function getMinMargin() {
     'use strict';
     let minimum = Number.MAX_VALUE;
-    $("input[name$='[margin]']").each(function () {
+    const selector = getMarginSelector();
+    $(selector).each(function () {
         minimum = Math.min(minimum, $(this).intVal());
     });
     return minimum === Number.MAX_VALUE ? 1 : minimum;
@@ -73,9 +91,9 @@ function addMargin() {
     // update UI
     updateUI();
     // set values
-    $("input[name$='[minimum]']:last").floatVal(minimum).selectFocus();
-    $("input[name$='[maximum]']:last").floatVal(maximum);
-    $("input[name$='[margin]']:last").intVal(margin);
+    $(`${getMinimumSelector()}:last`).floatVal(minimum).selectFocus();
+    $(`${getMaximumSelector()}:last`).floatVal(maximum);
+    $(`${getMarginSelector()}:last`).intVal(margin);
 }
 
 /**
@@ -93,26 +111,15 @@ function removeMargin($caller) {
 
 /**
  * Sorts the margins.
+ * @return {jQuery} the sorted rows.
  */
 function sortMargins() {
     'use strict';
     const $table = $('#data-table-edit');
     const $body = $table.find('tbody');
-    let $rows = $body.find('tr');
-    if ($rows.length < 2) {
-        return $rows;
+    if ($body.children('tr').length > 1) {
+        getSortedMargins($body).appendTo($body);
     }
-    $rows.sort(function (rowA, rowB) {
-        const valueA = $(rowA).find("input[name$='[minimum]']").floatVal();
-        const valueB = $(rowB).find("input[name$='[minimum]']").floatVal();
-        if (valueA < valueB) {
-            return -1;
-        } else if (valueA > valueB) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }).appendTo($body);
 }
 
 /**
@@ -138,8 +145,6 @@ function sortMargins() {
     updateUI();
 
     // validation
-    if (typeof addMarginsMethods !== 'undefined') {
-        addMarginsMethods();
-    }
+    addMarginsMethods();
     $('form').initValidator();
 }(jQuery));

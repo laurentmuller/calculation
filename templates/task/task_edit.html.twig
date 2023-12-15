@@ -9,7 +9,7 @@
         'data-bs-toggle': 'collapse',
         'data-bs-target': '#' ~ id_content,
         'aria-expanded': show|json_encode,
-        'title': title|trans} -%}
+        'title': title} -%}
     <div class="d-flex-wrap-center mb-2">
         {{ form_label(form, null, {'label_attr': label_attributes}) }}
         <div class="btn-group btn-group-sm d-print-none" role="group">
@@ -46,7 +46,7 @@
             <em>{{ form_errors(margin.value) }}</em>
         </div>
     </td>
-    <td class="actions align-middle pt-0 d-print-none">
+    <td class="actions align-top pt-2 d-print-none">
         <button type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'taskitem.edit.delete_item'|trans }}">
             {{- icon(ICON_DELETE) -}}
         </button>

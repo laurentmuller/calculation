@@ -1,6 +1,23 @@
 /**! compression tag for ftp-deployment */
 
-/* globals sortable, addMarginsMethods */
+/*  globals
+    sortable,
+    getSortedMargins,
+    addMarginsMethods,
+    validateOtherMargins,
+    getMinimumInput, getMaximumInput,
+    getMinimumSelector, getMaximumSelector,
+*/
+
+/**
+ * Gets the value input selector.
+ *
+ * @return {string}
+ */
+function getValueSelector() {
+    'use strict';
+    return '#items input[name$="[value]"]';
+}
 
 /**
  * Update the user interface.
@@ -8,9 +25,9 @@
 function updateUI() {
     'use strict';
     // initialize the number input formats
-    $('#items input[name$="[minimum]"]').inputNumberFormat();
-    $('#items input[name$="[maximum]"]').inputNumberFormat();
-    $('#items input[name$="[value]"]').inputNumberFormat();
+    $(getMinimumSelector()).inputNumberFormat();
+    $(getMaximumSelector()).inputNumberFormat();
+    $(getValueSelector).inputNumberFormat();
 
     // update tables
     $('#items .table-edit').each(function () {
@@ -24,13 +41,12 @@ function updateUI() {
     $('.empty-items').toggleClass('d-none', $items.length !== 0);
 
     // update actions, rules and positions
-    let position = 0;
-    const isValidator = $('#edit-form').data('validator') || false;
-    $items.each(function (_index, item) {
+    const isValidator = $('#edit-form').getValidator() || false;
+    $items.each(function (index, item) {
         const $item = $(item);
         $item.find('.btn-up-item').toggleDisabled($item.is(':first-of-type'));
         $item.find('.btn-down-item').toggleDisabled($item.is(':last-of-type'));
-        $item.find('input[name$="[position]"]').val(position++);
+        $item.find('input[name$="[position]"]').val(index);
         if (isValidator) {
             $item.find('.unique-name').rules('add', {unique: '.unique-name'});
         }
@@ -38,6 +54,7 @@ function updateUI() {
 
     // update edit message
     $('#edit-form :input:first').trigger('input');
+    // validateOtherMargins();
 }
 
 /**
@@ -76,14 +93,15 @@ function startDragItems() {
 function getMaxValue($table) {
     'use strict';
     let maximum = 0;
-    $table.find('input[name$="[maximum]"]').each(function () {
+    const selector = getMaximumSelector();
+    $table.find(selector).each(function () {
         maximum = Math.max(maximum, $(this).floatVal());
     });
     return maximum;
 }
 
 /**
- * Gets the minimum of the value column.
+ * Gets the minimum value of the value column.
  *
  * @param {jQuery} $table - the parent table.
  * @returns {number} - the minimum.
@@ -91,7 +109,7 @@ function getMaxValue($table) {
 function getMinValue($table) {
     'use strict';
     let minimum = Number.MAX_VALUE;
-    $table.find('input[name$="[value]"]').each(function () {
+    $table.find(getValueSelector()).each(function () {
         minimum = Math.min(minimum, $(this).floatVal());
     });
     return minimum === Number.MAX_VALUE ? 1 : minimum;
@@ -250,9 +268,10 @@ function addMargin($caller) {
     updateUI();
 
     // set values
-    $table.find('input[name$="[minimum]"]:last').floatVal(minimum).selectFocus().scrollInViewport();
-    $table.find('input[name$="[maximum]"]:last').floatVal(maximum);
-    $table.find('input[name$="[value]"]:last').floatVal(value);
+    $table.find(`${getMinimumSelector()}:last`).floatVal(minimum)
+        .selectFocus().scrollInViewport();
+    $table.find(`${getMaximumSelector()}:last`).floatVal(maximum);
+    $table.find(`${getValueSelector()}:last`).floatVal(value);
 }
 
 /**
@@ -280,21 +299,9 @@ function sortMargins($caller) {
         return;
     }
     const $body = $table.find('tbody');
-    const $rows = $body.find('tr');
-    if ($rows.length < 2) {
-        return;
+    if ($body.children('tr').length > 1) {
+        getSortedMargins($body).appendTo($body);
     }
-    $rows.sort(function (rowA, rowB) {
-        const valueA = $(rowA).find('input[name$="[minimum]"]').floatVal();
-        const valueB = $(rowB).find('input[name$="[minimum]"]').floatVal();
-        if (valueA < valueB) {
-            return -1;
-        } else if (valueA > valueB) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }).appendTo($body);
 }
 
 /**
@@ -386,9 +393,7 @@ function expand($caller) {
     updateUI();
 
     // initialize validation
-    if (typeof addMarginsMethods !== 'undefined') {
-        addMarginsMethods();
-    }
+    addMarginsMethods();
     $form.initValidator();
 
 }(jQuery));

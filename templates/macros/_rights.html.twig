@@ -34,21 +34,21 @@
            </tr>
         </thead>
         <tbody>
-            {{ _self.row(form.EntityCalculation, default.EntityCalculation, overwrite) }}
-            {{ _self.row(form.EntityProduct, default.EntityProduct, overwrite) }}
-            {{ _self.row(form.EntityTask, default.EntityTask, overwrite) }}
-            {{ _self.row(form.EntityCategory, default.EntityCategory, overwrite) }}
-            {{ _self.row(form.EntityGroup, default.EntityGroup, overwrite) }}
-            {{ _self.row(form.EntityCalculationState, default.EntityCalculationState, overwrite) }}
-            {{ _self.row(form.EntityGlobalMargin, default.EntityGlobalMargin, overwrite) }}
-            {%- if form.EntityCustomer|default(false) -%}
-                {{ _self.row(form.EntityCustomer, default.EntityCustomer, overwrite) }}
+            {{ _self.row(form.CalculationPermission, default.CalculationPermission, overwrite) }}
+            {{ _self.row(form.ProductPermission, default.ProductPermission, overwrite) }}
+            {{ _self.row(form.TaskPermission, default.TaskPermission, overwrite) }}
+            {{ _self.row(form.CategoryPermission, default.CategoryPermission, overwrite) }}
+            {{ _self.row(form.GroupPermission, default.GroupPermission, overwrite) }}
+            {{ _self.row(form.CalculationStatePermission, default.CalculationStatePermission, overwrite) }}
+            {{ _self.row(form.GlobalMarginPermission, default.GlobalMarginPermission, overwrite) }}
+            {%- if form.CustomerPermission is defined -%}
+                {{ _self.row(form.CustomerPermission, default.CustomerPermission, overwrite) }}
             {%- endif -%}
-            {%- if form.EntityUser|default(false) -%}
-                {{ _self.row(form.EntityUser, default.EntityUser, overwrite) }}
+            {%- if form.UserPermission is defined -%}
+                {{ _self.row(form.UserPermission, default.UserPermission, overwrite) }}
             {%- endif -%}
-            {%- if form.EntityLog|default(false) -%}
-                {{ _self.row(form.EntityLog, default.EntityLog, overwrite) }}
+            {%- if form.LogPermission is defined -%}
+                {{ _self.row(form.LogPermission, default.LogPermission, overwrite) }}
             {%- endif -%}
         </tbody>
     </table>

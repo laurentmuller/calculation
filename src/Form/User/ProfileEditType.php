@@ -35,27 +35,23 @@ class ProfileEditType extends AbstractEntityType
 
     protected function addFormFields(FormHelper $helper): void
     {
-        // username
+        $helper->field('id')
+            ->disabled()
+            ->addHiddenType();
+
         $helper->field('username')
             ->addUserNameType();
 
-        // email
         $helper->field('email')
             ->autocomplete('email')
             ->addEmailType();
 
-        // current password
         $helper->field('currentPassword')
             ->label('user.password.current')
             ->addCurrentPasswordType();
 
-        // image
         $helper->field('imageFile')
             ->updateOption('delete_label', 'user.edit.delete_image')
             ->addVichImageType();
-
-        // id for ajax validation
-        $helper->field('id')
-            ->addHiddenType();
     }
 }

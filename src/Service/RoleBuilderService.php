@@ -13,11 +13,9 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
-use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
-use Elao\Enum\FlagBag;
 
 /**
  * Service to build roles with default access rights.
@@ -74,61 +72,37 @@ class RoleBuilderService
      */
     public function getRoleUser(): Role
     {
-        $all = $this->getAllPermissions();
-        $none = $this->getNonePermissions();
-        $default = $this->getDefaultPermissions();
+        $all = EntityPermission::getAllPermissions();
+        $none = EntityPermission::getNonePermissions();
+        $default = EntityPermission::getDefaultPermissions();
         $role = new Role(RoleInterface::ROLE_USER);
-        $role->EntityCalculation = $all;
-        $role->EntityCalculationState = $default;
-        $role->EntityCategory = $default;
-        $role->EntityCustomer = $default;
-        $role->EntityGlobalMargin = $default;
-        $role->EntityGroup = $default;
-        $role->EntityLog = $none;
-        $role->EntityProduct = $default;
-        $role->EntityTask = $default;
-        $role->EntityUser = $none;
 
-        return $role;
-    }
-
-    /**
-     * @psalm-return FlagBag<EntityPermission>
-     */
-    private function getAllPermissions(): FlagBag
-    {
-        return FlagBag::from(...EntityPermission::sorted());
-    }
-
-    /**
-     * @psalm-return FlagBag<EntityPermission>
-     */
-    private function getDefaultPermissions(): FlagBag
-    {
-        return FlagBag::from(
-            EntityPermission::LIST,
-            EntityPermission::EXPORT,
-            EntityPermission::SHOW
-        );
-    }
-
-    /**
-     * @psalm-return FlagBag<EntityPermission>
-     */
-    private function getNonePermissions(): FlagBag
-    {
-        return new FlagBag(EntityPermission::class);
+        return $role->setCalculationPermission($all)
+            ->setCalculationStatePermission($default)
+            ->setCategoryPermission($default)
+            ->setCustomerPermission($default)
+            ->setGlobalMarginPermission($default)
+            ->setGroupPermission($default)
+            ->setLogPermission($none)
+            ->setProductPermission($default)
+            ->setTaskPermission($default)
+            ->setUserPermission($none);
     }
 
     private function getRoleWithAll(string $roleName): Role
     {
+        $all = EntityPermission::getAllPermissions();
         $role = new Role($roleName);
-        $value = $this->getAllPermissions();
-        $entities = EntityName::constants();
-        foreach ($entities as $entity) {
-            $role->$entity = $value;
-        }
 
-        return $role;
+        return $role->setCalculationPermission($all)
+            ->setCalculationStatePermission($all)
+            ->setCategoryPermission($all)
+            ->setCustomerPermission($all)
+            ->setGlobalMarginPermission($all)
+            ->setGroupPermission($all)
+            ->setLogPermission($all)
+            ->setProductPermission($all)
+            ->setTaskPermission($all)
+            ->setUserPermission($all);
     }
 }

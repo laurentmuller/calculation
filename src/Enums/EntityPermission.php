@@ -14,12 +14,12 @@ namespace App\Enums;
 
 use App\Interfaces\EnumConstantsInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Interfaces\RoleInterface;
 use App\Utils\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
+use Elao\Enum\FlagBag;
 
 /**
  * Entity permission enumeration.
@@ -69,6 +69,11 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
     case SHOW = 1 << 5;
 
     /**
+     * The value returned when entity permission value is not found.
+     */
+    final public const INVALID_VALUE = -1;
+
+    /**
      * Gets this enumeration as constants.
      */
     public static function constants(): array
@@ -79,6 +84,34 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
             static fn (array $choices, self $type): array => $choices + ['ATTRIBUTE_' . $type->name => $type->name],
             [],
         );
+    }
+
+    /**
+     * @return FlagBag<EntityPermission>
+     */
+    public static function getAllPermissions(): FlagBag
+    {
+        return FlagBag::from(...EntityPermission::sorted());
+    }
+
+    /**
+     * @return FlagBag<EntityPermission>
+     */
+    public static function getDefaultPermissions(): FlagBag
+    {
+        return FlagBag::from(
+            EntityPermission::LIST,
+            EntityPermission::EXPORT,
+            EntityPermission::SHOW
+        );
+    }
+
+    /**
+     * @psalm-return FlagBag<EntityPermission>
+     */
+    public static function getNonePermissions(): FlagBag
+    {
+        return new FlagBag(EntityPermission::class);
     }
 
     /**
@@ -107,7 +140,7 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
     /**
      * Find an entity permission value from the given name, ignoring case consideration.
      */
-    public static function tryFindValue(string $name, int $default = RoleInterface::INVALID_VALUE): int
+    public static function tryFindValue(string $name, int $default = self::INVALID_VALUE): int
     {
         return self::tryFromName($name)?->value ?: $default;
     }

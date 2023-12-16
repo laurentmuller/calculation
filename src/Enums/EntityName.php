@@ -14,7 +14,6 @@ namespace App\Enums;
 
 use App\Interfaces\EnumConstantsInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Interfaces\RoleInterface;
 use App\Traits\EnumExtrasTrait;
 use App\Utils\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
@@ -95,9 +94,19 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
     case USER = 'EntityUser';
 
     /**
+     * The value returned when entity offset is not found.
+     */
+    final public const INVALID_VALUE = -1;
+
+    /**
      * The entity prefix.
      */
     private const ENTITY_PREFIX = 'Entity';
+
+    /**
+     * The permission field name suffix.
+     */
+    private const PERMISSION_SUFFIX = 'Permission';
 
     /**
      * Gets this enumeration as constants.
@@ -110,6 +119,22 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
             static fn (array $choices, self $type): array => $choices + ['ENTITY_' . $type->name => $type->value],
             [],
         );
+    }
+
+    /**
+     * Gets the field name.
+     */
+    public function getFieldName(): string
+    {
+        return \substr($this->value, \strlen(self::ENTITY_PREFIX)) . self::PERMISSION_SUFFIX;
+    }
+
+    /**
+     * Get the property name.
+     */
+    public function getPropertyName(): string
+    {
+        return 'get' . $this->getFieldName();
     }
 
     /**
@@ -150,7 +175,7 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
     /**
      * Find an entity name offset for the given subject.
      */
-    public static function tryFindOffset(mixed $subject, int $default = RoleInterface::INVALID_VALUE): int
+    public static function tryFindOffset(mixed $subject, int $default = self::INVALID_VALUE): int
     {
         return self::tryFromMixed($subject)?->offset() ?? $default;
     }
@@ -162,7 +187,7 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
      */
     public static function tryFindValue(mixed $subject, string $default = null): ?string
     {
-        return self::tryFromMixed($subject)?->value ?: $default;
+        return self::tryFromMixed($subject)?->value ?? $default;
     }
 
     /**

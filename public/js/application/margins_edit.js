@@ -30,7 +30,7 @@ function updateUI() {
         decimal: 0,
         decimalAuto: 0
     });
-    // show / hide elements
+    // show/hide elements
     const $table = $('#data-table-edit');
     const rows = $table.find('tbody > tr').length;
     $table.toggleClass('d-none', rows === 0);
@@ -99,7 +99,7 @@ function addMargin() {
 /**
  * Remove the margin.
  *
- * @param {jQuery} $caller - the caller.
+ * @param {jQuery} $caller the caller.
  */
 function removeMargin($caller) {
     'use strict';

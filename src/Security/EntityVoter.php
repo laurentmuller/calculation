@@ -15,7 +15,6 @@ namespace App\Security;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
-use App\Interfaces\RoleInterface;
 use App\Service\ApplicationService;
 use App\Traits\MathTrait;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -71,11 +70,11 @@ class EntityVoter extends Voter
             return $user->isAdmin();
         }
         $offset = EntityName::tryFindOffset($name);
-        if (RoleInterface::INVALID_VALUE === $offset) {
+        if (EntityName::INVALID_VALUE === $offset) {
             return false;
         }
         $mask = EntityPermission::tryFindValue($attribute);
-        if (RoleInterface::INVALID_VALUE === $mask) {
+        if (EntityPermission::INVALID_VALUE === $mask) {
             return false;
         }
         $rights = $this->getRights($user);

@@ -191,9 +191,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
                 continue;
             }
             if ($outputUsers || EntityName::USER !== $entity) {
-                $value = $entity->value;
+                $field = $entity->getPropertyName();
                 /** @psalm-var FlagBag<EntityPermission>|null $rights */
-                $rights = $role->{$value};
+                $rights = $role->{$field}();
                 $this->outputRights($table, $entity, $rights);
             }
         }

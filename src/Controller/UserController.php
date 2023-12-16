@@ -277,9 +277,12 @@ class UserController extends AbstractEntityController
         if ($this->handleRequestForm($request, $form)) {
             // same as default?
             if ($item->getRights() === $default->getRights()) {
-                $item->setOverwrite(false)
-                    ->setRights(null);
+                $item->setRights(null);
+                if ($item->isEnabled()) {
+                    $item->setOverwrite(false);
+                }
             }
+
             $manager->flush();
 
             return $this->redirectToDefaultRoute($request, $item);

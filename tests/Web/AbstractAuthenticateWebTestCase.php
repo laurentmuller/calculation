@@ -58,6 +58,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
         $application->setProperties([
             PropertyServiceInterface::P_USER_RIGHTS => $userRight,
             PropertyServiceInterface::P_ADMIN_RIGHTS => $adminRight,
+            PropertyServiceInterface::P_DISPLAY_CAPTCHA => false,
             PropertyServiceInterface::P_QR_CODE => true,
         ]);
     }

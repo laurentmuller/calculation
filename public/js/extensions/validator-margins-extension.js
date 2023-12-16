@@ -15,7 +15,7 @@ const KEY_MARGIN_ERROR = 'margin-error';
 const KEY_MARGIN_VALIDATE = 'margin-validating';
 
 /**
- * Returns if the validation margins is in progress.
+ * Returns if the validation of margins is in progress.
  *
  * @param {jQuery} $element
  * @return {boolean} true if in progress.
@@ -26,7 +26,7 @@ function isMarginValidate($element) {
 }
 
 /**
- * Sets a value indicating validation margins is in progress.
+ * Sets a value indicating validation of margins is in progress.
  *
  * @param {jQuery} $element
  * @param {boolean} value - true if in progress.
@@ -179,7 +179,6 @@ function validateMinimumMargin($element) {
     if (minimum > maximum) {
         return setMarginError($element, 'minimum_smaller_maximum');
     }
-
     // get previous row
     const $rows = getSortedMargins($element);
     const index = $rows.index($row);

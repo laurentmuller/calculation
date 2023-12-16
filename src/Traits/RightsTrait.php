@@ -14,23 +14,11 @@ namespace App\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
-use App\Interfaces\RoleInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Elao\Enum\FlagBag;
 
 /**
  * Trait to set or get access rights.
- *
- * @property ?FlagBag<EntityPermission> $EntityCalculation      the rights for calculations.
- * @property ?FlagBag<EntityPermission> $EntityCalculationState the rights for calculation state.
- * @property ?FlagBag<EntityPermission> $EntityGroup            the rights for groups.
- * @property ?FlagBag<EntityPermission> $EntityCategory         the rights for categories.
- * @property ?FlagBag<EntityPermission> $EntityCustomer         the rights for customers.
- * @property ?FlagBag<EntityPermission> $EntityGlobalMargin     the rights for global margins.
- * @property ?FlagBag<EntityPermission> $EntityProduct          the rights for products.
- * @property ?FlagBag<EntityPermission> $EntityUser             the rights for users.
- * @property ?FlagBag<EntityPermission> $EntityTask             the rights for tasks.
- * @property ?FlagBag<EntityPermission> $EntityLog              the rights for logs.
  */
 trait RightsTrait
 {
@@ -51,32 +39,67 @@ trait RightsTrait
     private ?array $rights = null;
 
     /**
-     * @param string $name the property name
-     *
-     * @return ?FlagBag<EntityPermission>
+     * @return FlagBag<EntityPermission>|null
      */
-    public function __get(string $name): ?FlagBag
+    public function getCalculationPermission(): ?FlagBag
     {
-        if ($this->entityExists($name)) {
-            return $this->getEntityRights($name);
-        }
-
-        return null;
-    }
-
-    public function __isset(string $name): bool
-    {
-        return $this->entityExists($name);
+        return $this->getEntityRights(EntityName::CALCULATION);
     }
 
     /**
-     * @psalm-param string|FlagBag<EntityPermission> $value
+     * @return FlagBag<EntityPermission>|null
      */
-    public function __set(string $name, mixed $value): void
+    public function getCalculationStatePermission(): ?FlagBag
     {
-        if ($this->entityExists($name) && $value instanceof FlagBag) {
-            $this->setEntityRights($name, $value);
-        }
+        return $this->getEntityRights(EntityName::CALCULATION_STATE);
+    }
+
+    /**
+     * @return FlagBag<EntityPermission>|null
+     */
+    public function getCategoryPermission(): ?FlagBag
+    {
+        return $this->getEntityRights(EntityName::CATEGORY);
+    }
+
+    /**
+     * @return FlagBag<EntityPermission>|null
+     */
+    public function getCustomerPermission(): ?FlagBag
+    {
+        return $this->getEntityRights(EntityName::CUSTOMER);
+    }
+
+    /**
+     * @return FlagBag<EntityPermission>|null
+     */
+    public function getGlobalMarginPermission(): ?FlagBag
+    {
+        return $this->getEntityRights(EntityName::GLOBAL_MARGIN);
+    }
+
+    /**
+     * @return FlagBag<EntityPermission>|null
+     */
+    public function getGroupPermission(): ?FlagBag
+    {
+        return $this->getEntityRights(EntityName::GROUP);
+    }
+
+    /**
+     * @return FlagBag<EntityPermission>|null
+     */
+    public function getLogPermission(): ?FlagBag
+    {
+        return $this->getEntityRights(EntityName::LOG);
+    }
+
+    /**
+     * @return FlagBag<EntityPermission>|null
+     */
+    public function getProductPermission(): ?FlagBag
+    {
+        return $this->getEntityRights(EntityName::PRODUCT);
     }
 
     /**
@@ -90,6 +113,22 @@ trait RightsTrait
     }
 
     /**
+     * @return FlagBag<EntityPermission>|null
+     */
+    public function getTaskPermission(): ?FlagBag
+    {
+        return $this->getEntityRights(EntityName::TASK);
+    }
+
+    /**
+     * @return FlagBag<EntityPermission>|null
+     */
+    public function getUserPermission(): ?FlagBag
+    {
+        return $this->getEntityRights(EntityName::USER);
+    }
+
+    /**
      * Gets a value indicating if this rights overwrite the default rights.
      *
      * @return bool true if overwritten, false to use the default rights
@@ -100,6 +139,62 @@ trait RightsTrait
     }
 
     /**
+     * @param FlagBag<EntityPermission>|null $rights
+     */
+    public function setCalculationPermission(?FlagBag $rights): static
+    {
+        return $this->setEntityRights(EntityName::CALCULATION, $rights);
+    }
+
+    /**
+     * @param FlagBag<EntityPermission>|null $rights
+     */
+    public function setCalculationStatePermission(?FlagBag $rights): static
+    {
+        return $this->setEntityRights(EntityName::CALCULATION_STATE, $rights);
+    }
+
+    /**
+     * @param FlagBag<EntityPermission>|null $rights
+     */
+    public function setCategoryPermission(?FlagBag $rights): static
+    {
+        return $this->setEntityRights(EntityName::CATEGORY, $rights);
+    }
+
+    /**
+     * @param FlagBag<EntityPermission>|null $rights
+     */
+    public function setCustomerPermission(?FlagBag $rights): static
+    {
+        return $this->setEntityRights(EntityName::CUSTOMER, $rights);
+    }
+
+    /**
+     * @param FlagBag<EntityPermission>|null $rights
+     */
+    public function setGlobalMarginPermission(?FlagBag $rights): static
+    {
+        return $this->setEntityRights(EntityName::GLOBAL_MARGIN, $rights);
+    }
+
+    /**
+     * @param FlagBag<EntityPermission>|null $rights
+     */
+    public function setGroupPermission(?FlagBag $rights): static
+    {
+        return $this->setEntityRights(EntityName::GROUP, $rights);
+    }
+
+    /**
+     * @param FlagBag<EntityPermission>|null $rights
+     */
+    public function setLogPermission(?FlagBag $rights): static
+    {
+        return $this->setEntityRights(EntityName::LOG, $rights);
+    }
+
+    /**
      * Sets a value indicating if this rights overwrite the default rights.
      */
     public function setOverwrite(bool $overwrite): static
@@ -107,6 +202,14 @@ trait RightsTrait
         $this->overwrite = $overwrite;
 
         return $this;
+    }
+
+    /**
+     * @param FlagBag<EntityPermission>|null $rights
+     */
+    public function setProductPermission(?FlagBag $rights): static
+    {
+        return $this->setEntityRights(EntityName::PRODUCT, $rights);
     }
 
     /**
@@ -122,11 +225,19 @@ trait RightsTrait
     }
 
     /**
-     * Returns if the given entity name exists.
+     * @param FlagBag<EntityPermission>|null $rights
      */
-    private function entityExists(string $name): bool
+    public function setTaskPermission(?FlagBag $rights): static
     {
-        return EntityName::tryFromMixed($name) instanceof EntityName;
+        return $this->setEntityRights(EntityName::TASK, $rights);
+    }
+
+    /**
+     * @param FlagBag<EntityPermission>|null $rights
+     */
+    public function setUserPermission(?FlagBag $rights): static
+    {
+        return $this->setEntityRights(EntityName::USER, $rights);
     }
 
     /**
@@ -144,12 +255,12 @@ trait RightsTrait
     /**
      * Gets the rights for the given entity name.
      *
-     * @psalm-return ?FlagBag<EntityPermission>
+     * @return FlagBag<EntityPermission>|null
      */
-    private function getEntityRights(string $entity): ?FlagBag
+    private function getEntityRights(EntityName $entity): ?FlagBag
     {
         $offset = EntityName::tryFindOffset($entity);
-        if (RoleInterface::INVALID_VALUE === $offset) {
+        if (EntityName::INVALID_VALUE === $offset) {
             return null;
         }
         $rights = $this->getRights();
@@ -161,14 +272,14 @@ trait RightsTrait
     /**
      * Sets the rights for the given entity.
      *
-     * @psalm-param FlagBag<EntityPermission> $rights
+     * @param FlagBag<EntityPermission>|null $rights
      */
-    private function setEntityRights(string $entity, FlagBag $rights): static
+    private function setEntityRights(EntityName $entity, ?FlagBag $rights): static
     {
         $offset = EntityName::tryFindOffset($entity);
-        if (RoleInterface::INVALID_VALUE !== $offset) {
+        if (EntityName::INVALID_VALUE !== $offset) {
             $newRights = $this->getRights();
-            $newRights[$offset] = $rights->getValue();
+            $newRights[$offset] = $rights?->getValue() ?? 0;
 
             return $this->setRights($newRights);
         }

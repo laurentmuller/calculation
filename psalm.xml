@@ -104,19 +104,19 @@
 
         <InvalidReturnType>
             <errorLevel type="suppress">
-                <file name="src/Service/RoleBuilderService.php" />
+                <file name="src/Enums/EntityPermission.php" />
             </errorLevel>
         </InvalidReturnType>
 
         <InvalidReturnStatement>
             <errorLevel type="suppress">
-                <file name="src/Service/RoleBuilderService.php" />
+                <file name="src/Enums/EntityPermission.php" />
             </errorLevel>
         </InvalidReturnStatement>
 
         <InvalidArgument>
             <errorLevel type="suppress">
-                <file name="src/Service/RoleBuilderService.php" />
+                <file name="src/Enums/EntityPermission.php" />
                 <referencedFunction name="getAllPermissions" />
             </errorLevel>
         </InvalidArgument>

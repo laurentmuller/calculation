@@ -18,11 +18,6 @@ namespace App\Interfaces;
 interface RoleInterface
 {
     /**
-     * The value returned when attribute or entity offset is not found.
-     */
-    final public const INVALID_VALUE = -1;
-
-    /**
      * The administrator role name.
      */
     final public const ROLE_ADMIN = 'ROLE_ADMIN';

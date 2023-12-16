@@ -130,9 +130,9 @@ class UserRightsDocument extends AbstractArrayDocument
             if (EntityName::LOG === $name || (!$isAdmin && EntityName::USER === $name)) {
                 continue;
             }
-            $value = $name->value;
+            $field = $name->getPropertyName();
             /** @psalm-var ?FlagBag<\BackedEnum> $rights $rights */
-            $rights = $entity->{$value};
+            $rights = $entity->{$field}();
             $this->outputRights($sheet, $name, $rights, $row++);
         }
     }

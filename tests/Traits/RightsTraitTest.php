@@ -14,11 +14,11 @@ namespace App\Tests\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
-use App\Interfaces\RoleInterface;
 use App\Traits\RightsTrait;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\TestCase;
 
+#[\AllowDynamicProperties]
 #[\PHPUnit\Framework\Attributes\CoversClass(RightsTrait::class)]
 class RightsTraitTest extends TestCase
 {
@@ -45,6 +45,14 @@ class RightsTraitTest extends TestCase
         }
     }
 
+    public static function getFieldNames(): \Generator
+    {
+        $values = EntityName::cases();
+        foreach ($values as $value) {
+            yield [$value->getPropertyName()];
+        }
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getEntities')]
     public function testGetAdd(string $entity): void
     {
@@ -63,36 +71,18 @@ class RightsTraitTest extends TestCase
         $this->checkAttribute($entity, 'EDIT');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getEntities')]
-    public function testGetEmpty(string $entity): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getFieldNames')]
+    public function testGetEmpty(string $field): void
     {
-        /** @psalm-var FlagBag<EntityPermission> $entity */
-        $entity = $this->$entity;
-        self::assertSame(0, $entity->getValue());
+        /** @psalm-var FlagBag<EntityPermission> $permission */
+        $permission = $this->$field();
+        self::assertSame(0, $permission->getValue());
     }
 
     public function testInvalidAttribute(): void
     {
         $attribute = $this->getAttribute('UnknownAttribute');
-        self::assertSame(RoleInterface::INVALID_VALUE, $attribute);
-    }
-
-    public function testIsNotSet(): void
-    {
-        $className = 'UnknownClass';
-        self::assertFalse($this->__isset($className));
-        $value = $this->__get($className);
-        self::assertNull($value);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('getEntities')]
-    public function testIsSet(string $entity): void
-    {
-        self::assertTrue($this->__isset($entity));
-        /** @psalm-var FlagBag<EntityPermission> $entity */
-        $entity = $this->$entity;
-        self::assertInstanceOf(FlagBag::class, $entity);
-        self::assertSame(0, $entity->getValue());
+        self::assertSame(EntityPermission::INVALID_VALUE, $attribute);
     }
 
     private function checkAttribute(string $entity, string $key): void
@@ -109,6 +99,6 @@ class RightsTraitTest extends TestCase
     {
         $permission = EntityPermission::tryFromName($key);
 
-        return $permission instanceof EntityPermission ? $permission->value : RoleInterface::INVALID_VALUE;
+        return $permission instanceof EntityPermission ? $permission->value : EntityPermission::INVALID_VALUE;
     }
 }

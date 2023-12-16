@@ -39,67 +39,67 @@ trait RightsTrait
     private ?array $rights = null;
 
     /**
-     * @return FlagBag<EntityPermission>|null
+     * @return FlagBag<EntityPermission>
      */
-    public function getCalculationPermission(): ?FlagBag
+    public function getCalculationPermission(): FlagBag
     {
-        return $this->getEntityRights(EntityName::CALCULATION);
+        return $this->getPermission(EntityName::CALCULATION);
     }
 
     /**
-     * @return FlagBag<EntityPermission>|null
+     * @return FlagBag<EntityPermission>
      */
-    public function getCalculationStatePermission(): ?FlagBag
+    public function getCalculationStatePermission(): FlagBag
     {
-        return $this->getEntityRights(EntityName::CALCULATION_STATE);
+        return $this->getPermission(EntityName::CALCULATION_STATE);
     }
 
     /**
-     * @return FlagBag<EntityPermission>|null
+     * @return FlagBag<EntityPermission>
      */
-    public function getCategoryPermission(): ?FlagBag
+    public function getCategoryPermission(): FlagBag
     {
-        return $this->getEntityRights(EntityName::CATEGORY);
+        return $this->getPermission(EntityName::CATEGORY);
     }
 
     /**
-     * @return FlagBag<EntityPermission>|null
+     * @return FlagBag<EntityPermission>
      */
-    public function getCustomerPermission(): ?FlagBag
+    public function getCustomerPermission(): FlagBag
     {
-        return $this->getEntityRights(EntityName::CUSTOMER);
+        return $this->getPermission(EntityName::CUSTOMER);
     }
 
     /**
-     * @return FlagBag<EntityPermission>|null
+     * @return FlagBag<EntityPermission>
      */
-    public function getGlobalMarginPermission(): ?FlagBag
+    public function getGlobalMarginPermission(): FlagBag
     {
-        return $this->getEntityRights(EntityName::GLOBAL_MARGIN);
+        return $this->getPermission(EntityName::GLOBAL_MARGIN);
     }
 
     /**
-     * @return FlagBag<EntityPermission>|null
+     * @return FlagBag<EntityPermission>
      */
-    public function getGroupPermission(): ?FlagBag
+    public function getGroupPermission(): FlagBag
     {
-        return $this->getEntityRights(EntityName::GROUP);
+        return $this->getPermission(EntityName::GROUP);
     }
 
     /**
-     * @return FlagBag<EntityPermission>|null
+     * @return FlagBag<EntityPermission>
      */
-    public function getLogPermission(): ?FlagBag
+    public function getLogPermission(): FlagBag
     {
-        return $this->getEntityRights(EntityName::LOG);
+        return $this->getPermission(EntityName::LOG);
     }
 
     /**
-     * @return FlagBag<EntityPermission>|null
+     * @return FlagBag<EntityPermission>
      */
-    public function getProductPermission(): ?FlagBag
+    public function getProductPermission(): FlagBag
     {
-        return $this->getEntityRights(EntityName::PRODUCT);
+        return $this->getPermission(EntityName::PRODUCT);
     }
 
     /**
@@ -113,19 +113,19 @@ trait RightsTrait
     }
 
     /**
-     * @return FlagBag<EntityPermission>|null
+     * @return FlagBag<EntityPermission>
      */
-    public function getTaskPermission(): ?FlagBag
+    public function getTaskPermission(): FlagBag
     {
-        return $this->getEntityRights(EntityName::TASK);
+        return $this->getPermission(EntityName::TASK);
     }
 
     /**
-     * @return FlagBag<EntityPermission>|null
+     * @return FlagBag<EntityPermission>
      */
-    public function getUserPermission(): ?FlagBag
+    public function getUserPermission(): FlagBag
     {
-        return $this->getEntityRights(EntityName::USER);
+        return $this->getPermission(EntityName::USER);
     }
 
     /**
@@ -139,59 +139,59 @@ trait RightsTrait
     }
 
     /**
-     * @param FlagBag<EntityPermission>|null $rights
+     * @param FlagBag<EntityPermission> $permission
      */
-    public function setCalculationPermission(?FlagBag $rights): static
+    public function setCalculationPermission(FlagBag $permission): static
     {
-        return $this->setEntityRights(EntityName::CALCULATION, $rights);
+        return $this->setPermission(EntityName::CALCULATION, $permission);
     }
 
     /**
-     * @param FlagBag<EntityPermission>|null $rights
+     * @param FlagBag<EntityPermission> $permission
      */
-    public function setCalculationStatePermission(?FlagBag $rights): static
+    public function setCalculationStatePermission(FlagBag $permission): static
     {
-        return $this->setEntityRights(EntityName::CALCULATION_STATE, $rights);
+        return $this->setPermission(EntityName::CALCULATION_STATE, $permission);
     }
 
     /**
-     * @param FlagBag<EntityPermission>|null $rights
+     * @param FlagBag<EntityPermission> $permission
      */
-    public function setCategoryPermission(?FlagBag $rights): static
+    public function setCategoryPermission(FlagBag $permission): static
     {
-        return $this->setEntityRights(EntityName::CATEGORY, $rights);
+        return $this->setPermission(EntityName::CATEGORY, $permission);
     }
 
     /**
-     * @param FlagBag<EntityPermission>|null $rights
+     * @param FlagBag<EntityPermission> $permission
      */
-    public function setCustomerPermission(?FlagBag $rights): static
+    public function setCustomerPermission(FlagBag $permission): static
     {
-        return $this->setEntityRights(EntityName::CUSTOMER, $rights);
+        return $this->setPermission(EntityName::CUSTOMER, $permission);
     }
 
     /**
-     * @param FlagBag<EntityPermission>|null $rights
+     * @param FlagBag<EntityPermission> $permission
      */
-    public function setGlobalMarginPermission(?FlagBag $rights): static
+    public function setGlobalMarginPermission(FlagBag $permission): static
     {
-        return $this->setEntityRights(EntityName::GLOBAL_MARGIN, $rights);
+        return $this->setPermission(EntityName::GLOBAL_MARGIN, $permission);
     }
 
     /**
-     * @param FlagBag<EntityPermission>|null $rights
+     * @param FlagBag<EntityPermission> $permission
      */
-    public function setGroupPermission(?FlagBag $rights): static
+    public function setGroupPermission(FlagBag $permission): static
     {
-        return $this->setEntityRights(EntityName::GROUP, $rights);
+        return $this->setPermission(EntityName::GROUP, $permission);
     }
 
     /**
-     * @param FlagBag<EntityPermission>|null $rights
+     * @param FlagBag<EntityPermission> $permission
      */
-    public function setLogPermission(?FlagBag $rights): static
+    public function setLogPermission(FlagBag $permission): static
     {
-        return $this->setEntityRights(EntityName::LOG, $rights);
+        return $this->setPermission(EntityName::LOG, $permission);
     }
 
     /**
@@ -205,11 +205,11 @@ trait RightsTrait
     }
 
     /**
-     * @param FlagBag<EntityPermission>|null $rights
+     * @param FlagBag<EntityPermission> $permission
      */
-    public function setProductPermission(?FlagBag $rights): static
+    public function setProductPermission(FlagBag $permission): static
     {
-        return $this->setEntityRights(EntityName::PRODUCT, $rights);
+        return $this->setPermission(EntityName::PRODUCT, $permission);
     }
 
     /**
@@ -225,19 +225,19 @@ trait RightsTrait
     }
 
     /**
-     * @param FlagBag<EntityPermission>|null $rights
+     * @param FlagBag<EntityPermission> $permission
      */
-    public function setTaskPermission(?FlagBag $rights): static
+    public function setTaskPermission(FlagBag $permission): static
     {
-        return $this->setEntityRights(EntityName::TASK, $rights);
+        return $this->setPermission(EntityName::TASK, $permission);
     }
 
     /**
-     * @param FlagBag<EntityPermission>|null $rights
+     * @param FlagBag<EntityPermission> $permission
      */
-    public function setUserPermission(?FlagBag $rights): static
+    public function setUserPermission(FlagBag $permission): static
     {
-        return $this->setEntityRights(EntityName::USER, $rights);
+        return $this->setPermission(EntityName::USER, $permission);
     }
 
     /**
@@ -253,37 +253,30 @@ trait RightsTrait
     }
 
     /**
-     * Gets the rights for the given entity name.
+     * Gets the permission for the given entity name.
      *
-     * @return FlagBag<EntityPermission>|null
+     * @return FlagBag<EntityPermission>
      */
-    private function getEntityRights(EntityName $entity): ?FlagBag
+    private function getPermission(EntityName $entity): FlagBag
     {
-        $offset = EntityName::tryFindOffset($entity);
-        if (EntityName::INVALID_VALUE === $offset) {
-            return null;
-        }
+        $offset = $entity->offset();
         $rights = $this->getRights();
-        $value = $rights[$offset] ?? 0;
+        $value = $rights[$offset];
 
         return new FlagBag(EntityPermission::class, $value);
     }
 
     /**
-     * Sets the rights for the given entity.
+     * Sets the permission for the given entity name.
      *
-     * @param FlagBag<EntityPermission>|null $rights
+     * @param FlagBag<EntityPermission> $permission
      */
-    private function setEntityRights(EntityName $entity, ?FlagBag $rights): static
+    private function setPermission(EntityName $entity, FlagBag $permission): static
     {
-        $offset = EntityName::tryFindOffset($entity);
-        if (EntityName::INVALID_VALUE !== $offset) {
-            $newRights = $this->getRights();
-            $newRights[$offset] = $rights?->getValue() ?? 0;
+        $offset = $entity->offset();
+        $rights = $this->getRights();
+        $rights[$offset] = $permission->getValue();
 
-            return $this->setRights($newRights);
-        }
-
-        return $this;
+        return $this->setRights($rights);
     }
 }

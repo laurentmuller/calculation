@@ -87,17 +87,21 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
     }
 
     /**
+     * Gets a flag bag with all permission.
+     *
      * @return FlagBag<EntityPermission>
      */
-    public static function getAllPermissions(): FlagBag
+    public static function getAllPermission(): FlagBag
     {
         return FlagBag::from(...EntityPermission::sorted());
     }
 
     /**
+     * Gets a flag bag with default permission.
+     *
      * @return FlagBag<EntityPermission>
      */
-    public static function getDefaultPermissions(): FlagBag
+    public static function getDefaultPermission(): FlagBag
     {
         return FlagBag::from(
             EntityPermission::LIST,
@@ -107,9 +111,11 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
     }
 
     /**
+     * Gets a flag bag with no permission.
+     *
      * @psalm-return FlagBag<EntityPermission>
      */
-    public static function getNonePermissions(): FlagBag
+    public static function getNonePermission(): FlagBag
     {
         return new FlagBag(EntityPermission::class);
     }

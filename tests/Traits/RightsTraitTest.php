@@ -85,6 +85,23 @@ class RightsTraitTest extends TestCase
         self::assertSame(EntityPermission::INVALID_VALUE, $attribute);
     }
 
+    public function testPermissionEmpty(): void
+    {
+        $permission = new FlagBag(EntityPermission::class);
+        $this->setCalculationPermission($permission);
+        $actual = $this->getCalculationPermission();
+        self::assertEqualsCanonicalizing($permission, $actual);
+    }
+
+    public function testPermissionShow(): void
+    {
+        $value = EntityPermission::SHOW->value;
+        $permission = new FlagBag(EntityPermission::class, $value);
+        $this->setCalculationPermission($permission);
+        $actual = $this->getCalculationPermission()->getValue();
+        self::assertSame($value, $actual);
+    }
+
     private function checkAttribute(string $entity, string $key): void
     {
         $attribute = $this->getAttribute($key);

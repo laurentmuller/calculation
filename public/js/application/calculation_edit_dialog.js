@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* exported EditDialog */
+
 /**
  * Abstract edit dialog class.
  * @property {jQuery} $form

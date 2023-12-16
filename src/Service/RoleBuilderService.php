@@ -72,9 +72,9 @@ class RoleBuilderService
      */
     public function getRoleUser(): Role
     {
-        $all = EntityPermission::getAllPermissions();
-        $none = EntityPermission::getNonePermissions();
-        $default = EntityPermission::getDefaultPermissions();
+        $all = EntityPermission::getAllPermission();
+        $none = EntityPermission::getNonePermission();
+        $default = EntityPermission::getDefaultPermission();
         $role = new Role(RoleInterface::ROLE_USER);
 
         return $role->setCalculationPermission($all)
@@ -91,7 +91,7 @@ class RoleBuilderService
 
     private function getRoleWithAll(string $roleName): Role
     {
-        $all = EntityPermission::getAllPermissions();
+        $all = EntityPermission::getAllPermission();
         $role = new Role($roleName);
 
         return $role->setCalculationPermission($all)

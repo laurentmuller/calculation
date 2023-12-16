@@ -99,6 +99,15 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
+    public function testAllPermission(): void
+    {
+        $permission = EntityPermission::getAllPermission();
+        $values = EntityPermission::cases();
+        foreach ($values as $value) {
+            self::assertTrue($permission->hasBits($value->value));
+        }
+    }
+
     public function testBits(): void
     {
         $expected = [1, 2, 4, 8, 16, 32];
@@ -129,6 +138,28 @@ class EntityPermissionTest extends TestCase
         self::assertCount(6, $flags);
     }
 
+    public function testDefaultPermission(): void
+    {
+        $permission = EntityPermission::getDefaultPermission();
+        $trueValues = [
+            EntityPermission::LIST,
+            EntityPermission::EXPORT,
+            EntityPermission::SHOW,
+        ];
+        foreach ($trueValues as $value) {
+            self::assertTrue($permission->hasBits($value->value));
+        }
+
+        $falseValues = [
+            EntityPermission::ADD,
+            EntityPermission::DELETE,
+            EntityPermission::EDIT,
+        ];
+        foreach ($falseValues as $value) {
+            self::assertFalse($permission->hasBits($value->value));
+        }
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
     public function testLabel(EntityPermission $permission, string $expected): void
     {
@@ -141,6 +172,15 @@ class EntityPermissionTest extends TestCase
     {
         $result = $permission->matchName($name);
         self::assertSame($expected, $result);
+    }
+
+    public function testNonePermission(): void
+    {
+        $permission = EntityPermission::getNonePermission();
+        $values = EntityPermission::cases();
+        foreach ($values as $value) {
+            self::assertFalse($permission->hasBits($value->value));
+        }
     }
 
     public function testSorted(): void

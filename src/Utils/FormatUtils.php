@@ -20,7 +20,7 @@ final class FormatUtils
     /**
      * The Swiss French locale.
      */
-    final public const LOCALE_FR_CH = 'fr_CH';
+    public const LOCALE_FR_CH = 'fr_CH';
 
     /**
      * The date formatters cache.

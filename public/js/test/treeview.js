@@ -307,8 +307,8 @@ function updatePosition($radio) {
 
     let focused = false;
     const dropdown = new bootstrap.Dropdown(input);
-    input.addEventListener('focus', (e) => focused = true);
-    input.addEventListener('blur', (e) => focused = false);
+    input.addEventListener('focus', () => focused = true);
+    input.addEventListener('blur', () => focused = false);
     input.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowDown') {
             focused = false;

@@ -18,7 +18,6 @@ use App\Traits\RightsTrait;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\TestCase;
 
-#[\AllowDynamicProperties]
 #[\PHPUnit\Framework\Attributes\CoversClass(RightsTrait::class)]
 class RightsTraitTest extends TestCase
 {
@@ -29,53 +28,37 @@ class RightsTraitTest extends TestCase
         $this->rights = null;
     }
 
-    public static function getAttributes(): \Generator
-    {
-        $values = \array_values(EntityPermission::constants());
-        foreach ($values as $value) {
-            yield [$value];
-        }
-    }
-
-    public static function getEntities(): \Generator
-    {
-        $values = \array_values(EntityName::constants());
-        foreach ($values as $value) {
-            yield [$value];
-        }
-    }
-
-    public static function getFieldNames(): \Generator
+    public static function getRightsFields(): \Generator
     {
         $values = EntityName::cases();
         foreach ($values as $value) {
-            yield [$value->getPropertyName()];
+            yield [$value->getRightsField()];
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getEntities')]
-    public function testGetAdd(string $entity): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRightsFields')]
+    public function testGetAdd(string $field): void
     {
-        $this->checkAttribute($entity, 'ADD');
+        $this->checkAttribute($field, 'ADD');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getEntities')]
-    public function testGetDelete(string $entity): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRightsFields')]
+    public function testGetDelete(string $field): void
     {
-        $this->checkAttribute($entity, 'DELETE');
+        $this->checkAttribute($field, 'DELETE');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getEntities')]
-    public function testGetEdit(string $entity): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRightsFields')]
+    public function testGetEdit(string $field): void
     {
-        $this->checkAttribute($entity, 'EDIT');
+        $this->checkAttribute($field, 'EDIT');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getFieldNames')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRightsFields')]
     public function testGetEmpty(string $field): void
     {
-        /** @psalm-var FlagBag<EntityPermission> $permission */
-        $permission = $this->$field();
+        $permission = $this->__get($field);
+        self::assertNotNull($permission);
         self::assertSame(0, $permission->getValue());
     }
 
@@ -88,27 +71,27 @@ class RightsTraitTest extends TestCase
     public function testPermissionEmpty(): void
     {
         $permission = new FlagBag(EntityPermission::class);
-        $this->setCalculationPermission($permission);
-        $actual = $this->getCalculationPermission();
-        self::assertEqualsCanonicalizing($permission, $actual);
+        $this->CalculationRights = $permission;
+        $actual = $this->CalculationRights;
+        self::assertSame($permission->getValue(), $actual->getValue());
     }
 
     public function testPermissionShow(): void
     {
-        $value = EntityPermission::SHOW->value;
-        $permission = new FlagBag(EntityPermission::class, $value);
-        $this->setCalculationPermission($permission);
-        $actual = $this->getCalculationPermission()->getValue();
-        self::assertSame($value, $actual);
+        $expected = EntityPermission::SHOW->value;
+        $permission = new FlagBag(EntityPermission::class, $expected);
+        $this->CalculationRights = $permission;
+        $actual = $this->CalculationRights;
+        self::assertSame($expected, $actual->getValue());
     }
 
-    private function checkAttribute(string $entity, string $key): void
+    private function checkAttribute(string $field, string $key): void
     {
         $attribute = $this->getAttribute($key);
         $rights = new FlagBag(EntityPermission::class, $attribute);
-        $this->$entity = $rights;
+        $this->$field = $rights;
         /** @psalm-var FlagBag<EntityPermission> $value */
-        $value = $this->$entity;
+        $value = $this->$field;
         self::assertSame($rights->getValue(), $value->getValue());
     }
 

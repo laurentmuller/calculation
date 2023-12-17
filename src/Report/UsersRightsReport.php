@@ -140,19 +140,19 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
     /**
      * Gets the cell text for the given rights and attribute.
      *
-     * @psalm-param FlagBag<EntityPermission>|null $rights
+     * @psalm-param FlagBag<EntityPermission> $rights
      */
-    private function getRightText(?FlagBag $rights, EntityPermission $permission): ?string
+    private function getRightText(FlagBag $rights, EntityPermission $permission): ?string
     {
-        return $rights instanceof FlagBag && $rights->hasFlags($permission) ? PdfStyle::BULLET : null;
+        return $rights->hasFlags($permission) ? PdfStyle::BULLET : null;
     }
 
     /**
      * Output rights.
      *
-     * @psalm-param FlagBag<EntityPermission>|null $rights
+     * @psalm-param FlagBag<EntityPermission> $rights
      */
-    private function outputRights(PdfGroupTable $table, EntityName $entity, ?FlagBag $rights): self
+    private function outputRights(PdfGroupTable $table, EntityName $entity, FlagBag $rights): self
     {
         $table->startRow()
             ->add(text: $this->trans($entity), style: $this->titleStyle);
@@ -169,32 +169,30 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      *
      * @throws PdfException
      */
-    private function outputRole(PdfGroupTable $table, Role|User $role): void
+    private function outputRole(PdfGroupTable $table, Role|User $entity): void
     {
-        $outputUsers = $role->isAdmin();
-        $entities = EntityName::sorted();
-        $lines = \count($entities) - 1;
+        $outputUsers = $entity->isAdmin();
+        $names = EntityName::sorted();
+        $lines = \count($names) - 1;
         if (!$outputUsers) {
             --$lines;
         }
         if (!$this->isPrintable((float) $lines * self::LINE_HEIGHT)) {
             $this->AddPage();
         }
-        if ($role instanceof User) {
-            $this->addBookmark($role->getUserIdentifier(), true, 1);
+        if ($entity instanceof User) {
+            $this->addBookmark($entity->getUserIdentifier(), true, 1);
         } else {
-            $this->addBookmark($this->translateRole($role), level: 1);
+            $this->addBookmark($this->translateRole($entity), level: 1);
         }
-        $table->setGroupKey($role);
-        foreach ($entities as $entity) {
-            if (EntityName::LOG === $entity) {
+        $table->setGroupKey($entity);
+        foreach ($names as $name) {
+            if (EntityName::LOG === $name) {
                 continue;
             }
-            if ($outputUsers || EntityName::USER !== $entity) {
-                $field = $entity->getPropertyName();
-                /** @psalm-var FlagBag<EntityPermission>|null $rights */
-                $rights = $role->{$field}();
-                $this->outputRights($table, $entity, $rights);
+            if ($outputUsers || EntityName::USER !== $name) {
+                $rights = $entity->getPermission($name);
+                $this->outputRights($table, $name, $rights);
             }
         }
     }

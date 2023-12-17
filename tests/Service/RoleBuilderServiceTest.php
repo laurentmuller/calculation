@@ -33,16 +33,16 @@ class RoleBuilderServiceTest extends TestCase
 
         $role = $this->service->getRoleAdmin();
         self::assertSame(RoleInterface::ROLE_ADMIN, $role->getName());
-        self::assertEqualsCanonicalizing($permission, $role->getCalculationPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getCalculationStatePermission());
-        self::assertEqualsCanonicalizing($permission, $role->getCategoryPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getCustomerPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getGlobalMarginPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getGroupPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getLogPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getProductPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getTaskPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getUserPermission());
+        self::assertEqualsCanonicalizing($permission, $role->CalculationRights);
+        self::assertEqualsCanonicalizing($permission, $role->CalculationStateRights);
+        self::assertEqualsCanonicalizing($permission, $role->CategoryRights);
+        self::assertEqualsCanonicalizing($permission, $role->CustomerRights);
+        self::assertEqualsCanonicalizing($permission, $role->GlobalMarginRights);
+        self::assertEqualsCanonicalizing($permission, $role->GroupRights);
+        self::assertEqualsCanonicalizing($permission, $role->LogRights);
+        self::assertEqualsCanonicalizing($permission, $role->ProductRights);
+        self::assertEqualsCanonicalizing($permission, $role->TaskRights);
+        self::assertEqualsCanonicalizing($permission, $role->UserRights);
     }
 
     public function testRoleDisabled(): void
@@ -52,16 +52,16 @@ class RoleBuilderServiceTest extends TestCase
         $role = $this->service->getRoleDisabled();
         self::assertTrue($role->isOverwrite());
         self::assertSame(RoleInterface::ROLE_USER, $role->getName());
-        self::assertEqualsCanonicalizing($permission, $role->getCalculationPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getCalculationStatePermission());
-        self::assertEqualsCanonicalizing($permission, $role->getCategoryPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getCustomerPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getGlobalMarginPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getGroupPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getLogPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getProductPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getTaskPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getUserPermission());
+        self::assertEqualsCanonicalizing($permission, $role->CalculationRights);
+        self::assertEqualsCanonicalizing($permission, $role->CalculationStateRights);
+        self::assertEqualsCanonicalizing($permission, $role->GroupRights);
+        self::assertEqualsCanonicalizing($permission, $role->CategoryRights);
+        self::assertEqualsCanonicalizing($permission, $role->ProductRights);
+        self::assertEqualsCanonicalizing($permission, $role->TaskRights);
+        self::assertEqualsCanonicalizing($permission, $role->GlobalMarginRights);
+        self::assertEqualsCanonicalizing($permission, $role->UserRights);
+        self::assertEqualsCanonicalizing($permission, $role->LogRights);
+        self::assertEqualsCanonicalizing($permission, $role->CustomerRights);
     }
 
     public function testRoleSuperAdmin(): void
@@ -71,16 +71,16 @@ class RoleBuilderServiceTest extends TestCase
         $role = $this->service->getRoleSuperAdmin();
         self::assertFalse($role->isOverwrite());
         self::assertSame(RoleInterface::ROLE_SUPER_ADMIN, $role->getName());
-        self::assertEqualsCanonicalizing($permission, $role->getCalculationPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getCalculationStatePermission());
-        self::assertEqualsCanonicalizing($permission, $role->getCategoryPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getCustomerPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getGlobalMarginPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getGroupPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getLogPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getProductPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getTaskPermission());
-        self::assertEqualsCanonicalizing($permission, $role->getUserPermission());
+        self::assertEqualsCanonicalizing($permission, $role->CalculationRights);
+        self::assertEqualsCanonicalizing($permission, $role->CalculationStateRights);
+        self::assertEqualsCanonicalizing($permission, $role->GroupRights);
+        self::assertEqualsCanonicalizing($permission, $role->CategoryRights);
+        self::assertEqualsCanonicalizing($permission, $role->ProductRights);
+        self::assertEqualsCanonicalizing($permission, $role->TaskRights);
+        self::assertEqualsCanonicalizing($permission, $role->GlobalMarginRights);
+        self::assertEqualsCanonicalizing($permission, $role->UserRights);
+        self::assertEqualsCanonicalizing($permission, $role->LogRights);
+        self::assertEqualsCanonicalizing($permission, $role->CustomerRights);
     }
 
     public function testRoleUser(): void
@@ -92,15 +92,15 @@ class RoleBuilderServiceTest extends TestCase
         $role = $this->service->getRoleUser();
         self::assertFalse($role->isOverwrite());
         self::assertSame(RoleInterface::ROLE_USER, $role->getName());
-        self::assertEqualsCanonicalizing($all, $role->getCalculationPermission());
-        self::assertEqualsCanonicalizing($default, $role->getCalculationStatePermission());
-        self::assertEqualsCanonicalizing($default, $role->getCategoryPermission());
-        self::assertEqualsCanonicalizing($default, $role->getCustomerPermission());
-        self::assertEqualsCanonicalizing($default, $role->getGlobalMarginPermission());
-        self::assertEqualsCanonicalizing($default, $role->getGroupPermission());
-        self::assertEqualsCanonicalizing($none, $role->getLogPermission());
-        self::assertEqualsCanonicalizing($default, $role->getProductPermission());
-        self::assertEqualsCanonicalizing($default, $role->getTaskPermission());
-        self::assertEqualsCanonicalizing($none, $role->getUserPermission());
+        self::assertEqualsCanonicalizing($all, $role->CalculationRights);
+        self::assertEqualsCanonicalizing($default, $role->CalculationStateRights);
+        self::assertEqualsCanonicalizing($default, $role->GroupRights);
+        self::assertEqualsCanonicalizing($default, $role->CategoryRights);
+        self::assertEqualsCanonicalizing($default, $role->ProductRights);
+        self::assertEqualsCanonicalizing($default, $role->TaskRights);
+        self::assertEqualsCanonicalizing($default, $role->GlobalMarginRights);
+        self::assertEqualsCanonicalizing($none, $role->UserRights);
+        self::assertEqualsCanonicalizing($none, $role->LogRights);
+        self::assertEqualsCanonicalizing($default, $role->CustomerRights);
     }
 }

@@ -34,21 +34,21 @@
            </tr>
         </thead>
         <tbody>
-            {{ _self.row(form.CalculationPermission, default.CalculationPermission, overwrite) }}
-            {{ _self.row(form.ProductPermission, default.ProductPermission, overwrite) }}
-            {{ _self.row(form.TaskPermission, default.TaskPermission, overwrite) }}
-            {{ _self.row(form.CategoryPermission, default.CategoryPermission, overwrite) }}
-            {{ _self.row(form.GroupPermission, default.GroupPermission, overwrite) }}
-            {{ _self.row(form.CalculationStatePermission, default.CalculationStatePermission, overwrite) }}
-            {{ _self.row(form.GlobalMarginPermission, default.GlobalMarginPermission, overwrite) }}
-            {%- if form.CustomerPermission is defined -%}
-                {{ _self.row(form.CustomerPermission, default.CustomerPermission, overwrite) }}
+            {{ _self.row(form.CalculationRights, default.CalculationRights, overwrite) }}
+            {{ _self.row(form.ProductRights, default.ProductRights, overwrite) }}
+            {{ _self.row(form.TaskRights, default.TaskRights, overwrite) }}
+            {{ _self.row(form.CategoryRights, default.CategoryRights, overwrite) }}
+            {{ _self.row(form.GroupRights, default.GroupRights, overwrite) }}
+            {{ _self.row(form.CalculationStateRights, default.CalculationStateRights, overwrite) }}
+            {{ _self.row(form.GlobalMarginRights, default.GlobalMarginRights, overwrite) }}
+            {%- if form.CustomerRights is defined -%}
+                {{ _self.row(form.CustomerRights, default.CustomerRights, overwrite) }}
             {%- endif -%}
-            {%- if form.UserPermission is defined -%}
-                {{ _self.row(form.UserPermission, default.UserPermission, overwrite) }}
+            {%- if form.UserRights is defined -%}
+                {{ _self.row(form.UserRights, default.UserRights, overwrite) }}
             {%- endif -%}
-            {%- if form.LogPermission is defined -%}
-                {{ _self.row(form.LogPermission, default.LogPermission, overwrite) }}
+            {%- if form.LogRights is defined -%}
+                {{ _self.row(form.LogRights, default.LogRights, overwrite) }}
             {%- endif -%}
         </tbody>
     </table>
@@ -57,17 +57,17 @@
 
 {% macro actions(overwrite=true) %}
 <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
-    <button type="button" id="all" class="btn btn-outline-secondary" title="{{ 'user.rights.all_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>
+    <button type="button" id="all" class="btn btn-outline-primary" title="{{ 'user.rights.all_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>
         <i class="fa-fw fa-solid fa-check-circle"></i>
     </button>
-    <button type="button" id="none" class="btn btn-outline-secondary" title="{{ 'user.rights.none_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>
+    <button type="button" id="none" class="btn btn-outline-primary" title="{{ 'user.rights.none_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>
         <i class="fa-fw fa-solid fa-times-circle"></i>
     </button>
-    <button type="button" id="toggle" class="btn btn-outline-secondary" title="{{ 'user.rights.toggle_title'|trans }}" {%- if not overwrite -%} disabled="disabled"{%- endif -%}>
-        <i class="fa-fw fa-solid fa-toggle-on"></i>
+    <button type="button" id="toggle" class="btn btn-outline-primary" title="{{ 'user.rights.toggle_title'|trans }}" {%- if not overwrite -%} disabled="disabled"{%- endif -%}>
+        <i class="fa-fw fa-solid fa-arrows-turn-to-dots"></i>
     </button>
-    <button type="button" id="default" class="btn btn-outline-secondary" title="{{ 'user.rights.default_title'|trans }}">
-        <i class="fa-fw fa-brands fa-rev"></i>
+    <button type="button" id="default" class="btn btn-outline-primary" title="{{ 'user.rights.default_title'|trans }}">
+        <i class="fa-fw fa-solid fa-list-check"></i>
     </button>
 </div>
 {% endmacro %}

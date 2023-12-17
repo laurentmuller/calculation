@@ -41,13 +41,13 @@ class RightsType extends AbstractHelperType
         $data = $event->getData();
         $form = $event->getForm();
         if (!$this->service->hasRole($data, RoleInterface::ROLE_SUPER_ADMIN)) {
-            $form->remove(EntityName::LOG->getFieldName());
+            $form->remove(EntityName::LOG->getRightsField());
         }
         if (!$this->service->hasRole($data, RoleInterface::ROLE_ADMIN)) {
-            $form->remove(EntityName::USER->getFieldName());
+            $form->remove(EntityName::USER->getRightsField());
         }
         if (!$this->debug) {
-            $form->remove(EntityName::CUSTOMER->getFieldName());
+            $form->remove(EntityName::CUSTOMER->getRightsField());
         }
     }
 
@@ -65,7 +65,7 @@ class RightsType extends AbstractHelperType
 
     private function addRightType(FormHelper $helper, EntityName $entity): void
     {
-        $helper->field($entity->getFieldName())
+        $helper->field($entity->getRightsField())
             ->label($entity)
             ->add(AttributeRightType::class);
     }

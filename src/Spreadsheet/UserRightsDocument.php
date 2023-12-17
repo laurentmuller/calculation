@@ -76,11 +76,11 @@ class UserRightsDocument extends AbstractArrayDocument
     /**
      * Gets the cell text for the given rights and attribute.
      *
-     * @psalm-param ?FlagBag<\BackedEnum> $rights
+     * @psalm-param FlagBag<EntityPermission> $rights
      */
-    private function getRightText(?FlagBag $rights, EntityPermission $permission): ?string
+    private function getRightText(FlagBag $rights, EntityPermission $permission): ?string
     {
-        return $rights instanceof FlagBag && $rights->hasFlags($permission) ? 'x' : null;
+        return $rights->hasFlags($permission) ? 'x' : null;
     }
 
     private function outputEntityName(WorksheetDocument $sheet, Role|User $entity, int $row): void
@@ -103,9 +103,9 @@ class UserRightsDocument extends AbstractArrayDocument
     /**
      * Output the rights.
      *
-     * @psalm-param ?FlagBag<\BackedEnum> $rights
+     * @psalm-param FlagBag<EntityPermission> $rights
      */
-    private function outputRights(WorksheetDocument $sheet, EntityName $entity, ?FlagBag $rights, int $row): void
+    private function outputRights(WorksheetDocument $sheet, EntityName $entity, FlagBag $rights, int $row): void
     {
         $columnIndex = 1;
         $sheet->getStyle([$columnIndex, $row])
@@ -130,9 +130,7 @@ class UserRightsDocument extends AbstractArrayDocument
             if (EntityName::LOG === $name || (!$isAdmin && EntityName::USER === $name)) {
                 continue;
             }
-            $field = $name->getPropertyName();
-            /** @psalm-var ?FlagBag<\BackedEnum> $rights $rights */
-            $rights = $entity->{$field}();
+            $rights = $entity->getPermission($name);
             $this->outputRights($sheet, $name, $rights, $row++);
         }
     }

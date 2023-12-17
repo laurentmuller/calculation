@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
+use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
@@ -76,33 +77,30 @@ class RoleBuilderService
         $none = EntityPermission::getNonePermission();
         $default = EntityPermission::getDefaultPermission();
         $role = new Role(RoleInterface::ROLE_USER);
+        $role->CalculationRights = $all;
+        $role->CalculationStateRights = $default;
+        $role->GroupRights = $default;
+        $role->CategoryRights = $default;
+        $role->ProductRights = $default;
+        $role->TaskRights = $default;
+        $role->GlobalMarginRights = $default;
+        $role->UserRights = $none;
+        $role->LogRights = $none;
+        $role->CustomerRights = $default;
 
-        return $role->setCalculationPermission($all)
-            ->setCalculationStatePermission($default)
-            ->setCategoryPermission($default)
-            ->setCustomerPermission($default)
-            ->setGlobalMarginPermission($default)
-            ->setGroupPermission($default)
-            ->setLogPermission($none)
-            ->setProductPermission($default)
-            ->setTaskPermission($default)
-            ->setUserPermission($none);
+        return $role;
     }
 
     private function getRoleWithAll(string $roleName): Role
     {
-        $all = EntityPermission::getAllPermission();
         $role = new Role($roleName);
+        $entities = EntityName::sorted();
+        $all = EntityPermission::getAllPermission();
+        foreach ($entities as $entity) {
+            $field = $entity->getRightsField();
+            $role->$field = $all;
+        }
 
-        return $role->setCalculationPermission($all)
-            ->setCalculationStatePermission($all)
-            ->setCategoryPermission($all)
-            ->setCustomerPermission($all)
-            ->setGlobalMarginPermission($all)
-            ->setGroupPermission($all)
-            ->setLogPermission($all)
-            ->setProductPermission($all)
-            ->setTaskPermission($all)
-            ->setUserPermission($all);
+        return $role;
     }
 }

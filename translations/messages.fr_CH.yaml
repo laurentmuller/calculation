@@ -1366,16 +1366,16 @@ user:
     submit : Renvoyer
   rights:
     title: Droits d'accès
-    all_title: Tous les droits
+    all_title: Accorder tous les droits d'accès
     col_title: Activer ou désactiver tous les droits d'accès pour cette action
     connected: Impossible de modifier les droits d'accès de l'utilisateur actuellement connecté !
-    default_title: Valeurs par défaut
+    default_title: Rétablir les droits d'accès aux valeurs par défaut
     description: Définition des droits d'accès à l'application.
-    none_title: Aucun droit
+    none_title: N'accorder aucun droit d'accès
     row_title: Activer ou désactiver tous les droits d'accès pour cet objet
     success: Les droits d'accès de l'utilisateur <b>%name%</b> ont été mis à jour avec succès.
     table_title: Objet / Action
-    toggle_title: Inverser les droits
+    toggle_title: Inverser les droits d'accès
     action: Modifier les droits d'accès
   roles:
     name: Rôles

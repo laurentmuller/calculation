@@ -104,9 +104,9 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
     private const ENTITY_PREFIX = 'Entity';
 
     /**
-     * The permission field name suffix.
+     * The rights suffix.
      */
-    private const PERMISSION_SUFFIX = 'Permission';
+    private const RIGHTS_SUFFIX = 'Rights';
 
     /**
      * Gets this enumeration as constants.
@@ -121,20 +121,11 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
         );
     }
 
-    /**
-     * Gets the field name.
-     */
-    public function getFieldName(): string
+    public function getRightsField(): string
     {
-        return \substr($this->value, \strlen(self::ENTITY_PREFIX)) . self::PERMISSION_SUFFIX;
-    }
+        $value = \substr($this->value, \strlen(self::ENTITY_PREFIX));
 
-    /**
-     * Get the property name.
-     */
-    public function getPropertyName(): string
-    {
-        return 'get' . $this->getFieldName();
+        return $value . self::RIGHTS_SUFFIX;
     }
 
     /**
@@ -188,6 +179,19 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
     public static function tryFindValue(mixed $subject, string $default = null): ?string
     {
         return self::tryFromMixed($subject)?->value ?? $default;
+    }
+
+    /**
+     * Find an entity name from the given field name.
+     */
+    public static function tryFromField(string $field): ?self
+    {
+        if (!\str_ends_with($field, self::RIGHTS_SUFFIX)) {
+            return null;
+        }
+        $field = self::ENTITY_PREFIX . \substr($field, 0, -\strlen(self::RIGHTS_SUFFIX));
+
+        return self::tryFrom($field);
     }
 
     /**

@@ -65,6 +65,8 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more calculations with random data.
+     *
+     * @psalm-api
      */
     #[Route(path: '/calculation', name: self::ROUTE_CALCULATION, methods: Request::METHOD_GET)]
     public function generateCalculations(Request $request, CalculationGenerator $generator): JsonResponse
@@ -74,6 +76,8 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more customers with random data.
+     *
+     * @psalm-api
      */
     #[Route(path: '/customer', name: self::ROUTE_CUSTOMER, methods: Request::METHOD_GET)]
     public function generateCustomers(Request $request, CustomerGenerator $generator): JsonResponse
@@ -83,6 +87,8 @@ class GeneratorController extends AbstractController
 
     /**
      * Create one or more products with random data.
+     *
+     * @psalm-api
      */
     #[Route(path: '/product', name: self::ROUTE_PRODUCT, methods: Request::METHOD_GET)]
     public function generateProducts(Request $request, ProductGenerator $generator): JsonResponse

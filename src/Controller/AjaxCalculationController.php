@@ -34,6 +34,8 @@ class AjaxCalculationController extends AbstractController
 {
     /**
      * Return the edit item dialog template.
+     *
+     * @psalm-api
      */
     #[Route(path: '/dialog/item', name: 'ajax_dialog_item', methods: Request::METHOD_GET)]
     public function renderItemDialog(): JsonResponse
@@ -47,6 +49,8 @@ class AjaxCalculationController extends AbstractController
 
     /**
      * Return the edit task dialog template.
+     *
+     * @psalm-api
      */
     #[Route(path: '/dialog/task', name: 'ajax_dialog_task', methods: Request::METHOD_GET)]
     public function renderTaskDialog(TaskRepository $repository): JsonResponse

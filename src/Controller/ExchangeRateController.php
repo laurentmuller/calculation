@@ -53,6 +53,8 @@ class ExchangeRateController extends AbstractController
 
     /**
      * Gets the supported currency codes.
+     *
+     * @psalm-api
      */
     #[Route(path: '/codes', name: 'exchange_codes', methods: Request::METHOD_GET)]
     public function getCodes(): JsonResponse
@@ -69,6 +71,8 @@ class ExchangeRateController extends AbstractController
      * Gets the exchange rates from the given currency code to all the other currencies supported.
      *
      * @param string $code the base currency code
+     *
+     * @psalm-api
      */
     #[Route(path: '/latest/{code}', name: 'exchange_latest', methods: Request::METHOD_GET)]
     public function getLatest(string $code): JsonResponse
@@ -83,6 +87,8 @@ class ExchangeRateController extends AbstractController
 
     /**
      * Gets the exchange rate from the base currency code to the target currency code.
+     *
+     * @psalm-api
      */
     #[Route(path: '/rate', name: 'exchange_rate', methods: Request::METHOD_GET)]
     public function getRate(

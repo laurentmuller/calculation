@@ -31,6 +31,8 @@ class AkismetController extends AbstractController
 {
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+     *
+     * @psalm-api
      */
     #[Route(path: '/spam', name: 'akismet_comment', methods: Request::METHOD_GET)]
     public function verifyComment(AkismetService $service, FakerService $faker): JsonResponse
@@ -47,6 +49,9 @@ class AkismetController extends AbstractController
         ]);
     }
 
+    /**
+     * @psalm-api
+     */
     #[Route(path: '/verify', name: 'akismet_key', methods: Request::METHOD_GET)]
     public function verifyKey(AkismetService $service): JsonResponse
     {

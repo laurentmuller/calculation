@@ -46,6 +46,8 @@ class AjaxController extends AbstractController
 
     /**
      * Compute a task.
+     *
+     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/task', name: 'ajax_task', methods: Request::METHOD_POST)]
@@ -79,6 +81,8 @@ class AjaxController extends AbstractController
 
     /**
      * Gets random text used to display notifications.
+     *
+     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/random/text', name: 'ajax_random_text', methods: Request::METHOD_GET)]
@@ -94,6 +98,8 @@ class AjaxController extends AbstractController
 
     /**
      * Render the page selection dialog for data table.
+     *
+     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/dialog/page', name: 'ajax_dialog_page', methods: Request::METHOD_GET)]
@@ -104,6 +110,8 @@ class AjaxController extends AbstractController
 
     /**
      * Render the sort dialog for data table.
+     *
+     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/dialog/sort', name: 'ajax_dialog_sort', methods: Request::METHOD_POST)]
@@ -114,6 +122,8 @@ class AjaxController extends AbstractController
 
     /**
      * Sets a session attribute.
+     *
+     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/session/set', name: 'ajax_session_set', methods: Request::METHOD_POST)]
@@ -130,6 +140,8 @@ class AjaxController extends AbstractController
 
     /**
      * Save table parameters.
+     *
+     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/save', name: 'ajax_save_table', methods: Request::METHOD_POST)]

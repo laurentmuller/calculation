@@ -56,17 +56,18 @@
 {% endmacro %}
 
 {% macro actions(overwrite=true) %}
+{%- set button_class = 'btn btn-secondary' -%}
 <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
-    <button type="button" id="all" class="btn btn-outline-primary" title="{{ 'user.rights.all_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>
+    <button type="button" id="all" class="{{ button_class }}" title="{{ 'user.rights.all_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>
         <i class="fa-fw fa-solid fa-check-circle"></i>
     </button>
-    <button type="button" id="none" class="btn btn-outline-primary" title="{{ 'user.rights.none_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>
+    <button type="button" id="none" class="{{ button_class }}" title="{{ 'user.rights.none_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>
         <i class="fa-fw fa-solid fa-times-circle"></i>
     </button>
-    <button type="button" id="toggle" class="btn btn-outline-primary" title="{{ 'user.rights.toggle_title'|trans }}" {%- if not overwrite -%} disabled="disabled"{%- endif -%}>
+    <button type="button" id="toggle" class="{{ button_class }}" title="{{ 'user.rights.toggle_title'|trans }}" {%- if not overwrite -%} disabled="disabled"{%- endif -%}>
         <i class="fa-fw fa-solid fa-arrows-turn-to-dots"></i>
     </button>
-    <button type="button" id="default" class="btn btn-outline-primary" title="{{ 'user.rights.default_title'|trans }}">
+    <button type="button" id="default" class="{{ button_class }}" title="{{ 'user.rights.default_title'|trans }}">
         <i class="fa-fw fa-solid fa-list-check"></i>
     </button>
 </div>

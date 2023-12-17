@@ -50,8 +50,8 @@ trait TranslatorTrait
     /**
      * Translates the given message.
      *
-     * @param string|\Stringable|TranslatableInterface $id         the message id (may also be an object that can be
-     *                                                             cast to string)
+     * @param string|\Stringable|TranslatableInterface $id         the message id, may also be an object that can be
+     *                                                             cast to string
      * @param array                                    $parameters an array of parameters for the message
      * @param ?string                                  $domain     the domain for the message or null to use the default
      * @param ?string                                  $locale     the locale or null to use the default

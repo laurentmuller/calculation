@@ -184,8 +184,13 @@ abstract class AbstractController extends BaseController
      *
      * @return RedirectResponse the response
      */
-    public function redirectToHomePage(string $message = '', array $parameters = [], FlashType $type = FlashType::SUCCESS, string $domain = null, string $locale = null): RedirectResponse
-    {
+    public function redirectToHomePage(
+        string $message = '',
+        array $parameters = [],
+        FlashType $type = FlashType::SUCCESS,
+        string $domain = null,
+        string $locale = null
+    ): RedirectResponse {
         if ('' !== $message) {
             $message = $this->trans($message, $parameters, $domain, $locale);
             $this->addFlashMessage($type, $message);
@@ -197,7 +202,8 @@ abstract class AbstractController extends BaseController
     /**
      * Creates and returns a form helper instance.
      *
-     * @param ?string    $labelPrefix the label prefix. If the prefix is not null, the label is automatically added when the field property is set.
+     * @param ?string    $labelPrefix the label prefix. If the prefix is not null, the label is automatically added
+     *                                when the field property is set.
      * @param mixed|null $data        the initial data
      * @param array      $options     the initial options
      */
@@ -211,8 +217,11 @@ abstract class AbstractController extends BaseController
     /**
      * {inheritDoc}.
      */
-    protected function denyAccessUnlessGranted(mixed $attribute, mixed $subject = null, string $message = 'Access Denied.'): void
-    {
+    protected function denyAccessUnlessGranted(
+        mixed $attribute,
+        mixed $subject = null,
+        string $message = 'Access Denied.'
+    ): void {
         if ($attribute instanceof EntityPermission) {
             $attribute = $attribute->name;
         }
@@ -300,7 +309,7 @@ abstract class AbstractController extends BaseController
         $context = $this->getExceptionContext($e);
         $logger?->error($message, $context);
 
-        return $this->render('@Twig/Exception/exception.html.twig', [
+        return $this->render('bundles/TwigBundle/Exception/exception.html.twig', [
             'message' => $message,
             'exception' => $e,
         ]);
@@ -310,8 +319,9 @@ abstract class AbstractController extends BaseController
      * Render the given PDF document and output the response.
      *
      * @param PdfDocument $doc    the document to render
-     * @param bool        $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if available.
-     *                            <code>false</code> to send to the browser and force a file download with the name given.
+     * @param bool        $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if
+     *                            available. <code>false</code> to send to the browser and force a file download with
+     *                            the name given.
      * @param string      $name   the name of the PDF file or null to use default ('document.pdf')
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report can not be rendered
@@ -332,15 +342,19 @@ abstract class AbstractController extends BaseController
      * Render the given Spreadsheet document and output the response.
      *
      * @param SpreadsheetDocument $doc    the document to render
-     * @param bool                $inline <code>true</code> to send the file inline to the browser. The Spreadsheet viewer is used if available.
+     * @param bool                $inline <code>true</code> to send the file inline to the browser. The Spreadsheet
+     *                                    viewer is used if available.
      *                                    <code>false</code> to send to the browser and force a file download.
      * @param string              $name   the name of the Spreadsheet file or null to use default ('document.xlsx')
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
-    {
+    protected function renderSpreadsheetDocument(
+        SpreadsheetDocument $doc,
+        bool $inline = true,
+        string $name = ''
+    ): SpreadsheetResponse {
         if ($doc instanceof AbstractDocument && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
@@ -355,8 +369,9 @@ abstract class AbstractController extends BaseController
      * Render the given Word document and output the response.
      *
      * @param WordDocument $doc    the document to render
-     * @param bool         $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if available.
-     *                             <code>false</code> to send to the browser and force a file download with the name given.
+     * @param bool         $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used
+     *                             if available. <code>false</code> to send to the browser and force a file download
+     *                             with the name given.
      * @param string       $name   the name of the PDF file or null to use default ('document.pdf')
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException

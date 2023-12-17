@@ -44,9 +44,9 @@ class EntityProvider extends Base
     /**
      * The cached entities.
      *
-     * @psalm-var TEntity[]
+     * @psalm-var list<TEntity>
      */
-    private ?array $entities = null;
+    private array $entities = [];
 
     /**
      * @psalm-param class-string<TEntity> $className the entity class name.
@@ -103,6 +103,8 @@ class EntityProvider extends Base
 
     /**
      * Gets the criteria used to filter entities.
+     *
+     * @psalm-return array<string, mixed>
      */
     protected function getCriteria(): array
     {
@@ -112,13 +114,13 @@ class EntityProvider extends Base
     /**
      * Gets all entities.
      *
-     * @psalm-return TEntity[]
+     * @psalm-return list<TEntity>
      */
     protected function getEntities(): array
     {
-        if (empty($this->entities)) {
-            $criteria = $this->getCriteria();
+        if ([] === $this->entities) {
             $repository = $this->repository;
+            $criteria = $this->getCriteria();
             $this->entities = [] === $criteria ? $repository->findAll() : $repository->findBy($criteria);
         }
 

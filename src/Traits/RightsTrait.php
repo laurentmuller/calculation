@@ -33,8 +33,6 @@ use Elao\Enum\FlagBag;
  */
 trait RightsTrait
 {
-    use MathTrait;
-
     /**
      * The overwritten rights flag.
      */

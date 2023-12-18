@@ -49,6 +49,16 @@ class DataQueryKernelListener
         }
     }
 
+    private function getLimit(Request $request, string $prefix, TableView $view): int
+    {
+        return $this->getCookieInt($request, TableInterface::PARAM_LIMIT, $prefix, $view->getPageSize());
+    }
+
+    private function getPrefix(Request $request): string
+    {
+        return \strtoupper($request->attributes->getString('_route'));
+    }
+
     private function getView(Request $request): TableView
     {
         return $this->getCookieEnum($request, TableInterface::PARAM_VIEW, TableView::TABLE);
@@ -62,7 +72,11 @@ class DataQueryKernelListener
     private function updateQuery(DataQuery $query, Request $request): DataQuery
     {
         $query->callback = $this->isCallback($request);
+        $query->prefix = $this->getPrefix($request);
         $query->view = $this->getView($request);
+        if (0 === $query->limit) {
+            $query->limit = $this->getLimit($request, $query->prefix, $query->view);
+        }
 
         return $query;
     }

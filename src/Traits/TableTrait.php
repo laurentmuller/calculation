@@ -54,7 +54,7 @@ trait TableTrait
             $results = $table->processDataQuery($query);
             $response = $query->callback ? $this->json($results) : $this->render($template, (array) $results);
             $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);
-            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $table->getPrefix());
+            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $query->prefix);
             $this->getUserService()->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $query->view);
 
             return $response;

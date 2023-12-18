@@ -35,7 +35,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @psalm-import-type CalculationItemType from CalculationRepository
  */
 #[AsController]
-#[Route(path: '/empty')]
+#[Route(path: '/calculation/empty')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationEmptyController extends AbstractController
 {

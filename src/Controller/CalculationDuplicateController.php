@@ -35,7 +35,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @psalm-import-type CalculationItemType from CalculationRepository
  */
 #[AsController]
-#[Route(path: '/duplicate')]
+#[Route(path: '/calculation/duplicate')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationDuplicateController extends AbstractController
 {

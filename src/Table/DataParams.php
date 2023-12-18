@@ -21,13 +21,13 @@ readonly class DataParams
 {
     public function __construct(
         /** The group identifier. */
-        #[Assert\GreaterThanOrEqual(0)]
+        #[Assert\PositiveOrZero]
         public int $groupId = 0,
         /** The category identifier. */
-        #[Assert\GreaterThanOrEqual(0)]
+        #[Assert\PositiveOrZero]
         public int $categoryId = 0,
         /** The calculation state identifier. */
-        #[Assert\GreaterThanOrEqual(0)]
+        #[Assert\PositiveOrZero]
         public int $stateId = 0,
         /** The edit state identifier. */
         #[Assert\Range(min: -1, max: 1)]

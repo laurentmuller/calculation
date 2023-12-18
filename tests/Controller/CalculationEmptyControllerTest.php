@@ -26,17 +26,17 @@ class CalculationEmptyControllerTest extends AbstractControllerTestCase
     public static function getRoutes(): array
     {
         return [
-            ['/empty', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/empty', self::ROLE_ADMIN],
-            ['/empty', self::ROLE_SUPER_ADMIN],
+            ['/calculation/empty', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/empty', self::ROLE_ADMIN],
+            ['/calculation/empty', self::ROLE_SUPER_ADMIN],
 
-            ['/empty/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/empty/pdf', self::ROLE_ADMIN],
-            ['/empty/pdf', self::ROLE_SUPER_ADMIN],
+            ['/calculation/empty/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/empty/pdf', self::ROLE_ADMIN],
+            ['/calculation/empty/pdf', self::ROLE_SUPER_ADMIN],
 
-            ['/empty/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/empty/excel', self::ROLE_ADMIN],
-            ['/empty/excel', self::ROLE_SUPER_ADMIN],
+            ['/calculation/empty/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/empty/excel', self::ROLE_ADMIN],
+            ['/calculation/empty/excel', self::ROLE_SUPER_ADMIN],
         ];
     }
 

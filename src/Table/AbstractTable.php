@@ -18,7 +18,6 @@ use App\Interfaces\TableInterface;
 use App\Traits\MathTrait;
 use App\Traits\ParameterTrait;
 use App\Utils\FormatUtils;
-use App\Utils\StringUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -36,11 +35,6 @@ abstract class AbstractTable implements SortModeInterface
      * @var array<Column>
      */
     private ?array $columns = null;
-
-    /**
-     * The cookie and session prefix.
-     */
-    private ?string $prefix = null;
 
     public function formatAmount(float $value): string
     {
@@ -98,18 +92,6 @@ abstract class AbstractTable implements SortModeInterface
     public function getEntityClassName(): ?string
     {
         return null;
-    }
-
-    /**
-     * Gets cookie and session prefix.
-     */
-    public function getPrefix(): string
-    {
-        if (null === $this->prefix) {
-            $this->prefix = StringUtils::unicode(StringUtils::getShortName($this))->snake()->toString();
-        }
-
-        return $this->prefix;
     }
 
     /**

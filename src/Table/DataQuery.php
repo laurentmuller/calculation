@@ -23,19 +23,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 class DataQuery
 {
     public function __construct(
-        /* The callback state (XMLHttpRequest). */
+        /** The callback state (XMLHttpRequest). */
         public bool $callback = false,
         /** The selected identifier. */
-        #[Assert\GreaterThanOrEqual(0)]
+        #[Assert\PositiveOrZero]
         public readonly int $id = 0,
         /** The view. */
         public TableView $view = TableView::TABLE,
         /** The position of the first result to retrieve (the "offset"). */
-        #[Assert\GreaterThanOrEqual(0)]
+        #[Assert\PositiveOrZero]
         public readonly int $offset = 0,
         /** The maximum number of results to retrieve (the "limit"). */
-        #[Assert\GreaterThanOrEqual(1)]
-        public int $limit = 20,
+        #[Assert\PositiveOrZero]
+        public int $limit = 0,
         /** The search term. */
         #[Assert\NotNull]
         public readonly string $search = '',
@@ -52,6 +52,9 @@ class DataQuery
         /** The custom data parameters. */
         #[Assert\Valid]
         public readonly DataParams $customData = new DataParams(),
+        /** The cookie prefix */
+        #[Assert\NotNull]
+        public string $prefix = ''
     ) {
     }
 

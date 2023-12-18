@@ -26,17 +26,17 @@ class CalculationDuplicateControllerTest extends AbstractControllerTestCase
     public static function getRoutes(): array
     {
         return [
-            ['/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/duplicate', self::ROLE_ADMIN],
-            ['/duplicate', self::ROLE_SUPER_ADMIN],
+            ['/calculation/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/duplicate', self::ROLE_ADMIN],
+            ['/calculation/duplicate', self::ROLE_SUPER_ADMIN],
 
-            ['/duplicate/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/duplicate/pdf', self::ROLE_ADMIN],
-            ['/duplicate/pdf', self::ROLE_SUPER_ADMIN],
+            ['/calculation/duplicate/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/duplicate/pdf', self::ROLE_ADMIN],
+            ['/calculation/duplicate/pdf', self::ROLE_SUPER_ADMIN],
 
-            ['/duplicate/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/duplicate/excel', self::ROLE_ADMIN],
-            ['/duplicate/excel', self::ROLE_SUPER_ADMIN],
+            ['/calculation/duplicate/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/duplicate/excel', self::ROLE_ADMIN],
+            ['/calculation/duplicate/excel', self::ROLE_SUPER_ADMIN],
         ];
     }
 

@@ -14,6 +14,7 @@ namespace App\Table;
 
 use App\Enums\TableView;
 use App\Interfaces\SortModeInterface;
+use App\Interfaces\TableInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -21,11 +22,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class DataQuery
 {
-    /**
-     * The page index (first = 1).
-     */
-    public readonly int $page;
-
     public function __construct(
         /* The callback state (XMLHttpRequest). */
         public bool $callback = false,
@@ -33,7 +29,7 @@ class DataQuery
         #[Assert\GreaterThanOrEqual(0)]
         public readonly int $id = 0,
         /** The view. */
-        public readonly TableView $view = TableView::TABLE,
+        public TableView $view = TableView::TABLE,
         /** The position of the first result to retrieve (the "offset"). */
         #[Assert\GreaterThanOrEqual(0)]
         public readonly int $offset = 0,
@@ -57,14 +53,57 @@ class DataQuery
         #[Assert\Valid]
         public readonly DataParams $customData = new DataParams(),
     ) {
-        $this->page = 1 + \intdiv($this->offset, $this->limit);
     }
 
     /**
-     * Returns if the values must be shown as custom.
+     * Gets this values as attributes.
+     *
+     * @psalm-return array<string, bool|int|string>
      */
-    public function isViewCustom(): bool
+    public function attributes(): array
+    {
+        return [
+            'search' => true,
+            'search-text' => $this->search,
+            'page-size' => $this->limit,
+            'page-number' => $this->getPage(),
+            'sort-name' => $this->sort,
+            'sort-order' => $this->order,
+            'custom-view-default-view' => $this->isCustomView(),
+        ];
+    }
+
+    /**
+     * Get the page index (first = 1).
+     */
+    public function getPage(): int
+    {
+        return 1 + \intdiv($this->offset, $this->limit);
+    }
+
+    /**
+     * Returns if the view must be shown as custom.
+     */
+    public function isCustomView(): bool
     {
         return TableView::CUSTOM === $this->view;
+    }
+
+    /**
+     * Gets this values as parameters.
+     *
+     * @psalm-return array<string, bool|int|string>
+     */
+    public function parameters(): array
+    {
+        return [
+            TableInterface::PARAM_ID => $this->id,
+            TableInterface::PARAM_SEARCH => $this->search,
+            TableInterface::PARAM_SORT => $this->sort,
+            TableInterface::PARAM_ORDER => $this->order,
+            TableInterface::PARAM_OFFSET => $this->offset,
+            TableInterface::PARAM_VIEW => $this->view->value,
+            TableInterface::PARAM_LIMIT => $this->limit,
+        ];
     }
 }

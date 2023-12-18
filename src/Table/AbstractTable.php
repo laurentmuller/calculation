@@ -188,16 +188,6 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Gets the session key for the given name.
-     *
-     * @param string $name the parameter name
-     */
-    protected function getSessionKey(string $name): string
-    {
-        return $this->getPrefix() . '.' . $name;
-    }
-
-    /**
      * Handle the query parameters.
      */
     protected function handleQuery(DataQuery $query): DataResults
@@ -289,35 +279,16 @@ abstract class AbstractTable implements SortModeInterface
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         $results->pageList = $this->getAllowedPageList($results->totalNotFiltered);
-        $limit = [] !== $results->pageList ? \min($query->limit, \max($results->pageList)) : $query->limit;
-        $results->params = \array_merge([
-            TableInterface::PARAM_ID => $query->id,
-            TableInterface::PARAM_SEARCH => $query->search,
-            TableInterface::PARAM_SORT => $query->sort,
-            TableInterface::PARAM_ORDER => $query->order,
-            TableInterface::PARAM_OFFSET => $query->offset,
-            TableInterface::PARAM_VIEW => $query->view->value,
-            TableInterface::PARAM_LIMIT => $limit,
-        ], $results->params);
+        $query->limit = [] !== $results->pageList ? \min($query->limit, \max($results->pageList)) : $query->limit;
+        $results->params = \array_merge($query->parameters(), $results->params);
         if ($query->callback) {
             return;
         }
         $results->columns = $this->getColumns();
         $results->attributes = \array_merge([
-            'total-not-filtered' => $results->totalNotFiltered,
             'total-rows' => $results->filtered,
-
-            'search' => true,
-            'search-text' => $query->search,
-
-            'page-size' => $limit,
-            'page-number' => $query->page,
+            'total-not-filtered' => $results->totalNotFiltered,
             'page-list' => $this->implodePageList($results->pageList),
-
-            'sort-name' => $query->sort,
-            'sort-order' => $query->order,
-
-            'custom-view-default-view' => $query->isViewCustom(),
-        ], $results->attributes);
+        ], $query->attributes(), $results->attributes);
     }
 }

@@ -12,17 +12,23 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
+use App\Enums\TableView;
+use App\Interfaces\TableInterface;
 use App\Table\DataQuery;
+use App\Traits\CookieTrait;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
- * Handle the kernel controller arguments to update the callback property of the data query.
+ * Handle the kernel controller arguments event to update properties of data query.
  */
 #[AsEventListener(event: KernelEvents::CONTROLLER_ARGUMENTS, method: 'onKernelControllerArguments', priority: -10)]
-class DataQueryCallbackListener
+class DataQueryKernelListener
 {
+    use CookieTrait;
+
     public function onKernelControllerArguments(ControllerArgumentsEvent $event): void
     {
         if (!$event->isMainRequest()) {
@@ -33,14 +39,31 @@ class DataQueryCallbackListener
             return;
         }
 
-        /** @psalm-var mixed $argument */
+        /** @psalm-var ?DataQuery $argument */
         foreach ($arguments as $index => $argument) {
             if ($argument instanceof DataQuery) {
-                $argument->callback = $event->getRequest()->isXmlHttpRequest();
-                $arguments[$index] = $argument;
+                $arguments[$index] = $this->updateQuery($argument, $event->getRequest());
                 $event->setArguments($arguments);
                 break;
             }
         }
+    }
+
+    private function getView(Request $request): TableView
+    {
+        return $this->getCookieEnum($request, TableInterface::PARAM_VIEW, TableView::TABLE);
+    }
+
+    private function isCallback(Request $request): bool
+    {
+        return $request->isXmlHttpRequest();
+    }
+
+    private function updateQuery(DataQuery $query, Request $request): DataQuery
+    {
+        $query->callback = $this->isCallback($request);
+        $query->view = $this->getView($request);
+
+        return $query;
     }
 }

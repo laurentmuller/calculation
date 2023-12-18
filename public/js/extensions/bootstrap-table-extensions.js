@@ -476,8 +476,9 @@ function loadingTemplate(message) {
             const $this = $(this);
             const url = $this.getOptions().saveUrl;
             if (url) {
-                // const data = {view: $this.getDisplayMode()};
-                $.post(url, $this.getParameters());
+                //$.post(url, $this.getParameters());
+                const data = {view: $this.getDisplayMode()};
+                $.post(url, data);
             }
             return $this;
         },

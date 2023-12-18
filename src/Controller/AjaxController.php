@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\TableInterface;
@@ -23,7 +24,6 @@ use App\Service\FakerService;
 use App\Service\PasswordService;
 use App\Service\TaskService;
 use App\Service\UserService;
-use App\Table\DataQuery;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -146,11 +146,11 @@ class AjaxController extends AbstractController
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Route(path: '/save', name: 'ajax_save_table', methods: Request::METHOD_POST)]
     public function saveTable(
-        UserService $service,
-        #[MapRequestPayload]
-        DataQuery $query = new DataQuery()
+        Request $request,
+        UserService $service
     ): JsonResponse {
-        $view = $query->view;
+        $value = $request->request->getString(TableInterface::PARAM_VIEW);
+        $view = TableView::tryFrom($value) ?? TableView::TABLE;
         $response = $this->json(true);
         $path = $this->getCookiePath();
         $this->updateCookie($response, TableInterface::PARAM_VIEW, $view, path: $path);

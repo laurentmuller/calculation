@@ -17,7 +17,6 @@ use App\Service\SearchService;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\FileUtils;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -55,15 +54,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     {
     }
 
-    public function getDataQuery(Request $request): DataQuery
-    {
-        $query = parent::getDataQuery($request);
-        $entity = $this->getRequestString($request, self::PARAM_ENTITY);
-        $query->addCustomData(self::PARAM_ENTITY, $entity);
-
-        return $query;
-    }
-
     protected function getAllowedPageList(int $totalNotFiltered): array
     {
         return TableInterface::PAGE_LIST;
@@ -79,7 +69,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
         /** @psalm-var SearchType[] $items */
         $items = [];
         $search = $query->search;
-        $entity = $query->getCustomData(self::PARAM_ENTITY, '');
+        $entity = $query->customData->entity;
         $results = parent::handleQuery($query);
         if (\strlen($search) > 1) {
             $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);

@@ -18,12 +18,14 @@ use App\Report\CalculationsDuplicateReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDuplicateDocument;
 use App\Table\CalculationDuplicateTable;
+use App\Table\DataQuery;
 use App\Traits\TableTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -80,14 +82,13 @@ class CalculationDuplicateController extends AbstractController
      * Render the table view.
      */
     #[Route(path: '', name: 'duplicate_table', methods: Request::METHOD_GET)]
-    public function table(Request $request, CalculationDuplicateTable $table, LoggerInterface $logger): Response
-    {
-        return $this->handleTableRequest(
-            $request,
-            $table,
-            $logger,
-            'calculation/calculation_table_duplicate.html.twig'
-        );
+    public function table(
+        CalculationDuplicateTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'calculation/calculation_table_duplicate.html.twig');
     }
 
     /**

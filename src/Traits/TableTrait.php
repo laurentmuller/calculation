@@ -18,13 +18,13 @@ use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\TableInterface;
 use App\Table\AbstractTable;
+use App\Table\DataQuery;
 use App\Table\DataResults;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Trait to handle an <code></code>AbstractTable</code> request.
+ * Trait to handle a table request.
  */
 trait TableTrait
 {
@@ -33,19 +33,24 @@ trait TableTrait
     /**
      * Handles a table request.
      */
-    protected function handleTableRequest(Request $request, AbstractTable $table, LoggerInterface $logger, string $template): Response
-    {
+    protected function handleTableRequest(
+        AbstractTable $table,
+        LoggerInterface $logger,
+        DataQuery $query,
+        string $template
+    ): Response {
+        // check granted
         $subject = $table->getEntityClassName();
         if (null !== $subject) {
             $this->denyAccessUnlessGranted(EntityPermission::LIST, $subject);
         }
+        // check empty
         $message = $table->getEmptyMessage();
         if (null !== $message) {
             return $this->redirectToHomePage(message: $message, type: FlashType::INFO);
         }
 
         try {
-            $query = $table->getDataQuery($request);
             $results = $table->processDataQuery($query);
             $response = $query->callback ? $this->json($results) : $this->render($template, (array) $results);
             $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);
@@ -65,7 +70,7 @@ trait TableTrait
                 'status_code' => $status,
                 'status_text' => $this->trans('errors.invalid_request'),
             ];
-            if ($request->isXmlHttpRequest()) {
+            if ($query->callback) {
                 return $this->json($parameters, $status);
             }
 

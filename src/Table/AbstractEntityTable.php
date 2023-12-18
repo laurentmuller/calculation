@@ -290,6 +290,7 @@ abstract class AbstractEntityTable extends AbstractTable
     private function updateOrderBy(array &$orderBy, DataQuery|Column|array $value, string $alias): void
     {
         if ($value instanceof DataQuery) {
+            /** @psalm-var array<string,\App\Interfaces\SortModeInterface::*> $value */
             $value = [$value->sort => $value->order];
         } elseif ($value instanceof Column) {
             $value = [$value->getField() => $value->getOrder()];

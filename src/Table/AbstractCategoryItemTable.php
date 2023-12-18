@@ -20,7 +20,6 @@ use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Common abstract table for products and tasks.
@@ -55,17 +54,6 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         parent::__construct($repository);
     }
 
-    public function getDataQuery(Request $request): DataQuery
-    {
-        $query = parent::getDataQuery($request);
-        $categoryId = $this->getRequestInt($request, self::PARAM_CATEGORY);
-        $query->addCustomData(self::PARAM_CATEGORY, $categoryId);
-        $groupId = $this->getRequestInt($request, self::PARAM_GROUP);
-        $query->addCustomData(self::PARAM_GROUP, $groupId);
-
-        return $query;
-    }
-
     /**
      * Gets drop-down values.
      *
@@ -77,7 +65,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     {
         $repository = $this->getRepository();
         $result = parent::search($query, $builder, $alias);
-        $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0);
+        $categoryId = $query->customData->categoryId;
         if (0 !== $categoryId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('category.id', $alias);
@@ -86,7 +74,7 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
 
             return true;
         }
-        $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
+        $groupId = $query->customData->groupId;
         if (0 !== $groupId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('group.id', $alias);
@@ -103,10 +91,10 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $categoryId = $query->getCustomData(self::PARAM_CATEGORY, 0);
+            $categoryId = $query->customData->categoryId;
             $results->addParameter(self::PARAM_CATEGORY, $categoryId);
 
-            $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
+            $groupId = $query->customData->groupId;
             $results->addParameter(self::PARAM_GROUP, $groupId);
 
             $results->addCustomData('dropdown', $this->getDropDownValues());

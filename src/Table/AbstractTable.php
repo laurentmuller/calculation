@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Table;
 
-use App\Enums\TableView;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
@@ -20,7 +19,6 @@ use App\Traits\MathTrait;
 use App\Traits\ParameterTrait;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -87,31 +85,6 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Gets the data query from the given request.
-     */
-    public function getDataQuery(Request $request): DataQuery
-    {
-        $query = new DataQuery();
-        $query->callback = $request->isXmlHttpRequest();
-        $query->id = $this->getParamId($request);
-        $query->view = $this->getParamView($request);
-        $query->search = $this->getParamSearch($request);
-        $query->offset = $this->getParamOffset($request);
-        $query->limit = $this->getParamLimit($request, $query->view);
-        $query->page = 1 + (int) \floor($this->safeDivide($query->offset, $query->limit));
-
-        $column = $this->getDefaultColumn();
-        if ($column instanceof Column) {
-            $query->sort = $column->getField();
-            $query->order = $column->getOrder();
-        }
-        $query->sort = $this->getParamSort($request, $query->sort);
-        $query->setOrder($this->getParamOrder($request, $query->order));
-
-        return $query;
-    }
-
-    /**
      * Gets the translatable message to show when no data is available.
      */
     public function getEmptyMessage(): ?string
@@ -144,6 +117,7 @@ abstract class AbstractTable implements SortModeInterface
      */
     public function processDataQuery(DataQuery $query): DataResults
     {
+        $this->updateDataQuery($query);
         $results = $this->handleQuery($query);
         $this->updateResults($query, $results);
 
@@ -294,6 +268,22 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
+     * Update the data query.
+     */
+    protected function updateDataQuery(DataQuery $query): void
+    {
+        if ('' !== $query->sort) {
+            return;
+        }
+        $column = $this->getDefaultColumn();
+        if (!$column instanceof Column) {
+            return;
+        }
+        $query->sort = $column->getField();
+        $query->order = $column->getOrder();
+    }
+
+    /**
      * Update the results before sending back.
      */
     protected function updateResults(DataQuery $query, DataResults &$results): void
@@ -329,40 +319,5 @@ abstract class AbstractTable implements SortModeInterface
 
             'custom-view-default-view' => $query->isViewCustom(),
         ], $results->attributes);
-    }
-
-    private function getParamId(Request $request): int
-    {
-        return $this->getParamInt($request, TableInterface::PARAM_ID);
-    }
-
-    private function getParamLimit(Request $request, TableView $view): int
-    {
-        return $this->getParamInt($request, TableInterface::PARAM_LIMIT, $this->getPrefix(), $view->getPageSize());
-    }
-
-    private function getParamOffset(Request $request): int
-    {
-        return $this->getParamInt($request, TableInterface::PARAM_OFFSET);
-    }
-
-    private function getParamOrder(Request $request, string $default): string
-    {
-        return $this->getParamString($request, TableInterface::PARAM_ORDER, '', $default);
-    }
-
-    private function getParamSearch(Request $request): string
-    {
-        return $this->getParamString($request, TableInterface::PARAM_SEARCH);
-    }
-
-    private function getParamSort(Request $request, string $default): string
-    {
-        return $this->getParamString($request, TableInterface::PARAM_SORT, '', $default);
-    }
-
-    private function getParamView(Request $request): TableView
-    {
-        return $this->getParamEnum($request, TableInterface::PARAM_VIEW, TableView::getDefault());
     }
 }

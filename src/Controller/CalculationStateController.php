@@ -23,10 +23,12 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CalculationStatesDocument;
 use App\Table\CalculationStateTable;
+use App\Table\DataQuery;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -158,14 +160,13 @@ class CalculationStateController extends AbstractEntityController
      * Render the table view.
      */
     #[Route(path: '', name: 'calculationstate_table', methods: Request::METHOD_GET)]
-    public function table(Request $request, CalculationStateTable $table, LoggerInterface $logger): Response
-    {
-        return $this->handleTableRequest(
-            $request,
-            $table,
-            $logger,
-            'calculationstate/calculationstate_table.html.twig'
-        );
+    public function table(
+        CalculationStateTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'calculationstate/calculationstate_table.html.twig');
     }
 
     /**

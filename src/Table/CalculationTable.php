@@ -20,7 +20,6 @@ use App\Repository\CalculationStateRepository;
 use App\Utils\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 
 /**
@@ -66,17 +65,6 @@ class CalculationTable extends AbstractEntityTable
         ]);
     }
 
-    public function getDataQuery(Request $request): DataQuery
-    {
-        $query = parent::getDataQuery($request);
-        $stateId = $this->getRequestInt($request, self::PARAM_STATE);
-        $query->addCustomData(self::PARAM_STATE, $stateId);
-        $stateEditable = $this->getRequestInt($request, self::PARAM_EDITABLE);
-        $query->addCustomData(self::PARAM_EDITABLE, $stateEditable);
-
-        return $query;
-    }
-
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
@@ -104,7 +92,7 @@ class CalculationTable extends AbstractEntityTable
     {
         $repository = $this->getRepository();
         $result = parent::search($query, $builder, $alias);
-        $stateId = $query->getCustomData(self::PARAM_STATE, 0);
+        $stateId = $query->customData->stateId;
         if (0 !== $stateId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('state.id', $alias);
@@ -114,7 +102,7 @@ class CalculationTable extends AbstractEntityTable
             return true;
         }
 
-        $stateEditable = $query->getCustomData(self::PARAM_EDITABLE, 0);
+        $stateEditable = $query->customData->stateEditable;
         if (0 !== $stateEditable) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('state.editable', $alias);
@@ -132,10 +120,10 @@ class CalculationTable extends AbstractEntityTable
         parent::updateResults($query, $results);
         if (!$query->callback) {
             $results->addAttribute('row-style', 'styleTextMuted');
-            $stateId = $query->getCustomData(self::PARAM_STATE, 0);
+            $stateId = $query->customData->stateId;
             $results->addParameter(self::PARAM_STATE, $stateId);
 
-            $stateEditable = $query->getCustomData(self::PARAM_EDITABLE, 0);
+            $stateEditable = $query->customData->stateEditable;
             $results->addParameter(self::PARAM_EDITABLE, $stateEditable);
 
             $results->addCustomData('dropdown', $this->getDropDownValues());

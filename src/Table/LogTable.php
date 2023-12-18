@@ -18,7 +18,6 @@ use App\Service\LogService;
 use App\Utils\FileUtils;
 use App\Utils\LogFilter;
 use App\Utils\LogSorter;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
@@ -76,16 +75,6 @@ class LogTable extends AbstractTable implements \Countable
         return $this->twig->render('macros/_cell_log_level.html.twig', ['value' => $value, 'log' => $log]);
     }
 
-    public function getDataQuery(Request $request): DataQuery
-    {
-        $level = $this->getRequestString($request, self::PARAM_LEVEL);
-        $channel = $this->getRequestString($request, self::PARAM_CHANNEL);
-
-        return parent::getDataQuery($request)
-            ->addCustomData(self::PARAM_CHANNEL, $channel)
-            ->addCustomData(self::PARAM_LEVEL, $level);
-    }
-
     public function getEmptyMessage(): ?string
     {
         return 0 === $this->count() ? 'log.list.empty' : null;
@@ -116,8 +105,8 @@ class LogTable extends AbstractTable implements \Countable
         $entities = \array_slice($entities, $query->offset, $query->limit);
         $results->rows = $this->mapEntities($entities);
         if (!$query->callback) {
-            $level = $query->getCustomData(self::PARAM_LEVEL, '');
-            $channel = $query->getCustomData(self::PARAM_CHANNEL, '');
+            $level = $query->customData->level;
+            $channel = $query->customData->channel;
             $results->params = [
                 self::PARAM_LEVEL => $level,
                 self::PARAM_CHANNEL => $channel,
@@ -144,8 +133,8 @@ class LogTable extends AbstractTable implements \Countable
     private function filter(DataQuery $query, array $entities): array
     {
         $search = $query->search;
-        $level = $query->getCustomData(self::PARAM_LEVEL, '');
-        $channel = $query->getCustomData(self::PARAM_CHANNEL, '');
+        $level = $query->customData->level;
+        $channel = $query->customData->channel;
         if (LogFilter::isFilter($search, $level, $channel)) {
             $filter = new LogFilter($search, $level, $channel);
 

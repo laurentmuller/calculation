@@ -33,6 +33,7 @@ use App\Service\RoleBuilderService;
 use App\Service\RoleHierarchyService;
 use App\Spreadsheet\UserRightsDocument;
 use App\Spreadsheet\UsersDocument;
+use App\Table\DataQuery;
 use App\Table\UserTable;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -41,6 +42,7 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
@@ -380,14 +382,13 @@ class UserController extends AbstractEntityController
      * Render the table view.
      */
     #[Route(path: '', name: 'user_table', methods: Request::METHOD_GET)]
-    public function table(Request $request, UserTable $table, LoggerInterface $logger): Response
-    {
-        return $this->handleTableRequest(
-            $request,
-            $table,
-            $logger,
-            'user/user_table.html.twig'
-        );
+    public function table(
+        UserTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'user/user_table.html.twig');
     }
 
     protected function getEditFormType(): string

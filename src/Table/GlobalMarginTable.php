@@ -15,7 +15,6 @@ namespace App\Table;
 use App\Entity\GlobalMargin;
 use App\Repository\GlobalMarginRepository;
 use App\Utils\FileUtils;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * The global margins table.
@@ -29,14 +28,6 @@ class GlobalMarginTable extends AbstractEntityTable
         parent::__construct($repository);
     }
 
-    public function getDataQuery(Request $request): DataQuery
-    {
-        $query = parent::getDataQuery($request);
-        $query->limit = \PHP_INT_MAX;
-
-        return $query;
-    }
-
     protected function getColumnDefinitions(): string
     {
         return FileUtils::buildPath(__DIR__, 'Definition', 'global_margin.json');
@@ -45,6 +36,12 @@ class GlobalMarginTable extends AbstractEntityTable
     protected function getDefaultOrder(): array
     {
         return ['minimum' => self::SORT_ASC];
+    }
+
+    protected function updateDataQuery(DataQuery $query): void
+    {
+        parent::updateDataQuery($query);
+        $query->limit = \PHP_INT_MAX;
     }
 
     protected function updateResults(DataQuery $query, DataResults &$results): void

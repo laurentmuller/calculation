@@ -19,6 +19,7 @@ use App\Report\CalculationsBelowReport;
 use App\Repository\CalculationRepository;
 use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationBelowTable;
+use App\Table\DataQuery;
 use App\Traits\TableTrait;
 use App\Utils\FormatUtils;
 use Psr\Log\LoggerInterface;
@@ -26,6 +27,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -87,14 +89,13 @@ class CalculationBelowController extends AbstractController
      * Render the table view.
      */
     #[Route(path: '', name: 'below_table', methods: Request::METHOD_GET)]
-    public function table(Request $request, CalculationBelowTable $table, LoggerInterface $logger): Response
-    {
-        return $this->handleTableRequest(
-            $request,
-            $table,
-            $logger,
-            'calculation/calculation_table_below.html.twig'
-        );
+    public function table(
+        CalculationBelowTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'calculation/calculation_table_below.html.twig');
     }
 
     private function getDescription(float $minMargin): string

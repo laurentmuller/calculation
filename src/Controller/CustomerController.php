@@ -21,10 +21,12 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CustomersDocument;
 use App\Table\CustomerTable;
+use App\Table\DataQuery;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -124,14 +126,13 @@ class CustomerController extends AbstractEntityController
      * Render the table view.
      */
     #[Route(path: '', name: 'customer_table', methods: Request::METHOD_GET)]
-    public function table(Request $request, CustomerTable $table, LoggerInterface $logger): Response
-    {
-        return $this->handleTableRequest(
-            $request,
-            $table,
-            $logger,
-            'customer/customer_table.html.twig'
-        );
+    public function table(
+        CustomerTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery(),
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'customer/customer_table.html.twig');
     }
 
     protected function getEditFormType(): string

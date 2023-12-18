@@ -22,11 +22,13 @@ use App\Repository\ProductRepository;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\ProductsDocument;
+use App\Table\DataQuery;
 use App\Table\ProductTable;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -144,14 +146,13 @@ class ProductController extends AbstractEntityController
      * Render the table view.
      */
     #[Route(path: '', name: 'product_table', methods: Request::METHOD_GET)]
-    public function table(Request $request, ProductTable $table, LoggerInterface $logger): Response
-    {
-        return $this->handleTableRequest(
-            $request,
-            $table,
-            $logger,
-            'product/product_table.html.twig'
-        );
+    public function table(
+        ProductTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'product/product_table.html.twig');
     }
 
     /**

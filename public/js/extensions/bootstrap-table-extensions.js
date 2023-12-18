@@ -326,12 +326,12 @@ function loadingTemplate(message) {
             const $this = $(this);
             const options = $this.getOptions();
             const params = {
-                'caller': options.caller,
-                'sort': options.sortName,
-                'order': options.sortOrder,
-                'offset': (options.pageNumber - 1) * options.pageSize,
-                'limit': options.pageSize,
-                'view': $this.getDisplayMode()
+                caller: options.caller,
+                sort: options.sortName,
+                order: options.sortOrder,
+                offset: (options.pageNumber - 1) * options.pageSize,
+                limit: options.pageSize,
+                view: $this.getDisplayMode()
             };
 
             // add search if applicable
@@ -476,6 +476,7 @@ function loadingTemplate(message) {
             const $this = $(this);
             const url = $this.getOptions().saveUrl;
             if (url) {
+                // const data = {view: $this.getDisplayMode()};
                 $.post(url, $this.getParameters());
             }
             return $this;
@@ -596,7 +597,7 @@ function loadingTemplate(message) {
                     element: 'span',
                     className: 'text-success',
                     separateWordSearch: false,
-                    ignorePunctuation: ["'", ","]
+                    ignorePunctuation: ['\'', ',']
                 };
                 if ($this.isCustomView()) {
                     $this.getCustomView().find('.custom-item').mark(text, options);

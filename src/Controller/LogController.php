@@ -19,6 +19,7 @@ use App\Model\LogFile;
 use App\Report\LogsReport;
 use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
+use App\Table\DataQuery;
 use App\Table\LogTable;
 use App\Traits\TableTrait;
 use App\Utils\FileUtils;
@@ -28,6 +29,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -153,14 +155,13 @@ class LogController extends AbstractController
      * Render the table view.
      */
     #[Route(path: '', name: 'log_table', methods: Request::METHOD_GET)]
-    public function table(Request $request, LogTable $table, LoggerInterface $logger): Response
-    {
-        return $this->handleTableRequest(
-            $request,
-            $table,
-            $logger,
-            'log/log_table.html.twig'
-        );
+    public function table(
+        LogTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'log/log_table.html.twig');
     }
 
     /**

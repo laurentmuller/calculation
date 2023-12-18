@@ -24,7 +24,6 @@ use App\Traits\TableCellTrait;
 use App\Utils\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;
@@ -97,15 +96,6 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         );
     }
 
-    public function getDataQuery(Request $request): DataQuery
-    {
-        $query = parent::getDataQuery($request);
-        $groupId = $this->getRequestInt($request, self::PARAM_GROUP);
-        $query->addCustomData(self::PARAM_GROUP, $groupId);
-
-        return $query;
-    }
-
     protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
@@ -124,7 +114,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $result = parent::search($query, $builder, $alias);
-        $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
+        $groupId = $query->customData->groupId;
         if (0 === $groupId) {
             return $result;
         }
@@ -140,7 +130,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $groupId = $query->getCustomData(self::PARAM_GROUP, 0);
+            $groupId = $query->customData->groupId;
             $results->addParameter(self::PARAM_GROUP, $groupId);
             $results->addCustomData('group', $this->getGroup($groupId));
             $results->addCustomData('dropdown', $this->getDropDownValues());

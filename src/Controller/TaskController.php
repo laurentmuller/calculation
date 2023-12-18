@@ -25,11 +25,13 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\TaskService;
 use App\Spreadsheet\TasksDocument;
+use App\Table\DataQuery;
 use App\Table\TaskTable;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
@@ -176,14 +178,13 @@ class TaskController extends AbstractEntityController
      * Render the table view.
      */
     #[Route(path: '', name: 'task_table', methods: Request::METHOD_GET)]
-    public function table(Request $request, TaskTable $table, LoggerInterface $logger): Response
-    {
-        return $this->handleTableRequest(
-            $request,
-            $table,
-            $logger,
-            'task/task_table.html.twig'
-        );
+    public function table(
+        TaskTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'task/task_table.html.twig');
     }
 
     /**

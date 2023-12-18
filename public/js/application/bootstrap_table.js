@@ -497,11 +497,12 @@ function showSortDialog($table, $button) {
         },
 
         queryParams: function (params) {
+            params.customData = {};
             inputs.each(function () {
                 const id = this.getId();
                 const value = this.getValue();
                 if (id && value) {
-                    params[id] = value;
+                    params.customData[id] = value;
                 }
             });
             return params;

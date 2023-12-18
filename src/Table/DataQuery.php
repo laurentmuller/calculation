@@ -14,92 +14,50 @@ namespace App\Table;
 
 use App\Enums\TableView;
 use App\Interfaces\SortModeInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Contains the data query parameters.
  */
-class DataQuery implements SortModeInterface
+class DataQuery
 {
-    /**
-     * The callback state (XMLHttpRequest).
-     */
-    public bool $callback = false;
-
-    /**
-     * The custom datas.
-     *
-     * @var array<string, string|int>
-     */
-    public array $customData = [];
-
-    /**
-     * The selected identifier.
-     */
-    public int $id = 0;
-
-    /**
-     * The maximum number of results to retrieve (the "limit").
-     */
-    public int $limit;
-
-    /**
-     * The position of the first result to retrieve (the "offset").
-     */
-    public int $offset = 0;
-
-    /**
-     * The sort order ('asc' or 'desc').
-     *
-     * @psalm-var SortModeInterface::* $order
-     */
-    public string $order = self::SORT_ASC;
-
     /**
      * The page index (first = 1).
      */
-    public int $page = 1;
+    public readonly int $page;
 
-    /**
-     * The search term.
-     */
-    public string $search = '';
-
-    /**
-     * The sorted field.
-     */
-    public string $sort = '';
-
-    /**
-     * The view.
-     */
-    public TableView $view = TableView::TABLE;
-
-    public function __construct()
-    {
-        $this->limit = TableView::TABLE->getPageSize();
-    }
-
-    /**
-     * Adds a custom data to this list of custom datas.
-     */
-    public function addCustomData(string $name, string|int $value): self
-    {
-        $this->customData[$name] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Gets a custom data.
-     *
-     * @psalm-return ($default is null ? (string|int|null) : ($default is string ? string : int))
-     */
-    public function getCustomData(string $name, string|int $default = null): string|int|null
-    {
-        /** @psalm-var string|int|null $value */
-        $value = $this->customData[$name] ?? $default;
-
-        return $value;
+    public function __construct(
+        /* The callback state (XMLHttpRequest). */
+        public bool $callback = false,
+        /** The selected identifier. */
+        #[Assert\GreaterThanOrEqual(0)]
+        public readonly int $id = 0,
+        /** The view. */
+        public readonly TableView $view = TableView::TABLE,
+        /** The position of the first result to retrieve (the "offset"). */
+        #[Assert\GreaterThanOrEqual(0)]
+        public readonly int $offset = 0,
+        /** The maximum number of results to retrieve (the "limit"). */
+        #[Assert\GreaterThanOrEqual(1)]
+        public int $limit = 20,
+        /** The search term. */
+        #[Assert\NotNull]
+        public readonly string $search = '',
+        /** The sorted field. */
+        #[Assert\NotNull]
+        public string $sort = '',
+        #[Assert\Choice([SortModeInterface::SORT_ASC, SortModeInterface::SORT_DESC])]
+        /**
+         * The sort order ('asc' or 'desc').
+         *
+         * @var SortModeInterface::*
+         */
+        public string $order = SortModeInterface::SORT_ASC,
+        /** The custom data parameters. */
+        #[Assert\Valid]
+        public readonly DataParams $customData = new DataParams(),
+    ) {
+        $this->page = 1 + \intdiv($this->offset, $this->limit);
     }
 
     /**
@@ -108,30 +66,5 @@ class DataQuery implements SortModeInterface
     public function isViewCustom(): bool
     {
         return TableView::CUSTOM === $this->view;
-    }
-
-    /**
-     * Returns if the values must be shown as table.
-     *
-     * @psalm-api
-     */
-    public function isViewTable(): bool
-    {
-        return TableView::TABLE === $this->view;
-    }
-
-    /**
-     * Sets the sorting order.
-     */
-    public function setOrder(string $order): self
-    {
-        $order = \strtolower($order);
-        $this->order = match ($order) {
-            self::SORT_ASC,
-            self::SORT_DESC => $order,
-            default => $this->order,
-        };
-
-        return $this;
     }
 }

@@ -19,6 +19,8 @@ use App\Utils\StringUtils;
  */
 trait EmptyItemsTrait
 {
+    use MathTrait;
+
     /**
      * @psalm-param array<array{
      *          description: string,

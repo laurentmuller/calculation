@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Log;
+use App\Interfaces\SortModeInterface;
 use App\Model\LogFile;
 use App\Service\LogService;
 use App\Utils\FileUtils;
@@ -105,8 +106,8 @@ class LogTable extends AbstractTable implements \Countable
         $entities = \array_slice($entities, $query->offset, $query->limit);
         $results->rows = $this->mapEntities($entities);
         if (!$query->callback) {
-            $level = $query->customData->level;
-            $channel = $query->customData->channel;
+            $level = $query->level;
+            $channel = $query->channel;
             $results->params = [
                 self::PARAM_LEVEL => $level,
                 self::PARAM_CHANNEL => $channel,
@@ -133,8 +134,8 @@ class LogTable extends AbstractTable implements \Countable
     private function filter(DataQuery $query, array $entities): array
     {
         $search = $query->search;
-        $level = $query->customData->level;
-        $channel = $query->customData->channel;
+        $level = $query->level;
+        $channel = $query->channel;
         if (LogFilter::isFilter($search, $level, $channel)) {
             $filter = new LogFilter($search, $level, $channel);
 
@@ -152,7 +153,7 @@ class LogTable extends AbstractTable implements \Countable
     private function sort(DataQuery $query, array &$entities): void
     {
         $sort = $query->sort;
-        $ascending = self::SORT_ASC === $query->order;
+        $ascending = SortModeInterface::SORT_ASC === $query->order;
         if ('' !== $sort && !LogSorter::isDefaultSort($sort, $ascending)) {
             $sorter = new LogSorter($sort, $ascending);
             $sorter->sort($entities);

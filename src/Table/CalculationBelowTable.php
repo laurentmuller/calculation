@@ -49,9 +49,9 @@ class CalculationBelowTable extends CalculationTable implements \Countable
         return 0 === $this->count() ? 'below.empty' : null;
     }
 
-    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        $builder = parent::createDefaultQueryBuilder($alias);
+        $builder = parent::createQueryBuilder($alias);
 
         return CalculationRepository::addBelowFilter($builder, $this->getMinMargin(), $alias);
     }

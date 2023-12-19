@@ -14,7 +14,6 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Traits\EmptyItemsTrait;
-use App\Traits\MathTrait;
 
 /**
  * Spreadsheet document for the list of calculations with empty items.
@@ -24,7 +23,6 @@ use App\Traits\MathTrait;
 class CalculationsEmptyDocument extends AbstractCalculationItemsDocument
 {
     use EmptyItemsTrait;
-    use MathTrait;
 
     /**
      * The price label.

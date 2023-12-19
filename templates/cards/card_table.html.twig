@@ -130,6 +130,7 @@
 {%- set params = params|default({})|merge({'caller': caller}) -%}
 {%- set id = params.id|default(0) -%}
 {%- set limit = params.limit|default(20) -%}
+{%- set is_page_list = pageList is defined and pageList|length > 1 -%}
 {%- set attributes = attributes|default({})|merge({
     'classes': 'table table-hover table-list table-no-end-line table-sm',
     'row-selector': 'tbody .' ~ row_selector,
@@ -191,7 +192,7 @@
     <div class="btn-group btn-group-sm btn-group-toolbar" role="group">
         {# page size #}
         {% block page_list %}
-            {% if pageList is defined and pageList|length > 1 %}
+            {% if is_page_list %}
                 <div class="btn-group btn-group-sm dropdown" role="group">
                     {# menu is created on the prebody event #}
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_page" data-value="{{ limit }}" data-bs-toggle="dropdown" title="{{ 'list.limit_title'|trans }}" aria-expanded="false">
@@ -203,7 +204,7 @@
         {% endblock %}
         <div class="btn-group btn-group-sm" role="group">
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-bs-toggle="dropdown" title="{{ 'common.global_actions'|trans }}" aria-expanded="false">
-                <i class="fa-solid fa-bars"></i>
+                <i class="fa-solid fa-bars"></i>{% if not is_page_list %}&nbsp;{{ 'common.actions'|trans }}{% endif %}
             </button>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="button_other_actions">
                 {# display mode #}

@@ -20,13 +20,20 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * The table column.
+ *
+ * @psalm-type EntityType = EntityInterface|array{id: int, ...}
  */
-class Column implements \Stringable, SortModeInterface
+class Column implements \Stringable
 {
     /**
      * The property name of the field formatter.
      */
     private const FIELD_FORMATTER = 'fieldFormatter';
+
+    /**
+     * The shared property accessor to map JSON columns or values.
+     */
+    private static ?PropertyAccessor $accessor = null;
 
     /**
      * The field alias name.
@@ -58,7 +65,7 @@ class Column implements \Stringable, SortModeInterface
      *
      * @var string|callable|null
      *
-     * @psalm-var string|callable(mixed, EntityInterface|array): string|null
+     * @psalm-var string|callable(mixed, EntityType): string|null
      */
     private $fieldFormatter;
 
@@ -72,7 +79,7 @@ class Column implements \Stringable, SortModeInterface
      *
      * @psalm-var SortModeInterface::*
      */
-    private string $order = self::SORT_ASC;
+    private string $order = SortModeInterface::SORT_ASC;
 
     /**
      * The property path for array object.
@@ -143,7 +150,7 @@ class Column implements \Stringable, SortModeInterface
             throw new \InvalidArgumentException("The file '$path' does not contain any definition.");
         }
 
-        $accessor = PropertyAccess::createPropertyAccessor();
+        $accessor = self::getAccessor();
 
         return \array_map(function (array $definition) use ($parent, $accessor): self {
             $column = new self();
@@ -156,13 +163,10 @@ class Column implements \Stringable, SortModeInterface
                 }
 
                 try {
-                    /*
-                     * @param Column $column
-                     * @param-out Column $column
-                     */
                     $accessor->setValue($column, $key, $value);
                 } catch (\Exception $e) {
-                    throw new \InvalidArgumentException(\sprintf("Cannot set the property '%s'.", $key), (int) $e->getCode(), $e);
+                    $message = \sprintf("Cannot set the property '%s'.", $key);
+                    throw new \InvalidArgumentException($message, (int) $e->getCode(), $e);
                 }
             }
 
@@ -282,16 +286,15 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Map the given entity or array to a string value using this field property.
      *
-     * @param EntityInterface|array $objectOrArray the entity or array to map
-     * @param PropertyAccessor      $accessor      the property accessor to get the value
+     * @param EntityType $objectOrArray the entity or array to map
      *
      * @return string the mapped value
      */
-    public function mapValue(EntityInterface|array $objectOrArray, PropertyAccessor $accessor): string
+    public function mapValue(EntityInterface|array $objectOrArray): string
     {
         $property = \is_array($objectOrArray) ? $this->property : $this->field;
         /** @psalm-var mixed $value */
-        $value = $accessor->getValue($objectOrArray, $property);
+        $value = self::getAccessor()->getValue($objectOrArray, $property);
 
         return $this->formatValue($objectOrArray, $value);
     }
@@ -332,7 +335,7 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * @psalm-param string|callable(mixed, EntityInterface|array): string|null $fieldFormatter
+     * @psalm-param string|callable(mixed, EntityType): string|null $fieldFormatter
      *
      * @psalm-api
      */
@@ -362,8 +365,8 @@ class Column implements \Stringable, SortModeInterface
     {
         $order = \strtolower($order);
         $this->order = match ($order) {
-            self::SORT_ASC,
-            self::SORT_DESC => $order,
+            SortModeInterface::SORT_ASC,
+            SortModeInterface::SORT_DESC => $order,
             default => $this->order,
         };
 
@@ -411,8 +414,8 @@ class Column implements \Stringable, SortModeInterface
     /**
      * Formats the given value using the field formatter if applicable.
      *
-     * @param EntityInterface|array $objectOrArray the parent entity or array
-     * @param mixed                 $value         the value to format
+     * @param EntityType $objectOrArray the parent entity or array
+     * @param mixed      $value         the value to format
      *
      * @return string the formatted value
      */
@@ -426,6 +429,15 @@ class Column implements \Stringable, SortModeInterface
         }
 
         return (string) $value;
+    }
+
+    private static function getAccessor(): PropertyAccessor
+    {
+        if (!self::$accessor instanceof PropertyAccessor) {
+            return self::$accessor = PropertyAccess::createPropertyAccessor();
+        }
+
+        return self::$accessor;
     }
 
     /**

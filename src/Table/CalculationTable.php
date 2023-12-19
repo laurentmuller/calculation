@@ -14,6 +14,7 @@ namespace App\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
+use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
@@ -33,6 +34,7 @@ class CalculationTable extends AbstractEntityTable
      * The state editable parameter name (bool).
      */
     final public const PARAM_EDITABLE = 'stateEditable';
+
     /**
      * The state parameter name (int).
      */
@@ -65,34 +67,11 @@ class CalculationTable extends AbstractEntityTable
         ]);
     }
 
-    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
-    {
-        return $this->getRepository()->getTableQueryBuilder($alias);
-    }
-
-    protected function getColumnDefinitions(): string
-    {
-        return FileUtils::buildPath(__DIR__, 'Definition', 'calculation.json');
-    }
-
-    protected function getDefaultOrder(): array
-    {
-        return ['id' => self::SORT_DESC];
-    }
-
-    /**
-     * Gets drop-down values.
-     */
-    protected function getDropDownValues(): array
-    {
-        return $this->stateRepository->getDropDown();
-    }
-
-    protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
+    protected function addSearch(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $repository = $this->getRepository();
-        $result = parent::search($query, $builder, $alias);
-        $stateId = $query->customData->stateId;
+        $result = parent::addSearch($query, $builder, $alias);
+        $stateId = $query->stateId;
         if (0 !== $stateId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('state.id', $alias);
@@ -102,7 +81,7 @@ class CalculationTable extends AbstractEntityTable
             return true;
         }
 
-        $stateEditable = $query->customData->stateEditable;
+        $stateEditable = $query->stateEditable;
         if (0 !== $stateEditable) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('state.editable', $alias);
@@ -115,15 +94,38 @@ class CalculationTable extends AbstractEntityTable
         return $result;
     }
 
+    protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    {
+        return $this->getRepository()->getTableQueryBuilder($alias);
+    }
+
+    protected function getColumnDefinitions(): string
+    {
+        return FileUtils::buildPath(__DIR__, 'Definition', 'calculation.json');
+    }
+
+    protected function getDefaultOrder(): array
+    {
+        return ['id' => SortModeInterface::SORT_DESC];
+    }
+
+    /**
+     * Gets drop-down values.
+     */
+    protected function getDropDownValues(): array
+    {
+        return $this->stateRepository->getDropDown();
+    }
+
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
             $results->addAttribute('row-style', 'styleTextMuted');
-            $stateId = $query->customData->stateId;
+            $stateId = $query->stateId;
             $results->addParameter(self::PARAM_STATE, $stateId);
 
-            $stateEditable = $query->customData->stateEditable;
+            $stateEditable = $query->stateEditable;
             $results->addParameter(self::PARAM_EDITABLE, $stateEditable);
 
             $results->addCustomData('dropdown', $this->getDropDownValues());

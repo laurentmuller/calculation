@@ -14,7 +14,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Traits\EmptyItemsTrait;
-use App\Traits\MathTrait;
 
 /**
  * Report for calculations with empty items.
@@ -24,7 +23,6 @@ use App\Traits\MathTrait;
 class CalculationsEmptyReport extends AbstractCalculationItemsReport
 {
     use EmptyItemsTrait;
-    use MathTrait;
 
     /**
      * The price label.

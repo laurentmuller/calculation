@@ -377,7 +377,7 @@
             // header
             const clazz = `toast-header column-gap-2 text-bg-${options.type}`;
             const $div = $('<div/>', {
-                'class': clazz
+                class: clazz
             });
             this._createHeaderIcon($div, options);
             this._createHeaderTitle($div, options);
@@ -428,7 +428,7 @@
 
             // create
             const $icon = $('<i/>', {
-                'class': className,
+                class: className,
                 'aria-hidden': true
             });
             $parent.append($icon);
@@ -444,7 +444,7 @@
         _createHeaderSubtitle: function ($parent, options) {
             if (options.displaySubtitle && options.subtitle) {
                 const $subtitle = $('<small/>', {
-                    'html': options.subtitle
+                    html: options.subtitle
                 });
                 $parent.append($subtitle);
             }
@@ -469,10 +469,10 @@
             const title = options.closeTitle || 'Close';
             const $button = $('<button/>', {
                 'data-bs-dismiss': 'toast',
-                'class': className,
+                class: className,
                 'aria-label': title,
-                'type': 'button',
-                'title': title
+                type: 'button',
+                title: title
             });
             $parent.append($button);
         },
@@ -486,8 +486,8 @@
          */
         _createHeaderTitle: function ($parent, options) {
             const $title = $('<span/>', {
-                'class': 'me-auto',
-                'html': options.title || ''
+                class: 'me-auto',
+                html: options.title || ''
             });
             $parent.append($title);
         },
@@ -501,10 +501,10 @@
          */
         _createBodyMessage: function ($parent, options) {
             const $body = $('<div/>', {
-                'class': 'toast-body',
+                class: 'toast-body',
             });
             const $message = $('<div/>', {
-                'html': options.message
+                html: options.message
             });
             $body.append($message);
             $parent.append($body);
@@ -519,11 +519,11 @@
          */
         _createToast: function (options) {
             const $toast = $('<div/>', {
-                'role': 'alert',
+                role: 'alert',
                 'aria-atomic': 'true',
                 'aria-live': 'assertive',
-                'class': `toast border-${options.type}`,
-                'css': {
+                class: `toast border-${options.type}`,
+                css: {
                     'max-width': options.containerWidth,
                     'flex-basis': options.containerWidth
                 }
@@ -551,16 +551,16 @@
                 className = 'bg-body-secondary';
             }
             const $bar = $('<div/>', {
-                'class': `progress-bar overflow-hidden ${className}`,
-                'role': 'progressbar',
-                'aria-valuenow': '0',
+                class: `progress-bar overflow-hidden ${className}`,
+                role: 'progressbar',
                 'aria-valuemin': '0',
                 'aria-valuemax': '100',
+                'aria-valuenow': '1000',
             });
             const $progress = $('<div/>', {
-                'class': 'progress bg-transparent rounded-0 rounded-bottom',
-                'css': {
-                    'height': `${options.progress}px`
+                class: 'progress bg-transparent rounded-0 rounded-bottom',
+                css: {
+                    height: `${options.progress}px`
                 },
             });
             $progress.append($bar);

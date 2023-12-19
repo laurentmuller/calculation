@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\User;
+use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
 use App\Traits\RoleTranslatorTrait;
@@ -98,9 +99,9 @@ class UserTable extends AbstractEntityTable
         return $this->translator;
     }
 
-    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        $query = parent::createDefaultQueryBuilder($alias);
+        $query = parent::createQueryBuilder($alias);
         $user = $this->security->getUser();
         if (!$user instanceof User || !$user->isSuperAdmin()) {
             $criteria = $this->getRepository()->getSuperAdminFilter($alias);
@@ -117,7 +118,7 @@ class UserTable extends AbstractEntityTable
 
     protected function getDefaultOrder(): array
     {
-        return ['username' => self::SORT_ASC];
+        return ['username' => SortModeInterface::SORT_ASC];
     }
 
     protected function updateResults(DataQuery $query, DataResults &$results): void

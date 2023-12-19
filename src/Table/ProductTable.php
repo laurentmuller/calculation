@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Product;
+use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
@@ -35,7 +36,7 @@ class ProductTable extends AbstractCategoryItemTable
         parent::__construct($repository, $categoryRepository, $groupRepository);
     }
 
-    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
     }
@@ -47,7 +48,7 @@ class ProductTable extends AbstractCategoryItemTable
 
     protected function getDefaultOrder(): array
     {
-        return ['description' => self::SORT_ASC];
+        return ['description' => SortModeInterface::SORT_ASC];
     }
 
     protected function getDropDownValues(): array

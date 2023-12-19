@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Service\SearchService;
 use App\Traits\AuthorizationCheckerAwareTrait;
@@ -69,7 +70,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
         /** @psalm-var SearchType[] $items */
         $items = [];
         $search = $query->search;
-        $entity = $query->customData->entity;
+        $entity = $query->entity;
         $results = parent::handleQuery($query);
         if (\strlen($search) > 1) {
             $items = $this->service->search($search, $entity, SearchService::NO_LIMIT);
@@ -149,7 +150,7 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
      */
     private function sortItems(array &$items, string $sort, string $order): void
     {
-        $columns = [$sort => self::SORT_ASC === $order ? 1 : -1];
+        $columns = [$sort => SortModeInterface::SORT_ASC === $order ? 1 : -1];
         foreach (self::SORT_COLUMNS as $field) {
             if (!\array_key_exists($field, $columns)) {
                 $columns[$field] = 1;

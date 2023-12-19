@@ -19,7 +19,7 @@ use App\Utils\StringUtils;
 /**
  * Represents a pivot node.
  */
-class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringable, SortModeInterface
+class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringable
 {
     /**
      * The children.
@@ -38,7 +38,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
      *
      * @psalm-var SortModeInterface::*
      */
-    private string $sortMode = self::SORT_ASC;
+    private string $sortMode = SortModeInterface::SORT_ASC;
 
     /**
      * The title.
@@ -509,8 +509,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     public function setSortMode(string $sortMode): self
     {
         switch ($sortMode) {
-            case self::SORT_ASC:
-            case self::SORT_DESC:
+            case SortModeInterface::SORT_ASC:
+            case SortModeInterface::SORT_DESC:
                 if ($this->sortMode !== $sortMode) {
                     $this->sortMode = $sortMode;
 
@@ -538,8 +538,8 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     private function sort(): self
     {
         return match ($this->sortMode) {
-            self::SORT_ASC => $this->sortAscending(),
-            self::SORT_DESC => $this->sortDescending(),
+            SortModeInterface::SORT_ASC => $this->sortAscending(),
+            SortModeInterface::SORT_DESC => $this->sortDescending(),
         };
     }
 

@@ -49,12 +49,33 @@ class DataQuery
          * @var SortModeInterface::*
          */
         public string $order = SortModeInterface::SORT_ASC,
-        /** The custom data parameters. */
-        #[Assert\Valid]
-        public readonly DataParams $customData = new DataParams(),
         /** The cookie prefix */
         #[Assert\NotNull]
-        public string $prefix = ''
+        public string $prefix = '',
+        /** The group identifier. */
+        #[Assert\PositiveOrZero]
+        public int $groupId = 0,
+        /** The category identifier. */
+        #[Assert\PositiveOrZero]
+        public int $categoryId = 0,
+        /** The calculation state identifier. */
+        #[Assert\PositiveOrZero]
+        public int $stateId = 0,
+        /** The edit state identifier. */
+        #[Assert\Range(min: -1, max: 1)]
+        public int $stateEditable = 0,
+        /** The log level. */
+        #[Assert\NotNull]
+        public string $level = '',
+        /** The log channel. */
+        #[Assert\NotNull]
+        public string $channel = '',
+        /** The search entity. */
+        #[Assert\NotNull]
+        public string $entity = '',
+        /** The search type. */
+        #[Assert\NotNull]
+        public string $type = '',
     ) {
     }
 

@@ -16,6 +16,7 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
+use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
@@ -96,25 +97,10 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         );
     }
 
-    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    protected function addSearch(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
-        return $this->getRepository()->getTableQueryBuilder($alias);
-    }
-
-    protected function getColumnDefinitions(): string
-    {
-        return FileUtils::buildPath(__DIR__, 'Definition', 'category.json');
-    }
-
-    protected function getDefaultOrder(): array
-    {
-        return ['code' => self::SORT_ASC];
-    }
-
-    protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
-    {
-        $result = parent::search($query, $builder, $alias);
-        $groupId = $query->customData->groupId;
+        $result = parent::addSearch($query, $builder, $alias);
+        $groupId = $query->groupId;
         if (0 === $groupId) {
             return $result;
         }
@@ -126,11 +112,26 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
         return true;
     }
 
+    protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    {
+        return $this->getRepository()->getTableQueryBuilder($alias);
+    }
+
+    protected function getColumnDefinitions(): string
+    {
+        return FileUtils::buildPath(__DIR__, 'Definition', 'category.json');
+    }
+
+    protected function getDefaultOrder(): array
+    {
+        return ['code' => SortModeInterface::SORT_ASC];
+    }
+
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $groupId = $query->customData->groupId;
+            $groupId = $query->groupId;
             $results->addParameter(self::PARAM_GROUP, $groupId);
             $results->addCustomData('group', $this->getGroup($groupId));
             $results->addCustomData('dropdown', $this->getDropDownValues());

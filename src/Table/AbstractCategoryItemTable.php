@@ -39,11 +39,6 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
     final public const PARAM_CATEGORY = 'categoryId';
 
     /**
-     * The group parameter name (int).
-     */
-    private const PARAM_GROUP = CategoryTable::PARAM_GROUP;
-
-    /**
      * @psalm-param TRepository $repository
      */
     public function __construct(
@@ -54,18 +49,11 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         parent::__construct($repository);
     }
 
-    /**
-     * Gets drop-down values.
-     *
-     * @psalm-return DropDownType
-     */
-    abstract protected function getDropDownValues(): array;
-
-    protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
+    protected function addSearch(DataQuery $query, QueryBuilder $builder, string $alias): bool
     {
         $repository = $this->getRepository();
-        $result = parent::search($query, $builder, $alias);
-        $categoryId = $query->customData->categoryId;
+        $result = parent::addSearch($query, $builder, $alias);
+        $categoryId = $query->categoryId;
         if (0 !== $categoryId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('category.id', $alias);
@@ -74,12 +62,12 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
 
             return true;
         }
-        $groupId = $query->customData->groupId;
+        $groupId = $query->groupId;
         if (0 !== $groupId) {
             /** @psalm-var string $field */
             $field = $repository->getSearchFields('group.id', $alias);
-            $builder->andWhere($field . '=:' . self::PARAM_GROUP)
-                ->setParameter(self::PARAM_GROUP, $groupId, Types::INTEGER);
+            $builder->andWhere($field . '=:' . CategoryTable::PARAM_GROUP)
+                ->setParameter(CategoryTable::PARAM_GROUP, $groupId, Types::INTEGER);
 
             return true;
         }
@@ -87,15 +75,22 @@ abstract class AbstractCategoryItemTable extends AbstractEntityTable
         return $result;
     }
 
+    /**
+     * Gets drop-down values.
+     *
+     * @psalm-return DropDownType
+     */
+    abstract protected function getDropDownValues(): array;
+
     protected function updateResults(DataQuery $query, DataResults &$results): void
     {
         parent::updateResults($query, $results);
         if (!$query->callback) {
-            $categoryId = $query->customData->categoryId;
+            $categoryId = $query->categoryId;
             $results->addParameter(self::PARAM_CATEGORY, $categoryId);
 
-            $groupId = $query->customData->groupId;
-            $results->addParameter(self::PARAM_GROUP, $groupId);
+            $groupId = $query->groupId;
+            $results->addParameter(CategoryTable::PARAM_GROUP, $groupId);
 
             $results->addCustomData('dropdown', $this->getDropDownValues());
             $results->addCustomData('category', $this->getCategory($categoryId));

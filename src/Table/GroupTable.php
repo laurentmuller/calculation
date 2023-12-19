@@ -16,6 +16,7 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
+use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\GroupRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
@@ -110,7 +111,7 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
         );
     }
 
-    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
     }
@@ -122,6 +123,6 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
 
     protected function getDefaultOrder(): array
     {
-        return ['code' => self::SORT_ASC];
+        return ['code' => SortModeInterface::SORT_ASC];
     }
 }

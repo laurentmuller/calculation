@@ -15,7 +15,6 @@ namespace App\Table;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\TableInterface;
 use App\Repository\AbstractRepository;
-use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\Query\Expr\Orx;
@@ -27,6 +26,8 @@ use Doctrine\ORM\Tools\Pagination\CountWalker;
  *
  * @template TEntity of EntityInterface
  * @template TRepository of AbstractRepository<TEntity>
+ *
+ * @psalm-import-type EntityType from Column
  */
 abstract class AbstractEntityTable extends AbstractTable
 {
@@ -53,6 +54,46 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
+     * Adds the search clause.
+     *
+     * @param DataQuery      $query   the data query
+     * @param QueryBuilder   $builder the query builder to update
+     * @param literal-string $alias   the root alias
+     *
+     * @return bool true if a search clause is added to the query builder
+     */
+    protected function addSearch(DataQuery $query, QueryBuilder $builder, string $alias): bool
+    {
+        $search = $query->search;
+        if ('' === $search) {
+            return false;
+        }
+        $searchFields = $this->getSearchFields();
+        if ([] === $searchFields) {
+            return false;
+        }
+
+        $whereExpr = new Orx();
+        $builderExpr = $builder->expr();
+        $repository = $this->repository;
+        $parameter = ':' . TableInterface::PARAM_SEARCH;
+        foreach ($searchFields as $searchField) {
+            $fields = (array) $repository->getSearchFields($searchField, $alias);
+            foreach ($fields as $field) {
+                $whereExpr->add($builderExpr->like($field, $parameter));
+            }
+        }
+        if (0 === $whereExpr->count()) {
+            return false;
+        }
+
+        $builder->andWhere($whereExpr)
+            ->setParameter(TableInterface::PARAM_SEARCH, "%$search%", Types::STRING);
+
+        return true;
+    }
+
+    /**
      * Gets the total number of unfiltered entities.
      */
     protected function count(): int
@@ -61,29 +102,11 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
-     * Count the number of filtered entities.
-     *
-     * @param QueryBuilder $builder the source builder
-     * @param string       $alias   the root alias
-     *
-     * @throws \Doctrine\ORM\Exception\ORMException
-     */
-    protected function countFiltered(QueryBuilder $builder, string $alias): int
-    {
-        $field = $this->repository->getSingleIdentifierFieldName();
-        $builder = $this->updateJoin(clone $builder)
-            ->resetDQLPart(self::GROUP_BY_PART)
-            ->select("COUNT($alias.$field)");
-
-        return (int) $builder->getQuery()->getSingleScalarResult();
-    }
-
-    /**
-     * Creates a default query builder.
+     * Creates the query builder.
      *
      * @param literal-string $alias the entity alias
      */
-    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->repository->createDefaultQueryBuilder($alias);
     }
@@ -91,7 +114,8 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Gets the default sort order.
      *
-     * @return array<string, string> an array where each key is the field name and the value is the order direction ('asc' or 'desc')
+     * @return array<string, string> an array where each key is the field name and the value is the order
+     *                               direction ('asc' or 'desc')
      *
      * @psalm-return array<string, \App\Interfaces\SortModeInterface::*>
      */
@@ -114,21 +138,26 @@ abstract class AbstractEntityTable extends AbstractTable
     protected function handleQuery(DataQuery $query): DataResults
     {
         $results = parent::handleQuery($query);
-        $builder = $this->createDefaultQueryBuilder();
+        $builder = $this->createQueryBuilder();
+        /** @psalm-var literal-string $alias */
         $alias = $builder->getRootAliases()[0];
+
         $results->totalNotFiltered = $results->filtered = $this->count();
-        if ($this->search($query, $builder, $alias)) {
+        if ($this->addSearch($query, $builder, $alias)) {
             $results->filtered = $this->countFiltered($builder, $alias);
         }
-        $this->orderBy($query, $builder, $alias);
-        $this->limit($query, $builder);
+
+        $this->addOrderBy($query, $builder, $alias);
+        $this->addLimit($query, $builder);
+
         $q = $builder->getQuery();
         if (empty($builder->getDQLPart(self::JOIN_PART))) {
             $q->setHint(CountWalker::HINT_DISTINCT, false);
         }
-        /** @var EntityInterface[]|array<array{id: int}> $entities */
+
+        /** @psalm-var EntityType[] $entities */
         $entities = $q->getResult();
-        $this->addSelection($entities, $query);
+        $this->addSelection($entities, $query, $alias);
         $results->rows = $this->mapEntities($entities);
 
         return $results;
@@ -140,7 +169,7 @@ abstract class AbstractEntityTable extends AbstractTable
      * @param DataQuery    $query   the data query
      * @param QueryBuilder $builder the query builder to update
      */
-    protected function limit(DataQuery $query, QueryBuilder $builder): void
+    private function addLimit(DataQuery $query, QueryBuilder $builder): void
     {
         $builder->setFirstResult($query->offset)
             ->setMaxResults($query->limit);
@@ -149,74 +178,38 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Add the order by clause.
      *
-     * @param DataQuery    $query   the data query
-     * @param QueryBuilder $builder the query builder to update
-     * @param string       $alias   the root alias
+     * @param DataQuery      $query   the data query
+     * @param QueryBuilder   $builder the query builder to update
+     * @param literal-string $alias   the root alias
      */
-    protected function orderBy(DataQuery $query, QueryBuilder $builder, string $alias): void
+    private function addOrderBy(DataQuery $query, QueryBuilder $builder, string $alias): void
     {
         $orderBy = [];
-        $sorting = StringUtils::isString($query->sort);
-        if ($sorting && StringUtils::isString($query->order)) {
+        if ('' !== $query->sort) {
             $this->updateOrderBy($orderBy, $query, $alias);
-        }
-        if (!$sorting) {
+        } else {
             $column = $this->getDefaultColumn();
             if ($column instanceof Column) {
                 $this->updateOrderBy($orderBy, $column, $alias);
             }
         }
         $this->updateOrderBy($orderBy, $this->getDefaultOrder(), $alias);
+
         foreach ($orderBy as $sort => $order) {
             $builder->addOrderBy($sort, $order);
         }
     }
 
     /**
-     * Adds the search clause.
+     * Add the selected entity if any and if it is missing.
      *
-     * @param DataQuery    $query   the data query
-     * @param QueryBuilder $builder the query builder to update
-     * @param string       $alias   the root alias
-     */
-    protected function search(DataQuery $query, QueryBuilder $builder, string $alias): bool
-    {
-        $search = $query->search;
-        if (!StringUtils::isString($search)) {
-            return false;
-        }
-        $searchFields = $this->getSearchFields();
-        if ([] === $searchFields) {
-            return false;
-        }
-        $whereExpr = new Orx();
-        $builderExpr = $builder->expr();
-        $repository = $this->repository;
-        $likeParameter = ':' . TableInterface::PARAM_SEARCH;
-        foreach ($searchFields as $searchField) {
-            $fields = (array) $repository->getSearchFields($searchField, $alias);
-            foreach ($fields as $field) {
-                $whereExpr->add($builderExpr->like($field, $likeParameter));
-            }
-        }
-        if (0 === $whereExpr->count()) {
-            return false;
-        }
-        $builder->andWhere($whereExpr)
-            ->setParameter(TableInterface::PARAM_SEARCH, "%$search%", Types::STRING);
-
-        return true;
-    }
-
-    /**
-     * Add selected entity if missing.
-     *
-     * @param EntityInterface[]|array<array{id: int}> $entities the entities to search in or to update
-     * @param DataQuery                               $query    the query to get values from
+     * @param EntityType[]   $entities the entities to search in or to update
+     * @param DataQuery      $query    the query to get values from
+     * @param literal-string $alias    the entity alias
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    private function addSelection(array &$entities, DataQuery $query): void
+    private function addSelection(array &$entities, DataQuery $query, string $alias): void
     {
         $id = $query->id;
         if (0 === $id) {
@@ -224,14 +217,14 @@ abstract class AbstractEntityTable extends AbstractTable
         }
 
         foreach ($entities as $entity) {
-            if ($id === (\is_array($entity) ? $entity['id'] : $entity->getId())) {
+            if ($id === $this->getEntityId($entity)) {
                 return;
             }
         }
 
-        /** @psalm-var EntityInterface|array{id: int}|null $entity */
-        $entity = $this->createDefaultQueryBuilder()
-            ->where(AbstractRepository::DEFAULT_ALIAS . '.id = :id')
+        /** @psalm-var EntityType|null $entity */
+        $entity = $this->createQueryBuilder($alias)
+            ->where($alias . '.id = :id')
             ->setParameter('id', $id, Types::INTEGER)
             ->getQuery()
             ->getOneOrNullResult();
@@ -246,60 +239,92 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
+     * Count the number of filtered entities.
+     *
+     * @param QueryBuilder   $builder the source builder
+     * @param literal-string $alias   the root alias
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
+     */
+    private function countFiltered(QueryBuilder $builder, string $alias): int
+    {
+        $field = $this->repository->getSingleIdentifierFieldName();
+        $builder = $this->updateParts(clone $builder, $alias)
+            ->select("COUNT($alias.$field)");
+
+        return (int) $builder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Gets the entity identifier.
+     *
+     * @psalm-param EntityType $entity
+     */
+    private function getEntityId(array|EntityInterface $entity): ?int
+    {
+        return \is_array($entity) ? $entity['id'] : $entity->getId();
+    }
+
+    /**
+     * Get the search fields.
+     *
      * @return string[]
      */
     private function getSearchFields(): array
     {
-        return \array_map(
-            static fn (Column $c): string => $c->getField(),
-            \array_filter(
-                $this->getColumns(),
-                static fn (Column $c): bool => $c->isSearchable()
-            )
-        );
-    }
+        $mapCallback = static fn (Column $c): string => $c->getField();
+        $filterCallback = static fn (Column $c): bool => $c->isSearchable();
 
-    /**
-     * Remove the left join parts of the given builder.
-     */
-    private function updateJoin(QueryBuilder $builder): QueryBuilder
-    {
-        /** @psalm-var array{e: ?Join[]} $part */
-        $part = $builder->getDQLPart(self::JOIN_PART);
-        if (!isset($part['e'])) {
-            return $builder;
-        }
-        $joins = \array_filter($part['e'], static fn (Join $join): bool => Join::LEFT_JOIN !== $join->getJoinType());
-        if ([] === $joins) {
-            return $builder;
-        }
-        $builder->resetDQLPart(self::JOIN_PART);
-        foreach ($joins as $join) {
-            $builder->join($join->getJoin(), (string) $join->getAlias());
-        }
-
-        return $builder;
+        return \array_map($mapCallback, \array_filter($this->getColumns(), $filterCallback));
     }
 
     /**
      * Update the order by clause.
      *
-     * @psalm-param array<string, \App\Interfaces\SortModeInterface::*> $orderBy
-     * @psalm-param DataQuery|Column|array<string, \App\Interfaces\SortModeInterface::*> $value
+     * @psalm-param array<string, string> $orderBy
+     * @psalm-param DataQuery|Column|array<string, string> $value
      */
     private function updateOrderBy(array &$orderBy, DataQuery|Column|array $value, string $alias): void
     {
         if ($value instanceof DataQuery) {
-            /** @psalm-var array<string,\App\Interfaces\SortModeInterface::*> $value */
             $value = [$value->sort => $value->order];
         } elseif ($value instanceof Column) {
             $value = [$value->getField() => $value->getOrder()];
         }
+
         foreach ($value as $field => $order) {
             $sortField = $this->repository->getSortField($field, $alias);
             if (!\array_key_exists($sortField, $orderBy)) {
                 $orderBy[$sortField] = $order;
             }
         }
+    }
+
+    /**
+     * Remove the group by part and left join parts of the given builder.
+     *
+     * @param literal-string $alias the root alias
+     */
+    private function updateParts(QueryBuilder $builder, string $alias): QueryBuilder
+    {
+        $builder->resetDQLPart(self::GROUP_BY_PART);
+
+        /** @psalm-var array<string, ?Join[]> $part */
+        $part = $builder->getDQLPart(self::JOIN_PART);
+        if (!isset($part[$alias])) {
+            return $builder;
+        }
+
+        $joins = \array_filter($part[$alias], static fn (Join $join): bool => Join::LEFT_JOIN !== $join->getJoinType());
+        if ([] === $joins) {
+            return $builder;
+        }
+
+        $builder->resetDQLPart(self::JOIN_PART);
+        foreach ($joins as $join) {
+            $builder->join($join->getJoin(), (string) $join->getAlias());
+        }
+
+        return $builder;
     }
 }

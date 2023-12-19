@@ -14,6 +14,7 @@ namespace App\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
+use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationStateRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
@@ -80,7 +81,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
         return $this->trans('common.value_false');
     }
 
-    protected function createDefaultQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
+    protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
         return $this->getRepository()->getTableQueryBuilder($alias);
     }
@@ -92,7 +93,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
 
     protected function getDefaultOrder(): array
     {
-        return ['code' => self::SORT_ASC];
+        return ['code' => SortModeInterface::SORT_ASC];
     }
 
     protected function updateResults(DataQuery $query, DataResults &$results): void

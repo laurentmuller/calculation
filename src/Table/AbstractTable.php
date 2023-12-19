@@ -13,26 +13,20 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Interfaces\EntityInterface;
-use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
-use App\Traits\MathTrait;
-use App\Traits\ParameterTrait;
 use App\Utils\FormatUtils;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * The abstract table.
+ *
+ * @psalm-import-type EntityType from Column
  */
-abstract class AbstractTable implements SortModeInterface
+abstract class AbstractTable
 {
-    use MathTrait;
-    use ParameterTrait;
-
     /**
      * The column definitions.
      *
-     * @var array<Column>
+     * @var ?Column[]
      */
     private ?array $columns = null;
 
@@ -67,7 +61,7 @@ abstract class AbstractTable implements SortModeInterface
     /**
      * Gets the column definitions.
      *
-     * @return array<Column>
+     * @return Column[]
      */
     public function getColumns(): array
     {
@@ -107,44 +101,6 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Create the columns.
-     *
-     * @return Column[] the columns
-     */
-    protected function createColumns(): array
-    {
-        $path = $this->getColumnDefinitions();
-        $columns = Column::fromJson($this, $path);
-        if ($this->isColumnAction()) {
-            $columns[] = Column::createColumnAction();
-        }
-
-        return $columns;
-    }
-
-    /**
-     * Gets the allowed page list.
-     *
-     * @param int $totalNotFiltered the number of not filtered entities
-     *
-     * @return int[] the allowed page list
-     */
-    protected function getAllowedPageList(int $totalNotFiltered): array
-    {
-        $sizes = TableInterface::PAGE_LIST;
-        if (\end($sizes) <= $totalNotFiltered) {
-            return $sizes;
-        }
-        foreach ($sizes as $index => $size) {
-            if ($size >= $totalNotFiltered) {
-                return \array_slice($sizes, 0, $index + 1);
-            }
-        }
-
-        return $sizes;
-    }
-
-    /**
      * Gets the JSON file containing the column definitions.
      */
     abstract protected function getColumnDefinitions(): string;
@@ -178,65 +134,21 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Implode the given page list.
-     *
-     * @param int[] $pageList the page list
-     */
-    protected function implodePageList(array $pageList): string
-    {
-        return '[' . \implode(',', $pageList) . ']';
-    }
-
-    /**
-     * Returns a value indicating if the column action is added at the end of the columns.
-     *
-     * @see Column::createColumnAction()
-     */
-    protected function isColumnAction(): bool
-    {
-        return true;
-    }
-
-    /**
      * Maps the given entities.
      *
-     * @param array<EntityInterface|array> $entities the entities to map
+     * @param EntityType[] $entities the entities to map
      *
      * @return array<array<string, string>> the mapped entities
      */
     protected function mapEntities(array $entities): array
     {
-        if ([] !== $entities) {
-            $columns = $this->getColumns();
-            $accessor = PropertyAccess::createPropertyAccessor();
-
-            return \array_map(fn (EntityInterface|array $entity): array => $this->mapValues($entity, $columns, $accessor), $entities);
+        if ([] === $entities) {
+            return [];
         }
 
-        return [];
-    }
+        $columns = $this->getColumns();
 
-    /**
-     * Map the given entity or array to an array where the keys are the column field.
-     *
-     * @param EntityInterface|array $objectOrArray the entity or array to map
-     * @param array<Column>         $columns       the column definitions
-     * @param PropertyAccessor      $accessor      the property accessor to get the values
-     *
-     * @return array<string, string> the mapped object
-     */
-    protected function mapValues(EntityInterface|array $objectOrArray, array $columns, PropertyAccessor $accessor): array
-    {
-        return \array_reduce(
-            $columns,
-            /** @psalm-param array<string, string> $result */
-            static function (array $result, Column $column) use ($objectOrArray, $accessor): array {
-                $result[$column->getAlias()] = $column->mapValue($objectOrArray, $accessor);
-
-                return $result;
-            },
-            []
-        );
+        return \array_map(fn (EntityInterface|array $entity): array => $this->mapEntity($entity, $columns), $entities);
     }
 
     /**
@@ -272,5 +184,73 @@ abstract class AbstractTable implements SortModeInterface
             'total-not-filtered' => $results->totalNotFiltered,
             'page-list' => $this->implodePageList($results->pageList),
         ], $query->attributes(), $results->attributes);
+    }
+
+    /**
+     * Create the columns.
+     *
+     * @return Column[] the columns
+     */
+    private function createColumns(): array
+    {
+        $path = $this->getColumnDefinitions();
+        $columns = Column::fromJson($this, $path);
+        $columns[] = Column::createColumnAction();
+
+        return $columns;
+    }
+
+    /**
+     * Gets the allowed page list.
+     *
+     * @param int $totalNotFiltered the number of not filtered entities
+     *
+     * @return int[] the allowed page list
+     */
+    private function getAllowedPageList(int $totalNotFiltered): array
+    {
+        $sizes = TableInterface::PAGE_LIST;
+        if (\end($sizes) <= $totalNotFiltered) {
+            return $sizes;
+        }
+        foreach ($sizes as $index => $size) {
+            if ($size >= $totalNotFiltered) {
+                return \array_slice($sizes, 0, $index + 1);
+            }
+        }
+
+        return $sizes;
+    }
+
+    /**
+     * Implode the given page list.
+     *
+     * @param int[] $pageList the page list
+     */
+    private function implodePageList(array $pageList): string
+    {
+        return '[' . \implode(',', $pageList) . ']';
+    }
+
+    /**
+     * Map the given entity or array to an array.
+     *
+     * @param EntityType $objectOrArray the entity or array to map
+     * @param Column[]   $columns       the columns
+     *
+     * @return array<string, string> the mapped entity or array
+     */
+    private function mapEntity(EntityInterface|array $objectOrArray, array $columns): array
+    {
+        return \array_reduce(
+            $columns,
+            /** @psalm-param array<string, string> $result */
+            static function (array $result, Column $column) use ($objectOrArray): array {
+                $result[$column->getAlias()] = $column->mapValue($objectOrArray);
+
+                return $result;
+            },
+            []
+        );
     }
 }

@@ -134,7 +134,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.2.9"
+            "php": "8.2.13"
         },
         "optimize-autoloader": true,
         "preferred-install": {

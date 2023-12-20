@@ -7,7 +7,5 @@
             {% if image %}{{ image|raw }}{% else %}{{ icon('user fa-lg far me-2') }}{% endif %}<span class="d-lg-none">{{ app.user.userIdentifier }}</span>
         {% endapply %}
     </button>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-        {{ include('navigation/menu/_user_menu.html.twig') }}
-    </ul>
+    {{ include('navigation/menu/_menu_user.html.twig', {'class': 'dropdown-menu-end'}) }}
 </li>

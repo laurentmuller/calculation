@@ -1,5 +1,5 @@
 {# tools menu #}
-{% from 'macros/_icons.html.twig' import icon, navItem, dropdownSeparator %}
+{% from 'macros/_icons.html.twig' import icon %}
 {% set show_navigation_menu = is_granted_data and show_navigation_search ?? false %}
 {% if show_navigation_menu or is_admin or is_granted_task %}
     {% set id = 'MENU_SIDEBAR_TOOLS' %}
@@ -12,25 +12,7 @@
             {{- icon('tools fa-fw', 'index.menu_tools') -}}
         </button>
         <div class="collapse{{ collapse_class }}" id="{{ id }}">
-            <ul class="list-unstyled">
-                {% if show_navigation_menu -%}
-                    {{ navItem(path('search'), 'search.title', 'search') }}
-                {% endif %}
-                {% if is_admin %}
-                    {% if show_navigation_menu %}
-                        <li>{{ dropdownSeparator() }}</li>
-                    {% endif %}
-                    {{ navItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
-                    {{ navItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
-                    {{ navItem(path('empty_table'), 'empty.title', 'file-code far') }}
-                {% endif %}
-                {%- if is_granted_task -%}
-                    {% if show_navigation_menu or is_admin -%}
-                        <li>{{ dropdownSeparator() }}</li>
-                    {% endif %}
-                    {{ navItem(path('task_compute'), 'task_compute.title', 'keyboard') }}
-                {% endif -%}
-            </ul>
+            {{ include('navigation/menu/_menu_tools.html.twig') }}
         </div>
     </li>
 {% endif %}

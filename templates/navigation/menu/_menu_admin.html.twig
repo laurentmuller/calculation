@@ -1,0 +1,22 @@
+{# common admin menu #}
+{% from 'macros/_icons.html.twig' import dropdownItem, dropdownSeparator %}
+<ul class="dropdown-menu">
+    {{ dropdownItem(path('admin_product'), 'product.update.title', ICON_PRODUCT) }}
+    {{ dropdownItem(path('admin_update'), 'calculation.update.title', 'pencil') }}
+    {{ dropdownItem(path('admin_archive'), 'archive.title', 'calendar-xmark far') }}
+    {{ dropdownSeparator() }}
+    {{ dropdownItem(path('user_table'), 'user.list.title', ICON_USER) }}
+    {{ dropdownItem(path('admin_rights_user'), 'index.menu_rights_user', 'user-check') }}
+    {% if is_super_admin -%}
+        {{ dropdownItem(path('admin_rights_admin'), 'index.menu_rights_admin', 'user-shield') }}
+    {% endif %}
+    {{ dropdownSeparator() }}
+    {{ dropdownItem(path('admin_parameters'), 'parameters.title', 'cogs') }}
+    {% if is_admin -%}
+        {{ dropdownSeparator() }}
+        {{ dropdownItem(path('log_table'), 'log.title', ICON_LOG) }}
+        {% if is_super_admin -%}
+            {{ dropdownItem(path('admin_clear'), 'clear_cache.title', ICON_DELETE) }}
+        {% endif %}
+    {% endif %}
+</ul>

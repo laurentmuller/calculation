@@ -123,3 +123,31 @@ html[data-bs-theme=dark] .navbar-vertical::-webkit-scrollbar-thumb {
 .navbar-vertical:focus::-webkit-scrollbar-thumb {
     visibility: visible;
 }
+
+/**
+ * dropdown menu and item
+ */
+.navbar-vertical .dropdown-menu:not(.dropdown-menu-default) {
+    background: transparent;
+    padding-top: 0;
+    display: block;
+    border: 0;
+}
+
+.navbar-vertical .dropdown-menu:not(.dropdown-menu-default) .dropdown-item {
+    color: var(--bs-navbar-color);
+    white-space: normal;
+    padding: 0.3rem 0;
+    width: 100%;
+}
+
+.navbar-vertical .dropdown-menu:not(.dropdown-menu-default) .dropdown-item:hover,
+.navbar-vertical .dropdown-menu:not(.dropdown-menu-default) .dropdown-item:focus {
+    color: var(--bs-navbar-hover-color);
+    background: none;
+}
+
+.navbar-vertical .dropdown-menu:not(.dropdown-menu-default) .dropdown-item.active {
+    color: var(--bs-emphasis-color);
+    background: none;
+}

@@ -43,4 +43,4 @@
         </tbody>
     </table>
 </div>
-{% include 'dialog/dialog_raw_data.html.twig' with {'id': 'daily_data_modal', 'description': title, 'raw_data': daily, 'allow_copy': true} %}
+{{ include('dialog/dialog_raw_data.html.twig', {'id': 'daily_data_modal', 'description': title, 'raw_data': daily, 'allow_copy': true}) }}

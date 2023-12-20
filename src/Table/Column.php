@@ -16,7 +16,7 @@ use App\Interfaces\EntityInterface;
 use App\Interfaces\SortModeInterface;
 use App\Utils\FileUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * The table column.
@@ -33,7 +33,7 @@ class Column implements \Stringable
     /**
      * The shared property accessor to map JSON columns or values.
      */
-    private static ?PropertyAccessor $accessor = null;
+    private static ?PropertyAccessorInterface $accessor = null;
 
     /**
      * The field alias name.
@@ -170,7 +170,7 @@ class Column implements \Stringable
                 }
             }
 
-            return $column instanceof self ? $column : new self();
+            return $column;
         }, $definitions);
     }
 
@@ -431,9 +431,9 @@ class Column implements \Stringable
         return (string) $value;
     }
 
-    private static function getAccessor(): PropertyAccessor
+    private static function getAccessor(): PropertyAccessorInterface
     {
-        if (!self::$accessor instanceof PropertyAccessor) {
+        if (!self::$accessor instanceof PropertyAccessorInterface) {
             return self::$accessor = PropertyAccess::createPropertyAccessor();
         }
 

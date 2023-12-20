@@ -12,11 +12,13 @@
         {% set counter = user_service.panelCalculation %}
         <div class="dropdown dropdown-counter" title="{{ 'index.panel_table_count'|trans }}" data-path="{{ path('homepage_calculation') }}" data-value="{{ counter }}">
             <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">{{ counter }}</button>
-            <div class="dropdown-menu">
+            <ul class="dropdown-menu">
             {% for index in calculations_range %}
-                <button class="dropdown-item dropdown-item-counter{% if counter == index %} active{% endif %}" data-value="{{ index }}" >{{ 'counters.calculations'|trans({'count': index}) }}</button>
+                <li>
+                    <button class="dropdown-item dropdown-item-counter{% if counter == index %} active{% endif %}" data-value="{{ index }}" >{{ 'counters.calculations'|trans({'count': index}) }}</button>
+                </li>
             {% endfor %}
-            </div>
+            </ul>
         </div>
     </div>
 </div>

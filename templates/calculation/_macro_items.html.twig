@@ -25,19 +25,19 @@
             {%- set menu_id = 'dropdownMenuItem_' ~ item.vars.id -%}
             {{ dropdownEllipsis(menu_id) }}
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
-                <li>{{ dropdownItemWithClass('#', 'calculation.edit.edit_item', ICON_EDIT, 'btn-default btn-edit-item') }}</li>
-                <li>{{ dropdownItemWithClass('#', 'calculation.edit.delete_item', ICON_DELETE, 'btn-delete-item') }}</li>
-                <li>{{ dropdownSeparator() }}</li>
-                <li>{{ dropdownItemWithClass('#', 'calculation.edit.price.edit', 'highlighter', 'btn-edit-price') }}</li>
-                <li>{{ dropdownItemWithClass('#', 'calculation.edit.quantity.edit', 'paint-brush', 'btn-edit-quantity') }}</li>
-                <li>{{ dropdownSeparator() }}</li>
-                <li>{{ dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-add-item') }}</li>
-                <li>{{ dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}</li>
-                <li>{{ dropdownSeparator(first and last) }}</li>
-                <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-item', first) }}</li>
-                <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_up', 'chevron-up', 'btn-up-item', first) }}</li>
-                <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_down', 'chevron-down', 'btn-down-item', last) }}</li>
-                <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-item', last) }}</li>
+                {{ dropdownItemWithClass('#', 'calculation.edit.edit_item', ICON_EDIT, 'btn-default btn-edit-item') }}
+                {{ dropdownItemWithClass('#', 'calculation.edit.delete_item', ICON_DELETE, 'btn-delete-item') }}
+                {{ dropdownSeparator() }}
+                {{ dropdownItemWithClass('#', 'calculation.edit.price.edit', 'highlighter', 'btn-edit-price') }}
+                {{ dropdownItemWithClass('#', 'calculation.edit.quantity.edit', 'paint-brush', 'btn-edit-quantity') }}
+                {{ dropdownSeparator() }}
+                {{ dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-add-item') }}
+                {{ dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}
+                {{ dropdownSeparator(first and last) }}
+                {{ dropdownItemWithClass('#', 'calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-item', first) }}
+                {{ dropdownItemWithClass('#', 'calculation.edit.move_up', 'chevron-up', 'btn-up-item', first) }}
+                {{ dropdownItemWithClass('#', 'calculation.edit.move_down', 'chevron-down', 'btn-down-item', last) }}
+                {{ dropdownItemWithClass('#', 'calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-item', last) }}
             </ul>
         </div>
     </td>

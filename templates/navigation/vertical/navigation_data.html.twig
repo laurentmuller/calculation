@@ -1,5 +1,5 @@
 {# data menu #}
-{% from 'macros/_icons.html.twig' import icon, navItem %}
+{% from 'macros/_icons.html.twig' import icon %}
 {% set id = 'MENU_SIDEBAR_DATA' %}
 {% set expanded = app.request.cookies.boolean(id, true) %}
 {% set toggle_class = expanded ? ' active' : '' %}
@@ -10,28 +10,6 @@
         {{- icon('database fa-fw', 'index.menu_data') -}}
     </button>
     <div class="collapse{{ collapse_class }}" id="{{ id }}">
-        <ul class="list-unstyled">
-            {% if is_granted_calculation -%}
-                {{ navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
-            {% endif %}
-            {% if is_granted_product -%}
-                {{ navItem(path('product_table'), 'product.list.title', ICON_PRODUCT) }}
-            {% endif -%}
-            {% if is_granted_task -%}
-                {{ navItem(path('task_table'), 'task.list.title', ICON_TASK) }}
-            {% endif -%}
-            {% if is_granted_category -%}
-                {{ navItem(path('category_table'), 'category.list.title', ICON_CATEGORY) }}
-            {% endif -%}
-            {% if is_granted_group -%}
-                {{ navItem(path('group_table'), 'group.list.title', ICON_GROUP) }}
-            {% endif -%}
-            {% if is_granted_calculation_state -%}
-                {{ navItem(path('calculationstate_table'), 'calculationstate.list.title', ICON_CALCULATION_STATE) }}
-            {% endif -%}
-            {% if is_granted_global_margin -%}
-                {{ navItem(path('globalmargin_table'), 'globalmargin.list.title', ICON_GLOBAL_MARGIN) }}
-            {% endif -%}
-        </ul>
+        {{ include('navigation/menu/_menu_data.html.twig') }}
     </div>
 </li>

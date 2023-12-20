@@ -1,5 +1,5 @@
 {# chart menu #}
-{% from 'macros/_icons.html.twig' import icon, navItem %}
+{% from 'macros/_icons.html.twig' import icon %}
 {% set id = 'MENU_SIDEBAR_CHART' %}
 {% set expanded = app.request.cookies.boolean(id) %}
 {% set toggle_class = expanded ? ' active' : '' %}
@@ -10,9 +10,6 @@
         {{- icon('chart-area fa-fw', 'index.menu_graphics') -}}
     </button>
     <div class="collapse{{ collapse_class }}" id="{{ id }}">
-        <ul class="list-unstyled">
-            {{ navItem(path('chart_month'), 'title_by_month', 'calendar-alt far', 'chart') }}
-            {{ navItem(path('chart_state'), 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}
-        </ul>
+        {{ include('navigation/menu/_menu_chart.html.twig') }}
     </div>
 </li>

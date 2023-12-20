@@ -1,5 +1,5 @@
 {# admin menu #}
-{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, navItem, navItemExternal %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator, dropdownItem, dropdownItemExternal %}
 {% set id = 'MENU_SIDEBAR_TEST' %}
 {% set expanded = app.request.cookies.boolean(id) %}
 {% set toggle_class = expanded ? ' active' : '' %}
@@ -11,7 +11,7 @@
         {{- icon('bug fa-fw', 'index.menu_test') -}}
     </button>
     <div class="collapse{{ collapse_class }}" id="{{ id }}">
-        <ul class="list-unstyled">
+        <ul class="dropdown-menu d-block border-0 pt-0">
             {% set id = 'MENU_SIDEBAR_TEST_SERVICE' %}
             {% set expanded = app.request.cookies.boolean(id) %}
             {% set toggle_class = expanded ? ' active' : '' %}
@@ -22,11 +22,11 @@
                     {{- icon('bell-concierge fa-fw', 'index.menu_service') -}}
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
-                    <ul class="list-unstyled">
-                        {{ navItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') }}
-                        {{ navItem(path('exchange_display'), 'exchange_rate.title', 'comments-dollar') }}
-                        {{ navItem(path('test_translate'), 'translator.title', 'globe') }}
-                        {{ navItem(path('ipstack'), 'test.ip_stack', 'location-dot') }}
+                    <ul class="dropdown-menu d-block border-0 pt-0">
+                        {{ dropdownItem(path('openweather_weather'), 'openweather.current.title', 'cloud-sun') }}
+                        {{ dropdownItem(path('exchange_display'), 'exchange_rate.title', 'comments-dollar') }}
+                        {{ dropdownItem(path('test_translate'), 'translator.title', 'globe') }}
+                        {{ dropdownItem(path('ipstack'), 'test.ip_stack', 'location-dot') }}
                     </ul>
                 </div>
             </li>
@@ -41,11 +41,11 @@
                     {{- icon('bug fa-fw', 'index.menu_tools') -}}
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
-                    <ul class="list-unstyled">
-                        {{ navItem(path('test_tree'), 'test.tree_view', 'folder-tree') }}
-                        {{ navItemExternal(path('test_pdf'), 'common.button_export_pdf', ICON_PDF) }}
-                        {{ navItemExternal(path('test_word'), 'common.button_export_word', ICON_WORD) }}
-                        {{ navItem(path('schema'), 'schema.index.title', 'table') }}
+                    <ul class="dropdown-menu d-block border-0 pt-0">
+                        {{ dropdownItem(path('test_tree'), 'test.tree_view', 'folder-tree') }}
+                        {{ dropdownItemExternal(path('test_pdf'), 'common.button_export_pdf', ICON_PDF) }}
+                        {{ dropdownItemExternal(path('test_word'), 'common.button_export_word', ICON_WORD) }}
+                        {{ dropdownItem(path('schema'), 'schema.index.title', 'table') }}
                     </ul>
                 </div>
             </li>
@@ -60,9 +60,9 @@
                     {{- icon('bug fa-fw', 'index.menu_admin') -}}
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
-                    <ul class="list-unstyled">
-                        {{ navItem(path('admin_import'), 'swisspost.title', 'download') }}
-                        {{ navItem(path('generate'), 'generate.title', 'random') }}
+                    <ul class="dropdown-menu d-block border-0 pt-0">
+                        {{ dropdownItem(path('admin_import'), 'swisspost.title', 'download') }}
+                        {{ dropdownItem(path('generate'), 'generate.title', 'random') }}
                     </ul>
                 </div>
             </li>
@@ -77,19 +77,19 @@
                     {{- icon('chart-area fa-fw', 'index.menu_graphics') -}}
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
-                    <ul class="list-unstyled">
-                        {{ navItem(path('calculation_pivot'), 'pivot.title', 'table') }}
-                        {{ navItem(path('timeline'), 'timeline.title', 'stream') }}
-                        {{ navItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
+                    <ul class="dropdown-menu d-block border-0 pt-0">
+                        {{ dropdownItem(path('calculation_pivot'), 'pivot.title', 'table') }}
+                        {{ dropdownItem(path('timeline'), 'timeline.title', 'stream') }}
+                        {{ dropdownItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
                     </ul>
                 </div>
             </li>
             <li>{{ dropdownSeparator() }}</li>
-            {{ navItem(path('test_notifications'), 'test.notification', 'bell far') }}
-            {{ navItem(path('test_editor'), 'test.editor', 'edit') }}
-            {{ navItem(path('test_password'), 'password.title', 'lock') }}
-            {{ navItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') }}
-            {{ navItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
+            {{ dropdownItem(path('test_notifications'), 'test.notification', 'bell far') }}
+            {{ dropdownItem(path('test_editor'), 'test.editor', 'edit') }}
+            {{ dropdownItem(path('test_password'), 'password.title', 'lock') }}
+            {{ dropdownItem(path('test_recaptcha'), 'test.recaptcha', 'google fab') }}
+            {{ dropdownItem(path('customer_table'), 'customer.list.title', ICON_CUSTOMER) }}
         </ul>
     </div>
 </li>

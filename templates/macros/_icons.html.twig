@@ -36,20 +36,10 @@
     {{ _self.linkExternal(href, 'common.api_documentation', class, icon, 'common.api_documentation_help') -}}
 {%- endmacro %}
 
-{% macro navItem(href, text, icon, domain=null, parameters=[]) -%}
-<li class="nav-item">
-    {{- _self.link(href, text, 'nav-link', icon, null, domain, parameters) -}}
-</li>
-{%- endmacro %}
-
-{% macro navItemExternal(href, text, icon, domain=null, parameters=[]) -%}
-<li class="nav-item">
-    {{- _self.linkExternal(href, text, 'nav-link', icon, null, domain, parameters) -}}
-</li>
-{%- endmacro %}
-
 {% macro dropdownItem(href, text, icon, domain=null, parameters=[]) -%}
-{{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, domain, parameters) -}}
+<li>
+    {{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, domain, parameters) -}}
+</li>
 {%- endmacro %}
 
 {% macro dropdownItemExternal(href, text, icon, domain=null, parameters=[]) -%}
@@ -64,14 +54,18 @@
 
 {% macro dropdownItemWithClass(href, text, icon, class, hidden, domain=null, parameters=[]) -%}
 {%- set class = ('dropdown-item rowlink-skip ' ~ (hidden ? 'd-none ' : '') ~ class|default(''))|trim -%}
-<a href="{{ href }}" class="{{ class }}">
-    {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}
-</a>
+<li>
+    <a href="{{ href }}" class="{{ class }}">
+        {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}
+    </a>
+</li>
 {%- endmacro %}
 
 {% macro dropdownSeparator(hidden=false, class='') -%}
 {%- set class = ('dropdown-divider ' ~ class ~ (hidden ? ' d-none' : ''))|trim -%}
-<hr class="{{ class }}">
+<li>
+    <hr class="{{ class }}">
+</li>
 {%- endmacro %}
 
 {% macro dropdownEllipsis(id=null, title='common.actions', class='btn btn-sm border-0 pt-0') -%}

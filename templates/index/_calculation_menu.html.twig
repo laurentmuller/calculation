@@ -1,6 +1,6 @@
 {% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownItemWithClass, dropdownSeparator, dropdownItem, dropdownItemExternal %}
 {{ dropdownEllipsis() }}
-<div class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
+<ul class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
     {%- if edit_page -%}
         {%- set path = path(edit_page, params) -%}
         {% set item_class = row_edit and is_editable ? 'btn-default' : '' %}
@@ -40,4 +40,4 @@
             {{ dropdownItemExternal(path, 'calculation.list.excel_single_title', ICON_EXCEL) }}
         {% endif %}
     {%- endif -%}
-</div>
+</ul>

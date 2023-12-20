@@ -858,7 +858,7 @@ parameters:
     print_address: L'adresse du client est imprimée sur les entêtes des documents Excel®, Word® et PDF.
     qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
     status_bar: Afficher la barre d'état au bas de l'application.
-    dark_navigation: Utiliser le thème sombre pour le menu principal et la barre d'état.
+    dark_navigation: Toujours utiliser le thème sombre pour le menu principal, le menu latéral et la barre d'état; indépendamment du thème choisi.
   placeholders:
     default_product: <Aucun article sélectionné>
   success: Les paramètres de l'application ont été mis à jour avec succès.

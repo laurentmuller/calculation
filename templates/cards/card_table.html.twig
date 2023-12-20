@@ -33,9 +33,11 @@
         'role': 'button',
         'data-value': value,
         'class': ('dropdown-item dropdown-' ~ suffix ~ active)|trim}) %}
-    <button{{ output_attributes(attributes) }}>
-        {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{%- endif -%}{{- text|default(value) -}}
-    </button>
+    <li>
+        <button{{ output_attributes(attributes) }}>
+            {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{%- endif -%}{{- text|default(value) -}}
+        </button>
+    </li>
 {% endapply %}
 {%- endmacro %}
 {# output a drop-down header #}
@@ -48,12 +50,16 @@
 {# output a drop-down item path #}
 {% macro item_path(path, text, icon, class='') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
-{{ link(path, text, class, icon ~ ' fa-fw') }}
+<li>
+    {{- link(path, text, class, icon ~ ' fa-fw') -}}
+</li>
 {%- endmacro %}
 {# output an external drop-down item path #}
 {% macro item_path_external(path, text, icon, class='') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
-{{ linkExternal(path, text, class, icon ~ ' fa-fw') }}
+<li>
+    {{- linkExternal(path, text, class, icon ~ ' fa-fw') -}}
+</li>
 {%- endmacro %}
 {# output a global drop-down item #}
 {% macro item_global(path, text, icon) %}
@@ -62,7 +68,10 @@
 {# output an external drop-down item #}
 {% macro item_external(path, text, icon, class='') %}
 {%- set class = ('dropdown-item rowlink-skip ' ~ class|default(''))|trim -%}
-{{ linkExternal(path, text, class, icon ~ ' fa-fw') }}
+<li>
+    {{- linkExternal(path, text, class, icon ~ ' fa-fw') -}}
+</li>
+
 {%- endmacro %}
 {# output a drop-down separator #}
 {% macro item_separator(class='') %}
@@ -96,9 +105,11 @@
 {%- endmacro %}
 {# output a drop-down view item #}
 {% macro button_view(text, icon, view, selection) %}
-<button type="button" class="dropdown-item dropdown-menu-view{% if view == selection %} dropdown-item-checked-right{% endif %}" data-value="{{ view }}">
-    {{- icon(icon ~ ' fa-fw', text) -}}
-</button>
+<li>
+    <button type="button" class="dropdown-item dropdown-menu-view{% if view == selection %} dropdown-item-checked-right{% endif %}" data-value="{{ view }}">
+        {{- icon(icon ~ ' fa-fw', text) -}}
+    </button>
+</li>
 {%- endmacro %}
 {# granted actions #}
 {%- set object_type = object_type|default('none') -%}
@@ -198,7 +209,7 @@
                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_page" data-value="{{ limit }}" data-bs-toggle="dropdown" title="{{ 'list.limit_title'|trans }}" aria-expanded="false">
                         {{- limit -}}
                     </button>
-                    <div class="dropdown-menu dropdown-menu-page" aria-labelledby="button_page"></div>
+                    <ul class="dropdown-menu dropdown-menu-page" aria-labelledby="button_page"></ul>
                 </div>
             {% endif %}
         {% endblock %}
@@ -206,7 +217,7 @@
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-bs-toggle="dropdown" title="{{ 'common.global_actions'|trans }}" aria-expanded="false">
                 <i class="fa-solid fa-bars"></i>{% if not is_page_list %}&nbsp;{{ 'common.actions'|trans }}{% endif %}
             </button>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="button_other_actions">
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="button_other_actions">
                 {# display mode #}
                 {% block display_mode %}
                     {{ _self.button_view('table_view.table', 'table', 'table', params.view) }}
@@ -214,18 +225,22 @@
                 {%- endblock %}
                 {% if sortable %}
                     {{ _self.item_separator() }}
-                    <button type="button" class="dropdown-item btn-sort-data" data-url="{{ url('ajax_dialog_sort') }}">
-                        {{- icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
-                    </button>
+                    <li>
+                        <button type="button" class="dropdown-item btn-sort-data" data-url="{{ url('ajax_dialog_sort') }}">
+                            {{- icon('sort-amount-down-alt fa-fw fa-solid fa-sort-amount-down-alt', 'list.sort_title') -}}
+                        </button>
+                    </li>
                 {% endif %}
-                <button type="button" class="dropdown-item btn-show-page" data-url="{{ url('ajax_dialog_page') }}">
-                    {{- icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}
-                </button>
+                <li>
+                    <button type="button" class="dropdown-item btn-show-page" data-url="{{ url('ajax_dialog_page') }}">
+                        {{- icon('arrow-up-right-dots fa-solid fa-fw', 'datatable.dialog_title') -}}
+                    </button>
+                </li>
                 {% if allow_global %}
                     {{ _self.item_separator() }}
                     {% block global_actions -%}{%- endblock %}
                 {% endif %}
-            </div>
+            </ul>
         </div>
     </div>
 </div>
@@ -251,7 +266,7 @@
 {# dropdown actions template #}
 <div id="dropdown-actions" class="dropdown d-print-none d-none">
     {{ dropdownEllipsis() }}
-    <div class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
+    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-actions">
         {% if allow_edit %}
             {{- _self.item_separator('edit-divider') }}
             {% block edit_actions -%}{%- endblock %}
@@ -269,7 +284,7 @@
             {% block show_actions -%}{%- endblock %}
         {% endif %}
         {% block other_actions -%}{%- endblock %}
-    </div>
+    </ul>
 </div>
 {# custom view template #}
 <div id="custom-view-template" class="d-none">

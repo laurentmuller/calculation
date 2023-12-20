@@ -1,8 +1,8 @@
 {# horizontal toolbar #}
-{% from 'macros/_icons.html.twig' import icon, navItem %}
+{% from 'macros/_icons.html.twig' import icon, link, navItem %}
 {# horizontal navigation #}
 {% set display_style = sidebar_show ? 'none' : 'flex' %}
-<nav id="navigation" class="navbar navbar-horizontal navbar-expand-lg {{ navigation_class }} border-bottom ps-2" style="display: {{ display_style }}">
+<nav id="navigation" class="navbar navbar-horizontal navbar-expand-lg bg-body-tertiary border-bottom ps-2 pb-1" style="display: {{ display_style }}"{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
     <div class="container-fluid ps-0">
         <button class="btn btn-outline-secondary rounded-circle show-sidebar py-0 px-2 mt-1" title="{{ 'index.sidebar_show'|trans }}">
             <i class="fa-solid fa-angle-right"></i>
@@ -16,7 +16,9 @@
         <div class="navbar-collapse collapse" id="navbar-horizontal">
             <ul class="navbar-nav me-auto">
                 {% if is_granted_calculation -%}
-                    {{ navItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
+                    <li class="nav-item">
+                        {{- link(path('calculation_table'), 'calculation.list.title', 'nav-link', ICON_CALCULATION) -}}
+                    </li>
                 {% endif %}
                 {% if is_granted_data -%}
                    {{ include('navigation/horizontal/navigation_data.html.twig') }}

@@ -64,7 +64,7 @@
     {{ _self.output_position(results.position_dms|default(false), results.position_url|default(false)) }}
     </tbody>
 </table>
-{% include 'dialog/dialog_raw_data.html.twig' with {'raw_data': results, 'description': 'test.ip_stack'|trans, 'allow_copy': true} %}
+{{ include('dialog/dialog_raw_data.html.twig', {'raw_data': results, 'description': 'test.ip_stack'|trans, 'allow_copy': true}) }}
 {% endblock %}
 {# footer #}
 {% block card_footer -%}

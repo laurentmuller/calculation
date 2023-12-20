@@ -1,28 +1,8 @@
 {# data menu #}
-{% from 'macros/_icons.html.twig' import icon, dropdownItem %}
-{% set id = 'dropdown_data' %}
+{% from 'macros/_icons.html.twig' import icon %}
 <li class="nav-item dropdown">
-    <button class="nav-link dropdown-toggle" id="{{ id }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <button class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         {{ icon('database', 'index.menu_data') }}
     </button>
-    <ul class="dropdown-menu" aria-labelledby="{{ id }}">
-        {% if is_granted_product -%}
-            <li>{{ dropdownItem(path('product_table'), 'product.list.title', ICON_PRODUCT) }}</li>
-        {% endif -%}
-        {% if is_granted_task -%}
-            <li>{{ dropdownItem(path('task_table'), 'task.list.title', ICON_TASK) }}</li>
-        {% endif -%}
-        {% if is_granted_category -%}
-            <li>{{ dropdownItem(path('category_table'), 'category.list.title', ICON_CATEGORY) }}</li>
-        {% endif -%}
-        {% if is_granted_group -%}
-            <li>{{ dropdownItem(path('group_table'), 'group.list.title', ICON_GROUP) }}</li>
-        {% endif -%}
-        {% if is_granted_calculation_state -%}
-            <li>{{ dropdownItem(path('calculationstate_table'), 'calculationstate.list.title', ICON_CALCULATION_STATE) }}</li>
-        {% endif -%}
-        {% if is_granted_global_margin -%}
-            <li>{{ dropdownItem(path('globalmargin_table'), 'globalmargin.list.title', ICON_GLOBAL_MARGIN) }}</li>
-        {% endif -%}
-    </ul>
+    {{ include('navigation/menu/_menu_data.html.twig') }}
 </li>

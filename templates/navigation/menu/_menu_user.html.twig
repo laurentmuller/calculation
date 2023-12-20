@@ -1,0 +1,32 @@
+{# common user menu #}
+{% from 'macros/_icons.html.twig' import dropdownSeparator, dropdownItem %}
+<ul class="dropdown-menu {{ class }}">
+    {{ dropdownItem(logout_path(), 'index.logout', 'sign-out-alt') }}
+    {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}
+    {{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
+    {{ dropdownSeparator() }}
+    {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
+    {% if is_previous_admin -%}
+        {{ dropdownSeparator() }}
+        {{ dropdownItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
+    {% endif %}
+    {% if is_env_dev -%}
+        {{ dropdownSeparator() }}
+        {{ dropdownItem(link_prod, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) }}
+    {% elseif is_env_prod or is_env_local -%}
+        {{ dropdownSeparator() }}
+        {{ dropdownItem(link_dev, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) }}
+    {% endif %}
+    {{ dropdownSeparator() }}
+    {% if is_granted_data %}
+        {{ dropdownItem(path('site_map'), 'index.menu_site_map', 'sitemap') }}
+    {% endif %}
+    {{ dropdownItem(path('user_comment'), 'user.comment.title', 'envelope far') }}
+    {% if is_env_dev %}
+        {{ dropdownItem(path('help'), 'help.title', 'question-circle') }}
+    {% endif %}
+    {% if not status_bar %}
+        {{ dropdownSeparator() }}
+        {{ dropdownItem(path('about'), 'index.menu_info', 'info-circle', null, {'%app_name%': app_name}) }}
+    {% endif %}
+</ul>

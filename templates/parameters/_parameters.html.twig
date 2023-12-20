@@ -51,10 +51,10 @@
         <button class="btn btn-form btn-outline-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="{{ 'parameters.default_help'|trans }}">
             {{- 'parameters.default'|trans -}}
         </button>
-        <div class="dropdown-menu">
-            <a class="btn-default-visible dropdown-item" href="#">{{- 'parameters.default_visible'|trans -}}</a>
-            <a class="btn-default-all dropdown-item" href="#">{{- 'parameters.default_all'|trans -}}</a>
-        </div>
+        <ul class="dropdown-menu">
+            <li><a class="btn-default-visible dropdown-item" href="#">{{- 'parameters.default_visible'|trans -}}</a></li>
+            <li><a class="btn-default-all dropdown-item" href="#">{{- 'parameters.default_all'|trans -}}</a></li>
+        </ul>
     </div>
 </div>
 {%- endblock %}

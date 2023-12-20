@@ -16,15 +16,15 @@
                 {%- set menu_id = 'dropdownMenuGroup_' ~ group.vars.id -%}
                     {{ dropdownEllipsis(menu_id) }}
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
-                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.delete_group', ICON_DELETE, 'btn-delete-group') }}</li>
-                    <li>{{ dropdownSeparator() }}</li>
-                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-default btn-add-item') }}</li>
-                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}</li>
-                    <li>{{ dropdownSeparator(first and last) }}</li>
-                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-group', first) }}</li>
-                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_up', 'chevron-up', 'btn-up-group', first) }}</li>
-                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_down', 'chevron-down', 'btn-down-group', last) }}</li>
-                    <li>{{ dropdownItemWithClass('#', 'calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-group', last) }}</li>
+                    {{ dropdownItemWithClass('#', 'calculation.edit.delete_group', ICON_DELETE, 'btn-delete-group') }}
+                    {{ dropdownSeparator() }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-default btn-add-item') }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}
+                    {{ dropdownSeparator(first and last) }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-group', first) }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.move_up', 'chevron-up', 'btn-up-group', first) }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.move_down', 'chevron-down', 'btn-down-group', last) }}
+                    {{ dropdownItemWithClass('#', 'calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-group', last) }}
                 </ul>
             </div>
         </th>

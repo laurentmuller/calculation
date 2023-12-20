@@ -15,7 +15,7 @@
 {%- set sidebar_show = is_remembered and is_actived ? app.request.cookies.boolean('MENU_SIDEBAR_SHOW') : false -%}
 {%- set sidebar_class = sidebar_show ? ' sidebar-show' : '' -%}
 {%- set status_bar = status_bar is defined ? status_bar : user_service.statusBar and is_remembered and is_actived -%}
-{%- set navigation_class = user_service.darkNavigation ? 'navbar-dark bg-dark' : 'bg-body' -%}
+{%- set is_dark_navigation = is_remembered and user_service.darkNavigation -%}
 {# rights #}
 {%- set is_granted_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
 {%- set is_granted_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
@@ -72,7 +72,7 @@
 <body{% if status_bar %} class="status-bar"{% endif %} data-cookie-path="{{ cookie_path }}">
     {# vertical navigation #}
     {%- block navigation_vertical -%}
-        {{- include('navigation/vertical/navigation.html.twig') }}
+        {{ include('navigation/vertical/navigation.html.twig') }}
     {%- endblock %}
     {# main content #}
     <div class="page-content{{ sidebar_class }}">

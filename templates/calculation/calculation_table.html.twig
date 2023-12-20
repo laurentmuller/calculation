@@ -23,7 +23,7 @@
         {% set text = (state_editable ? 'calculationstate.list.editable' : 'calculationstate.list.not_editable')|trans %}
     {% endif %}
     {{ _self.output_dropdown_menu('state', ICON_CALCULATION_STATE, text, 'calculation.list.state_help', input_value, data_default) }}
-    <div class="dropdown-menu" aria-labelledby="state">
+    <ul class="dropdown-menu" aria-labelledby="state">
         {{ _self.output_dropdown('state', 0, input_value, 'calculation.list.state_all_text'|trans, {}, 'filter-circle-xmark') }}
         {% for key, entry in customData.dropdown %}
             {{ _self.item_separator() }}
@@ -32,7 +32,7 @@
                 {{ _self.output_dropdown('child state', id, state_id, code, {'data-parameter': 'stateId'}, ICON_CALCULATION_STATE) }}
             {% endfor %}
         {% endfor %}
-    </div>
+    </ul>
 {% endif %}
 {%- endblock %}
 {# global actions #}

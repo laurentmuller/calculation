@@ -25,7 +25,7 @@
     </div>
 </div>
 <div class="task-row-table">
-    {% include 'task/_task_table.html.twig' with tasks %}
+    {{ include('task/_task_table.html.twig', tasks) }}
 </div>
 <div class="row task-row-empty d-none ps-1">
     <p class="small text-body-secondary">{{ 'task.edit.empty_items'|trans }}</p>

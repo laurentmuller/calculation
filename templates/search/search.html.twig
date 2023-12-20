@@ -24,13 +24,13 @@
             data-default="{{ data_default }}">
         {{- icon('database') }}&nbsp;{{ entity ? customData.entities[entity].name|trans : data_default -}}
     </button>
-    <div class="dropdown-menu" aria-labelledby="entity">
+    <ul class="dropdown-menu" aria-labelledby="entity">
         {{ _self.output_dropdown('entity', '', entity, 'search.all_entities'|trans, false, 'filter-circle-xmark') }}
         {{ _self.item_separator() }}
         {% for key, entry in customData.entities %}
             {{ _self.output_dropdown('entity', key, entity, entry.name|trans, {}, entry.icon) }}
         {% endfor %}
-    </div>
+    </ul>
 {% endif %}
 {%- endblock %}
 {# other actions #}

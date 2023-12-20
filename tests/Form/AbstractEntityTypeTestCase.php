@@ -173,9 +173,6 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
      * @psalm-param array<string, mixed>  $data
      *
      * @psalm-return TEntity
-     *
-     * @psalm-suppress InvalidReturnStatement
-     * @psalm-suppress InvalidReturnType
      */
     protected function populate(string $entityClass, array $data): EntityInterface
     {

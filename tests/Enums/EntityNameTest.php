@@ -72,6 +72,22 @@ class EntityNameTest extends TestCase
         ];
     }
 
+    public static function getRightsField(): array
+    {
+        return [
+            [EntityName::CALCULATION, 'CalculationRights'],
+            [EntityName::CALCULATION_STATE, 'CalculationStateRights'],
+            [EntityName::CATEGORY, 'CategoryRights'],
+            [EntityName::CUSTOMER, 'CustomerRights'],
+            [EntityName::GLOBAL_MARGIN, 'GlobalMarginRights'],
+            [EntityName::GROUP, 'GroupRights'],
+            [EntityName::LOG, 'LogRights'],
+            [EntityName::PRODUCT, 'ProductRights'],
+            [EntityName::TASK, 'TaskRights'],
+            [EntityName::USER, 'UserRights'],
+        ];
+    }
+
     public static function getTryFindOffset(): array
     {
         return [
@@ -98,6 +114,26 @@ class EntityNameTest extends TestCase
             ['Calculation', 'EntityCalculation'],
             [Calculation::class, 'EntityCalculation'],
             [null, 'EntityCalculation', 'EntityCalculation'],
+        ];
+    }
+
+    public static function getTryFromField(): array
+    {
+        return [
+            ['', null],
+            ['Fake', null],
+            ['Rights', null],
+
+            ['CalculationRights', EntityName::CALCULATION],
+            ['CalculationStateRights', EntityName::CALCULATION_STATE],
+            ['CategoryRights', EntityName::CATEGORY],
+            ['CustomerRights', EntityName::CUSTOMER],
+            ['GlobalMarginRights', EntityName::GLOBAL_MARGIN],
+            ['GroupRights', EntityName::GROUP],
+            ['LogRights', EntityName::LOG],
+            ['ProductRights', EntityName::PRODUCT],
+            ['TaskRights', EntityName::TASK],
+            ['UserRights', EntityName::USER],
         ];
     }
 
@@ -189,21 +225,29 @@ class EntityNameTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
     public function testLabel(string $expected, EntityName $entity): void
     {
-        self::assertSame($expected, $entity->getReadable());
+        $actual = $entity->getReadable();
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getMatchValue')]
-    public function testMatch(EntityName $name, string $value, bool $expected = true): void
+    public function testMatchValue(EntityName $name, string $value, bool $expected = true): void
     {
-        $result = $name->matchValue($value);
-        self::assertSame($expected, $result);
+        $actual = $name->matchValue($value);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getOffset')]
     public function testOffset(EntityName $entityName, int $expected): void
     {
-        $result = $entityName->offset();
-        self::assertSame($expected, $result);
+        $actual = $entityName->offset();
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRightsField')]
+    public function testRightsField(EntityName $entityName, string $expected): void
+    {
+        $actual = $entityName->getRightsField();
+        self::assertSame($expected, $actual);
     }
 
     public function testSorted(): void
@@ -220,8 +264,8 @@ class EntityNameTest extends TestCase
             EntityName::CUSTOMER,
             EntityName::LOG,
         ];
-        $sorted = EntityName::sorted();
-        self::assertSame($expected, $sorted);
+        $actual = EntityName::sorted();
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -231,34 +275,47 @@ class EntityNameTest extends TestCase
     public function testTranslate(string $expected, EntityName $entity): void
     {
         $translator = $this->createTranslator();
-        self::assertSame($expected, $entity->trans($translator));
+        $actual = $entity->trans($translator);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindOffset')]
     public function testTryFindOffset(mixed $e, int $expected): void
     {
-        $result = EntityName::tryFindOffset($e);
-        self::assertSame($expected, $result);
+        $actual = EntityName::tryFindOffset($e);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindValue')]
     public function testTryFindValue(mixed $subject, ?string $expected, string $default = null): void
     {
-        $result = EntityName::tryFindValue($subject, $default);
-        self::assertSame($expected, $result);
+        $actual = EntityName::tryFindValue($subject, $default);
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFromField')]
+    public function testTryFromField(string $field, ?EntityName $expected): void
+    {
+        $actual = EntityName::tryFromField($field);
+        if ($expected instanceof EntityName) {
+            self::assertSame($expected, $actual);
+        } else {
+            self::assertNull($actual);
+        }
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTryFromMixed')]
     public function testTryFromMixed(mixed $subject, mixed $expected): void
     {
-        $result = EntityName::tryFromMixed($subject);
-        self::assertSame($expected, $result);
+        $actual = EntityName::tryFromMixed($subject);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getValue')]
     public function testValue(EntityName $entityName, string $expected): void
     {
-        self::assertSame($expected, $entityName->value);
+        $actual = $entityName->value;
+        self::assertSame($expected, $actual);
     }
 
     /**

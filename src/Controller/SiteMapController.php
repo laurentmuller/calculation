@@ -85,6 +85,6 @@ class SiteMapController extends AbstractController
             }
         }
 
-        return $results;
+        return \array_unique($results);
     }
 }

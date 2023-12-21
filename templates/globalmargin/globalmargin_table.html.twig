@@ -5,12 +5,6 @@
 {%- set title_icon = ICON_GLOBAL_MARGIN -%}
 {%- set object_type = ENTITY_GLOBAL_MARGIN -%}
 {% block card_container_class ' col col-xl-8 offset-xl-2' %}
-{# header actions #}
-{% block header_actions -%}
-{% if allow_edit -%}
-    {{- link(path('globalmargin_edit', params), 'globalmargin.edit.title', 'add-link p-0') }}
-{%- endif %}
-{%- endblock %}
 {# display mode  #}
 {% block display_mode %}
 {% if allow_edit -%}
@@ -32,6 +26,14 @@
 {% block show_actions -%}
 {{- _self.item_path(path('globalmargin_show', params), 'globalmargin.show.title', ICON_SHOW, show_class ~ ' btn-default') }}
 {%- endblock %}
+{# page list #}
+{% block page_list %}
+{{ parent() }}
+{% if allow_edit -%}
+    {{ link(path('globalmargin_edit'), '', 'btn btn-outline-secondary', ICON_EDIT, 'globalmargin.edit.title') }}
+{% endif %}
+{%- endblock %}
+
 {# custom view header #}
 {% block custom_view_header -%}
 {%- if allow_show -%}

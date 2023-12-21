@@ -1,18 +1,18 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'about/_about_macro.html.twig' as tools %}
-{% from 'macros/_icons.html.twig' import link, linkExternal, homepage, button_pdf, button_word %}
+{% from 'macros/_icons.html.twig' import link, linkExternal, homepage, button_pdf, button_word, link_pdf, link_word, link_excel %}
 {# macros #}
 {% macro card(id, pdf_route, excel_route=false, word_route=false) -%}
     {%- set title = ('about.' ~ id)|trans -%}
     {%- set route = path('about_' ~ id ~ '_content') -%}
     <div class="card-header d-flex-wrap-center">
         <a class="drop-down-icon-left card-title flex-fill" href="#" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" title="{{ 'about.expand'|trans }}">{{- title -}}</a>
-        {{ linkExternal(path(pdf_route), null, null, ICON_PDF, 'common.button_export_pdf') }}
+        {{ link_pdf(pdf_route) }}
         {% if excel_route %}
-            {{ linkExternal(path(excel_route), null, null, ICON_EXCEL, 'common.button_export_excel') }}
+            {{ link_excel(excel_route) }}
         {% endif %}
         {% if word_route %}
-            {{ linkExternal(path(word_route), null, null, ICON_WORD, 'common.button_export_word') }}
+            {{ link_word(word_route) }}
         {% endif %}
     </div>
     <div class="card-body collapse" id="{{ id }}" data-bs-parent="#aboutAccordion">
@@ -73,8 +73,8 @@
 <div class="d-flex-wrap-center mt-2 pb-3 d-print-none">
     {{ homepage() }}
     {{ link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
-    {{ button_pdf('about_pdf', {}, 'common.button_export_pdf') }}
-    {{ button_word('about_word', {}, 'common.button_export_word') }}
+    {{ button_pdf('about_pdf') }}
+    {{ button_word('about_word') }}
 </div>
 {% endblock %}
 {# stylesheets #}

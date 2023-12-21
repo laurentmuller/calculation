@@ -397,13 +397,8 @@ class UpdateAssetsCommand extends Command
 
     private function loadJson(string $filename): ?array
     {
-        $content = $this->readFile($filename);
-        if (false === $content) {
-            return null;
-        }
-
         try {
-            return StringUtils::decodeJson($content);
+            return FileUtils::decodeJson($filename);
         } catch (\Exception $e) {
             $this->writeError($e->getMessage());
             $this->writeError("Unable to decode file '$filename'.");

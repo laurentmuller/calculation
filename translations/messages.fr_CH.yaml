@@ -279,9 +279,9 @@ common:
   button_delete: Supprimer
   button_edit: Modifier
   button_export: Exporter
-  button_export_pdf: Exporter au format PDF
-  button_export_excel: Exporter vers Microsoft® Excel®
-  button_export_word: Exporter vers Microsoft® Word®
+  button_export_pdf: Exporter vers le format de document portable (PDF)
+  button_export_excel: Exporter vers le format Microsoft® Excel®
+  button_export_word: Exporter vers le format Microsoft® Word®
   button_excel_list: Exporter la liste
   button_card: Mode mosaïque
   button_import: Importer
@@ -556,7 +556,6 @@ help:
     screenshot: 'Capture d''écran :'
     see_also: 'Voir aussi :'
   main_menu: Menu principal
-  pdf_menu: Télécharger l'aide au format PDF
   title: Aide
   title_name: Aide - %name%
   types:

@@ -144,13 +144,13 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             ->setTextListener($this)
             ->addColumns(
                 PdfColumn::left($this->transChart('fields.state'), 20),
-                PdfColumn::right($this->transChart('fields.count'), 25, true),
-                PdfColumn::right(FormatUtils::getPercent(), 20, true),
+                PdfColumn::right($this->transChart('fields.count'), 16, true),
+                PdfColumn::right(FormatUtils::getPercent(), 16, true),
                 PdfColumn::right($this->transChart('fields.net'), 20, true),
                 PdfColumn::right($this->transChart('fields.margin'), 20, true),
-                PdfColumn::right($this->transChart('fields.margin_percent'), 20, true),
+                PdfColumn::right($this->transChart('fields.margin_percent'), 16, true),
                 PdfColumn::right($this->transChart('fields.total'), 20, true),
-                PdfColumn::right(FormatUtils::getPercent(), 20, true)
+                PdfColumn::right(FormatUtils::getPercent(), 16, true)
             )->outputHeaders();
     }
 

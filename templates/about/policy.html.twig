@@ -25,6 +25,6 @@
         {{ link(path('app_login'), 'index.login', 'btn btn-form btn-outline-primary') }}
     {% endif %}
     {{ link(path('about_licence'), 'about.licence', 'btn btn-form btn-secondary') }}
-    {{ button_pdf('about_policy_pdf', {}, 'common.button_export_pdf') }}
-    {{ button_word('about_policy_word', {}, 'common.button_export_word') }}
+    {{ button_pdf('about_policy_pdf') }}
+    {{ button_word('about_policy_word') }}
 {% endblock %}

@@ -1,7 +1,7 @@
 {
     "name": "bibi/calculation",
     "type": "project",
-    "description": "Implementation of the calculation with Symfony 6.x",
+    "description": "Computational program based on the Symfony 7.x development environment.",
     "keywords": [
         "symfony",
         "calculation"

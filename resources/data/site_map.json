@@ -210,6 +210,24 @@
             ]
         },
         {
+            "text": "index.menu_graphics",
+            "entity": "Calculation",
+            "permission": "list",
+            "icon": "chart-area",
+            "entries": [
+                {
+                    "route": "chart_month",
+                    "text": "index.menu_graphics_month",
+                    "icon": "calendar-alt far"
+                },
+                {
+                    "route": "chart_state",
+                    "text": "index.menu_graphics_state",
+                    "icon": "flag"
+                }
+            ]
+        },
+        {
             "text": "index.menu_tools",
             "icon": "tools",
             "entries": [
@@ -239,24 +257,6 @@
                     "permission": "list",
                     "text": "task_compute.title",
                     "icon": "keyboard"
-                }
-            ]
-        },
-        {
-            "text": "index.menu_graphics",
-            "entity": "Calculation",
-            "permission": "list",
-            "icon": "chart-area",
-            "entries": [
-                {
-                    "route": "chart_month",
-                    "text": "index.menu_graphics_month",
-                    "icon": "calendar-alt far"
-                },
-                {
-                    "route": "chart_state",
-                    "text": "index.menu_graphics_state",
-                    "icon": "flag"
                 }
             ]
         },

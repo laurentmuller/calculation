@@ -61,11 +61,18 @@ final class SymfonyInfoService
     ];
 
     /**
+     * The release information URL.
+     */
+    private const RELEASE_URL = 'https://symfony.com/releases/%s.%s.json';
+
+    /**
      * The unknown label.
      */
     private const UNKNOWN = 'Unknown';
 
-    /** @psalm-var array<string, BundleType>|null */
+    /**
+     * @psalm-var array<string, BundleType>|null
+     */
     private ?array $bundles = null;
 
     private readonly Environment $environment;
@@ -85,8 +92,6 @@ final class SymfonyInfoService
     private readonly string $projectDir;
 
     /**
-     * The routes.
-     *
      * @psalm-var null|array{
      *     runtime?: array<string, RouteType>,
      *     debug?: array<string, RouteType>}
@@ -176,7 +181,33 @@ final class SymfonyInfoService
     }
 
     /**
+     * Gets the debug packages.
+     *
+     * @return array<string, PackageType>
+     *
+     * @psalm-api
+     */
+    public function getDebugPackages(): array
+    {
+        return $this->getPackages()[self::KEY_DEBUG] ?? [];
+    }
+
+    /**
+     * Gets debug routes.
+     *
+     * @return array<string, RouteType>
+     *
+     * @psalm-api
+     */
+    public function getDebugRoutes(): array
+    {
+        return $this->getRoutes()[self::KEY_DEBUG] ?? [];
+    }
+
+    /**
      * Gets the end of life.
+     *
+     * @psalm-api
      */
     public function getEndOfLife(): string
     {
@@ -195,6 +226,8 @@ final class SymfonyInfoService
 
     /**
      * Gets the kernel environment.
+     *
+     * @psalm-api
      */
     public function getEnvironment(): Environment
     {
@@ -214,6 +247,8 @@ final class SymfonyInfoService
 
     /**
      * Gets the log directory path.
+     *
+     * @psalm-api
      */
     public function getLogDir(): string
     {
@@ -269,40 +304,6 @@ final class SymfonyInfoService
     }
 
     /**
-     * Gets packages information.
-     *
-     * @return array{
-     *     runtime?: array<string, PackageType>,
-     *     debug?: array<string, PackageType>
-     * }
-     */
-    public function getPackages(): array
-    {
-        if (null === $this->packages) {
-            $this->packages = [];
-            $path = $this->projectDir . self::PACKAGE_FILE_NAME;
-            if (FileUtils::exists($path)) {
-                try {
-                    /**
-                     * @psalm-var array{
-                     *     packages: array<string, PackageType>,
-                     *     'dev-package-names': string[]|null
-                     * } $content
-                     */
-                    $content = FileUtils::decodeJson($path);
-                    $runtimePackages = $content['packages'];
-                    $debugPackages = $content['dev-package-names'] ?? [];
-                    $this->packages = $this->processPackages($runtimePackages, $debugPackages);
-                } catch (\InvalidArgumentException) {
-                    // ignore
-                }
-            }
-        }
-
-        return $this->packages;
-    }
-
-    /**
      * Gets the project directory path.
      */
     public function getProjectDir(): string
@@ -324,34 +325,27 @@ final class SymfonyInfoService
     }
 
     /**
-     * Gets all routes.
+     * Gets the runtime packages.
      *
-     * @return array{
-     *     runtime?: array<string, RouteType>,
-     *     debug?: array<string, RouteType>}
+     * @return array<string, PackageType>
+     *
+     * @psalm-api
      */
-    public function getRoutes(): array
+    public function getRuntimePackages(): array
     {
-        if (null === $this->routes) {
-            $result = [];
-            $routes = $this->router->getRouteCollection()->all();
-            foreach ($routes as $name => $route) {
-                $key = $this->isDebugRoute($name) ? self::KEY_DEBUG : self::KEY_RUNTIME;
-                $result[$key][$name] = [
-                    'name' => $name,
-                    'path' => $route->getPath(),
-                ];
-            }
-            if (!empty($result[self::KEY_RUNTIME])) {
-                \ksort($result[self::KEY_RUNTIME]);
-            }
-            if (!empty($result[self::KEY_DEBUG])) {
-                \ksort($result[self::KEY_DEBUG]);
-            }
-            $this->routes = $result;
-        }
+        return $this->getPackages()[self::KEY_RUNTIME] ?? [];
+    }
 
-        return $this->routes;
+    /**
+     * Gets runtime routes.
+     *
+     * @return array<string, RouteType>
+     *
+     * @psalm-api
+     */
+    public function getRuntimeRoutes(): array
+    {
+        return $this->getRoutes()[self::KEY_RUNTIME] ?? [];
     }
 
     /**
@@ -476,6 +470,76 @@ final class SymfonyInfoService
         return $date;
     }
 
+    /**
+     * Gets packages information.
+     *
+     * @return array{
+     *     runtime?: array<string, PackageType>,
+     *     debug?: array<string, PackageType>
+     * }
+     */
+    private function getPackages(): array
+    {
+        if (null !== $this->packages) {
+            return $this->packages;
+        }
+
+        $this->packages = [];
+        $path = $this->projectDir . self::PACKAGE_FILE_NAME;
+        if (!FileUtils::exists($path)) {
+            return $this->packages;
+        }
+
+        try {
+            /**
+             * @psalm-var array{
+             *     packages: array<string, PackageType>|null,
+             *     'dev-package-names': string[]|null
+             * } $content
+             */
+            $content = FileUtils::decodeJson($path);
+            $runtimePackages = $content['packages'] ?? [];
+            $debugPackages = $content['dev-package-names'] ?? [];
+            $this->packages = $this->processPackages($runtimePackages, $debugPackages);
+        } catch (\InvalidArgumentException) {
+            // ignore
+        }
+
+        return $this->packages;
+    }
+
+    /**
+     * Gets all routes.
+     *
+     * @return array{
+     *     runtime?: array<string, RouteType>,
+     *     debug?: array<string, RouteType>}
+     */
+    private function getRoutes(): array
+    {
+        if (null !== $this->routes) {
+            return $this->routes;
+        }
+
+        $this->routes = [];
+        $routes = $this->router->getRouteCollection()->all();
+        foreach ($routes as $name => $route) {
+            $key = $this->isDebugRoute($name) ? self::KEY_DEBUG : self::KEY_RUNTIME;
+            $this->routes[$key][$name] = [
+                'name' => $name,
+                'path' => $route->getPath(),
+            ];
+        }
+        if (!empty($this->routes[self::KEY_RUNTIME])) {
+            \ksort($this->routes[self::KEY_RUNTIME]);
+        }
+        if (!empty($this->routes[self::KEY_DEBUG])) {
+            \ksort($this->routes[self::KEY_DEBUG]);
+        }
+
+        return $this->routes;
+    }
+
     private function isDebugRoute(string $name): bool
     {
         return \str_starts_with($name, '_');
@@ -491,16 +555,16 @@ final class SymfonyInfoService
             if ($item->isHit()) {
                 return (string) $item->get();
             }
-            $url = \sprintf('https://symfony.com/releases/%s.%s.json', Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
-            $releases = FileUtils::decodeJson($url);
-            if (isset($releases['release_date']) && \is_string($releases['release_date'])) {
-                $value = $releases['release_date'];
-                $item->set($value);
-                $this->cache->save($item);
 
-                return $value;
-            }
-        } catch (\Psr\Cache\InvalidArgumentException|\InvalidArgumentException) {
+            $url = \sprintf(self::RELEASE_URL, Kernel::MAJOR_VERSION, Kernel::MINOR_VERSION);
+            /** @psalm-var array{release_date: string, ...} $content */
+            $content = FileUtils::decodeJson($url);
+            $value = $content['release_date'];
+            $item->set($value);
+            $this->cache->save($item);
+
+            return $value;
+        } catch (\Psr\Cache\CacheException|\InvalidArgumentException) {
             // ignore
         }
 
@@ -522,6 +586,10 @@ final class SymfonyInfoService
      */
     private function processPackages(array $runtimePackages, array $debugPackages): array
     {
+        if ([] === $runtimePackages && [] === $debugPackages) {
+            return [];
+        }
+
         $result = [];
         foreach ($runtimePackages as $package) {
             $name = $package['name'];
@@ -548,17 +616,20 @@ final class SymfonyInfoService
             \ksort($result[self::KEY_DEBUG]);
         }
 
-        return $result; // @phpstan-ignore-line
+        // @phpstan-ignore-next-line
+        return $result;
     }
 
     private function updateBundles(): void
     {
-        if (null !== $this->bundles && null !== $this->packages) {
-            foreach ($this->bundles as &$bundle) {
-                $package = $this->findPackage($bundle['package']);
-                if (null !== $package) {
-                    $bundle['homepage'] = $package['homepage'];
-                }
+        if (empty($this->bundles) || empty($this->packages)) {
+            return;
+        }
+
+        foreach ($this->bundles as &$bundle) {
+            $package = $this->findPackage($bundle['package']);
+            if (null !== $package) {
+                $bundle['homepage'] = $package['homepage'];
             }
         }
     }

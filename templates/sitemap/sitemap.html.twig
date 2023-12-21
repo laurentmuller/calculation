@@ -1,12 +1,18 @@
 {% extends 'base.html.twig' %}
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
 {# macros #}
-{% macro entry(entry, entity=null, role=null) %}
+{% macro entry(entry, entity=null, role='ROLE_USER') %}
 {% set role = entry.role is defined ? ('role_' ~ entry.role)|upper : role %}
-{% if not role or is_granted(role) %}
-    {% set entity = entry.entity|default(entity) %}
+{% set route = entry.route|default(false) %}
+{% set entity = entry.entity|default(entity) %}
+{% set permission = entry.permission|default(false) %}
+{% set display = is_granted(role) %}
+{% if permission and entity %}
+    {% set display = display and is_granted(permission, entity) %}
+{% endif %}
+{% if display %}
     <li{% if entry.class|default(false) %} class="{{ entry.class }}"{% endif %}>
-        {{ _self.entry_content(entry, entity) }}
+        {{ _self.entry_content(entry, entity, role) }}
         {% if entry.entries|default({})|length %}
             <ul>
                 {% for child in entry.entries %}
@@ -18,30 +24,22 @@
 {% endif %}
 {%- endmacro %}
 
-{% macro entry_content(entry, entity=null, role=null) %}
-{% set role = entry.role is defined ? ('role_' ~ entry.role)|upper : role %}
-{% if not role or is_granted(role) %}
-    {% set route = entry.route|default(false) %}
-    {% set entity = entry.entity|default(entity) %}
-    {% set permission = entry.permission|default(false) %}
-    {% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : false %}
-    {% if route == 'app_logout' %}
-        <a href="{{ logout_path() }}">{{ icon(icon, entry.text) }}</a>
-    {% else %}
-        {% if route and entity and permission %}
-            {% set route = is_granted(permission, entity) ? route : false %}
-        {% endif %}
-        {% if route %}
-            {% if entry.external|default(false) %}
-                {{ linkExternal(path(route), entry.text, null, icon) }}
-            {% else %}
-                {{ link(path(route, {'caller': path('site_map')}), entry.text, null, icon) }}
-            {% endif %}
-        {% elseif icon %}
-            <span>{{- icon(icon, entry.text) -}}</span>
+{% macro entry_content(entry) %}
+{% set route = entry.route|default(false) %}
+{% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : false %}
+{% if route == 'app_logout' %}
+    <a href="{{ logout_path() }}">{{ icon(icon, entry.text) }}</a>
+{% else %}
+    {% if route %}
+        {% if entry.external|default(false) %}
+            {{ linkExternal(path(route), entry.text, null, icon) }}
         {% else %}
-            <span>{{ entry.text|trans }}</span>
+            {{ link(path(route, {'caller': path('site_map')}), entry.text, null, icon) }}
         {% endif %}
+    {% elseif icon %}
+        <span>{{ icon(icon, entry.text) }}</span>
+    {% else %}
+        <span>{{ entry.text|trans }}</span>
     {% endif %}
 {% endif %}
 {%- endmacro %}

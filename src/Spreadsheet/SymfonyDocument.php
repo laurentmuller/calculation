@@ -45,23 +45,21 @@ class SymfonyDocument extends AbstractDocument
         if ([] !== $bundles) {
             $this->outputBundles($bundles);
         }
-        $packages = $info->getPackages();
-        $runtimePackages = $packages[SymfonyInfoService::KEY_RUNTIME] ?? [];
-        if ([] !== $runtimePackages) {
-            $this->outputPackages('Packages', $runtimePackages);
+        $packages = $info->getRuntimePackages();
+        if ([] !== $packages) {
+            $this->outputPackages('Packages', $packages);
         }
-        $debugPackages = $packages[SymfonyInfoService::KEY_DEBUG] ?? [];
-        if ([] !== $debugPackages) {
-            $this->outputPackages('Debug Packages', $debugPackages);
+        $packages = $info->getDebugPackages();
+        if ([] !== $packages) {
+            $this->outputPackages('Debug Packages', $packages);
         }
-        $routes = $info->getRoutes();
-        $runtimeRoutes = $routes[SymfonyInfoService::KEY_RUNTIME] ?? [];
-        if ([] !== $runtimeRoutes) {
-            $this->outputRoutes('Routes', $runtimeRoutes);
+        $routes = $info->getRuntimeRoutes();
+        if ([] !== $routes) {
+            $this->outputRoutes('Routes', $routes);
         }
-        $debugRoutes = $routes[SymfonyInfoService::KEY_DEBUG] ?? [];
-        if ([] !== $debugRoutes) {
-            $this->outputRoutes('Debug Routes', $debugRoutes);
+        $routes = $info->getDebugRoutes();
+        if ([] !== $routes) {
+            $this->outputRoutes('Debug Routes', $routes);
         }
         $this->setActiveSheetIndex(0);
 

@@ -48,36 +48,35 @@ class SymfonyReport extends AbstractReport
         $this->AddPage();
         $this->outputInfo($this->service);
 
-        $bundles = $this->service->getBundles();
+        $info = $this->service;
+        $bundles = $info->getBundles();
         if ([] !== $bundles) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
             $this->outputBundles($bundles);
         }
 
-        $packages = $this->service->getPackages();
-        $runtimePackages = $packages[SymfonyInfoService::KEY_RUNTIME] ?? [];
-        if ([] !== $runtimePackages) {
+        $packages = $info->getRuntimePackages();
+        if ([] !== $packages) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
-            $this->outputPackages('Packages', $runtimePackages);
+            $this->outputPackages('Packages', $packages);
         }
 
-        $debugPackages = $packages[SymfonyInfoService::KEY_DEBUG] ?? [];
-        if ([] !== $debugPackages) {
+        $packages = $info->getDebugPackages();
+        if ([] !== $packages) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
-            $this->outputPackages('Debug Packages', $debugPackages);
+            $this->outputPackages('Debug Packages', $packages);
         }
 
-        $routes = $this->service->getRoutes();
-        $runtimeRoutes = $routes[SymfonyInfoService::KEY_RUNTIME] ?? [];
-        if ([] !== $runtimeRoutes) {
+        $routes = $info->getRuntimeRoutes();
+        if ([] !== $routes) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
-            $this->outputRoutes('Routes', $runtimeRoutes);
+            $this->outputRoutes('Routes', $routes);
         }
 
-        $debugRoutes = $routes[SymfonyInfoService::KEY_DEBUG] ?? [];
-        if ([] !== $debugRoutes) {
+        $routes = $info->getDebugRoutes();
+        if ([] !== $routes) {
             $this->Ln(self::LINE_HEIGHT / 2.0);
-            $this->outputRoutes('Debug Routes', $debugRoutes);
+            $this->outputRoutes('Debug Routes', $routes);
         }
 
         return true;

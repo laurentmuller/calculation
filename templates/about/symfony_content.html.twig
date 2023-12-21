@@ -29,11 +29,11 @@
 </tr>
 {%- endmacro %}
 {# parameters #}
-{%- set bundles = service.bundles|default([]) -%}
-{%- set runtime_packages = service.packages.runtime|default([]) -%}
-{%- set debug_packages = service.packages.debug|default([]) -%}
-{%- set runtime_routes = service.routes.runtime|default([]) -%}
-{%- set debug_routes = service.routes.debug|default([]) -%}
+{%- set bundles = service.bundles -%}
+{%- set runtime_packages = service.runtimePackages -%}
+{%- set debug_packages = service.debugPackages -%}
+{%- set runtime_routes = service.runtimeRoutes -%}
+{%- set debug_routes = service.debugRoutes -%}
 {# content #}
 <div class="phpversion">
     <table id="data-table-symfony" class="table table-sm mb-0">

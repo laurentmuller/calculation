@@ -35,7 +35,8 @@
         "ext-sqlite3": "*",
         "ext-zip": "*",
         "ext-zlib": "*",
-        "createnl/zxcvbn-bundle": "dev-master",
+        "ext-openssl": "*",
+        "createnl/zxcvbn-bundle": "^3.0",
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/orm": "^2.0",
         "dukecity/doctrineextensions": "^2.0",
@@ -196,10 +197,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/laurentmuller/HighchartsBundle"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/laurentmuller/zxcvbn-bundle"
         }
     ]
 }

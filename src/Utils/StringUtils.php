@@ -97,14 +97,14 @@ final class StringUtils
      * @see StringUtils::encodeJson()
      *
      * @psalm-return ($assoc is true ? array : \stdClass)
-     *
-     * @psalm-suppress MixedInferredReturnType
-     * @psalm-suppress MixedReturnStatement
      */
     public static function decodeJson(string $value, bool $assoc = true): array|\stdClass
     {
         try {
-            return \json_decode(json: $value, associative: $assoc, flags: \JSON_THROW_ON_ERROR);
+            /** @psalm-var array|\stdClass $content */
+            $content = \json_decode(json: $value, associative: $assoc, flags: \JSON_THROW_ON_ERROR);
+
+            return $content;
         } catch (\JsonException $e) {
             throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }

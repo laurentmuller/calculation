@@ -79,8 +79,9 @@ function startDragItems() {
             forcePlaceholderSize: true,
             placeholderClass: 'border border-primary'
         });
-        $items.on('sortupdate', updateUI);
-        $items.data('sortable', true);
+        $items.on('sortupdate', updateUI)
+            .data('sortable', true)
+            .find('.item').removeAttr('role');
     }
 }
 
@@ -395,5 +396,4 @@ function expand($caller) {
     // initialize validation
     addMarginsMethods();
     $form.initValidator();
-
 }(jQuery));

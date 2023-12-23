@@ -138,10 +138,6 @@
 
             // add dropdown attribute
             this.$element.attr('data-bs-toggle', 'dropdown');
-            // this.$element.attr({
-            //     'data-bs-toggle': 'dropdown',
-            //     'aria-expanded': 'false'
-            // });
 
             // bind events
             return this._listen();
@@ -401,19 +397,8 @@
             }
 
             this.ajax.timerId = null;
-            this.ajax.xhr = $.getJSON(
-                this.ajax.url,
-                data,
-                this.ajaxSuccessProxy)
+            this.ajax.xhr = $.getJSON(this.ajax.url, data, this.ajaxSuccessProxy)
                 .fail(this.ajaxErrorProxy);
-                //.always(function() {
-
-            // this.ajax.xhr = $.getJSON({
-            //     success: this.ajaxSuccessProxy,
-            //     error: this.ajaxErrorProxy,
-            //     url: this.ajax.url,
-            //     data: data
-            // });
 
             return this;
         }

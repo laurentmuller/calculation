@@ -1,14 +1,17 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% from 'macros/_timestampable.html.twig' import timestampable_footer %}
+{% from 'macros/_margins_edit.html.twig' import outputMarginRow %}
 {% from 'macros/_icons.html.twig' import icon %}
 {% form_theme form with _self %}
 {# item label #}
 {% block _task_items_entry_name_label -%}
     {%- set label_attributes = {
         'class': 'label-toggle drop-down-icon-left cursor-pointer flex-fill mb-0',
-        'data-bs-toggle': 'collapse',
         'data-bs-target': '#' ~ id_content,
+        'data-bs-toggle': 'collapse',
         'aria-expanded': show|json_encode,
+        'aria-controls': id_content,
+        'role': 'button',
         'title': title} -%}
     <div class="d-flex-wrap-center mb-2">
         {{ form_label(form, null, {'label_attr': label_attributes}) }}
@@ -25,34 +28,6 @@
         </div>
     </div>
 {% endblock %}
-{# item margins #}
-{% macro outputTaskItemMargin(margin) %}
-<tr>
-    <td class="w-35">
-        <div class="form-group">
-            {{ form_widget(margin.minimum, {'attr': {'aria-label': 'taskitemmargin.fields.minimum'|trans}}) }}
-            <em>{{ form_errors(margin.minimum) }}</em>
-        </div>
-    </td>
-    <td class="w-35">
-        <div class="form-group">
-            {{ form_widget(margin.maximum, {'attr': {'aria-label': 'taskitemmargin.fields.maximum'|trans}}) }}
-            <em>{{ form_errors(margin.maximum) }}</em>
-        </div>
-    </td>
-    <td class="w-30">
-        <div class="form-group">
-            {{ form_widget(margin.value, {'attr': {'aria-label': 'taskitemmargin.fields.value'|trans}}) }}
-            <em>{{ form_errors(margin.value) }}</em>
-        </div>
-    </td>
-    <td class="actions align-top pt-2 d-print-none">
-        <button type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'taskitem.edit.delete_item'|trans }}">
-            {{- icon(ICON_DELETE) -}}
-        </button>
-    </td>
-</tr>
-{% endmacro -%}
 {# item #}
 {% macro outputTaskItem(item, show=false) %}
 {%- set id = item.vars.id|default(0) -%}
@@ -80,18 +55,18 @@
                 </div>
             </div>
             <hr class="my-0">
-            <table class="table table-borderless table-sm table-edit{% if count == 0 %} d-none{% endif %}" data-prototype="{{ _self.outputTaskItemMargin(item.margins.vars.prototype)|e('html_attr') }}">
+            <table class="table table-borderless table-sm table-edit{% if count == 0 %} d-none{% endif %}" data-prototype="{{ outputMarginRow(item.margins.vars.prototype)|e('html_attr') }}">
                 <thead>
                     <tr>
                         <th class="vertical-middle text-end fw-normal required">{{ 'taskitemmargin.fields.minimum'|trans }}</th>
                         <th class="vertical-middle text-end fw-normal required">{{ 'taskitemmargin.fields.maximum'|trans }}</th>
                         <th class="vertical-middle text-end fw-normal required">{{ 'taskitemmargin.fields.value'|trans }}</th>
-                        <th class="actions d-print-none">&nbsp;</th>
+                        <th class="actions d-print-none" aria-label="{{ 'common.actions'|trans }}">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for margin in item.margins -%}
-                    {{ _self.outputTaskItemMargin(margin) }}
+                    {{ outputMarginRow(margin) }}
                 {% endfor -%}
                 </tbody>
             </table>

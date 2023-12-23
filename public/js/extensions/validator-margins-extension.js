@@ -121,7 +121,6 @@ function validateOtherMargins($element) {
     $cells.each(function () {
         const $cell = $(this);
         if (!$cell.is(element) && $cell.data(KEY_MARGIN_ERROR)) {
-            // window.console.log($cell);
             $validator.element($cell);
             return false;
         }
@@ -137,9 +136,8 @@ function validateOtherMargins($element) {
  */
 function getMarginError($element) {
     'use strict';
-    const $form = $('#edit-form');
+    const $form = $element.parents('form');
     const id = $element.data(KEY_MARGIN_ERROR);
-    // $element.removeData(KEY_MARGIN_ERROR);
     const message = String($form.data(id));
     return message || $.validator.messages.remote;
 }

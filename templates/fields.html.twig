@@ -53,9 +53,17 @@
         'data-custom-text': 'color_picker.custom_text'|trans,
         'data-advanced-text': 'color_picker.advanced_text'|trans
     }) -%}
-    <button type="button" role="combobox" class="color-picker dropdown-toggle form-control d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+    {%- set button_attr = {
+        'type': 'button',
+        'role': 'combobox',
+        'data-bs-toggle': 'dropdown',
+        'aria-expanded': 'false',
+        'aria-label': form.vars.label|trans,
+        'class': 'color-picker dropdown-toggle form-control d-flex align-items-center',
+    } -%}
+    <button{% with {attr: button_attr} %}{{ block('attributes') }}{% endwith %}>
         <span class="dropdown-color border" style="background-color: {{ value|default('#000000') }}"></span>
-        <span class="dropdown-text flex-fill text-start"></span>
+        <span class="dropdown-text flex-fill"></span>
     </button>
     <div class="color-picker dropdown-menu p-2" role="menu"></div>
     {{ block('form_widget_simple') }}

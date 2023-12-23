@@ -128,16 +128,13 @@ function sortMargins() {
 (function ($) {
     'use strict';
     // handle buttons
-    $('.btn-add').on('click', function (e) {
-        e.preventDefault();
+    $('.btn-add').on('click', function () {
         addMargin();
     });
-    $('.btn-sort').on('click', function (e) {
-        e.preventDefault();
+    $('.btn-sort').on('click', function () {
         sortMargins();
     });
-    $('#data-table-edit').on('click', '.btn-delete-margin', function (e) {
-        e.preventDefault();
+    $('#data-table-edit').on('click', '.btn-delete-margin', function () {
         removeMargin($(this));
     });
 

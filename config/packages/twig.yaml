@@ -28,7 +28,7 @@ twig:
         thousands_separator: ''''
 
     form_themes:
-        - form/fields.html.twig
+        - fields.html.twig
 
     paths:
         '%kernel.project_dir%/public/css': css

@@ -16,14 +16,19 @@
     </td>
     <td class="w-30">
         <div class="form-group">
+        {% if margin.margin is defined %}
             {{ form_widget(margin.margin, {'attr': {'aria-label': 'globalmargin.fields.margin_percent'|trans}}) }}
             <em>{{ form_errors(margin.margin) }}</em>
+        {% else %}
+            {{ form_widget(margin.value, {'attr': {'aria-label': 'taskitemmargin.fields.value'|trans}}) }}
+            <em>{{ form_errors(margin.value) }}</em>
+        {% endif %}
         </div>
     </td>
     <td class="actions align-top pt-2 d-print-none">
-        <a href="#" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'group.edit.delete_margin'|trans }}">
+        <button type="button" class="btn btn-sm btn-outline-danger btn-edit btn-delete-margin" title="{{ 'group.edit.delete_margin'|trans }}">
             {{- icon(ICON_DELETE) -}}
-        </a>
+        </button>
     </td>
 </tr>
 {% endmacro %}
@@ -50,7 +55,7 @@
             <th class="vertical-middle text-end fw-normal required">{{ 'globalmargin.fields.minimum'|trans }}</th>
             <th class="vertical-middle text-end fw-normal required">{{ 'globalmargin.fields.maximum'|trans }}</th>
             <th class="vertical-middle text-end fw-normal required">{{ 'globalmargin.fields.margin_percent'|trans }}</th>
-            <th class="actions d-print-none">&nbsp;</th>
+            <th class="actions d-print-none" aria-label="{{ 'common.actions'|trans }}">&nbsp;</th>
         </tr>
         </thead>
         <tbody>

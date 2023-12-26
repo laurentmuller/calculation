@@ -18,6 +18,7 @@ use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Service\PhpInfoService;
 use App\Spreadsheet\PhpIniDocument;
+use App\Traits\ArrayTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -31,6 +32,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route(path: '/about/php')]
 class AboutPhpController extends AbstractController
 {
+    use ArrayTrait;
+
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Route(path: '/content', name: 'about_php_content', methods: Request::METHOD_GET)]
     public function content(Request $request, PhpInfoService $service): JsonResponse
@@ -89,8 +92,8 @@ class AboutPhpController extends AbstractController
 
     private function getLoadedExtensions(): string
     {
-        $extensions = \array_map('strtolower', \get_loaded_extensions());
-        \sort($extensions);
+        /** @psalm-var string[] $extensions */
+        $extensions = $this->getSorted(\array_map('strtolower', \get_loaded_extensions()));
 
         return \implode(', ', $extensions);
     }

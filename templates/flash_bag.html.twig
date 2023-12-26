@@ -4,15 +4,15 @@
     <p class="flash" data-type="{{ key }}" data-title="{{ ('flash_bag.' ~ key)|trans }}">{{ message }}</p>
 {%- endmacro %}
 {# add all flash messages #}
-{% apply spaceless %}
-    {% set flash_attributes = user_service.messageAttributes|merge({
-        'dataset': '#flashes',
-        'target': '.page-content',
-        'subtitle': app_name_version,
-        'close-title': 'common.button_close'|trans}) %}
-    <div id="flashes" class="d-none"{{ attributes(flash_attributes, 'data-') }}>
-        {% for key, messages in app.flashes %}
-            {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
-        {% endfor %}
-    </div>
-{% endapply %}
+{% if app.request.hasPreviousSession %}
+{%- set flash_attributes = user_service.messageAttributes|merge({
+    'dataset': '#flashes',
+    'target': '.page-content',
+    'subtitle': app_name_version,
+    'close-title': 'common.button_close'|trans}) -%}
+<div id="flashes" class="d-none"{{ attributes(flash_attributes, 'data-') }}>
+    {% for key, messages in app.flashes %}
+        {% for message in messages %}{{- _self.addFlashbag(key, message) -}}{% endfor %}
+    {% endfor %}
+</div>
+{% endif %}

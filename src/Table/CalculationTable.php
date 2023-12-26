@@ -18,6 +18,7 @@ use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Traits\MathTrait;
 use App\Utils\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -30,6 +31,8 @@ use Twig\Environment;
  */
 class CalculationTable extends AbstractEntityTable
 {
+    use MathTrait;
+
     /**
      * The state editable parameter name (bool).
      */
@@ -53,17 +56,15 @@ class CalculationTable extends AbstractEntityTable
      *
      * @throws \Twig\Error\Error
      *
-     * @psalm-param Calculation|array{groups: int} $entity
+     * @psalm-param array{overallTotal: float} $entity
      *
      * @psalm-api
      */
-    public function formatOverallMargin(float $margin, Calculation|array $entity): string
+    public function formatOverallMargin(float $margin, array $entity): string
     {
-        $empty = \is_array($entity) ? 0 === $entity['groups'] : $entity->isEmpty();
-
         return $this->twig->render('macros/_cell_calculation_margin.html.twig', [
+            'empty' => $this->isFloatZero($entity['overallTotal']),
             'margin' => $margin,
-            'empty' => $empty,
         ]);
     }
 

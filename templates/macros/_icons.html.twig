@@ -62,9 +62,9 @@
 {%- endmacro %}
 
 {% macro dropdownSeparator(hidden=false, class='') -%}
-{%- set class = ('dropdown-divider ' ~ class ~ (hidden ? ' d-none' : ''))|trim -%}
-<li>
-    <hr class="{{ class }}">
+{%- set class = (class ~ (hidden ? ' d-none' : ''))|trim -%}
+<li{% if class %} class="{{ class }}"{% endif %}>
+    <hr class="dropdown-divider">
 </li>
 {%- endmacro %}
 

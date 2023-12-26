@@ -54,11 +54,6 @@ class CalculationRepository extends AbstractRepository
      */
     final public const STATE_ALIAS = 's';
 
-    /**
-     * The alias for the calculation group entity.
-     */
-    private const GROUP_ALIAS = 'g';
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Calculation::class);
@@ -670,9 +665,7 @@ class CalculationRepository extends AbstractRepository
             ->addSelect(self::STATE_ALIAS . '.code as stateCode')
             ->addSelect(self::STATE_ALIAS . '.color as stateColor')
             ->addSelect(self::STATE_ALIAS . '.editable as stateEditable')
-            ->addSelect($this->getCountDistinct(self::GROUP_ALIAS, 'groups'))
             ->innerJoin("$alias.state", self::STATE_ALIAS)
-            ->leftJoin("$alias.groups", self::GROUP_ALIAS)
             ->groupBy("$alias.id");
     }
 

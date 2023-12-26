@@ -19,13 +19,13 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
  */
 readonly class AES256Encryptor
 {
-    private const ENCRYPT_METHOD = 'aes-256-ecb';
+    private const CIPHER_METHOD = 'aes-256-ecb';
 
     private string $initializationVector;
     private string $passphrase;
 
     /**
-     * @throws \LogicException if this encryption method is not found
+     * @throws \LogicException if this cipher method is not found in available cipher methods
      */
     public function __construct(
         #[\SensitiveParameter]
@@ -33,12 +33,12 @@ readonly class AES256Encryptor
         string $key
     ) {
         $methods = \openssl_get_cipher_methods();
-        if (!\in_array(self::ENCRYPT_METHOD, $methods, true)) {
-            throw new \LogicException("Unable to find the encryption method '{${self::ENCRYPT_METHOD}}'.");
+        if (!\in_array(self::CIPHER_METHOD, $methods, true)) {
+            throw new \LogicException(\sprintf('Unable to find the cipher method "%s" in available cipher methods.', self::CIPHER_METHOD));
         }
 
         $this->passphrase = \md5($key);
-        $len = \openssl_cipher_iv_length(self::ENCRYPT_METHOD);
+        $len = \openssl_cipher_iv_length(self::CIPHER_METHOD);
         $this->initializationVector = \substr($key, 0, (int) $len);
     }
 
@@ -51,28 +51,31 @@ readonly class AES256Encryptor
 
         return \openssl_decrypt(
             $decoded,
-            self::ENCRYPT_METHOD,
+            self::CIPHER_METHOD,
             $this->passphrase,
             0,
             $this->initializationVector
         );
     }
 
-    public function decryptJson(string $data, bool $assoc = true): mixed
+    /**
+     * @throws \JsonException if the data can not be decoded
+     */
+    public function decryptJson(string $data, bool $assoc = true, int $flags = 0): mixed
     {
         $decoded = $this->decrypt($data);
         if (!\is_string($decoded)) {
             return false;
         }
 
-        return \json_decode($decoded, $assoc);
+        return \json_decode($decoded, $assoc, flags: $flags | \JSON_THROW_ON_ERROR);
     }
 
     public function encrypt(string $data): string|false
     {
         $encrypted = \openssl_encrypt(
             $data,
-            self::ENCRYPT_METHOD,
+            self::CIPHER_METHOD,
             $this->passphrase,
             0,
             $this->initializationVector
@@ -85,12 +88,12 @@ readonly class AES256Encryptor
         return \base64_encode($encrypted);
     }
 
-    public function encryptJson(mixed $data): string|false
+    /**
+     * @throws \JsonException if the data can not be encoded
+     */
+    public function encryptJson(mixed $data, int $flags = 0): string|false
     {
-        $encoded = \json_encode($data);
-        if (!\is_string($encoded)) {
-            return false;
-        }
+        $encoded = \json_encode($data, $flags | \JSON_THROW_ON_ERROR);
 
         return $this->encrypt($encoded);
     }

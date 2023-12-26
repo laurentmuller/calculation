@@ -143,6 +143,24 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
+     * Gets the query builder for the table.
+     *
+     * @param literal-string $alias the entity alias
+     */
+    public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        return $this->createQueryBuilder($alias)
+            ->select("$alias.id")
+            ->addSelect("$alias.imageName")
+            ->addSelect("$alias.username")
+            ->addSelect("$alias.email")
+            ->addSelect("$alias.role")
+            ->addSelect("$alias.enabled")
+            ->addSelect("$alias.lastLogin")
+            ->addSelect("$alias.hashedToken");
+    }
+
+    /**
      * Returns if one or more users have reset password requested.
      */
     public function isResettableUsers(): bool

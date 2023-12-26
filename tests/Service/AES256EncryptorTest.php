@@ -25,16 +25,22 @@ class AES256EncryptorTest extends TestCase
         $this->encryptor = new AES256Encryptor('fake-key');
     }
 
-    public function testEncrypt(): void
+    /**
+     * @throws \JsonException
+     */
+    public function testEncryptDecryptInt(): void
     {
-        $expected = 'This is a message to encrypt';
-        $data = $this->encryptor->encrypt($expected);
+        $expected = 145_145;
+        $data = $this->encryptor->encrypt((string) $expected);
         self::assertIsString($data);
-        $actual = $this->encryptor->decrypt($data);
+        $actual = (int) $this->encryptor->decrypt($data);
         self::assertSame($expected, $actual);
     }
 
-    public function testEncryptJson(): void
+    /**
+     * @throws \JsonException
+     */
+    public function testEncryptDecryptJson(): void
     {
         $expected = [
             'null' => null,
@@ -46,6 +52,15 @@ class AES256EncryptorTest extends TestCase
         $data = $this->encryptor->encryptJson($expected);
         self::assertIsString($data);
         $actual = $this->encryptor->decryptJson($data);
+        self::assertSame($expected, $actual);
+    }
+
+    public function testEncryptDecryptString(): void
+    {
+        $expected = 'This is a message to encrypt';
+        $data = $this->encryptor->encrypt($expected);
+        self::assertIsString($data);
+        $actual = $this->encryptor->decrypt($data);
         self::assertSame($expected, $actual);
     }
 }

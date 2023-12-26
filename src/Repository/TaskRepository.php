@@ -100,16 +100,9 @@ class TaskRepository extends AbstractCategoryItemRepository
      */
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        return $this->createQueryBuilder($alias)
-            ->select("$alias.id")
+        return $this->createTableQueryBuilder($alias)
             ->addSelect("$alias.name")
-            ->addSelect("$alias.unit")
-            ->addSelect("$alias.supplier")
-            ->addSelect(self::CATEGORY_ALIAS . '.code as categoryCode')
-            ->addSelect(self::GROUP_ALIAS . '.code as groupCode')
             ->addSelect($this->getCountDistinct(self::ITEM_ALIAS, 'items'))
-            ->innerJoin("$alias.category", self::CATEGORY_ALIAS)
-            ->innerJoin(self::CATEGORY_ALIAS . '.group', self::GROUP_ALIAS)
             ->leftJoin("$alias.items", self::ITEM_ALIAS)
             ->groupBy("$alias.id");
     }

@@ -130,14 +130,16 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Output the user image profile.
      *
+     * @param User|array|null $user the user
+     *
      * @psalm-param array<string, string|int> $parameters
      */
-    private function assetImageUser(?User $user, string $size = null, array $parameters = []): string|false
+    private function assetImageUser(User|array|null $user, string $size = null, array $parameters = []): string|false
     {
-        if (!$user instanceof User) {
+        if (null === $user) {
             return false;
         }
-        $asset = $this->helper->asset($user);
+        $asset = $this->helper->asset($user, className: User::class);
         if (null === $asset) {
             return false;
         }

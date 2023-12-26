@@ -3,10 +3,10 @@ framework:
         # see https://symfony.com/doc/current/cache.html
         pools:
             # used by the App\Service\ApplicationService
-            application_cache:
+            cache.app_service:
                 adapter: cache.adapter.filesystem
                 default_lifetime: 3600
             # used by the App\Service\UserService
-            user_cache:
+            cache.user_service:
                 adapter: cache.adapter.filesystem
                 default_lifetime: 3600

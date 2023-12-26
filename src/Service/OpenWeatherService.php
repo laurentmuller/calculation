@@ -292,7 +292,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * @param int[]  $cityIds the city identifiers. The maximum number of city identifiers are 20.
      * @param string $units   the units to use
      *
-     * @return array|bool the conditions for the given cities if success; false on error
+     * @return array|false the conditions for the given cities if success; false on error
      *
      * @psalm-return OpenWeatherGroupType|false
      */

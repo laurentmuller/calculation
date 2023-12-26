@@ -20,6 +20,11 @@ use App\Utils\StringUtils;
 final class PhpInfoService
 {
     /**
+     * The replace string for sensitive parameters.
+     */
+    public const REDACTED = '********';
+
+    /**
      * Gets PHP information as array.
      *
      * @param int $what The output may be customized by passing one or more of the following constants bitwise values summed
@@ -96,6 +101,7 @@ final class PhpInfoService
         $info = \str_ireplace('<i>no value</i>', '<i class="text-secondary">No value</i>', $info);
         $info = \str_ireplace('(none)', '<i class="text-secondary">None</i>', $info);
         $info = \str_ireplace('<table>', "<table class='table table-hover table-sm mb-0'>", $info);
+        $info = \str_ireplace(self::REDACTED, '<i class="text-secondary">' . self::REDACTED . '</i>', $info);
 
         foreach (['Directive', 'Local Value', 'Master Value'] as $value) {
             $info = \str_replace($value, '<span class="fw-bold">' . $value . '</span>', $info);
@@ -170,7 +176,7 @@ final class PhpInfoService
 
     private function updateContent(string $content): string
     {
-        $subst = '$1******$3';
+        $subst = '$1' . self::REDACTED . '$3';
         $keys = ['_KEY', '_USER_NAME', 'APP_SECRET', '_PASSWORD', 'MAILER_DSN', 'DATABASE_URL'];
         foreach ($keys as $key) {
             $regex = "/(<tr.*\['.*$key']<\/td><td.*?>)(.*)(<.*<\/tr>)/mi";

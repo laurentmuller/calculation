@@ -264,6 +264,7 @@ clear_cache:
   message: "Êtes-vous sûr de vouloir vider le cache de l'application (taille actuelle : %size%) ?"
   note: '<b>Note : </b>Cette opération peut durer un certain temps.'
   submit: Vider
+  list: Liste des caches
   success: Le cache de l'application a été vidé avec succès.
   failure: Impossible de vider le cache de l'application.
 common:

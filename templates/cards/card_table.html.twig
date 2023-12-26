@@ -71,7 +71,6 @@
 <li>
     {{- linkExternal(path, text, class, icon ~ ' fa-fw') -}}
 </li>
-
 {%- endmacro %}
 {# output a drop-down separator #}
 {% macro item_separator(class='') %}
@@ -215,7 +214,7 @@
         {% endblock %}
         <div class="btn-group btn-group-sm" role="group">
             <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="button_other_actions" data-bs-toggle="dropdown" title="{{ 'common.global_actions'|trans }}" aria-expanded="false">
-                <i class="fa-solid fa-bars"></i>{% if not is_page_list %}&nbsp;{{ 'common.actions'|trans }}{% endif %}
+                <i class="fa-solid fa-bars me-1"></i>{{- 'common.actions'|trans -}}
             </button>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="button_other_actions">
                 {# display mode #}

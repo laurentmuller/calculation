@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Listener;
 
 use App\Enums\TableView;
+use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Table\DataQuery;
 use App\Traits\CookieTrait;
@@ -54,9 +55,19 @@ class DataQueryKernelListener
         return $this->getCookieInt($request, TableInterface::PARAM_LIMIT, $prefix, $view->getPageSize());
     }
 
+    private function getOrder(Request $request, string $prefix): string
+    {
+        return $this->getCookieString($request, TableInterface::PARAM_ORDER, $prefix, SortModeInterface::SORT_ASC);
+    }
+
     private function getPrefix(Request $request): string
     {
         return \strtoupper($request->attributes->getString('_route'));
+    }
+
+    private function getSort(Request $request, string $prefix): string
+    {
+        return $this->getCookieString($request, TableInterface::PARAM_SORT, $prefix);
     }
 
     private function getView(Request $request): TableView
@@ -71,11 +82,16 @@ class DataQueryKernelListener
 
     private function updateQuery(DataQuery $query, Request $request): DataQuery
     {
-        $query->callback = $this->isCallback($request);
-        $query->prefix = $this->getPrefix($request);
+        $prefix = $this->getPrefix($request);
+        $query->prefix = $prefix;
         $query->view = $this->getView($request);
+        $query->callback = $this->isCallback($request);
         if (0 === $query->limit) {
-            $query->limit = $this->getLimit($request, $query->prefix, $query->view);
+            $query->limit = $this->getLimit($request, $prefix, $query->view);
+        }
+        if ('' === $query->sort) {
+            $query->sort = $this->getSort($request, $prefix);
+            $query->order = $this->getOrder($request, $prefix);
         }
 
         return $query;

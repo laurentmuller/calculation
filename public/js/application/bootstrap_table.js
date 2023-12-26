@@ -5,7 +5,7 @@
 /**
  * Formatter for the custom view.
  *
- * @param {Array.<Object>} data - the rows to format.
+ * @param {Array.<Object>} data the rows to format.
  * @returns {string} the custom view.
  */
 function customViewFormatter(data) {
@@ -45,7 +45,7 @@ function customViewFormatter(data) {
 /**
  * Format the product unit in the custom view.
  *
- * @param {object} row - the record data.
+ * @param {object} row the record data.
  * @returns {string} the formatted product unit.
  */
 function formatProductUnit(row) {
@@ -56,7 +56,7 @@ function formatProductUnit(row) {
 /**
  * Gets the class of the product price in the custom view.
  *
- * @param {object} row - the record data.
+ * @param {object} row the record data.
  * @returns {string} the class.
  */
 function formatProductClass(row) {
@@ -71,8 +71,8 @@ function formatProductClass(row) {
 /**
  * Cell style for a border column (calculations, status or log).
  *
- * @param {number} _value - the field value.
- * @param {object} row - the record data.
+ * @param {number} _value the field value.
+ * @param {object} row the record data.
  * @returns {object} the cell style.
  */
 function styleBorderColor(_value, row) {
@@ -90,7 +90,7 @@ function styleBorderColor(_value, row) {
 /**
  * Cell class for the product price.
  *
- * @param {string} value - the product price.
+ * @param {string} value the product price.
  * @returns {object} the cell classes.
  */
 function styleProductPrice(value) {
@@ -108,9 +108,9 @@ function styleProductPrice(value) {
 /**
  * Row classes for the text muted.
  *
- * @param {Object} row - the record data.
- * @param {string} row.textMuted - the text muted value
- * @param {int} index - the row index.
+ * @param {Object} row the record data.
+ * @param {string} row.textMuted the text muted value
+ * @param {int} index the row index.
  * @returns {object} the row classes.
  */
 function styleTextMuted(row, index) {
@@ -128,8 +128,8 @@ function styleTextMuted(row, index) {
 /**
  * Returns if the current row is rendered for the connected user
  *
- * @param {jQueryTable} $table - the parent table.
- * @param {Object} row - the row data.
+ * @param {jQueryTable} $table the parent table.
+ * @param {Object} row the row data.
  * @returns {boolean} true if connected user
  */
 function isConnectedUser($table, row) {
@@ -142,8 +142,8 @@ function isConnectedUser($table, row) {
 /**
  * Returns if the current row is rendered for the original connected user
  *
- * @param {jQueryTable} $table - the parent table.
- * @param {Object} row - the row data.
+ * @param {jQueryTable} $table the parent table.
+ * @param {Object} row the row data.
  * @returns {boolean} true if connected user
  */
 function isOrignalUser($table, row) {
@@ -156,48 +156,45 @@ function isOrignalUser($table, row) {
 /**
  * Update the user message action.
  *
- * @param {jQueryTable} $table - the parent table.
- * @param {Object} row - the row data.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {jQueryTable} $table the parent table.
+ * @param {Object} row the row data.
+ * @param {jQuery} _$element the table row.
+ * @param {jQuery} $action the action to update
  */
 function updateUserMessageAction($table, row, _$element, $action) {
     'use strict';
     if (isConnectedUser($table, row)) {
-        $action.prev('.user-message-divider').remove();
-        $action.remove();
+        removeAction($action, '.user-message-divider');
     }
 }
 
 /**
  * Update the user delete action.
  *
- * @param {jQueryTable} $table - the parent table.
- * @param {Object} row - the row data.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {jQueryTable} $table the parent table.
+ * @param {Object} row the row data.
+ * @param {jQuery} _$element the table row.
+ * @param {jQuery} $action the action to update
  */
 function updateUserDeleteAction($table, row, _$element, $action) {
     'use strict';
     if (isConnectedUser($table, row) || isOrignalUser($table, row)) {
-        $action.prev('.delete-divider').remove();
-        $action.remove();
+        removeAction($action, '.delete-divider');
     }
 }
 
 /**
  * Update the switch user action.
  *
- * @param {jQueryTable} $table - the parent table.
- * @param {Object} row - the row data.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {jQueryTable} $table the parent table.
+ * @param {Object} row the row data.
+ * @param {jQuery} _$element the table row.
+ * @param {jQuery} $action the action to update
  */
 function updateUserSwitchAction($table, row, _$element, $action) {
     'use strict';
     if (isConnectedUser($table, row)) {
-        $action.prev('.user-switch-divider').remove();
-        $action.remove();
+        removeAction($action, '.user-switch-divider');
     } else {
         const source = $action.attr('href').split('?')[0];
         const params = {
@@ -211,41 +208,40 @@ function updateUserSwitchAction($table, row, _$element, $action) {
 /**
  * Update the reset request password user action.
  *
- * @param {jQueryTable} $table - the parent table.
- * @param {Object} row - the row data.
- * @param {string} row.resetPassword - the reset password value
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {jQueryTable} $table the parent table.
+ * @param {Object} row the row data.
+ * @param {string} row.hashedToken the reset password value
+ * @param {jQuery} _$element the table row.
+ * @param {jQuery} $action the action to update
  */
 function updateUserResetAction($table, row, _$element, $action) {
     'use strict';
-    if ($.parseInt(row.resetPassword) === 0) {
-        $action.prev('.user-reset-divider').remove();
-        $action.remove();
+    if (!row.hashedToken) {
+        removeAction($action, '.user-reset-divider');
     }
 }
 
 /**
  * Update the search action.
  *
- * @param {jQueryTable} $table - the parent table.
- * @param {Object} row - the row data.
- * @param {string} row.id - the row identifier.
- * @param {string} row.type - the entity type.
- * @param {boolean} row.allowShow - the show granted.
- * @param {boolean} row.allowEdit - the  edit granted.
- * @param {boolean} row.allowDelete - the deleted granted.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {jQueryTable} $table the parent table.
+ * @param {Object} row the row data.
+ * @param {string} row.id the row identifier.
+ * @param {string} row.type the entity type.
+ * @param {boolean} row.allowShow the show granted.
+ * @param {boolean} row.allowEdit the  edit granted.
+ * @param {boolean} row.allowDelete the deleted granted.
+ * @param {jQuery} _$element the table row.
+ * @param {jQuery} $action the action to update
  */
 function updateSearchAction($table, row, _$element, $action) {
     'use strict';
     if ($action.is('.btn-show') && !row.allowShow) {
-        $action.remove();
+        removeAction($action);
     } else if ($action.is('.btn-edit') && !row.allowEdit) {
-        $action.remove();
+        removeAction($action);
     } else if ($action.is('.btn-delete') && !row.allowDelete) {
-        $action.remove();
+        removeAction($action);
     } else {
         const id = row.id;
         const type = row.type;
@@ -263,10 +259,10 @@ function updateSearchAction($table, row, _$element, $action) {
 /**
  * Update the edit calculation action.
  *
- * @param {jQuery} _$table - the parent table.
- * @param {Object} row - the row data.
- * @param {jQuery} $element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {jQuery} _$table the parent table.
+ * @param {Object} row the row data.
+ * @param {jQuery} $element the table row.
+ * @param {jQuery} $action the action to update
  */
 function updateCalculationEditAction(_$table, row, $element, $action) {
     'use strict';
@@ -285,10 +281,10 @@ function updateCalculationEditAction(_$table, row, $element, $action) {
 /**
  * Update the export calculation action.
  *
- * @param {jQuery} _$table - the parent table.
- * @param {Object} _row - the row data.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {jQuery} _$table the parent table.
+ * @param {Object} _row the row data.
+ * @param {jQuery} _$element the table row.
+ * @param {jQuery} $action the action to update
  */
 function updateCalculationAction(_$table, _row, _$element, $action) {
     'use strict';
@@ -297,27 +293,41 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
 }
 
 /**
+ * Remove the given action by removing the parent's list entry.
+ *
+ * @param {jQuery} $action the action to remove.
+ * @param {string} [divider] the previous divider, if any; to remove.
+ */
+function removeAction($action, divider) {
+    'use strict';
+    const $parent = $action.parents('li');
+    if (divider) {
+        $parent.prev(divider).remove();
+    }
+    $parent.remove();
+}
+
+/**
  * Update the task compute action.
  *
- * @param {jQueryTable} _$table - the parent table.
- * @param {Object} row - the row data.
- * @param {jQuery} _$element - the table row.
- * @param {jQuery} $action - the action to update
+ * @param {jQueryTable} _$table the parent table.
+ * @param {Object} row the row data.
+ * @param {jQuery} _$element the table row.
+ * @param {jQuery} $action the action to update
  */
 function updateTaskComputeAction(_$table, row, _$element, $action) {
     'use strict';
     if ($.parseInt(row.items) === 0) {
-        $action.prev('.task-compute-divider').remove();
-        $action.remove();
+        removeAction($action, '.task-compute-divider');
     }
 }
 
 /**
  * Update the show entity action.
  *
- * @param {Object} row - the row data.
- * @param {jQuery} $action - the action to update
- * @param {string} propertyName -  the property name to get from row.
+ * @param {Object} row the row data.
+ * @param {jQuery} $action the action to update
+ * @param {string} propertyName  the property name to get from row.
  */
 function updateShowEntityAction(row, $action, propertyName) {
     'use strict';
@@ -329,13 +339,13 @@ function updateShowEntityAction(row, $action, propertyName) {
             return;
         }
     }
-    $action.remove();
+    $action.parents('li').remove();
 }
 
 /**
  * Formatter for the actions' column.
  *
- * @param {number} value - the field value (id).
+ * @param {number} value the field value (id).
  * @returns {string} the rendered cell.
  */
 function formatActions(value) {
@@ -402,9 +412,9 @@ function initializeDangerTooltips($table) {
 /**
  * Show the page selection dialog.
  *
- * @param {jQueryTable} $table - the data table.
- * @param {jQuery} $button - the caller button.
- * @param {jQuery} [$source] - the source page link.
+ * @param {jQueryTable} $table the data table.
+ * @param {jQuery} $button the caller button.
+ * @param {jQuery} [$source] the source page link.
  */
 function showPageDialog($table, $button, $source) {
     'use strict';
@@ -424,8 +434,8 @@ function showPageDialog($table, $button, $source) {
 /**
  * Show the sort field dialog.
  *
- * @param {jQueryTable} $table - the data table.
- * @param {jQuery} $button - the caller button.
+ * @param {jQueryTable} $table the data table.
+ * @param {jQuery} $button the caller button.
  */
 function showSortDialog($table, $button) {
     'use strict';

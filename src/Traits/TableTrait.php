@@ -51,10 +51,13 @@ trait TableTrait
         }
 
         try {
+            $prefix = $query->prefix;
             $results = $table->processDataQuery($query);
             $response = $query->callback ? $this->json($results) : $this->render($template, (array) $results);
             $this->saveCookie($response, $results, TableInterface::PARAM_VIEW, TableView::TABLE);
-            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $query->prefix);
+            $this->saveCookie($response, $results, TableInterface::PARAM_LIMIT, TableView::TABLE->getPageSize(), $prefix);
+            $this->saveCookie($response, $results, TableInterface::PARAM_SORT, $query->sort, $prefix);
+            $this->saveCookie($response, $results, TableInterface::PARAM_ORDER, $query->order, $prefix);
             $this->getUserService()->setProperty(PropertyServiceInterface::P_DISPLAY_MODE, $query->view);
 
             return $response;

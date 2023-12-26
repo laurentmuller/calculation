@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\User;
+use App\Interfaces\RoleInterface;
 use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
@@ -61,7 +62,7 @@ class UserTable extends AbstractEntityTable
      *
      * @psalm-api
      */
-    public function formatImage(?string $image, User $user): string
+    public function formatImage(?string $image, array $user): string
     {
         if (StringUtils::isString($image)) {
             return $this->twig->render('macros/_cell_user_image.html.twig', ['user' => $user]);
@@ -89,9 +90,13 @@ class UserTable extends AbstractEntityTable
      *
      * @psalm-api
      */
-    public function formatRole(string $role, User $user): string
+    public function formatRole(?string $role): string
     {
-        return $this->twig->render('macros/_cell_user_role.html.twig', ['value' => $this->translateRole($role), 'user' => $user]);
+        $role ??= RoleInterface::ROLE_USER;
+
+        return $this->twig->render('macros/_cell_user_role.html.twig', [
+            'role' => $this->translateRole($role),
+            'icon' => $this->getRoleIcon($role)]);
     }
 
     public function getTranslator(): TranslatorInterface
@@ -101,10 +106,11 @@ class UserTable extends AbstractEntityTable
 
     protected function createQueryBuilder(string $alias = AbstractRepository::DEFAULT_ALIAS): QueryBuilder
     {
-        $query = parent::createQueryBuilder($alias);
         $user = $this->security->getUser();
+        $repository = $this->getRepository();
+        $query = $repository->getTableQueryBuilder($alias);
         if (!$user instanceof User || !$user->isSuperAdmin()) {
-            $criteria = $this->getRepository()->getSuperAdminFilter($alias);
+            $criteria = $repository->getSuperAdminFilter($alias);
             $query->andWhere($criteria);
         }
 
@@ -143,6 +149,15 @@ class UserTable extends AbstractEntityTable
         }
 
         return (int) $user->getId();
+    }
+
+    private function getRoleIcon(string $role): string
+    {
+        return match ($role) {
+            RoleInterface::ROLE_SUPER_ADMIN => 'fa-solid fa-user-gear',
+            RoleInterface::ROLE_ADMIN => 'fa-solid fa-user-shield',
+            default => 'fa-solid fa-user',
+        };
     }
 
     private function isResettableUsers(): bool

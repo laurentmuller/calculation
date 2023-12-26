@@ -1,7 +1,5 @@
-{% apply spaceless %}
-    {% if route|default(false) and count > 0 %}
-        <a class="rowlink-skip" href="{{ path(route, parameters|default({})) }}"{% if title %} title="{{ title|trans }}"{% endif %}>{{ count|integer }}</a>
-    {% else %}
-        {{ count|integer }}
-    {% endif %}
-{% endapply %}
+{% if route|default(false) and count > 0 %}
+    <a class="rowlink-skip" href="{{ path(route, parameters|default({})) }}"{% if title %} title="{{ title|trans }}"{% endif %}>{{ count|integer }}</a>
+{% else %}
+    {{ count|integer }}
+{% endif %}

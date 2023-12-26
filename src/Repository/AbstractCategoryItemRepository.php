@@ -88,4 +88,21 @@ abstract class AbstractCategoryItemRepository extends AbstractRepository
             default => parent::getSortField($field, $alias),
         };
     }
+
+    /**
+     * Create the query builder for the table.
+     *
+     * @param literal-string $alias the entity alias
+     */
+    protected function createTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
+    {
+        return $this->createQueryBuilder($alias)
+            ->select("$alias.id")
+            ->addSelect("$alias.unit")
+            ->addSelect("$alias.supplier")
+            ->addSelect(self::CATEGORY_ALIAS . '.code as categoryCode')
+            ->addSelect(self::GROUP_ALIAS . '.code as groupCode')
+            ->innerJoin("$alias.category", self::CATEGORY_ALIAS)
+            ->innerJoin(self::CATEGORY_ALIAS . '.group', self::GROUP_ALIAS);
+    }
 }

@@ -19,7 +19,8 @@ use App\Form\User\RoleRightsType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\Role;
-use App\Service\ClearCacheService;
+use App\Service\ApplicationService;
+use App\Service\CacheService;
 use App\Service\RoleBuilderService;
 use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
@@ -45,15 +46,19 @@ class AdminController extends AbstractController
      * Clear the application cache.
      */
     #[Route(path: '/clear', name: 'admin_clear', methods: [Request::METHOD_GET, Request::METHOD_POST])]
-    public function clearCache(Request $request, SymfonyInfoService $info, ClearCacheService $service, LoggerInterface $logger): Response
-    {
+    public function clearCache(
+        Request $request,
+        SymfonyInfoService $info,
+        CacheService $service,
+        LoggerInterface $logger
+    ): Response {
         $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
             $this->getUserService()->clearCache();
             $this->getApplication()->clearCache();
 
             try {
-                if ($service->execute()) {
+                if ($service->clear()) {
                     return $this->redirectToHomePage('clear_cache.success');
                 }
 
@@ -63,8 +68,15 @@ class AdminController extends AbstractController
             }
         }
 
+        try {
+            $pools = $service->list();
+        } catch (\Exception $e) {
+            return $this->renderFormException('clear_cache.failure', $e, $logger);
+        }
+
         return $this->render('admin/clear_cache.html.twig', [
             'size' => $info->getCacheSize(),
+            'pools' => $pools,
             'form' => $form,
         ]);
     }
@@ -99,12 +111,13 @@ class AdminController extends AbstractController
     #[Route(path: '/rights/admin', name: 'admin_rights_admin', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function rightsAdmin(Request $request, RoleBuilderService $service): Response
     {
+        $application = $this->getApplication();
         $roleName = RoleInterface::ROLE_ADMIN;
-        $rights = $this->getApplication()->getAdminRights();
+        $rights = $application->getAdminRights();
         $default = $service->getRoleAdmin();
         $property = PropertyServiceInterface::P_ADMIN_RIGHTS;
 
-        return $this->editRights($request, $roleName, $rights, $default, $property);
+        return $this->editRights($request, $application, $roleName, $rights, $default, $property);
     }
 
     /**
@@ -113,12 +126,24 @@ class AdminController extends AbstractController
     #[Route(path: '/rights/user', name: 'admin_rights_user', methods: [Request::METHOD_GET, Request::METHOD_POST])]
     public function rightsUser(Request $request, RoleBuilderService $service): Response
     {
+        $application = $this->getApplication();
         $roleName = RoleInterface::ROLE_USER;
-        $rights = $this->getApplication()->getUserRights();
+        $rights = $application->getUserRights();
         $default = $service->getRoleUser();
         $property = PropertyServiceInterface::P_USER_RIGHTS;
 
-        return $this->editRights($request, $roleName, $rights, $default, $property);
+        return $this->editRights($request, $application, $roleName, $rights, $default, $property);
+    }
+
+    /**
+     * @psalm-param int[] $rights
+     */
+    private function createRole(string $roleName, array $rights): Role
+    {
+        $role = new Role($roleName);
+
+        return $role->setName($this->translateRole($roleName))
+            ->setRights($rights);
     }
 
     /**
@@ -126,15 +151,17 @@ class AdminController extends AbstractController
      *
      * @param int[] $rights
      */
-    private function editRights(Request $request, string $roleName, ?array $rights, Role $default, string $property): Response
-    {
-        $role = new Role($roleName);
-        $role->setName($this->translateRole($roleName))
-            ->setRights($rights);
+    private function editRights(
+        Request $request,
+        ApplicationService $application,
+        string $roleName,
+        array $rights,
+        Role $default,
+        string $property
+    ): Response {
+        $role = $this->createRole($roleName, $rights);
         $form = $this->createForm(RoleRightsType::class, $role);
         if ($this->handleRequestForm($request, $form)) {
-            // update property
-            $application = $this->getApplication();
             if ($role->getRights() === $default->getRights()) {
                 $application->removeProperty($property);
             } else {

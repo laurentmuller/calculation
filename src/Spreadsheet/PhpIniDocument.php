@@ -88,19 +88,23 @@ class PhpIniDocument extends AbstractDocument
             $color = \substr($var, 1);
         } elseif (\in_array(\strtolower($var), ['no', 'disabled', 'off'], true)) {
             $color = '7F7F7F';
+        } elseif (StringUtils::equalIgnoreCase(PhpInfoService::REDACTED, $var)) {
+            $color = '7F7F7F';
         } elseif (StringUtils::equalIgnoreCase('no value', $var)) {
             $color = '7F7F7F';
             $italic = true;
         }
-        if (null !== $color || $italic) {
-            $font = $sheet->getCell([$column, $row])
-                ->getStyle()->getFont();
-            if ($italic) {
-                $font->setItalic(true);
-            }
-            if (null !== $color) {
-                $font->setColor(new Color($color));
-            }
+        if (null === $color && !$italic) {
+            return $this;
+        }
+
+        $font = $sheet->getCell([$column, $row])
+            ->getStyle()->getFont();
+        if ($italic) {
+            $font->setItalic(true);
+        }
+        if (null !== $color) {
+            $font->setColor(new Color($color));
         }
 
         return $this;

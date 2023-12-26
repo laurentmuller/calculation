@@ -96,16 +96,9 @@ class ProductRepository extends AbstractCategoryItemRepository
      */
     public function getTableQueryBuilder(string $alias = self::DEFAULT_ALIAS): QueryBuilder
     {
-        return $this->createQueryBuilder($alias)
-            ->select("$alias.id")
+        return $this->createTableQueryBuilder($alias)
             ->addSelect("$alias.description")
-            ->addSelect("$alias.price")
-            ->addSelect("$alias.unit")
-            ->addSelect("$alias.supplier")
-            ->addSelect(self::CATEGORY_ALIAS . '.code as categoryCode')
-            ->addSelect(self::GROUP_ALIAS . '.code as groupCode')
-            ->innerJoin("$alias.category", self::CATEGORY_ALIAS)
-            ->innerJoin(self::CATEGORY_ALIAS . '.group', self::GROUP_ALIAS);
+            ->addSelect("$alias.price");
     }
 
     /**

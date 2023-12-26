@@ -84,17 +84,19 @@ class PhpIniReport extends AbstractReport
             $color = PdfTextColor::create($var);
         } elseif (\in_array(\strtolower($var), ['no', 'disabled', 'off', '(none)'], true)) {
             $color = PdfTextColor::darkGray();
+        } elseif (StringUtils::equalIgnoreCase(PhpInfoService::REDACTED, $var)) {
+            $color = PdfTextColor::darkGray();
         } elseif (StringUtils::equalIgnoreCase('no value', $var)) {
             $color = PdfTextColor::darkGray();
             $style = PdfFontStyle::ITALIC;
         }
-        if ($color instanceof PdfTextColor) {
-            return PdfStyle::getCellStyle()
-                ->setTextColor($color)
-                ->setFontStyle($style);
+        if (!$color instanceof PdfTextColor) {
+            return null;
         }
 
-        return null;
+        return PdfStyle::getCellStyle()
+            ->setTextColor($color)
+            ->setFontStyle($style);
     }
 
     /**

@@ -68,6 +68,53 @@ trait ArrayTrait
     }
 
     /**
+     * Gets filtered values.
+     *
+     * @template T
+     *
+     * @param array<T|null> $values   the values to filter and to get unique values for
+     * @param callable|null $callback the callback function to use. If no callback is supplied, all empty entries
+     *                                of array will be removed.
+     * @param int           $mode     a flag determining what arguments are sent to callback:
+     *                                <ul>
+     *                                <li>0 - pass the value as the only argument</li>
+     *                                <li>ARRAY_FILTER_USE_KEY - pass key as the only argument to callback instead
+     *                                of the value</li>
+     *                                <li>ARRAY_FILTER_USE_BOTH - pass both value and key as arguments to callback
+     *                                instead of the value</li>
+     *                                </ul>
+     *
+     * @return T[]
+     *
+     * @psalm-param callable(?T|array-key|array{array-key, ?T}):bool|null $callable
+     * @psalm-param 0|1|2 $mode
+     */
+    public function getFiltered(
+        array $values,
+        callable $callback = null,
+        int $mode = 0
+    ): array {
+        /** @psalm-var T[] $values */
+        $values = \is_callable($callback) ? \array_filter($values, $callback, $mode) : \array_filter($values);
+
+        return $values;
+    }
+
+    /**
+     * Sort the given array.
+     *
+     * @return array the sorted array
+     */
+    public function getSorted(array $array, int $flags = \SORT_REGULAR): array
+    {
+        if ([] !== $array) {
+            \sort($array, $flags);
+        }
+
+        return $array;
+    }
+
+    /**
      * Gets filtered and uniques values.
      *
      * @template T
@@ -95,10 +142,9 @@ trait ArrayTrait
         array $values,
         callable $callback = null,
         int $mode = 0,
-        int $flags = \SORT_STRING
+        int $flags = \SORT_REGULAR
     ): array {
-        /** @psalm-var T[] $values */
-        $values = \is_callable($callback) ? \array_filter($values, $callback, $mode) : \array_filter($values);
+        $values = $this->getFiltered($values, $callback, $mode);
 
         return \array_unique($values, $flags);
     }

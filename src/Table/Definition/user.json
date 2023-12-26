@@ -46,7 +46,7 @@
         "visible": false
     },
     {
-        "field": "resetPassword",
+        "field": "hashedToken",
         "visible": false
     }
 ]

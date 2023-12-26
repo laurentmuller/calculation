@@ -1,7 +1,6 @@
 {# tool menu #}
 {% from 'macros/_icons.html.twig' import icon %}
-{% set show_navigation_menu = is_granted_data and show_navigation_search ?? false %}
-{% if show_navigation_menu or is_admin or is_granted_task %}
+{% if is_granted_data or is_granted_task or is_admin %}
     <li class="nav-item dropdown">
         <button class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             {{ icon('tools', 'index.menu_tools') }}

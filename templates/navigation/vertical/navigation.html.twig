@@ -38,7 +38,7 @@
         {% if is_granted_calculation %}
             {{ include('navigation/vertical/navigation_chart.html.twig') }}
         {% endif %}
-        {% if is_granted_data or is_admin %}
+        {% if is_granted_data or is_granted_task or is_admin %}
             {{ include('navigation/vertical/navigation_tools.html.twig') }}
         {% endif %}
         {% if is_admin -%}

@@ -154,6 +154,21 @@ function isOrignalUser($table, row) {
 }
 
 /**
+ * Remove the given action by removing the parent's list entry.
+ *
+ * @param {jQuery} $action the action to remove.
+ * @param {string} [divider] the previous divider, if any; to remove.
+ */
+function removeAction($action, divider) {
+    'use strict';
+    const $parent = $action.parents('li');
+    if (divider) {
+        $parent.prev(divider).remove();
+    }
+    $parent.remove();
+}
+
+/**
  * Update the user message action.
  *
  * @param {jQueryTable} $table the parent table.
@@ -290,21 +305,6 @@ function updateCalculationAction(_$table, _row, _$element, $action) {
     'use strict';
     const href = $action.attr('href').split('?')[0];
     $action.attr('href', href);
-}
-
-/**
- * Remove the given action by removing the parent's list entry.
- *
- * @param {jQuery} $action the action to remove.
- * @param {string} [divider] the previous divider, if any; to remove.
- */
-function removeAction($action, divider) {
-    'use strict';
-    const $parent = $action.parents('li');
-    if (divider) {
-        $parent.prev(divider).remove();
-    }
-    $parent.remove();
 }
 
 /**

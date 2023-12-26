@@ -1,19 +1,15 @@
 {# common tool menu #}
 {% from 'macros/_icons.html.twig' import dropdownSeparator, dropdownItem %}
 <ul class="dropdown-menu">
-    {% if show_navigation_menu -%}
-        {{ dropdownItem(path('search'), 'search.title', 'search') }}
-    {% endif %}
+    {{ dropdownItem(path('search'), 'search.title', 'search') }}
     {% if is_admin %}
-        {% if show_navigation_menu %}
-            {{ dropdownSeparator() }}
-        {% endif %}
+        {{ dropdownSeparator() }}
         {{ dropdownItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
         {{ dropdownItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
         {{ dropdownItem(path('empty_table'), 'empty.title', 'file-code far') }}
     {% endif -%}
     {%- if is_granted_task -%}
-        {% if show_navigation_menu or is_admin -%}
+        {% if is_admin -%}
             {{ dropdownSeparator() }}
         {% endif %}
         {{ dropdownItem(path('task_compute'), 'task_compute.title', 'keyboard') }}

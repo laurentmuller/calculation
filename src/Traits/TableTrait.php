@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Controller\AbstractController;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Enums\TableView;
@@ -25,6 +26,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Trait to handle a table request.
+ *
+ * @psalm-require-extends AbstractController
  */
 trait TableTrait
 {
@@ -84,8 +87,13 @@ trait TableTrait
     /**
      * Save the given parameter from the data result to a cookie.
      */
-    protected function saveCookie(Response $response, DataResults $results, string $key, string|bool|int|\BackedEnum $default = null, string $prefix = ''): void
-    {
+    protected function saveCookie(
+        Response $response,
+        DataResults $results,
+        string $key,
+        string|bool|int|\BackedEnum $default = null,
+        string $prefix = ''
+    ): void {
         $path = $this->getCookiePath();
         $value = $results->getParameter($key, $default);
         $this->updateCookie($response, $key, $value, $prefix, $path);

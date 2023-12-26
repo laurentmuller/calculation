@@ -2,7 +2,6 @@
 {# parameters #}
 {%- set title = 'index.title' -%}
 {%- set enabled = app.user.enabled -%}
-{%- set show_navigation_search = enabled -%}
 {# navigation #}
 {%- block navigation_vertical -%}
     {%- if enabled -%}{{ parent() }}{% endif %}

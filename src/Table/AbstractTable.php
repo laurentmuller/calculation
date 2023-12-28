@@ -113,6 +113,7 @@ abstract class AbstractTable
         if (\end($sizes) <= $totalNotFiltered) {
             return $sizes;
         }
+
         foreach ($sizes as $index => $size) {
             if ($size >= $totalNotFiltered) {
                 return \array_slice($sizes, 0, $index + 1);

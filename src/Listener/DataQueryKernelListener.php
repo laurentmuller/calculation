@@ -82,16 +82,15 @@ class DataQueryKernelListener
 
     private function updateQuery(DataQuery $query, Request $request): DataQuery
     {
-        $prefix = $this->getPrefix($request);
-        $query->prefix = $prefix;
         $query->view = $this->getView($request);
+        $query->prefix = $this->getPrefix($request);
         $query->callback = $this->isCallback($request);
         if (0 === $query->limit) {
-            $query->limit = $this->getLimit($request, $prefix, $query->view);
+            $query->limit = $this->getLimit($request, $query->prefix, $query->view);
         }
         if ('' === $query->sort) {
-            $query->sort = $this->getSort($request, $prefix);
-            $query->order = $this->getOrder($request, $prefix);
+            $query->sort = $this->getSort($request, $query->prefix);
+            $query->order = $this->getOrder($request, $query->prefix);
         }
 
         return $query;

@@ -19,3 +19,8 @@ framework:
     # errors
     php_errors:
         log: true
+
+    # form
+    form:
+        csrf_protection:
+            field_name: token

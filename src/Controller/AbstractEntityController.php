@@ -148,7 +148,6 @@ abstract class AbstractEntityController extends AbstractController
     {
         $isNew = $item->isNew();
         $this->checkPermission($isNew ? EntityPermission::ADD : EntityPermission::EDIT);
-
         $type = $this->getEditFormType();
         $form = $this->createForm($type, $item);
         if ($this->handleRequestForm($request, $form)) {
@@ -160,6 +159,7 @@ abstract class AbstractEntityController extends AbstractController
         $parameters['new'] = $isNew;
         $parameters['item'] = $item;
         $parameters['form'] = $form;
+        $parameters['submit_text'] = $isNew ? 'common.button_submit_add' : 'common.button_submit_edit';
         $this->updateQueryParameters($request, $parameters, $item);
 
         return $this->render($this->getEditTemplate(), $parameters);

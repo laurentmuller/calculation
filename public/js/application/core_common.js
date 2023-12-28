@@ -39,7 +39,7 @@
             $button.hide();
             $form.show().animate({
                 width: formSize
-            },  () => {
+            }, () => {
                 $input.trigger('focus');
             });
         });
@@ -137,7 +137,7 @@
     /**
      * Must be called after content loaded.
      */
-    window.addEventListener("DOMContentLoaded", function () {
+    window.addEventListener('DOMContentLoaded', () => {
         initThemeTooltip();
         showFlashBag();
     });

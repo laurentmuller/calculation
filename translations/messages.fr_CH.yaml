@@ -294,6 +294,8 @@ common:
   button_search: Rechercher
   button_show: Afficher
   button_table: Mode tabulaire
+  button_submit_edit: Enregistrer
+  button_submit_add: Ajouter
   clone_description: '%description% - Copie'
   count: 'Nombre d''éléments : %count%'
   add_success: L'objet <b>%name%</b> a été ajouté avec succès.

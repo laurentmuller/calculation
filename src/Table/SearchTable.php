@@ -67,7 +67,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
 
     protected function handleQuery(DataQuery $query): DataResults
     {
-        /** @psalm-var SearchType[] $items */
         $items = [];
         $search = $query->search;
         $entity = $query->entity;
@@ -85,20 +84,22 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
             }
         }
         $results->rows = $items;
-        if (!$query->callback) {
-            $entities = $this->service->getEntities();
-            foreach ($entities as $key => &$value) {
-                $value = [
-                    'name' => $value,
-                    'icon' => $this->getIcon($key),
-                ];
-            }
-            $results->customData = [
-                'entity' => $entity,
-                'entities' => $entities,
-            ];
-            $results->addParameter(self::PARAM_ENTITY, $entity);
+        if ($query->callback) {
+            return $results;
         }
+
+        $entities = $this->service->getEntities();
+        foreach ($entities as $key => &$value) {
+            $value = [
+                'name' => $value,
+                'icon' => $this->getIcon($key),
+            ];
+        }
+        $results->customData = [
+            'entity' => $entity,
+            'entities' => $entities,
+        ];
+        $results->addParameter(self::PARAM_ENTITY, $entity);
 
         return $results;
     }
@@ -109,14 +110,14 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     private function getIcon(string $type): string
     {
         return match ($type) {
-            'calculation' => 'fa-fw fa-solid fa-calculator',
-            'calculationstate' => 'fa-fw fa-regular fa-flag',
-            'category' => 'fa-fw fa-regular fa-folder',
-            'customer' => 'fa-fw fa-regular fa-address-card',
-            'task' => 'fa-fw fa-solid fa-tasks',
-            'group' => 'fa-fw fa-solid fa-code-branch',
-            'product' => 'fa-fw fa-regular fa-file-alt',
-            default => 'fa-fw fa-regular fa-file',
+            'calculation' => 'fa-solid fa-calculator',
+            'calculationstate' => 'fa-regular fa-flag',
+            'category' => 'fa-regular fa-folder',
+            'customer' => 'fa-regular fa-address-card',
+            'task' => 'fa-solid fa-tasks',
+            'group' => 'fa-solid fa-code-branch',
+            'product' => 'fa-regular fa-file-alt',
+            default => 'fa-regular fa-file',
         };
     }
 
@@ -173,14 +174,20 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
      *
      * @psalm-param SearchType $item
      *
-     * @psalm-param-out  array<"id"|"type"|"field"|"content"|"entityName"|"fieldName", int|string> $item
+     * @psalm-param-out array{
+     *       id: int,
+     *       type: string,
+     *       content: string,
+     *       entityName: string,
+     *       fieldName: string
+     *   } $item
      */
     private function updateItem(array &$item): void
     {
         $name = $item[SearchService::COLUMN_ENTITY_NAME];
         $type = \strtolower($item[SearchService::COLUMN_TYPE]);
         $icon = $this->getIcon($type);
-        $item[SearchService::COLUMN_ENTITY_NAME] = \sprintf('<i class="%s" aria-hidden="true"></i>&nbsp;%s', $icon, $name);
+        $item[SearchService::COLUMN_ENTITY_NAME] = \sprintf('<i class="%s me-1"></i>%s', $icon, $name);
         $item[SearchService::COLUMN_TYPE] = $type;
         unset($item[SearchService::COLUMN_FIELD]);
     }

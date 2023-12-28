@@ -101,6 +101,28 @@ abstract class AbstractTable
     }
 
     /**
+     * Gets the allowed page list.
+     *
+     * @param int $totalNotFiltered the number of not filtered entities
+     *
+     * @return int[] the allowed page list
+     */
+    protected function getAllowedPageList(int $totalNotFiltered): array
+    {
+        $sizes = TableInterface::PAGE_LIST;
+        if (\end($sizes) <= $totalNotFiltered) {
+            return $sizes;
+        }
+        foreach ($sizes as $index => $size) {
+            if ($size >= $totalNotFiltered) {
+                return \array_slice($sizes, 0, $index + 1);
+            }
+        }
+
+        return $sizes;
+    }
+
+    /**
      * Gets the JSON file containing the column definitions.
      */
     abstract protected function getColumnDefinitions(): string;
@@ -198,28 +220,6 @@ abstract class AbstractTable
         $columns[] = Column::createColumnAction();
 
         return $columns;
-    }
-
-    /**
-     * Gets the allowed page list.
-     *
-     * @param int $totalNotFiltered the number of not filtered entities
-     *
-     * @return int[] the allowed page list
-     */
-    private function getAllowedPageList(int $totalNotFiltered): array
-    {
-        $sizes = TableInterface::PAGE_LIST;
-        if (\end($sizes) <= $totalNotFiltered) {
-            return $sizes;
-        }
-        foreach ($sizes as $index => $size) {
-            if ($size >= $totalNotFiltered) {
-                return \array_slice($sizes, 0, $index + 1);
-            }
-        }
-
-        return $sizes;
     }
 
     /**

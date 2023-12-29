@@ -12,65 +12,55 @@
      * Handle horizontal search form.
      */
     function initHorizontalSearch() {
-        const $form = $('#search-form-horizontal');
-        if ($form.length === 0) {
+        const $div = $('#search-div-horizontal');
+        if ($div.length === 0) {
             return;
         }
         const formSize = 150;
         const breakPoint = 992;
+        const $input = $('#search-input-horizontal');
         const $button = $('#search-button-horizontal');
-        const $input = $('#search-form-horizontal #search');
-        const hideInvalid = () => {
-            $input.removeClass('is-invalid').data('display', false).tooltip('hide');
-        };
+        const hideInvalid = () => $input.removeClass('is-invalid').data('display', false).tooltip('hide');
         const hideForm = () => {
-            $input.val('');
             hideInvalid();
             if (window.innerWidth > breakPoint) {
-                $form.animate({
-                    width: 0
-                }, () => {
-                    $form.hide();
+                $div.animate({width: 0}, () => {
+                    $div.hide();
                     $button.show().trigger('focus');
                 });
             }
         };
+        const keyupHandler = (e) => {
+            if (e.key === 'Escape') {
+                hideForm();
+                return;
+            }
+            const value = String($input.val()).trim();
+            if (value.length < 2) {
+                $input.addClass('is-invalid');
+                if (!$input.data('display')) {
+                    $input.data('display', true).tooltip('show');
+                }
+                return;
+            }
+            hideInvalid();
+            if (e.key === 'Enter') {
+                const url = $input.data('action');
+                window.location.href = `${url}?search=${value}`;
+            }
+        };
+        $input.on('keyup', keyupHandler).on('blur', () => hideForm());
         $button.on('click', () => {
             $button.hide();
-            $form.show().animate({
-                width: formSize
-            }, () => {
-                $input.trigger('focus');
-            });
+            $div.show().animate({width: formSize}, () => $input.trigger('focus'));
         });
         $(window).on('resize', () => {
             if (window.innerWidth > breakPoint) {
                 $button.show();
-                $form.css('width', 0).hide();
+                $div.css('width', 0).hide();
             } else {
                 $button.hide();
-                $form.css('width', formSize).show();
-            }
-        });
-        $input.on('keyup', (e) => {
-            if (e.key === 'Escape') {
-                hideForm();
-            } else {
-                if ($input.val().trim().length < 2) {
-                    $input.addClass('is-invalid');
-                    if (!$input.data('display')) {
-                        $input.data('display', true).tooltip('show');
-                    }
-                } else {
-                    hideInvalid();
-                }
-            }
-        }).on('blur', () => {
-            hideForm();
-        });
-        $form.on('submit', (e) => {
-            if ($input.val().trim().length < 2 || $input.hasClass('is-invalid')) {
-                e.preventDefault();
+                $div.css('width', formSize).show();
             }
         });
     }

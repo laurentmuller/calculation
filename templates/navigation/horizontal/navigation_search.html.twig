@@ -1,8 +1,36 @@
 {# search form #}
 {% from 'macros/_icons.html.twig' import icon %}
+{% from 'macros/_attributes.html.twig' import attributes %}
+{% set search_button_attributes = {
+    'id': 'search-button-horizontal',
+    'class': 'nav-link',
+    'title': 'search.title'|trans
+} %}
+{% set search_div_attributes = {
+    'id': 'search-div-horizontal',
+    'class': 'my-auto mx-lg-2 py-1 py-lg-0',
+    'role': 'search',
+    'style': 'display: none; width: 0;'
+} %}
+{% set search_input_attributes = {
+    'type': 'text',
+    'id': 'search-input-horizontal',
+    'class': 'form-control form-control-sm w-100',
+    'aria-label': 'search.title'|trans,
+    'minlength': 2,
+    'autocomplete': 'off',
+    'required': 'required',
+    'placeholder': 'search.title'|trans,
+    'data-action': path('search'),
+    'data-display': false|json_encode,
+    'data-bs-toggle': 'tooltip',
+    'data-bs-trigger': 'manual',
+    'data-bs-custom-class': 'tooltip-danger',
+    'data-bs-title': 'search.minimum'|trans
+} %}
 <li class="nav-item my-auto">
-    <button id="search-button-horizontal" class="nav-link" title="{{ 'search.title'|trans }}">{{- icon('search fa-fw') -}}</button>
-    <form id="search-form-horizontal" action="{{ path('search') }}" class="my-auto mx-lg-2 py-1 py-lg-0" role="search" novalidate="novalidate" style="display: none; width: 0;">
-        <input type="text" id="search" name="search" class="form-control form-control-sm w-100" aria-label="{{ 'list.search_placeholder'|trans }}" required="required" minlength="2" autocomplete="off" placeholder="{{ 'search.placeholder'|trans }}" data-display="false" data-bs-toggle="tooltip" data-bs-trigger="manual" data-bs-custom-class="tooltip-danger" data-bs-title="{{ 'search.minimum'|trans }}">
-    </form>
+    <button{{ attributes(search_button_attributes) }}>{{- icon('search fa-fw') -}}</button>
+    <div{{ attributes(search_div_attributes) }}>
+        <input{{ attributes(search_input_attributes) }}>
+    </div>
 </li>

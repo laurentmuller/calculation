@@ -30,7 +30,7 @@
     <div class="card-footer d-print-none">
         <div class="d-flex-wrap">
             {%- if editable -%}
-                {{ button_submit() }}
+                {{ button_submit(submit_text) }}
                 {{ button_cancel(cancel_path) }}
                 <small class="ms-sm-auto">{{ 'common.required'|trans|raw }}</small>
             {%- else -%}

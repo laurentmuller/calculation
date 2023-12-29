@@ -26,7 +26,7 @@
                 {% if is_granted_calculation %}
                     {{ include('navigation/horizontal/navigation_chart.html.twig') }}
                 {% endif %}
-                {% if is_granted_data or is_granted_task or is_admin %}
+                {% if is_admin or is_granted_task %}
                     {{ include('navigation/horizontal/navigation_tools.html.twig') }}
                 {% endif %}
                 {% if is_admin -%}
@@ -34,7 +34,7 @@
                 {% endif %}
             </ul>
             <ul class="navbar-nav">
-                {% if is_granted_data %}
+                {% if is_granted_data and app.current_route is not same as('search') -%}
                     {{ include('navigation/horizontal/navigation_search.html.twig') }}
                 {% endif %}
                 {{ include('navigation/horizontal/navigation_theme.html.twig') }}

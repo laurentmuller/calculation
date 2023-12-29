@@ -429,7 +429,7 @@ errors:
   invalid_request: La demande Http est invalide.
   item_not_found: Impossible de retrouver l'objet '%class%' No %id% dans la base de données.
   page_not_found: La page %page% n'existe pas.
-  render_document: Impossible de générer le document PDF ou le document ne contient aucune donnée.
+  render_document: Impossible de générer le document ou le document ne contient aucune donnée.
 exchange_rate:
   amount: Montant
   description: Choisissez les devises et le montant pour obtenir le taux de change.
@@ -483,7 +483,7 @@ globalmargin:
   fields:
     minimum: Minimum
     maximum: Maximum
-    delta: Ecart
+    delta: Écart
     margin: Marge
     margin_percent: Marge (%)
   list:
@@ -857,8 +857,8 @@ parameters:
     panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
     panel_month: Afficher la liste des calculations regroupées par mois.
     panel_state: Afficher la liste des calculations regroupées par statut.
-    print_address: L'adresse du client est imprimée sur les entêtes des documents Excel®, Word® et PDF.
-    qr_code: Un code QR est imprimé à la fin du document PDF permettant d'afficher la calculation.
+    print_address: L'adresse du client est imprimée sur les entêtes des documents Excel®, Word® et portable (PDF).
+    qr_code: Un code QR est imprimé à la fin du document portable (PDF) permettant d'afficher la calculation.
     status_bar: Afficher la barre d'état au bas de l'application.
     dark_navigation: Toujours utiliser le thème sombre pour le menu principal, le menu latéral et la barre d'état; indépendamment du thème choisi.
   placeholders:
@@ -1236,7 +1236,7 @@ theme:
     success: Le <b>thème système</b> a été sélectionné avec succès.
     help: >-
       Le thème système fait passer l'apparence de claire à sombre en fonction des préférences de l'utilisateur dans le système d'exploitation.<br>
-      Sur Microsoft&reg; Windows&reg; 10 et 11, il se trouve dans les paramètres de la section : <i>Personalisation</i> &gt; <i>Couleurs</i> &gt; <i>Choisir votre mode</i>.
+      Sur Microsoft® Windows® 10 et 11, il se trouve dans les paramètres de la section : <i>Personalisation</i> &gt; <i>Couleurs</i> &gt; <i>Choisir votre mode</i>.
   dark:
     name: Thème sombre
     title: Appliquer le thème sombre sur le site.

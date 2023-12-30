@@ -1,4 +1,22 @@
 {
+    "actions": {
+        "pdf": {
+            "permission": "export",
+            "external": true,
+            "text": "common.button_pdf",
+            "icon": "file-pdf"
+        },
+        "excel": {
+            "permission": "export",
+            "external": true,
+            "text": "common.button_export",
+            "icon": "file-excel"
+        },
+        "add": {
+            "permission": "add",
+            "icon": "file"
+        }
+    },
     "primary": [
         {
             "route": "homepage",
@@ -15,23 +33,16 @@
             "entries": [
                 {
                     "route": "calculation_add",
-                    "permission": "add",
-                    "text": "calculation.add.title",
-                    "icon": "file"
+                    "action": "add",
+                    "text": "calculation.add.title"
                 },
                 {
                     "route": "calculation_pdf",
-                    "permission": "export",
-                    "external": true,
-                    "text": "calculation.list.pdf_title",
-                    "icon": "file-pdf"
+                    "action": "pdf"
                 },
                 {
                     "route": "calculation_excel",
-                    "permission": "export",
-                    "external": true,
-                    "text": "calculation.list.excel_title",
-                    "icon": "file-excel"
+                    "action": "excel"
                 }
             ]
         },
@@ -48,23 +59,16 @@
                     "entries": [
                         {
                             "route": "product_add",
-                            "permission": "add",
-                            "text": "product.add.title",
-                            "icon": "file"
+                            "action": "add",
+                            "text": "product.add.title"
                         },
                         {
                             "route": "product_pdf",
-                            "permission": "export",
-                            "external": true,
-                            "text": "product.list.pdf_title",
-                            "icon": "file-pdf"
+                            "action": "pdf"
                         },
                         {
                             "route": "product_excel",
-                            "permission": "export",
-                            "external": true,
-                            "text": "product.list.excel_title",
-                            "icon": "file-excel"
+                            "action": "excel"
                         }
                     ]
                 },
@@ -77,23 +81,16 @@
                     "entries": [
                         {
                             "route": "task_add",
-                            "permission": "add",
-                            "text": "task.add.title",
-                            "icon": "file"
+                            "action": "add",
+                            "text": "task.add.title"
                         },
                         {
                             "route": "task_pdf",
-                            "permission": "export",
-                            "external": true,
-                            "text": "task.list.pdf_title",
-                            "icon": "file-pdf"
+                            "action": "pdf"
                         },
                         {
                             "route": "task_excel",
-                            "permission": "export",
-                            "external": true,
-                            "text": "task.list.excel_title",
-                            "icon": "file-excel"
+                            "action": "excel"
                         }
                     ]
                 },
@@ -106,23 +103,16 @@
                     "entries": [
                         {
                             "route": "category_add",
-                            "permission": "add",
-                            "text": "category.add.title",
-                            "icon": "file"
+                            "action": "add",
+                            "text": "category.add.title"
                         },
                         {
                             "route": "category_pdf",
-                            "permission": "export",
-                            "external": true,
-                            "text": "category.list.pdf_title",
-                            "icon": "file-pdf"
+                            "action": "pdf"
                         },
                         {
                             "route": "category_excel",
-                            "permission": "export",
-                            "external": true,
-                            "text": "category.list.excel_title",
-                            "icon": "file-excel"
+                            "action": "excel"
                         }
                     ]
                 },
@@ -135,23 +125,16 @@
                     "entries": [
                         {
                             "route": "group_add",
-                            "permission": "add",
-                            "text": "group.add.title",
-                            "icon": "file"
+                            "action": "add",
+                            "text": "group.add.title"
                         },
                         {
                             "route": "group_pdf",
-                            "permission": "export",
-                            "external": true,
-                            "text": "group.list.pdf_title",
-                            "icon": "file-pdf"
+                            "action": "pdf"
                         },
                         {
                             "route": "group_excel",
-                            "permission": "export",
-                            "external": true,
-                            "text": "group.list.excel_title",
-                            "icon": "file-excel"
+                            "action": "excel"
                         }
                     ]
                 },
@@ -164,23 +147,16 @@
                     "entries": [
                         {
                             "route": "calculationstate_add",
-                            "permission": "add",
-                            "text": "calculationstate.add.title",
-                            "icon": "file"
+                            "action": "add",
+                            "text": "calculationstate.add.title"
                         },
                         {
                             "route": "calculationstate_pdf",
-                            "permission": "export",
-                            "external": true,
-                            "text": "calculationstate.list.pdf_title",
-                            "icon": "file-pdf"
+                            "action": "pdf"
                         },
                         {
                             "route": "calculationstate_excel",
-                            "permission": "export",
-                            "external": true,
-                            "text": "calculationstate.list.excel_title",
-                            "icon": "file-excel"
+                            "action": "excel"
                         }
                     ]
                 },
@@ -192,18 +168,18 @@
                     "icon": "percent",
                     "entries": [
                         {
+                            "route": "globalmargin_edit",
+                            "permission": "edit",
+                            "text": "common.button_edit",
+                            "icon": "pencil"
+                        },
+                        {
                             "route": "globalmargin_pdf",
-                            "permission": "export",
-                            "external": true,
-                            "text": "globalmargin.list.pdf_title",
-                            "icon": "file-pdf"
+                            "action": "pdf"
                         },
                         {
                             "route": "globalmargin_excel",
-                            "permission": "export",
-                            "external": true,
-                            "text": "globalmargin.list.excel_title",
-                            "icon": "file-excel"
+                            "action": "excel"
                         }
                     ]
                 }

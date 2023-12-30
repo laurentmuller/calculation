@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
 {# macros #}
-{% macro entry(entry, entity=null, role='ROLE_USER') %}
+{% macro entry(entry, actions, entity=null, role='ROLE_USER') %}
 {% set role = entry.role is defined ? ('role_' ~ entry.role)|upper : role %}
 {% set route = entry.route|default(false) %}
 {% set entity = entry.entity|default(entity) %}
@@ -11,12 +11,14 @@
     {% set display = display and is_granted(permission, entity) %}
 {% endif %}
 {% if display %}
+    {% set action = actions[entry.action|default()]|default({}) %}
+    {% set entry = entry|merge(action) %}
     <li{% if entry.class|default(false) %} class="{{ entry.class }}"{% endif %}>
         {{ _self.entry_content(entry, entity, role) }}
         {% if entry.entries|default({})|length %}
             <ul>
                 {% for child in entry.entries %}
-                    {{ _self.entry(child, entity, role) }}
+                    {{ _self.entry(child, actions, entity, role) }}
                 {% endfor %}
             </ul>
         {% endif %}
@@ -46,26 +48,28 @@
 {# parameters #}
 {%- set title = 'index.menu_site_map' -%}
 {%- set title_icon = 'sitemap' -%}
-{%- set route_params = {'caller': path('site_map')} -%}
+{%- set actions = content.actions|default({}) -%}
+{%- set utility = content.utility|default({}) -%}
+{%- set primary = content.primary|default({}) -%}
 {# class #}
 {% block container_class 'container-fluid' %}
 {# body #}
 {% block body -%}
 <div class="sitemap">
-{% if content.utility|default({})|length %}
+{% if utility|length %}
     <nav class="utility-nav">
         <ul>
-        {% for entry in content.utility %}
-            {{ _self.entry(entry) }}
+        {% for entry in utility %}
+            {{ _self.entry(entry, actions) }}
         {% endfor %}
         </ul>
     </nav>
 {% endif %}
-{% if content.primary|default({})|length %}
+{% if primary|length %}
     <nav class="primary-nav">
         <ul>
-        {% for entry in content.primary %}
-            {{ _self.entry(entry) }}
+        {% for entry in primary %}
+            {{ _self.entry(entry, actions) }}
         {% endfor %}
         </ul>
     </nav>

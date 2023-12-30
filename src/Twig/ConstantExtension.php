@@ -64,7 +64,10 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     private function getConstants(string $className): array
     {
         $reflection = new \ReflectionClass($className);
-        $constants = \array_filter($reflection->getReflectionConstants(), static fn (\ReflectionClassConstant $c): bool => $c->isPublic());
+        $constants = \array_filter(
+            $reflection->getReflectionConstants(),
+            static fn (\ReflectionClassConstant $c): bool => $c->isPublic()
+        );
 
         return \array_reduce(
             $constants,

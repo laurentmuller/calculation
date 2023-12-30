@@ -1,5 +1,4 @@
 {% extends 'chart/chart_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage, button_pdf %}
 {% trans_default_domain 'chart' %}
 {# add a month option #}
 {% macro month(value, selected) -%}
@@ -29,6 +28,8 @@
 {# parameters #}
 {%- set title = 'title_by_month' -%}
 {%- set title_icon = 'calendar-alt far' -%}
+{%- set pdf_route = 'chart_month_pdf' -%}
+{%- set pdf_params = {'count': months} -%}
 {# class #}
 {% block card_container_class '' -%}
 {# header #}
@@ -114,13 +115,4 @@
 {% block card_body %}
     {{ parent() }}
     <p class="small mb-0">{{ 'month_chart.tooltip'|trans|raw }}</p>
-{%- endblock %}
-{# footer #}
-{% block card_footer -%}
-<div class="d-flex-wrap">
-    {{ homepage() }}
-    {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
-        {{ button_pdf('chart_month_pdf', {'count': months}) }}
-    {% endif %}
-</div>
 {%- endblock %}

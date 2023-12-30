@@ -6,9 +6,12 @@
 {%- set path = path('homepage') -%}
 {%- set allow_global = false -%}
 {%- set entity = customData.entity|default('') -%}
+{%- set is_search = params is defined and params.search|default('')|length > 1 -%}
 {# header #}
 {% block header_actions %}
-<small id="search_minimum" class="text-danger d-print-none">{{ 'search.minimum'|trans }}</small>
+<small id="search_minimum" class="text-danger d-print-none{% if is_search %} d-none{% endif %}">
+    {{- 'search.minimum'|trans -}}
+</small>
 {% endblock %}
 {# actions #}
 {% block toolbar_actions -%}

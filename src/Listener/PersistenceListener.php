@@ -69,10 +69,10 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
     ];
 
     private const USER_RESET = [
-        'expiresAt',
         'selector',
-        'hashedToken',
+        'expiresAt',
         'requestedAt',
+        'hashedToken',
     ];
 
     private const USER_RIGHTS = [
@@ -89,22 +89,29 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
             return;
         }
 
+        // get modifications
         $uow = $args->getObjectManager()->getUnitOfWork();
         $updates = $this->filterEntities($uow->getScheduledEntityUpdates());
         $deletions = $this->filterEntities($uow->getScheduledEntityDeletions());
         $insertions = $this->filterEntities($uow->getScheduledEntityInsertions());
 
+        // merge updated
         $collections = $this->filterCollections($uow->getScheduledCollectionUpdates());
         if ([] !== $collections) {
-            $updates = $this->getUniqueMerged($updates, $collections);
+            if ([] !== $insertions) {
+                $insertions = $this->getUniqueMerged($insertions, $collections);
+            } else {
+                $updates = $this->getUniqueMerged($updates, $collections);
+            }
         }
-        $updates = \array_diff($updates, $insertions);
 
+        // merge deleted
         $collections = $this->filterCollections($uow->getScheduledCollectionDeletions());
         if ([] !== $collections) {
             $deletions = $this->getUniqueMerged($deletions, $collections);
         }
 
+        // notify
         $this->notifyEntities($uow, $updates, '.edit.success', 'common.edit_success');
         $this->notifyEntities($uow, $deletions, '.delete.success', 'common.delete_success', FlashType::WARNING);
         $this->notifyEntities($uow, $insertions, '.add.success', 'common.add_success');
@@ -223,10 +230,12 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
                 $changeSet = \array_keys($uow->getEntityChangeSet($entity));
                 if ($this->isUserLogin($changeSet) || $this->isUserReset($changeSet)) {
                     continue;
-                } elseif ($this->isUserRights($changeSet)) {
+                }
+                if ($this->isUserRights($changeSet)) {
                     $this->notify($entity, '', 'user.rights.success');
                     continue;
-                } elseif ($this->isUserPassword($changeSet)) {
+                }
+                if ($this->isUserPassword($changeSet)) {
                     $this->notify($entity, '', 'user.change_password.change_success');
                     continue;
                 }

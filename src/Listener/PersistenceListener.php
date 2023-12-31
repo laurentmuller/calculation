@@ -90,31 +90,28 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         }
 
         // get modifications
-        $uow = $args->getObjectManager()->getUnitOfWork();
-        $updates = $this->filterEntities($uow->getScheduledEntityUpdates());
-        $deletions = $this->filterEntities($uow->getScheduledEntityDeletions());
-        $insertions = $this->filterEntities($uow->getScheduledEntityInsertions());
+        $unitOfWork = $args->getObjectManager()->getUnitOfWork();
+        $updates = $this->filterEntities($unitOfWork->getScheduledEntityUpdates());
+        $deletions = $this->filterEntities($unitOfWork->getScheduledEntityDeletions());
+        $insertions = $this->filterEntities($unitOfWork->getScheduledEntityInsertions());
 
         // merge updated
-        $collections = $this->filterCollections($uow->getScheduledCollectionUpdates());
+        $collections = $this->filterCollections($unitOfWork->getScheduledCollectionUpdates());
         if ([] !== $collections) {
-            if ([] !== $insertions) {
-                $insertions = $this->getUniqueMerged($insertions, $collections);
-            } else {
-                $updates = $this->getUniqueMerged($updates, $collections);
-            }
+            $updates = $this->getUniqueMerged($updates, $collections);
         }
+        $updates = \array_diff($updates, $insertions);
 
         // merge deleted
-        $collections = $this->filterCollections($uow->getScheduledCollectionDeletions());
+        $collections = $this->filterCollections($unitOfWork->getScheduledCollectionDeletions());
         if ([] !== $collections) {
             $deletions = $this->getUniqueMerged($deletions, $collections);
         }
 
         // notify
-        $this->notifyEntities($uow, $updates, '.edit.success', 'common.edit_success');
-        $this->notifyEntities($uow, $deletions, '.delete.success', 'common.delete_success', FlashType::WARNING);
-        $this->notifyEntities($uow, $insertions, '.add.success', 'common.add_success');
+        $this->notifyEntities($unitOfWork, $updates, '.edit.success', 'common.edit_success');
+        $this->notifyEntities($unitOfWork, $deletions, '.delete.success', 'common.delete_success', FlashType::WARNING);
+        $this->notifyEntities($unitOfWork, $insertions, '.add.success', 'common.add_success');
     }
 
     /**
@@ -130,10 +127,7 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
 
         $result = [];
         foreach ($collections as $collection) {
-            $entities = $this->filterEntities($collection);
-            if ([] !== $entities) {
-                $result = $this->getUniqueMerged($result, $entities);
-            }
+            $result = $this->getUniqueMerged($result, $this->filterEntities($collection, true));
         }
 
         return $result;
@@ -144,26 +138,26 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
      *
      * @psalm-return EntityInterface[]
      */
-    private function filterEntities(array|Collection $entities): array
+    private function filterEntities(array|Collection $entities, bool $includeChildren = false): array
     {
         if ($entities instanceof Collection) {
             $entities = $entities->toArray();
         }
 
         return $this->getUniqueFiltered(\array_map(
-            fn (object $entity): ?EntityInterface => $this->filterEntity($entity),
+            fn (object $entity): ?EntityInterface => $this->filterEntity($entity, $includeChildren),
             $entities
         ));
     }
 
-    private function filterEntity(?object $entity): ?EntityInterface
+    private function filterEntity(?object $entity, bool $includeChildren): ?EntityInterface
     {
         if ($entity instanceof EntityInterface && \in_array($entity::class, self::CLASS_NAMES, true)) {
             return $entity;
         }
 
-        if ($entity instanceof ParentEntityInterface) {
-            return $this->filterEntity($entity->getParentEntity());
+        if ($includeChildren && $entity instanceof ParentEntityInterface) {
+            return $this->filterEntity($entity->getParentEntity(), true);
         }
 
         return null;
@@ -201,22 +195,11 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         return $this->isMatchFields($changeSet, self::USER_RIGHTS);
     }
 
-    private function notify(
-        EntityInterface $entity,
-        string $suffix,
-        string $default,
-        FlashType $type = FlashType::SUCCESS
-    ): void {
-        $id = '' === $suffix ? $default : $this->getId($entity, $suffix, $default);
-        $message = $this->trans($id, ['%name%' => $entity->getDisplay()]);
-        $this->addFlashMessage($type, $message);
-    }
-
     /**
      * @psalm-param EntityInterface[] $entities
      */
     private function notifyEntities(
-        UnitOfWork $uow,
+        UnitOfWork $unitOfWork,
         array $entities,
         string $suffix,
         string $default,
@@ -227,20 +210,31 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         }
         foreach ($entities as $entity) {
             if (User::class === $entity::class) {
-                $changeSet = \array_keys($uow->getEntityChangeSet($entity));
+                $changeSet = \array_keys($unitOfWork->getEntityChangeSet($entity));
                 if ($this->isUserLogin($changeSet) || $this->isUserReset($changeSet)) {
                     continue;
                 }
                 if ($this->isUserRights($changeSet)) {
-                    $this->notify($entity, '', 'user.rights.success');
+                    $this->notifyEntity($entity, '', 'user.rights.success');
                     continue;
                 }
                 if ($this->isUserPassword($changeSet)) {
-                    $this->notify($entity, '', 'user.change_password.change_success');
+                    $this->notifyEntity($entity, '', 'user.change_password.change_success');
                     continue;
                 }
             }
-            $this->notify($entity, $suffix, $default, $type);
+            $this->notifyEntity($entity, $suffix, $default, $type);
         }
+    }
+
+    private function notifyEntity(
+        EntityInterface $entity,
+        string $suffix,
+        string $default,
+        FlashType $type = FlashType::SUCCESS
+    ): void {
+        $id = '' === $suffix ? $default : $this->getId($entity, $suffix, $default);
+        $message = $this->trans($id, ['%name%' => $entity->getDisplay()]);
+        $this->addFlashMessage($type, $message);
     }
 }

@@ -40,7 +40,7 @@
 </div>
 {%- endblock %}
 {# parameters #}
-{%- set cancel_path = path('homepage') -%}
+{%- set cancel_path = app.request.query.string('caller') ?? path('homepage') -%}
 {%- set super_admin = is_granted('ROLE_SUPER_ADMIN') -%}
 {%- set form_attr = form_attr|default({})|merge({'data-random': url('ajax_random_text'), 'data-failure': 'parameters.failure'|trans}) -%}
 {# form #}

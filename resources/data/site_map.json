@@ -247,6 +247,11 @@
                     "icon": "file-alt"
                 },
                 {
+                    "route": "admin_update",
+                    "text": "calculation.update.title",
+                    "icon": "pencil"
+                },
+                {
                     "route": "admin_archive",
                     "text": "archive.title",
                     "icon": "calendar-xmark far"
@@ -268,12 +273,6 @@
                     "role": "super_admin",
                     "text": "index.menu_rights_admin",
                     "icon": "user-shield"
-                },
-                {
-                    "route": "user_register",
-                    "role": "super_admin",
-                    "text": "registration.register.title",
-                    "icon": "user-plus"
                 },
                 {
                     "route": "admin_parameters",

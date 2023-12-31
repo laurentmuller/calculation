@@ -16,7 +16,11 @@
 {% endblock %}
 {# footer #}
 {% block card_footer %}
-    {% if is_remembered %}
+<div class="d-flex-wrap">
+    {% set caller = app.request.query.string('caller')|default %}
+    {% if caller %}
+        {{ link(caller, 'common.button_back', 'btn btn-form btn-primary', 'chevron-left') }}
+    {% elseif is_remembered %}
         {{ homepage() }}
         {% if not accepted %}
             {{ link(path('policy_accept'), 'cookie_banner.accept', 'btn btn-form btn-success', null, 'cookie_banner.accept_title') }}
@@ -24,7 +28,8 @@
     {% else %}
         {{ link(path('app_login'), 'index.login', 'btn btn-form btn-outline-primary') }}
     {% endif %}
-    {{ link(path('about_policy'), 'about.policy', 'btn btn-form btn-secondary') }}
+    {{ link(path('about_policy', {'caller': caller}), 'about.policy', 'btn btn-form btn-secondary') }}
     {{ button_pdf('about_licence_pdf') }}
     {{ button_word('about_licence_word') }}
+</div>
 {% endblock %}

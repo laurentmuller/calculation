@@ -14,7 +14,7 @@ conformément à la présente politique.
 
 Sauf définition contraire dans la présente politique de confidentialité, les
 termes utilisés dans la présente politique de confidentialité ont la même
-signification que dans notre Accord de licence ci-dessus.
+signification que dans notre [Accord de licence](LICENSE.md).
 
 ## Définitions
 

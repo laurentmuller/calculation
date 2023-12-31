@@ -111,12 +111,12 @@ abstract class AbstractEntityController extends AbstractController
             return $this->redirectToDefaultRoute(request: $request, route: $parameters['route'] ?? null);
         }
 
-        $parameters += [
+        $parameters = \array_merge([
             'form' => $form,
             'title' => $this->getMessageId('.delete.title', 'common.delete_title'),
             'message' => $this->getMessageId('.delete.message', 'common.delete_message'),
             'message_parameters' => ['%name%' => $item],
-        ];
+            ], $parameters);
         $this->updateQueryParameters($request, $parameters, $item);
 
         return $this->render('cards/card_delete.html.twig', $parameters);
@@ -156,10 +156,12 @@ abstract class AbstractEntityController extends AbstractController
             return $this->redirectToDefaultRoute($request, $item, $parameters['route'] ?? null);
         }
 
-        $parameters['new'] = $isNew;
-        $parameters['item'] = $item;
-        $parameters['form'] = $form;
-        $parameters['submit_text'] = $isNew ? 'common.button_submit_add' : 'common.button_submit_edit';
+        $parameters = \array_merge([
+            'new' => $isNew,
+            'item' => $item,
+            'form' => $form,
+            'submit_text' => $isNew ? 'common.button_submit_add' : 'common.button_submit_edit',
+        ], $parameters);
         $this->updateQueryParameters($request, $parameters, $item);
 
         return $this->render($this->getEditTemplate(), $parameters);

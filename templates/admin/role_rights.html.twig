@@ -4,7 +4,7 @@
 {%- set title = is_admin ? 'index.menu_rights_admin' : 'index.menu_rights_user' -%}
 {%- set title_icon = is_admin ? 'user-shield' : 'user-check' -%}
 {%- set title_description = 'user.rights.description' -%}
-{%- set cancel_path = path('homepage') -%}
+{%- set cancel_path = app.request.query.string('caller') ?? path('homepage') -%}
 {%- set show_required = false -%}
 {# classes #}
 {% block card_container_class '' %}

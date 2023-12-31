@@ -2,6 +2,11 @@
 
 /**! compression tag for ftp-deployment */
 
+:root {
+    --sitemap-line-width: 1px;
+    --sitemap-border-width: 2px;
+}
+
 /* reset styles */
 .sitemap ul,
 .sitemap li,
@@ -20,11 +25,19 @@
 /* root styles */
 .sitemap,
 .sitemap ul {
-    line-height: 1;
+    line-height: 1.2;
+}
+
+/* entry */
+.sitemap li a,
+.sitemap li span {
+    color: white;
+    display: block;
+    text-decoration: none;
+    border: var(--sitemap-border-width) solid var(--bs-border-color-translucent);
 }
 
 /* top level */
-
 .primary-nav {
     clear: both;
     width: 100%;
@@ -65,30 +78,15 @@
     margin-top: 3em;
 }
 
-.primary-nav li a {
+.primary-nav li a,
+.primary-nav li span {
     margin: 0;
     padding: .875em .9375em .9375em;
-    display: block;
-    /*font-size: .9375em;*/
-    color: white;
     background-color: #0090ff;
-    border: 2px solid rgba(0, 0, 0, .025);
-    text-decoration: none;
 }
 
 .primary-nav li a:hover {
     background-color: #0070f9;
-}
-
-.primary-nav li span {
-    margin: 0;
-    padding: .875em .9375em .9375em;
-    display: block;
-    /*font-size: .9375em;*/
-    color: white;
-    background-color: #0090ff;
-    border: 2px solid rgba(0, 0, 0, .025);
-    text-decoration: none;
 }
 
 /* second level */
@@ -185,8 +183,8 @@
     top: -1.375em;
     right: calc(50% + .625em);
     width: 100%;
-    border-top-width: 2px;
-    border-right-width: 2px;
+    border-top-width: var(--sitemap-line-width);
+    border-right-width: var(--sitemap-line-width);
 }
 
 .primary-nav > ul > li:first-child + li:before {
@@ -199,16 +197,16 @@
     width: 50%;
     height: .6875em;
     top: 0;
-    right: 2px;
-    border-left-width: 2px;
+    right: var(--sitemap-line-width);
+    border-left-width: var(--sitemap-line-width);
 }
 
 .primary-nav ul ul li:first-child:before {
     width: 50%;
     height: 1.3125em;
     top: .6875em;
-    right: 2px;
-    border-left-width: 2px;
+    right: var(--sitemap-line-width);
+    border-left-width: var(--sitemap-line-width);
 }
 
 .primary-nav > ul > li:last-child:after {
@@ -220,22 +218,22 @@
     height: 100%;
     top: -50%;
     left: 0;
-    border-left-width: 2px;
-    border-bottom-width: 2px;
+    border-left-width: var(--sitemap-line-width);
+    border-bottom-width: var(--sitemap-line-width);
 }
 
 .primary-nav ul ul ul li:first-child:before {
     height: 2.125em;
-    top: -2px;
-    border-top-width: 2px;
+    top: calc(var(--sitemap-line-width) * -1);
+    border-top-width: var(--sitemap-line-width);
 }
 
 .primary-nav ul ul ul:before {
     width: 50%;
     height: 1.25em;
     top: -11px;
-    right: 2px;
-    border-left-width: 2px;
+    right: var(--sitemap-line-width);
+    border-left-width: var(--sitemap-line-width);
 }
 
 .primary-nav ul ul ul li:after {
@@ -248,12 +246,11 @@
 }
 
 .primary-nav ul ul ul ul:before {
-    width: 2px;
+    width: var(--sitemap-line-width);
     height: calc(100% + 2.5em);
     top: -2.5em;
     left: 0;
-    border-left-width: 2px;
-    /* border-color: red; */
+    border-left-width: var(--sitemap-line-width);
 }
 
 /* utility navigation */
@@ -266,18 +263,18 @@
 }
 
 .utility-nav li {
-    padding: 0 0 .625em .625em;
+    padding-right: .625em;
     display: inline-block;
 }
 
-.utility-nav li a {
-    display: block;
-    padding: .75em 1em;
-    text-align: left;
-    color: white;
+.utility-nav li:last-child {
+    padding-right: 0;
+}
+
+.utility-nav li a,
+.utility-nav li span {
+    padding: .75em .875em;
     background-color: #ff9d00;
-    border: 2px solid rgba(0, 0, 0, .025);
-    text-decoration: none;
 }
 
 .utility-nav li a:hover {
@@ -354,11 +351,13 @@ that you don't need, and your sitemap layout will work perfectly.
     }
 }
 
-/* six column
+/* six column */
 @media screen and (min-width: 73em) {
-	.primary-nav > ul > li {	max-width: 16.66%;	}
+    .primary-nav > ul > li {
+        max-width: 16.66%;
+    }
 }
- */
+
 /* seven column
 @media screen and (min-width: 84.5em) {
 	.primary-nav > ul > li {	max-width: 14.285%;	}

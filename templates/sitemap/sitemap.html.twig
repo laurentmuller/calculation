@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
-{# macros #}
+{# output entry #}
 {% macro entry(entry, actions, entity=null, role='ROLE_USER') %}
 {% set role = entry.role is defined ? ('role_' ~ entry.role)|upper : role %}
 {% set route = entry.route|default(false) %}
@@ -14,7 +14,7 @@
     {% set action = actions[entry.action|default()]|default({}) %}
     {% set entry = entry|merge(action) %}
     <li{% if entry.class|default(false) %} class="{{ entry.class }}"{% endif %}>
-        {{ _self.entry_content(entry, entity, role) }}
+        {{ _self.entry_content(entry, route) }}
         {% if entry.entries|default({})|length %}
             <ul>
                 {% for child in entry.entries %}
@@ -25,24 +25,17 @@
     </li>
 {% endif %}
 {%- endmacro %}
-
-{% macro entry_content(entry) %}
-{% set route = entry.route|default(false) %}
+{# output entry content #}
+{% macro entry_content(entry, route) %}
 {% set icon = entry.icon is defined ? entry.icon ~ ' fa-fw' : false %}
 {% if route == 'app_logout' %}
     <a href="{{ logout_path() }}">{{ icon(icon, entry.text) }}</a>
+{% elseif route and entry.external|default(false) %}
+    {{ linkExternal(path(route), entry.text, null, icon) }}
+{% elseif route %}
+    {{ link(path(route, {'caller': path('site_map')}), entry.text, null, icon) }}
 {% else %}
-    {% if route %}
-        {% if entry.external|default(false) %}
-            {{ linkExternal(path(route), entry.text, null, icon) }}
-        {% else %}
-            {{ link(path(route, {'caller': path('site_map')}), entry.text, null, icon) }}
-        {% endif %}
-    {% elseif icon %}
-        <span>{{ icon(icon, entry.text) }}</span>
-    {% else %}
-        <span>{{ entry.text|trans }}</span>
-    {% endif %}
+    <span>{{ icon(icon, entry.text) }}</span>
 {% endif %}
 {%- endmacro %}
 {# parameters #}

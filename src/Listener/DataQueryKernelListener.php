@@ -25,11 +25,14 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Handle the kernel controller arguments event to update properties of data query.
  */
-#[AsEventListener(event: KernelEvents::CONTROLLER_ARGUMENTS, method: 'onKernelControllerArguments', priority: -10)]
 class DataQueryKernelListener
 {
     use CookieTrait;
 
+    /**
+     * @psalm-api
+     */
+    #[AsEventListener(event: KernelEvents::CONTROLLER_ARGUMENTS, priority: -10)]
     public function onKernelControllerArguments(ControllerArgumentsEvent $event): void
     {
         if (!$event->isMainRequest()) {

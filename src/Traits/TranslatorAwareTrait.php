@@ -31,11 +31,22 @@ trait TranslatorAwareTrait
     #[SubscribedService]
     public function getTranslator(): TranslatorInterface
     {
-        if (null === $this->translator) {
-            /* @noinspection PhpUnhandledExceptionInspection */
-            $this->translator = $this->container->get(self::class . '::' . __FUNCTION__);
+        if ($this->translator instanceof TranslatorInterface) {
+            return $this->translator;
+        }
+        $id = self::class . '::' . __FUNCTION__;
+        if (!$this->container->has($id)) {
+            throw new \LogicException(\sprintf('Unable to find service "%s".', $id));
         }
 
-        return $this->translator;
+        /* @noinspection PhpUnhandledExceptionInspection */
+        return $this->translator = $this->container->get($id);
+    }
+
+    public function setTranslator(TranslatorInterface $translator): static
+    {
+        $this->translator = $translator;
+
+        return $this;
     }
 }

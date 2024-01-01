@@ -21,6 +21,8 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
  * Trait to save or load data from a cache.
  *
  * @property \Psr\Container\ContainerInterface $container
+ *
+ * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait CacheAwareTrait
 {
@@ -69,18 +71,19 @@ trait CacheAwareTrait
         }
     }
 
-    /**
-     * Get the cache item pool.
-     */
     #[SubscribedService]
     public function getCacheItemPool(): CacheItemPoolInterface
     {
-        if (null === $this->cacheItemPool) {
-            /* @noinspection PhpUnhandledExceptionInspection */
-            $this->cacheItemPool = $this->container->get(self::class . '::' . __FUNCTION__);
+        if ($this->cacheItemPool instanceof CacheItemPoolInterface) {
+            return $this->cacheItemPool;
+        }
+        $id = self::class . '::' . __FUNCTION__;
+        if (!$this->container->has($id)) {
+            throw new \LogicException(\sprintf('Unable to find service "%s".', $id));
         }
 
-        return $this->cacheItemPool;
+        /* @noinspection PhpUnhandledExceptionInspection */
+        return $this->cacheItemPool = $this->container->get($id);
     }
 
     /**

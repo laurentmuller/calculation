@@ -64,10 +64,11 @@ trait TranslatorTrait
         string $domain = null,
         string $locale = null
     ): string {
+        $translator = $this->getTranslator();
         if ($id instanceof TranslatableInterface) {
-            return $id->trans($this->getTranslator(), $locale);
+            return $id->trans($translator, $locale);
         }
 
-        return $this->getTranslator()->trans((string) $id, $parameters, $domain, $locale);
+        return $translator->trans((string) $id, $parameters, $domain, $locale);
     }
 }

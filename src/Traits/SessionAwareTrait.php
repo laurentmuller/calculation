@@ -28,18 +28,19 @@ trait SessionAwareTrait
 {
     private ?RequestStack $requestStack = null;
 
-    /**
-     * Get the request stack.
-     */
     #[SubscribedService]
     public function getRequestStack(): RequestStack
     {
-        if (null === $this->requestStack) {
-            /* @noinspection PhpUnhandledExceptionInspection */
-            $this->requestStack = $this->container->get(self::class . '::' . __FUNCTION__);
+        if ($this->requestStack instanceof RequestStack) {
+            return $this->requestStack;
+        }
+        $id = self::class . '::' . __FUNCTION__;
+        if (!$this->container->has($id)) {
+            throw new \LogicException(\sprintf('Unable to find service "%s".', $id));
         }
 
-        return $this->requestStack;
+        /* @noinspection PhpUnhandledExceptionInspection */
+        return $this->requestStack = $this->container->get($id);
     }
 
     public function setRequestStack(RequestStack $requestStack): static

@@ -31,18 +31,19 @@ trait AuthorizationCheckerAwareTrait
     /** @var bool[] */
     private array $rights = [];
 
-    /**
-     * Get the authorization checker.
-     */
     #[SubscribedService]
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
     {
-        if (null === $this->authorizationChecker) {
-            /* @noinspection PhpUnhandledExceptionInspection */
-            $this->authorizationChecker = $this->container->get(self::class . '::' . __FUNCTION__);
+        if ($this->authorizationChecker instanceof AuthorizationCheckerInterface) {
+            return $this->authorizationChecker;
+        }
+        $id = self::class . '::' . __FUNCTION__;
+        if (!$this->container->has($id)) {
+            throw new \LogicException(\sprintf('Unable to find service "%s".', $id));
         }
 
-        return $this->authorizationChecker;
+        /* @noinspection PhpUnhandledExceptionInspection */
+        return $this->authorizationChecker = $this->container->get($id);
     }
 
     public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): static
@@ -58,11 +59,11 @@ trait AuthorizationCheckerAwareTrait
     protected function isGranted(string|EntityPermission $action, string|EntityName $subject): bool
     {
         $key = \sprintf('%s.%s', $this->asString($action), $this->asString($subject));
-        if (!isset($this->rights[$key])) {
-            return $this->rights[$key] = $this->getAuthorizationChecker()->isGranted($action, $subject);
+        if (isset($this->rights[$key])) {
+            return $this->rights[$key];
         }
 
-        return $this->rights[$key];
+        return $this->rights[$key] = $this->getAuthorizationChecker()->isGranted($action, $subject);
     }
 
     /**

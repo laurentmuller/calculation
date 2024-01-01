@@ -1,5 +1,5 @@
 {% extends 'cards/card_edit.html.twig' %}
-{% from 'macros/_icons.html.twig' import button_cancel, homepage %}
+{% from 'macros/_icons.html.twig' import button_cancel, homepage, sitemap %}
 {# parameters #}
 {%- set title = 'task_compute.title' -%}
 {%- set title_icon = 'keyboard' -%}
@@ -36,6 +36,7 @@
     {{ button_cancel(cancel_path, 'common.button_back_list') }}
 {% else %}
     {{ homepage() }}
+    {{ sitemap() }}
 {% endif %}
 {% endblock %}
 {# javascripts #}

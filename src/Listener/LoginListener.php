@@ -25,7 +25,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Listener for the user interactive login event.
  */
-#[AsEventListener(event: LoginSuccessEvent::class, method: 'onLoginSuccess')]
 class LoginListener implements ServiceSubscriberInterface
 {
     use ServiceSubscriberTrait;
@@ -40,6 +39,10 @@ class LoginListener implements ServiceSubscriberInterface
     ) {
     }
 
+    /**
+     * @psalm-api
+     */
+    #[AsEventListener(event: LoginSuccessEvent::class)]
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
         $user = $event->getUser();

@@ -192,11 +192,5 @@
         "php-twigcs": "Run Twigcs.",
         "php-test": "Run tests with PHPUnit.",
         "php-all": "Run all validation scripts."
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/laurentmuller/HighchartsBundle"
-        }
-    ]
+    }
 }

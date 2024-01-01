@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Enums\FlashType;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 
 /**
  * Trait to add flash messages.
@@ -26,12 +26,12 @@ trait FlashMessageAwareTrait
      * Adds a flash message with the given type to the current session.
      *
      * @param FlashType|string $type    the message type
-     * @param string           $message the message content
+     * @param mixed            $message the message content
      */
-    protected function addFlashMessage(FlashType|string $type, string $message): static
+    protected function addFlashMessage(FlashType|string $type, mixed $message): static
     {
         $session = $this->getSession();
-        if ($session instanceof Session) {
+        if ($session instanceof FlashBagAwareSessionInterface) {
             if ($type instanceof FlashType) {
                 $type = $type->value;
             }
@@ -45,9 +45,9 @@ trait FlashMessageAwareTrait
      * Add an error message to the session flash bag.
      * Do nothing if the session is not set.
      *
-     * @param string $message The message to add
+     * @param mixed $message The message to add
      */
-    protected function error(string $message): static
+    protected function error(mixed $message): static
     {
         return $this->addFlashMessage(FlashType::DANGER, $message);
     }
@@ -56,9 +56,9 @@ trait FlashMessageAwareTrait
      * Add an information message to the session flash bag.
      * Do nothing if the session is not set.
      *
-     * @param string $message the message to add
+     * @param mixed $message the message to add
      */
-    protected function info(string $message): static
+    protected function info(mixed $message): static
     {
         return $this->addFlashMessage(FlashType::INFO, $message);
     }
@@ -67,9 +67,9 @@ trait FlashMessageAwareTrait
      * Add a success message to the session flash bag.
      * Do nothing if the session is not set.
      *
-     * @param string $message the message to add
+     * @param mixed $message the message to add
      */
-    protected function success(string $message): static
+    protected function success(mixed $message): static
     {
         return $this->addFlashMessage(FlashType::SUCCESS, $message);
     }
@@ -78,9 +78,9 @@ trait FlashMessageAwareTrait
      * Add a warning message to the session flash bag.
      * Do nothing if the session is not set.
      *
-     * @param string $message the message to add
+     * @param mixed $message the message to add
      */
-    protected function warning(string $message): static
+    protected function warning(mixed $message): static
     {
         return $this->addFlashMessage(FlashType::WARNING, $message);
     }

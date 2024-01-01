@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import link, homepage, button_pdf, button_word %}
+{% from 'macros/_icons.html.twig' import link, homepage, sitemap, button_pdf, button_word %}
 {# parameters #}
 {%- set title = 'about.licence' -%}
 {%- set title_icon = 'info-circle' -%}
@@ -17,10 +17,7 @@
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
-    {% set caller = app.request.query.string('caller')|default %}
-    {% if caller %}
-        {{ link(caller, 'common.button_back', 'btn btn-form btn-primary', 'chevron-left') }}
-    {% elseif is_remembered %}
+    {% if is_remembered %}
         {{ homepage() }}
         {% if not accepted %}
             {{ link(path('policy_accept'), 'cookie_banner.accept', 'btn btn-form btn-success', null, 'cookie_banner.accept_title') }}
@@ -28,6 +25,8 @@
     {% else %}
         {{ link(path('app_login'), 'index.login', 'btn btn-form btn-outline-primary') }}
     {% endif %}
+    {{ sitemap() }}
+    {% set caller = app.request.query.string('caller')|default %}
     {{ link(path('about_policy', {'caller': caller}), 'about.policy', 'btn btn-form btn-secondary') }}
     {{ button_pdf('about_licence_pdf') }}
     {{ button_word('about_licence_word') }}

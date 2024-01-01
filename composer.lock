@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1596aaa0de12562ceac41c94ce17d27f",
+    "content-hash": "79f42b20deb0818db06f4a80a4c9450f",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -2094,32 +2094,7 @@
                     "HighchartsBundle\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "HighchartsBundle\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "php-fixer": [
-                    "vendor/bin/php-cs-fixer fix --diff --dry-run"
-                ],
-                "php-psalm": [
-                    "vendor/bin/psalm --config=psalm.xml"
-                ],
-                "php-stan": [
-                    "vendor/bin/phpstan analyse --memory-limit 2G -c phpstan.neon"
-                ],
-                "php-rector": [
-                    "vendor/bin/rector process --dry-run --config=rector.php"
-                ],
-                "php-all": [
-                    "@php-fixer",
-                    "@php-psalm",
-                    "@php-stan",
-                    "@php-rector",
-                    "phpunit"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],

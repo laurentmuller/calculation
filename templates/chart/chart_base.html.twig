@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage, button_pdf, link %}
+{% from 'macros/_icons.html.twig' import homepage, sitemap, button_pdf, link %}
 {% trans_default_domain 'chart' %}
 {# macros #}
 {% macro margin_below_class(margin, min_margin) -%}
@@ -25,17 +25,13 @@
 {% endblock %}
 {# footer #}
 {% block card_footer -%}
-    <div class="d-flex-wrap">
-        {% set caller = app.request.query.string('caller')|default %}
-        {% if caller %}
-            {{ link(caller, 'common.button_back', 'btn btn-form btn-primary', 'chevron-left') }}
-        {% else %}
-            {{ homepage() }}
-        {% endif %}
-        {% if pdf_route is defined and is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
-            {{ button_pdf(pdf_route, pdf_params|default({})) }}
-        {% endif %}
-    </div>
+<div class="d-flex-wrap">
+    {{ homepage() }}
+    {% if pdf_route is defined and is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
+        {{ button_pdf(pdf_route, pdf_params|default({})) }}
+    {% endif %}
+    {{ sitemap() }}
+</div>
 {%- endblock %}
 {# javascripts #}
 {% block javascripts %}

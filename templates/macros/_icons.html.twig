@@ -211,3 +211,10 @@
     <i class="theme-icon me-1 {{ selection.iconLight }}"></i><span class="theme-text">{{ selection|trans }}</span>
 </a>
 {% endmacro %}
+
+{% macro sitemap() -%}
+{% set caller = app.request.query.string('caller')|default %}
+{% if app.user and caller is same as path('site_map') %}
+    {{ _self.link(caller, 'index.menu_site_map', 'btn btn-form btn-outline-success') }}
+{% endif %}
+{% endmacro %}

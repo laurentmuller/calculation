@@ -30,7 +30,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  *
  * For CSP violation see https://mathiasbynens.be/notes/csp-reports.
  */
-#[AsEventListener(event: KernelEvents::RESPONSE, method: 'onKernelResponse')]
 class ResponseListener
 {
     /**
@@ -99,9 +98,7 @@ class ResponseListener
         $this->csp = $this->loadCSP($file, $service, $generator);
     }
 
-    /**
-     * Handle kernel response event.
-     */
+    #[AsEventListener(event: KernelEvents::RESPONSE)]
     public function onKernelResponse(ResponseEvent $event): void
     {
         if (!$event->isMainRequest()) {

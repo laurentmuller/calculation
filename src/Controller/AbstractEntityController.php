@@ -87,17 +87,20 @@ abstract class AbstractEntityController extends AbstractController
      * @param LoggerInterface $logger  the logger to log any exception
      *
      * @psalm-param TEntity $item
-     * @psalm-param array{route?: string|null, ...} $parameters
+     * @psalm-param array{route?: string, ...} $parameters
      */
-    protected function deleteEntity(Request $request, EntityInterface $item, LoggerInterface $logger, array $parameters = []): Response
-    {
+    protected function deleteEntity(
+        Request $request,
+        EntityInterface $item,
+        LoggerInterface $logger,
+        array $parameters = []
+    ): Response {
         $this->checkPermission(EntityPermission::DELETE);
         $options = [
             'method' => Request::METHOD_DELETE,
             'csrf_field_name' => 'delete_token',
             'csrf_token_id' => $this->getDeleteToken($item),
         ];
-        $parameters['item'] = $item;
         $form = $this->createForm(FormType::class, [], $options);
         if ($this->handleRequestForm($request, $form)) {
             try {
@@ -112,6 +115,7 @@ abstract class AbstractEntityController extends AbstractController
         }
 
         $parameters = \array_merge([
+            'item' => $item,
             'form' => $form,
             'title' => $this->getMessageId('.delete.title', 'common.delete_title'),
             'message' => $this->getMessageId('.delete.message', 'common.delete_message'),
@@ -142,7 +146,7 @@ abstract class AbstractEntityController extends AbstractController
      * @param array           $parameters the optional parameters
      *
      * @psalm-param TEntity $item
-     * @psalm-param array{route?: string|null, ...} $parameters
+     * @psalm-param array{route?: string, ...} $parameters
      */
     protected function editEntity(Request $request, EntityInterface $item, array $parameters = []): Response
     {
@@ -195,31 +199,29 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Gets the entities to display.
      *
-     * @param array<string, string>|string $sortedFields the sorted fields where key is the field name and value is the sort
-     *                                                   mode ('ASC' or 'DESC') or a string for a single ascending sorted field
+     * @param array<string, string>|string $sortedFields the sorted fields where key is the field name and value is
+     *                                                   the sort mode ('ASC' or 'DESC') or a string for a single
+     *                                                   ascending sorted field
      * @param array<Criteria|string>       $criteria     the filter criteria
      * @param literal-string               $alias        the entity alias
      *
-     * @return EntityInterface[] the entities
+     * @return TEntity[] the entities
      *
      * @psalm-return TEntity[]
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function getEntities(array|string $sortedFields = [], array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array
-    {
+    protected function getEntities(
+        array|string $sortedFields = [],
+        array $criteria = [],
+        string $alias = AbstractRepository::DEFAULT_ALIAS
+    ): array {
         if (\is_string($sortedFields)) {
             $sortedFields = [$sortedFields => Criteria::ASC];
         }
 
-        /**
-         * @psalm-var \Doctrine\ORM\Query<int, TEntity> $query
-         *
-         * @phpstan-var \Doctrine\ORM\Query $query
-         */
-        $query = $this->repository->getSearchQuery($sortedFields, $criteria, $alias);
-
-        return $query->getResult();
+        return $this->repository->getSearchQuery($sortedFields, $criteria, $alias)
+            ->getResult();
     }
 
     /**
@@ -241,8 +243,11 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Redirect to the default route.
      */
-    protected function redirectToDefaultRoute(Request $request, EntityInterface|int|null $item = 0, string $route = null): RedirectResponse
-    {
+    protected function redirectToDefaultRoute(
+        Request $request,
+        EntityInterface|int|null $item = 0,
+        string $route = null
+    ): RedirectResponse {
         return $this->getUrlGenerator()->redirect($request, $item, $route ?? $this->getDefaultRoute());
     }
 
@@ -260,8 +265,11 @@ abstract class AbstractEntityController extends AbstractController
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    protected function renderSpreadsheetDocument(SpreadsheetDocument $doc, bool $inline = true, string $name = ''): SpreadsheetResponse
-    {
+    protected function renderSpreadsheetDocument(
+        SpreadsheetDocument $doc,
+        bool $inline = true,
+        string $name = ''
+    ): SpreadsheetResponse {
         $this->checkPermission(EntityPermission::EXPORT);
 
         return parent::renderSpreadsheetDocument($doc, $inline, $name);
@@ -322,12 +330,15 @@ abstract class AbstractEntityController extends AbstractController
      * @param array                    $parameters the parameters to update
      * @param EntityInterface|int|null $id         an optional entity identifier
      */
-    protected function updateQueryParameters(Request $request, array &$parameters, EntityInterface|int|null $id = 0): void
-    {
+    protected function updateQueryParameters(
+        Request $request,
+        array &$parameters,
+        EntityInterface|int|null $id = 0
+    ): void {
         /** @psalm-var array $existing */
         $existing = $parameters['params'] ?? [];
         $queryParameters = $request->query->all();
-        $parameters['params'] = $existing + $queryParameters;
+        $parameters['params'] = \array_merge($existing, $queryParameters);
 
         if ($id instanceof EntityInterface) {
             $id = $id->getId();

@@ -31,15 +31,19 @@ trait LoggerAwareTrait
     #[SubscribedService]
     public function getLogger(): LoggerInterface
     {
-        if (null === $this->logger) {
-            /* @noinspection PhpUnhandledExceptionInspection */
-            $this->logger = $this->container->get(self::class . '::' . __FUNCTION__);
+        if ($this->logger instanceof LoggerInterface) {
+            return $this->logger;
+        }
+        $id = self::class . '::' . __FUNCTION__;
+        if (!$this->container->has($id)) {
+            throw new \LogicException(\sprintf('Unable to find service "%s".', $id));
         }
 
-        return $this->logger;
+        /* @noinspection PhpUnhandledExceptionInspection */
+        return $this->logger = $this->container->get($id);
     }
 
-    public function setLogger(?LoggerInterface $logger): static
+    public function setLogger(LoggerInterface $logger): static
     {
         $this->logger = $logger;
 

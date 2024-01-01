@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import link, homepage, button_close_modal %}
+{% from 'macros/_icons.html.twig' import link, homepage, sitemap, button_close_modal %}
 {% from 'macros/_properties.html.twig' import stateCss %}
 {# macro #}
 {% macro add_line_info(name, value) -%}
@@ -105,5 +105,6 @@
 <div class="d-flex-wrap-center">
     {{ homepage() }}
     {{ link(path('admin_archive'), 'archive.result.new_archive', 'btn btn-form btn-secondary', null) -}}
+    {{ sitemap() }}
 </div>
 {% endblock %}

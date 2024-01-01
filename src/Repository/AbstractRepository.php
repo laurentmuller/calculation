@@ -127,7 +127,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      *
      * @see AbstractRepository::createDefaultQueryBuilder()
      *
-     * @psalm-return Query<TEntity>
+     * @psalm-return Query<int, TEntity>
      *
      * @phpstan-return Query
      */

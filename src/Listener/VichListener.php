@@ -29,9 +29,6 @@ use Vich\UploaderBundle\Naming\Polyfill\FileExtensionTrait;
 /**
  * Listener to resize the profile image.
  */
-#[AsEventListener(event: Events::PRE_UPLOAD, method: 'onPreUpload')]
-#[AsEventListener(event: Events::PRE_REMOVE, method: 'onPreRemove')]
-#[AsEventListener(event: Events::POST_UPLOAD, method: 'onPostUpload')]
 class VichListener
 {
     use FileExtensionTrait;
@@ -42,7 +39,10 @@ class VichListener
 
     /**
      * Create the small and medium image if applicable.
+     *
+     * @psalm-api
      */
+    #[AsEventListener(event: Events::POST_UPLOAD)]
     public function onPostUpload(Event $event): void
     {
         /** @var User $user */
@@ -65,7 +65,10 @@ class VichListener
 
     /**
      * Remove the small and medium image if applicable.
+     *
+     * @psalm-api
      */
+    #[AsEventListener(event: Events::PRE_REMOVE)]
     public function onPreRemove(Event $event): void
     {
         /** @var User $user */
@@ -82,7 +85,10 @@ class VichListener
 
     /**
      * Rename and resize the image if applicable.
+     *
+     * @psalm-api
      */
+    #[AsEventListener(event: Events::PRE_UPLOAD)]
     public function onPreUpload(Event $event): void
     {
         /** @var User $user */

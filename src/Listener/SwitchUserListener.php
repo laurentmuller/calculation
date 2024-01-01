@@ -22,7 +22,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Listener for the switch user event.
  */
-#[AsEventListener(event: SwitchUserEvent::class, method: 'onSwitchUser')]
 class SwitchUserListener implements ServiceSubscriberInterface
 {
     use ServiceSubscriberTrait;
@@ -39,15 +38,16 @@ class SwitchUserListener implements ServiceSubscriberInterface
     private const SWITCH_USER = '_switch_user';
 
     /**
-     * Handles the switch user event.
+     * @psalm-api
      */
+    #[AsEventListener(event: SwitchUserEvent::class)]
     public function onSwitchUser(SwitchUserEvent $event): void
     {
         // get values
         $request = $event->getRequest();
         $name = $this->getTargetUsername($event);
         $original = $this->getOriginalUsername($event);
-        $action = $request->query->get(self::SWITCH_USER, '');
+        $action = $request->query->getString(self::SWITCH_USER);
 
         // get message
         if (self::EXIT_VALUE === $action) {
@@ -59,10 +59,7 @@ class SwitchUserListener implements ServiceSubscriberInterface
         }
 
         // display message
-        $this->successTrans($id, [
-            '%orignal%' => $original,
-            '%name%' => $name,
-        ]);
+        $this->successTrans($id, ['%name%' => $name, '%orignal%' => $original]);
     }
 
     private function getOriginalUsername(SwitchUserEvent $event): ?string

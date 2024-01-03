@@ -54,7 +54,7 @@
     {% endif %}
     {{- _self.item_path(path('user_reset', params), 'user.reset.title', 'eraser', 'btn-user-reset') }}
 {% endif %}
-{%- if not is_granted('IS_IMPERSONATOR') and is_granted('ROLE_ADMIN') -%}
+{%- if not is_impersonator and is_admin -%}
     {% if allow_edit or allow_delete or allow_add or allow_show %}
         {{- _self.item_separator('user-switch-divider') }}
     {% endif %}

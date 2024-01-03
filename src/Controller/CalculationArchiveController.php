@@ -40,10 +40,10 @@ class CalculationArchiveController extends AbstractController
     public function invoke(Request $request, CalculationArchiveService $service): Response
     {
         if (!$service->isEditableStates()) {
-            return $this->redirectToHomePage('archive.editable_empty');
+            return $this->redirectToHomePage('archive.editable_empty', request: $request);
         }
         if (!$service->isNotEditableStates()) {
-            return $this->redirectToHomePage('archive.not_editable_empty');
+            return $this->redirectToHomePage('archive.not_editable_empty', request: $request);
         }
 
         $query = $service->createQuery();

@@ -59,10 +59,14 @@ class AdminController extends AbstractController
 
             try {
                 if ($service->clear()) {
-                    return $this->redirectToHomePage('clear_cache.success');
+                    return $this->redirectToHomePage('clear_cache.success', request: $request);
                 }
 
-                return $this->redirectToHomePage(message: 'clear_cache.failure', type: FlashType::DANGER);
+                return $this->redirectToHomePage(
+                    message: 'clear_cache.failure',
+                    type: FlashType::DANGER,
+                    request: $request
+                );
             } catch (\Exception $e) {
                 return $this->renderFormException('clear_cache.failure', $e, $logger);
             }
@@ -95,7 +99,7 @@ class AdminController extends AbstractController
             $data = $form->getData();
             $application->setProperties($data);
 
-            return $this->redirectToHomePage('parameters.success');
+            return $this->redirectToHomePage('parameters.success', request: $request);
         }
 
         return $this->render('admin/parameters.html.twig', [
@@ -168,7 +172,11 @@ class AdminController extends AbstractController
                 $application->setProperty($property, $role->getRights());
             }
 
-            return $this->redirectToHomePage('admin.rights.success', ['%name%' => $role->getName()]);
+            return $this->redirectToHomePage(
+                'admin.rights.success',
+                ['%name%' => $role->getName()],
+                request: $request
+            );
         }
 
         return $this->render('admin/role_rights.html.twig', [

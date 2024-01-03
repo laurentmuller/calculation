@@ -264,6 +264,7 @@
 
 .utility-nav li {
     padding-right: .625em;
+    padding-bottom: .625em;
     display: inline-block;
 }
 

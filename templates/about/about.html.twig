@@ -1,6 +1,6 @@
 {% extends 'cards/card_base.html.twig' %}
 {% import 'about/_about_macro.html.twig' as tools %}
-{% from 'macros/_icons.html.twig' import link, linkExternal, homepage, button_pdf, button_word, link_pdf, link_word, link_excel %}
+{% from 'macros/_icons.html.twig' import link, linkExternal, homepage, sitemap, button_pdf, button_word, link_pdf, link_word, link_excel %}
 {# macros #}
 {% macro card(id, pdf_route, excel_route=false, word_route=false) -%}
     {%- set title = ('about.' ~ id)|trans -%}
@@ -73,6 +73,7 @@
 <div class="d-flex-wrap-center mt-2 pb-3 d-print-none">
     {{ homepage() }}
     {{ link(path('user_comment'), 'user.comment.title', 'btn btn-form btn-secondary', 'envelope far', 'user.comment.description') }}
+    {{ sitemap() }}
     {{ button_pdf('about_pdf') }}
     {{ button_word('about_word') }}
 </div>

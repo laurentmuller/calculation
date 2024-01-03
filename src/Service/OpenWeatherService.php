@@ -419,6 +419,7 @@ class OpenWeatherService extends AbstractHttpClientService
         $timezone = $this->offsetToTimZone($offset);
         $this->updateResults($results, $timezone);
         $this->addUnits($results, (string) $query['units']);
+        $this->sortResults($results);
 
         return $results;
     }
@@ -523,6 +524,32 @@ class OpenWeatherService extends AbstractHttpClientService
     private function replaceUrl(string $url, string $value): string
     {
         return \str_replace('{0}', $value, $url);
+    }
+
+    /**
+     * @psalm-param array<array-key, mixed> $results
+     */
+    private function sortResults(array &$results): void
+    {
+        \uksort($results, function (string|int $keyA, string|int $keyB) use ($results): int {
+            $isArrayA = \is_array($results[$keyA]);
+            $isArrayB = \is_array($results[$keyB]);
+            if ($isArrayA && !$isArrayB) {
+                return 1;
+            }
+            if (!$isArrayA && $isArrayB) {
+                return -1;
+            }
+
+            return $keyA <=> $keyB;
+        });
+
+        /** @psalm-var array<array-key, mixed>|scalar $value */
+        foreach ($results as &$value) {
+            if (\is_array($value)) {
+                $this->sortResults($value);
+            }
+        }
     }
 
     private function updateCoordinate(array &$results): void

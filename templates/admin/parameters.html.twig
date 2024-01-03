@@ -12,7 +12,7 @@
 {{ _self.collapseLine('message', form) }}
 {{ _self.collapseLine('home', form) }}
 {{ _self.collapseLine('options', form) }}
-{% if super_admin %}
+{% if is_super_admin %}
     {{ _self.collapseLine('security', form, false, options) }}
 {% endif %}
 {%- endblock %}

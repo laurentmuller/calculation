@@ -591,7 +591,7 @@ color_picker:
   custom_text: Personnalisé
 index:
   change_password: Modifier le mot de passe
-  disabled: <b>%username%</b>, vous ne pouvez pas accéder à ce site car votre profile a été désactivé.<br><br>Veuillez demander à votre supérieur hiérarchique de vous octroyer les droits nécessaires ou à l'administrateur du site de réactiver votre compte.
+  disabled: <b>%username%</b>, vous ne pouvez pas accéder à ce site car votre profil a été désactivé.<br><br>Veuillez demander à votre supérieur hiérarchique de vous octroyer les droits nécessaires ou à l'administrateur du site de réactiver votre compte.
   login: Connexion
   logout: Déconnexion
   menu_chart_title: Afficher le graphique

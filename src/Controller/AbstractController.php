@@ -107,12 +107,12 @@ abstract class AbstractController extends BaseController
 
     public function getRequestStack(): RequestStack
     {
-        if (!$this->requestStack instanceof RequestStack) {
-            /* @noinspection PhpUnhandledExceptionInspection */
-            $this->requestStack = $this->container->get('request_stack');
+        if ($this->requestStack instanceof RequestStack) {
+            return $this->requestStack;
         }
 
-        return $this->requestStack;
+        /* @noinspection PhpUnhandledExceptionInspection */
+        return $this->requestStack = $this->container->get('request_stack');
     }
 
     public static function getSubscribedServices(): array
@@ -129,12 +129,12 @@ abstract class AbstractController extends BaseController
      */
     public function getTranslator(): TranslatorInterface
     {
-        if (!$this->translator instanceof TranslatorInterface) {
-            /* @noinspection PhpUnhandledExceptionInspection */
-            $this->translator = $this->container->get(TranslatorInterface::class);
+        if ($this->translator instanceof TranslatorInterface) {
+            return $this->translator;
         }
 
-        return $this->translator;
+        /* @noinspection PhpUnhandledExceptionInspection */
+        return $this->translator = $this->container->get(TranslatorInterface::class);
     }
 
     /**
@@ -142,12 +142,12 @@ abstract class AbstractController extends BaseController
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
-        if (!$this->generatorService instanceof UrlGeneratorService) {
-            /* @noinspection PhpUnhandledExceptionInspection */
-            $this->generatorService = $this->container->get(UrlGeneratorService::class);
+        if ($this->generatorService instanceof UrlGeneratorService) {
+            return $this->generatorService;
         }
 
-        return $this->generatorService;
+        /* @noinspection PhpUnhandledExceptionInspection */
+        return $this->generatorService = $this->container->get(UrlGeneratorService::class);
     }
 
     /**
@@ -165,35 +165,33 @@ abstract class AbstractController extends BaseController
      */
     public function getUserService(): UserService
     {
-        if (!$this->userService instanceof UserService) {
-            /* @noinspection PhpUnhandledExceptionInspection */
-            $this->userService = $this->container->get(UserService::class);
+        if ($this->userService instanceof UserService) {
+            return $this->userService;
         }
 
-        return $this->userService;
+        /* @noinspection PhpUnhandledExceptionInspection */
+        return $this->userService = $this->container->get(UserService::class);
     }
 
     /**
      * Display a message, if not empty; and redirect to the home page.
      *
-     * @param string    $message    the translatable message
-     * @param array     $parameters the message parameters
-     * @param FlashType $type       the message type
-     * @param ?string   $domain     the translation domain
-     * @param ?string   $locale     the translation locale
-     *
-     * @return RedirectResponse the response
+     * If the request is not null and the caller parameter is set, redirect to it.
      */
     public function redirectToHomePage(
         string $message = '',
         array $parameters = [],
         FlashType $type = FlashType::SUCCESS,
         string $domain = null,
-        string $locale = null
+        string $locale = null,
+        Request $request = null
     ): RedirectResponse {
         if ('' !== $message) {
             $message = $this->trans($message, $parameters, $domain, $locale);
             $this->addFlashMessage($type, $message);
+        }
+        if ($request instanceof Request) {
+            return $this->getUrlGenerator()->redirect($request);
         }
 
         return $this->redirectToRoute(self::HOME_PAGE);
@@ -220,11 +218,15 @@ abstract class AbstractController extends BaseController
     protected function denyAccessUnlessGranted(
         mixed $attribute,
         mixed $subject = null,
-        string $message = 'Access Denied.'
+        string $message = ''
     ): void {
         if ($attribute instanceof EntityPermission) {
             $attribute = $attribute->name;
         }
+        if ('' === $message) {
+            $message = $this->trans('http_error_403.description');
+        }
+
         parent::denyAccessUnlessGranted($attribute, $subject, $message);
     }
 

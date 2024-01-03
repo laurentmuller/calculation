@@ -326,9 +326,9 @@
             "icon": "pencil"
         },
         {
-            "route": "user_parameters",
-            "text": "user.parameters.title",
-            "icon": "user-gear"
+            "route": "user_profile_change_password",
+            "text": "profile.change_password.title",
+            "icon": "unlock-alt"
         },
         {
             "route": "app_logout",

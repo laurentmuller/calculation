@@ -6,7 +6,7 @@
     {{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
     {{ dropdownSeparator() }}
     {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
-    {% if is_previous_admin -%}
+    {% if is_impersonator -%}
         {{ dropdownSeparator() }}
         {{ dropdownItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
     {% endif %}

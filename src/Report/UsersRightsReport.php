@@ -65,19 +65,20 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     public function outputGroup(PdfGroupEvent $event): bool
     {
-        /** @var Role|User|null $key */
+        /** @psalm-var Role|User|null $key */
         $key = $event->group->getKey();
         if ($key instanceof Role) {
-            $description = $this->trans('user.fields.role') . ' ';
-            $description .= $this->translateRole($key);
-            $event->table->singleLine($description, $event->group->getStyle());
+            $text = $this->trans('user.fields.role') . ' ';
+            $text .= $this->translateRole($key);
+            $event->table->singleLine($text, $event->group->getStyle());
 
             return true;
         }
 
         if ($key instanceof User) {
             $text = $key->getUserIdentifier();
-            $description = $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
+            $description = $this->trans('user.fields.role') . ' ';
+            $description .= $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
             [$x, $y] = $this->GetXY();
             $event->group->apply($this);
             $this->Cell(border: PdfBorder::default());

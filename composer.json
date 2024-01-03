@@ -40,7 +40,7 @@
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/orm": "^2.0",
         "dukecity/doctrineextensions": "^2.0",
-        "elao/enum": "^2.x-dev",
+        "elao/enum": "^2.0",
         "endroid/qr-code": "^5.0",
         "erusev/parsedown": "^1.0",
         "fakerphp/faker": "^1.0",

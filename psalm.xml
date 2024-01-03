@@ -59,22 +59,14 @@
         <MixedAssignment>
             <errorLevel type="suppress">
                 <file name="src/Controller/AbstractController.php"/>
-                <file name="src/Traits/AuthorizationCheckerAwareTrait.php"/>
                 <file name="src/Traits/CacheAwareTrait.php"/>
-                <file name="src/Traits/LoggerAwareTrait.php"/>
-                <file name="src/Traits/SessionAwareTrait.php"/>
-                <file name="src/Traits/TranslatorAwareTrait.php"/>
             </errorLevel>
         </MixedAssignment>
 
         <MixedInferredReturnType>
             <errorLevel type="suppress">
+                <file name="src/Traits/AwareTrait.php"/>
                 <file name="src/Controller/AbstractController.php"/>
-                <file name="src/Traits/AuthorizationCheckerAwareTrait.php"/>
-                <file name="src/Traits/CacheAwareTrait.php"/>
-                <file name="src/Traits/LoggerAwareTrait.php"/>
-                <file name="src/Traits/SessionAwareTrait.php"/>
-                <file name="src/Traits/TranslatorAwareTrait.php"/>
             </errorLevel>
         </MixedInferredReturnType>
 

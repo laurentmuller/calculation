@@ -50,15 +50,12 @@ class UserExceptionServiceTest extends TestCase
             [new ExpiredSignatureException(), 'registration_expired_signature'],
             [new InvalidSignatureException(), 'registration_invalid_signature'],
             [new WrongEmailVerifyException(), 'registration_wrong_email_verify'],
-
             // reset password
             [new ExpiredResetPasswordTokenException(), 'reset_expired_reset_password_token'],
             [new InvalidResetPasswordTokenException(), 'reset_invalid_reset_password_token'],
             [new TooManyPasswordRequestsException(new \DateTime('2000-01-01')), 'reset_too_many_password_request', 1],
-
             // mailer
             [new TransportException(), 'send_email_error'],
-
             // other
             [new \Exception(), 'error_unknown'],
         ];

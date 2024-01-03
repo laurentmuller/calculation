@@ -2,6 +2,7 @@
 
 :root {
     --sidebar-width: 18rem;
+    --sidebar-delay: 0.35s;
 }
 
 /* navigation bar */
@@ -12,8 +13,8 @@
     height: 100vh;
     min-width: var(--sidebar-width);
     max-width: var(--sidebar-width);
-    padding: 0.5rem 1rem 0.1rem;
-    transition: margin-left 0.35s ease-in-out;
+    padding: 0.5rem 1rem 0.75rem;
+    transition: margin-left var(--sidebar-delay) ease-in-out;
     overflow-y: auto;
     overflow-x: hidden;
     flex-direction: column !important;

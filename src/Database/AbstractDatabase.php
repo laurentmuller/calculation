@@ -154,6 +154,17 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     }
 
     /**
+     * Gets the number of records for the given table.
+     */
+    public function getRecordsCount(string $table): int
+    {
+        $query = "SELECT COUNT(1) FROM $table";
+        $result = $this->querySingle($query);
+
+        return \is_int($result) ? $result : 0;
+    }
+
+    /**
      * Returns if a transaction is active.
      *
      * @return bool true if a transaction is active

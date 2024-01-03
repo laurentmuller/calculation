@@ -18,14 +18,14 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
- * Trait to check grant actions.
- *
- * @property \Psr\Container\ContainerInterface $container
+ * Trait to check grant actions within the subscribed service.
  *
  * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait AuthorizationCheckerAwareTrait
 {
+    use AwareTrait;
+
     private ?AuthorizationCheckerInterface $authorizationChecker = null;
 
     /** @var bool[] */
@@ -37,13 +37,12 @@ trait AuthorizationCheckerAwareTrait
         if ($this->authorizationChecker instanceof AuthorizationCheckerInterface) {
             return $this->authorizationChecker;
         }
-        $id = self::class . '::' . __FUNCTION__;
-        if (!$this->container->has($id)) {
-            throw new \LogicException(\sprintf('Unable to find service "%s".', $id));
-        }
 
         /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->authorizationChecker = $this->container->get($id);
+        return $this->authorizationChecker = $this->getServiceFromContainer(
+            AuthorizationCheckerInterface::class,
+            __FUNCTION__
+        );
     }
 
     public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): static

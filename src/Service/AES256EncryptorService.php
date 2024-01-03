@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 /**
  * Class for AES-256 encryption.
  */
-readonly class AES256Encryptor
+readonly class AES256EncryptorService
 {
     private const CIPHER_METHOD = 'aes-256-ecb';
 

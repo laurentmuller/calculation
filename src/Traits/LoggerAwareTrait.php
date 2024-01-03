@@ -16,14 +16,13 @@ use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
- * Extends logger trait wih the subscribed service.
- *
- * @property \Psr\Container\ContainerInterface $container
+ * Extends logger trait within the subscribed service.
  *
  * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait LoggerAwareTrait
 {
+    use AwareTrait;
     use LoggerTrait;
 
     private ?LoggerInterface $logger = null;
@@ -34,13 +33,9 @@ trait LoggerAwareTrait
         if ($this->logger instanceof LoggerInterface) {
             return $this->logger;
         }
-        $id = self::class . '::' . __FUNCTION__;
-        if (!$this->container->has($id)) {
-            throw new \LogicException(\sprintf('Unable to find service "%s".', $id));
-        }
 
         /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->logger = $this->container->get($id);
+        return $this->logger = $this->getServiceFromContainer(LoggerInterface::class, __FUNCTION__);
     }
 
     public function setLogger(LoggerInterface $logger): static

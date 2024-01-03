@@ -1123,8 +1123,10 @@ swisspost:
     objects: Objets
     states: Cantons
     streets: Rues
+    previous: Précédent
     valid: Valides
     invalid: Erreurs
+    difference: Différence
     total: Total
   helps:
     file: Le fichier doit être un fichier compressé au format *.zip avec une seule entrée.

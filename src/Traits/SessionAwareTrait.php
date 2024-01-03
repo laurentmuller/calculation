@@ -18,14 +18,14 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
- * Trait to get or set values within session.
- *
- * @property \Psr\Container\ContainerInterface $container
+ * Trait to manage session values within the subscribed service.
  *
  * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait SessionAwareTrait
 {
+    use AwareTrait;
+
     private ?RequestStack $requestStack = null;
 
     #[SubscribedService]
@@ -34,13 +34,9 @@ trait SessionAwareTrait
         if ($this->requestStack instanceof RequestStack) {
             return $this->requestStack;
         }
-        $id = self::class . '::' . __FUNCTION__;
-        if (!$this->container->has($id)) {
-            throw new \LogicException(\sprintf('Unable to find service "%s".', $id));
-        }
 
         /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->requestStack = $this->container->get($id);
+        return $this->requestStack = $this->getServiceFromContainer(RequestStack::class, __FUNCTION__);
     }
 
     public function setRequestStack(RequestStack $requestStack): static

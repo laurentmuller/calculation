@@ -7,7 +7,7 @@
     'hide-menu': 'index.menu_hide'|trans
 } -%}
 {# sidebar #}
-<div id="sidebar" class="navbar navbar-vertical bg-body-tertiary border-end d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
+<div id="sidebar" class="navbar navbar-vertical bg-body-tertiary d-print-none{{ sidebar_class }}"{{ attributes(sidebar_attributes, 'data-') }}{% if is_dark_navigation %} data-bs-theme="dark"{% endif %}>
     {# toggle sidebar #}
     <button class="btn btn-outline-secondary rounded-circle py-0 px-2 hide-sidebar" title="{{ 'index.sidebar_hide'|trans }}">
         <i class="fa-solid fa-angle-left"></i>
@@ -24,7 +24,7 @@
                 <a href="{{ path('about') }}" class="stretched-link" title="{{ 'footer.about_title'|trans }}"></a>
             </div>
         </div>
-        {{ dropdownSeparator(false, 'my-1 w-100') }}
+        <hr class="dropdown-divider my-1 w-100">
     {% endif %}
     {# home page #}
     <a class="navbar-brand mb-2" href="{{ path('homepage') }}" title="{{ 'index.title_help'|trans }}">
@@ -49,7 +49,7 @@
         {% endif %}
     </ul>
     {# bottom menus #}
-    <div class="d-flex-wrap-center border-top border-bottom w-100 py-2{% if not status_bar %} mb-4{% endif %}">
+    <div class="d-flex-wrap-center border-top w-100 py-2">
         {{ include('navigation/vertical/navigation_user.html.twig') }}
         {{ include('navigation/vertical/navigation_theme.html.twig') }}
     </div>

@@ -161,7 +161,7 @@
 {{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt}) -}}
 {# delete #}
 {% if form.delete is defined -%}
-    <div class="d-none">{{- form_widget(form.delete, {hidden: true, type: 'hidden'}) -}}</div>
+    <div class="d-none">{{- form_widget(form.delete) -}}</div>
 {%- endif %}
 {%- endblock %}
 

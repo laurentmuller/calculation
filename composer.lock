@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79f42b20deb0818db06f4a80a4c9450f",
+    "content-hash": "642bbeb39d38bf8e999831620fb9c95c",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1469,16 +1469,16 @@
         },
         {
             "name": "elao/enum",
-            "version": "2.x-dev",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Elao/PhpEnums.git",
-                "reference": "8b09a3a2efa38e57b54a335063844604beea4afa"
+                "reference": "a64a1fa1bdb09ffa68cb463452fd6a8d43067cda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/8b09a3a2efa38e57b54a335063844604beea4afa",
-                "reference": "8b09a3a2efa38e57b54a335063844604beea4afa",
+                "url": "https://api.github.com/repos/Elao/PhpEnums/zipball/a64a1fa1bdb09ffa68cb463452fd6a8d43067cda",
+                "reference": "a64a1fa1bdb09ffa68cb463452fd6a8d43067cda",
                 "shasum": ""
             },
             "require": {
@@ -1504,7 +1504,6 @@
                 "symfony/var-dumper": "^5.4|^6.0",
                 "symfony/yaml": "^5.4|^6.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1543,7 +1542,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Elao/PhpEnums/issues",
-                "source": "https://github.com/Elao/PhpEnums/tree/2.x"
+                "source": "https://github.com/Elao/PhpEnums/tree/v2.3.0"
             },
             "funding": [
                 {
@@ -1551,7 +1550,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-07-05T13:45:49+00:00"
+            "time": "2024-01-03T14:13:19+00:00"
         },
         {
             "name": "endroid/qr-code",
@@ -7777,16 +7776,16 @@
         },
         {
             "name": "symfonycasts/reset-password-bundle",
-            "version": "v1.20.0",
+            "version": "v1.20.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/reset-password-bundle.git",
-                "reference": "9c682c2888b667b6a2e8cdd0a2ea19f2733fad30"
+                "reference": "aaf9477d0aa3a28e9c4ef7d3eb6b917f1e11f9f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/9c682c2888b667b6a2e8cdd0a2ea19f2733fad30",
-                "reference": "9c682c2888b667b6a2e8cdd0a2ea19f2733fad30",
+                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/aaf9477d0aa3a28e9c4ef7d3eb6b917f1e11f9f8",
+                "reference": "aaf9477d0aa3a28e9c4ef7d3eb6b917f1e11f9f8",
                 "shasum": ""
             },
             "require": {
@@ -7817,9 +7816,9 @@
             "description": "Symfony bundle that adds password reset functionality.",
             "support": {
                 "issues": "https://github.com/SymfonyCasts/reset-password-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.20.0"
+                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.20.1"
             },
-            "time": "2023-12-18T21:59:53+00:00"
+            "time": "2024-01-02T16:46:54+00:00"
         },
         {
             "name": "symfonycasts/verify-email-bundle",
@@ -12711,9 +12710,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "elao/enum": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

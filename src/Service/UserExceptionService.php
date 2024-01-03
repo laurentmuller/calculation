@@ -46,9 +46,12 @@ class UserExceptionService
     /**
      * Creates a custom user exception.
      */
-    private function createException(string $message, \Throwable $previous, array $parameters = []): CustomUserMessageAuthenticationException
-    {
-        return new CustomUserMessageAuthenticationException($message, $parameters, (int) $previous->getCode(), $previous);
+    private function createException(
+        string $message,
+        \Throwable $previous,
+        array $parameters = []
+    ): CustomUserMessageAuthenticationException {
+        return new CustomUserMessageAuthenticationException($message, $parameters, 0, $previous);
     }
 
     /**
@@ -56,34 +59,28 @@ class UserExceptionService
      */
     private function mapException(\Throwable $e): CustomUserMessageAuthenticationException
     {
-        if ($e instanceof ExpiredSignatureException) {
-            return $this->createException('registration_expired_signature', $e);
-        }
-        if ($e instanceof InvalidSignatureException) {
-            return $this->createException('registration_invalid_signature', $e);
-        }
-        if ($e instanceof WrongEmailVerifyException) {
-            return $this->createException('registration_wrong_email_verify', $e);
-        }
-        if ($e instanceof VerifyEmailExceptionInterface) {
-            return $this->createException($e->getReason(), $e);
-        }
-        if ($e instanceof ExpiredResetPasswordTokenException) {
-            return $this->createException('reset_expired_reset_password_token', $e);
-        }
-        if ($e instanceof InvalidResetPasswordTokenException) {
-            return $this->createException('reset_invalid_reset_password_token', $e);
-        }
-        if ($e instanceof TooManyPasswordRequestsException) {
-            return $this->createException('reset_too_many_password_request', $e, ['%availableAt%' => $e->getAvailableAt()->format('H:i')]);
-        }
-        if ($e instanceof ResetPasswordExceptionInterface) {
-            return $this->createException($e->getReason(), $e);
-        }
-        if ($e instanceof TransportExceptionInterface) {
-            return $this->createException('send_email_error', $e);
-        }
+        $message = match (true) {
+            // register user
+            $e instanceof ExpiredSignatureException => 'registration_expired_signature',
+            $e instanceof InvalidSignatureException => 'registration_invalid_signature',
+            $e instanceof WrongEmailVerifyException => 'registration_wrong_email_verify',
+            $e instanceof VerifyEmailExceptionInterface => $e->getReason(),
+            // reset password
+            $e instanceof ExpiredResetPasswordTokenException => 'reset_expired_reset_password_token',
+            $e instanceof InvalidResetPasswordTokenException => 'reset_invalid_reset_password_token',
+            $e instanceof TooManyPasswordRequestsException => 'reset_too_many_password_request',
+            $e instanceof ResetPasswordExceptionInterface => $e->getReason(),
+            // mailer
+            $e instanceof TransportExceptionInterface => 'send_email_error',
+            // other
+            default => 'error_unknown'
+        };
 
-        return $this->createException('error_unknown', $e);
+        $parameters = match (true) {
+            $e instanceof TooManyPasswordRequestsException => ['%availableAt%' => $e->getAvailableAt()->format('H:i')],
+            default => []
+        };
+
+        return $this->createException($message, $e, $parameters);
     }
 }

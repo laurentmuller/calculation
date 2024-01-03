@@ -68,8 +68,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         /** @psalm-var Role|User|null $key */
         $key = $event->group->getKey();
         if ($key instanceof Role) {
-            $text = $this->trans('user.fields.role') . ' ';
-            $text .= $this->translateRole($key);
+            $text = $this->trans('user.fields.role') . ' ' . $this->translateRole($key);
             $event->table->singleLine($text, $event->group->getStyle());
 
             return true;
@@ -77,15 +76,14 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
         if ($key instanceof User) {
             $text = $key->getUserIdentifier();
-            $description = $this->trans('user.fields.role') . ' ';
-            $description .= $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
+            $description = $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
             [$x, $y] = $this->GetXY();
             $event->group->apply($this);
             $this->Cell(border: PdfBorder::default());
             $this->SetXY($x, $y);
             $width = $this->GetStringWidth($text);
             $this->Cell(w: $width, txt: $text);
-            PdfStyle::default()->setFontItalic()->apply($this);
+            PdfStyle::default()->apply($this);
             $this->Cell(txt: ' - ' . $description, ln: PdfMove::NEW_LINE);
 
             return true;

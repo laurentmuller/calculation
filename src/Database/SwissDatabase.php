@@ -229,6 +229,20 @@ class SwissDatabase extends AbstractDatabase
     }
 
     /**
+     * Gets the records count for all tables.
+     *
+     * @return array{state: int, city: int, street: int}
+     */
+    public function getTablesCount(): array
+    {
+        return [
+            'state' => $this->getRecordsCount('state'),
+            'city' => $this->getRecordsCount('city'),
+            'street' => $this->getRecordsCount('street'),
+        ];
+    }
+
+    /**
      * Insert a city.
      *
      * @psalm-param array{0: int, 1: int, 2: string, 3:string} $data the data to insert with the following values:

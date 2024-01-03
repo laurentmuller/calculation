@@ -83,11 +83,11 @@ class SwissPostUpdater implements ServiceSubscriberInterface
      */
     private const STATE_FILE = 'swiss_state.csv';
 
-    private readonly string $databaseName;
-
-    public function __construct(private readonly ApplicationService $application, private readonly FormFactoryInterface $factory, SwissPostService $service)
-    {
-        $this->databaseName = $service->getDatabaseName();
+    public function __construct(
+        private readonly ApplicationService $application,
+        private readonly FormFactoryInterface $factory,
+        private readonly SwissPostService $service
+    ) {
     }
 
     /**
@@ -116,6 +116,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
     {
         $result = new SwissPostUpdateResult();
         $result->setOverwrite($overwrite);
+        $result->setOldEntries($this->getTablesCount());
         if (!$this->validateInput($result, $sourceFile)) {
             return $result;
         }
@@ -205,13 +206,28 @@ class SwissPostUpdater implements ServiceSubscriberInterface
         }
     }
 
+    private function getDatabaseName(): string
+    {
+        return $this->service->getDatabaseName();
+    }
+
     private function getLastImport(SwissPostUpdateResult $result): ?\DateTimeInterface
     {
-        if ($result->isOverwrite() || !FileUtils::exists($this->databaseName)) {
+        if ($result->isOverwrite() || !FileUtils::exists($this->getDatabaseName())) {
             return null;
         }
 
         return $this->application->getLastImport();
+    }
+
+    /**
+     * Gets the records count for all tables.
+     *
+     * @return array{city: int, state: int, street: int}
+     */
+    private function getTablesCount(): array
+    {
+        return $this->service->getTablesCount();
     }
 
     private function logResult(SwissPostUpdateResult $result, string $id, \Exception $e): void
@@ -315,7 +331,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     private function processStates(SwissPostUpdateResult $result, SwissDatabase $database): bool
     {
-        $filename = FileUtils::buildPath(\dirname($this->databaseName), self::STATE_FILE);
+        $filename = FileUtils::buildPath(\dirname($this->getDatabaseName()), self::STATE_FILE);
         if (!FileUtils::exists($filename) || FileUtils::empty($filename)) {
             $this->setError($result, 'file_states');
 
@@ -378,7 +394,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
     private function renameDatabase(SwissPostUpdateResult $result, string $source): void
     {
-        if ($result->isValid() && !FileUtils::rename($source, $this->databaseName, true)) {
+        if ($result->isValid() && !FileUtils::rename($source, $this->getDatabaseName(), true)) {
             $this->setError($result, 'database_rename');
         }
     }
@@ -452,7 +468,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
 
             return false;
         }
-        if (StringUtils::equalIgnoreCase($sourceFile, $this->databaseName)) {
+        if (StringUtils::equalIgnoreCase($sourceFile, $this->getDatabaseName())) {
             $this->setError($result, 'database_open');
 
             return false;

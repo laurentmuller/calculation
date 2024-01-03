@@ -87,6 +87,16 @@ readonly class SwissPostService
     }
 
     /**
+     * Gets the records count for all tables.
+     *
+     * @return array{state: int, city: int, street: int}
+     */
+    public function getTablesCount(): array
+    {
+        return $this->getDatabase()->getTablesCount();
+    }
+
+    /**
      * @psalm-param callable(SwissDatabase): array $callback
      */
     private function find(callable $callback): array

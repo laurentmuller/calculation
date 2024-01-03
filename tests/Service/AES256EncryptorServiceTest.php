@@ -12,22 +12,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
-use App\Service\AES256Encryptor;
+use App\Service\AES256EncryptorService;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(AES256Encryptor::class)]
-class AES256EncryptorTest extends TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(AES256EncryptorService::class)]
+class AES256EncryptorServiceTest extends TestCase
 {
-    private AES256Encryptor $encryptor;
+    private AES256EncryptorService $encryptor;
 
     protected function setUp(): void
     {
-        $this->encryptor = new AES256Encryptor('fake-key');
+        $this->encryptor = new AES256EncryptorService('fake-key');
     }
 
-    /**
-     * @throws \JsonException
-     */
     public function testEncryptDecryptInt(): void
     {
         $expected = 145_145;

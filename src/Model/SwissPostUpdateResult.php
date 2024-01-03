@@ -23,6 +23,8 @@ class SwissPostUpdateResult
     /** @psalm-var SwissPostResultType */
     private array $invalidEntries = ['state' => 0, 'city' => 0, 'street' => 0];
     private int $invalidEntriesCount = 0;
+    /** @psalm-var SwissPostResultType */
+    private array $oldEntries = ['state' => 0, 'city' => 0, 'street' => 0];
     private bool $overwrite = false;
     private string $sourceFile = '';
     private string $sourceName = '';
@@ -86,7 +88,31 @@ class SwissPostUpdateResult
     }
 
     /**
+     * Gets the existing tables count.
+     *
+     * @psalm-return SwissPostResultType
+     *
+     * @psalm-api
+     */
+    public function getOldEntries(): array
+    {
+        return $this->oldEntries;
+    }
+
+    /**
+     * Gets the total number of old entries.
+     *
+     * @psalm-api
+     */
+    public function getOldEntriesCount(): int
+    {
+        return \array_sum($this->oldEntries);
+    }
+
+    /**
      * Gets the source (archive) file.
+     *
+     * @psalm-api
      */
     public function getSourceFile(): string
     {
@@ -115,6 +141,8 @@ class SwissPostUpdateResult
 
     /**
      * Gets the total number of valid entries.
+     *
+     * @psalm-api
      */
     public function getValidEntriesCount(): int
     {
@@ -123,6 +151,8 @@ class SwissPostUpdateResult
 
     /**
      * Gets the validity date.
+     *
+     * @psalm-api
      */
     public function getValidity(): ?\DateTimeInterface
     {
@@ -139,6 +169,8 @@ class SwissPostUpdateResult
 
     /**
      * Returns if the update is valid.
+     *
+     * @psalm-api
      */
     public function isValid(): bool
     {
@@ -147,6 +179,8 @@ class SwissPostUpdateResult
 
     /**
      * Sets the error message.
+     *
+     * @psalm-api
      */
     public function setError(string $error): self
     {
@@ -156,7 +190,21 @@ class SwissPostUpdateResult
     }
 
     /**
+     * Sets the existing tables count.
+     *
+     * @psalm-param SwissPostResultType $oldEntries
+     */
+    public function setOldEntries(array $oldEntries): self
+    {
+        $this->oldEntries = $oldEntries;
+
+        return $this;
+    }
+
+    /**
      * Sets the overwrite option.
+     *
+     * @psalm-api
      */
     public function setOverwrite(bool $overwrite): self
     {
@@ -167,6 +215,8 @@ class SwissPostUpdateResult
 
     /**
      * Sets the source (archive) file.
+     *
+     * @psalm-api
      */
     public function setSourceFile(string $sourceFile): self
     {
@@ -177,6 +227,8 @@ class SwissPostUpdateResult
 
     /**
      * Sets the source (archive name) file name.
+     *
+     * @psalm-api
      */
     public function setSourceName(string $sourceName): self
     {

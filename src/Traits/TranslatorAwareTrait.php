@@ -16,14 +16,13 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Extends translator trait wih the subscribed service.
- *
- * @property \Psr\Container\ContainerInterface $container
+ * Extends translator trait within the subscribed service.
  *
  * @psalm-require-implements \Symfony\Contracts\Service\ServiceSubscriberInterface
  */
 trait TranslatorAwareTrait
 {
+    use AwareTrait;
     use TranslatorTrait;
 
     private ?TranslatorInterface $translator = null;
@@ -34,13 +33,9 @@ trait TranslatorAwareTrait
         if ($this->translator instanceof TranslatorInterface) {
             return $this->translator;
         }
-        $id = self::class . '::' . __FUNCTION__;
-        if (!$this->container->has($id)) {
-            throw new \LogicException(\sprintf('Unable to find service "%s".', $id));
-        }
 
         /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->translator = $this->container->get($id);
+        return $this->translator = $this->getServiceFromContainer(TranslatorInterface::class, __FUNCTION__);
     }
 
     public function setTranslator(TranslatorInterface $translator): static

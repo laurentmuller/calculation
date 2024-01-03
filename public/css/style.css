@@ -9,9 +9,14 @@
 
 /**! compression tag for ftp-deployment */
 
+html {
+    width: 100vw;
+    overflow-x: hidden;
+}
+
 /* page-content */
 .page-content {
-    transition: margin-top 0.35s ease-in-out, margin-left 0.35s ease-in-out;
+    transition: margin-top var(--sidebar-delay) ease-in-out, margin-left var(--sidebar-delay) ease-in-out;
 }
 
 .page-content.sidebar-show {
@@ -38,8 +43,17 @@
 }
 
 /* navbar-vertical */
-body.status-bar .navbar.navbar-vertical {
-    height: calc(100vh - 29px);
+.navbar.navbar-vertical:after {
+    top: 0;
+    right: 0;
+    content: "";
+    height: 100%;
+    position: absolute;
+    border-right: var(--bs-border-width) solid var(--bs-border-color);
+}
+
+body.status-bar .navbar.navbar-vertical:after {
+    height: calc(100% - 30px);
 }
 
 /* hide-sidebar */
@@ -60,25 +74,20 @@ body.status-bar {
 }
 
 /* footer */
+footer {
+    transition: all var(--sidebar-delay) ease-in-out;
+}
+
+html:has(.sidebar-show) footer {
+    left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+}
+
 footer a,
 footer span {
     padding: 0 0.5rem !important;
 }
 
-footer:before {
-    top: 0;
-    left: 0;
-    content: "";
-    width: 100%;
-    position: absolute;
-    border-top: var(--bs-border-width) solid var(--bs-border-color);
-    transition: left 0.3s ease-in-out
-}
-
-html:has(.sidebar-show) footer:before {
-    left: var(--sidebar-width);
-    width: calc(100% - var(--sidebar-width));
-}
 
 /* buttons for edit form */
 .btn-form {

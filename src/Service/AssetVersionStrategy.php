@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Enums\Environment;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Path;
@@ -34,12 +33,8 @@ class AssetVersionStrategy extends StaticVersionStrategy
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
-        #[Autowire('%kernel.environment%')]
-        string $env
     ) {
-        $production = Environment::from($env)->isProduction();
-        $file = $production ? '.htdeployment' : 'composer.lock';
-        parent::__construct($this->time($projectDir, $file));
+        parent::__construct($this->time($projectDir, '.htdeployment'));
         $this->imagesVersion = $this->time($projectDir, 'public', self::IMAGES_PATH);
     }
 

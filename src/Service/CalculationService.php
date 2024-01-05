@@ -249,6 +249,7 @@ final class CalculationService implements ServiceSubscriberInterface
         $old_items_total = $this->round($calculation->getItemsTotal());
         $old_overall_total = $this->round($calculation->getOverallTotal());
         $old_global_margin = $this->round($calculation->getGlobalMargin());
+
         // 1. update each groups and compute item and overall total
         $items_total = 0.0;
         $overall_total = 0.0;
@@ -260,22 +261,25 @@ final class CalculationService implements ServiceSubscriberInterface
         }
         $items_total = $this->round($items_total);
         $overall_total = $this->round($overall_total);
+
         // 2. update global margin, net total and overall total
         $global_margin = $this->round($this->getGlobalMargin($overall_total));
         $overall_total = $this->round($overall_total * $global_margin);
         $overall_total = $this->round($overall_total * (1.0 + $calculation->getUserMargin()));
-        // 3. update if not equal
-        if ($old_items_total !== $items_total
-            || $old_global_margin !== $global_margin
-            || $old_overall_total !== $overall_total) {
-            $calculation->setItemsTotal($items_total)
-                ->setGlobalMargin($global_margin)
-                ->setOverallTotal($overall_total);
 
-            return true;
+        // 3. equal?
+        if ($this->isFloatEquals($old_items_total, $items_total)
+            && $this->isFloatEquals($old_global_margin, $global_margin)
+            && $this->isFloatEquals($old_overall_total, $overall_total)) {
+            return false;
         }
 
-        return false;
+        // 3. update
+        $calculation->setItemsTotal($items_total)
+            ->setGlobalMargin($global_margin)
+            ->setOverallTotal($overall_total);
+
+        return true;
     }
 
     /**

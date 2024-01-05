@@ -17,11 +17,11 @@
 {% block property_body %}
 {{ property('user.fields.username', item.username) }}
 {{ email(item.email, null, 'user.fields.email') }}
-{{ property('user.fields.role', '<i class="' ~ item.roleIcon ~ ' me-1"></i>' ~ item.role|trans_role) }}
+{{ property('user.fields.role', '<i class="' ~ item|role_icon ~ ' me-1"></i>' ~ item|trans_role) }}
 {%- set value = (item.enabled ? 'common.value_enabled' : 'common.value_disabled')|trans -%}
 {{ property('user.fields.enabled', value, item.enabled ? 'text-success' : 'text-danger') }}
 {{ property('user.fields.lastLogin', item.lastLogin ? item.lastLogin|locale_datetime : 'common.value_none'|trans) }}
-{%- set image = asset_image_user(item, '096', {'alt': 'user.fields.imageFile'|trans, 'title': 'user.image.title'|trans, 'class': 'border avatar-lg'}) -%}
+{%- set image = asset_image_user(item, '096', {'alt': 'user.fields.imageFile'|trans, 'title': 'user.image.title'|trans, 'class': 'border rounded avatar-lg'}) -%}
 {%- if image -%}
     {{ property('user.fields.imageFile', image) }}
 {%- endif -%}

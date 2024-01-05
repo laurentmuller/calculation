@@ -125,13 +125,15 @@ class ImageExtensionTest extends TestCase
 
     public function testCount(): void
     {
-        self::assertCount(9, ImageExtension::cases());
+        $expected = 9;
+        self::assertCount($expected, ImageExtension::cases());
     }
 
     public function testDefault(): void
     {
+        $expected = ImageExtension::PNG;
         $actual = ImageExtension::getDefault();
-        self::assertSame(ImageExtension::PNG, $actual);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getFilters')]

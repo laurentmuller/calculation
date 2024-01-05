@@ -54,7 +54,7 @@ class EntityVoterTest extends TestCase
         $attribute = 'FakeAttribute';
         $subject = Calculation::class;
         $expected = VoterInterface::ACCESS_ABSTAIN;
-        $this->checkVote($user, $subject, $attribute, $expected);
+        $this->assertVote($user, $subject, $attribute, $expected);
     }
 
     public function testAbstainSubject(): void
@@ -63,7 +63,7 @@ class EntityVoterTest extends TestCase
         $attribute = 'ADD';
         $subject = static::class;
         $expected = VoterInterface::ACCESS_ABSTAIN;
-        $this->checkVote($user, $subject, $attribute, $expected);
+        $this->assertVote($user, $subject, $attribute, $expected);
     }
 
     public function testAdmin(): void
@@ -77,7 +77,7 @@ class EntityVoterTest extends TestCase
         $attribute = 'ADD';
         $subject = User::class;
         $expected = VoterInterface::ACCESS_GRANTED;
-        $this->checkVote($user, $subject, $attribute, $expected);
+        $this->assertVote($user, $subject, $attribute, $expected);
     }
 
     public function testDisable(): void
@@ -86,7 +86,7 @@ class EntityVoterTest extends TestCase
         $attribute = 'ADD';
         $subject = Calculation::class;
         $expected = VoterInterface::ACCESS_DENIED;
-        $this->checkVote($user, $subject, $attribute, $expected);
+        $this->assertVote($user, $subject, $attribute, $expected);
     }
 
     public function testEntities(): void
@@ -116,23 +116,23 @@ class EntityVoterTest extends TestCase
         $attribute = 'ADD';
         $subject = Calculation::class;
         $expected = VoterInterface::ACCESS_GRANTED;
-        $this->checkVote($user, $subject, $attribute, $expected);
+        $this->assertVote($user, $subject, $attribute, $expected);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getSupportsAttribute')]
     public function testSupportsAttribute(string $value, bool $expected): void
     {
         self::assertNotNull($this->voter);
-        $result = $this->voter->supportsAttribute($value);
-        self::assertSame($expected, $result);
+        $actual = $this->voter->supportsAttribute($value);
+        self::assertSame($expected, $actual);
     }
 
-    private function checkVote(User $user, mixed $subject, mixed $attribute, mixed $expected): void
+    private function assertVote(User $user, mixed $subject, mixed $attribute, mixed $expected): void
     {
         $token = $this->getUserToken($user);
         self::assertNotNull($this->voter);
-        $result = $this->voter->vote($token, $subject, [$attribute]);
-        self::assertSame($expected, $result);
+        $actual = $this->voter->vote($token, $subject, [$attribute]);
+        self::assertSame($expected, $actual);
     }
 
     private function getAdminUser(): User

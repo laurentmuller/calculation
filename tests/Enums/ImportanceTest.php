@@ -48,15 +48,16 @@ class ImportanceTest extends TestCase
 
     public function testDefault(): void
     {
-        $default = Importance::getDefault();
         $expected = Importance::LOW;
-        self::assertSame($expected, $default);
+        $actual = Importance::getDefault();
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
     public function testLabel(string $expected, Importance $importance): void
     {
-        self::assertSame($expected, $importance->getReadable());
+        $actual = $importance->getReadable();
+        self::assertSame($expected, $actual);
     }
 
     public function testSorted(): void
@@ -67,8 +68,8 @@ class ImportanceTest extends TestCase
             Importance::HIGH,
             Importance::URGENT,
         ];
-        $sorted = Importance::sorted();
-        self::assertSame($expected, $sorted);
+        $actual = Importance::sorted();
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -78,13 +79,15 @@ class ImportanceTest extends TestCase
     public function testTranslate(string $expected, Importance $importance): void
     {
         $translator = $this->createTranslator();
-        self::assertSame($expected, $importance->trans($translator));
+        $actual = $importance->trans($translator);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
     public function testValue(Importance $importance, string $expected): void
     {
-        self::assertSame($expected, $importance->value);
+        $actual = $importance->value;
+        self::assertSame($expected, $actual);
     }
 
     /**

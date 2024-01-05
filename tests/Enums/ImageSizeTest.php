@@ -34,13 +34,15 @@ class ImageSizeTest extends TestCase
 
     public function testDefault(): void
     {
-        $default = ImageSize::getDefault();
-        self::assertSame(ImageSize::DEFAULT, $default);
+        $expected = ImageSize::DEFAULT;
+        $actual = ImageSize::getDefault();
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
     public function testValue(ImageSize $imageSize, int $expected): void
     {
-        self::assertSame($expected, $imageSize->value);
+        $actual = $imageSize->value;
+        self::assertSame($expected, $actual);
     }
 }

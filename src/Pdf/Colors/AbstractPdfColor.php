@@ -40,8 +40,28 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * @psalm-param int<0, 255> $green
      * @psalm-param int<0, 255> $blue
      */
-    final public function __construct(public readonly int $red = 0, public readonly int $green = 0, public readonly int $blue = 0)
+    final public function __construct(public readonly int $red, public readonly int $green, public readonly int $blue)
     {
+    }
+
+    /**
+     * Gets the hexadecimal representation of these values.
+     *
+     * @param string $prefix the optional prefix to prepend
+     *
+     * @return string the hexadecimal value as 6 lower case characters (like <code>'ff8040'</code>)
+     */
+    public function asHex(string $prefix = ''): string
+    {
+        return $prefix . \substr('000000' . \dechex($this->asInt()), -6);
+    }
+
+    /**
+     * Gets the integer representation of these values.
+     */
+    public function asInt(): int
+    {
+        return (($this->red & 0xFF) << 0x10) | (($this->green & 0xFF) << 0x8) | ($this->blue & 0xFF);
     }
 
     /**
@@ -81,29 +101,36 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Creates a new instance.
+     * Creates a new instance from the given value.
      *
-     * @param int[]|string|null $rgb an array containing the red, green and blue values or a hexadecimal string like
-     *                               <code>'#FF8040'</code> or <code>'FFF'</code>
+     * @param int[]|string|null $rgb an array containing the red, green and blue values, an integer value or a
+     *                               hexadecimal string like <code>'#FF8040'</code> or <code>'FFF'</code>
      *
      * @return static|null the color or null if the RGB value can not be parsed
+     *
+     * @psalm-param int<0, 255>[]|int|string|null $rgb
      */
-    public static function create(array|string|null $rgb): ?static
+    public static function create(array|int|string|null $rgb): ?static
     {
         if (null === $rgb || '' === $rgb) {
             return null;
         }
 
-        if (\is_string($rgb)) {
-            return self::parse($rgb);
+        if (\is_array($rgb)) {
+            return 3 === \count($rgb) ? new static($rgb[0], $rgb[1], $rgb[2]) : null;
         }
 
-        /** @psalm-var array{0: int<0, 255>, 1: int<0, 255>, 2: int<0, 255>}|false $rgb */
-        if (\is_array($rgb) && 3 === \count($rgb)) {
-            return new static($rgb[0], $rgb[1], $rgb[2]);
+        if (\is_int($rgb)) {
+            return self::createFromInt($rgb);
         }
 
-        return null;
+        $rgb = (string) \preg_replace('/[^0-9A-F]/i', '', $rgb);
+
+        return match (\strlen($rgb)) {
+            6 => self::createFrom6Chars($rgb),
+            3 => self::createFrom3Chars($rgb),
+            default => null,
+        };
     }
 
     /**
@@ -148,36 +175,6 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * Gets the default color.
      */
     abstract public static function default(): self;
-
-    /**
-     * Gets the blue component.
-     *
-     * @psalm-return int<0, 255>
-     */
-    public function getBlue(): int
-    {
-        return $this->blue;
-    }
-
-    /**
-     * Gets the green component.
-     *
-     * @psalm-return int<0, 255>
-     */
-    public function getGreen(): int
-    {
-        return $this->green;
-    }
-
-    /**
-     * Gets the red component.
-     *
-     * @psalm-return int<0, 255>
-     */
-    public function getRed(): int
-    {
-        return $this->red;
-    }
 
     /**
      * Gets the green color.
@@ -239,31 +236,32 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
         return new static(self::MAX_VALUE, self::MAX_VALUE, self::MAX_VALUE);
     }
 
-    private static function parse(string $value): ?static
+    private static function createFrom3Chars(string $rgb): static
     {
-        $value = (string) \preg_replace('/[^0-9A-Fa-f]/', '', $value);
-        switch (\strlen($value)) {
-            case 6:
-                $color = \hexdec($value);
-                /** @psalm-var int<0, 255> $r */
-                $r = 0xFF & ($color >> 0x10);
-                /** @psalm-var int<0, 255> $g */
-                $g = 0xFF & ($color >> 0x8);
-                /** @psalm-var int<0, 255> $b */
-                $b = 0xFF & $color;
+        /** @psalm-var int<0, 255> $r */
+        $r = \hexdec(\str_repeat(\substr($rgb, 0, 1), 2));
+        /** @psalm-var int<0, 255> $g */
+        $g = \hexdec(\str_repeat(\substr($rgb, 1, 1), 2));
+        /** @psalm-var int<0, 255> $b */
+        $b = \hexdec(\str_repeat(\substr($rgb, 2, 1), 2));
 
-                return new static($r, $g, $b);
-            case 3:
-                /** @psalm-var int<0, 255> $r */
-                $r = \hexdec(\str_repeat(\substr($value, 0, 1), 2));
-                /** @psalm-var int<0, 255> $g */
-                $g = \hexdec(\str_repeat(\substr($value, 1, 1), 2));
-                /** @psalm-var int<0, 255> $b */
-                $b = \hexdec(\str_repeat(\substr($value, 2, 1), 2));
+        return new static($r, $g, $b);
+    }
 
-                return new static($r, $g, $b);
-            default:
-                return null;
-        }
+    private static function createFrom6Chars(string $rgb): static
+    {
+        return self::createFromInt((int) \hexdec($rgb));
+    }
+
+    private static function createFromInt(int $rgb): static
+    {
+        /** @psalm-var int<0, 255> $r */
+        $r = 0xFF & ($rgb >> 0x10);
+        /** @psalm-var int<0, 255> $g */
+        $g = 0xFF & ($rgb >> 0x8);
+        /** @psalm-var int<0, 255> $b */
+        $b = 0xFF & $rgb;
+
+        return new static($r, $g, $b);
     }
 }

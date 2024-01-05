@@ -55,8 +55,9 @@ class StrengthLevelTest extends TestCase
 
     public function testCount(): void
     {
-        self::assertCount(6, StrengthLevel::cases());
-        self::assertCount(6, StrengthLevel::sorted());
+        $expected = 6;
+        self::assertCount($expected, StrengthLevel::cases());
+        self::assertCount($expected, StrengthLevel::sorted());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
@@ -68,7 +69,8 @@ class StrengthLevelTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
     public function testLabel(string $expected, StrengthLevel $level): void
     {
-        self::assertSame($expected, $level->getReadable());
+        $actual = $level->getReadable();
+        self::assertSame($expected, $actual);
     }
 
     public function testPercent(): void
@@ -91,8 +93,8 @@ class StrengthLevelTest extends TestCase
             StrengthLevel::STRONG,
             StrengthLevel::VERY_STRONG,
         ];
-        $sorted = StrengthLevel::sorted();
-        self::assertSame($expected, $sorted);
+        $actual = StrengthLevel::sorted();
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -102,13 +104,15 @@ class StrengthLevelTest extends TestCase
     public function testTranslate(string $expected, StrengthLevel $level): void
     {
         $translator = $this->createTranslator();
-        self::assertSame($expected, $level->trans($translator));
+        $actual = $level->trans($translator);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
     public function testValue(StrengthLevel $level, int $expected): void
     {
-        self::assertSame($expected, $level->value);
+        $actual = $level->value;
+        self::assertSame($expected, $actual);
     }
 
     /**

@@ -12,48 +12,48 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Utils\FileUtils;
+use App\Enums\Environment;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Path;
 
 /**
- * Use the modification time of the composer lock file (composer.lock) for the version.
- *
- * For the user images folder, the file modification time is used.
+ * Apply the following strategy for assets:
+ * <ul>
+ * <li>In production mode, use the modification time of the deployment file ('.htdeployment').</li>
+ * <li>In debug and test mode, use the modification time of the composer lock file ('composer.lock').</li>
+ * <li>Use the modification time of the directory for the user images folder ('images/users').</li>
+ * </ul>
  */
 class AssetVersionStrategy extends StaticVersionStrategy
 {
-    private const USER_IMAGES = 'images/users/';
+    private const IMAGES_PATH = 'images/users/';
 
-    private readonly string $publicDir;
+    private readonly string $imagesVersion;
 
-    public function __construct(#[Autowire('%kernel.project_dir%')] string $projectDir)
-    {
-        parent::__construct((string) \filemtime($projectDir . '/composer.lock'));
-        $this->publicDir = FileUtils::normalize($projectDir . '/public');
+    public function __construct(
+        #[Autowire('%kernel.project_dir%')]
+        string $projectDir,
+        #[Autowire('%kernel.environment%')]
+        string $env
+    ) {
+        $production = Environment::from($env)->isProduction();
+        $file = $production ? '.htdeployment' : 'composer.lock';
+        parent::__construct($this->time($projectDir, $file));
+        $this->imagesVersion = $this->time($projectDir, 'public', self::IMAGES_PATH);
     }
 
     public function getVersion(string $path): string
     {
-        $default = parent::getVersion($path);
-        if (\str_starts_with($path, self::USER_IMAGES)) {
-            return $this->getImageVersion($path, $default);
+        if (\str_starts_with($path, self::IMAGES_PATH)) {
+            return $this->imagesVersion;
         }
 
-        return $default;
+        return parent::getVersion($path);
     }
 
-    private function getImageVersion(string $path, string $default): string
+    private function time(string ...$paths): string
     {
-        $file = FileUtils::buildPath($this->publicDir, $path);
-        if (!FileUtils::exists($file)) {
-            return $default;
-        }
-        $version = \filemtime($file);
-        if (!\is_int($version)) {
-            return $default;
-        }
-
-        return (string) $version;
+        return (string) \filemtime(Path::join(...$paths));
     }
 }

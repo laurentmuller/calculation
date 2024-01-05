@@ -176,7 +176,7 @@ abstract class AbstractController extends BaseController
     /**
      * Display a message, if not empty; and redirect to the home page.
      *
-     * If the request is not null and the caller parameter is set, redirect to it.
+     * If the request is not null, and the caller parameter is set, redirect to it.
      */
     public function redirectToHomePage(
         string $message = '',

@@ -20,6 +20,7 @@ use App\Traits\TimestampableTrait;
 use App\Utils\FileUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -54,7 +55,7 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
     #[ORM\Column(options: ['default' => true])]
     private bool $enabled = true;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $expiresAt = null;
 
     #[Assert\Length(max: 100)]
@@ -75,7 +76,7 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
     #[ORM\Column(nullable: true)]
     private ?string $imageName = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $lastLogin = null;
 
     #[Assert\NotBlank]
@@ -88,7 +89,7 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserProperty::class, cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
     private Collection $properties;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $requestedAt = null;
 
     #[Assert\Length(max: 20)]

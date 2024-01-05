@@ -105,7 +105,8 @@ class HtmlBootstrapColorTest extends TestCase
 
     public function testCount(): void
     {
-        self::assertCount(8, HtmlBootstrapColor::cases());
+        $expected = 8;
+        self::assertCount($expected, HtmlBootstrapColor::cases());
     }
 
     public function testDrawColor(): void

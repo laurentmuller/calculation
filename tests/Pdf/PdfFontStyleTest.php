@@ -73,7 +73,9 @@ class PdfFontStyleTest extends TestCase
 
     public function testDefault(): void
     {
-        self::assertSame(PdfFontStyle::REGULAR, PdfFontStyle::getDefault());
+        $expected = PdfFontStyle::REGULAR;
+        $actual = PdfFontStyle::getDefault();
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getFrom')]

@@ -14,6 +14,7 @@ namespace App\Entity;
 
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\SqlFormatter\SqlFormatter;
 use Psr\Log\LogLevel;
@@ -52,7 +53,7 @@ class Log extends AbstractEntity
     #[ORM\Column(nullable: true)]
     private ?array $context = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeInterface $createdAt;
 
     /**
@@ -68,7 +69,7 @@ class Log extends AbstractEntity
     #[ORM\Column(length: 50)]
     private string $level = LogLevel::INFO;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT)]
     private string $message = '';
 
     public function __construct()

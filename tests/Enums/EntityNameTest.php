@@ -218,8 +218,9 @@ class EntityNameTest extends TestCase
 
     public function testCount(): void
     {
-        self::assertCount(10, EntityName::cases());
-        self::assertCount(10, EntityName::sorted());
+        $expected = 10;
+        self::assertCount($expected, EntityName::cases());
+        self::assertCount($expected, EntityName::sorted());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]

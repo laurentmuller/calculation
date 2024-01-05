@@ -168,3 +168,18 @@ html[data-bs-theme=dark] .bootstrap-table .custom-item.table-primary a.text-body
 .dropdown-item.dropdown-child {
     padding-left: calc(2 * var(--bs-dropdown-item-padding-x)) !important;
 }
+
+/* custom view header */
+.custom-view-header {
+    flex: 1 1 auto;
+    font-weight: 700;
+    overflow: hidden;
+}
+
+.custom-view-header a.item-link {
+    display: inline-block;
+    width: 100% !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}

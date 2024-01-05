@@ -15,6 +15,7 @@ namespace App\Entity;
 use App\Repository\CustomerRepository;
 use App\Service\CountryFlagService;
 use App\Utils\DateUtils;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -34,7 +35,7 @@ class Customer extends AbstractEntity
     private ?string $address = null;
 
     #[Assert\Date]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthday = null;
 
     #[Assert\Length(max: self::MAX_STRING_LENGTH)]

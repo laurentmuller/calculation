@@ -20,12 +20,39 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(Environment::class)]
 class EnvironmentTest extends TestCase
 {
+    public static function getIsDevelopment(): array
+    {
+        return [
+            [Environment::DEVELOPMENT, true],
+            [Environment::PRODUCTION, false],
+            [Environment::TEST, false],
+        ];
+    }
+
+    public static function getIsProduction(): array
+    {
+        return [
+            [Environment::DEVELOPMENT, false],
+            [Environment::PRODUCTION, true],
+            [Environment::TEST, false],
+        ];
+    }
+
+    public static function getIsTest(): array
+    {
+        return [
+            [Environment::DEVELOPMENT, false],
+            [Environment::PRODUCTION, false],
+            [Environment::TEST, true],
+        ];
+    }
+
     public static function getLabels(): array
     {
         return [
-            ['environment.dev', Environment::DEVELOPMENT],
-            ['environment.prod', Environment::PRODUCTION],
-            ['environment.test', Environment::TEST],
+            [Environment::DEVELOPMENT, 'environment.dev'],
+            [Environment::PRODUCTION, 'environment.prod'],
+            [Environment::TEST, 'environment.test'],
         ];
     }
 
@@ -40,29 +67,55 @@ class EnvironmentTest extends TestCase
 
     public function testCount(): void
     {
-        self::assertCount(3, Environment::cases());
+        $expected = 3;
+        $actual = Environment::cases();
+        self::assertCount($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getIsDevelopment')]
+    public function testIsDevelopment(Environment $environment, bool $expected): void
+    {
+        $actual = $environment->isDevelopment();
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getIsProduction')]
+    public function testIsProduction(Environment $environment, bool $expected): void
+    {
+        $actual = $environment->isProduction();
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getIsTest')]
+    public function testIsTest(Environment $environment, bool $expected): void
+    {
+        $actual = $environment->isTest();
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
-    public function testLabel(string $expected, Environment $environment): void
+    public function testLabel(Environment $environment, string $expected): void
     {
-        self::assertSame($expected, $environment->getReadable());
+        $actual = $environment->getReadable();
+        self::assertSame($expected, $actual);
     }
 
     /**
      * @throws Exception
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
-    public function testTranslate(string $expected, Environment $environment): void
+    public function testTranslate(Environment $environment, string $expected): void
     {
         $translator = $this->createTranslator();
-        self::assertSame($expected, $environment->trans($translator));
+        $actual = $environment->trans($translator);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
     public function testValue(Environment $environment, string $expected): void
     {
-        self::assertSame($expected, $environment->value);
+        $actual = $environment->value;
+        self::assertSame($expected, $actual);
     }
 
     /**

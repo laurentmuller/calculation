@@ -38,4 +38,34 @@ enum Environment: string implements TranslatableEnumInterface
      * The test environment.
      */
     case TEST = 'test';
+
+    /**
+     * Returns if this enumeration is the development environment.
+     *
+     * @return bool true if development environment
+     */
+    public function isDevelopment(): bool
+    {
+        return self::DEVELOPMENT === $this;
+    }
+
+    /**
+     * Returns if this is enumeration the production environment.
+     *
+     * @return bool true if production environment
+     */
+    public function isProduction(): bool
+    {
+        return self::PRODUCTION === $this;
+    }
+
+    /**
+     * Returns if this enumeration is the test environment.
+     *
+     * @return bool true if test environment
+     */
+    public function isTest(): bool
+    {
+        return self::TEST === $this;
+    }
 }

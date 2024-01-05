@@ -23,7 +23,7 @@ use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\Query;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -69,7 +69,7 @@ class CalculationUpdateService implements ServiceSubscriberInterface
     }
 
     /**
-     * @throws ORMException
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function update(CalculationUpdateQuery $query): CalculationUpdateResult
     {
@@ -78,7 +78,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             return $result;
         }
 
-        /** @psalm-var Calculation[] $calculations */
         $calculations = $this->getCalculations($query);
         if ([] === $calculations) {
             return $result;
@@ -87,10 +86,6 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         foreach ($calculations as $calculation) {
             $oldTotal = $calculation->getOverallTotal();
             if (!$this->calculationService->updateTotal($calculation)) {
-                continue;
-            }
-            $newTotal = $calculation->getOverallTotal();
-            if ($oldTotal === $newTotal) {
                 continue;
             }
             $result->addCalculation($oldTotal, $calculation);
@@ -106,9 +101,13 @@ class CalculationUpdateService implements ServiceSubscriberInterface
         return $result;
     }
 
+    /**
+     * @psalm-return Calculation[]
+     */
     private function getCalculations(CalculationUpdateQuery $query): array
     {
-        return $this->calculationRepository
+        /** @psalm-var Query<int, Calculation> $q */
+        $q = $this->calculationRepository
             ->createQueryBuilder('c')
             ->where('c.state in (:states)')
             ->andWhere('c.date >= :from')
@@ -116,8 +115,9 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             ->setParameter('states', $query->getStates())
             ->setParameter('from', $query->getDateFrom(), Types::DATE_MUTABLE)
             ->setParameter('to', $query->getDateTo(), Types::DATE_MUTABLE)
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
+
+        return $q->getResult();
     }
 
     private function getDate(string $key, \DateTimeInterface $default): \DateTimeInterface

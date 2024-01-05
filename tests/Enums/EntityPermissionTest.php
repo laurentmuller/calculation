@@ -130,12 +130,13 @@ class EntityPermissionTest extends TestCase
 
     public function testCount(): void
     {
+        $expected = 6;
         $permissions = $this->fromAll();
-        $bits = $permissions->getBits();
-        self::assertCount(6, $bits);
+        $actual = $permissions->getBits();
+        self::assertCount($expected, $actual);
 
-        $flags = $permissions->getFlags();
-        self::assertCount(6, $flags);
+        $actual = $permissions->getFlags();
+        self::assertCount($expected, $actual);
     }
 
     public function testDefaultPermission(): void
@@ -163,15 +164,15 @@ class EntityPermissionTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
     public function testLabel(EntityPermission $permission, string $expected): void
     {
-        $label = $permission->getReadable();
-        self::assertSame($expected, $label);
+        $actual = $permission->getReadable();
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getMatchName')]
     public function testMatchName(EntityPermission $permission, string $name, bool $expected = true): void
     {
-        $result = $permission->matchName($name);
-        self::assertSame($expected, $result);
+        $actual = $permission->matchName($name);
+        self::assertSame($expected, $actual);
     }
 
     public function testNonePermission(): void
@@ -193,14 +194,15 @@ class EntityPermissionTest extends TestCase
             EntityPermission::DELETE,
             EntityPermission::EXPORT,
         ];
-        $sorted = EntityPermission::sorted();
-        self::assertSame($expected, $sorted);
+        $actual = EntityPermission::sorted();
+        self::assertSame($expected, $actual);
     }
 
     public function testSum(): void
     {
-        $permissions = $this->fromAll();
-        self::assertSame(63, $permissions->getValue());
+        $expected = 63;
+        $actual = $this->fromAll()->getValue();
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -210,29 +212,29 @@ class EntityPermissionTest extends TestCase
     public function testTranslate(EntityPermission $permission, string $expected): void
     {
         $translator = $this->createTranslator();
-        $label = $permission->trans($translator);
-        self::assertSame($expected, $label);
+        $actual = $permission->trans($translator);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindValue')]
     public function testTryFindValue(string $name, int $expected, int $default = EntityPermission::INVALID_VALUE): void
     {
-        $result = EntityPermission::tryFindValue($name, $default);
-        self::assertSame($expected, $result);
+        $actual = EntityPermission::tryFindValue($name, $default);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTryFromName')]
     public function testTryFromName(mixed $expected, string $value): void
     {
-        $result = EntityPermission::tryFromName($value);
-        self::assertSame($expected, $result);
+        $actual = EntityPermission::tryFromName($value);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getValue')]
     public function testValue(EntityPermission $permission, int $expected): void
     {
-        $value = $permission->value;
-        self::assertSame($expected, $value);
+        $actual = $permission->value;
+        self::assertSame($expected, $actual);
     }
 
     /**

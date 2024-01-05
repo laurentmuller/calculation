@@ -15,14 +15,32 @@ namespace App\Traits;
 use App\Interfaces\RoleInterface;
 
 /**
- * Trait to translate role.
+ * Trait get translated and icon role.
  */
 trait RoleTranslatorTrait
 {
     use TranslatorTrait;
 
     /**
-     * Translate the given role.
+     * Gets the role's icon.
+     *
+     * @psalm-api
+     */
+    public function getRoleIcon(RoleInterface|string $role): string
+    {
+        if ($role instanceof RoleInterface) {
+            $role = $role->getRole();
+        }
+
+        return match ($role) {
+            RoleInterface::ROLE_SUPER_ADMIN => 'fa-solid fa-user-gear',
+            RoleInterface::ROLE_ADMIN => 'fa-solid fa-user-shield',
+            default => 'fa-solid fa-user',
+        };
+    }
+
+    /**
+     * Gets the translated role.
      */
     public function translateRole(RoleInterface|string $role): string
     {

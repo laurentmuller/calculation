@@ -59,21 +59,25 @@ class RightsTraitTest extends TestCase
     {
         $permission = $this->__get($field);
         self::assertNotNull($permission);
-        self::assertSame(0, $permission->getValue());
+        $expected = 0;
+        $actual = $permission->getValue();
+        self::assertSame($expected, $actual);
     }
 
     public function testInvalidAttribute(): void
     {
-        $attribute = $this->getAttribute('UnknownAttribute');
-        self::assertSame(EntityPermission::INVALID_VALUE, $attribute);
+        $expected = EntityPermission::INVALID_VALUE;
+        $actual = $this->getAttribute('UnknownAttribute');
+        self::assertSame($expected, $actual);
     }
 
     public function testPermissionEmpty(): void
     {
         $permission = new FlagBag(EntityPermission::class);
+        $expected = $permission->getValue();
         $this->CalculationRights = $permission;
-        $actual = $this->CalculationRights;
-        self::assertSame($permission->getValue(), $actual->getValue());
+        $actual = $this->CalculationRights->getValue();
+        self::assertSame($expected, $actual);
     }
 
     public function testPermissionShow(): void
@@ -81,8 +85,8 @@ class RightsTraitTest extends TestCase
         $expected = EntityPermission::SHOW->value;
         $permission = new FlagBag(EntityPermission::class, $expected);
         $this->CalculationRights = $permission;
-        $actual = $this->CalculationRights;
-        self::assertSame($expected, $actual->getValue());
+        $actual = $this->CalculationRights->getValue();
+        self::assertSame($expected, $actual);
     }
 
     private function checkAttribute(string $field, string $key): void
@@ -92,7 +96,9 @@ class RightsTraitTest extends TestCase
         $this->$field = $rights;
         /** @psalm-var FlagBag<EntityPermission> $value */
         $value = $this->$field;
-        self::assertSame($rights->getValue(), $value->getValue());
+        $expected = $rights->getValue();
+        $actual = $value->getValue();
+        self::assertSame($expected, $actual);
     }
 
     private function getAttribute(string $key): int

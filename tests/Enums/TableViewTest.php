@@ -39,8 +39,9 @@ class TableViewTest extends TestCase
 
     public function testCount(): void
     {
-        self::assertCount(2, TableView::cases());
-        self::assertCount(2, TableView::sorted());
+        $expected = 2;
+        self::assertCount($expected, TableView::cases());
+        self::assertCount($expected, TableView::sorted());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
@@ -67,8 +68,8 @@ class TableViewTest extends TestCase
             TableView::TABLE,
             TableView::CUSTOM,
         ];
-        $sorted = TableView::sorted();
-        self::assertSame($expected, $sorted);
+        $actual = TableView::sorted();
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -84,7 +85,8 @@ class TableViewTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
     public function testValue(TableView $view, string $expected): void
     {
-        self::assertSame($expected, $view->value);
+        $actual = $view->value;
+        self::assertSame($expected, $actual);
     }
 
     /**

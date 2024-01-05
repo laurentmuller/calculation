@@ -100,14 +100,15 @@ class MessagePositionTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getAngle')]
     public function testAngle(MessagePosition $position, int $expected): void
     {
-        $value = $position->getAngle();
-        self::assertSame($expected, $value);
+        $actual = $position->getAngle();
+        self::assertSame($expected, $actual);
     }
 
     public function testCount(): void
     {
-        self::assertCount(9, MessagePosition::cases());
-        self::assertCount(9, MessagePosition::sorted());
+        $expected = 9;
+        self::assertCount($expected, MessagePosition::cases());
+        self::assertCount($expected, MessagePosition::sorted());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
@@ -119,16 +120,16 @@ class MessagePositionTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getIcon')]
     public function testIcon(MessagePosition $position, string $expected): void
     {
-        $value = $position->getIcon();
-        self::assertSame($expected, $value);
+        $actual = $position->getIcon();
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
     public function testLabel(MessagePosition $position, string $value): void
     {
-        $result = $position->getReadable();
         $expected = 'message_position.' . $value;
-        self::assertSame($expected, $result);
+        $actual = $position->getReadable();
+        self::assertSame($expected, $actual);
     }
 
     public function testSorted(): void
@@ -157,15 +158,15 @@ class MessagePositionTest extends TestCase
     public function testTranslate(MessagePosition $position, string $expected): void
     {
         $translator = $this->createTranslator();
-        $result = $position->trans($translator);
-        self::assertSame($expected, $result);
+        $actual = $position->trans($translator);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
     public function testValue(MessagePosition $position, string $expected): void
     {
-        $value = $position->value;
-        self::assertSame($expected, $value);
+        $actual = $position->value;
+        self::assertSame($expected, $actual);
     }
 
     /**

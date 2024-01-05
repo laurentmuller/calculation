@@ -49,8 +49,9 @@ class EntityActionTest extends TypeTestCase
 
     public function testCount(): void
     {
-        self::assertCount(3, EntityAction::cases());
-        self::assertCount(3, EntityAction::sorted());
+        $expected = 3;
+        self::assertCount($expected, EntityAction::cases());
+        self::assertCount($expected, EntityAction::sorted());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
@@ -62,7 +63,8 @@ class EntityActionTest extends TypeTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
     public function testLabel(string $expected, EntityAction $action): void
     {
-        self::assertSame($expected, $action->getReadable());
+        $actual = $action->getReadable();
+        self::assertSame($expected, $actual);
     }
 
     public function testSorted(): void
@@ -72,8 +74,8 @@ class EntityActionTest extends TypeTestCase
             EntityAction::SHOW,
             EntityAction::NONE,
         ];
-        $sorted = EntityAction::sorted();
-        self::assertSame($expected, $sorted);
+        $actual = EntityAction::sorted();
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -83,13 +85,15 @@ class EntityActionTest extends TypeTestCase
     public function testTranslate(string $expected, EntityAction $action): void
     {
         $translator = $this->createTranslator();
-        self::assertSame($expected, $action->trans($translator));
+        $actual = $action->trans($translator);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
     public function testValue(EntityAction $action, string $expected): void
     {
-        self::assertSame($expected, $action->value);
+        $actual = $action->value;
+        self::assertSame($expected, $actual);
     }
 
     /**

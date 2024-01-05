@@ -16,6 +16,11 @@
 {%- set row_none = user_service.actionNone -%}
 {%- set row_edit = edit_page and user_service.actionEdit -%}
 {%- set row_show = show_page and user_service.actionShow -%}
+{% if not row_none and not row_edit and show_page %}
+    {%- set row_show = true %}
+{% elseif not row_show and not row_none and edit_page %}
+    {%- set row_edit = true -%}
+{% endif %}
 {%- set row_link = not row_none and (edit_page or show_page) -%}
 {%- set is_drop_down = add_page or edit_page or delete_page or show_page or single_page_pdf -%}
 {%- set is_calculations = calculations|length -%}

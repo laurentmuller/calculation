@@ -25,16 +25,29 @@ class RoleTranslatorTraitTest extends TestCase
 
     private ?TranslatorInterface $translator = null;
 
+    public static function getRoleIcons(): array
+    {
+        return [
+            [RoleInterface::ROLE_USER, 'fa-solid fa-user'],
+            [RoleInterface::ROLE_ADMIN, 'fa-solid fa-user-shield'],
+            [RoleInterface::ROLE_SUPER_ADMIN, 'fa-solid fa-user-gear'],
+
+            [new Role(RoleInterface::ROLE_USER), 'fa-solid fa-user'],
+            [new Role(RoleInterface::ROLE_ADMIN), 'fa-solid fa-user-shield'],
+            [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'fa-solid fa-user-gear'],
+        ];
+    }
+
     public static function getTranslateRoles(): array
     {
         return [
-            [RoleInterface::ROLE_USER, 'user'],
-            [RoleInterface::ROLE_ADMIN, 'admin'],
-            [RoleInterface::ROLE_SUPER_ADMIN, 'super_admin'],
+            [RoleInterface::ROLE_USER, 'user.roles.user'],
+            [RoleInterface::ROLE_ADMIN, 'user.roles.admin'],
+            [RoleInterface::ROLE_SUPER_ADMIN, 'user.roles.super_admin'],
 
-            [new Role(RoleInterface::ROLE_USER), 'user'],
-            [new Role(RoleInterface::ROLE_ADMIN), 'admin'],
-            [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'super_admin'],
+            [new Role(RoleInterface::ROLE_USER), 'user.roles.user'],
+            [new Role(RoleInterface::ROLE_ADMIN), 'user.roles.admin'],
+            [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'user.roles.super_admin'],
         ];
     }
 
@@ -47,13 +60,19 @@ class RoleTranslatorTraitTest extends TestCase
         return $this->translator;
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('getRoleIcons')]
+    public function testRoleIcon(RoleInterface|string $role, string $expected): void
+    {
+        $actual = $this->getRoleIcon($role);
+        self::assertSame($actual, $expected);
+    }
+
     /**
      * @param string|RoleInterface $role the role to translate
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTranslateRoles')]
-    public function testTranslateRole(RoleInterface|string $role, string $message): void
+    public function testTranslateRole(RoleInterface|string $role, string $expected): void
     {
-        $expected = "user.roles.$message";
         $this->translator = $this->createTranslator($expected);
         $actual = $this->translateRole($role);
         self::assertSame($actual, $expected);

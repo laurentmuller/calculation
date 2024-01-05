@@ -48,7 +48,8 @@ class FlashTypeTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
     public function testLabel(FlashType $type, string $expected): void
     {
-        self::assertSame($expected, $type->getReadable());
+        $actual = $type->getReadable();
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -58,13 +59,15 @@ class FlashTypeTest extends TestCase
     public function testTranslate(FlashType $type, string $expected): void
     {
         $translator = $this->createTranslator();
-        self::assertSame($expected, $type->trans($translator));
+        $actual = $type->trans($translator);
+        self::assertSame($expected, $actual);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
     public function testValue(FlashType $type, string $expected): void
     {
-        self::assertSame($expected, $type->value);
+        $actual = $type->value;
+        self::assertSame($expected, $actual);
     }
 
     /**

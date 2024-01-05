@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use App\Interfaces\UserInterface;
 use App\Utils\FormatUtils;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,7 +29,7 @@ trait TimestampableTrait
     /**
      * The creation date.
      */
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $createdAt = null;
 
     /**
@@ -41,7 +42,7 @@ trait TimestampableTrait
     /**
      * The updated date.
      */
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
     /**

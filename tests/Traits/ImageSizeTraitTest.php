@@ -32,7 +32,7 @@ class ImageSizeTraitTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getSizes')]
     public function testSize(string $filename, array $expected): void
     {
-        $size = $this->getImageSize($filename);
-        self::assertSame($expected, $size);
+        $actual = $this->getImageSize($filename);
+        self::assertSame($expected, $actual);
     }
 }

@@ -14,15 +14,15 @@
     <div class="col mb-2 px-1">
         <div data-id="{{ id }}" class="{{ class_name }}" style="{{ stateCss(calculation.stateColor) }}">
             <div class="d-flex-no-wrap-center context-menu-skip">
-                <div class="text-truncate fw-bold me-auto">
-                    {% if row_edit %}
+                <div class="text-truncate fw-bold flex-fill">
+                    {% if edit_page or state_page %}
                         {% set edit_route = is_editable ? edit_page : state_page %}
                         {% set edit_title = is_editable ? 'calculation.edit.title_short' : 'calculation.list.state_title' %}
-                        <a href="{{ path(edit_route, params) }}" class="item-link text-body" title="{{ edit_title|trans }}">
+                        <a href="{{ path(edit_route, params) }}" class="item-link text-body w-100 d-block" title="{{ edit_title|trans }}">
                             {{- calculation.id|identifier -}}
                         </a>
-                    {% elseif row_show %}
-                        <a href="{{ path('calculation_show', params) }}" class="item-link text-body" title="{{ 'calculation.show.title'|trans }}">
+                    {% elseif show_page %}
+                        <a href="{{ path('calculation_show', params) }}" class="item-link text-body w-100 d-block" title="{{ 'calculation.show.title'|trans }}">
                             {{- calculation.id|identifier -}}
                         </a>
                     {% else %}

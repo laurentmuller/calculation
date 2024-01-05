@@ -54,7 +54,8 @@ class PdfBorderTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getBorders')]
     public function testBorder(string|int $value, string|int $expected): void
     {
-        $broder = new PdfBorder($value);
-        self::assertSame($expected, $broder->getValue());
+        $border = new PdfBorder($value);
+        $actual = $border->getValue();
+        self::assertSame($expected, $actual);
     }
 }

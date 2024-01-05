@@ -32,6 +32,7 @@ class RoleExtension extends AbstractExtension
     {
         return [
             new TwigFilter('trans_role', $this->translateRole(...)),
+            new TwigFilter('role_icon', $this->getRoleIcon(...)),
         ];
     }
 

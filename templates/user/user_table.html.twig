@@ -63,17 +63,16 @@
 {%- endblock %}
 
 {% block custom_view_header -%}
-%imageName%
 {%- if row_edit -%}
-    <span class="align-top">
-        <a href="{{ path('user_edit', params) }}" class="item-link text-body" title="{{ 'user.edit.title'|trans }}">%username%</a>
-    </span>
+    <a href="{{ path('user_edit', params) }}" class="item-link text-body" title="{{ 'user.edit.title'|trans }}">
+        %imageName%<span class="ms-1 align-top">%username%</span>
+    </a>
 {%- elseif row_show -%}
-    <span class="align-top">
-        <a href="{{ path('user_show', params) }}" class="item-link text-body" title="{{ 'user.show.title'|trans }}">%username%</a>
-    </span>
+    <a href="{{ path('user_show', params) }}" class="item-link text-body" title="{{ 'user.show.title'|trans }}">
+        %imageName%<span class="ms-1 align-top">%username%</span>
+    </a>
 {%- else -%}
-    <span class="align-top">%username%</span>
+    %imageName%<span class="ms-1 align-top">%username%</span>
 {%- endif -%}
 {%- endblock %}
 

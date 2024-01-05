@@ -151,15 +151,6 @@ class UserTable extends AbstractEntityTable
         return (int) $user->getId();
     }
 
-    private function getRoleIcon(string $role): string
-    {
-        return match ($role) {
-            RoleInterface::ROLE_SUPER_ADMIN => 'fa-solid fa-user-gear',
-            RoleInterface::ROLE_ADMIN => 'fa-solid fa-user-shield',
-            default => 'fa-solid fa-user',
-        };
-    }
-
     private function isResettableUsers(): bool
     {
         return $this->getRepository()->isResettableUsers();

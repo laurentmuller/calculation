@@ -20,68 +20,70 @@ class PdfRectangleTest extends TestCase
 {
     public function testBottom(): void
     {
+        $expected = 30.0;
         $r = new PdfRectangle(10, 10, 20, 20);
-        self::assertSame(30.0, $r->bottom());
+        $actual = $r->bottom();
+        self::assertSame($expected, $actual);
     }
 
     public function testContains(): void
     {
-        $r = new PdfRectangle(10, 10, 20, 20);
-        self::assertTrue($r->contains(10, 10));
-        self::assertTrue($r->contains(15, 15));
-        self::assertTrue($r->contains(29.999999, 29.999999));
+        $actual = new PdfRectangle(10, 10, 20, 20);
+        self::assertTrue($actual->contains(10, 10));
+        self::assertTrue($actual->contains(15, 15));
+        self::assertTrue($actual->contains(29.999999, 29.999999));
 
-        self::assertFalse($r->contains(0, 0));
-        self::assertFalse($r->contains(30, 30));
+        self::assertFalse($actual->contains(0, 0));
+        self::assertFalse($actual->contains(30, 30));
     }
 
     public function testIndent(): void
     {
-        $r = new PdfRectangle(10, 10, 20, 20);
-        $r->indent(5);
-        $this->validate($r, 15, 10, 15, 20);
+        $actual = new PdfRectangle(10, 10, 20, 20);
+        $actual->indent(5);
+        self::assertValidBounds($actual, 15, 10, 15, 20);
     }
 
     public function testIndentNegative(): void
     {
-        $r = new PdfRectangle(10, 10, 20, 20);
-        $r->indent(-10);
-        $this->validate($r, 10, 10, 20, 20);
+        $actual = new PdfRectangle(10, 10, 20, 20);
+        $actual->indent(-10);
+        self::assertValidBounds($actual, 10, 10, 20, 20);
     }
 
     public function testIndentZero(): void
     {
-        $r = new PdfRectangle(10, 10, 20, 20);
-        $r->indent(0);
-        $this->validate($r, 10, 10, 20, 20);
+        $actual = new PdfRectangle(10, 10, 20, 20);
+        $actual->indent(0);
+        self::assertValidBounds($actual, 10, 10, 20, 20);
     }
 
     public function testInflate(): void
     {
-        $r = new PdfRectangle(0, 0, 10, 10);
-        $r->inflate(5);
-        $this->validate($r, -5, -5, 20, 20);
+        $actual = new PdfRectangle(0, 0, 10, 10);
+        $actual->inflate(5);
+        self::assertValidBounds($actual, -5, -5, 20, 20);
     }
 
     public function testInflateX(): void
     {
-        $r = new PdfRectangle(0, 0, 10, 10);
-        $r->inflateX(5);
-        $this->validate($r, -5, 0, 20, 10);
+        $actual = new PdfRectangle(0, 0, 10, 10);
+        $actual->inflateX(5);
+        self::assertValidBounds($actual, -5, 0, 20, 10);
     }
 
     public function testInflateXY(): void
     {
-        $r = new PdfRectangle(0, 0, 10, 10);
-        $r->inflateXY(5, 5);
-        $this->validate($r, -5, -5, 20, 20);
+        $actual = new PdfRectangle(0, 0, 10, 10);
+        $actual->inflateXY(5, 5);
+        self::assertValidBounds($actual, -5, -5, 20, 20);
     }
 
     public function testInflateY(): void
     {
-        $r = new PdfRectangle(0, 0, 10, 10);
-        $r->inflateY(5);
-        $this->validate($r, 0, -5, 10, 20);
+        $actual = new PdfRectangle(0, 0, 10, 10);
+        $actual->inflateY(5);
+        self::assertValidBounds($actual, 0, -5, 10, 20);
     }
 
     public function testIntersect(): void
@@ -93,44 +95,62 @@ class PdfRectangleTest extends TestCase
 
     public function testRight(): void
     {
+        $expected = 30.0;
         $r = new PdfRectangle(10, 10, 20, 20);
-        self::assertSame(30.0, $r->right());
+        $actual = $r->right();
+        self::assertSame($expected, $actual);
     }
 
     public function testSetBottom(): void
     {
-        $r = new PdfRectangle(10, 10, 20, 20);
-        $r->setBottom(40);
-        $this->validate($r, 10, 10, 20, 30);
+        $actual = new PdfRectangle(10, 10, 20, 20);
+        $actual->setBottom(40);
+        self::assertValidBounds($actual, 10, 10, 20, 30);
     }
 
     public function testSetRight(): void
     {
-        $r = new PdfRectangle(10, 10, 20, 20);
-        $r->setRight(40);
-        $this->validate($r, 10, 10, 30, 20);
+        $actual = new PdfRectangle(10, 10, 20, 20);
+        $actual->setRight(40);
+        self::assertValidBounds($actual, 10, 10, 30, 20);
     }
 
     public function testSetSize(): void
     {
-        $r = new PdfRectangle(0, 0, 20, 20);
-        $r->setSize(10, 10);
-        $this->validate($r, 0, 0, 10, 10);
+        $actual = new PdfRectangle(0, 0, 20, 20);
+        $actual->setSize(10, 10);
+        self::assertValidBounds($actual, 0, 0, 10, 10);
     }
 
     public function testUnion(): void
     {
         $r1 = new PdfRectangle(0, 0, 20, 20);
         $r2 = new PdfRectangle(10, 10, 20, 20);
-        $r3 = $r1->union($r2);
-        $this->validate($r3, 0, 0, 30, 30);
+        $actual = $r1->union($r2);
+        self::assertValidBounds($actual, 0, 0, 30, 30);
     }
 
-    private function validate(PdfRectangle $r, float $x, float $y, float $w, float $h): void
+    public function testX(): void
     {
-        self::assertSame($x, $r->x());
-        self::assertSame($y, $r->y());
-        self::assertSame($w, $r->width());
-        self::assertSame($h, $r->height());
+        $expected = 30.0;
+        $r = new PdfRectangle(30, 10, 20, 20);
+        $actual = $r->x();
+        self::assertSame($expected, $actual);
+    }
+
+    public function testY(): void
+    {
+        $expected = 30.0;
+        $r = new PdfRectangle(30, 30, 20, 20);
+        $actual = $r->y();
+        self::assertSame($expected, $actual);
+    }
+
+    protected static function assertValidBounds(PdfRectangle $actual, float $x, float $y, float $w, float $h): void
+    {
+        self::assertSame($x, $actual->x());
+        self::assertSame($y, $actual->y());
+        self::assertSame($w, $actual->width());
+        self::assertSame($h, $actual->height());
     }
 }

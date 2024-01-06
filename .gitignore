@@ -21,10 +21,6 @@ symfony.lock
 /resources/data/openweather.sqlite
 ###< application ###
 
-###> phpstorm ###
-/.idea
-###< phpstorm ###
-
 ###> deploy ###
 /env.ini
 /deploy.ini

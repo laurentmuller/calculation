@@ -7,7 +7,8 @@ symfony.lock
 ###< symfony/framework-bundle ###
 
 ###> public ###
-/public/images/users/
+/public/images/users/*
+!/public/images/users/.gitkeep
 /public/vendor/
 ###< public ###
 

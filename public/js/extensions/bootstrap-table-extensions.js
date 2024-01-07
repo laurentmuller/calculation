@@ -4,9 +4,9 @@
  * @typedef {Object} Options - the table options
  * @property {number} id - the selected object identifier.
  * @property {string} searchText - the search text.
- * @property {number} totalRows - the total number of rows.
+ * @property {number} totalRows - the total numbers of rows.
  * @property {number} pageNumber - the current page number.
- * @property {number} totalPages - the total number of pages.
+ * @property {number} totalPages - the total numbers of pages.
  * @property {number} pageSize - the page size.
  * @property {number[]} pageList - the pages list.
  * @property {string} rowClass - the row class.
@@ -44,7 +44,7 @@ function loadingTemplate(message) {
 }
 
 /**
- * jQuery's extension for Bootstrap tables, rows and cells.
+ * JQuery extension for Bootstrap tables, rows and cells.
  */
 (function ($) {
     'use strict';
@@ -398,7 +398,7 @@ function loadingTemplate(message) {
         },
 
         /**
-         * Get the loaded data (rows) of table at the moment that this method is called.
+         * Get the loaded data (rows) of table when this method is called.
          *
          * @return {array} the loaded data.
          */
@@ -650,7 +650,7 @@ function loadingTemplate(message) {
          * Select the given page. Do nothing if the page is out of allowed values.
          *
          * @param {number} page - the page to select.
-         * @param {boolean} [force] - true to load the page, even if it is the page currently displayed
+         * @param {boolean} [force] - true to load the page, even if the page is displayed
          *
          * @return {boolean} true if the page is displayed.
          */

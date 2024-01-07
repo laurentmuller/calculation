@@ -16,6 +16,7 @@ use App\Enums\Environment;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Path;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Apply the following strategy for assets:
@@ -31,16 +32,21 @@ class AssetVersionStrategy extends StaticVersionStrategy
 
     private readonly string $imagesVersion;
 
+    /**
+     * @param string $projectDir the project directory
+     * @param string $env        the running environnement
+     */
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
         #[Autowire('%kernel.environment%')]
-        string $env
+        string $env,
     ) {
         $production = Environment::from($env)->isProduction();
         $file = $production ? '.htdeployment' : 'composer.lock';
-        parent::__construct($this->time($projectDir, $file));
-        $this->imagesVersion = $this->time($projectDir, 'public', self::IMAGES_PATH);
+        $version = $this->getFileTime(Path::join($projectDir, $file), Kernel::VERSION);
+        $this->imagesVersion = $this->getFileTime(Path::join($projectDir, 'public', self::IMAGES_PATH), $version);
+        parent::__construct($version);
     }
 
     public function getVersion(string $path): string
@@ -52,8 +58,8 @@ class AssetVersionStrategy extends StaticVersionStrategy
         return parent::getVersion($path);
     }
 
-    private function time(string ...$paths): string
+    private function getFileTime(string $path, string $default): string
     {
-        return (string) \filemtime(Path::join(...$paths));
+        return \file_exists($path) ? (string) \filemtime($path) : $default;
     }
 }

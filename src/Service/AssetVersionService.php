@@ -23,19 +23,15 @@ use Symfony\Component\HttpKernel\Kernel;
  * <ul>
  * <li>In production mode, use the modification time of the deployment file ('.htdeployment').</li>
  * <li>In debug and test mode, use the modification time of the composer lock file ('composer.lock').</li>
- * <li>Use the modification time of the directory for the user images folder ('images/users').</li>
+ * <li>For user images folder ('images/users'), use the modification time of the directory.</li>
  * </ul>
  */
-class AssetVersionStrategy extends StaticVersionStrategy
+class AssetVersionService extends StaticVersionStrategy
 {
     private const IMAGES_PATH = 'images/users/';
 
     private readonly string $imagesVersion;
 
-    /**
-     * @param string $projectDir the project directory
-     * @param string $env        the running environnement
-     */
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
@@ -44,8 +40,8 @@ class AssetVersionStrategy extends StaticVersionStrategy
     ) {
         $production = Environment::from($env)->isProduction();
         $file = $production ? '.htdeployment' : 'composer.lock';
-        $version = $this->getFileTime(Path::join($projectDir, $file), Kernel::VERSION);
-        $this->imagesVersion = $this->getFileTime(Path::join($projectDir, 'public', self::IMAGES_PATH), $version);
+        $version = $this->getFileTime($this->canonicalize($projectDir, $file), Kernel::VERSION);
+        $this->imagesVersion = $this->getFileTime($this->canonicalize($projectDir, 'public', self::IMAGES_PATH), $version);
         parent::__construct($version);
     }
 
@@ -56,6 +52,11 @@ class AssetVersionStrategy extends StaticVersionStrategy
         }
 
         return parent::getVersion($path);
+    }
+
+    private function canonicalize(string ...$paths): string
+    {
+        return Path::canonicalize(Path::join(...$paths));
     }
 
     private function getFileTime(string $path, string $default): string

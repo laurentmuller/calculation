@@ -302,7 +302,7 @@
 		{
 			"id": "calculationstate",
 			"icon": "flag far",
-			"description": "Repésente le statut d'une calculation.",
+			"description": "Représente le statut d'une calculation.",
 			"fields": [
 				{
 					"name": "code",
@@ -460,7 +460,7 @@
 				},
 				{
 					"name": "channel",
-					"description": "Nom du cannal.",
+					"description": "Nom du canal.",
 					"required": false,
 					"type": "text"
 				},
@@ -636,7 +636,7 @@
 				{
 					"id": "calculationstate.name",
 					"icon": "flag far",
-					"description": "Menu déroulant permattant de filter les calculations d'un statut."
+					"description": "Menu déroulant permettant de filter les calculations d'un statut."
 				},
 				{
 					"id": "help.actions.clear",
@@ -646,17 +646,17 @@
 				{
 					"id": "help.actions.sort",
 					"icon": "sort-amount-down-alt",
-					"description": "Menu déroulant permattant de trier les calculations."
+					"description": "Menu déroulant permettant de trier les calculations."
 				},
 				{
 					"id": "help.actions.toggle",
 					"icon": "table",
-					"description": "Menu déroulant permattant de choisir le mode d'affichage (table, détaillé ou mosaïque)."
+					"description": "Menu déroulant permettant de choisir le mode d'affichage (table, détaillé ou mosaïque)."
 				},
 				{
 					"id": "help.actions.pages",
 					"icon": "sort-down",
-					"description": "Menu déroulant permattant de sélectionner le nombre de lignes affichées par page."
+					"description": "Menu déroulant permettant de sélectionner le nombre de lignes affichées par page."
 				},
 				{
 					"id": "calculation.list.pdf_title",
@@ -781,7 +781,7 @@
 				{
 					"id": "category.name",
 					"icon": "folder far",
-					"description": "Menu déroulant permattant de filter les articles d'une catégorie."
+					"description": "Menu déroulant permettant de filter les articles d'une catégorie."
 				},
 				{
 					"id": "help.actions.clear",
@@ -791,17 +791,17 @@
 				{
 					"id": "help.actions.sort",
 					"icon": "sort-amount-down-alt",
-					"description": "Menu déroulant permattant de trier les articles."
+					"description": "Menu déroulant permettant de trier les articles."
 				},
 				{
 					"id": "help.actions.toggle",
 					"icon": "table",
-					"description": "Menu déroulant permattant de choisir le mode d'affichage (table, détaillé ou mosaïque)."
+					"description": "Menu déroulant permettant de choisir le mode d'affichage (table, détaillé ou mosaïque)."
 				},
 				{
 					"id": "help.actions.pages",
 					"icon": "sort-down",
-					"description": "Menu déroulant permattant de sélectionner le nombre de lignes affichées par page."
+					"description": "Menu déroulant permettant de sélectionner le nombre de lignes affichées par page."
 				},
 				{
 					"id": "product.list.pdf_title",
@@ -1087,7 +1087,7 @@
 			"icon": "keyboard",
 			"description": "Permet de calculer une tâche.",
 			"details": [
-				"L'utilisateur doit sélectionner une <b>tâche</b>, une <b>quantitée</b>",
+				"L'utilisateur doit sélectionner une <b>tâche</b>, une <b>quantité</b>",
 				"et une ou plusieurs <b>opérations</b>.",
 				"Le programme recalcule automatiquement le <b>totale générale</b> à chaque changement."
 			],

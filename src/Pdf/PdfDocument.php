@@ -88,7 +88,6 @@ use App\Utils\StringUtils;
  *      rotation: int,
  *      size: PdfPageSizeType}
  */
-#[\AllowDynamicProperties]
 class PdfDocument extends \FPDF
 {
     use MathTrait;

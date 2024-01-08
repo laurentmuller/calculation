@@ -14,7 +14,11 @@ framework:
 
     # assets
     assets:
-        version_strategy: 'App\Service\AssetVersionStrategy'
+        version_strategy: 'App\Service\AssetVersionService'
+
+    # router
+    router:
+        utf8: true
 
     # errors
     php_errors:

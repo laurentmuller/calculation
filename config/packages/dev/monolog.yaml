@@ -4,16 +4,12 @@ monolog:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.log'
             level: debug
-            channels:
-            - '!event'
+            channels: ['!event']
             formatter: monolog.custom_formatter
         console:
             type: console
             process_psr_3_messages: false
-            channels:
-            - '!event'
-            - '!doctrine'
-            - '!console'
+            channels: ['!event', '!doctrine', '!console']
         deprecation:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.deprecations.log'
@@ -22,15 +18,12 @@ monolog:
             handler: deprecation
             max_level: info
             formatter: monolog.custom_formatter
-            channels:
-            - 'php'
+            channels: ['php']
         #symfony_mailer:
             #type: symfony_mailer
-            #from_email: calculation@bibi.nu
-            #to_email: calculation@bibi.nu
-            #subject: An Error Occurred! %%message%%
+            #from_email: '%env(string:MAILER_EMAIL)%'
+            #to_email: '%env(string:MAILER_EMAIL)%'
+            #subject: Une erreur s’est produite : %%message%%
             #level: debug
             #formatter: monolog.formatter.html
             #content_type: text/html
-            #channels:
-            #- 'app'

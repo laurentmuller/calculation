@@ -97,9 +97,11 @@ class AdminController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
-            $application->setProperties($data);
+            if ($application->setProperties($data)) {
+                return $this->redirectToHomePage('parameters.success', request: $request);
+            }
 
-            return $this->redirectToHomePage('parameters.success', request: $request);
+            return $this->redirectToHomePage();
         }
 
         return $this->render('admin/parameters.html.twig', [

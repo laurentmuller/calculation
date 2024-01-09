@@ -12,8 +12,10 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use Psr\Container\ContainerExceptionInterface;
+
 /**
- * Trait to get service from container.
+ * Trait to get service from the container.
  *
  * @property \Psr\Container\ContainerInterface $container
  */
@@ -26,15 +28,24 @@ trait AwareTrait
      *
      * @return T
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \LogicException if the service can not be found
      */
-    protected function getServiceFromContainer(string $class, string $function): mixed
+    protected function getContainerService(string $function, string $class): mixed
     {
         $id = self::class . '::' . $function;
         if (!$this->container->has($id)) {
-            throw new \LogicException(\sprintf('Unable to find service "%s" from "%s".', $class, $id));
+            throw new \LogicException($this->getErrorMessage($class, $id));
         }
 
-        return $this->container->get($id);
+        try {
+            return $this->container->get($id);
+        } catch (ContainerExceptionInterface $e) {
+            throw new \LogicException($this->getErrorMessage($class, $id), $e->getCode(), $e);
+        }
+    }
+
+    private function getErrorMessage(string $class, string $id): string
+    {
+        return \sprintf('Unable to find service "%s" from "%s".', $class, $id);
     }
 }

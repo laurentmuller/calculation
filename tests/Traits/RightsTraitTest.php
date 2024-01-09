@@ -64,13 +64,6 @@ class RightsTraitTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testInvalidAttribute(): void
-    {
-        $expected = EntityPermission::INVALID_VALUE;
-        $actual = $this->getAttribute('UnknownAttribute');
-        self::assertSame($expected, $actual);
-    }
-
     public function testPermissionEmpty(): void
     {
         $permission = new FlagBag(EntityPermission::class);
@@ -103,8 +96,6 @@ class RightsTraitTest extends TestCase
 
     private function getAttribute(string $key): int
     {
-        $permission = EntityPermission::tryFromName($key);
-
-        return $permission instanceof EntityPermission ? $permission->value : EntityPermission::INVALID_VALUE;
+        return EntityPermission::tryFromName($key)?->value ?? -1;
     }
 }

@@ -34,8 +34,7 @@ trait TranslatorAwareTrait
             return $this->translator;
         }
 
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->translator = $this->getServiceFromContainer(TranslatorInterface::class, __FUNCTION__);
+        return $this->translator = $this->getContainerService(__FUNCTION__, TranslatorInterface::class);
     }
 
     public function setTranslator(TranslatorInterface $translator): static

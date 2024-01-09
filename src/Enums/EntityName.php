@@ -24,8 +24,8 @@ use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumTrait;
 /**
  * The entity name enumeration.
  *
- * @implements EnumSortableInterface<EntityName>
  * @implements EnumConstantsInterface<string>
+ * @implements EnumSortableInterface<EntityName>
  */
 #[ReadableEnum(suffix: '.name')]
 enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface, TranslatableEnumInterface
@@ -94,11 +94,6 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
     case USER = 'EntityUser';
 
     /**
-     * The value returned when entity offset is not found.
-     */
-    final public const INVALID_VALUE = -1;
-
-    /**
      * The entity prefix.
      */
     private const ENTITY_PREFIX = 'Entity';
@@ -164,24 +159,6 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
     }
 
     /**
-     * Find an entity name offset for the given subject.
-     */
-    public static function tryFindOffset(mixed $subject, int $default = self::INVALID_VALUE): int
-    {
-        return self::tryFromMixed($subject)?->offset() ?? $default;
-    }
-
-    /**
-     * Find an entity name value for the given subject.
-     *
-     * @psalm-return ($default is null ? (string|null) : string)
-     */
-    public static function tryFindValue(mixed $subject, string $default = null): ?string
-    {
-        return self::tryFromMixed($subject)?->value ?? $default;
-    }
-
-    /**
      * Find an entity name from the given field name.
      */
     public static function tryFromField(string $field): ?self
@@ -201,13 +178,16 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
     {
         if ($subject instanceof self) {
             return $subject;
-        } elseif (\is_scalar($subject)) {
+        }
+
+        if (\is_scalar($subject)) {
             $name = (string) $subject;
         } elseif (\is_object($subject)) {
             $name = $subject::class;
         } else {
             return null;
         }
+
         $name = StringUtils::unicode($name)
             ->afterLast('\\')
             ->title()

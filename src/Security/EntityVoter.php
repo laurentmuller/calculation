@@ -43,7 +43,10 @@ class EntityVoter extends Voter
         if ($subject instanceof EntityName) {
             $subject = $subject->value;
         }
-        $attributes = \array_map(static fn (mixed $value): mixed => ($value instanceof EntityPermission) ? $value->name : $value, $attributes);
+        $attributes = \array_map(
+            static fn (mixed $value): mixed => ($value instanceof EntityPermission) ? $value->name : $value,
+            $attributes
+        );
 
         return parent::vote($token, $subject, $attributes);
     }
@@ -62,23 +65,25 @@ class EntityVoter extends Voter
         if ($user->isSuperAdmin()) {
             return true;
         }
-        $name = EntityName::tryFindValue($subject);
-        if (null === $name) {
+
+        $entity = EntityName::tryFromMixed($subject);
+        if (!$entity instanceof EntityName) {
             return false;
         }
-        if (EntityName::LOG->matchValue($name)) {
+
+        if (EntityName::LOG === $entity) {
             return $user->isAdmin();
         }
-        $offset = EntityName::tryFindOffset($name);
-        if (EntityName::INVALID_VALUE === $offset) {
+
+        $permission = EntityPermission::tryFromName($attribute);
+        if (!$permission instanceof EntityPermission) {
             return false;
         }
-        $mask = EntityPermission::tryFindValue($attribute);
-        if (EntityPermission::INVALID_VALUE === $mask) {
-            return false;
-        }
+
         $rights = $this->getRights($user);
+        $offset = $entity->offset();
         $value = $rights[$offset];
+        $mask = $permission->value;
 
         return $this->isBitSet($value, $mask);
     }
@@ -100,7 +105,6 @@ class EntityVoter extends Voter
 
     private function getUser(TokenInterface $token): ?User
     {
-        // check user
         $user = $token->getUser();
         if (!$user instanceof User || !$user->isEnabled()) {
             return null;

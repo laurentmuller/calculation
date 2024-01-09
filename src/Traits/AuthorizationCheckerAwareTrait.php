@@ -26,95 +26,98 @@ trait AuthorizationCheckerAwareTrait
 {
     use AwareTrait;
 
-    private ?AuthorizationCheckerInterface $authorizationChecker = null;
+    private ?AuthorizationCheckerInterface $checker = null;
 
-    /** @var bool[] */
+    /** @psalm-var array<string, bool> */
     private array $rights = [];
 
     #[SubscribedService]
-    public function getAuthorizationChecker(): AuthorizationCheckerInterface
+    public function getChecker(): AuthorizationCheckerInterface
     {
-        if ($this->authorizationChecker instanceof AuthorizationCheckerInterface) {
-            return $this->authorizationChecker;
+        if ($this->checker instanceof AuthorizationCheckerInterface) {
+            return $this->checker;
         }
 
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->authorizationChecker = $this->getServiceFromContainer(
-            AuthorizationCheckerInterface::class,
-            __FUNCTION__
-        );
+        return $this->checker = $this->getContainerService(__FUNCTION__, AuthorizationCheckerInterface::class);
     }
 
-    public function setAuthorizationChecker(AuthorizationCheckerInterface $authorizationChecker): static
+    public function setChecker(AuthorizationCheckerInterface $checker): static
     {
-        $this->authorizationChecker = $authorizationChecker;
+        $this->checker = $checker;
 
         return $this;
     }
 
     /**
-     * Returns if the given action for the given subject (entity name) is granted.
+     * Returns if the given action for the given subject is granted.
      */
-    protected function isGranted(string|EntityPermission $action, string|EntityName $subject): bool
+    protected function isGranted(EntityPermission|string $action, EntityName|string $subject): bool
     {
-        $key = \sprintf('%s.%s', $this->asString($action), $this->asString($subject));
+        $key = $this->getGrantedKey($action, $subject);
         if (isset($this->rights[$key])) {
             return $this->rights[$key];
         }
 
-        return $this->rights[$key] = $this->getAuthorizationChecker()->isGranted($action, $subject);
+        return $this->rights[$key] = $this->getChecker()->isGranted($action, $subject);
     }
 
     /**
-     * Returns if the given subject (entity name) can be added.
+     * Returns if the given subject can be added.
      */
-    protected function isGrantedAdd(string $subject): bool
+    protected function isGrantedAdd(EntityName|string $subject): bool
     {
         return $this->isGranted(EntityPermission::ADD, $subject);
     }
 
     /**
-     * Returns if the given subject (entity name) can be deleted.
+     * Returns if the given subject can be deleted.
      */
-    protected function isGrantedDelete(string $subject): bool
+    protected function isGrantedDelete(EntityName|string $subject): bool
     {
         return $this->isGranted(EntityPermission::DELETE, $subject);
     }
 
     /**
-     * Returns if the given subject (entity name) can be edited.
+     * Returns if the given subject can be edited.
      */
-    protected function isGrantedEdit(string $subject): bool
+    protected function isGrantedEdit(EntityName|string $subject): bool
     {
         return $this->isGranted(EntityPermission::EDIT, $subject);
     }
 
     /**
-     * Returns if the given subject (entity name) can be exported.
+     * Returns if the given list od subjects can be exported.
      */
-    protected function isGrantedExport(string $subject): bool
+    protected function isGrantedExport(EntityName|string $subject): bool
     {
         return $this->isGranted(EntityPermission::EXPORT, $subject);
     }
 
     /**
-     * Returns if the given list of subjects (entity name) can be displayed.
+     * Returns if the given list of subjects can be displayed.
      */
-    protected function isGrantedList(string $subject): bool
+    protected function isGrantedList(EntityName|string $subject): bool
     {
         return $this->isGranted(EntityPermission::LIST, $subject);
     }
 
     /**
-     * Returns if the given subject (entity name) can be displayed.
+     * Returns if the given subject can be displayed.
      */
-    protected function isGrantedShow(string $subject): bool
+    protected function isGrantedShow(EntityName|string $subject): bool
     {
         return $this->isGranted(EntityPermission::SHOW, $subject);
     }
 
-    private function asString(string|\UnitEnum $value): string
+    private function getGrantedKey(EntityPermission|string $action, EntityName|string $subject): string
     {
-        return $value instanceof \UnitEnum ? $value->name : $value;
+        if ($action instanceof EntityPermission) {
+            $action = $action->name;
+        }
+        if ($subject instanceof EntityName) {
+            $subject = $subject->name;
+        }
+
+        return \sprintf('%s.%s', $action, $subject);
     }
 }

@@ -77,7 +77,7 @@ interface PropertyServiceInterface
     final public const DEFAULT_MIN_MARGIN = 1.1;
 
     /**
-     * The default number of displayed calculation in the home page (int).
+     * The default numbers of displayed calculation in the home page (int).
      */
     final public const DEFAULT_PANEL_CALCULATION = 12;
 
@@ -152,7 +152,7 @@ interface PropertyServiceInterface
     final public const P_CUSTOMER_ZIP_CITY = 'customer_zip_city';
 
     /**
-     * The property name to use dark theme for the sidebar, the navigation abr and the footer (bool).
+     * The property name to use a dark theme for the sidebar, the navigation abr and the footer (bool).
      */
     final public const P_DARK_NAVIGATION = 'dark_navigation';
 
@@ -262,7 +262,7 @@ interface PropertyServiceInterface
     final public const P_MIN_STRENGTH = 'min_strength';
 
     /**
-     * The property name for the number of displayed calculation in the home page (int).
+     * The property name for the numbers of displayed calculation in the home page (int).
      */
     final public const P_PANEL_CALCULATION = 'panel_calculation';
 
@@ -344,7 +344,7 @@ interface PropertyServiceInterface
     public function getCustomer(): CustomerInformation;
 
     /**
-     * Gets the display mode for table.
+     * Gets the display mode for tables.
      */
     public function getDisplayMode(): TableView;
 
@@ -369,7 +369,7 @@ interface PropertyServiceInterface
     public function getMessageTimeout(): int;
 
     /**
-     * Returns a value indicating number of displayed calculation in the home page.
+     * Returns a value indicating numbers of displayed calculation in the home page.
      */
     public function getPanelCalculation(): int;
 
@@ -439,9 +439,14 @@ interface PropertyServiceInterface
     public function isStatusBar(): bool;
 
     /**
-     * Set the properties.
+     * Sets the properties.
      *
      * @param array<string, mixed> $properties
      */
-    public function setProperties(array $properties): static;
+    public function setProperties(array $properties): bool;
+
+    /**
+     * Sets a single property value.
+     */
+    public function setProperty(string $name, mixed $value): bool;
 }

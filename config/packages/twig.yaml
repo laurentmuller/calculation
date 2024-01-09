@@ -6,8 +6,8 @@ twig:
     globals:
         app_name: '%app_name%'
         app_version: '%app_version%'
-        app_name_version: '%app_name% v%app_version%'
-        app_owner: '%app_owner%'
+        app_name_version: '%app_name_version%'
+        app_owner_name: '%app_owner_name%'
         app_owner_url: '%app_owner_url%'
         app_owner_city: '%app_owner_city%'
         app_description: '%app_description%'

@@ -35,8 +35,7 @@ trait SessionAwareTrait
             return $this->requestStack;
         }
 
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->requestStack = $this->getServiceFromContainer(RequestStack::class, __FUNCTION__);
+        return $this->requestStack = $this->getContainerService(__FUNCTION__, RequestStack::class);
     }
 
     public function setRequestStack(RequestStack $requestStack): static
@@ -226,7 +225,7 @@ trait SessionAwareTrait
     }
 
     /**
-     * Sets session attributes (values).
+     * Set session attributes (values).
      *
      * @param array<string, mixed> $attributes the keys and values to save
      */

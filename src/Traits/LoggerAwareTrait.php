@@ -34,8 +34,7 @@ trait LoggerAwareTrait
             return $this->logger;
         }
 
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->logger = $this->getServiceFromContainer(LoggerInterface::class, __FUNCTION__);
+        return $this->logger = $this->getContainerService(__FUNCTION__, LoggerInterface::class);
     }
 
     public function setLogger(LoggerInterface $logger): static

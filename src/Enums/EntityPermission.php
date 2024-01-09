@@ -14,7 +14,6 @@ namespace App\Enums;
 
 use App\Interfaces\EnumConstantsInterface;
 use App\Interfaces\EnumSortableInterface;
-use App\Utils\StringUtils;
 use Elao\Enum\Attribute\EnumCase;
 use Elao\Enum\Attribute\ReadableEnum;
 use Elao\Enum\Bridge\Symfony\Translation\TranslatableEnumInterface;
@@ -24,8 +23,8 @@ use Elao\Enum\FlagBag;
 /**
  * Entity permission enumeration.
  *
- * @implements EnumSortableInterface<EntityPermission>
  * @implements EnumConstantsInterface<string>
+ * @implements EnumSortableInterface<EntityPermission>
  */
 #[ReadableEnum(prefix: 'rights.')]
 enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterface, TranslatableEnumInterface
@@ -67,11 +66,6 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
      */
     #[EnumCase('show')]
     case SHOW = 1 << 5;
-
-    /**
-     * The value returned when entity permission value is not found.
-     */
-    final public const INVALID_VALUE = -1;
 
     /**
      * Gets this enumeration as constants.
@@ -121,14 +115,6 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
     }
 
     /**
-     * Returns if the given name is equal to this name, ignoring case consideration.
-     */
-    public function matchName(string $name): bool
-    {
-        return StringUtils::equalIgnoreCase($name, $this->name);
-    }
-
-    /**
      * @return EntityPermission[]
      */
     public static function sorted(): array
@@ -144,26 +130,21 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
     }
 
     /**
-     * Find an entity permission value from the given name, ignoring case consideration.
-     */
-    public static function tryFindValue(string $name, int $default = self::INVALID_VALUE): int
-    {
-        return self::tryFromName($name)?->value ?: $default;
-    }
-
-    /**
-     * Find an entity permission from the given name, ignoring case consideration.
-     *
-     * @see EntityPermission::matchName()
+     * Find an entity permission for the given name, ignoring case consideration.
      */
     public static function tryFromName(string $name): ?self
     {
         foreach (self::cases() as $permission) {
-            if ($permission->matchName($name)) {
+            if ($permission->match($name)) {
                 return $permission;
             }
         }
 
         return null;
+    }
+
+    private function match(string $name): bool
+    {
+        return 0 === \strcasecmp($name, $this->name);
     }
 }

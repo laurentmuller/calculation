@@ -30,6 +30,7 @@ use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
 use App\Word\AbstractWordDocument;
 use App\Word\WordDocument;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as BaseController;
 use Symfony\Component\Form\FormInterface;
@@ -72,6 +73,8 @@ abstract class AbstractController extends BaseController
 
     /**
      * Gets the application service.
+     *
+     * @throws \LogicException if the service can not be found
      */
     public function getApplication(): ApplicationService
     {
@@ -83,10 +86,7 @@ abstract class AbstractController extends BaseController
      */
     public function getApplicationName(): string
     {
-        $name = $this->getParameterString('app_name');
-        $version = $this->getParameterString('app_version');
-
-        return \sprintf('%s v%s', $name, $version);
+        return $this->getParameterString('app_name_version');
     }
 
     /**
@@ -105,14 +105,22 @@ abstract class AbstractController extends BaseController
         return $this->getApplication()->getMinMargin();
     }
 
+    /**
+     * Gets the request stack.
+     *
+     * @throws \LogicException if the service can not be found
+     */
     public function getRequestStack(): RequestStack
     {
         if ($this->requestStack instanceof RequestStack) {
             return $this->requestStack;
         }
 
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->requestStack = $this->container->get('request_stack');
+        try {
+            return $this->requestStack = $this->container->get('request_stack');
+        } catch (ContainerExceptionInterface $e) {
+            throw new \LogicException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     public static function getSubscribedServices(): array
@@ -126,6 +134,8 @@ abstract class AbstractController extends BaseController
 
     /**
      * Gets the translator.
+     *
+     * @throws \LogicException if the service can not be found
      */
     public function getTranslator(): TranslatorInterface
     {
@@ -133,12 +143,17 @@ abstract class AbstractController extends BaseController
             return $this->translator;
         }
 
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->translator = $this->container->get(TranslatorInterface::class);
+        try {
+            return $this->translator = $this->container->get(TranslatorInterface::class);
+        } catch (ContainerExceptionInterface $e) {
+            throw new \LogicException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
      * Gets the URL generator service.
+     *
+     * @throws \LogicException if the service can not be found
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
@@ -146,8 +161,11 @@ abstract class AbstractController extends BaseController
             return $this->generatorService;
         }
 
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->generatorService = $this->container->get(UrlGeneratorService::class);
+        try {
+            return $this->generatorService = $this->container->get(UrlGeneratorService::class);
+        } catch (ContainerExceptionInterface $e) {
+            throw new \LogicException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
@@ -162,6 +180,8 @@ abstract class AbstractController extends BaseController
 
     /**
      * Gets the user service.
+     *
+     * @throws \LogicException if the service can not be found
      */
     public function getUserService(): UserService
     {
@@ -169,8 +189,11 @@ abstract class AbstractController extends BaseController
             return $this->userService;
         }
 
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->userService = $this->container->get(UserService::class);
+        try {
+            return $this->userService = $this->container->get(UserService::class);
+        } catch (ContainerExceptionInterface $e) {
+            throw new \LogicException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
@@ -182,12 +205,10 @@ abstract class AbstractController extends BaseController
         string $message = '',
         array $parameters = [],
         FlashType $type = FlashType::SUCCESS,
-        string $domain = null,
-        string $locale = null,
         Request $request = null
     ): RedirectResponse {
         if ('' !== $message) {
-            $message = $this->trans($message, $parameters, $domain, $locale);
+            $message = $this->trans($message, $parameters);
             $this->addFlashMessage($type, $message);
         }
         if ($request instanceof Request) {

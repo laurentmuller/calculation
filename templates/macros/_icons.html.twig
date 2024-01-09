@@ -132,7 +132,7 @@
 {%- endmacro %}
 
 {% macro copyright_link(class=null) -%}
-{%- set parameters = {'%year%': 'now'|date('Y'), '%owner%': app_owner} -%}
+{%- set parameters = {'%year%': 'now'|date('Y'), '%owner%': app_owner_name} -%}
 {{- _self.linkExternal(app_owner_url, 'footer.copyright', class, null, 'footer.copyright_title', null, parameters) -}}
 {%- endmacro %}
 

@@ -176,7 +176,7 @@ class LogController extends AbstractController
         string $message = 'log.list.empty',
         FlashType $type = FlashType::INFO
     ): RedirectResponse {
-        return $this->redirectToHomePage($message, [], $type);
+        return $this->redirectToHomePage($message, type: $type);
     }
 
     private function getLogFile(LogService $service): ?LogFile

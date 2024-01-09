@@ -112,9 +112,9 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
      *
      * @return array<string, mixed>
      */
-    public function getProperties(): array
+    public function getProperties(bool $updateAdapter = true): array
     {
-        return $this->loadProperties();
+        return $this->loadProperties($updateAdapter);
     }
 
     public function isDarkNavigation(): bool
@@ -173,19 +173,21 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
     }
 
     /**
-     * @param array<string, mixed> $properties
+     * @param array<string, mixed> $properties the properties to set
+     *
+     * @return bool true if one or more properties have changed
      */
-    public function setProperties(array $properties): static
+    public function setProperties(array $properties): bool
     {
         if ([] === $properties) {
-            return $this;
+            return false;
         }
-        if (!$this->isPropertiesChanged($properties, new UserProperty())) {
-            return $this;
+        if (!$this->isPropertiesChanged($properties)) {
+            return false;
         }
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
-            return $this;
+            return false;
         }
 
         $defaultValues = $this->service->getProperties();
@@ -197,7 +199,7 @@ class UserService implements PropertyServiceInterface, ServiceSubscriberInterfac
         $this->repository->flush();
         $this->updateAdapter();
 
-        return $this;
+        return true;
     }
 
     protected function updateAdapter(): void

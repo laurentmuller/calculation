@@ -152,7 +152,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * Update the number of displayed calculations.
+     * Update the numbers of displayed calculations.
      *
      * @psalm-api
      */
@@ -246,6 +246,6 @@ class IndexController extends AbstractController
 
     private function sendJsonMessage(string $id): JsonResponse
     {
-        return new JsonResponse($this->trans($id));
+        return $this->json($this->trans($id));
     }
 }

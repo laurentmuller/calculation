@@ -14,8 +14,6 @@ namespace App\Tests\Security;
 
 use App\Entity\Calculation;
 use App\Entity\User;
-use App\Enums\EntityName;
-use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Security\EntityVoter;
 use App\Service\ApplicationService;
@@ -87,27 +85,6 @@ class EntityVoterTest extends TestCase
         $subject = Calculation::class;
         $expected = VoterInterface::ACCESS_DENIED;
         $this->assertVote($user, $subject, $attribute, $expected);
-    }
-
-    public function testEntities(): void
-    {
-        $entities = \array_values(EntityName::constants());
-        foreach ($entities as $index => $entity) {
-            self::assertNotNull($this->voter);
-            $actual = EntityName::tryFindOffset($entity);
-            self::assertSame($index, $actual);
-        }
-    }
-
-    public function testMaskAttributes(): void
-    {
-        $keys = \array_values(EntityPermission::constants());
-        foreach ($keys as $index => $key) {
-            $expected = 2 ** $index;
-            self::assertNotNull($this->voter);
-            $actual = EntityPermission::tryFindValue($key);
-            self::assertSame($expected, $actual);
-        }
     }
 
     public function testSuperAdmin(): void

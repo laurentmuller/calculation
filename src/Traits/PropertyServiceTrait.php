@@ -105,12 +105,14 @@ trait PropertyServiceTrait
      *
      * @param array<string, mixed> $properties the properties to set
      */
-    abstract public function setProperties(array $properties): static;
+    abstract public function setProperties(array $properties): bool;
 
     /**
      * Sets a single property value.
+     *
+     * @return bool true if the property has changed
      */
-    public function setProperty(string $name, mixed $value): self
+    public function setProperty(string $name, mixed $value): bool
     {
         return $this->setProperties([$name => $value]);
     }
@@ -249,20 +251,16 @@ trait PropertyServiceTrait
     }
 
     /**
-     * @psalm-template TProperty of AbstractProperty
-     *
      * @param array<string, mixed> $properties
-     *
-     * @psalm-param TProperty $property
      */
-    protected function isPropertiesChanged(array $properties, AbstractProperty $property): bool
+    protected function isPropertiesChanged(array $properties): bool
     {
+        $existing = $this->getProperties(false);
         /** @psalm-var mixed $value */
         foreach ($properties as $key => $value) {
-            /** @psalm-var string|null $oldValue */
-            $oldValue = $this->getCacheValue($key);
-            $newValue = $property->setValue($value)->getString();
-            if ($newValue !== $oldValue) {
+            /** @psalm-var mixed $oldValue */
+            $oldValue = $existing[$key] ?? null;
+            if ($value !== $oldValue) {
                 return true;
             }
         }
@@ -275,9 +273,11 @@ trait PropertyServiceTrait
      *
      * @return array<string, mixed>
      */
-    protected function loadProperties(): array
+    protected function loadProperties(bool $updateAdapter = true): array
     {
-        $this->updateAdapter();
+        if ($updateAdapter) {
+            $this->updateAdapter();
+        }
 
         return [
             // display and edit entities
@@ -298,7 +298,7 @@ trait PropertyServiceTrait
             self::P_PANEL_CATALOG => $this->isPanelCatalog(),
             self::P_STATUS_BAR => $this->isStatusBar(),
             self::P_DARK_NAVIGATION => $this->isDarkNavigation(),
-            // document options
+            // document's options
             self::P_QR_CODE => $this->isQrCode(),
             self::P_PRINT_ADDRESS => $this->isPrintAddress(),
         ];

@@ -211,7 +211,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
             self::P_PANEL_MONTH => self::DEFAULT_TRUE,
             self::P_STATUS_BAR => self::DEFAULT_TRUE,
             self::P_DARK_NAVIGATION => self::DEFAULT_TRUE,
-            // document options
+            // document's options
             self::P_QR_CODE => self::DEFAULT_QR_CODE,
             self::P_PRINT_ADDRESS => self::DEFAULT_PRINT_ADDRESS,
             // security
@@ -317,10 +317,10 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      *
      * @return array<string, mixed>
      */
-    public function getProperties(): array
+    public function getProperties(bool $updateAdapter = true): array
     {
         $properties = \array_merge(
-            $this->loadProperties(),
+            $this->loadProperties($updateAdapter),
             [
                 // customer
                 self::P_CUSTOMER_NAME => $this->getCustomerName(),
@@ -389,7 +389,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
-     * Gets a value indicating if the default product (if any)  must be edited
+     * Gets a value indicating if the default product (if any) must be edited
      * when a new calculation is created.
      */
     public function isDefaultEdit(): bool
@@ -487,7 +487,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     /**
      * Set the date of the last archive calculations.
      */
-    public function setLastArchiveCalculations(\DateTimeInterface $date = new \DateTime()): self
+    public function setLastArchiveCalculations(\DateTimeInterface $date = new \DateTime()): bool
     {
         return $this->setProperty(PropertyServiceInterface::P_DATE_CALCULATION, $date);
     }
@@ -495,7 +495,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     /**
      * Set the date of the last update calculations.
      */
-    public function setLastUpdateCalculations(\DateTimeInterface $date = new \DateTime()): self
+    public function setLastUpdateCalculations(\DateTimeInterface $date = new \DateTime()): bool
     {
         return $this->setProperty(PropertyServiceInterface::P_UPDATE_CALCULATION, $date);
     }
@@ -503,35 +503,37 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     /**
      * Set the date of the last update of product prices.
      */
-    public function setLastUpdateProducts(\DateTimeInterface $date = new \DateTime()): self
+    public function setLastUpdateProducts(\DateTimeInterface $date = new \DateTime()): bool
     {
         return $this->setProperty(PropertyServiceInterface::P_DATE_PRODUCT, $date);
     }
 
     /**
-     * @param array<string, mixed> $properties
+     * @param array<string, mixed> $properties the properties to set
+     *
+     * @return bool true if one or more properties have changed
      */
-    public function setProperties(array $properties): static
+    public function setProperties(array $properties): bool
     {
         if ([] === $properties) {
-            return $this;
+            return false;
         }
-        if (!$this->isPropertiesChanged($properties, new Property())) {
-            return $this;
+        if (!$this->isPropertiesChanged($properties)) {
+            return false;
         }
 
-        $repository = $this->getPropertyRepository();
         $defaultValues = $this->getDefaultValues();
+        $repository = $this->getPropertyRepository();
         $existingProperties = $this->getExistingProperties();
 
         /** @psalm-var mixed $value */
         foreach ($properties as $key => $value) {
-            $this->saveProperty($repository, $key, $value, $defaultValues, $existingProperties);
+            $this->saveProperty($key, $value, $defaultValues, $existingProperties, $repository);
         }
         $this->manager->flush();
         $this->updateAdapter();
 
-        return $this;
+        return true;
     }
 
     /**
@@ -560,7 +562,8 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
 
     protected function updateAdapter(): void
     {
-        $this->saveProperties($this->getPropertyRepository()->findAll());
+        $properties = $this->getPropertyRepository()->findAll();
+        $this->saveProperties($properties);
     }
 
     /**
@@ -612,11 +615,11 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
      * @psalm-param array<string, Property> $existingProperties
      */
     private function saveProperty(
-        PropertyRepository $repository,
         string $name,
         mixed $value,
         array $defaultValues,
-        array $existingProperties
+        array $existingProperties,
+        PropertyRepository $repository
     ): void {
         if ($this->isDefaultValue($defaultValues, $name, $value)) {
             if (isset($existingProperties[$name])) {

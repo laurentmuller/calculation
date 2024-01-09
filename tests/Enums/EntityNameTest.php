@@ -88,35 +88,6 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    public static function getTryFindOffset(): array
-    {
-        return [
-            [EntityName::CALCULATION, 0],
-            [EntityName::CALCULATION_STATE, 1],
-            [EntityName::CATEGORY, 2],
-            [EntityName::CUSTOMER, 3],
-            [EntityName::GLOBAL_MARGIN, 4],
-            [EntityName::GROUP, 5],
-            [EntityName::LOG, 6],
-            [EntityName::PRODUCT, 7],
-            [EntityName::TASK, 8],
-            [EntityName::USER, 9],
-
-            ['Calculation', 0],
-            ['EntityCalculation', 0],
-            [Calculation::class, 0],
-        ];
-    }
-
-    public static function getTryFindValue(): array
-    {
-        return [
-            ['Calculation', 'EntityCalculation'],
-            [Calculation::class, 'EntityCalculation'],
-            [null, 'EntityCalculation', 'EntityCalculation'],
-        ];
-    }
-
     public static function getTryFromField(): array
     {
         return [
@@ -277,20 +248,6 @@ class EntityNameTest extends TestCase
     {
         $translator = $this->createTranslator();
         $actual = $entity->trans($translator);
-        self::assertSame($expected, $actual);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindOffset')]
-    public function testTryFindOffset(mixed $e, int $expected): void
-    {
-        $actual = EntityName::tryFindOffset($e);
-        self::assertSame($expected, $actual);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindValue')]
-    public function testTryFindValue(mixed $subject, ?string $expected, string $default = null): void
-    {
-        $actual = EntityName::tryFindValue($subject, $default);
         self::assertSame($expected, $actual);
     }
 

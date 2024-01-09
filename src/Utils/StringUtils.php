@@ -98,11 +98,11 @@ final class StringUtils
      *
      * @psalm-return ($assoc is true ? array : \stdClass)
      */
-    public static function decodeJson(string $value, bool $assoc = true): array|\stdClass
+    public static function decodeJson(string $value, bool $assoc = true, int $flags = 0): array|\stdClass
     {
         try {
             /** @psalm-var array|\stdClass $content */
-            $content = \json_decode(json: $value, associative: $assoc, flags: \JSON_THROW_ON_ERROR);
+            $content = \json_decode(json: $value, associative: $assoc, flags: $flags | \JSON_THROW_ON_ERROR);
 
             return $content;
         } catch (\JsonException $e) {

@@ -21,8 +21,8 @@ monolog:
             channels: ['php']
         #symfony_mailer:
             #type: symfony_mailer
-            #from_email: '%env(string:MAILER_EMAIL)%'
-            #to_email: '%env(string:MAILER_EMAIL)%'
+            #from_email: '%mailer_user_email%'
+            #to_email: '%mailer_user_email%'
             #subject: Une erreur s’est produite : %%message%%
             #level: debug
             #formatter: monolog.formatter.html

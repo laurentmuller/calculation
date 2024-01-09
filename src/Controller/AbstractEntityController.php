@@ -70,12 +70,12 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function checkPermission(EntityPermission ...$permissions): void
     {
-        $subject = EntityName::tryFindValue($this->className);
-        if (null === $subject) {
+        $entity = EntityName::tryFromMixed($this->className);
+        if (!$entity instanceof EntityName) {
             return;
         }
         foreach ($permissions as $permission) {
-            $this->denyAccessUnlessGranted($permission, $subject);
+            $this->denyAccessUnlessGranted($permission, $entity);
         }
     }
 

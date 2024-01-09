@@ -30,7 +30,7 @@ use Doctrine\ORM\QueryBuilder;
 abstract class AbstractRepository extends ServiceEntityRepository
 {
     /**
-     * The default entity alias used to create query builder (value = 'e') .
+     * The default entity alias used to create query builder (value = 'e').
      */
     final public const DEFAULT_ALIAS = 'e';
 

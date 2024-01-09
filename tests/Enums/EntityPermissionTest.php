@@ -36,39 +36,6 @@ class EntityPermissionTest extends TestCase
         ];
     }
 
-    public static function getMatchName(): array
-    {
-        return [
-            [EntityPermission::ADD, 'add'],
-            [EntityPermission::ADD, 'AdD'],
-            [EntityPermission::ADD, 'Add'],
-            [EntityPermission::ADD, 'ADD'],
-            [EntityPermission::DELETE, 'DELETE'],
-            [EntityPermission::EDIT, 'EDIT'],
-            [EntityPermission::EXPORT, 'EXPORT'],
-            [EntityPermission::LIST, 'LIST'],
-            [EntityPermission::SHOW, 'SHOW'],
-
-            [EntityPermission::ADD, '', false],
-            [EntityPermission::ADD, 'FAKE', false],
-        ];
-    }
-
-    public static function getTryFindValue(): array
-    {
-        return [
-            ['add', 1],
-            ['delete', 2],
-            ['edit', 4],
-            ['export', 8],
-            ['list', 16],
-            ['show', 32],
-
-            ['fake', -1],
-            ['fake', 1, 1],
-        ];
-    }
-
     public static function getTryFromName(): array
     {
         return [
@@ -168,13 +135,6 @@ class EntityPermissionTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getMatchName')]
-    public function testMatchName(EntityPermission $permission, string $name, bool $expected = true): void
-    {
-        $actual = $permission->matchName($name);
-        self::assertSame($expected, $actual);
-    }
-
     public function testNonePermission(): void
     {
         $permission = EntityPermission::getNonePermission();
@@ -213,13 +173,6 @@ class EntityPermissionTest extends TestCase
     {
         $translator = $this->createTranslator();
         $actual = $permission->trans($translator);
-        self::assertSame($expected, $actual);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFindValue')]
-    public function testTryFindValue(string $name, int $expected, int $default = EntityPermission::INVALID_VALUE): void
-    {
-        $actual = EntityPermission::tryFindValue($name, $default);
         self::assertSame($expected, $actual);
     }
 

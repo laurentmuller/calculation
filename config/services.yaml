@@ -5,20 +5,21 @@ parameters:
     locale:             fr_CH
     app_name:           Calculation
     app_version:        3.0.0
-    app_owner:          bibi.nu
+    app_owner_name:     bibi.nu
     app_owner_url:      https://www.bibi.nu
     app_owner_city:     Montévraz
     app_description:    Programme de calcul basé sur l'environnement de développement Symfony 7.x.
+    app_name_version:  '%app_name% v%app_version%'
 
     app_secret:         '%env(string:APP_SECRET)%'
     app_mode:           '%env(string:APP_MODE)%'
 
     # mailer
     mailer_user_name: '%app_name%'
-    mailer_user_email: '%env(string:MAILER_EMAIL)%'
+    mailer_user_email: 'calculation@bibi.nu'
 
     # cookies
-    cookie_path: '%env(string:COOKIE_PATH)%'
+    cookie_path: '%env(string:string:COOKIE_PATH)%'
 
     # keys
     akismet_key: '%env(string:AKISMET_KEY)%'

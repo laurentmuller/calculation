@@ -25,6 +25,7 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 trait CacheAwareTrait
 {
     use AwareTrait;
+
     /**
      * The cache.
      */
@@ -77,8 +78,7 @@ trait CacheAwareTrait
             return $this->cacheItemPool;
         }
 
-        /* @noinspection PhpUnhandledExceptionInspection */
-        return $this->cacheItemPool = $this->getServiceFromContainer(CacheItemPoolInterface::class, __FUNCTION__);
+        return $this->cacheItemPool = $this->getContainerService(__FUNCTION__, CacheItemPoolInterface::class);
     }
 
     /**

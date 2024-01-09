@@ -6,4 +6,4 @@ framework:
             medium: ['email']
             low: ['email']
         admin_recipients:
-            - { email: '%env(MAILER_EMAIL)%' }
+            - { email: '%mailer_user_email%' }

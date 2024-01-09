@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Controller to display user's preferences.
+ * Controller to edit user preferences.
  */
 #[AsController]
 #[Route(path: '/user')]
@@ -42,9 +42,9 @@ class UserParametersController extends AbstractController
         if ($this->handleRequestForm($request, $form)) {
             /** @psalm-var array<string, mixed> $data */
             $data = $form->getData();
-            $userService->setProperties($data);
-            $this->successTrans('user.parameters.success');
-
+            if ($userService->setProperties($data)) {
+                $this->successTrans('user.parameters.success');
+            }
             $response = $this->getUrlGenerator()->redirect($request);
             if (isset($data[PropertyServiceInterface::P_DISPLAY_MODE])) {
                 /** @psalm-var TableView $display */

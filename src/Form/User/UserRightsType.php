@@ -35,20 +35,6 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
         $resolver->setDefault('data_class', User::class);
     }
 
-    /**
-     * Translate the enabled state.
-     *
-     * @param string $enabled the enabled state
-     *
-     * @return string the translated enabled state
-     */
-    public function translateEnabled(string $enabled): string
-    {
-        $enabled = \filter_var($enabled, \FILTER_VALIDATE_BOOLEAN);
-
-        return $this->trans($enabled ? 'common.value_enabled' : 'common.value_disabled');
-    }
-
     protected function addFormFields(FormHelper $helper): void
     {
         parent::addFormFields($helper);
@@ -68,5 +54,12 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
     protected function getLabelPrefix(): ?string
     {
         return 'user.fields.';
+    }
+
+    private function translateEnabled(string $enabled): string
+    {
+        $enabled = \filter_var($enabled, \FILTER_VALIDATE_BOOLEAN);
+
+        return $this->trans($enabled ? 'common.value_enabled' : 'common.value_disabled');
     }
 }

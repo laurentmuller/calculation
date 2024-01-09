@@ -66,24 +66,19 @@ class EntityVoter extends Voter
             return true;
         }
 
+        $permission = EntityPermission::tryFromName($attribute);
+        if (!$permission instanceof EntityPermission) {
+            return false;
+        }
         $entity = EntityName::tryFromMixed($subject);
         if (!$entity instanceof EntityName) {
             return false;
         }
 
-        if (EntityName::LOG === $entity) {
-            return $user->isAdmin();
-        }
-
-        $permission = EntityPermission::tryFromName($attribute);
-        if (!$permission instanceof EntityPermission) {
-            return false;
-        }
-
         $rights = $this->getRights($user);
         $offset = $entity->offset();
-        $value = $rights[$offset];
         $mask = $permission->value;
+        $value = $rights[$offset];
 
         return $this->isBitSet($value, $mask);
     }

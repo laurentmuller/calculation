@@ -83,7 +83,7 @@ class StateChart extends AbstractHighchart
 
     private function getClickExpression(): Expr
     {
-        return $this->createExpression('function() {location.href = this.url;}');
+        return self::createExpression('function() {location.href = this.url;}');
     }
 
     private function getMarginColor(float $value): string

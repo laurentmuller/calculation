@@ -33,25 +33,6 @@ class RightsType extends AbstractHelperType
     }
 
     /**
-     * Handles the preset data event.
-     */
-    public function onPreSetData(PreSetDataEvent $event): void
-    {
-        /** @psalm-var mixed $data */
-        $data = $event->getData();
-        $form = $event->getForm();
-        if (!$this->service->hasRole($data, RoleInterface::ROLE_SUPER_ADMIN)) {
-            $form->remove(EntityName::LOG->getRightsField());
-        }
-        if (!$this->service->hasRole($data, RoleInterface::ROLE_ADMIN)) {
-            $form->remove(EntityName::USER->getRightsField());
-        }
-        if (!$this->debug) {
-            $form->remove(EntityName::CUSTOMER->getRightsField());
-        }
-    }
-
-    /**
      * Add fields to the given helper.
      */
     protected function addFormFields(FormHelper $helper): void
@@ -68,5 +49,19 @@ class RightsType extends AbstractHelperType
         $helper->field($entity->getRightsField())
             ->label($entity)
             ->add(AttributeRightType::class);
+    }
+
+    private function onPreSetData(PreSetDataEvent $event): void
+    {
+        /** @psalm-var mixed $data */
+        $data = $event->getData();
+        $form = $event->getForm();
+        if (!$this->service->hasRole($data, RoleInterface::ROLE_ADMIN)) {
+            $form->remove(EntityName::LOG->getRightsField());
+            $form->remove(EntityName::USER->getRightsField());
+        }
+        if (!$this->debug) {
+            $form->remove(EntityName::CUSTOMER->getRightsField());
+        }
     }
 }

@@ -5,8 +5,8 @@
 {%- set title = 'category.show.title' -%}
 {%- set params = route_params(app.request, item) %}
 {# actions #}
-{%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('category_edit', params) : null -%}
-{%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('category_delete', params) : null -%}
+{%- set edit_path = is_granted(PERMISSION_EDIT, item) ? path('category_edit', params) : null -%}
+{%- set delete_path = is_granted(PERMISSION_DELETE, item) ? path('category_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, item, 'category_table') -%}
 {# properties #}
 {% block property_body %}

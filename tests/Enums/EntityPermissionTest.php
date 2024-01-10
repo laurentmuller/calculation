@@ -90,7 +90,7 @@ class EntityPermissionTest extends TestCase
         self::assertSameSize($cases, $constants);
 
         foreach ($constants as $key => $value) {
-            self::assertStringStartsWith('ATTRIBUTE_', $key);
+            self::assertStringStartsWith('PERMISSION_', $key);
             self::assertNotNull(EntityPermission::tryFromName($value));
         }
     }

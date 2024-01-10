@@ -4,8 +4,8 @@
 {%- set title = 'customer.show.title' -%}
 {%- set params = route_params(app.request, item) %}
 {# actions #}
-{%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('customer_edit', params) : null -%}
-{%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('customer_delete', params) : null -%}
+{%- set edit_path = is_granted(PERMISSION_EDIT, item) ? path('customer_edit', params) : null -%}
+{%- set delete_path = is_granted(PERMISSION_DELETE, item) ? path('customer_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, item, 'customer_table') -%}
 {# properties #}
 {% block property_body %}

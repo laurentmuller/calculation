@@ -6,8 +6,8 @@
 {%- set params = route_params(app.request, item) -%}
 {%- set has_margins = item.hasMargins -%}
 {# actions #}
-{%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('group_edit', params) : null -%}
-{%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('group_delete', params) : null -%}
+{%- set edit_path = is_granted(PERMISSION_EDIT, item) ? path('group_edit', params) : null -%}
+{%- set delete_path = is_granted(PERMISSION_DELETE, item) ? path('group_delete', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, item, 'group_table') -%}
 {# properties #}
 {% block property_body %}

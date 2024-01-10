@@ -4,14 +4,14 @@
 {%- set selection = app.request.get('id', 0) -%}
 {# page actions #}
 {%- set object_type = ENTITY_CALCULATION -%}
-{%- set add_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_add' : null -%}
-{%- set clone_page = is_granted(ATTRIBUTE_ADD, object_type) ? 'calculation_clone' : null -%}
-{%- set edit_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_edit' : null -%}
-{%- set state_page = is_granted(ATTRIBUTE_EDIT, object_type) ? 'calculation_state' : null -%}
-{%- set delete_page = is_granted(ATTRIBUTE_DELETE, object_type) ? 'calculation_delete' : null -%}
-{%- set show_page = is_granted(ATTRIBUTE_SHOW, object_type) ? 'calculation_show' : null -%}
-{%- set single_page_pdf = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
-{%- set single_page_excel = is_granted(ATTRIBUTE_EXPORT, object_type) ? 'calculation_excel_id' : null -%}
+{%- set add_page = is_granted(PERMISSION_ADD, object_type) ? 'calculation_add' : null -%}
+{%- set clone_page = is_granted(PERMISSION_ADD, object_type) ? 'calculation_clone' : null -%}
+{%- set edit_page = is_granted(PERMISSION_EDIT, object_type) ? 'calculation_edit' : null -%}
+{%- set state_page = is_granted(PERMISSION_EDIT, object_type) ? 'calculation_state' : null -%}
+{%- set delete_page = is_granted(PERMISSION_DELETE, object_type) ? 'calculation_delete' : null -%}
+{%- set show_page = is_granted(PERMISSION_SHOW, object_type) ? 'calculation_show' : null -%}
+{%- set single_page_pdf = is_granted(PERMISSION_EXPORT, object_type) ? 'calculation_pdf_id' : null -%}
+{%- set single_page_excel = is_granted(PERMISSION_EXPORT, object_type) ? 'calculation_excel_id' : null -%}
 {# default actions #}
 {%- set row_none = user_service.actionNone -%}
 {%- set row_edit = edit_page and user_service.actionEdit -%}

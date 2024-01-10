@@ -43,10 +43,13 @@ class EntityVoter extends Voter
         if ($subject instanceof EntityName) {
             $subject = $subject->value;
         }
-        $attributes = \array_map(
-            static fn (mixed $value): mixed => ($value instanceof EntityPermission) ? $value->name : $value,
-            $attributes
-        );
+
+        /** @psalm-var mixed $attribute */
+        foreach ($attributes as &$attribute) {
+            if ($attribute instanceof EntityPermission) {
+                $attribute = $attribute->name;
+            }
+        }
 
         return parent::vote($token, $subject, $attributes);
     }
@@ -70,15 +73,15 @@ class EntityVoter extends Voter
         if (!$permission instanceof EntityPermission) {
             return false;
         }
-        $entity = EntityName::tryFromMixed($subject);
-        if (!$entity instanceof EntityName) {
+        $name = EntityName::tryFromMixed($subject);
+        if (!$name instanceof EntityName) {
             return false;
         }
 
         $rights = $this->getRights($user);
-        $offset = $entity->offset();
-        $mask = $permission->value;
+        $offset = $name->offset();
         $value = $rights[$offset];
+        $mask = $permission->value;
 
         return $this->isBitSet($value, $mask);
     }

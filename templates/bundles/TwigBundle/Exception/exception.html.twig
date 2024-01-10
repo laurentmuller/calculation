@@ -1,4 +1,4 @@
-{% extends '@Twig/Exception/error_base.html.twig' %}
+{% extends 'bundles/TwigBundle/Exception/error_base.html.twig' %}
 {# status_code #}
 {%- set status_code = status_code|default(0) -%}
 {% switch status_code -%}

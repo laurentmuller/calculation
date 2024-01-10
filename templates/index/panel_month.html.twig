@@ -37,7 +37,7 @@
         </a>
         {%- if list_path and is_months -%}
             {{ link(path('chart_month'), null, 'd-print-none', 'chart-column fa-fw', 'index.menu_chart_title') }}
-            {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
+            {% if is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
                 {{ linkExternal(path('chart_month_pdf', {'count': months|length}), null, 'd-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
             {% endif %}
         {%- endif -%}

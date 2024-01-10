@@ -1,5 +1,4 @@
-{% extends '@Twig/Exception/error_base.html.twig' %}
-
+{% extends 'bundles/TwigBundle/Exception/error_base.html.twig' %}
 {# parameters #}
 {% set description = 'http_error_503.description'|trans %}
 {% set suggestion = 'http_error_503.suggestion'|trans({'%url%': path('homepage')}) %}

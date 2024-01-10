@@ -17,14 +17,14 @@
 {%- set status_bar = status_bar is defined ? status_bar : user_service.statusBar and is_remembered and is_actived -%}
 {%- set is_dark_navigation = is_remembered and user_service.darkNavigation -%}
 {# rights #}
-{%- set is_granted_calculation = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION) -%}
-{%- set is_granted_product = is_granted(ATTRIBUTE_LIST, ENTITY_PRODUCT) -%}
-{%- set is_granted_task = is_granted(ATTRIBUTE_LIST, ENTITY_TASK) -%}
-{%- set is_granted_category = is_granted(ATTRIBUTE_LIST, ENTITY_CATEGORY) -%}
-{%- set is_granted_group = is_granted(ATTRIBUTE_LIST, ENTITY_GROUP) -%}
-{%- set is_granted_calculation_state = is_granted(ATTRIBUTE_LIST, ENTITY_CALCULATION_STATE) -%}
-{%- set is_granted_global_margin = is_granted(ATTRIBUTE_LIST, ENTITY_GLOBAL_MARGIN) -%}
-{%- set is_granted_customer = is_granted(ATTRIBUTE_LIST, ENTITY_CUSTOMER) and is_test -%}
+{%- set is_granted_calculation = is_granted(PERMISSION_LIST, ENTITY_CALCULATION) -%}
+{%- set is_granted_product = is_granted(PERMISSION_LIST, ENTITY_PRODUCT) -%}
+{%- set is_granted_task = is_granted(PERMISSION_LIST, ENTITY_TASK) -%}
+{%- set is_granted_category = is_granted(PERMISSION_LIST, ENTITY_CATEGORY) -%}
+{%- set is_granted_group = is_granted(PERMISSION_LIST, ENTITY_GROUP) -%}
+{%- set is_granted_calculation_state = is_granted(PERMISSION_LIST, ENTITY_CALCULATION_STATE) -%}
+{%- set is_granted_global_margin = is_granted(PERMISSION_LIST, ENTITY_GLOBAL_MARGIN) -%}
+{%- set is_granted_customer = is_granted(PERMISSION_LIST, ENTITY_CUSTOMER) and is_test -%}
 {%- set is_granted_data = is_granted_calculation or is_granted_product or is_granted_task or is_granted_category or is_granted_group or is_granted_calculation_state or is_granted_global_margin -%}
 <!DOCTYPE html>
 <html lang="{{ app.locale|replace({'_': '-'}) }}">

@@ -35,7 +35,7 @@
 {% if is_exception %}
 <div id="exception-detail" class="collapse mt-3">
     <table id="exception-table" class="table table-bordered table-exception table-sm mb-0">
-        <thead class="d-print-none">
+        <thead>
             <tr class="border-danger">
                 <th class="text-bg-danger fw-normal property">{{ 'error_page.property'|trans }}</th>
                 <th class="text-bg-danger fw-normal value">{{ 'error_page.value'|trans }}</th>
@@ -64,33 +64,36 @@
                     <td class="value">{{ exception.line }}</td>
                 </tr>
             {% endif %}
-            {% set traces = traces|default(exception.trace)|default({}) %}
+            {% set traces = traces|default(exception.trace|default({})) %}
             {% for trace in traces %}
-            <tr>
-                {% if loop.index0 == 0 %}
-                    <td class="property" rowspan="{{ traces|length }}">{{ 'error_page.fields.trace'|trans }}</td>
-                {% endif %}
-                <td class="value">
-                    <samp>
-                        {% apply spaceless %}
-                            <strong>{{ loop.index0 }}.</strong>
-                            {% if trace.file %}
-                                <span class="text-body-secondary ms-1">{{ trace.file }}</span>
-                            {% endif -%}
-                            {% if trace.short_class %}
-                                <span class="ms-1">{{ trace.short_class }}</span>
-                            {% endif -%}
-                            {% if trace.type %}
-                                <span>{{ trace.type }}</span>
-                            {% endif -%}
-                            {% if trace.function %}
-                                <span class="text-danger{% if not trace.short_class %} ms-1{% endif %}">{{ trace.function }}</span>
-                            {% endif -%}
-                            <span class="ms-1">(line {{ trace.line|default(1) }})</span>
-                        {% endapply %}
-                    </samp>
-                </td>
-            </tr>
+                {% set trace_file = trace.file|default(trace.class|default(false)) %}
+                <tr>
+                    {% if loop.index0 == 0 %}
+                        <td class="property" rowspan="{{ traces|length }}">{{ 'error_page.fields.trace'|trans }}</td>
+                    {% endif %}
+                    <td class="value">
+                        <samp>
+                            {% apply spaceless %}
+                                <strong>{{ loop.index0 }}.</strong>
+                                {% if trace_file %}
+                                    <span class="ms-1">{{ trace_file }}</span>
+                                {% endif -%}
+                                {% if trace.short_class|default(false) %}
+                                    <span class="ms-1">{{ trace.short_class }}</span>
+                                {% endif -%}
+                                {% if trace.type|default(false) %}
+                                    <span class="ms-1">{{ trace.type }}</span>
+                                {% endif -%}
+                                {% if trace.function|default(false) %}
+                                    <span class="ms-1 text-danger">{{ trace.function }}</span>
+                                {% endif -%}
+                                {% if trace.line|default(false) %}
+                                    <span class="ms-1 text-body-secondary">(line {{ trace.line }})</span>
+                                {% endif -%}
+                            {% endapply %}
+                        </samp>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

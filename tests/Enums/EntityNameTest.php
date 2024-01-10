@@ -47,15 +47,6 @@ class EntityNameTest extends TestCase
         ];
     }
 
-    public static function getMatchValue(): array
-    {
-        return [
-            [EntityName::CALCULATION, 'EntityCalculation'],
-            [EntityName::CALCULATION, 'entityCalculation'],
-            [EntityName::CALCULATION, 'Fake', false],
-        ];
-    }
-
     public static function getOffset(): array
     {
         return [
@@ -198,13 +189,6 @@ class EntityNameTest extends TestCase
     public function testLabel(string $expected, EntityName $entity): void
     {
         $actual = $entity->getReadable();
-        self::assertSame($expected, $actual);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('getMatchValue')]
-    public function testMatchValue(EntityName $name, string $value, bool $expected = true): void
-    {
-        $actual = $name->matchValue($value);
         self::assertSame($expected, $actual);
     }
 

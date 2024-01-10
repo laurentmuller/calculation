@@ -35,7 +35,7 @@
                 <small class="ms-sm-auto">{{ 'common.required'|trans|raw }}</small>
             {%- else -%}
                 {{ button_ok(cancel_path, 'common.button_close') }}
-                {% if is_granted(ATTRIBUTE_EDIT, ENTITY_CALCULATION) %}
+                {% if is_granted(PERMISSION_EDIT, ENTITY_CALCULATION) %}
                     {%- set state_params = route_params(app.request, item) -%}
                     {%- set state_path = path('calculation_state', state_params) -%}
                     {{ link(state_path, 'calculation.list.state_title', 'btn btn-form btn-outline-success') -}}

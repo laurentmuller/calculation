@@ -27,7 +27,7 @@
 {% block card_footer -%}
 <div class="d-flex-wrap">
     {{ homepage() }}
-    {% if pdf_route is defined and is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
+    {% if pdf_route is defined and is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
         {{ button_pdf(pdf_route, pdf_params|default({})) }}
     {% endif %}
     {{ sitemap() }}

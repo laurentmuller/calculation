@@ -105,6 +105,8 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
 
     /**
      * Gets this enumeration as constants.
+     *
+     * @return array<string, string>
      */
     public static function constants(): array
     {
@@ -116,19 +118,14 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
         );
     }
 
+    /**
+     * Gets the rights field name.
+     */
     public function getRightsField(): string
     {
         $value = \substr($this->value, \strlen(self::ENTITY_PREFIX));
 
         return $value . self::RIGHTS_SUFFIX;
-    }
-
-    /**
-     * Returns if the given value is equal to this value, ignoring case consideration.
-     */
-    public function matchValue(string $value): bool
-    {
-        return StringUtils::equalIgnoreCase($value, $this->value);
     }
 
     /**

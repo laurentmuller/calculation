@@ -6,9 +6,9 @@
 {%- set title = 'user.show.title' -%}
 {%- set params = route_params(app.request, item) %}
 {# actions #}
-{%- set edit_path = is_granted(ATTRIBUTE_EDIT, item) ? path('user_edit', params) : null -%}
-{%- set delete_path = is_granted(ATTRIBUTE_DELETE, item) ? path('user_delete', params) : null -%}
-{%- set rights_path = is_granted(ATTRIBUTE_EDIT, item) ? path('user_rights', params) : null -%}
+{%- set edit_path = is_granted(PERMISSION_EDIT, item) ? path('user_edit', params) : null -%}
+{%- set delete_path = is_granted(PERMISSION_DELETE, item) ? path('user_delete', params) : null -%}
+{%- set rights_path = is_granted(PERMISSION_EDIT, item) ? path('user_rights', params) : null -%}
 {%- set cancel_path = cancel_url(app.request, item, 'user_table') -%}
 {%- if item.userIdentifier == app.user.userIdentifier -%}
     {%- set delete_path = null -%}

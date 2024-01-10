@@ -55,12 +55,12 @@ class ConstantExtensionTest extends KernelTestCase
     public static function getEntityVoterConstants(): array
     {
         return [
-            ['ATTRIBUTE_ADD', 'ADD'],
-            ['ATTRIBUTE_DELETE', 'DELETE'],
-            ['ATTRIBUTE_EDIT', 'EDIT'],
-            ['ATTRIBUTE_EXPORT', 'EXPORT'],
-            ['ATTRIBUTE_LIST', 'LIST'],
-            ['ATTRIBUTE_SHOW', 'SHOW'],
+            ['PERMISSION_ADD', 'ADD'],
+            ['PERMISSION_DELETE', 'DELETE'],
+            ['PERMISSION_EDIT', 'EDIT'],
+            ['PERMISSION_EXPORT', 'EXPORT'],
+            ['PERMISSION_LIST', 'LIST'],
+            ['PERMISSION_SHOW', 'SHOW'],
 
             ['ENTITY_CALCULATION', 'EntityCalculation'],
             ['ENTITY_CALCULATION_STATE', 'EntityCalculationState'],

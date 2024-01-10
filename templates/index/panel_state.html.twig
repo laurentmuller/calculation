@@ -36,7 +36,7 @@
         </a>
         {%- if table_path and is_states -%}
             {{ link(path('chart_state'), null, 'd-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}
-            {% if is_granted(ATTRIBUTE_EXPORT, ENTITY_CALCULATION) %}
+            {% if is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
                 {{ linkExternal(path('chart_state_pdf'), null, 'd-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
             {% endif %}
         {%- endif -%}

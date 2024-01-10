@@ -33,7 +33,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     use TranslatorAwareTrait;
 
     /**
-     * The default identifier (#id) of the div where to render the chart.
+     * The default identifier of the div where to render the chart.
      */
     final public const CONTAINER = 'chartContainer';
 
@@ -130,7 +130,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the font style for the given color and an optional font size.
+     * Gets the font style for the given color and for the optional font size.
      *
      * @param string  $color    the font color
      * @param ?string $fontSize the font size or null to use the body font size
@@ -197,10 +197,10 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     /**
      * Translate the given key within the 'chart' domain.
      *
-     * @param string $id         the message id (may also be an object that can be cast to string)
+     * @param string $id         the message identifier (may also be an object that can be cast to string)
      * @param array  $parameters an array of parameters for the message
      *
-     * @return string the translated string or the message id if this translator is not defined
+     * @return string the translated string or the message identifier if this translator is not defined
      */
     protected function transChart(string $id, array $parameters = []): string
     {

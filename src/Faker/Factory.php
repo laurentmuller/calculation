@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Faker;
 
 /**
- * Extends Factory with custom generator.
+ * Extends Factory with custom generators.
  */
 class Factory extends \Faker\Factory
 {

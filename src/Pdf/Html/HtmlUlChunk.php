@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 /**
- * Specialized chunk for HTML unordered list (ul).
+ * A specialized chunk for HTML unordered list (ul).
  */
 class HtmlUlChunk extends AbstractHtmlListChunk
 {

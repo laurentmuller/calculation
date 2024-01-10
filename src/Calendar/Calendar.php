@@ -89,7 +89,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     private ?array $weekShortNames = null;
 
     /**
-     * Year for calendar.
+     * Year for the calendar.
      */
     private ?int $year = null;
 

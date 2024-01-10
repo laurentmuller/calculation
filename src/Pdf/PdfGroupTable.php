@@ -209,7 +209,7 @@ class PdfGroupTable extends PdfTable
     }
 
     /**
-     * Returns a value indicating if the group is currently output.
+     * Returns a value indicating if the group is output.
      */
     protected function isInProgress(): bool
     {
@@ -217,7 +217,7 @@ class PdfGroupTable extends PdfTable
     }
 
     /**
-     * Sets a value indicating if the group is currently output.
+     * Sets a value indicating if the group is output.
      */
     protected function setInProgress(bool $inProgress): static
     {

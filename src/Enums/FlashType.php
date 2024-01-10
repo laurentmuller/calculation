@@ -34,7 +34,7 @@ enum FlashType: string implements TranslatableEnumInterface
     case DANGER = 'danger';
 
     /**
-     * Information  flash bag.
+     * Information flash bag.
      */
     #[EnumCase(extras: ['icon' => 'fas fa-lg fa-info-circle'])]
     case INFO = 'info';

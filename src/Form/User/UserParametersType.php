@@ -23,11 +23,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserParametersType extends AbstractParametersType
 {
-    /**
-     * The theme field name.
-     */
-    final public const THEME_FIELD = 'theme';
-
     public function __construct(Security $security, TranslatorInterface $translator, ApplicationService $service)
     {
         parent::__construct($security, $translator, $service->getProperties());

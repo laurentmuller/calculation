@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
 /**
- * Chart to display calculations by month.
+ * Chart to display calculations by months.
  *
  * @psalm-import-type CalculationByMonthType from CalculationRepository
  */
@@ -168,7 +168,7 @@ class MonthChart extends AbstractHighchart
     }
 
     /**
-     * The y value, the url and all data needed by custom tooltip are returned.
+     * The y value, the url and all data needed by the custom tooltip are returned.
      *
      * @param CalculationByMonthType[] $series
      */

@@ -106,7 +106,7 @@ class AjaxSearchController extends AbstractController
     }
 
     /**
-     * Search distinct product and task suppliers.
+     * Search distinct products and task suppliers.
      *
      * @psalm-api
      */
@@ -123,7 +123,7 @@ class AjaxSearchController extends AbstractController
     }
 
     /**
-     * Search distinct customer's titles.
+     * Search the distinct customer's titles.
      *
      * @psalm-api
      */

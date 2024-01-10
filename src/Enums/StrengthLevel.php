@@ -83,7 +83,7 @@ enum StrengthLevel: int implements EnumDefaultInterface, EnumSortableInterface, 
     /**
      * Returns the percentage of this level.
      *
-     * @return int a value between 0 and  100
+     * @return int a value between 0 and 100
      */
     public function percent(): int
     {

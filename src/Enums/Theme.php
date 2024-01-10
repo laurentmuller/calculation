@@ -33,7 +33,7 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, Trans
     use TranslatableEnumTrait;
 
     /**
-     * The system theme (default value).
+     * System theme (default value).
      *
      * The system theme changes the appearance from light to dark based on the user's preferences in the operating
      * system.
@@ -42,16 +42,16 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, Trans
     case AUTO = 'auto';
 
     /**
-     * The dark theme.
+     * Dark theme.
      *
-     * The dark theme displays a dark background with a contrasting light foreground. In dark mode, you'll usually see
-     * white or light text on black or dark backgrounds.
+     * The dark theme displays a dark background with a contrasting light foreground. In the dark mode, you will
+     * usually see white or light text on black or dark backgrounds.
      */
     #[EnumCase(extras: ['icon' => 'fa-solid fa-moon', 'light-icon' => 'fa-regular fa-moon'])]
     case DARK = 'dark';
 
     /**
-     * The light theme.
+     * Light theme.
      *
      * The light theme displays a light background with a contrasting dark foreground. In light mode, you'll usually
      * see black or dark text on white or light backgrounds.

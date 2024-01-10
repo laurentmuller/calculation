@@ -44,7 +44,7 @@ class CalendarController extends AbstractController
     }
 
     /**
-     * Display a month of a calendar.
+     * Display a month.
      *
      * @param ?int $year  the year to search for or <code>null</code> for the current year
      * @param ?int $month the month to search for or <code>null</code> for the current month

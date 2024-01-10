@@ -18,7 +18,7 @@ use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
 
 /**
- * Specialized chunk for HTML list item (li).
+ * A specialized chunk for HTML list item (li).
  */
 class HtmlLiChunk extends HtmlParentChunk
 {

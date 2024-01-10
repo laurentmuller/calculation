@@ -26,7 +26,7 @@ enum ImageSize: int implements EnumDefaultInterface
     use EnumDefaultTrait;
 
     /**
-     * The default image size used for edition (192 pixels).
+     * The default image size used for edit purpose (192 pixels).
      */
     #[EnumCase(extras: [EnumDefaultInterface::NAME => true])]
     case DEFAULT = 192;

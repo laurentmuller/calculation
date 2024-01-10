@@ -24,7 +24,7 @@ use App\Utils\FormatUtils;
 class PdfFooter
 {
     /**
-     * the top border.
+     * The top border.
      */
     private readonly PdfBorder $border;
 

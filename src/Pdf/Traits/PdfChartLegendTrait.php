@@ -75,7 +75,7 @@ trait PdfChartLegendTrait
     /**
      * Draw the given legends horizontally or vertically.
      *
-     * Does nothing if legends are empty. if horizontal value is false, the position is the same as before after this
+     * Does nothing if legends are empty. If horizontal value is false, the position is the same as before after this
      * call.
      *
      * @param ColorStringType[] $legends    the legends to draw

@@ -36,7 +36,7 @@ class CalendarService
     /**
      * Returns a calendar for specified year.
      *
-     * @param ?int $year the year to generate calendar for or null for the current year
+     * @param ?int $year the year to generate the calendar for or null for the current year
      *
      * @return Calendar the generated calendar
      *

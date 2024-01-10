@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 /**
- * Specialized chunk for HTML ordered list (ol).
+ * A specialized chunk for HTML ordered list (ol).
  */
 class HtmlOlChunk extends AbstractHtmlListChunk
 {

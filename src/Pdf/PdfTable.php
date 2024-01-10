@@ -213,7 +213,7 @@ class PdfTable
      * @param ?PdfStyle                  $style the row style or null for default cell style
      *
      * @throws \LogicException      if a row is already started
-     * @throws \LengthException     if  cells parameter is empty
+     * @throws \LengthException     if cells parameter is empty
      * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
      *
      * @see PdfTable::addRow()
@@ -407,7 +407,7 @@ class PdfTable
     }
 
     /**
-     * Returns a value indicating if a row is currently started.
+     * Returns a value indicating if a row is started.
      */
     public function isRowStarted(): bool
     {

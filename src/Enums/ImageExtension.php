@@ -84,7 +84,7 @@ enum ImageExtension: string implements EnumDefaultInterface
     case XPM = 'xpm';
 
     /**
-     * Create a new image from file or URL.
+     * Create a new image from a file or a URL.
      *
      * @param string $filename the path to the image
      *
@@ -106,7 +106,7 @@ enum ImageExtension: string implements EnumDefaultInterface
     }
 
     /**
-     * Gets the allowed options to save image.
+     * Gets the allowed options to save an image.
      *
      * @psalm-return AllowedOptionsType
      */
@@ -157,7 +157,7 @@ enum ImageExtension: string implements EnumDefaultInterface
      *
      * @param \GdImage|ImageService   $image   a GdImage object, returned by one of the image creation functions or an
      *                                         image service to get GdImage for
-     * @param resource|string|null    $file    The path or an open stream resource, which is automatically closed after
+     * @param resource|string|null    $file    The path or an open stream resource is automatically closed after
      *                                         this function returns; to save the file to. If not set or null, the raw
      *                                         image stream will be output directly.
      * @param array<string, int|bool> $options additional options to use

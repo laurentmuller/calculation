@@ -87,7 +87,7 @@ class OpenWeatherController extends AbstractController
     private const KEY_UNITS = 'units';
 
     /**
-     * the prefix key for sessions.
+     * The prefix key for sessions.
      */
     private const PREFIX_KEY = 'openweather.';
 
@@ -319,7 +319,7 @@ class OpenWeatherController extends AbstractController
                 $group = null;
                 $cityIds = \array_map(fn (array $city): int => $city['id'], $cities);
                 foreach (\array_keys($cities) as $index) {
-                    // load current weather by chunk of 20 items
+                    // load current weather by chunks of 20 items
                     if (0 === $index % OpenWeatherService::MAX_GROUP) {
                         $ids = \array_splice($cityIds, 0, OpenWeatherService::MAX_GROUP);
                         $group = $this->service->group($ids, $units);

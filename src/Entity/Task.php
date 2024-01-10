@@ -107,7 +107,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
     }
 
     /**
-     * Gets the number of margins in all items.
+     * Gets the number of margins for all items.
      */
     public function countMargins(): int
     {

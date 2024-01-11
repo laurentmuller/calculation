@@ -24,7 +24,7 @@ use Symfony\Component\Routing\RouterInterface;
 /**
  * Utility class to get Symfony information.
  *
- * @see https://github.com/symfony/symfony/blob/5.x/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
+ * @see https://github.com/symfony/symfony/blob/7.1/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
  * @see https://github.com/EasyCorp/easy-doc-bundle/blob/master/src/Command/DocCommand.php
  *
  * @psalm-type RouteType = array{name: string, path: string}
@@ -81,8 +81,8 @@ final class SymfonyInfoService
 
     /**
      * @psalm-var null|array{
-     *     runtime?: array<string, PackageType>,
-     *     debug?: array<string, PackageType>}
+     *     runtime: array<string, PackageType>,
+     *     debug: array<string, PackageType>}
      */
     private ?array $packages = null;
 
@@ -141,7 +141,8 @@ final class SymfonyInfoService
             $this->updateBundles();
         }
 
-        return $this->bundles; /* @phpstan-ignore-line */
+        // @phpstan-ignore-next-line
+        return $this->bundles;
     }
 
     /**
@@ -189,7 +190,7 @@ final class SymfonyInfoService
      */
     public function getDebugPackages(): array
     {
-        return $this->getPackages()[self::KEY_DEBUG] ?? [];
+        return $this->getPackages()[self::KEY_DEBUG];
     }
 
     /**
@@ -333,7 +334,7 @@ final class SymfonyInfoService
      */
     public function getRuntimePackages(): array
     {
-        return $this->getPackages()[self::KEY_RUNTIME] ?? [];
+        return $this->getPackages()[self::KEY_RUNTIME];
     }
 
     /**
@@ -474,8 +475,8 @@ final class SymfonyInfoService
      * Gets packages information.
      *
      * @return array{
-     *     runtime?: array<string, PackageType>,
-     *     debug?: array<string, PackageType>
+     *     runtime: array<string, PackageType>,
+     *     debug: array<string, PackageType>
      * }
      */
     private function getPackages(): array
@@ -484,7 +485,10 @@ final class SymfonyInfoService
             return $this->packages;
         }
 
-        $this->packages = [];
+        $this->packages = [
+            self::KEY_RUNTIME => [],
+            self::KEY_DEBUG => [],
+        ];
         $path = $this->projectDir . self::PACKAGE_FILE_NAME;
         if (!FileUtils::exists($path)) {
             return $this->packages;
@@ -581,16 +585,20 @@ final class SymfonyInfoService
      * @param string[]                   $debugPackages
      *
      * @return array{
-     *          runtime?: array<string, PackageType>,
-     *          debug?: array<string, PackageType>}
+     *          runtime: array<string, PackageType>,
+     *          debug: array<string, PackageType>}
      */
     private function processPackages(array $runtimePackages, array $debugPackages): array
     {
+        $result = [
+            self::KEY_RUNTIME => [],
+            self::KEY_DEBUG => [],
+        ];
+
         if ([] === $runtimePackages && [] === $debugPackages) {
-            return [];
+            return $result;
         }
 
-        $result = [];
         foreach ($runtimePackages as $package) {
             $name = $package['name'];
             $entry = ['name' => $name];

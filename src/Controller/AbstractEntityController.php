@@ -183,8 +183,6 @@ abstract class AbstractEntityController extends AbstractController
      * Gets the form type (class name) used to edit an entity.
      *
      * @return class-string<\Symfony\Component\Form\FormTypeInterface>
-     *
-     * @phpstan-return class-string<\Symfony\Component\Form\FormTypeInterface>
      */
     abstract protected function getEditFormType(): string;
 

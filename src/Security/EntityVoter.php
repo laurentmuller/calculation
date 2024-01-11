@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 /**
  * Voter for entities.
  *
- * @phpstan-extends Voter<string, EntityName|string>
+ * @extends Voter<string, EntityName|string>
  */
 class EntityVoter extends Voter
 {

@@ -41,7 +41,8 @@ trait GroupByTrait
             $slice_args = \array_slice(\func_get_args(), 2);
             foreach ($result as $groupKey => $value) {
                 $params = \array_merge([$value], $slice_args);
-                $result[$groupKey] = (array) \call_user_func_array($function, $params); // @phpstan-ignore-line
+                // @phpstan-ignore-next-line
+                $result[$groupKey] = (array) \call_user_func_array($function, $params);
             }
         }
 

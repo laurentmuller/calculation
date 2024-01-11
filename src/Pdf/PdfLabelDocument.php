@@ -71,35 +71,35 @@ class PdfLabelDocument extends PdfDocument
         'mm' => 1000.0,
     ];
 
-    // number of labels horizontally
+    // the number of labels horizontally
     private int $cols = 0;
-    // current column (0 based index)
+    // the current column (0 based index)
     private int $currentCol;
-    // current row (0 based index)
+    // the current row (0 based index)
     private int $currentRow;
-    // height of label
+    // the height of label
     private float $height = 0;
-    // draw border around labels
+    // the draw border around labels
     private bool $labelBorder = false;
     // the label listener
     private ?PdfLabelTextListenerInterface $labelTextListener = null;
-    // Line height
+    // the Line height
     private float $lineHeight = 0;
-    // left margin of labels
+    // the left margin of labels
     private float $marginLeft = 0;
-    // top margin of labels
+    // the top margin of labels
     private float $marginTop = 0;
-    // padding inside labels
+    // the padding inside labels
     private float $padding = 0;
-    // number of labels vertically
+    // the number of labels vertically
     private int $rows = 0;
-    // horizontal space between 2 labels
+    // the horizontal space between 2 labels
     private float $spaceX = 0;
-    // vertical space between 2 labels
+    // the vertical space between 2 labels
     private float $spaceY = 0;
-    // document unit
+    // the document unit
     private string $unit;
-    // width of label
+    // the width of label
     private float $width = 0;
 
     /**

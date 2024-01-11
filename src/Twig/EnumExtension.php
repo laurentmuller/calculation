@@ -47,8 +47,10 @@ class EnumExtension extends AbstractExtension
 
             public function __call(string $name, array $arguments): mixed
             {
-                // @phpstan-ignore-next-line
-                return \call_user_func_array([$this->fullClassName, $name], $arguments);
+                /** @psalm-var callable $callable */
+                $callable = [$this->fullClassName, $name];
+
+                return \call_user_func_array($callable, $arguments);
             }
         };
     }

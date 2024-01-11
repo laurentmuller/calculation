@@ -40,13 +40,13 @@
 			"actions": [
 				{
 					"id": "product.show.title",
-					"icon": "tv",
+					"icon": "display",
 					"description": "Affiche la page des propriétés de l'article.",
 					"dialog": "product.show.title"
 				},
 				{
 					"id": "product.edit.title",
-					"icon": "pencil-alt",
+					"icon": "pencil",
 					"description": "Affiche la page d'édition de l'article.",
 					"dialog": "product.edit.title"
 				},
@@ -105,12 +105,12 @@
 			"actions": [
 				{
 					"id": "task.show.title",
-					"icon": "tv",
+					"icon": "display",
 					"description": "Affiche la page des propriétés de la tâche."
 				},
 				{
 					"id": "task.edit.title",
-					"icon": "pencil-alt",
+					"icon": "pencil",
 					"description": "Affiche la page d'édition de la tâche."
 				},
 				{
@@ -178,12 +178,12 @@
 			"actions": [
 				{
 					"id": "category.show.title",
-					"icon": "tv",
+					"icon": "display",
 					"description": "Affiche la page des propriétés de la catégorie."
 				},
 				{
 					"id": "category.edit.title",
-					"icon": "pencil-alt",
+					"icon": "pencil",
 					"description": "Affiche la page d'édition de la catégorie."
 				},
 				{
@@ -239,12 +239,12 @@
 			"actions": [
 				{
 					"id": "group.show.title",
-					"icon": "tv",
+					"icon": "display",
 					"description": "Affiche la page des propriétés du groupe."
 				},
 				{
 					"id": "group.edit.title",
-					"icon": "pencil-alt",
+					"icon": "pencil",
 					"description": "Affiche la page d'édition du groupe."
 				},
 				{
@@ -289,12 +289,12 @@
 			"actions": [
 				{
 					"id": "globalmargin.show.title",
-					"icon": "tv",
+					"icon": "display",
 					"description": "Affiche la page des propriétés de la marge globale."
 				},
 				{
 					"id": "globalmargin.edit.title",
-					"icon": "pencil-alt",
+					"icon": "pencil",
 					"description": "Affiche la page d'édition des marges globales."
 				}
 			]
@@ -412,12 +412,12 @@
 			"actions": [
 				{
 					"id": "calculation.show.title",
-					"icon": "tv",
+					"icon": "display",
 					"description": "Affiche la page des propriétés de la calculation."
 				},
 				{
 					"id": "calculation.edit.title_short",
-					"icon": "pencil-alt",
+					"icon": "pencil",
 					"description": "Affiche la page d'édition de la calculation."
 				},
 				{
@@ -483,7 +483,7 @@
 			"actions": [
 				{
 					"id": "log.show.title",
-					"icon": "tv",
+					"icon": "display",
 					"description": "Affiche la page des propriétés de l'entrée."
 				}
 			]
@@ -674,7 +674,7 @@
 			"id": "calculation.show.title",
 			"entity": "calculation",
 			"image": "calculation/calculation_show",
-			"icon": "tv",
+			"icon": "display",
 			"description": "Cette page affiche les propriétés de la calculation.",
 			"editActions": [
 				{
@@ -819,7 +819,7 @@
 			"id": "product.show.title",
 			"entity": "product",
 			"image": "product/product_show",
-			"icon": "tv",
+			"icon": "display",
 			"description": "Cette page affiche les propriétés de l'article.",
 			"editActions": [
 				{
@@ -1010,7 +1010,7 @@
 			"id": "task.show.title",
 			"entity": "task",
 			"image": "task/task_show",
-			"icon": "tv",
+			"icon": "display",
 			"description": "Cette page affiche les propriétés de la tâche.",
 			"editActions": [
 				{
@@ -1132,7 +1132,7 @@
 			"id": "category.show.title",
 			"entity": "category",
 			"image": "category/category_show",
-			"icon": "tv",
+			"icon": "display",
 			"description": "Cette page affiche les propriétés de la catégorie.",
 			"editActions": [
 				{
@@ -1245,7 +1245,7 @@
 			"id": "group.show.title",
 			"entity": "group",
 			"image": "group/group_show",
-			"icon": "tv",
+			"icon": "display",
 			"description": "Cette page affiche les propriétés du groupe.",
 			"editActions": [
 				{
@@ -1358,7 +1358,7 @@
 			"id": "globalmargin.show.title",
 			"entity": "globalmargin",
 			"image": "globalmargin/globalmargin_show",
-			"icon": "tv",
+			"icon": "display",
 			"description": "Cette page affiche les propriétés de la marge globale.",
 			"editActions": [
 				{
@@ -1451,7 +1451,7 @@
 			"id": "log.show.title",
 			"entity": "log",
 			"image": "log/log_show",
-			"icon": "tv",
+			"icon": "display",
 			"description": "Cette page affiche les propriétés d'une entrée dans le journal de l'application. Cette page est accessible uniquement aux administrateurs.",
 			"editActions": [
 				{

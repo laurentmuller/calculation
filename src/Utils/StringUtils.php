@@ -218,13 +218,14 @@ final class StringUtils
      *
      * @return string|string[] returns a string or an array with the replaced values
      *
-     * @phpstan-return ($subject is string ? string : string[])
+     * @psalm-param non-empty-array<non-empty-string, string> $values
      *
-     * @psalm-param array<non-empty-string, string> $values
+     * @psalm-return ($subject is string ? string : string[])
      */
     public static function pregReplace(array $values, string|array $subject): string|array
     {
-        return \preg_replace(\array_keys($values), \array_values($values), $subject); /* @phpstan-ignore-line */
+        // @phpstan-ignore-next-line
+        return \preg_replace(\array_keys($values), \array_values($values), $subject);
     }
 
     /**
@@ -235,7 +236,7 @@ final class StringUtils
      *
      * @return string|string[] returns a string or an array with the replaced values
      *
-     * @phpstan-return ($subject is string ? string : string[])
+     * @psalm-return ($subject is string ? string : string[])
      */
     public static function replace(array $values, string|array $subject): string|array
     {

@@ -33,53 +33,57 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class HelpController extends AbstractController
 {
+    public function __construct(private readonly HelpService $service)
+    {
+    }
+
     /**
-     * Display the help for a dialog.
+     * Display help for a dialog.
      */
     #[Route(path: '/dialog/{id}', name: 'help_dialog', methods: Request::METHOD_GET)]
-    public function dialog(string $id, HelpService $service): Response
+    public function dialog(string $id): Response
     {
         /** @psalm-var HelpDialogType|null $dialog */
-        $dialog = $service->findDialog($id);
+        $dialog = $this->service->findDialog($id);
         if (null === $dialog) {
             throw $this->createNotFoundException("Unable to find the resource for the dialog '$id'.");
         }
         /** @psalm-var HelpEntityType|null $entity */
-        $entity = $service->findEntityByDialog($dialog);
+        $entity = $this->service->findEntityByDialog($dialog);
 
         return $this->render('help/help_dialog.html.twig', [
-            'service' => $service,
+            'service' => $this->service,
             'dialog' => $dialog,
             'entity' => $entity,
         ]);
     }
 
     /**
-     * Display the help for an entity.
+     * Display help for an entity.
      */
     #[Route(path: '/entity/{id}', name: 'help_entity', methods: Request::METHOD_GET)]
-    public function entity(string $id, HelpService $service): Response
+    public function entity(string $id): Response
     {
         /** @psalm-var HelpEntityType|null $entity */
-        $entity = $service->findEntity($id);
+        $entity = $this->service->findEntity($id);
         if (null === $entity) {
             throw $this->createNotFoundException("Unable to find the resource for the object '$id'.");
         }
 
         return $this->render('help/help_entity.html.twig', [
-            'service' => $service,
+            'service' => $this->service,
             'entity' => $entity,
         ]);
     }
 
     /**
-     * Display the help index.
+     * Display help index.
      */
     #[Route(path: '', name: 'help', methods: Request::METHOD_GET)]
-    public function index(HelpService $service): Response
+    public function index(): Response
     {
         return $this->render('help/help_index.html.twig', [
-            'service' => $service,
+            'service' => $this->service,
         ]);
     }
 
@@ -87,9 +91,9 @@ class HelpController extends AbstractController
      * Export the help to a PDF document.
      */
     #[Route(path: '/pdf', name: 'help_pdf', methods: Request::METHOD_GET)]
-    public function pdf(HelpService $service): PdfResponse
+    public function pdf(): PdfResponse
     {
-        $doc = new HelpReport($this, $service);
+        $doc = new HelpReport($this, $this->service);
         $name = $this->trans('help.title_name', ['%name%' => $this->getApplicationName()]);
 
         return $this->renderPdfDocument(doc: $doc, name: $name);

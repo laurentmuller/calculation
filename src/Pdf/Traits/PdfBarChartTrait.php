@@ -307,7 +307,7 @@ trait PdfBarChartTrait
      */
     private function _barGetLabelsY(PdfBarScale $scale, callable $formatter): array
     {
-        /** @phpstan-var non-empty-array<BarChartLabelType> $result */
+        /** @psalm-var non-empty-array<BarChartLabelType> $result */
         $result = [];
         foreach (\range($scale->getUpperBound(), $scale->getLowerBound(), -$scale->getTickSpacing()) as $value) {
             $text = $formatter($value);

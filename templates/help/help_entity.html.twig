@@ -6,6 +6,8 @@
 {%- set title_parameters = {'%name%': entity_name|trans} -%}
 {%- set fields = entity.fields|default(false) -%}
 {%- set actions = entity.actions|default(false) -%}
+{%- set constraints = entity.constraints|default(false) -%}
+{% set links = entity.links|default(false) %}
 {# body #}
 {% block help_title -%}
 {{- tools.output_icon(entity.icon|default(false), entity_name) -}}
@@ -21,12 +23,12 @@
 <div class="table-responsive">
     <table class="table table-sm w-100">
         <thead>
-            <tr>
-                <th class="text-date-time">{{ 'help.fields.field'|trans }}</th>
-                <th class="w-100">{{ 'help.fields.description'|trans }}</th>
-                <th class="text-nowrap">{{ 'help.fields.type'|trans }}</th>
-                <th class="text-nowrap text-center">{{ 'help.fields.required'|trans }}</th>
-            </tr>
+        <tr>
+            <th class="text-nowrap">{{ 'help.fields.field'|trans }}</th>
+            <th class="w-100">{{ 'help.fields.description'|trans }}</th>
+            <th class="text-nowrap">{{ 'help.fields.type'|trans }}</th>
+            <th class="text-nowrap text-center">{{ 'help.fields.required'|trans }}</th>
+        </tr>
         </thead>
         <tbody>
         {% for field in fields %}
@@ -44,21 +46,27 @@
     </table>
 </div>
 {% else %}
-<p>{{ 'help.labels.entity_empty'|trans }}</p>
+    <p>{{ 'help.labels.entity_empty'|trans }}</p>
 {% endif %}
 {# constraints #}
-{%- if entity.constraints|default([])|length -%}
-    <hr class="mt-0 mb-2">
+{%- if constraints -%}
     <p class="mb-0">{{ 'help.labels.constraints'|trans }}</p>
     <ul>
-    {% for constraint in entity.constraints -%}
+    {% for constraint in constraints -%}
         <li>{{ constraint|raw }}</li>
     {%- endfor %}
     </ul>
 {%- endif -%}
 {# actions #}
 {% if actions %}
-<p class="mb-1 mt-2">{{ 'help.labels.entity_actions'|trans }}</p>
-{{ tools.output_table_actions(actions, service) }}
+    {% if constraints %}
+        <hr class="mt-0 mb-2">
+    {% endif %}
+    <p class="mb-1 mt-2">{{ 'help.labels.entity_actions'|trans }}</p>
+    {{ tools.output_table_actions(actions, service) }}
 {% endif %}
+{# links  #}
+{% if links -%}
+    {{ tools.output_links(links, service) }}
+{%- endif %}
 {%- endblock %}

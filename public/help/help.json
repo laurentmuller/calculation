@@ -1,1483 +1,1840 @@
 {
-	"entities": [
-		{
-			"id": "product",
-			"icon": "file-alt far",
-			"description": "Représente un article du catalogue.",
-			"fields": [
-				{
-					"name": "description",
-					"description": "Description de l'article.",
-					"length": "255"
-				},
-				{
-					"name": "category",
-					"description": "Catégorie à laquelle appartient l'article.",
-					"type": "reference",
-					"entity": "category"
-				},
-				{
-					"name": "price",
-					"description": "Prix unitaire de l'article.",
-					"type": "amount"
-				},
-				{
-					"name": "unit",
-					"description": "Unité de l'article.",
-					"required": false,
-					"length": "30"
-				},
-				{
-					"name": "supplier",
-					"description": "Nom du fournisseur de l'article.",
-					"required": false,
-					"length": "255"
-				}
-			],
-			"constraints": [
-				"La description de l'article doit être unique à travers tout le catalogue."
-			],
-			"actions": [
-				{
-					"id": "product.show.title",
-					"icon": "display",
-					"description": "Affiche la page des propriétés de l'article.",
-					"dialog": "product.show.title"
-				},
-				{
-					"id": "product.edit.title",
-					"icon": "pencil",
-					"description": "Affiche la page d'édition de l'article.",
-					"dialog": "product.edit.title"
-				},
-				{
-					"id": "product.delete.title",
-					"icon": "times",
-					"description": "Affiche la page de suppression de l'article.",
-					"dialog": "product.delete.title"
-				},
-				{
-					"id": "product.add.title",
-					"icon": "file far",
-					"description": "Affiche la page de création d'un article.",
-					"dialog": "product.add.title"
-				},
-				{
-					"id": "common.button_clone",
-					"icon": "copy far",
-					"description": "Crée une copie de l'article et affiche la page de création."
-				}
-			]
-		},
-		{
-			"id": "task",
-			"icon": "tasks",
-			"description": "Représente une tâche du catalogue. Une tâche regroupe plusieurs opérations.",
-			"fields": [
-				{
-					"name": "name",
-					"description": "Description de la tâche.",
-					"length": "255"
-				},
-				{
-					"name": "category",
-					"description": "Catégorie à laquelle appartient la tâche.",
-					"type": "reference",
-					"entity": "category"
-				},
-				{
-					"name": "unit",
-					"description": "Unité de la tâche.",
-					"required": false,
-					"length": "30"
-				},
-				{
-					"name": "items",
-					"description": "Liste des opération appartenant à cette tâche.",
-					"required": false,
-					"type": "collection"
-				}
-			],
-			"constraints": [
-				"Le nom de la tâche doit être unique à travers tout le catalogue.",
-				"Le nom des opérations de chaque tâche doit être unique."
-			],
-			"actions": [
-				{
-					"id": "task.show.title",
-					"icon": "display",
-					"description": "Affiche la page des propriétés de la tâche."
-				},
-				{
-					"id": "task.edit.title",
-					"icon": "pencil",
-					"description": "Affiche la page d'édition de la tâche."
-				},
-				{
-					"id": "task.delete.title",
-					"icon": "times",
-					"description": "Affiche la page de suppression de la tâche."
-				},
-				{
-					"id": "task.add.title",
-					"icon": "file far",
-					"description": "Affiche la page de création d'une tâche."
-				},
-				{
-					"id": "common.button_clone",
-					"icon": "copy far",
-					"description": "Crée une copie de la tâche et affiche la page de création."
-				},
-				{
-					"id": "task_compute.title",
-					"icon": "keyboard",
-					"description": "Permet de simuler le calcul d'une tâche."
-				}
-			]
-		},
-		{
-			"id": "category",
-			"icon": "folder far",
-			"description": "Représente un catégorie du catalogue. Elle contient une liste d'articles et de tâches.",
-			"fields": [
-				{
-					"name": "code",
-					"description": "Nom de la catégorie.",
-					"length": "30"
-				},
-				{
-					"name": "description",
-					"description": "Description de la catégorie.",
-					"required": false,
-					"length": "255"
-				},
-				{
-					"name": "group",
-					"description": "Groupe à laquelle appartient la catégorie.",
-					"type": "reference",
-					"entity": "group"
-				},
-				{
-					"name": "products",
-					"description": "Liste des articles appartenant à cette catégorie.",
-					"required": false,
-					"type": "collection",
-					"entity": "product"
-				},
-				{
-					"name": "tasks",
-					"description": "Liste des tâches appartenant à cette catégorie.",
-					"required": false,
-					"type": "collection",
-					"entity": "task"
-				}
-			],
-			"constraints": [
-				"Le nom de la catégorie doit être unique à travers tout le catalogue."
-			],
-			"actions": [
-				{
-					"id": "category.show.title",
-					"icon": "display",
-					"description": "Affiche la page des propriétés de la catégorie."
-				},
-				{
-					"id": "category.edit.title",
-					"icon": "pencil",
-					"description": "Affiche la page d'édition de la catégorie."
-				},
-				{
-					"id": "category.delete.title",
-					"icon": "times",
-					"description": "Affiche la page de suppression de la catégorie."
-				},
-				{
-					"id": "category.add.title",
-					"icon": "file far",
-					"description": "Affiche la page de création d'une catégorie."
-				},
-				{
-					"id": "common.button_clone",
-					"icon": "copy far",
-					"description": "Crée une copie de la catégorie et affiche la page de création."
-				}
-			]
-		},
-		{
-			"id": "group",
-			"icon": "code-branch",
-			"description": "Représente un groupe du catalogue. Il contient une liste de catégories et de marges à appliquer aux calculations.",
-			"fields": [
-				{
-					"name": "code",
-					"description": "Nom du groupe.",
-					"length": "30"
-				},
-				{
-					"name": "description",
-					"description": "Description du groupe.",
-					"required": false,
-					"length": "255"
-				},
-				{
-					"name": "margins",
-					"description": "Liste de marges à appliquer à un groupe d'articles d'une calculation.",
-					"required": false,
-					"type": "collection"
-				},
-				{
-					"name": "categories",
-					"description": "Liste de catégories appartenant à ce groupe.",
-					"required": false,
-					"type": "collection",
-					"entity": "category"
-				}
-			],
-			"constraints": [
-				"Le nom du groupe doit être unique à travers tout le catalogue."
-			],
-			"actions": [
-				{
-					"id": "group.show.title",
-					"icon": "display",
-					"description": "Affiche la page des propriétés du groupe."
-				},
-				{
-					"id": "group.edit.title",
-					"icon": "pencil",
-					"description": "Affiche la page d'édition du groupe."
-				},
-				{
-					"id": "group.delete.title",
-					"icon": "times",
-					"description": "Affiche la page de suppression du groupe."
-				},
-				{
-					"id": "group.add.title",
-					"icon": "file far",
-					"description": "Affiche la page de création d'un groupe."
-				}
-			]
-		},
-		{
-			"id": "globalmargin",
-			"icon": "percent",
-			"description": "Représente une marge globale à appliquer aux calculations.",
-			"fields": [
-				{
-					"name": "minimum",
-					"description": "Valeur minimale (inclus) pour laquelle la marge est appliquée.",
-					"type": "amount"
-				},
-				{
-					"name": "maximum",
-					"description": "Valeur maximale (exclus) pour laquelle la marge est appliquée.",
-					"type": "amount"
-				},
-				{
-					"name": "margin",
-					"description": "Marge à appliquer à la calculation.",
-					"type": "percent"
-				}
-			],
-			"constraints": [
-				"La valeur minimale d'une marge ne doit pas chevaucher une marge existante.",
-				"La valeur maximale d'une marge ne doit pas chevaucher une marge existante.",
-				"La valeur maximale d'une marge doit être supérieure à la valeur minimale.",
-				"La valeur minimale d'une marge doit être égale à la valeur maximal de la marge précédente."
-			],
-			"actions": [
-				{
-					"id": "globalmargin.show.title",
-					"icon": "display",
-					"description": "Affiche la page des propriétés de la marge globale."
-				},
-				{
-					"id": "globalmargin.edit.title",
-					"icon": "pencil",
-					"description": "Affiche la page d'édition des marges globales."
-				}
-			]
-		},
-		{
-			"id": "calculationstate",
-			"icon": "flag far",
-			"description": "Représente le statut d'une calculation.",
-			"fields": [
-				{
-					"name": "code",
-					"description": "Nom du statut.",
-					"length": "30"
-				},
-				{
-					"name": "editable",
-					"description": "Définit si une calculation avec ce statut peut être modifiée.",
-					"type": "boolean"
-				},
-				{
-					"name": "color",
-					"description": "Couleur utilisée dans interface utilisateur (UI).",
-					"length": "10"
-				},
-				{
-					"name": "description",
-					"description": "Description du statut.",
-					"length": "255",
-					"required": false
-				},
-				{
-					"name": "calculations",
-					"description": "Liste des calculations appartenant à ce statut.",
-					"required": false,
-					"type": "collection",
-					"entity": "calculation"
-				}
-			],
-			"constraints": [
-				"Le nom du statut doit être unique à travers tout le catalogue."
-			]
-		},
-		{
-			"id": "calculation",
-			"icon": "calculator",
-			"description": "Représente une calculation.",
-			"fields": [
-				{
-					"name": "id",
-					"description": "Numéro unique identifiant la calculation. Ce numéro est généré automatiquement par l'application.",
-					"type": "identifier"
-				},
-				{
-					"name": "date",
-					"description": "Date de la calculation. La valeur par défaut est la date du jour.",
-					"type": "date"
-				},
-				{
-					"name": "customer",
-					"description": "Nom du client.",
-					"length": "255"
-				},
-				{
-					"name": "description",
-					"description": "Description de la calculation.",
-					"length": "255"
-				},
-				{
-					"name": "state",
-					"description": "Statut de la calculation.",
-					"type": "reference",
-					"entity": "calculationstate"
-				},
-				{
-					"name": "itemsTotal",
-					"description": "Montant total des articles.",
-					"type": "amount",
-					"required": false
-				},
-				{
-					"name": "globalMargin",
-					"description": "Marge globale calculée automatiquement par le programme en fonction du montant total des articles.",
-					"type": "percent",
-					"required": false
-				},
-				{
-					"name": "totalNet",
-					"description": "Montant total net de la calculation.",
-					"type": "amount",
-					"required": false
-				},
-				{
-					"name": "userMargin",
-					"description": "Marge de l'utilisateur à appliquer à la calculation.",
-					"type": "percent",
-					"required": false
-				},
-				{
-					"name": "overallTotal",
-					"description": "Total général de la calculation.",
-					"type": "amount",
-					"required": false
-				},
-				{
-					"name": "created",
-					"description": "Date et nom de l'utilisateur qui a crée la calculation.",
-					"required": false
-				},
-				{
-					"name": "updated",
-					"description": "Date et nom de l'utilisateur qui a modifié la calculation en dernier.",
-					"required": false
-				}
-			],
-			"actions": [
-				{
-					"id": "calculation.show.title",
-					"icon": "display",
-					"description": "Affiche la page des propriétés de la calculation."
-				},
-				{
-					"id": "calculation.edit.title_short",
-					"icon": "pencil",
-					"description": "Affiche la page d'édition de la calculation."
-				},
-				{
-					"id": "calculation.delete.title",
-					"icon": "times",
-					"description": "Affiche la page de suppression de la calculation."
-				},
-				{
-					"id": "calculation.add.title",
-					"icon": "file far",
-					"description": "Affiche la page de création d'une calculation."
-				},
-				{
-					"id": "common.button_clone",
-					"icon": "copy far",
-					"description": "Crée une copie de la calculation et affiche la page de création."
-				},
-				{
-					"id": "calculation.list.state_title",
-					"icon": "flag far",
-					"description": "Affiche la page de modification du statut de la calculation."
-				},
-				{
-					"id": "calculation.list.pdf_single_title",
-					"icon": "file-pdf far",
-					"description": "Exporte la calculation au format PDF."
-				}
-			]
-		},
-		{
-			"id": "log",
-			"icon": "book",
-			"description": "Représente une entrée dans le journal de l'application.",
-			"fields": [
-				{
-					"name": "createdAt",
-					"description": "Date de création de l'entrée.",
-					"required": false,
-					"type": "date"
-				},
-				{
-					"name": "channel",
-					"description": "Nom du canal.",
-					"required": false,
-					"type": "text"
-				},
-				{
-					"name": "level",
-					"description": "Niveau d'erreur.",
-					"required": false
-				},
-				{
-					"name": "message",
-					"description": "Message d'information ou d'erreur.",
-					"required": false
-				},
-				{
-					"name": "context",
-					"description": "Contexte d'information ou d'erreur.",
-					"required": false
-				}
-			],
-			"actions": [
-				{
-					"id": "log.show.title",
-					"icon": "display",
-					"description": "Affiche la page des propriétés de l'entrée."
-				}
-			]
-		}
-	],
-	"mainMenu": {
-		"image": "navigation",
-		"description": "Le menu principal est une partie de l'interface d'utilisateur permettant de parcourir les pages du site.",
-		"menus": [
-			{
-				"id": "index.title",
-				"icon": "home",
-				"description": "Page principale de l'application.",
-				"dialog": "index.title"
-			},
-			{
-				"id": "calculation.list.title",
-				"icon": "calculator",
-				"description": "Liste des calculations.",
-				"dialog": "calculation.list.title"
-			},
-			{
-				"id": "index.menu_data",
-				"icon": "database",
-				"description": "Menu d'accès aux données",
-				"menus": [
-					{
-						"id": "product.list.title",
-						"icon": "file-alt far",
-						"description": "Gestion des articles du catalogue.",
-						"dialog": "product.list.title"
-					},
-					{
-						"id": "task.list.title",
-						"icon": "tasks",
-						"description": "Gestion des tâches du catalogue.",
-						"dialog": "task.list.title"
-					},
-					{
-						"id": "category.list.title",
-						"icon": "folder far",
-						"description": "Gestion des catégories du catalogue.",
-						"dialog": "category.list.title"
-					},
-					{
-						"id": "group.list.title",
-						"icon": "code-branch",
-						"description": "Gestion des groupes du catalogue.",
-						"dialog": "group.list.title"
-					},
-					{
-						"id": "globalmargin.list.title",
-						"icon": "percent",
-						"description": "Gestion des marge globales du catalogue.",
-						"dialog": "globalmargin.list.title"
-					}
-				]
-			},
-			{
-				"id": "index.menu_tools",
-				"icon": "tools",
-				"description": "Menu d'accès aux outils de l'application.",
-				"menus": [
-					{
-						"id": "search.title",
-						"icon": "search",
-						"description": "Page de recherche.",
-						"dialog": "search.title"
-					},
-					{
-						"id": "product.update.title",
-						"icon": "file-alt far",
-						"description": "Page pour mettre à jour le prix des articles.",
-						"dialog": "product.update.title"
-					},
-					{
-						"id": "archive.title",
-						"icon": "file-alt far",
-						"description": "Page pour archiver des calculations.",
-						"dialog": "archive.title"
-					},
-					{
-						"id": "below.title",
-						"icon": "percent",
-						"description": "Page pour afficher les calculations contenant une marge globale inférieure au seuil définit."
-					},
-					{
-						"id": "duplicate.title",
-						"icon": "copy far",
-						"description": "Page pour afficher les calculations contenant le même article plus d'une fois."
-					},
-					{
-						"id": "empty.title",
-						"icon": "file-code far",
-						"description": "Page pour afficher les calculations contenant un article avec une quantité ou un prix égale à 0."
-					},
-					{
-						"id": "task_compute.title",
-						"icon": "keyboard",
-						"description": "Page pour calculer une tâche.",
-						"dialog": "task_compute.title"
-					}
-				]
-			},
-			{
-				"id": "index.menu_graphics",
-				"icon": "chart-area",
-				"description": "Menu d'accès aux statistiques.",
-				"menus": [
-					{
-						"id": "title_by_month|chart",
-						"icon": "calendar-alt far",
-						"description": "Page affichant un graphique des calculations par mois."
-					},
-					{
-						"id": "title_by_state|chart",
-						"icon": "flag far",
-						"description": "Page affichant un graphique des calculations par statut."
-					}
-				]
-			}
-		]
-	},
-	"dialogs": [
-		{
-			"id": "index.title",
-			"image": "home",
-			"description": "Page principale de l'application.",
-			"details": [
-				"Cette page est divisée en quatre parties<br>",
-				"- La partie principale contient la liste des dernières calculations.<br>",
-				"- La deuxième partie contient la liste des calculations regroupées par status.<br>",
-				"- La troisième partie contient la liste des calculations regroupées par mois.<br>",
-				"- La dernière partie contient le nombre d'objets dans le catalogue (base de données)."
-			]
-		},
-		{
-			"id": "calculation.list.title",
-			"entity": "calculation",
-			"image": "calculation/calculation_list",
-			"description": "Gestion des calculations.",
-			"displayEntityColumns": true,
-			"displayEntityActions": true,
-			"globalActions": [
-				{
-					"id": "help.actions.search",
-					"icon": "square far",
-					"description": "Zone de text pour rechercher des articles."
-				},
-				{
-					"id": "calculationstate.name",
-					"icon": "flag far",
-					"description": "Menu déroulant permettant de filter les calculations d'un statut."
-				},
-				{
-					"id": "help.actions.clear",
-					"icon": "eraser",
-					"description": "Efface tous les critères de recherche."
-				},
-				{
-					"id": "help.actions.sort",
-					"icon": "sort-amount-down-alt",
-					"description": "Menu déroulant permettant de trier les calculations."
-				},
-				{
-					"id": "help.actions.toggle",
-					"icon": "table",
-					"description": "Menu déroulant permettant de choisir le mode d'affichage (table, détaillé ou mosaïque)."
-				},
-				{
-					"id": "help.actions.pages",
-					"icon": "sort-down",
-					"description": "Menu déroulant permettant de sélectionner le nombre de lignes affichées par page."
-				},
-				{
-					"id": "calculation.list.pdf_title",
-					"icon": "file-pdf far",
-					"description": "Exporte la liste des calculations au format PDF."
-				},
-				{
-					"id": "calculation.list.excel_title",
-					"icon": "file-excel far",
-					"description": "Exporte la liste des calculations au format Microsoft® Excel®."
-				}
-			]
-		},
-		{
-			"id": "calculation.show.title",
-			"entity": "calculation",
-			"image": "calculation/calculation_show",
-			"icon": "display",
-			"description": "Cette page affiche les propriétés de la calculation.",
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Retourne à la page précédente."
-				},
-				{
-					"id": "common.button_edit",
-					"description": "Affiche la page d'édition de la calculation.",
-					"dialog": "calculation.edit.title_short"
-				},
-				{
-					"id": "common.button_delete",
-					"description": "Affiche la page de suppression de la calculation.",
-					"dialog": "calculation.delete.title"
-				},
-				{
-					"id": "common.button_pdf",
-					"icon": "file-pdf far",
-					"description": "Exporte la calculation au format PDF."
-				}
-			]
-		},
-		{
-			"id": "calculation.edit.title_short",
-			"entity": "calculation",
-			"image": "calculation/calculation_edit_main",
-			"description": "Cette page permet de modifier une calculation.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "calculation.add.title",
-			"entity": "calculation",
-			"image": "calculation/calculation_edit_new",
-			"description": "Cette page permet de créer une nouvelle calculation.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "calculation.delete.title",
-			"entity": "calculation",
-			"image": "calculation/calculation_delete",
-			"icon": "times",
-			"description": "Cette page permet de confirmer la suppression d'une calculation.",
-			"editActions": [
-				{
-					"id": "common.button_delete",
-					"description": "Supprime la calculation et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule la suppression et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "calculation.list.state_title",
-			"entity": "calculation",
-			"image": "calculation/calculation_edit_state",
-			"description": "Permet de modifier le statut d'une calculation.",
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "product.list.title",
-			"entity": "product",
-			"image": "product/product_list",
-			"description": "Gestion des articles du catalogue.",
-			"displayEntityColumns": true,
-			"displayEntityActions": true,
-			"globalActions": [
-				{
-					"id": "help.actions.search",
-					"icon": "square far",
-					"description": "Zone de text pour rechercher des articles."
-				},
-				{
-					"id": "category.name",
-					"icon": "folder far",
-					"description": "Menu déroulant permettant de filter les articles d'une catégorie."
-				},
-				{
-					"id": "help.actions.clear",
-					"icon": "eraser",
-					"description": "Efface tous les critères de recherche."
-				},
-				{
-					"id": "help.actions.sort",
-					"icon": "sort-amount-down-alt",
-					"description": "Menu déroulant permettant de trier les articles."
-				},
-				{
-					"id": "help.actions.toggle",
-					"icon": "table",
-					"description": "Menu déroulant permettant de choisir le mode d'affichage (table, détaillé ou mosaïque)."
-				},
-				{
-					"id": "help.actions.pages",
-					"icon": "sort-down",
-					"description": "Menu déroulant permettant de sélectionner le nombre de lignes affichées par page."
-				},
-				{
-					"id": "product.list.pdf_title",
-					"icon": "file-pdf far",
-					"description": "Exporte la liste des articles au format PDF."
-				},
-				{
-					"id": "product.list.excel_title",
-					"icon": "file-excel far",
-					"description": "Exporte la liste des articles au format Microsoft® Excel®."
-				}
-			]
-		},
-		{
-			"id": "product.show.title",
-			"entity": "product",
-			"image": "product/product_show",
-			"icon": "display",
-			"description": "Cette page affiche les propriétés de l'article.",
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Retourne à la page précédente."
-				},
-				{
-					"id": "common.button_edit",
-					"description": "Affiche la page d'édition de l'article.",
-					"dialog": "product.edit.title"
-				},
-				{
-					"id": "common.button_delete",
-					"description": "Affiche la page de suppression de l'article.",
-					"dialog": "product.delete.title"
-				}
-			]
-		},
-		{
-			"id": "product.add.title",
-			"entity": "product",
-			"image": "product/product_add",
-			"description": "Cette page permet de créer un nouvel article.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "product.edit.title",
-			"entity": "product",
-			"image": "product/product_edit",
-			"description": "Cette page permet de modifier un article.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "product.delete.title",
-			"entity": "product",
-			"image": "product/product_delete",
-			"icon": "times",
-			"description": "Cette page permet de confirmer la suppression d'un article.",
-			"editActions": [
-				{
-					"id": "common.button_delete",
-					"description": "Supprime l'article et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule la suppression et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "product.update.title",
-			"image": "product/product_update",
-			"icon": "file-alt far",
-			"entity": "product",
-			"description": "Cette page permet de mettre jour le prix des articles pour une catégorie.",
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Met à jour le prix des articles et affiche les résultats de la mise à jour."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Retourne à la page principale de l'application.",
-					"dialog": "index.title"
-				}
-			],
-			"links": [
-				{
-					"id": "product.result.description",
-					"type": "dialog"
-				}
-			]
-		},
-		{
-			"id": "product.result.description",
-			"name": "product.result.description",
-			"image": "product/product_result",
-			"icon": "file-alt far",
-			"entity": "product",
-			"description": "Cette page affiche le résultat de la mise à jour des articles.",
-			"editActions": [
-				{
-					"id": "index.title",
-					"icon": "home",
-					"description": "Retourne à la page principale de l'application.",
-					"dialog": "index.title"
-				},
-				{
-					"id": "product.update.title",
-					"label": "product.result.new_update",
-					"description": "Retourne à la page de mise à jour des articles."
-				}
-			],
-			"links": [
-				{
-					"id": "product.update.title",
-					"type": "dialog"
-				}
-			]
-		},
-		{
-			"id": "archive.title",
-			"image": "calculation/calculation_archive_query",
-			"icon": "calendar-xmark far",
-			"entity": "calculation",
-			"description": "Cette page vous permet d'archiver des calculations en modifiant leur statut.",
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Met à jour le statut des calculations et affiche les résultats de la mise à jour."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Retourne à la page principale de l'application.",
-					"dialog": "index.title"
-				}
-			],
-			"links": [
-				{
-					"id": "archive.result.description",
-					"type": "dialog"
-				}
-			]
-		},
-		{
-			"id": "archive.result.description",
-			"image": "calculation/calculation_archive_result",
-			"icon": "calendar-xmark far",
-			"description": "Cette page affiche le résultat de l'archivage des calculations.",
-			"links": [
-				{
-					"id": "archive.title",
-					"type": "dialog"
-				}
-			]
-		},
-		{
-			"id": "task.list.title",
-			"entity": "task",
-			"image": "task/task_list",
-			"description": "Gestion des tâches du catalogue.",
-			"displayEntityColumns": true,
-			"displayEntityActions": true,
-			"globalActions": [
-				{
-					"id": "help.actions.clear",
-					"icon": "eraser",
-					"description": "Efface tous les critères de recherche saisie."
-				},
-				{
-					"id": "help.actions.toggle",
-					"icon": "toggle-on",
-					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
-				},
-				{
-					"id": "task.list.pdf_title",
-					"icon": "file-pdf far",
-					"description": "Exporte la liste des tâches au format PDF."
-				},
-				{
-					"id": "task.list.excel_title",
-					"icon": "file-excel far",
-					"description": "Exporte la liste des tâches au format Microsoft® Excel®."
-				}
-			]
-		},
-		{
-			"id": "task.show.title",
-			"entity": "task",
-			"image": "task/task_show",
-			"icon": "display",
-			"description": "Cette page affiche les propriétés de la tâche.",
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Retourne à la page précédente."
-				},
-				{
-					"id": "common.button_edit",
-					"description": "Affiche la page d'édition de la tâches.",
-					"dialog": "task.edit.title"
-				},
-				{
-					"id": "common.button_delete",
-					"description": "Affiche la page de suppression de la tâches.",
-					"dialog": "task.delete.title"
-				}
-			]
-		},
-		{
-			"id": "task.add.title",
-			"entity": "task",
-			"image": "task/task_add",
-			"description": "Cette page permet de créer un nouvelle tâche.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "task.edit.title",
-			"entity": "task",
-			"image": "task/task_edit",
-			"description": "Cette page permet de modifier une tâche.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "task.delete.title",
-			"entity": "task",
-			"image": "task/task_delete",
-			"icon": "times",
-			"description": "Cette page permet de confirmer la suppression d'une tâche.",
-			"editActions": [
-				{
-					"id": "common.button_delete",
-					"description": "Supprime la tâche et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule la suppression et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "task_compute.title",
-			"entity": "task",
-			"image": "task/task_compute",
-			"icon": "keyboard",
-			"description": "Permet de calculer une tâche.",
-			"details": [
-				"L'utilisateur doit sélectionner une <b>tâche</b>, une <b>quantité</b>",
-				"et une ou plusieurs <b>opérations</b>.",
-				"Le programme recalcule automatiquement le <b>totale générale</b> à chaque changement."
-			],
-			"editActions": [
-				{
-					"id": "common.button_close",
-					"description": "Retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "category.list.title",
-			"entity": "category",
-			"image": "category/category_list",
-			"description": "Gestion des catégories du catalogue.",
-			"displayEntityColumns": true,
-			"displayEntityActions": true,
-			"globalActions": [
-				{
-					"id": "help.actions.clear",
-					"icon": "eraser",
-					"description": "Efface tous les critères de recherche saisie."
-				},
-				{
-					"id": "help.actions.toggle",
-					"icon": "toggle-on",
-					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
-				},
-				{
-					"id": "category.list.pdf_title",
-					"icon": "file-pdf far",
-					"description": "Exporte la liste des catégories au format PDF."
-				},
-				{
-					"id": "category.list.excel_title",
-					"icon": "file-excel far",
-					"description": "Exporte la liste des catégories au format Microsoft® Excel®."
-				}
-			]
-		},
-		{
-			"id": "category.show.title",
-			"entity": "category",
-			"image": "category/category_show",
-			"icon": "display",
-			"description": "Cette page affiche les propriétés de la catégorie.",
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Retourne à la page précédente."
-				},
-				{
-					"id": "common.button_edit",
-					"description": "Affiche la page d'édition de la catégorie.",
-					"dialog": "category.edit.title"
-				},
-				{
-					"id": "common.button_delete",
-					"description": "Affiche la page de suppression de la catégorie.",
-					"dialog": "category.delete.title"
-				}
-			]
-		},
-		{
-			"id": "category.add.title",
-			"entity": "category",
-			"image": "category/category_add",
-			"description": "Cette page permet de créer une nouvelle catégorie.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "category.edit.title",
-			"entity": "category",
-			"image": "category/category_edit",
-			"description": "Cette page permet de modifier une catégorie.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "category.delete.title",
-			"entity": "category",
-			"image": "category/category_delete",
-			"forbidden": {
-				"image": "category/category_delete_forbidden",
-				"text": "Si la catégorie sélectionnée ne peut pas être supprimée, l'avertissement ci-dessous est affiché.",
-				"action": {
-					"id": "common.button_back_list",
-					"icon": "chevron-left",
-					"description": "Retourne la page précédente."
-				}
-			},
-			"icon": "times",
-			"description": "Cette page permet de confirmer la suppression d'une catégorie.",
-			"editActions": [
-				{
-					"id": "common.button_delete",
-					"description": "Supprime la catégorie et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule la suppression et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "group.list.title",
-			"entity": "group",
-			"image": "group/group_list",
-			"description": "Gestion des groupes du catalogue.",
-			"displayEntityColumns": true,
-			"displayEntityActions": true,
-			"globalActions": [
-				{
-					"id": "help.actions.clear",
-					"icon": "eraser",
-					"description": "Efface tous les critères de recherche saisie."
-				},
-				{
-					"id": "help.actions.toggle",
-					"icon": "toggle-on",
-					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
-				},
-				{
-					"id": "group.list.pdf_title",
-					"icon": "file-pdf far",
-					"description": "Exporte la liste des groupes au format PDF."
-				},
-				{
-					"id": "group.list.excel_title",
-					"icon": "file-excel far",
-					"description": "Exporte la liste des groupes au format Microsoft® Excel®."
-				}
-			]
-		},
-		{
-			"id": "group.show.title",
-			"entity": "group",
-			"image": "group/group_show",
-			"icon": "display",
-			"description": "Cette page affiche les propriétés du groupe.",
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Retourne à la page précédente."
-				},
-				{
-					"id": "common.button_edit",
-					"description": "Affiche la page d'édition du groupe.",
-					"dialog": "group.edit.title"
-				},
-				{
-					"id": "common.button_delete",
-					"description": "Affiche la page de suppression du groupe.",
-					"dialog": "group.delete.title"
-				}
-			]
-		},
-		{
-			"id": "group.add.title",
-			"entity": "group",
-			"image": "group/group_add",
-			"description": "Cette page permet de créer un nouveau group.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "group.edit.title",
-			"entity": "group",
-			"image": "group/group_edit",
-			"description": "Cette page permet de modifier un groupe.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "group.delete.title",
-			"entity": "group",
-			"image": "group/group_delete",
-			"icon": "times",
-			"description": "Cette page permet de confirmer la suppression d'un groupe.",
-			"editActions": [
-				{
-					"id": "common.button_delete",
-					"description": "Supprime le groupe et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule la suppression et retourne à la page précédente."
-				}
-			],
-			"forbidden": {
-				"image": "group/group_delete_forbidden",
-				"text": "Si le groupe sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.",
-				"action": {
-					"id": "common.button_back_list",
-					"icon": "chevron-left",
-					"description": "Retourne la page précédente."
-				}
-			}
-		},
-		{
-			"id": "globalmargin.list.title",
-			"entity": "globalmargin",
-			"image": "globalmargin/globalmargin_list",
-			"description": "Gestion des marges globales du catalogue.",
-			"displayEntityColumns": true,
-			"displayEntityActions": true,
-			"globalActions": [
-				{
-					"id": "help.actions.clear",
-					"icon": "eraser",
-					"description": "Efface tous les critères de recherche saisie."
-				},
-				{
-					"id": "help.actions.toggle",
-					"icon": "toggle-on",
-					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
-				},
-				{
-					"id": "group.list.pdf_title",
-					"icon": "file-pdf far",
-					"description": "Exporte la liste des marges globales au format PDF."
-				},
-				{
-					"id": "group.list.excel_title",
-					"icon": "file-excel far",
-					"description": "Exporte la liste des marges globales au format Microsoft® Excel®."
-				}
-			]
-		},
-		{
-			"id": "globalmargin.show.title",
-			"entity": "globalmargin",
-			"image": "globalmargin/globalmargin_show",
-			"icon": "display",
-			"description": "Cette page affiche les propriétés de la marge globale.",
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Retourne à la page précédente."
-				},
-				{
-					"id": "common.button_edit",
-					"description": "Affiche la page d'édition des marges globales.",
-					"dialog": "globalmargin.edit.title"
-				}
-			]
-		},
-		{
-			"id": "globalmargin.edit.title",
-			"entity": "globalmargin",
-			"image": "globalmargin/globalmargin_edit",
-			"description": "Cette page permet de modifier les marges globales.",
-			"displayEntityFields": true,
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Enregistre les modifications et retourne à la page précédente."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule les modifications et retourne à la page précédente."
-				}
-			]
-		},
-		{
-			"id": "search.title",
-			"image": "search",
-			"description": "Permet de rechercher des données.",
-			"displayEntityColumns": true,
-			"globalActions": [
-				{
-					"id": "help.actions.clear",
-					"icon": "eraser",
-					"description": "Efface tous les critères de recherche saisie."
-				},
-				{
-					"id": "help.actions.toggle",
-					"icon": "toggle-on",
-					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
-				}
-			]
-		},
-		{
-			"id": "log.list.title",
-			"entity": "log",
-			"image": "log/log_list",
-			"description": "Affichage des entrées du journal de l'application. Cette page est accessible uniquement aux administrateurs.",
-			"displayEntityColumns": true,
-			"displayEntityActions": true,
-			"globalActions": [
-				{
-					"id": "help.actions.clear",
-					"icon": "eraser",
-					"description": "Efface tous les critères de recherche saisie."
-				},
-				{
-					"id": "help.actions.toggle",
-					"icon": "toggle-on",
-					"description": "Bascule l'affichage de la table entre la vue tabulaire et la vue détaillée."
-				},
-				{
-					"id": "common.button_refresh",
-					"icon": "sync-alt",
-					"description": "Actualise la liste des entrées du journal."
-				},
-				{
-					"id": "log.delete.title",
-					"icon": "times",
-					"description": "Supprime la liste des entrées du journal."
-				},
-				{
-					"id": "log.list.pdf_title",
-					"icon": "file-pdf far",
-					"description": "Exporte la liste des entrées au format PDF."
-				},
-				{
-					"id": "log.list.excel_title",
-					"icon": "file-excel far",
-					"description": "Exporte la liste des entrées au format Microsoft® Excel®."
-				}
-			]
-		},
-		{
-			"id": "log.show.title",
-			"entity": "log",
-			"image": "log/log_show",
-			"icon": "display",
-			"description": "Cette page affiche les propriétés d'une entrée dans le journal de l'application. Cette page est accessible uniquement aux administrateurs.",
-			"editActions": [
-				{
-					"id": "common.button_ok",
-					"description": "Retourne à la page précédente.",
-					"dialog": "log.list.title"
-				}
-			]
-		},
-		{
-			"id": "log.delete.title",
-			"entity": "log",
-			"image": "log/log_delete",
-			"icon": "times",
-			"description": "Cette page permet de confirmer la suppression du journal de l'application. Cette page est accessible uniquement aux administrateurs.",
-			"editActions": [
-				{
-					"id": "common.button_delete",
-					"description": "Supprime le journal et retourne à la page principale du site."
-				},
-				{
-					"id": "common.button_cancel",
-					"description": "Annule la suppression et retourne à la page précédente.",
-					"dialog": "log.list.title"
-				}
-			]
-		}
-	]
+    "actions": {
+        "search": {
+            "id": "help.actions.search",
+            "icon": "pen-to-square",
+            "description": "Zone de text pour rechercher les données."
+        },
+        "clear": {
+            "id": "help.actions.clear",
+            "icon": "eraser",
+            "description": "Efface tous les critères de recherche et les filtres."
+        },
+        "table": {
+            "id": "table_view.table",
+            "icon": "table",
+            "description": "Menu permettant d'afficher les objets sous forme tabulaire."
+        },
+        "custom": {
+            "id": "table_view.custom",
+            "icon": "grip-horizontal",
+            "description": "Menu permettant d'afficher les objets sous forme de mosaïque."
+        },
+        "sort": {
+            "id": "list.sort_title",
+            "icon": "sort-amount-down-alt",
+            "description": "Affiche une boîte de dialog permettant de trier les objets."
+        },
+        "page": {
+            "id": "datatable.dialog_title",
+            "icon": "arrow-up-right-dots",
+            "description": "Affiche une boîte de dialog permettant de sélectionner une page à afficher."
+        },
+        "size": {
+            "id": "help.actions.pages",
+            "icon": "list-ol",
+            "description": "Permet de définir le nombre d'éléments à afficher."
+        }
+    },
+    "entities": [
+        {
+            "id": "product",
+            "icon": "file-alt far",
+            "description": "Représente un article du catalogue.",
+            "fields": [
+                {
+                    "name": "description",
+                    "description": "Description de l'article.",
+                    "length": "255"
+                },
+                {
+                    "name": "category",
+                    "description": "Catégorie à laquelle appartient l'article.",
+                    "type": "reference",
+                    "entity": "category"
+                },
+                {
+                    "name": "price",
+                    "description": "Prix unitaire de l'article.",
+                    "type": "amount"
+                },
+                {
+                    "name": "unit",
+                    "description": "Unité de l'article.",
+                    "required": false,
+                    "length": "30"
+                },
+                {
+                    "name": "supplier",
+                    "description": "Nom du fournisseur de l'article.",
+                    "required": false,
+                    "length": "255"
+                }
+            ],
+            "constraints": [
+                "La description de l'article doit être unique à travers tout le catalogue."
+            ],
+            "actions": [
+                {
+                    "id": "product.show.title",
+                    "icon": "display",
+                    "description": "Affiche la page des propriétés de l'article.",
+                    "dialog": "product.show.title"
+                },
+                {
+                    "id": "product.edit.title",
+                    "icon": "pencil",
+                    "description": "Affiche la page d'édition de l'article.",
+                    "dialog": "product.edit.title"
+                },
+                {
+                    "id": "product.delete.title",
+                    "icon": "times",
+                    "description": "Affiche la page de suppression de l'article.",
+                    "dialog": "product.delete.title"
+                },
+                {
+                    "id": "product.add.title",
+                    "icon": "file far",
+                    "description": "Affiche la page de création d'un article.",
+                    "dialog": "product.add.title"
+                },
+                {
+                    "id": "common.button_clone",
+                    "icon": "copy far",
+                    "description": "Crée une copie de l'article et affiche la page de création."
+                }
+            ],
+            "links": [
+                {
+                    "id": "product.list.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "task",
+            "icon": "tasks",
+            "description": "Représente une tâche du catalogue. Une tâche regroupe plusieurs opérations.",
+            "fields": [
+                {
+                    "name": "name",
+                    "description": "Description de la tâche.",
+                    "length": "255"
+                },
+                {
+                    "name": "category",
+                    "description": "Catégorie à laquelle appartient la tâche.",
+                    "type": "reference",
+                    "entity": "category"
+                },
+                {
+                    "name": "unit",
+                    "description": "Unité de la tâche.",
+                    "required": false,
+                    "length": "30"
+                },
+                {
+                    "name": "items",
+                    "description": "Liste des opération appartenant à cette tâche.",
+                    "required": false,
+                    "type": "collection"
+                }
+            ],
+            "constraints": [
+                "Le nom de la tâche doit être unique à travers tout le catalogue.",
+                "Le nom des opérations de chaque tâche doit être unique."
+            ],
+            "actions": [
+                {
+                    "id": "task.show.title",
+                    "icon": "display",
+                    "description": "Affiche la page des propriétés de la tâche."
+                },
+                {
+                    "id": "task.edit.title",
+                    "icon": "pencil",
+                    "description": "Affiche la page d'édition de la tâche."
+                },
+                {
+                    "id": "task.delete.title",
+                    "icon": "times",
+                    "description": "Affiche la page de suppression de la tâche."
+                },
+                {
+                    "id": "task.add.title",
+                    "icon": "file far",
+                    "description": "Affiche la page de création d'une tâche."
+                },
+                {
+                    "id": "common.button_clone",
+                    "icon": "copy far",
+                    "description": "Crée une copie de la tâche et affiche la page de création."
+                },
+                {
+                    "id": "task_compute.title",
+                    "icon": "keyboard",
+                    "description": "Permet de simuler le calcul d'une tâche."
+                }
+            ],
+            "links": [
+                {
+                    "id": "task.list.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "category",
+            "icon": "folder far",
+            "description": "Représente un catégorie du catalogue. Elle contient une liste d'articles et de tâches.",
+            "fields": [
+                {
+                    "name": "code",
+                    "description": "Nom de la catégorie.",
+                    "length": "30"
+                },
+                {
+                    "name": "description",
+                    "description": "Description de la catégorie.",
+                    "required": false,
+                    "length": "255"
+                },
+                {
+                    "name": "group",
+                    "description": "Groupe à laquelle appartient la catégorie.",
+                    "type": "reference",
+                    "entity": "group"
+                },
+                {
+                    "name": "products",
+                    "description": "Liste des articles appartenant à cette catégorie.",
+                    "required": false,
+                    "type": "collection",
+                    "entity": "product"
+                },
+                {
+                    "name": "tasks",
+                    "description": "Liste des tâches appartenant à cette catégorie.",
+                    "required": false,
+                    "type": "collection",
+                    "entity": "task"
+                }
+            ],
+            "constraints": [
+                "Le nom de la catégorie doit être unique à travers tout le catalogue."
+            ],
+            "actions": [
+                {
+                    "id": "category.show.title",
+                    "icon": "display",
+                    "description": "Affiche la page des propriétés de la catégorie."
+                },
+                {
+                    "id": "category.edit.title",
+                    "icon": "pencil",
+                    "description": "Affiche la page d'édition de la catégorie."
+                },
+                {
+                    "id": "category.delete.title",
+                    "icon": "times",
+                    "description": "Affiche la page de suppression de la catégorie."
+                },
+                {
+                    "id": "category.add.title",
+                    "icon": "file far",
+                    "description": "Affiche la page de création d'une catégorie."
+                },
+                {
+                    "id": "common.button_clone",
+                    "icon": "copy far",
+                    "description": "Crée une copie de la catégorie et affiche la page de création."
+                }
+            ],
+            "links": [
+                {
+                    "id": "category.list.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "group",
+            "icon": "code-branch",
+            "description": "Représente un groupe du catalogue. Il contient une liste de catégories et de marges à appliquer aux calculations.",
+            "fields": [
+                {
+                    "name": "code",
+                    "description": "Nom du groupe.",
+                    "length": "30"
+                },
+                {
+                    "name": "description",
+                    "description": "Description du groupe.",
+                    "required": false,
+                    "length": "255"
+                },
+                {
+                    "name": "margins",
+                    "description": "Liste de marges à appliquer à un groupe d'articles d'une calculation.",
+                    "required": false,
+                    "type": "collection"
+                },
+                {
+                    "name": "categories",
+                    "description": "Liste de catégories appartenant à ce groupe.",
+                    "required": false,
+                    "type": "collection",
+                    "entity": "category"
+                }
+            ],
+            "constraints": [
+                "Le nom du groupe doit être unique à travers tout le catalogue."
+            ],
+            "actions": [
+                {
+                    "id": "group.show.title",
+                    "icon": "display",
+                    "description": "Affiche la page des propriétés du groupe."
+                },
+                {
+                    "id": "group.edit.title",
+                    "icon": "pencil",
+                    "description": "Affiche la page d'édition du groupe."
+                },
+                {
+                    "id": "group.delete.title",
+                    "icon": "times",
+                    "description": "Affiche la page de suppression du groupe."
+                },
+                {
+                    "id": "group.add.title",
+                    "icon": "file far",
+                    "description": "Affiche la page de création d'un groupe."
+                }
+            ],
+            "links": [
+                {
+                    "id": "group.list.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "globalmargin",
+            "icon": "percent",
+            "description": "Représente une marge globale à appliquer aux calculations.",
+            "fields": [
+                {
+                    "name": "minimum",
+                    "description": "Valeur minimale (inclus) pour laquelle la marge est appliquée.",
+                    "type": "amount"
+                },
+                {
+                    "name": "maximum",
+                    "description": "Valeur maximale (exclus) pour laquelle la marge est appliquée.",
+                    "type": "amount"
+                },
+                {
+                    "name": "margin",
+                    "description": "Marge à appliquer à la calculation.",
+                    "type": "percent"
+                }
+            ],
+            "constraints": [
+                "La valeur minimale d'une marge ne doit pas chevaucher une marge existante.",
+                "La valeur maximale d'une marge ne doit pas chevaucher une marge existante.",
+                "La valeur maximale d'une marge doit être supérieure à la valeur minimale.",
+                "La valeur minimale d'une marge doit être égale à la valeur maximal de la marge précédente."
+            ],
+            "actions": [
+                {
+                    "id": "globalmargin.show.title",
+                    "icon": "display",
+                    "description": "Affiche la page des propriétés de la marge globale."
+                },
+                {
+                    "id": "globalmargin.edit.title",
+                    "icon": "pencil",
+                    "description": "Affiche la page d'édition des marges globales."
+                }
+            ],
+            "links": [
+                {
+                    "id": "globalmargin.list.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "calculationstate",
+            "icon": "flag far",
+            "description": "Représente le statut d'une calculation.",
+            "fields": [
+                {
+                    "name": "code",
+                    "description": "Nom du statut.",
+                    "length": "30"
+                },
+                {
+                    "name": "editable",
+                    "description": "Définit si une calculation avec ce statut peut être modifiée.",
+                    "type": "boolean"
+                },
+                {
+                    "name": "color",
+                    "description": "Couleur utilisée dans interface utilisateur (UI).",
+                    "length": "10"
+                },
+                {
+                    "name": "description",
+                    "description": "Description du statut.",
+                    "length": "255",
+                    "required": false
+                },
+                {
+                    "name": "calculations",
+                    "description": "Liste des calculations appartenant à ce statut.",
+                    "required": false,
+                    "type": "collection",
+                    "entity": "calculation"
+                }
+            ],
+            "constraints": [
+                "Le nom du statut doit être unique à travers tout le catalogue."
+            ]
+        },
+        {
+            "id": "calculation",
+            "icon": "calculator",
+            "description": "Représente une calculation.",
+            "fields": [
+                {
+                    "name": "id",
+                    "description": "Numéro unique identifiant la calculation. Ce numéro est généré automatiquement par l'application.",
+                    "type": "identifier"
+                },
+                {
+                    "name": "date",
+                    "description": "Date de la calculation. La valeur par défaut est la date du jour.",
+                    "type": "date"
+                },
+                {
+                    "name": "customer",
+                    "description": "Nom du client.",
+                    "length": "255"
+                },
+                {
+                    "name": "description",
+                    "description": "Description de la calculation.",
+                    "length": "255"
+                },
+                {
+                    "name": "state",
+                    "description": "Statut de la calculation.",
+                    "type": "reference",
+                    "entity": "calculationstate"
+                },
+                {
+                    "name": "itemsTotal",
+                    "description": "Montant total des articles.",
+                    "type": "amount",
+                    "required": false
+                },
+                {
+                    "name": "globalMargin",
+                    "description": "Marge globale calculée automatiquement par le programme en fonction du montant total des articles.",
+                    "type": "percent",
+                    "required": false
+                },
+                {
+                    "name": "totalNet",
+                    "description": "Montant total net de la calculation.",
+                    "type": "amount",
+                    "required": false
+                },
+                {
+                    "name": "userMargin",
+                    "description": "Marge de l'utilisateur à appliquer à la calculation.",
+                    "type": "percent",
+                    "required": false
+                },
+                {
+                    "name": "overallTotal",
+                    "description": "Total général de la calculation.",
+                    "type": "amount",
+                    "required": false
+                },
+                {
+                    "name": "created",
+                    "description": "Date et nom de l'utilisateur qui a crée la calculation.",
+                    "required": false
+                },
+                {
+                    "name": "updated",
+                    "description": "Date et nom de l'utilisateur qui a modifié la calculation en dernier.",
+                    "required": false
+                }
+            ],
+            "actions": [
+                {
+                    "id": "calculation.show.title",
+                    "icon": "display",
+                    "description": "Affiche la page des propriétés de la calculation."
+                },
+                {
+                    "id": "calculation.edit.title_short",
+                    "icon": "pencil",
+                    "description": "Affiche la page d'édition de la calculation."
+                },
+                {
+                    "id": "calculation.delete.title",
+                    "icon": "times",
+                    "description": "Affiche la page de suppression de la calculation."
+                },
+                {
+                    "id": "calculation.add.title",
+                    "icon": "file far",
+                    "description": "Affiche la page de création d'une calculation."
+                },
+                {
+                    "id": "common.button_clone",
+                    "icon": "copy far",
+                    "description": "Crée une copie de la calculation et affiche la page de création."
+                },
+                {
+                    "id": "calculation.list.state_title",
+                    "icon": "flag far",
+                    "description": "Affiche la page de modification du statut de la calculation."
+                },
+                {
+                    "id": "calculation.list.pdf_single_title",
+                    "icon": "file-pdf far",
+                    "description": "Exporte la calculation vers le format de document portable (PDF)."
+                },
+                {
+                    "id": "calculation.list.excel_single_title",
+                    "icon": "file-pdf far",
+                    "description": "Exporte la calculation vers le format Microsoft® Excel®."
+                }
+            ],
+            "links": [
+                {
+                    "id": "calculation.list.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "log",
+            "icon": "book",
+            "description": "Représente une entrée dans le journal de l'application.",
+            "fields": [
+                {
+                    "name": "createdAt",
+                    "description": "Date de création de l'entrée.",
+                    "required": true,
+                    "type": "date"
+                },
+                {
+                    "name": "channel",
+                    "description": "Nom du canal.",
+                    "required": true,
+                    "type": "text"
+                },
+                {
+                    "name": "level",
+                    "description": "Niveau d'erreur.",
+                    "required": true
+                },
+                {
+                    "name": "message",
+                    "description": "Message d'information, d'avertissement ou d'erreur.",
+                    "required": true
+                },
+                {
+                    "name": "context",
+                    "description": "Contexte d'information, d'avertissement ou d'erreur.",
+                    "required": false
+                },
+                {
+                    "name": "user",
+                    "description": "Nom de l'utilisateur ayant générer cette information, cet avertissement ou cette erreur.",
+                    "required": false
+                }
+            ],
+            "actions": [
+                {
+                    "id": "log.show.title",
+                    "icon": "display",
+                    "description": "Affiche la page des propriétés de l'entrée."
+                }
+            ],
+            "links": [
+                {
+                    "id": "log.list.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "user",
+            "icon": "user far",
+            "description": "Représente un utilisateur de l'application.",
+            "fields": [
+                {
+                    "name": "imageFile",
+                    "description": "Image du profile.",
+                    "type": "image",
+                    "required": false
+                },
+                {
+                    "name": "username",
+                    "description": "Nom utilisé pour la connexion à l'application.",
+                    "length": "180"
+                },
+                {
+                    "name": "password",
+                    "description": "Mot de passe utilisé pour la connexion à l'application.",
+                    "length": "255"
+                },
+                {
+                    "name": "email",
+                    "description": "Adresse électronique.",
+                    "length": "180"
+                },
+                {
+                    "name": "role",
+                    "description": "Rôle utilisé pour définir les droits d'accès à l'application.",
+                    "type": "reference",
+                    "required": true
+                },
+                {
+                    "name": "enabled",
+                    "description": "Définit si l'utilisateur est activé ou désactivé.",
+                    "type": "boolean",
+                    "required": true
+                },
+                {
+                    "name": "lastLogin",
+                    "description": "Date et heure de la dernière connexion à l'application.",
+                    "type": "date",
+                    "required": false
+                }
+            ],
+            "actions": [
+                {
+                    "id": "user.show.title",
+                    "icon": "display",
+                    "description": "Affiche la page des propriétés de l'utilisateur."
+                },
+                {
+                    "id": "user.edit.title",
+                    "icon": "pencil",
+                    "description": "Affiche la page d'édition de l'utilisateur."
+                },
+                {
+                    "id": "user.delete.title",
+                    "icon": "times",
+                    "description": "Affiche la page de suppression de l'utilisateur."
+                },
+                {
+                    "id": "user.add.title",
+                    "icon": "file far",
+                    "description": "Affiche la page de création d'un utilisateur."
+                }
+            ],
+            "links": [
+                {
+                    "id": "user.list.title",
+                    "type": "dialog"
+                }
+            ]
+        }
+    ],
+    "mainMenu": {
+        "image": "navigation",
+        "description": "Le menu principal est une partie de l'interface d'utilisateur permettant de parcourir les pages du site.",
+        "menus": [
+            {
+                "id": "index.title",
+                "icon": "home",
+                "description": "Page principale de l'application.",
+                "dialog": "index.title"
+            },
+            {
+                "id": "calculation.list.title",
+                "icon": "calculator",
+                "description": "Gestion des calculations.",
+                "dialog": "calculation.list.title"
+            },
+            {
+                "id": "index.menu_data",
+                "icon": "database",
+                "description": "Menu d'accès aux données",
+                "menus": [
+                    {
+                        "id": "product.list.title",
+                        "icon": "file-alt far",
+                        "description": "Gestion des articles du catalogue.",
+                        "dialog": "product.list.title"
+                    },
+                    {
+                        "id": "task.list.title",
+                        "icon": "tasks",
+                        "description": "Gestion des tâches du catalogue.",
+                        "dialog": "task.list.title"
+                    },
+                    {
+                        "id": "category.list.title",
+                        "icon": "folder far",
+                        "description": "Gestion des catégories du catalogue.",
+                        "dialog": "category.list.title"
+                    },
+                    {
+                        "id": "group.list.title",
+                        "icon": "code-branch",
+                        "description": "Gestion des groupes du catalogue.",
+                        "dialog": "group.list.title"
+                    },
+                    {
+                        "id": "globalmargin.list.title",
+                        "icon": "percent",
+                        "description": "Gestion des marge globales du catalogue.",
+                        "dialog": "globalmargin.list.title"
+                    }
+                ]
+            },
+            {
+                "id": "index.menu_graphics",
+                "icon": "chart-area",
+                "description": "Menu d'accès aux statistiques.",
+                "menus": [
+                    {
+                        "id": "title_by_month|chart",
+                        "icon": "calendar-alt far",
+                        "description": "Page affichant un graphique des calculations par mois."
+                    },
+                    {
+                        "id": "title_by_state|chart",
+                        "icon": "flag far",
+                        "description": "Page affichant un graphique des calculations par statut."
+                    }
+                ]
+            },
+            {
+                "id": "index.menu_tools",
+                "icon": "tools",
+                "description": "Menu d'accès aux outils de l'application.",
+                "menus": [
+                    {
+                        "id": "search.title",
+                        "icon": "search",
+                        "description": "Page de recherche.",
+                        "dialog": "search.title"
+                    },
+                    {
+                        "id": "below.title",
+                        "icon": "percent",
+                        "description": "Page pour afficher les calculations contenant une marge globale inférieure au seuil définit."
+                    },
+                    {
+                        "id": "duplicate.title",
+                        "icon": "copy far",
+                        "description": "Page pour afficher les calculations contenant le même article plus d'une fois."
+                    },
+                    {
+                        "id": "empty.title",
+                        "icon": "file-code far",
+                        "description": "Page pour afficher les calculations contenant un article avec une quantité ou un prix égale à 0."
+                    },
+                    {
+                        "id": "task_compute.title",
+                        "icon": "keyboard",
+                        "description": "Page pour calculer une tâche.",
+                        "dialog": "task_compute.title"
+                    }
+                ]
+            },
+            {
+                "id": "index.menu_admin",
+                "icons": "gear",
+                "description": "Menu réservé aux administrateurs.",
+                "menus": [
+                    {
+                        "id": "product.update.title",
+                        "icon": "file-alt far",
+                        "description": "Page pour mettre à jour le prix des articles.",
+                        "dialog": "product.update.title"
+                    },
+                    {
+                        "id": "archive.title",
+                        "icon": "file-alt far",
+                        "description": "Page pour archiver des calculations.",
+                        "dialog": "archive.title"
+                    },
+                    {
+                        "id": "user.list.title",
+                        "icon": "user",
+                        "description": "Gestion des utilisateurs.",
+                        "dialog": "user.list.title"
+                    },
+                    {
+                        "id": "log.list.title",
+                        "icon": "book",
+                        "description": "Affiche la liste des entrées du journal de l'application.",
+                        "dialog": "log.list.title"
+                    }
+                ]
+            }
+        ]
+    },
+    "dialogs": [
+        {
+            "id": "index.title",
+            "image": "home",
+            "description": "Page principale de l'application.",
+            "details": [
+                "Cette page est divisée en quatre parties<br>",
+                "- La partie principale contient la liste des dernières calculations.<br>",
+                "- La deuxième partie contient la liste des calculations regroupées par status.<br>",
+                "- La troisième partie contient la liste des calculations regroupées par mois.<br>",
+                "- La dernière partie contient le nombre d'objets dans le catalogue (base de données)."
+            ]
+        },
+        {
+            "id": "calculation.list.title",
+            "entity": "calculation",
+            "image": "calculation/calculation_list",
+            "description": "Gestion des calculations.",
+            "displayEntityColumns": true,
+            "displayEntityActions": true,
+            "globalActions": [
+                {
+                    "action": "search"
+                },
+                {
+                    "id": "calculationstate.name",
+                    "icon": "flag far",
+                    "description": "Menu déroulant permettant de filtrer les calculations selon un statut."
+                },
+                {
+                    "action": "clear"
+                },
+                {
+                    "action": "size"
+                },
+                {
+                    "action": "table"
+                },
+                {
+                    "action": "custom"
+                },
+                {
+                    "action": "page"
+                },
+                {
+                    "action": "sort"
+                },
+                {
+                    "id": "calculation.list.pdf_title",
+                    "icon": "file-pdf far",
+                    "description": "Exporte la liste des calculations vers le format de document portable (PDF)."
+                },
+                {
+                    "id": "calculation.list.excel_title",
+                    "icon": "file-excel far",
+                    "description": "Exporte la liste des calculations au format Microsoft® Excel®."
+                }
+            ]
+        },
+        {
+            "id": "calculation.show.title",
+            "entity": "calculation",
+            "image": "calculation/calculation_show",
+            "icon": "display",
+            "description": "Cette page affiche les propriétés de la calculation.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_edit",
+                    "description": "Affiche la page d'édition de la calculation.",
+                    "dialog": "calculation.edit.title_short"
+                },
+                {
+                    "id": "common.button_delete",
+                    "description": "Affiche la page de suppression de la calculation.",
+                    "dialog": "calculation.delete.title"
+                },
+                {
+                    "id": "common.button_pdf",
+                    "icon": "file-pdf far",
+                    "description": "Exporte la calculation vers le format de document portable (PDF)."
+                }
+            ]
+        },
+        {
+            "id": "calculation.edit.title_short",
+            "entity": "calculation",
+            "image": "calculation/calculation_edit_main",
+            "description": "Cette page permet de modifier une calculation.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "calculation.add.title",
+            "entity": "calculation",
+            "image": "calculation/calculation_edit_new",
+            "description": "Cette page permet de créer une nouvelle calculation.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "calculation.delete.title",
+            "entity": "calculation",
+            "image": "calculation/calculation_delete",
+            "icon": "times",
+            "description": "Cette page permet de confirmer la suppression d'une calculation.",
+            "editActions": [
+                {
+                    "id": "common.button_delete",
+                    "description": "Supprime la calculation et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule la suppression et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "calculation.list.state_title",
+            "entity": "calculation",
+            "image": "calculation/calculation_edit_state",
+            "description": "Permet de modifier le statut d'une calculation.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "product.list.title",
+            "entity": "product",
+            "image": "product/product_list",
+            "description": "Gestion des articles du catalogue.",
+            "displayEntityColumns": true,
+            "displayEntityActions": true,
+            "globalActions": [
+                {
+                    "action": "search"
+                },
+                {
+                    "id": "category.name",
+                    "icon": "folder far",
+                    "description": "Menu déroulant permettant de filtrer les articles selon un groupe ou une catégorie."
+                },
+                {
+                    "action": "clear"
+                },
+                {
+                    "action": "size"
+                },
+                {
+                    "action": "table"
+                },
+                {
+                    "action": "custom"
+                },
+                {
+                    "action": "page"
+                },
+                {
+                    "action": "sort"
+                },
+                {
+                    "id": "product.list.pdf_title",
+                    "icon": "file-pdf far",
+                    "description": "Exporte la liste des articles vers le format de document portable (PDF)."
+                },
+                {
+                    "id": "product.list.excel_title",
+                    "icon": "file-excel far",
+                    "description": "Exporte la liste des articles au format Microsoft® Excel®."
+                }
+            ]
+        },
+        {
+            "id": "product.show.title",
+            "entity": "product",
+            "image": "product/product_show",
+            "icon": "display",
+            "description": "Cette page affiche les propriétés de l'article.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_edit",
+                    "description": "Affiche la page d'édition de l'article.",
+                    "dialog": "product.edit.title"
+                },
+                {
+                    "id": "common.button_delete",
+                    "description": "Affiche la page de suppression de l'article.",
+                    "dialog": "product.delete.title"
+                }
+            ]
+        },
+        {
+            "id": "product.add.title",
+            "entity": "product",
+            "image": "product/product_add",
+            "description": "Cette page permet de créer un nouvel article.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "product.edit.title",
+            "entity": "product",
+            "image": "product/product_edit",
+            "description": "Cette page permet de modifier un article.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "product.delete.title",
+            "entity": "product",
+            "image": "product/product_delete",
+            "icon": "times",
+            "description": "Cette page permet de confirmer la suppression d'un article.",
+            "editActions": [
+                {
+                    "id": "common.button_delete",
+                    "description": "Supprime l'article et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule la suppression et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "product.update.title",
+            "image": "product/product_update",
+            "icon": "file-alt far",
+            "entity": "product",
+            "description": "Cette page permet de mettre jour le prix des articles pour une catégorie. Cette page est accessible uniquement aux administrateurs.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Met à jour le prix des articles et affiche les résultats de la mise à jour."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Retourne à la page principale de l'application.",
+                    "dialog": "index.title"
+                }
+            ],
+            "links": [
+                {
+                    "id": "product.result.description",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "product.result.description",
+            "name": "product.result.description",
+            "image": "product/product_result",
+            "icon": "file-alt far",
+            "entity": "product",
+            "description": "Cette page affiche le résultat de la mise à jour des articles.",
+            "editActions": [
+                {
+                    "id": "index.title",
+                    "icon": "home",
+                    "description": "Retourne à la page principale de l'application.",
+                    "dialog": "index.title"
+                },
+                {
+                    "id": "product.update.title",
+                    "label": "product.result.new_update",
+                    "description": "Retourne à la page de mise à jour des articles."
+                }
+            ],
+            "links": [
+                {
+                    "id": "product.update.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "archive.title",
+            "image": "calculation/calculation_archive_query",
+            "icon": "calendar-xmark far",
+            "entity": "calculation",
+            "description": "Cette page vous permet d'archiver des calculations en modifiant leur statut. Cette page est accessible uniquement aux administrateurs.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Met à jour le statut des calculations et affiche les résultats de la mise à jour."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Retourne à la page principale de l'application.",
+                    "dialog": "index.title"
+                }
+            ],
+            "links": [
+                {
+                    "id": "archive.result.description",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "archive.result.description",
+            "image": "calculation/calculation_archive_result",
+            "icon": "calendar-xmark far",
+            "description": "Cette page affiche le résultat de l'archivage des calculations.",
+            "links": [
+                {
+                    "id": "archive.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "task.list.title",
+            "entity": "task",
+            "image": "task/task_list",
+            "description": "Gestion des tâches du catalogue.",
+            "displayEntityColumns": true,
+            "displayEntityActions": true,
+            "globalActions": [
+                {
+                    "action": "search"
+                },
+                {
+                    "id": "category.name",
+                    "icon": "folder far",
+                    "description": "Menu déroulant permettant de filtrer les tâches selon un groupe ou une catégorie."
+                },
+                {
+                    "action": "clear"
+                },
+                {
+                    "action": "size"
+                },
+                {
+                    "action": "table"
+                },
+                {
+                    "action": "custom"
+                },
+                {
+                    "action": "page"
+                },
+                {
+                    "action": "sort"
+                },
+                {
+                    "id": "task.list.pdf_title",
+                    "icon": "file-pdf far",
+                    "description": "Exporte la liste des tâches vers le format de document portable (PDF)."
+                },
+                {
+                    "id": "task.list.excel_title",
+                    "icon": "file-excel far",
+                    "description": "Exporte la liste des tâches au format Microsoft® Excel®."
+                }
+            ]
+        },
+        {
+            "id": "task.show.title",
+            "entity": "task",
+            "image": "task/task_show",
+            "icon": "display",
+            "description": "Cette page affiche les propriétés de la tâche.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_edit",
+                    "description": "Affiche la page d'édition de la tâches.",
+                    "dialog": "task.edit.title"
+                },
+                {
+                    "id": "common.button_delete",
+                    "description": "Affiche la page de suppression de la tâches.",
+                    "dialog": "task.delete.title"
+                }
+            ]
+        },
+        {
+            "id": "task.add.title",
+            "entity": "task",
+            "image": "task/task_add",
+            "description": "Cette page permet de créer un nouvelle tâche.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "task.edit.title",
+            "entity": "task",
+            "image": "task/task_edit",
+            "description": "Cette page permet de modifier une tâche.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "task.delete.title",
+            "entity": "task",
+            "image": "task/task_delete",
+            "icon": "times",
+            "description": "Cette page permet de confirmer la suppression d'une tâche.",
+            "editActions": [
+                {
+                    "id": "common.button_delete",
+                    "description": "Supprime la tâche et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule la suppression et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "task_compute.title",
+            "entity": "task",
+            "image": "task/task_compute",
+            "icon": "keyboard",
+            "description": "Permet de calculer une tâche.",
+            "details": [
+                "L'utilisateur doit sélectionner une <b>tâche</b>, une <b>quantité</b>",
+                "et une ou plusieurs <b>opérations</b>.",
+                "Le programme recalcule automatiquement le <b>totale générale</b> à chaque changement."
+            ],
+            "editActions": [
+                {
+                    "id": "common.button_close",
+                    "description": "Retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "category.list.title",
+            "entity": "category",
+            "image": "category/category_list",
+            "description": "Gestion des catégories du catalogue.",
+            "displayEntityColumns": true,
+            "displayEntityActions": true,
+            "globalActions": [
+                {
+                    "action": "search"
+                },
+                {
+                    "id": "group.name",
+                    "icon": "code-branch",
+                    "description": "Menu déroulant permettant de filtrer les catégories selon un groupe."
+                },
+                {
+                    "action": "clear"
+                },
+                {
+                    "action": "size"
+                },
+                {
+                    "action": "table"
+                },
+                {
+                    "action": "custom"
+                },
+                {
+                    "action": "page"
+                },
+                {
+                    "action": "sort"
+                },
+                {
+                    "id": "category.list.pdf_title",
+                    "icon": "file-pdf far",
+                    "description": "Exporte la liste des catégories vers le format de document portable (PDF)."
+                },
+                {
+                    "id": "category.list.excel_title",
+                    "icon": "file-excel far",
+                    "description": "Exporte la liste des catégories au format Microsoft® Excel®."
+                }
+            ]
+        },
+        {
+            "id": "category.show.title",
+            "entity": "category",
+            "image": "category/category_show",
+            "icon": "display",
+            "description": "Cette page affiche les propriétés de la catégorie.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_edit",
+                    "description": "Affiche la page d'édition de la catégorie.",
+                    "dialog": "category.edit.title"
+                },
+                {
+                    "id": "common.button_delete",
+                    "description": "Affiche la page de suppression de la catégorie.",
+                    "dialog": "category.delete.title"
+                }
+            ]
+        },
+        {
+            "id": "category.add.title",
+            "entity": "category",
+            "image": "category/category_add",
+            "description": "Cette page permet de créer une nouvelle catégorie.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "category.edit.title",
+            "entity": "category",
+            "image": "category/category_edit",
+            "description": "Cette page permet de modifier une catégorie.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "category.delete.title",
+            "entity": "category",
+            "image": "category/category_delete",
+            "forbidden": {
+                "image": "category/category_delete_forbidden",
+                "text": "Si la catégorie sélectionnée ne peut pas être supprimée, l'avertissement ci-dessous est affiché.",
+                "action": {
+                    "id": "common.button_back_list",
+                    "icon": "chevron-left",
+                    "description": "Retourne la page précédente."
+                }
+            },
+            "icon": "times",
+            "description": "Cette page permet de confirmer la suppression d'une catégorie.",
+            "editActions": [
+                {
+                    "id": "common.button_delete",
+                    "description": "Supprime la catégorie et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule la suppression et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "group.list.title",
+            "entity": "group",
+            "image": "group/group_list",
+            "description": "Gestion des groupes du catalogue.",
+            "displayEntityColumns": true,
+            "displayEntityActions": true,
+            "globalActions": [
+                {
+                    "action": "search"
+                },
+                {
+                    "action": "clear"
+                },
+                {
+                    "action": "size"
+                },
+                {
+                    "action": "table"
+                },
+                {
+                    "action": "custom"
+                },
+                {
+                    "action": "page"
+                },
+                {
+                    "action": "sort"
+                },
+                {
+                    "id": "group.list.pdf_title",
+                    "icon": "file-pdf far",
+                    "description": "Exporte la liste des groupes vers le format de document portable (PDF)."
+                },
+                {
+                    "id": "group.list.excel_title",
+                    "icon": "file-excel far",
+                    "description": "Exporte la liste des groupes au format Microsoft® Excel®."
+                }
+            ]
+        },
+        {
+            "id": "group.show.title",
+            "entity": "group",
+            "image": "group/group_show",
+            "icon": "display",
+            "description": "Cette page affiche les propriétés du groupe.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_edit",
+                    "description": "Affiche la page d'édition du groupe.",
+                    "dialog": "group.edit.title"
+                },
+                {
+                    "id": "common.button_delete",
+                    "description": "Affiche la page de suppression du groupe.",
+                    "dialog": "group.delete.title"
+                }
+            ]
+        },
+        {
+            "id": "group.add.title",
+            "entity": "group",
+            "image": "group/group_add",
+            "description": "Cette page permet de créer un nouveau group.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "group.edit.title",
+            "entity": "group",
+            "image": "group/group_edit",
+            "description": "Cette page permet de modifier un groupe.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "group.delete.title",
+            "entity": "group",
+            "image": "group/group_delete",
+            "icon": "times",
+            "description": "Cette page permet de confirmer la suppression d'un groupe.",
+            "editActions": [
+                {
+                    "id": "common.button_delete",
+                    "description": "Supprime le groupe et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule la suppression et retourne à la page précédente."
+                }
+            ],
+            "forbidden": {
+                "image": "group/group_delete_forbidden",
+                "text": "Si le groupe sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.",
+                "action": {
+                    "id": "common.button_back_list",
+                    "icon": "chevron-left",
+                    "description": "Retourne la page précédente."
+                }
+            }
+        },
+        {
+            "id": "globalmargin.list.title",
+            "entity": "globalmargin",
+            "image": "globalmargin/globalmargin_list",
+            "description": "Gestion des marges globales du catalogue.",
+            "displayEntityColumns": true,
+            "displayEntityActions": true,
+            "globalActions": [
+                {
+                    "id": "globalmargin.edit.title",
+                    "icon": "pencil",
+                    "description": "Affiche la page d'édition des marges globales."
+                },
+                {
+                    "action": "table"
+                },
+                {
+                    "action": "custom"
+                },
+                {
+                    "action": "sort"
+                },
+                {
+                    "id": "group.list.pdf_title",
+                    "icon": "file-pdf far",
+                    "description": "Exporte la liste des marges globales vers le format de document portable (PDF)."
+                },
+                {
+                    "id": "group.list.excel_title",
+                    "icon": "file-excel far",
+                    "description": "Exporte la liste des marges globales au format Microsoft® Excel®."
+                }
+            ]
+        },
+        {
+            "id": "globalmargin.show.title",
+            "entity": "globalmargin",
+            "image": "globalmargin/globalmargin_show",
+            "icon": "display",
+            "description": "Cette page affiche les propriétés de la marge globale.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_edit",
+                    "description": "Affiche la page d'édition des marges globales.",
+                    "dialog": "globalmargin.edit.title"
+                }
+            ]
+        },
+        {
+            "id": "globalmargin.edit.title",
+            "entity": "globalmargin",
+            "image": "globalmargin/globalmargin_edit",
+            "description": "Cette page permet de modifier les marges globales.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "search.title",
+            "image": "search",
+            "description": "Permet de rechercher des données.",
+            "displayEntityColumns": true,
+            "globalActions": [
+                {
+                    "id": "help.actions.clear",
+                    "icon": "eraser",
+                    "description": "Efface tous les critères de recherche saisie."
+                },
+                {
+                    "id": "help.actions.toggle",
+                    "icon": "table",
+                    "description": "Menu déroulant permettant de choisir le mode d'affichage tabulaire ou mosaïque."
+                }
+            ]
+        },
+        {
+            "id": "log.list.title",
+            "entity": "log",
+            "image": "log/log_list",
+            "description": "Affiche la liste des entrées du journal de l'application. Cette page est accessible uniquement aux administrateurs.",
+            "displayEntityColumns": true,
+            "displayEntityActions": true,
+            "globalActions": [
+                {
+                    "action": "search"
+                },
+                {
+                    "id": "log.fields.channel",
+                    "icon": "layer-group",
+                    "description": "Menu déroulant permettant de filtrer les entrées du journal selon un canal."
+                },
+                {
+                    "id": "log.fields.level",
+                    "icon": "tools",
+                    "description": "Menu déroulant permettant de filtrer les entrées du journal selon un niveau."
+                },
+                {
+                    "action": "clear"
+                },
+                {
+                    "action": "size"
+                },
+                {
+                    "action": "table"
+                },
+                {
+                    "action": "custom"
+                },
+                {
+                    "action": "page"
+                },
+                {
+                    "action": "sort"
+                },
+                {
+                    "id": "common.button_refresh",
+                    "icon": "sync-alt",
+                    "description": "Actualise la liste des entrées du journal."
+                },
+                {
+                    "id": "log.delete.title",
+                    "icon": "times",
+                    "description": "Supprime la liste des entrées du journal."
+                },
+                {
+                    "id": "log.list.pdf_title",
+                    "icon": "file-pdf far",
+                    "description": "Exporte la liste des entrées du journal vers le format de document portable (PDF)."
+                },
+                {
+                    "id": "log.list.excel_title",
+                    "icon": "file-excel far",
+                    "description": "Exporte la liste des entrées du journal au format Microsoft® Excel®."
+                }
+            ]
+        },
+        {
+            "id": "log.show.title",
+            "entity": "log",
+            "image": "log/log_show",
+            "icon": "display",
+            "description": "Cette page affiche les propriétés d'une entrée dans le journal de l'application. Cette page est accessible uniquement aux administrateurs.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Retourne à la page précédente.",
+                    "dialog": "log.list.title"
+                }
+            ]
+        },
+        {
+            "id": "log.delete.title",
+            "entity": "log",
+            "image": "log/log_delete",
+            "icon": "times",
+            "description": "Cette page permet de confirmer la suppression du journal de l'application. Cette page est accessible uniquement aux administrateurs.",
+            "editActions": [
+                {
+                    "id": "common.button_delete",
+                    "description": "Supprime le journal et retourne à la page principale du site."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule la suppression et retourne à la page précédente.",
+                    "dialog": "log.list.title"
+                }
+            ]
+        },
+        {
+            "id": "user.list.title",
+            "entity": "user",
+            "image": "user/user_list",
+            "description": "Affiche la liste des utilisateurs. Cette page est accessible uniquement aux administrateurs.",
+            "displayEntityColumns": true,
+            "displayEntityActions": true,
+            "globalActions": [
+                {
+                    "action": "search"
+                },
+                {
+                    "action": "clear"
+                },
+                {
+                    "action": "size"
+                },
+                {
+                    "action": "table"
+                },
+                {
+                    "action": "custom"
+                },
+                {
+                    "action": "page"
+                },
+                {
+                    "action": "sort"
+                },
+                {
+                    "id": "user.list.pdf_title",
+                    "icon": "file-pdf far",
+                    "description": "Exporte la liste des utilisateurs vers le format de document portable (PDF)."
+                },
+                {
+                    "id": "user.list.excel_title",
+                    "icon": "file-excel far",
+                    "description": "Exporte la liste des utilisateurs au format Microsoft® Excel®."
+                }
+            ]
+        },
+        {
+            "id": "user.show.title",
+            "entity": "user",
+            "image": "user/user_show",
+            "icon": "display",
+            "description": "Cette page affiche les propriétés de l'utilisateur.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_edit",
+                    "description": "Affiche la page d'édition de l'utilisateur.",
+                    "dialog": "group.edit.title"
+                },
+                {
+                    "id": "common.button_delete",
+                    "description": "Affiche la page de suppression de l'utilisateur.",
+                    "dialog": "group.delete.title"
+                }
+            ]
+        },
+        {
+            "id": "user.add.title",
+            "entity": "user",
+            "image": "user/user_add",
+            "description": "Cette page permet de créer un nouvel utilisateur.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "user.edit.title",
+            "entity": "user",
+            "image": "user/user_edit",
+            "description": "Cette page permet de modifier un utilisateur.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Enregistre les modifications et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule les modifications et retourne à la page précédente."
+                }
+            ]
+        },
+        {
+            "id": "user.delete.title",
+            "entity": "user",
+            "image": "user/user_delete",
+            "icon": "times",
+            "description": "Cette page permet de confirmer la suppression d'un utilisateur.",
+            "editActions": [
+                {
+                    "id": "common.button_delete",
+                    "description": "Supprime le groupe et retourne à la page précédente."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Annule la suppression et retourne à la page précédente."
+                }
+            ]
+        }
+    ]
 }

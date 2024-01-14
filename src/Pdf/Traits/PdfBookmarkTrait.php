@@ -116,8 +116,8 @@ trait PdfBookmarkTrait
      * <b>Remark:</b> Do nothing if no bookmark is defined.
      *
      * @param ?string   $title        the index title or null to use the default title ('Index')
-     * @param ?PdfStyle $titleStyle   the title style or null to use the default style (Font Arial 9pt Bold)
-     * @param ?PdfStyle $contentStyle the content style or null to use the default style (Font Arial 9pt Regular)
+     * @param ?PdfStyle $titleStyle   the title style or null to use the default style (Font Arial 9 points Bold)
+     * @param ?PdfStyle $contentStyle the content style or null to use the default style (Font Arial 9 points Regular)
      * @param bool      $addBookmark  true to add the index page itself in the list of the bookmarks
      * @param string    $separator    the separator character used between the text and the page
      *
@@ -285,7 +285,7 @@ trait PdfBookmarkTrait
         $result = false;
         if ($addBookmark) {
             try {
-                $this->addBookmark($title);
+                $this->addBookmark($title, currentY: false);
                 $result = \end($this->bookmarks);
             } catch (PdfException) {
             }

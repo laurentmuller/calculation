@@ -101,8 +101,8 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * The style has the following properties:
      *
-     * - Font: Arial 9pt Regular.
-     * - Line width: 0.2mm.
+     * - Font: Arial 9 points Regular.
+     * - Line width: 0.2 mm.
      * - Fill color: White.
      * - Draw color: Black.
      * - Text color: Black.
@@ -117,8 +117,8 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * The style has the following properties:
      *
-     * - Font: Arial 9pt Bold.
-     * - Line width: 0.2mm.
+     * - Font: Arial 9 points Bold.
+     * - Line width: 0.2 mm.
      * - Fill color: Black.
      * - Draw color: Black.
      * - Text color: White.
@@ -139,8 +139,8 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * The style has the following properties:
      *
-     * - Font: Arial 9pt Bold.
-     * - Line width: 0.2mm.
+     * - Font: Arial 9 points Bold.
+     * - Line width: 0.2 mm.
      * - Fill color: White.
      * - Draw color: RGB(221, 221, 221).
      * - Text color: Black.
@@ -164,8 +164,8 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * The style has the following properties:
      *
-     * - Font: Symbol 9pt.
-     * - Line width: 0.2mm.
+     * - Font: Symbol 9 points.
+     * - Line width: 0.2 mm.
      * - Fill color: White.
      * - Draw color: RGB(221, 221, 221).
      * - Text color: Black.
@@ -186,8 +186,8 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * The style has the following properties:
      *
-     * - Font: Arial 9pt Regular.
-     * - Line width: 0.2mm.
+     * - Font: Arial 9 points Regular.
+     * - Line width: 0.2 mm.
      * - Fill color: White.
      * - Draw color: RGB(221, 221, 221).
      * - Text color: Black.
@@ -231,8 +231,8 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * The style has the following properties:
      *
-     * - Font: Arial 9pt Bold.
-     * - Line width: 0.2mm.
+     * - Font: Arial 9 points Bold.
+     * - Line width: 0.2 mm.
      * - Fill color: RGB(245, 245, 245).
      * - Draw color: RGB(221, 221, 221).
      * - Text color: Black.
@@ -265,8 +265,8 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * The style has the following properties:
      *
-     * - Font: Arial 9pt Regular.
-     * - Line width: 0.2mm.
+     * - Font: Arial 9 points Regular.
+     * - Line width: 0.2 mm.
      * - Fill color: White.
      * - Draw color: Black.
      * - Text color: Blue.
@@ -283,8 +283,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      * Gets the no border style.
      *
      * The style has the following properties:
-     *
-     * - Font: Arial 9pt Regular.
+     * - Font: Arial 9 points Regular.
      * - Border: None.
      * - Fill color: White.
      * - Draw color: Black.
@@ -323,8 +322,8 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * The default values are:
      *
-     * - Font: Arial 9pt Regular.
-     * - Line width: 0.2mm.
+     * - Font: Arial 9 points Regular.
+     * - Line width: 0.2 mm.
      * - Fill color: White.
      * - Draw Color: Black.
      * - Text Color: Black.
@@ -367,7 +366,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * The default value is:
      *
-     * - Arial, 9pt, regular.
+     * - Arial, 9 points, regular.
      */
     public function resetFont(): static
     {
@@ -465,7 +464,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the font name.
      *
-     * @param ?PdfFontName $name the font name or null to use the default name ("ARIAL")
+     * @param ?PdfFontName $name the font name or null to use the default name ('ARIAL')
      */
     public function setFontName(PdfFontName $name = null): static
     {
@@ -497,7 +496,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the font style.
      *
-     * @param ?PdfFontStyle $style the font style or null to use the default style ("Regular")
+     * @param ?PdfFontStyle $style the font style or null to use the default style ('Regular')
      */
     public function setFontStyle(PdfFontStyle $style = null): static
     {

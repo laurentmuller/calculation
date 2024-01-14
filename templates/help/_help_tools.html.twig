@@ -13,7 +13,7 @@
 {%- endmacro %}
 
 {% macro output_image(path, screenshot=true) -%}
-{%- set full_path = 'help/images/' ~ path ~ '.webp' -%}
+{%- set full_path = 'help/images/' ~ path ~ constant('App\\Service\\HelpService::IMAGES_EXT') -%}
 {% if asset_exists(full_path) %}
     {% if screenshot %}<p class="mb-2">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
     <img src="{{ asset(full_path) }}" class="img-fluid rounded d-block" alt="{{ 'help.labels.screenshot'|trans }}">
@@ -39,6 +39,8 @@
 {%- endmacro %}
 
 {% macro output_row_action(action, service) -%}
+{%- set key = action.action|default(false) -%}
+{%- set action = action|merge(service.findAction(key)|default({})) -%}
 {%- set dialog = service.findDialog(action.dialog|default(action.id)) -%}
 {%- set href = dialog ? path('help_dialog', {'id': dialog.id}) : false -%}
 {%- set text = action.label|default(action.id) -%}

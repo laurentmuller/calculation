@@ -169,37 +169,28 @@
         }
     },
     "scripts": {
-        "php-lint": [
+        "app-lint": [
             "@php bin/console lint:yaml translations config",
             "@php bin/console lint:xliff translations",
             "@php bin/console lint:twig templates",
             "@php bin/console lint:container",
-            "@php bin/console doctrine:schema:validate --skip-sync --no-interaction",
+            "@php bin/console doctrine:schema:validate",
             "@composer validate --strict "
         ],
-        "php-fixer": "vendor/bin/php-cs-fixer fix --diff --dry-run",
-        "php-psalm": "vendor/bin/psalm --config=psalm.xml",
-        "php-stan": "vendor/bin/phpstan analyse --memory-limit 2G --configuration phpstan.neon",
-        "php-rector": "vendor/bin/rector process --dry-run --config rector.php",
-        "php-twigcs": "vendor/bin/twigcs --config .twig_cs.dist.php",
-        "php-test": "phpunit",
-        "php-all": [
-            "@php-lint",
-            "@php-fixer",
-            "@php-psalm",
-            "@php-stan",
-            "@php-rector",
-            "@php-twigcs",
-            "@php-test"
+        "app-fixer": "vendor/bin/php-cs-fixer fix --diff --dry-run",
+        "app-psalm": "vendor/bin/psalm --config psalm.xml",
+        "app-stan": "vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",
+        "app-rector": "vendor/bin/rector process --dry-run --config rector.php",
+        "app-twigcs": "vendor/bin/twigcs --config .twig_cs.dist.php",
+        "app-test": "phpunit",
+        "app-all": [
+            "@app-lint",
+            "@app-fixer",
+            "@app-psalm",
+            "@app-stan",
+            "@app-rector",
+            "@app-twigcs",
+            "@app-test"
         ]
-    },
-    "scripts-descriptions": {
-        "php-fixer": "Run PHP-CS-Fixer.",
-        "php-psalm": "Run Pslam.",
-        "php-stan": "Run PHPStan.",
-        "php-rector": "Run Rector.",
-        "php-twigcs": "Run Twigcs.",
-        "php-test": "Run tests with PHPUnit.",
-        "php-all": "Run all validation scripts."
     }
 }

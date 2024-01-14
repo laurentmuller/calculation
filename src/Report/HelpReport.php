@@ -131,6 +131,25 @@ class HelpReport extends AbstractReport
     }
 
     /**
+     * @psalm-param HelpActionType $action
+     *
+     * @psalm-return HelpActionType
+     */
+    private function mergeAction(array $action): array
+    {
+        if (!isset($action['action'])) {
+            return $action;
+        }
+        $key = $action['action'];
+        $source = $this->service->findAction($key);
+        if (null === $source) {
+            return $action;
+        }
+
+        return \array_merge($action, $source);
+    }
+
+    /**
      * @psalm-param HelpActionType[] $actions
      */
     private function outputActions(array $actions, string $description): void
@@ -153,6 +172,7 @@ class HelpReport extends AbstractReport
             )->outputHeaders();
 
         foreach ($actions as $action) {
+            $action = $this->mergeAction($action);
             $table->addRow(
                 $this->trans($action['id']),
                 $action['description']
@@ -220,7 +240,7 @@ class HelpReport extends AbstractReport
     private function outputDialog(array $item): void
     {
         $id = $item['id'];
-        $this->addBookmark($this->trans($id), true, 1);
+        $this->addBookmark($this->trans($id), true, 1, false);
         $this->outputTitle($id);
         $this->outputDialogDescription($item);
         $this->outputDialogImage($item);
@@ -354,7 +374,7 @@ class HelpReport extends AbstractReport
         }
 
         $id = 'help.dialog_menu';
-        $this->addBookmark($this->trans($id), true);
+        $this->addBookmark($this->trans($id), true, 0, false);
         $this->outputTitle($id, 12);
         $this->outputLine();
 
@@ -386,7 +406,7 @@ class HelpReport extends AbstractReport
         }
 
         $id = 'help.entity_menu';
-        $this->addBookmark($this->trans($id), true);
+        $this->addBookmark($this->trans($id), true, 0, false);
         $this->outputTitle($id, 12);
         $this->outputLine();
 
@@ -407,7 +427,7 @@ class HelpReport extends AbstractReport
     private function outputEntity(array $item): void
     {
         $id = $item['id'] . '.name';
-        $this->addBookmark($this->trans($id), true, 1);
+        $this->addBookmark($this->trans($id), true, 1, false);
         $this->outputTitle($id);
         if (isset($item['description'])) {
             $this->MultiCell(txt: $item['description']);
@@ -460,7 +480,7 @@ class HelpReport extends AbstractReport
 
     private function outputImage(string $image): void
     {
-        $file = FileUtils::buildPath($this->service->getImagePath(), $image);
+        $file = FileUtils::buildPath($this->service->getImagePath(), $image . HelpService::IMAGES_EXT);
         if (!FileUtils::exists($file)) {
             return;
         }
@@ -493,7 +513,7 @@ class HelpReport extends AbstractReport
 
         $this->AddPage();
         $id = 'help.main_menu';
-        $this->addBookmark($this->trans($id), true);
+        $this->addBookmark($this->trans($id), true, 0, false);
         $this->outputTitle($id, 12);
         $this->outputLine();
         $rootMenu = $this->service->getMainMenu();

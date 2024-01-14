@@ -24,17 +24,20 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *
  * @psalm-type HelpActionType = array{
  *       id: string,
- *       description: string}
+ *       icon: string,
+ *       description: string,
+ *       action?: string}
  * @psalm-type HelpForbiddenType = array{
  *     image: string|null,
  *     text:string|null,
  *     action: HelpActionType|null}
  * @psalm-type HelpFieldType = array{
  *      name: string,
- *      description: string,
- *      type: string|null,
- *      length: int|null,
- *      required: bool|null}
+ *      description: string|null,
+ *      type?: string,
+ *      length?: int,
+ *      required?: bool,
+ *      entity?: string}
  * @psalm-type HelpDialogType = array{
  *      id: string,
  *      description: string|null,
@@ -49,9 +52,9 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      details: string[]|null}
  * @psalm-type HelpEntityType = array{
  *      id: string,
- *      name: string,
- *      description: string|null,
- *      constraints: string[]|null,
+ *      icon: string,
+ *      description?: string,
+ *      constraints?: string[],
  *      actions: HelpActionType[]|null,
  *      fields: HelpFieldType[]|null,
  *      required: bool|null,
@@ -66,8 +69,9 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      description: string|null,
  *      menus: HelpMenuType[]|null}
  * @psalm-type HelpContentType = array{
- *      dialogs: HelpDialogType[]|null,
- *      entities: HelpEntityType[]|null,
+ *      actions?: array<string, HelpActionType>,
+ *      dialogs: HelpDialogType[],
+ *      entities: HelpEntityType[],
  *      mainMenu: HelpMainMenuType|null}
  */
 class HelpService implements ServiceSubscriberInterface
@@ -75,6 +79,11 @@ class HelpService implements ServiceSubscriberInterface
     use CacheAwareTrait;
     use ServiceSubscriberTrait;
     use TranslatorAwareTrait;
+
+    /**
+     * The image extension.
+     */
+    final public const IMAGES_EXT = '.png';
 
     /**
      * The key name to cache content.
@@ -85,6 +94,13 @@ class HelpService implements ServiceSubscriberInterface
      * The cache timeout (15 minutes).
      */
     private const CACHE_TIMEOUT = 60 * 15;
+
+    /** @psalm-var array<string, HelpActionType>|null */
+    private ?array $actions = null;
+    /** @psalm-var HelpDialogType[]|null */
+    private ?array $dialogs = null;
+    /** @psalm-var HelpEntityType[]|null */
+    private ?array $entities = null;
 
     /**
      * @param string $file      the absolute path to the JSON help file
@@ -99,6 +115,18 @@ class HelpService implements ServiceSubscriberInterface
     }
 
     /**
+     * Finds an action for the given identifier.
+     *
+     * @param string $id the action identifier to search for
+     *
+     * @psalm-return HelpActionType|null
+     */
+    public function findAction(string $id): ?array
+    {
+        return $this->getActions()[$id] ?? null;
+    }
+
+    /**
      * Finds a dialog for the given identifier.
      *
      * @param string $id the dialog identifier to search for
@@ -109,7 +137,7 @@ class HelpService implements ServiceSubscriberInterface
      */
     public function findDialog(string $id): ?array
     {
-        return $this->findById('dialogs', $id);
+        return $this->getDialogs()[$id] ?? null;
     }
 
     /**
@@ -123,7 +151,7 @@ class HelpService implements ServiceSubscriberInterface
      */
     public function findEntity(string $id): ?array
     {
-        return $this->findById('entities', $id);
+        return $this->getEntities()[$id] ?? null;
     }
 
     /**
@@ -146,6 +174,20 @@ class HelpService implements ServiceSubscriberInterface
         return null;
     }
 
+    /**
+     * Gets actions.
+     *
+     * @psalm-return array<string, HelpActionType>
+     */
+    public function getActions(): array
+    {
+        if (null !== $this->actions) {
+            return $this->actions;
+        }
+
+        return $this->actions = $this->findEntries('actions') ?? [];
+    }
+
     public function getCacheTimeout(): int
     {
         return self::CACHE_TIMEOUT;
@@ -154,31 +196,57 @@ class HelpService implements ServiceSubscriberInterface
     /**
      * Gets the dialogs.
      *
-     * @return array|null the dialogs, if found; null otherwise
-     *
-     * @psalm-return HelpDialogType[]|null
+     * @psalm-return HelpDialogType[]
      */
-    public function getDialogs(): ?array
+    public function getDialogs(): array
     {
-        /** @psalm-var HelpDialogType[]|null $items */
-        $items = $this->findEntries('dialogs');
+        if (null !== $this->dialogs) {
+            return $this->dialogs;
+        }
 
-        return $items;
+        /** @psalm-var HelpDialogType[]|null $dialogs */
+        $dialogs = $this->findEntries('dialogs');
+        if (null === $dialogs) {
+            return $this->dialogs = [];
+        }
+
+        return $this->dialogs = \array_reduce(
+            $dialogs,
+            /**
+             * @psalm-param array<string, HelpDialogType> $carry
+             * @psalm-param HelpDialogType $dialog
+             */
+            static fn (array $carry, array $dialog) => $carry + [$dialog['id'] => $dialog],
+            []
+        );
     }
 
     /**
      * Gets the entities.
      *
-     * @return array|null the entities, if found; null otherwise
-     *
-     * @psalm-return HelpEntityType[]|null
+     * @psalm-return HelpEntityType[]
      */
-    public function getEntities(): ?array
+    public function getEntities(): array
     {
-        /** @psalm-var HelpEntityType[]|null $items */
-        $items = $this->findEntries('entities');
+        if (null !== $this->entities) {
+            return $this->entities;
+        }
 
-        return $items;
+        /** @psalm-var HelpEntityType[]|null $entities */
+        $entities = $this->findEntries('entities');
+        if (null === $entities) {
+            return $this->entities = [];
+        }
+
+        return $this->entities = \array_reduce(
+            $entities,
+            /**
+             * @psalm-param array<string, HelpEntityType> $carry
+             * @psalm-param HelpEntityType $entity
+             */
+            static fn (array $carry, array $entity) => $carry + [$entity['id'] => $entity],
+            []
+        );
     }
 
     /**
@@ -208,14 +276,14 @@ class HelpService implements ServiceSubscriberInterface
     /**
      * Gets the main (root) menu.
      *
-     * @return HelpMainMenuType|null the main menu, if found; null otherwise
+     * @psalm-return HelpMainMenuType|null
      */
     public function getMainMenu(): ?array
     {
-        /** @psalm-var HelpMainMenuType|null $items */
-        $items = $this->findEntries('mainMenu');
+        /** @psalm-var HelpMainMenuType|null $mainMenu */
+        $mainMenu = $this->findEntries('mainMenu');
 
-        return $items;
+        return $mainMenu;
     }
 
     /**
@@ -227,27 +295,17 @@ class HelpService implements ServiceSubscriberInterface
      */
     public function getMainMenus(): ?array
     {
-        /** @psalm-var HelpMenuType[]|null $items */
-        $items = $this->findEntries('mainMenu', 'menus');
-
-        return $items;
+        return $this->findEntries('mainMenu', 'menus');
     }
 
-    private function findById(string $path, string $id): ?array
-    {
-        $entries = $this->findEntries($path);
-        if (null !== $entries) {
-            /** @psalm-var array $entry */
-            foreach ($entries as $entry) {
-                if (isset($entry['id']) && $entry['id'] === $id) {
-                    return $entry;
-                }
-            }
-        }
-
-        return null;
-    }
-
+    /**
+     * @psalm-template TKey of array-key
+     * @psalm-template TArray
+     *
+     * @return array<TKey, TArray>|null
+     *
+     * @phpstan-ignore-next-line
+     */
     private function findEntries(string ...$paths): ?array
     {
         $entries = $this->getHelp();
@@ -255,7 +313,7 @@ class HelpService implements ServiceSubscriberInterface
             if (!isset($entries[$path])) {
                 return null;
             }
-            /** @psalm-var array $entries */
+            /** @psalm-var array<TKey, TArray> $entries */
             $entries = $entries[$path];
         }
 

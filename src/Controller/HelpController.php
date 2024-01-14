@@ -48,7 +48,6 @@ class HelpController extends AbstractController
         if (null === $dialog) {
             throw $this->createNotFoundException("Unable to find the resource for the dialog '$id'.");
         }
-        /** @psalm-var HelpEntityType|null $entity */
         $entity = $this->service->findEntityByDialog($dialog);
 
         return $this->render('help/help_dialog.html.twig', [
@@ -64,10 +63,9 @@ class HelpController extends AbstractController
     #[Route(path: '/entity/{id}', name: 'help_entity', methods: Request::METHOD_GET)]
     public function entity(string $id): Response
     {
-        /** @psalm-var HelpEntityType|null $entity */
         $entity = $this->service->findEntity($id);
         if (null === $entity) {
-            throw $this->createNotFoundException("Unable to find the resource for the object '$id'.");
+            throw $this->createNotFoundException("Unable to find the resource for the entity '$id'.");
         }
 
         return $this->render('help/help_entity.html.twig', [
@@ -83,7 +81,9 @@ class HelpController extends AbstractController
     public function index(): Response
     {
         return $this->render('help/help_index.html.twig', [
-            'service' => $this->service,
+            'mainMenus' => $this->service->getMainMenus(),
+            'entities' => $this->service->getEntities(),
+            'dialogs' => $this->service->getDialogs(),
         ]);
     }
 

@@ -529,7 +529,7 @@ group:
     title: Propriétés du groupe
 help:
   actions:
-    clear: Effacer les critères de recherche
+    clear: Effacer
     pages: Lignes par page
     search: Rechercher
     sort: Trier
@@ -571,6 +571,7 @@ help:
     reference: Référence
     text: Texte
     boolean: Oui/Non
+    image: Image
 http_error:
   description: Il y a eu une erreur inconnue (%status_code% - %status_text%) qui a empêché l'aboutissement de votre requête.
   suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
@@ -1446,7 +1447,6 @@ strength_level:
   very_weak: Très faible
   weak: Faible
 table_view:
-  card: Vue détaillée
   custom: Vue mosaïque
   table: Vue tabulaire
 entity_action:

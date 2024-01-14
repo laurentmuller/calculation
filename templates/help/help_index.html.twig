@@ -15,25 +15,24 @@
 <dd>{{ item.description }}</dd>
 {%- endmacro %}
 
-{% macro output_menus(menus, help, indent=0) -%}
+{% macro output_menus(menus, dialogs, indent=0) -%}
 <dl{% if indent > 0 %} style="margin-left: {{ indent }}rem;"{% endif %}>
-    {%- for menu in menus -%}{{- _self.output_menu(menu, help, indent) -}}{%- endfor -%}
+    {%- for menu in menus -%}{{- _self.output_menu(menu, dialogs, indent) -}}{%- endfor -%}
 </dl>
 {%- endmacro %}
 
-{% macro output_menu(menu, help, indent=0) -%}
+{% macro output_menu(menu, dialogs, indent=0) -%}
 {%- set href = false -%}
 {%- set description = menu.description %}
 {%- set dialog = menu.dialog|default(false) -%}
 {%- if dialog -%}
-    {%- set target = help.dialogs|filter(d => d.id == dialog) -%}
+    {%- set target = dialogs|filter(d => d.id == dialog) -%}
     {%- if target|length -%}
         {%- set target = target|first -%}
         {%- set href = path('help_dialog', {'id': target.id}) -%}
         {%- set description = description|default(target.description) -%}
     {%- endif -%}
 {%- endif -%}
-
 {%- set menus = menu.menus|default(false) -%}
 <dt class="fw-normal">
 {%- if href -%}
@@ -45,16 +44,12 @@
 </dt>
 {% if description %}
 <dd>{{ description }}
-    {%- if menus %}{{ _self.output_menus(menus, help, indent + 2) }}{% endif -%}
+    {%- if menus %}{{ _self.output_menus(menus, dialogs, indent + 2) }}{% endif -%}
 </dd>
 {% endif %}
 {%- endmacro %}
 {# parameters #}
 {%- set title = 'help.title' -%}
-{%- set help = service.help -%}
-{%- set menus = help.mainMenu.menus|default(false) -%}
-{%- set dialogs = help.dialogs|default(false) -%}
-{%- set entities = help.entities|default(false) -%}
 {# class #}
 {%- block container_class 'container-fluid' -%}
 {# title #}
@@ -67,13 +62,13 @@
 <hr class="mt-1">
 <div class="row">
 {# main menu #}
-{% if menus %}
+{% if mainMenus %}
     <div class="col-xl-4 col-lg-6">
         <h5>{{ 'help.main_menu'|trans }}</h5>
         <hr class="my-1">
         {% set description = help['mainMenu']['description']|default(false) %}
         {% if description %}<p class="small mb-1">{{ description }}</p>{% endif %}
-        {{ _self.output_menus(menus, help) }}
+        {{ _self.output_menus(mainMenus, dialogs) }}
     </div>
 {%- endif %}
 {# dialogs #}

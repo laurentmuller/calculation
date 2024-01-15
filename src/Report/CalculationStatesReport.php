@@ -84,7 +84,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
     /**
      * Gets the cell style for the given state color.
      *
-     * @param calculationState $state the state to get style for
+     * @param CalculationState $state the state to get style for
      *
      * @return PdfStyle|null the style, if applicable, null otherwise
      */

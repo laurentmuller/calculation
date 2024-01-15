@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraint;
  */
 class RecaptchaValidator extends AbstractConstraintValidator
 {
-    public function __construct(private readonly ReCaptchaService $service)
+    public function __construct(private readonly RecaptchaService $service)
     {
         parent::__construct(Recaptcha::class);
     }

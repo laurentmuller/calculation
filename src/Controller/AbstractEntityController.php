@@ -82,7 +82,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Delete an entity.
      *
-     * @param request         $request the request
+     * @param Request         $request the request
      * @param EntityInterface $item    the entity to delete
      * @param LoggerInterface $logger  the logger to log any exception
      *
@@ -141,7 +141,7 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Edit an entity.
      *
-     * @param request         $request    the request
+     * @param Request         $request    the request
      * @param EntityInterface $item       the entity to edit
      * @param array           $parameters the optional parameters
      *

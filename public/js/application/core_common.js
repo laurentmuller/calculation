@@ -146,7 +146,7 @@
                         'image': canvas.toDataURL('image/png'),
                     }, (data) => window.console.log(data));
                 });
-            })
+            });
         });
     }
 

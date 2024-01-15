@@ -537,7 +537,7 @@ help:
   back_menu: Retourner à page principale de l'aide
   description: Bienvenue dans le système d'aide de l'application <b>%app_name_version%</b>.
   dialog_menu: Pages
-  entity_menu: Objets de la base de données
+  entity_menu: Objets de la base de données (catalogue)
   fields:
     action: Action
     column: Colonne

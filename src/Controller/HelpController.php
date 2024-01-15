@@ -78,7 +78,7 @@ class HelpController extends AbstractController
             return $this->jsonFalse(['message' => 'Unable to get target image.']);
         }
         $targetPath = $this->getTargetPath($query);
-        if ('' === $targetPath) {
+        if (null === $targetPath) {
             return $this->jsonFalse(['message' => 'Unable to get the target path.']);
         }
         $filesystem->dumpFile($projectDir . '/var/cache/help/' . $targetPath, $targetImage);
@@ -147,10 +147,14 @@ class HelpController extends AbstractController
         return $decoded;
     }
 
-    private function getTargetPath(HelpDownloadQuery $query): string
+    private function getTargetPath(HelpDownloadQuery $query): ?string
     {
-        $parts = \array_filter(\explode('/', $query->location));
+        $location = $query->location;
+        $parts = \array_filter(\explode('/', $location));
         if ([] === $parts) {
+            if ('/' !== $location) {
+                return null;
+            }
             $parts = ['', 'index'];
         }
         if (\is_numeric(\end($parts))) {

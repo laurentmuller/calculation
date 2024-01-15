@@ -1,39 +1,94 @@
 {
     "actions": {
-        "search": {
+        "list_search": {
             "id": "help.actions.search",
             "icon": "pen-to-square",
             "description": "Zone de text pour rechercher les données."
         },
-        "clear": {
+        "list_clear": {
             "id": "help.actions.clear",
             "icon": "eraser",
             "description": "Efface tous les critères de recherche et les filtres."
         },
-        "table": {
+        "list_table": {
             "id": "table_view.table",
             "icon": "table",
             "description": "Menu permettant d'afficher les objets sous forme tabulaire."
         },
-        "custom": {
+        "list_custom": {
             "id": "table_view.custom",
             "icon": "grip-horizontal",
             "description": "Menu permettant d'afficher les objets sous forme de mosaïque."
         },
-        "sort": {
-            "id": "list.sort_title",
-            "icon": "sort-amount-down-alt",
-            "description": "Affiche une boîte de dialog permettant de trier les objets."
-        },
-        "page": {
+        "list_page": {
             "id": "datatable.dialog_title",
             "icon": "arrow-up-right-dots",
             "description": "Affiche une boîte de dialog permettant de sélectionner une page à afficher."
         },
-        "size": {
+        "list_sort": {
+            "id": "list.sort_title",
+            "icon": "sort-amount-down-alt",
+            "description": "Affiche une boîte de dialog permettant de trier les objets."
+        },
+        "list_size": {
             "id": "help.actions.pages",
             "icon": "list-ol",
             "description": "Permet de définir le nombre d'éléments à afficher."
+        },
+        "list_pdf": {
+            "icon": "file-pdf far",
+            "description": "Exporte la liste des objets vers le format de document portable (PDF)."
+        },
+        "list_excel": {
+            "icon": "file-excel far",
+            "description": "Exporte la liste des objets vers format Microsoft® Excel®."
+        },
+        "entity_show": {
+            "icon": "display",
+            "description": "Affiche la page des propriétés de l'objet."
+        },
+        "entity_edit": {
+            "icon": "pencil",
+            "id": "common.button_edit",
+            "description": "Affiche la page d'édition de l'objet."
+        },
+        "entity_add": {
+            "icon": "file far",
+            "description": "Affiche la page de création d'un nouvel objet."
+        },
+        "entity_clone": {
+            "id": "common.button_clone",
+            "icon": "copy far",
+            "description": "Crée une copie de l'objet et affiche la page de création."
+        },
+        "entity_delete": {
+            "icon": "times",
+            "id": "common.button_delete",
+            "description": "Affiche la page de suppression de l'objet."
+        },
+        "back_ok": {
+            "id": "common.button_ok",
+            "description": "Retourne à la page précédente."
+        },
+        "submit_ok": {
+            "id": "common.button_ok",
+            "description": "Enregistre les modifications et retourne à la page précédente."
+        },
+        "submit_add": {
+            "id": "common.button_submit_add",
+            "description": "Ajoute le nouvel objet et retourne à la page précédente."
+        },
+        "submit_delete": {
+            "id": "common.button_delete",
+            "description": "Supprime l'objet et retourne à la page précédente."
+        },
+        "submit_cancel": {
+            "id": "common.button_cancel",
+            "description": "Annule les modifications et retourne à la page précédente."
+        },
+        "delete_cancel": {
+            "id": "common.button_cancel",
+            "description": "Annule la suppression et retourne à la page précédente."
         }
     },
     "entities": [
@@ -77,32 +132,26 @@
             "actions": [
                 {
                     "id": "product.show.title",
-                    "icon": "display",
-                    "description": "Affiche la page des propriétés de l'article.",
+                    "action": "entity_show",
                     "dialog": "product.show.title"
                 },
                 {
                     "id": "product.edit.title",
-                    "icon": "pencil",
-                    "description": "Affiche la page d'édition de l'article.",
+                    "action": "entity_edit",
                     "dialog": "product.edit.title"
                 },
                 {
                     "id": "product.delete.title",
-                    "icon": "times",
-                    "description": "Affiche la page de suppression de l'article.",
+                    "action": "entity_delete",
                     "dialog": "product.delete.title"
                 },
                 {
                     "id": "product.add.title",
-                    "icon": "file far",
-                    "description": "Affiche la page de création d'un article.",
+                    "action": "entity_add",
                     "dialog": "product.add.title"
                 },
                 {
-                    "id": "common.button_clone",
-                    "icon": "copy far",
-                    "description": "Crée une copie de l'article et affiche la page de création."
+                    "action": "entity_clone"
                 }
             ],
             "links": [
@@ -115,7 +164,7 @@
         {
             "id": "task",
             "icon": "tasks",
-            "description": "Représente une tâche du catalogue. Une tâche regroupe plusieurs opérations.",
+            "description": "Représente une tâche du catalogue. Une tâche regroupe plusieurs opérations. Chaque opération contient plusieurs marges.",
             "fields": [
                 {
                     "name": "name",
@@ -136,7 +185,7 @@
                 },
                 {
                     "name": "items",
-                    "description": "Liste des opération appartenant à cette tâche.",
+                    "description": "Liste ou nombre d'opérations appartenant à cette tâche.",
                     "required": false,
                     "type": "collection"
                 }
@@ -148,28 +197,23 @@
             "actions": [
                 {
                     "id": "task.show.title",
-                    "icon": "display",
-                    "description": "Affiche la page des propriétés de la tâche."
+                    "action": "entity_show"
                 },
                 {
                     "id": "task.edit.title",
-                    "icon": "pencil",
-                    "description": "Affiche la page d'édition de la tâche."
+                    "action": "entity_edit"
                 },
                 {
                     "id": "task.delete.title",
-                    "icon": "times",
-                    "description": "Affiche la page de suppression de la tâche."
+                    "action": "entity_delete"
                 },
                 {
                     "id": "task.add.title",
-                    "icon": "file far",
-                    "description": "Affiche la page de création d'une tâche."
+                    "action": "entity_add"
                 },
                 {
                     "id": "common.button_clone",
-                    "icon": "copy far",
-                    "description": "Crée une copie de la tâche et affiche la page de création."
+                    "action": "entity_clone"
                 },
                 {
                     "id": "task_compute.title",
@@ -227,28 +271,22 @@
             "actions": [
                 {
                     "id": "category.show.title",
-                    "icon": "display",
-                    "description": "Affiche la page des propriétés de la catégorie."
+                    "action": "entity_show"
                 },
                 {
                     "id": "category.edit.title",
-                    "icon": "pencil",
-                    "description": "Affiche la page d'édition de la catégorie."
+                    "action": "entity_edit"
                 },
                 {
                     "id": "category.delete.title",
-                    "icon": "times",
-                    "description": "Affiche la page de suppression de la catégorie."
+                    "action": "entity_delete"
                 },
                 {
                     "id": "category.add.title",
-                    "icon": "file far",
-                    "description": "Affiche la page de création d'une catégorie."
+                    "action": "entity_add"
                 },
                 {
-                    "id": "common.button_clone",
-                    "icon": "copy far",
-                    "description": "Crée une copie de la catégorie et affiche la page de création."
+                    "action": "entity_clone"
                 }
             ],
             "links": [
@@ -294,23 +332,19 @@
             "actions": [
                 {
                     "id": "group.show.title",
-                    "icon": "display",
-                    "description": "Affiche la page des propriétés du groupe."
+                    "action": "entity_show"
                 },
                 {
                     "id": "group.edit.title",
-                    "icon": "pencil",
-                    "description": "Affiche la page d'édition du groupe."
+                    "action": "entity_edit"
                 },
                 {
                     "id": "group.delete.title",
-                    "icon": "times",
-                    "description": "Affiche la page de suppression du groupe."
+                    "action": "entity_delete"
                 },
                 {
                     "id": "group.add.title",
-                    "icon": "file far",
-                    "description": "Affiche la page de création d'un groupe."
+                    "action": "entity_add"
                 }
             ],
             "links": [
@@ -345,17 +379,18 @@
                 "La valeur minimale d'une marge ne doit pas chevaucher une marge existante.",
                 "La valeur maximale d'une marge ne doit pas chevaucher une marge existante.",
                 "La valeur maximale d'une marge doit être supérieure à la valeur minimale.",
-                "La valeur minimale d'une marge doit être égale à la valeur maximal de la marge précédente."
+                "La valeur minimale d'une marge doit être égale à la valeur maximal de la marge précédente.",
+                "La valeur maximale d'une marge doit être égale à la valeur minimale de la marge suivante."
             ],
             "actions": [
                 {
                     "id": "globalmargin.show.title",
-                    "icon": "display",
+                    "action": "entity_show",
                     "description": "Affiche la page des propriétés de la marge globale."
                 },
                 {
                     "id": "globalmargin.edit.title",
-                    "icon": "pencil",
+                    "action": "entity_edit",
                     "description": "Affiche la page d'édition des marges globales."
                 }
             ],
@@ -479,28 +514,23 @@
             "actions": [
                 {
                     "id": "calculation.show.title",
-                    "icon": "display",
-                    "description": "Affiche la page des propriétés de la calculation."
+                    "action": "entity_show"
                 },
                 {
                     "id": "calculation.edit.title_short",
-                    "icon": "pencil",
-                    "description": "Affiche la page d'édition de la calculation."
+                    "action": "entity_edit"
                 },
                 {
                     "id": "calculation.delete.title",
-                    "icon": "times",
-                    "description": "Affiche la page de suppression de la calculation."
+                    "action": "entity_delete"
                 },
                 {
                     "id": "calculation.add.title",
-                    "icon": "file far",
-                    "description": "Affiche la page de création d'une calculation."
+                    "action": "entity_add"
                 },
                 {
                     "id": "common.button_clone",
-                    "icon": "copy far",
-                    "description": "Crée une copie de la calculation et affiche la page de création."
+                    "action": "entity_clone"
                 },
                 {
                     "id": "calculation.list.state_title",
@@ -566,8 +596,7 @@
             "actions": [
                 {
                     "id": "log.show.title",
-                    "icon": "display",
-                    "description": "Affiche la page des propriétés de l'entrée."
+                    "action": "entity_show"
                 }
             ],
             "links": [
@@ -625,23 +654,19 @@
             "actions": [
                 {
                     "id": "user.show.title",
-                    "icon": "display",
-                    "description": "Affiche la page des propriétés de l'utilisateur."
+                    "action": "entity_show"
                 },
                 {
                     "id": "user.edit.title",
-                    "icon": "pencil",
-                    "description": "Affiche la page d'édition de l'utilisateur."
+                    "action": "entity_edit"
                 },
                 {
                     "id": "user.delete.title",
-                    "icon": "times",
-                    "description": "Affiche la page de suppression de l'utilisateur."
+                    "action": "entity_delete"
                 },
                 {
                     "id": "user.add.title",
-                    "icon": "file far",
-                    "description": "Affiche la page de création d'un utilisateur."
+                    "action": "entity_add"
                 }
             ],
             "links": [
@@ -811,7 +836,7 @@
             "displayEntityActions": true,
             "globalActions": [
                 {
-                    "action": "search"
+                    "action": "list_search"
                 },
                 {
                     "id": "calculationstate.name",
@@ -819,32 +844,30 @@
                     "description": "Menu déroulant permettant de filtrer les calculations selon un statut."
                 },
                 {
-                    "action": "clear"
+                    "action": "list_clear"
                 },
                 {
-                    "action": "size"
+                    "action": "list_size"
                 },
                 {
-                    "action": "table"
+                    "action": "list_table"
                 },
                 {
-                    "action": "custom"
+                    "action": "list_custom"
                 },
                 {
-                    "action": "page"
+                    "action": "list_page"
                 },
                 {
-                    "action": "sort"
+                    "action": "list_sort"
                 },
                 {
                     "id": "calculation.list.pdf_title",
-                    "icon": "file-pdf far",
-                    "description": "Exporte la liste des calculations vers le format de document portable (PDF)."
+                    "action": "list_pdf"
                 },
                 {
                     "id": "calculation.list.excel_title",
-                    "icon": "file-excel far",
-                    "description": "Exporte la liste des calculations au format Microsoft® Excel®."
+                    "action": "list_excel"
                 }
             ]
         },
@@ -856,17 +879,14 @@
             "description": "Cette page affiche les propriétés de la calculation.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Retourne à la page précédente."
+                    "action": "back_ok"
                 },
                 {
-                    "id": "common.button_edit",
-                    "description": "Affiche la page d'édition de la calculation.",
+                    "action": "entity_edit",
                     "dialog": "calculation.edit.title_short"
                 },
                 {
-                    "id": "common.button_delete",
-                    "description": "Affiche la page de suppression de la calculation.",
+                    "action": "entity_delete",
                     "dialog": "calculation.delete.title"
                 },
                 {
@@ -884,12 +904,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_ok"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -901,12 +919,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_add"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -918,12 +934,10 @@
             "description": "Cette page permet de confirmer la suppression d'une calculation.",
             "editActions": [
                 {
-                    "id": "common.button_delete",
-                    "description": "Supprime la calculation et retourne à la page précédente."
+                    "action": "submit_delete"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule la suppression et retourne à la page précédente."
+                    "action": "delete_cancel"
                 }
             ]
         },
@@ -934,12 +948,10 @@
             "description": "Permet de modifier le statut d'une calculation.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_ok"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -952,7 +964,7 @@
             "displayEntityActions": true,
             "globalActions": [
                 {
-                    "action": "search"
+                    "action": "list_search"
                 },
                 {
                     "id": "category.name",
@@ -960,32 +972,30 @@
                     "description": "Menu déroulant permettant de filtrer les articles selon un groupe ou une catégorie."
                 },
                 {
-                    "action": "clear"
+                    "action": "list_clear"
                 },
                 {
-                    "action": "size"
+                    "action": "list_size"
                 },
                 {
-                    "action": "table"
+                    "action": "list_table"
                 },
                 {
-                    "action": "custom"
+                    "action": "list_custom"
                 },
                 {
-                    "action": "page"
+                    "action": "list_page"
                 },
                 {
-                    "action": "sort"
+                    "action": "list_sort"
                 },
                 {
                     "id": "product.list.pdf_title",
-                    "icon": "file-pdf far",
-                    "description": "Exporte la liste des articles vers le format de document portable (PDF)."
+                    "action": "list_pdf"
                 },
                 {
                     "id": "product.list.excel_title",
-                    "icon": "file-excel far",
-                    "description": "Exporte la liste des articles au format Microsoft® Excel®."
+                    "action": "list_excel"
                 }
             ]
         },
@@ -1001,13 +1011,11 @@
                     "description": "Retourne à la page précédente."
                 },
                 {
-                    "id": "common.button_edit",
-                    "description": "Affiche la page d'édition de l'article.",
+                    "action": "back_ok",
                     "dialog": "product.edit.title"
                 },
                 {
-                    "id": "common.button_delete",
-                    "description": "Affiche la page de suppression de l'article.",
+                    "action": "entity_delete",
                     "dialog": "product.delete.title"
                 }
             ]
@@ -1020,12 +1028,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_add"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -1037,12 +1043,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_ok"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -1054,12 +1058,10 @@
             "description": "Cette page permet de confirmer la suppression d'un article.",
             "editActions": [
                 {
-                    "id": "common.button_delete",
-                    "description": "Supprime l'article et retourne à la page précédente."
+                    "action": "submit_delete"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule la suppression et retourne à la page précédente."
+                    "action": "delete_cancel"
                 }
             ]
         },
@@ -1159,7 +1161,7 @@
             "displayEntityActions": true,
             "globalActions": [
                 {
-                    "action": "search"
+                    "action": "list_search"
                 },
                 {
                     "id": "category.name",
@@ -1167,32 +1169,30 @@
                     "description": "Menu déroulant permettant de filtrer les tâches selon un groupe ou une catégorie."
                 },
                 {
-                    "action": "clear"
+                    "action": "list_clear"
                 },
                 {
-                    "action": "size"
+                    "action": "list_size"
                 },
                 {
-                    "action": "table"
+                    "action": "list_table"
                 },
                 {
-                    "action": "custom"
+                    "action": "list_custom"
                 },
                 {
-                    "action": "page"
+                    "action": "list_page"
                 },
                 {
-                    "action": "sort"
+                    "action": "list_sort"
                 },
                 {
                     "id": "task.list.pdf_title",
-                    "icon": "file-pdf far",
-                    "description": "Exporte la liste des tâches vers le format de document portable (PDF)."
+                    "action": "list_pdf"
                 },
                 {
                     "id": "task.list.excel_title",
-                    "icon": "file-excel far",
-                    "description": "Exporte la liste des tâches au format Microsoft® Excel®."
+                    "action": "list_pdf"
                 }
             ]
         },
@@ -1204,17 +1204,14 @@
             "description": "Cette page affiche les propriétés de la tâche.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Retourne à la page précédente."
+                    "action": "back_ok"
                 },
                 {
-                    "id": "common.button_edit",
-                    "description": "Affiche la page d'édition de la tâches.",
+                    "action": "entity_edit",
                     "dialog": "task.edit.title"
                 },
                 {
-                    "id": "common.button_delete",
-                    "description": "Affiche la page de suppression de la tâches.",
+                    "action": "entity_delete",
                     "dialog": "task.delete.title"
                 }
             ]
@@ -1227,12 +1224,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_add"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -1244,12 +1239,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_ok"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -1261,12 +1254,10 @@
             "description": "Cette page permet de confirmer la suppression d'une tâche.",
             "editActions": [
                 {
-                    "id": "common.button_delete",
-                    "description": "Supprime la tâche et retourne à la page précédente."
+                    "action": "submit_delete"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule la suppression et retourne à la page précédente."
+                    "action": "delete_cancel"
                 }
             ]
         },
@@ -1283,8 +1274,7 @@
             ],
             "editActions": [
                 {
-                    "id": "common.button_close",
-                    "description": "Retourne à la page précédente."
+                    "action": "back_ok"
                 }
             ]
         },
@@ -1297,7 +1287,7 @@
             "displayEntityActions": true,
             "globalActions": [
                 {
-                    "action": "search"
+                    "action": "list_search"
                 },
                 {
                     "id": "group.name",
@@ -1305,32 +1295,30 @@
                     "description": "Menu déroulant permettant de filtrer les catégories selon un groupe."
                 },
                 {
-                    "action": "clear"
+                    "action": "list_clear"
                 },
                 {
-                    "action": "size"
+                    "action": "list_size"
                 },
                 {
-                    "action": "table"
+                    "action": "list_table"
                 },
                 {
-                    "action": "custom"
+                    "action": "list_custom"
                 },
                 {
-                    "action": "page"
+                    "action": "list_page"
                 },
                 {
-                    "action": "sort"
+                    "action": "list_sort"
                 },
                 {
                     "id": "category.list.pdf_title",
-                    "icon": "file-pdf far",
-                    "description": "Exporte la liste des catégories vers le format de document portable (PDF)."
+                    "action": "list_pdf"
                 },
                 {
                     "id": "category.list.excel_title",
-                    "icon": "file-excel far",
-                    "description": "Exporte la liste des catégories au format Microsoft® Excel®."
+                    "action": "list_excel"
                 }
             ]
         },
@@ -1342,17 +1330,14 @@
             "description": "Cette page affiche les propriétés de la catégorie.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Retourne à la page précédente."
+                    "action": "back_ok"
                 },
                 {
-                    "id": "common.button_edit",
-                    "description": "Affiche la page d'édition de la catégorie.",
+                    "action": "entity_edit",
                     "dialog": "category.edit.title"
                 },
                 {
-                    "id": "common.button_delete",
-                    "description": "Affiche la page de suppression de la catégorie.",
+                    "action": "entity_delete",
                     "dialog": "category.delete.title"
                 }
             ]
@@ -1365,12 +1350,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_add"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -1382,12 +1365,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_ok"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -1408,12 +1389,10 @@
             "description": "Cette page permet de confirmer la suppression d'une catégorie.",
             "editActions": [
                 {
-                    "id": "common.button_delete",
-                    "description": "Supprime la catégorie et retourne à la page précédente."
+                    "action": "submit_delete"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule la suppression et retourne à la page précédente."
+                    "action": "delete_cancel"
                 }
             ]
         },
@@ -1426,35 +1405,33 @@
             "displayEntityActions": true,
             "globalActions": [
                 {
-                    "action": "search"
+                    "action": "list_search"
                 },
                 {
-                    "action": "clear"
+                    "action": "list_clear"
                 },
                 {
-                    "action": "size"
+                    "action": "list_size"
                 },
                 {
-                    "action": "table"
+                    "action": "list_table"
                 },
                 {
-                    "action": "custom"
+                    "action": "list_custom"
                 },
                 {
-                    "action": "page"
+                    "action": "list_page"
                 },
                 {
-                    "action": "sort"
+                    "action": "list_sort"
                 },
                 {
                     "id": "group.list.pdf_title",
-                    "icon": "file-pdf far",
-                    "description": "Exporte la liste des groupes vers le format de document portable (PDF)."
+                    "action": "list_pdf"
                 },
                 {
                     "id": "group.list.excel_title",
-                    "icon": "file-excel far",
-                    "description": "Exporte la liste des groupes au format Microsoft® Excel®."
+                    "action": "list_excel"
                 }
             ]
         },
@@ -1466,17 +1443,14 @@
             "description": "Cette page affiche les propriétés du groupe.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Retourne à la page précédente."
+                    "action": "back_ok"
                 },
                 {
-                    "id": "common.button_edit",
-                    "description": "Affiche la page d'édition du groupe.",
+                    "action": "entity_edit",
                     "dialog": "group.edit.title"
                 },
                 {
-                    "id": "common.button_delete",
-                    "description": "Affiche la page de suppression du groupe.",
+                    "action": "entity_delete",
                     "dialog": "group.delete.title"
                 }
             ]
@@ -1489,12 +1463,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_add"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -1506,12 +1478,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_ok"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -1523,12 +1493,10 @@
             "description": "Cette page permet de confirmer la suppression d'un groupe.",
             "editActions": [
                 {
-                    "id": "common.button_delete",
-                    "description": "Supprime le groupe et retourne à la page précédente."
+                    "action": "submit_delete"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule la suppression et retourne à la page précédente."
+                    "action": "delete_cancel"
                 }
             ],
             "forbidden": {
@@ -1551,27 +1519,25 @@
             "globalActions": [
                 {
                     "id": "globalmargin.edit.title",
-                    "icon": "pencil",
+                    "action": "entity_edit",
                     "description": "Affiche la page d'édition des marges globales."
                 },
                 {
-                    "action": "table"
+                    "action": "list_table"
                 },
                 {
-                    "action": "custom"
+                    "action": "list_custom"
                 },
                 {
-                    "action": "sort"
+                    "action": "list_sort"
                 },
                 {
                     "id": "group.list.pdf_title",
-                    "icon": "file-pdf far",
-                    "description": "Exporte la liste des marges globales vers le format de document portable (PDF)."
+                    "action": "list_pdf"
                 },
                 {
                     "id": "group.list.excel_title",
-                    "icon": "file-excel far",
-                    "description": "Exporte la liste des marges globales au format Microsoft® Excel®."
+                    "action": "list_excel"
                 }
             ]
         },
@@ -1583,13 +1549,18 @@
             "description": "Cette page affiche les propriétés de la marge globale.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Retourne à la page précédente."
+                    "action": "back_ok"
                 },
                 {
-                    "id": "common.button_edit",
+                    "action": "entity_edit",
                     "description": "Affiche la page d'édition des marges globales.",
                     "dialog": "globalmargin.edit.title"
+                }
+            ],
+            "links": [
+                {
+                    "id": "globalmargin.list.title",
+                    "type": "dialog"
                 }
             ]
         },
@@ -1601,12 +1572,16 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_ok"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
+                }
+            ],
+            "links": [
+                {
+                    "id": "globalmargin.list.title",
+                    "type": "dialog"
                 }
             ]
         },
@@ -1637,7 +1612,7 @@
             "displayEntityActions": true,
             "globalActions": [
                 {
-                    "action": "search"
+                    "action": "list_search"
                 },
                 {
                     "id": "log.fields.channel",
@@ -1650,22 +1625,22 @@
                     "description": "Menu déroulant permettant de filtrer les entrées du journal selon un niveau."
                 },
                 {
-                    "action": "clear"
+                    "action": "list_clear"
                 },
                 {
-                    "action": "size"
+                    "action": "list_size"
                 },
                 {
-                    "action": "table"
+                    "action": "list_table"
                 },
                 {
-                    "action": "custom"
+                    "action": "list_custom"
                 },
                 {
-                    "action": "page"
+                    "action": "list_page"
                 },
                 {
-                    "action": "sort"
+                    "action": "list_sort"
                 },
                 {
                     "id": "common.button_refresh",
@@ -1679,13 +1654,11 @@
                 },
                 {
                     "id": "log.list.pdf_title",
-                    "icon": "file-pdf far",
-                    "description": "Exporte la liste des entrées du journal vers le format de document portable (PDF)."
+                    "action": "list_pdf"
                 },
                 {
                     "id": "log.list.excel_title",
-                    "icon": "file-excel far",
-                    "description": "Exporte la liste des entrées du journal au format Microsoft® Excel®."
+                    "action": "list_excel"
                 }
             ]
         },
@@ -1697,8 +1670,7 @@
             "description": "Cette page affiche les propriétés d'une entrée dans le journal de l'application. Cette page est accessible uniquement aux administrateurs.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Retourne à la page précédente.",
+                    "action": "back_ok",
                     "dialog": "log.list.title"
                 }
             ]
@@ -1715,8 +1687,7 @@
                     "description": "Supprime le journal et retourne à la page principale du site."
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule la suppression et retourne à la page précédente.",
+                    "action": "submit_cancel",
                     "dialog": "log.list.title"
                 }
             ]
@@ -1730,35 +1701,33 @@
             "displayEntityActions": true,
             "globalActions": [
                 {
-                    "action": "search"
+                    "action": "list_search"
                 },
                 {
-                    "action": "clear"
+                    "action": "list_clear"
                 },
                 {
-                    "action": "size"
+                    "action": "list_size"
                 },
                 {
-                    "action": "table"
+                    "action": "list_table"
                 },
                 {
-                    "action": "custom"
+                    "action": "list_custom"
                 },
                 {
-                    "action": "page"
+                    "action": "list_page"
                 },
                 {
-                    "action": "sort"
+                    "action": "list_sort"
                 },
                 {
                     "id": "user.list.pdf_title",
-                    "icon": "file-pdf far",
-                    "description": "Exporte la liste des utilisateurs vers le format de document portable (PDF)."
+                    "action": "list_pdf"
                 },
                 {
                     "id": "user.list.excel_title",
-                    "icon": "file-excel far",
-                    "description": "Exporte la liste des utilisateurs au format Microsoft® Excel®."
+                    "action": "list_excel"
                 }
             ]
         },
@@ -1770,18 +1739,15 @@
             "description": "Cette page affiche les propriétés de l'utilisateur.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Retourne à la page précédente."
+                    "action": "back_ok"
                 },
                 {
-                    "id": "common.button_edit",
-                    "description": "Affiche la page d'édition de l'utilisateur.",
-                    "dialog": "group.edit.title"
+                    "action": "entity_edit",
+                    "dialog": "user.edit.title"
                 },
                 {
-                    "id": "common.button_delete",
-                    "description": "Affiche la page de suppression de l'utilisateur.",
-                    "dialog": "group.delete.title"
+                    "action": "entity_delete",
+                    "dialog": "user.delete.title"
                 }
             ]
         },
@@ -1793,12 +1759,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_add"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -1810,12 +1774,10 @@
             "displayEntityFields": true,
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Enregistre les modifications et retourne à la page précédente."
+                    "action": "submit_ok"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule les modifications et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -1827,12 +1789,10 @@
             "description": "Cette page permet de confirmer la suppression d'un utilisateur.",
             "editActions": [
                 {
-                    "id": "common.button_delete",
-                    "description": "Supprime le groupe et retourne à la page précédente."
+                    "action": "submit_delete"
                 },
                 {
-                    "id": "common.button_cancel",
-                    "description": "Annule la suppression et retourne à la page précédente."
+                    "action": "submit_cancel"
                 }
             ]
         }

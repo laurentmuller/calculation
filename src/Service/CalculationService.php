@@ -238,7 +238,7 @@ final class CalculationService implements ServiceSubscriberInterface
     /**
      * Update the total of the given calculation.
      *
-     * @param calculation $calculation the calculation to update
+     * @param Calculation $calculation the calculation to update
      *
      * @return bool true if updated; false otherwise
      *

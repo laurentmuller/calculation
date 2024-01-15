@@ -116,7 +116,7 @@ class VichListener
         }
     }
 
-    private function buildPath(user $user, ImageSize $size, File $file): string
+    private function buildPath(User $user, ImageSize $size, File $file): string
     {
         $path = $file->getPath();
         $ext = $file->getExtension();

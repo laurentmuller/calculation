@@ -87,9 +87,9 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
     /**
      * @throws Exception
      */
-    private function createService(string $code = ''): ReCaptchaService
+    private function createService(string $code = ''): RecaptchaService
     {
-        $service = $this->getMockBuilder(ReCaptchaService::class)
+        $service = $this->getMockBuilder(RecaptchaService::class)
             ->disableOriginalConstructor()
             ->getMock();
         $success = '' === $code;

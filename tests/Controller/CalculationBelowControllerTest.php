@@ -27,17 +27,17 @@ class CalculationBelowControllerTest extends AbstractControllerTestCase
     public static function getRoutes(): array
     {
         return [
-            ['/below', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/below', self::ROLE_ADMIN],
-            ['/below', self::ROLE_SUPER_ADMIN],
+            ['/calculation/below', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/below', self::ROLE_ADMIN],
+            ['/calculation/below', self::ROLE_SUPER_ADMIN],
 
-            ['/below/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/below/pdf', self::ROLE_ADMIN],
-            ['/below/pdf', self::ROLE_SUPER_ADMIN],
+            ['/calculation/below/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/below/pdf', self::ROLE_ADMIN],
+            ['/calculation/below/pdf', self::ROLE_SUPER_ADMIN],
 
-            ['/below/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/below/excel', self::ROLE_ADMIN],
-            ['/below/excel', self::ROLE_SUPER_ADMIN],
+            ['/calculation/below/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
+            ['/calculation/below/excel', self::ROLE_ADMIN],
+            ['/calculation/below/excel', self::ROLE_SUPER_ADMIN],
         ];
     }
 

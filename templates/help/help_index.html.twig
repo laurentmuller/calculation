@@ -66,8 +66,9 @@
     <div class="col-xl-4 col-lg-6">
         <h5>{{ 'help.main_menu'|trans }}</h5>
         <hr class="my-1">
-        {% set description = help['mainMenu']['description']|default(false) %}
-        {% if description %}<p class="small mb-1">{{ description }}</p>{% endif %}
+        {% if mainMenu.description is defined %}
+            <p class="small mb-1">{{ mainMenu.description }}</p>
+        {% endif %}
         {{ _self.output_menus(mainMenus, dialogs) }}
     </div>
 {%- endif %}

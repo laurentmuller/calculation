@@ -35,7 +35,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for calculations where margins are below the minimum.
  */
 #[AsController]
-#[Route(path: '/below')]
+#[Route(path: '/calculation/below')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationBelowController extends AbstractController
 {

@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster, bootstrap */
+/* globals Toaster, bootstrap, html2canvas */
 
 /**
  * Ready function
@@ -98,6 +98,58 @@
         }
     }
 
+    // /**
+    //  * @param {string} data
+    //  * @return {Uint8Array}
+    //  */
+    // function base64ToArrayBuffer(data) {
+    //     const binary = window.atob(data);
+    //     const length = binary.length;
+    //     const bytes = new Uint8Array(length);
+    //     for (let i = 0; i < length; i++) {
+    //         bytes[i] = binary.charCodeAt(i);
+    //     }
+    //     return bytes;
+    // }
+
+    /**
+     * Save card images.
+     */
+    function initHtml2canvas() {
+        if (typeof html2canvas === 'undefined') {
+            return;
+        }
+        const cards = document.querySelectorAll('.page-content .card');
+        if (!cards.length) {
+            return;
+        }
+
+        const icon = document.createElement('i');
+        icon.classList.add('fa-fw', 'fa-regular', 'fa-copy');
+        const link = document.createElement('a');
+
+        link.append(icon);
+        link.title = 'Save Image Card';
+        link.style.marginRight = '15px';
+        link.classList.add('btn', 'btn-outline-secondary',
+            'position-absolute', 'top-50', 'end-0', 'translate-middle-y');
+        document.querySelector('.page-content').append(link);
+
+        link.addEventListener('click', () => {
+            const location = window.location.pathname;
+            const options = {backgroundColor: null};
+            cards.forEach(function (card, index) {
+                html2canvas(card, options).then((canvas) => {
+                    $.post('/help/download', {
+                        'index': index,
+                        'location': location,
+                        'image': canvas.toDataURL('image/png'),
+                    }, (data) => window.console.log(data));
+                });
+            })
+        });
+    }
+
     /**
      * Show the flash bag messages.
      */
@@ -130,5 +182,6 @@
     window.addEventListener('DOMContentLoaded', () => {
         initThemeTooltip();
         showFlashBag();
+        initHtml2canvas();
     });
 }(jQuery));

@@ -13,12 +13,17 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Interfaces\RoleInterface;
+use App\Model\HelpDownloadQuery;
 use App\Report\HelpReport;
 use App\Response\PdfResponse;
 use App\Service\HelpService;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -58,6 +63,33 @@ class HelpController extends AbstractController
     }
 
     /**
+     * Save screenshot image.
+     */
+    #[Route(path: '/download', name: 'help_download', methods: Request::METHOD_POST)]
+    public function download(
+        #[MapRequestPayload]
+        HelpDownloadQuery $query,
+        #[Autowire('%kernel.project_dir%')]
+        string $projectDir,
+        Filesystem $filesystem
+    ): JsonResponse {
+        $targetImage = $this->getTargetImage($query);
+        if (null === $targetImage) {
+            return $this->jsonFalse(['message' => 'Unable to get target image.']);
+        }
+        $targetPath = $this->getTargetPath($query);
+        if ('' === $targetPath) {
+            return $this->jsonFalse(['message' => 'Unable to get the target path.']);
+        }
+        $filesystem->dumpFile($projectDir . '/var/cache/help/' . $targetPath, $targetImage);
+
+        return $this->jsonTrue([
+            'message' => 'Saved image successfully.',
+            'target' => $targetPath,
+        ]);
+    }
+
+    /**
      * Display help for an entity.
      */
     #[Route(path: '/entity/{id}', name: 'help_entity', methods: Request::METHOD_GET)]
@@ -81,6 +113,7 @@ class HelpController extends AbstractController
     public function index(): Response
     {
         return $this->render('help/help_index.html.twig', [
+            'mainMenu' => $this->service->getMainMenu(),
             'mainMenus' => $this->service->getMainMenus(),
             'entities' => $this->service->getEntities(),
             'dialogs' => $this->service->getDialogs(),
@@ -97,5 +130,42 @@ class HelpController extends AbstractController
         $name = $this->trans('help.title_name', ['%name%' => $this->getApplicationName()]);
 
         return $this->renderPdfDocument(doc: $doc, name: $name);
+    }
+
+    private function getTargetImage(HelpDownloadQuery $query): ?string
+    {
+        $image = $query->image;
+        $parts = \explode(';base64,', $image);
+        if (2 !== \count($parts)) {
+            return null;
+        }
+        $decoded = \base64_decode($parts[1], true);
+        if (!\is_string($decoded)) {
+            return null;
+        }
+
+        return $decoded;
+    }
+
+    private function getTargetPath(HelpDownloadQuery $query): string
+    {
+        $parts = \array_filter(\explode('/', $query->location));
+        if ([] === $parts) {
+            $parts = ['', 'index'];
+        }
+        if (\is_numeric(\end($parts))) {
+            \array_pop($parts);
+        }
+        $first = \reset($parts);
+        $last = \end($parts);
+        if ($first === $last) {
+            $last = 'list';
+        }
+        $name = \ltrim(\sprintf('%s_%s', $first, $last), '_');
+        if ($query->index > 0) {
+            $name .= \sprintf('_%d', $query->index);
+        }
+
+        return \sprintf('%s/%s.png', $first, $name);
     }
 }

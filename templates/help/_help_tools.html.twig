@@ -81,8 +81,7 @@
 
 {% macro output_links(links, service) -%}
 {% if links -%}
-    <hr class="my-2">
-    <p class="mt-2 mb-0">{{ 'help.labels.see_also'|trans }}</p>
+    <p class="mb-0">{{ 'help.labels.see_also'|trans }}</p>
     <ul>
     {% for link in links %}
         {% if link.type == 'dialog' %}

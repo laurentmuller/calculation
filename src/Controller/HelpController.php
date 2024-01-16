@@ -81,6 +81,7 @@ class HelpController extends AbstractController
     /**
      * Save screenshot image.
      */
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Route(path: '/download', name: 'help_download', methods: Request::METHOD_POST)]
     public function download(
         #[MapRequestPayload]
@@ -141,7 +142,7 @@ class HelpController extends AbstractController
     /**
      * Display help index.
      */
-    #[Route(path: '', name: 'help', methods: Request::METHOD_GET)]
+    #[Route(path: '/', name: 'help', methods: Request::METHOD_GET)]
     public function index(): Response
     {
         return $this->render('help/help_index.html.twig', [

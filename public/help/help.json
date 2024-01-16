@@ -1121,7 +1121,7 @@
             "description": "Cette page permet de créer une copie d'un article.",
             "editActions": [
                 {
-                    "action": "submit_ok"
+                    "action": "submit_add"
                 },
                 {
                     "action": "submit_cancel"
@@ -1331,7 +1331,7 @@
             "description": "Cette page permet de créer une copie d'une tâche.",
             "editActions": [
                 {
-                    "action": "submit_ok"
+                    "action": "submit_add"
                 },
                 {
                     "action": "submit_cancel"
@@ -1479,7 +1479,7 @@
             "description": "Cette page permet de créer une copie d'une catégorie.",
             "editActions": [
                 {
-                    "action": "submit_ok"
+                    "action": "submit_add"
                 },
                 {
                     "action": "submit_cancel"
@@ -1605,7 +1605,7 @@
             "description": "Cette page permet de créer une copie d'un groupe.",
             "editActions": [
                 {
-                    "action": "submit_ok"
+                    "action": "submit_add"
                 },
                 {
                     "action": "submit_cancel"
@@ -2018,7 +2018,7 @@
             "description": "Cette page permet de créer une copie d'un statut.",
             "editActions": [
                 {
-                    "action": "submit_ok"
+                    "action": "submit_add"
                 },
                 {
                     "action": "submit_cancel"

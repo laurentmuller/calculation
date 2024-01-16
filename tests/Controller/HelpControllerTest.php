@@ -29,9 +29,9 @@ class HelpControllerTest extends AbstractControllerTestCase
     public static function getRoutes(): array
     {
         return [
-            ['/help', self::ROLE_USER],
-            ['/help', self::ROLE_ADMIN],
-            ['/help', self::ROLE_SUPER_ADMIN],
+            ['/help/', self::ROLE_USER],
+            ['/help/', self::ROLE_ADMIN],
+            ['/help/', self::ROLE_SUPER_ADMIN],
 
             ['/help/pdf', self::ROLE_USER],
             ['/help/pdf', self::ROLE_ADMIN],

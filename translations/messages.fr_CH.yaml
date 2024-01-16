@@ -98,7 +98,7 @@ calculation:
     title: Calculation Nº %id%
     title_short: Modifier la calculation
   clone:
-    title: Créer une copie de la calculation
+    title: Copie d'une calculation
   fields:
     created: Création
     createdAt: Création
@@ -190,7 +190,7 @@ calculationstate:
     title: Modifier le statut
     success: Le statut <b>%name%</b> a été mis à jour avec succès.
   clone:
-    title: Créer une copie du statut
+    title: Copie d'un statut
   fields:
     calculations: Calculations
     code: Nom
@@ -245,7 +245,7 @@ category:
     title: Modifier la catégorie
     success: La catégorie <b>%name%</b> a été mise à jour avec succès.
   clone:
-    title: Créer une copie de la catégorie
+    title: Copie d'une catégorie
   fields:
     code: Nom
     description: Description
@@ -303,7 +303,7 @@ common:
   button_submit_edit: Enregistrer
   button_submit_add: Ajouter
   clone_description: '%description% - Copie'
-  count: 'Nombre d''éléments : %count%'
+  count: "Nombre d'éléments : %count%"
   add_success: L'objet <b>%name%</b> a été ajouté avec succès.
   edit_success: L'objet <b>%name%</b> a été mis à jour avec succès.
   delete_success: L'objet <b>%name%</b> a été supprimé avec succès.
@@ -402,12 +402,12 @@ datatable:
   dialog_title: Sélectionner une page
   dialog_message: 'Veuillez sélectionner le numéro de page que vous désirez afficher :'
 duplicate:
-  count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
+  count: "Nombre de calculations : %calculations% - Nombre d'articles : %items%"
   description: Calculations contenant le même article plus d'une fois.
   empty: Aucune calculation ne contient des articles en double.
   title: Articles à double
 empty:
-  count: 'Nombre de calculations : %calculations% - Nombre d''articles : %items%'
+  count: "Nombre de calculations : %calculations% - Nombre d'articles : %items%"
   description: Calculations contenant un article avec une quantité ou un prix égale à 0.
   empty: Aucune calculation ne contient des articles sans quantité ou sans prix.
   title: Articles vides
@@ -442,7 +442,7 @@ exchange_rate:
   last_update: 'Dernière mise à jour : %date%'
   next_update: 'Prochaine mise à jour : %date%'
   rate: 'Taux de change : %base% = %target%'
-  quota: 'Demandes restantes jusqu''au %date% : %remaining% / %allowed%'
+  quota: "Demandes restantes jusqu'au %date% : %remaining% / %allowed%"
   result: Résultat
   source: Devise locale
   swap_label: Inverser
@@ -517,7 +517,7 @@ group:
     empty_margins: Aucune marge définie.
     sort_margins: Trier les marges
   clone:
-    title: Créer une copie du groupe
+    title: Copie d'un groupe
   fields:
     categories: Catégories
     code: Nom
@@ -544,7 +544,7 @@ help:
     toggle: Affichage
   home_menu: Page d'accueil de l'aide
   description: Bienvenue dans le système d'aide de l'application <b>%app_name_version%</b>.
-  dialog_menu: "Pages de l'application"
+  dialog_menu: Pages de l'application
   entity_menu: Catalogue (base de données)
   fields:
     action: Action
@@ -559,12 +559,12 @@ help:
     edit_actions: 'Les actions suivantes peuvent être sélectionnées :'
     edit_columns: 'La table contient les colonnes suivantes :'
     edit_fields: 'Les champs de saisie sont définis comme suit :'
-    entity_actions: 'Les actions possibles sur l''objet sont les suivantes :'
+    entity_actions: "Les actions possibles sur l'objet sont les suivantes :"
     entity_empty: Cet objet ne contient aucun champ.
     entity_fields: 'Les champs sont définis comme suit :'
     forbidden_text: Si l'objet sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.
     global_actions: 'Les actions globales suivantes peuvent être sélectionnées :'
-    screenshot: 'Capture d''écran :'
+    screenshot: "Capture d'écran :"
     see_also: 'Voir aussi :'
   main_menu: Menu principal
   title: Aide
@@ -920,7 +920,7 @@ product:
     error_search_unit: Une erreur s'est produite lors de la recherche des unités.
     error_search_supplier: Une erreur s'est produite lors de la recherche des fournisseur.
   clone:
-    title: Créer une copie de l'article
+    title: Copie d'un article
   fields:
     category: Catégorie
     description: Description
@@ -1171,7 +1171,7 @@ task:
     move_up_item: Déplacer l'opération vers le haut
     empty_items: Aucune opération définie.
   clone:
-    title: Créer une copie de la tâche
+    title: Copie d'une tâche
   fields:
     category: Catégorie
     group: Groupe

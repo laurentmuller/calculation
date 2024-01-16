@@ -76,6 +76,7 @@ class TaskController extends AbstractEntityController
         $name = $this->trans('common.clone_description', ['%description%' => $item->getName()]);
         $clone = $item->clone($name);
         $parameters = [
+            'title' => 'task.clone.title',
             'params' => ['id' => $item->getId()],
         ];
 

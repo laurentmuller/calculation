@@ -65,8 +65,11 @@ class CalculationStateController extends AbstractEntityController
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
         $clone = $item->clone($code);
+        $parameters = [
+            'title' => 'calculationstate.clone.title',
+        ];
 
-        return $this->editEntity($request, $clone);
+        return $this->editEntity($request, $clone, $parameters);
     }
 
     /**

@@ -1,0 +1,34 @@
+{% extends 'help/help_base.html.twig' %}
+{% from 'macros/_icons.html.twig' import link %}
+{# macro #}
+{% macro output_entity(entity) -%}
+{%- set entity_name = entity.id ~ '.name' -%}
+{% set href = path('help_entity', {'id': entity.id}) %}
+<div class="col-lg-6 col-xxl-4">
+    <dt class="fw-normal">{{ link(href, entity_name, '', entity.icon|default) }}</dt>
+    <dd>{{ entity.description }}</dd>
+    <hr class="my-2">
+</div>
+{%- endmacro %}
+{# parameters #}
+{%- set title = 'help.entity_menu' -%}
+{# class #}
+{%- block container_class 'container-fluid' -%}
+{# title #}
+{% block help_title -%}
+<i class="fa-solid fa-database me-1"></i>{{- 'help.entity_menu'|trans -}}
+{% endblock %}
+{#  home #}
+{% block help_home -%}
+{{ parent() }}
+{{ link(path('help_dialogs'), '', 'ms-1', 'file-lines', 'help.dialog_menu') }}
+{% endblock %}
+{# body #}
+{% block help_body -%}
+<hr class="mt-1">
+<dl class="row">
+    {% for entity in entities %}
+        {{ _self.output_entity(entity) }}
+    {% endfor %}
+</dl>
+{% endblock %}

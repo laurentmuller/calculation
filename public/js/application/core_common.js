@@ -98,20 +98,6 @@
         }
     }
 
-    // /**
-    //  * @param {string} data
-    //  * @return {Uint8Array}
-    //  */
-    // function base64ToArrayBuffer(data) {
-    //     const binary = window.atob(data);
-    //     const length = binary.length;
-    //     const bytes = new Uint8Array(length);
-    //     for (let i = 0; i < length; i++) {
-    //         bytes[i] = binary.charCodeAt(i);
-    //     }
-    //     return bytes;
-    // }
-
     /**
      * Save card images.
      */

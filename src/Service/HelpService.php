@@ -23,10 +23,15 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * Service to provide help.
  *
  * @psalm-type HelpActionType = array{
- *       id: string,
- *       icon: string,
- *       description: string,
- *       action?: string}
+ *     id: string,
+ *     icon: string,
+ *     description: string,
+ *     action?: string}
+ * @psalm-type HelpLink = array{
+ *     id?: string,
+ *     type?: 'dialog'|'entity',
+ *     href?: string,
+ *     text?: string}
  * @psalm-type HelpForbiddenType = array{
  *     image: string|null,
  *     text:string|null,
@@ -49,7 +54,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      editActions: HelpActionType[]|null,
  *      globalActions: HelpActionType[]|null,
  *      forbidden: HelpForbiddenType|null,
- *      details: string[]|null}
+ *      details: string[]|null,
+ *      links?: HelpLink[]}
  * @psalm-type HelpEntityType = array{
  *      id: string,
  *      icon: string,
@@ -58,7 +64,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      actions: HelpActionType[]|null,
  *      fields: HelpFieldType[]|null,
  *      required: bool|null,
- *      editActions: HelpActionType|null}
+ *      editActions: HelpActionType|null,
+ *      links?: HelpLink[]}
  * @psalm-type HelpMenuType = array{
  *      id: string,
  *      description: string|null,

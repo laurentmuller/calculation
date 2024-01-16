@@ -48,11 +48,12 @@
             "description": "Affiche la page des propriétés de l'objet."
         },
         "entity_edit": {
-            "icon": "pencil",
             "id": "common.button_edit",
+            "icon": "pencil",
             "description": "Affiche la page d'édition de l'objet."
         },
         "entity_add": {
+            "id": "common.button_add",
             "icon": "file far",
             "description": "Affiche la page de création d'un nouvel objet."
         },
@@ -62,8 +63,8 @@
             "description": "Crée une copie de l'objet et affiche la page de création."
         },
         "entity_delete": {
-            "icon": "times",
             "id": "common.button_delete",
+            "icon": "times",
             "description": "Affiche la page de suppression de l'objet."
         },
         "back_ok": {
@@ -89,6 +90,11 @@
         "delete_cancel": {
             "id": "common.button_cancel",
             "description": "Annule la suppression et retourne à la page précédente."
+        },
+        "delete_forbidden": {
+            "id": "common.button_back_list",
+            "icon": "chevron-left",
+            "description": "Retourne à la page précédente sans supprimer l'objet."
         }
     },
     "entities": [
@@ -151,7 +157,8 @@
                     "dialog": "product.add.title"
                 },
                 {
-                    "action": "entity_clone"
+                    "action": "entity_clone",
+                    "dialog": "product.clone.title"
                 }
             ],
             "links": [
@@ -164,7 +171,7 @@
         {
             "id": "task",
             "icon": "tasks",
-            "description": "Représente une tâche du catalogue. Une tâche regroupe plusieurs opérations. Chaque opération contient plusieurs marges.",
+            "description": "Représente une tâche du catalogue. Une tâche regroupe une ou plusieurs opérations. Chaque opération contient une ou plusieurs marges.",
             "fields": [
                 {
                     "name": "name",
@@ -185,7 +192,7 @@
                 },
                 {
                     "name": "items",
-                    "description": "Liste ou nombre d'opérations appartenant à cette tâche.",
+                    "description": "Nombre d'opérations appartenant à cette tâche.",
                     "required": false,
                     "type": "collection"
                 }
@@ -212,8 +219,8 @@
                     "action": "entity_add"
                 },
                 {
-                    "id": "common.button_clone",
-                    "action": "entity_clone"
+                    "action": "entity_clone",
+                    "dialog": "task.clone.title"
                 },
                 {
                     "id": "task_compute.title",
@@ -286,7 +293,8 @@
                     "action": "entity_add"
                 },
                 {
-                    "action": "entity_clone"
+                    "action": "entity_clone",
+                    "dialog": "category.clone.title"
                 }
             ],
             "links": [
@@ -345,6 +353,10 @@
                 {
                     "id": "group.add.title",
                     "action": "entity_add"
+                },
+                {
+                    "action": "entity_clone",
+                    "dialog": "group.clone.title"
                 }
             ],
             "links": [
@@ -412,6 +424,12 @@
                     "length": "30"
                 },
                 {
+                    "name": "description",
+                    "description": "Description du statut.",
+                    "length": "255",
+                    "required": false
+                },
+                {
                     "name": "editable",
                     "description": "Définit si une calculation avec ce statut peut être modifiée.",
                     "type": "boolean"
@@ -420,12 +438,6 @@
                     "name": "color",
                     "description": "Couleur utilisée dans interface utilisateur (UI).",
                     "length": "10"
-                },
-                {
-                    "name": "description",
-                    "description": "Description du statut.",
-                    "length": "255",
-                    "required": false
                 },
                 {
                     "name": "calculations",
@@ -437,6 +449,34 @@
             ],
             "constraints": [
                 "Le nom du statut doit être unique à travers tout le catalogue."
+            ],
+            "actions": [
+                {
+                    "id": "calculationstate.show.title",
+                    "action": "entity_show"
+                },
+                {
+                    "id": "calculationstate.edit.title",
+                    "action": "entity_edit"
+                },
+                {
+                    "id": "calculationstate.delete.title",
+                    "action": "entity_delete"
+                },
+                {
+                    "id": "calculationstate.add.title",
+                    "action": "entity_add"
+                },
+                {
+                    "action": "entity_clone",
+                    "dialog": "calculationstate.clone.title"
+                }
+            ],
+            "links": [
+                {
+                    "id": "calculationstate.list.title",
+                    "type": "dialog"
+                }
             ]
         },
         {
@@ -723,6 +763,12 @@
                         "dialog": "group.list.title"
                     },
                     {
+                        "id": "calculationstate.list.title",
+                        "icon": "flag far",
+                        "description": "Gestion des statuts.",
+                        "dialog": "calculationstate.list.title"
+                    },
+                    {
                         "id": "globalmargin.list.title",
                         "icon": "percent",
                         "description": "Gestion des marge globales du catalogue.",
@@ -738,12 +784,14 @@
                     {
                         "id": "title_by_month|chart",
                         "icon": "calendar-alt far",
-                        "description": "Page affichant un graphique des calculations par mois."
+                        "description": "Page affichant un graphique des calculations par mois.",
+                        "dialog": "title_by_month|chart"
                     },
                     {
                         "id": "title_by_state|chart",
                         "icon": "flag far",
-                        "description": "Page affichant un graphique des calculations par statut."
+                        "description": "Page affichant un graphique des calculations par statut.",
+                        "dialog": "title_by_state|chart"
                     }
                 ]
             },
@@ -1066,6 +1114,21 @@
             ]
         },
         {
+            "id": "product.clone.title",
+            "entity": "product",
+            "image": "product/product_clone",
+            "icon": "copy far",
+            "description": "Cette page permet de créer une copie d'un article.",
+            "editActions": [
+                {
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
+        },
+        {
             "id": "product.update.title",
             "image": "product/product_update",
             "icon": "file-alt far",
@@ -1091,7 +1154,6 @@
         },
         {
             "id": "product.result.description",
-            "name": "product.result.description",
             "image": "product/product_result",
             "icon": "file-alt far",
             "entity": "product",
@@ -1262,6 +1324,21 @@
             ]
         },
         {
+            "id": "task.clone.title",
+            "entity": "task",
+            "image": "task/task_clone",
+            "icon": "copy far",
+            "description": "Cette page permet de créer une copie d'une tâche.",
+            "editActions": [
+                {
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
+        },
+        {
             "id": "task_compute.title",
             "entity": "task",
             "image": "task/task_compute",
@@ -1380,9 +1457,7 @@
                 "image": "category/category_delete_forbidden",
                 "text": "Si la catégorie sélectionnée ne peut pas être supprimée, l'avertissement ci-dessous est affiché.",
                 "action": {
-                    "id": "common.button_back_list",
-                    "icon": "chevron-left",
-                    "description": "Retourne la page précédente."
+                    "action": "delete_forbidden"
                 }
             },
             "icon": "times",
@@ -1393,6 +1468,21 @@
                 },
                 {
                     "action": "delete_cancel"
+                }
+            ]
+        },
+        {
+            "id": "category.clone.title",
+            "entity": "category",
+            "image": "category/category_clone",
+            "icon": "copy far",
+            "description": "Cette page permet de créer une copie d'une catégorie.",
+            "editActions": [
+                {
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
                 }
             ]
         },
@@ -1459,7 +1549,7 @@
             "id": "group.add.title",
             "entity": "group",
             "image": "group/group_add",
-            "description": "Cette page permet de créer un nouveau group.",
+            "description": "Cette page permet de créer un nouveau groupe.",
             "displayEntityFields": true,
             "editActions": [
                 {
@@ -1503,11 +1593,24 @@
                 "image": "group/group_delete_forbidden",
                 "text": "Si le groupe sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.",
                 "action": {
-                    "id": "common.button_back_list",
-                    "icon": "chevron-left",
-                    "description": "Retourne la page précédente."
+                    "action": "delete_forbidden"
                 }
             }
+        },
+        {
+            "id": "group.clone.title",
+            "entity": "group",
+            "image": "group/group_clone",
+            "icon": "copy far",
+            "description": "Cette page permet de créer une copie d'un groupe.",
+            "editActions": [
+                {
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
         },
         {
             "id": "globalmargin.list.title",
@@ -1793,6 +1896,166 @@
                 },
                 {
                     "action": "submit_cancel"
+                }
+            ]
+        },
+        {
+            "id": "calculationstate.list.title",
+            "entity": "calculationstate",
+            "image": "calculationstate/calculationstate_list",
+            "description": "Gestion des statuts.",
+            "displayEntityColumns": true,
+            "displayEntityActions": true,
+            "globalActions": [
+                {
+                    "action": "list_search"
+                },
+                {
+                    "action": "list_clear"
+                },
+                {
+                    "action": "list_size"
+                },
+                {
+                    "action": "list_table"
+                },
+                {
+                    "action": "list_custom"
+                },
+                {
+                    "action": "list_page"
+                },
+                {
+                    "action": "list_sort"
+                },
+                {
+                    "id": "calculationstate.list.pdf_title",
+                    "action": "list_pdf"
+                },
+                {
+                    "id": "calculationstate.list.excel_title",
+                    "action": "list_excel"
+                }
+            ]
+        },
+        {
+            "id": "calculationstate.show.title",
+            "entity": "calculationstate",
+            "image": "calculationstate/calculationstate_show",
+            "icon": "display",
+            "description": "Cette page affiche les propriétés du statut.",
+            "editActions": [
+                {
+                    "action": "back_ok"
+                },
+                {
+                    "action": "entity_edit",
+                    "dialog": "calculationstate.edit.title"
+                },
+                {
+                    "action": "entity_delete",
+                    "dialog": "calculationstate.delete.title"
+                }
+            ]
+        },
+        {
+            "id": "calculationstate.add.title",
+            "entity": "calculationstate",
+            "image": "calculationstate/calculationstate_add",
+            "description": "Cette page permet de créer un nouveau statut.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "action": "submit_add"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
+        },
+        {
+            "id": "calculationstate.edit.title",
+            "entity": "calculationstate",
+            "image": "calculationstate/calculationstate_edit",
+            "description": "Cette page permet de modifier un statut.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
+        },
+        {
+            "id": "calculationstate.delete.title",
+            "entity": "calculationstate",
+            "image": "calculationstate/calculationstate_delete",
+            "forbidden": {
+                "image": "calculationstate/calculationstate_delete_forbidden",
+                "text": "Si le statut sélectionnée ne peut pas être supprimée, l'avertissement ci-dessous est affiché.",
+                "action": {
+                    "action": "delete_forbidden"
+                }
+            },
+            "icon": "times",
+            "description": "Cette page permet de confirmer la suppression d'un statut.",
+            "editActions": [
+                {
+                    "action": "submit_delete"
+                },
+                {
+                    "action": "delete_cancel"
+                }
+            ]
+        },
+        {
+            "id": "calculationstate.clone.title",
+            "entity": "calculationstate",
+            "image": "calculationstate/calculationstate_clone",
+            "icon": "copy far",
+            "description": "Cette page permet de créer une copie d'un statut.",
+            "editActions": [
+                {
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
+        },
+        {
+            "id": "title_by_month|chart",
+            "image": "chart/chart_month",
+            "description": "Cette page affiche un graphique des calculations par mois.",
+            "editActions": [
+                {
+                    "id": "index.title",
+                    "icon": "home",
+                    "description": "Retourne à la page d'accueil."
+                },
+                {
+                    "id": "common.button_pdf",
+                    "icon": "file-pdf",
+                    "description": "Exporte le graphique et les données vers le format de document portable (PDF)."
+                }
+            ]
+        },
+        {
+            "id": "title_by_state|chart",
+            "image": "chart/chart_state",
+            "description": "Cette page affiche un graphique des calculations par statut.",
+            "editActions": [
+                {
+                    "id": "index.title",
+                    "icon": "home",
+                    "description": "Retourne à la page d'accueil."
+                },
+                {
+                    "id": "common.button_pdf",
+                    "icon": "file-pdf",
+                    "description": "Exporte le graphique et les données vers le format de document portable (PDF)."
                 }
             ]
         }

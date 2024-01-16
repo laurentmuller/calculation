@@ -1,0 +1,33 @@
+{% extends 'help/help_base.html.twig' %}
+{% from 'macros/_icons.html.twig' import link %}
+{# macro #}
+{% macro output_dialog(dialog) -%}
+{% set href = path('help_dialog', {'id': dialog.id}) %}
+<div class="col-lg-6 col-xxl-4">
+    <dt class="fw-normal"><a href="{{ href }}">{{ dialog.name|default(dialog.id)|trans }}</a></dt>
+    <dd>{{ dialog.description }}</dd>
+    <hr class="my-2">
+</div>
+{%- endmacro %}
+{# parameters #}
+{%- set title = 'help.dialog_menu' -%}
+{# class #}
+{%- block container_class 'container-fluid' -%}
+{# title #}
+{% block help_title -%}
+<i class="fa-regular fa-file-lines me-1"></i>{{- 'help.dialog_menu'|trans -}}
+{% endblock %}
+{#  home #}
+{% block help_home -%}
+{{ parent() }}
+{{ link(path('help_entities'), '', 'ms-1', 'database', 'help.entity_menu') }}
+{% endblock %}
+{# body #}
+{% block help_body -%}
+<hr class="mt-1">
+<dl class="row">
+    {% for dialog in dialogs %}
+        {{ _self.output_dialog(dialog) }}
+    {% endfor %}
+</dl>
+{% endblock %}

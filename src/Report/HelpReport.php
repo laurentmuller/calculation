@@ -239,9 +239,9 @@ class HelpReport extends AbstractReport
      */
     private function outputDialog(array $item): void
     {
-        $id = $item['id'];
-        $this->addBookmark($this->trans($id), true, 1, false);
-        $this->outputTitle($id);
+        $name = $this->splitTrans($item);
+        $this->addBookmark($name, true, 1, false);
+        $this->outputTitle($name);
         $this->outputDialogDescription($item);
         $this->outputDialogImage($item);
         $this->outputDialogDetails($item);
@@ -551,7 +551,7 @@ class HelpReport extends AbstractReport
         $style = PdfStyle::getCellStyle()->setIndent($indent);
         foreach ($menus as $menu) {
             $table->startRow()
-                ->add(text: $this->splitTrans($menu['id']), style: $style)
+                ->add(text: $this->splitTrans($menu), style: $style)
                 ->add($menu['description'] ?? null)
                 ->endRow();
 
@@ -582,13 +582,16 @@ class HelpReport extends AbstractReport
         PdfStyle::default()->apply($this);
     }
 
-    private function splitTrans(string $id): string
+    /**
+     * @psalm-param array{id: string, ...} $item
+     */
+    private function splitTrans(array $item): string
     {
-        $values = \explode('|', $id);
+        $values = \explode('|', $item['id']);
         if (2 === \count($values)) {
             return $this->trans($values[0], [], $values[1]);
         }
 
-        return $this->trans($id);
+        return $this->trans($values[0]);
     }
 }

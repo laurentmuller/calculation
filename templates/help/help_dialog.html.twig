@@ -1,5 +1,6 @@
 {% extends 'help/help_base.html.twig' %}
 {% import 'help/_help_tools.html.twig' as tools %}
+{% from 'macros/_icons.html.twig' import link %}
 {# macro #}
 {% macro output_entity_columns(entity) -%}
 {% set fields = entity.fields|default(false) %}
@@ -68,6 +69,12 @@
 {% block help_title -%}
 {{- tools.output_icon(dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false), dialog_name) -}}
 {%- endblock %}
+{#  home #}
+{% block help_home -%}
+{{ parent() }}
+{{ link(path('help_dialogs'), '', 'ms-1', 'file-lines', 'help.dialog_menu') }}
+{{ link(path('help_entities'), '', 'ms-1', 'database', 'help.entity_menu') }}
+{% endblock %}
 {# body #}
 {% block help_body -%}
 <p class="mb-0">{{ dialog.description }}</p>

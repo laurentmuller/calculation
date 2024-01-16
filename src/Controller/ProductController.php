@@ -72,6 +72,7 @@ class ProductController extends AbstractEntityController
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
         $clone = $item->clone($description);
         $parameters = [
+            'title' => 'product.clone.title',
             'params' => ['id' => $item->getId()],
         ];
 

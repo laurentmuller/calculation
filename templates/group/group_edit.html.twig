@@ -2,7 +2,7 @@
 {% from 'macros/_margins_edit.html.twig' import outputMargins %}
 {% from 'macros/_timestampable.html.twig' import timestampable_footer %}
 {# parameters #}
-{%- set title = new ? 'group.add.title' : 'group.edit.title' -%}
+{%- set title = title|default(new ? 'group.add.title' : 'group.edit.title') -%}
 {%- set title_icon = ICON_GROUP -%}
 {%- set page_list = 'group_table' -%}
 {%- set form_attr = form_attr|default({})|merge({

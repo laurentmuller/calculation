@@ -72,7 +72,6 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
     {
         $this->loginUsername('ROLE_SUPER_ADMIN');
         $parameters = ['email' => $email, 'id' => $id];
-        self::assertNotNull($this->client);
         $this->client->request(Request::METHOD_GET, '/ajax/check/user/email', $parameters);
         $response = $this->client->getResponse();
         $this->validateResponse($response, $expected);
@@ -83,7 +82,6 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
     {
         $this->loginUsername('ROLE_SUPER_ADMIN');
         $parameters = ['username' => $username, 'id' => $id];
-        self::assertNotNull($this->client);
         $this->client->request(Request::METHOD_GET, '/ajax/check/user/name', $parameters);
         $response = $this->client->getResponse();
         $this->validateResponse($response, $expected);
@@ -93,7 +91,6 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
     public function testCheckUser(string|bool $expected, string $user = null): void
     {
         $parameters = ['user' => $user];
-        self::assertNotNull($this->client);
         $this->client->request(Request::METHOD_GET, '/ajax/check/user', $parameters);
         $response = $this->client->getResponse();
         $this->validateResponse($response, $expected);

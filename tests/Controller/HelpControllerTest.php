@@ -13,10 +13,19 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\HelpController;
+use App\Service\HelpService;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(HelpController::class)]
 class HelpControllerTest extends AbstractControllerTestCase
 {
+    private HelpService $help;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->help = $this->getService(HelpService::class);
+    }
+
     public static function getRoutes(): array
     {
         return [
@@ -28,13 +37,38 @@ class HelpControllerTest extends AbstractControllerTestCase
             ['/help/pdf', self::ROLE_ADMIN],
             ['/help/pdf', self::ROLE_SUPER_ADMIN],
 
-            ['/help/dialog/product.list.title', self::ROLE_USER],
-            ['/help/dialog/product.list.title', self::ROLE_ADMIN],
-            ['/help/dialog/product.list.title', self::ROLE_SUPER_ADMIN],
-
             ['/help/entity/product', self::ROLE_USER],
             ['/help/entity/product', self::ROLE_ADMIN],
             ['/help/entity/product', self::ROLE_SUPER_ADMIN],
+
+            ['/help/dialog/product.list.title', self::ROLE_USER],
+            ['/help/dialog/product.list.title', self::ROLE_ADMIN],
+            ['/help/dialog/product.list.title', self::ROLE_SUPER_ADMIN],
         ];
+    }
+
+    public function testDialogs(): void
+    {
+        $dialogs = $this->help->getDialogs();
+        foreach ($dialogs as $dialog) {
+            $url = \sprintf('/help/dialog/%s', $dialog['id']);
+            $this->checkUrl($url);
+        }
+    }
+
+    public function testEntities(): void
+    {
+        $entities = $this->help->getEntities();
+        foreach ($entities as $entity) {
+            $url = \sprintf('/help/entity/%s', $entity['id']);
+            $this->checkUrl($url);
+        }
+    }
+
+    private function checkUrl(string $url): void
+    {
+        $this->checkRoute($url, self::ROLE_USER);
+        $this->checkRoute($url, self::ROLE_ADMIN);
+        $this->checkRoute($url, self::ROLE_SUPER_ADMIN);
     }
 }

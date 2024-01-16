@@ -1,7 +1,7 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% from 'macros/_timestampable.html.twig' import timestampable_footer %}
 {# parameters #}
-{%- set title = new ? 'category.add.title' : 'category.edit.title' -%}
+{%- set title = title|default(new ? 'category.add.title' : 'category.edit.title') -%}
 {%- set title_icon = ICON_CATEGORY -%}
 {%- set page_list = 'category_table' -%}
 

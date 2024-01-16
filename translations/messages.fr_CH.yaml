@@ -97,6 +97,8 @@ calculation:
     success: La calculation Nº <b>%name%</b> a été mise à jour avec succès.
     title: Calculation Nº %id%
     title_short: Modifier la calculation
+  clone:
+    title: Créer une copie de la calculation
   fields:
     created: Création
     createdAt: Création
@@ -187,6 +189,8 @@ calculationstate:
   edit:
     title: Modifier le statut
     success: Le statut <b>%name%</b> a été mis à jour avec succès.
+  clone:
+    title: Créer une copie du statut
   fields:
     calculations: Calculations
     code: Nom
@@ -240,6 +244,8 @@ category:
   edit:
     title: Modifier la catégorie
     success: La catégorie <b>%name%</b> a été mise à jour avec succès.
+  clone:
+    title: Créer une copie de la catégorie
   fields:
     code: Nom
     description: Description
@@ -510,6 +516,8 @@ group:
     delete_margin: Supprimer la marge
     empty_margins: Aucune marge définie.
     sort_margins: Trier les marges
+  clone:
+    title: Créer une copie du groupe
   fields:
     categories: Catégories
     code: Nom
@@ -534,10 +542,10 @@ help:
     search: Rechercher
     sort: Trier
     toggle: Affichage
-  back_menu: Retourner à page principale de l'aide
+  home_menu: Page d'accueil de l'aide
   description: Bienvenue dans le système d'aide de l'application <b>%app_name_version%</b>.
-  dialog_menu: Pages
-  entity_menu: Objets de la base de données (catalogue)
+  dialog_menu: "Pages de l'application"
+  entity_menu: Catalogue (base de données)
   fields:
     action: Action
     column: Colonne
@@ -911,6 +919,8 @@ product:
     success: L'article <b>%name%</b> a été mis à jour avec succès.
     error_search_unit: Une erreur s'est produite lors de la recherche des unités.
     error_search_supplier: Une erreur s'est produite lors de la recherche des fournisseur.
+  clone:
+    title: Créer une copie de l'article
   fields:
     category: Catégorie
     description: Description
@@ -1160,6 +1170,8 @@ task:
     move_down_item: Déplacer l'opération vers le bas
     move_up_item: Déplacer l'opération vers le haut
     empty_items: Aucune opération définie.
+  clone:
+    title: Créer une copie de la tâche
   fields:
     category: Catégorie
     group: Groupe

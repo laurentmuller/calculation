@@ -36,7 +36,7 @@ class RoutesTest extends AbstractAuthenticateWebTestCase
     public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
     {
         $this->loginUsername($username);
-        $this->client?->request(Request::METHOD_GET, $url);
+        $this->client->request(Request::METHOD_GET, $url);
         $this->checkResponse($url, $username, $expected);
     }
 }

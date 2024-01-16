@@ -67,35 +67,40 @@
 {%- if text -%}
     {%- set values = text|split('|') -%}
     {%- set text = values[0] -%}
-    {%- set domain = values|length > 1 ? values[1] : null -%}
-    {{- icon(icon ? icon ~ ' fa-fw' : null, text, domain) -}}
+    {%- set domain = values[1]|default(null) -%}
+    {{- icon(icon ? icon ~ ' me-1' : null, text, domain) -}}
 {%- else -%}
-    {{- icon(icon ? icon ~ ' fa-fw' : null, text) -}}
+    {{- icon(icon ? icon ~ ' me-1' : null, text) -}}
 {%- endif -%}
 {%- endmacro %}
 
 {% macro home() -%}
 {% from 'macros/_icons.html.twig' import link %}
-{{ link(path('help'), null, null, 'home', 'help.back_menu') }}
+{{ link(path('help'), null, null, 'home', 'help.home_menu') }}
 {%- endmacro %}
 
 {% macro output_links(links, service) -%}
 {% if links -%}
-    <p class="mb-0">{{ 'help.labels.see_also'|trans }}</p>
-    <ul>
+<p class="mb-0">{{ 'help.labels.see_also'|trans }}</p>
+<ul>
     {% for link in links %}
-        {% if link.type == 'dialog' %}
-           {%- set dialog = service.findDialog(link.id) -%}
-           {%- set href = path('help_dialog', {'id': dialog.id}) -%}
-           <li><a href="{{ href }}">{{ dialog.name|default(dialog.id)|trans }}</a></li>
-        {% elseif link.type == 'entity' %}
+        {% set type = link.type|default %}
+        {% if type == 'dialog' %}
+            {%- set dialog = service.findDialog(link.id) -%}
+            {% if dialog %}
+                {%- set href = path('help_dialog', {'id': dialog.id}) -%}
+                <li><a href="{{ href }}">{{ dialog.name|default(dialog.id)|trans }}</a></li>
+            {% endif %}
+        {% elseif type == 'entity' %}
             {%- set entity = service.findEntity(link.id) -%}
-            {%- set href = path('help_entity', {'id': entity.id}) -%}
-            <li><a href="{{ href }}">{{ (entity.id ~ '.name')|trans }}</a></li>
+            {% if entity %}
+                {%- set href = path('help_entity', {'id': entity.id}) -%}
+                <li><a href="{{ href }}">{{ (entity.id ~ '.name')|trans }}</a></li>
+            {% endif %}
         {% elseif link.href is defined and link.text is defined %}
-            <li><a href="{{ href }}">{{ link.text|trans }}</a></li>
+            <li><a href="{{ link.href }}">{{ link.text|trans }}</a></li>
         {% endif %}
     {% endfor %}
-    </ul>
+</ul>
 {%- endif %}
 {%- endmacro %}

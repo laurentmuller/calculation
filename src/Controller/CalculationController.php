@@ -91,6 +91,7 @@ class CalculationController extends AbstractEntityController
         $state = $this->getApplication()->getDefaultState();
         $clone = $item->clone($state, $description);
         $parameters = [
+            'title' => 'calculation.clone.title',
             'params' => ['id' => $item->getId()],
             'overall_below' => $this->isMarginBelow($clone),
         ];

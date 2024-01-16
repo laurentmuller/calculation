@@ -41,7 +41,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     final public const ROLE_SUPER_ADMIN = RoleInterface::ROLE_SUPER_ADMIN;
     final public const ROLE_USER = RoleInterface::ROLE_USER;
 
-    protected ?KernelBrowser $client = null;
+    protected KernelBrowser $client;
 
     protected function setUp(): void
     {
@@ -74,7 +74,6 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
      */
     protected function checkResponse(string $url, string $username, int $expected): void
     {
-        self::assertNotNull($this->client);
         $response = $this->client->getResponse();
         $statusCode = $response->getStatusCode();
         self::assertSame($expected, $statusCode, "Invalid status code for '$url' and '$username'.");
@@ -112,7 +111,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
      */
     protected function loginUser(User $user): void
     {
-        $this->client?->loginUser($user);
+        $this->client->loginUser($user);
     }
 
     /**

@@ -26,7 +26,7 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
     /**
      * Gets the routes to test.
      *
-     * Each entry must contain a URL, a username, an optional expected result, request method and xml http request.
+     * Each entry must contain a URL, a username, an optional expected result, request method and XML http request.
      */
     abstract public static function getRoutes(): array|\Generator;
 
@@ -39,8 +39,13 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      * @param string $method   the request method
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getRoutes')]
-    public function testRoutes(string $url, string $username = '', int $expected = Response::HTTP_OK, string $method = Request::METHOD_GET, bool $xmlHttpRequest = false): void
-    {
+    public function testRoutes(
+        string $url,
+        string $username = '',
+        int $expected = Response::HTTP_OK,
+        string $method = Request::METHOD_GET,
+        bool $xmlHttpRequest = false
+    ): void {
         $this->addEntities();
         $this->checkRoute($url, $username, $expected, $method, $xmlHttpRequest);
         if ($this->mustDeleteEntities()) {
@@ -73,13 +78,18 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      * Checks the given route.
      *
      * @param string $url            the URL to be tested
-     * @param string $username       the username to log in or empty ("") if none
+     * @param string $username       the username to log in or empty string if none
      * @param int    $expected       the expected result
      * @param string $method         the request method
      * @param bool   $xmlHttpRequest true if XMLHttpRequest
      */
-    protected function checkRoute(string $url, string $username, int $expected, string $method, bool $xmlHttpRequest = false): void
-    {
+    protected function checkRoute(
+        string $url,
+        string $username = '',
+        int $expected = Response::HTTP_OK,
+        string $method = Request::METHOD_GET,
+        bool $xmlHttpRequest = false
+    ): void {
         $officeDocument = $this->isOfficeDocument($url);
         if ('' !== $username) {
             $this->loginUsername($username);
@@ -89,7 +99,7 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
         }
 
         $server = $xmlHttpRequest ? ['HTTP_X-Requested-With' => 'XMLHttpRequest'] : [];
-        $this->client?->request(method: $method, uri: $url, server: $server);
+        $this->client->request(method: $method, uri: $url, server: $server);
         if ($officeDocument) {
             \ob_get_clean();
         }

@@ -175,7 +175,7 @@
             "@php bin/console lint:twig templates",
             "@php bin/console lint:container",
             "@php bin/console doctrine:schema:validate",
-            "@composer validate --strict "
+            "@composer validate --strict"
         ],
         "app-fixer": "vendor/bin/php-cs-fixer fix --diff --dry-run",
         "app-psalm": "vendor/bin/psalm --config psalm.xml",

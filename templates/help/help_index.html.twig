@@ -1,18 +1,18 @@
 {% extends 'help/help_base.html.twig' %}
 {% import 'help/_help_tools.html.twig' as tools %}
-{% from 'macros/_icons.html.twig' import link_pdf %}
+{% from 'macros/_icons.html.twig' import icon, link, link_pdf %}
 {# macro #}
-{% macro output_dialog(item) -%}
-{% set href = path('help_dialog', {'id': item.id}) %}
-<dt class="fw-normal"><a href="{{ href }}">{{ item.name|default(item.id)|trans }}</a></dt>
-<dd>{{ item.description }}</dd>
+{% macro output_dialog(dialog) -%}
+{% set href = path('help_dialog', {'id': dialog.id}) %}
+<dt class="fw-normal"><a href="{{ href }}">{{ dialog.name|default(dialog.id)|trans }}</a></dt>
+<dd>{{ dialog.description }}</dd>
 {%- endmacro %}
 
-{% macro output_entity(item) -%}
-{%- set entity_name = item.id ~ '.name' -%}
-{% set href = path('help_entity', {'id': item.id}) %}
-<dt class="fw-normal"><a href="{{ href }}">{{ entity_name|trans }}</a></dt>
-<dd>{{ item.description }}</dd>
+{% macro output_entity(entity) -%}
+{%- set entity_name = entity.id ~ '.name' -%}
+{% set href = path('help_entity', {'id': entity.id}) %}
+<dt class="fw-normal">{{ link(href, entity_name, '', entity.icon|default) }}</dt>
+<dd>{{ entity.description }}</dd>
 {%- endmacro %}
 
 {% macro output_menus(menus, dialogs, indent=0) -%}
@@ -36,8 +36,9 @@
 {%- set menus = menu.menus|default(false) -%}
 <dt class="fw-normal">
 {%- if href -%}
-    {{- tools.output_icon(menu.icon|default(false), null) -}}
-    <a class="ms-1" href="{{ href }}">{{ menu.id|trans }}</a>
+    <a href="{{ href }}">
+        {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
+    </a>
 {%- else -%}
     {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
 {%- endif -%}
@@ -64,7 +65,7 @@
 {# main menu #}
 {% if mainMenus %}
     <div class="col-xl-4 col-lg-6">
-        <h5>{{ 'help.main_menu'|trans }}</h5>
+        <h6><i class="fa-solid fa-sitemap me-1"></i>{{ 'help.main_menu'|trans }}</h6>
         <hr class="my-1">
         {% if mainMenu.description is defined %}
             <p class="small mb-1">{{ mainMenu.description }}</p>
@@ -75,7 +76,7 @@
 {# dialogs #}
 {% if dialogs %}
     <div class="col-xl-4 col-lg-6">
-        <h5>{{ 'help.dialog_menu'|trans }}</h5>
+        <h6><i class="fa-regular fa-file-lines me-1"></i>{{ 'help.dialog_menu'|trans }}</h6>
         <hr class="my-1">
         <dl>
         {% for dialog in dialogs %}
@@ -87,7 +88,9 @@
 {# entities #}
 {% if entities %}
     <div class="col-xl-4 col-lg-6">
-        <h5>{{ 'help.entity_menu'|trans }}</h5>
+        <h6>
+            <i class="fa-solid fa-database me-1"></i>{{ 'help.entity_menu'|trans }}
+        </h6>
         <hr class="my-1">
         <dl>
         {% for entity in entities %}

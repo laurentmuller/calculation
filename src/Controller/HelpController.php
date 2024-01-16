@@ -63,6 +63,22 @@ class HelpController extends AbstractController
     }
 
     /**
+     * Display help for dialogs.
+     */
+    #[Route(path: '/dialogs', name: 'help_dialogs', methods: Request::METHOD_GET)]
+    public function dialogs(): Response
+    {
+        $dialogs = $this->service->getDialogs();
+        if ([] === $dialogs) {
+            throw $this->createNotFoundException('Unable to find dialogs.');
+        }
+
+        return $this->render('help/help_dialogs.html.twig', [
+            'dialogs' => $dialogs,
+        ]);
+    }
+
+    /**
      * Save screenshot image.
      */
     #[Route(path: '/download', name: 'help_download', methods: Request::METHOD_POST)]
@@ -86,6 +102,22 @@ class HelpController extends AbstractController
         return $this->jsonTrue([
             'message' => 'Saved image successfully.',
             'target' => $targetPath,
+        ]);
+    }
+
+    /**
+     * Display help for entities.
+     */
+    #[Route(path: '/entities', name: 'help_entities', methods: Request::METHOD_GET)]
+    public function entities(): Response
+    {
+        $entities = $this->service->getEntities();
+        if ([] === $entities) {
+            throw $this->createNotFoundException('Unable to find entities.');
+        }
+
+        return $this->render('help/help_entities.html.twig', [
+            'entities' => $entities,
         ]);
     }
 

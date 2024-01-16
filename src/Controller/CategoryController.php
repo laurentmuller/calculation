@@ -69,6 +69,7 @@ class CategoryController extends AbstractEntityController
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
         $clone = $item->clone($code);
         $parameters = [
+            'title' => 'category.clone.title',
             'params' => ['id' => $item->getId()],
         ];
 

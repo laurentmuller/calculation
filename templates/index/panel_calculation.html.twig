@@ -1,5 +1,9 @@
 {% import 'index/_macros.html.twig' as macros %}
 {# parameters #}
+{%- set panel_key = 'DISPLAY_CALCULATION' -%}
+{%- set panel_show = app.request.cookies.boolean(panel_key, true) -%}
+{%- set panel_title = panel_show ? 'about.collapse' : 'about.expand' -%}
+
 {%- set caller = path(app.current_route) -%}
 {%- set selection = app.request.get('id', 0) -%}
 {# page actions #}
@@ -25,18 +29,20 @@
 {%- set is_drop_down = add_page or edit_page or delete_page or show_page or single_page_pdf -%}
 {%- set is_calculations = calculations|length -%}
 {# content #}
-<div class="card mb-2">
+<div class="card card-collapse mb-2">
     {{ include('index/_calculation_header.html.twig') }}
-    <div class="card-body {% if is_calculations %}p-2{% else %}g-0 p-1{% endif %}">
-        {% if is_calculations %}
-            {% if custom %}
-                {{- include('index/_calculation_card.html.twig') }}
-            {% else %}
-                {{- include('index/_calculation_table.html.twig') }}
-            {% endif %}
-        {%- else -%}
-            {{ macros.empty() }}
-        {%- endif -%}
+    <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
+        <div class="card-body {% if is_calculations %}p-2{% else %}g-0 p-1{% endif %}">
+            {% if is_calculations %}
+                {% if custom %}
+                    {{- include('index/_calculation_card.html.twig') }}
+                {% else %}
+                    {{- include('index/_calculation_table.html.twig') }}
+                {% endif %}
+            {%- else -%}
+                {{ macros.empty() }}
+            {%- endif -%}
+        </div>
+        {{ include('index/_calculation_footer.html.twig') }}
     </div>
-    {{ include('index/_calculation_footer.html.twig') }}
 </div>

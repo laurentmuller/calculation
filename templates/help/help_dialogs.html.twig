@@ -1,10 +1,13 @@
 {% extends 'help/help_base.html.twig' %}
+{% from 'help/_help_tools.html.twig' import output_icon %}
 {% from 'macros/_icons.html.twig' import link %}
 {# macro #}
 {% macro output_dialog(dialog) -%}
 {% set href = path('help_dialog', {'id': dialog.id}) %}
 <div class="col-lg-6 col-xxl-4">
-    <dt class="fw-normal"><a href="{{ href }}">{{ dialog.name|default(dialog.id)|trans }}</a></dt>
+    <dt class="fw-normal">
+        <a href="{{ href }}">{{ output_icon(null, dialog.name|default(dialog.id)) }}</a>
+    </dt>
     <dd>{{ dialog.description }}</dd>
     <hr class="my-2">
 </div>

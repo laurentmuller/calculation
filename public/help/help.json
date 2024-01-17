@@ -60,7 +60,7 @@
         "entity_clone": {
             "id": "common.button_clone",
             "icon": "copy far",
-            "description": "Crée une copie de l'objet et affiche la page de création."
+            "description": "Crée un nouvel objet en copiant les valeurs d'un objet existant et affiche la page de création."
         },
         "entity_delete": {
             "id": "common.button_delete",
@@ -246,16 +246,16 @@
                     "length": "30"
                 },
                 {
-                    "name": "description",
-                    "description": "Description de la catégorie.",
-                    "required": false,
-                    "length": "255"
-                },
-                {
                     "name": "group",
                     "description": "Groupe à laquelle appartient la catégorie.",
                     "type": "reference",
                     "entity": "group"
+                },
+                {
+                    "name": "description",
+                    "description": "Description de la catégorie.",
+                    "required": false,
+                    "length": "255"
                 },
                 {
                     "name": "products",
@@ -831,7 +831,7 @@
             },
             {
                 "id": "index.menu_admin",
-                "icons": "gear",
+                "icon": "gear",
                 "description": "Menu réservé aux administrateurs.",
                 "menus": [
                     {
@@ -839,6 +839,11 @@
                         "icon": "file-alt far",
                         "description": "Page pour mettre à jour le prix des articles.",
                         "dialog": "product.update.title"
+                    },
+                    {
+                        "id": "calculation.update.title",
+                        "icon": "pencil",
+                        "description": "Page pour recalculer et de mettre à jour le total général des calculations."
                     },
                     {
                         "id": "archive.title",
@@ -851,6 +856,16 @@
                         "icon": "user",
                         "description": "Gestion des utilisateurs.",
                         "dialog": "user.list.title"
+                    },
+                    {
+                        "id": "index.menu_rights_user",
+                        "icon": "user-check",
+                        "description": "Page pour définir les droits d'accès à l'application pour les utilisateurs."
+                    },
+                    {
+                        "id": "parameters.title",
+                        "icon": "cogs",
+                        "description": "Page pour définir les paramètres globaux de l'application."
                     },
                     {
                         "id": "log.list.title",
@@ -1118,7 +1133,7 @@
             "entity": "product",
             "image": "product/product_clone",
             "icon": "copy far",
-            "description": "Cette page permet de créer une copie d'un article.",
+            "description": "Cette page permet de créer un nouvel article en copiant les valeurs d'un article existant.",
             "editActions": [
                 {
                     "action": "submit_add"
@@ -1328,7 +1343,7 @@
             "entity": "task",
             "image": "task/task_clone",
             "icon": "copy far",
-            "description": "Cette page permet de créer une copie d'une tâche.",
+            "description": "Cette page permet de créer une nouvelle tâche en copiant les valeurs d'une tâche existante.",
             "editActions": [
                 {
                     "action": "submit_add"
@@ -1476,7 +1491,7 @@
             "entity": "category",
             "image": "category/category_clone",
             "icon": "copy far",
-            "description": "Cette page permet de créer une copie d'une catégorie.",
+            "description": "Cette page permet de créer une nouvelle catégorie en copiant les valeurs d'une catégorie existante.",
             "editActions": [
                 {
                     "action": "submit_add"
@@ -1602,7 +1617,7 @@
             "entity": "group",
             "image": "group/group_clone",
             "icon": "copy far",
-            "description": "Cette page permet de créer une copie d'un groupe.",
+            "description": "Cette page permet de créer un nouveau groupe en copiant les valeurs d'un groupe existant.",
             "editActions": [
                 {
                     "action": "submit_add"
@@ -2015,7 +2030,7 @@
             "entity": "calculationstate",
             "image": "calculationstate/calculationstate_clone",
             "icon": "copy far",
-            "description": "Cette page permet de créer une copie d'un statut.",
+            "description": "Cette page permet de créer un nouveau statut en copiant les valeurs d'un statut existant.",
             "editActions": [
                 {
                     "action": "submit_add"

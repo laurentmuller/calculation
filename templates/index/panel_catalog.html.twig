@@ -1,4 +1,5 @@
 {% from 'macros/_icons.html.twig' import icon, link %}
+{% from 'macros/_attributes.html.twig' import attributes %}
 {# macros #}
 {% macro cardEntry(entity, count, list_path, icon) -%}
 {% set title = entity ~ '.list.title' %}
@@ -18,26 +19,30 @@
 </div>
 {%- endmacro %}
 {# parameters #}
-{%- set state_key = 'DISPLAY_CATALOG' -%}
-{%- set state_show = app.request.cookies.boolean(state_key, true) -%}
-{%- set state_title = state_show ? 'about.collapse' : 'about.expand' -%}
+{%- set panel_key = 'DISPLAY_CATALOG' -%}
+{%- set panel_show = app.request.cookies.boolean(panel_key, true) -%}
+{%- set panel_title = panel_show ? 'about.collapse' : 'about.expand' -%}
 {%- set task_path = is_granted_task ? 'task_table' : false -%}
 {%- set group_path = is_granted_group ? 'group_table' : false -%}
 {%- set product_path = is_granted_product ? 'product_table' : false -%}
 {%- set category_path = is_granted_category ? 'category_table' : false -%}
 {%- set margin_path = is_granted_global_margin ? 'globalmargin_table' : false -%}
 {%- set state_path = is_granted_calculation_state ? 'calculationstate_table' : false -%}
+{%- set header_attributes = header_attributes|merge({
+    'href': '#' ~ panel_key,
+    'title': panel_title|trans,
+    'aria-expanded': panel_show|json_encode}) -%}
 {# content #}
 <div class="card card-collapse card-catalog mb-2" data-path="{{ path('homepage_hide_catalog') }}">
     <div class="card-header d-flex-wrap-center">
-        <a class="drop-down-icon-left card-title flex-fill h1" href="#{{ state_key }}" title="{{ state_title|trans }}" data-bs-toggle="collapse" aria-expanded="{{ state_show|json_encode }}" data-collapse="{{ 'about.collapse'|trans }}" data-expand="{{ 'about.expand'|trans }}">
+        <a{{ attributes(header_attributes) }}>
             {{- icon('database ms-1', 'index.panel_catalog') -}}
         </a>
         <a href="#" class="d-print-none hide-panel text-body" title="{{ 'index.panel_catalog_hide'|trans }}">
             {{- icon('xmark') -}}
         </a>
     </div>
-    <div class="collapse{% if state_show %} show{% endif %}" id="{{ state_key }}">
+    <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
         <div class="card-body index-parent g-0 p-1">
             {{ _self.cardEntry('product', product_count, product_path, ICON_PRODUCT) }}
             {{ _self.cardEntry('task', task_count, task_path, ICON_TASK) }}

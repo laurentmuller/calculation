@@ -1,4 +1,5 @@
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
+{% from 'macros/_attributes.html.twig' import attributes %}
 {% import 'index/_macros.html.twig' as macros %}
 {# macros #}
 {% macro cardEntry(state, table_path, parameters=[], min_margin) -%}
@@ -23,15 +24,19 @@
 </div>
 {%- endmacro %}
 {# parameters #}
-{%- set state_key = 'DISPLAY_STATE' -%}
-{%- set state_show = app.request.cookies.boolean(state_key, true) -%}
-{%- set state_title = state_show ? 'about.collapse' : 'about.expand' -%}
+{%- set panel_key = 'DISPLAY_STATE' -%}
+{%- set panel_show = app.request.cookies.boolean(panel_key, true) -%}
+{%- set panel_title = panel_show ? 'about.collapse' : 'about.expand' -%}
 {%- set is_states = states|length -%}
 {%- set table_path = is_granted_calculation ? 'calculation_table' : false -%}
+{%- set header_attributes = header_attributes|merge({
+    'href': '#' ~ panel_key,
+    'title': panel_title|trans,
+    'aria-expanded': panel_show|json_encode}) -%}
 {# content #}
 <div class="card card-collapse card-state mb-2" data-path="{{ path('homepage_hide_state') }}">
     <div class="card-header d-flex-wrap-center">
-        <a class="drop-down-icon-left card-title flex-fill h1" href="#{{ state_key }}" title="{{ state_title|trans }}" data-bs-toggle="collapse" aria-expanded="{{ state_show|json_encode }}" data-collapse="{{ 'about.collapse'|trans }}" data-expand="{{ 'about.expand'|trans }}">
+        <a{{ attributes(header_attributes) }}>
             {{- icon(ICON_CALCULATION_STATE ~ ' ms-1', 'index.panel_state') -}}
         </a>
         {%- if table_path and is_states -%}
@@ -44,7 +49,7 @@
             {{- icon('xmark') -}}
         </a>
     </div>
-    <div class="collapse{% if state_show %} show{% endif %}" id="{{ state_key }}">
+    <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
     {% if is_states %}
         <div class="card-body index-parent g-0 p-1">
         {% for state in states %}

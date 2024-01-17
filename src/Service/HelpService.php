@@ -63,7 +63,6 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      constraints?: string[],
  *      actions: HelpActionType[]|null,
  *      fields: HelpFieldType[]|null,
- *      required: bool|null,
  *      editActions: HelpActionType|null,
  *      links?: HelpLink[]}
  * @psalm-type HelpMenuType = array{
@@ -364,8 +363,17 @@ class HelpService implements ServiceSubscriberInterface
             if (0 !== $result) {
                 return $result;
             }
-            $textA = $this->trans($a['id']);
-            $textB = $this->trans($b['id']);
+
+            $idA = $a['id'];
+            $idB = $b['id'];
+            $isListA = \str_ends_with($idA, '.list.title') ? 0 : 1;
+            $isListB = \str_ends_with($idB, '.list.title') ? 0 : 1;
+            if ($isListA !== $isListB) {
+                return $isListA <=> $isListB;
+            }
+
+            $textA = $this->trans($idA);
+            $textB = $this->trans($idB);
 
             return \strnatcmp($textA, $textB);
         });

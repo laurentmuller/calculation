@@ -2,6 +2,11 @@
 {# parameters #}
 {%- set title = 'index.title' -%}
 {%- set enabled = app.user.enabled -%}
+{%- set header_attributes = {
+    'class': 'drop-down-icon-left card-title flex-fill',
+    'data-bs-toggle': 'collapse',
+    'data-collapse': 'about.collapse'|trans,
+    'data-expand': 'about.expand'|trans} -%}
 {# navigation #}
 {%- block navigation_vertical -%}
     {%- if enabled -%}{{ parent() }}{% endif %}

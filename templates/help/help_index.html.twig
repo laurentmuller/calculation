@@ -4,7 +4,9 @@
 {# macro #}
 {% macro output_dialog(dialog) -%}
 {% set href = path('help_dialog', {'id': dialog.id}) %}
-<dt class="fw-normal"><a href="{{ href }}">{{ dialog.name|default(dialog.id)|trans }}</a></dt>
+<dt class="fw-normal">
+    <a href="{{ href }}">{{ tools.output_icon(null, dialog.name|default(dialog.id)) }}</a>
+</dt>
 <dd>{{ dialog.description }}</dd>
 {%- endmacro %}
 
@@ -67,9 +69,6 @@
     <div class="col-xl-4 col-lg-6">
         <h6><i class="fa-solid fa-sitemap me-1"></i>{{ 'help.main_menu'|trans }}</h6>
         <hr class="my-1">
-        {% if mainMenu.description is defined %}
-            <p class="small mb-1">{{ mainMenu.description }}</p>
-        {% endif %}
         {{ _self.output_menus(mainMenus, dialogs) }}
     </div>
 {%- endif %}
@@ -103,5 +102,7 @@
 {%- endblock %}
 
 {% block help_home -%}
-{{- link_pdf('help_pdf', [], 'common.button_export_pdf', 'common.button_pdf') -}}
+{{ link(path('help_dialogs'), '', 'ms-1', 'file-lines', 'help.dialog_menu') }}
+{{ link(path('help_entities'), '', 'ms-1', 'database', 'help.entity_menu') }}
+{{ link_pdf('help_pdf', [], 'common.button_export_pdf') }}
 {%- endblock %}

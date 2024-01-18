@@ -14,10 +14,13 @@ namespace App\Tests\Controller;
 
 use App\Controller\HelpController;
 use App\Service\HelpService;
+use App\Utils\FileUtils;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(HelpController::class)]
 class HelpControllerTest extends AbstractControllerTestCase
 {
+    private const IMAGES_PATH = 'public/help/images';
+
     private HelpService $help;
 
     protected function setUp(): void
@@ -56,6 +59,27 @@ class HelpControllerTest extends AbstractControllerTestCase
         }
     }
 
+    public function testDialogsImages(): void
+    {
+        $extension = HelpService::IMAGES_EXT;
+        $projectDir = $this->client->getKernel()->getProjectDir();
+        $dialogs = $this->help->getDialogs();
+
+        foreach ($dialogs as $dialog) {
+            if (isset($dialog['image'])) {
+                $this->checkImage($projectDir, $dialog['image'], $extension);
+            }
+            if (isset($dialog['images'])) {
+                foreach ($dialog['images'] as $image) {
+                    $this->checkImage($projectDir, $image, $extension);
+                }
+            }
+            if (isset($dialog['forbidden']['image'])) {
+                $this->checkImage($projectDir, $dialog['forbidden']['image'], $extension);
+            }
+        }
+    }
+
     public function testEntities(): void
     {
         $entities = $this->help->getEntities();
@@ -63,6 +87,13 @@ class HelpControllerTest extends AbstractControllerTestCase
             $url = \sprintf('/help/entity/%s', $entity['id']);
             $this->checkUrl($url);
         }
+    }
+
+    private function checkImage(string $projectDir, string $path, string $extension): void
+    {
+        $name = $path . $extension;
+        $filename = FileUtils::buildPath($projectDir, self::IMAGES_PATH, $name);
+        self::assertFileExists($filename);
     }
 
     private function checkUrl(string $url): void

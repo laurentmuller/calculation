@@ -374,7 +374,7 @@ class PdfDocument extends \FPDF
      *
      * @return int the number of lines
      */
-    public function getLinesCount(?string $text, float $width = 0, float $cellMargin = null): int
+    public function getLinesCount(?string $text, float $width = 0.0, float $cellMargin = null): int
     {
         if (null === $text || '' === $text) {
             return 0;

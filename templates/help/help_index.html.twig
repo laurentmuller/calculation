@@ -4,23 +4,29 @@
 {# macro #}
 {% macro output_dialog(dialog) -%}
 {% set href = path('help_dialog', {'id': dialog.id}) %}
-<dt class="fw-normal">
-    <a href="{{ href }}">{{ tools.output_icon(null, dialog.name|default(dialog.id)) }}</a>
-</dt>
-<dd>{{ dialog.description }}</dd>
+<div class="help-item">
+    <dt class="fw-normal">
+        <a href="{{ href }}">{{ tools.output_icon(null, dialog.name|default(dialog.id)) }}</a>
+    </dt>
+    <dd>{{ dialog.description }}</dd>
+</div>
 {%- endmacro %}
 
 {% macro output_entity(entity) -%}
 {%- set entity_name = entity.id ~ '.name' -%}
 {% set href = path('help_entity', {'id': entity.id}) %}
-<dt class="fw-normal">{{ link(href, entity_name, '', entity.icon|default) }}</dt>
-<dd>{{ entity.description }}</dd>
+<div class="help-item">
+    <dt class="fw-normal">{{ link(href, entity_name, '', entity.icon|default) }}</dt>
+    <dd>{{ entity.description }}</dd>
+</div>
 {%- endmacro %}
 
 {% macro output_menus(menus, dialogs, indent=0) -%}
-<dl{% if indent > 0 %} style="margin-left: {{ indent }}rem;"{% endif %}>
-    {%- for menu in menus -%}{{- _self.output_menu(menu, dialogs, indent) -}}{%- endfor -%}
-</dl>
+<div class="help-item"{% if indent > 0 %} style="margin-left: {{ indent }}rem;"{% endif %}>
+    <dl>
+        {%- for menu in menus -%}{{- _self.output_menu(menu, dialogs, indent) -}}{%- endfor -%}
+    </dl>
+</div>
 {%- endmacro %}
 
 {% macro output_menu(menu, dialogs, indent=0) -%}
@@ -36,20 +42,22 @@
     {%- endif -%}
 {%- endif -%}
 {%- set menus = menu.menus|default(false) -%}
-<dt class="fw-normal">
-{%- if href -%}
-    <a href="{{ href }}">
-        {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
-    </a>
-{%- else -%}
-    {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
-{%- endif -%}
-</dt>
-{% if description %}
-<dd>{{ description }}
-    {%- if menus %}{{ _self.output_menus(menus, dialogs, indent + 2) }}{% endif -%}
-</dd>
-{% endif %}
+<div class="help-item">
+    <dt class="fw-normal">
+        {%- if href -%}
+            <a href="{{ href }}">
+                {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
+            </a>
+        {%- else -%}
+            {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
+        {%- endif -%}
+    </dt>
+    {% if description %}
+        <dd>{{ description }}
+            {%- if menus %}{{ _self.output_menus(menus, dialogs, indent + 2) }}{% endif -%}
+        </dd>
+    {% endif %}
+</div>
 {%- endmacro %}
 {# parameters #}
 {%- set title = 'help.title' -%}
@@ -75,7 +83,7 @@
 {# dialogs #}
 {% if dialogs %}
     <div class="col-xl-4 col-lg-6">
-        <h6><i class="fa-regular fa-file-lines me-1"></i>{{ 'help.dialog_menu'|trans }}</h6>
+        <h6><i class="fa-regular fa-file-image me-1"></i>{{ 'help.dialog_menu'|trans }}</h6>
         <hr class="my-1">
         <dl>
         {% for dialog in dialogs %}
@@ -100,9 +108,9 @@
 {%- endif %}
 </div>
 {%- endblock %}
-
+{# home #}
 {% block help_home -%}
-{{ link(path('help_dialogs'), '', 'ms-1', 'file-lines', 'help.dialog_menu') }}
-{{ link(path('help_entities'), '', 'ms-1', 'database', 'help.entity_menu') }}
-{{ link_pdf('help_pdf', [], 'common.button_export_pdf') }}
+    {{ tools.dialogs_button() }}
+    {{ tools.entities_button() }}
+    {{ link_pdf('help_pdf', [], 'common.button_export_pdf', null, 'btn btn-outline-secondary') }}
 {%- endblock %}

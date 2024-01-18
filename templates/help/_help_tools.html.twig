@@ -16,7 +16,7 @@
 {%- set full_path = 'help/images/' ~ path ~ constant('App\\Service\\HelpService::IMAGES_EXT') -%}
 {% if asset_exists(full_path) %}
     {% if screenshot %}<p class="mb-2">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
-    <img src="{{ asset(full_path) }}" class="img-fluid rounded d-block" alt="{{ 'help.labels.screenshot'|trans }}">
+    {{ asset_image(full_path, {'class': 'img-fluid rounded d-block', 'alt': 'help.labels.screenshot'|trans}) }}
 {% endif %}
 {%- endmacro %}
 
@@ -43,17 +43,12 @@
 {%- set action = service.findAction(key)|default({})|merge(action) -%}
 {%- set dialog = service.findDialog(action.dialog|default(action.id)) -%}
 {%- set href = dialog ? path('help_dialog', {'id': dialog.id}) : false -%}
-{%- set text = action.label|default(action.id) -%}
 {%- set icon = action.icon|default(false) -%}
+{%- set text = action.label|default(action.id) -%}
 <tr>
     <td class="text-nowrap">
         {%- if href -%}
-            {%- if icon -%}
-                {{- _self.output_icon(icon) -}}
-                <a class="ms-1" href="{{ href }}">{{ text|trans }}</a>
-            {%- else -%}
-                <a href="{{ href }}">{{ text|trans }}</a>
-            {%- endif -%}
+            <a href="{{ href }}">{{ _self.output_icon(icon, text) }}</a>
         {%- else -%}
             {{- _self.output_icon(icon, text) -}}
         {%- endif -%}
@@ -74,10 +69,20 @@
 {%- endif -%}
 {%- endmacro %}
 
-{% macro home() -%}
-{% from 'macros/_icons.html.twig' import link %}
-{{ link(path('help'), null, null, 'home', 'help.home_menu') }}
+{% macro home_button() -%}
+    {% from 'macros/_icons.html.twig' import link %}
+    {{ link(path('help'), null, 'btn btn-outline-secondary', 'home', 'help.home_menu') }}
 {%- endmacro %}
+
+{% macro dialogs_button() %}
+    {% from 'macros/_icons.html.twig' import link %}
+    {{ link(path('help_dialogs'), '', 'btn btn-outline-secondary', 'file-lines', 'help.dialog_menu') }}
+{% endmacro %}
+
+{% macro entities_button() %}
+    {% from 'macros/_icons.html.twig' import link %}
+    {{ link(path('help_entities'), '', 'btn btn-outline-secondary', 'database', 'help.entity_menu') }}
+{% endmacro %}
 
 {% macro output_links(links, service) -%}
 {% if links -%}
@@ -89,7 +94,7 @@
             {%- set dialog = service.findDialog(link.id) -%}
             {% if dialog %}
                 {%- set href = path('help_dialog', {'id': dialog.id}) -%}
-                <li><a href="{{ href }}">{{ dialog.name|default(dialog.id)|trans }}</a></li>
+                <li><a href="{{ href }}">{{ _self.output_icon(null, dialog.name|default(dialog.id)) }}</a></li>
             {% endif %}
         {% elseif type == 'entity' %}
             {%- set entity = service.findEntity(link.id) -%}
@@ -98,7 +103,7 @@
                 <li><a href="{{ href }}">{{ (entity.id ~ '.name')|trans }}</a></li>
             {% endif %}
         {% elseif link.href is defined and link.text is defined %}
-            <li><a href="{{ link.href }}">{{ link.text|trans }}</a></li>
+            <li><a href="{{ link.href }}">{{ _self.output_icon(null, link.text) }}</a></li>
         {% endif %}
     {% endfor %}
 </ul>

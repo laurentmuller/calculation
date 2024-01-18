@@ -72,7 +72,7 @@
             "description": "Retourne à la page précédente."
         },
         "submit_ok": {
-            "id": "common.button_ok",
+            "id": "common.button_submit_edit",
             "description": "Enregistre les modifications et retourne à la page précédente."
         },
         "submit_add": {
@@ -87,7 +87,7 @@
             "id": "common.button_cancel",
             "description": "Annule les modifications et retourne à la page précédente."
         },
-        "delete_cancel": {
+        "cancel_delete": {
             "id": "common.button_cancel",
             "description": "Annule la suppression et retourne à la page précédente."
         },
@@ -569,7 +569,7 @@
                     "action": "entity_add"
                 },
                 {
-                    "id": "common.button_clone",
+                    "id": "calculation.clone.title",
                     "action": "entity_clone"
                 },
                 {
@@ -579,12 +579,12 @@
                 },
                 {
                     "id": "calculation.list.pdf_single_title",
-                    "icon": "file-pdf far",
+                    "action": "list_pdf",
                     "description": "Exporte la calculation vers le format de document portable (PDF)."
                 },
                 {
                     "id": "calculation.list.excel_single_title",
-                    "icon": "file-pdf far",
+                    "action": "list_excel",
                     "description": "Exporte la calculation vers le format Microsoft® Excel®."
                 }
             ],
@@ -880,14 +880,19 @@
     "dialogs": [
         {
             "id": "index.title",
-            "image": "home",
+            "image": "index",
             "description": "Page principale de l'application.",
             "details": [
-                "Cette page est divisée en quatre parties<br>",
-                "- La partie principale contient la liste des dernières calculations.<br>",
-                "- La deuxième partie contient la liste des calculations regroupées par status.<br>",
-                "- La troisième partie contient la liste des calculations regroupées par mois.<br>",
+                "Cette page est divisée en quatre parties",
+                "- La partie principale contient la liste des dernières calculations.",
+                "- La deuxième partie contient la liste des calculations regroupées par mois.",
+                "- La troisième partie contient la liste des calculations regroupées par status.",
                 "- La dernière partie contient le nombre d'objets dans le catalogue (base de données)."
+            ],
+            "images": [
+                "index_1",
+                "index_2",
+                "index_3"
             ]
         },
         {
@@ -954,7 +959,7 @@
                 },
                 {
                     "id": "common.button_pdf",
-                    "icon": "file-pdf far",
+                    "action": "list_pdf",
                     "description": "Exporte la calculation vers le format de document portable (PDF)."
                 }
             ]
@@ -962,7 +967,7 @@
         {
             "id": "calculation.edit.title_short",
             "entity": "calculation",
-            "image": "calculation/calculation_edit_main",
+            "image": "calculation/calculation_edit",
             "description": "Cette page permet de modifier une calculation.",
             "displayEntityFields": true,
             "editActions": [
@@ -972,12 +977,22 @@
                 {
                     "action": "submit_cancel"
                 }
+            ],
+            "details": [
+                "Cette page est divisée en trois parties",
+                "- La partie principale contient les données générales de la calculation.",
+                "- La deuxième partie contient la liste des articles.",
+                "- La troisième partie contient le résumé des marges et des totaux."
+            ],
+            "images": [
+                "calculation/calculation_edit_2",
+                "calculation/calculation_edit_1"
             ]
         },
         {
             "id": "calculation.add.title",
             "entity": "calculation",
-            "image": "calculation/calculation_edit_new",
+            "image": "calculation/calculation_add",
             "description": "Cette page permet de créer une nouvelle calculation.",
             "displayEntityFields": true,
             "editActions": [
@@ -987,6 +1002,16 @@
                 {
                     "action": "submit_cancel"
                 }
+            ],
+            "details": [
+                "Cette page est divisée en trois parties",
+                "- La partie principale contient les données générales de la calculation.",
+                "- La deuxième partie contient la liste des articles.",
+                "- La troisième partie contient le résumé des marges et des totaux."
+            ],
+            "images": [
+                "calculation/calculation_add_2",
+                "calculation/calculation_add_1"
             ]
         },
         {
@@ -1000,15 +1025,41 @@
                     "action": "submit_delete"
                 },
                 {
-                    "action": "delete_cancel"
+                    "action": "cancel_delete"
                 }
+            ]
+        },
+        {
+            "id": "calculation.clone.title",
+            "entity": "calculation",
+            "image": "calculation/calculation_clone",
+            "icon": "copy far",
+            "description": "Cette page permet de créer une nouvelle calculation en copiant les valeurs d'une calculation existante.",
+            "displayEntityFields": true,
+            "editActions": [
+                {
+                    "action": "submit_add"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ],
+            "details": [
+                "Cette page est divisée en trois parties",
+                "- La partie principale contient les données générales de la calculation.",
+                "- La deuxième partie contient la liste des articles.",
+                "- La troisième partie contient le résumé des marges et des totaux."
+            ],
+            "images": [
+                "calculation/calculation_clone_2",
+                "calculation/calculation_clone_1"
             ]
         },
         {
             "id": "calculation.list.state_title",
             "entity": "calculation",
             "image": "calculation/calculation_edit_state",
-            "description": "Permet de modifier le statut d'une calculation.",
+            "description": "Cette page permet de modifier le statut d'une calculation.",
             "editActions": [
                 {
                     "action": "submit_ok"
@@ -1070,11 +1121,10 @@
             "description": "Cette page affiche les propriétés de l'article.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Retourne à la page précédente."
+                    "action": "back_ok"
                 },
                 {
-                    "action": "back_ok",
+                    "action": "entity_edit",
                     "dialog": "product.edit.title"
                 },
                 {
@@ -1124,7 +1174,7 @@
                     "action": "submit_delete"
                 },
                 {
-                    "action": "delete_cancel"
+                    "action": "cancel_delete"
                 }
             ]
         },
@@ -1334,7 +1384,7 @@
                     "action": "submit_delete"
                 },
                 {
-                    "action": "delete_cancel"
+                    "action": "cancel_delete"
                 }
             ]
         },
@@ -1360,8 +1410,7 @@
             "icon": "keyboard",
             "description": "Permet de calculer une tâche.",
             "details": [
-                "L'utilisateur doit sélectionner une <b>tâche</b>, une <b>quantité</b>",
-                "et une ou plusieurs <b>opérations</b>.",
+                "L'utilisateur doit sélectionner une <b>tâche</b>, une <b>quantité</b> et une ou plusieurs <b>opérations</b>.",
                 "Le programme recalcule automatiquement le <b>totale générale</b> à chaque changement."
             ],
             "editActions": [
@@ -1482,7 +1531,7 @@
                     "action": "submit_delete"
                 },
                 {
-                    "action": "delete_cancel"
+                    "action": "cancel_delete"
                 }
             ]
         },
@@ -1601,7 +1650,7 @@
                     "action": "submit_delete"
                 },
                 {
-                    "action": "delete_cancel"
+                    "action": "cancel_delete"
                 }
             ],
             "forbidden": {
@@ -1705,19 +1754,52 @@
         },
         {
             "id": "search.title",
-            "image": "search",
-            "description": "Permet de rechercher des données.",
-            "displayEntityColumns": true,
+            "image": "search/search_list",
+            "description": "Permet de rechercher des données dans le catalogue (base de données).",
             "globalActions": [
                 {
-                    "id": "help.actions.clear",
-                    "icon": "eraser",
-                    "description": "Efface tous les critères de recherche saisie."
+                    "action": "list_search"
                 },
                 {
-                    "id": "help.actions.toggle",
-                    "icon": "table",
-                    "description": "Menu déroulant permettant de choisir le mode d'affichage tabulaire ou mosaïque."
+                    "id": "search.entity",
+                    "icon": "database",
+                    "description": "Menu déroulant permettant de filtrer les objets."
+                },
+                {
+                    "action": "list_clear"
+                },
+                {
+                    "action": "list_size"
+                },
+                {
+                    "action": "list_table"
+                },
+                {
+                    "action": "list_custom"
+                },
+                {
+                    "action": "list_page"
+                },
+                {
+                    "action": "list_sort"
+                }
+            ],
+            "fields": [
+                {
+                    "name": "search.fields.entity",
+                    "description": "Nom de l'objet.",
+                    "type": "reference",
+                    "required": false
+                },
+                {
+                    "name": "search.fields.field",
+                    "description": "Nom du champ.",
+                    "required": false
+                },
+                {
+                    "name": "search.fields.content",
+                    "description": "Contenu du champ.",
+                    "required": false
                 }
             ]
         },
@@ -2021,7 +2103,7 @@
                     "action": "submit_delete"
                 },
                 {
-                    "action": "delete_cancel"
+                    "action": "cancel_delete"
                 }
             ]
         },
@@ -2055,6 +2137,43 @@
                     "icon": "file-pdf",
                     "description": "Exporte le graphique et les données vers le format de document portable (PDF)."
                 }
+            ],
+            "links": [
+                {
+                    "id": "title_by_state|chart",
+                    "type": "dialog"
+                }
+            ],
+            "fields": [
+                {
+                    "name": "fields.month|chart",
+                    "description": "Mois et année (clé de regroupement).",
+                    "required": false
+                },
+                {
+                    "name": "fields.count|chart",
+                    "description": "Nombre de calculations.",
+                    "type": "quantity",
+                    "required": false
+                },
+                {
+                    "name": "fields.net|chart",
+                    "description": "Montant net des calculations.",
+                    "type": "quantity",
+                    "required": false
+                },
+                {
+                    "name": "fields.margin|chart",
+                    "description": "Marge (valeur et pourcentage) des calculations.",
+                    "type": "amount",
+                    "required": false
+                },
+                {
+                    "name": "fields.total|chart",
+                    "description": "Montant total des calculations.",
+                    "type": "amount",
+                    "required": false
+                }
             ]
         },
         {
@@ -2071,6 +2190,34 @@
                     "id": "common.button_pdf",
                     "icon": "file-pdf",
                     "description": "Exporte le graphique et les données vers le format de document portable (PDF)."
+                }
+            ],
+            "fields": [
+                {
+                    "name": "fields.state|chart",
+                    "description": "Statut de la calculation (clé de regroupement)."
+                },
+                {
+                    "name": "fields.count|chart",
+                    "description": "Nombre (valeur et pourcentage) des calculations."
+                },
+                {
+                    "name": "fields.net|chart",
+                    "description": "Montant net des calculations."
+                },
+                {
+                    "name": "fields.margin|chart",
+                    "description": "Marge (valeur et pourcentage) des calculations."
+                },
+                {
+                    "name": "fields.total|chart",
+                    "description": "Total (valeur et pourcentage) des calculations."
+                }
+            ],
+            "links": [
+                {
+                    "id": "title_by_month|chart",
+                    "type": "dialog"
                 }
             ]
         }

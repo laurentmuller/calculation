@@ -63,14 +63,6 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * Convert the BR tags to the end of line symbol of this platform.
-     */
-    private function br2nl(string $str): string
-    {
-        return (string) \preg_replace('#<br\s*/?>#i', \PHP_EOL, $str);
-    }
-
-    /**
      * @psalm-param HelpDialogType $dialog
      *
      * @psalm-return HelpEntityType|null
@@ -157,8 +149,11 @@ class HelpReport extends AbstractReport
         if ([] === $actions) {
             return;
         }
-
-        $height = self::LINE_HEIGHT * ('' === $description ? 0.0 : (float) $this->getLinesCount($description, 0.0)) + 3.0 + self::LINE_HEIGHT;
+        $lines = 1 + \count($actions);
+        if ('' !== $description) {
+            $lines += $this->getLinesCount($description);
+        }
+        $height = (float) $lines * self::LINE_HEIGHT + 3.0;
         if (!$this->isPrintable($height)) {
             $this->AddPage();
         } else {
@@ -220,19 +215,6 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param string[] $details
-     */
-    private function outputDetails(array $details): void
-    {
-        $text = \array_reduce($details, function (string $carry, string $str): string {
-            $str = \strip_tags($this->br2nl($str));
-
-            return '' === $carry ? $str : $carry . ' ' . $str;
-        }, '');
-        $this->MultiCell(txt: $text, align: PdfTextAlignment::LEFT);
-    }
-
-    /**
      * @psalm-param HelpDialogType $item
      *
      * @throws PdfException
@@ -244,7 +226,9 @@ class HelpReport extends AbstractReport
         $this->outputTitle($name);
         $this->outputDialogDescription($item);
         $this->outputDialogImage($item);
+        $this->outputDialogImages($item);
         $this->outputDialogDetails($item);
+        $this->outputDialogFields($item);
         $this->outputDialogEntityAndFields($item);
         $this->outputDialogEditActions($item);
         $this->outputDialogGlobalActions($item);
@@ -267,12 +251,15 @@ class HelpReport extends AbstractReport
      */
     private function outputDialogDetails(array $item): void
     {
-        if (!isset($item['details'])) {
+        $details = $item['details'] ?? [];
+        if ([] === $details) {
             return;
         }
         $this->Ln(3);
         $this->outputText('help.labels.description');
-        $this->outputDetails($item['details']);
+        foreach ($details as $detail) {
+            $this->MultiCell(txt: $detail, align: PdfTextAlignment::LEFT);
+        }
     }
 
     /**
@@ -309,6 +296,39 @@ class HelpReport extends AbstractReport
         $displayEntityActions = $item['displayEntityActions'] ?? false;
         if ($displayEntityActions && isset($entity['actions'])) {
             $this->outputActions($entity['actions'], 'help.labels.entity_actions');
+        }
+    }
+
+    /**
+     * @psalm-param HelpDialogType $item
+     */
+    private function outputDialogFields(array $item): void
+    {
+        $fields = $item['fields'] ?? [];
+        if ([] === $fields) {
+            return;
+        }
+
+        $text = $this->trans('help.labels.edit_columns');
+        $lines = 1 + \count($fields) + $this->getLinesCount($text);
+        $height = (float) $lines * self::LINE_HEIGHT + 3.0;
+        if (!$this->isPrintable($height)) {
+            $this->AddPage();
+        } else {
+            $this->Ln(3);
+        }
+
+        $this->MultiCell(txt: $text);
+        $table = PdfTable::instance($this)
+            ->addColumns(
+                PdfColumn::left($this->trans('help.fields.column'), 30, true),
+                PdfColumn::left($this->trans('help.fields.description'), 50),
+            )->outputHeaders();
+        foreach ($fields as $field) {
+            $table->addRow(
+                $this->splitTrans($field['name']),
+                $field['description'],
+            );
         }
     }
 
@@ -355,6 +375,21 @@ class HelpReport extends AbstractReport
         $this->Ln(3);
         $this->outputText('help.labels.screenshot');
         $this->outputImage($item['image']);
+    }
+
+    /**
+     * @psalm-param HelpDialogType $item
+     */
+    private function outputDialogImages(array $item): void
+    {
+        $images = $item['images'] ?? [];
+        if ([] === $images) {
+            return;
+        }
+        foreach ($images as $image) {
+            $this->Ln(3);
+            $this->outputImage($image);
+        }
     }
 
     /**
@@ -583,11 +618,14 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param array{id: string, ...} $item
+     * @psalm-param array{id: string, ...}|string $item
      */
-    private function splitTrans(array $item): string
+    private function splitTrans(array|string $item): string
     {
-        $values = \explode('|', $item['id']);
+        if (\is_array($item)) {
+            $item = $item['id'];
+        }
+        $values = \explode('|', $item);
         if (2 === \count($values)) {
             return $this->trans($values[0], [], $values[1]);
         }

@@ -107,8 +107,8 @@
 {{- _self.link(href, text, class) -}}
 {%- endmacro %}
 
-{% macro link_pdf(route, parameters=[], title='common.button_export_pdf', text=null) -%}
-{{- _self.linkExternal(path(route, parameters), text, null, ICON_PDF, title) -}}
+{% macro link_pdf(route, parameters=[], title='common.button_export_pdf', text=null, class=null) -%}
+{{- _self.linkExternal(path(route, parameters), text, class, ICON_PDF, title) -}}
 {%- endmacro %}
 
 {% macro button_pdf(route, parameters=[], title='common.button_export_pdf') -%}

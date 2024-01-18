@@ -9,15 +9,17 @@
 {%- set actions = entity.actions|default(false) -%}
 {%- set constraints = entity.constraints|default(false) -%}
 {%- set links = entity.links|default(false) -%}
-{# body #}
+{# title #}
 {% block help_title -%}
 {{- tools.output_icon(entity.icon|default(false), entity_name) -}}
 {%- endblock %}
-{#  home #}
+{# search #}
+{% block help_search %}{% endblock %}
+{# home #}
 {% block help_home -%}
-{{ parent() }}
-{{ link(path('help_dialogs'), '', 'ms-1', 'file-lines', 'help.dialog_menu') }}
-{{ link(path('help_entities'), '', 'ms-1', 'database', 'help.entity_menu') }}
+    {{ parent() }}
+    {{ tools.dialogs_button() }}
+    {{ tools.entities_button() }}
 {% endblock %}
 {# body #}
 {% block help_body -%}

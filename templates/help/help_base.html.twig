@@ -1,16 +1,38 @@
 {% extends 'base.html.twig' %}
-{% from 'help/_help_tools.html.twig' import home %}
-{# parameters #}
+{% from 'help/_help_tools.html.twig' import home_button %}
+{# parameters
 {%- set table_class = 'table table-list table-sm' -%}
+#}
 {# body #}
 {% block body -%}
-<div class="row g-0">
-    <div class="col col-md-10 offset-md-1 mb-2">
-        <div class="row">
-            <div class="col-md-8"><h4>{% block help_title -%}{%- endblock %}</h4></div>
-            <div class="col-md-4 text-md-end d-print-none">{% block help_home -%}{{ home() }}{%- endblock %}</div>
+    <div class="row g-0">
+        <div class="col col-md-10 offset-md-1 mb-2">
+            <div class="d-flex-wrap-center">
+                <div class="me-auto">
+                    <h4>{% block help_title -%}{%- endblock %}</h4>
+                </div>
+                <div class="d-print-none">
+                    <div class="input-group input-group-sm">
+                        {% block help_search %}
+                            <input id="help-search" class="form-control" type="text" placeholder="{{ 'datatable.search'|trans }}" aria-label="{{ 'datatable.search'|trans }}" style="width: 8rem">
+                            <button  class="btn btn-outline-secondary btn-help-search" type="button" disabled="disabled" title="{{ 'datatable.clear'|trans }}">
+                                <i class="fa-solid fa-eraser" style=""></i>
+                            </button>
+                        {% endblock %}
+                        {% block help_home -%}{{ home_button() }}{%- endblock %}
+                    </div>
+                </div>
+            </div>
+            <div class="help-body">{% block help_body -%}{%- endblock %}</div>
         </div>
-        {% block help_body -%}{%- endblock %}
     </div>
-</div>
 {%- endblock %}
+{% block javascripts %}
+    {% if app.debug %}
+        {{ parent() }}
+        {{ asset_js('vendor/jquery-mark/jquery.mark.js') }}
+        {{ asset_js('js/application/help.js') }}
+    {% else %}
+        {{- asset_js('js/compiled/help.js') }}
+    {% endif %}
+{% endblock %}

@@ -1,10 +1,10 @@
 {% extends 'help/help_base.html.twig' %}
-{% from 'help/_help_tools.html.twig' import output_icon %}
+{% from 'help/_help_tools.html.twig' import output_icon, entities_button %}
 {% from 'macros/_icons.html.twig' import link %}
 {# macro #}
 {% macro output_dialog(dialog) -%}
 {% set href = path('help_dialog', {'id': dialog.id}) %}
-<div class="col-lg-6 col-xxl-4">
+<div class="help-item col-lg-6 col-xxl-4">
     <dt class="fw-normal">
         <a href="{{ href }}">{{ output_icon(null, dialog.name|default(dialog.id)) }}</a>
     </dt>
@@ -20,10 +20,10 @@
 {% block help_title -%}
 <i class="fa-regular fa-file-lines me-1"></i>{{- 'help.dialog_menu'|trans -}}
 {% endblock %}
-{#  home #}
+{# home #}
 {% block help_home -%}
-{{ parent() }}
-{{ link(path('help_entities'), '', 'ms-1', 'database', 'help.entity_menu') }}
+    {{ parent() }}
+    {{ entities_button() }}
 {% endblock %}
 {# body #}
 {% block help_body -%}

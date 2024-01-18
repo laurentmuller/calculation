@@ -47,6 +47,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      id: string,
  *      description: string|null,
  *      image: string|null,
+ *      images?: string[]|null,
  *      displayEntityColumns: true|null,
  *      displayEntityFields: true|null,
  *      displayEntityActions: true|null,
@@ -54,7 +55,8 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      editActions: HelpActionType[]|null,
  *      globalActions: HelpActionType[]|null,
  *      forbidden: HelpForbiddenType|null,
- *      details: string[]|null,
+ *      fields?: HelpFieldType[],
+ *      details?: string[],
  *      links?: HelpLink[]}
  * @psalm-type HelpEntityType = array{
  *      id: string,

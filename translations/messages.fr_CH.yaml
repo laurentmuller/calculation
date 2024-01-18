@@ -536,16 +536,19 @@ group:
   show:
     title: Propriétés du groupe
 help:
+  title: Aide
+  title_name: Aide - %name%
+  main_menu: Menu principal
+  home_menu: Page d'accueil de l'aide
+  dialog_menu: Pages de l'application
+  entity_menu: Catalogue (base de données)
+  description: Bienvenue dans le système d'aide de l'application <b>%app_name_version%</b>.
   actions:
     clear: Effacer
     pages: Lignes par page
     search: Rechercher
     sort: Trier
     toggle: Affichage
-  home_menu: Page d'accueil de l'aide
-  description: Bienvenue dans le système d'aide de l'application <b>%app_name_version%</b>.
-  dialog_menu: Pages de l'application
-  entity_menu: Catalogue (base de données)
   fields:
     action: Action
     column: Colonne
@@ -566,9 +569,6 @@ help:
     global_actions: 'Les actions globales suivantes peuvent être sélectionnées :'
     screenshot: "Capture d'écran :"
     see_also: 'Voir aussi :'
-  main_menu: Menu principal
-  title: Aide
-  title_name: Aide - %name%
   types:
     amount: Montant
     collection: Collection

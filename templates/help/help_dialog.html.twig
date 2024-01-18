@@ -29,31 +29,45 @@
 {% macro output_entity_fields(entity) -%}
 {% set fields = entity.fields|default(false) %}
 {% if fields %}
-    <p class="mt-2 mb-1">{{ 'help.labels.edit_fields'|trans }}</p>
-    <div class="table-responsive">
-        <table class="table table-sm w-100">
-            <thead>
-                <tr>
-                    <th class="text-nowrap">{{ 'help.fields.field'|trans }}</th>
-                    <th class="w-100">{{ 'help.fields.description'|trans }}</th>
-                    <th class="text-nowrap">{{ 'help.fields.type'|trans }}</th>
-                    <th class="text-nowrap text-center">{{ 'help.fields.required'|trans }}</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for field in fields %}
-                <tr>
-                    <td class="text-nowrap">{{ (entity.id ~ '.fields.' ~ field.name)|trans }}</td>
-                    <td class="w-100">{{ field.description }}</td>
-                    <td class="text-nowrap">{{ tools.output_type(field) }}</td>
-                    <td class="text-nowrap text-center">{{- tools.output_required(field) -}}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    {{ _self.output_fields(fields) }}
 {% endif %}
 {%- endmacro %}
+
+{% macro output_fields(fields, id=null, text=null) -%}
+{% set text = text|default('help.labels.edit_fields') %}
+<p class="mt-2 mb-1">{{ text|trans }}</p>
+<div class="table-responsive">
+    <table class="table table-sm w-100">
+        <thead>
+        <tr>
+            {% if id %}
+                <th class="text-nowrap">{{ 'help.fields.field'|trans }}</th>
+                <th class="w-100">{{ 'help.fields.description'|trans }}</th>
+                <th class="text-nowrap">{{ 'help.fields.type'|trans }}</th>
+                <th class="text-nowrap text-center">{{ 'help.fields.required'|trans }}</th>
+            {% else %}
+                <th class="text-nowrap">{{ 'help.fields.column'|trans }}</th>
+                <th class="w-100">{{ 'help.fields.description'|trans }}</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for field in fields %}
+            {% set name = field.name|default(id ~ '.fields.' ~ field.name) %}
+            <tr>
+                <td class="text-nowrap">{{ tools.output_icon(null, name) }}</td>
+                <td class="w-100">{{ field.description }}</td>
+                {% if id %}
+                    <td class="text-nowrap">{{ tools.output_type(field) }}</td>
+                    <td class="text-nowrap text-center">{{- tools.output_required(field) -}}</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{%- endmacro %}
+
 {% macro output_entity_actions(entity, service) -%}
 {% set actions = entity.actions|default(false) %}
 {% if actions %}
@@ -69,29 +83,45 @@
 {% block help_title -%}
 {{- tools.output_icon(dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false), dialog_name) -}}
 {%- endblock %}
-{#  home #}
+{# search #}
+{% block help_search %}{% endblock %}
+{# home #}
 {% block help_home -%}
-{{ parent() }}
-{{ link(path('help_dialogs'), '', 'ms-1', 'file-lines', 'help.dialog_menu') }}
-{{ link(path('help_entities'), '', 'ms-1', 'database', 'help.entity_menu') }}
+    {{ parent() }}
+    {{ tools.dialogs_button() }}
+    {{ tools.entities_button() }}
 {% endblock %}
 {# body #}
 {% block help_body -%}
 <p class="mb-0">{{ dialog.description }}</p>
 <hr class="my-2">
 {{ tools.output_image(dialog.image|default(false)) }}
+{# images #}
+{%- if dialog.images|default([])|length -%}
+    {% for image in dialog.images %}
+        <div class="my-2">
+            {{ tools.output_image(image, false) }}
+        </div>
+    {% endfor %}
+{% endif %}
 {# details #}
 {%- if dialog.details|default([])|length -%}
     <p class="mt-2 mb-0">{{ 'help.labels.description'|trans }}</p>
-    <p class="mb-0 ml">{% for detail in dialog.details -%}{{ detail|raw }} {% endfor %}</p>
+    {% for detail in dialog.details -%}
+        <p class="mb-0">{{ detail|raw }}</p>
+    {% endfor %}
 {%- endif -%}
 {# entity columns #}
 {%- if dialog.displayEntityColumns|default(false) -%}
     {{- _self.output_entity_columns(entity) }}
 {%- endif -%}
+{# dialog fields #}
+{%- if dialog.fields|default(false) -%}
+    {{- _self.output_fields(dialog.fields, null, 'help.labels.edit_columns') }}
+{%- endif -%}
 {# entity fields #}
-{%- if dialog.displayEntityFields|default(false) -%}
-    {{- _self.output_entity_fields(entity) }}
+{%- if dialog.displayEntityFields|default(false) and entity.fields|default(false) -%}
+    {{- _self.output_fields(entity.fields, entity.id) }}
 {%- endif -%}
 {# entity actions #}
 {%- if dialog.displayEntityActions|default(false) -%}

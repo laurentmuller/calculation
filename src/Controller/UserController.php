@@ -18,7 +18,6 @@ use App\Form\User\ResetAllPasswordType;
 use App\Form\User\UserChangePasswordType;
 use App\Form\User\UserCommentType;
 use App\Form\User\UserRightsType;
-use App\Form\User\UserType;
 use App\Interfaces\RoleInterface;
 use App\Model\Comment;
 use App\Report\UsersReport;
@@ -389,11 +388,6 @@ class UserController extends AbstractEntityController
         DataQuery $query = new DataQuery()
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'user/user_table.html.twig');
-    }
-
-    protected function getEditFormType(): string
-    {
-        return UserType::class;
     }
 
     protected function getEntities(array|string $sortedFields = [], array $criteria = [], string $alias = AbstractRepository::DEFAULT_ALIAS): array

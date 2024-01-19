@@ -145,12 +145,7 @@ class HelpController extends AbstractController
     #[Route(path: '/', name: 'help', methods: Request::METHOD_GET)]
     public function index(): Response
     {
-        return $this->render('help/help_index.html.twig', [
-            'mainMenu' => $this->service->getMainMenu(),
-            'mainMenus' => $this->service->getMainMenus(),
-            'entities' => $this->service->getEntities(),
-            'dialogs' => $this->service->getDialogs(),
-        ]);
+        return $this->render('help/help_index.html.twig', ['service' => $this->service]);
     }
 
     /**

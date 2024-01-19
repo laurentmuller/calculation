@@ -14,7 +14,8 @@ namespace App\Tests\Controller;
 
 use App\Controller\HelpController;
 use App\Service\HelpService;
-use App\Utils\FileUtils;
+use Symfony\Component\Filesystem\Path;
+use Symfony\Component\Finder\Finder;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(HelpController::class)]
 class HelpControllerTest extends AbstractControllerTestCase
@@ -59,27 +60,6 @@ class HelpControllerTest extends AbstractControllerTestCase
         }
     }
 
-    public function testDialogsImages(): void
-    {
-        $extension = HelpService::IMAGES_EXT;
-        $projectDir = $this->client->getKernel()->getProjectDir();
-        $dialogs = $this->help->getDialogs();
-
-        foreach ($dialogs as $dialog) {
-            if (isset($dialog['image'])) {
-                $this->checkImage($projectDir, $dialog['image'], $extension);
-            }
-            if (isset($dialog['images'])) {
-                foreach ($dialog['images'] as $image) {
-                    $this->checkImage($projectDir, $image, $extension);
-                }
-            }
-            if (isset($dialog['forbidden']['image'])) {
-                $this->checkImage($projectDir, $dialog['forbidden']['image'], $extension);
-            }
-        }
-    }
-
     public function testEntities(): void
     {
         $entities = $this->help->getEntities();
@@ -89,11 +69,28 @@ class HelpControllerTest extends AbstractControllerTestCase
         }
     }
 
-    private function checkImage(string $projectDir, string $path, string $extension): void
+    public function testImages(): void
     {
-        $name = $path . $extension;
-        $filename = FileUtils::buildPath($projectDir, self::IMAGES_PATH, $name);
-        self::assertFileExists($filename);
+        foreach ($this->getImages() as $file) {
+            self::assertFileExists($file);
+        }
+    }
+
+    public function testUnusedImages(): void
+    {
+        $expected = \iterator_to_array($this->getImages());
+        \sort($expected);
+
+        $actual = $this->getExistingImages();
+        \sort($actual);
+
+        $diff = \array_diff($actual, $expected);
+        if ([] !== $diff) {
+            $diff = \array_map(fn (string $file): string => \basename($file), $diff);
+            self::markTestSkipped("Not all images have been implemented in help:\n" . \implode("\n", $diff));
+        }
+
+        self::assertSame($actual, $expected);
     }
 
     private function checkUrl(string $url): void
@@ -101,5 +98,59 @@ class HelpControllerTest extends AbstractControllerTestCase
         $this->checkRoute($url, self::ROLE_USER);
         $this->checkRoute($url, self::ROLE_ADMIN);
         $this->checkRoute($url, self::ROLE_SUPER_ADMIN);
+    }
+
+    private function getExistingImages(): array
+    {
+        $name = '*' . HelpService::IMAGES_EXT;
+        $projectDir = $this->client->getKernel()->getProjectDir();
+        $dir = Path::canonicalize(Path::join($projectDir, self::IMAGES_PATH));
+        $finder = new Finder();
+        $finder->in($dir)
+            ->files()
+            ->name($name);
+        $files = [];
+        foreach ($finder as $file) {
+            $files[] = Path::canonicalize($file->getRealPath());
+        }
+
+        return $files;
+    }
+
+    private function getImagePath(string $projectDir, string $path, string $extension): string
+    {
+        $file_name = $path . $extension;
+        $full_path = Path::join($projectDir, self::IMAGES_PATH, $file_name);
+
+        return Path::canonicalize($full_path);
+    }
+
+    /**
+     * @return \Generator<string>
+     */
+    private function getImages(): \Generator
+    {
+        $extension = HelpService::IMAGES_EXT;
+        $projectDir = $this->client->getKernel()->getProjectDir();
+        $dialogs = $this->help->getDialogs();
+
+        foreach ($dialogs as $dialog) {
+            if (isset($dialog['image'])) {
+                yield $this->getImagePath($projectDir, $dialog['image'], $extension);
+            }
+            if (isset($dialog['images'])) {
+                foreach ($dialog['images'] as $image) {
+                    yield $this->getImagePath($projectDir, $image, $extension);
+                }
+            }
+            if (isset($dialog['forbidden']['image'])) {
+                yield $this->getImagePath($projectDir, $dialog['forbidden']['image'], $extension);
+            }
+        }
+
+        $menu = $this->help->getMainMenu();
+        if (null !== $menu && isset($menu['image'])) {
+            yield $this->getImagePath($projectDir, $menu['image'], $extension);
+        }
     }
 }

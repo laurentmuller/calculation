@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\Entity\GlobalMargin;
 use App\Enums\EntityPermission;
 use App\Form\GlobalMargin\GlobalMarginsType;
-use App\Form\GlobalMargin\GlobalMarginType;
 use App\Interfaces\RoleInterface;
 use App\Model\GlobalMargins;
 use App\Report\GlobalMarginsReport;
@@ -136,10 +135,5 @@ class GlobalMarginController extends AbstractEntityController
         DataQuery $query = new DataQuery()
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'globalmargin/globalmargin_table.html.twig');
-    }
-
-    protected function getEditFormType(): string
-    {
-        return GlobalMarginType::class;
     }
 }

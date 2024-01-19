@@ -123,22 +123,22 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpActionType $action
+     * @psalm-param HelpMenuType|HelpActionType $action
      *
-     * @psalm-return HelpActionType
+     * @psalm-return HelpMenuType|HelpActionType
      */
     private function mergeAction(array $action): array
     {
         if (!isset($action['action'])) {
             return $action;
         }
-        $key = $action['action'];
-        $source = $this->service->findAction($key);
+        $source = $this->service->findAction($action['action']);
         if (null === $source) {
             return $action;
         }
 
-        return \array_merge($action, $source);
+        // @phpstan-ignore-next-line
+        return \array_merge($source, $action);
     }
 
     /**
@@ -585,6 +585,7 @@ class HelpReport extends AbstractReport
 
         $style = PdfStyle::getCellStyle()->setIndent($indent);
         foreach ($menus as $menu) {
+            $menu = $this->mergeAction($menu);
             $table->startRow()
                 ->add(text: $this->splitTrans($menu), style: $style)
                 ->add($menu['description'] ?? null)

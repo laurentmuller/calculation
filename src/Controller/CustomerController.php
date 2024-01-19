@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Customer;
-use App\Form\Customer\CustomerType;
 use App\Interfaces\RoleInterface;
 use App\Report\CustomersReport;
 use App\Repository\CustomerRepository;
@@ -133,10 +132,5 @@ class CustomerController extends AbstractEntityController
         DataQuery $query = new DataQuery(),
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'customer/customer_table.html.twig');
-    }
-
-    protected function getEditFormType(): string
-    {
-        return CustomerType::class;
     }
 }

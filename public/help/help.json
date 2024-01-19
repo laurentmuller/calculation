@@ -23,12 +23,14 @@
         "list_page": {
             "id": "datatable.dialog_title",
             "icon": "arrow-up-right-dots",
-            "description": "Affiche une boîte de dialog permettant de sélectionner une page à afficher."
+            "description": "Affiche une boîte de dialog permettant de sélectionner une page à afficher.",
+            "dialog": "datatable.dialog_title"
         },
         "list_sort": {
             "id": "list.sort_title",
             "icon": "sort-amount-down-alt",
-            "description": "Affiche une boîte de dialog permettant de trier les objets."
+            "description": "Affiche une boîte de dialog permettant de trier les objets.",
+            "dialog": "list.sort_title"
         },
         "list_size": {
             "id": "help.actions.pages",
@@ -95,6 +97,12 @@
             "id": "common.button_back_list",
             "icon": "chevron-left",
             "description": "Retourne à la page précédente sans supprimer l'objet."
+        },
+        "back_home": {
+            "id": "index.title",
+            "icon": "home",
+            "description": "Retourne à la page précédente ou à la page principale de l'application (page d'accueil).",
+            "dialog": "index.title"
         }
     },
     "entities": [
@@ -607,10 +615,9 @@
                     "type": "date"
                 },
                 {
-                    "name": "channel",
-                    "description": "Nom du canal.",
-                    "required": true,
-                    "type": "text"
+                    "name": "message",
+                    "description": "Message d'information, d'avertissement ou d'erreur.",
+                    "required": true
                 },
                 {
                     "name": "level",
@@ -618,9 +625,10 @@
                     "required": true
                 },
                 {
-                    "name": "message",
-                    "description": "Message d'information, d'avertissement ou d'erreur.",
-                    "required": true
+                    "name": "channel",
+                    "description": "Nom du canal.",
+                    "required": true,
+                    "type": "text"
                 },
                 {
                     "name": "context",
@@ -707,6 +715,11 @@
                 {
                     "id": "user.add.title",
                     "action": "entity_add"
+                },
+                {
+                    "id": "user.message.title",
+                    "icon": "envelope far",
+                    "description": "Page permettant d'envoyer un message à l'utilisateur."
                 }
             ],
             "links": [
@@ -722,10 +735,8 @@
         "description": "Le menu principal est une partie de l'interface d'utilisateur permettant de parcourir les pages du site.",
         "menus": [
             {
-                "id": "index.title",
-                "icon": "home",
-                "description": "Page principale de l'application.",
-                "dialog": "index.title"
+                "action": "back_home",
+                "description": "Page principale de l'application."
             },
             {
                 "id": "calculation.list.title",
@@ -843,7 +854,8 @@
                     {
                         "id": "calculation.update.title",
                         "icon": "pencil",
-                        "description": "Page pour recalculer et de mettre à jour le total général des calculations."
+                        "description": "Page pour recalculer et mettre à jour le total général des calculations.",
+                        "dialog": "calculation.update.title"
                     },
                     {
                         "id": "archive.title",
@@ -860,18 +872,63 @@
                     {
                         "id": "index.menu_rights_user",
                         "icon": "user-check",
-                        "description": "Page pour définir les droits d'accès à l'application pour les utilisateurs."
+                        "description": "Page pour définir les droits d'accès à l'application pour les utilisateurs.",
+                        "dialog": "index.menu_rights_user"
+                    },
+                    {
+                        "id": "index.menu_rights_admin",
+                        "icon": "user-shield",
+                        "description": "Page pour définir les droits d'accès à l'application pour les administrateurs.",
+                        "dialog": "index.menu_rights_admin"
                     },
                     {
                         "id": "parameters.title",
                         "icon": "cogs",
-                        "description": "Page pour définir les paramètres globaux de l'application."
+                        "description": "Page pour définir les paramètres globaux de l'application.",
+                        "dialog": "parameters.title"
                     },
                     {
                         "id": "log.list.title",
                         "icon": "book",
-                        "description": "Affiche la liste des entrées du journal de l'application.",
+                        "description": "Affiche les entrées du journal de l'application.",
                         "dialog": "log.list.title"
+                    },
+                    {
+                        "id": "clear_cache.title",
+                        "icon": "times",
+                        "description": "Page pour de vider le cache de l'application.",
+                        "dialog": "clear_cache.title"
+                    }
+                ]
+            },
+            {
+                "id": "user.name",
+                "icon": "user",
+                "description": "Menu de l'utilisateur.",
+                "menus": [
+                    {
+                        "id": "profile.edit.title",
+                        "icon": "user-gear",
+                        "dialog": "profile.edit.title",
+                        "description": "Page permettant de modifier le profile."
+                    },
+                    {
+                        "id": "profile.change_password.title",
+                        "icon": "unlock-alt",
+                        "dialog": "profile.change_password.title",
+                        "description": "Page permettant de modifier le mot de passe."
+                    },
+                    {
+                        "id": "user.parameters.title",
+                        "icon": "user-gear",
+                        "description": "Page permettant de modifier les préférence de l'application.",
+                        "dialog": "user.parameters.title"
+                    },
+                    {
+                        "id": "user.comment.title",
+                        "icon": "envelope far",
+                        "description": "Page permettant d'envoyer un commentaire à l'administrateur du site.",
+                        "dialog": "user.comment.title"
                     }
                 ]
             }
@@ -884,7 +941,7 @@
             "description": "Page principale de l'application.",
             "details": [
                 "Cette page est divisée en quatre parties",
-                "- La partie principale contient la liste des dernières calculations.",
+                "- La première partie contient la liste des dernières calculations.",
                 "- La deuxième partie contient la liste des calculations regroupées par mois.",
                 "- La troisième partie contient la liste des calculations regroupées par status.",
                 "- La dernière partie contient le nombre d'objets dans le catalogue (base de données)."
@@ -936,6 +993,16 @@
                 {
                     "id": "calculation.list.excel_title",
                     "action": "list_excel"
+                },
+                {
+                    "id": "archive.title",
+                    "icon": "calendar-xmark far",
+                    "description": "Affiche la page permettant d'archiver des calculations en modifiant leur statut."
+                },
+                {
+                    "id": "calculation.update.title",
+                    "icon": "pencil",
+                    "description": "Affiche la page permettant de recalculer et de mettre à jour le total général des calculations."
                 }
             ]
         },
@@ -1110,6 +1177,11 @@
                 {
                     "id": "product.list.excel_title",
                     "action": "list_excel"
+                },
+                {
+                    "id": "product.update.title",
+                    "description": "Affiche la page de mise jour du prix des articles pour une catégorie.",
+                    "dialog": "product.update.title"
                 }
             ]
         },
@@ -1195,18 +1267,20 @@
         },
         {
             "id": "product.update.title",
-            "image": "product/product_update",
+            "image": "admin/update_product_query",
             "icon": "file-alt far",
             "entity": "product",
-            "description": "Cette page permet de mettre jour le prix des articles pour une catégorie. Cette page est accessible uniquement aux administrateurs.",
+            "description": "Cette page permet de mettre jour le prix des articles pour une catégorie. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Met à jour le prix des articles et affiche les résultats de la mise à jour."
+                    "id": "product.update.submit",
+                    "description": "Met à jour le prix des articles et affiche les résultats de la mise à jour.",
+                    "dialog": "product.result.description"
                 },
                 {
                     "id": "common.button_cancel",
-                    "description": "Retourne à la page principale de l'application.",
+                    "icon": "",
+                    "action": "back_home",
                     "dialog": "index.title"
                 }
             ],
@@ -1214,21 +1288,22 @@
                 {
                     "id": "product.result.description",
                     "type": "dialog"
+                },
+                {
+                    "id": "product.list.title",
+                    "type": "dialog"
                 }
             ]
         },
         {
             "id": "product.result.description",
-            "image": "product/product_result",
+            "image": "admin/update_product_result",
             "icon": "file-alt far",
             "entity": "product",
             "description": "Cette page affiche le résultat de la mise à jour des articles.",
             "editActions": [
                 {
-                    "id": "index.title",
-                    "icon": "home",
-                    "description": "Retourne à la page principale de l'application.",
-                    "dialog": "index.title"
+                    "action": "back_home"
                 },
                 {
                     "id": "product.update.title",
@@ -1245,36 +1320,64 @@
         },
         {
             "id": "archive.title",
-            "image": "calculation/calculation_archive_query",
-            "icon": "calendar-xmark far",
             "entity": "calculation",
-            "description": "Cette page vous permet d'archiver des calculations en modifiant leur statut. Cette page est accessible uniquement aux administrateurs.",
+            "image": "admin/calculation_archive_query",
+            "icon": "calendar-xmark far",
+            "description": "Cette page vous permet d'archiver des calculations en modifiant leur statut. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "description": "Met à jour le statut des calculations et affiche les résultats de la mise à jour."
+                    "id": "archive.edit.submit",
+                    "description": "Met à jour le statut des calculations et affiche les résultats de la mise à jour.",
+                    "dialog": "archive.result.description"
                 },
                 {
                     "id": "common.button_cancel",
-                    "description": "Retourne à la page principale de l'application.",
-                    "dialog": "index.title"
+                    "icon": "",
+                    "action": "back_home"
                 }
             ],
             "links": [
                 {
                     "id": "archive.result.description",
                     "type": "dialog"
+                },
+                {
+                    "id": "calculation.update.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "calculation.list.title",
+                    "type": "dialog"
                 }
             ]
         },
         {
             "id": "archive.result.description",
-            "image": "calculation/calculation_archive_result",
+            "entity": "calculation",
+            "image": "admin/calculation_archive_result",
             "icon": "calendar-xmark far",
             "description": "Cette page affiche le résultat de l'archivage des calculations.",
+            "editActions": [
+                {
+                    "action": "back_home"
+                },
+                {
+                    "id": "archive.result.new_archive",
+                    "description": "Retourne à la page d'archivage des calculations.",
+                    "dialog": "archive.title"
+                }
+            ],
             "links": [
                 {
                     "id": "archive.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "calculation.update.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "calculation.list.title",
                     "type": "dialog"
                 }
             ]
@@ -1807,7 +1910,7 @@
             "id": "log.list.title",
             "entity": "log",
             "image": "log/log_list",
-            "description": "Affiche la liste des entrées du journal de l'application. Cette page est accessible uniquement aux administrateurs.",
+            "description": "Affiche les entrées du journal de l'application. Cette page n'est accessible qu'aux administrateurs.",
             "displayEntityColumns": true,
             "displayEntityActions": true,
             "globalActions": [
@@ -1867,7 +1970,7 @@
             "entity": "log",
             "image": "log/log_show",
             "icon": "display",
-            "description": "Cette page affiche les propriétés d'une entrée dans le journal de l'application. Cette page est accessible uniquement aux administrateurs.",
+            "description": "Cette page affiche les propriétés d'une entrée dans le journal de l'application. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
                 {
                     "action": "back_ok",
@@ -1880,7 +1983,7 @@
             "entity": "log",
             "image": "log/log_delete",
             "icon": "times",
-            "description": "Cette page permet de confirmer la suppression du journal de l'application. Cette page est accessible uniquement aux administrateurs.",
+            "description": "Cette page permet de confirmer la suppression du journal de l'application. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
                 {
                     "id": "common.button_delete",
@@ -1896,7 +1999,7 @@
             "id": "user.list.title",
             "entity": "user",
             "image": "user/user_list",
-            "description": "Affiche la liste des utilisateurs. Cette page est accessible uniquement aux administrateurs.",
+            "description": "Affiche la liste des utilisateurs. Cette page n'est accessible qu'aux administrateurs.",
             "displayEntityColumns": true,
             "displayEntityActions": true,
             "globalActions": [
@@ -2128,9 +2231,7 @@
             "description": "Cette page affiche un graphique des calculations par mois.",
             "editActions": [
                 {
-                    "id": "index.title",
-                    "icon": "home",
-                    "description": "Retourne à la page d'accueil."
+                    "action": "back_home"
                 },
                 {
                     "id": "common.button_pdf",
@@ -2182,9 +2283,7 @@
             "description": "Cette page affiche un graphique des calculations par statut.",
             "editActions": [
                 {
-                    "id": "index.title",
-                    "icon": "home",
-                    "description": "Retourne à la page d'accueil."
+                    "action": "back_home"
                 },
                 {
                     "id": "common.button_pdf",
@@ -2217,6 +2316,290 @@
             "links": [
                 {
                     "id": "title_by_month|chart",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "parameters.title",
+            "image": "admin/parameters",
+            "description": "Cette page affiche les paramètres globaux de l'application. Cette page n'est accessible qu'aux administrateurs.",
+            "editActions": [
+                {
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
+        },
+        {
+            "id": "index.menu_rights_user",
+            "image": "admin/rights_user",
+            "description": "Cette page définit les droits d'accès par défaut à l'application pour les utilisateurs. Cette page n'est accessible qu'aux administrateurs.",
+            "editActions": [
+                {
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ],
+            "links": [
+                {
+                    "id": "index.menu_rights_admin",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "index.menu_rights_admin",
+            "image": "admin/rights_admin",
+            "description": "Cette page définit les droits d'accès par défaut à l'application pour les administrateurs. Cette page n'est accessible qu'aux administrateurs du site.",
+            "editActions": [
+                {
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ],
+            "links": [
+                {
+                    "id": "index.menu_rights_user",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "calculation.update.title",
+            "image": "admin/calculation_update_query",
+            "entity": "calculation",
+            "description": "Cette page vous permet de recalculer et de mettre à jour le total général des calculations. Cette page n'est accessible qu'aux administrateurs.",
+            "editActions": [
+                {
+                    "id": "calculation.update.submit",
+                    "action": "submit_ok",
+                    "description": "Met à jour le total général des calculations et affiche le résultat.",
+                    "dialog": "calculation.result.description"
+                },
+                {
+                    "id": "common.button_cancel",
+                    "icon": "",
+                    "action": "back_home"
+                }
+            ],
+            "links": [
+                {
+                    "id": "calculation.result.description",
+                    "type": "dialog"
+                },
+                {
+                    "id": "archive.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "calculation.list.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "calculation.result.description",
+            "image": "admin/calculation_update_result",
+            "description": "Cette page affiche les résultats de la mise à jour des calculations. Cette page n'est accessible qu'aux administrateurs.",
+            "entity": "calculation",
+            "editActions": [
+                {
+                    "action": "back_home"
+                },
+                {
+                    "id": "calculation.result.update",
+                    "description": "Retourne à la page de mise à jour des calculations.",
+                    "dialog": "calculation.update.title"
+                }
+            ],
+            "links": [
+                {
+                    "id": "calculation.update.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "archive.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "calculation.list.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "clear_cache.title",
+            "image": "admin/cache_clear",
+            "description": "Cette page permet de vider le cache de l'application. Cette page n'est accessible qu'aux administrateurs.",
+            "editActions": [
+                {
+                    "id": "clear_cache.submit",
+                    "description": "Vide le cache de l'application et retourne à la page principale de l'application (page d'accueil).",
+                    "dialog": "index.title"
+                },
+                {
+                    "id": "common.button_cancel",
+                    "icon": "",
+                    "description": "Retourne à la page principale de l'application (page d'accueil) sans vider le cache.",
+                    "dialog": "index.title"
+                }
+            ]
+        },
+        {
+            "id": "profile.edit.title",
+            "image": "profile/profile_edit",
+            "entity": "user",
+            "description": "Cette page permet de modifier son profile.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ],
+            "links": [
+                {
+                    "id": "profile.change_password.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "user.parameters.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "profile.change_password.title",
+            "image": "profile/profile_change-password",
+            "entity": "user",
+            "description": "Cette page permet de modifier son mot de passe.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ],
+            "links": [
+                {
+                    "id": "profile.edit.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "user.parameters.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "user.parameters.title",
+            "image": "user/user_parameters",
+            "entity": "user-gear",
+            "description": "Cette page permet de modifier les préférence de l'application.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ],
+            "links": [
+                {
+                    "id": "profile.change_password.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "profile.edit.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "user.message.title",
+            "image": "user/user_message",
+            "entity": "user",
+            "description": "Cette page permet d'envoyer un message à l'utilisateur sélectionné.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
+        },
+        {
+            "id": "user.comment.title",
+            "image": "user/user_comment",
+            "entity": "user",
+            "description": "Cette page permet d'envoyer un commentaire à l'administrateur du site.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "action": "submit_ok",
+                    "description": "Envoie les commentaires à l'administrateur du site et retourne à la page d'accueil."
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
+        },
+        {
+            "id": "datatable.dialog_title",
+            "image": "dialog_page",
+            "description": "Cette boîte de dialogue permet de sélectionner une page de la table.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Sélectionne la page et ferme la boîte de dialogue"
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Ferme la boîte de dialogue en affichant la page actuellement sélectionnée."
+                }
+            ],
+            "links": [
+                {
+                    "id": "list.sort_title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "list.sort_title",
+            "image": "dialog_sort",
+            "description": "Cette boîte de dialogue permet de trier les données de la table.",
+            "editActions": [
+                {
+                    "id": "common.button_ok",
+                    "description": "Trie les données et ferme la boîte de dialogue."
+                },
+                {
+                    "id": "list.sort_default_title",
+                    "description": "Trie les données selon l'ordre par défaut et ferme la boîte de dialogue."
+                },
+                {
+                    "id": "common.button_cancel",
+                    "description": "Ferme la boîte de dialogue en conservant le tri actuel."
+                }
+            ],
+            "links": [
+                {
+                    "id": "datatable.dialog_title",
                     "type": "dialog"
                 }
             ]

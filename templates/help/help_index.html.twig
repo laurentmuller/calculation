@@ -5,10 +5,8 @@
 {% macro output_dialog(dialog) -%}
 {% set href = path('help_dialog', {'id': dialog.id}) %}
 <div class="help-item">
-    <dt class="fw-normal">
-        <a href="{{ href }}">{{ tools.output_icon(null, dialog.name|default(dialog.id)) }}</a>
-    </dt>
-    <dd>{{ dialog.description }}</dd>
+    <a href="{{ href }}">{{ tools.output_icon(null, dialog.name|default(dialog.id)) }}</a>
+    <p class="mb-1">{{ dialog.description }}</p>
 </div>
 {%- endmacro %}
 
@@ -16,34 +14,34 @@
 {%- set entity_name = entity.id ~ '.name' -%}
 {% set href = path('help_entity', {'id': entity.id}) %}
 <div class="help-item">
-    <dt class="fw-normal">{{ link(href, entity_name, '', entity.icon|default) }}</dt>
-    <dd>{{ entity.description }}</dd>
+    {{ link(href, entity_name, '', entity.icon|default) }}
+    <p class="mb-1">{{ entity.description }}</p>
 </div>
 {%- endmacro %}
 
-{% macro output_menus(menus, dialogs, indent=0) -%}
-<div class="help-item"{% if indent > 0 %} style="margin-left: {{ indent }}rem;"{% endif %}>
-    <dl>
-        {%- for menu in menus -%}{{- _self.output_menu(menu, dialogs, indent) -}}{%- endfor -%}
-    </dl>
+{% macro output_menus(menus, service, indent=0) -%}
+<div class="help-item"{% if indent %} style="margin-left: {{ indent }}rem;"{% endif %}>
+    {%- for menu in menus -%}
+        {{- _self.output_menu(menu, service, indent) -}}
+    {%- endfor -%}
 </div>
 {%- endmacro %}
 
-{% macro output_menu(menu, dialogs, indent=0) -%}
-{%- set href = false -%}
+{% macro output_menu(menu, service, indent=0) -%}
+{% if menu.action|default(false) %}
+    {%- set menu = service.findAction(menu.action)|default({})|merge(menu) -%}
+{% endif %}
 {%- set description = menu.description %}
-{%- set dialog = menu.dialog|default(false) -%}
-{%- if dialog -%}
-    {%- set target = dialogs|filter(d => d.id == dialog) -%}
-    {%- if target|length -%}
-        {%- set target = target|first -%}
+{%- set href = false -%}
+{%- if menu.dialog|default(false) -%}
+    {%- set target = service.findDialog(menu.dialog) -%}
+    {%- if target -%}
         {%- set href = path('help_dialog', {'id': target.id}) -%}
         {%- set description = description|default(target.description) -%}
     {%- endif -%}
 {%- endif -%}
-{%- set menus = menu.menus|default(false) -%}
-<div class="help-item">
-    <dt class="fw-normal">
+<div class="help-item mb-2">
+    <p class="mb-0">
         {%- if href -%}
             <a href="{{ href }}">
                 {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
@@ -51,12 +49,12 @@
         {%- else -%}
             {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
         {%- endif -%}
-    </dt>
+    </p>
     {% if description %}
-        <dd>{{ description }}
-            {%- if menus %}{{ _self.output_menus(menus, dialogs, indent + 2) }}{% endif -%}
-        </dd>
+        <p class="mb-0">{{ description }}</p>
     {% endif %}
+    {%- set menus = menu.menus|default(false) -%}
+    {%- if menus %}{{ _self.output_menus(menus, service, indent + 1.25) }}{% endif -%}
 </div>
 {%- endmacro %}
 {# parameters #}
@@ -73,37 +71,36 @@
 <hr class="mt-1">
 <div class="row">
 {# main menu #}
-{% if mainMenus %}
+{% set main_menus = service.mainMenus|default(false) %}
+{% if main_menus %}
     <div class="col-xl-4 col-lg-6">
         <h6><i class="fa-solid fa-sitemap me-1"></i>{{ 'help.main_menu'|trans }}</h6>
         <hr class="my-1">
-        {{ _self.output_menus(mainMenus, dialogs) }}
+        {{ _self.output_menus(main_menus, service) }}
     </div>
 {%- endif %}
 {# dialogs #}
+{% set dialogs = service.dialogs|default(false) %}
 {% if dialogs %}
     <div class="col-xl-4 col-lg-6">
-        <h6><i class="fa-regular fa-file-image me-1"></i>{{ 'help.dialog_menu'|trans }}</h6>
+        <h6><i class="fa-regular fa-window-maximize me-1"></i>{{ 'help.dialog_menu'|trans }}</h6>
         <hr class="my-1">
-        <dl>
         {% for dialog in dialogs %}
             {{ _self.output_dialog(dialog) }}
         {% endfor %}
-        </dl>
     </div>
 {%- endif %}
 {# entities #}
+{% set entities = service.entities|default(false) %}
 {% if entities %}
     <div class="col-xl-4 col-lg-6">
         <h6>
             <i class="fa-solid fa-database me-1"></i>{{ 'help.entity_menu'|trans }}
         </h6>
         <hr class="my-1">
-        <dl>
         {% for entity in entities %}
             {{ _self.output_entity(entity) }}
         {% endfor %}
-        </dl>
     </div>
 {%- endif %}
 </div>

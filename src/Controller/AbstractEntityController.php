@@ -49,9 +49,14 @@ abstract class AbstractEntityController extends AbstractController
     private readonly string $className;
 
     /**
-     * The lower case entity class name.
+     * The lower case entity class name without name space.
      */
     private readonly string $lowerName;
+
+    /**
+     * The entity class name without name space.
+     */
+    private readonly string $shortName;
 
     /**
      * @psalm-param TRepository $repository
@@ -59,7 +64,8 @@ abstract class AbstractEntityController extends AbstractController
     public function __construct(private readonly AbstractRepository $repository)
     {
         $this->className = $this->repository->getClassName();
-        $this->lowerName = \strtolower(StringUtils::getShortName($this->className));
+        $this->shortName = StringUtils::getShortName($this->className);
+        $this->lowerName = \strtolower($this->shortName);
     }
 
     /**
@@ -81,10 +87,6 @@ abstract class AbstractEntityController extends AbstractController
 
     /**
      * Delete an entity.
-     *
-     * @param Request         $request the request
-     * @param EntityInterface $item    the entity to delete
-     * @param LoggerInterface $logger  the logger to log any exception
      *
      * @psalm-param TEntity $item
      * @psalm-param array{route?: string, ...} $parameters
@@ -129,8 +131,6 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * This function delete the given entity from the database.
      *
-     * @param EntityInterface $item the entity to delete
-     *
      * @psalm-param TEntity $item
      */
     protected function deleteFromDatabase(EntityInterface $item): void
@@ -140,10 +140,6 @@ abstract class AbstractEntityController extends AbstractController
 
     /**
      * Edit an entity.
-     *
-     * @param Request         $request    the request
-     * @param EntityInterface $item       the entity to edit
-     * @param array           $parameters the optional parameters
      *
      * @psalm-param TEntity $item
      * @psalm-param array{route?: string, ...} $parameters
@@ -180,14 +176,15 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * Gets the form type (class name) used to edit an entity.
-     *
-     * @return class-string<\Symfony\Component\Form\FormTypeInterface>
+     * Gets the form type class name used to edit an entity.
      */
-    abstract protected function getEditFormType(): string;
+    protected function getEditFormType(): string
+    {
+        return \sprintf('App\\Form\\%1$s\\%1$sType', $this->shortName);
+    }
 
     /**
-     * Gets the Twig template (path) name used to edit an entity.
+     * Gets the template name used to edit an entity.
      */
     protected function getEditTemplate(): string
     {
@@ -231,7 +228,7 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * Gets the Twig template (path) name used to show an entity.
+     * Gets the template name used to show an entity.
      */
     protected function getShowTemplate(): string
     {
@@ -290,8 +287,6 @@ abstract class AbstractEntityController extends AbstractController
      *
      * Derived class can update entity before it is saved to the database.
      *
-     * @param EntityInterface $item the entity to save
-     *
      * @psalm-param TEntity $item
      */
     protected function saveToDatabase(EntityInterface $item): void
@@ -305,9 +300,6 @@ abstract class AbstractEntityController extends AbstractController
 
     /**
      * Show properties of an entity.
-     *
-     * @param EntityInterface $item       the entity to show
-     * @param array           $parameters the additional parameters to pass to the template
      *
      * @throws \Symfony\Component\Finder\Exception\AccessDeniedException if the access is denied
      *
@@ -324,26 +316,23 @@ abstract class AbstractEntityController extends AbstractController
     /**
      * Update the parameters by adding the request query values.
      *
-     * @param Request                  $request    the request to get the query values
-     * @param array                    $parameters the parameters to update
-     * @param EntityInterface|int|null $id         an optional entity identifier
+     * @psalm-param array{params?: array, ...} $parameters
      */
     protected function updateQueryParameters(
         Request $request,
         array &$parameters,
-        EntityInterface|int|null $id = 0
+        EntityInterface|int $id = null
     ): void {
-        /** @psalm-var array $existing */
-        $existing = $parameters['params'] ?? [];
-        $queryParameters = $request->query->all();
-        $parameters['params'] = \array_merge($existing, $queryParameters);
-
-        if ($id instanceof EntityInterface) {
-            $id = $id->getId();
+        $params = \array_merge($request->query->all(), $parameters['params'] ?? []);
+        if (!isset($params['id'])) {
+            if ($id instanceof EntityInterface) {
+                $id = $id->getId();
+            }
+            if (null !== $id && 0 !== $id) {
+                $params['id'] = $id;
+            }
         }
-        if (null !== $id && 0 !== $id && !isset($parameters['params']['id'])) {
-            $parameters['params']['id'] = $id;
-        }
+        $parameters['params'] = $params;
     }
 
     /**

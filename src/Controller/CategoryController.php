@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Category;
-use App\Form\Category\CategoryType;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\CategoriesReport;
@@ -192,10 +191,5 @@ class CategoryController extends AbstractEntityController
     {
         $this->getApplication()->updateDeletedCategory($item);
         parent::deleteFromDatabase($item);
-    }
-
-    protected function getEditFormType(): string
-    {
-        return CategoryType::class;
     }
 }

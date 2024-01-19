@@ -16,7 +16,6 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Product;
 use App\Form\Calculation\CalculationEditStateType;
-use App\Form\Calculation\CalculationType;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationReport;
@@ -30,7 +29,6 @@ use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationTable;
 use App\Table\DataQuery;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -207,11 +205,11 @@ class CalculationController extends AbstractEntityController
      * Edit the state of a calculation.
      */
     #[Route(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_POST])]
-    public function state(Request $request, Calculation $item, EntityManagerInterface $manager): Response
+    public function state(Request $request, Calculation $item): Response
     {
         $form = $this->createForm(CalculationEditStateType::class, $item);
         if ($this->handleRequestForm($request, $form)) {
-            $manager->flush();
+            $this->getRepository()->flush();
 
             return $this->redirectToDefaultRoute($request, $item);
         }
@@ -259,11 +257,6 @@ class CalculationController extends AbstractEntityController
         }
 
         return parent::editEntity($request, $item, $parameters);
-    }
-
-    protected function getEditFormType(): string
-    {
-        return CalculationType::class;
     }
 
     /**

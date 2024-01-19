@@ -39,8 +39,9 @@
 {%- endmacro %}
 
 {% macro output_row_action(action, service) -%}
-{%- set key = action.action|default(false) -%}
-{%- set action = service.findAction(key)|default({})|merge(action) -%}
+{% if action.action|default(false) %}
+    {%- set action = service.findAction(action.action)|default({})|merge(action) -%}
+{% endif %}
 {%- set dialog = service.findDialog(action.dialog|default(action.id)) -%}
 {%- set href = dialog ? path('help_dialog', {'id': dialog.id}) : false -%}
 {%- set icon = action.icon|default(false) -%}
@@ -76,7 +77,7 @@
 
 {% macro dialogs_button() %}
     {% from 'macros/_icons.html.twig' import link %}
-    {{ link(path('help_dialogs'), '', 'btn btn-outline-secondary', 'file-lines', 'help.dialog_menu') }}
+    {{ link(path('help_dialogs'), '', 'btn btn-outline-secondary', 'window-maximize far', 'help.dialog_menu') }}
 {% endmacro %}
 
 {% macro entities_button() %}

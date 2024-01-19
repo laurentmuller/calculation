@@ -5,10 +5,8 @@
 {% macro output_dialog(dialog) -%}
 {% set href = path('help_dialog', {'id': dialog.id}) %}
 <div class="help-item col-lg-6 col-xxl-4">
-    <dt class="fw-normal">
-        <a href="{{ href }}">{{ output_icon(null, dialog.name|default(dialog.id)) }}</a>
-    </dt>
-    <dd>{{ dialog.description }}</dd>
+    <a href="{{ href }}">{{ output_icon(null, dialog.name|default(dialog.id)) }}</a>
+    <p class="mb-0">{{ dialog.description }}</p>
     <hr class="my-2">
 </div>
 {%- endmacro %}
@@ -18,7 +16,7 @@
 {%- block container_class 'container-fluid' -%}
 {# title #}
 {% block help_title -%}
-<i class="fa-regular fa-file-lines me-1"></i>{{- 'help.dialog_menu'|trans -}}
+<i class="fa-regular fa-window-maximize me-1"></i>{{- 'help.dialog_menu'|trans -}}
 {% endblock %}
 {# home #}
 {% block help_home -%}
@@ -28,9 +26,9 @@
 {# body #}
 {% block help_body -%}
 <hr class="mt-1">
-<dl class="row">
+<div class="row">
     {% for dialog in dialogs %}
         {{ _self.output_dialog(dialog) }}
     {% endfor %}
-</dl>
+</div>
 {% endblock %}

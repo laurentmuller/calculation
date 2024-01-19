@@ -6,8 +6,8 @@
 {%- set entity_name = entity.id ~ '.name' -%}
 {% set href = path('help_entity', {'id': entity.id}) %}
 <div class="help-item col-lg-6 col-xxl-4">
-    <dt class="fw-normal">{{ link(href, entity_name, '', entity.icon|default) }}</dt>
-    <dd>{{ entity.description }}</dd>
+    {{ link(href, entity_name, '', entity.icon|default) }}
+    <p class="mb-0">{{ entity.description }}</p>
     <hr class="my-2">
 </div>
 {%- endmacro %}
@@ -27,9 +27,9 @@
 {# body #}
 {% block help_body -%}
 <hr class="mt-1">
-<dl class="row">
+<div class="row">
     {% for entity in entities %}
         {{ _self.output_entity(entity) }}
     {% endfor %}
-</dl>
+</div>
 {% endblock %}

@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Group;
-use App\Form\Group\GroupType;
 use App\Interfaces\RoleInterface;
 use App\Report\GroupsReport;
 use App\Repository\CalculationGroupRepository;
@@ -178,10 +177,5 @@ class GroupController extends AbstractEntityController
         DataQuery $query = new DataQuery()
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'group/group_table.html.twig');
-    }
-
-    protected function getEditFormType(): string
-    {
-        return GroupType::class;
     }
 }

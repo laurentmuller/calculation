@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\CalculationState;
-use App\Form\CalculationState\CalculationStateType;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationStatesReport;
@@ -179,10 +178,5 @@ class CalculationStateController extends AbstractEntityController
     {
         $this->getApplication()->updateDeletedState($item);
         parent::deleteFromDatabase($item);
-    }
-
-    protected function getEditFormType(): string
-    {
-        return CalculationStateType::class;
     }
 }

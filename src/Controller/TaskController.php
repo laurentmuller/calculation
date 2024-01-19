@@ -15,7 +15,6 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Entity\Task;
 use App\Form\Task\TaskServiceType;
-use App\Form\Task\TaskType;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Model\TaskComputeQuery;
@@ -197,11 +196,6 @@ class TaskController extends AbstractEntityController
         $parameters['margin_index'] = $item->countMargins();
 
         return parent::editEntity($request, $item, $parameters);
-    }
-
-    protected function getEditFormType(): string
-    {
-        return TaskType::class;
     }
 
     /**

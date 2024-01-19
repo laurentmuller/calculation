@@ -14,7 +14,6 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use App\Form\Product\ProductType;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\ProductsReport;
@@ -163,10 +162,5 @@ class ProductController extends AbstractEntityController
     {
         $this->getApplication()->updateDeletedProduct($item);
         parent::deleteFromDatabase($item);
-    }
-
-    protected function getEditFormType(): string
-    {
-        return ProductType::class;
     }
 }

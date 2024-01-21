@@ -18,24 +18,19 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(AdminController::class)]
 class AdminControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/admin/clear', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/clear', self::ROLE_ADMIN],
-            ['/admin/clear', self::ROLE_SUPER_ADMIN],
-
-            ['/admin/parameters', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/parameters', self::ROLE_ADMIN],
-            ['/admin/parameters', self::ROLE_SUPER_ADMIN],
-
-            ['/admin/rights/admin', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/rights/admin', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/admin/rights/admin', self::ROLE_SUPER_ADMIN],
-
-            ['/admin/rights/user', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/rights/user', self::ROLE_ADMIN],
-            ['/admin/rights/user', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/admin/clear', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/admin/clear', self::ROLE_ADMIN];
+        yield ['/admin/clear', self::ROLE_SUPER_ADMIN];
+        yield ['/admin/parameters', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/admin/parameters', self::ROLE_ADMIN];
+        yield ['/admin/parameters', self::ROLE_SUPER_ADMIN];
+        yield ['/admin/rights/admin', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/admin/rights/admin', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
+        yield ['/admin/rights/admin', self::ROLE_SUPER_ADMIN];
+        yield ['/admin/rights/user', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/admin/rights/user', self::ROLE_ADMIN];
+        yield ['/admin/rights/user', self::ROLE_SUPER_ADMIN];
     }
 }

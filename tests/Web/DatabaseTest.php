@@ -43,57 +43,42 @@ class DatabaseTest extends KernelTestCase
         self::bootKernel();
     }
 
-    /**
-     * @return array<array{0: string, 1: int}>
-     */
-    public static function getRepositories(): array
+    public static function getRepositories(): \Iterator
     {
-        return [
-            [GroupRepository::class, 0],
-            [CategoryRepository::class, 0],
-            [GroupMarginRepository::class, 0],
-            [ProductRepository::class, 0],
-            [CalculationStateRepository::class, 0],
-            [CalculationRepository::class, 0],
-            [CalculationGroupRepository::class, 0],
-            [CalculationItemRepository::class, 0],
-            [GlobalMarginRepository::class, 0],
-            [UserPropertyRepository::class, 0],
-            [UserRepository::class, 4],
-        ];
+        yield [GroupRepository::class, 0];
+        yield [CategoryRepository::class, 0];
+        yield [GroupMarginRepository::class, 0];
+        yield [ProductRepository::class, 0];
+        yield [CalculationStateRepository::class, 0];
+        yield [CalculationRepository::class, 0];
+        yield [CalculationGroupRepository::class, 0];
+        yield [CalculationItemRepository::class, 0];
+        yield [GlobalMarginRepository::class, 0];
+        yield [UserPropertyRepository::class, 0];
+        yield [UserRepository::class, 4];
     }
 
-    /**
-     * @return array<array{0: string, 1: int}>
-     */
-    public static function getTables(): array
+    public static function getTables(): \Iterator
     {
-        return [
-            ['sy_Group', 0],
-            ['sy_Category', 0],
-            ['sy_GroupMargin', 0],
-            ['sy_Product', 0],
-            ['sy_CalculationState', 0],
-            ['sy_Calculation', 0],
-            ['sy_CalculationGroup', 0],
-            ['sy_CalculationItem', 0],
-            ['sy_GlobalMargin', 0],
-            ['sy_Property', 0],
-            ['sy_User', 4],
-        ];
+        yield ['sy_Group', 0];
+        yield ['sy_Category', 0];
+        yield ['sy_GroupMargin', 0];
+        yield ['sy_Product', 0];
+        yield ['sy_CalculationState', 0];
+        yield ['sy_Calculation', 0];
+        yield ['sy_CalculationGroup', 0];
+        yield ['sy_CalculationItem', 0];
+        yield ['sy_GlobalMargin', 0];
+        yield ['sy_Property', 0];
+        yield ['sy_User', 4];
     }
 
-    /**
-     * @return array<int, array<int, int|string>>
-     */
-    public static function getUsers(): array
+    public static function getUsers(): \Iterator
     {
-        return [
-            [AbstractAuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER],
-            [AbstractAuthenticateWebTestCase::ROLE_ADMIN, RoleInterface::ROLE_ADMIN],
-            [AbstractAuthenticateWebTestCase::ROLE_SUPER_ADMIN, RoleInterface::ROLE_SUPER_ADMIN],
-            [AbstractAuthenticateWebTestCase::ROLE_DISABLED, RoleInterface::ROLE_USER],
-        ];
+        yield [AbstractAuthenticateWebTestCase::ROLE_USER, RoleInterface::ROLE_USER];
+        yield [AbstractAuthenticateWebTestCase::ROLE_ADMIN, RoleInterface::ROLE_ADMIN];
+        yield [AbstractAuthenticateWebTestCase::ROLE_SUPER_ADMIN, RoleInterface::ROLE_SUPER_ADMIN];
+        yield [AbstractAuthenticateWebTestCase::ROLE_DISABLED, RoleInterface::ROLE_USER];
     }
 
     /**

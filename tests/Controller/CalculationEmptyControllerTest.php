@@ -23,21 +23,17 @@ class CalculationEmptyControllerTest extends AbstractControllerTestCase
     use CalculationTrait;
     use ProductTrait;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/calculation/empty', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/empty', self::ROLE_ADMIN],
-            ['/calculation/empty', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/empty/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/empty/pdf', self::ROLE_ADMIN],
-            ['/calculation/empty/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/empty/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/empty/excel', self::ROLE_ADMIN],
-            ['/calculation/empty/excel', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/calculation/empty', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/calculation/empty', self::ROLE_ADMIN];
+        yield ['/calculation/empty', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/empty/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/calculation/empty/pdf', self::ROLE_ADMIN];
+        yield ['/calculation/empty/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/empty/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/calculation/empty/excel', self::ROLE_ADMIN];
+        yield ['/calculation/empty/excel', self::ROLE_SUPER_ADMIN];
     }
 
     /**

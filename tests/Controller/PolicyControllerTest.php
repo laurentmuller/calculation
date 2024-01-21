@@ -18,13 +18,11 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(PolicyController::class)]
 class PolicyControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/policy/accept', '', Response::HTTP_FOUND],
-            ['/policy/accept', self::ROLE_USER, Response::HTTP_FOUND],
-            ['/policy/accept', self::ROLE_ADMIN, Response::HTTP_FOUND],
-            ['/policy/accept', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
-        ];
+        yield ['/policy/accept', '', Response::HTTP_FOUND];
+        yield ['/policy/accept', self::ROLE_USER, Response::HTTP_FOUND];
+        yield ['/policy/accept', self::ROLE_ADMIN, Response::HTTP_FOUND];
+        yield ['/policy/accept', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
     }
 }

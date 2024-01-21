@@ -21,41 +21,32 @@ class GroupControllerTest extends AbstractControllerTestCase
 {
     use GroupTrait;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/group', self::ROLE_USER],
-            ['/group', self::ROLE_ADMIN],
-            ['/group', self::ROLE_SUPER_ADMIN],
-
-            ['/group/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/group/add', self::ROLE_ADMIN],
-            ['/group/add', self::ROLE_SUPER_ADMIN],
-
-            ['/group/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/group/edit/1', self::ROLE_ADMIN],
-            ['/group/edit/1', self::ROLE_SUPER_ADMIN],
-
-            ['/group/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/group/clone/1', self::ROLE_ADMIN],
-            ['/group/clone/1', self::ROLE_SUPER_ADMIN],
-
-            ['/group/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/group/delete/1', self::ROLE_ADMIN],
-            ['/group/delete/1', self::ROLE_SUPER_ADMIN],
-
-            ['/group/show/1', self::ROLE_USER],
-            ['/group/show/1', self::ROLE_ADMIN],
-            ['/group/show/1', self::ROLE_SUPER_ADMIN],
-
-            ['/group/pdf', self::ROLE_USER],
-            ['/group/pdf', self::ROLE_ADMIN],
-            ['/group/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/group/excel', self::ROLE_USER],
-            ['/group/excel', self::ROLE_ADMIN],
-            ['/group/excel', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/group', self::ROLE_USER];
+        yield ['/group', self::ROLE_ADMIN];
+        yield ['/group', self::ROLE_SUPER_ADMIN];
+        yield ['/group/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/group/add', self::ROLE_ADMIN];
+        yield ['/group/add', self::ROLE_SUPER_ADMIN];
+        yield ['/group/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/group/edit/1', self::ROLE_ADMIN];
+        yield ['/group/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/group/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/group/clone/1', self::ROLE_ADMIN];
+        yield ['/group/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/group/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/group/delete/1', self::ROLE_ADMIN];
+        yield ['/group/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/group/show/1', self::ROLE_USER];
+        yield ['/group/show/1', self::ROLE_ADMIN];
+        yield ['/group/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/group/pdf', self::ROLE_USER];
+        yield ['/group/pdf', self::ROLE_ADMIN];
+        yield ['/group/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/group/excel', self::ROLE_USER];
+        yield ['/group/excel', self::ROLE_ADMIN];
+        yield ['/group/excel', self::ROLE_SUPER_ADMIN];
     }
 
     /**

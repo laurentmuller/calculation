@@ -21,37 +21,29 @@ class CustomerControllerTest extends AbstractControllerTestCase
 {
     private ?Customer $entity = null;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/customer', self::ROLE_USER],
-            ['/customer', self::ROLE_ADMIN],
-            ['/customer', self::ROLE_SUPER_ADMIN],
-
-            ['/customer/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/customer/add', self::ROLE_ADMIN],
-            ['/customer/add', self::ROLE_SUPER_ADMIN],
-
-            ['/customer/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/customer/edit/1', self::ROLE_ADMIN],
-            ['/customer/edit/1', self::ROLE_SUPER_ADMIN],
-
-            ['/customer/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/customer/delete/1', self::ROLE_ADMIN],
-            ['/customer/delete/1', self::ROLE_SUPER_ADMIN],
-
-            ['/customer/show/1', self::ROLE_USER],
-            ['/customer/show/1', self::ROLE_ADMIN],
-            ['/customer/show/1', self::ROLE_SUPER_ADMIN],
-
-            ['/customer/pdf', self::ROLE_USER],
-            ['/customer/pdf', self::ROLE_ADMIN],
-            ['/customer/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/customer/excel', self::ROLE_USER],
-            ['/customer/excel', self::ROLE_ADMIN],
-            ['/customer/excel', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/customer', self::ROLE_USER];
+        yield ['/customer', self::ROLE_ADMIN];
+        yield ['/customer', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/customer/add', self::ROLE_ADMIN];
+        yield ['/customer/add', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/customer/edit/1', self::ROLE_ADMIN];
+        yield ['/customer/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/customer/delete/1', self::ROLE_ADMIN];
+        yield ['/customer/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/show/1', self::ROLE_USER];
+        yield ['/customer/show/1', self::ROLE_ADMIN];
+        yield ['/customer/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/pdf', self::ROLE_USER];
+        yield ['/customer/pdf', self::ROLE_ADMIN];
+        yield ['/customer/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/customer/excel', self::ROLE_USER];
+        yield ['/customer/excel', self::ROLE_ADMIN];
+        yield ['/customer/excel', self::ROLE_SUPER_ADMIN];
     }
 
     /**

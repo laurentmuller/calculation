@@ -21,20 +21,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(TableView::class)]
 class TableViewTest extends TestCase
 {
-    public static function getDefault(): array
+    public static function getDefault(): \Iterator
     {
-        return [
-            [TableView::getDefault(), TableView::TABLE],
-            [PropertyServiceInterface::DEFAULT_DISPLAY_MODE, TableView::TABLE],
-        ];
+        yield [TableView::getDefault(), TableView::TABLE];
+        yield [PropertyServiceInterface::DEFAULT_DISPLAY_MODE, TableView::TABLE];
     }
 
-    public static function getValues(): array
+    public static function getValues(): \Iterator
     {
-        return [
-            [TableView::TABLE, 'table'],
-            [TableView::CUSTOM, 'custom'],
-        ];
+        yield [TableView::TABLE, 'table'];
+        yield [TableView::CUSTOM, 'custom'];
     }
 
     public function testCount(): void

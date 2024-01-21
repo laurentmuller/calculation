@@ -21,15 +21,10 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversNothing]
 class RoutesTest extends AbstractAuthenticateWebTestCase
 {
-    /**
-     * @return array<array{0: string, 1: string, 2?: int}>
-     */
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            // not exist
-            ['/not_exist', self::ROLE_USER, Response::HTTP_NOT_FOUND],
-        ];
+        // not exist
+        yield ['/not_exist', self::ROLE_USER, Response::HTTP_NOT_FOUND];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getRoutes')]

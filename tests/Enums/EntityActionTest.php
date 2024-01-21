@@ -21,30 +21,24 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityAction::class)]
 class EntityActionTest extends TypeTestCase
 {
-    public static function getDefault(): array
+    public static function getDefault(): \Iterator
     {
-        return [
-            [EntityAction::getDefault(), EntityAction::EDIT],
-            [PropertyServiceInterface::DEFAULT_ACTION, EntityAction::EDIT],
-        ];
+        yield [EntityAction::getDefault(), EntityAction::EDIT];
+        yield [PropertyServiceInterface::DEFAULT_ACTION, EntityAction::EDIT];
     }
 
-    public static function getLabel(): array
+    public static function getLabel(): \Iterator
     {
-        return [
-            ['entity_action.edit', EntityAction::EDIT],
-            ['entity_action.show', EntityAction::SHOW],
-            ['entity_action.none', EntityAction::NONE],
-        ];
+        yield ['entity_action.edit', EntityAction::EDIT];
+        yield ['entity_action.show', EntityAction::SHOW];
+        yield ['entity_action.none', EntityAction::NONE];
     }
 
-    public static function getValues(): array
+    public static function getValues(): \Iterator
     {
-        return [
-            [EntityAction::NONE, 'none'],
-            [EntityAction::EDIT, 'edit'],
-            [EntityAction::SHOW, 'show'],
-        ];
+        yield [EntityAction::NONE, 'none'];
+        yield [EntityAction::EDIT, 'edit'];
+        yield [EntityAction::SHOW, 'show'];
     }
 
     public function testCount(): void

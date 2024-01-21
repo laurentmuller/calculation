@@ -18,12 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(ImportAddressController::class)]
 class ImportAddressControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/admin/import', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/import', self::ROLE_ADMIN],
-            ['/admin/import', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/admin/import', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/admin/import', self::ROLE_ADMIN];
+        yield ['/admin/import', self::ROLE_SUPER_ADMIN];
     }
 }

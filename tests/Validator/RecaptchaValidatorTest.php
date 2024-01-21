@@ -25,12 +25,10 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(RecaptchaValidator::class)]
 class RecaptchaValidatorTest extends ConstraintValidatorTestCase
 {
-    public static function getErrorCodes(): array
+    public static function getErrorCodes(): \Iterator
     {
-        return [
-            ['bad-request'],
-            ['bad-response'],
-        ];
+        yield ['bad-request'];
+        yield ['bad-response'];
     }
 
     /**

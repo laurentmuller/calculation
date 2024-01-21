@@ -30,25 +30,20 @@ class HelpControllerTest extends AbstractControllerTestCase
         $this->help = $this->getService(HelpService::class);
     }
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/help/', self::ROLE_USER],
-            ['/help/', self::ROLE_ADMIN],
-            ['/help/', self::ROLE_SUPER_ADMIN],
-
-            ['/help/pdf', self::ROLE_USER],
-            ['/help/pdf', self::ROLE_ADMIN],
-            ['/help/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/help/entity/product', self::ROLE_USER],
-            ['/help/entity/product', self::ROLE_ADMIN],
-            ['/help/entity/product', self::ROLE_SUPER_ADMIN],
-
-            ['/help/dialog/product.list.title', self::ROLE_USER],
-            ['/help/dialog/product.list.title', self::ROLE_ADMIN],
-            ['/help/dialog/product.list.title', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/help/', self::ROLE_USER];
+        yield ['/help/', self::ROLE_ADMIN];
+        yield ['/help/', self::ROLE_SUPER_ADMIN];
+        yield ['/help/pdf', self::ROLE_USER];
+        yield ['/help/pdf', self::ROLE_ADMIN];
+        yield ['/help/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/help/entity/product', self::ROLE_USER];
+        yield ['/help/entity/product', self::ROLE_ADMIN];
+        yield ['/help/entity/product', self::ROLE_SUPER_ADMIN];
+        yield ['/help/dialog/product.list.title', self::ROLE_USER];
+        yield ['/help/dialog/product.list.title', self::ROLE_ADMIN];
+        yield ['/help/dialog/product.list.title', self::ROLE_SUPER_ADMIN];
     }
 
     public function testDialogs(): void

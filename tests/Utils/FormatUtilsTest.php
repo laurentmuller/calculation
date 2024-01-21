@@ -32,69 +32,48 @@ class FormatUtilsTest extends TestCase
         \setlocale(\LC_TIME, FormatUtils::LOCALE_FR_CH);
     }
 
-    /**
-     * @return array<array{0: string|int|float, 1: string}>
-     */
-    public static function getAmounts(): array
+    public static function getAmounts(): \Iterator
     {
-        return [
-            [0, '0.00'],
-            [0.0, '0.00'],
-            [-0.0, '0.00'],
-            ['0', '0.00'],
-            ['0.0', '0.00'],
+        yield [0, '0.00'];
+        yield [0.0, '0.00'];
+        yield [-0.0, '0.00'];
+        yield ['0', '0.00'];
+        yield ['0.0', '0.00'];
+        yield [1000, "1'000.00"];
+        yield [1000.0, "1'000.00"];
+        yield ['1000', "1'000.00"];
+        yield ['1000.0', "1'000.00"];
+        yield [-1000, "-1'000.00"];
+        yield [-0, '0.00'];
+        yield [-0.0, '0.00'];
+        yield [0.14, '0.14'];
+        yield [0.15, '0.15'];
+        yield [0.16, '0.16'];
+        yield [0.114, '0.11'];
+        yield [0.115, '0.12'];
+        yield [0.116, '0.12'];
+    }
 
-            [1000, "1'000.00"],
-            [1000.0, "1'000.00"],
-            ['1000', "1'000.00"],
-            ['1000.0', "1'000.00"],
-
-            [-1000, "-1'000.00"],
-
-            [-0, '0.00'],
-            [-0.0, '0.00'],
-
-            [0.14, '0.14'],
-            [0.15, '0.15'],
-            [0.16, '0.16'],
-
-            [0.114, '0.11'],
-            [0.115, '0.12'],
-            [0.116, '0.12'],
-        ];
+    public static function getDateFormatterPatterns(): \Iterator
+    {
+        yield ['dd/mm/yy', 'dd/mm/yyyy'];
+        yield ['dd-mm-yy', 'dd-mm-yyyy'];
+        yield ['d/m/yy', 'd/m/yyyy'];
     }
 
     /**
-     * @return array<array{0: string, 1: string}>
-     */
-    public static function getDateFormatterPatterns(): array
-    {
-        return [
-            ['dd/mm/yy', 'dd/mm/yyyy'],
-            ['dd-mm-yy', 'dd-mm-yyyy'],
-            ['d/m/yy', 'd/m/yyyy'],
-        ];
-    }
-
-    /**
-     * @return array<array{0: \DateTimeInterface|int|null, 1: string|null, 2?: int}>
-     *
      * @throws \Exception
      */
-    public static function getDates(): array
+    public static function getDates(): \Iterator
     {
         $date = self::createDate();
-
-        return [
-            [$date, '20.02.2022'],
-            [$date, '20.02.2022', \IntlDateFormatter::SHORT],
-            [$date, '20 févr. 2022', \IntlDateFormatter::MEDIUM],
-            [$date, '20 février 2022', \IntlDateFormatter::LONG],
-            [$date, 'dimanche, 20 février 2022', \IntlDateFormatter::FULL],
-
-            [null, null],
-            [self::TIME_STAMP, '20.02.2022'],
-        ];
+        yield [$date, '20.02.2022'];
+        yield [$date, '20.02.2022', \IntlDateFormatter::SHORT];
+        yield [$date, '20 févr. 2022', \IntlDateFormatter::MEDIUM];
+        yield [$date, '20 février 2022', \IntlDateFormatter::LONG];
+        yield [$date, 'dimanche, 20 février 2022', \IntlDateFormatter::FULL];
+        yield [null, null];
+        yield [self::TIME_STAMP, '20.02.2022'];
     }
 
     /**
@@ -131,92 +110,67 @@ class FormatUtilsTest extends TestCase
         yield [self::TIME_STAMP, '20.02.2022 12:59'];
     }
 
-    /**
-     * @return array<array{0: int|float|string|null, 1: string}>
-     */
-    public static function getIds(): array
+    public static function getIds(): \Iterator
     {
-        return [
-            [0, '000000'],
-            [0.0, '000000'],
-            [-0.0, '000000'],
-            ['0', '000000'],
-            ['0.0', '000000'],
-            [1, '000001'],
-            [1.0, '000001'],
-            [-0, '000000'],
-            [null, '000000'],
-            [123456, '123456'],
-            [-123456, '-123456'],
-        ];
+        yield [0, '000000'];
+        yield [0.0, '000000'];
+        yield [-0.0, '000000'];
+        yield ['0', '000000'];
+        yield ['0.0', '000000'];
+        yield [1, '000001'];
+        yield [1.0, '000001'];
+        yield [-0, '000000'];
+        yield [null, '000000'];
+        yield [123456, '123456'];
+        yield [-123456, '-123456'];
+    }
+
+    public static function getIntegers(): \Iterator
+    {
+        yield [0, '0'];
+        yield [0.0, '0'];
+        yield [-0.0, '0'];
+        yield ['0', '0'];
+        yield ['0.0', '0'];
+        yield [1, '1'];
+        yield [1.0, '1'];
+        yield [-1, '-1'];
+        yield [-1.0, '-1'];
+        yield [null, '0'];
+        yield [1000, "1'000"];
+        yield [-1000, "-1'000"];
+    }
+
+    public static function getPercents(): \Iterator
+    {
+        yield [0, '0%'];
+        yield [-0, '0%'];
+        yield [0, '0', false];
+        yield [0, '0.0%', true, 1];
+        yield [0, '0.00%', true, 2];
+        yield [0, '0.0', false, 1];
+        yield [0, '0.00', false, 2];
+        yield [0.1, '10%'];
+        yield [0.15, '15%'];
+        yield [null, '0%'];
+        yield [null, '0', false];
+        yield [null, '0.0%', true, 1];
+        yield [null, '0.00%', true, 2];
     }
 
     /**
-     * @return array<array{0: int|float|string|null, 1: string}>
-     */
-    public static function getIntegers(): array
-    {
-        return [
-            [0, '0'],
-            [0.0, '0'],
-            [-0.0, '0'],
-            ['0', '0'],
-            ['0.0', '0'],
-            [1, '1'],
-            [1.0, '1'],
-            [-1, '-1'],
-            [-1.0, '-1'],
-            [null, '0'],
-            [1000, "1'000"],
-            [-1000, "-1'000"],
-        ];
-    }
-
-    /**
-     * @return array<array{0: int|float|string|null, 1: string, 2?: bool, 3?: int, 4?: int}>
-     */
-    public static function getPercents(): array
-    {
-        return [
-            [0, '0%'],
-            [-0, '0%'],
-            [0, '0', false],
-
-            [0, '0.0%', true, 1],
-            [0, '0.00%', true, 2],
-
-            [0, '0.0', false, 1],
-            [0, '0.00', false, 2],
-
-            [0.1, '10%'],
-            [0.15, '15%'],
-
-            [null, '0%'],
-            [null, '0', false],
-            [null, '0.0%', true, 1],
-            [null, '0.00%', true, 2],
-        ];
-    }
-
-    /**
-     * @return array<array{0: \DateTimeInterface|int|null, 1: string|null, 2?: int}>
-     *
      * @throws \Exception
      */
-    public static function getTimes(): array
+    public static function getTimes(): \Iterator
     {
         $date = self::createDate();
-
-        return [
-            [$date, '12:59'],
-            [$date, '12:59', \IntlDateFormatter::SHORT],
-            [$date, '12:59:59', \IntlDateFormatter::MEDIUM],
-            [$date, '12:59:59 UTC+1', \IntlDateFormatter::LONG],
-            [$date, '12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL],
-
-            [null, null],
-            [self::TIME_STAMP, '12:59'],
-        ];
+        yield [$date, '12:59'];
+        yield [$date, '12:59', \IntlDateFormatter::SHORT];
+        yield [$date, '12:59:59', \IntlDateFormatter::MEDIUM];
+        yield [$date, '12:59:59 UTC+1', \IntlDateFormatter::LONG];
+        yield [$date, '12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL];
+        yield [null, null];
+        yield [self::TIME_STAMP, '12:59'];
     }
 
     /**

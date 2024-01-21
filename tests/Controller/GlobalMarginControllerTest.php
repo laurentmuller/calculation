@@ -21,29 +21,23 @@ class GlobalMarginControllerTest extends AbstractControllerTestCase
 {
     use GlobalMarginTrait;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/globalmargin', self::ROLE_USER],
-            ['/globalmargin', self::ROLE_ADMIN],
-            ['/globalmargin', self::ROLE_SUPER_ADMIN],
-
-            ['/globalmargin/edit', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/globalmargin/edit', self::ROLE_ADMIN],
-            ['/globalmargin/edit', self::ROLE_SUPER_ADMIN],
-
-            ['/globalmargin/show/1', self::ROLE_USER],
-            ['/globalmargin/show/1', self::ROLE_ADMIN],
-            ['/globalmargin/show/1', self::ROLE_SUPER_ADMIN],
-
-            ['/globalmargin/pdf', self::ROLE_USER],
-            ['/globalmargin/pdf', self::ROLE_ADMIN],
-            ['/globalmargin/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/globalmargin/excel', self::ROLE_USER],
-            ['/globalmargin/excel', self::ROLE_ADMIN],
-            ['/globalmargin/excel', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/globalmargin', self::ROLE_USER];
+        yield ['/globalmargin', self::ROLE_ADMIN];
+        yield ['/globalmargin', self::ROLE_SUPER_ADMIN];
+        yield ['/globalmargin/edit', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/globalmargin/edit', self::ROLE_ADMIN];
+        yield ['/globalmargin/edit', self::ROLE_SUPER_ADMIN];
+        yield ['/globalmargin/show/1', self::ROLE_USER];
+        yield ['/globalmargin/show/1', self::ROLE_ADMIN];
+        yield ['/globalmargin/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/globalmargin/pdf', self::ROLE_USER];
+        yield ['/globalmargin/pdf', self::ROLE_ADMIN];
+        yield ['/globalmargin/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/globalmargin/excel', self::ROLE_USER];
+        yield ['/globalmargin/excel', self::ROLE_ADMIN];
+        yield ['/globalmargin/excel', self::ROLE_SUPER_ADMIN];
     }
 
     /**

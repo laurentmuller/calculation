@@ -21,80 +21,62 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(MessagePosition::class)]
 class MessagePositionTest extends TestCase
 {
-    public static function getAngle(): array
+    public static function getAngle(): \Iterator
     {
-        return [
-            [MessagePosition::TOP_LEFT, 315],
-            [MessagePosition::TOP_CENTER, 0],
-            [MessagePosition::TOP_RIGHT, 45],
-
-            [MessagePosition::CENTER_LEFT, 270],
-            [MessagePosition::CENTER_CENTER, 0],
-            [MessagePosition::CENTER_RIGHT, 90],
-
-            [MessagePosition::BOTTOM_LEFT, 225],
-            [MessagePosition::BOTTOM_CENTER, 180],
-            [MessagePosition::BOTTOM_RIGHT, 135],
-        ];
+        yield [MessagePosition::TOP_LEFT, 315];
+        yield [MessagePosition::TOP_CENTER, 0];
+        yield [MessagePosition::TOP_RIGHT, 45];
+        yield [MessagePosition::CENTER_LEFT, 270];
+        yield [MessagePosition::CENTER_CENTER, 0];
+        yield [MessagePosition::CENTER_RIGHT, 90];
+        yield [MessagePosition::BOTTOM_LEFT, 225];
+        yield [MessagePosition::BOTTOM_CENTER, 180];
+        yield [MessagePosition::BOTTOM_RIGHT, 135];
     }
 
-    public static function getDefault(): array
+    public static function getDefault(): \Iterator
     {
-        return [
-              [MessagePosition::getDefault(), MessagePosition::BOTTOM_RIGHT],
-              [PropertyServiceInterface::DEFAULT_MESSAGE_POSITION, MessagePosition::BOTTOM_RIGHT],
-        ];
+        yield [MessagePosition::getDefault(), MessagePosition::BOTTOM_RIGHT];
+        yield [PropertyServiceInterface::DEFAULT_MESSAGE_POSITION, MessagePosition::BOTTOM_RIGHT];
     }
 
-    public static function getIcon(): array
+    public static function getIcon(): \Iterator
     {
-        return [
-            [MessagePosition::TOP_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'],
-            [MessagePosition::TOP_CENTER, 'fa-solid fa-arrow-up fa-rotate-by'],
-            [MessagePosition::TOP_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'],
-
-            [MessagePosition::CENTER_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'],
-            [MessagePosition::CENTER_CENTER, 'fa-solid fa-location-crosshairs'],
-            [MessagePosition::CENTER_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'],
-
-            [MessagePosition::BOTTOM_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'],
-            [MessagePosition::BOTTOM_CENTER, 'fa-solid fa-arrow-up fa-rotate-by'],
-            [MessagePosition::BOTTOM_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'],
-        ];
+        yield [MessagePosition::TOP_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'];
+        yield [MessagePosition::TOP_CENTER, 'fa-solid fa-arrow-up fa-rotate-by'];
+        yield [MessagePosition::TOP_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'];
+        yield [MessagePosition::CENTER_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'];
+        yield [MessagePosition::CENTER_CENTER, 'fa-solid fa-location-crosshairs'];
+        yield [MessagePosition::CENTER_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'];
+        yield [MessagePosition::BOTTOM_LEFT, 'fa-solid fa-arrow-up fa-rotate-by'];
+        yield [MessagePosition::BOTTOM_CENTER, 'fa-solid fa-arrow-up fa-rotate-by'];
+        yield [MessagePosition::BOTTOM_RIGHT, 'fa-solid fa-arrow-up fa-rotate-by'];
     }
 
-    public static function getLabel(): array
+    public static function getLabel(): \Iterator
     {
-        return [
-            [MessagePosition::TOP_LEFT, 'top-left'],
-            [MessagePosition::TOP_CENTER, 'top-center'],
-            [MessagePosition::TOP_RIGHT, 'top-right'],
-
-            [MessagePosition::CENTER_LEFT, 'center-left'],
-            [MessagePosition::CENTER_CENTER, 'center-center'],
-            [MessagePosition::CENTER_RIGHT, 'center-right'],
-
-            [MessagePosition::BOTTOM_LEFT, 'bottom-left'],
-            [MessagePosition::BOTTOM_CENTER, 'bottom-center'],
-            [MessagePosition::BOTTOM_RIGHT, 'bottom-right'],
-        ];
+        yield [MessagePosition::TOP_LEFT, 'top-left'];
+        yield [MessagePosition::TOP_CENTER, 'top-center'];
+        yield [MessagePosition::TOP_RIGHT, 'top-right'];
+        yield [MessagePosition::CENTER_LEFT, 'center-left'];
+        yield [MessagePosition::CENTER_CENTER, 'center-center'];
+        yield [MessagePosition::CENTER_RIGHT, 'center-right'];
+        yield [MessagePosition::BOTTOM_LEFT, 'bottom-left'];
+        yield [MessagePosition::BOTTOM_CENTER, 'bottom-center'];
+        yield [MessagePosition::BOTTOM_RIGHT, 'bottom-right'];
     }
 
-    public static function getTranslation(): array
+    public static function getTranslation(): \Iterator
     {
-        return [
-            [MessagePosition::TOP_LEFT, 'message_position.top-left'],
-            [MessagePosition::TOP_CENTER, 'message_position.top-center'],
-            [MessagePosition::TOP_RIGHT, 'message_position.top-right'],
-
-            [MessagePosition::CENTER_LEFT, 'message_position.center-left'],
-            [MessagePosition::CENTER_CENTER, 'message_position.center-center'],
-            [MessagePosition::CENTER_RIGHT, 'message_position.center-right'],
-
-            [MessagePosition::BOTTOM_LEFT, 'message_position.bottom-left'],
-            [MessagePosition::BOTTOM_CENTER, 'message_position.bottom-center'],
-            [MessagePosition::BOTTOM_RIGHT, 'message_position.bottom-right'],
-        ];
+        yield [MessagePosition::TOP_LEFT, 'message_position.top-left'];
+        yield [MessagePosition::TOP_CENTER, 'message_position.top-center'];
+        yield [MessagePosition::TOP_RIGHT, 'message_position.top-right'];
+        yield [MessagePosition::CENTER_LEFT, 'message_position.center-left'];
+        yield [MessagePosition::CENTER_CENTER, 'message_position.center-center'];
+        yield [MessagePosition::CENTER_RIGHT, 'message_position.center-right'];
+        yield [MessagePosition::BOTTOM_LEFT, 'message_position.bottom-left'];
+        yield [MessagePosition::BOTTOM_CENTER, 'message_position.bottom-center'];
+        yield [MessagePosition::BOTTOM_RIGHT, 'message_position.bottom-right'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getAngle')]

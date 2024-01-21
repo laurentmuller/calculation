@@ -20,49 +20,39 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(Environment::class)]
 class EnvironmentTest extends TestCase
 {
-    public static function getIsDevelopment(): array
+    public static function getIsDevelopment(): \Iterator
     {
-        return [
-            [Environment::DEVELOPMENT, true],
-            [Environment::PRODUCTION, false],
-            [Environment::TEST, false],
-        ];
+        yield [Environment::DEVELOPMENT, true];
+        yield [Environment::PRODUCTION, false];
+        yield [Environment::TEST, false];
     }
 
-    public static function getIsProduction(): array
+    public static function getIsProduction(): \Iterator
     {
-        return [
-            [Environment::DEVELOPMENT, false],
-            [Environment::PRODUCTION, true],
-            [Environment::TEST, false],
-        ];
+        yield [Environment::DEVELOPMENT, false];
+        yield [Environment::PRODUCTION, true];
+        yield [Environment::TEST, false];
     }
 
-    public static function getIsTest(): array
+    public static function getIsTest(): \Iterator
     {
-        return [
-            [Environment::DEVELOPMENT, false],
-            [Environment::PRODUCTION, false],
-            [Environment::TEST, true],
-        ];
+        yield [Environment::DEVELOPMENT, false];
+        yield [Environment::PRODUCTION, false];
+        yield [Environment::TEST, true];
     }
 
-    public static function getLabels(): array
+    public static function getLabels(): \Iterator
     {
-        return [
-            [Environment::DEVELOPMENT, 'environment.dev'],
-            [Environment::PRODUCTION, 'environment.prod'],
-            [Environment::TEST, 'environment.test'],
-        ];
+        yield [Environment::DEVELOPMENT, 'environment.dev'];
+        yield [Environment::PRODUCTION, 'environment.prod'];
+        yield [Environment::TEST, 'environment.test'];
     }
 
-    public static function getValues(): array
+    public static function getValues(): \Iterator
     {
-        return [
-            [Environment::DEVELOPMENT, 'dev'],
-            [Environment::PRODUCTION, 'prod'],
-            [Environment::TEST, 'test'],
-        ];
+        yield [Environment::DEVELOPMENT, 'dev'];
+        yield [Environment::PRODUCTION, 'prod'];
+        yield [Environment::TEST, 'test'];
     }
 
     public function testCount(): void

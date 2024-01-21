@@ -18,13 +18,11 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(ImageSize::class)]
 class ImageSizeTest extends TestCase
 {
-    public static function getValues(): array
+    public static function getValues(): \Iterator
     {
-        return [
-            [ImageSize::DEFAULT, 192],
-            [ImageSize::MEDIUM, 96],
-            [ImageSize::SMALL, 32],
-        ];
+        yield [ImageSize::DEFAULT, 192];
+        yield [ImageSize::MEDIUM, 96];
+        yield [ImageSize::SMALL, 32];
     }
 
     public function testCount(): void

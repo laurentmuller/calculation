@@ -20,100 +20,81 @@ class MathTraitTest extends TestCase
 {
     use MathTrait;
 
-    public static function getIsBitSet(): array
+    public static function getIsBitSet(): \Iterator
     {
-        return [
-            [31, 1],
-            [31, 2],
-            [31, 4],
-            [31, 8],
-            [31, 16],
-
-            [0, 1, false],
-            [0, 2, false],
-            [0, 4, false],
-            [0, 8, false],
-            [0, 16, false],
-        ];
+        yield [31, 1];
+        yield [31, 2];
+        yield [31, 4];
+        yield [31, 8];
+        yield [31, 16];
+        yield [0, 1, false];
+        yield [0, 2, false];
+        yield [0, 4, false];
+        yield [0, 8, false];
+        yield [0, 16, false];
     }
 
-    public static function getIsFloatEquals(): array
+    public static function getIsFloatEquals(): \Iterator
     {
-        return [
-            [0, 0],
-            [0, 0.01, 0],
-            [0, 0.01, 1],
-
-            [1.15, 1.154],
-            [1.15, 1.155],
-
-            [1, 0, 2, false],
-            [0, 0.01, 2, false],
-        ];
+        yield [0, 0];
+        yield [0, 0.01, 0];
+        yield [0, 0.01, 1];
+        yield [1.15, 1.154];
+        yield [1.15, 1.155];
+        yield [1, 0, 2, false];
+        yield [0, 0.01, 2, false];
     }
 
-    public static function getIsFloatZero(): array
+    public static function getIsFloatZero(): \Iterator
     {
-        return [
-            [0],
-            [0, 0],
-            [0, 1],
-            [0, 2],
-            [0.001, 1],
-            [0.001, 2],
-
-            [1, 2, false],
-            [0.1, 1, false],
-            [0.1, 2, false],
-            [0.001, 3, false],
-        ];
+        yield [0];
+        yield [0, 0];
+        yield [0, 1];
+        yield [0, 2];
+        yield [0.001, 1];
+        yield [0.001, 2];
+        yield [1, 2, false];
+        yield [0.1, 1, false];
+        yield [0.1, 2, false];
+        yield [0.001, 3, false];
     }
 
-    public static function getRound(): array
+    public static function getRound(): \Iterator
     {
-        return [
-            [0, 0.0],
-            [1.5, 1.5],
-            [1.55, 1.55],
-            [1.5545, 1.55],
-            [1.52, 1.5, 1],
-
-            [1.1549, 1.15],
-            [1.155, 1.15],
-            [1.1551, 1.16],
-        ];
+        yield [0, 0.0];
+        yield [1.5, 1.5];
+        yield [1.55, 1.55];
+        yield [1.5545, 1.55];
+        yield [1.52, 1.5, 1];
+        yield [1.1549, 1.15];
+        yield [1.155, 1.15];
+        yield [1.1551, 1.16];
     }
 
-    public static function getSafeDivide(): array
+    public static function getSafeDivide(): \Iterator
     {
-        return [
-            [100, 0,  0.0],
-            [100, 5,  20.0],
-            [100, 10,  10.0],
-            [100, 0,  11.0,  11.0],
-        ];
+        yield [100, 0,  0.0];
+        yield [100, 5,  20.0];
+        yield [100, 10,  10.0];
+        yield [100, 0,  11.0,  11.0];
     }
 
-    public static function getValidateFloatRange(): array
+    public static function getValidateFloatRange(): \Iterator
     {
-        return [
-            [0.0,  0, 100.0, 0.0],
-            [100.0,  0, 100.0, 100.0],
-            [50.0,  0.0, 100.0, 50.0],
-            [-0.1,  0.0, 100.0, 0.0],
-            [100.1,  0.0, 100.0, 100.0],
-        ];
+        yield [0.0,  0, 100.0, 0.0];
+        yield [100.0,  0, 100.0, 100.0];
+        yield [50.0,  0.0, 100.0, 50.0];
+        yield [-0.1,  0.0, 100.0, 0.0];
+        yield [100.1,  0.0, 100.0, 100.0];
     }
 
-    public static function getValidateIntRange(): array
+    public static function getValidateIntRange(): \Iterator
     {
-        return [
-            [0,  0, 100, 0],
-            [100,  0, 100, 100],
-            [50,  0, 100, 50],
-            [-1,  0, 100, 0],
-            [101,  0, 100, 100],
-        ];
+        yield [0,  0, 100, 0];
+        yield [100,  0, 100, 100];
+        yield [50,  0, 100, 50];
+        yield [-1,  0, 100, 0];
+        yield [101,  0, 100, 100];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getIsBitSet')]

@@ -31,139 +31,117 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityName::class)]
 class EntityNameTest extends TestCase
 {
-    public static function getLabel(): array
+    public static function getLabel(): \Iterator
     {
-        return [
-            ['calculation.name', EntityName::CALCULATION],
-            ['calculationstate.name', EntityName::CALCULATION_STATE],
-            ['category.name', EntityName::CATEGORY],
-            ['customer.name', EntityName::CUSTOMER],
-            ['globalmargin.name', EntityName::GLOBAL_MARGIN],
-            ['group.name', EntityName::GROUP],
-            ['log.name', EntityName::LOG],
-            ['product.name', EntityName::PRODUCT],
-            ['task.name', EntityName::TASK],
-            ['user.name', EntityName::USER],
-        ];
+        yield ['calculation.name', EntityName::CALCULATION];
+        yield ['calculationstate.name', EntityName::CALCULATION_STATE];
+        yield ['category.name', EntityName::CATEGORY];
+        yield ['customer.name', EntityName::CUSTOMER];
+        yield ['globalmargin.name', EntityName::GLOBAL_MARGIN];
+        yield ['group.name', EntityName::GROUP];
+        yield ['log.name', EntityName::LOG];
+        yield ['product.name', EntityName::PRODUCT];
+        yield ['task.name', EntityName::TASK];
+        yield ['user.name', EntityName::USER];
     }
 
-    public static function getOffset(): array
+    public static function getOffset(): \Iterator
     {
-        return [
-            [EntityName::CALCULATION, 0],
-            [EntityName::CALCULATION_STATE, 1],
-            [EntityName::CATEGORY, 2],
-            [EntityName::CUSTOMER, 3],
-            [EntityName::GLOBAL_MARGIN, 4],
-            [EntityName::GROUP, 5],
-            [EntityName::LOG, 6],
-            [EntityName::PRODUCT, 7],
-            [EntityName::TASK, 8],
-            [EntityName::USER, 9],
-        ];
+        yield [EntityName::CALCULATION, 0];
+        yield [EntityName::CALCULATION_STATE, 1];
+        yield [EntityName::CATEGORY, 2];
+        yield [EntityName::CUSTOMER, 3];
+        yield [EntityName::GLOBAL_MARGIN, 4];
+        yield [EntityName::GROUP, 5];
+        yield [EntityName::LOG, 6];
+        yield [EntityName::PRODUCT, 7];
+        yield [EntityName::TASK, 8];
+        yield [EntityName::USER, 9];
     }
 
-    public static function getRightsField(): array
+    public static function getRightsField(): \Iterator
     {
-        return [
-            [EntityName::CALCULATION, 'CalculationRights'],
-            [EntityName::CALCULATION_STATE, 'CalculationStateRights'],
-            [EntityName::CATEGORY, 'CategoryRights'],
-            [EntityName::CUSTOMER, 'CustomerRights'],
-            [EntityName::GLOBAL_MARGIN, 'GlobalMarginRights'],
-            [EntityName::GROUP, 'GroupRights'],
-            [EntityName::LOG, 'LogRights'],
-            [EntityName::PRODUCT, 'ProductRights'],
-            [EntityName::TASK, 'TaskRights'],
-            [EntityName::USER, 'UserRights'],
-        ];
+        yield [EntityName::CALCULATION, 'CalculationRights'];
+        yield [EntityName::CALCULATION_STATE, 'CalculationStateRights'];
+        yield [EntityName::CATEGORY, 'CategoryRights'];
+        yield [EntityName::CUSTOMER, 'CustomerRights'];
+        yield [EntityName::GLOBAL_MARGIN, 'GlobalMarginRights'];
+        yield [EntityName::GROUP, 'GroupRights'];
+        yield [EntityName::LOG, 'LogRights'];
+        yield [EntityName::PRODUCT, 'ProductRights'];
+        yield [EntityName::TASK, 'TaskRights'];
+        yield [EntityName::USER, 'UserRights'];
     }
 
-    public static function getTryFromField(): array
+    public static function getTryFromField(): \Iterator
     {
-        return [
-            ['', null],
-            ['Fake', null],
-            ['Rights', null],
-
-            ['CalculationRights', EntityName::CALCULATION],
-            ['CalculationStateRights', EntityName::CALCULATION_STATE],
-            ['CategoryRights', EntityName::CATEGORY],
-            ['CustomerRights', EntityName::CUSTOMER],
-            ['GlobalMarginRights', EntityName::GLOBAL_MARGIN],
-            ['GroupRights', EntityName::GROUP],
-            ['LogRights', EntityName::LOG],
-            ['ProductRights', EntityName::PRODUCT],
-            ['TaskRights', EntityName::TASK],
-            ['UserRights', EntityName::USER],
-        ];
+        yield ['', null];
+        yield ['Fake', null];
+        yield ['Rights', null];
+        yield ['CalculationRights', EntityName::CALCULATION];
+        yield ['CalculationStateRights', EntityName::CALCULATION_STATE];
+        yield ['CategoryRights', EntityName::CATEGORY];
+        yield ['CustomerRights', EntityName::CUSTOMER];
+        yield ['GlobalMarginRights', EntityName::GLOBAL_MARGIN];
+        yield ['GroupRights', EntityName::GROUP];
+        yield ['LogRights', EntityName::LOG];
+        yield ['ProductRights', EntityName::PRODUCT];
+        yield ['TaskRights', EntityName::TASK];
+        yield ['UserRights', EntityName::USER];
     }
 
-    public static function getTryFromMixed(): array
+    public static function getTryFromMixed(): \Iterator
     {
-        return [
-            [null, null],
-            [1456, null],
-            ['fake', null],
-            [new Role(''), null],
-            ['Calculation', EntityName::CALCULATION],
-            ['\Calculation', EntityName::CALCULATION],
-            ['\Fake\Calculation', EntityName::CALCULATION],
-            [new Calculation(), EntityName::CALCULATION],
-            [Calculation::class, EntityName::CALCULATION],
-
-            ['Product', EntityName::PRODUCT],
-            [Product::class, EntityName::PRODUCT],
-            [new Product(), EntityName::PRODUCT],
-
-            ['Task', EntityName::TASK],
-            [Task::class, EntityName::TASK],
-            [new Task(), EntityName::TASK],
-
-            ['Category', EntityName::CATEGORY],
-            [Category::class, EntityName::CATEGORY],
-            [new Category(), EntityName::CATEGORY],
-
-            ['Group', EntityName::GROUP],
-            [Group::class, EntityName::GROUP],
-            [new Group(), EntityName::GROUP],
-
-            ['CalculationState', EntityName::CALCULATION_STATE],
-            [CalculationState::class, EntityName::CALCULATION_STATE],
-            [new CalculationState(), EntityName::CALCULATION_STATE],
-
-            ['GlobalMargin', EntityName::GLOBAL_MARGIN],
-            [GlobalMargin::class, EntityName::GLOBAL_MARGIN],
-            [new GlobalMargin(), EntityName::GLOBAL_MARGIN],
-
-            ['User', EntityName::USER],
-            [User::class, EntityName::USER],
-            [new User(), EntityName::USER],
-
-            ['Customer', EntityName::CUSTOMER],
-            [Customer::class, EntityName::CUSTOMER],
-            [new Customer(), EntityName::CUSTOMER],
-
-            ['Log', EntityName::LOG],
-            [Log::class, EntityName::LOG],
-            [new Log(), EntityName::LOG],
-        ];
+        yield [null, null];
+        yield [1456, null];
+        yield ['fake', null];
+        yield [new Role(''), null];
+        yield ['Calculation', EntityName::CALCULATION];
+        yield ['\Calculation', EntityName::CALCULATION];
+        yield ['\Fake\Calculation', EntityName::CALCULATION];
+        yield [new Calculation(), EntityName::CALCULATION];
+        yield [Calculation::class, EntityName::CALCULATION];
+        yield ['Product', EntityName::PRODUCT];
+        yield [Product::class, EntityName::PRODUCT];
+        yield [new Product(), EntityName::PRODUCT];
+        yield ['Task', EntityName::TASK];
+        yield [Task::class, EntityName::TASK];
+        yield [new Task(), EntityName::TASK];
+        yield ['Category', EntityName::CATEGORY];
+        yield [Category::class, EntityName::CATEGORY];
+        yield [new Category(), EntityName::CATEGORY];
+        yield ['Group', EntityName::GROUP];
+        yield [Group::class, EntityName::GROUP];
+        yield [new Group(), EntityName::GROUP];
+        yield ['CalculationState', EntityName::CALCULATION_STATE];
+        yield [CalculationState::class, EntityName::CALCULATION_STATE];
+        yield [new CalculationState(), EntityName::CALCULATION_STATE];
+        yield ['GlobalMargin', EntityName::GLOBAL_MARGIN];
+        yield [GlobalMargin::class, EntityName::GLOBAL_MARGIN];
+        yield [new GlobalMargin(), EntityName::GLOBAL_MARGIN];
+        yield ['User', EntityName::USER];
+        yield [User::class, EntityName::USER];
+        yield [new User(), EntityName::USER];
+        yield ['Customer', EntityName::CUSTOMER];
+        yield [Customer::class, EntityName::CUSTOMER];
+        yield [new Customer(), EntityName::CUSTOMER];
+        yield ['Log', EntityName::LOG];
+        yield [Log::class, EntityName::LOG];
+        yield [new Log(), EntityName::LOG];
     }
 
-    public static function getValue(): array
+    public static function getValue(): \Iterator
     {
-        return [
-            [EntityName::CALCULATION, 'EntityCalculation'],
-            [EntityName::CALCULATION_STATE, 'EntityCalculationState'],
-            [EntityName::CATEGORY, 'EntityCategory'],
-            [EntityName::CUSTOMER, 'EntityCustomer'],
-            [EntityName::GLOBAL_MARGIN, 'EntityGlobalMargin'],
-            [EntityName::GROUP, 'EntityGroup'],
-            [EntityName::LOG, 'EntityLog'],
-            [EntityName::PRODUCT, 'EntityProduct'],
-            [EntityName::TASK, 'EntityTask'],
-            [EntityName::USER, 'EntityUser'],
-        ];
+        yield [EntityName::CALCULATION, 'EntityCalculation'];
+        yield [EntityName::CALCULATION_STATE, 'EntityCalculationState'];
+        yield [EntityName::CATEGORY, 'EntityCategory'];
+        yield [EntityName::CUSTOMER, 'EntityCustomer'];
+        yield [EntityName::GLOBAL_MARGIN, 'EntityGlobalMargin'];
+        yield [EntityName::GROUP, 'EntityGroup'];
+        yield [EntityName::LOG, 'EntityLog'];
+        yield [EntityName::PRODUCT, 'EntityProduct'];
+        yield [EntityName::TASK, 'EntityTask'];
+        yield [EntityName::USER, 'EntityUser'];
     }
 
     public function testConstants(): void

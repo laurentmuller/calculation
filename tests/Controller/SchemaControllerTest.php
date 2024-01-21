@@ -18,16 +18,13 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(SchemaController::class)]
 class SchemaControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/schema', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/schema', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/schema', self::ROLE_SUPER_ADMIN],
-
-            ['/schema/sy_Calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/schema/sy_Calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/schema/sy_Calculation', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/schema', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/schema', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
+        yield ['/schema', self::ROLE_SUPER_ADMIN];
+        yield ['/schema/sy_Calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/schema/sy_Calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
+        yield ['/schema/sy_Calculation', self::ROLE_SUPER_ADMIN];
     }
 }

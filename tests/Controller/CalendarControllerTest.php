@@ -17,20 +17,16 @@ use App\Controller\CalendarController;
 #[\PHPUnit\Framework\Attributes\CoversClass(CalendarController::class)]
 class CalendarControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/calendar/month', self::ROLE_USER],
-            ['/calendar/month', self::ROLE_ADMIN],
-            ['/calendar/month', self::ROLE_SUPER_ADMIN],
-
-            ['/calendar/week', self::ROLE_USER],
-            ['/calendar/week', self::ROLE_ADMIN],
-            ['/calendar/week', self::ROLE_SUPER_ADMIN],
-
-            ['/calendar/year', self::ROLE_USER],
-            ['/calendar/year', self::ROLE_ADMIN],
-            ['/calendar/year', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/calendar/month', self::ROLE_USER];
+        yield ['/calendar/month', self::ROLE_ADMIN];
+        yield ['/calendar/month', self::ROLE_SUPER_ADMIN];
+        yield ['/calendar/week', self::ROLE_USER];
+        yield ['/calendar/week', self::ROLE_ADMIN];
+        yield ['/calendar/week', self::ROLE_SUPER_ADMIN];
+        yield ['/calendar/year', self::ROLE_USER];
+        yield ['/calendar/year', self::ROLE_ADMIN];
+        yield ['/calendar/year', self::ROLE_SUPER_ADMIN];
     }
 }

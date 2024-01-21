@@ -18,58 +18,45 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(UserController::class)]
 class UserControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/user', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user', self::ROLE_ADMIN],
-            ['/user', self::ROLE_SUPER_ADMIN],
-
-            ['/user', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN],
-            ['/user/add', self::ROLE_ADMIN],
-            ['/user/add', self::ROLE_SUPER_ADMIN],
-
-            ['/user/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user/edit/1', self::ROLE_ADMIN],
-            ['/user/edit/1', self::ROLE_SUPER_ADMIN],
-
-            ['/user/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user/delete/1', self::ROLE_ADMIN],
-            // can delete when connected
-            ['/user/delete/1', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
-            ['/user/delete/2', self::ROLE_SUPER_ADMIN],
-
-            ['/user/show/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user/show/1', self::ROLE_ADMIN],
-            ['/user/show/1', self::ROLE_SUPER_ADMIN],
-
-            ['/user/password/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user/password/1', self::ROLE_ADMIN],
-            ['/user/password/1', self::ROLE_SUPER_ADMIN],
-
-            ['/user/rights/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user/rights/1', self::ROLE_ADMIN],
-            ['/user/rights/1', self::ROLE_SUPER_ADMIN],
-
-            ['/user/rights/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user/rights/pdf', self::ROLE_ADMIN],
-            ['/user/rights/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/user/rights/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user/rights/excel', self::ROLE_ADMIN],
-            ['/user/rights/excel', self::ROLE_SUPER_ADMIN],
-
-            ['/user/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user/pdf', self::ROLE_ADMIN],
-            ['/user/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/user/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/user/excel', self::ROLE_ADMIN],
-            ['/user/excel', self::ROLE_SUPER_ADMIN],
-
-            ['/user/parameters', self::ROLE_USER],
-            ['/user/parameters', self::ROLE_ADMIN],
-            ['/user/parameters', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/user', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user', self::ROLE_ADMIN];
+        yield ['/user', self::ROLE_SUPER_ADMIN];
+        yield ['/user', self::ROLE_DISABLED, Response::HTTP_FORBIDDEN];
+        yield ['/user/add', self::ROLE_ADMIN];
+        yield ['/user/add', self::ROLE_SUPER_ADMIN];
+        yield ['/user/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user/edit/1', self::ROLE_ADMIN];
+        yield ['/user/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/user/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user/delete/1', self::ROLE_ADMIN];
+        // can delete when connected
+        yield ['/user/delete/1', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
+        yield ['/user/delete/2', self::ROLE_SUPER_ADMIN];
+        yield ['/user/show/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user/show/1', self::ROLE_ADMIN];
+        yield ['/user/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/user/password/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user/password/1', self::ROLE_ADMIN];
+        yield ['/user/password/1', self::ROLE_SUPER_ADMIN];
+        yield ['/user/rights/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user/rights/1', self::ROLE_ADMIN];
+        yield ['/user/rights/1', self::ROLE_SUPER_ADMIN];
+        yield ['/user/rights/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user/rights/pdf', self::ROLE_ADMIN];
+        yield ['/user/rights/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/user/rights/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user/rights/excel', self::ROLE_ADMIN];
+        yield ['/user/rights/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/user/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user/pdf', self::ROLE_ADMIN];
+        yield ['/user/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/user/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/user/excel', self::ROLE_ADMIN];
+        yield ['/user/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/user/parameters', self::ROLE_USER];
+        yield ['/user/parameters', self::ROLE_ADMIN];
+        yield ['/user/parameters', self::ROLE_SUPER_ADMIN];
     }
 }

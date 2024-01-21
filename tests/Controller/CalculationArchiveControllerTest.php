@@ -22,13 +22,11 @@ class CalculationArchiveControllerTest extends AbstractControllerTestCase
     private ?CalculationState $editState = null;
     private ?CalculationState $notEditSate = null;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/admin/archive', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/archive', self::ROLE_ADMIN],
-            ['/admin/archive', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/admin/archive', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/admin/archive', self::ROLE_ADMIN];
+        yield ['/admin/archive', self::ROLE_SUPER_ADMIN];
     }
 
     /**

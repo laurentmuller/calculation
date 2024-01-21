@@ -2,7 +2,7 @@
 
 Programme de calcul basé sur l'environnement de développement Symfony 7.x.
 
-![Screenshot](public/help/images/home.png)
+![Screenshot](public/images/screenshots/home_light.png)
 
 ## Licence
 

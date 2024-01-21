@@ -36,14 +36,12 @@ class EntityVoterTest extends TestCase
         $this->voter = $this->getEntityVoter();
     }
 
-    public static function getSupportsAttribute(): array
+    public static function getSupportsAttribute(): \Iterator
     {
-        return [
-            ['add', true],
-            ['ADD', true],
-            ['Fake', false],
-            ['', false],
-        ];
+        yield ['add', true];
+        yield ['ADD', true];
+        yield ['Fake', false];
+        yield ['', false];
     }
 
     public function testAbstainAttribute(): void

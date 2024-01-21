@@ -24,18 +24,16 @@ class StrengthLevelTranslatorTraitTest extends TestCase
 
     private ?TranslatorInterface $translator = null;
 
-    public static function getTranslateLevels(): array
+    public static function getTranslateLevels(): \Iterator
     {
-        return [
-            [-2, 'none'],
-            [-1, 'none'],
-            [0, 'very_weak'],
-            [1, 'weak'],
-            [2, 'medium'],
-            [3, 'strong'],
-            [4, 'very_strong'],
-            [5, 'very_strong'],
-        ];
+        yield [-2, 'none'];
+        yield [-1, 'none'];
+        yield [0, 'very_weak'];
+        yield [1, 'weak'];
+        yield [2, 'medium'];
+        yield [3, 'strong'];
+        yield [4, 'very_strong'];
+        yield [5, 'very_strong'];
     }
 
     public function getTranslator(): TranslatorInterface

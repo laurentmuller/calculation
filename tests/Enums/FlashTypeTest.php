@@ -20,24 +20,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(FlashType::class)]
 class FlashTypeTest extends TestCase
 {
-    public static function getLabels(): array
+    public static function getLabels(): \Iterator
     {
-        return [
-            [FlashType::DANGER, 'flash_bag.danger'],
-            [FlashType::INFO, 'flash_bag.info'],
-            [FlashType::SUCCESS, 'flash_bag.success'],
-            [FlashType::WARNING, 'flash_bag.warning'],
-        ];
+        yield [FlashType::DANGER, 'flash_bag.danger'];
+        yield [FlashType::INFO, 'flash_bag.info'];
+        yield [FlashType::SUCCESS, 'flash_bag.success'];
+        yield [FlashType::WARNING, 'flash_bag.warning'];
     }
 
-    public static function getValues(): array
+    public static function getValues(): \Iterator
     {
-        return [
-            [FlashType::DANGER, 'danger'],
-            [FlashType::INFO, 'info'],
-            [FlashType::SUCCESS, 'success'],
-            [FlashType::WARNING, 'warning'],
-        ];
+        yield [FlashType::DANGER, 'danger'];
+        yield [FlashType::INFO, 'info'];
+        yield [FlashType::SUCCESS, 'success'];
+        yield [FlashType::WARNING, 'warning'];
     }
 
     public function testCount(): void

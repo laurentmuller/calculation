@@ -19,34 +19,30 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(ImageExtension::class)]
 class ImageExtensionTest extends TestCase
 {
-    public static function getFilters(): array
+    public static function getFilters(): \Iterator
     {
-        return [
-            [ImageExtension::BMP, '*.bmp'],
-            [ImageExtension::GIF, '*.gif'],
-            [ImageExtension::JPEG, '*.jpeg'],
-            [ImageExtension::JPG, '*.jpg'],
-            [ImageExtension::PNG, '*.png'],
-            [ImageExtension::WBMP, '*.wbmp'],
-            [ImageExtension::WEBP, '*.webp'],
-            [ImageExtension::XBM, '*.xbm'],
-            [ImageExtension::XPM, '*.xpm'],
-        ];
+        yield [ImageExtension::BMP, '*.bmp'];
+        yield [ImageExtension::GIF, '*.gif'];
+        yield [ImageExtension::JPEG, '*.jpeg'];
+        yield [ImageExtension::JPG, '*.jpg'];
+        yield [ImageExtension::PNG, '*.png'];
+        yield [ImageExtension::WBMP, '*.wbmp'];
+        yield [ImageExtension::WEBP, '*.webp'];
+        yield [ImageExtension::XBM, '*.xbm'];
+        yield [ImageExtension::XPM, '*.xpm'];
     }
 
-    public static function getImageTypes(): array
+    public static function getImageTypes(): \Iterator
     {
-        return [
-            [ImageExtension::BMP,  \IMAGETYPE_BMP],
-            [ImageExtension::GIF, \IMAGETYPE_GIF],
-            [ImageExtension::JPEG, \IMAGETYPE_JPEG],
-            [ImageExtension::JPG, \IMAGETYPE_JPEG],
-            [ImageExtension::PNG, \IMAGETYPE_PNG],
-            [ImageExtension::WBMP,  \IMAGETYPE_WBMP],
-            [ImageExtension::WEBP,  \IMAGETYPE_WEBP],
-            [ImageExtension::XBM,  \IMAGETYPE_XBM],
-            [ImageExtension::XPM,  \IMAGETYPE_UNKNOWN],
-        ];
+        yield [ImageExtension::BMP,  \IMAGETYPE_BMP];
+        yield [ImageExtension::GIF, \IMAGETYPE_GIF];
+        yield [ImageExtension::JPEG, \IMAGETYPE_JPEG];
+        yield [ImageExtension::JPG, \IMAGETYPE_JPEG];
+        yield [ImageExtension::PNG, \IMAGETYPE_PNG];
+        yield [ImageExtension::WBMP,  \IMAGETYPE_WBMP];
+        yield [ImageExtension::WEBP,  \IMAGETYPE_WEBP];
+        yield [ImageExtension::XBM,  \IMAGETYPE_XBM];
+        yield [ImageExtension::XPM,  \IMAGETYPE_UNKNOWN];
     }
 
     public static function getInvalidOptions(): \Generator
@@ -57,34 +53,30 @@ class ImageExtensionTest extends TestCase
         }
     }
 
-    public static function getTryFromTypes(): array
+    public static function getTryFromTypes(): \Iterator
     {
-        return [
-            [\IMAGETYPE_BMP, ImageExtension::BMP],
-            [\IMAGETYPE_GIF, ImageExtension::GIF],
-            [\IMAGETYPE_JPEG, ImageExtension::JPEG],
-            [\IMAGETYPE_PNG, ImageExtension::PNG],
-            [\IMAGETYPE_WBMP, ImageExtension::WBMP],
-            [\IMAGETYPE_WEBP, ImageExtension::WEBP],
-            [\IMAGETYPE_XBM, ImageExtension::XBM],
-            [\IMAGETYPE_UNKNOWN],
-            [-1],
-        ];
+        yield [\IMAGETYPE_BMP, ImageExtension::BMP];
+        yield [\IMAGETYPE_GIF, ImageExtension::GIF];
+        yield [\IMAGETYPE_JPEG, ImageExtension::JPEG];
+        yield [\IMAGETYPE_PNG, ImageExtension::PNG];
+        yield [\IMAGETYPE_WBMP, ImageExtension::WBMP];
+        yield [\IMAGETYPE_WEBP, ImageExtension::WEBP];
+        yield [\IMAGETYPE_XBM, ImageExtension::XBM];
+        yield [\IMAGETYPE_UNKNOWN];
+        yield [-1];
     }
 
-    public static function getTypes(): array
+    public static function getTypes(): \Iterator
     {
-        return [
-            [ImageExtension::BMP, \IMAGETYPE_BMP],
-            [ImageExtension::GIF, \IMAGETYPE_GIF],
-            [ImageExtension::JPEG, \IMAGETYPE_JPEG],
-            [ImageExtension::JPG, \IMAGETYPE_JPEG],
-            [ImageExtension::PNG, \IMAGETYPE_PNG],
-            [ImageExtension::WBMP, \IMAGETYPE_WBMP],
-            [ImageExtension::WEBP, \IMAGETYPE_WEBP],
-            [ImageExtension::XBM, \IMAGETYPE_XBM],
-            [ImageExtension::XPM, \IMAGETYPE_UNKNOWN],
-        ];
+        yield [ImageExtension::BMP, \IMAGETYPE_BMP];
+        yield [ImageExtension::GIF, \IMAGETYPE_GIF];
+        yield [ImageExtension::JPEG, \IMAGETYPE_JPEG];
+        yield [ImageExtension::JPG, \IMAGETYPE_JPEG];
+        yield [ImageExtension::PNG, \IMAGETYPE_PNG];
+        yield [ImageExtension::WBMP, \IMAGETYPE_WBMP];
+        yield [ImageExtension::WEBP, \IMAGETYPE_WEBP];
+        yield [ImageExtension::XBM, \IMAGETYPE_XBM];
+        yield [ImageExtension::XPM, \IMAGETYPE_UNKNOWN];
     }
 
     public static function getValidOptions(): \Generator
@@ -108,19 +100,17 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, [], false];
     }
 
-    public static function getValues(): array
+    public static function getValues(): \Iterator
     {
-        return [
-            [ImageExtension::BMP, 'bmp'],
-            [ImageExtension::GIF, 'gif'],
-            [ImageExtension::JPEG, 'jpeg'],
-            [ImageExtension::JPG, 'jpg'],
-            [ImageExtension::PNG, 'png'],
-            [ImageExtension::WBMP, 'wbmp'],
-            [ImageExtension::WEBP, 'webp'],
-            [ImageExtension::XBM, 'xbm'],
-            [ImageExtension::XPM, 'xpm'],
-        ];
+        yield [ImageExtension::BMP, 'bmp'];
+        yield [ImageExtension::GIF, 'gif'];
+        yield [ImageExtension::JPEG, 'jpeg'];
+        yield [ImageExtension::JPG, 'jpg'];
+        yield [ImageExtension::PNG, 'png'];
+        yield [ImageExtension::WBMP, 'wbmp'];
+        yield [ImageExtension::WEBP, 'webp'];
+        yield [ImageExtension::XBM, 'xbm'];
+        yield [ImageExtension::XPM, 'xpm'];
     }
 
     public function testCount(): void

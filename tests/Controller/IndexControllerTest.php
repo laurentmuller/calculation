@@ -17,13 +17,11 @@ use App\Controller\IndexController;
 #[\PHPUnit\Framework\Attributes\CoversClass(IndexController::class)]
 class IndexControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/', self::ROLE_DISABLED],
-            ['/', self::ROLE_USER],
-            ['/', self::ROLE_ADMIN],
-            ['/', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/', self::ROLE_DISABLED];
+        yield ['/', self::ROLE_USER];
+        yield ['/', self::ROLE_ADMIN];
+        yield ['/', self::ROLE_SUPER_ADMIN];
     }
 }

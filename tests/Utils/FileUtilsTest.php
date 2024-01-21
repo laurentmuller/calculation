@@ -18,40 +18,30 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(FileUtils::class)]
 class FileUtilsTest extends TestCase
 {
-    /**
-     * @return array<array{0: string, 1: string, 2?: string, 3?: string}>
-     */
-    public static function getBuildPaths(): array
+    public static function getBuildPaths(): \Iterator
     {
-        return [
-            ['', ''],
-            ['/', '/'],
-            ['c:/', 'c:'],
-            ['c:/home', 'c:', 'home'],
-            ['home', 'home'],
-            ['home', '', 'home', ''],
-            ['home/test', 'home', 'test'],
-            ['home/test/value', 'home', 'test', 'value'],
-            ['home/test/value', 'home', 'test', 'value/'],
-        ];
+        yield ['', ''];
+        yield ['/', '/'];
+        yield ['c:/', 'c:'];
+        yield ['c:/home', 'c:', 'home'];
+        yield ['home', 'home'];
+        yield ['home', '', 'home', ''];
+        yield ['home/test', 'home', 'test'];
+        yield ['home/test/value', 'home', 'test', 'value'];
+        yield ['home/test/value', 'home', 'test', 'value/'];
     }
 
-    public static function getExtension(): array
+    public static function getExtension(): \Iterator
     {
-        return [
-            ['', ''],
-            ['file', ''],
-            ['file.', ''],
-            ['file.txt', 'txt'],
-            ['file.TXT', 'TXT'],
-            ['file.TXT', 'txt', true],
-        ];
+        yield ['', ''];
+        yield ['file', ''];
+        yield ['file.', ''];
+        yield ['file.txt', 'txt'];
+        yield ['file.TXT', 'TXT'];
+        yield ['file.TXT', 'txt', true];
     }
 
-    /**
-     * @return array<array{0: string|\SplFileInfo|int, 1: string}>
-     */
-    public static function getFormatSize(): array
+    public static function getFormatSize(): \Iterator
     {
         $kb = 1024;
         $mb = $kb * $kb;
@@ -63,48 +53,32 @@ class FileUtilsTest extends TestCase
 
         $thisSize = \round(\filesize(__FILE__) / $kb);
         $thisText = \sprintf('%d KB', $thisSize);
-
-        return [
-            [$linesFile, \sprintf('%d B', $lineSize)],
-            [$lineSize, \sprintf('%d B', $lineSize)],
-
-            ["D:\zzz_aaa", $empty],
-            [self::getEmptyFile(), $empty],
-
-            [0, $empty],
-            [1, '1 B'],
-            [$kb - 1, '1023 B'],
-
-            [$kb, '1 KB'],
-            [$kb * 2, '2 KB'],
-            [$mb - 1, '1024 KB'],
-
-            [$mb, '1.0 MB'],
-            [$mb * 2, '2.0 MB'],
-            [$gb - 1, '1024.0 MB'],
-
-            [$gb, '1.0 GB'],
-            [$gb * 2, '2.0 GB'],
-            [$gb * $kb, '1.0 TB'],
-
-            [__FILE__, $thisText],
-
-            [new \SplFileInfo("D:\zzz_aaa"), $empty],
-        ];
+        yield [$linesFile, \sprintf('%d B', $lineSize)];
+        yield [$lineSize, \sprintf('%d B', $lineSize)];
+        yield ["D:\zzz_aaa", $empty];
+        yield [self::getEmptyFile(), $empty];
+        yield [0, $empty];
+        yield [1, '1 B'];
+        yield [$kb - 1, '1023 B'];
+        yield [$kb, '1 KB'];
+        yield [$kb * 2, '2 KB'];
+        yield [$mb - 1, '1024 KB'];
+        yield [$mb, '1.0 MB'];
+        yield [$mb * 2, '2.0 MB'];
+        yield [$gb - 1, '1024.0 MB'];
+        yield [$gb, '1.0 GB'];
+        yield [$gb * 2, '2.0 GB'];
+        yield [$gb * $kb, '1.0 TB'];
+        yield [__FILE__, $thisText];
+        yield [new \SplFileInfo("D:\zzz_aaa"), $empty];
     }
 
-    /**
-     * @return array<array{0: string|\SplFileInfo, 1: string|\SplFileInfo}>
-     */
-    public static function getRealPath(): array
+    public static function getRealPath(): \Iterator
     {
-        return [
-            [__DIR__, __DIR__],
-            [__FILE__, __FILE__],
-
-            [new \SplFileInfo(__DIR__), __DIR__],
-            [new \SplFileInfo(__FILE__), __FILE__],
-        ];
+        yield [__DIR__, __DIR__];
+        yield [__FILE__, __FILE__];
+        yield [new \SplFileInfo(__DIR__), __DIR__];
+        yield [new \SplFileInfo(__FILE__), __FILE__];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getBuildPaths')]

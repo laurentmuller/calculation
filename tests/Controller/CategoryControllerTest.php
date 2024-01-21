@@ -21,41 +21,32 @@ class CategoryControllerTest extends AbstractControllerTestCase
 {
     use CategoryTrait;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/category', self::ROLE_USER],
-            ['/category', self::ROLE_ADMIN],
-            ['/category', self::ROLE_SUPER_ADMIN],
-
-            ['/category/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/category/add', self::ROLE_ADMIN],
-            ['/category/add', self::ROLE_SUPER_ADMIN],
-
-            ['/category/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/category/edit/1', self::ROLE_ADMIN],
-            ['/category/edit/1', self::ROLE_SUPER_ADMIN],
-
-            ['/category/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/category/clone/1', self::ROLE_ADMIN],
-            ['/category/clone/1', self::ROLE_SUPER_ADMIN],
-
-            ['/category/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/category/delete/1', self::ROLE_ADMIN],
-            ['/category/delete/1', self::ROLE_SUPER_ADMIN],
-
-            ['/category/show/1', self::ROLE_USER],
-            ['/category/show/1', self::ROLE_ADMIN],
-            ['/category/show/1', self::ROLE_SUPER_ADMIN],
-
-            ['/category/pdf', self::ROLE_USER],
-            ['/category/pdf', self::ROLE_ADMIN],
-            ['/category/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/category/excel', self::ROLE_USER],
-            ['/category/excel', self::ROLE_ADMIN],
-            ['/category/excel', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/category', self::ROLE_USER];
+        yield ['/category', self::ROLE_ADMIN];
+        yield ['/category', self::ROLE_SUPER_ADMIN];
+        yield ['/category/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/category/add', self::ROLE_ADMIN];
+        yield ['/category/add', self::ROLE_SUPER_ADMIN];
+        yield ['/category/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/category/edit/1', self::ROLE_ADMIN];
+        yield ['/category/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/category/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/category/clone/1', self::ROLE_ADMIN];
+        yield ['/category/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/category/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/category/delete/1', self::ROLE_ADMIN];
+        yield ['/category/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/category/show/1', self::ROLE_USER];
+        yield ['/category/show/1', self::ROLE_ADMIN];
+        yield ['/category/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/category/pdf', self::ROLE_USER];
+        yield ['/category/pdf', self::ROLE_ADMIN];
+        yield ['/category/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/category/excel', self::ROLE_USER];
+        yield ['/category/excel', self::ROLE_ADMIN];
+        yield ['/category/excel', self::ROLE_SUPER_ADMIN];
     }
 
     /**

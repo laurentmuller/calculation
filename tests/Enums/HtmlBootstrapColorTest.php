@@ -21,18 +21,16 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(HtmlBootstrapColor::class)]
 class HtmlBootstrapColorTest extends TestCase
 {
-    public static function getColorValues(): array
+    public static function getColorValues(): \Iterator
     {
-        return [
-            [HtmlBootstrapColor::DANGER, '#DC3545'],
-            [HtmlBootstrapColor::DARK, '#343A40'],
-            [HtmlBootstrapColor::INFO, '#17A2B8'],
-            [HtmlBootstrapColor::LIGHT, '#F8F9FA'],
-            [HtmlBootstrapColor::PRIMARY, '#007BFF'],
-            [HtmlBootstrapColor::SECONDARY, '#6C757D'],
-            [HtmlBootstrapColor::SUCCESS, '#28A745'],
-            [HtmlBootstrapColor::WARNING, '#FFC107'],
-        ];
+        yield [HtmlBootstrapColor::DANGER, '#DC3545'];
+        yield [HtmlBootstrapColor::DARK, '#343A40'];
+        yield [HtmlBootstrapColor::INFO, '#17A2B8'];
+        yield [HtmlBootstrapColor::LIGHT, '#F8F9FA'];
+        yield [HtmlBootstrapColor::PRIMARY, '#007BFF'];
+        yield [HtmlBootstrapColor::SECONDARY, '#6C757D'];
+        yield [HtmlBootstrapColor::SUCCESS, '#28A745'];
+        yield [HtmlBootstrapColor::WARNING, '#FFC107'];
     }
 
     public static function getParseBorderColors(): \Generator
@@ -89,18 +87,16 @@ class HtmlBootstrapColorTest extends TestCase
         yield ['empty-class', null];
     }
 
-    public static function getPhpOfficeColors(): array
+    public static function getPhpOfficeColors(): \Iterator
     {
-        return [
-            [HtmlBootstrapColor::DANGER, 'DC3545'],
-            [HtmlBootstrapColor::DARK, '343A40'],
-            [HtmlBootstrapColor::INFO, '17A2B8'],
-            [HtmlBootstrapColor::LIGHT, 'F8F9FA'],
-            [HtmlBootstrapColor::PRIMARY, '007BFF'],
-            [HtmlBootstrapColor::SECONDARY, '6C757D'],
-            [HtmlBootstrapColor::SUCCESS, '28A745'],
-            [HtmlBootstrapColor::WARNING, 'FFC107'],
-        ];
+        yield [HtmlBootstrapColor::DANGER, 'DC3545'];
+        yield [HtmlBootstrapColor::DARK, '343A40'];
+        yield [HtmlBootstrapColor::INFO, '17A2B8'];
+        yield [HtmlBootstrapColor::LIGHT, 'F8F9FA'];
+        yield [HtmlBootstrapColor::PRIMARY, '007BFF'];
+        yield [HtmlBootstrapColor::SECONDARY, '6C757D'];
+        yield [HtmlBootstrapColor::SUCCESS, '28A745'];
+        yield [HtmlBootstrapColor::WARNING, 'FFC107'];
     }
 
     public function testCount(): void

@@ -19,139 +19,89 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(StringUtils::class)]
 class StringUtilsTest extends TestCase
 {
-    /**
-     * @return array<array{0: string, 1: string}>
-     */
-    public static function getAscii(): array
+    public static function getAscii(): \Iterator
     {
-        return [
-            ['home', 'home'],
-            ['नमस्ते', 'namaste'],
-            ['さよなら', 'sayonara'],
-            ['спасибо', 'spasibo'],
-        ];
+        yield ['home', 'home'];
+        yield ['नमस्ते', 'namaste'];
+        yield ['さよなら', 'sayonara'];
+        yield ['спасибо', 'spasibo'];
     }
 
-    /**
-     * @return array<array{0: string, 1: string}>
-     */
-    public static function getCapitalize(): array
+    public static function getCapitalize(): \Iterator
     {
-        return [
-            ['home', 'Home'],
-            ['hOmE', 'Home'],
-            ['my home', 'My home'],
-            ['my Home', 'My home'],
-            ['my HOME', 'My home'],
-        ];
+        yield ['home', 'Home'];
+        yield ['hOmE', 'Home'];
+        yield ['my home', 'My home'];
+        yield ['my Home', 'My home'];
+        yield ['my HOME', 'My home'];
     }
 
-    /**
-     * @return array<array{0: string, 1: string, 2: bool, 3: bool}>
-     */
-    public static function getContains(): array
+    public static function getContains(): \Iterator
     {
-        return [
-            ['fake', '', false, false],
-            ['before ab after', 'ab', false, true],
-            ['before AB after', 'ab', false, false],
-            ['before AB after', 'ab', true, true],
-        ];
+        yield ['fake', '', false, false];
+        yield ['before ab after', 'ab', false, true];
+        yield ['before AB after', 'ab', false, false];
+        yield ['before AB after', 'ab', true, true];
     }
 
-    /**
-     * @return array<array{0: string, 1: string, 2: bool, 3: bool}>
-     */
-    public static function getEndWith(): array
+    public static function getEndWith(): \Iterator
     {
-        return [
-            ['fake', '', false, false],
-            ['fake', 'ke', false, true],
-            ['fake', 'KE', false, false],
-            ['fake', 'KE', true, true],
-        ];
+        yield ['fake', '', false, false];
+        yield ['fake', 'ke', false, true];
+        yield ['fake', 'KE', false, false];
+        yield ['fake', 'KE', true, true];
     }
 
-    /**
-     * @return array<array{0: string, 1: string, 2?: bool}>
-     */
-    public static function getEqualIgnoreCase(): array
+    public static function getEqualIgnoreCase(): \Iterator
     {
-        return [
-            ['home', 'Home'],
-            ['home', 'HOME'],
-            ['a', 'b', false],
-        ];
+        yield ['home', 'Home'];
+        yield ['home', 'HOME'];
+        yield ['a', 'b', false];
     }
 
-    /**
-     * @return array<array{0: mixed, 1: mixed}>
-     */
-    public static function getExportVar(): array
+    public static function getExportVar(): \Iterator
     {
-        return [
-            [null, 'NULL'],
-            [true, 'true'],
-            [false, 'false'],
-            [0, '0'],
-            [0.0, '0.0'],
-            [0.01, '0.01'],
-            [1000, '1000'],
-            ['fake', "'fake'"],
-            [['key' => 'value'], self::getVarArray()],
-        ];
+        yield [null, 'NULL'];
+        yield [true, 'true'];
+        yield [false, 'false'];
+        yield [0, '0'];
+        yield [0.0, '0.0'];
+        yield [0.01, '0.01'];
+        yield [1000, '1000'];
+        yield ['fake', "'fake'"];
+        yield [['key' => 'value'], self::getVarArray()];
     }
 
-    /**
-     * @return array<array{0: string|null, 1: bool}>
-     */
-    public static function getIsString(): array
+    public static function getIsString(): \Iterator
     {
-        return [
-            [null, false],
-            ['', false],
-            ['my home', true],
-        ];
+        yield [null, false];
+        yield ['', false];
+        yield ['my home', true];
     }
 
-    /**
-     * @return array<array{0: object|string|null, 1: string|null, 2?: bool}>
-     */
-    public static function getShortName(): array
+    public static function getShortName(): \Iterator
     {
-        return [
-            [null, null, true],
-            [self::class, 'StringUtilsTest'],
-            [Calculation::class, 'Calculation'],
-            [new Calculation(), 'Calculation'],
-            ['invalid argument', null, true],
-        ];
+        yield [null, null, true];
+        yield [self::class, 'StringUtilsTest'];
+        yield [Calculation::class, 'Calculation'];
+        yield [new Calculation(), 'Calculation'];
+        yield ['invalid argument', null, true];
     }
 
-    /**
-     * @return array<array{0: string, 1: string, 2: bool, 3: bool}>
-     */
-    public static function getStartWith(): array
+    public static function getStartWith(): \Iterator
     {
-        return [
-            ['fake', '', false, false],
-            ['fake', 'fa', false, true],
-            ['fake', 'FA', false, false],
-            ['fake', 'FA', true, true],
-        ];
+        yield ['fake', '', false, false];
+        yield ['fake', 'fa', false, true];
+        yield ['fake', 'FA', false, false];
+        yield ['fake', 'FA', true, true];
     }
 
-    /**
-     * @return array<array{0: mixed, 1: string, 2: bool}>
-     */
-    public static function getToString(): array
+    public static function getToString(): \Iterator
     {
-        return [
-            [null, '', true],
-            [0, '0', true],
-            [1.0, '0', false],
-            ['a', '1', false],
-        ];
+        yield [null, '', true];
+        yield [0, '0', true];
+        yield [1.0, '0', false];
+        yield ['a', '1', false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getAscii')]

@@ -23,13 +23,11 @@ class PivotControllerTest extends AbstractControllerTestCase
     use CalculationTrait;
     use ProductTrait;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/pivot/csv', self::ROLE_USER],
-            ['/pivot/csv', self::ROLE_ADMIN],
-            ['/pivot/csv', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/pivot/csv', self::ROLE_USER];
+        yield ['/pivot/csv', self::ROLE_ADMIN];
+        yield ['/pivot/csv', self::ROLE_SUPER_ADMIN];
     }
 
     /**

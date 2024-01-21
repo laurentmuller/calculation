@@ -18,30 +18,20 @@ namespace App\Tests\Web;
 #[\PHPUnit\Framework\Attributes\CoversNothing]
 class UsersTest extends AbstractAuthenticateWebTestCase
 {
-    /**
-     * @return array<int, array<int, bool|string>>
-     */
-    public static function getUserExist(): array
+    public static function getUserExist(): \Iterator
     {
-        return [
-            [self::ROLE_USER, true],
-            [self::ROLE_ADMIN, true],
-            [self::ROLE_SUPER_ADMIN, true],
-            [self::ROLE_DISABLED, true],
-            [self::ROLE_FAKE, false],
-        ];
+        yield [self::ROLE_USER, true];
+        yield [self::ROLE_ADMIN, true];
+        yield [self::ROLE_SUPER_ADMIN, true];
+        yield [self::ROLE_DISABLED, true];
+        yield [self::ROLE_FAKE, false];
     }
 
-    /**
-     * @return array<int, array<int, string>>
-     */
-    public static function getUserRole(): array
+    public static function getUserRole(): \Iterator
     {
-        return [
-            [self::ROLE_USER],
-            [self::ROLE_ADMIN],
-            [self::ROLE_SUPER_ADMIN],
-        ];
+        yield [self::ROLE_USER];
+        yield [self::ROLE_ADMIN];
+        yield [self::ROLE_SUPER_ADMIN];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getUserExist')]

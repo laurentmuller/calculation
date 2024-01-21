@@ -33,46 +33,35 @@ class ConstantExtensionTest extends KernelTestCase
         }
     }
 
-    /**
-     * @return array<array{0: string, 1: int}>
-     */
-    public static function getCalculationServiceConstants(): array
+    public static function getCalculationServiceConstants(): \Iterator
     {
-        return [
-            ['ROW_EMPTY', 0],
-            ['ROW_GROUP', 1],
-            ['ROW_TOTAL_GROUP', 2],
-            ['ROW_GLOBAL_MARGIN', 3],
-            ['ROW_TOTAL_NET', 4],
-            ['ROW_USER_MARGIN', 5],
-            ['ROW_OVERALL_TOTAL', 6],
-        ];
+        yield ['ROW_EMPTY', 0];
+        yield ['ROW_GROUP', 1];
+        yield ['ROW_TOTAL_GROUP', 2];
+        yield ['ROW_GLOBAL_MARGIN', 3];
+        yield ['ROW_TOTAL_NET', 4];
+        yield ['ROW_USER_MARGIN', 5];
+        yield ['ROW_OVERALL_TOTAL', 6];
     }
 
-    /**
-     * @return array<array{0: string, 1: string}>
-     */
-    public static function getEntityVoterConstants(): array
+    public static function getEntityVoterConstants(): \Iterator
     {
-        return [
-            ['PERMISSION_ADD', 'ADD'],
-            ['PERMISSION_DELETE', 'DELETE'],
-            ['PERMISSION_EDIT', 'EDIT'],
-            ['PERMISSION_EXPORT', 'EXPORT'],
-            ['PERMISSION_LIST', 'LIST'],
-            ['PERMISSION_SHOW', 'SHOW'],
-
-            ['ENTITY_CALCULATION', 'EntityCalculation'],
-            ['ENTITY_CALCULATION_STATE', 'EntityCalculationState'],
-            ['ENTITY_CATEGORY', 'EntityCategory'],
-            ['ENTITY_CUSTOMER', 'EntityCustomer'],
-            ['ENTITY_GLOBAL_MARGIN', 'EntityGlobalMargin'],
-            ['ENTITY_GROUP', 'EntityGroup'],
-            ['ENTITY_LOG', 'EntityLog'],
-            ['ENTITY_PRODUCT', 'EntityProduct'],
-            ['ENTITY_TASK', 'EntityTask'],
-            ['ENTITY_USER', 'EntityUser'],
-        ];
+        yield ['PERMISSION_ADD', 'ADD'];
+        yield ['PERMISSION_DELETE', 'DELETE'];
+        yield ['PERMISSION_EDIT', 'EDIT'];
+        yield ['PERMISSION_EXPORT', 'EXPORT'];
+        yield ['PERMISSION_LIST', 'LIST'];
+        yield ['PERMISSION_SHOW', 'SHOW'];
+        yield ['ENTITY_CALCULATION', 'EntityCalculation'];
+        yield ['ENTITY_CALCULATION_STATE', 'EntityCalculationState'];
+        yield ['ENTITY_CATEGORY', 'EntityCategory'];
+        yield ['ENTITY_CUSTOMER', 'EntityCustomer'];
+        yield ['ENTITY_GLOBAL_MARGIN', 'EntityGlobalMargin'];
+        yield ['ENTITY_GROUP', 'EntityGroup'];
+        yield ['ENTITY_LOG', 'EntityLog'];
+        yield ['ENTITY_PRODUCT', 'EntityProduct'];
+        yield ['ENTITY_TASK', 'EntityTask'];
+        yield ['ENTITY_USER', 'EntityUser'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getCalculationServiceConstants')]

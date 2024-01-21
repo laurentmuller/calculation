@@ -20,75 +20,63 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(PositionService::class)]
 class PositionServiceTest extends TestCase
 {
-    public static function getDirections(): array
+    public static function getDirections(): \Iterator
     {
-        return [
-            [0, 'N'],
-            [22, 'N / N-E'],
-            [45, 'N-E'],
-            [68, 'E / N-E'],
-            [90, 'E'],
-            [113, 'E / S-E'],
-            [135, 'S-E'],
-            [158, 'S / S-E'],
-            [180, 'S'],
-            [203, 'S / S-W'],
-            [225, 'S-W'],
-            [248, 'W / S-W'],
-            [270, 'W'],
-            [296, 'W / N-W'],
-            [315, 'N-W'],
-            [338, 'N / N-W'],
-            [360, 'N'],
-            [361, 'N'],
-        ];
+        yield [0, 'N'];
+        yield [22, 'N / N-E'];
+        yield [45, 'N-E'];
+        yield [68, 'E / N-E'];
+        yield [90, 'E'];
+        yield [113, 'E / S-E'];
+        yield [135, 'S-E'];
+        yield [158, 'S / S-E'];
+        yield [180, 'S'];
+        yield [203, 'S / S-W'];
+        yield [225, 'S-W'];
+        yield [248, 'W / S-W'];
+        yield [270, 'W'];
+        yield [296, 'W / N-W'];
+        yield [315, 'N-W'];
+        yield [338, 'N / N-W'];
+        yield [360, 'N'];
+        yield [361, 'N'];
     }
 
-    public static function getFormatDirections(): array
+    public static function getFormatDirections(): \Iterator
     {
-        return [
-            [0, 'openweather.direction.N'],
-            [90, 'openweather.direction.E'],
-            [180, 'openweather.direction.S'],
-            [270, 'openweather.direction.W'],
-        ];
+        yield [0, 'openweather.direction.N'];
+        yield [90, 'openweather.direction.E'];
+        yield [180, 'openweather.direction.S'];
+        yield [270, 'openweather.direction.W'];
     }
 
-    public static function getLatitudes(): array
+    public static function getLatitudes(): \Iterator
     {
-        return [
-            [-91.0, '', true],
-            [-90.0, '90° 0\' 0" openweather.direction.S'],
-            [0.0, '0° 0\' 0" openweather.direction.N'],
-            [90.0, '90° 0\' 0" openweather.direction.N'],
-            [91.0, '', true],
-        ];
+        yield [-91.0, '', true];
+        yield [-90.0, '90° 0\' 0" openweather.direction.S'];
+        yield [0.0, '0° 0\' 0" openweather.direction.N'];
+        yield [90.0, '90° 0\' 0" openweather.direction.N'];
+        yield [91.0, '', true];
     }
 
-    public static function getLongitudes(): array
+    public static function getLongitudes(): \Iterator
     {
-        return [
-            [-181.0, '', true],
-            [-180.0, '180° 0\' 0" openweather.direction.W'],
-            [0.0, '0° 0\' 0" openweather.direction.E'],
-            [180.0, '180° 0\' 0" openweather.direction.E'],
-            [181.0, '', true],
-        ];
+        yield [-181.0, '', true];
+        yield [-180.0, '180° 0\' 0" openweather.direction.W'];
+        yield [0.0, '0° 0\' 0" openweather.direction.E'];
+        yield [180.0, '180° 0\' 0" openweather.direction.E'];
+        yield [181.0, '', true];
     }
 
-    public static function getPositions(): array
+    public static function getPositions(): \Iterator
     {
-        return [
-            [-90.0, -180.0, '90° 0\' 0" openweather.direction.S, 180° 0\' 0" openweather.direction.W'],
-            [0.0, 0.0, '0° 0\' 0" openweather.direction.N, 0° 0\' 0" openweather.direction.E'],
-            [90.0, +180, '90° 0\' 0" openweather.direction.N, 180° 0\' 0" openweather.direction.E'],
-
-            [-91.0, 0, '', true],
-            [+91.0, 0, '', true],
-
-            [0, -181, '', true],
-            [0, +181, '', true],
-        ];
+        yield [-90.0, -180.0, '90° 0\' 0" openweather.direction.S, 180° 0\' 0" openweather.direction.W'];
+        yield [0.0, 0.0, '0° 0\' 0" openweather.direction.N, 0° 0\' 0" openweather.direction.E'];
+        yield [90.0, +180, '90° 0\' 0" openweather.direction.N, 180° 0\' 0" openweather.direction.E'];
+        yield [-91.0, 0, '', true];
+        yield [+91.0, 0, '', true];
+        yield [0, -181, '', true];
+        yield [0, +181, '', true];
     }
 
     /**

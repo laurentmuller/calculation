@@ -21,49 +21,38 @@ class TaskControllerTest extends AbstractControllerTestCase
 {
     use TaskItemTrait;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/task', self::ROLE_USER],
-            ['/task', self::ROLE_ADMIN],
-            ['/task', self::ROLE_SUPER_ADMIN],
-
-            ['/task/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/task/add', self::ROLE_ADMIN],
-            ['/task/add', self::ROLE_SUPER_ADMIN],
-
-            ['/task/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/task/edit/1', self::ROLE_ADMIN],
-            ['/task/edit/1', self::ROLE_SUPER_ADMIN],
-
-            ['/task/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/task/clone/1', self::ROLE_ADMIN],
-            ['/task/clone/1', self::ROLE_SUPER_ADMIN],
-
-            ['/task/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/task/delete/1', self::ROLE_ADMIN],
-            ['/task/delete/1', self::ROLE_SUPER_ADMIN],
-
-            ['/task/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/task/clone/1', self::ROLE_ADMIN],
-            ['/task/clone/1', self::ROLE_SUPER_ADMIN],
-
-            ['/task/show/1', self::ROLE_USER],
-            ['/task/show/1', self::ROLE_ADMIN],
-            ['/task/show/1', self::ROLE_SUPER_ADMIN],
-
-            ['/task/pdf', self::ROLE_USER],
-            ['/task/pdf', self::ROLE_ADMIN],
-            ['/task/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/task/excel', self::ROLE_USER],
-            ['/task/excel', self::ROLE_ADMIN],
-            ['/task/excel', self::ROLE_SUPER_ADMIN],
-
-            ['/task/compute/1', self::ROLE_USER],
-            ['/task/compute/1', self::ROLE_ADMIN],
-            ['/task/compute/1', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/task', self::ROLE_USER];
+        yield ['/task', self::ROLE_ADMIN];
+        yield ['/task', self::ROLE_SUPER_ADMIN];
+        yield ['/task/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/task/add', self::ROLE_ADMIN];
+        yield ['/task/add', self::ROLE_SUPER_ADMIN];
+        yield ['/task/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/task/edit/1', self::ROLE_ADMIN];
+        yield ['/task/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/task/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/task/clone/1', self::ROLE_ADMIN];
+        yield ['/task/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/task/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/task/delete/1', self::ROLE_ADMIN];
+        yield ['/task/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/task/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/task/clone/1', self::ROLE_ADMIN];
+        yield ['/task/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/task/show/1', self::ROLE_USER];
+        yield ['/task/show/1', self::ROLE_ADMIN];
+        yield ['/task/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/task/pdf', self::ROLE_USER];
+        yield ['/task/pdf', self::ROLE_ADMIN];
+        yield ['/task/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/task/excel', self::ROLE_USER];
+        yield ['/task/excel', self::ROLE_ADMIN];
+        yield ['/task/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/task/compute/1', self::ROLE_USER];
+        yield ['/task/compute/1', self::ROLE_ADMIN];
+        yield ['/task/compute/1', self::ROLE_SUPER_ADMIN];
     }
 
     /**

@@ -18,16 +18,13 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(RegistrationController::class)]
 class RegistrationControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/register', self::ROLE_USER],
-            ['/register', self::ROLE_ADMIN],
-            ['/register', self::ROLE_SUPER_ADMIN],
-
-            ['/register/verify', self::ROLE_USER, Response::HTTP_FOUND],
-            ['/register/verify', self::ROLE_ADMIN, Response::HTTP_FOUND],
-            ['/register/verify', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND],
-        ];
+        yield ['/register', self::ROLE_USER];
+        yield ['/register', self::ROLE_ADMIN];
+        yield ['/register', self::ROLE_SUPER_ADMIN];
+        yield ['/register/verify', self::ROLE_USER, Response::HTTP_FOUND];
+        yield ['/register/verify', self::ROLE_ADMIN, Response::HTTP_FOUND];
+        yield ['/register/verify', self::ROLE_SUPER_ADMIN, Response::HTTP_FOUND];
     }
 }

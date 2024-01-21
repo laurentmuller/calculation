@@ -36,17 +36,15 @@ class AssetVersionServiceTest extends TestCase
         $this->service = new AssetVersionService($projectDir, Environment::TEST->value);
     }
 
-    public static function getPaths(): array
+    public static function getPaths(): \Iterator
     {
-        return [
-            [''],
-            ['/'],
-            ['/fake'],
-            ['/images'],
-            ['/images/'],
-            ['images/users/', true],
-            ['images/users/fake.png', true],
-        ];
+        yield [''];
+        yield ['/'];
+        yield ['/fake'];
+        yield ['/images'];
+        yield ['/images/'];
+        yield ['images/users/', true];
+        yield ['images/users/fake.png', true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getPaths')]

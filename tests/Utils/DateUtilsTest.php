@@ -25,25 +25,21 @@ class DateUtilsTest extends TestCase
         \setlocale(\LC_TIME, FormatUtils::LOCALE_FR_CH);
     }
 
-    public static function getCompletYears(): array
+    public static function getCompletYears(): \Iterator
     {
-        return [
-            [29, 2029],
-            [30, 2030],
-            [31, 1931],
-            [32, 1932],
-            [2, 2002],
-            [70, 1970],
-            [1932, 1932],
-            [2002, 2002],
-
-            [0, 2000],
-            [90, 1990],
-            [99, 1999],
-
-            [30, 2030, 1931],
-            [31, 2031, 1931],
-        ];
+        yield [29, 2029];
+        yield [30, 2030];
+        yield [31, 1931];
+        yield [32, 1932];
+        yield [2, 2002];
+        yield [70, 1970];
+        yield [1932, 1932];
+        yield [2002, 2002];
+        yield [0, 2000];
+        yield [90, 1990];
+        yield [99, 1999];
+        yield [30, 2030, 1931];
+        yield [31, 2031, 1931];
     }
 
     public static function getDays(): \Generator
@@ -58,41 +54,31 @@ class DateUtilsTest extends TestCase
         }
     }
 
-    /**
-     * @return array<array{0:\DateTimeInterface|null, 1: string|null}>
-     */
-    public static function getFormatFormDate(): array
+    public static function getFormatFormDate(): \Iterator
     {
-        return [
-            [null, null],
-            [new \DateTime('2022-1-1'), '2022-01-01'],
-            [new \DateTime('2022-9-9'), '2022-09-09'],
-            [new \DateTime('2022-01-01'), '2022-01-01'],
-            [new \DateTime('2022-12-31'), '2022-12-31'],
-            [new \DateTime('22-12-31'), '2022-12-31'],
-            [new \DateTime('22-2-1'), '2022-02-01'],
-        ];
+        yield [null, null];
+        yield [new \DateTime('2022-1-1'), '2022-01-01'];
+        yield [new \DateTime('2022-9-9'), '2022-09-09'];
+        yield [new \DateTime('2022-01-01'), '2022-01-01'];
+        yield [new \DateTime('2022-12-31'), '2022-12-31'];
+        yield [new \DateTime('22-12-31'), '2022-12-31'];
+        yield [new \DateTime('22-2-1'), '2022-02-01'];
     }
 
-    /**
-     * @return array<array{0:string, 1: int}>
-     */
-    public static function getMonthNames(): array
+    public static function getMonthNames(): \Iterator
     {
-        return [
-            ['Janvier', 1],
-            ['Février', 2],
-            ['Mars', 3],
-            ['Avril', 4],
-            ['Mai', 5],
-            ['Juin', 6],
-            ['Juillet', 7],
-            ['Août', 8],
-            ['Septembre', 9],
-            ['Octobre', 10],
-            ['Novembre', 11],
-            ['Décembre', 12],
-        ];
+        yield ['Janvier', 1];
+        yield ['Février', 2];
+        yield ['Mars', 3];
+        yield ['Avril', 4];
+        yield ['Mai', 5];
+        yield ['Juin', 6];
+        yield ['Juillet', 7];
+        yield ['Août', 8];
+        yield ['Septembre', 9];
+        yield ['Octobre', 10];
+        yield ['Novembre', 11];
+        yield ['Décembre', 12];
     }
 
     public static function getMonths(): \Generator
@@ -122,74 +108,60 @@ class DateUtilsTest extends TestCase
         yield [$date, $expected];
     }
 
-    /**
-     * @return array<array{0:string, 1: int}>
-     */
-    public static function getShortMonthNames(): array
+    public static function getShortMonthNames(): \Iterator
     {
-        return [
-            ['Janv.', 1],
-            ['Févr.', 2],
-            ['Mars', 3],
-            ['Avr.', 4],
-            ['Mai', 5],
-            ['Juin', 6],
-            ['Juil.', 7],
-            ['Août', 8],
-            ['Sept.', 9],
-            ['Oct.', 10],
-            ['Nov.', 11],
-            ['Déc.', 12],
-        ];
+        yield ['Janv.', 1];
+        yield ['Févr.', 2];
+        yield ['Mars', 3];
+        yield ['Avr.', 4];
+        yield ['Mai', 5];
+        yield ['Juin', 6];
+        yield ['Juil.', 7];
+        yield ['Août', 8];
+        yield ['Sept.', 9];
+        yield ['Oct.', 10];
+        yield ['Nov.', 11];
+        yield ['Déc.', 12];
     }
 
-    public static function getShortWeekdayNames(): array
+    public static function getShortWeekdayNames(): \Iterator
     {
-        return [
-            // default (sunday)
-            ['Dim.', 1],
-            ['Lun.', 2],
-            ['Mar.', 3],
-            ['Mer.', 4],
-            ['Jeu.', 5],
-            ['Ven.', 6],
-            ['Sam.', 7],
-
-            // monday
-            ['Lun.', 1, 'monday'],
-            ['Mar.', 2, 'monday'],
-            ['Mer.', 3, 'monday'],
-            ['Jeu.', 4, 'monday'],
-            ['Ven.', 5, 'monday'],
-            ['Sam.', 6, 'monday'],
-            ['Dim.', 7, 'monday'],
-        ];
+        // default (sunday)
+        yield ['Dim.', 1];
+        yield ['Lun.', 2];
+        yield ['Mar.', 3];
+        yield ['Mer.', 4];
+        yield ['Jeu.', 5];
+        yield ['Ven.', 6];
+        yield ['Sam.', 7];
+        // monday
+        yield ['Lun.', 1, 'monday'];
+        yield ['Mar.', 2, 'monday'];
+        yield ['Mer.', 3, 'monday'];
+        yield ['Jeu.', 4, 'monday'];
+        yield ['Ven.', 5, 'monday'];
+        yield ['Sam.', 6, 'monday'];
+        yield ['Dim.', 7, 'monday'];
     }
 
-    /**
-     * @return array<array{0:string, 1: int, 2?: string}>
-     */
-    public static function getWeekdayNames(): array
+    public static function getWeekdayNames(): \Iterator
     {
-        return [
-            // default (sunday)
-            ['Dimanche', 1],
-            ['Lundi', 2],
-            ['Mardi', 3],
-            ['Mercredi', 4],
-            ['Jeudi', 5],
-            ['Vendredi', 6],
-            ['Samedi', 7],
-
-            // monday
-            ['Lundi', 1, 'monday'],
-            ['Mardi', 2, 'monday'],
-            ['Mercredi', 3, 'monday'],
-            ['Jeudi', 4, 'monday'],
-            ['Vendredi', 5, 'monday'],
-            ['Samedi', 6, 'monday'],
-            ['Dimanche', 7, 'monday'],
-        ];
+        // default (sunday)
+        yield ['Dimanche', 1];
+        yield ['Lundi', 2];
+        yield ['Mardi', 3];
+        yield ['Mercredi', 4];
+        yield ['Jeudi', 5];
+        yield ['Vendredi', 6];
+        yield ['Samedi', 7];
+        // monday
+        yield ['Lundi', 1, 'monday'];
+        yield ['Mardi', 2, 'monday'];
+        yield ['Mercredi', 3, 'monday'];
+        yield ['Jeudi', 4, 'monday'];
+        yield ['Vendredi', 5, 'monday'];
+        yield ['Samedi', 6, 'monday'];
+        yield ['Dimanche', 7, 'monday'];
     }
 
     public static function getWeeks(): \Generator

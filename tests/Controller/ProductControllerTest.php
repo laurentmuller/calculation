@@ -21,41 +21,32 @@ class ProductControllerTest extends AbstractControllerTestCase
 {
     use ProductTrait;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/product', self::ROLE_USER],
-            ['/product', self::ROLE_ADMIN],
-            ['/product', self::ROLE_SUPER_ADMIN],
-
-            ['/product/add', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/product/add', self::ROLE_ADMIN],
-            ['/product/add', self::ROLE_SUPER_ADMIN],
-
-            ['/product/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/product/edit/1', self::ROLE_ADMIN],
-            ['/product/edit/1', self::ROLE_SUPER_ADMIN],
-
-            ['/product/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/product/delete/1', self::ROLE_ADMIN],
-            ['/product/delete/1', self::ROLE_SUPER_ADMIN],
-
-            ['/product/show/1', self::ROLE_USER],
-            ['/product/show/1', self::ROLE_ADMIN],
-            ['/product/show/1', self::ROLE_SUPER_ADMIN],
-
-            ['/product/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/product/clone/1', self::ROLE_ADMIN],
-            ['/product/clone/1', self::ROLE_SUPER_ADMIN],
-
-            ['/product/pdf', self::ROLE_USER],
-            ['/product/pdf', self::ROLE_ADMIN],
-            ['/product/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/product/excel', self::ROLE_USER],
-            ['/product/excel', self::ROLE_ADMIN],
-            ['/product/excel', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/product', self::ROLE_USER];
+        yield ['/product', self::ROLE_ADMIN];
+        yield ['/product', self::ROLE_SUPER_ADMIN];
+        yield ['/product/add', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/product/add', self::ROLE_ADMIN];
+        yield ['/product/add', self::ROLE_SUPER_ADMIN];
+        yield ['/product/edit/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/product/edit/1', self::ROLE_ADMIN];
+        yield ['/product/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/product/delete/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/product/delete/1', self::ROLE_ADMIN];
+        yield ['/product/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/product/show/1', self::ROLE_USER];
+        yield ['/product/show/1', self::ROLE_ADMIN];
+        yield ['/product/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/product/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/product/clone/1', self::ROLE_ADMIN];
+        yield ['/product/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/product/pdf', self::ROLE_USER];
+        yield ['/product/pdf', self::ROLE_ADMIN];
+        yield ['/product/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/product/excel', self::ROLE_USER];
+        yield ['/product/excel', self::ROLE_ADMIN];
+        yield ['/product/excel', self::ROLE_SUPER_ADMIN];
     }
 
     /**

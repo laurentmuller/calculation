@@ -28,7 +28,7 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      *
      * Each entry must contain a URL, a username, an optional expected result, request method and XML http request.
      */
-    abstract public static function getRoutes(): array|\Generator;
+    abstract public static function getRoutes(): \Iterator;
 
     /**
      * Checks the given route.

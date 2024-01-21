@@ -20,13 +20,11 @@ class ImageSizeTraitTest extends TestCase
 {
     use ImageSizeTrait;
 
-    public static function getSizes(): array
+    public static function getSizes(): \Iterator
     {
-        return [
-            ['', [0, 0]],
-            [__DIR__ . '/../Data/android.png', [124, 147]],
-            [__DIR__ . '/../Data/bibi.jpg', [360, 308]],
-        ];
+        yield ['', [0, 0]];
+        yield [__DIR__ . '/../Data/android.png', [124, 147]];
+        yield [__DIR__ . '/../Data/bibi.jpg', [360, 308]];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getSizes')]

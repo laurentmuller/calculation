@@ -18,37 +18,30 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(PdfBorder::class)]
 class PdfBorderTest extends TestCase
 {
-    public static function getBorders(): array
+    public static function getBorders(): \Iterator
     {
-        return [
-            [-1, PdfBorder::INHERITED],
-            [0, PdfBorder::NONE],
-            [1, PdfBorder::ALL],
-
-            ['F', PdfBorder::FILL],
-            ['D', PdfBorder::BORDER],
-            ['FD', PdfBorder::BOTH],
-
-            ['L', PdfBorder::LEFT],
-            ['R', PdfBorder::RIGHT],
-            ['T', PdfBorder::TOP],
-            ['B', PdfBorder::BOTTOM],
-
-            ['', PdfBorder::NONE],
-            [1000, PdfBorder::NONE],
-            [-2, PdfBorder::NONE],
-
-            ['LR', 'LR'],
-            ['TB', 'TB'],
-            ['LR', 'LR'],
-            ['TR', 'TR'],
-            ['LRTB', PdfBorder::ALL],
-            ['RTBL', PdfBorder::ALL],
-
-            ['A', PdfBorder::NONE],
-            ['RR', PdfBorder::RIGHT],
-            ['RA', PdfBorder::RIGHT],
-        ];
+        yield [-1, PdfBorder::INHERITED];
+        yield [0, PdfBorder::NONE];
+        yield [1, PdfBorder::ALL];
+        yield ['F', PdfBorder::FILL];
+        yield ['D', PdfBorder::BORDER];
+        yield ['FD', PdfBorder::BOTH];
+        yield ['L', PdfBorder::LEFT];
+        yield ['R', PdfBorder::RIGHT];
+        yield ['T', PdfBorder::TOP];
+        yield ['B', PdfBorder::BOTTOM];
+        yield ['', PdfBorder::NONE];
+        yield [1000, PdfBorder::NONE];
+        yield [-2, PdfBorder::NONE];
+        yield ['LR', 'LR'];
+        yield ['TB', 'TB'];
+        yield ['LR', 'LR'];
+        yield ['TR', 'TR'];
+        yield ['LRTB', PdfBorder::ALL];
+        yield ['RTBL', PdfBorder::ALL];
+        yield ['A', PdfBorder::NONE];
+        yield ['RR', PdfBorder::RIGHT];
+        yield ['RA', PdfBorder::RIGHT];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getBorders')]

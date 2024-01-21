@@ -20,24 +20,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(Importance::class)]
 class ImportanceTest extends TestCase
 {
-    public static function getLabel(): array
+    public static function getLabel(): \Iterator
     {
-        return [
-            ['importance.high', Importance::HIGH],
-            ['importance.low', Importance::LOW],
-            ['importance.medium', Importance::MEDIUM],
-            ['importance.urgent', Importance::URGENT],
-        ];
+        yield ['importance.high', Importance::HIGH];
+        yield ['importance.low', Importance::LOW];
+        yield ['importance.medium', Importance::MEDIUM];
+        yield ['importance.urgent', Importance::URGENT];
     }
 
-    public static function getValues(): array
+    public static function getValues(): \Iterator
     {
-        return [
-            [Importance::HIGH, 'high'],
-            [Importance::LOW, 'low'],
-            [Importance::MEDIUM, 'medium'],
-            [Importance::URGENT, 'urgent'],
-        ];
+        yield [Importance::HIGH, 'high'];
+        yield [Importance::LOW, 'low'];
+        yield [Importance::MEDIUM, 'medium'];
+        yield [Importance::URGENT, 'urgent'];
     }
 
     public function testCount(): void

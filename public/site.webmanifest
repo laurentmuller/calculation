@@ -56,7 +56,7 @@
     ],
     "screenshots": [
         {
-            "src": "help/images/home.png",
+            "src": "public/screenshots/home_light.png",
             "sizes": "1110x800",
             "type": "image/png"
         }

@@ -21,36 +21,30 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(StrengthLevel::class)]
 class StrengthLevelTest extends TestCase
 {
-    public static function getDefault(): array
+    public static function getDefault(): \Iterator
     {
-        return [
-            [StrengthLevel::getDefault(), StrengthLevel::NONE],
-            [PropertyServiceInterface::DEFAULT_STRENGTH_LEVEL, StrengthLevel::NONE],
-        ];
+        yield [StrengthLevel::getDefault(), StrengthLevel::NONE];
+        yield [PropertyServiceInterface::DEFAULT_STRENGTH_LEVEL, StrengthLevel::NONE];
     }
 
-    public static function getLabels(): array
+    public static function getLabels(): \Iterator
     {
-        return [
-            ['strength_level.medium', StrengthLevel::MEDIUM],
-            ['strength_level.none', StrengthLevel::NONE],
-            ['strength_level.strong', StrengthLevel::STRONG],
-            ['strength_level.very_strong', StrengthLevel::VERY_STRONG],
-            ['strength_level.very_weak', StrengthLevel::VERY_WEAK],
-            ['strength_level.weak', StrengthLevel::WEAK],
-        ];
+        yield ['strength_level.medium', StrengthLevel::MEDIUM];
+        yield ['strength_level.none', StrengthLevel::NONE];
+        yield ['strength_level.strong', StrengthLevel::STRONG];
+        yield ['strength_level.very_strong', StrengthLevel::VERY_STRONG];
+        yield ['strength_level.very_weak', StrengthLevel::VERY_WEAK];
+        yield ['strength_level.weak', StrengthLevel::WEAK];
     }
 
-    public static function getValues(): array
+    public static function getValues(): \Iterator
     {
-        return [
-            [StrengthLevel::NONE, -1],
-            [StrengthLevel::VERY_WEAK, 0],
-            [StrengthLevel::WEAK, 1],
-            [StrengthLevel::MEDIUM, 2],
-            [StrengthLevel::STRONG, 3],
-            [StrengthLevel::VERY_STRONG, 4],
-        ];
+        yield [StrengthLevel::NONE, -1];
+        yield [StrengthLevel::VERY_WEAK, 0];
+        yield [StrengthLevel::WEAK, 1];
+        yield [StrengthLevel::MEDIUM, 2];
+        yield [StrengthLevel::STRONG, 3];
+        yield [StrengthLevel::VERY_STRONG, 4];
     }
 
     public function testCount(): void

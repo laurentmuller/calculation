@@ -43,18 +43,16 @@ class ProductUpdateServiceTest extends TestCase
         $this->user->setUsername('system');
     }
 
-    public static function getFixedRounded(): array
+    public static function getFixedRounded(): \Iterator
     {
-        return [
-            [1.00, 2.00],
-            [1.01, 2.00],
-            [1.02, 2.00],
-            [1.025, 2.00],
-            [1.0251, 2.05],
-            [1.03, 2.05],
-            [1.04, 2.05],
-            [1.05, 2.05],
-        ];
+        yield [1.00, 2.00];
+        yield [1.01, 2.00];
+        yield [1.02, 2.00];
+        yield [1.025, 2.00];
+        yield [1.0251, 2.05];
+        yield [1.03, 2.05];
+        yield [1.04, 2.05];
+        yield [1.05, 2.05];
     }
 
     public static function getPercentRounded(): \Generator

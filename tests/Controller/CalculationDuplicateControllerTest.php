@@ -23,21 +23,17 @@ class CalculationDuplicateControllerTest extends AbstractControllerTestCase
     use CalculationTrait;
     use ProductTrait;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/calculation/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/duplicate', self::ROLE_ADMIN],
-            ['/calculation/duplicate', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/duplicate/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/duplicate/pdf', self::ROLE_ADMIN],
-            ['/calculation/duplicate/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/duplicate/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/calculation/duplicate/excel', self::ROLE_ADMIN],
-            ['/calculation/duplicate/excel', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/calculation/duplicate', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/calculation/duplicate', self::ROLE_ADMIN];
+        yield ['/calculation/duplicate', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/duplicate/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/calculation/duplicate/pdf', self::ROLE_ADMIN];
+        yield ['/calculation/duplicate/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/duplicate/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/calculation/duplicate/excel', self::ROLE_ADMIN];
+        yield ['/calculation/duplicate/excel', self::ROLE_SUPER_ADMIN];
     }
 
     /**

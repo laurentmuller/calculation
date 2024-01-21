@@ -25,30 +25,24 @@ class RoleTranslatorTraitTest extends TestCase
 
     private ?TranslatorInterface $translator = null;
 
-    public static function getRoleIcons(): array
+    public static function getRoleIcons(): \Iterator
     {
-        return [
-            [RoleInterface::ROLE_USER, 'fa-solid fa-user'],
-            [RoleInterface::ROLE_ADMIN, 'fa-solid fa-user-shield'],
-            [RoleInterface::ROLE_SUPER_ADMIN, 'fa-solid fa-user-gear'],
-
-            [new Role(RoleInterface::ROLE_USER), 'fa-solid fa-user'],
-            [new Role(RoleInterface::ROLE_ADMIN), 'fa-solid fa-user-shield'],
-            [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'fa-solid fa-user-gear'],
-        ];
+        yield [RoleInterface::ROLE_USER, 'fa-solid fa-user'];
+        yield [RoleInterface::ROLE_ADMIN, 'fa-solid fa-user-shield'];
+        yield [RoleInterface::ROLE_SUPER_ADMIN, 'fa-solid fa-user-gear'];
+        yield [new Role(RoleInterface::ROLE_USER), 'fa-solid fa-user'];
+        yield [new Role(RoleInterface::ROLE_ADMIN), 'fa-solid fa-user-shield'];
+        yield [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'fa-solid fa-user-gear'];
     }
 
-    public static function getTranslateRoles(): array
+    public static function getTranslateRoles(): \Iterator
     {
-        return [
-            [RoleInterface::ROLE_USER, 'user.roles.user'],
-            [RoleInterface::ROLE_ADMIN, 'user.roles.admin'],
-            [RoleInterface::ROLE_SUPER_ADMIN, 'user.roles.super_admin'],
-
-            [new Role(RoleInterface::ROLE_USER), 'user.roles.user'],
-            [new Role(RoleInterface::ROLE_ADMIN), 'user.roles.admin'],
-            [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'user.roles.super_admin'],
-        ];
+        yield [RoleInterface::ROLE_USER, 'user.roles.user'];
+        yield [RoleInterface::ROLE_ADMIN, 'user.roles.admin'];
+        yield [RoleInterface::ROLE_SUPER_ADMIN, 'user.roles.super_admin'];
+        yield [new Role(RoleInterface::ROLE_USER), 'user.roles.user'];
+        yield [new Role(RoleInterface::ROLE_ADMIN), 'user.roles.admin'];
+        yield [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'user.roles.super_admin'];
     }
 
     public function getTranslator(): TranslatorInterface

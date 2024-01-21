@@ -80,21 +80,19 @@ class PdfColorTest extends TestCase
         yield ['0xFFF'];
     }
 
-    public static function getNamedColors(): array
+    public static function getNamedColors(): \Iterator
     {
-        return [
-            ['black', 0, 0, 0],
-            ['blue', 0, 0, 255],
-            ['cellBorder', 221, 221, 221],
-            ['darkGray', 169, 169, 169],
-            ['darkGreen', 0, 128, 0],
-            ['darkRed', 128, 0, 0],
-            ['green', 0, 255, 0],
-            ['header', 245, 245, 245],
-            ['link', 0, 0, 255],
-            ['red', 255, 0, 0],
-            ['white', 255, 255, 255],
-        ];
+        yield ['black', 0, 0, 0];
+        yield ['blue', 0, 0, 255];
+        yield ['cellBorder', 221, 221, 221];
+        yield ['darkGray', 169, 169, 169];
+        yield ['darkGreen', 0, 128, 0];
+        yield ['darkRed', 128, 0, 0];
+        yield ['green', 0, 255, 0];
+        yield ['header', 245, 245, 245];
+        yield ['link', 0, 0, 255];
+        yield ['red', 255, 0, 0];
+        yield ['white', 255, 255, 255];
     }
 
     public static function getValidColors(): \Generator

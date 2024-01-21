@@ -21,67 +21,53 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(Theme::class)]
 class ThemeTest extends TestCase
 {
-    public static function getHelps(): array
+    public static function getHelps(): \Iterator
     {
-        return [
-            [Theme::AUTO, 'theme.auto.help'],
-            [Theme::DARK, 'theme.dark.help'],
-            [Theme::LIGHT, 'theme.light.help'],
-        ];
+        yield [Theme::AUTO, 'theme.auto.help'];
+        yield [Theme::DARK, 'theme.dark.help'];
+        yield [Theme::LIGHT, 'theme.light.help'];
     }
 
-    public static function getIcons(): array
+    public static function getIcons(): \Iterator
     {
-        return [
-            [Theme::AUTO, 'fa-solid fa-circle-half-stroke'],
-            [Theme::DARK, 'fa-solid fa-moon'],
-            [Theme::LIGHT, 'fa-solid fa-sun'],
-        ];
+        yield [Theme::AUTO, 'fa-solid fa-circle-half-stroke'];
+        yield [Theme::DARK, 'fa-solid fa-moon'];
+        yield [Theme::LIGHT, 'fa-solid fa-sun'];
     }
 
-    public static function getLabels(): array
+    public static function getLabels(): \Iterator
     {
-        return [
-            [Theme::AUTO, 'theme.auto.name'],
-            [Theme::DARK, 'theme.dark.name'],
-            [Theme::LIGHT, 'theme.light.name'],
-        ];
+        yield [Theme::AUTO, 'theme.auto.name'];
+        yield [Theme::DARK, 'theme.dark.name'];
+        yield [Theme::LIGHT, 'theme.light.name'];
     }
 
-    public static function getSuccess(): array
+    public static function getSuccess(): \Iterator
     {
-        return [
-            [Theme::AUTO, 'theme.auto.success'],
-            [Theme::DARK, 'theme.dark.success'],
-            [Theme::LIGHT, 'theme.light.success'],
-        ];
+        yield [Theme::AUTO, 'theme.auto.success'];
+        yield [Theme::DARK, 'theme.dark.success'];
+        yield [Theme::LIGHT, 'theme.light.success'];
     }
 
-    public static function getTitles(): array
+    public static function getTitles(): \Iterator
     {
-        return [
-            [Theme::AUTO, 'theme.auto.title'],
-            [Theme::DARK, 'theme.dark.title'],
-            [Theme::LIGHT, 'theme.light.title'],
-        ];
+        yield [Theme::AUTO, 'theme.auto.title'];
+        yield [Theme::DARK, 'theme.dark.title'];
+        yield [Theme::LIGHT, 'theme.light.title'];
     }
 
-    public static function getTranslates(): array
+    public static function getTranslates(): \Iterator
     {
-        return [
-            [Theme::AUTO, 'theme.auto.name'],
-            [Theme::DARK, 'theme.dark.name'],
-            [Theme::LIGHT, 'theme.light.name'],
-        ];
+        yield [Theme::AUTO, 'theme.auto.name'];
+        yield [Theme::DARK, 'theme.dark.name'];
+        yield [Theme::LIGHT, 'theme.light.name'];
     }
 
-    public static function getValues(): array
+    public static function getValues(): \Iterator
     {
-        return [
-            [Theme::AUTO, 'auto'],
-            [Theme::DARK, 'dark'],
-            [Theme::LIGHT, 'light'],
-        ];
+        yield [Theme::AUTO, 'auto'];
+        yield [Theme::DARK, 'dark'];
+        yield [Theme::LIGHT, 'light'];
     }
 
     public function testCount(): void

@@ -18,12 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(IpStackController::class)]
 class IpStackControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/ipstack', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/ipstack', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/ipstack', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/ipstack', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/ipstack', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
+        yield ['/ipstack', self::ROLE_SUPER_ADMIN];
     }
 }

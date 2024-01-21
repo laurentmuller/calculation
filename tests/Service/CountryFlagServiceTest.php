@@ -25,29 +25,23 @@ class CountryFlagServiceTest extends TestCase
         $this->service = new CountryFlagService();
     }
 
-    public static function getDefaultCodes(): array
+    public static function getDefaultCodes(): \Iterator
     {
-        return [
-            ['en-US', 'US'],
-            ['fr-CH', 'CH'],
-            ['sl-Latn-IT', 'IT'],
-            ['sl-Latn-IT-nedis', 'IT'],
-            ['zh_Hans_MO', 'MO'],
-        ];
+        yield ['en-US', 'US'];
+        yield ['fr-CH', 'CH'];
+        yield ['sl-Latn-IT', 'IT'];
+        yield ['sl-Latn-IT-nedis', 'IT'];
+        yield ['zh_Hans_MO', 'MO'];
     }
 
-    public static function getFlags(): array
+    public static function getFlags(): \Iterator
     {
-        return [
-            ['CH', '🇨🇭'],
-            ['CH', '🇨🇭', true],
-            ['CH', '🇨🇭', false],
-
-            ['FR', '🇫🇷'],
-
-            ['ZZ', '', true, true],
-            ['ZZ', '', false],
-        ];
+        yield ['CH', '🇨🇭'];
+        yield ['CH', '🇨🇭', true];
+        yield ['CH', '🇨🇭', false];
+        yield ['FR', '🇫🇷'];
+        yield ['ZZ', '', true, true];
+        yield ['ZZ', '', false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getDefaultCodes')]

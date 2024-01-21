@@ -22,57 +22,40 @@ use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(PasswordValidator::class)]
 class PasswordValidatorTest extends ConstraintValidatorTestCase
 {
-    public static function getConstraints(): array
+    public static function getConstraints(): \Iterator
     {
-        return [
-            ['case_diff'],
-            ['email'],
-            ['letters'],
-            ['numbers'],
-            ['special_char'],
-            ['pwned'],
-        ];
+        yield ['case_diff'];
+        yield ['email'];
+        yield ['letters'];
+        yield ['numbers'];
+        yield ['special_char'];
+        yield ['pwned'];
     }
 
-    /**
-     * @return array<array{0:string, 1: array, 2: string, 3: string}>
-     */
-    public static function getInvalidValues(): array
+    public static function getInvalidValues(): \Iterator
     {
-        return [
-            ['abc', ['case_diff' => true], 'password.case_diff', Password::CASE_DIFF_ERROR],
-            ['myemail@website.com', ['email' => true], 'password.email', Password::EMAIL_ERROR],
-            ['123', ['letters' => true], 'password.letters', Password::LETTERS_ERROR],
-            ['@@@', ['letters' => true, 'numbers' => true], 'password.letters', Password::LETTERS_ERROR],
-            ['abc', ['numbers' => true], 'password.numbers', Password::NUMBERS_ERROR],
-            ['123', ['special_char' => true], 'password.special_char', Password::SPECIAL_CHAR_ERROR],
-        ];
+        yield ['abc', ['case_diff' => true], 'password.case_diff', Password::CASE_DIFF_ERROR];
+        yield ['myemail@website.com', ['email' => true], 'password.email', Password::EMAIL_ERROR];
+        yield ['123', ['letters' => true], 'password.letters', Password::LETTERS_ERROR];
+        yield ['@@@', ['letters' => true, 'numbers' => true], 'password.letters', Password::LETTERS_ERROR];
+        yield ['abc', ['numbers' => true], 'password.numbers', Password::NUMBERS_ERROR];
+        yield ['123', ['special_char' => true], 'password.special_char', Password::SPECIAL_CHAR_ERROR];
     }
 
-    /**
-     * @return array<array{0:string, 1:bool}>
-     */
-    public static function getPasswords(): array
+    public static function getPasswords(): \Iterator
     {
-        return [
-            ['123456', true],
-            ['123*9-*55sA', false],
-        ];
+        yield ['123456', true];
+        yield ['123*9-*55sA', false];
     }
 
-    /**
-     * @return array<array{0:string, 1: array}>
-     */
-    public static function getValidValues(): array
+    public static function getValidValues(): \Iterator
     {
-        return [
-            ['ABC abc', ['case_diff' => true]],
-            ['test', ['email' => true]],
-            ['abc', ['letters' => true]],
-            ['123', ['numbers' => true]],
-            ['123*9-*55sA', ['pwned' => true]],
-            ['123@', ['special_char' => true]],
-        ];
+        yield ['ABC abc', ['case_diff' => true]];
+        yield ['test', ['email' => true]];
+        yield ['abc', ['letters' => true]];
+        yield ['123', ['numbers' => true]];
+        yield ['123*9-*55sA', ['pwned' => true]];
+        yield ['123@', ['special_char' => true]];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getConstraints')]

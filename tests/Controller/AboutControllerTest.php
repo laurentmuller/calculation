@@ -28,95 +28,77 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(AboutSymfonyController::class)]
 class AboutControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/about', '', Response::HTTP_FOUND], // redirect to login page
-            ['/about', self::ROLE_USER],
-            ['/about', self::ROLE_ADMIN],
-            ['/about', self::ROLE_SUPER_ADMIN],
-
-            ['/about/pdf', self::ROLE_USER],
-            ['/about/pdf', self::ROLE_ADMIN],
-            ['/about/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/about/word', self::ROLE_USER],
-            ['/about/word', self::ROLE_ADMIN],
-            ['/about/word', self::ROLE_SUPER_ADMIN],
-
-            ['/about/licence'],
-            ['/about/licence', self::ROLE_USER],
-            ['/about/licence', self::ROLE_ADMIN],
-            ['/about/licence', self::ROLE_SUPER_ADMIN],
-
-            ['/about/licence/content', self::ROLE_USER],
-            ['/about/licence/content', self::ROLE_ADMIN],
-            ['/about/licence/content', self::ROLE_SUPER_ADMIN],
-
-            ['/about/licence/pdf'],
-            ['/about/licence/pdf', self::ROLE_USER],
-            ['/about/licence/pdf', self::ROLE_ADMIN],
-            ['/about/licence/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/about/licence/word', '', Response::HTTP_FOUND], // redirect to login page
-            ['/about/licence/word', self::ROLE_USER],
-            ['/about/licence/word', self::ROLE_ADMIN],
-            ['/about/licence/word', self::ROLE_SUPER_ADMIN],
-
-            ['/about/mysql/content', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/mysql/content', self::ROLE_ADMIN],
-            ['/about/mysql/content', self::ROLE_SUPER_ADMIN],
-
-            ['/about/mysql/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/mysql/excel', self::ROLE_ADMIN],
-            ['/about/mysql/excel', self::ROLE_SUPER_ADMIN],
-
-            ['/about/mysql/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/mysql/pdf', self::ROLE_ADMIN],
-            ['/about/mysql/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/about/php/content', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/php/content', self::ROLE_ADMIN],
-            ['/about/php/content', self::ROLE_SUPER_ADMIN],
-
-            ['/about/php/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/php/excel', self::ROLE_ADMIN],
-            ['/about/php/excel', self::ROLE_SUPER_ADMIN],
-
-            ['/about/php/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/php/pdf', self::ROLE_ADMIN],
-            ['/about/php/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/about/policy'],
-            ['/about/policy', self::ROLE_USER],
-            ['/about/policy', self::ROLE_ADMIN],
-            ['/about/policy', self::ROLE_SUPER_ADMIN],
-
-            ['/about/policy/content', self::ROLE_USER],
-            ['/about/policy/content', self::ROLE_ADMIN],
-            ['/about/policy/content', self::ROLE_SUPER_ADMIN],
-
-            ['/about/policy/pdf'],
-            ['/about/policy/pdf', self::ROLE_USER],
-            ['/about/policy/pdf', self::ROLE_ADMIN],
-            ['/about/policy/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/about/policy/word', '', Response::HTTP_FOUND], // redirect to login page
-            ['/about/policy/word', self::ROLE_USER],
-            ['/about/policy/word', self::ROLE_ADMIN],
-            ['/about/policy/word', self::ROLE_SUPER_ADMIN],
-
-            ['/about/symfony/content', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/symfony/content', self::ROLE_ADMIN],
-            ['/about/symfony/content', self::ROLE_SUPER_ADMIN],
-
-            ['/about/symfony/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/symfony/excel', self::ROLE_ADMIN],
-            ['/about/symfony/excel', self::ROLE_SUPER_ADMIN],
-
-            ['/about/symfony/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/about/symfony/pdf', self::ROLE_ADMIN],
-            ['/about/symfony/pdf', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/about', '', Response::HTTP_FOUND];
+        // redirect to login page
+        yield ['/about', self::ROLE_USER];
+        yield ['/about', self::ROLE_ADMIN];
+        yield ['/about', self::ROLE_SUPER_ADMIN];
+        yield ['/about/pdf', self::ROLE_USER];
+        yield ['/about/pdf', self::ROLE_ADMIN];
+        yield ['/about/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/about/word', self::ROLE_USER];
+        yield ['/about/word', self::ROLE_ADMIN];
+        yield ['/about/word', self::ROLE_SUPER_ADMIN];
+        yield ['/about/licence'];
+        yield ['/about/licence', self::ROLE_USER];
+        yield ['/about/licence', self::ROLE_ADMIN];
+        yield ['/about/licence', self::ROLE_SUPER_ADMIN];
+        yield ['/about/licence/content', self::ROLE_USER];
+        yield ['/about/licence/content', self::ROLE_ADMIN];
+        yield ['/about/licence/content', self::ROLE_SUPER_ADMIN];
+        yield ['/about/licence/pdf'];
+        yield ['/about/licence/pdf', self::ROLE_USER];
+        yield ['/about/licence/pdf', self::ROLE_ADMIN];
+        yield ['/about/licence/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/about/licence/word', '', Response::HTTP_FOUND];
+        // redirect to login page
+        yield ['/about/licence/word', self::ROLE_USER];
+        yield ['/about/licence/word', self::ROLE_ADMIN];
+        yield ['/about/licence/word', self::ROLE_SUPER_ADMIN];
+        yield ['/about/mysql/content', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/about/mysql/content', self::ROLE_ADMIN];
+        yield ['/about/mysql/content', self::ROLE_SUPER_ADMIN];
+        yield ['/about/mysql/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/about/mysql/excel', self::ROLE_ADMIN];
+        yield ['/about/mysql/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/about/mysql/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/about/mysql/pdf', self::ROLE_ADMIN];
+        yield ['/about/mysql/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/about/php/content', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/about/php/content', self::ROLE_ADMIN];
+        yield ['/about/php/content', self::ROLE_SUPER_ADMIN];
+        yield ['/about/php/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/about/php/excel', self::ROLE_ADMIN];
+        yield ['/about/php/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/about/php/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/about/php/pdf', self::ROLE_ADMIN];
+        yield ['/about/php/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/about/policy'];
+        yield ['/about/policy', self::ROLE_USER];
+        yield ['/about/policy', self::ROLE_ADMIN];
+        yield ['/about/policy', self::ROLE_SUPER_ADMIN];
+        yield ['/about/policy/content', self::ROLE_USER];
+        yield ['/about/policy/content', self::ROLE_ADMIN];
+        yield ['/about/policy/content', self::ROLE_SUPER_ADMIN];
+        yield ['/about/policy/pdf'];
+        yield ['/about/policy/pdf', self::ROLE_USER];
+        yield ['/about/policy/pdf', self::ROLE_ADMIN];
+        yield ['/about/policy/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/about/policy/word', '', Response::HTTP_FOUND];
+        // redirect to login page
+        yield ['/about/policy/word', self::ROLE_USER];
+        yield ['/about/policy/word', self::ROLE_ADMIN];
+        yield ['/about/policy/word', self::ROLE_SUPER_ADMIN];
+        yield ['/about/symfony/content', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/about/symfony/content', self::ROLE_ADMIN];
+        yield ['/about/symfony/content', self::ROLE_SUPER_ADMIN];
+        yield ['/about/symfony/excel', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/about/symfony/excel', self::ROLE_ADMIN];
+        yield ['/about/symfony/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/about/symfony/pdf', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/about/symfony/pdf', self::ROLE_ADMIN];
+        yield ['/about/symfony/pdf', self::ROLE_SUPER_ADMIN];
     }
 }

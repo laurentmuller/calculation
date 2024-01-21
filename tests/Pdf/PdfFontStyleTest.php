@@ -18,57 +18,44 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(PdfFontStyle::class)]
 class PdfFontStyleTest extends TestCase
 {
-    public static function getFrom(): array
+    public static function getFrom(): \Iterator
     {
-        return [
-            ['B', PdfFontStyle::BOLD],
-            ['BI', PdfFontStyle::BOLD_ITALIC],
-            ['BIU', PdfFontStyle::BOLD_ITALIC_UNDERLINE],
-            ['BU', PdfFontStyle::BOLD_UNDERLINE],
-            ['I', PdfFontStyle::ITALIC],
-            ['IU', PdfFontStyle::ITALIC_UNDERLINE],
-            ['U', PdfFontStyle::UNDERLINE],
-            ['', PdfFontStyle::REGULAR],
-
-            ['b', PdfFontStyle::BOLD, true],
-            ['Z', PdfFontStyle::REGULAR, true],
-        ];
+        yield ['B', PdfFontStyle::BOLD];
+        yield ['BI', PdfFontStyle::BOLD_ITALIC];
+        yield ['BIU', PdfFontStyle::BOLD_ITALIC_UNDERLINE];
+        yield ['BU', PdfFontStyle::BOLD_UNDERLINE];
+        yield ['I', PdfFontStyle::ITALIC];
+        yield ['IU', PdfFontStyle::ITALIC_UNDERLINE];
+        yield ['U', PdfFontStyle::UNDERLINE];
+        yield ['', PdfFontStyle::REGULAR];
+        yield ['b', PdfFontStyle::BOLD, true];
+        yield ['Z', PdfFontStyle::REGULAR, true];
     }
 
-    public static function getFromStyle(): array
+    public static function getFromStyle(): \Iterator
     {
-        return [
-            ['b', PdfFontStyle::BOLD],
-            ['B', PdfFontStyle::BOLD],
-
-            ['bi', PdfFontStyle::BOLD_ITALIC],
-            ['ib', PdfFontStyle::BOLD_ITALIC],
-
-            ['biu', PdfFontStyle::BOLD_ITALIC_UNDERLINE],
-            ['iub', PdfFontStyle::BOLD_ITALIC_UNDERLINE],
-            ['ubi', PdfFontStyle::BOLD_ITALIC_UNDERLINE],
-            ['uib', PdfFontStyle::BOLD_ITALIC_UNDERLINE],
-
-            ['bu', PdfFontStyle::BOLD_UNDERLINE],
-            ['uB', PdfFontStyle::BOLD_UNDERLINE],
-
-            ['i', PdfFontStyle::ITALIC],
-            ['I', PdfFontStyle::ITALIC],
-
-            ['iu', PdfFontStyle::ITALIC_UNDERLINE],
-            ['ui', PdfFontStyle::ITALIC_UNDERLINE],
-
-            ['u', PdfFontStyle::UNDERLINE],
-            ['U', PdfFontStyle::UNDERLINE],
-
-            [null, PdfFontStyle::REGULAR],
-            ['', PdfFontStyle::REGULAR],
-            ['z', PdfFontStyle::REGULAR],
-
-            ['BBB', PdfFontStyle::BOLD],
-            ['BIBI', PdfFontStyle::BOLD_ITALIC],
-            ['bibi', PdfFontStyle::BOLD_ITALIC],
-        ];
+        yield ['b', PdfFontStyle::BOLD];
+        yield ['B', PdfFontStyle::BOLD];
+        yield ['bi', PdfFontStyle::BOLD_ITALIC];
+        yield ['ib', PdfFontStyle::BOLD_ITALIC];
+        yield ['biu', PdfFontStyle::BOLD_ITALIC_UNDERLINE];
+        yield ['iub', PdfFontStyle::BOLD_ITALIC_UNDERLINE];
+        yield ['ubi', PdfFontStyle::BOLD_ITALIC_UNDERLINE];
+        yield ['uib', PdfFontStyle::BOLD_ITALIC_UNDERLINE];
+        yield ['bu', PdfFontStyle::BOLD_UNDERLINE];
+        yield ['uB', PdfFontStyle::BOLD_UNDERLINE];
+        yield ['i', PdfFontStyle::ITALIC];
+        yield ['I', PdfFontStyle::ITALIC];
+        yield ['iu', PdfFontStyle::ITALIC_UNDERLINE];
+        yield ['ui', PdfFontStyle::ITALIC_UNDERLINE];
+        yield ['u', PdfFontStyle::UNDERLINE];
+        yield ['U', PdfFontStyle::UNDERLINE];
+        yield [null, PdfFontStyle::REGULAR];
+        yield ['', PdfFontStyle::REGULAR];
+        yield ['z', PdfFontStyle::REGULAR];
+        yield ['BBB', PdfFontStyle::BOLD];
+        yield ['BIBI', PdfFontStyle::BOLD_ITALIC];
+        yield ['bibi', PdfFontStyle::BOLD_ITALIC];
     }
 
     public function testDefault(): void

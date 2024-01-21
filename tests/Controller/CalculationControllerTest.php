@@ -22,57 +22,44 @@ class CalculationControllerTest extends AbstractControllerTestCase
     use CalculationTrait;
     use CategoryTrait;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/calculation', self::ROLE_USER],
-            ['/calculation', self::ROLE_ADMIN],
-            ['/calculation', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/add', self::ROLE_USER],
-            ['/calculation/add', self::ROLE_ADMIN],
-            ['/calculation/add', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/edit/1', self::ROLE_USER],
-            ['/calculation/edit/1', self::ROLE_ADMIN],
-            ['/calculation/edit/1', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/state/1', self::ROLE_USER],
-            ['/calculation/state/1', self::ROLE_ADMIN],
-            ['/calculation/state/1', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/delete/1', self::ROLE_USER],
-            ['/calculation/delete/1', self::ROLE_ADMIN],
-            ['/calculation/delete/1', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/clone/1', self::ROLE_USER],
-            ['/calculation/clone/1', self::ROLE_ADMIN],
-            ['/calculation/clone/1', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/show/1', self::ROLE_USER],
-            ['/calculation/show/1', self::ROLE_ADMIN],
-            ['/calculation/show/1', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/pdf/1', self::ROLE_USER],
-            ['/calculation/pdf/1', self::ROLE_ADMIN],
-            ['/calculation/pdf/1', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/pdf', self::ROLE_USER],
-            ['/calculation/pdf', self::ROLE_ADMIN],
-            ['/calculation/pdf', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/excel', self::ROLE_USER],
-            ['/calculation/excel', self::ROLE_ADMIN],
-            ['/calculation/excel', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation/excel/1', self::ROLE_USER],
-            ['/calculation/excel/1', self::ROLE_ADMIN],
-            ['/calculation/excel/1', self::ROLE_SUPER_ADMIN],
-
-            ['/calculation?search=22', self::ROLE_USER],
-            ['/calculation?search=22', self::ROLE_ADMIN],
-            ['/calculation?search=22', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/calculation', self::ROLE_USER];
+        yield ['/calculation', self::ROLE_ADMIN];
+        yield ['/calculation', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/add', self::ROLE_USER];
+        yield ['/calculation/add', self::ROLE_ADMIN];
+        yield ['/calculation/add', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/edit/1', self::ROLE_USER];
+        yield ['/calculation/edit/1', self::ROLE_ADMIN];
+        yield ['/calculation/edit/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/state/1', self::ROLE_USER];
+        yield ['/calculation/state/1', self::ROLE_ADMIN];
+        yield ['/calculation/state/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/delete/1', self::ROLE_USER];
+        yield ['/calculation/delete/1', self::ROLE_ADMIN];
+        yield ['/calculation/delete/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/clone/1', self::ROLE_USER];
+        yield ['/calculation/clone/1', self::ROLE_ADMIN];
+        yield ['/calculation/clone/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/show/1', self::ROLE_USER];
+        yield ['/calculation/show/1', self::ROLE_ADMIN];
+        yield ['/calculation/show/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/pdf/1', self::ROLE_USER];
+        yield ['/calculation/pdf/1', self::ROLE_ADMIN];
+        yield ['/calculation/pdf/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/pdf', self::ROLE_USER];
+        yield ['/calculation/pdf', self::ROLE_ADMIN];
+        yield ['/calculation/pdf', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/excel', self::ROLE_USER];
+        yield ['/calculation/excel', self::ROLE_ADMIN];
+        yield ['/calculation/excel', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation/excel/1', self::ROLE_USER];
+        yield ['/calculation/excel/1', self::ROLE_ADMIN];
+        yield ['/calculation/excel/1', self::ROLE_SUPER_ADMIN];
+        yield ['/calculation?search=22', self::ROLE_USER];
+        yield ['/calculation?search=22', self::ROLE_ADMIN];
+        yield ['/calculation?search=22', self::ROLE_SUPER_ADMIN];
     }
 
     /**

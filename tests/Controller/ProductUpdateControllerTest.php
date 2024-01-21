@@ -18,12 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(ProductUpdateController::class)]
 class ProductUpdateControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/admin/product', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/admin/product', self::ROLE_ADMIN],
-            ['/admin/product', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/admin/product', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/admin/product', self::ROLE_ADMIN];
+        yield ['/admin/product', self::ROLE_SUPER_ADMIN];
     }
 }

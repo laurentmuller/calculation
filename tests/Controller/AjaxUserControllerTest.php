@@ -23,48 +23,33 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
 {
     private ?TranslatorInterface $translator = null;
 
-    /**
-     * @return array<array{0: string|bool, 1?: string|null, 2?: int|null}>
-     */
-    public static function getEmails(): array
+    public static function getEmails(): \Iterator
     {
-        return [
-            [true, 'myemail_fake_zz@myemail.com'],
-            [true, 'ROLE_SUPER_ADMIN@TEST.COM', 1],
-            ['email.blank'],
-            ['email.short', 'A'],
-            ['email.long', \str_repeat('A', 200)],
-            ['email.already_used', 'ROLE_SUPER_ADMIN@TEST.COM'],
-        ];
+        yield [true, 'myemail_fake_zz@myemail.com'];
+        yield [true, 'ROLE_SUPER_ADMIN@TEST.COM', 1];
+        yield ['email.blank'];
+        yield ['email.short', 'A'];
+        yield ['email.long', \str_repeat('A', 200)];
+        yield ['email.already_used', 'ROLE_SUPER_ADMIN@TEST.COM'];
     }
 
-    /**
-     * @return array<array{0: string|bool, 1?: string, 2?: int}>
-     */
-    public static function getNames(): array
+    public static function getNames(): \Iterator
     {
-        return [
-            [true, 'myEmail_fake_zz'],
-            [true, 'ROLE_SUPER_ADMIN', 1],
-            ['username.blank'],
-            ['username.short', 'A'],
-            ['username.long', \str_repeat('A', 200)],
-            ['username.already_used', 'ROLE_SUPER_ADMIN'],
-        ];
+        yield [true, 'myEmail_fake_zz'];
+        yield [true, 'ROLE_SUPER_ADMIN', 1];
+        yield ['username.blank'];
+        yield ['username.short', 'A'];
+        yield ['username.long', \str_repeat('A', 200)];
+        yield ['username.already_used', 'ROLE_SUPER_ADMIN'];
     }
 
-    /**
-     * @return array<array{0: bool|string, 1?: string}>
-     */
-    public static function getUsers(): array
+    public static function getUsers(): \Iterator
     {
-        return [
-            ['username.blank'],
-            [true, 'ROLE_SUPER_ADMIN'],
-            [true, 'ROLE_SUPER_ADMIN@TEST.COM'],
-            ['username.not_found', 'USER_XXX_INVALID'],
-            ['username.not_found', 'USER_XXX_INVALID@INVALID.COM'],
-        ];
+        yield ['username.blank'];
+        yield [true, 'ROLE_SUPER_ADMIN'];
+        yield [true, 'ROLE_SUPER_ADMIN@TEST.COM'];
+        yield ['username.not_found', 'USER_XXX_INVALID'];
+        yield ['username.not_found', 'USER_XXX_INVALID@INVALID.COM'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getEmails')]

@@ -21,49 +21,39 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityPermission::class)]
 class EntityPermissionTest extends TestCase
 {
-    /**
-     * @return array<array{EntityPermission, string}>
-     */
-    public static function getLabel(): array
+    public static function getLabel(): \Iterator
     {
-        return [
-            [EntityPermission::ADD, 'rights.add'],
-            [EntityPermission::DELETE, 'rights.delete'],
-            [EntityPermission::EDIT, 'rights.edit'],
-            [EntityPermission::EXPORT, 'rights.export'],
-            [EntityPermission::LIST, 'rights.list'],
-            [EntityPermission::SHOW, 'rights.show'],
-        ];
+        yield [EntityPermission::ADD, 'rights.add'];
+        yield [EntityPermission::DELETE, 'rights.delete'];
+        yield [EntityPermission::EDIT, 'rights.edit'];
+        yield [EntityPermission::EXPORT, 'rights.export'];
+        yield [EntityPermission::LIST, 'rights.list'];
+        yield [EntityPermission::SHOW, 'rights.show'];
     }
 
-    public static function getTryFromName(): array
+    public static function getTryFromName(): \Iterator
     {
-        return [
-            [EntityPermission::ADD, 'add'],
-            [EntityPermission::ADD, 'AdD'],
-            [EntityPermission::ADD, 'Add'],
-            [EntityPermission::ADD, 'ADD'],
-            [EntityPermission::DELETE, 'DELETE'],
-            [EntityPermission::EDIT, 'EDIT'],
-            [EntityPermission::EXPORT, 'EXPORT'],
-            [EntityPermission::LIST, 'LIST'],
-            [EntityPermission::SHOW, 'SHOW'],
-
-            [null, ''],
-            [null, 'FAKE'],
-        ];
+        yield [EntityPermission::ADD, 'add'];
+        yield [EntityPermission::ADD, 'AdD'];
+        yield [EntityPermission::ADD, 'Add'];
+        yield [EntityPermission::ADD, 'ADD'];
+        yield [EntityPermission::DELETE, 'DELETE'];
+        yield [EntityPermission::EDIT, 'EDIT'];
+        yield [EntityPermission::EXPORT, 'EXPORT'];
+        yield [EntityPermission::LIST, 'LIST'];
+        yield [EntityPermission::SHOW, 'SHOW'];
+        yield [null, ''];
+        yield [null, 'FAKE'];
     }
 
-    public static function getValue(): array
+    public static function getValue(): \Iterator
     {
-        return [
-            [EntityPermission::ADD, 1],
-            [EntityPermission::DELETE, 2],
-            [EntityPermission::EDIT, 4],
-            [EntityPermission::EXPORT, 8],
-            [EntityPermission::LIST, 16],
-            [EntityPermission::SHOW, 32],
-        ];
+        yield [EntityPermission::ADD, 1];
+        yield [EntityPermission::DELETE, 2];
+        yield [EntityPermission::EDIT, 4];
+        yield [EntityPermission::EXPORT, 8];
+        yield [EntityPermission::LIST, 16];
+        yield [EntityPermission::SHOW, 32];
     }
 
     public function testAllPermission(): void

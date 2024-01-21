@@ -28,21 +28,17 @@ class GeneratorControllerTest extends AbstractControllerTestCase
     private static ?array $products = null;
     private static ?CalculationState $state = null;
 
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/generate', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/generate', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/generate', self::ROLE_SUPER_ADMIN],
-
-            ['/generate/calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/generate/calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/generate/calculation', self::ROLE_SUPER_ADMIN],
-
-            ['/generate/customer', self::ROLE_USER, Response::HTTP_FORBIDDEN],
-            ['/generate/customer', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN],
-            ['/generate/customer', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/generate', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/generate', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
+        yield ['/generate', self::ROLE_SUPER_ADMIN];
+        yield ['/generate/calculation', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/generate/calculation', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
+        yield ['/generate/calculation', self::ROLE_SUPER_ADMIN];
+        yield ['/generate/customer', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/generate/customer', self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
+        yield ['/generate/customer', self::ROLE_SUPER_ADMIN];
     }
 
     /**

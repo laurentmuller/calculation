@@ -17,12 +17,10 @@ use App\Controller\SiteMapController;
 #[\PHPUnit\Framework\Attributes\CoversClass(SiteMapController::class)]
 class SiteMapControllerTest extends AbstractControllerTestCase
 {
-    public static function getRoutes(): array
+    public static function getRoutes(): \Iterator
     {
-        return [
-            ['/sitemap', self::ROLE_USER],
-            ['/sitemap', self::ROLE_ADMIN],
-            ['/sitemap', self::ROLE_SUPER_ADMIN],
-        ];
+        yield ['/sitemap', self::ROLE_USER];
+        yield ['/sitemap', self::ROLE_ADMIN];
+        yield ['/sitemap', self::ROLE_SUPER_ADMIN];
     }
 }

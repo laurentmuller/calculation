@@ -23,23 +23,18 @@ class CheckSubClassTraitTest extends TestCase
 {
     use CheckSubClassTrait;
 
-    public static function getSubClass(): array
+    public static function getSubClass(): \Iterator
     {
-        return [
-            [Calculation::class, Calculation::class],
-            [Calculation::class, AbstractEntity::class],
-            [Calculation::class, EntityInterface::class],
-
-            [new Calculation(), Calculation::class],
-            [new Calculation(), AbstractEntity::class],
-            [new Calculation(), EntityInterface::class],
-
-            ['\App\Entity\Calculation', Calculation::class],
-            ['\App\Entity\Calculation', AbstractEntity::class],
-            ['\App\Entity\Calculation', EntityInterface::class],
-
-            ['ZZ', AbstractEntity::class, true],
-        ];
+        yield [Calculation::class, Calculation::class];
+        yield [Calculation::class, AbstractEntity::class];
+        yield [Calculation::class, EntityInterface::class];
+        yield [new Calculation(), Calculation::class];
+        yield [new Calculation(), AbstractEntity::class];
+        yield [new Calculation(), EntityInterface::class];
+        yield ['\App\Entity\Calculation', Calculation::class];
+        yield ['\App\Entity\Calculation', AbstractEntity::class];
+        yield ['\App\Entity\Calculation', EntityInterface::class];
+        yield ['ZZ', AbstractEntity::class, true];
     }
 
     /**

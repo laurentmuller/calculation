@@ -66,6 +66,18 @@
             "sizes": "1296x876",
             "type": "image/png",
             "form_factor": "wide"
+        },
+        {
+            "src": "images/screenshots/home_light_wide.png",
+            "sizes": "403x617",
+            "type": "image/png",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "images/screenshots/home_dark_wide.png",
+            "sizes": "403x617",
+            "type": "image/png",
+            "form_factor": "narrow"
         }
     ]
 }

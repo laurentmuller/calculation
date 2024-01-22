@@ -222,7 +222,7 @@ class HelpReport extends AbstractReport
     private function outputDialog(array $item): void
     {
         $name = $this->splitTrans($item);
-        $this->addBookmark($name, true, 1, false);
+        $this->addBookmark($name, true, 2, false);
         $this->outputTitle($name);
         $this->outputDialogDescription($item);
         $this->outputDialogImage($item);
@@ -413,11 +413,17 @@ class HelpReport extends AbstractReport
         $this->outputTitle($id, 12);
         $this->outputLine();
 
+        $group = '';
         foreach ($dialogs as $dialog) {
             if ($newPage) {
                 $this->AddPage();
             }
             $newPage = true;
+            $newGroup = $dialog['group'] ?? '';
+            if ('' !== $newGroup && $group !== $newGroup) {
+                $group = $newGroup;
+                $this->addBookmark($group, true, 1, false);
+            }
             $this->outputDialog($dialog);
         }
 

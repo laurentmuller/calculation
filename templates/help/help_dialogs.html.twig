@@ -1,11 +1,14 @@
 {% extends 'help/help_base.html.twig' %}
 {% from 'help/_help_tools.html.twig' import output_icon, entities_button %}
-{% from 'macros/_icons.html.twig' import link %}
+{% from 'macros/_icons.html.twig' import icon %}
 {# macro #}
-{% macro output_dialog(dialog) -%}
+{% macro output_dialog(dialog, entity) -%}
 {% set href = path('help_dialog', {'id': dialog.id}) %}
-<div class="help-item col-lg-6 col-xxl-4">
-    <a href="{{ href }}">{{ output_icon(null, dialog.name|default(dialog.id)) }}</a>
+{% set icon = dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false) %}
+<div class="help-item">
+    <a href="{{ href }}">
+        {%- if icon %}{{ icon(icon ~ ' me-1') }}{% endif %}{{ dialog.name -}}
+    </a>
     <p class="mb-0">{{ dialog.description }}</p>
     <hr class="my-2">
 </div>
@@ -18,17 +21,17 @@
 {% block help_title -%}
 <i class="fa-regular fa-window-maximize me-1"></i>{{- 'help.dialog_menu'|trans -}}
 {% endblock %}
-{# home #}
-{% block help_home -%}
-    {{ parent() }}
+{# actions #}
+{% block help_actions -%}
     {{ entities_button() }}
 {% endblock %}
 {# body #}
 {% block help_body -%}
 <hr class="mt-1">
-<div class="row">
-    {% for dialog in dialogs %}
-        {{ _self.output_dialog(dialog) }}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-4">
+    {% for dialog in dialogs|sort((a, b) => a.name <=> b.name) %}
+        {%- set entity = service.findEntityByDialog(dialog) -%}
+        {{ _self.output_dialog(dialog, entity) }}
     {% endfor %}
 </div>
 {% endblock %}

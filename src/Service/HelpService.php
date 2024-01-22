@@ -46,8 +46,11 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * @psalm-type HelpDialogType = array{
  *      id: string,
  *      description: string|null,
+ *      name?: string,
+ *      icon?: string,
+ *      group?: string,
  *      image: string|null,
- *      images?: string[]|null,
+ *      images?: string[],
  *      displayEntityColumns: true|null,
  *      displayEntityFields: true|null,
  *      displayEntityActions: true|null,
@@ -61,6 +64,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  * @psalm-type HelpEntityType = array{
  *      id: string,
  *      icon: string,
+ *      name?: string,
  *      description?: string,
  *      constraints?: string[],
  *      actions: HelpActionType[]|null,
@@ -79,9 +83,9 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      menus: HelpMenuType[]|null}
  * @psalm-type HelpContentType = array{
  *      actions?: array<string, HelpActionType>,
- *      dialogs: HelpDialogType[],
- *      entities: HelpEntityType[],
- *      mainMenu: HelpMainMenuType|null}
+ *      dialogs?: HelpDialogType[],
+ *      entities?: HelpEntityType[],
+ *      mainMenu?: HelpMainMenuType|null}
  */
 class HelpService implements ServiceSubscriberInterface
 {
@@ -330,6 +334,21 @@ class HelpService implements ServiceSubscriberInterface
     }
 
     /**
+     * @psalm-param HelpDialogType $dialog
+     */
+    private function getDialogGroup(array $dialog): string
+    {
+        if (isset($dialog['group']) && '' !== $dialog['group']) {
+            return $dialog['group'];
+        }
+        if (isset($dialog['entity']) && '' !== $dialog['entity']) {
+            return $dialog['entity'] . '.name';
+        }
+
+        return $dialog['id'];
+    }
+
+    /**
      * @pslam-return HelpContentType|null
      */
     private function loadHelp(): ?array
@@ -337,11 +356,17 @@ class HelpService implements ServiceSubscriberInterface
         try {
             /** @psalm-var HelpContentType $help */
             $help = FileUtils::decodeJson($this->file);
-            if (!empty($help['dialogs'])) {
-                $this->sortDialogs($help['dialogs']);
+
+            if (isset($help['entities']) && [] !== $help['entities']) {
+                $entities = &$help['entities'];
+                $this->updateEntities($entities);
+                $this->sortEntities($entities);
             }
-            if (!empty($help['entities'])) {
-                $this->sortEntities($help['entities']);
+
+            if (isset($help['dialogs']) && [] !== $help['dialogs']) {
+                $dialogs = &$help['dialogs'];
+                $this->updateDialogs($dialogs);
+                $this->sortDialogs($dialogs);
             }
 
             return $help;
@@ -360,9 +385,7 @@ class HelpService implements ServiceSubscriberInterface
              * @psalm-var HelpDialogType $a
              * @psalm-var HelpDialogType $b
              */
-            $entityA = isset($a['entity']) ? $this->trans($a['entity'] . '.name') : 'zzzz';
-            $entityB = isset($b['entity']) ? $this->trans($b['entity'] . '.name') : 'zzzz';
-            $result = \strnatcmp($entityA, $entityB);
+            $result = \strnatcmp($a['group'] ?? '', $b['group'] ?? '');
             if (0 !== $result) {
                 return $result;
             }
@@ -375,10 +398,10 @@ class HelpService implements ServiceSubscriberInterface
                 return $isListA <=> $isListB;
             }
 
-            $textA = $this->trans($idA);
-            $textB = $this->trans($idB);
+            $nameA = $this->transSplit($idA);
+            $nameB = $this->transSplit($idB);
 
-            return \strnatcmp($textA, $textB);
+            return \strnatcmp($nameA, $nameB);
         });
     }
 
@@ -392,10 +415,44 @@ class HelpService implements ServiceSubscriberInterface
              * @psalm-var HelpEntityType $a
              * @psalm-var HelpEntityType $b
              */
-            $textA = $this->trans($a['id'] . '.name');
-            $textB = $this->trans($b['id'] . '.name');
+            $nameA = $a['name'] ?? '';
+            $nameB = $b['name'] ?? '';
 
-            return \strnatcmp($textA, $textB);
+            return \strnatcmp($nameA, $nameB);
         });
+    }
+
+    private function transSplit(string $id): string
+    {
+        $values = \explode('|', $id);
+        if (\count($values) > 1) {
+            return $this->trans($values[0], [], $values[1]);
+        }
+
+        return $this->trans($values[0]);
+    }
+
+    /**
+     * @psalm-param HelpDialogType[] $values
+     */
+    private function updateDialogs(array &$values): void
+    {
+        /** @psalm-param HelpDialogType $value */
+        foreach ($values as &$value) {
+            $group = $this->getDialogGroup($value);
+            $value['group'] = $this->transSplit($group);
+            $value['name'] = $this->transSplit($value['name'] ?? $value['id']);
+        }
+    }
+
+    /**
+     * @psalm-param HelpEntityType[] $values
+     */
+    private function updateEntities(array &$values): void
+    {
+        /** @psalm-param HelpEntityType $value */
+        foreach ($values as &$value) {
+            $value['name'] = $this->trans($value['id'] . '.name');
+        }
     }
 }

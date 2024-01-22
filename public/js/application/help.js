@@ -16,6 +16,7 @@
     const options = {
         element: 'span',
         className: 'text-success',
+        separateWordSearch: false,
         done: function () {
             $context.not(':has(span)').hide();
         },

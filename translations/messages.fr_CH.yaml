@@ -562,13 +562,16 @@ help:
     edit_actions: 'Les actions suivantes peuvent être sélectionnées :'
     edit_columns: 'La table contient les colonnes suivantes :'
     edit_fields: 'Les champs de saisie sont définis comme suit :'
-    entity_actions: "Les actions possibles sur l'objet sont les suivantes :"
+    entity_actions: "Les actions possibles sur l'objet sélectionné sont les suivantes :"
     entity_empty: Cet objet ne contient aucun champ.
     entity_fields: 'Les champs sont définis comme suit :'
     forbidden_text: Si l'objet sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.
     global_actions: 'Les actions globales suivantes peuvent être sélectionnées :'
     screenshot: "Capture d'écran :"
     see_also: 'Voir aussi :'
+    switch: Basculer le mode
+  groups:
+    dialog: Dialogue
   types:
     amount: Montant
     collection: Collection

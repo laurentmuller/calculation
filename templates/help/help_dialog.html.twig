@@ -85,11 +85,11 @@
 {%- endblock %}
 {# search #}
 {% block help_search %}{% endblock %}
-{# home #}
-{% block help_home -%}
-    {{ parent() }}
+{# actions #}
+{% block help_actions -%}
     {{ tools.dialogs_button() }}
     {{ tools.entities_button() }}
+    {{ parent() }}
 {% endblock %}
 {# body #}
 {% block help_body -%}

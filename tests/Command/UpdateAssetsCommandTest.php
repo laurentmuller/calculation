@@ -23,7 +23,7 @@ class UpdateAssetsCommandTest extends KernelTestCase
     public function testExecuteDryRun(): void
     {
         $output = $this->execute(['--dry-run' => true]);
-        $values = [
+        $expected = [
             'Check versions:',
             'jquery',
             'bootstrap',
@@ -32,17 +32,22 @@ class UpdateAssetsCommandTest extends KernelTestCase
             'highcharts',
             'html5sortable',
             'mark.js',
+            'zxcvbn',
             'jquery-contextmenu',
             'clipboard.js',
             'bootstrap-table',
+            'select2',
+            'select2-bootstrap-5-theme',
+            'currency-flags',
+            'font-mfizz',
         ];
-        $this->validate($output, $values);
+        $this->validate($output, $expected);
     }
 
     public function testExecuteUpdate(): void
     {
         $output = $this->execute();
-        $values = [
+        $expected = [
             '[OK]',
             'Installed',
             'plugins',
@@ -50,7 +55,7 @@ class UpdateAssetsCommandTest extends KernelTestCase
             'directory',
             '/public/vendor',
         ];
-        $this->validate($output, $values);
+        $this->validate($output, $expected);
     }
 
     private function execute(array $input = []): string
@@ -68,11 +73,11 @@ class UpdateAssetsCommandTest extends KernelTestCase
     }
 
     /**
-     * @psalm-param string[] $values
+     * @psalm-param string[] $expected
      */
-    private function validate(string $output, array $values): void
+    private function validate(string $output, array $expected): void
     {
-        foreach ($values as $value) {
+        foreach ($expected as $value) {
             self::assertStringContainsString($value, $output);
         }
     }

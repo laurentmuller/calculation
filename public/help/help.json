@@ -39,11 +39,11 @@
         },
         "list_pdf": {
             "icon": "file-pdf far",
-            "description": "Exporte la liste des objets vers le format de document portable (PDF)."
+            "description": "Exporte la table vers le format de document portable (PDF)."
         },
         "list_excel": {
             "icon": "file-excel far",
-            "description": "Exporte la liste des objets vers format Microsoft® Excel®."
+            "description": "Exporte la table vers format Microsoft® Excel®."
         },
         "entity_show": {
             "icon": "display",
@@ -747,7 +747,7 @@
             {
                 "id": "index.menu_data",
                 "icon": "database",
-                "description": "Menu d'accès aux données",
+                "description": "Menu d'accès aux données du catalogue.",
                 "menus": [
                     {
                         "id": "product.list.title",
@@ -814,23 +814,26 @@
                     {
                         "id": "search.title",
                         "icon": "search",
-                        "description": "Page de recherche.",
+                        "description": "Page pour rechercher des données dans le catalogue.",
                         "dialog": "search.title"
                     },
                     {
                         "id": "below.title",
                         "icon": "percent",
-                        "description": "Page pour afficher les calculations contenant une marge globale inférieure au seuil définit."
+                        "description": "Page pour afficher les calculations contenant une marge globale inférieure au seuil définit.",
+                        "dialog": "below.title"
                     },
                     {
                         "id": "duplicate.title",
                         "icon": "copy far",
-                        "description": "Page pour afficher les calculations contenant le même article plus d'une fois."
+                        "description": "Page pour afficher les calculations contenant le même article plus d'une fois.",
+                        "dialog": "duplicate.title"
                     },
                     {
                         "id": "empty.title",
                         "icon": "file-code far",
-                        "description": "Page pour afficher les calculations contenant un article avec une quantité ou un prix égale à 0."
+                        "description": "Page pour afficher les calculations contenant un article avec une quantité ou un prix égale à 0.",
+                        "dialog": "empty.title"
                     },
                     {
                         "id": "task_compute.title",
@@ -843,7 +846,7 @@
             {
                 "id": "index.menu_admin",
                 "icon": "gear",
-                "description": "Menu réservé aux administrateurs.",
+                "description": "Menu réservé aux administrateurs du site.",
                 "menus": [
                     {
                         "id": "product.update.title",
@@ -904,7 +907,7 @@
             {
                 "id": "user.name",
                 "icon": "user",
-                "description": "Menu de l'utilisateur.",
+                "description": "Menu afficher lorsque l'utilisateur est connecté à l'application.",
                 "menus": [
                     {
                         "id": "profile.edit.title",
@@ -921,14 +924,24 @@
                     {
                         "id": "user.parameters.title",
                         "icon": "user-gear",
-                        "description": "Page permettant de modifier les préférence de l'application.",
+                        "description": "Page permettant de modifier ses préférence dans l'application.",
                         "dialog": "user.parameters.title"
+                    },
+                    {
+                        "id": "help.labels.switch",
+                        "icon": "location-arrow",
+                        "description": "Permet à l'utilisateur de basculer entre le mode Production et le mode Développement."
                     },
                     {
                         "id": "user.comment.title",
                         "icon": "envelope far",
-                        "description": "Page permettant d'envoyer un commentaire à l'administrateur du site.",
+                        "description": "Page pour envoyer un commentaire à l'administrateur du site.",
                         "dialog": "user.comment.title"
+                    },
+                    {
+                        "id": "help.title",
+                        "icon": "question-circle",
+                        "description": "Affiche l'aide de l'application."
                     }
                 ]
             }
@@ -938,6 +951,7 @@
         {
             "id": "index.title",
             "image": "index",
+            "icon": "home",
             "description": "Page principale de l'application.",
             "details": [
                 "Cette page est divisée en quatre parties",
@@ -1267,6 +1281,7 @@
         },
         {
             "id": "product.update.title",
+            "group": "index.menu_admin",
             "image": "admin/update_product_query",
             "icon": "file-alt far",
             "entity": "product",
@@ -1297,6 +1312,7 @@
         },
         {
             "id": "product.result.description",
+            "group": "index.menu_admin",
             "image": "admin/update_product_result",
             "icon": "file-alt far",
             "entity": "product",
@@ -1320,6 +1336,7 @@
         },
         {
             "id": "archive.title",
+            "group": "index.menu_admin",
             "entity": "calculation",
             "image": "admin/calculation_archive_query",
             "icon": "calendar-xmark far",
@@ -1353,6 +1370,7 @@
         },
         {
             "id": "archive.result.description",
+            "group": "index.menu_admin",
             "entity": "calculation",
             "image": "admin/calculation_archive_result",
             "icon": "calendar-xmark far",
@@ -1857,6 +1875,7 @@
         },
         {
             "id": "search.title",
+            "group": "index.menu_tools",
             "image": "search/search_list",
             "description": "Permet de rechercher des données dans le catalogue (base de données).",
             "globalActions": [
@@ -1908,6 +1927,8 @@
         },
         {
             "id": "log.list.title",
+            "group": "index.menu_admin",
+            "icon": "book",
             "entity": "log",
             "image": "log/log_list",
             "description": "Affiche les entrées du journal de l'application. Cette page n'est accessible qu'aux administrateurs.",
@@ -1967,6 +1988,7 @@
         },
         {
             "id": "log.show.title",
+            "group": "index.menu_admin",
             "entity": "log",
             "image": "log/log_show",
             "icon": "display",
@@ -1980,6 +2002,7 @@
         },
         {
             "id": "log.delete.title",
+            "group": "index.menu_admin",
             "entity": "log",
             "image": "log/log_delete",
             "icon": "times",
@@ -2228,6 +2251,7 @@
         {
             "id": "title_by_month|chart",
             "image": "chart/chart_month",
+            "group": "index.menu_graphics",
             "description": "Cette page affiche un graphique des calculations par mois.",
             "editActions": [
                 {
@@ -2280,6 +2304,7 @@
         {
             "id": "title_by_state|chart",
             "image": "chart/chart_state",
+            "group": "index.menu_graphics",
             "description": "Cette page affiche un graphique des calculations par statut.",
             "editActions": [
                 {
@@ -2322,7 +2347,9 @@
         },
         {
             "id": "parameters.title",
+            "group": "index.menu_admin",
             "image": "admin/parameters",
+            "icon": "cogs",
             "description": "Cette page affiche les paramètres globaux de l'application. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
                 {
@@ -2335,6 +2362,8 @@
         },
         {
             "id": "index.menu_rights_user",
+            "group": "index.menu_admin",
+            "icon": "user-check",
             "image": "admin/rights_user",
             "description": "Cette page définit les droits d'accès par défaut à l'application pour les utilisateurs. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
@@ -2354,6 +2383,8 @@
         },
         {
             "id": "index.menu_rights_admin",
+            "group": "index.menu_admin",
+            "icon": "user-shield",
             "image": "admin/rights_admin",
             "description": "Cette page définit les droits d'accès par défaut à l'application pour les administrateurs. Cette page n'est accessible qu'aux administrateurs du site.",
             "editActions": [
@@ -2373,6 +2404,8 @@
         },
         {
             "id": "calculation.update.title",
+            "group": "index.menu_admin",
+            "icon": "pencil",
             "image": "admin/calculation_update_query",
             "entity": "calculation",
             "description": "Cette page vous permet de recalculer et de mettre à jour le total général des calculations. Cette page n'est accessible qu'aux administrateurs.",
@@ -2406,6 +2439,8 @@
         },
         {
             "id": "calculation.result.description",
+            "group": "index.menu_admin",
+            "icon": "pencil",
             "image": "admin/calculation_update_result",
             "description": "Cette page affiche les résultats de la mise à jour des calculations. Cette page n'est accessible qu'aux administrateurs.",
             "entity": "calculation",
@@ -2436,6 +2471,8 @@
         },
         {
             "id": "clear_cache.title",
+            "group": "index.menu_admin",
+            "icon": "times",
             "image": "admin/cache_clear",
             "description": "Cette page permet de vider le cache de l'application. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
@@ -2456,6 +2493,7 @@
             "id": "profile.edit.title",
             "image": "profile/profile_edit",
             "entity": "user",
+            "icon": "user-gear",
             "description": "Cette page permet de modifier son profile.",
             "editActions": [
                 {
@@ -2481,6 +2519,7 @@
             "id": "profile.change_password.title",
             "image": "profile/profile_change-password",
             "entity": "user",
+            "icon": "unlock-alt",
             "description": "Cette page permet de modifier son mot de passe.",
             "editActions": [
                 {
@@ -2505,8 +2544,9 @@
         {
             "id": "user.parameters.title",
             "image": "user/user_parameters",
-            "entity": "user-gear",
-            "description": "Cette page permet de modifier les préférence de l'application.",
+            "entity": "user",
+            "icon": "user-gear",
+            "description": "Cette page permet de modifier ses préférence dans l'application.",
             "editActions": [
                 {
                     "id": "common.button_ok",
@@ -2560,7 +2600,9 @@
         },
         {
             "id": "datatable.dialog_title",
+            "group": "help.groups.dialog",
             "image": "dialog_page",
+            "icon": "arrow-up-right-dots",
             "description": "Cette boîte de dialogue permet de sélectionner une page de la table.",
             "editActions": [
                 {
@@ -2581,7 +2623,9 @@
         },
         {
             "id": "list.sort_title",
+            "group": "help.groups.dialog",
             "image": "dialog_sort",
+            "icon": "sort-amount-down-alt",
             "description": "Cette boîte de dialogue permet de trier les données de la table.",
             "editActions": [
                 {
@@ -2600,6 +2644,60 @@
             "links": [
                 {
                     "id": "datatable.dialog_title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "below.title",
+            "group": "index.menu_tools",
+            "image": "calculation/calculation_below",
+            "icon": "percent",
+            "entity": "calculation",
+            "description": "Cette page affiche les calculations contenant une marge globale inférieure à la marge définit dans les paramètres de l'application. Cette page n'est accessible qu'aux administrateurs.",
+            "links": [
+                {
+                    "id": "duplicate.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "empty.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "duplicate.title",
+            "group": "index.menu_tools",
+            "image": "calculation/calculation_duplicate",
+            "icon": "copy far",
+            "entity": "calculation",
+            "description": "Cette page affiche les calculations contenant le même article plus d'une fois. Cette page n'est accessible qu'aux administrateurs.",
+            "links": [
+                {
+                    "id": "below.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "empty.title",
+                    "type": "dialog"
+                }
+            ]
+        },
+        {
+            "id": "empty.title",
+            "group": "index.menu_tools",
+            "image": "calculation/calculation_empty",
+            "icon": "file-code far",
+            "entity": "calculation",
+            "description": "Cette page affiche les calculations contenant contenant un article avec une quantité ou un prix égale à 0. Cette page n'est accessible qu'aux administrateurs.",
+            "links": [
+                {
+                    "id": "below.title",
+                    "type": "dialog"
+                },
+                {
+                    "id": "duplicate.title",
                     "type": "dialog"
                 }
             ]

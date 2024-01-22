@@ -74,6 +74,7 @@ class HelpController extends AbstractController
         }
 
         return $this->render('help/help_dialogs.html.twig', [
+            'service' => $this->service,
             'dialogs' => $dialogs,
         ]);
     }

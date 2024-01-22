@@ -136,7 +136,8 @@ trait CookieTrait
         } elseif (\is_bool($value)) {
             $value = \json_encode($value);
         }
-        $cookie = new Cookie(
+
+        $cookie = Cookie::create(
             name: $this->getCookieName($key, $prefix),
             value: (string) $value,
             expire: $this->getCookieExpire($modify),

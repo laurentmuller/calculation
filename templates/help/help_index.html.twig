@@ -1,38 +1,42 @@
 {% extends 'help/help_base.html.twig' %}
 {% import 'help/_help_tools.html.twig' as tools %}
-{% from 'macros/_icons.html.twig' import icon, link, link_pdf %}
+{% from 'macros/_icons.html.twig' import icon, link %}
 {# macro #}
-{% macro output_dialog(dialog) -%}
+{% macro output_dialog(dialog, entity) -%}
 {% set href = path('help_dialog', {'id': dialog.id}) %}
+{% set icon = dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false) %}
 <div class="help-item">
-    <a href="{{ href }}">{{ tools.output_icon(null, dialog.name|default(dialog.id)) }}</a>
+    <a href="{{ href }}">
+        {%- if icon %}{{ icon(icon ~ ' me-1') }}{% endif %}{{ dialog.name -}}
+    </a>
     <p class="mb-1">{{ dialog.description }}</p>
 </div>
 {%- endmacro %}
 
 {% macro output_entity(entity) -%}
-{%- set entity_name = entity.id ~ '.name' -%}
 {% set href = path('help_entity', {'id': entity.id}) %}
 <div class="help-item">
-    {{ link(href, entity_name, '', entity.icon|default) }}
+    <a href="{{ href }}">
+        {%- if entity.icon|default(false) %}{{ icon(entity.icon ~ ' me-1') }}{% endif %}{{ entity.name -}}
+    </a>
     <p class="mb-1">{{ entity.description }}</p>
 </div>
 {%- endmacro %}
 
-{% macro output_menus(menus, service, indent=0) -%}
-<div class="help-item"{% if indent %} style="margin-left: {{ indent }}rem;"{% endif %}>
+{% macro output_menus(menus, service, indent=false) -%}
+<div class="help-item{% if indent %} ms-3{% endif %}">
     {%- for menu in menus -%}
         {{- _self.output_menu(menu, service, indent) -}}
     {%- endfor -%}
 </div>
 {%- endmacro %}
 
-{% macro output_menu(menu, service, indent=0) -%}
+{% macro output_menu(menu, service, indent=false) -%}
 {% if menu.action|default(false) %}
     {%- set menu = service.findAction(menu.action)|default({})|merge(menu) -%}
 {% endif %}
-{%- set description = menu.description %}
 {%- set href = false -%}
+{%- set description = menu.description|default %}
 {%- if menu.dialog|default(false) -%}
     {%- set target = service.findDialog(menu.dialog) -%}
     {%- if target -%}
@@ -44,17 +48,17 @@
     <p class="mb-0">
         {%- if href -%}
             <a href="{{ href }}">
-                {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
+                {{- tools.output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
             </a>
         {%- else -%}
-            {{- tools.output_icon(menu.icon|default(false), menu.id) -}}
+            {{- tools.output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
         {%- endif -%}
     </p>
     {% if description %}
         <p class="mb-0">{{ description }}</p>
     {% endif %}
     {%- set menus = menu.menus|default(false) -%}
-    {%- if menus %}{{ _self.output_menus(menus, service, indent + 1.25) }}{% endif -%}
+    {%- if menus %}{{ _self.output_menus(menus, service, true) }}{% endif -%}
 </div>
 {%- endmacro %}
 {# parameters #}
@@ -82,12 +86,24 @@
 {# dialogs #}
 {% set dialogs = service.dialogs|default(false) %}
 {% if dialogs %}
+    {%- set old_group = false -%}
     <div class="col-xl-4 col-lg-6">
-        <h6><i class="fa-regular fa-window-maximize me-1"></i>{{ 'help.dialog_menu'|trans }}</h6>
-        <hr class="my-1">
-        {% for dialog in dialogs %}
-            {{ _self.output_dialog(dialog) }}
-        {% endfor %}
+    <h6><i class="fa-regular fa-window-maximize me-1"></i>{{ 'help.dialog_menu'|trans }}</h6>
+    <hr class="my-1">
+    {% for dialog in dialogs %}
+        {%- if dialog.group != old_group -%}
+            {% if old_group %}</div>{% endif %}
+            <div class="help-item">
+                <p class="my-0 fw-bold">{{ dialog.group }}</p>
+                <hr class="my-1">
+        {%- endif -%}
+        {%- set entity = service.findEntityByDialog(dialog) -%}
+        {{ _self.output_dialog(dialog, entity) }}
+        {%- if dialog.group != old_group -%}
+            {%- set old_group = dialog.group -%}
+        {%- endif -%}
+    {% endfor %}
+    {% if old_group %}</div>{% endif %}
     </div>
 {%- endif %}
 {# entities #}
@@ -106,8 +122,10 @@
 </div>
 {%- endblock %}
 {# home #}
-{% block help_home -%}
+{% block help_home -%}{% endblock %}
+{# actions #}
+{% block help_actions -%}
     {{ tools.dialogs_button() }}
     {{ tools.entities_button() }}
-    {{ link_pdf('help_pdf', [], 'common.button_export_pdf', null, 'btn btn-outline-secondary') }}
+    {{ tools.export_button() }}
 {%- endblock %}

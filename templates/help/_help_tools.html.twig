@@ -75,6 +75,11 @@
     {{ link(path('help'), null, 'btn btn-outline-secondary', 'home', 'help.home_menu') }}
 {%- endmacro %}
 
+{% macro export_button() %}
+    {% from 'macros/_icons.html.twig' import link_pdf %}
+    {{ link_pdf('help_pdf', [], 'common.button_export_pdf', null, 'btn btn-outline-secondary') }}
+{% endmacro %}
+
 {% macro dialogs_button() %}
     {% from 'macros/_icons.html.twig' import link %}
     {{ link(path('help_dialogs'), '', 'btn btn-outline-secondary', 'window-maximize far', 'help.dialog_menu') }}

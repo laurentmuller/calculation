@@ -1,12 +1,14 @@
 {% extends 'help/help_base.html.twig' %}
 {% from 'help/_help_tools.html.twig' import dialogs_button %}
-{% from 'macros/_icons.html.twig' import link %}
+{% from 'macros/_icons.html.twig' import link, icon %}
 {# macro #}
 {% macro output_entity(entity) -%}
 {%- set entity_name = entity.id ~ '.name' -%}
 {% set href = path('help_entity', {'id': entity.id}) %}
-<div class="help-item col-lg-6 col-xxl-4">
-    {{ link(href, entity_name, '', entity.icon|default) }}
+<div class="help-item">
+    <a href="{{ href }}">
+        {%- if entity.icon|default(false) %}{{ icon(entity.icon ~ ' me-1') }}{% endif %}{{ entity.name -}}
+    </a>
     <p class="mb-0">{{ entity.description }}</p>
     <hr class="my-2">
 </div>
@@ -19,15 +21,14 @@
 {% block help_title -%}
 <i class="fa-solid fa-database me-1"></i>{{- 'help.entity_menu'|trans -}}
 {% endblock %}
-{# home #}
-{% block help_home -%}
-    {{ parent() }}
+{# actions #}
+{% block help_actions -%}
     {{ dialogs_button() }}
 {% endblock %}
 {# body #}
 {% block help_body -%}
 <hr class="mt-1">
-<div class="row">
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-4">
     {% for entity in entities %}
         {{ _self.output_entity(entity) }}
     {% endfor %}

@@ -39,11 +39,11 @@
         },
         "list_pdf": {
             "icon": "file-pdf far",
-            "description": "Exporte la table vers le format de document portable (PDF)."
+            "description": "Exporte les données vers le format de document portable (PDF)."
         },
         "list_excel": {
             "icon": "file-excel far",
-            "description": "Exporte la table vers format Microsoft® Excel®."
+            "description": "Exporte les données vers format Microsoft® Excel®."
         },
         "entity_show": {
             "icon": "display",
@@ -715,6 +715,11 @@
                 {
                     "id": "user.add.title",
                     "action": "entity_add"
+                },
+                {
+                    "id": "user.rights.title",
+                    "icon": "unlock",
+                    "description": "Page permettant de définir les droits d'accès à l'application."
                 },
                 {
                     "id": "user.message.title",
@@ -1536,7 +1541,7 @@
             ],
             "editActions": [
                 {
-                    "action": "back_ok"
+                    "action": "back_home"
                 }
             ]
         },
@@ -2592,6 +2597,21 @@
                     "id": "common.button_ok",
                     "action": "submit_ok",
                     "description": "Envoie les commentaires à l'administrateur du site et retourne à la page d'accueil."
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
+        },
+        {
+            "id": "user.rights.title",
+            "image": "user/user_rights",
+            "icon": "unlock",
+            "entity": "user",
+            "description": "Cette page permet de définir les droits d'accès à l'application pour l'utilisateur.",
+            "editActions": [
+                {
+                    "action": "submit_ok"
                 },
                 {
                     "action": "submit_cancel"

@@ -76,7 +76,7 @@
 {% endif %}
 {%- endmacro %}
 {# parameters #}
-{%- set dialog_name = dialog.name|default(dialog.id) -%}
+{%- set dialog_name = dialog.id -%}
 {%- set title = 'help.title_name' -%}
 {%- set title_parameters = {'%name%': dialog_name|trans} -%}
 {# title #}

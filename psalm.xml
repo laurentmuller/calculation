@@ -16,10 +16,12 @@
         <directory name="tests"/>
         <ignoreFiles>
             <directory name="vendor"/>
-        </ignoreFiles>
-    </projectFiles>
+        </ignoreFiles>    </projectFiles>
 
     <issueHandlers>
+        <!-- psalm v5.20 -->
+        <RiskyTruthyFalsyComparison errorLevel="suppress" />
+
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$charset"/>
@@ -65,8 +67,8 @@
 
         <MixedInferredReturnType>
             <errorLevel type="suppress">
-                <file name="src/Traits/AwareTrait.php"/>
                 <file name="src/Controller/AbstractController.php"/>
+                <file name="src/Traits/AwareTrait.php"/>
             </errorLevel>
         </MixedInferredReturnType>
 
@@ -87,10 +89,10 @@
 
         <PropertyTypeCoercion>
             <errorLevel type="suppress">
-                <file name="src/Report/CalculationByMonthReport.php" />
-                <referencedProperty name="colors" />
                 <file name="src/Faker/EntityProvider.php" />
                 <referencedProperty name="repository" />
+                <file name="src/Report/CalculationByMonthReport.php" />
+                <referencedProperty name="colors" />
             </errorLevel>
         </PropertyTypeCoercion>
 

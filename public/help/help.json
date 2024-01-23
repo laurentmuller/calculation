@@ -717,6 +717,16 @@
                     "action": "entity_add"
                 },
                 {
+                    "id": "user.change_password.title",
+                    "icon": "unlock-alt",
+                    "description": "Page permettant de modifier le mot de passe de l'utilisateur."
+                },
+                {
+                    "id": "user.send.title",
+                    "icon": "envelope-circle-check fas",
+                    "description": "Page permettant d'envoyer un message pour permettre à l'utilisateur sélectionné de changer son mot de passe."
+                },
+                {
                     "id": "user.rights.title",
                     "icon": "unlock",
                     "description": "Page permettant de définir les droits d'accès à l'application."
@@ -1287,7 +1297,7 @@
         {
             "id": "product.update.title",
             "group": "index.menu_admin",
-            "image": "admin/update_product_query",
+            "image": "admin/admin_product_query",
             "icon": "file-alt far",
             "entity": "product",
             "description": "Cette page permet de mettre jour le prix des articles pour une catégorie. Cette page n'est accessible qu'aux administrateurs.",
@@ -1318,7 +1328,7 @@
         {
             "id": "product.result.description",
             "group": "index.menu_admin",
-            "image": "admin/update_product_result",
+            "image": "admin/admin_product_result",
             "icon": "file-alt far",
             "entity": "product",
             "description": "Cette page affiche le résultat de la mise à jour des articles.",
@@ -1343,7 +1353,7 @@
             "id": "archive.title",
             "group": "index.menu_admin",
             "entity": "calculation",
-            "image": "admin/calculation_archive_query",
+            "image": "admin/admin_archive_query",
             "icon": "calendar-xmark far",
             "description": "Cette page vous permet d'archiver des calculations en modifiant leur statut. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
@@ -1377,7 +1387,7 @@
             "id": "archive.result.description",
             "group": "index.menu_admin",
             "entity": "calculation",
-            "image": "admin/calculation_archive_result",
+            "image": "admin/admin_archive_result",
             "icon": "calendar-xmark far",
             "description": "Cette page affiche le résultat de l'archivage des calculations.",
             "editActions": [
@@ -2354,7 +2364,7 @@
         {
             "id": "parameters.title",
             "group": "index.menu_admin",
-            "image": "admin/parameters",
+            "image": "admin/admin_parameters",
             "icon": "cogs",
             "description": "Cette page affiche les paramètres globaux de l'application. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
@@ -2370,7 +2380,7 @@
             "id": "index.menu_rights_user",
             "group": "index.menu_admin",
             "icon": "user-check",
-            "image": "admin/rights_user",
+            "image": "admin/admin_user",
             "description": "Cette page définit les droits d'accès par défaut à l'application pour les utilisateurs. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
                 {
@@ -2391,7 +2401,7 @@
             "id": "index.menu_rights_admin",
             "group": "index.menu_admin",
             "icon": "user-shield",
-            "image": "admin/rights_admin",
+            "image": "admin/admin_list",
             "description": "Cette page définit les droits d'accès par défaut à l'application pour les administrateurs. Cette page n'est accessible qu'aux administrateurs du site.",
             "editActions": [
                 {
@@ -2412,7 +2422,7 @@
             "id": "calculation.update.title",
             "group": "index.menu_admin",
             "icon": "pencil",
-            "image": "admin/calculation_update_query",
+            "image": "admin/admin_update_query",
             "entity": "calculation",
             "description": "Cette page vous permet de recalculer et de mettre à jour le total général des calculations. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
@@ -2447,7 +2457,7 @@
             "id": "calculation.result.description",
             "group": "index.menu_admin",
             "icon": "pencil",
-            "image": "admin/calculation_update_result",
+            "image": "admin/admin_update_result",
             "description": "Cette page affiche les résultats de la mise à jour des calculations. Cette page n'est accessible qu'aux administrateurs.",
             "entity": "calculation",
             "editActions": [
@@ -2479,7 +2489,7 @@
             "id": "clear_cache.title",
             "group": "index.menu_admin",
             "icon": "times",
-            "image": "admin/cache_clear",
+            "image": "admin/admin_clear",
             "description": "Cette page permet de vider le cache de l'application. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
                 {
@@ -2588,6 +2598,24 @@
                 }
             ]
         },
+
+        {
+            "id": "user.send.title",
+            "icon": "envelope-circle-check fas",
+            "image": "user/user_send",
+            "entity": "user",
+            "description": "Cette page permet d'envoyer un message pour permettre à l'utilisateur sélectionné de changer son mot de passe.",
+            "editActions": [
+                {
+                    "id": "user.send.submit",
+                    "description": "Renvoie un message et retourne à la page précédente."
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
+        },
+
         {
             "id": "user.comment.title",
             "image": "user/user_comment",
@@ -2610,6 +2638,21 @@
             "icon": "unlock",
             "entity": "user",
             "description": "Cette page permet de définir les droits d'accès à l'application pour l'utilisateur.",
+            "editActions": [
+                {
+                    "action": "submit_ok"
+                },
+                {
+                    "action": "submit_cancel"
+                }
+            ]
+        },
+        {
+            "id": "user.change_password.title",
+            "image": "user/user_password",
+            "icon": "unlock-alt",
+            "entity": "user",
+            "description": "Cette page permet de modifier le mot de passe de l'utilisateur.",
             "editActions": [
                 {
                     "action": "submit_ok"

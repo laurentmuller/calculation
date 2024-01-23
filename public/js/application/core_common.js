@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster, bootstrap, html2canvas */
+/* globals Toaster, bootstrap, html2canvas, htmlToImage */
 
 /**
  * Ready function
@@ -98,18 +98,7 @@
         }
     }
 
-    /**
-     * Save card images.
-     */
-    function initHtml2canvas() {
-        if (typeof html2canvas === 'undefined') {
-            return;
-        }
-        const cards = document.querySelectorAll('.page-content .card');
-        if (!cards.length) {
-            return;
-        }
-
+    function createCopyButton() {
         const icon = document.createElement('i');
         icon.classList.add('fa-fw', 'fa-regular', 'fa-copy');
         const link = document.createElement('a');
@@ -121,6 +110,50 @@
             'position-absolute', 'top-50', 'end-0', 'translate-middle-y');
         document.querySelector('.page-content').append(link);
 
+        return link;
+    }
+
+    /**
+     * Save card images.
+     */
+    function initHtml2Image() {
+        if (typeof htmlToImage === 'undefined') {
+            return;
+        }
+        const cards = document.querySelectorAll('.page-content .card');
+        if (!cards.length) {
+            return;
+        }
+
+        const link = createCopyButton();
+        link.addEventListener('click', () => {
+            const location = window.location.pathname;
+            const options = {backgroundColor: null};
+            cards.forEach(function (card, index) {
+                htmlToImage.toPng(card, options).then((image) => {
+                    $.post('/help/download', {
+                        'index': index,
+                        'location': location,
+                        'image': image,
+                    }, (data) => window.console.log(data));
+                });
+            });
+        });
+    }
+
+    /**
+     * Save card images.
+     */
+    function initHtml2Canvas() {
+        if (typeof html2canvas === 'undefined') {
+            return;
+        }
+        const cards = document.querySelectorAll('.page-content .card');
+        if (!cards.length) {
+            return;
+        }
+
+        const link = createCopyButton();
         link.addEventListener('click', () => {
             const location = window.location.pathname;
             const options = {backgroundColor: null};
@@ -168,6 +201,7 @@
     window.addEventListener('DOMContentLoaded', () => {
         initThemeTooltip();
         showFlashBag();
-        initHtml2canvas();
+        // initHtml2Canvas();
+        initHtml2Image();
     });
 }(jQuery));

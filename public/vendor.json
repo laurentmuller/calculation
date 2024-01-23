@@ -216,6 +216,14 @@
             "files": [
                 "html2canvas.js"
             ]
+        },
+        {
+            "name": "html-to-image",
+            "version": "1.11.11",
+            "source": "cdnjs",
+            "files": [
+                "html-to-image.js"
+            ]
         }
     ]
 }

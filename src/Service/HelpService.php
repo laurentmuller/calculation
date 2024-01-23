@@ -77,15 +77,14 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      menus: array|null,
  *      action?: string}
  * @psalm-type HelpMainMenuType = array{
- *      id: string,
  *      image: string|null,
  *      description: string|null,
- *      menus: HelpMenuType[]|null}
+ *      menus: HelpMenuType[]}
  * @psalm-type HelpContentType = array{
- *      actions?: array<string, HelpActionType>,
- *      dialogs?: HelpDialogType[],
- *      entities?: HelpEntityType[],
- *      mainMenu?: HelpMainMenuType|null}
+ *      actions: array<string, HelpActionType>,
+ *      dialogs: array<string, HelpDialogType>,
+ *      entities: array<string, HelpEntityType>,
+ *      mainMenu: HelpMainMenuType}
  */
 class HelpService implements ServiceSubscriberInterface
 {
@@ -104,16 +103,9 @@ class HelpService implements ServiceSubscriberInterface
     private const CACHE_KEY = 'help';
 
     /**
-     * The cache timeout (15 minutes).
+     * The cache timeout (1 hour).
      */
-    private const CACHE_TIMEOUT = 60 * 15;
-
-    /** @psalm-var array<string, HelpActionType>|null */
-    private ?array $actions = null;
-    /** @psalm-var HelpDialogType[]|null */
-    private ?array $dialogs = null;
-    /** @psalm-var HelpEntityType[]|null */
-    private ?array $entities = null;
+    private const CACHE_TIMEOUT = 3600;
 
     /**
      * @param string $file      the absolute path to the JSON help file
@@ -194,11 +186,7 @@ class HelpService implements ServiceSubscriberInterface
      */
     public function getActions(): array
     {
-        if (null !== $this->actions) {
-            return $this->actions;
-        }
-
-        return $this->actions = $this->findEntries('actions') ?? [];
+        return $this->getHelp()['actions'];
     }
 
     public function getCacheTimeout(): int
@@ -209,57 +197,21 @@ class HelpService implements ServiceSubscriberInterface
     /**
      * Gets the dialogs.
      *
-     * @psalm-return HelpDialogType[]
+     * @psalm-return array<string, HelpDialogType>
      */
     public function getDialogs(): array
     {
-        if (null !== $this->dialogs) {
-            return $this->dialogs;
-        }
-
-        /** @psalm-var HelpDialogType[]|null $dialogs */
-        $dialogs = $this->findEntries('dialogs');
-        if (null === $dialogs) {
-            return $this->dialogs = [];
-        }
-
-        return $this->dialogs = \array_reduce(
-            $dialogs,
-            /**
-             * @psalm-param array<string, HelpDialogType> $carry
-             * @psalm-param HelpDialogType $dialog
-             */
-            static fn (array $carry, array $dialog) => $carry + [$dialog['id'] => $dialog],
-            []
-        );
+        return $this->getHelp()['dialogs'];
     }
 
     /**
      * Gets the entities.
      *
-     * @psalm-return HelpEntityType[]
+     * @psalm-return array<string, HelpEntityType>
      */
     public function getEntities(): array
     {
-        if (null !== $this->entities) {
-            return $this->entities;
-        }
-
-        /** @psalm-var HelpEntityType[]|null $entities */
-        $entities = $this->findEntries('entities');
-        if (null === $entities) {
-            return $this->entities = [];
-        }
-
-        return $this->entities = \array_reduce(
-            $entities,
-            /**
-             * @psalm-param array<string, HelpEntityType> $carry
-             * @psalm-param HelpEntityType $entity
-             */
-            static fn (array $carry, array $entity) => $carry + [$entity['id'] => $entity],
-            []
-        );
+        return $this->getHelp()['entities'];
     }
 
     /**
@@ -272,10 +224,15 @@ class HelpService implements ServiceSubscriberInterface
 
     /**
      * Gets the full help content.
+     *
+     * @psalm-return HelpContentType
      */
     public function getHelp(): array
     {
-        return (array) ($this->getCacheValue(self::CACHE_KEY, fn (): ?array => $this->loadHelp()) ?? []);
+        /** @psalm-var HelpContentType $help */
+        $help = $this->getCacheValue(self::CACHE_KEY, fn (): array => $this->loadHelp());
+
+        return $help;
     }
 
     /**
@@ -289,48 +246,23 @@ class HelpService implements ServiceSubscriberInterface
     /**
      * Gets the main (root) menu.
      *
-     * @psalm-return HelpMainMenuType|null
+     * @psalm-return HelpMainMenuType
      */
-    public function getMainMenu(): ?array
+    public function getMainMenu(): array
     {
-        /** @psalm-var HelpMainMenuType|null $mainMenu */
-        $mainMenu = $this->findEntries('mainMenu');
-
-        return $mainMenu;
+        return $this->getHelp()['mainMenu'];
     }
 
     /**
      * Gets the main (root) menus.
      *
-     * @return array|null the main menus, if found; null otherwise
+     * @return array the main menus, if found; null otherwise
      *
-     * @psalm-return HelpMenuType[]|null
+     * @psalm-return HelpMenuType[]
      */
-    public function getMainMenus(): ?array
+    public function getMainMenus(): array
     {
-        return $this->findEntries('mainMenu', 'menus');
-    }
-
-    /**
-     * @psalm-template TKey of array-key
-     * @psalm-template TArray
-     *
-     * @return array<TKey, TArray>|null
-     *
-     * @phpstan-ignore-next-line
-     */
-    private function findEntries(string ...$paths): ?array
-    {
-        $entries = $this->getHelp();
-        foreach ($paths as $path) {
-            if (!isset($entries[$path])) {
-                return null;
-            }
-            /** @psalm-var array<TKey, TArray> $entries */
-            $entries = $entries[$path];
-        }
-
-        return $entries;
+        return $this->getMainMenu()['menus'];
     }
 
     /**
@@ -349,38 +281,59 @@ class HelpService implements ServiceSubscriberInterface
     }
 
     /**
-     * @pslam-return HelpContentType|null
+     * @pslam-return HelpContentType
      */
-    private function loadHelp(): ?array
+    private function loadHelp(): array
     {
         try {
             /** @psalm-var HelpContentType $help */
             $help = FileUtils::decodeJson($this->file);
 
-            if (isset($help['entities']) && [] !== $help['entities']) {
-                $entities = &$help['entities'];
-                $this->updateEntities($entities);
-                $this->sortEntities($entities);
+            $entities = $help['entities'];
+            if ([] !== $entities) {
+                $help['entities'] = $this->updateEntities($entities);
             }
 
-            if (isset($help['dialogs']) && [] !== $help['dialogs']) {
-                $dialogs = &$help['dialogs'];
-                $this->updateDialogs($dialogs);
-                $this->sortDialogs($dialogs);
+            $dialogs = $help['dialogs'];
+            if ([] !== $dialogs) {
+                $help['dialogs'] = $this->updateDialogs($dialogs);
             }
 
             return $help;
         } catch (\InvalidArgumentException) {
-            return null;
+            return [];
         }
     }
 
-    /**
-     * @psalm-param HelpDialogType[] $values
-     */
-    private function sortDialogs(array &$values): void
+    private function transSplit(string $id): string
     {
-        \usort($values, function (array $a, array $b): int {
+        $values = \explode('|', $id);
+        if (\count($values) > 1) {
+            return $this->trans($values[0], [], $values[1]);
+        }
+
+        return $this->trans($values[0]);
+    }
+
+    /**
+     * @psalm-param HelpDialogType[] $dialogs
+     *
+     * @psalm-return array<string, HelpDialogType>
+     */
+    private function updateDialogs(array $dialogs): array
+    {
+        if ([] === $dialogs) {
+            return $dialogs;
+        }
+
+        /** @psalm-param HelpDialogType $value */
+        foreach ($dialogs as &$value) {
+            $group = $this->getDialogGroup($value);
+            $value['group'] = $this->transSplit($group);
+            $value['name'] = $this->transSplit($value['name'] ?? $value['id']);
+        }
+
+        \usort($dialogs, function (array $a, array $b): int {
             /**
              * @psalm-var HelpDialogType $a
              * @psalm-var HelpDialogType $b
@@ -403,14 +356,35 @@ class HelpService implements ServiceSubscriberInterface
 
             return \strnatcmp($nameA, $nameB);
         });
+
+        return \array_reduce(
+            $dialogs,
+            /**
+             * @psalm-param array<string, HelpDialogType> $carry
+             * @psalm-param HelpDialogType $dialog
+             */
+            static fn (array $carry, array $dialog) => $carry + [$dialog['id'] => $dialog],
+            []
+        );
     }
 
     /**
-     *  @psalm-param HelpEntityType[] $values
+     * @psalm-param HelpEntityType[] $entities
+     *
+     * @psalm-return array<string, HelpEntityType>
      */
-    private function sortEntities(array &$values): void
+    private function updateEntities(array $entities): array
     {
-        \usort($values, function (array $a, array $b): int {
+        if ([] === $entities) {
+            return $entities;
+        }
+
+        /** @psalm-param HelpEntityType $value */
+        foreach ($entities as &$value) {
+            $value['name'] = $this->trans($value['id'] . '.name');
+        }
+
+        \usort($entities, function (array $a, array $b): int {
             /**
              * @psalm-var HelpEntityType $a
              * @psalm-var HelpEntityType $b
@@ -420,39 +394,15 @@ class HelpService implements ServiceSubscriberInterface
 
             return \strnatcmp($nameA, $nameB);
         });
-    }
 
-    private function transSplit(string $id): string
-    {
-        $values = \explode('|', $id);
-        if (\count($values) > 1) {
-            return $this->trans($values[0], [], $values[1]);
-        }
-
-        return $this->trans($values[0]);
-    }
-
-    /**
-     * @psalm-param HelpDialogType[] $values
-     */
-    private function updateDialogs(array &$values): void
-    {
-        /** @psalm-param HelpDialogType $value */
-        foreach ($values as &$value) {
-            $group = $this->getDialogGroup($value);
-            $value['group'] = $this->transSplit($group);
-            $value['name'] = $this->transSplit($value['name'] ?? $value['id']);
-        }
-    }
-
-    /**
-     * @psalm-param HelpEntityType[] $values
-     */
-    private function updateEntities(array &$values): void
-    {
-        /** @psalm-param HelpEntityType $value */
-        foreach ($values as &$value) {
-            $value['name'] = $this->trans($value['id'] . '.name');
-        }
+        return \array_reduce(
+            $entities,
+            /**
+             * @psalm-param array<string, HelpEntityType> $carry
+             * @psalm-param HelpEntityType $entity
+             */
+            static fn (array $carry, array $entity) => $carry + [$entity['id'] => $entity],
+            []
+        );
     }
 }

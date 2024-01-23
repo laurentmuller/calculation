@@ -144,7 +144,7 @@ class HelpControllerTest extends AbstractControllerTestCase
         }
 
         $menu = $this->help->getMainMenu();
-        if (null !== $menu && isset($menu['image'])) {
+        if (isset($menu['image'])) {
             yield $this->getImagePath($projectDir, $menu['image'], $extension);
         }
     }

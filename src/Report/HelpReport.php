@@ -557,17 +557,17 @@ class HelpReport extends AbstractReport
         $this->addBookmark($this->trans($id), true, 0, false);
         $this->outputTitle($id, 12);
         $this->outputLine();
+
         $rootMenu = $this->service->getMainMenu();
-        if (null !== $rootMenu) {
-            if (isset($rootMenu['description'])) {
-                $this->outputText($rootMenu['description'], false);
-            }
-            if (isset($rootMenu['image'])) {
-                $this->Ln(3);
-                $this->outputText('help.labels.screenshot');
-                $this->outputImage($rootMenu['image']);
-            }
+        if (isset($rootMenu['description'])) {
+            $this->outputText($rootMenu['description'], false);
         }
+        if (isset($rootMenu['image'])) {
+            $this->Ln(3);
+            $this->outputText('help.labels.screenshot');
+            $this->outputImage($rootMenu['image']);
+        }
+
         $this->Ln(3);
         $this->outputText('help.labels.edit_actions');
         $table = PdfTable::instance($this)

@@ -631,13 +631,13 @@
                     "type": "text"
                 },
                 {
-                    "name": "context",
-                    "description": "Contexte d'information, d'avertissement ou d'erreur.",
+                    "name": "user",
+                    "description": "Nom de l'utilisateur ayant générer l'entrée.",
                     "required": false
                 },
                 {
-                    "name": "user",
-                    "description": "Nom de l'utilisateur ayant générer cette information, cet avertissement ou cette erreur.",
+                    "name": "context",
+                    "description": "Contexte d'information, d'avertissement ou d'erreur.",
                     "required": false
                 }
             ],
@@ -959,7 +959,7 @@
             "icon": "home",
             "description": "Page principale de l'application.",
             "details": [
-                "Cette page est divisée en quatre parties",
+                "Cette page est divisée en quatre parties :",
                 "- La première partie contient la liste des dernières calculations.",
                 "- La deuxième partie contient la liste des calculations regroupées par mois.",
                 "- La troisième partie contient la liste des calculations regroupées par status.",
@@ -1997,6 +1997,7 @@
             "entity": "log",
             "image": "log/log_show",
             "icon": "display",
+            "displayEntityColumns": true,
             "description": "Cette page affiche les propriétés d'une entrée dans le journal de l'application. Cette page n'est accessible qu'aux administrateurs.",
             "editActions": [
                 {

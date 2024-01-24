@@ -948,6 +948,11 @@
                         "description": "Permet à l'utilisateur de basculer entre le mode Production et le mode Développement."
                     },
                     {
+                        "id": "index.menu_site_map",
+                        "icon": "sitemap",
+                        "description": "Affiche le plan du site."
+                    },
+                    {
                         "id": "user.comment.title",
                         "icon": "envelope far",
                         "description": "Page pour envoyer un commentaire à l'administrateur du site.",
@@ -956,7 +961,13 @@
                     {
                         "id": "help.title",
                         "icon": "question-circle",
-                        "description": "Affiche l'aide de l'application."
+                        "description": "Page pour afficher l'aide de l'application (page actuelle)."
+                    },
+                    {
+                        "id": "about.title",
+                        "icon": "info-circle",
+                        "description": "Page pour afficher des informations sur l'application.",
+                        "dialog": "about.title"
                     }
                 ]
             }
@@ -1154,7 +1165,7 @@
         {
             "id": "calculation.list.state_title",
             "entity": "calculation",
-            "image": "calculation/calculation_edit_state",
+            "image": "calculation/calculation_state",
             "description": "Cette page permet de modifier le statut d'une calculation.",
             "editActions": [
                 {
@@ -2598,7 +2609,6 @@
                 }
             ]
         },
-
         {
             "id": "user.send.title",
             "icon": "envelope-circle-check fas",
@@ -2615,7 +2625,6 @@
                 }
             ]
         },
-
         {
             "id": "user.comment.title",
             "image": "user/user_comment",
@@ -2765,6 +2774,12 @@
                     "type": "dialog"
                 }
             ]
+        },
+        {
+            "id": "about.title",
+            "image": "about/about_list",
+            "icon": "info-circle",
+            "description": "Cette page affiche des informations sur l'application tel que son nom, sa version ou son environnent."
         }
     ]
 }

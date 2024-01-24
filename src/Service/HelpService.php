@@ -148,35 +148,24 @@ class HelpService implements ServiceSubscriberInterface
     /**
      * Finds an entity for the given identifier.
      *
-     * @param string $id the entity identifier to search for
+     * @param string|array|null $id the entity identifier or the dialog array to search for
      *
      * @return array|null the entity, if found; null otherwise
      *
-     * @pslam-return HelpEntityType|null
-     */
-    public function findEntity(string $id): ?array
-    {
-        return $this->getEntities()[$id] ?? null;
-    }
-
-    /**
-     * Finds an entity for the given dialog.
-     *
-     * @param array $dialog the dialog to get the entity to search for
-     *
-     * @return array|null the entity, if found; null otherwise
-     *
-     * @psalm-param HelpDialogType $dialog
+     * @psalm-param string|HelpDialogType|null $id
      *
      * @pslam-return HelpEntityType|null
      */
-    public function findEntityByDialog(array $dialog): ?array
+    public function findEntity(string|array $id = null): ?array
     {
-        if (isset($dialog['entity'])) {
-            return $this->findEntity($dialog['entity']);
+        if (\is_array($id)) {
+            $id = $id['entity'] ?? '';
+        }
+        if (null === $id || '' === $id) {
+            return null;
         }
 
-        return null;
+        return $this->getEntities()[$id] ?? null;
     }
 
     /**
@@ -202,6 +191,36 @@ class HelpService implements ServiceSubscriberInterface
     public function getDialogs(): array
     {
         return $this->getHelp()['dialogs'];
+    }
+
+    /**
+     * @psalm-return array<string, HelpDialogType[]>
+     *
+     * @psalm-api
+     */
+    public function getDialogsByGroup(): array
+    {
+        $dialogs = $this->getDialogs();
+        if ([] === $dialogs) {
+            return [];
+        }
+
+        return \array_reduce(
+            $dialogs,
+            /**
+             * @psalm-param array<string, HelpDialogType[]> $carry
+             * @psalm-param HelpDialogType $dialog
+             *
+             * @psalm-return array<string, HelpDialogType[]>
+             */
+            function (array $carry, array $dialog): array {
+                $key = $dialog['group'] ?? '';
+                $carry[$key][] = $dialog;
+
+                return $carry;
+            },
+            []
+        );
     }
 
     /**
@@ -263,6 +282,18 @@ class HelpService implements ServiceSubscriberInterface
     public function getMainMenus(): array
     {
         return $this->getMainMenu()['menus'];
+    }
+
+    /**
+     * Sort the given array by 'name' index.
+     *
+     * @psalm-template T of array{name?: string, ...}
+     *
+     * @psalm-param array<array-key, T> $array
+     */
+    public function sortByName(array &$array): void
+    {
+        \uasort($array, fn (array $a, array $b): int => ($a['name'] ?? '') <=> ($b['name'] ?? ''));
     }
 
     /**
@@ -333,29 +364,32 @@ class HelpService implements ServiceSubscriberInterface
             $value['name'] = $this->transSplit($value['name'] ?? $value['id']);
         }
 
-        \usort($dialogs, function (array $a, array $b): int {
+        \usort(
+            $dialogs,
             /**
-             * @psalm-var HelpDialogType $a
-             * @psalm-var HelpDialogType $b
+             * @psalm-param HelpDialogType $a
+             * @psalm-param HelpDialogType $b
              */
-            $result = \strnatcmp($a['group'] ?? '', $b['group'] ?? '');
-            if (0 !== $result) {
-                return $result;
+            function (array $a, array $b): int {
+                $result = \strnatcmp($a['group'] ?? '', $b['group'] ?? '');
+                if (0 !== $result) {
+                    return $result;
+                }
+
+                $idA = $a['id'];
+                $idB = $b['id'];
+                $isListA = \str_ends_with($idA, '.list.title') ? 0 : 1;
+                $isListB = \str_ends_with($idB, '.list.title') ? 0 : 1;
+                if ($isListA !== $isListB) {
+                    return $isListA <=> $isListB;
+                }
+
+                $nameA = $this->transSplit($idA);
+                $nameB = $this->transSplit($idB);
+
+                return \strnatcmp($nameA, $nameB);
             }
-
-            $idA = $a['id'];
-            $idB = $b['id'];
-            $isListA = \str_ends_with($idA, '.list.title') ? 0 : 1;
-            $isListB = \str_ends_with($idB, '.list.title') ? 0 : 1;
-            if ($isListA !== $isListB) {
-                return $isListA <=> $isListB;
-            }
-
-            $nameA = $this->transSplit($idA);
-            $nameB = $this->transSplit($idB);
-
-            return \strnatcmp($nameA, $nameB);
-        });
+        );
 
         return \array_reduce(
             $dialogs,
@@ -384,16 +418,7 @@ class HelpService implements ServiceSubscriberInterface
             $value['name'] = $this->trans($value['id'] . '.name');
         }
 
-        \usort($entities, function (array $a, array $b): int {
-            /**
-             * @psalm-var HelpEntityType $a
-             * @psalm-var HelpEntityType $b
-             */
-            $nameA = $a['name'] ?? '';
-            $nameB = $b['name'] ?? '';
-
-            return \strnatcmp($nameA, $nameB);
-        });
+        $this->sortByName($entities);
 
         return \array_reduce(
             $entities,

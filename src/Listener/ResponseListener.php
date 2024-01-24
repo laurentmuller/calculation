@@ -17,8 +17,10 @@ use App\Service\NonceService;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Psr\Cache\CacheItemPoolInterface;
+use RectorPrefix202401\Symfony\Component\Filesystem\Path;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -93,7 +95,9 @@ class ResponseListener
         UrlGeneratorInterface $generator,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
-        private readonly CacheItemPoolInterface $cache
+        private readonly CacheItemPoolInterface $cache,
+        #[Autowire('%kernel.project_dir%/public')]
+        private readonly string $publicDir
     ) {
         $this->csp = $this->loadCSP($file, $service, $generator);
     }
@@ -106,8 +110,18 @@ class ResponseListener
         }
 
         $request = $event->getRequest();
-        if ($this->debug && $this->isDevRequest($request)) {
-            return;
+        if ($this->debug) {
+            $name = \basename($request->getPathInfo());
+            $ext = Path::getExtension($name);
+            if (\in_array($ext, ['css', 'ttf', 'woff2'], true)) {
+                $this->updateResponse($event, $name);
+
+                return;
+            }
+
+            if ($this->isDevRequest($request)) {
+                return;
+            }
         }
 
         $response = $event->getResponse();
@@ -203,5 +217,25 @@ class ResponseListener
         $decoded = \json_decode($encoded, true);
 
         return $decoded;
+    }
+
+    private function updateResponse(ResponseEvent $event, string $name): void
+    {
+        $finder = new Finder();
+        $finder->in($this->publicDir . '/css')
+            ->in($this->publicDir . '/vendor')
+            ->name($name)
+            ->files();
+
+        foreach ($finder as $file) {
+            try {
+                $content = $file->getContents();
+                $response = new Response($content);
+                $event->setResponse($response);
+            } catch (\RuntimeException) {
+            }
+
+            return;
+        }
     }
 }

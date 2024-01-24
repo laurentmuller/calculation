@@ -30,6 +30,12 @@
     const COOKIE_ENTRY = 'THEME=';
 
     /**
+     * The theme changed event name.
+     * @type {string}
+     */
+    const THEME_EVENT_NAME = 'theme_changed';
+
+    /**
      * Gets the stored theme.
      * @return {string} the stored theme.
      */
@@ -158,6 +164,18 @@
         }
     });
 
+    /*
+     * Channel to update theme in other tabs
+     */
+    const channel = new window.BroadcastChannel('Theme');
+    channel.addEventListener('message', e => {
+        if (e.data === THEME_EVENT_NAME) {
+            const theme = getStoredTheme();
+            updateActiveTheme(theme);
+            setTheme(theme);
+        }
+    });
+
     /**
      * Handle the content loaded event.
      */
@@ -171,10 +189,14 @@
                 updateActiveTheme(theme);
                 setStoredTheme(theme);
                 setTheme(theme);
+
+                // notify
+                channel.postMessage(THEME_EVENT_NAME);
             });
         });
         document.querySelectorAll('.navbar-horizontal .dropdown-item,.navbar-horizontal .navbar-brand').forEach((element) => {
             element.addEventListener('click', () => hideNavBar());
         });
     });
+
 })();

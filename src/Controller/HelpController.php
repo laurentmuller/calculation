@@ -53,7 +53,7 @@ class HelpController extends AbstractController
         if (null === $dialog) {
             throw $this->createNotFoundException("Unable to find the resource for the dialog '$id'.");
         }
-        $entity = $this->service->findEntityByDialog($dialog);
+        $entity = $this->service->findEntity($dialog);
 
         return $this->render('help/help_dialog.html.twig', [
             'service' => $this->service,
@@ -72,6 +72,8 @@ class HelpController extends AbstractController
         if ([] === $dialogs) {
             throw $this->createNotFoundException('Unable to find dialogs.');
         }
+
+        $this->service->sortByName($dialogs);
 
         return $this->render('help/help_dialogs.html.twig', [
             'service' => $this->service,
@@ -117,6 +119,8 @@ class HelpController extends AbstractController
         if ([] === $entities) {
             throw $this->createNotFoundException('Unable to find entities.');
         }
+
+        $this->service->sortByName($entities);
 
         return $this->render('help/help_entities.html.twig', [
             'entities' => $entities,

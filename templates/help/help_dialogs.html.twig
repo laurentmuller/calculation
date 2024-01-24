@@ -29,9 +29,8 @@
 {% block help_body -%}
 <hr class="mt-1">
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-4">
-    {% for dialog in dialogs|sort((a, b) => a.name <=> b.name) %}
-        {%- set entity = service.findEntityByDialog(dialog) -%}
-        {{ _self.output_dialog(dialog, entity) }}
+    {% for dialog in dialogs %}
+        {{ _self.output_dialog(dialog, service.findEntity(dialog)) }}
     {% endfor %}
 </div>
 {% endblock %}

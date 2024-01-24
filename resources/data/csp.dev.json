@@ -1,44 +1,45 @@
 {
-	"base-uri": "none",
-	"media-src": "none",
-	"object-src": "none",
-	"default-src": "self",
-	"form-action": "self",
-	"manifest-src": "self",
-	"frame-ancestors": "self",
-	"script-src": "%nonce%",
-	"script-src-elem": [
-		"%nonce%",
-		"https://www.google.com",
-		"https://api.iconify.design"
-	],
-	"connect-src": [
-		"self"
-	],
-	"frame-src": [
-		"self",
-		"https://www.google.com"
-	],
-	"font-src": [
-		"self",
-		"https://fonts.gstatic.com",
-		"https://raw.githack.com"
-	],
-	"style-src": [
-		"self",
-		"unsafe-inline",
-		"https://fonts.googleapis.com"
-	],
-	"style-src-elem": [
-		"self",
-		"unsafe-inline",
-		"https://fonts.googleapis.com"
-	],
-	"img-src": [
-		"self",
-		"data:",
-		"https://wise.com",
-		"https://robohash.org",
-		"https://openweathermap.org"
-	]
+    "base-uri": "self",
+    "media-src": "none",
+    "object-src": "none",
+    "default-src": "self",
+    "form-action": "self",
+    "manifest-src": "self",
+    "frame-ancestors": "self",
+    "script-src": "%nonce%",
+    "script-src-elem": [
+        "%nonce%",
+        "https://www.google.com",
+        "https://api.iconify.design"
+    ],
+    "connect-src": [
+        "self",
+        "https://raw.githack.com"
+    ],
+    "frame-src": [
+        "self",
+        "https://www.google.com"
+    ],
+    "font-src": [
+        "self",
+        "https://fonts.gstatic.com",
+        "https://raw.githack.com"
+    ],
+    "style-src": [
+        "self",
+        "unsafe-inline",
+        "https://fonts.googleapis.com"
+    ],
+    "style-src-elem": [
+        "self",
+        "unsafe-inline",
+        "https://fonts.googleapis.com"
+    ],
+    "img-src": [
+        "self",
+        "data:",
+        "https://wise.com",
+        "https://robohash.org",
+        "https://openweathermap.org"
+    ]
 }

@@ -16,7 +16,7 @@
 {%- set full_path = 'help/images/' ~ path ~ constant('App\\Service\\HelpService::IMAGES_EXT') -%}
 {% if asset_exists(full_path) %}
     {% if screenshot %}<p class="mb-2">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
-    {{ asset_image(full_path, {'class': 'img-fluid rounded d-block', 'alt': 'help.labels.screenshot'|trans}) }}
+    {{ asset_image(full_path, {'class': 'img-fluid rounded', 'alt': 'help.labels.screenshot'|trans}) }}
 {% endif %}
 {%- endmacro %}
 

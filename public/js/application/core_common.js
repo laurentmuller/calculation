@@ -98,20 +98,50 @@
         }
     }
 
-    function createCopyButton() {
+    /**
+     * Save an image to the help cache.
+     * @param {string} image
+     * @param {number} index
+     * @param {string} location
+     */
+    function sendImage(image, index, location) {
+        $.post('/help/download', {
+            'image': image,
+            'index': index,
+            'location': location
+        }, (data) => window.console.log(data));
+    }
+
+    /**
+     * Create the copy button.
+     * @param {NodeListOf<Element>} cards
+     * @param {function} callback
+     */
+    function createCopyButton(cards, callback) {
         const icon = document.createElement('i');
         icon.classList.add('fa-fw', 'fa-regular', 'fa-copy');
         const link = document.createElement('a');
 
         link.append(icon);
-        link.title = 'Save Image Card';
+        link.title = 'Save Card Image';
         link.style.marginRight = '15px';
-        link.classList.add('btn', 'btn-outline-secondary',
-            'position-absolute', 'top-50', 'end-0', 'translate-middle-y');
+        link.classList.add('btn', 'btn-outline-secondary', 'position-absolute',
+            'top-50', 'end-0', 'translate-middle-y');
         document.querySelector('.page-content').append(link);
 
-        return link;
+        link.addEventListener('click', () => {
+            const location = window.location.pathname;
+            const options = {backgroundColor: null};
+            cards.forEach(function (card, index) {
+                link.disabled = true;
+                link.setAttribute('disabled', 'disabled');
+                $('*').css('cursor', 'wait');
+                callback(card, index, location, options);
+                link.disabled = false;
+            });
+        });
     }
+
 
     /**
      * Save card images.
@@ -125,20 +155,19 @@
             return;
         }
 
-        const link = createCopyButton();
-        link.addEventListener('click', () => {
-            const location = window.location.pathname;
-            const options = {backgroundColor: null};
-            cards.forEach(function (card, index) {
-                htmlToImage.toPng(card, options).then((image) => {
-                    $.post('/help/download', {
-                        'index': index,
-                        'location': location,
-                        'image': image,
-                    }, (data) => window.console.log(data));
-                });
+        /**
+         * @param {Element} card
+         * @param {number} index
+         * @param {String} location
+         * @param {Object} options
+         */
+        const callback = function (card, index, location, options) {
+            htmlToImage.toPng(card, options).then((image) => {
+                $('*').css('cursor', 'wait');
+                sendImage(image, index, location);
             });
-        });
+        };
+        createCopyButton(cards, callback);
     }
 
     /**
@@ -153,20 +182,20 @@
             return;
         }
 
-        const link = createCopyButton();
-        link.addEventListener('click', () => {
-            const location = window.location.pathname;
-            const options = {backgroundColor: null};
-            cards.forEach(function (card, index) {
-                html2canvas(card, options).then((canvas) => {
-                    $.post('/help/download', {
-                        'index': index,
-                        'location': location,
-                        'image': canvas.toDataURL('image/png'),
-                    }, (data) => window.console.log(data));
-                });
+        /**
+         * @param {Element} card
+         * @param {number} index
+         * @param {String} location
+         * @param {Object} options
+         */
+        const callback = function (card, index, location, options) {
+            html2canvas(card, options).then((canvas) => {
+                $('*').css('cursor', 'wait');
+                const image = canvas.toDataURL('image/png');
+                sendImage(image, index, location);
             });
-        });
+        };
+        createCopyButton(cards, callback);
     }
 
     /**
@@ -201,7 +230,7 @@
     window.addEventListener('DOMContentLoaded', () => {
         initThemeTooltip();
         showFlashBag();
-        // initHtml2Canvas();
         initHtml2Image();
+        initHtml2Canvas();
     });
 }(jQuery));

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Interfaces;
 
-use App\Pdf\PdfLabelDocument;
+use App\Pdf\Events\PdfLabelTextEvent;
 
 /**
  * Class implementing this interface handle the draw label texts event.
@@ -22,21 +22,9 @@ interface PdfLabelTextListenerInterface
     /**
      * Called when a line must be drawn within the label.
      *
-     * @param PdfLabelDocument $parent the parent's document
-     * @param string           $text   the text to output
-     * @param int              $index  the text index (0 based line index)
-     * @param int              $lines  the number of lines
-     * @param float            $width  the output width
-     * @param float            $height the output height (line height)
+     * @param PdfLabelTextEvent $event the event
      *
      * @return bool true if listener handle the draw function; false to call the default behavior
      */
-    public function drawLabelText(
-        PdfLabelDocument $parent,
-        string $text,
-        int $index,
-        int $lines,
-        float $width,
-        float $height
-    ): bool;
+    public function drawLabelText(PdfLabelTextEvent $event): bool;
 }

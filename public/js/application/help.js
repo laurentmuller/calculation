@@ -5,6 +5,42 @@
  */
 (function ($) {
     'use strict';
+
+    $.fn.extend({
+        showItems: function (e) {
+            if (e) {
+                e.preventDefault();
+            }
+            $(this).find('.collapse:not(.show)').collapse('show');
+        },
+
+        hideItems: function (e) {
+            if (e) {
+                e.preventDefault();
+            }
+            $(this).find('.collapse.show').collapse('hide');
+        }
+    });
+
+    // expand / collapse
+    $('.btn-expand-all').on('click', function () {
+        $('.help-body').showItems();
+    });
+    $('.btn-collapse-all').on('click', function () {
+        $('.help-body').hideItems();
+    });
+
+    $('.expand-items').on('click', function (e) {
+        e.preventDefault();
+        $(this).parents('.items').showItems(e);
+    });
+    $('.collapse-items').on('click', function (e) {
+        e.preventDefault();
+        $(this).parents('.items').hideItems(e);
+    });
+
+
+    // search
     const $input = $('#help-search');
     if ($input.length === 0) {
         return;
@@ -17,6 +53,9 @@
         element: 'span',
         className: 'text-success',
         separateWordSearch: false,
+        each: function (element) {
+            $(element).parents('.help-item').showItems();
+        },
         done: function () {
             $context.not(':has(span)').hide();
         },

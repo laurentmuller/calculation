@@ -156,10 +156,13 @@ class PdfDocument extends \FPDF
     /**
      * Adds a new page to the document.
      *
-     * @param PdfDocumentOrientation|string $orientation the page orientation or an empty string ("") to use the current orientation
-     * @param PdfDocumentSize|int[]|string  $size        the page size or an empty string ("") to use the current size
-     * @param int                           $rotation    the angle by which to rotate the page or 0 to use the current orientation.
-     *                                                   It must be a multiple of 90; positive values mean clockwise rotation.
+     * @param PdfDocumentOrientation|string $orientation the page orientation or an empty string to use the current
+     *                                                   orientation
+     * @param PdfDocumentSize|int[]|string  $size        the page size or an empty string to use the current size
+     * @param int                           $rotation    the angle by which to rotate the page or 0 to use the current
+     *                                                   orientation.
+     *                                                   It must be a multiple of 90; positive values mean clockwise
+     *                                                   rotation.
      *
      * @psalm-param PdfDocumentOrientation|'P'|'L'|'' $orientation
      * @psalm-param PdfDocumentSize|PdfPageSizeType|'' $size
@@ -225,7 +228,7 @@ class PdfDocument extends \FPDF
      * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
      *                                        <li>A PdfTextAlignment enumeration.</li>
-     *                                        <li><code>'L'</code> or an empty string (""): left align (default value).</li>
+     *                                        <li><code>'L'</code> or an empty string: left align (default value).</li>
      *                                        <li><code>'C'</code>: Center.</li>
      *                                        <li><code>'R'</code>: Right align.</li>
      *                                        </ul>
@@ -237,8 +240,16 @@ class PdfDocument extends \FPDF
      * @psalm-param PdfMove|int<0,2> $ln
      * @psalm-param PdfTextAlignment|'J'|'L'|'C'|'R' $align
      */
-    public function Cell($w = 0, $h = self::LINE_HEIGHT, $txt = '', $border = PdfBorder::NONE, $ln = PdfMove::RIGHT, $align = PdfTextAlignment::LEFT, $fill = false, $link = ''): void
-    {
+    public function Cell(
+        $w = 0,
+        $h = self::LINE_HEIGHT,
+        $txt = '',
+        $border = PdfBorder::NONE,
+        $ln = PdfMove::RIGHT,
+        $align = PdfTextAlignment::LEFT,
+        $fill = false,
+        $link = ''
+    ): void {
         if ($ln instanceof PdfMove) {
             $ln = $ln->value;
         }
@@ -275,7 +286,8 @@ class PdfDocument extends \FPDF
     }
 
     /**
-     * This method is automatically called in case of a fatal error; it simply throws an exception with the provided message.
+     * This method is automatically called in case of a fatal error; it simply throws an exception with the provided
+     * message.
      *
      * @param string $msg
      *
@@ -497,7 +509,7 @@ class PdfDocument extends \FPDF
      * This method is used to render the page header.
      *
      * It is automatically called by AddPage() and should not be called directly by the application.
-     * The implementation in PdfDocument  call the output method of the PdfHeader.
+     * The implementation in PdfDocument call the output method of the PdfHeader.
      *
      * @see PdfHeader
      * @see PdfDocument::Footer()
@@ -522,8 +534,7 @@ class PdfDocument extends \FPDF
         $oldLineWidth = $this->LineWidth;
         $line?->apply($this);
         $this->Line($x, $y, $x + $w, $y);
-        $this->x = $x;
-        $this->y = $y + $afterSpace;
+        $this->SetXY($x, $y + $afterSpace);
         $this->SetLineWidth($oldLineWidth);
 
         return $this;
@@ -623,7 +634,7 @@ class PdfDocument extends \FPDF
      * @param PdfTextAlignment|string $align  the text alignment. The value can be:
      *                                        <ul>
      *                                        <li>A PdfTextAlignment enumeration.</li>
-     *                                        <li><code>'L'</code> or an empty string (""): left align (default value).</li>
+     *                                        <li><code>'L'</code> or an empty string: left align (default value).</li>
      *                                        <li><code>'C'</code>: center.</li>
      *                                        <li><code>'R'</code>: right align.</li>
      *                                        <li><code>'J'</code>: justification (default value).</li>
@@ -634,8 +645,14 @@ class PdfDocument extends \FPDF
      *
      * @psalm-param PdfTextAlignment|'J'|'L'|'C'|'R' $align
      */
-    public function MultiCell($w = 0, $h = self::LINE_HEIGHT, $txt = '', $border = PdfBorder::NONE, $align = PdfTextAlignment::JUSTIFIED, $fill = false): void
-    {
+    public function MultiCell(
+        $w = 0,
+        $h = self::LINE_HEIGHT,
+        $txt = '',
+        $border = PdfBorder::NONE,
+        $align = PdfTextAlignment::JUSTIFIED,
+        $fill = false
+    ): void {
         if ($border instanceof PdfBorder) {
             $border = $border->getValue();
         }
@@ -649,7 +666,7 @@ class PdfDocument extends \FPDF
      * Send the document to a given destination.
      *
      * @param PdfDocumentOutput|string $dest   the destination where to send the document or an empty
-     *                                         string ("") to send the file inline to the browser
+     *                                         string to send the file inline to the browser
      * @param string                   $name   the name of the file. It is ignored in case of string destination.
      * @param bool                     $isUTF8 indicates if name is encoded in ISO-8859-1 (false) or UTF-8 (true)
      *
@@ -716,7 +733,7 @@ class PdfDocument extends \FPDF
      *                                                  <ul>
      *                                                  <li>A PdfBorder instance.</li>
      *                                                  <li>A PdfRectangleStyle enumeration.</li>
-     *                                                  <li><code>'D'</code> or an empty string (""): Draw (default value).</li>
+     *                                                  <li><code>'D'</code> or an empty string: Draw (default value).</li>
      *                                                  <li><code>'F'</code>: Fill.</li>
      *                                                  <li><code>'DF'</code>: Draw and fill.</li>
      *                                                  </ul>
@@ -828,7 +845,8 @@ class PdfDocument extends \FPDF
     /**
      * Defines the color used for all drawing operations (lines, rectangles and cell borders).
      *
-     * It can be expressed in RGB components or gray scale. The method can be called before the first page is created and the value is retained from page to page.
+     * It can be expressed in RGB components or gray scale. The method can be called before the first page is created
+     * and the value is retained from page to page.
      *
      * @param int  $r If $g and $b are given, red component; if not, indicates the gray level. Value between 0 and 255.
      * @param ?int $g the green component (value between 0 and 255)
@@ -846,7 +864,8 @@ class PdfDocument extends \FPDF
     /**
      * Defines the color used for all filling operations (filled rectangles and cell backgrounds).
      *
-     * It can be expressed in RGB components or gray scale. The method can be called before the first page is created and the value is retained from page to page.
+     * It can be expressed in RGB components or gray scale. The method can be called before the first page is created
+     * and the value is retained from page to page.
      *
      * @param int  $r If $g and $b are given, red component; if not, indicates the gray level. Value between 0 and 255.
      * @param ?int $g the green component (value between 0 and 255)
@@ -864,8 +883,8 @@ class PdfDocument extends \FPDF
     /**
      * Sets the font used to print character strings.
      *
-     * @param PdfFontName|string  $family the font family. It can be either a font name enumeration, a name defined by AddFont()
-     *                                    or one of the standard families (case-insensitive):
+     * @param PdfFontName|string  $family the font family. It can be either a font name enumeration, a name defined by
+     *                                    AddFont() or one of the standard families (case-insensitive):
      *                                    <ul>
      *                                    <li>A PdfFontName enumeration.</li>
      *                                    <li><code>'Courier'</code>: Fixed-width.</li>
@@ -873,10 +892,11 @@ class PdfDocument extends \FPDF
      *                                    <li><code>'Symbol'</code>: Symbolic.</li>
      *                                    <li><code>'ZapfDingbats'</code>: Symbolic.</li>
      *                                    </ul>
-     *                                    It is also possible to pass an empty string (""). In that case, the current family is kept.
-     * @param PdfFontStyle|string $style  the font style. It can be either a font style enumeration or one of the given values (case-insensitive):
+     *                                    It is also possible to pass an empty string. In that case, the current family is kept.
+     * @param PdfFontStyle|string $style  the font style. It can be either a font style enumeration or one of the given
+     *                                    values (case-insensitive):
      *                                    <ul>
-     *                                    <li>An empty string (""): Regular.</li>
+     *                                    <li>An empty string: Regular.</li>
      *                                    <li><code>'B'</code>: Bold.</li>
      *                                    <li><code>'I'</code>: Italic.</li>
      *                                    <li><code>'U'</code>: Underline.</li>
@@ -899,7 +919,8 @@ class PdfDocument extends \FPDF
     /**
      * Defines the color used for text.
      *
-     * It can be expressed in RGB components or gray scale. The method can be called before the first page is created and the value is retained from page to page.
+     * It can be expressed in RGB components or gray scale. The method can be called before the first page is created
+     * and the value is retained from page to page.
      *
      * @param int  $r If $g et $b are given, red component; if not, indicates the gray level. Value between 0 and 255.
      * @param ?int $g the green component (value between 0 and 255)

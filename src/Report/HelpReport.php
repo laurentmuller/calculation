@@ -123,25 +123,6 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpMenuType|HelpActionType $action
-     *
-     * @psalm-return HelpMenuType|HelpActionType
-     */
-    private function mergeAction(array $action): array
-    {
-        if (!isset($action['action'])) {
-            return $action;
-        }
-        $source = $this->service->findAction($action['action']);
-        if (null === $source) {
-            return $action;
-        }
-
-        // @phpstan-ignore-next-line
-        return \array_merge($source, $action);
-    }
-
-    /**
      * @psalm-param HelpActionType[] $actions
      */
     private function outputActions(array $actions, string $description): void
@@ -167,7 +148,8 @@ class HelpReport extends AbstractReport
             )->outputHeaders();
 
         foreach ($actions as $action) {
-            $action = $this->mergeAction($action);
+            /** @psalm-var HelpActionType $action */
+            $action = $this->service->mergeAction($action);
             $table->addRow(
                 $this->trans($action['id']),
                 $action['description']
@@ -591,7 +573,8 @@ class HelpReport extends AbstractReport
 
         $style = PdfStyle::getCellStyle()->setIndent($indent);
         foreach ($menus as $menu) {
-            $menu = $this->mergeAction($menu);
+            /** @psalm-var HelpMenuType $menu */
+            $menu = $this->service->mergeAction($menu);
             $table->startRow()
                 ->add(text: $this->splitTrans($menu), style: $style)
                 ->add($menu['description'] ?? null)

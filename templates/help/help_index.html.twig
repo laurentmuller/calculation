@@ -3,66 +3,82 @@
 {% from 'macros/_icons.html.twig' import icon, link %}
 {# macro #}
 {% macro output_dialog(dialog, entity) -%}
-{% set href = path('help_dialog', {'id': dialog.id}) %}
-{% set icon = dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false) %}
-<div class="help-item">
-    <a href="{{ href }}">
-        {%- if icon %}{{ icon(icon ~ ' me-1') }}{% endif %}{{ dialog.name -}}
-    </a>
-    <p class="mb-1">{{ dialog.description }}</p>
-</div>
+    {% set href = path('help_dialog', {'id': dialog.id}) %}
+    {% set icon = dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false) %}
+    <div class="help-item">
+        <a href="{{ href }}">
+            {%- if icon %}{{ icon(icon ~ ' me-1') }}{% endif %}{{ dialog.name -}}
+        </a>
+        <p class="mb-1">{{ dialog.description }}</p>
+    </div>
 {%- endmacro %}
 
 {% macro output_entity(entity) -%}
-{% set href = path('help_entity', {'id': entity.id}) %}
-<div class="help-item">
-    <a href="{{ href }}">
-        {%- if entity.icon|default(false) %}{{ icon(entity.icon ~ ' me-1') }}{% endif %}{{ entity.name -}}
-    </a>
-    <p class="mb-1">{{ entity.description }}</p>
-</div>
+    {% set href = path('help_entity', {'id': entity.id}) %}
+    <div class="help-item">
+        <a href="{{ href }}">
+            {%- if entity.icon|default(false) %}{{ icon(entity.icon ~ ' me-1') }}{% endif %}{{ entity.name -}}
+        </a>
+        <p class="mb-1">{{ entity.description }}</p>
+    </div>
 {%- endmacro %}
 
 {% macro output_menus(menus, service, indent=false) -%}
-<div class="help-item{% if indent %} ms-3{% endif %}">
-    {%- for menu in menus -%}
-        {{- _self.output_menu(menu, service, indent) -}}
-    {%- endfor -%}
-</div>
+    <div class="help-item{% if indent %} ms-3{% endif %}">
+        {%- for menu in menus -%}
+            {{- _self.output_menu(menu, service, indent) -}}
+        {%- endfor -%}
+    </div>
 {%- endmacro %}
 
 {% macro output_menu(menu, service, indent=false) -%}
-{% if menu.action|default(false) %}
-    {%- set menu = service.findAction(menu.action)|default({})|merge(menu) -%}
-{% endif %}
-{%- set href = false -%}
-{%- set menus = menu.menus|default(false) -%}
-{%- set description = menu.description|default %}
-{%- if menu.dialog|default(false) -%}
-    {%- set target = service.findDialog(menu.dialog) -%}
-    {%- if target -%}
-        {%- set href = path('help_dialog', {'id': target.id}) -%}
-        {%- set description = description|default(target.description|default) -%}
-    {%- endif -%}
-{%- endif -%}
-<div class="help-item mb-2">
-    <p class="mb-0{% if menus %} fw-bold{% endif %}">
-        {%- if href -%}
-            <a href="{{ href }}">
-                {{- tools.output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
-            </a>
-        {%- else -%}
-            {{- tools.output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
+    {% if menu.action|default(false) %}
+        {%- set menu = service.mergeAction(menu) -%}
+    {% endif %}
+    {%- set href = false -%}
+    {%- set menus = menu.menus|default(false) -%}
+    {%- set description = menu.description|default %}
+    {%- if menu.dialog|default(false) -%}
+        {%- set target = service.findDialog(menu.dialog) -%}
+        {%- if target -%}
+            {%- set href = path('help_dialog', {'id': target.id}) -%}
+            {%- set description = description|default(target.description|default) -%}
         {%- endif -%}
-    </p>
-    {% if description %}
-        <p class="mb-0">{{ description }}</p>
-    {% endif %}
-    {% if menus %}
-        <hr class="my-1">
-        {{ _self.output_menus(menus, service, true) }}
-    {% endif %}
-</div>
+    {%- endif -%}
+    <div class="help-item mb-2">
+        {% if menus and not href %}
+            {% set menu_id = menu.id %}
+            <div class="d-flex">
+                <a href="#{{ menu_id }}" class="drop-down-icon-left text-body flex-fill" data-bs-toggle="collapse" aria-expanded="false">
+                    {{- tools.output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
+                </a>
+            </div>
+            <hr class="my-1">
+            <div id="{{ menu_id }}" class="ms-3 collapse">
+                {% if description %}
+                    <p class="mb-0">{{ description }}</p>
+                {% endif %}
+                {{ _self.output_menus(menus, service, false) }}
+            </div>
+        {% else %}
+            <p class="mb-0">
+                {%- if href -%}
+                    <a href="{{ href }}">
+                        {{- tools.output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
+                    </a>
+                {%- else -%}
+                    {{- tools.output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
+                {%- endif -%}
+            </p>
+            {% if description %}
+                <p class="mb-0">{{ description }}</p>
+            {% endif %}
+            {% if menus %}
+                <hr class="my-1">
+                {{ _self.output_menus(menus, service, true) }}
+            {% endif %}
+        {% endif %}
+    </div>
 {%- endmacro %}
 {# parameters #}
 {%- set title = 'help.title' -%}
@@ -70,56 +86,97 @@
 {%- block container_class 'container-fluid' -%}
 {# title #}
 {% block help_title -%}
-{{- tools.output_icon('question-circle', 'help.title') -}}
+    {{- tools.output_icon('question-circle', 'help.title') -}}
 {%- endblock %}
 {# body #}
 {% block help_body -%}
-<p class="mb-1">{{ 'help.description'|trans({'%app_name_version%': app_name_version})|raw }}</p>
-<hr class="mt-1">
-<div class="row">
-    {# main menu #}
-    {% set main_menus = service.mainMenus|default(false) %}
-    {% if main_menus %}
-        <div class="col-xl-4 col-lg-6">
-            <h6><i class="fa-solid fa-sitemap me-1"></i>{{ 'help.main_menu'|trans }}</h6>
-            <hr class="my-1">
-            {{ _self.output_menus(main_menus, service) }}
-        </div>
-    {%- endif %}
-    {# dialogs #}
-    {% set groups = service.getDialogsByGroup() %}
-    {% if groups %}
-        <div class="col-xl-4 col-lg-6">
-            <h6><i class="fa-regular fa-window-maximize me-1"></i>{{ 'help.dialog_menu'|trans }}</h6>
-            <hr class="my-1">
-            {% for group, dialogs in groups %}
-                <div class="help-item">
-                    <p class="my-0 fw-bold">{{ group }}</p>
-                    <hr class="my-1">
-                    {% for dialog in dialogs %}
-                        {{ _self.output_dialog(dialog, service.findEntity(dialog)) }}
-                    {% endfor %}
+    <p class="mb-1">{{ 'help.description'|trans({'%app_name_version%': app_name_version})|raw }}</p>
+    <hr class="mt-1">
+    <div class="row">
+        {# main menu #}
+        {% set main_menus = service.mainMenus|default(false) %}
+        {% if main_menus %}
+            <div class="col-xl-4 col-lg-6 items">
+                <div class="d-flex-wrap-center">
+                    <h6 class="flex-fill"><i class="fa-solid fa-sitemap me-1"></i>{{ 'help.main_menu'|trans }}</h6>
+                    <a class="expand-items" href="#" title="{{ 'about.expand'|trans }}">
+                        <i class="fa-regular fa-square-plus"></i>
+                    </a>
+                    <a class="collapse-items" href="#" title="{{ 'about.collapse'|trans }}">
+                        <i class="fa-regular fa-square-minus"></i>
+                    </a>
                 </div>
-            {% endfor %}
-        </div>
-    {%- endif %}
-    {# entities #}
-    {% set entities = service.entities|default(false) %}
-    {% if entities %}
-        <div class="col-xl-4 col-lg-6">
-            <h6><i class="fa-solid fa-database me-1"></i>{{ 'help.entity_menu'|trans }}</h6>
-            <hr class="my-1">
-            {% for entity in entities %}
-                {{ _self.output_entity(entity) }}
-            {% endfor %}
-        </div>
-    {%- endif %}
-</div>
+                <hr class="my-1">
+                {{ _self.output_menus(main_menus, service) }}
+            </div>
+        {%- endif %}
+        {# dialogs #}
+        {% set groups = service.getDialogsByGroup() %}
+        {% if groups %}
+            <div class="col-xl-4 col-lg-6 items">
+                <div class="d-flex-wrap-center">
+                    <h6 class="flex-fill"><i class="fa-regular fa-window-maximize me-1"></i>{{ 'help.dialog_menu'|trans }}</h6>
+                    <a class="expand-items" href="#" title="{{ 'about.expand'|trans }}">
+                        <i class="fa-regular fa-square-plus"></i>
+                    </a>
+                    <a class="collapse-items" href="#" title="{{ 'about.collapse'|trans }}">
+                        <i class="fa-regular fa-square-minus"></i>
+                    </a>
+                </div>
+                <hr class="my-1">
+                {% for group, dialogs in groups %}
+                    {% set group_id = 'group-' ~ loop.index %}
+                    <div class="help-item">
+                        <div class="d-flex">
+                            <a href="#{{ group_id }}" class="drop-down-icon-left text-body my-0 flex-fill" data-bs-toggle="collapse" aria-expanded="false" aria-controls="{{ group_id }}">
+                                {{- group -}}
+                            </a>
+                        </div>
+                        <hr class="my-1">
+                        <div id="{{ group_id }}" class="ms-3 collapse">
+                            {% for dialog in dialogs %}
+                                {{ _self.output_dialog(dialog, service.findEntity(dialog)) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {%- endif %}
+        {# entities #}
+        {% set entities = service.entities|default(false) %}
+        {% if entities %}
+            <div class="col-xl-4 col-lg-6 items">
+                <div class="d-flex-wrap-center">
+                    <h6 class="flex-fill"><i class="fa-solid fa-database me-1"></i>{{ 'help.entity_menu'|trans }}</h6>
+                    <a class="expand-items" href="#" title="{{ 'about.expand'|trans }}">
+                        <i class="fa-regular fa-square-plus"></i>
+                    </a>
+                    <a class="collapse-items" href="#" title="{{ 'about.collapse'|trans }}">
+                        <i class="fa-regular fa-square-minus"></i>
+                    </a>
+                </div>
+                <hr class="my-1">
+                <div class="help-item">
+                    <div class="collapse">
+                        {% for entity in entities %}
+                            {{ _self.output_entity(entity) }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {%- endif %}
+    </div>
 {%- endblock %}
 {# home #}
 {% block help_home -%}{% endblock %}
 {# actions #}
 {% block help_actions -%}
+    <button type="button" class="btn btn-outline-secondary btn-expand-all" title="{{ 'about.expand'|trans }}">
+        <i class="fa-solid fa-plus"></i>
+    </button>
+    <button type="button" class="btn btn-outline-secondary btn-collapse-all" title="{{ 'about.collapse'|trans }}">
+        <i class="fa-solid fa-minus"></i>
+    </button>
     {{ tools.dialogs_button() }}
     {{ tools.entities_button() }}
     {{ tools.export_button() }}

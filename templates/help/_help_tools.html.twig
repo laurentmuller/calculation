@@ -40,7 +40,7 @@
 
 {% macro output_row_action(action, service) -%}
 {% if action.action|default(false) %}
-    {%- set action = service.findAction(action.action)|default({})|merge(action) -%}
+    {%- set action = service.mergeAction(action) -%}
 {% endif %}
 {%- set dialog = service.findDialog(action.dialog|default(action.id)) -%}
 {%- set href = dialog ? path('help_dialog', {'id': dialog.id}) : false -%}

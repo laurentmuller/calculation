@@ -538,6 +538,7 @@ group:
 help:
   title: Aide
   title_name: Aide - %name%
+  navigation_menu: Barre de navigation
   main_menu: Menu principal
   home_menu: Page d'accueil de l'aide
   dialog_menu: Pages de l'application
@@ -572,6 +573,7 @@ help:
     switch: Basculer le mode
   groups:
     dialog: Dialogue
+    user_connected: Utilisateur (connecté)
   types:
     amount: Montant
     collection: Collection

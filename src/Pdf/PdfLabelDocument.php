@@ -15,6 +15,8 @@ namespace App\Pdf;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Enums\PdfDocumentSize;
 use App\Pdf\Enums\PdfDocumentUnit;
+use App\Pdf\Enums\PdfTextAlignment;
+use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\Traits\PdfDashLineTrait;
 use App\Utils\StringUtils;
@@ -71,7 +73,7 @@ class PdfLabelDocument extends PdfDocument
         'mm' => 1000.0,
     ];
 
-    // the number of labels horizontally
+    // the number of horizontally labels
     private int $cols = 0;
     // the current column (0 based index)
     private int $currentCol;
@@ -91,7 +93,7 @@ class PdfLabelDocument extends PdfDocument
     private float $marginTop = 0;
     // the padding inside labels
     private float $padding = 0;
-    // the number of labels vertically
+    // the number of vertically labels
     private int $rows = 0;
     // the horizontal space between 2 labels
     private float $spaceX = 0;
@@ -143,7 +145,7 @@ class PdfLabelDocument extends PdfDocument
         }
         $this->currentCol = $col - 1;
         $this->currentRow = $row - 1;
-        $this->cMargin = 0;
+        $this->setCellMargin(0);
     }
 
     /**
@@ -262,31 +264,55 @@ class PdfLabelDocument extends PdfDocument
         return $this->_convertUnit(self::FONT_CONVERSION[$pt], 'mm');
     }
 
+    /**
+     * Gets the horizontal label offset.
+     */
     private function _getLabelX(): float
     {
-        return $this->marginLeft + (float) $this->currentCol * ($this->width + $this->spaceX) + $this->padding;
+        return $this->_getOffsetX() + $this->padding;
     }
 
+    /**
+     * Gets the vertical label offset.
+     */
     private function _getLabelY(string $text): float
     {
-        $lines = $this->getLinesCount($text, $this->width - 2.0 * $this->padding);
-        $height = (float) $lines * $this->lineHeight;
-        $y = ($this->height - $height) / 2.0;
+        $height = (float) $this->getLinesCount($text, $this->width - 2.0 * $this->padding) * $this->lineHeight;
 
-        return $this->marginTop + (float) $this->currentRow * ($this->height + $this->spaceY) + $y;
+        return $this->_getOffsetY() + ($this->height - $height) / 2.0;
     }
 
+    /**
+     * Gets the horizontal offset.
+     */
+    private function _getOffsetX(): float
+    {
+        return $this->marginLeft + (float) $this->currentCol * ($this->width + $this->spaceX);
+    }
+
+    /**
+     * Gets the vertical offset.
+     */
+    private function _getOffsetY(): float
+    {
+        return $this->marginTop + (float) $this->currentRow * ($this->height + $this->spaceY);
+    }
+
+    /**
+     * Output border if applicable.
+     */
     private function _outputLabelBorder(): void
     {
         if (!$this->labelBorder) {
             return;
         }
-        $x = $this->marginLeft + (float) $this->currentCol * ($this->width + $this->spaceX);
-        $y = $this->marginTop + (float) $this->currentRow * ($this->height + $this->spaceY);
         PdfDrawColor::cellBorder()->apply($this);
-        $this->dashedRect($x, $y, $this->width, $this->height);
+        $this->dashedRect($this->_getOffsetX(), $this->_getOffsetY(), $this->width, $this->height);
     }
 
+    /**
+     * Output label's text.
+     */
     private function _outputLabelText(string $text): void
     {
         if ('' === $text) {
@@ -295,24 +321,29 @@ class PdfLabelDocument extends PdfDocument
 
         $x = $this->_getLabelX();
         $y = $this->_getLabelY($text);
-        $w = $this->width - $this->padding;
-        if (!$this->labelTextListener instanceof PdfLabelTextListenerInterface) {
-            $this->SetXY($x, $y);
-            $this->MultiCell(w: $w, h: $this->lineHeight, txt: $text, align: 'L');
+        $height = $this->lineHeight;
+        $width = $this->width - $this->padding;
+
+        // listener?
+        if ($this->labelTextListener instanceof PdfLabelTextListenerInterface) {
+            $texts = \explode(StringUtils::NEW_LINE, $text);
+            $lines = \count($texts);
+            foreach ($texts as $index => $text) {
+                $this->SetXY($x, $y);
+                $event = new PdfLabelTextEvent($this, $text, $index, $lines, $width, $height);
+                // @phpstan-ignore-next-line
+                if (!$this->labelTextListener->drawLabelText($event)) {
+                    $this->Cell($width, $height, $text);
+                }
+                $y += $this->lasth;
+            }
 
             return;
         }
 
-        $texts = \explode(StringUtils::NEW_LINE, $text);
-        $lines = \count($texts);
-        foreach ($texts as $index => $text) {
-            $this->SetXY($x, $y);
-            // @phpstan-ignore-next-line
-            if (!$this->labelTextListener->drawLabelText($this, $text, $index, $lines, $w, $this->lineHeight)) {
-                $this->Cell($w, $this->lineHeight, $text);
-            }
-            $y += $this->lasth;
-        }
+        // default
+        $this->SetXY($x, $y);
+        $this->MultiCell(w: $width, h: $height, txt: $text, align: PdfTextAlignment::LEFT);
     }
 
     /**

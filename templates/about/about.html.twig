@@ -6,7 +6,7 @@
     {%- set title = ('about.' ~ id)|trans -%}
     {%- set route = path('about_' ~ id ~ '_content') -%}
     <div class="card-header d-flex-wrap-center">
-        <a class="drop-down-icon-left card-title flex-fill" href="#" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="false" title="{{ 'about.expand'|trans }}">{{- title -}}</a>
+        <a class="drop-down-icon-left card-title flex-fill" href="#{{ id }}" data-bs-toggle="collapse" aria-expanded="false" title="{{ 'about.expand'|trans }}">{{- title -}}</a>
         {{ link_pdf(pdf_route) }}
         {% if excel_route %}
             {{ link_excel(excel_route) }}

@@ -26,6 +26,8 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\UserInterface;
 use App\Model\HttpClientError;
+use App\Pdf\Enums\PdfFontStyle;
+use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfException;
 use App\Pdf\PdfLabelDocument;
@@ -154,20 +156,22 @@ class TestController extends AbstractController
     public function exportLabel(CustomerRepository $repository): PdfResponse
     {
         $listener = new class() implements PdfLabelTextListenerInterface {
-            public function drawLabelText(PdfLabelDocument $parent, string $text, int $index, int $lines, float $width, float $height): bool
+            public function drawLabelText(PdfLabelTextEvent $event): bool
             {
-                if ($index < 2) {
-                    $font = $parent->getCurrentFont();
-                    $parent->SetFont('', 'B');
-                    $parent->Cell($width, $height, $text);
-                    $font->apply($parent);
-
-                    return true;
+                if ($event->index !== $event->lines - 1 && $event->index > 2) {
+                    return false;
                 }
 
-                return false;
+                $parent = $event->parent;
+                $font = $parent->getCurrentFont();
+                $parent->SetFont('', PdfFontStyle::BOLD);
+                $parent->Cell($event->width, $event->height, $event->text);
+                $font->apply($parent);
+
+                return true;
             }
         };
+
         $format = '5161';
         $report = new PdfLabelDocument($format);
         $report->SetTitle("Etiquette - Format Avery $format");
@@ -195,7 +199,7 @@ class TestController extends AbstractController
         }
 
         $report->AddPage();
-        $report->SetLineWidth(1);
+        $report->SetLineWidth(0.25);
         $report->dashedRect(55, 30, 100, 50);
         $report->setDashPattern(5, 3);
         $report->Rect(55, 100, 100, 50);

@@ -750,14 +750,21 @@
         "description": "Le menu principal est une partie de l'interface d'utilisateur permettant de parcourir les pages du site.",
         "menus": [
             {
-                "action": "back_home",
-                "description": "Page principale de l'application."
-            },
-            {
-                "id": "calculation.list.title",
-                "icon": "calculator",
-                "description": "Gestion des calculations.",
-                "dialog": "calculation.list.title"
+                "id": "help.navigation_menu",
+                "icon": "bars",
+                "description": "",
+                "menus": [
+                    {
+                        "action": "back_home",
+                        "description": "Page principale de l'application."
+                    },
+                    {
+                        "id": "calculation.list.title",
+                        "icon": "calculator",
+                        "description": "Gestion des calculations.",
+                        "dialog": "calculation.list.title"
+                    }
+                ]
             },
             {
                 "id": "index.menu_data",
@@ -791,7 +798,7 @@
                     {
                         "id": "calculationstate.list.title",
                         "icon": "flag far",
-                        "description": "Gestion des statuts.",
+                        "description": "Gestion des statuts du catalogue.",
                         "dialog": "calculationstate.list.title"
                     },
                     {
@@ -928,13 +935,13 @@
                         "id": "profile.edit.title",
                         "icon": "user-gear",
                         "dialog": "profile.edit.title",
-                        "description": "Page permettant de modifier le profile."
+                        "description": "Page permettant de modifier son profile."
                     },
                     {
                         "id": "profile.change_password.title",
                         "icon": "unlock-alt",
                         "dialog": "profile.change_password.title",
-                        "description": "Page permettant de modifier le mot de passe."
+                        "description": "Page permettant de modifier son mot de passe."
                     },
                     {
                         "id": "user.parameters.title",
@@ -945,7 +952,7 @@
                     {
                         "id": "help.labels.switch",
                         "icon": "location-arrow",
-                        "description": "Permet à l'utilisateur de basculer entre le mode Production et le mode Développement."
+                        "description": "Permet de basculer entre le mode Production et le mode Développement."
                     },
                     {
                         "id": "index.menu_site_map",
@@ -961,7 +968,7 @@
                     {
                         "id": "help.title",
                         "icon": "question-circle",
-                        "description": "Page pour afficher l'aide de l'application (page actuelle)."
+                        "description": "Page affichant l'aide de l'application (page actuelle)."
                     },
                     {
                         "id": "about.title",
@@ -2279,7 +2286,8 @@
             "id": "title_by_month|chart",
             "image": "chart/chart_month",
             "group": "index.menu_graphics",
-            "description": "Cette page affiche un graphique des calculations par mois.",
+            "icon": "calendar-alt far",
+            "description": "Cette page affiche un graphique et un tableau des calculations par mois.",
             "editActions": [
                 {
                     "action": "back_home"
@@ -2332,7 +2340,8 @@
             "id": "title_by_state|chart",
             "image": "chart/chart_state",
             "group": "index.menu_graphics",
-            "description": "Cette page affiche un graphique des calculations par statut.",
+            "icon": "flag far",
+            "description": "Cette page affiche un graphique et un tableau des calculations par statut.",
             "editActions": [
                 {
                     "action": "back_home"
@@ -2518,6 +2527,7 @@
         },
         {
             "id": "profile.edit.title",
+            "group": "help.groups.user_connected",
             "image": "profile/profile_edit",
             "entity": "user",
             "icon": "user-gear",
@@ -2544,6 +2554,7 @@
         },
         {
             "id": "profile.change_password.title",
+            "group": "help.groups.user_connected",
             "image": "profile/profile_change-password",
             "entity": "user",
             "icon": "unlock-alt",
@@ -2570,6 +2581,7 @@
         },
         {
             "id": "user.parameters.title",
+            "group": "help.groups.user_connected",
             "image": "user/user_parameters",
             "entity": "user",
             "icon": "user-gear",
@@ -2627,6 +2639,7 @@
         },
         {
             "id": "user.comment.title",
+            "group": "help.groups.user_connected",
             "image": "user/user_comment",
             "entity": "user",
             "description": "Cette page permet d'envoyer un commentaire à l'administrateur du site.",
@@ -2777,6 +2790,7 @@
         },
         {
             "id": "about.title",
+            "group": "help.groups.user_connected",
             "image": "about/about_list",
             "icon": "info-circle",
             "description": "Cette page affiche des informations sur l'application tel que son nom, sa version ou son environnent."

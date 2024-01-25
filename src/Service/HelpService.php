@@ -285,6 +285,24 @@ class HelpService implements ServiceSubscriberInterface
     }
 
     /**
+     * Merge current item with an action; if applicable.
+     *
+     * @psalm-param array{action?: string, ...} $item
+     */
+    public function mergeAction(array $item): array
+    {
+        if (!isset($item['action'])) {
+            return $item;
+        }
+        $action = $this->findAction($item['action']);
+        if (null === $action) {
+            return $item;
+        }
+
+        return \array_merge($action, $item);
+    }
+
+    /**
      * Sort the given array by 'name' index.
      *
      * @psalm-template T of array{name?: string, ...}

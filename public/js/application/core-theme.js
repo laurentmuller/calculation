@@ -168,7 +168,7 @@
      * Channel to update theme in other tabs
      */
     const channel = new window.BroadcastChannel('Theme');
-    channel.addEventListener('message', e => {
+    channel.addEventListener('message', (e) => {
         if (e.data === THEME_EVENT_NAME) {
             const theme = getStoredTheme();
             updateActiveTheme(theme);

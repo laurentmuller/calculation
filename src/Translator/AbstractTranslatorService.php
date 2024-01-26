@@ -148,7 +148,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     private function doLoadLanguages(): ?array
     {
         $languages = $this->loadLanguages();
-        if (!empty($languages) && !$this->hasLastError()) {
+        if (false !== $languages && [] !== $languages && !$this->hasLastError()) {
             return $languages;
         }
 

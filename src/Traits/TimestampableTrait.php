@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use App\Interfaces\UserInterface;
 use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -95,7 +96,8 @@ trait TimestampableTrait
     public function updateTimestampable(\DateTimeImmutable $date, string $user): bool
     {
         $changed = false;
-        if (empty($this->getId())) {
+        $id = $this->getId();
+        if (null === $id || 0 === $id) {
             if (null === $this->createdAt) {
                 $this->createdAt = $date;
                 $changed = true;
@@ -120,7 +122,7 @@ trait TimestampableTrait
     private function formatDateAndUser(?\DateTimeInterface $date, ?string $user, TranslatorInterface $translator, string $id): string
     {
         $date = $date instanceof \DateTimeInterface ? FormatUtils::formatDateTime($date) : $translator->trans('common.empty_date');
-        if (null === $user || '' === $user) {
+        if (!StringUtils::isString($user)) {
             $user = $translator->trans('common.empty_user');
         }
 

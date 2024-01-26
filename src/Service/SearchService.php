@@ -153,7 +153,7 @@ class SearchService implements ServiceSubscriberInterface
         if (!StringUtils::isString($search)) {
             return 0;
         }
-        $result = $this->getArrayResult((string) $search, $entity);
+        $result = $this->getArrayResult($search, $entity);
 
         // count
         return \count($result);
@@ -218,7 +218,7 @@ class SearchService implements ServiceSubscriberInterface
         }
         $extra = " LIMIT $limit OFFSET $offset";
 
-        return $this->getArrayResult((string) $search, $entity, $extra);
+        return $this->getArrayResult($search, $entity, $extra);
     }
 
     private function addQuery(string $key, QueryBuilder $builder): void
@@ -365,7 +365,7 @@ class SearchService implements ServiceSubscriberInterface
     {
         $queries = $this->getQueries();
         if (StringUtils::isString($entity)) {
-            $queries = \array_filter($queries, fn (string $key): bool => 0 === \stripos($key, (string) $entity), \ARRAY_FILTER_USE_KEY);
+            $queries = \array_filter($queries, fn (string $key): bool => 0 === \stripos($key, $entity), \ARRAY_FILTER_USE_KEY);
         }
         if ([] === $queries) {
             return [];

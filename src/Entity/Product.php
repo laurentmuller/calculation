@@ -16,6 +16,7 @@ use App\Interfaces\TimestampableInterface;
 use App\Repository\ProductRepository;
 use App\Traits\TimestampableTrait;
 use App\Types\FixedFloatType;
+use App\Utils\StringUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -62,7 +63,7 @@ class Product extends AbstractCategoryItemEntity implements TimestampableInterfa
     public function clone(string $description = null): self
     {
         $copy = clone $this;
-        if ($description) {
+        if (StringUtils::isString($description)) {
             $copy->setDescription($description);
         }
 

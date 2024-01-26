@@ -15,6 +15,7 @@ namespace App\Entity;
 use App\Repository\CustomerRepository;
 use App\Service\CountryFlagService;
 use App\Utils\DateUtils;
+use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -144,7 +145,7 @@ class Customer extends AbstractEntity
 
     public function getDisplay(): string
     {
-        if ($this->firstName || $this->lastName || $this->company) {
+        if (StringUtils::isString($this->firstName) || StringUtils::isString($this->lastName) || StringUtils::isString($this->company)) {
             return $this->getNameAndCompany();
         }
 
@@ -337,7 +338,7 @@ class Customer extends AbstractEntity
     public function setWebSite(?string $webSite): self
     {
         $webSite = $this->trim($webSite);
-        if ($webSite && !\str_starts_with($webSite, 'http')) {
+        if (StringUtils::isString($webSite) && !\str_starts_with($webSite, 'http')) {
             $webSite = "https://$webSite";
         }
         $this->webSite = $webSite;
@@ -359,7 +360,9 @@ class Customer extends AbstractEntity
     public function validate(ExecutionContextInterface $context): void
     {
         // check values
-        if (empty($this->firstName) && empty($this->lastName) && empty($this->company)) {
+        if (!StringUtils::isString($this->firstName)
+            && !StringUtils::isString($this->lastName)
+            && !StringUtils::isString($this->company)) {
             $context->buildViolation('customer.empty')
                 ->addViolation();
         }

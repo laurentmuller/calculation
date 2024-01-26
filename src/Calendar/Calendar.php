@@ -204,7 +204,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function getMonthNames(): array
     {
-        if (!$this->monthNames) {
+        if (null === $this->monthNames) {
             $this->monthNames = DateUtils::getMonths();
         }
 
@@ -228,7 +228,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function getMonthShortNames(): array
     {
-        if (!$this->monthShortNames) {
+        if (null === $this->monthShortNames) {
             $this->monthShortNames = DateUtils::getShortMonths();
         }
 
@@ -283,7 +283,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function getWeekNames(): array
     {
-        if (!$this->weekNames) {
+        if (null === $this->weekNames) {
             $this->weekNames = DateUtils::getWeekdays();
         }
 
@@ -307,7 +307,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      */
     public function getWeekShortNames(): array
     {
-        if (!$this->weekShortNames) {
+        if (null === $this->weekShortNames) {
             $this->weekShortNames = DateUtils::getShortWeekdays();
         }
 

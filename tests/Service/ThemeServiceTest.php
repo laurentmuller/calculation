@@ -96,7 +96,7 @@ class ThemeServiceTest extends TestCase
 
     private static function createRequest(Theme|string $value = null): Request
     {
-        if ($value) {
+        if (null !== $value) {
             if ($value instanceof Theme) {
                 $value = $value->value;
             }

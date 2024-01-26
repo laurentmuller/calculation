@@ -34,18 +34,30 @@ class FormatUtilsTest extends TestCase
 
     public static function getAmounts(): \Iterator
     {
+        yield [null, '0.00'];
+        yield ['', '0.00'];
+        yield ['fake', '0.00'];
+
         yield [0, '0.00'];
         yield [0.0, '0.00'];
-        yield [-0.0, '0.00'];
-        yield ['0', '0.00'];
-        yield ['0.0', '0.00'];
-        yield [1000, "1'000.00"];
-        yield [1000.0, "1'000.00"];
-        yield ['1000', "1'000.00"];
-        yield ['1000.0', "1'000.00"];
-        yield [-1000, "-1'000.00"];
         yield [-0, '0.00'];
         yield [-0.0, '0.00'];
+
+        yield ['0', '0.00'];
+        yield ['0.0', '0.00'];
+        yield ['-0', '0.00'];
+        yield ['-0.0', '0.00'];
+
+        yield [1000, "1'000.00"];
+        yield [1000.0, "1'000.00"];
+        yield [-1000, "-1'000.00"];
+        yield [-1000.0, "-1'000.00"];
+
+        yield ['1000', "1'000.00"];
+        yield ['1000.0', "1'000.00"];
+        yield ['-1000', "-1'000.00"];
+        yield ['-1000.0', "-1'000.00"];
+
         yield [0.14, '0.14'];
         yield [0.15, '0.15'];
         yield [0.16, '0.16'];
@@ -112,26 +124,46 @@ class FormatUtilsTest extends TestCase
 
     public static function getIds(): \Iterator
     {
+        yield [null, '000000'];
+        yield ['', '000000'];
+        yield ['fake', '000000'];
+
         yield [0, '000000'];
+        yield [-0, '000000'];
         yield [0.0, '000000'];
         yield [-0.0, '000000'];
+
         yield ['0', '000000'];
+        yield ['-0', '000000'];
         yield ['0.0', '000000'];
+        yield ['-0.0', '000000'];
+
         yield [1, '000001'];
         yield [1.0, '000001'];
-        yield [-0, '000000'];
-        yield [null, '000000'];
+
+        yield ['1', '000001'];
+        yield ['1.0', '000001'];
+
         yield [123456, '123456'];
         yield [-123456, '-123456'];
     }
 
     public static function getIntegers(): \Iterator
     {
+        yield [null, '0'];
+        yield ['', '0'];
+        yield ['fake', '0'];
+
         yield [0, '0'];
         yield [0.0, '0'];
+        yield [-0, '0'];
         yield [-0.0, '0'];
+
         yield ['0', '0'];
         yield ['0.0', '0'];
+        yield ['-0', '0'];
+        yield ['-0.0', '0'];
+
         yield [1, '1'];
         yield [1.0, '1'];
         yield [-1, '-1'];
@@ -143,8 +175,20 @@ class FormatUtilsTest extends TestCase
 
     public static function getPercents(): \Iterator
     {
+        yield [null, '0%'];
+        yield [null, '0', false];
+        yield [null, '0.0%', true, 1];
+        yield [null, '0.00%', true, 2];
+
+        yield ['', '0%'];
+        yield ['fake', '0%'];
+
         yield [0, '0%'];
         yield [-0, '0%'];
+
+        yield ['0', '0%'];
+        yield ['-0', '0%'];
+
         yield [0, '0', false];
         yield [0, '0.0%', true, 1];
         yield [0, '0.00%', true, 2];
@@ -152,10 +196,6 @@ class FormatUtilsTest extends TestCase
         yield [0, '0.00', false, 2];
         yield [0.1, '10%'];
         yield [0.15, '15%'];
-        yield [null, '0%'];
-        yield [null, '0', false];
-        yield [null, '0.0%', true, 1];
-        yield [null, '0.00%', true, 2];
     }
 
     /**
@@ -195,7 +235,7 @@ class FormatUtilsTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getAmounts')]
-    public function testFormatAmount(string|int|float $number, string $expected): void
+    public function testFormatAmount(string|int|float|null $number, string $expected): void
     {
         $actual = FormatUtils::formatAmount($number);
         self::assertSame($expected, $actual);

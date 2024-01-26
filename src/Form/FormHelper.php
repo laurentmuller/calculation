@@ -18,6 +18,7 @@ use App\Form\Type\RepeatPasswordType;
 use App\Interfaces\EnumSortableInterface;
 use App\Interfaces\UserInterface;
 use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use Elao\Enum\Bridge\Symfony\Form\Type\EnumType as ElaoEnumType;
 use Elao\Enum\ReadableEnumInterface;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -114,7 +115,7 @@ class FormHelper
      */
     public function __construct(private readonly FormBuilderInterface $builder, string $labelPrefix = null)
     {
-        $this->labelPrefix = empty($labelPrefix) ? null : $labelPrefix;
+        $this->labelPrefix = StringUtils::isString($labelPrefix) ? $labelPrefix : null;
     }
 
     /**
@@ -557,7 +558,7 @@ class FormHelper
      */
     public function domain(?string $domain): self
     {
-        $domain = empty($domain) ? null : $domain;
+        $domain = StringUtils::isString($domain) ? $domain : null;
 
         return $this->updateOption('translation_domain', $domain);
     }
@@ -596,7 +597,7 @@ class FormHelper
      */
     public function help(?string $help): self
     {
-        $help = empty($help) ? null : $help;
+        $help = StringUtils::isString($help) ? $help : null;
 
         return $this->updateOption('help', $help);
     }

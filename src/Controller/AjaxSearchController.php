@@ -53,14 +53,16 @@ class AjaxSearchController extends AbstractController
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
         int $limit = null
     ): JsonResponse {
-        $limit ??= 15;
-        if (!empty($zip)) {
+        if (null === $limit) {
+            $limit = 15;
+        }
+        if (null !== $zip && '' !== $zip) {
             return $this->json($service->findZip($zip, $limit));
         }
-        if (!empty($city)) {
+        if (null !== $city && '' !== $city) {
             return $this->json($service->findCity($city, $limit));
         }
-        if (!empty($street)) {
+        if (null !== $street && '' !== $street) {
             return $this->json($service->findStreet($street, $limit));
         }
 

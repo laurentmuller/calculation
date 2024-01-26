@@ -49,7 +49,7 @@ class FileUtilsTest extends TestCase
         $empty = 'Empty';
 
         $linesFile = self::getLinesFile();
-        $lineSize = \filesize($linesFile) ?: 0;
+        $lineSize = (int) \filesize($linesFile);
 
         $thisSize = \round(\filesize(__FILE__) / $kb);
         $thisText = \sprintf('%d KB', $thisSize);

@@ -327,7 +327,7 @@ final class CalculationService implements ServiceSubscriberInterface
         float $global_margin = null
     ): array {
         /** @psalm-var array<ServiceGroupType> $result */
-        $result = $callback ? \array_map($callback, $groups) : $groups;
+        $result = \is_callable($callback) ? \array_map($callback, $groups) : $groups;
         $groups_amount = $this->round($this->getGroupsAmount($result));
         $groups_margin = $this->round($this->getGroupsMargin($result));
         $total_net = $groups_amount + $groups_margin;

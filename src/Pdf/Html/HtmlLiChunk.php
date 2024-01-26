@@ -16,6 +16,7 @@ use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
+use App\Utils\StringUtils;
 
 /**
  * A specialized chunk for HTML list item (li).
@@ -85,7 +86,7 @@ class HtmlLiChunk extends HtmlParentChunk
             $text = $parent->getBulletLast();
         }
 
-        if ($text) {
+        if (StringUtils::isString($text)) {
             $this->applyFont($report, $this->findFont(), function (HtmlReport $report) use (&$width, $text): void {
                 $width = $report->GetStringWidth($text);
             });

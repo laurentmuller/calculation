@@ -157,7 +157,7 @@ class PasswordValidator extends AbstractConstraintValidator
         // load
         $url = \sprintf('https://api.pwnedpasswords.com/range/%s', $hashPrefix);
         $lines = \file($url, \FILE_IGNORE_NEW_LINES | \FILE_SKIP_EMPTY_LINES);
-        if (empty($lines)) {
+        if (false === $lines || [] === $lines) {
             return 0;
         }
 

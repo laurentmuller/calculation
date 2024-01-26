@@ -18,6 +18,7 @@ use App\Traits\ImageSizeTrait;
 use App\Traits\RoleTranslatorTrait;
 use App\Utils\FileUtils;
 use App\Utils\FormatUtils;
+use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
@@ -74,7 +75,7 @@ class UsersDocument extends AbstractArrayDocument
                 $this->formatLastLogin($entity->getLastLogin()),
             ]);
             $path = $this->getImagePath($entity);
-            if (!empty($path) && FileUtils::isFile($path)) {
+            if (StringUtils::isString($path) && FileUtils::isFile($path)) {
                 [$width, $height] = $this->getImageSize($path);
                 $sheet->setCellImage($path, "A$row", $width, $height);
             }

@@ -534,10 +534,10 @@ final class SymfonyInfoService
                 'path' => $route->getPath(),
             ];
         }
-        if (!empty($this->routes[self::KEY_RUNTIME])) {
+        if (isset($this->routes[self::KEY_RUNTIME]) && [] !== $this->routes[self::KEY_RUNTIME]) {
             \ksort($this->routes[self::KEY_RUNTIME]);
         }
-        if (!empty($this->routes[self::KEY_DEBUG])) {
+        if (isset($this->routes[self::KEY_DEBUG]) && [] !== $this->routes[self::KEY_DEBUG]) {
             \ksort($this->routes[self::KEY_DEBUG]);
         }
 
@@ -630,7 +630,7 @@ final class SymfonyInfoService
 
     private function updateBundles(): void
     {
-        if (empty($this->bundles) || empty($this->packages)) {
+        if (!\is_array($this->bundles) || !\is_array($this->packages)) {
             return;
         }
 

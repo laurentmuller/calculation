@@ -93,10 +93,10 @@ class Log extends AbstractEntity
         if (self::DOCTRINE_CHANNEL === $this->getChannel()) {
             $message = $formatter->format($message);
         }
-        if (!empty($this->context)) {
+        if (null !== $this->context && [] !== $this->context) {
             $message .= "\nContext:\n" . StringUtils::exportVar($this->getContext());
         }
-        if (!empty($this->extra)) {
+        if (null !== $this->extra && [] !== $this->extra) {
             $message .= "\nExtra:\n" . StringUtils::exportVar($this->getExtra());
         }
 

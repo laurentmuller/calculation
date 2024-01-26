@@ -336,8 +336,9 @@ final class FileUtils
             return 0;
         }
         if (self::isFile($file)) {
-            return \filesize($file) ?: 0;
+            return (int) \filesize($file);
         }
+
         $size = 0;
         $flags = \FilesystemIterator::SKIP_DOTS;
         $innerIterator = new \RecursiveDirectoryIterator($file, $flags);

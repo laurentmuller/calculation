@@ -64,7 +64,7 @@ abstract class AbstractProperty extends AbstractEntity
      */
     public function getArray(): ?array
     {
-        if (!empty($this->value)) {
+        if (StringUtils::isString($this->value)) {
             try {
                 return StringUtils::decodeJson($this->value);
             } catch (\InvalidArgumentException) {

@@ -101,7 +101,7 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
 
     public function validate(?string $data, ExecutionContextInterface $context): void
     {
-        if (!StringUtils::isString($data) || !$this->captcha->checkAnswer((string) $data, (string) $this->previousAnswer)) {
+        if (!StringUtils::isString($data) || !$this->captcha->checkAnswer($data, (string) $this->previousAnswer)) {
             $context->buildViolation('error')
                 ->setTranslationDomain('captcha')
                 ->addViolation();

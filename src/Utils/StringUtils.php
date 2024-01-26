@@ -204,6 +204,8 @@ final class StringUtils
 
     /**
      * Returns if the given string is not null nor is empty.
+     *
+     * @psalm-assert-if-true string $str
      */
     public static function isString(?string $str): bool
     {

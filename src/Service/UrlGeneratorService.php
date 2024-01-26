@@ -22,6 +22,7 @@ use App\Table\CategoryTable;
 use App\Table\LogTable;
 use App\Table\SearchTable;
 use App\Traits\RequestTrait;
+use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -139,7 +140,7 @@ class UrlGeneratorService
     {
         /** @psalm-var string|null $caller */
         $caller = $params[self::PARAM_CALLER] ?? null;
-        if (!empty($caller)) {
+        if (StringUtils::isString($caller)) {
             return ('/' === $caller) ? $caller : \rtrim($caller, '/');
         }
 

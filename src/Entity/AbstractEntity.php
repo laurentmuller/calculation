@@ -56,7 +56,7 @@ abstract class AbstractEntity implements EntityInterface
 
     public function isNew(): bool
     {
-        return empty($this->id);
+        return null === $this->id || 0 === $this->id;
     }
 
     /**

@@ -203,7 +203,7 @@ final class FunctionExtension extends AbstractExtension
      */
     private function getRealPath(?string $path): ?string
     {
-        if (empty($path)) {
+        if (!StringUtils::isString($path)) {
             return null;
         }
         $path = FileUtils::buildPath($this->webDir, $path);

@@ -18,6 +18,7 @@ use App\Enums\ImageSize;
 use App\Service\ImageResizer;
 use App\Service\UserNamer;
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -132,7 +133,7 @@ class VichListener
     {
         $extension = $this->getExtension($file);
 
-        return empty($extension) ? ImageExtension::PNG->value : \strtolower($extension);
+        return StringUtils::isString($extension) ? \strtolower($extension) : ImageExtension::PNG->value;
     }
 
     private function rename(PropertyMapping $mapping, User $user, File $file): File

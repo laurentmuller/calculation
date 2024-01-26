@@ -17,6 +17,7 @@ use App\Model\HttpClientError;
 use App\Model\TranslateQuery;
 use App\Translator\TranslatorFactory;
 use App\Translator\TranslatorServiceInterface;
+use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,7 +51,7 @@ class AjaxTranslateController extends AbstractController
         #[MapQueryParameter(name: 'service')]
         string $class = null
     ): JsonResponse {
-        if (empty($text)) {
+        if (!StringUtils::isString($text)) {
             return $this->jsonFalse([
                 'message' => $this->trans('translator.text_error'),
             ]);

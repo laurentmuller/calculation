@@ -15,6 +15,7 @@ namespace App\Table;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\SortModeInterface;
 use App\Utils\FileUtils;
+use App\Utils\StringUtils;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -194,10 +195,10 @@ class Column implements \Stringable
             'searchable' => $this->isSearchable(),
             'default' => $this->isDefault(),
         ];
-        if ($this->cellFormatter) {
+        if (StringUtils::isString($this->cellFormatter)) {
             $result['formatter'] = $this->cellFormatter;
         }
-        if ($this->styleFormatter) {
+        if (StringUtils::isString($this->styleFormatter)) {
             $result['cell-style'] = $this->styleFormatter;
         }
 

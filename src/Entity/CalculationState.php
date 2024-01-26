@@ -15,6 +15,7 @@ namespace App\Entity;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationStateRepository;
 use App\Traits\TimestampableTrait;
+use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -88,7 +89,7 @@ class CalculationState extends AbstractEntity implements TimestampableInterface
     public function clone(string $code = null): self
     {
         $copy = clone $this;
-        if ($code) {
+        if (StringUtils::isString($code)) {
             $copy->setCode($code);
         }
 

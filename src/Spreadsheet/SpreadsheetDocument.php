@@ -14,6 +14,7 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Traits\TranslatorTrait;
+use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -252,7 +253,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setCategory(?string $category): static
     {
-        if ($category) {
+        if (StringUtils::isString($category)) {
             $this->getProperties()->setCategory($category);
         }
 
@@ -266,7 +267,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setCompany(?string $company): static
     {
-        if ($company) {
+        if (StringUtils::isString($company)) {
             $this->getProperties()->setCompany($company);
         }
 
@@ -280,7 +281,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setDescription(?string $description): static
     {
-        if ($description) {
+        if (StringUtils::isString($description)) {
             $this->getProperties()->setDescription($description);
         }
 
@@ -294,7 +295,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setSubject(?string $subject): static
     {
-        if ($subject) {
+        if (StringUtils::isString($subject)) {
             $this->getProperties()->setSubject($subject);
         }
 
@@ -307,7 +308,7 @@ class SpreadsheetDocument extends Spreadsheet
     public function setTitle(?string $title): static
     {
         $this->title = $title;
-        if ($title) {
+        if (StringUtils::isString($title)) {
             $this->getProperties()->setTitle($title);
         }
 
@@ -319,7 +320,7 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setUserName(string $userName = null): static
     {
-        if ($userName) {
+        if (StringUtils::isString($userName)) {
             $this->getProperties()
                 ->setCreator($userName)
                 ->setLastModifiedBy($userName);

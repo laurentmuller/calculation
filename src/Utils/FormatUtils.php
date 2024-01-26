@@ -234,7 +234,7 @@ final class FormatUtils
     {
         /** @var string|null $decimal */
         static $decimal;
-        if ($decimal) {
+        if (null !== $decimal) {
             return $decimal;
         }
         $locale = \Locale::getDefault();
@@ -255,7 +255,7 @@ final class FormatUtils
     {
         /** @var string|null $grouping */
         static $grouping;
-        if ($grouping) {
+        if (null !== $grouping) {
             return $grouping;
         }
         $locale = \Locale::getDefault();
@@ -308,7 +308,7 @@ final class FormatUtils
     {
         /** @var string|null $percent */
         static $percent;
-        if ($percent) {
+        if (null !== $percent) {
             return $percent;
         }
         $formatter = new \NumberFormatter(\Locale::getDefault(), \NumberFormatter::PATTERN_DECIMAL);
@@ -327,7 +327,12 @@ final class FormatUtils
 
     private static function checkNegativeZero(int|float|string|null $number): float
     {
-        return empty($number) ? 0.0 : (float) $number;
+        if (null === $number) {
+            return 0.0;
+        }
+        $value = (float) $number;
+
+        return -0.0 === $value ? 0.0 : $value;
     }
 
     private static function getHashCode(\DateTimeZone|string|int|null ...$values): string

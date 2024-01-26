@@ -96,7 +96,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
      */
     private function normalizeSize(int|string $size): ?int
     {
-        if (empty($size)) {
+        if (0 === $size || '' === $size) {
             return null;
         }
 

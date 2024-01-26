@@ -16,6 +16,7 @@ use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\UserInterface;
 use App\Repository\UserRepository;
+use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -49,7 +50,7 @@ class AjaxUserController extends AbstractController
         int $id = null,
     ): JsonResponse {
         $message = null;
-        if (empty($email)) {
+        if (!StringUtils::isString($email)) {
             $message = 'email.blank';
         } elseif (\strlen($email) < UserInterface::MIN_USERNAME_LENGTH) {
             $message = 'email.short';
@@ -79,7 +80,7 @@ class AjaxUserController extends AbstractController
         int $id = null,
     ): JsonResponse {
         $message = null;
-        if (empty($username)) {
+        if (!StringUtils::isString($username)) {
             $message = 'username.blank';
         } elseif (\strlen($username) < UserInterface::MIN_USERNAME_LENGTH) {
             $message = 'username.short';
@@ -105,7 +106,7 @@ class AjaxUserController extends AbstractController
     public function checkUser(#[MapQueryParameter] string $user = null): JsonResponse
     {
         $message = null;
-        if (empty($user)) {
+        if (!StringUtils::isString($user)) {
             $message = 'username.blank';
         } elseif (!$this->findByUsernameOrEmail($user) instanceof User) {
             $message = 'username.not_found';

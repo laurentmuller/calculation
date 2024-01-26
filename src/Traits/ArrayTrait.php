@@ -86,7 +86,6 @@ trait ArrayTrait
      *
      * @return T[]
      *
-     * @psalm-param callable(?T|array-key|array{array-key, ?T}):bool|null $callable
      * @psalm-param 0|1|2 $mode
      */
     public function getFiltered(
@@ -134,7 +133,6 @@ trait ArrayTrait
      *
      * @return T[]
      *
-     * @psalm-param callable(?T|array-key|array{array-key, ?T}):bool|null $callable
      * @psalm-param 0|1|2 $mode
      * @psalm-param 0|1|2|5 $flags
      */

@@ -24,15 +24,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * The Simple editor type.
  *
  * @psalm-type SimpleEditorActionType = array{
- *      title: string|false|null,
- *      group: string|null,
- *      icon: string|null,
- *      text: string|null,
- *      exec: string,
- *      parameter: string|null,
- *      state: string|null,
- *      enabled: string|null,
- *      class: string|null,
+ *      title?: string|false,
+ *      group?: string,
+ *      icon?: string,
+ *      text?: string,
+ *      exec?: string,
+ *      parameter?: string,
+ *      state?: string,
+ *      enabled?: string,
+ *      class?: string,
  *      attributes: array<string, string>,
  *      actions?: array}
  *
@@ -141,12 +141,24 @@ class SimpleEditorType extends AbstractType
     /**
      * @psalm-param SimpleEditorActionType $action
      */
+    private function updateAttribute(array &$action, string $key): self
+    {
+        if (isset($action[$key]) && \is_string($action[$key])) {
+            $action['attributes']['data-' . $key] = $action[$key];
+        }
+
+        return $this;
+    }
+
+    /**
+     * @psalm-param SimpleEditorActionType $action
+     */
     private function updateClass(array &$action, string $class): self
     {
-        if (!empty($action['actions'])) {
+        if (isset($action['actions']) && [] !== $action['actions']) {
             $class .= ' dropdown-toggle';
         }
-        if (!empty($action['class'])) {
+        if (isset($action['class'])) {
             $class .= ' ' . $action['class'];
         }
         $action['attributes']['class'] = $class;
@@ -173,11 +185,7 @@ class SimpleEditorType extends AbstractType
      */
     private function updateEnabled(array &$action): self
     {
-        if (!empty($action['enabled'])) {
-            $action['attributes']['data-enabled'] = $action['enabled'];
-        }
-
-        return $this;
+        return $this->updateAttribute($action, 'enabled');
     }
 
     /**
@@ -185,11 +193,7 @@ class SimpleEditorType extends AbstractType
      */
     private function updateExec(array &$action): self
     {
-        if (!empty($action['exec'])) {
-            $action['attributes']['data-exec'] = $action['exec'];
-        }
-
-        return $this;
+        return $this->updateAttribute($action, 'exec');
     }
 
     /**
@@ -197,7 +201,9 @@ class SimpleEditorType extends AbstractType
      */
     private function updateIcon(array &$action): self
     {
-        $action['icon'] ??= $action['exec'];
+        if (!isset($action['icon']) && isset($action['exec'])) {
+            $action['icon'] = $action['exec'];
+        }
 
         return $this;
     }
@@ -207,11 +213,7 @@ class SimpleEditorType extends AbstractType
      */
     private function updateParameter(array &$action): self
     {
-        if (!empty($action['parameter'])) {
-            $action['attributes']['data-parameter'] = $action['parameter'];
-        }
-
-        return $this;
+        return $this->updateAttribute($action, 'parameter');
     }
 
     /**
@@ -219,11 +221,7 @@ class SimpleEditorType extends AbstractType
      */
     private function updateState(array &$action): self
     {
-        if (!empty($action['state'])) {
-            $action['attributes']['data-state'] = $action['state'];
-        }
-
-        return $this;
+        return $this->updateAttribute($action, 'state');
     }
 
     /**
@@ -231,7 +229,7 @@ class SimpleEditorType extends AbstractType
      */
     private function updateText(array &$action): self
     {
-        if (!empty($action['text'])) {
+        if (isset($action['text'])) {
             $action['text'] = 'simple_editor.' . $action['text'];
         }
 
@@ -243,7 +241,7 @@ class SimpleEditorType extends AbstractType
      */
     private function updateTitle(array &$action): self
     {
-        $title = $action['title'] ?? $action['exec'];
+        $title = $action['title'] ?? $action['exec'] ?? null;
         if (\is_string($title)) {
             $action['attributes']['title'] = "simple_editor.$title";
         }

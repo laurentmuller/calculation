@@ -11,10 +11,9 @@
 declare(strict_types=1);
 
 use App\Service\UserService;
+use Symfony\Config\TwigConfig;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
-
-use Symfony\Config\TwigConfig;
 
 return static function (TwigConfig $config): void {
     $config->formThemes(['fields.html.twig'])

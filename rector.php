@@ -44,11 +44,6 @@ return static function (RectorConfig $rectorConfig): void {
         ],
     ]);
 
-    // rules to apply
-    $rectorConfig->rules([
-        //StringExtensionToConfigBuilderRector::class,
-    ]);
-
     // rules list to apply
     $rectorConfig->sets([
         // global

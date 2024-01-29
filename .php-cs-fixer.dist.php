@@ -44,7 +44,7 @@ $rules = [
     'no_unused_imports' => true,
     'strict_comparison' => true,
     'strict_param' => true,
-    'ordered_imports' => true,
+    'ordered_imports' => ['imports_order' => ['const', 'class', 'function']],
     'ordered_class_elements' => ['sort_algorithm' => 'alpha'],
     'concat_space' => ['spacing' => 'one'],
     'array_syntax' => ['syntax' => 'short'],

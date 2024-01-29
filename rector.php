@@ -18,6 +18,7 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
+use Rector\Symfony\CodeQuality\Rector\Closure\StringExtensionToConfigBuilderRector;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Set\TwigSetList;
 
@@ -27,6 +28,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     // paths
     $rectorConfig->paths([
+        __DIR__ . '/config',
         __DIR__ . '/src',
         __DIR__ . '/tests',
         __DIR__ . '/public',
@@ -43,6 +45,11 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     // rules to apply
+    $rectorConfig->rules([
+        //StringExtensionToConfigBuilderRector::class,
+    ]);
+
+    // rules list to apply
     $rectorConfig->sets([
         // global
         SetList::PHP_82,
@@ -56,7 +63,7 @@ return static function (RectorConfig $rectorConfig): void {
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
         PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES,
         // Symfony
-        SymfonySetList::SYMFONY_63,
+        SymfonySetList::SYMFONY_64,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,

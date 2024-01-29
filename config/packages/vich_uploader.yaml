@@ -1,7 +1,0 @@
-vich_uploader:
-    db_driver: orm
-    mappings:
-        user_image:
-            namer: App\Service\UserNamer
-            uri_prefix: /images/users
-            upload_destination: '%kernel.project_dir%/public/images/users'

@@ -51,7 +51,7 @@
     });
 
     // save/restore collapse state
-    // if (window.sessionStorage) {
+    // if (typeof window.sessionStorage !== 'undefined') {
     //     const $collapses = $('.help-body .collapse');
     //     $collapses.each((index, element) => {
     //         const $this = $(element);
@@ -104,7 +104,13 @@
         className: 'text-success',
         separateWordSearch: false,
         each: function (element) {
-            $(element).parents('.help-item').showItems();
+            const selector = '.help-item:first';
+            let $parent = $(element).parents(selector);
+            while ($parent.length) {
+                //$parent.children('.collapse:not(.show)').collapse('show');
+                $parent = $parent.parents(selector);
+            }
+            // $(element).parents('.help-item').showItems();
         },
         done: function () {
             $context.not(':has(span)').hide();

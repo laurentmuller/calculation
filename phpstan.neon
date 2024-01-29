@@ -1,13 +1,24 @@
 parameters:
     level: 8
     paths:
-    - src
-    - tests
-    - public
+        - src
+        - tests
+        - public
 
     scanFiles:
-    - vendor/twig/twig/src/Extension/CoreExtension.php
-    - vendor/symfony/validator/Test/ConstraintValidatorTestCase.php
+        - vendor/twig/twig/src/Extension/CoreExtension.php
+        - vendor/symfony/validator/Test/ConstraintValidatorTestCase.php
+
+    bootstrapFiles:
+        - var/cache/dev/Symfony/Config/DebugConfig.php
+        - var/cache/dev/Symfony/Config/DoctrineConfig.php
+        - var/cache/dev/Symfony/Config/FrameworkConfig.php
+        - var/cache/dev/Symfony/Config/MonologConfig.php
+        - var/cache/dev/Symfony/Config/SecurityConfig.php
+        - var/cache/dev/Symfony/Config/SymfonycastsResetPasswordConfig.php
+        - var/cache/dev/Symfony/Config/TwigConfig.php
+        - var/cache/dev/Symfony/Config/VichUploaderConfig.php
+        - var/cache/dev/Symfony/Config/WebProfilerConfig.php
 
     reportUnmatchedIgnoredErrors: true
     checkUninitializedProperties: true

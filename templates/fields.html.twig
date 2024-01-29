@@ -181,7 +181,7 @@
 <button type="button"{% with {attr: action.attributes} %}{{ block('attributes') }}{% endwith %}>
     {%- if action.text|default(false) -%}
         {{- action.text|trans -}}
-    {%- else -%}
+    {%- elseif action.icon|default(false) -%}
         <i class="{{- 'fa-fw fa-solid fa-' ~ action.icon -}}"></i>
     {%- endif -%}
 </button>
@@ -196,7 +196,6 @@
 {% block simple_editor_widget -%}
 {%- set type = type|default('hidden') -%}
 {%- set editor_id = form.vars.id ~ '_editor' -%}
-{%- set actions = form.vars.actions|default([]) -%}
 <div class="simple-editor form-control p-0" id="{{ editor_id }}">
     {% if groups|default([])|length -%}
     <div class="simple-editor-toolbar btn-toolbar rounded-top d-print-none" role="toolbar">

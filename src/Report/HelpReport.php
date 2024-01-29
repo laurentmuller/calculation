@@ -38,6 +38,9 @@ class HelpReport extends AbstractReport
 {
     use ImageSizeTrait;
 
+    private readonly PdfStyle $defaultStyle;
+    private readonly PdfStyle $headerStyle;
+
     /**
      * @param AbstractController $controller the parent controller
      * @param HelpService        $service    the help service
@@ -46,6 +49,8 @@ class HelpReport extends AbstractReport
     {
         parent::__construct($controller);
         $this->setTitleTrans('help.title');
+        $this->defaultStyle = PdfStyle::default();
+        $this->headerStyle = PdfStyle::getHeaderStyle();
     }
 
     /**
@@ -55,7 +60,7 @@ class HelpReport extends AbstractReport
     {
         $service = $this->service;
         $newPage = $this->outputMainMenus($service->getMainMenus());
-        $newPage = $this->outputDialogs($service->getDialogs(), $newPage);
+        $newPage = $this->outputDialogs($service->getDialogsByGroup(), $newPage);
         $this->outputEntities($service->getEntities(), $newPage);
         $this->addPageIndex();
 
@@ -375,13 +380,13 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpDialogType[]|null $dialogs
+     * @psalm-param array<string, HelpDialogType[]> $groupedDialogs
      *
      * @throws PdfException
      */
-    private function outputDialogs(?array $dialogs, bool $newPage): bool
+    private function outputDialogs(array $groupedDialogs, bool $newPage): bool
     {
-        if (null === $dialogs || [] === $dialogs) {
+        if ([] === $groupedDialogs) {
             return false;
         }
 
@@ -395,31 +400,32 @@ class HelpReport extends AbstractReport
         $this->outputTitle($id, 12);
         $this->outputLine();
 
-        $group = '';
-        foreach ($dialogs as $dialog) {
+        foreach ($groupedDialogs as $group => $dialogs) {
             if ($newPage) {
                 $this->AddPage();
+                $newPage = false;
             }
-            $newPage = true;
-            $newGroup = $dialog['group'] ?? '';
-            if ('' !== $newGroup && $group !== $newGroup) {
-                $group = $newGroup;
-                $this->addBookmark($group, true, 1, false);
+            $this->addBookmark($group, true, 1, false);
+            foreach ($dialogs as $dialog) {
+                if ($newPage) {
+                    $this->AddPage();
+                }
+                $this->outputDialog($dialog);
+                $newPage = true;
             }
-            $this->outputDialog($dialog);
         }
 
         return true;
     }
 
     /**
-     * @psalm-param HelpEntityType[]|null $entities
+     * @psalm-param HelpEntityType[] $entities
      *
      * @throws PdfException
      */
-    private function outputEntities(?array $entities, bool $newPage): void
+    private function outputEntities(array $entities, bool $newPage): void
     {
-        if (null === $entities || [] === $entities) {
+        if ([] === $entities) {
             return;
         }
 
@@ -437,8 +443,8 @@ class HelpReport extends AbstractReport
             if ($newPage) {
                 $this->AddPage();
             }
-            $newPage = true;
             $this->outputEntity($entity);
+            $newPage = true;
         }
     }
 
@@ -524,13 +530,13 @@ class HelpReport extends AbstractReport
     }
 
     /**
-     * @psalm-param HelpMenuType[]|null $menus
+     * @psalm-param HelpMenuType[] $menus
      *
      * @throws PdfException
      */
-    private function outputMainMenus(?array $menus): bool
+    private function outputMainMenus(array $menus): bool
     {
-        if (null === $menus || [] === $menus) {
+        if ([] === $menus) {
             return false;
         }
 
@@ -595,16 +601,16 @@ class HelpReport extends AbstractReport
         }
 
         if ($translate) {
-            $id = $this->trans($id);
+            $id = $this->splitTrans($id);
         }
         $this->MultiCell(txt: $id);
     }
 
     private function outputTitle(string $id, float $size = 10): void
     {
-        PdfStyle::getHeaderStyle()->setFontSize($size)->apply($this);
+        $this->headerStyle->setFontSize($size)->apply($this);
         $this->outputText($id);
-        PdfStyle::default()->apply($this);
+        $this->defaultStyle->apply($this);
     }
 
     /**

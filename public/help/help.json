@@ -103,6 +103,10 @@
             "icon": "home",
             "description": "Retourne à la page précédente ou à la page principale de l'application (page d'accueil).",
             "dialog": "index.title"
+        },
+        "send": {
+            "id": "common.button_send",
+            "description": "Envoie le message et retourne à la page précédente ou à la page principale de l'application (page d'accueil)."
         }
     },
     "entities": [
@@ -115,6 +119,12 @@
                     "name": "description",
                     "description": "Description de l'article.",
                     "length": "255"
+                },
+                {
+                    "name": "group",
+                    "description": "Groupe au quel appartient l'article.",
+                    "type": "reference",
+                    "entity": "group"
                 },
                 {
                     "name": "category",
@@ -747,11 +757,11 @@
     ],
     "mainMenu": {
         "image": "navigation",
-        "description": "Le menu principal est une partie de l'interface d'utilisateur permettant de parcourir les pages du site.",
+        "description": "Le menu principal (barre de navigation) est une partie de l'interface d'utilisateur permettant de parcourir les pages du site.",
         "menus": [
             {
-                "id": "help.navigation_menu",
-                "icon": "bars",
+                "id": "help.main_menu",
+                "icon": "sitemap",
                 "description": "",
                 "menus": [
                     {
@@ -932,6 +942,11 @@
                 "description": "Menu afficher lorsque l'utilisateur est connecté à l'application.",
                 "menus": [
                     {
+                        "id": "theme.title",
+                        "icon": "circle-half-stroke",
+                        "description": "Permet d'appliquer un thème clair ou sombre sur ce site."
+                    },
+                    {
                         "id": "profile.edit.title",
                         "icon": "user-gear",
                         "dialog": "profile.edit.title",
@@ -973,7 +988,7 @@
                     {
                         "id": "about.title",
                         "icon": "info-circle",
-                        "description": "Page pour afficher des informations sur l'application.",
+                        "description": "Page affichant des informations sur l'application.",
                         "dialog": "about.title"
                     }
                 ]
@@ -2613,8 +2628,7 @@
             "description": "Cette page permet d'envoyer un message à l'utilisateur sélectionné.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "action": "submit_ok"
+                    "action": "send"
                 },
                 {
                     "action": "submit_cancel"
@@ -2645,9 +2659,7 @@
             "description": "Cette page permet d'envoyer un commentaire à l'administrateur du site.",
             "editActions": [
                 {
-                    "id": "common.button_ok",
-                    "action": "submit_ok",
-                    "description": "Envoie les commentaires à l'administrateur du site et retourne à la page d'accueil."
+                    "action": "send"
                 },
                 {
                     "action": "submit_cancel"
@@ -2741,6 +2753,38 @@
             "icon": "percent",
             "entity": "calculation",
             "description": "Cette page affiche les calculations contenant une marge globale inférieure à la marge définit dans les paramètres de l'application. Cette page n'est accessible qu'aux administrateurs.",
+            "fields": [
+                {
+                    "name": "calculation.fields.id",
+                    "description": "Numéro unique identifiant la calculation."
+                },
+                {
+                    "name": "calculation.fields.date",
+                    "description": "Date de la calculation. La valeur par défaut est la date du jour."
+                },
+                {
+                    "name": "calculation.fields.state",
+                    "description": "Statut de la calculation."
+                },
+                {
+                    "name": "calculation.fields.customer",
+                    "description": "Nom du client."
+                },
+                {
+                    "name": "calculation.fields.description",
+                    "description": "Description de la calculation."
+                },
+                {
+                    "name": "calculation.fields.margin",
+                    "description": "Marge globale inférieure."
+                },
+                {
+                    "name": "calculation.fields.total",
+                    "description": "Total général de la calculation.",
+                    "type": "amount",
+                    "required": false
+                }
+            ],
             "links": [
                 {
                     "id": "duplicate.title",
@@ -2759,6 +2803,32 @@
             "icon": "copy far",
             "entity": "calculation",
             "description": "Cette page affiche les calculations contenant le même article plus d'une fois. Cette page n'est accessible qu'aux administrateurs.",
+            "fields": [
+                {
+                    "name": "calculation.fields.id",
+                    "description": "Numéro unique identifiant la calculation."
+                },
+                {
+                    "name": "calculation.fields.date",
+                    "description": "Date de la calculation. La valeur par défaut est la date du jour."
+                },
+                {
+                    "name": "calculation.fields.state",
+                    "description": "Statut de la calculation."
+                },
+                {
+                    "name": "calculation.fields.customer",
+                    "description": "Nom du client."
+                },
+                {
+                    "name": "calculation.fields.description",
+                    "description": "Description de la calculation."
+                },
+                {
+                    "name": "product.list.title",
+                    "description": "Nom des articles étant présent plus d'une fois."
+                }
+            ],
             "links": [
                 {
                     "id": "below.title",
@@ -2777,6 +2847,32 @@
             "icon": "file-code far",
             "entity": "calculation",
             "description": "Cette page affiche les calculations contenant contenant un article avec une quantité ou un prix égale à 0. Cette page n'est accessible qu'aux administrateurs.",
+            "fields": [
+                {
+                    "name": "calculation.fields.id",
+                    "description": "Numéro unique identifiant la calculation."
+                },
+                {
+                    "name": "calculation.fields.date",
+                    "description": "Date de la calculation. La valeur par défaut est la date du jour."
+                },
+                {
+                    "name": "calculation.fields.state",
+                    "description": "Statut de la calculation."
+                },
+                {
+                    "name": "calculation.fields.customer",
+                    "description": "Nom du client."
+                },
+                {
+                    "name": "calculation.fields.description",
+                    "description": "Description de la calculation."
+                },
+                {
+                    "name": "product.list.title",
+                    "description": "Nom des articles ayant une quantité ou un prix égale à 0."
+                }
+            ],
             "links": [
                 {
                     "id": "below.title",

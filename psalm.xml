@@ -112,6 +112,18 @@
                 <referencedFunction name="getAllPermissions"/>
             </errorLevel>
         </InvalidArgument>
+
+        <MixedArrayAssignment>
+            <errorLevel type="suppress">
+                <file name="src/Form/Type/SimpleEditorType.php" />
+            </errorLevel>
+        </MixedArrayAssignment>
+
+        <MixedPropertyTypeCoercion>
+            <errorLevel type="suppress">
+                <file name="src/Form/Type/SimpleEditorType.php" />
+            </errorLevel>
+        </MixedPropertyTypeCoercion>
     </issueHandlers>
 
     <plugins>

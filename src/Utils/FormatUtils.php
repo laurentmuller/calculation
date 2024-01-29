@@ -43,7 +43,7 @@ final class FormatUtils
     }
 
     /**
-     * Format a number for the current locale with 2 decimals (Ex: 2312.5 -> 2'312.50).
+     * Format a number for the current locale with 2 decimals (Ex: 2312.5 > 2'312.50).
      */
     public static function formatAmount(float|int|string|null $number): string
     {
@@ -80,8 +80,7 @@ final class FormatUtils
      * @param \DateTimeInterface|int|null $date     the date and time to format
      * @param int<-1,3>|null              $dateType the type of date formatting, one of the format type
      *                                              constants or null to use default
-     * @param int<-1,3>|null              $timeType the type of time formatting, one of the format type
-     *                                              constants or null to use default
+     * @param int<-1,3>|null              $timeType the type of time formatting, one of the format type constants or null to use default
      * @param ?string                     $pattern  the optional pattern to use when formatting
      * @param \DateTimeZone|string|null   $timezone the timezone identifier
      *
@@ -113,7 +112,7 @@ final class FormatUtils
     }
 
     /**
-     * Format an integer identifier with 0 left padding  (Ex: 123 -> 000123).
+     * Format an integer identifier with 0 left padding (Ex: 123 > 000123).
      */
     public static function formatId(float|int|string|null $number): string
     {
@@ -123,7 +122,7 @@ final class FormatUtils
     }
 
     /**
-     * Format a number for the current locale with no decimal (Ex: 2312.2 -> 2'312).
+     * Format a number for the current locale with no decimal (Ex: 2312.2 > 2'312).
      */
     public static function formatInt(\Countable|array|int|float|string|null $number): string
     {
@@ -327,12 +326,9 @@ final class FormatUtils
 
     private static function checkNegativeZero(int|float|string|null $number): float
     {
-        if (null === $number) {
-            return 0.0;
-        }
         $value = (float) $number;
 
-        return -0.0 === $value ? 0.0 : $value;
+        return ($value ** -1.0) === -\INF ? 0.0 : $value;
     }
 
     private static function getHashCode(\DateTimeZone|string|int|null ...$values): string

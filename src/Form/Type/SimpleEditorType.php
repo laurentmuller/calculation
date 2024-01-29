@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
+use App\Traits\GroupByTrait;
 use App\Utils\FileUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
@@ -40,6 +41,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SimpleEditorType extends AbstractType
 {
+    use GroupByTrait;
+
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/simple_editor_actions.json')]
         private readonly string $actionsPath
@@ -47,8 +50,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * @psalm-suppress MixedArrayAssignment
-     * @psalm-suppress MixedPropertyTypeCoercion
+     * @psalm-param array{required: bool, ...} $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
@@ -85,22 +87,21 @@ class SimpleEditorType extends AbstractType
 
     /**
      * Filter, update and group actions.
+     *
+     * @psalm-param array{actions?: array, ...} $options
      */
     private function getGroupedActions(array $options): array
     {
-        /** @psalm-var array $existing */
-        $existing = $options['actions'] ?? [];
-
-        /** @psalm-var SimpleEditorActionType[] $actions */
-        $actions = \array_filter($existing, static fn (array $action): bool => !empty($action['exec']) || !empty($action['actions']));
-        $this->updateActions($actions);
-
-        $groups = [];
-        foreach ($actions as $action) {
-            $groups[$action['group'] ?? 'default'][] = $action;
+        $actions = $options['actions'] ?? [];
+        if ([] === $actions) {
+            return [];
         }
 
-        return $groups;
+        /** @psalm-var SimpleEditorActionType[] $actions */
+        $actions = \array_filter($actions, static fn (array $action): bool => !empty($action['exec']) || !empty($action['actions']));
+        $this->updateActions($actions);
+
+        return $this->groupBy($actions, static fn (array $action): string => $action['group'] ?? 'default');
     }
 
     /**

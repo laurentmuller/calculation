@@ -165,6 +165,9 @@
             htmlToImage.toPng(card, options).then((image) => {
                 $('*').css('cursor', 'wait');
                 sendImage(image, index, location);
+            }).catch(function (error) {
+                $('*').css('cursor', '');
+                window.console.warn(error);
             });
         };
         createCopyButton(cards, callback);
@@ -193,6 +196,9 @@
                 $('*').css('cursor', 'wait');
                 const image = canvas.toDataURL('image/png');
                 sendImage(image, index, location);
+            }).catch(function (error) {
+                $('*').css('cursor', '');
+                window.console.warn(error);
             });
         };
         createCopyButton(cards, callback);

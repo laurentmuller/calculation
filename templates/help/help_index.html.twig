@@ -53,7 +53,7 @@
                     {{- tools.output_icon(menu.icon|default(false), menu.name|default(menu.id)) -}}
                 </a>
             </div>
-            <hr class="my-1">
+            <hr class="ms-3 my-1">
             <div id="{{ menu_id }}" class="ms-3 collapse">
                 {% if description %}
                     <p class="mb-0">{{ description }}</p>
@@ -80,6 +80,30 @@
         {% endif %}
     </div>
 {%- endmacro %}
+
+{% macro expand_button() %}
+<a href="#" class="expand-items link-items" title="{{ 'about.expand'|trans }}">
+    <i class="fa-solid fa-plus"></i>
+</a>
+{% endmacro %}
+
+{% macro collapse_button() %}
+<a href="#" class="collapse-items link-items" title="{{ 'about.collapse'|trans }}">
+    <i class="fa-solid fa-minus"></i>
+</a>
+{% endmacro %}
+
+{% macro output_header(icon, text) %}
+<div class="d-flex-wrap-center">
+    <a href="#" class="h6 flex-fill text-body link-items toggle-items" title="{{ 'about.toggle'|trans }}">
+        {{- icon(icon ~ ' me-1', text) -}}
+    </a>
+    {{ _self.expand_button() }}
+    {{ _self.collapse_button() }}
+</div>
+<hr class="my-1">
+{% endmacro %}
+
 {# parameters #}
 {%- set title = 'help.title' -%}
 {# class #}
@@ -94,88 +118,58 @@
     <hr class="mt-1">
     <div class="row">
         {# main menu #}
-        {% set main_menus = service.mainMenus|default(false) %}
-        {% if main_menus %}
-            <div class="col-xl-4 col-lg-6 items">
-                <div class="d-flex-wrap-center">
-                    <h6 class="flex-fill"><i class="fa-solid fa-sitemap me-1"></i>{{ 'help.main_menu'|trans }}</h6>
-                    <a class="expand-items" href="#" title="{{ 'about.expand'|trans }}">
-                        <i class="fa-regular fa-square-plus"></i>
-                    </a>
-                    <a class="collapse-items" href="#" title="{{ 'about.collapse'|trans }}">
-                        <i class="fa-regular fa-square-minus"></i>
-                    </a>
-                </div>
-                <hr class="my-1">
-                {{ _self.output_menus(main_menus, service) }}
-            </div>
-        {%- endif %}
+        {% set main_menus = service.mainMenus %}
+        <div class="col-xl-4 col-lg-6 items">
+            {{ _self.output_header('bars', 'help.navigation_menu') }}
+            {{ _self.output_menus(main_menus, service) }}
+        </div>
         {# dialogs #}
         {% set groups = service.getDialogsByGroup() %}
-        {% if groups %}
-            <div class="col-xl-4 col-lg-6 items">
-                <div class="d-flex-wrap-center">
-                    <h6 class="flex-fill"><i class="fa-regular fa-window-maximize me-1"></i>{{ 'help.dialog_menu'|trans }}</h6>
-                    <a class="expand-items" href="#" title="{{ 'about.expand'|trans }}">
-                        <i class="fa-regular fa-square-plus"></i>
-                    </a>
-                    <a class="collapse-items" href="#" title="{{ 'about.collapse'|trans }}">
-                        <i class="fa-regular fa-square-minus"></i>
-                    </a>
-                </div>
-                <hr class="my-1">
-                {% for group, dialogs in groups %}
-                    {% set group_id = 'group-' ~ loop.index %}
-                    <div class="help-item">
-                        <div class="d-flex">
-                            <a href="#{{ group_id }}" class="drop-down-icon-left text-body my-0 flex-fill" data-bs-toggle="collapse" aria-expanded="false" aria-controls="{{ group_id }}">
-                                {{- group -}}
-                            </a>
-                        </div>
-                        <hr class="my-1">
-                        <div id="{{ group_id }}" class="ms-3 collapse">
-                            {% for dialog in dialogs %}
-                                {{ _self.output_dialog(dialog, service.findEntity(dialog)) }}
-                            {% endfor %}
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {%- endif %}
-        {# entities #}
-        {% set entities = service.entities|default(false) %}
-        {% if entities %}
-            <div class="col-xl-4 col-lg-6 items">
-                <div class="d-flex-wrap-center">
-                    <h6 class="flex-fill"><i class="fa-solid fa-database me-1"></i>{{ 'help.entity_menu'|trans }}</h6>
-                    <a class="expand-items" href="#" title="{{ 'about.expand'|trans }}">
-                        <i class="fa-regular fa-square-plus"></i>
-                    </a>
-                    <a class="collapse-items" href="#" title="{{ 'about.collapse'|trans }}">
-                        <i class="fa-regular fa-square-minus"></i>
-                    </a>
-                </div>
-                <hr class="my-1">
+        <div class="col-xl-4 col-lg-6 items">
+            {{ _self.output_header('window-maximize far', 'help.dialog_menu') }}
+            {% for group, dialogs in groups %}
+                {% set group_id = 'group-' ~ loop.index %}
                 <div class="help-item">
-                    <div class="collapse">
-                        {% for entity in entities %}
-                            {{ _self.output_entity(entity) }}
+                    <div class="d-flex">
+                        <a href="#{{ group_id }}" class="drop-down-icon-left text-body my-0 flex-fill" data-bs-toggle="collapse" aria-expanded="false" aria-controls="{{ group_id }}">
+                            {{- group -}}
+                        </a>
+                    </div>
+                    <hr class="ms-3 my-1">
+                    <div id="{{ group_id }}" class="ms-3 collapse">
+                        {% for dialog in dialogs %}
+                            {{ _self.output_dialog(dialog, service.findEntity(dialog)) }}
                         {% endfor %}
                     </div>
                 </div>
+            {% endfor %}
+        </div>
+        {# entities #}
+        {% set entities = service.entities %}
+        <div class="col-xl-4 col-lg-6 items">
+            {{ _self.output_header('database', 'help.entity_menu') }}
+            <div class="help-item">
+                <div id="entities" class="collapse">
+                    {% for entity in entities %}
+                        {{ _self.output_entity(entity) }}
+                    {% endfor %}
+                </div>
             </div>
-        {%- endif %}
+        </div>
     </div>
 {%- endblock %}
 {# home #}
 {% block help_home -%}{% endblock %}
 {# actions #}
 {% block help_actions -%}
-    <button type="button" class="btn btn-outline-secondary btn-expand-all" title="{{ 'about.expand'|trans }}">
+    <button type="button" class="btn btn-outline-secondary btn-expand-all link-items" title="{{ 'about.expand'|trans }}">
         <i class="fa-solid fa-plus"></i>
     </button>
-    <button type="button" class="btn btn-outline-secondary btn-collapse-all" title="{{ 'about.collapse'|trans }}">
+    <button type="button" class="btn btn-outline-secondary btn-collapse-all link-items" title="{{ 'about.collapse'|trans }}">
         <i class="fa-solid fa-minus"></i>
+    </button>
+    <button type="button" class="btn btn-outline-secondary btn-toggle-all link-items" title="{{ 'about.toggle'|trans }}">
+        <i class="fa-solid fa-shuffle"></i>
     </button>
     {{ tools.dialogs_button() }}
     {{ tools.entities_button() }}

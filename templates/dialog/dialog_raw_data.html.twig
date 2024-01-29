@@ -7,7 +7,7 @@
     <div class="modal-dialog{% if raw_data %} modal-lg{% endif %}" role="document">
         <div class="modal-content{% if not raw_data %} border-danger{% endif %}">
             <div class="modal-header{% if not raw_data %} text-bg-danger{% endif %}">
-                <h1 class="modal-title fs-5" id="modal-data-title"><i class="fa-solid fa-code"></i> <span class="dialog-title">{{ 'dialog_raw_data.title'|trans }}</span></h1>
+                <h1 class="modal-title fs-5" id="modal-data-title"><i class="fa-solid fa-code me-1"></i><span class="dialog-title">{{ 'dialog_raw_data.title'|trans }}</span></h1>
                 {{- button_close_modal(true, null, dialog_id) -}}
             </div>
             <div class="modal-body">

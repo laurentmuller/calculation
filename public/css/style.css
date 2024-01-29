@@ -724,6 +724,11 @@ a,
     text-decoration: none;
 }
 
+a.disabled {
+    pointer-events: none;
+    color: var(--bs-tertiary-color);
+}
+
 /* negative margins */
 .mx-n1 {
     margin-left: -0.25rem !important;

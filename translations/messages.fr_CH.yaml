@@ -28,6 +28,7 @@ about:
   version: Version %version%
   expand: Afficher le contenu
   collapse: Masquer le contenu
+  toggle: Inverser l'affichage du contenu
 admin:
   rights:
     title: Droits d'accès
@@ -302,6 +303,7 @@ common:
   button_table: Mode tabulaire
   button_submit_edit: Enregistrer
   button_submit_add: Ajouter
+  button_send: Envoyer
   clone_description: '%description% - Copie'
   count: "Nombre d'éléments : %count%"
   add_success: L'objet <b>%name%</b> a été ajouté avec succès.

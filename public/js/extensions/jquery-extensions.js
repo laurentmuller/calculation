@@ -496,18 +496,25 @@
         /**
          * Toggle the disabled attribute.
          *
-         * @param {boolean} state - true to add attribute (disabled); false to remove
+         * @param {boolean} state - true to add the attribute (disabled); false to remove
          *            attribute (enabled).
          */
         toggleDisabled: function (state) {
             return this.each(function () {
+                const $this = $(this);
                 if (state) {
-                    $(this).addClass('disabled').attr({
+                    $this.addClass('disabled').attr({
                         'disabled': 'disabled',
                         'aria-disabled': 'true'
                     });
+                    if ($this.is('a')) {
+                        $this.attr('tabindex', -1);
+                    }
                 } else {
-                    $(this).removeClass('disabled').removeAttr('disabled aria-disabled');
+                    $this.removeClass('disabled').removeAttr('disabled aria-disabled');
+                    if ($this.is('a')) {
+                        $this.removeAttr('tabindex');
+                    }
                 }
             });
         },

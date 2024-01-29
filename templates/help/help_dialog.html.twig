@@ -53,7 +53,7 @@
         </thead>
         <tbody>
         {% for field in fields %}
-            {% set name = field.name|default(id ~ '.fields.' ~ field.name) %}
+            {% set name = id ? id ~ '.fields.' ~ field.name : field.name %}
             <tr>
                 <td class="text-nowrap">{{ tools.output_icon(null, name) }}</td>
                 <td class="w-100">{{ field.description }}</td>

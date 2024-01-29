@@ -57,10 +57,8 @@ return static function (ContainerConfigurator $config): void {
         $parameters->set($key, $value);
     }
 
-    // services
-    $services = $config->services();
-
     // default configuration for services
+    $services = $config->services();
     $services->defaults()
         ->autowire()
         ->autoconfigure()

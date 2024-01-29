@@ -14,7 +14,7 @@ use Psr\Log\LogLevel;
 use Symfony\Config\MonologConfig;
 
 return static function (MonologConfig $config): void {
-    $config > handler('main')
+    $config->handler('main')
         ->type('fingers_crossed')
         ->actionLevel(LogLevel::ERROR)
         ->handler('nested')

@@ -14,12 +14,15 @@ use Psr\Log\LogLevel;
 use Symfony\Config\MonologConfig;
 
 return static function (MonologConfig $config): void {
-    $config->handler('main')
+    $handler = $config->handler('main')
         ->type('fingers_crossed')
         ->actionLevel(LogLevel::ERROR)
         ->handler('nested')
-        ->bufferSize(50)
-        ->excludedHttpCode([404, 405]);
+        ->bufferSize(50);
+    $handler->excludedHttpCode()
+        ->code(404);
+    $handler->excludedHttpCode()
+        ->code(405);
 
     $config->handler('nested')
         ->type('stream')

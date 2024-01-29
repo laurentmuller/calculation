@@ -19,7 +19,7 @@ return static function (MonologConfig $config): void {
         ->actionLevel(LogLevel::ERROR)
         ->handler('nested')
         ->bufferSize(50)
-        ->excludedHttpCodes([404, 405]);
+        ->excludedHttpCode([404, 405]);
 
     $config->handler('nested')
         ->type('stream')

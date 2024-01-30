@@ -39,15 +39,11 @@ jobs:
 
       - name: Lint YAML
         if: always() && steps.install.outcome == 'success'
-        run: php bin/console lint:yaml translations config .github/workflows --parse-tags
+        run: php bin/console lint:yaml translations .github/workflows --parse-tags
 
       - name: Lint Twig
         if: always() && steps.install.outcome == 'success'
         run: php bin/console lint:twig templates
-
-      - name: Lint XLIFF
-        if: always() && steps.install.outcome == 'success'
-        run: php bin/console lint:xliff translations
 
       - name: Lint Container
         if: always() && steps.install.outcome == 'success'

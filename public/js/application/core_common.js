@@ -109,7 +109,14 @@
             'image': image,
             'index': index,
             'location': location
-        }, (data) => window.console.log(data));
+        }, (data) => {
+            const title = 'Html2Image';
+            if (data.result) {
+                Toaster.success(data.message, title);
+            } else {
+                Toaster.warning(data.message, title);
+            }
+        });
     }
 
     /**
@@ -142,7 +149,6 @@
         });
     }
 
-
     /**
      * Save card images.
      */
@@ -164,37 +170,6 @@
         const callback = function (card, index, location, options) {
             htmlToImage.toPng(card, options).then((image) => {
                 $('*').css('cursor', 'wait');
-                sendImage(image, index, location);
-            }).catch(function (error) {
-                $('*').css('cursor', '');
-                window.console.warn(error);
-            });
-        };
-        createCopyButton(cards, callback);
-    }
-
-    /**
-     * Save card images.
-     */
-    function initHtml2Canvas() {
-        if (typeof html2canvas === 'undefined') {
-            return;
-        }
-        const cards = document.querySelectorAll('.page-content .card');
-        if (!cards.length) {
-            return;
-        }
-
-        /**
-         * @param {Element} card
-         * @param {number} index
-         * @param {String} location
-         * @param {Object} options
-         */
-        const callback = function (card, index, location, options) {
-            html2canvas(card, options).then((canvas) => {
-                $('*').css('cursor', 'wait');
-                const image = canvas.toDataURL('image/png');
                 sendImage(image, index, location);
             }).catch(function (error) {
                 $('*').css('cursor', '');
@@ -237,6 +212,5 @@
         initThemeTooltip();
         showFlashBag();
         initHtml2Image();
-        initHtml2Canvas();
     });
 }(jQuery));

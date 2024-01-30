@@ -18,9 +18,39 @@ namespace App\Utils;
 final class FormatUtils
 {
     /**
+     * The default date type format.
+     */
+    public const DATE_TYPE = \IntlDateFormatter::SHORT;
+
+    /**
+     * The decimal separator character.
+     */
+    public const DECIMAL_SEP = '.';
+
+    /**
+     * The fraction digits.
+     */
+    public const FRACTION_DIGITS = 2;
+
+    /**
      * The Swiss French locale.
      */
     public const LOCALE_FR_CH = 'fr_CH';
+
+    /**
+     * The percent symbol character.
+     */
+    public const PERCENT_SYMBOL = '%';
+
+    /**
+     * The thousand separator character.
+     */
+    public const THOUSANDS_SEP = '\'';
+
+    /**
+     * The default time type format.
+     */
+    public const TIME_TYPE = \IntlDateFormatter::SHORT;
 
     /**
      * The date formatters cache.
@@ -49,7 +79,7 @@ final class FormatUtils
     {
         $value = self::checkNegativeZero($number);
 
-        return (string) self::getNumberFormatter(\NumberFormatter::DECIMAL, 2)->format($value);
+        return (string) self::getNumberFormatter(\NumberFormatter::DECIMAL, self::FRACTION_DIGITS)->format($value);
     }
 
     /**
@@ -104,7 +134,7 @@ final class FormatUtils
         if (false === $result) {
             return null;
         }
-        if (null !== $pattern && '' !== $pattern) {
+        if (StringUtils::isString($pattern)) {
             return \ucfirst($result);
         }
 
@@ -150,12 +180,8 @@ final class FormatUtils
         int $decimals = 0,
         int $roundingMode = \NumberFormatter::ROUND_DOWN
     ): string {
-        $style = \NumberFormatter::PERCENT;
-        $extraHash = $includeSign ? '1' : '0';
-        $formatter = self::getNumberFormatter($style, $decimals, $roundingMode, $extraHash);
-        if (!$includeSign) {
-            $formatter->setSymbol(\NumberFormatter::PERCENT_SYMBOL, '');
-        }
+        $symbol = $includeSign ? self::PERCENT_SYMBOL : '';
+        $formatter = self::getNumberFormatter(\NumberFormatter::PERCENT, $decimals, $roundingMode, $symbol);
         $value = self::checkNegativeZero($number);
 
         return (string) $formatter->format($value);
@@ -200,11 +226,10 @@ final class FormatUtils
         \DateTimeZone|string $timezone = null
     ): \IntlDateFormatter {
         $locale = \Locale::getDefault();
-        $dateType ??= self::getDateType();
-        $timeType ??= self::getTimeType();
+        $dateType ??= self::DATE_TYPE;
+        $timeType ??= self::TIME_TYPE;
         $pattern ??= '';
-        $hash = self::getHashCode($dateType, $timeType, $timezone, $pattern);
-
+        $hash = self::hashCode($dateType, $timeType, $timezone, $pattern);
         if (!isset(self::$dateFormatters[$hash])) {
             $formatter = new \IntlDateFormatter($locale, $dateType, $timeType, $timezone, pattern: $pattern);
             $pattern = $formatter->getPattern();
@@ -219,65 +244,12 @@ final class FormatUtils
     }
 
     /**
-     * Gets the default date type format.
-     */
-    public static function getDateType(): int
-    {
-        return \IntlDateFormatter::SHORT;
-    }
-
-    /**
-     * Gets the default decimal separator for the current locale.
-     */
-    public static function getDecimal(): string
-    {
-        /** @var string|null $decimal */
-        static $decimal;
-        if (null !== $decimal) {
-            return $decimal;
-        }
-        $locale = \Locale::getDefault();
-        if (self::LOCALE_FR_CH === $locale) {
-            $decimal = '.';
-        } else {
-            $formatter = new \NumberFormatter($locale, \NumberFormatter::PATTERN_DECIMAL);
-            $decimal = $formatter->getSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL);
-        }
-
-        return $decimal;
-    }
-
-    /**
-     * Gets the default grouping separator for the current locale.
-     */
-    public static function getGrouping(): string
-    {
-        /** @var string|null $grouping */
-        static $grouping;
-        if (null !== $grouping) {
-            return $grouping;
-        }
-        $locale = \Locale::getDefault();
-        if (self::LOCALE_FR_CH === $locale) {
-            $grouping = '\'';
-        } else {
-            $formatter = new \NumberFormatter($locale, \NumberFormatter::PATTERN_DECIMAL);
-            $grouping = $formatter->getSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL);
-        }
-        if (2 === \strlen($grouping) && 194 === \ord($grouping[0]) && 160 === \ord($grouping[1])) {
-            $grouping = ' ';
-        }
-
-        return $grouping;
-    }
-
-    /**
      * Gets a number formatter for the current locale.
      *
-     * @param int    $style        the style of the formatter
-     * @param int    $digits       the number of fraction digits
-     * @param int    $roundingMode the rounding mode
-     * @param string $extraHash    an optional extra hash code used to check if the formatter is already created
+     * @param int    $style         the style of the formatter
+     * @param int    $digits        the number of fraction digits
+     * @param int    $roundingMode  the rounding mode
+     * @param string $percentSymbol an optional percent symbol
      *
      * @psalm-param \NumberFormatter::ROUND_* $roundingMode
      */
@@ -285,43 +257,20 @@ final class FormatUtils
         int $style,
         int $digits,
         int $roundingMode = \NumberFormatter::ROUND_HALFEVEN,
-        string $extraHash = ''
+        string $percentSymbol = ''
     ): \NumberFormatter {
-        $hash = self::getHashCode($style, $digits, $roundingMode, $extraHash);
+        $hash = self::hashCode($style, $digits, $roundingMode, $percentSymbol);
         if (!isset(self::$numberFormatters[$hash])) {
             $formatter = new \NumberFormatter(\Locale::getDefault(), $style);
             $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $digits);
             $formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, $roundingMode);
-            $formatter->setSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL, self::getGrouping());
-            $formatter->setSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL, self::getDecimal());
+            $formatter->setSymbol(\NumberFormatter::GROUPING_SEPARATOR_SYMBOL, self::THOUSANDS_SEP);
+            $formatter->setSymbol(\NumberFormatter::DECIMAL_SEPARATOR_SYMBOL, self::DECIMAL_SEP);
+            $formatter->setSymbol(\NumberFormatter::PERCENT_SYMBOL, $percentSymbol);
             self::$numberFormatters[$hash] = $formatter;
         }
 
         return self::$numberFormatters[$hash];
-    }
-
-    /**
-     * Gets the percent symbol.
-     */
-    public static function getPercent(): string
-    {
-        /** @var string|null $percent */
-        static $percent;
-        if (null !== $percent) {
-            return $percent;
-        }
-        $formatter = new \NumberFormatter(\Locale::getDefault(), \NumberFormatter::PATTERN_DECIMAL);
-        $percent = $formatter->getSymbol(\NumberFormatter::PERCENT_SYMBOL);
-
-        return $percent;
-    }
-
-    /**
-     * Gets the default time type format.
-     */
-    public static function getTimeType(): int
-    {
-        return \IntlDateFormatter::SHORT;
     }
 
     private static function checkNegativeZero(int|float|string|null $number): float
@@ -331,16 +280,13 @@ final class FormatUtils
         return ($value ** -1.0) === -\INF ? 0.0 : $value;
     }
 
-    private static function getHashCode(\DateTimeZone|string|int|null ...$values): string
+    private static function hashCode(mixed ...$values): string
     {
-        $array = \array_map(function (\DateTimeZone|string|int|null $value): string {
-            if ($value instanceof \DateTimeZone) {
-                return $value->getName();
-            }
+        $values = \array_map(
+            fn (mixed $value): string => $value instanceof \DateTimeZone ? $value->getName() : (string) $value,
+            $values
+        );
 
-            return (string) $value;
-        }, $values);
-
-        return \implode('|', $array);
+        return \implode('|', $values);
     }
 }

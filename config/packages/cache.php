@@ -15,13 +15,13 @@ use Symfony\Config\FrameworkConfig;
 return static function (FrameworkConfig $config): void {
     $cache = $config->cache();
 
-    // used by the App\Service\ApplicationService
-    $cache->pool('cache.app_service')
+    // used by the ApplicationService
+    $cache->pool('cache.app.service')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime(3600);
 
-    // used by the App\Service\UserService
-    $config->cache()->pool('cache.user_service')
+    // used by the UserService
+    $config->cache()->pool('cache.user.service')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime(3600);
 };

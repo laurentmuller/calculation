@@ -16,4 +16,10 @@ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 return static function (RoutingConfigurator $config): void {
     $config->import('../../src/Controller/', 'attribute');
     $config->import(Kernel::class, 'attribute');
+
+    if ('dev' === $config->env()) {
+        $config->import('@FrameworkBundle/Resources/config/routing/errors.xml')->prefix('/_error');
+        $config->import('@WebProfilerBundle/Resources/config/routing/wdt.xml')->prefix('/_wdt');
+        $config->import('@WebProfilerBundle/Resources/config/routing/profiler.xml')->prefix('/_profiler');
+    }
 };

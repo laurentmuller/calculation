@@ -26,12 +26,12 @@
             </div>
         </td>
         <td class="text-currency">{{ item.count|integer }}</td>
-        <td class="text-percent">{{ item.percent_calculation|percent(true, 2, 4) }}</td>
+        <td class="text-percent">{{ item.percent_calculation|percent(true, 2, 5) }}</td>
         <td class="text-currency">{{ item.items|integer }}</td>
         <td class="text-currency">{{ item.margin_amount|integer }}</td>
         <td class="text-percent{{ _self.margin_below_class(item.margin_percent, min_margin) }}"{{ _self.margin_below_tooltip(item.margin_percent, min_margin) }}>{{ item.margin_percent|percent }}</td>
         <td class="text-currency">{{ item.total|integer }}</td>
-        <td class="text-percent">{{ item.percent_amount|percent(true, 2, 4) }}</td>
+        <td class="text-percent">{{ item.percent_amount|percent(true, 2, 5) }}</td>
     </tr>
     {% endfor -%}
     <tr title="{{ 'row_show_all'|trans }}">

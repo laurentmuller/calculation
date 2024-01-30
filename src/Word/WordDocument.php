@@ -57,7 +57,7 @@ class WordDocument extends PhpWord
     {
         $settings = $this->getSettings();
         $settings->setZoom(Zoom::BEST_FIT);
-        $settings->setDecimalSymbol(FormatUtils::getDecimal());
+        $settings->setDecimalSymbol(FormatUtils::DECIMAL_SEP);
         $settings->setThemeFontLang(new Language(\Locale::getDefault()));
         Settings::setOutputEscapingEnabled(true);
     }

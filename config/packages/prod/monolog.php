@@ -14,6 +14,8 @@ use Psr\Log\LogLevel;
 use Symfony\Config\MonologConfig;
 
 return static function (MonologConfig $config): void {
+    $config->channels(['deprecation']);
+
     $handler = $config->handler('main')
         ->type('fingers_crossed')
         ->actionLevel(LogLevel::ERROR)
@@ -34,16 +36,11 @@ return static function (MonologConfig $config): void {
         ->type('console')
         ->processPsr3Messages(false)
         ->channels()
-        ->elements(['!event', '!doctrine']);
+        ->channels()->elements(['!event', '!doctrine', '!console', '!deprecation']);
 
     $config->handler('deprecation')
         ->type('stream')
-        ->path('%kernel.logs_dir%/%kernel.environment%.deprecations.log');
-
-    $config->handler('deprecationFilter')
-        ->type('filter')
-        ->handler('deprecation')
-        ->maxLevel(LogLevel::INFO)
+        ->path('%kernel.logs_dir%/%kernel.environment%.deprecations.log')
         ->formatter('monolog.custom_formatter')
-        ->channel('php');
+        ->channels()->elements(['deprecation']);
 };

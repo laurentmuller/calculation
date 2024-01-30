@@ -11,6 +11,9 @@
     {%- if add_page -%}
         {%- set params = route_params(app.request)|merge({'caller': caller}) -%}
         {%- set path = path(add_page, params) -%}
-        <a href="{{ path }}" class="d-print-none">{{ 'calculation.add.title'|trans }}</a>
+        <a href="{{ path }}" class="d-print-none">
+            <i class="fa-solid fa-file-circle-plus d-md-none" title="{{ 'calculation.add.title'|trans }}"></i>
+            <span class="d-none d-md-block">{{- 'calculation.add.title'|trans -}}</span>
+        </a>
     {%- endif -%}
 </div>

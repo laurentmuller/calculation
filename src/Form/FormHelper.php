@@ -725,7 +725,7 @@ class FormHelper
      */
     public function percent(bool $visible): self
     {
-        return $this->updateOption('symbol', $visible ? FormatUtils::getPercent() : false);
+        return $this->updateOption('symbol', $visible ? FormatUtils::PERCENT_SYMBOL : false);
     }
 
     /**

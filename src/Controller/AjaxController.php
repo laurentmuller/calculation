@@ -105,7 +105,7 @@ class AjaxController extends AbstractController
     #[Route(path: '/dialog/page', name: 'ajax_dialog_page', methods: Request::METHOD_GET)]
     public function renderDialogPage(): JsonResponse
     {
-        return $this->renderDialog('dialog/dialog_table_page.html.twig');
+        return $this->renderTemplate('dialog/dialog_table_page.html.twig');
     }
 
     /**
@@ -117,7 +117,7 @@ class AjaxController extends AbstractController
     #[Route(path: '/dialog/sort', name: 'ajax_dialog_sort', methods: Request::METHOD_POST)]
     public function renderDialogSort(Request $request): JsonResponse
     {
-        return $this->renderDialog('dialog/dialog_table_sort.html.twig', ['columns' => $request->toArray()]);
+        return $this->renderTemplate('dialog/dialog_table_sort.html.twig', ['columns' => $request->toArray()]);
     }
 
     /**
@@ -159,7 +159,7 @@ class AjaxController extends AbstractController
         return $response;
     }
 
-    private function renderDialog(string $view, array $parameters = []): JsonResponse
+    private function renderTemplate(string $view, array $parameters = []): JsonResponse
     {
         return $this->json($this->renderView($view, $parameters));
     }

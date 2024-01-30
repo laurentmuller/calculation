@@ -76,7 +76,7 @@ enum Theme: string implements EnumDefaultInterface, EnumSortableInterface, Trans
     }
 
     /**
-     * Gets the icon for dark mode.
+     * Gets the icon for the dark mode.
      *
      * @psalm-api
      */

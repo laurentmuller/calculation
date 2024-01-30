@@ -83,28 +83,23 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         $columns = $event->getColumns();
         foreach ($columns as $index => $column) {
             switch ($index) {
-                case 1:
-                case 4:
-                case 6:
-                    $cols = 2;
-                    $alignment = PdfTextAlignment::CENTER;
-                    $cells[] = new PdfCell(
-                        $column->getText(),
-                        $cols,
-                        $style,
-                        $alignment
-                    );
-                    break;
-                case 2:
-                case 5:
-                case 7:
-                    break;
-                default: // 0, 3, 6
+                case 0:
+                case 3:
                     $cells[] = new PdfCell(
                         $column->getText(),
                         1,
                         $style,
                         $column->getAlignment()
+                    );
+                    break;
+                case 1:
+                case 4:
+                case 6:
+                    $cells[] = new PdfCell(
+                        $column->getText(),
+                        2,
+                        $style,
+                        PdfTextAlignment::CENTER
                     );
                     break;
             }
@@ -144,13 +139,13 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             ->setTextListener($this)
             ->addColumns(
                 PdfColumn::left($this->transChart('fields.state'), 20),
-                PdfColumn::right($this->transChart('fields.count'), 16, true),
-                PdfColumn::right(FormatUtils::getPercent(), 16, true),
+                PdfColumn::right($this->transChart('fields.count'), 20, true),
+                PdfColumn::right('', 20, true),
                 PdfColumn::right($this->transChart('fields.net'), 20, true),
                 PdfColumn::right($this->transChart('fields.margin'), 20, true),
-                PdfColumn::right($this->transChart('fields.margin_percent'), 16, true),
+                PdfColumn::right('', 20, true),
                 PdfColumn::right($this->transChart('fields.total'), 20, true),
-                PdfColumn::right(FormatUtils::getPercent(), 16, true)
+                PdfColumn::right('', 20, true)
             )->outputHeaders();
     }
 
@@ -184,7 +179,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     private function formatPercent(float $value, int $decimals = 1, bool $useStyle = false, bool $bold = false): PdfCell
     {
         $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
-        $cell = new PdfCell(FormatUtils::formatPercent($value, true, $decimals, \NumberFormatter::ROUND_HALFEVEN));
+        $cell = new PdfCell(FormatUtils::formatPercent($value, true, $decimals, \NumberFormatter::ROUND_HALFDOWN));
         if ($useStyle && $this->isMinMargin($value)) {
             $style->setTextColor(PdfTextColor::red());
         }
@@ -247,23 +242,21 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
 
         // total
         $count = $this->getColumnSum($entities, 'count');
-        $percentCalculation = $this->getColumnSum($entities, 'percent_calculation');
         $items = $this->getColumnSum($entities, 'items');
         $marginAmount = $this->getColumnSum($entities, 'margin_amount');
         $total = $this->getColumnSum($entities, 'total');
         $net = $total - $items;
         $margin = 1.0 + $this->safeDivide($net, $items);
-        $percentAmount = $this->getColumnSum($entities, 'percent_amount');
 
         $table->addHeaderRow(
             $this->transChart('fields.total'),
             FormatUtils::formatInt($count),
-            $this->formatPercent($percentCalculation, 2, bold: true),
+            $this->formatPercent(1.0, 2, bold: true),
             FormatUtils::formatInt($items),
             FormatUtils::formatInt($marginAmount),
             $this->formatPercent($margin, 0, bold: true),
             FormatUtils::formatInt($total),
-            $this->formatPercent($percentAmount, 2, bold: true)
+            $this->formatPercent(1.0, 2, bold: true)
         );
     }
 

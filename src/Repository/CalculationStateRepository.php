@@ -89,8 +89,8 @@ class CalculationStateRepository extends AbstractRepository
         $count = $this->getColumnSum($result, 'count');
         $total = $this->getColumnSum($result, 'total');
         foreach ($result as &$data) {
-            $data['percent_calculation'] = $this->round($this->safeDivide($data['count'], $count), 4);
-            $data['percent_amount'] = $this->round($this->safeDivide($data['total'], $total), 4);
+            $data['percent_calculation'] = $this->round($this->safeDivide($data['count'], $count), 5);
+            $data['percent_amount'] = $this->round($this->safeDivide($data['total'], $total), 5);
         }
 
         return $result;

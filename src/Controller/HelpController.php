@@ -18,6 +18,7 @@ use App\Report\HelpReport;
 use App\Response\PdfResponse;
 use App\Service\HelpService;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -91,7 +92,7 @@ class HelpController extends AbstractController
         HelpDownloadQuery $query,
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
-        Filesystem $filesystem
+        Filesystem $fs
     ): JsonResponse {
         $targetImage = $this->getTargetImage($query);
         if (null === $targetImage) {
@@ -101,12 +102,14 @@ class HelpController extends AbstractController
         if (null === $targetPath) {
             return $this->jsonFalse(['message' => 'Unable to get the target path.']);
         }
-        $filesystem->dumpFile($projectDir . '/var/cache/help/' . $targetPath, $targetImage);
 
-        return $this->jsonTrue([
-            'message' => 'Saved image successfully.',
-            'target' => $targetPath,
-        ]);
+        try {
+            $fs->dumpFile($projectDir . '/var/cache/help/' . $targetPath, $targetImage);
+
+            return $this->jsonTrue(['message' => \sprintf('Image "%s" saved successfully.', $targetPath)]);
+        } catch (IOException $e) {
+            return $this->jsonException($e);
+        }
     }
 
     /**

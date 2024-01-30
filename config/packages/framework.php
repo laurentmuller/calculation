@@ -17,9 +17,17 @@ return static function (FrameworkConfig $config): void {
     $config->secret('%app_secret%')
         ->httpMethodOverride(true);
 
+    $config->defaultLocale('%locale%')
+        ->enabledLocales(['%locale%']);
+
     $config->session()
         ->enabled(true)
         ->cookiePath('%cookie_path%');
+
+    $config->mailer()
+        ->dsn('%env(MAILER_DSN)%')
+        ->envelope()
+        ->sender('%mailer_user_email%');
 
     $config->assets()
         ->versionStrategy(AssetVersionService::class);

@@ -249,8 +249,8 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     private function initializeLanguage(): static
     {
         $this->lang->merge([
-            'thousandsSep' => FormatUtils::getGrouping(),
-            'decimalPoint' => FormatUtils::getDecimal(),
+            'decimalPoint' => FormatUtils::DECIMAL_SEP,
+            'thousandsSep' => FormatUtils::THOUSANDS_SEP,
             'months' => \array_values(DateUtils::getMonths()),
             'weekdays' => \array_values(DateUtils::getWeekdays()),
             'shortMonths' => \array_values(DateUtils::getShortMonths()),

@@ -226,12 +226,12 @@ class FormatUtilsTest extends TestCase
 
     public function testDateType(): void
     {
-        self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::getDateType());
+        self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::DATE_TYPE);
     }
 
     public function testDecimal(): void
     {
-        self::assertSame('.', FormatUtils::getDecimal());
+        self::assertSame('.', FormatUtils::DECIMAL_SEP);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getAmounts')]
@@ -304,17 +304,17 @@ class FormatUtilsTest extends TestCase
 
     public function testGrouping(): void
     {
-        self::assertSame("'", FormatUtils::getGrouping());
+        self::assertSame("'", FormatUtils::THOUSANDS_SEP);
     }
 
     public function testPercent(): void
     {
-        self::assertSame(self::PERCENT_SIGN, FormatUtils::getPercent());
+        self::assertSame(self::PERCENT_SIGN, FormatUtils::PERCENT_SYMBOL);
     }
 
     public function testTimeType(): void
     {
-        self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::getTimeType());
+        self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::TIME_TYPE);
     }
 
     /**

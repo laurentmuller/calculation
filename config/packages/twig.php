@@ -11,24 +11,29 @@
 declare(strict_types=1);
 
 use App\Service\UserService;
+use App\Utils\FormatUtils;
 use Symfony\Config\TwigConfig;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (TwigConfig $config): void {
+    // theme and paths
     $config->formThemes(['fields.html.twig'])
         ->path('%kernel.project_dir%/public/css', 'css')
         ->path('%kernel.project_dir%/public/images', 'images');
 
+    // date format
     $config->date()
         ->format('d.m.Y H:i:s')
         ->intervalFormat('%%d jours');
 
+    // number format
     $config->numberFormat()
-        ->decimals(2)
-        ->decimalPoint('.')
-        ->thousandsSeparator('\'');
+        ->decimals(FormatUtils::FRACTION_DIGITS)
+        ->decimalPoint(FormatUtils::DECIMAL_SEP)
+        ->thousandsSeparator(FormatUtils::THOUSANDS_SEP);
 
+    // global parameters
     $globals = [
         'app_name' => '%app_name%',
         'app_version' => '%app_version%',

@@ -35,7 +35,6 @@ return static function (MonologConfig $config): void {
     $config->handler('console')
         ->type('console')
         ->processPsr3Messages(false)
-        ->channels()
         ->channels()->elements(['!event', '!doctrine', '!console', '!deprecation']);
 
     $config->handler('deprecation')

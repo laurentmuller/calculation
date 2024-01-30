@@ -75,7 +75,6 @@
         "symfony/twig-bundle": "7.0.*",
         "symfony/validator": "7.0.*",
         "symfony/web-link": "7.0.*",
-        "symfony/yaml": "7.0.*",
         "symfonycasts/reset-password-bundle": "^1.0",
         "symfonycasts/verify-email-bundle": "^1.0",
         "twig/cssinliner-extra": "^3.0",
@@ -91,7 +90,6 @@
         "orklah/psalm-insane-comparison": "^2.0",
         "orklah/psalm-not-empty": "^1.0",
         "orklah/psalm-strict-equality": "^2.0",
-        "phpdocumentor/reflection-docblock": "^5.0",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-deprecation-rules": "^1.0",
@@ -110,7 +108,6 @@
         "symfony/stopwatch": "7.0.*",
         "symfony/var-dumper": "7.0.*",
         "symfony/web-profiler-bundle": "7.0.*",
-        "symplify/config-transformer": "^12.3",
         "vimeo/psalm": "^5.0",
         "weirdan/doctrine-psalm-plugin": "^2.0"
     },

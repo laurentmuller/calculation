@@ -29,7 +29,7 @@ return static function (MonologConfig $config): void {
     $config->handler('nested')
         ->type('stream')
         ->path('%kernel.logs_dir%/%kernel.environment%.log')
-        ->level(LogLevel::DEBUG)
+        ->level(LogLevel::INFO)
         ->formatter('monolog.custom_formatter');
 
     $config->handler('console')

@@ -15,5 +15,6 @@ use Symfony\Config\FrameworkConfig;
 return static function (FrameworkConfig $config): void {
     $config->ide('phpstorm')
         ->profiler()
-        ->onlyExceptions(false);
+        ->onlyExceptions(false)
+        ->collectSerializerData(true);
 };

@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
+use App\Attribute\GetDelete;
+use App\Attribute\GetPost;
 use App\Entity\Customer;
 use App\Interfaces\RoleInterface;
 use App\Report\CustomersReport;
@@ -50,7 +53,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Add a customer.
      */
-    #[Route(path: '/add', name: 'customer_add', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/add', name: 'customer_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new Customer());
@@ -59,7 +62,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Delete a customer.
      */
-    #[Route(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_DELETE])]
+    #[GetDelete(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -68,7 +71,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Edit a customer.
      */
-    #[Route(path: '/edit/{id}', name: 'customer_edit', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/edit/{id}', name: 'customer_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Customer $item): Response
     {
         return $this->editEntity($request, $item);
@@ -80,7 +83,7 @@ class CustomerController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/excel', name: 'customer_excel', methods: Request::METHOD_GET)]
+    #[Get(path: '/excel', name: 'customer_excel')]
     public function excel(CustomerRepository $repository): SpreadsheetResponse
     {
         $entities = $repository->findByNameAndCompany();
@@ -98,7 +101,7 @@ class CustomerController extends AbstractEntityController
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no customer is found
      */
-    #[Route(path: '/pdf', name: 'customer_pdf', methods: Request::METHOD_GET)]
+    #[Get(path: '/pdf', name: 'customer_pdf')]
     public function pdf(Request $request, CustomerRepository $repository): PdfResponse
     {
         $entities = $repository->findByNameAndCompany();
@@ -115,7 +118,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Show properties of a customer.
      */
-    #[Route(path: '/show/{id}', name: 'customer_show', requirements: ['id' => Requirement::DIGITS], methods: Request::METHOD_GET)]
+    #[Get(path: '/show/{id}', name: 'customer_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Customer $item): Response
     {
         return $this->showEntity($item);
@@ -124,7 +127,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'customer_table', methods: Request::METHOD_GET)]
+    #[Get(path: '', name: 'customer_table')]
     public function table(
         CustomerTable $table,
         LoggerInterface $logger,

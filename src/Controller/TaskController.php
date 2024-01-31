@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
+use App\Attribute\GetDelete;
+use App\Attribute\GetPost;
 use App\Entity\Category;
 use App\Entity\Task;
 use App\Form\Task\TaskServiceType;
@@ -54,7 +57,7 @@ class TaskController extends AbstractEntityController
     /**
      * Add a task.
      */
-    #[Route(path: '/add', name: 'task_add', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/add', name: 'task_add')]
     public function add(Request $request): Response
     {
         $item = new Task();
@@ -69,7 +72,7 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a copy (cloned) task.
      */
-    #[Route(path: '/clone/{id}', name: 'task_clone', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/clone/{id}', name: 'task_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Task $item): Response
     {
         $name = $this->trans('common.clone_description', ['%description%' => $item->getName()]);
@@ -85,7 +88,7 @@ class TaskController extends AbstractEntityController
     /**
      * Display the page to compute a task.
      */
-    #[Route(path: '/compute/{id?}', name: 'task_compute', requirements: ['id' => Requirement::DIGITS], methods: Request::METHOD_GET)]
+    #[Get(path: '/compute/{id?}', name: 'task_compute', requirements: ['id' => Requirement::DIGITS])]
     public function compute(Request $request, TaskService $service, Task $task = null): Response
     {
         [$tasks, $task] = $this->getTasks($service, $task);
@@ -111,7 +114,7 @@ class TaskController extends AbstractEntityController
     /**
      * Delete a task.
      */
-    #[Route(path: '/delete/{id}', name: 'task_delete', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_DELETE])]
+    #[GetDelete(path: '/delete/{id}', name: 'task_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -120,7 +123,7 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a task.
      */
-    #[Route(path: '/edit/{id}', name: 'task_edit', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/edit/{id}', name: 'task_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Task $item): Response
     {
         return $this->editEntity($request, $item);
@@ -133,7 +136,7 @@ class TaskController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/excel', name: 'task_excel', methods: Request::METHOD_GET)]
+    #[Get(path: '/excel', name: 'task_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('name');
@@ -152,7 +155,7 @@ class TaskController extends AbstractEntityController
      * @throws NotFoundHttpException                if no category is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/pdf', name: 'task_pdf', methods: Request::METHOD_GET)]
+    #[Get(path: '/pdf', name: 'task_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('name');
@@ -168,7 +171,7 @@ class TaskController extends AbstractEntityController
     /**
      * Show properties of a task.
      */
-    #[Route(path: '/show/{id}', name: 'task_show', requirements: ['id' => Requirement::DIGITS], methods: Request::METHOD_GET)]
+    #[Get(path: '/show/{id}', name: 'task_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Task $item): Response
     {
         return $this->showEntity($item);
@@ -177,7 +180,7 @@ class TaskController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'task_table', methods: Request::METHOD_GET)]
+    #[Get(path: '', name: 'task_table')]
     public function table(
         TaskTable $table,
         LoggerInterface $logger,

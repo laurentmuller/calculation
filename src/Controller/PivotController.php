@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Pivot\Aggregator\SumAggregator;
 use App\Pivot\Field\PivotFieldFactory;
@@ -21,7 +22,6 @@ use App\Repository\CalculationRepository;
 use App\Response\CsvResponse;
 use App\Utils\FormatUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
@@ -42,7 +42,7 @@ class PivotController extends AbstractController
     /**
      * Show the pivot data table.
      */
-    #[Route(path: '', name: 'calculation_pivot', methods: Request::METHOD_GET)]
+    #[Get(path: '', name: 'calculation_pivot')]
     public function index(): Response
     {
         return $this->render('calculation/calculation_pivot.html.twig', [
@@ -55,7 +55,7 @@ class PivotController extends AbstractController
     /**
      * Export pivot data to CSV.
      */
-    #[Route(path: '/csv', name: 'calculation_pivot_csv', methods: Request::METHOD_GET)]
+    #[Get(path: '/csv', name: 'calculation_pivot_csv')]
     public function toCsv(): CsvResponse
     {
         $dataset = $this->getDataset();
@@ -81,7 +81,7 @@ class PivotController extends AbstractController
     /**
      * Export pivot data to JSON.
      */
-    #[Route(path: '/json', name: 'calculation_pivot_json', methods: Request::METHOD_GET)]
+    #[Get(path: '/json', name: 'calculation_pivot_json')]
     public function toJson(): JsonResponse
     {
         $table = $this->getTable();

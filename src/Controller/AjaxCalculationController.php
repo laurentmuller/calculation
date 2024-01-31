@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
+use App\Attribute\Post;
 use App\Form\Dialog\EditItemDialogType;
 use App\Form\Dialog\EditTaskDialogType;
 use App\Interfaces\RoleInterface;
@@ -37,7 +39,7 @@ class AjaxCalculationController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/dialog/item', name: 'ajax_dialog_item', methods: Request::METHOD_GET)]
+    #[Get(path: '/dialog/item', name: 'ajax_dialog_item')]
     public function renderItemDialog(): JsonResponse
     {
         $parameters = [
@@ -52,7 +54,7 @@ class AjaxCalculationController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/dialog/task', name: 'ajax_dialog_task', methods: Request::METHOD_GET)]
+    #[Get(path: '/dialog/task', name: 'ajax_dialog_task')]
     public function renderTaskDialog(TaskRepository $repository): JsonResponse
     {
         $parameters = [
@@ -66,7 +68,7 @@ class AjaxCalculationController extends AbstractController
     /**
      * Update the total of a calculation.
      */
-    #[Route(path: '/update', name: 'ajax_update', methods: Request::METHOD_POST)]
+    #[Post(path: '/update', name: 'ajax_update')]
     public function update(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse
     {
         try {

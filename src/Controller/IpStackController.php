@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Service\IpStackService;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class IpStackController extends AbstractController
 {
-    #[Route(path: '', name: 'ipstack', methods: Request::METHOD_GET)]
+    #[Get(path: '', name: 'ipstack')]
     public function ipStack(Request $request, IpStackService $service): Response
     {
         $results = $service->getIpInfo($request);

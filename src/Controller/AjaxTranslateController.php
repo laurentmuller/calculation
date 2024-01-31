@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
+use App\Attribute\Post;
 use App\Interfaces\RoleInterface;
 use App\Model\HttpClientError;
 use App\Model\TranslateQuery;
@@ -20,7 +22,6 @@ use App\Translator\TranslatorServiceInterface;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -44,7 +45,7 @@ class AjaxTranslateController extends AbstractController
      * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/detect', name: 'ajax_detect', methods: Request::METHOD_GET)]
+    #[Get(path: '/detect', name: 'ajax_detect')]
     public function detect(
         #[MapQueryParameter]
         string $text = null,
@@ -79,7 +80,7 @@ class AjaxTranslateController extends AbstractController
      * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/languages', name: 'ajax_languages', methods: Request::METHOD_GET)]
+    #[Get(path: '/languages', name: 'ajax_languages')]
     public function languages(#[MapQueryParameter(name: 'service')] string $class = null): JsonResponse
     {
         try {
@@ -103,7 +104,7 @@ class AjaxTranslateController extends AbstractController
      * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/translate', name: 'ajax_translate', methods: Request::METHOD_POST)]
+    #[Post(path: '/translate', name: 'ajax_translate')]
     public function translate(#[MapRequestPayload] TranslateQuery $query): JsonResponse
     {
         if (empty($query->text)) {

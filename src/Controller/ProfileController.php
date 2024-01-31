@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetPost;
 use App\Entity\User;
 use App\Form\User\ProfileChangePasswordType;
 use App\Form\User\ProfileEditType;
@@ -35,7 +36,7 @@ class ProfileController extends AbstractController
     /**
      * Change password of the current user (if any).
      */
-    #[Route(path: '/change-password', name: 'user_profile_change_password', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/change-password', name: 'user_profile_change_password')]
     public function changePassword(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(ProfileChangePasswordType::class, $user);
@@ -57,7 +58,7 @@ class ProfileController extends AbstractController
     /**
      * Edit the profile of the current user (if any).
      */
-    #[Route(path: '/edit', name: 'user_profile_edit', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/edit', name: 'user_profile_edit')]
     public function editProfil(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(ProfileEditType::class, $user);

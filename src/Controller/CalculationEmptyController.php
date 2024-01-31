@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationsEmptyReport;
@@ -22,7 +23,6 @@ use App\Table\DataQuery;
 use App\Traits\TableTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
@@ -47,7 +47,7 @@ class CalculationEmptyController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/excel', name: 'empty_excel', methods: Request::METHOD_GET)]
+    #[Get(path: '/excel', name: 'empty_excel')]
     public function excel(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -65,7 +65,7 @@ class CalculationEmptyController extends AbstractController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/pdf', name: 'empty_pdf', methods: Request::METHOD_GET)]
+    #[Get(path: '/pdf', name: 'empty_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -81,7 +81,7 @@ class CalculationEmptyController extends AbstractController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'empty_table', methods: Request::METHOD_GET)]
+    #[Get(path: '', name: 'empty_table')]
     public function table(
         CalculationEmptyTable $table,
         LoggerInterface $logger,

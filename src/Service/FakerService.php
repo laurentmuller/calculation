@@ -44,8 +44,7 @@ class FakerService
     {
         if (!$this->generator instanceof Generator) {
             $manager = $this->manager;
-            $locale = \Locale::getDefault();
-            $generator = Factory::create($locale);
+            $generator = Factory::create(\Locale::getDefault());
             // custom providers
             $generator->addProvider(new CustomPerson($generator));
             $generator->addProvider(new CustomCompany($generator));

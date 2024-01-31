@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
+use App\Attribute\GetPost;
 use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Product;
@@ -94,7 +96,7 @@ class TestController extends AbstractController
     /**
      * Test sending notification mail.
      */
-    #[Route(path: '/editor', name: 'test_editor', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/editor', name: 'test_editor')]
     public function editor(
         Request $request,
         #[CurrentUser]
@@ -152,7 +154,7 @@ class TestController extends AbstractController
      *
      * @throws PdfException
      */
-    #[Route(path: '/label', name: 'test_label', methods: Request::METHOD_GET)]
+    #[Get(path: '/label', name: 'test_label')]
     public function exportLabel(CustomerRepository $repository): PdfResponse
     {
         $listener = new class() implements PdfLabelTextListenerInterface {
@@ -211,7 +213,7 @@ class TestController extends AbstractController
     /**
      * Export a HTML page to PDF.
      */
-    #[Route(path: '/pdf', name: 'test_pdf', methods: Request::METHOD_GET)]
+    #[Get(path: '/pdf', name: 'test_pdf')]
     public function exportPdf(): PdfResponse
     {
         $content = $this->renderView('test/html_report.html.twig');
@@ -227,7 +229,7 @@ class TestController extends AbstractController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
-    #[Route(path: '/word', name: 'test_word', methods: Request::METHOD_GET)]
+    #[Get(path: '/word', name: 'test_word')]
     public function exportWord(): WordResponse
     {
         $content = $this->renderView('test/html_report.html.twig');
@@ -240,7 +242,7 @@ class TestController extends AbstractController
     /**
      * Test notifications.
      */
-    #[Route(path: '/notifications', name: 'test_notifications', methods: Request::METHOD_GET)]
+    #[Get(path: '/notifications', name: 'test_notifications')]
     public function notifications(): Response
     {
         return $this->render('test/notification.html.twig', ['positions' => MessagePosition::sorted()]);
@@ -251,7 +253,7 @@ class TestController extends AbstractController
      *
      * @throws \Exception
      */
-    #[Route(path: '/password', name: 'test_password', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/password', name: 'test_password')]
     public function password(Request $request, CaptchaImageService $service): Response
     {
         $options = PropertyServiceInterface::PASSWORD_OPTIONS;
@@ -331,7 +333,7 @@ class TestController extends AbstractController
     /**
      * Display the reCaptcha.
      */
-    #[Route(path: '/recaptcha', name: 'test_recaptcha', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/recaptcha', name: 'test_recaptcha')]
     public function recaptcha(Request $request, RecaptchaService $service): Response
     {
         $data = [
@@ -367,7 +369,7 @@ class TestController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/search', name: 'test_search', methods: Request::METHOD_GET)]
+    #[Get(path: '/search', name: 'test_search')]
     public function search(Request $request, SearchService $service): JsonResponse
     {
         $query = $this->getRequestString($request, 'query');
@@ -400,7 +402,7 @@ class TestController extends AbstractController
     /**
      * Search zip codes, cities and streets from Switzerland.
      */
-    #[Route(path: '/swiss', name: 'test_swiss', methods: Request::METHOD_GET)]
+    #[Get(path: '/swiss', name: 'test_swiss')]
     public function swiss(Request $request, SwissPostService $service): JsonResponse
     {
         $all = $this->getRequestString($request, 'all');
@@ -440,7 +442,7 @@ class TestController extends AbstractController
      *
      * @throws ServiceNotFoundException if the service is not found
      */
-    #[Route(path: '/translate', name: 'test_translate', methods: Request::METHOD_GET)]
+    #[Get(path: '/translate', name: 'test_translate')]
     public function translate(TranslatorFactory $factory): Response
     {
         $service = $factory->getSessionService();
@@ -472,7 +474,7 @@ class TestController extends AbstractController
         return $this->render('test/translate.html.twig', $parameters);
     }
 
-    #[Route(path: '/tree', name: 'test_tree', methods: Request::METHOD_GET)]
+    #[Get(path: '/tree', name: 'test_tree')]
     public function tree(Request $request, GroupRepository $repository, EntityManagerInterface $manager): Response
     {
         if ($request->isXmlHttpRequest()) {

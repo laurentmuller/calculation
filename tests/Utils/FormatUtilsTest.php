@@ -20,7 +20,7 @@ class FormatUtilsTest extends TestCase
 {
     private const DATE_TIME = '2022-02-20 12:59:59';
 
-    private const PERCENT_SIGN = '%';
+    private const PERCENT_SYMBOL = '%';
 
     private const TIME_STAMP = 1_645_358_399;
 
@@ -28,8 +28,8 @@ class FormatUtilsTest extends TestCase
 
     protected function setUp(): void
     {
-        \Locale::setDefault(FormatUtils::LOCALE_FR_CH);
-        \setlocale(\LC_TIME, FormatUtils::LOCALE_FR_CH);
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
+        \setlocale(\LC_TIME, FormatUtils::DEFAULT_LOCALE);
     }
 
     public static function getAmounts(): \Iterator
@@ -229,9 +229,14 @@ class FormatUtilsTest extends TestCase
         self::assertSame(\IntlDateFormatter::SHORT, FormatUtils::DATE_TYPE);
     }
 
-    public function testDecimal(): void
+    public function testDecimalSep(): void
     {
         self::assertSame('.', FormatUtils::DECIMAL_SEP);
+    }
+
+    public function testDefaultLocale(): void
+    {
+        self::assertSame('fr_CH', FormatUtils::DEFAULT_LOCALE);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getAmounts')]
@@ -285,10 +290,10 @@ class FormatUtilsTest extends TestCase
         $actual = FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode);
         self::assertSame($expected, $actual);
 
-        $contains = \str_contains($actual, self::PERCENT_SIGN);
+        $contains = \str_contains($actual, self::PERCENT_SYMBOL);
         self::assertSame($includeSign, $contains);
 
-        $ends_with = \str_ends_with($actual, self::PERCENT_SIGN);
+        $ends_with = \str_ends_with($actual, self::PERCENT_SYMBOL);
         self::assertSame($ends_with, $contains);
     }
 
@@ -302,14 +307,19 @@ class FormatUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    public function testGrouping(): void
+    public function testFractionDigits(): void
     {
-        self::assertSame("'", FormatUtils::THOUSANDS_SEP);
+        self::assertSame(2, FormatUtils::FRACTION_DIGITS);
     }
 
-    public function testPercent(): void
+    public function testPercentSymbol(): void
     {
-        self::assertSame(self::PERCENT_SIGN, FormatUtils::PERCENT_SYMBOL);
+        self::assertSame(self::PERCENT_SYMBOL, FormatUtils::PERCENT_SYMBOL);
+    }
+
+    public function testThousandsSep(): void
+    {
+        self::assertSame("'", FormatUtils::THOUSANDS_SEP);
     }
 
     public function testTimeType(): void

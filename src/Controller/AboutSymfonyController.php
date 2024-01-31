@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Report\SymfonyReport;
 use App\Response\PdfResponse;
@@ -19,7 +20,6 @@ use App\Response\SpreadsheetResponse;
 use App\Service\SymfonyInfoService;
 use App\Spreadsheet\SymfonyDocument;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -32,7 +32,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AboutSymfonyController extends AbstractController
 {
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Route(path: '/content', name: 'about_symfony_content', methods: Request::METHOD_GET)]
+    #[Get(path: '/content', name: 'about_symfony_content')]
     public function content(SymfonyInfoService $service): JsonResponse
     {
         $content = $this->renderView('about/symfony_content.html.twig', ['service' => $service]);
@@ -44,7 +44,7 @@ class AboutSymfonyController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Route(path: '/excel', name: 'about_symfony_excel', methods: Request::METHOD_GET)]
+    #[Get(path: '/excel', name: 'about_symfony_excel')]
     public function excel(SymfonyInfoService $service): SpreadsheetResponse
     {
         $doc = new SymfonyDocument($this, $service);
@@ -53,7 +53,7 @@ class AboutSymfonyController extends AbstractController
     }
 
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Route(path: '/pdf', name: 'about_symfony_pdf', methods: Request::METHOD_GET)]
+    #[Get(path: '/pdf', name: 'about_symfony_pdf')]
     public function pdf(SymfonyInfoService $service): PdfResponse
     {
         $doc = new SymfonyReport($this, $service);

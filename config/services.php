@@ -19,7 +19,6 @@ return static function (ContainerConfigurator $config): void {
     // parameters
     $values = [
         // fixed
-        'locale' => 'fr_CH',
         'app_name' => 'Calculation',
         'app_version' => '3.0.0',
         'app_owner_name' => 'bibi.nu',

@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
+use App\Attribute\GetPost;
 use App\Generator\CalculationGenerator;
 use App\Generator\CustomerGenerator;
 use App\Generator\ProductGenerator;
@@ -40,7 +42,7 @@ class GeneratorController extends AbstractController
     private const KEY_ENTITY = 'admin.generate.entity';
     private const KEY_SIMULATE = 'admin.generate.simulate';
 
-    #[Route(path: '', name: 'generate', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '', name: 'generate')]
     public function generate(): Response
     {
         $data = $this->getSessionData();
@@ -68,7 +70,7 @@ class GeneratorController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/calculation', name: self::ROUTE_CALCULATION, methods: Request::METHOD_GET)]
+    #[Get(path: '/calculation', name: self::ROUTE_CALCULATION)]
     public function generateCalculations(Request $request, CalculationGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);
@@ -79,7 +81,7 @@ class GeneratorController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/customer', name: self::ROUTE_CUSTOMER, methods: Request::METHOD_GET)]
+    #[Get(path: '/customer', name: self::ROUTE_CUSTOMER)]
     public function generateCustomers(Request $request, CustomerGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);
@@ -90,7 +92,7 @@ class GeneratorController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/product', name: self::ROUTE_PRODUCT, methods: Request::METHOD_GET)]
+    #[Get(path: '/product', name: self::ROUTE_PRODUCT)]
     public function generateProducts(Request $request, ProductGenerator $generator): JsonResponse
     {
         return $this->generateEntities($request, $generator);

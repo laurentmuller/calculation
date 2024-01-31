@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Service\TimelineService;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -36,7 +36,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: '', name: 'timeline', methods: Request::METHOD_GET)]
+    #[Get(path: '', name: 'timeline')]
     public function current(
         #[MapQueryParameter]
         string $date = null,
@@ -51,7 +51,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: '/first', name: 'timeline_first', methods: Request::METHOD_GET)]
+    #[Get(path: '/first', name: 'timeline_first')]
     public function first(#[MapQueryParameter] string $interval = null): Response
     {
         $parameters = $this->service->first($interval);
@@ -62,7 +62,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: '/last', name: 'timeline_last', methods: Request::METHOD_GET)]
+    #[Get(path: '/last', name: 'timeline_last')]
     public function last(#[MapQueryParameter] string $interval = null): Response
     {
         $parameters = $this->service->last($interval);

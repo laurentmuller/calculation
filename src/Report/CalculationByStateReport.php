@@ -28,8 +28,8 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Pdf\Traits\PdfPieChartTrait;
-use App\Traits\ArrayTrait;
 use App\Traits\MathTrait;
+use App\Traits\StateTotalsTrait;
 use App\Utils\FormatUtils;
 
 /**
@@ -41,10 +41,10 @@ use App\Utils\FormatUtils;
  */
 class CalculationByStateReport extends AbstractArrayReport implements PdfChartInterface, PdfDrawCellTextInterface, PdfDrawHeadersInterface
 {
-    use ArrayTrait;
     use MathTrait;
     use PdfChartLegendTrait;
     use PdfPieChartTrait;
+    use StateTotalsTrait;
 
     /** @psalm-var QueryCalculationType|null */
     private ?array $currentRow = null;
@@ -139,13 +139,13 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             ->setTextListener($this)
             ->addColumns(
                 PdfColumn::left($this->transChart('fields.state'), 20),
-                PdfColumn::right($this->transChart('fields.count'), 20, true),
-                PdfColumn::right('', 20, true),
-                PdfColumn::right($this->transChart('fields.net'), 20, true),
-                PdfColumn::right($this->transChart('fields.margin'), 20, true),
-                PdfColumn::right('', 20, true),
-                PdfColumn::right($this->transChart('fields.total'), 20, true),
-                PdfColumn::right('', 20, true)
+                PdfColumn::right($this->transChart('fields.count'), 18, true),
+                PdfColumn::right('', 18, true),
+                PdfColumn::right($this->transChart('fields.net'), 24, true),
+                PdfColumn::right($this->transChart('fields.margin'), 24, true),
+                PdfColumn::right('', 14, true),
+                PdfColumn::right($this->transChart('fields.total'), 24, true),
+                PdfColumn::right('', 18, true)
             )->outputHeaders();
     }
 
@@ -176,10 +176,18 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         );
     }
 
-    private function formatPercent(float $value, int $decimals = 1, bool $useStyle = false, bool $bold = false): PdfCell
-    {
+    /**
+     * @psalm-param \NumberFormatter::ROUND_* $roundingMode
+     */
+    private function formatPercent(
+        float $value,
+        int $decimals = 2,
+        bool $useStyle = false,
+        bool $bold = false,
+        int $roundingMode = \NumberFormatter::ROUND_HALFDOWN
+    ): PdfCell {
         $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
-        $cell = new PdfCell(FormatUtils::formatPercent($value, true, $decimals, \NumberFormatter::ROUND_HALFDOWN));
+        $cell = new PdfCell(FormatUtils::formatPercent($value, true, $decimals, $roundingMode));
         if ($useStyle && $this->isMinMargin($value)) {
             $style->setTextColor(PdfTextColor::red());
         }
@@ -230,33 +238,27 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             $table->addRow(
                 $entity['code'],
                 FormatUtils::formatInt($entity['count']),
-                $this->formatPercent($entity['percent_calculation'], 2),
-                FormatUtils::formatInt($entity['items']),
-                FormatUtils::formatInt($entity['margin_amount']),
+                $this->formatPercent($entity['percent_calculation']),
+                FormatUtils::formatAmount($entity['items']),
+                FormatUtils::formatAmount($entity['margin_amount']),
                 $this->formatPercent($entity['margin_percent'], 0, true),
-                FormatUtils::formatInt($entity['total']),
-                $this->formatPercent($entity['percent_amount'], 2)
+                FormatUtils::formatAmount($entity['total']),
+                $this->formatPercent($entity['percent_amount'])
             );
         }
         $this->currentRow = null;
 
-        // total
-        $count = $this->getColumnSum($entities, 'count');
-        $items = $this->getColumnSum($entities, 'items');
-        $marginAmount = $this->getColumnSum($entities, 'margin_amount');
-        $total = $this->getColumnSum($entities, 'total');
-        $net = $total - $items;
-        $margin = 1.0 + $this->safeDivide($net, $items);
-
+        // totals
+        $totals = $this->getStateTotals($entities);
         $table->addHeaderRow(
             $this->transChart('fields.total'),
-            FormatUtils::formatInt($count),
-            $this->formatPercent(1.0, 2, bold: true),
-            FormatUtils::formatInt($items),
-            FormatUtils::formatInt($marginAmount),
-            $this->formatPercent($margin, 0, bold: true),
-            FormatUtils::formatInt($total),
-            $this->formatPercent(1.0, 2, bold: true)
+            FormatUtils::formatInt($totals['calculation_count']),
+            $this->formatPercent($totals['calculation_percent'], bold: true),
+            FormatUtils::formatAmount($totals['items_amount']),
+            FormatUtils::formatAmount($totals['margin_amount']),
+            $this->formatPercent($totals['margin_percent'], 0, bold: true, roundingMode: \NumberFormatter::ROUND_DOWN),
+            FormatUtils::formatAmount($totals['total_amount']),
+            $this->formatPercent($totals['total_percent'], bold: true)
         );
     }
 

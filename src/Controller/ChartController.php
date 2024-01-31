@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Chart\MonthChart;
 use App\Chart\StateChart;
 use App\Entity\Calculation;
@@ -48,7 +49,7 @@ class ChartController extends AbstractController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws BadRequestHttpException
      */
-    #[Route(path: '/month', name: 'chart_month', methods: Request::METHOD_GET)]
+    #[Get(path: '/month', name: 'chart_month')]
     public function month(Request $request, MonthChart $chart): Response
     {
         $this->checkAccess();
@@ -64,7 +65,7 @@ class ChartController extends AbstractController
      * @throws BadRequestHttpException
      * @throws \Exception
      */
-    #[Route(path: '/month/pdf', name: 'chart_month_pdf', methods: Request::METHOD_GET)]
+    #[Get(path: '/month/pdf', name: 'chart_month_pdf')]
     public function monthPdf(Request $request, CalculationRepository $repository): PdfResponse
     {
         $this->checkAccess(EntityPermission::EXPORT);
@@ -78,7 +79,7 @@ class ChartController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route(path: '/state', name: 'chart_state', methods: Request::METHOD_GET)]
+    #[Get(path: '/state', name: 'chart_state')]
     public function state(StateChart $chart): Response
     {
         $this->checkAccess();
@@ -87,7 +88,7 @@ class ChartController extends AbstractController
         return $this->render('chart/chart_state.html.twig', $parameters);
     }
 
-    #[Route(path: '/state/pdf', name: 'chart_state_pdf', methods: Request::METHOD_GET)]
+    #[Get(path: '/state/pdf', name: 'chart_state_pdf')]
     public function statePdf(CalculationStateRepository $repository): PdfResponse
     {
         $this->checkAccess(EntityPermission::EXPORT);

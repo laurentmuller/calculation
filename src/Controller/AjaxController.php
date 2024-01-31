@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
+use App\Attribute\Post;
 use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
@@ -50,7 +52,7 @@ class AjaxController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/task', name: 'ajax_task', methods: Request::METHOD_POST)]
+    #[Post(path: '/task', name: 'ajax_task')]
     public function computeTask(#[MapRequestPayload] TaskComputeQuery $query, TaskService $service): JsonResponse
     {
         $result = $service->computeQuery($query);
@@ -71,7 +73,7 @@ class AjaxController extends AbstractController
      * Validate a strength password.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/password', name: 'ajax_password', methods: Request::METHOD_POST)]
+    #[Post(path: '/password', name: 'ajax_password')]
     public function password(#[MapRequestPayload] PasswordQuery $query, PasswordService $service): JsonResponse
     {
         $results = $service->validate($query);
@@ -85,7 +87,7 @@ class AjaxController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/random/text', name: 'ajax_random_text', methods: Request::METHOD_GET)]
+    #[Get(path: '/random/text', name: 'ajax_random_text')]
     public function randomText(FakerService $service, #[MapQueryParameter] int $maxNbChars = 150): JsonResponse
     {
         $generator = $service->getGenerator();
@@ -102,7 +104,7 @@ class AjaxController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/dialog/page', name: 'ajax_dialog_page', methods: Request::METHOD_GET)]
+    #[Get(path: '/dialog/page', name: 'ajax_dialog_page')]
     public function renderDialogPage(): JsonResponse
     {
         return $this->renderTemplate('dialog/dialog_table_page.html.twig');
@@ -114,7 +116,7 @@ class AjaxController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/dialog/sort', name: 'ajax_dialog_sort', methods: Request::METHOD_POST)]
+    #[Post(path: '/dialog/sort', name: 'ajax_dialog_sort')]
     public function renderDialogSort(Request $request): JsonResponse
     {
         return $this->renderTemplate('dialog/dialog_table_sort.html.twig', ['columns' => $request->toArray()]);
@@ -126,7 +128,7 @@ class AjaxController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/session/set', name: 'ajax_session_set', methods: Request::METHOD_POST)]
+    #[Post(path: '/session/set', name: 'ajax_session_set')]
     public function saveSession(#[MapRequestPayload] SessionQuery $query): JsonResponse
     {
         try {
@@ -144,7 +146,7 @@ class AjaxController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/save', name: 'ajax_save_table', methods: Request::METHOD_POST)]
+    #[Post(path: '/save', name: 'ajax_save_table')]
     public function saveTable(
         Request $request,
         UserService $service

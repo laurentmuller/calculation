@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Calendar\CalculationsDay;
 use App\Calendar\CalculationsMonth;
 use App\Calendar\CalculationsWeek;
@@ -23,7 +24,6 @@ use App\Entity\Calculation;
 use App\Interfaces\RoleInterface;
 use App\Repository\CalculationRepository;
 use App\Utils\DateUtils;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -51,7 +51,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Route(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => Requirement::DIGITS, 'month' => Requirement::DIGITS], methods: Request::METHOD_GET)]
+    #[Get(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => Requirement::DIGITS, 'month' => Requirement::DIGITS])]
     public function month(int $year = null, int $month = null): Response
     {
         $year = $this->validateYear($year);
@@ -87,7 +87,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Route(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => Requirement::DIGITS, 'week' => Requirement::DIGITS], methods: Request::METHOD_GET)]
+    #[Get(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => Requirement::DIGITS, 'week' => Requirement::DIGITS])]
     public function week(int $year = null, int $week = null): Response
     {
         $year = $this->validateYear($year);
@@ -128,7 +128,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Route(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => Requirement::DIGITS], methods: Request::METHOD_GET)]
+    #[Get(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => Requirement::DIGITS])]
     public function year(int $year = null): Response
     {
         $year = $this->validateYear($year);

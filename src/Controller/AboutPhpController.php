@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Report\PhpIniReport;
 use App\Response\PdfResponse;
@@ -35,7 +36,7 @@ class AboutPhpController extends AbstractController
     use ArrayTrait;
 
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Route(path: '/content', name: 'about_php_content', methods: Request::METHOD_GET)]
+    #[Get(path: '/content', name: 'about_php_content')]
     public function content(Request $request, PhpInfoService $service): JsonResponse
     {
         $parameters = [
@@ -53,7 +54,7 @@ class AboutPhpController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Route(path: '/excel', name: 'about_php_excel', methods: Request::METHOD_GET)]
+    #[Get(path: '/excel', name: 'about_php_excel')]
     public function excel(PhpInfoService $service): SpreadsheetResponse
     {
         $doc = new PhpIniDocument($this, $service);
@@ -62,7 +63,7 @@ class AboutPhpController extends AbstractController
     }
 
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Route(path: '/pdf', name: 'about_php_pdf', methods: Request::METHOD_GET)]
+    #[Get(path: '/pdf', name: 'about_php_pdf')]
     public function pdf(PhpInfoService $service): PdfResponse
     {
         $report = new PhpIniReport($this, $service);

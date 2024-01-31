@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
+use App\Attribute\GetPost;
 use App\Interfaces\RoleInterface;
 use App\Service\OpenWeatherCityUpdater;
 use App\Service\OpenWeatherService;
@@ -100,7 +102,7 @@ class OpenWeatherController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/api/current', name: 'openweather_api_current', methods: Request::METHOD_GET)]
+    #[Get(path: '/api/current', name: 'openweather_api_current')]
     public function apiCurrent(Request $request): JsonResponse
     {
         try {
@@ -122,7 +124,7 @@ class OpenWeatherController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/api/daily', name: 'openweather_api_daily', methods: Request::METHOD_GET)]
+    #[Get(path: '/api/daily', name: 'openweather_api_daily')]
     public function apiDaily(Request $request): JsonResponse
     {
         try {
@@ -145,7 +147,7 @@ class OpenWeatherController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/api/forecast', name: 'openweather_api_forecast', methods: Request::METHOD_GET)]
+    #[Get(path: '/api/forecast', name: 'openweather_api_forecast')]
     public function apiForecast(Request $request): JsonResponse
     {
         try {
@@ -168,7 +170,7 @@ class OpenWeatherController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/api/onecall', name: 'openweather_api_onecall', methods: Request::METHOD_GET)]
+    #[Get(path: '/api/onecall', name: 'openweather_api_onecall')]
     public function apiOneCall(Request $request): JsonResponse
     {
         try {
@@ -193,7 +195,7 @@ class OpenWeatherController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/api/search', name: 'openweather_api_search', methods: Request::METHOD_GET)]
+    #[Get(path: '/api/search', name: 'openweather_api_search')]
     public function apiSearch(Request $request, UrlGeneratorInterface $generator): JsonResponse
     {
         try {
@@ -233,7 +235,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Returns current conditions data for a specific location.
      */
-    #[Route(path: '/current', name: 'openweather_current', methods: Request::METHOD_GET)]
+    #[Get(path: '/current', name: 'openweather_current')]
     public function current(Request $request): Response
     {
         $id = $this->getRequestId($request);
@@ -259,7 +261,7 @@ class OpenWeatherController extends AbstractController
      * Data can be downloaded from the <a href="https://bulk.openweathermap.org/sample/">sample directory</a>.
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Route(path: '/import', name: 'openweather_import', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/import', name: 'openweather_import')]
     public function import(Request $request, OpenWeatherCityUpdater $updater): Response
     {
         $form = $updater->createForm();
@@ -281,7 +283,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the search city view.
      */
-    #[Route(path: '/search', name: 'openweather_search', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/search', name: 'openweather_search')]
     public function search(Request $request): Response
     {
         $data = [
@@ -348,7 +350,7 @@ class OpenWeatherController extends AbstractController
     /**
      * Shows the current weather, if applicable, the search cities otherwise.
      */
-    #[Route(path: '', name: 'openweather_weather', methods: Request::METHOD_GET)]
+    #[Get(path: '', name: 'openweather_weather')]
     public function weather(Request $request): Response
     {
         $id = $this->getSessionId($request);

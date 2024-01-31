@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
+use App\Attribute\GetPost;
 use App\Entity\User;
 use App\Enums\Importance;
 use App\Form\User\UserRegistrationType;
@@ -58,7 +60,7 @@ class RegistrationController extends AbstractController
     /**
      * Display and process form to register a new user.
      */
-    #[Route(path: '', name: self::ROUTE_REGISTER, methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '', name: self::ROUTE_REGISTER)]
     public function register(Request $request, AuthenticationUtils $utils): Response
     {
         $user = new User();
@@ -87,7 +89,7 @@ class RegistrationController extends AbstractController
     /**
      * Verify the user e-mail.
      */
-    #[Route(path: '/verify', name: self::ROUTE_VERIFY, methods: Request::METHOD_GET)]
+    #[Get(path: '/verify', name: self::ROUTE_VERIFY)]
     public function verify(Request $request): RedirectResponse
     {
         $user = $this->findUser($request);

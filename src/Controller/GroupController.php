@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
+use App\Attribute\GetDelete;
+use App\Attribute\GetPost;
 use App\Entity\Group;
 use App\Interfaces\RoleInterface;
 use App\Report\GroupsReport;
@@ -50,7 +53,7 @@ class GroupController extends AbstractEntityController
     /**
      * Add a group.
      */
-    #[Route(path: '/add', name: 'group_add', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/add', name: 'group_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new Group());
@@ -59,7 +62,7 @@ class GroupController extends AbstractEntityController
     /**
      * Clone (copy) a group.
      */
-    #[Route(path: '/clone/{id}', name: 'group_clone', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/clone/{id}', name: 'group_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Group $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -77,7 +80,7 @@ class GroupController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_DELETE])]
+    #[GetDelete(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
     {
         // external references?
@@ -112,7 +115,7 @@ class GroupController extends AbstractEntityController
     /**
      * Edit a group.
      */
-    #[Route(path: '/edit/{id}', name: 'group_edit', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/edit/{id}', name: 'group_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Group $item): Response
     {
         return $this->editEntity($request, $item);
@@ -125,7 +128,7 @@ class GroupController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/excel', name: 'group_excel', methods: Request::METHOD_GET)]
+    #[Get(path: '/excel', name: 'group_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -144,7 +147,7 @@ class GroupController extends AbstractEntityController
      * @throws NotFoundHttpException                if no group is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/pdf', name: 'group_pdf', methods: Request::METHOD_GET)]
+    #[Get(path: '/pdf', name: 'group_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -160,7 +163,7 @@ class GroupController extends AbstractEntityController
     /**
      * Show properties of a group.
      */
-    #[Route(path: '/show/{id}', name: 'group_show', requirements: ['id' => Requirement::DIGITS], methods: Request::METHOD_GET)]
+    #[Get(path: '/show/{id}', name: 'group_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Group $item): Response
     {
         return $this->showEntity($item);
@@ -169,7 +172,7 @@ class GroupController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'group_table', methods: Request::METHOD_GET)]
+    #[Get(path: '', name: 'group_table')]
     public function table(
         GroupTable $table,
         LoggerInterface $logger,

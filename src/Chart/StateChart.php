@@ -15,7 +15,7 @@ namespace App\Chart;
 use App\Repository\CalculationStateRepository;
 use App\Service\ApplicationService;
 use App\Table\CalculationTable;
-use App\Traits\ArrayTrait;
+use App\Traits\StateTotalsTrait;
 use App\Utils\FormatUtils;
 use Laminas\Json\Expr;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -28,7 +28,7 @@ use Twig\Environment;
  */
 class StateChart extends AbstractHighchart
 {
-    use ArrayTrait;
+    use StateTotalsTrait;
 
     private const TEMPLATE_NAME = 'chart/_state_tooltip.js.twig';
 
@@ -59,7 +59,7 @@ class StateChart extends AbstractHighchart
         return [
             'chart' => $this,
             'data' => $states,
-            'totals' => $this->getTotals($states),
+            'totals' => $this->getStateTotals($states),
             'min_margin' => $this->getMinMargin(),
         ];
     }
@@ -129,26 +129,6 @@ class StateChart extends AbstractHighchart
                 'total_percent',
                 'url',
             ],
-        ];
-    }
-
-    /**
-     * @param QueryCalculationType[] $states
-     */
-    private function getTotals(array $states): array
-    {
-        $count = $this->getColumnSum($states, 'count');
-        $total = $this->getColumnSum($states, 'total');
-        $items = $this->getColumnSum($states, 'items');
-        $margin_percent = $this->round($this->safeDivide($total, $items), 4);
-        $margin_amount = $total - $items;
-
-        return [
-            'count' => $count,
-            'items' => $items,
-            'total' => $total,
-            'margin_percent' => $margin_percent,
-            'margin_amount' => $margin_amount,
         ];
     }
 

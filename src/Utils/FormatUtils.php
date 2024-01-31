@@ -28,14 +28,14 @@ final class FormatUtils
     public const DECIMAL_SEP = '.';
 
     /**
+     * The default locale (Swiss French locale).
+     */
+    public const DEFAULT_LOCALE = 'fr_CH';
+
+    /**
      * The fraction digits.
      */
     public const FRACTION_DIGITS = 2;
-
-    /**
-     * The Swiss French locale.
-     */
-    public const LOCALE_FR_CH = 'fr_CH';
 
     /**
      * The percent symbol character.
@@ -233,7 +233,7 @@ final class FormatUtils
         if (!isset(self::$dateFormatters[$hash])) {
             $formatter = new \IntlDateFormatter($locale, $dateType, $timeType, $timezone, pattern: $pattern);
             $pattern = $formatter->getPattern();
-            if (self::LOCALE_FR_CH === $locale && !\str_contains($pattern, 'yyyy') && \str_contains($pattern, 'yy')) {
+            if (self::DEFAULT_LOCALE === $locale && !\str_contains($pattern, 'yyyy') && \str_contains($pattern, 'yy')) {
                 $pattern = \str_replace('yy', 'yyyy', $pattern);
                 $formatter->setPattern($pattern);
             }

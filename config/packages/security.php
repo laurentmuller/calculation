@@ -15,6 +15,7 @@ use App\Interfaces\RoleInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Config\SecurityConfig;
+use Symfony\Component\HttpFoundation\Cookie;
 
 return static function (SecurityConfig $config): void {
     // hasher
@@ -64,7 +65,7 @@ return static function (SecurityConfig $config): void {
         ->secret('%app_secret%')
         ->path('%cookie_path%')
         ->lifetime(2_592_000) // 30 days
-        ->samesite('lax')
+        ->samesite(Cookie::SAMESITE_LAX)
         ->secure(true);
 
     // channel

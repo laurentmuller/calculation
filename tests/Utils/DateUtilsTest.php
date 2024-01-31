@@ -21,8 +21,8 @@ class DateUtilsTest extends TestCase
 {
     protected function setUp(): void
     {
-        \Locale::setDefault(FormatUtils::LOCALE_FR_CH);
-        \setlocale(\LC_TIME, FormatUtils::LOCALE_FR_CH);
+        \Locale::setDefault(FormatUtils::DEFAULT_LOCALE);
+        \setlocale(\LC_TIME, FormatUtils::DEFAULT_LOCALE);
     }
 
     public static function getCompletYears(): \Iterator

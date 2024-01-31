@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\GetPost;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
 use App\Form\Admin\ApplicationParametersType;
@@ -45,7 +46,7 @@ class AdminController extends AbstractController
     /**
      * Clear the application cache.
      */
-    #[Route(path: '/clear', name: 'admin_clear', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/clear', name: 'admin_clear')]
     public function clearCache(
         Request $request,
         SymfonyInfoService $info,
@@ -88,7 +89,7 @@ class AdminController extends AbstractController
     /**
      * Edit the application parameters.
      */
-    #[Route(path: '/parameters', name: 'admin_parameters', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/parameters', name: 'admin_parameters')]
     public function parameters(Request $request): Response
     {
         $application = $this->getApplication();
@@ -114,7 +115,7 @@ class AdminController extends AbstractController
      * Edit rights for the administrator role (@see RoleInterface::ROLE_ADMIN).
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[Route(path: '/rights/admin', name: 'admin_rights_admin', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/rights/admin', name: 'admin_rights_admin')]
     public function rightsAdmin(Request $request, RoleBuilderService $service): Response
     {
         $application = $this->getApplication();
@@ -129,7 +130,7 @@ class AdminController extends AbstractController
     /**
      * Edit rights for the user role (@see RoleInterface::ROLE_USER).
      */
-    #[Route(path: '/rights/user', name: 'admin_rights_user', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/rights/user', name: 'admin_rights_user')]
     public function rightsUser(Request $request, RoleBuilderService $service): Response
     {
         $application = $this->getApplication();

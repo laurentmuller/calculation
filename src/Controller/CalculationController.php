@@ -12,6 +12,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
+use App\Attribute\GetDelete;
+use App\Attribute\GetPost;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Product;
@@ -59,7 +62,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/add', name: 'calculation_add', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/add', name: 'calculation_add')]
     public function add(Request $request): Response
     {
         $item = new Calculation();
@@ -82,7 +85,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/clone/{id}', name: 'calculation_clone', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/clone/{id}', name: 'calculation_clone', requirements: ['id' => Requirement::DIGITS])]
     public function clone(Request $request, Calculation $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -100,7 +103,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Delete a calculation.
      */
-    #[Route(path: '/delete/{id}', name: 'calculation_delete', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_DELETE])]
+    #[GetDelete(path: '/delete/{id}', name: 'calculation_delete', requirements: ['id' => Requirement::DIGITS])]
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -111,7 +114,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/edit/{id}', name: 'calculation_edit', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/edit/{id}', name: 'calculation_edit', requirements: ['id' => Requirement::DIGITS])]
     public function edit(Request $request, Calculation $item): Response
     {
         return $this->editEntity($request, $item);
@@ -124,7 +127,7 @@ class CalculationController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/excel', name: 'calculation_excel', methods: Request::METHOD_GET)]
+    #[Get(path: '/excel', name: 'calculation_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities(['id' => Criteria::DESC]);
@@ -142,7 +145,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Route(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => Requirement::DIGITS], methods: Request::METHOD_GET)]
+    #[Get(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => Requirement::DIGITS])]
     public function excelOne(Calculation $calculation): SpreadsheetResponse
     {
         $doc = new CalculationDocument($this, $calculation);
@@ -156,7 +159,7 @@ class CalculationController extends AbstractEntityController
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Route(path: '/pdf', name: 'calculation_pdf', methods: Request::METHOD_GET)]
+    #[Get(path: '/pdf', name: 'calculation_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities([
@@ -176,7 +179,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Export a single calculation to a PDF document.
      */
-    #[Route(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: ['id' => Requirement::DIGITS], methods: Request::METHOD_GET)]
+    #[Get(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: ['id' => Requirement::DIGITS])]
     public function pdfOne(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
     {
         $minMargin = $this->getMinMargin();
@@ -189,7 +192,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Show properties of a calculation.
      */
-    #[Route(path: '/show/{id}', name: 'calculation_show', requirements: ['id' => Requirement::DIGITS], methods: Request::METHOD_GET)]
+    #[Get(path: '/show/{id}', name: 'calculation_show', requirements: ['id' => Requirement::DIGITS])]
     public function show(Calculation $item): Response
     {
         $parameters = [
@@ -204,7 +207,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit the state of a calculation.
      */
-    #[Route(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => Requirement::DIGITS], methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    #[GetPost(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => Requirement::DIGITS])]
     public function state(Request $request, Calculation $item): Response
     {
         $form = $this->createForm(CalculationEditStateType::class, $item);
@@ -226,7 +229,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Render the table view.
      */
-    #[Route(path: '', name: 'calculation_table', methods: Request::METHOD_GET)]
+    #[Get(path: '', name: 'calculation_table')]
     public function table(
         CalculationTable $table,
         LoggerInterface $logger,

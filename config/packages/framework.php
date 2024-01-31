@@ -11,14 +11,15 @@
 declare(strict_types=1);
 
 use App\Service\AssetVersionService;
+use App\Utils\FormatUtils;
 use Symfony\Config\FrameworkConfig;
 
 return static function (FrameworkConfig $config): void {
     $config->secret('%app_secret%')
         ->httpMethodOverride(true);
 
-    $config->defaultLocale('%locale%')
-        ->enabledLocales(['%locale%']);
+    $config->defaultLocale(FormatUtils::DEFAULT_LOCALE)
+        ->enabledLocales([FormatUtils::DEFAULT_LOCALE]);
 
     $config->session()
         ->enabled(true)

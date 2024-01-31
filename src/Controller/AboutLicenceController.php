@@ -12,13 +12,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Report\HtmlReport;
 use App\Response\PdfResponse;
 use App\Response\WordResponse;
 use App\Word\HtmlDocument;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
@@ -33,7 +33,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AboutLicenceController extends AbstractController
 {
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/content', name: 'about_licence_content', methods: Request::METHOD_GET)]
+    #[Get(path: '/content', name: 'about_licence_content')]
     public function content(): JsonResponse
     {
         $parameters = [
@@ -46,7 +46,7 @@ class AboutLicenceController extends AbstractController
     }
 
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Route(path: '', name: 'about_licence', methods: Request::METHOD_GET)]
+    #[Get(path: '', name: 'about_licence')]
     public function index(): Response
     {
         $parameters = [
@@ -58,7 +58,7 @@ class AboutLicenceController extends AbstractController
     }
 
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Route(path: '/pdf', name: 'about_licence_pdf', methods: Request::METHOD_GET)]
+    #[Get(path: '/pdf', name: 'about_licence_pdf')]
     public function pdf(): PdfResponse
     {
         $parameters = [
@@ -77,7 +77,7 @@ class AboutLicenceController extends AbstractController
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/word', name: 'about_licence_word', methods: Request::METHOD_GET)]
+    #[Get(path: '/word', name: 'about_licence_word')]
     public function word(): WordResponse
     {
         $parameters = [

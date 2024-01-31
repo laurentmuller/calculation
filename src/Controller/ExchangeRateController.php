@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Service\ExchangeRateService;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -41,7 +41,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Display the view.
      */
-    #[Route(path: '', name: 'exchange_display', methods: Request::METHOD_GET)]
+    #[Get(path: '', name: 'exchange_display')]
     public function display(): Response
     {
         return $this->render('test/exchange_rate.html.twig', [
@@ -56,7 +56,7 @@ class ExchangeRateController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/codes', name: 'exchange_codes', methods: Request::METHOD_GET)]
+    #[Get(path: '/codes', name: 'exchange_codes')]
     public function getCodes(): JsonResponse
     {
         $codes = $this->service->getSupportedCodes();
@@ -74,7 +74,7 @@ class ExchangeRateController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/latest/{code}', name: 'exchange_latest', methods: Request::METHOD_GET)]
+    #[Get(path: '/latest/{code}', name: 'exchange_latest')]
     public function getLatest(string $code): JsonResponse
     {
         $latest = $this->service->getLatest($code);
@@ -90,7 +90,7 @@ class ExchangeRateController extends AbstractController
      *
      * @psalm-api
      */
-    #[Route(path: '/rate', name: 'exchange_rate', methods: Request::METHOD_GET)]
+    #[Get(path: '/rate', name: 'exchange_rate')]
     public function getRate(
         #[MapQueryParameter]
         string $baseCode = '',

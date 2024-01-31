@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Repository\AbstractRepository;
@@ -22,7 +23,6 @@ use App\Service\SwissPostService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
@@ -41,7 +41,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/address', name: 'ajax_search_address', methods: Request::METHOD_GET)]
+    #[Get(path: '/search/address', name: 'ajax_search_address')]
     public function searchAddress(
         SwissPostService $service,
         #[MapQueryParameter]
@@ -75,7 +75,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/customer', name: 'ajax_search_customer', methods: Request::METHOD_GET)]
+    #[Get(path: '/search/customer', name: 'ajax_search_customer')]
     public function searchCustomer(
         CalculationRepository $repository,
         #[MapQueryParameter]
@@ -92,7 +92,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/product', name: 'ajax_search_product', methods: Request::METHOD_GET)]
+    #[Get(path: '/search/product', name: 'ajax_search_product')]
     public function searchProduct(
         ProductRepository $repository,
         #[MapQueryParameter]
@@ -113,7 +113,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/supplier', name: 'ajax_search_supplier', methods: Request::METHOD_GET)]
+    #[Get(path: '/search/supplier', name: 'ajax_search_supplier')]
     public function searchSupplier(
         EntityManagerInterface $manager,
         #[MapQueryParameter]
@@ -130,7 +130,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/title', name: 'ajax_search_title', methods: Request::METHOD_GET)]
+    #[Get(path: '/search/title', name: 'ajax_search_title')]
     public function searchTitle(
         CustomerRepository $repository,
         #[MapQueryParameter]
@@ -147,7 +147,7 @@ class AjaxSearchController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Route(path: '/search/unit', name: 'ajax_search_unit', methods: Request::METHOD_GET)]
+    #[Get(path: '/search/unit', name: 'ajax_search_unit')]
     public function searchUnit(
         EntityManagerInterface $manager,
         #[MapQueryParameter]

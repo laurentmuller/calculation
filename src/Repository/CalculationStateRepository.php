@@ -33,8 +33,8 @@ use Doctrine\Persistence\ManagerRegistry;
  *      total: float,
  *      margin_percent: float,
  *      margin_amount: float,
- *      percent_calculation :float,
- *      percent_amount:float}
+ *      percent_calculation: float,
+ *      percent_amount: float}
  * @psalm-type DropDownType = array<int, array{
  *     id: int,
  *     icon: string,
@@ -85,7 +85,6 @@ class CalculationStateRepository extends AbstractRepository
             ->orderBy('s.code', Criteria::ASC);
 
         $result = $builder->getQuery()->getArrayResult();
-
         $count = $this->getColumnSum($result, 'count');
         $total = $this->getColumnSum($result, 'total');
         foreach ($result as &$data) {

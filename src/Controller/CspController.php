@@ -12,17 +12,16 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Enums\Importance;
 use App\Interfaces\RoleInterface;
 use App\Mime\CspViolationEmail;
 use App\Utils\StringUtils;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -33,7 +32,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CspController extends AbstractController
 {
-    #[Route(path: '/csp', name: 'log_csp', methods: Request::METHOD_GET)]
+    #[Get(path: '/csp', name: 'log_csp')]
     public function invoke(LoggerInterface $logger, MailerInterface $mailer): Response
     {
         $context = $this->getContext();

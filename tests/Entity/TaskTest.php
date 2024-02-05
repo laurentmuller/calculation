@@ -108,7 +108,7 @@ class TaskTest extends AbstractEntityValidatorTestCase
         return $group;
     }
 
-    private function createTask(Category $category, string $name = null): Task
+    private function createTask(Category $category, ?string $name = null): Task
     {
         $task = new Task();
         $task->setCategory($category);

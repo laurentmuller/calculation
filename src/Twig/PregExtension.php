@@ -90,7 +90,7 @@ class PregExtension extends AbstractExtension
     /**
      * Quote regular expression characters.
      */
-    protected function pregQuote(?string $subject, string $delimiter = null): ?string
+    protected function pregQuote(?string $subject, ?string $delimiter = null): ?string
     {
         if (null === $subject) {
             return null;

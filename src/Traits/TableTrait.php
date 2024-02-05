@@ -91,7 +91,7 @@ trait TableTrait
         Response $response,
         DataResults $results,
         string $key,
-        string|bool|int|\BackedEnum $default = null,
+        string|bool|int|\BackedEnum|null $default = null,
         string $prefix = ''
     ): void {
         $path = $this->getCookiePath();

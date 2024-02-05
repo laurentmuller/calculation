@@ -39,9 +39,9 @@ class TimelineController extends AbstractController
     #[Get(path: '', name: 'timeline')]
     public function current(
         #[MapQueryParameter]
-        string $date = null,
+        ?string $date = null,
         #[MapQueryParameter]
-        string $interval = null
+        ?string $interval = null
     ): Response {
         $parameters = $this->service->current($date, $interval);
 
@@ -52,7 +52,7 @@ class TimelineController extends AbstractController
      * @throws \Exception
      */
     #[Get(path: '/first', name: 'timeline_first')]
-    public function first(#[MapQueryParameter] string $interval = null): Response
+    public function first(#[MapQueryParameter] ?string $interval = null): Response
     {
         $parameters = $this->service->first($interval);
 
@@ -63,7 +63,7 @@ class TimelineController extends AbstractController
      * @throws \Exception
      */
     #[Get(path: '/last', name: 'timeline_last')]
-    public function last(#[MapQueryParameter] string $interval = null): Response
+    public function last(#[MapQueryParameter] ?string $interval = null): Response
     {
         $parameters = $this->service->last($interval);
 

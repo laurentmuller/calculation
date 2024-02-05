@@ -202,7 +202,7 @@ class WebpCommand extends Command
     /**
      * @return array{0: bool, 1: int}
      */
-    private function saveImage(\GdImage $image, string $path = null): array
+    private function saveImage(\GdImage $image, ?string $path = null): array
     {
         $temp = null;
         if (null === $path) {

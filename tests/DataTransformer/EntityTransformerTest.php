@@ -120,7 +120,7 @@ class EntityTransformerTest extends TestCase
     /**
      * @throws Exception
      */
-    private function createRepository(Group $group = null): GroupRepository
+    private function createRepository(?Group $group = null): GroupRepository
     {
         $repository = $this->createMock(GroupRepository::class);
         $repository->method('find')
@@ -136,7 +136,7 @@ class EntityTransformerTest extends TestCase
      *
      * @throws Exception
      */
-    private function createTransformer(Group $group = null): EntityTransformer
+    private function createTransformer(?Group $group = null): EntityTransformer
     {
         $repository = $this->createRepository($group);
 

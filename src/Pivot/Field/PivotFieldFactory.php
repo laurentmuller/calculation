@@ -24,7 +24,7 @@ class PivotFieldFactory
      * @param ?string $title  the field title
      * @param int     $method the field method (one of the PivotField::METHOD_XX)
      */
-    public static function default(string $name, string $title = null, int $method = PivotField::METHOD_STRING): PivotField
+    public static function default(string $name, ?string $title = null, int $method = PivotField::METHOD_STRING): PivotField
     {
         return (new PivotField($name, $title))->setMethod($method);
     }
@@ -35,7 +35,7 @@ class PivotFieldFactory
      * @param string  $name  the field name
      * @param ?string $title the field title
      */
-    public static function float(string $name, string $title = null): PivotField
+    public static function float(string $name, ?string $title = null): PivotField
     {
         return self::default($name, $title, PivotField::METHOD_FLOAT);
     }
@@ -46,7 +46,7 @@ class PivotFieldFactory
      * @param string  $name  the field name
      * @param ?string $title the field title
      */
-    public static function integer(string $name, string $title = null): PivotField
+    public static function integer(string $name, ?string $title = null): PivotField
     {
         return self::default($name, $title, PivotField::METHOD_INTEGER);
     }
@@ -58,7 +58,7 @@ class PivotFieldFactory
      * @param ?string $title the field title
      * @param bool    $short true to display the short month name, false to display the full month name
      */
-    public static function month(string $name, string $title = null, bool $short = false): PivotMonthField
+    public static function month(string $name, ?string $title = null, bool $short = false): PivotMonthField
     {
         return new PivotMonthField($name, $title, $short);
     }
@@ -69,7 +69,7 @@ class PivotFieldFactory
      * @param string  $name  the field name
      * @param ?string $title the field title
      */
-    public static function quarter(string $name, string $title = null): PivotQuarterField
+    public static function quarter(string $name, ?string $title = null): PivotQuarterField
     {
         return new PivotQuarterField($name, $title);
     }
@@ -80,7 +80,7 @@ class PivotFieldFactory
      * @param string  $name  the field name
      * @param ?string $title the field title
      */
-    public static function semester(string $name, string $title = null): PivotSemesterField
+    public static function semester(string $name, ?string $title = null): PivotSemesterField
     {
         return new PivotSemesterField($name, $title);
     }
@@ -91,7 +91,7 @@ class PivotFieldFactory
      * @param string  $name  the field name
      * @param ?string $title the field title
      */
-    public static function week(string $name, string $title = null): PivotDateField
+    public static function week(string $name, ?string $title = null): PivotDateField
     {
         return new PivotDateField($name, PivotDateField::PART_WEEK, $title);
     }
@@ -103,7 +103,7 @@ class PivotFieldFactory
      * @param ?string $title the field title
      * @param bool    $short true to display the short day name, false to display the full day name
      */
-    public static function weekday(string $name, string $title = null, bool $short = false): PivotWeekdayField
+    public static function weekday(string $name, ?string $title = null, bool $short = false): PivotWeekdayField
     {
         return new PivotWeekdayField($name, $title, $short);
     }
@@ -114,7 +114,7 @@ class PivotFieldFactory
      * @param string  $name  the field name
      * @param ?string $title the field title
      */
-    public static function year(string $name, string $title = null): PivotDateField
+    public static function year(string $name, ?string $title = null): PivotDateField
     {
         return new PivotDateField($name, PivotDateField::PART_YEAR, $title);
     }

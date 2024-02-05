@@ -205,7 +205,7 @@ abstract class AbstractController extends BaseController
         string $message = '',
         array $parameters = [],
         FlashType $type = FlashType::SUCCESS,
-        Request $request = null
+        ?Request $request = null
     ): RedirectResponse {
         if ('' !== $message) {
             $message = $this->trans($message, $parameters);
@@ -226,7 +226,7 @@ abstract class AbstractController extends BaseController
      * @param mixed|null $data        the initial data
      * @param array      $options     the initial options
      */
-    protected function createFormHelper(string $labelPrefix = null, mixed $data = null, array $options = []): FormHelper
+    protected function createFormHelper(?string $labelPrefix = null, mixed $data = null, array $options = []): FormHelper
     {
         $builder = $this->createFormBuilder($data, $options);
 
@@ -295,7 +295,7 @@ abstract class AbstractController extends BaseController
      * @param \Exception $e       the exception to serialize
      * @param ?string    $message the optional error message
      */
-    protected function jsonException(\Exception $e, string $message = null): JsonResponse
+    protected function jsonException(\Exception $e, ?string $message = null): JsonResponse
     {
         return $this->jsonFalse([
             'message' => $message ?? $e->getMessage(),
@@ -326,7 +326,7 @@ abstract class AbstractController extends BaseController
     /**
      * Render the template exception.
      */
-    protected function renderFormException(string $id, \Throwable $e, LoggerInterface $logger = null): Response
+    protected function renderFormException(string $id, \Throwable $e, ?LoggerInterface $logger = null): Response
     {
         $message = $this->trans($id);
         $context = $this->getExceptionContext($e);

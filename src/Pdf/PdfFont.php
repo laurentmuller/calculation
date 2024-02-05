@@ -135,7 +135,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
      *
      * @param ?PdfFontName $name the font name or null to use the default name ("ARIAL")
      */
-    public function setName(PdfFontName $name = null): self
+    public function setName(?PdfFontName $name = null): self
     {
         $this->name = $name ?? self::DEFAULT_NAME;
 
@@ -161,7 +161,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
      *
      * @param ?PdfFontStyle $style the font style or null to use the default style ("Regular")
      */
-    public function setStyle(PdfFontStyle $style = null): self
+    public function setStyle(?PdfFontStyle $style = null): self
     {
         return $this->updateStyle($style ?? self::DEFAULT_STYLE, false);
     }

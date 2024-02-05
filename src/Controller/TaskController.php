@@ -89,7 +89,7 @@ class TaskController extends AbstractEntityController
      * Display the page to compute a task.
      */
     #[Get(path: '/compute/{id?}', name: 'task_compute', requirements: ['id' => Requirement::DIGITS])]
-    public function compute(Request $request, TaskService $service, Task $task = null): Response
+    public function compute(Request $request, TaskService $service, ?Task $task = null): Response
     {
         [$tasks, $task] = $this->getTasks($service, $task);
         if (null === $task) {

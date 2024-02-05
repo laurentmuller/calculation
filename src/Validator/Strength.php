@@ -48,7 +48,7 @@ class Strength extends Constraint
         public ?string $userNamePath = null,
         public ?string $emailPath = null,
         mixed $options = [],
-        array $groups = null,
+        ?array $groups = null,
         mixed $payload = null
     ) {
         parent::__construct($options, $groups, $payload);

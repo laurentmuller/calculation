@@ -34,23 +34,29 @@ class ProductsReport extends AbstractArrayReport
         $this->setTitleTrans('product.list.title');
         $this->AddPage();
         $table = $this->createTable();
-        $emptyStyle = PdfStyle::getCellStyle()
+        $style = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
 
-        $groupCode = '';
-        $categoryCode = '';
+        $key = '';
+        $group = '';
+        $category = '';
         foreach ($entities as $entity) {
-            if ($groupCode !== $entity->getGroupCode()) {
-                $groupCode = $entity->getGroupCode();
-                $this->addBookmark($groupCode, true);
+            $newGroup = $entity->getGroupCode();
+            if ($group !== $newGroup) {
+                $group = $newGroup;
+                $this->addBookmark($group, true);
             }
-            if ($categoryCode !== $entity->getCategoryCode()) {
-                $categoryCode = $entity->getCategoryCode();
-                $this->addBookmark($categoryCode, true, 1);
+            $newCategory = $entity->getCategoryCode();
+            if ($category !== $newCategory) {
+                $category = $newCategory;
+                $this->addBookmark($category, true, 1);
             }
-            $key = \sprintf('%s / %s', $groupCode, $categoryCode);
-            $table->setGroupKey($key);
-            $style = empty($entity->getPrice()) ? $emptyStyle : null;
+            $newKey = \sprintf('%s - %s', $group, $category);
+            if ($key !== $newKey) {
+                $key = $newKey;
+                $table->setGroupKey($key);
+            }
+            $style = $this->isFloatZero($entity->getPrice()) ? $style : null;
             $table->startRow()
                 ->add($entity->getDescription())
                 ->add(text: FormatUtils::formatAmount($entity->getPrice()), style: $style)
@@ -74,7 +80,7 @@ class ProductsReport extends AbstractArrayReport
                 PdfColumn::left($this->trans('product.fields.description'), 90),
                 PdfColumn::right($this->trans('product.fields.price'), 20, true),
                 PdfColumn::left($this->trans('product.fields.unit'), 20, true),
-                PdfColumn::left($this->trans('product.fields.supplier'), 45, true)
+                PdfColumn::left($this->trans('product.fields.supplier'), 40, true)
             )->outputHeaders();
     }
 }

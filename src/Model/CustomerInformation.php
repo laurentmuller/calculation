@@ -71,7 +71,7 @@ class CustomerInformation
     /**
      * Gets the translated fax number.
      */
-    public function getTranslatedFax(object $translator = null): string
+    public function getTranslatedFax(?object $translator = null): string
     {
         $fax = $this->fax ?? '';
         if ('' === $fax) {
@@ -90,7 +90,7 @@ class CustomerInformation
     /**
      * Gets the translated phone number.
      */
-    public function getTranslatedPhone(object $translator = null): string
+    public function getTranslatedPhone(?object $translator = null): string
     {
         $phone = $this->phone ?? '';
         if ('' === $phone) {

@@ -54,7 +54,7 @@ class PdfImageCell extends PdfCell
      *
      * @psalm-param positive-int $cols
      */
-    public function __construct(private readonly string $path, int $cols = 1, PdfStyle $style = null, PdfTextAlignment $alignment = null, string|int $link = '')
+    public function __construct(private readonly string $path, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, string|int $link = '')
     {
         if (!FileUtils::exists($path)) {
             throw new \InvalidArgumentException("The image '$path' does not exist.");

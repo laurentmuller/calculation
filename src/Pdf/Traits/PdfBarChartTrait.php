@@ -71,10 +71,10 @@ trait PdfBarChartTrait
     public function renderBarChart(
         array $rows,
         array $axis,
-        float $x = null,
-        float $y = null,
-        float $w = null,
-        float $h = null
+        ?float $x = null,
+        ?float $y = null,
+        ?float $w = null,
+        ?float $h = null
     ): void {
         if ([] === $rows) {
             return;

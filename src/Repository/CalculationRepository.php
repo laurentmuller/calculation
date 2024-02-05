@@ -68,7 +68,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @return QueryBuilder the updated query builder
      */
-    public static function addBelowFilter(QueryBuilder $builder, float $minMargin, string $alias = null): QueryBuilder
+    public static function addBelowFilter(QueryBuilder $builder, float $minMargin, ?string $alias = null): QueryBuilder
     {
         $param = 'minMargin';
         $alias ??= $builder->getRootAliases()[0];
@@ -521,7 +521,7 @@ class CalculationRepository extends AbstractRepository
     /**
      * Gets the last calculations.
      */
-    public function getLastCalculations(int $maxResults, UserInterface $user = null): array
+    public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array
     {
         $builder = $this->getTableQueryBuilder();
         $builder->addOrderBy('e.updatedAt', Criteria::DESC)

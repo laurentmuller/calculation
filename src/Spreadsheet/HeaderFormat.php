@@ -26,12 +26,12 @@ class HeaderFormat
     ) {
     }
 
-    public static function amount(string $vertical = null): self
+    public static function amount(?string $vertical = null): self
     {
         return self::create(ColumnFormat::AMOUNT, $vertical);
     }
 
-    public static function amountZero(string $vertical = null): self
+    public static function amountZero(?string $vertical = null): self
     {
         return self::create(ColumnFormat::AMOUNT_ZERO, $vertical);
     }
@@ -59,67 +59,67 @@ class HeaderFormat
         }
     }
 
-    public static function center(string $vertical = null): self
+    public static function center(?string $vertical = null): self
     {
         return new self(Alignment::HORIZONTAL_CENTER, $vertical);
     }
 
-    public static function create(ColumnFormat $format, string $vertical = null): self
+    public static function create(ColumnFormat $format, ?string $vertical = null): self
     {
         return new self($format->alignment(), $vertical, $format);
     }
 
-    public static function date(string $vertical = null): self
+    public static function date(?string $vertical = null): self
     {
         return self::create(ColumnFormat::DATE, $vertical);
     }
 
-    public static function dateTime(string $vertical = null): self
+    public static function dateTime(?string $vertical = null): self
     {
         return self::create(ColumnFormat::DATE_TIME, $vertical);
     }
 
-    public static function id(string $vertical = null): self
+    public static function id(?string $vertical = null): self
     {
         return self::create(ColumnFormat::ID, $vertical);
     }
 
-    public static function instance(string $vertical = null): self
+    public static function instance(?string $vertical = null): self
     {
         return new self(vertical: $vertical);
     }
 
-    public static function int(string $vertical = null): self
+    public static function int(?string $vertical = null): self
     {
         return self::create(ColumnFormat::INT, $vertical);
     }
 
-    public static function left(string $vertical = null): self
+    public static function left(?string $vertical = null): self
     {
         return new self(Alignment::HORIZONTAL_LEFT, $vertical);
     }
 
-    public static function percent(string $vertical = null): self
+    public static function percent(?string $vertical = null): self
     {
         return self::create(ColumnFormat::PERCENT, $vertical);
     }
 
-    public static function percentCustom(string $format, string $vertical = null): self
+    public static function percentCustom(string $format, ?string $vertical = null): self
     {
         return new self(ColumnFormat::PERCENT->alignment(), $vertical, $format);
     }
 
-    public static function percentDecimals(string $vertical = null): self
+    public static function percentDecimals(?string $vertical = null): self
     {
         return self::create(ColumnFormat::PERCENT_DECIMALS, $vertical);
     }
 
-    public static function right(string $vertical = null): self
+    public static function right(?string $vertical = null): self
     {
         return new self(Alignment::HORIZONTAL_RIGHT, $vertical);
     }
 
-    public static function yesNo(string $vertical = null): self
+    public static function yesNo(?string $vertical = null): self
     {
         return self::create(ColumnFormat::YES_NO, $vertical);
     }

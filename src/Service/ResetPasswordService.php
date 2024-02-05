@@ -66,7 +66,7 @@ class ResetPasswordService
     /**
      * Generates a fake reset password token.
      */
-    public function generateFakeResetToken(int $resetRequestLifetime = null): ResetPasswordToken
+    public function generateFakeResetToken(?int $resetRequestLifetime = null): ResetPasswordToken
     {
         return $this->helper->generateFakeResetToken($resetRequestLifetime);
     }
@@ -189,7 +189,7 @@ class ResetPasswordService
         );
     }
 
-    private function trans(string $id, array $parameters = [], string $domain = null): string
+    private function trans(string $id, array $parameters = [], ?string $domain = null): string
     {
         return $this->translator->trans($id, $parameters, $domain);
     }

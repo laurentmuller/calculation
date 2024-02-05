@@ -52,7 +52,7 @@ class CalendarController extends AbstractController
      * @throws \App\Calendar\CalendarException
      */
     #[Get(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => Requirement::DIGITS, 'month' => Requirement::DIGITS])]
-    public function month(int $year = null, int $month = null): Response
+    public function month(?int $year = null, ?int $month = null): Response
     {
         $year = $this->validateYear($year);
         $month = $this->validateMonth($month);
@@ -88,7 +88,7 @@ class CalendarController extends AbstractController
      * @throws \App\Calendar\CalendarException
      */
     #[Get(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => Requirement::DIGITS, 'week' => Requirement::DIGITS])]
-    public function week(int $year = null, int $week = null): Response
+    public function week(?int $year = null, ?int $week = null): Response
     {
         $year = $this->validateYear($year);
         $week = $this->validateWeek($week);
@@ -129,7 +129,7 @@ class CalendarController extends AbstractController
      * @throws \App\Calendar\CalendarException
      */
     #[Get(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => Requirement::DIGITS])]
-    public function year(int $year = null): Response
+    public function year(?int $year = null): Response
     {
         $year = $this->validateYear($year);
         $calendar = $this->generate($year);
@@ -376,7 +376,7 @@ class CalendarController extends AbstractController
      *
      * @throws NotFoundHttpException if the month is not within the range from 1 to 12 inclusive
      */
-    private function validateMonth(int $month = null): int
+    private function validateMonth(?int $month = null): int
     {
         $month = (int) ($month ?? \date('n'));
         if ($month < 1 || $month > 12) {
@@ -395,7 +395,7 @@ class CalendarController extends AbstractController
      *
      * @throws NotFoundHttpException if the week is not within the range from 1 to 53 inclusive
      */
-    private function validateWeek(int $week = null): int
+    private function validateWeek(?int $week = null): int
     {
         $week = (int) ($week ?? \date('W'));
         if ($week < 1 || $week > 53) {
@@ -412,7 +412,7 @@ class CalendarController extends AbstractController
      *
      * @return int a valid year
      */
-    private function validateYear(int $year = null): int
+    private function validateYear(?int $year = null): int
     {
         return DateUtils::completYear((int) ($year ?? \date('Y')));
     }

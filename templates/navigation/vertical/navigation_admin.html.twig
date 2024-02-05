@@ -1,10 +1,11 @@
 {# admin menu #}
-{% from 'macros/_icons.html.twig' import icon %}
+{% from 'macros/_icons.html.twig' import icon, dropdownSeparator %}
 {% set id = 'MENU_SIDEBAR_ADMIN' %}
 {% set expanded = app.request.cookies.boolean(id) %}
 {% set toggle_class = expanded ? ' active' : '' %}
 {% set collapse_class = expanded ? ' show' : '' %}
 {% set toggle_title = expanded ? 'index.menu_hide' : 'index.menu_show' %}
+<li>{{ dropdownSeparator() }}</li>
 <li class="nav-item nav-item-dropdown">
     <button class="nav-link nav-link-toggle{{ toggle_class }}" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="{{ expanded|json_encode }}" title="{{ toggle_title|trans }}">
         {{- icon('gear fa-solid fa-fw', 'index.menu_admin') -}}

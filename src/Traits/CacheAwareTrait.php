@@ -107,7 +107,7 @@ trait CacheAwareTrait
      *
      * @return mixed the value, if found; the default otherwise
      */
-    public function getCacheValue(string $key, mixed $default = null, int|\DateInterval $time = null): mixed
+    public function getCacheValue(string $key, mixed $default = null, int|\DateInterval|null $time = null): mixed
     {
         $key = self::cleanKey($key);
         $item = $this->getCacheItem($key);
@@ -146,7 +146,7 @@ trait CacheAwareTrait
      *                                      expired. An integer parameter is understood to be the time in seconds until
      *                                      expiration. If null is passed, the expiration time is not set.
      */
-    public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval $time = null): bool
+    public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
         $item = $this->getCacheItem($key);
         if (null !== $item) {
@@ -181,7 +181,7 @@ trait CacheAwareTrait
      *
      * @return bool true if the cache is updated
      */
-    public function setCacheValue(string $key, mixed $value, int|\DateInterval $time = null): bool
+    public function setCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
         $key = self::cleanKey($key);
         if (null === $value) {

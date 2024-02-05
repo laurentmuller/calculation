@@ -97,9 +97,9 @@ final class FormatUtils
      */
     public static function formatDate(
         \DateTimeInterface|int|null $date,
-        int $dateType = null,
-        string $pattern = null,
-        \DateTimeZone|string $timezone = null
+        ?int $dateType = null,
+        ?string $pattern = null,
+        \DateTimeZone|string|null $timezone = null
     ): ?string {
         return self::formatDateTime($date, $dateType, \IntlDateFormatter::NONE, $pattern, $timezone);
     }
@@ -120,10 +120,10 @@ final class FormatUtils
      */
     public static function formatDateTime(
         \DateTimeInterface|int|null $date,
-        int $dateType = null,
-        int $timeType = null,
-        string $pattern = null,
-        \DateTimeZone|string $timezone = null
+        ?int $dateType = null,
+        ?int $timeType = null,
+        ?string $pattern = null,
+        \DateTimeZone|string|null $timezone = null
     ): ?string {
         if (null === $date) {
             return null;
@@ -202,9 +202,9 @@ final class FormatUtils
      */
     public static function formatTime(
         \DateTimeInterface|int|null $date,
-        int $timeType = null,
-        string $pattern = null,
-        \DateTimeZone|string $timezone = null,
+        ?int $timeType = null,
+        ?string $pattern = null,
+        \DateTimeZone|string|null $timezone = null,
     ): ?string {
         return self::formatDateTime($date, \IntlDateFormatter::NONE, $timeType, $pattern, $timezone);
     }
@@ -220,10 +220,10 @@ final class FormatUtils
      * @param \DateTimeZone|string|null $timezone the timezone identifier
      */
     public static function getDateFormatter(
-        int $dateType = null,
-        int $timeType = null,
-        string $pattern = null,
-        \DateTimeZone|string $timezone = null
+        ?int $dateType = null,
+        ?int $timeType = null,
+        ?string $pattern = null,
+        \DateTimeZone|string|null $timezone = null
     ): \IntlDateFormatter {
         $locale = \Locale::getDefault();
         $dateType ??= self::DATE_TYPE;

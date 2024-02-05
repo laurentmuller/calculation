@@ -107,7 +107,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    public function createSheetAndTitle(AbstractController $controller, string $title = null, int $sheetIndex = null): WorksheetDocument
+    public function createSheetAndTitle(AbstractController $controller, ?string $title = null, ?int $sheetIndex = null): WorksheetDocument
     {
         $sheet = $this->createSheet($sheetIndex);
         if (null !== $title) {
@@ -234,7 +234,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * If this parent's controller is not null, the header and footer are also updated.
      */
-    public function setActiveTitle(string $title, AbstractController $controller = null): static
+    public function setActiveTitle(string $title, ?AbstractController $controller = null): static
     {
         $sheet = $this->getActiveSheet()
             ->setTitle($title);
@@ -318,7 +318,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Sets the username for the creator and the last modified properties.
      */
-    public function setUserName(string $userName = null): static
+    public function setUserName(?string $userName = null): static
     {
         if (StringUtils::isString($userName)) {
             $this->getProperties()

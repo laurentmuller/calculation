@@ -36,7 +36,7 @@ trait PdfDashLineTrait
         float $w,
         float $h,
         int $dashes = 15,
-        PdfLine|float $line = null
+        PdfLine|float|null $line = null
     ): void {
         $oldWidth = $this->LineWidth;
         if ($line instanceof PdfLine) {
@@ -76,7 +76,7 @@ trait PdfDashLineTrait
      * @param int                $dashes    the number of dashes per line
      * @param PdfLine|float|null $line      the line width or null to use current
      */
-    public function dashedRectangle(PdfRectangle $rectangle, int $dashes = 15, PdfLine|float $line = null): void
+    public function dashedRectangle(PdfRectangle $rectangle, int $dashes = 15, PdfLine|float|null $line = null): void
     {
         $this->dashedRect(
             $rectangle->x(),
@@ -96,7 +96,7 @@ trait PdfDashLineTrait
      * @param float|null $black the length of dashes
      * @param float|null $white the length of gaps
      */
-    public function setDashPattern(float $black = null, float $white = null): void
+    public function setDashPattern(?float $black = null, ?float $white = null): void
     {
         if (null !== $black && null !== $white) {
             $this->_outParams('[%.3F %.3F] 0 d', $black * $this->k, $white * $this->k);

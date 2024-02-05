@@ -108,9 +108,9 @@ class IndexController extends AbstractController
     public function index(
         Request $request,
         #[MapQueryParameter]
-        bool $restrict = null,
+        ?bool $restrict = null,
         #[MapQueryParameter]
-        bool $custom = null
+        ?bool $custom = null
     ): Response {
         $service = $this->getUserService();
         $restrict ??= $this->getCookieBoolean($request, self::PARAM_RESTRICT);

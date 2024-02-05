@@ -156,7 +156,7 @@ class HelpService implements ServiceSubscriberInterface
      *
      * @pslam-return HelpEntityType|null
      */
-    public function findEntity(string|array $id = null): ?array
+    public function findEntity(string|array|null $id = null): ?array
     {
         if (\is_array($id)) {
             $id = $id['entity'] ?? '';

@@ -80,8 +80,12 @@ class UrlGeneratorService
     /**
      * Generate the cancel URL.
      */
-    public function cancelUrl(Request $request, EntityInterface|int|null $id = 0, string $defaultRoute = AbstractController::HOME_PAGE, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): string
-    {
+    public function cancelUrl(
+        Request $request,
+        EntityInterface|int|null $id = 0,
+        string $defaultRoute = AbstractController::HOME_PAGE,
+        int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
+    ): string {
         $params = $this->routeParams($request, $id);
         $caller = $this->getCaller($params);
         if (null !== $caller) {
@@ -100,8 +104,13 @@ class UrlGeneratorService
     /**
      * Generate the cancel URL and returns a redirect response.
      */
-    public function redirect(Request $request, EntityInterface|int|null $id = 0, string $defaultRoute = AbstractController::HOME_PAGE, int $status = Response::HTTP_FOUND, int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH): RedirectResponse
-    {
+    public function redirect(
+        Request $request,
+        EntityInterface|int|null $id = 0,
+        string $defaultRoute = AbstractController::HOME_PAGE,
+        int $status = Response::HTTP_FOUND,
+        int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
+    ): RedirectResponse {
         $url = $this->cancelUrl($request, $id, $defaultRoute, $referenceType);
 
         return new RedirectResponse($url, $status);

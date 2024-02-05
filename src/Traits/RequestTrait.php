@@ -82,7 +82,7 @@ trait RequestTrait
     protected function getRequestValue(
         Request $request,
         string $key,
-        string|int|float|bool $default = null
+        string|int|float|bool|null $default = null
     ): string|int|float|bool|null {
         /** @psalm-var scalar $value */
         $value = $this->getRequestBag($request, $key)?->get($key, $default) ?? $default;

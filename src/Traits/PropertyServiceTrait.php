@@ -70,7 +70,7 @@ trait PropertyServiceTrait
         return $this->getPropertyBoolean(self::P_DARK_NAVIGATION, true);
     }
 
-    public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval $time = null): bool
+    public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
         if (!$this->doSaveDeferredCacheValue($key, $value, $time)) {
             $this->logWarning($this->trans('application_service.deferred_error', ['%key%' => $key]));
@@ -164,7 +164,7 @@ trait PropertyServiceTrait
      *
      * @psalm-return ($default is null ? (\DateTimeInterface|null) : \DateTimeInterface)
      */
-    protected function getPropertyDate(string $name, \DateTimeInterface $default = null): ?\DateTimeInterface
+    protected function getPropertyDate(string $name, ?\DateTimeInterface $default = null): ?\DateTimeInterface
     {
         $timestamp = $this->getPropertyInteger($name);
         if (AbstractProperty::FALSE_VALUE !== $timestamp) {
@@ -228,7 +228,7 @@ trait PropertyServiceTrait
      *
      * @psalm-return ($default is null ? (string|null) : string)
      */
-    protected function getPropertyString(string $name, string $default = null): ?string
+    protected function getPropertyString(string $name, ?string $default = null): ?string
     {
         /** @psalm-var mixed $value */
         $value = $this->getCacheValue($name, $default);

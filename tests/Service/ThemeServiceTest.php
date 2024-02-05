@@ -94,7 +94,7 @@ class ThemeServiceTest extends TestCase
         self::assertFalse($cookie->isHttpOnly());
     }
 
-    private static function createRequest(Theme|string $value = null): Request
+    private static function createRequest(Theme|string|null $value = null): Request
     {
         if (null !== $value) {
             if ($value instanceof Theme) {

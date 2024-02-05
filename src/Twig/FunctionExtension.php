@@ -134,7 +134,7 @@ final class FunctionExtension extends AbstractExtension
      *
      * @psalm-param array<string, string|int> $parameters
      */
-    private function assetImageUser(User|array|null $user, string $size = null, array $parameters = []): string|false
+    private function assetImageUser(User|array|null $user, ?string $size = null, array $parameters = []): string|false
     {
         if (null === $user) {
             return false;

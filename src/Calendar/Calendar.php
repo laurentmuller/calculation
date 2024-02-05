@@ -98,7 +98,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
      *
      * @throws CalendarException
      */
-    public function __construct(int $year = null)
+    public function __construct(?int $year = null)
     {
         parent::__construct($this, (string) ($year ?? 0));
 

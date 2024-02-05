@@ -113,7 +113,7 @@ class FormHelper
      * @param ?string              $labelPrefix the label prefix. If the prefix is not null, the label is automatically
      *                                          added when the field property is set.
      */
-    public function __construct(private readonly FormBuilderInterface $builder, string $labelPrefix = null)
+    public function __construct(private readonly FormBuilderInterface $builder, ?string $labelPrefix = null)
     {
         $this->labelPrefix = StringUtils::isString($labelPrefix) ? $labelPrefix : null;
     }
@@ -258,7 +258,7 @@ class FormHelper
     /**
      * Add a fax (telephone) type to the builder and reset all values to default.
      */
-    public function addFaxType(string $pattern = null): self
+    public function addFaxType(?string $pattern = null): self
     {
         return $this->updateAttribute('pattern', $pattern)
             ->updateOption('prepend_icon', 'fa-fw fa-solid fa-fax')
@@ -312,7 +312,7 @@ class FormHelper
      * @param ?int  $max  the maximum value allowed (inclusive) or null if none
      * @param float $step the step increment or a negative value if none
      */
-    public function addPercentType(int $min = null, int $max = null, float $step = 1.0): self
+    public function addPercentType(?int $min = null, ?int $max = null, float $step = 1.0): self
     {
         $this->widgetClass('text-end')
             ->updateAttribute('inputmode', 'decimal')
@@ -402,7 +402,7 @@ class FormHelper
     /**
      * Add a telephone type to the builder and reset all values to default.
      */
-    public function addTelType(string $pattern = null): self
+    public function addTelType(?string $pattern = null): self
     {
         return $this->updateAttribute('inputmode', 'tel')
             ->updateOption('prepend_icon', 'fa-fw fa-solid fa-phone')

@@ -86,7 +86,7 @@ trait PdfChartLegendTrait
      * @param ?float            $y          the ordinate of the legends or null to use current position
      * @param bool              $circle     true to draw circle shapes; false to draw square shapes
      */
-    public function legends(array $legends, bool $horizontal, float $x = null, float $y = null, bool $circle = true): static
+    public function legends(array $legends, bool $horizontal, ?float $x = null, ?float $y = null, bool $circle = true): static
     {
         if ([] === $legends) {
             return $this;
@@ -107,7 +107,7 @@ trait PdfChartLegendTrait
      * @param ?float            $y       the ordinate of the legends or null to use current position
      * @param bool              $circle  true to a draw circle shape; false to draw a square shape
      */
-    public function legendsHorizontal(array $legends, float $x = null, float $y = null, bool $circle = true): static
+    public function legendsHorizontal(array $legends, ?float $x = null, ?float $y = null, bool $circle = true): static
     {
         if ([] === $legends) {
             return $this;
@@ -140,7 +140,7 @@ trait PdfChartLegendTrait
      * @param ?float            $y       the ordinate of the legends or null to use current position
      * @param bool              $circle  true to a draw circle shape; false to draw a square shape
      */
-    public function legendsVertical(array $legends, float $x = null, float $y = null, bool $circle = true): static
+    public function legendsVertical(array $legends, ?float $x = null, ?float $y = null, bool $circle = true): static
     {
         if ([] === $legends) {
             return $this;

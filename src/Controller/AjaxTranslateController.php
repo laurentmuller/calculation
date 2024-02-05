@@ -48,9 +48,9 @@ class AjaxTranslateController extends AbstractController
     #[Get(path: '/detect', name: 'ajax_detect')]
     public function detect(
         #[MapQueryParameter]
-        string $text = null,
+        ?string $text = null,
         #[MapQueryParameter(name: 'service')]
-        string $class = null
+        ?string $class = null
     ): JsonResponse {
         if (!StringUtils::isString($text)) {
             return $this->jsonFalse([
@@ -81,7 +81,7 @@ class AjaxTranslateController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Get(path: '/languages', name: 'ajax_languages')]
-    public function languages(#[MapQueryParameter(name: 'service')] string $class = null): JsonResponse
+    public function languages(#[MapQueryParameter(name: 'service')] ?string $class = null): JsonResponse
     {
         try {
             $service = $this->getService($class);
@@ -137,7 +137,7 @@ class AjaxTranslateController extends AbstractController
     /**
      * @throws ServiceNotFoundException if the service is not found
      */
-    private function getService(string $class = null): TranslatorServiceInterface
+    private function getService(?string $class = null): TranslatorServiceInterface
     {
         return $this->factory->getService($class ?? TranslatorFactory::DEFAULT_SERVICE);
     }

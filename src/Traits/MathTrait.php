@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Traits;
 
+use App\Utils\FormatUtils;
+
 /**
  * Trait for mathematical functions.
  */
@@ -39,7 +41,7 @@ trait MathTrait
      *
      * @return bool true if values are equals
      */
-    protected function isFloatEquals(float $val1, float $val2, int $precision = 2): bool
+    protected function isFloatEquals(float $val1, float $val2, int $precision = FormatUtils::FRACTION_DIGITS): bool
     {
         return $this->round($val1, $precision) === $this->round($val2, $precision);
     }
@@ -52,7 +54,7 @@ trait MathTrait
      *
      * @return bool true if the value is equal to zero
      */
-    protected function isFloatZero(float $val, int $precision = 2): bool
+    protected function isFloatZero(float $val, int $precision = FormatUtils::FRACTION_DIGITS): bool
     {
         return $this->isFloatEquals($val, 0.0, $precision);
     }
@@ -65,7 +67,7 @@ trait MathTrait
      *
      * @return float the rounded value or 0 if value is empty
      */
-    protected function round(?float $val, int $precision = 2): float
+    protected function round(?float $val, int $precision = FormatUtils::FRACTION_DIGITS): float
     {
         return null === $val ? 0.0 : \round($val, $precision, \PHP_ROUND_HALF_DOWN);
     }

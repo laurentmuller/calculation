@@ -109,7 +109,7 @@ class Category extends AbstractEntity implements TimestampableInterface
      *
      * @param ?string $code the new code
      */
-    public function clone(string $code = null): self
+    public function clone(?string $code = null): self
     {
         $copy = clone $this;
         if (StringUtils::isString($code)) {

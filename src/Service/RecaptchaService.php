@@ -99,7 +99,7 @@ class RecaptchaService
         return $errors;
     }
 
-    public function verify(string $response, Request $request = null): Response
+    public function verify(string $response, ?Request $request = null): Response
     {
         $recaptcha = new ReCaptcha($this->secretKey);
         $recaptcha->setChallengeTimeout($this->timeoutSeconds)

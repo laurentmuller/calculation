@@ -83,7 +83,7 @@ readonly class EmailVerifier
         );
     }
 
-    private function trans(string $id, array $parameters = [], string $domain = null): string
+    private function trans(string $id, array $parameters = [], ?string $domain = null): string
     {
         return $this->translator->trans($id, $parameters, $domain);
     }

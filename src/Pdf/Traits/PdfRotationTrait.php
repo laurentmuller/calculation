@@ -45,7 +45,7 @@ trait PdfRotationTrait
      * @param float|null $x     the abscissa position or null to use the current abscissa
      * @param float|null $y     the ordinate position or null to use the current ordinate
      */
-    public function rotate(float $angle, float $x = null, float $y = null): void
+    public function rotate(float $angle, ?float $x = null, ?float $y = null): void
     {
         $this->endRotate();
         $angle = \fmod($angle, 360.0);
@@ -112,7 +112,7 @@ trait PdfRotationTrait
      * @param float|null $x     the abscissa position or null to use the current abscissa
      * @param float|null $y     the ordinate position or null to use the current ordinate
      */
-    public function rotateText(string $txt, float $angle, float $x = null, float $y = null): void
+    public function rotateText(string $txt, float $angle, ?float $x = null, ?float $y = null): void
     {
         if ('' === $txt || $this->isFloatZero($angle)) {
             return;

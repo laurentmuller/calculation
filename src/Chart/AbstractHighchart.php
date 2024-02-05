@@ -137,7 +137,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
      *
      * @return array an array with a font color, a font size, a font weight and a font family
      */
-    protected function getColorFontStyle(string $color, string $fontSize = null): array
+    protected function getColorFontStyle(string $color, ?string $fontSize = null): array
     {
         return \array_merge(
             $this->getFontStyle($fontSize),
@@ -152,7 +152,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
      *
      * @return array an array with a font size, a font weight and a font family
      */
-    protected function getFontStyle(string $fontSize = null): array
+    protected function getFontStyle(?string $fontSize = null): array
     {
         return [
             'fontSize' => $fontSize ?? 'var(--bs-body-font-size)',

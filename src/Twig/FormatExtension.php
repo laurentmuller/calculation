@@ -48,7 +48,7 @@ final class FormatExtension extends AbstractExtension
      * @param ?string $false     the text to use when the value is <code>false</code> or <code>null</code> to use default
      * @param bool    $translate <code>true</code> to translate texts
      */
-    public function formatBoolean(bool $value, string $true = null, string $false = null, bool $translate = false): string
+    public function formatBoolean(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {
         if ($value) {
             if (null !== $true) {
@@ -101,8 +101,8 @@ final class FormatExtension extends AbstractExtension
     private function dateFilter(
         Environment $env,
         \DateTimeInterface|string|null $date,
-        string $dateFormat = null,
-        string $pattern = null
+        ?string $dateFormat = null,
+        ?string $pattern = null
     ): string {
         return $this->dateTimeFilter($env, $date, $dateFormat, 'none', $pattern);
     }
@@ -123,9 +123,9 @@ final class FormatExtension extends AbstractExtension
     private function dateTimeFilter(
         Environment $env,
         \DateTimeInterface|string|null $date,
-        string $dateFormat = null,
-        string $timeFormat = null,
-        string $pattern = null
+        ?string $dateFormat = null,
+        ?string $timeFormat = null,
+        ?string $pattern = null
     ): string {
         // check types
         $dateType = $this->translateFormat($dateFormat);
@@ -156,8 +156,8 @@ final class FormatExtension extends AbstractExtension
     private function timeFilter(
         Environment $env,
         \DateTimeInterface|string|null $date,
-        string $timeFormat = null,
-        string $pattern = null
+        ?string $timeFormat = null,
+        ?string $pattern = null
     ): string {
         return $this->dateTimeFilter($env, $date, 'none', $timeFormat, $pattern);
     }
@@ -169,7 +169,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @psalm-return int<-1,3>|null
      */
-    private function translateFormat(string $format = null): ?int
+    private function translateFormat(?string $format = null): ?int
     {
         if (null === $format || '' === $format) {
             return null;

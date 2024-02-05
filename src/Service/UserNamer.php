@@ -30,7 +30,7 @@ class UserNamer implements NamerInterface
     /**
      * Gets the base file name.
      */
-    public static function getBaseName(User|int $key, ImageSize $size, ImageExtension|string $ext = null): string
+    public static function getBaseName(User|int $key, ImageSize $size, ImageExtension|string|null $ext = null): string
     {
         $id = \is_int($key) ? $key : (int) $key->getId();
         $name = \sprintf('USER_%06d_%03d', $id, $size->value);

@@ -163,7 +163,7 @@ class ImageExtensionTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getTryFromTypes')]
-    public function testTryFromType(int $type, ImageExtension $expected = null): void
+    public function testTryFromType(int $type, ?ImageExtension $expected = null): void
     {
         $actual = ImageExtension::tryFromType($type);
         self::assertSame($expected, $actual);

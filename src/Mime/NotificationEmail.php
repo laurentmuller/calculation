@@ -27,7 +27,7 @@ class NotificationEmail extends BaseNotificationEmail
 {
     private ?string $importance = null;
 
-    public function __construct(Headers $headers = null, AbstractPart $body = null)
+    public function __construct(?Headers $headers = null, ?AbstractPart $body = null)
     {
         parent::__construct($headers, $body);
         $this->htmlTemplate('notification/notification.html.twig');

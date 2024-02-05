@@ -170,7 +170,7 @@ class ArrayTraitTest extends TestCase
      * @psalm-param int<0,2> $mode
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getColumnFilterValues')]
-    public function testColumnFilter(array $values, array $expected, callable $callback = null, int $mode = 0): void
+    public function testColumnFilter(array $values, array $expected, ?callable $callback = null, int $mode = 0): void
     {
         $actual = $this->getColumnFilter($values, self::KEY, $callback, $mode);
         self::assertSame($expected, $actual);
@@ -194,7 +194,7 @@ class ArrayTraitTest extends TestCase
      * @psalm-param 0|1|2 $mode
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getUniqueFilteredValues')]
-    public function testUniqueFiltered(array $values, array $expected, callable $callback = null, int $mode = 0): void
+    public function testUniqueFiltered(array $values, array $expected, ?callable $callback = null, int $mode = 0): void
     {
         $actual = $this->getUniqueFiltered($values, $callback, $mode);
         $expectedCount = \count($expected);

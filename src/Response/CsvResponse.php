@@ -29,7 +29,7 @@ class CsvResponse extends StreamedResponse implements MimeTypeInterface
      *                                <code>false</code> to send to the browser and force a file download with the name given.
      * @param string        $name     the name of the document file or <code>''</code> to use the default name ('document.csv')
      */
-    public function __construct(callable $callback = null, bool $inline = true, string $name = '')
+    public function __construct(?callable $callback = null, bool $inline = true, string $name = '')
     {
         $headers = $this->buildHeaders($name, $inline);
         parent::__construct($callback, self::HTTP_OK, $headers);

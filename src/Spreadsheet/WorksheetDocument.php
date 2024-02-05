@@ -64,7 +64,7 @@ class WorksheetDocument extends Worksheet
     /**
      * @param string $title
      */
-    public function __construct(SpreadsheetDocument $parent = null, $title = 'Worksheet')
+    public function __construct(?SpreadsheetDocument $parent = null, $title = 'Worksheet')
     {
         parent::__construct($parent, $title);
         $this->setPageSizeA4()->setPagePortrait();
@@ -123,7 +123,7 @@ class WorksheetDocument extends Worksheet
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
      */
-    public function mergeContent(int $startColumn, int $endColumn, int $startRow, int $endRow = null): static
+    public function mergeContent(int $startColumn, int $endColumn, int $startRow, ?int $endRow = null): static
     {
         $this->mergeCells([$startColumn, $startRow, $endColumn, $endRow ?? $startRow]);
 
@@ -518,7 +518,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Update this header and footer with the given customer information.
      */
-    public function updateHeaderFooter(CustomerInformation $customer, TranslatorInterface $translator = null): static
+    public function updateHeaderFooter(CustomerInformation $customer, ?TranslatorInterface $translator = null): static
     {
         $title = $this->getTitle();
         $pageMargins = $this->getPageMargins();

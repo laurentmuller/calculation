@@ -118,7 +118,7 @@ class PdfTable
      *
      * @psalm-param positive-int $cols
      */
-    public function add(string $text = null, int $cols = 1, PdfStyle $style = null, PdfTextAlignment $alignment = null, string|int $link = ''): static
+    public function add(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, string|int $link = ''): static
     {
         return $this->addCell(new PdfCell($text, $cols, $style, $alignment, $link));
     }
@@ -218,7 +218,7 @@ class PdfTable
      *
      * @see PdfTable::addRow()
      */
-    public function addStyledRow(array $cells, PdfStyle $style = null): static
+    public function addStyledRow(array $cells, ?PdfStyle $style = null): static
     {
         return $this->startRow($style)
             ->addValues(...$cells)
@@ -526,7 +526,7 @@ class PdfTable
      *
      * @see PdfTable::add()
      */
-    public function singleLine(string $text = null, PdfStyle $style = null, PdfTextAlignment $alignment = null): static
+    public function singleLine(?string $text = null, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null): static
     {
         /** @psalm-var positive-int $cols */
         $cols = $this->getColumnsCount();
@@ -559,7 +559,7 @@ class PdfTable
      *
      * @throws \LogicException if the row is already started
      */
-    public function startRow(PdfStyle $style = null): static
+    public function startRow(?PdfStyle $style = null): static
     {
         $this->checkRowStarted();
         $this->rowStyle = $style ?? PdfStyle::getCellStyle();

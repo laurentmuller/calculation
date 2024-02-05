@@ -30,7 +30,7 @@ trait ArrayTrait
      *
      * @psalm-param int<0,2> $mode
      */
-    public function getColumnFilter(array $values, string|int $key, callable $callback = null, int $mode = 0): array
+    public function getColumnFilter(array $values, string|int $key, ?callable $callback = null, int $mode = 0): array
     {
         return \array_filter($this->getColumn($values, $key), $callback, $mode);
     }
@@ -90,7 +90,7 @@ trait ArrayTrait
      */
     public function getFiltered(
         array $values,
-        callable $callback = null,
+        ?callable $callback = null,
         int $mode = 0
     ): array {
         /** @psalm-var T[] $values */
@@ -138,7 +138,7 @@ trait ArrayTrait
      */
     public function getUniqueFiltered(
         array $values,
-        callable $callback = null,
+        ?callable $callback = null,
         int $mode = 0,
         int $flags = \SORT_REGULAR
     ): array {

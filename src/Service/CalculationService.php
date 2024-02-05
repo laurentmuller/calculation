@@ -323,8 +323,8 @@ final class CalculationService implements ServiceSubscriberInterface
     private function computeGroups(
         array $groups,
         float $user_margin,
-        callable $callback = null,
-        float $global_margin = null
+        ?callable $callback = null,
+        ?float $global_margin = null
     ): array {
         /** @psalm-var array<ServiceGroupType> $result */
         $result = \is_callable($callback) ? \array_map($callback, $groups) : $groups;
@@ -414,7 +414,7 @@ final class CalculationService implements ServiceSubscriberInterface
         float $margin = 0.0,
         float $margin_amount = 0.0,
         float $total = 0.0,
-        bool $overall_below = null
+        ?bool $overall_below = null
     ): array {
         $result = [
             'id' => $id,

@@ -45,13 +45,13 @@ class AjaxSearchController extends AbstractController
     public function searchAddress(
         SwissPostService $service,
         #[MapQueryParameter]
-        string $zip = null,
+        ?string $zip = null,
         #[MapQueryParameter]
-        string $city = null,
+        ?string $city = null,
         #[MapQueryParameter]
-        string $street = null,
+        ?string $street = null,
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
-        int $limit = null
+        ?int $limit = null
     ): JsonResponse {
         if (null === $limit) {
             $limit = 15;
@@ -79,9 +79,9 @@ class AjaxSearchController extends AbstractController
     public function searchCustomer(
         CalculationRepository $repository,
         #[MapQueryParameter]
-        string $query = null,
+        ?string $query = null,
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
-        int $limit = null
+        ?int $limit = null
     ): JsonResponse {
         return $this->getValuesFromRepository($repository, 'customer', $query, $limit);
     }
@@ -96,9 +96,9 @@ class AjaxSearchController extends AbstractController
     public function searchProduct(
         ProductRepository $repository,
         #[MapQueryParameter]
-        string $query = null,
+        ?string $query = null,
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
-        int $limit = null
+        ?int $limit = null
     ): JsonResponse {
         return $this->getValuesFromCallback(
             fn (string $query, int $limit): array => $repository->search($query, $limit),
@@ -117,9 +117,9 @@ class AjaxSearchController extends AbstractController
     public function searchSupplier(
         EntityManagerInterface $manager,
         #[MapQueryParameter]
-        string $query = null,
+        ?string $query = null,
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
-        int $limit = null
+        ?int $limit = null
     ): JsonResponse {
         return $this->getValuesFromManager($manager, 'supplier', $query, $limit);
     }
@@ -134,9 +134,9 @@ class AjaxSearchController extends AbstractController
     public function searchTitle(
         CustomerRepository $repository,
         #[MapQueryParameter]
-        string $query = null,
+        ?string $query = null,
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
-        int $limit = null
+        ?int $limit = null
     ): JsonResponse {
         return $this->getValuesFromRepository($repository, 'title', $query, $limit);
     }
@@ -151,9 +151,9 @@ class AjaxSearchController extends AbstractController
     public function searchUnit(
         EntityManagerInterface $manager,
         #[MapQueryParameter]
-        string $query = null,
+        ?string $query = null,
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
-        int $limit = null
+        ?int $limit = null
     ): JsonResponse {
         return $this->getValuesFromManager($manager, 'unit', $query, $limit);
     }
@@ -187,8 +187,8 @@ class AjaxSearchController extends AbstractController
      */
     private function getValuesFromCallback(
         callable $callback,
-        string $query = null,
-        int $limit = null
+        ?string $query = null,
+        ?int $limit = null
     ): JsonResponse {
         if (null === $query || '' === $query) {
             return $this->jsonFalse(['values' => []]);
@@ -209,7 +209,7 @@ class AjaxSearchController extends AbstractController
     /**
      * Search distinct values from products and tasks.
      */
-    private function getValuesFromManager(EntityManagerInterface $manager, string $field, string $query = null, int $limit = null): JsonResponse
+    private function getValuesFromManager(EntityManagerInterface $manager, string $field, ?string $query = null, ?int $limit = null): JsonResponse
     {
         return $this->getValuesFromCallback(
             function (string $query, int $limit) use ($manager, $field): array {
@@ -230,7 +230,7 @@ class AjaxSearchController extends AbstractController
      *
      * @param AbstractRepository<TEntity> $repository
      */
-    private function getValuesFromRepository(AbstractRepository $repository, string $field, string $query = null, int $limit = null): JsonResponse
+    private function getValuesFromRepository(AbstractRepository $repository, string $field, ?string $query = null, ?int $limit = null): JsonResponse
     {
         return $this->getValuesFromCallback(
             fn (string $query, int $limit): array => $repository->getDistinctValues($field, $query, $limit),

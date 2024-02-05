@@ -386,7 +386,7 @@ class PdfDocument extends \FPDF
      *
      * @return int the number of lines
      */
-    public function getLinesCount(?string $text, float $width = 0.0, float $cellMargin = null): int
+    public function getLinesCount(?string $text, float $width = 0.0, ?float $cellMargin = null): int
     {
         if (null === $text || '' === $text) {
             return 0;
@@ -526,7 +526,7 @@ class PdfDocument extends \FPDF
      * @param float    $afterSpace  the verticale space after the line
      * @param ?PdfLine $line        the optional line width to apply
      */
-    public function horizontalLine(float $beforeSpace = 1.0, float $afterSpace = 1.0, PdfLine $line = null): self
+    public function horizontalLine(float $beforeSpace = 1.0, float $afterSpace = 1.0, ?PdfLine $line = null): self
     {
         $x = $this->x;
         $y = $this->y + $beforeSpace;
@@ -583,7 +583,7 @@ class PdfDocument extends \FPDF
      *
      * @see PdfDocument::AddPage()
      */
-    public function isPrintable(float $height, float $y = null): bool
+    public function isPrintable(float $height, ?float $y = null): bool
     {
         return (($y ?? $this->y) + $height) <= $this->PageBreakTrigger;
     }

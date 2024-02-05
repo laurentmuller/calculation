@@ -216,7 +216,7 @@ class Log extends AbstractEntity
      *
      * @param int|null $id the optional primary key identifier
      */
-    public static function instance(int $id = null): self
+    public static function instance(?int $id = null): self
     {
         $log = new self();
         $log->id = $id;

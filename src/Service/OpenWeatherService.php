@@ -404,7 +404,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      * @throws \Exception
      */
-    private function doGet(string $uri, array $query = []): ?array
+    private function doGet(string $uri, array $query = []): array|false
     {
         $response = $this->requestGet($uri, [
             self::QUERY => $query,
@@ -413,7 +413,7 @@ class OpenWeatherService extends AbstractHttpClientService
         /** @psalm-var array<string, mixed> $results */
         $results = $response->toArray(false);
         if (!$this->checkErrorCode($results)) {
-            return null;
+            return false;
         }
         $offset = $this->findTimezone($results);
         $timezone = $this->offsetToTimZone($offset);
@@ -477,13 +477,12 @@ class OpenWeatherService extends AbstractHttpClientService
      */
     private function get(string $uri, array $query = []): array|false
     {
-        // find from cache
         $key = $this->getCacheKey($uri, $query);
 
-        /** @psalm-var array|false $result */
-        $result = $this->getCacheValue($key, fn (): ?array => $this->doGet($uri, $query)) ?? false;
+        /** @psalm-var array|false $value */
+        $value = $this->getCacheValue($key, fn (): array|false => $this->doGet($uri, $query));
 
-        return $result;
+        return $value;
     }
 
     /**
@@ -569,7 +568,7 @@ class OpenWeatherService extends AbstractHttpClientService
         $results['country_flag'] = $this->replaceUrl(self::COUNTRY_URL, \strtolower($value));
     }
 
-    private function updateDate(array &$result, int $value, \DateTimeZone $timezone = null): void
+    private function updateDate(array &$result, int $value, ?\DateTimeZone $timezone = null): void
     {
         $result['dt_date'] = FormatUtils::formatDate($value, \IntlDateFormatter::SHORT);
         $result['dt_date_locale'] = FormatUtils::formatDate($value, \IntlDateFormatter::SHORT, timezone: $timezone);
@@ -616,7 +615,7 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * @psalm-param array<array-key, mixed> $results
      */
-    private function updateResults(array &$results, \DateTimeZone $timezone = null): void
+    private function updateResults(array &$results, ?\DateTimeZone $timezone = null): void
     {
         /** @psalm-var mixed $value */
         foreach ($results as $key => &$value) {
@@ -663,17 +662,17 @@ class OpenWeatherService extends AbstractHttpClientService
         }
     }
 
-    private function updateSunrise(array &$results, int $value, \DateTimeZone $timezone = null): void
+    private function updateSunrise(array &$results, int $value, ?\DateTimeZone $timezone = null): void
     {
         $results['sunrise_formatted'] = FormatUtils::formatTime($value, \IntlDateFormatter::SHORT, timezone: $timezone);
     }
 
-    private function updateSunset(array &$results, int $value, \DateTimeZone $timezone = null): void
+    private function updateSunset(array &$results, int $value, ?\DateTimeZone $timezone = null): void
     {
         $results['sunset_formatted'] = FormatUtils::formatTime($value, \IntlDateFormatter::SHORT, timezone: $timezone);
     }
 
-    private function updateTimezone(array &$results, \DateTimeZone $timezone = null): void
+    private function updateTimezone(array &$results, ?\DateTimeZone $timezone = null): void
     {
         if ($timezone instanceof \DateTimeZone) {
             $results['timezone_name'] = $timezone->getName();

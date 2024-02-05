@@ -174,7 +174,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * @see PdfStyle::BULLET
      */
-    public static function getBulletStyle(self $source = null): self
+    public static function getBulletStyle(?self $source = null): self
     {
         $source ??= self::getCellStyle();
 
@@ -466,7 +466,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * @param ?PdfFontName $name the font name or null to use the default name ('ARIAL')
      */
-    public function setFontName(PdfFontName $name = null): static
+    public function setFontName(?PdfFontName $name = null): static
     {
         $this->font->setName($name);
 
@@ -498,7 +498,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      *
      * @param ?PdfFontStyle $style the font style or null to use the default style ('Regular')
      */
-    public function setFontStyle(PdfFontStyle $style = null): static
+    public function setFontStyle(?PdfFontStyle $style = null): static
     {
         $this->font->setStyle($style);
 

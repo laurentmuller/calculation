@@ -128,7 +128,7 @@
 {%- endmacro %}
 
 {% macro button_word(route, parameters=[], title='common.button_export_word') -%}
-    {{- _self.linkExternal(path(route, parameters), 'common.button_export', 'btn btn-form btn-outline-secondary', ICON_WORD, title) -}}
+{{- _self.linkExternal(path(route, parameters), 'common.button_export', 'btn btn-form btn-outline-secondary', ICON_WORD, title) -}}
 {%- endmacro %}
 
 {% macro copyright_link(class=null) -%}
@@ -181,7 +181,7 @@
 {% macro navItemThemeSwitcher(class) %}
 {% set class = (class|default('') ~ ' rowlink-skip theme-link')|trim %}
 {% set theme = theme(app.request) %}
-<button class="{{ class }}" title="{{ 'theme.description'|trans }}"  data-url="{{ path('theme_dialog') }}">
+<button class="{{ class }}" title="{{ 'theme.description'|trans }}" data-url="{{ path('theme_dialog') }}">
     <i class="theme-icon me-1 {{ theme.iconLight }}"></i><span class="theme-text">{{ theme|trans }}</span>
 </button >
 {% endmacro %}

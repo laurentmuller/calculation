@@ -75,7 +75,7 @@ class IpStackService extends AbstractHttpClientService
      *
      * @return IpStackType|null the current Ip information if success; null on error
      */
-    public function getIpInfo(Request $request = null): ?array
+    public function getIpInfo(?Request $request = null): ?array
     {
         $url = $this->getUrl($request);
         /** @psalm-var IpStackType|null $result */
@@ -104,7 +104,7 @@ class IpStackService extends AbstractHttpClientService
         return null;
     }
 
-    private function getClientIp(Request $request = null): string
+    private function getClientIp(?Request $request = null): string
     {
         if (!$request instanceof Request) {
             return self::URI_CHECK;
@@ -117,7 +117,7 @@ class IpStackService extends AbstractHttpClientService
         return $clientIp;
     }
 
-    private function getUrl(Request $request = null): string
+    private function getUrl(?Request $request = null): string
     {
         $clientIp = $this->getClientIp($request);
         $query = \http_build_query([

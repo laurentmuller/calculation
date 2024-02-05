@@ -86,7 +86,7 @@ class TableOverall extends PdfTable
         return $this->add(FormatUtils::formatAmount($number), $cols);
     }
 
-    private function addPercent(float $number, PdfStyle $style = null): self
+    private function addPercent(float $number, ?PdfStyle $style = null): self
     {
         return $this->add(text: FormatUtils::formatPercent($number), style: $style);
     }

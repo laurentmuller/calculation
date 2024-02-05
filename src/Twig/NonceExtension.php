@@ -42,7 +42,7 @@ final class NonceExtension extends AbstractExtension
      *
      * @throws \Exception
      */
-    public function getNonce(int $length = null): string
+    public function getNonce(?int $length = null): string
     {
         return $this->service->getNonce($length);
     }

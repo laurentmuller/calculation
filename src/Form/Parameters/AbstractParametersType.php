@@ -186,7 +186,7 @@ abstract class AbstractParametersType extends AbstractType
         return $user->isSuperAdmin();
     }
 
-    private function addOption(FormHelper $helper, string $key, string $label = null): void
+    private function addOption(FormHelper $helper, string $key, ?string $label = null): void
     {
         $label ??= self::LABEL_PREFIX . $key;
         $helper->field($key)

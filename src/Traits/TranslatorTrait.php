@@ -35,7 +35,7 @@ trait TranslatorTrait
      *
      * @return bool true if the message has a translation, false otherwise
      */
-    public function isTransDefined(string $id, string $domain = null, string $locale = null): bool
+    public function isTransDefined(string $id, ?string $domain = null, ?string $locale = null): bool
     {
         $translator = $this->getTranslator();
         if ($translator instanceof TranslatorBagInterface) {
@@ -61,8 +61,8 @@ trait TranslatorTrait
     public function trans(
         string|\Stringable|TranslatableInterface $id,
         array $parameters = [],
-        string $domain = null,
-        string $locale = null
+        ?string $domain = null,
+        ?string $locale = null
     ): string {
         $translator = $this->getTranslator();
         if ($id instanceof TranslatableInterface) {

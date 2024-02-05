@@ -65,9 +65,9 @@ abstract class AbstractReport extends PdfDocument
      * Override the default behavior by adding a translated title if null and the page index to bookmarks.
      */
     public function addPageIndex(
-        string $title = null,
-        PdfStyle $titleStyle = null,
-        PdfStyle $contentStyle = null,
+        ?string $title = null,
+        ?PdfStyle $titleStyle = null,
+        ?PdfStyle $contentStyle = null,
         bool $addBookmark = true,
         string $separator = '.'
     ): self {
@@ -85,7 +85,7 @@ abstract class AbstractReport extends PdfDocument
      * @param ?string $false     the text to use when the value is <b>FALSE</b> or <code>null</code> to use default
      * @param bool    $translate <code>TRUE</code> to translate texts
      */
-    public function formatBoolean(bool $value, string $true = null, string $false = null, bool $translate = false): string
+    public function formatBoolean(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
     {
         return $this->extension->formatBoolean($value, $true, $false, $translate);
     }
@@ -122,7 +122,7 @@ abstract class AbstractReport extends PdfDocument
      * @param string $id     the title id (may also be an object that can be cast to string)
      * @param bool   $isUTF8 indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true)
      */
-    public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false, string $domain = null): static
+    public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false, ?string $domain = null): static
     {
         $title = $this->trans($id, $parameters, $domain);
         $this->SetTitle($title, $isUTF8);

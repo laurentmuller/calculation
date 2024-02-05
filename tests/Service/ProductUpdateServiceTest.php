@@ -176,7 +176,7 @@ class ProductUpdateServiceTest extends TestCase
         self::assertProduct($product, $expected);
     }
 
-    private function assertProduct(mixed $product, float $newPrice = null): void
+    private function assertProduct(mixed $product, ?float $newPrice = null): void
     {
         self::assertIsArray($product);
         self::assertArrayHasKey('description', $product);
@@ -192,7 +192,7 @@ class ProductUpdateServiceTest extends TestCase
     /**
      * @psalm-param ProductUpdateQuery::UPDATE_* $type
      */
-    private function createQuery(string $type, Product $product = null): ProductUpdateQuery
+    private function createQuery(string $type, ?Product $product = null): ProductUpdateQuery
     {
         $query = new ProductUpdateQuery();
         $query->setType($type)

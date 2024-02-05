@@ -423,7 +423,7 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
      *
      * @psalm-api
      */
-    public function setImageFile(File $imageFile = null, bool $update = true): self
+    public function setImageFile(?File $imageFile = null, bool $update = true): self
     {
         $this->imageFile = $imageFile;
         if ($update) {

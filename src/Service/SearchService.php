@@ -148,7 +148,7 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @psalm-return 0|positive-int
      */
-    public function count(?string $search, string $entity = null): int
+    public function count(?string $search, ?string $entity = null): int
     {
         if (!StringUtils::isString($search)) {
             return 0;
@@ -208,7 +208,7 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @psalm-return SearchType[]
      */
-    public function search(?string $search, string $entity = null, int $limit = 25, int $offset = 0): array
+    public function search(?string $search, ?string $entity = null, int $limit = 25, int $offset = 0): array
     {
         if (!StringUtils::isString($search) || 0 === $limit) {
             return [];
@@ -334,7 +334,7 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @psalm-param class-string $class
      */
-    private function createQueryBuilder(string $class, string $field, string $content = null): QueryBuilder
+    private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
         $name = StringUtils::getShortName($class);
         $content ??= "e.$field";
@@ -361,7 +361,7 @@ class SearchService implements ServiceSubscriberInterface
      *
      * @psalm-return SearchType[]
      */
-    private function getArrayResult(string $search, string $entity = null, string $extra = ''): array
+    private function getArrayResult(string $search, ?string $entity = null, string $extra = ''): array
     {
         $queries = $this->getQueries();
         if (StringUtils::isString($entity)) {

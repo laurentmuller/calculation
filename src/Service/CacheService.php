@@ -103,7 +103,7 @@ class CacheService
     /**
      * @throws \Exception
      */
-    private function run(InputInterface $input, OutputInterface $output = null): bool
+    private function run(InputInterface $input, ?OutputInterface $output = null): bool
     {
         $application = new Application($this->kernel);
         $application->setCatchExceptions(false);

@@ -73,12 +73,12 @@ class TableGroups extends PdfTable
         return $table;
     }
 
-    private function addAmount(float $number, PdfStyle $style = null): self
+    private function addAmount(float $number, ?PdfStyle $style = null): self
     {
         return $this->add(text: FormatUtils::formatAmount($number), style: $style);
     }
 
-    private function addPercent(float $number, PdfStyle $style = null): self
+    private function addPercent(float $number, ?PdfStyle $style = null): self
     {
         return $this->add(text: FormatUtils::formatPercent($number), style: $style);
     }

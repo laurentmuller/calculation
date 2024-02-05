@@ -29,7 +29,7 @@ class CountryFlagService
      *
      * @return array<string, string> an array where key is the flag and the country name (if applicable) and value is the country code
      */
-    public function getChoices(string $locale = null, bool $flagOnly = false): array
+    public function getChoices(?string $locale = null, bool $flagOnly = false): array
     {
         $choices = [];
         $names = Countries::getNames($locale);

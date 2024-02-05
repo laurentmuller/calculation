@@ -82,7 +82,7 @@ abstract class AbstractWordDocument extends WordDocument
      * @param array   $parameters an array of parameters for the message
      * @param ?string $domain     the domain for the message or null to use the default
      */
-    public function setTitleTrans(string $id, array $parameters = [], string $domain = null): static
+    public function setTitleTrans(string $id, array $parameters = [], ?string $domain = null): static
     {
         $title = $this->trans($id, $parameters, $domain);
 

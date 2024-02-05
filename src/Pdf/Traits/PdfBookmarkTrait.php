@@ -124,9 +124,9 @@ trait PdfBookmarkTrait
      * @see PdfDocument::addBookmark()
      */
     public function addPageIndex(
-        string $title = null,
-        PdfStyle $titleStyle = null,
-        PdfStyle $contentStyle = null,
+        ?string $title = null,
+        ?PdfStyle $titleStyle = null,
+        ?PdfStyle $contentStyle = null,
         bool $addBookmark = true,
         string $separator = '.'
     ): PdfDocument {

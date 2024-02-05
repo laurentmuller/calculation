@@ -20,7 +20,7 @@ use Symfony\Component\Mime\Part\AbstractPart;
  */
 class CspViolationEmail extends NotificationEmail
 {
-    public function __construct(Headers $headers = null, AbstractPart $body = null)
+    public function __construct(?Headers $headers = null, ?AbstractPart $body = null)
     {
         parent::__construct($headers, $body);
         $this->htmlTemplate('notification/csp_violation.html.twig');

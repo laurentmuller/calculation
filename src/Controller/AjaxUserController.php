@@ -45,9 +45,9 @@ class AjaxUserController extends AbstractController
     #[Get(path: '/check/user/email', name: 'ajax_check_user_email')]
     public function checkEmail(
         #[MapQueryParameter]
-        string $email = null,
+        ?string $email = null,
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
-        int $id = null,
+        ?int $id = null,
     ): JsonResponse {
         $message = null;
         if (!StringUtils::isString($email)) {
@@ -75,9 +75,9 @@ class AjaxUserController extends AbstractController
     #[Get(path: '/check/user/name', name: 'ajax_check_user_name')]
     public function checkName(
         #[MapQueryParameter]
-        string $username = null,
+        ?string $username = null,
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
-        int $id = null,
+        ?int $id = null,
     ): JsonResponse {
         $message = null;
         if (!StringUtils::isString($username)) {
@@ -103,7 +103,7 @@ class AjaxUserController extends AbstractController
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[Get(path: '/check/user', name: 'ajax_check_user')]
-    public function checkUser(#[MapQueryParameter] string $user = null): JsonResponse
+    public function checkUser(#[MapQueryParameter] ?string $user = null): JsonResponse
     {
         $message = null;
         if (!StringUtils::isString($user)) {
@@ -130,7 +130,7 @@ class AjaxUserController extends AbstractController
         return $this->repository->findByUsernameOrEmail($usernameOrEmail);
     }
 
-    private function getJsonResponse(string $id = null): JsonResponse
+    private function getJsonResponse(?string $id = null): JsonResponse
     {
         if (null !== $id) {
             return $this->json($this->trans($id, [], 'validators'));

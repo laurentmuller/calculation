@@ -57,7 +57,7 @@ enum HtmlAttribute: string
     /**
      * @psalm-return ($default is null ? (string|null) : string)
      */
-    public function getValue(\DOMNode $node, string $default = null): ?string
+    public function getValue(\DOMNode $node, ?string $default = null): ?string
     {
         if (!$node->attributes instanceof \DOMNamedNodeMap) {
             return $default;

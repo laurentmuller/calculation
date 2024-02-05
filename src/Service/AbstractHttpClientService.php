@@ -155,7 +155,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
      *
      * @return mixed the value, if found; the default otherwise
      */
-    protected function getUrlCacheValue(string $url, mixed $default = null, int|\DateInterval $time = null): mixed
+    protected function getUrlCacheValue(string $url, mixed $default = null, int|\DateInterval|null $time = null): mixed
     {
         $key = $this->getUrlKey($url);
 
@@ -226,7 +226,7 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     /**
      * Sets the last error and log it.
      */
-    protected function setLastError(int $code, string $message, \Exception $exception = null): false
+    protected function setLastError(int $code, string $message, ?\Exception $exception = null): false
     {
         $this->lastError = new HttpClientError($code, $message, $exception);
         if ($exception instanceof \Exception) {

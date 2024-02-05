@@ -35,8 +35,8 @@ trait TranslatorFlashMessageAwareTrait
     protected function errorTrans(
         string $id,
         array $parameters = [],
-        string $domain = null,
-        string $locale = null
+        ?string $domain = null,
+        ?string $locale = null
     ): string {
         $message = $this->trans($id, $parameters, $domain, $locale);
         $this->error($message);
@@ -59,8 +59,8 @@ trait TranslatorFlashMessageAwareTrait
     protected function infoTrans(
         string $id,
         array $parameters = [],
-        string $domain = null,
-        string $locale = null
+        ?string $domain = null,
+        ?string $locale = null
     ): string {
         $message = $this->trans($id, $parameters, $domain, $locale);
         $this->info($message);
@@ -83,8 +83,8 @@ trait TranslatorFlashMessageAwareTrait
     protected function successTrans(
         string $id,
         array $parameters = [],
-        string $domain = null,
-        string $locale = null
+        ?string $domain = null,
+        ?string $locale = null
     ): string {
         $message = $this->trans($id, $parameters, $domain, $locale);
         $this->success($message);
@@ -107,8 +107,8 @@ trait TranslatorFlashMessageAwareTrait
     protected function warningTrans(
         string $id,
         array $parameters = [],
-        string $domain = null,
-        string $locale = null
+        ?string $domain = null,
+        ?string $locale = null
     ): string {
         $message = $this->trans($id, $parameters, $domain, $locale);
         $this->warning($message);

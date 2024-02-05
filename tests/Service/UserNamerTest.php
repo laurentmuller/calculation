@@ -36,7 +36,7 @@ class UserNamerTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getBaseNames')]
-    public function testBaseName(string $expected, int $value, ImageSize $size, ImageExtension|string $ext = null): void
+    public function testBaseName(string $expected, int $value, ImageSize $size, ImageExtension|string|null $ext = null): void
     {
         $result = UserNamer::getBaseName($value, $size, $ext);
         self::assertSame($result, $expected);

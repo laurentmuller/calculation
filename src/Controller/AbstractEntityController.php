@@ -241,7 +241,7 @@ abstract class AbstractEntityController extends AbstractController
     protected function redirectToDefaultRoute(
         Request $request,
         EntityInterface|int|null $item = 0,
-        string $route = null
+        ?string $route = null
     ): RedirectResponse {
         return $this->getUrlGenerator()->redirect($request, $item, $route ?? $this->getDefaultRoute());
     }
@@ -321,7 +321,7 @@ abstract class AbstractEntityController extends AbstractController
     protected function updateQueryParameters(
         Request $request,
         array &$parameters,
-        EntityInterface|int $id = null
+        EntityInterface|int|null $id = null
     ): void {
         $params = \array_merge($request->query->all(), $parameters['params'] ?? []);
         if (!isset($params['id'])) {

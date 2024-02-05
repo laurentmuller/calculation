@@ -88,7 +88,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
      *
      * @param ?string $name the new name
      */
-    public function clone(string $name = null): self
+    public function clone(?string $name = null): self
     {
         $copy = clone $this;
         if (null !== $name) {

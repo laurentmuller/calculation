@@ -21,30 +21,22 @@ use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\Set\TwigSetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    // bootstrap files
-    $rectorConfig->bootstrapFiles([__DIR__ . '/vendor/autoload.php']);
-
-    // paths
-    $rectorConfig->paths([
+return RectorConfig::configure()
+    ->withBootstrapFiles([
+        __DIR__ . '/vendor/autoload.php',
+    ])->withPaths([
         __DIR__ . '/config',
         __DIR__ . '/src',
         __DIR__ . '/tests',
         __DIR__ . '/public',
-    ]);
-
-    // rules to skip
-    $rectorConfig->skip([
+    ])->withSkip([
         AddSeeTestAnnotationRector::class,
         DisallowedEmptyRuleFixerRector::class,
         PreferPHPUnitThisCallRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class => [
             __DIR__ . '/src/Form/DataTransformer/EntityTransformer.php',
         ],
-    ]);
-
-    // rules list to apply
-    $rectorConfig->sets([
+    ])->withSets([
         // global
         SetList::PHP_82,
         SetList::CODE_QUALITY,
@@ -65,4 +57,3 @@ return static function (RectorConfig $rectorConfig): void {
         TwigSetList::TWIG_240,
         TwigSetList::TWIG_UNDERSCORE_TO_NAMESPACE,
     ]);
-};

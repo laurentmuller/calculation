@@ -56,7 +56,7 @@ final class StringUtils
      *
      * The first character will be uppercase, all others lowercase:
      * <pre>
-     * 'my first Car' => 'My first car'
+     * 'my first Car' = 'My first car'
      * </pre>
      *
      * @param string $string the string to capitalize
@@ -205,7 +205,7 @@ final class StringUtils
     /**
      * Returns if the given string is not null nor is empty.
      *
-     * @psalm-assert-if-true string $str
+     * @psalm-assert-if-true non-empty-string $str
      */
     public static function isString(?string $str): bool
     {
@@ -273,18 +273,6 @@ final class StringUtils
     public static function startWith(string $haystack, string $needle, bool $ignore_case = true): bool
     {
         return self::unicode($haystack, $ignore_case)->startsWith($needle);
-    }
-
-    /**
-     * Ensure that the given variable is a string.
-     *
-     * @param mixed $var the variable to cast
-     *
-     * @return string the variable as string
-     */
-    public static function toString(mixed $var): string
-    {
-        return \is_string($var) ? $var : (string) $var;
     }
 
     /**

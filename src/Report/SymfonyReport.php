@@ -47,35 +47,25 @@ class SymfonyReport extends AbstractReport
     {
         $this->AddPage();
         $this->outputInfo($this->service);
-
         $info = $this->service;
-        $bundles = $info->getBundles();
-        if ([] !== $bundles) {
-            $this->Ln(self::LINE_HEIGHT / 2.0);
+        if ([] !== $bundles = $info->getBundles()) {
+            $this->halfLineBreak();
             $this->outputBundles($bundles);
         }
-
-        $packages = $info->getRuntimePackages();
-        if ([] !== $packages) {
-            $this->Ln(self::LINE_HEIGHT / 2.0);
+        if ([] !== $packages = $info->getRuntimePackages()) {
+            $this->halfLineBreak();
             $this->outputPackages('Packages', $packages);
         }
-
-        $packages = $info->getDebugPackages();
-        if ([] !== $packages) {
-            $this->Ln(self::LINE_HEIGHT / 2.0);
+        if ([] !== $packages = $info->getDebugPackages()) {
+            $this->halfLineBreak();
             $this->outputPackages('Debug Packages', $packages);
         }
-
-        $routes = $info->getRuntimeRoutes();
-        if ([] !== $routes) {
-            $this->Ln(self::LINE_HEIGHT / 2.0);
+        if ([] !== $routes = $info->getRuntimeRoutes()) {
+            $this->halfLineBreak();
             $this->outputRoutes('Routes', $routes);
         }
-
-        $routes = $info->getDebugRoutes();
-        if ([] !== $routes) {
-            $this->Ln(self::LINE_HEIGHT / 2.0);
+        if ([] !== $routes = $info->getDebugRoutes()) {
+            $this->halfLineBreak();
             $this->outputRoutes('Debug Routes', $routes);
         }
 
@@ -87,12 +77,16 @@ class SymfonyReport extends AbstractReport
         if ($enabled) {
             return null;
         }
-
-        if (!$this->style instanceof PdfStyle) {
-            $this->style = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
+        if ($this->style instanceof PdfStyle) {
+            return $this->style;
         }
 
-        return $this->style;
+        return $this->style = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGray());
+    }
+
+    private function halfLineBreak(): void
+    {
+        $this->Ln(self::LINE_HEIGHT / 2.0);
     }
 
     /**
@@ -107,15 +101,17 @@ class SymfonyReport extends AbstractReport
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 30),
-                PdfColumn::left('Path', 70)
+                PdfColumn::left('Path', 70),
+                PdfColumn::right('Size', 18, true)
             )
             ->setGroupBeforeHeader(true)
             ->setGroupKey('Bundles')
             ->outputHeaders();
         foreach ($bundles as $bundle) {
             $table->startRow()
-                ->addCell(new PdfCell(text: $bundle['name'], link: $bundle['homepage'] ?? ''))
+                ->addCell(new PdfCell(text: $bundle['name'], link: $bundle['homepage']))
                 ->add($bundle['path'])
+                ->add($bundle['size'])
                 ->endRow();
         }
     }
@@ -137,6 +133,7 @@ class SymfonyReport extends AbstractReport
         $this->outputRow($table, 'Environment', $this->trans($info->getEnvironment()))
             ->outputRow($table, 'Running Mode', $this->trans($info->getMode()))
             ->outputRow($table, 'Version status', $info->getMaintenanceStatus())
+            ->outputRowEnabled($table, 'Long-Term support', $info->isLongTermSupport())
             ->outputRow($table, 'End of maintenance', $info->getEndOfMaintenance())
             ->outputRow($table, 'End of product life', $info->getEndOfLife());
 
@@ -144,7 +141,8 @@ class SymfonyReport extends AbstractReport
         $table->setGroupKey('Parameters');
         $this->outputRow($table, 'Intl Locale', $info->getLocaleName())
             ->outputRow($table, 'Timezone', $info->getTimeZone())
-            ->outputRow($table, 'Charset', $info->getCharset());
+            ->outputRow($table, 'Charset', $info->getCharset())
+            ->outputRow($table, 'Architecture', $info->getArchitecture());
 
         $this->addBookmark('Extensions', false, 1);
         $table->setGroupKey('Extensions');
@@ -157,7 +155,8 @@ class SymfonyReport extends AbstractReport
         $table->setGroupKey('Directories');
         $this->outputRow($table, 'Project', $info->getProjectDir())
             ->outputRow($table, 'Logs', $info->getLogInfo())
-            ->outputRow($table, 'Cache', $info->getCacheInfo());
+            ->outputRow($table, 'Cache', $info->getCacheInfo())
+            ->outputRow($table, 'Build', $info->getBuildInfo());
     }
 
     /**
@@ -199,8 +198,8 @@ class SymfonyReport extends AbstractReport
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
                 PdfColumn::left('Name', 40),
-                PdfColumn::left('Path', 70),
-                PdfColumn::left('Method', 22, true)
+                PdfColumn::left('Path', 60),
+                PdfColumn::left('Method', 25, true)
             )
             ->setGroupBeforeHeader(true)
             ->setGroupKey($title)

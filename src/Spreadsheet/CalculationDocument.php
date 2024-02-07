@@ -211,9 +211,9 @@ class CalculationDocument extends AbstractDocument
                 ->setBorderStyle(Border::BORDER_NONE);
         }
 
-        $sheet->getColumnDimension('A')->setWidth(8.5, 'cm');
-        foreach (\range('B', 'E') as $column) {
-            $sheet->getColumnDimension($column)->setWidth(2.0, 'cm');
+        $sheet->getColumnDimensionByColumn(1)->setWidth(8.5, 'cm');
+        foreach (\range(2, 5) as $column) {
+            $sheet->getColumnDimensionByColumn($column)->setWidth(2.0, 'cm');
         }
         $this->renderTimestampable($sheet, $calculation, $lastRow + 1);
 

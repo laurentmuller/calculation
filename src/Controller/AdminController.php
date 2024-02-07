@@ -23,13 +23,14 @@ use App\Model\Role;
 use App\Service\ApplicationService;
 use App\Service\CacheService;
 use App\Service\RoleBuilderService;
-use App\Service\SymfonyInfoService;
 use App\Traits\RoleTranslatorTrait;
+use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -49,7 +50,7 @@ class AdminController extends AbstractController
     #[GetPost(path: '/clear', name: 'admin_clear')]
     public function clearCache(
         Request $request,
-        SymfonyInfoService $info,
+        KernelInterface $kernel,
         CacheService $service,
         LoggerInterface $logger
     ): Response {
@@ -80,7 +81,7 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/clear_cache.html.twig', [
-            'size' => $info->getCacheSize(),
+            'size' => FileUtils::formatSize($kernel->getCacheDir()),
             'pools' => $pools,
             'form' => $form,
         ]);

@@ -37,7 +37,7 @@ class LogService implements ServiceSubscriberInterface
     /**
      * The cache timeout (15 minutes).
      */
-    private const CACHE_TIMEOUT = 60 * 15;
+    private const CACHE_TIMEOUT = 900;
 
     /**
      * The key to cache result.

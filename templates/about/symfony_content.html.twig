@@ -17,6 +17,7 @@
         {{- bundle.name -}}{%- if bundle.homepage|default(false) %}{{- linkExternal(bundle.homepage, '', 'mx-1 d-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
     </td>
     <td class="v">{{ bundle.path }}</td>
+    <td class="v text-percent">{{ bundle.size }}</td>
 </tr>
 {%- endmacro %}
 {% macro headerPackage() %}
@@ -73,8 +74,10 @@
             {{ tools.rowInfo('Running Mode', service.mode|trans) }}
             {{ tools.rowInfo('Status', service.maintenanceStatus) }}
             {{ tools.rowInfo('Release', service.releaseDate) }}
+            {{ tools.rowInfoBoolean('Long-Term support', service.longTermSupport|boolean) }}
             {{ tools.rowInfo('End of maintenance', service.endOfMaintenance) }}
             {{ tools.rowInfo('End of product life', service.endOfLife) }}
+
         </tbody>
     </table>
     {# Configuration #}
@@ -88,6 +91,7 @@
                 {{ tools.rowInfo('Locale', service.localeName) }}
                 {{ tools.rowInfo('Timezone', service.timezone) }}
                 {{ tools.rowInfo('Charset', service.charset) }}
+                {{ tools.rowInfo('Architecture', service.architecture) }}
                 </tbody>
             </table>
         </div>
@@ -111,6 +115,7 @@
                 {{ tools.rowInfo('Project', service.projectDir) }}
                 {{ tools.rowInfo('Logs', service.logInfo) }}
                 {{ tools.rowInfo('Cache', service.cacheInfo) }}
+                {{ tools.rowInfo('Build', service.buildInfo) }}
                 </tbody>
             </table>
         </div>
@@ -123,6 +128,7 @@
                         <tr>
                             <th class="fw-normal">Name</th>
                             <th class="fw-normal">Path</th>
+                            <th class="fw-normal text-percent">Size</th>
                         </tr>
                     </thead>
                     <tbody>

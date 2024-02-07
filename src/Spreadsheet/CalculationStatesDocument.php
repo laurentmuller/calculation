@@ -47,9 +47,8 @@ class CalculationStatesDocument extends AbstractArrayDocument
                 $entity->isEditable(),
                 $entity->countCalculations(),
             ]);
-            $col = $sheet->stringFromColumnIndex(5);
             $color = new Color(\substr($entity->getColor(), 1));
-            $fill = $sheet->getStyle("$col$row")
+            $fill = $sheet->getStyle([5, $row])
                 ->getFill();
             $fill->setFillType(Fill::FILL_SOLID)
                 ->setStartColor($color);

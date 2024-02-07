@@ -18,10 +18,15 @@ return static function (FrameworkConfig $config): void {
     // used by the ApplicationService
     $cache->pool('cache.app.service')
         ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime(3600);
+        ->defaultLifetime(3600); // 1 hour
 
     // used by the UserService
     $config->cache()->pool('cache.user.service')
         ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime(3600);
+        ->defaultLifetime(3600); // 1 hour
+
+    // used by the SymfonyInfoService
+    $config->cache()->pool('cache.symfony.service')
+        ->adapters('cache.adapter.filesystem')
+        ->defaultLifetime(86_400); // 1 day
 };

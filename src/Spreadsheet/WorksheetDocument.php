@@ -14,8 +14,11 @@ namespace App\Spreadsheet;
 
 use App\Model\CustomerInformation;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Shared\StringHelper;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\Style;
@@ -35,12 +38,12 @@ class WorksheetDocument extends Worksheet
     private const FORMAT_DATE_TIME = 'dd/mm/yyyy hh:mm';
 
     /**
-     * The identifier format ('000000').
+     * The identifier format.
      */
     private const FORMAT_ID = '000000';
 
     /**
-     * The integer format ('#,##0').
+     * The integer format.
      */
     private const FORMAT_INT = '#,##0';
 
@@ -61,10 +64,7 @@ class WorksheetDocument extends Worksheet
      */
     private array $booleanFormats = [];
 
-    /**
-     * @param string $title
-     */
-    public function __construct(?SpreadsheetDocument $parent = null, $title = 'Worksheet')
+    public function __construct(?SpreadsheetDocument $parent = null, string $title = 'Worksheet')
     {
         parent::__construct($parent, $title);
         $this->setPageSizeA4()->setPagePortrait();
@@ -121,13 +121,27 @@ class WorksheetDocument extends Worksheet
      * @param int  $startRow    the index of first row (1 = First row)
      * @param ?int $endRow      the index of the last cell or null to use the start row
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     * @throws Exception if an exception occurs
      */
     public function mergeContent(int $startColumn, int $endColumn, int $startRow, ?int $endRow = null): static
     {
         $this->mergeCells([$startColumn, $startRow, $endColumn, $endRow ?? $startRow]);
 
         return $this;
+    }
+
+    /**
+     * Re-bind parent.
+     *
+     * @throws Exception if the given $parent is not instance of WorksheetDocument
+     */
+    public function rebindParent(Spreadsheet $parent): static
+    {
+        if (!$parent instanceof SpreadsheetDocument) {
+            throw new Exception(\sprintf('%s expected, %s given.', SpreadsheetDocument::class, \get_debug_type($parent)));
+        }
+
+        return parent::rebindParent($parent);
     }
 
     /**
@@ -138,13 +152,19 @@ class WorksheetDocument extends Worksheet
     public function setAutoSize(int ...$columnIndexes): static
     {
         foreach ($columnIndexes as $columnIndex) {
-            $name = $this->stringFromColumnIndex($columnIndex);
-            $this->getColumnDimension($name)->setAutoSize(true);
+            $this->getColumnDimensionByColumn($columnIndex)->setAutoSize(true);
         }
 
         return $this;
     }
 
+    /**
+     * Sets content of the given cell.
+     *
+     * @param int   $columnIndex the column index ('A' = First column)
+     * @param int   $rowIndex    the row index (1 = First row)
+     * @param mixed $value       the value to set
+     */
     public function setCellContent(int $columnIndex, int $rowIndex, mixed $value): static
     {
         if (null !== $value && '' !== $value) {
@@ -164,11 +184,11 @@ class WorksheetDocument extends Worksheet
      * Sets image at the given coordinate.
      *
      * @param string $path        the image path
-     * @param string $coordinates the coordinates (eg: 'A1')
+     * @param string $coordinates the coordinates (for example: 'A1')
      * @param int    $width       the image width
      * @param int    $height      the image height
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     * @throws Exception if an exception occurs
      */
     public function setCellImage(string $path, string $coordinates, int $width, int $height): static
     {
@@ -181,14 +201,53 @@ class WorksheetDocument extends Worksheet
             ->setOffsetX(2)
             ->setOffsetY(2)
             ->setWorksheet($this);
-        [$columnIndex, $rowIndex] = Coordinate::coordinateFromString($coordinates);
-        $columnDimension = $this->getColumnDimension($columnIndex);
+        [$columnIndex, $rowIndex] = Coordinate::indexesFromString($coordinates);
+        $columnDimension = $this->getColumnDimensionByColumn($columnIndex);
         if ($width > $columnDimension->getWidth()) {
             $columnDimension->setWidth($width);
         }
-        $rowDimension = $this->getRowDimension((int) $rowIndex);
+        $rowDimension = $this->getRowDimension($rowIndex);
         if ($height > $rowDimension->getRowHeight()) {
             $rowDimension->setRowHeight($height);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets a hyperlink for the given cell.
+     *
+     * Do nothing if the link is empty.
+     *
+     * @param int    $columnIndex the column index ('A' = First column)
+     * @param int    $rowIndex    the row index (1 = First row)
+     * @param string $link        the hyperlink to set
+     * @param string $color       the color of the font or an empty string if none
+     * @param bool   $underline   true to set the underlined font
+     */
+    public function setCellLink(
+        int $columnIndex,
+        int $rowIndex,
+        string $link,
+        string $color = Color::COLOR_BLUE,
+        bool $underline = false
+    ): static {
+        if ('' === $link) {
+            return $this;
+        }
+
+        $cell = $this->getCell([$columnIndex, $rowIndex]);
+        $cell->getHyperlink()->setUrl($link);
+        if ('' === $color && !$underline) {
+            return $this;
+        }
+
+        $font = $cell->getStyle()->getFont();
+        if ('' !== $color) {
+            $font->getColor()->setARGB($color);
+        }
+        if ($underline) {
+            $font->setUnderline($underline);
         }
 
         return $this;
@@ -219,8 +278,7 @@ class WorksheetDocument extends Worksheet
      */
     public function setColumnWidth(int $columnIndex, int $width, bool $wrapText = false): static
     {
-        $name = $this->stringFromColumnIndex($columnIndex);
-        $this->getColumnDimension($name)->setWidth($width);
+        $this->getColumnDimensionByColumn($columnIndex)->setWidth($width);
 
         return $wrapText ? $this->setWrapText($columnIndex) : $this;
     }
@@ -229,12 +287,11 @@ class WorksheetDocument extends Worksheet
      * Sets the foreground color for the given column.
      *
      * @param int    $columnIndex   the column index ('A' = First column)
-     * @param string $color         the hexadecimal color or an empty string ("") for black color
+     * @param string $color         the hexadecimal color or an empty string for black color
      * @param bool   $includeHeader true to set color for all rows; false to skip the first row
      */
     public function setForeground(int $columnIndex, string $color, bool $includeHeader = false): static
     {
-        $name = $this->stringFromColumnIndex($columnIndex);
         $style = $this->getColumnStyle($columnIndex);
         $fontColor = $style->getFont()->getColor();
         if (\strlen($color) > 6) {
@@ -243,13 +300,18 @@ class WorksheetDocument extends Worksheet
             $fontColor->setRGB($color);
         }
         if (!$includeHeader) {
-            $this->getStyle("{$name}1")->getFont()->getColor()
-                ->setARGB();
+            $this->getStyle([$columnIndex, 1])->getFont()->getColor()->setARGB();
         }
 
         return $this;
     }
 
+    /**
+     * Sets the format for the given column index.
+     *
+     * @param int    $columnIndex the column index ('A' = First column)
+     * @param string $format      the format to apply
+     */
     public function setFormat(int $columnIndex, string $format): static
     {
         $this->getColumnStyle($columnIndex)
@@ -260,7 +322,7 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
-     * Sets the amount format ('#,##0.00') for the given column.
+     * Sets the amount format for the given column.
      *
      * @param int  $columnIndex the column index ('A' = First column)
      * @param bool $zeroInRed   if true, the red color is used when values are smaller than or equal to 0
@@ -333,7 +395,7 @@ class WorksheetDocument extends Worksheet
     }
 
     /**
-     * Sets the integer format ('#,##0') for the given column.
+     * Sets the integer format for the given column.
      *
      * @param int $columnIndex the column index ('A' = First column)
      */
@@ -372,7 +434,7 @@ class WorksheetDocument extends Worksheet
      *
      * @return int this function return the given row index + 1
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if an exception occurs
+     * @throws Exception if an exception occurs
      */
     public function setHeaders(array $headers, int $columnIndex = 1, int $rowIndex = 1): int
     {
@@ -479,14 +541,15 @@ class WorksheetDocument extends Worksheet
      * @param bool   $updateFormulaCellReferences Flag indicating whether cell references in formulae should
      *                                            be updated to reflect the new sheet name.
      *                                            This should be left as the default true, unless you are
-     *                                            certain that no formula cells on any worksheet contain
+     *                                            certain no formula cells on any worksheet contain
      *                                            references to this worksheet
-     * @param bool   $validate                    False to skip validation of new title. WARNING: This should only be set
-     *                                            at parse time (by Readers), where titles can be assumed to be valid.
+     * @param bool   $validate                    False to skip validation of new title. WARNING: This should only be
+     *                                            set at parse time (by Readers), where titles can be assumed to be
+     *                                            valid.
      *
      * @return $this
      */
-    public function setTitle($title, $updateFormulaCellReferences = true, $validate = true): static
+    public function setTitle(string $title, bool $updateFormulaCellReferences = true, bool $validate = true): static
     {
         return parent::setTitle($this->validateTitle($title), $updateFormulaCellReferences, $validate);
     }

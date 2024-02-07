@@ -96,14 +96,6 @@ class StringUtilsTest extends TestCase
         yield ['fake', 'FA', true, true];
     }
 
-    public static function getToString(): \Iterator
-    {
-        yield [null, '', true];
-        yield [0, '0', true];
-        yield [1.0, '0', false];
-        yield ['a', '1', false];
-    }
-
     #[\PHPUnit\Framework\Attributes\DataProvider('getAscii')]
     public function testAscii(string $value, string $expected): void
     {
@@ -228,17 +220,6 @@ class StringUtilsTest extends TestCase
     {
         $result = StringUtils::startWith($haystack, $needle, $ignore_case);
         self::assertSame($expected, $result);
-    }
-
-    #[\PHPUnit\Framework\Attributes\DataProvider('getToString')]
-    public function testToString(mixed $var, string $expected, bool $equal): void
-    {
-        $result = StringUtils::toString($var);
-        if ($equal) {
-            self::assertSame($result, $expected);
-        } else {
-            self::assertNotSame($result, $expected);
-        }
     }
 
     private static function getVarArray(): string

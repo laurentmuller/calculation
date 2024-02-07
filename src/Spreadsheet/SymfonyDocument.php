@@ -41,24 +41,19 @@ class SymfonyDocument extends AbstractDocument
         $this->start($this->trans('about.symfony_version', ['%version%' => $info->getVersion()]));
         $this->setActiveTitle('Configuration', $this->controller);
         $this->outputInfo($info);
-        $bundles = $info->getBundles();
-        if ([] !== $bundles) {
+        if ([] !== $bundles = $info->getBundles()) {
             $this->outputBundles($bundles);
         }
-        $packages = $info->getRuntimePackages();
-        if ([] !== $packages) {
+        if ([] !== $packages = $info->getRuntimePackages()) {
             $this->outputPackages('Packages', $packages);
         }
-        $packages = $info->getDebugPackages();
-        if ([] !== $packages) {
+        if ([] !== $packages = $info->getDebugPackages()) {
             $this->outputPackages('Debug Packages', $packages);
         }
-        $routes = $info->getRuntimeRoutes();
-        if ([] !== $routes) {
+        if ([] !== $routes = $info->getRuntimeRoutes()) {
             $this->outputRoutes('Routes', $routes);
         }
-        $routes = $info->getDebugRoutes();
-        if ([] !== $routes) {
+        if ([] !== $routes = $info->getDebugRoutes()) {
             $this->outputRoutes('Debug Routes', $routes);
         }
         $this->setActiveSheetIndex(0);
@@ -77,9 +72,17 @@ class SymfonyDocument extends AbstractDocument
         $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
             'Path' => HeaderFormat::instance(),
+            'Size' => HeaderFormat::right(),
         ]);
         foreach ($bundles as $bundle) {
-            $this->outputRow($sheet, $row++, $bundle['name'], $bundle['path']);
+            $this->outputLinkRow(
+                $sheet,
+                $row++,
+                $bundle['homepage'],
+                $bundle['name'],
+                $bundle['path'],
+                $bundle['size']
+            );
         }
         $sheet->setAutoSize(1, 2)->finish();
     }
@@ -112,13 +115,15 @@ class SymfonyDocument extends AbstractDocument
             ->outputRow($sheet, $row++, 'Environment', $this->trans($info->getEnvironment()))
             ->outputRow($sheet, $row++, 'Running Mode', $this->trans($info->getMode()))
             ->outputRow($sheet, $row++, 'Version status', $info->getMaintenanceStatus())
+            ->outputRowEnabled($sheet, $row++, 'Long-Term support', $info->isLongTermSupport())
             ->outputRow($sheet, $row++, 'End of maintenance', $info->getEndOfMaintenance())
             ->outputRow($sheet, $row++, 'End of product life', $info->getEndOfLife());
 
         $this->outputGroup($sheet, $row++, 'Parameters')
             ->outputRow($sheet, $row++, 'Intl Locale', $info->getLocaleName())
             ->outputRow($sheet, $row++, 'Timezone', $info->getTimeZone())
-            ->outputRow($sheet, $row++, 'Charset', $info->getCharset());
+            ->outputRow($sheet, $row++, 'Charset', $info->getCharset())
+            ->outputRow($sheet, $row++, 'Architecture', $info->getArchitecture());
 
         $this->outputGroup($sheet, $row++, 'Extensions')
             ->outputRowEnabled($sheet, $row++, 'Debug', $app->isDebug())
@@ -129,10 +134,17 @@ class SymfonyDocument extends AbstractDocument
         $this->outputGroup($sheet, $row++, 'Directories')
             ->outputRow($sheet, $row++, 'Project', $info->getProjectDir())
             ->outputRow($sheet, $row++, 'Logs', $info->getLogInfo())
-            ->outputRow($sheet, $row, 'Cache', $info->getCacheInfo());
+            ->outputRow($sheet, $row, 'Cache', $info->getCacheInfo())
+            ->outputRow($sheet, $row, 'Build', $info->getBuildInfo());
 
         $sheet->setAutoSize(1, 2)
             ->finish();
+    }
+
+    private function outputLinkRow(WorksheetDocument $sheet, int $row, string $link, string ...$values): void
+    {
+        $sheet->setRowValues($row, $values)
+            ->setCellLink(1, $row, $link);
     }
 
     /**
@@ -150,9 +162,10 @@ class SymfonyDocument extends AbstractDocument
             'Description' => HeaderFormat::instance(),
         ], 1, $row++);
         foreach ($packages as $package) {
-            $this->outputRow(
+            $this->outputLinkRow(
                 $sheet,
                 $row++,
+                $package['homepage'],
                 $package['name'],
                 $package['version'],
                 $package['description']

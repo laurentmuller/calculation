@@ -46,8 +46,7 @@ class GlobalMarginsDocument extends AbstractArrayDocument
         }
 
         for ($i = 1; $i < 5; ++$i) {
-            $name = $sheet->stringFromColumnIndex($i);
-            $sheet->getColumnDimension($name)
+            $sheet->getColumnDimensionByColumn($i)
                 ->setAutoSize(false)
                 ->setWidth(20);
         }

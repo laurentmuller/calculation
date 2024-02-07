@@ -40,14 +40,18 @@ class HeaderFooter
      */
     final public const RIGHT_SECTION = '&R';
 
+    // the date and time format
     private const DATE_AND_TIME = '&D - &T';
-
+    // the initial font size
     private const INITIAL_FONT_SIZE = 11;
-
+    // the page/pages format
     private const PAGE_AND_PAGES = 'Page &P / &N';
 
+    // the center text
     private string $centerText = '';
+    // the left text
     private string $leftText = '';
+    // the right text
     private string $rightText = '';
 
     /**
@@ -125,11 +129,12 @@ class HeaderFooter
      */
     public function apply(Worksheet $sheet): self
     {
+        $content = $this->getContent();
         $headerFooter = $sheet->getHeaderFooter();
         if ($this->isHeader) {
-            $headerFooter->setOddHeader($this->getContent());
+            $headerFooter->setOddHeader($content);
         } else {
-            $headerFooter->setOddFooter($this->getContent());
+            $headerFooter->setOddFooter($content);
         }
 
         return $this;
@@ -157,13 +162,13 @@ class HeaderFooter
     private function getContent(): string
     {
         $content = '';
-        if (!empty($this->leftText)) {
+        if (StringUtils::isString($this->leftText)) {
             $content .= self::LEFT_SECTION . $this->leftText;
         }
-        if (!empty($this->centerText)) {
+        if (StringUtils::isString($this->centerText)) {
             $content .= self::CENTER_SECTION . $this->centerText;
         }
-        if (!empty($this->rightText)) {
+        if (StringUtils::isString($this->rightText)) {
             $content .= self::RIGHT_SECTION . $this->rightText;
         }
 
@@ -172,7 +177,7 @@ class HeaderFooter
 
     private function updateText(string &$value, ?string $text, bool $bold = false, bool $clean = false): self
     {
-        if (null === $text || '' === $text) {
+        if (!StringUtils::isString($text)) {
             return $this;
         }
         if ('' !== $value) {

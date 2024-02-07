@@ -15,6 +15,7 @@ namespace App\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Traits\TranslatorTrait;
 use App\Utils\StringUtils;
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -32,7 +33,7 @@ class SpreadsheetDocument extends Spreadsheet
     private ?string $title = null;
 
     /**
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     public function __construct(private readonly TranslatorInterface $translator)
     {
@@ -46,19 +47,18 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Add external sheet.
      *
-     * @param Worksheet $worksheet  External sheet to add
-     * @param int|null  $sheetIndex Index where sheet should go (0,1,..., or null for last)
+     * @param Worksheet $worksheet  the external sheet to add
+     * @param ?int      $sheetIndex the index where sheet should go (0, 1, ... or null for last)
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if the given worksheet is not instance of WorksheetDocument
+     * @throws Exception if the given worksheet is not instance of WorksheetDocument
      */
-    public function addExternalSheet(Worksheet $worksheet, $sheetIndex = null): WorksheetDocument
+    public function addExternalSheet(Worksheet $worksheet, ?int $sheetIndex = null): WorksheetDocument
     {
         if (!$worksheet instanceof WorksheetDocument) {
-            throw new \PhpOffice\PhpSpreadsheet\Exception(\sprintf('%s expected, %s given.', WorksheetDocument::class, \get_debug_type($worksheet)));
+            throw new Exception(\sprintf('%s expected, %s given.', WorksheetDocument::class, \get_debug_type($worksheet)));
         }
 
-        /** @var WorksheetDocument $worksheet */
-        $worksheet = parent::addExternalSheet($worksheet, $sheetIndex);
+        parent::addExternalSheet($worksheet, $sheetIndex);
 
         return $worksheet;
     }
@@ -66,19 +66,18 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Add sheet.
      *
-     * @param Worksheet $worksheet  The worksheet to add
-     * @param int|null  $sheetIndex Index where sheet should go (0,1,..., or null for last)
+     * @param Worksheet $worksheet  the worksheet to add
+     * @param ?int      $sheetIndex the index where sheet should go (0, 1, ... or null for last)
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception if the given worksheet is not instance of WorksheetDocument
+     * @throws Exception if the given worksheet is not instance of WorksheetDocument
      */
-    public function addSheet(Worksheet $worksheet, $sheetIndex = null): WorksheetDocument
+    public function addSheet(Worksheet $worksheet, ?int $sheetIndex = null): WorksheetDocument
     {
         if (!$worksheet instanceof WorksheetDocument) {
-            throw new \PhpOffice\PhpSpreadsheet\Exception(\sprintf('%s expected, %s given.', WorksheetDocument::class, \get_debug_type($worksheet)));
+            throw new Exception(\sprintf('%s expected, %s given.', WorksheetDocument::class, \get_debug_type($worksheet)));
         }
 
-        /** @var WorksheetDocument $worksheet */
-        $worksheet = parent::addSheet($worksheet, $sheetIndex);
+        parent::addSheet($worksheet, $sheetIndex);
 
         return $worksheet;
     }
@@ -86,11 +85,11 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Create a sheet and add it to this workbook.
      *
-     * @param int|null $sheetIndex Index where sheet should go (0,1,..., or null for last)
+     * @param ?int $sheetIndex the index where sheet should go (0, 1, ..., or null for last)
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
-    public function createSheet($sheetIndex = null): WorksheetDocument
+    public function createSheet(?int $sheetIndex = null): WorksheetDocument
     {
         return $this->addSheet(new WorksheetDocument($this), $sheetIndex);
     }
@@ -101,14 +100,17 @@ class SpreadsheetDocument extends Spreadsheet
      * The created sheet is activated.
      *
      * @param ?string $title      the title of the worksheet
-     * @param ?int    $sheetIndex the index where worksheet should go (0,1,..., or null for last)
+     * @param ?int    $sheetIndex the index where worksheet should go (0, 1, ..., or null for last)
      *
      * @return WorksheetDocument the newly created worksheet
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
-    public function createSheetAndTitle(AbstractController $controller, ?string $title = null, ?int $sheetIndex = null): WorksheetDocument
-    {
+    public function createSheetAndTitle(
+        AbstractController $controller,
+        ?string $title = null,
+        ?int $sheetIndex = null
+    ): WorksheetDocument {
         $sheet = $this->createSheet($sheetIndex);
         if (null !== $title) {
             $sheet->setTitle($title);
@@ -122,7 +124,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Get active sheet.
+     * Get the active sheet.
      */
     public function getActiveSheet(): WorksheetDocument
     {
@@ -146,13 +148,13 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Get sheet by index.
+     * Get sheet by the given index.
      *
      * @param int $sheetIndex Sheet index
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
-    public function getSheet($sheetIndex): WorksheetDocument
+    public function getSheet(int $sheetIndex): WorksheetDocument
     {
         /** @psalm-var WorksheetDocument $sheet */
         $sheet = parent::getSheet($sheetIndex);
@@ -165,7 +167,7 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param string $worksheetName Sheet name
      */
-    public function getSheetByName($worksheetName): ?WorksheetDocument
+    public function getSheetByName(string $worksheetName): ?WorksheetDocument
     {
         /** @psalm-var WorksheetDocument|null $sheet */
         $sheet = parent::getSheetByName($worksheetName);
@@ -176,7 +178,7 @@ class SpreadsheetDocument extends Spreadsheet
     /**
      * Get sheet by name, throwing exception if not found.
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     public function getSheetByNameOrThrow(string $worksheetName): WorksheetDocument
     {
@@ -204,9 +206,9 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param int $worksheetIndex Active sheet index
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
-    public function setActiveSheetIndex($worksheetIndex): WorksheetDocument
+    public function setActiveSheetIndex(int $worksheetIndex): WorksheetDocument
     {
         /** @psalm-var WorksheetDocument $sheet */
         $sheet = parent::setActiveSheetIndex($worksheetIndex);
@@ -219,9 +221,9 @@ class SpreadsheetDocument extends Spreadsheet
      *
      * @param string $worksheetName Sheet title
      *
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
-    public function setActiveSheetIndexByName($worksheetName): WorksheetDocument
+    public function setActiveSheetIndexByName(string $worksheetName): WorksheetDocument
     {
         /** @psalm-var WorksheetDocument $sheet */
         $sheet = parent::setActiveSheetIndexByName($worksheetName);

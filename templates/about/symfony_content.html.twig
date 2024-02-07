@@ -13,20 +13,45 @@
 {%- endmacro %}
 {% macro rowBundle(bundle) -%}
 <tr>
-    <td class="e ps-3">
+    <td class="e">
         {{- bundle.name -}}{%- if bundle.homepage|default(false) %}{{- linkExternal(bundle.homepage, '', 'mx-1 d-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
     </td>
     <td class="v">{{ bundle.path }}</td>
 </tr>
 {%- endmacro %}
+{% macro headerPackage() %}
+<thead>
+    <tr>
+        <th class="fw-normal">Name</th>
+        <th class="fw-normal text-id">Version</th>
+        <th class="fw-normal">Description</th>
+    </tr>
+</thead>
+{% endmacro %}
 {% macro rowPackage(package) -%}
 <tr>
-    <td class="e ps-3">
+    <td class="e">
         {{- package.name -}}{%- if package.homepage %}{{- linkExternal(package.homepage, '', 'mx-1 d-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
     </td>
-    <td class="f text-nowrap">{{ package.version }}</td>
+    <td class="text-id">{{ package.version }}</td>
     <td class="text">{{ package.description }}</td>
 </tr>
+{%- endmacro %}
+{% macro headerRoute() -%}
+<thead>
+    <tr>
+        <th class="fw-normal">Name</th>
+        <th class="fw-normal">Path</th>
+        <th class="fw-normal text-state">Method</th>
+    </tr>
+</thead>
+{%- endmacro %}
+{% macro rowRoute(route) -%}
+<tr>
+    <td class="e">{{ route.name }}</td>
+    <td class="v">{{ route.path }}</td>
+    <td class="v text-state">{{ route.methods }}</td>
+    </tr>
 {%- endmacro %}
 {# parameters #}
 {%- set bundles = service.bundles -%}
@@ -57,18 +82,18 @@
     <div id="symfonyAccordion">
         {# parameters #}
         {{ _self.headerLinkInfo('Parameters', 'parameters') }}
-        <div class="collapse" id="parameters" aria-labelledby="parameters-header" data-bs-parent="#symfonyAccordion">
+        <div class="collapse ps-3" id="parameters" aria-labelledby="parameters-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-sm mb-0">
                 <tbody>
-                {{ tools.rowInfo('Locale', service.localeName, 'ps-3') }}
-                {{ tools.rowInfo('Timezone', service.timezone, 'ps-3') }}
-                {{ tools.rowInfo('Charset', service.charset, 'ps-3') }}
+                {{ tools.rowInfo('Locale', service.localeName) }}
+                {{ tools.rowInfo('Timezone', service.timezone) }}
+                {{ tools.rowInfo('Charset', service.charset) }}
                 </tbody>
             </table>
         </div>
         {# extensions #}
         {{ _self.headerLinkInfo('Extensions', 'extensions') }}
-        <div class="collapse" id="extensions" aria-labelledby="extensions-header" data-bs-parent="#symfonyAccordion">
+        <div class="collapse ps-3" id="extensions" aria-labelledby="extensions-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-sm mb-0">
                 <tbody>
                 {{ tools.rowInfoBoolean('Debug', app.debug ? 'Enabled' : 'Disabled', app.debug) }}
@@ -80,20 +105,26 @@
         </div>
         {# directories #}
         {{ _self.headerLinkInfo('Directories', 'directories') }}
-        <div class="collapse" id="directories" aria-labelledby="directories-header" data-bs-parent="#symfonyAccordion">
+        <div class="collapse ps-3" id="directories" aria-labelledby="directories-header" data-bs-parent="#symfonyAccordion">
             <table class="table table-sm mb-0">
                 <tbody>
-                {{ tools.rowInfo('Project', service.projectDir, 'ps-3') }}
-                {{ tools.rowInfo('Logs', service.logInfo, 'ps-3') }}
-                {{ tools.rowInfo('Cache', service.cacheInfo, 'ps-3') }}
+                {{ tools.rowInfo('Project', service.projectDir) }}
+                {{ tools.rowInfo('Logs', service.logInfo) }}
+                {{ tools.rowInfo('Cache', service.cacheInfo) }}
                 </tbody>
             </table>
         </div>
         {# bundles #}
         {% if bundles|length %}
             {{ _self.headerLinkInfo('Bundles', 'bundles', bundles) }}
-            <div class="collapse" id="bundles" aria-labelledby="bundles-header" data-bs-parent="#symfonyAccordion">
+            <div class="collapse ps-3" id="bundles" aria-labelledby="bundles-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th class="fw-normal">Name</th>
+                            <th class="fw-normal">Path</th>
+                        </tr>
+                    </thead>
                     <tbody>
                     {% for bundle in service.bundles %}
                         {{ _self.rowBundle(bundle) }}
@@ -105,8 +136,9 @@
         {# runtime packages #}
         {% if runtime_packages|length %}
             {{ _self.headerLinkInfo('Packages', 'runtime-packages', runtime_packages) }}
-            <div class="accordion-collapse collapse table-responsive" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-3 table-responsive" id="runtime-packages" aria-labelledby="runtime-packages-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm mb-0">
+                    {{ _self.headerPackage() }}
                     <tbody>
                     {% for package in runtime_packages %}
                         {{ _self.rowPackage(package) }}
@@ -118,8 +150,9 @@
         {# debug packages #}
         {% if debug_packages|length %}
             {{ _self.headerLinkInfo('Debug Packages', 'dev-packages', debug_packages) }}
-            <div class="accordion-collapse collapse" id="dev-packages" aria-labelledby="dev-packages-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-3" id="dev-packages" aria-labelledby="dev-packages-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm mb-0">
+                    {{ _self.headerPackage() }}
                     <tbody>
                     {% for package in debug_packages %}
                         {{ _self.rowPackage(package) }}
@@ -131,11 +164,12 @@
         {# runtime routes #}
         {% if runtime_routes|length %}
             {{ _self.headerLinkInfo('Routes', 'runtime-routes', runtime_routes) }}
-            <div class="accordion-collapse collapse" id="runtime-routes" aria-labelledby="runtime-routes-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-3" id="runtime-routes" aria-labelledby="runtime-routes-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm mb-0">
+                    {{ _self.headerRoute() }}
                     <tbody>
                     {% for route in runtime_routes %}
-                        {{ tools.rowInfo(route.name, route.path, 'ps-3') }}
+                        {{ _self.rowRoute(route) }}
                     {% endfor %}
                     </tbody>
                 </table>
@@ -144,11 +178,12 @@
         {# debug routes #}
         {% if debug_routes|length %}
             {{ _self.headerLinkInfo('Debug Routes', 'debug-routes', debug_routes) }}
-            <div class="accordion-collapse collapse" id="debug-routes" aria-labelledby="debug-routes-header" data-bs-parent="#symfonyAccordion">
+            <div class="accordion-collapse collapse ps-3" id="debug-routes" aria-labelledby="debug-routes-header" data-bs-parent="#symfonyAccordion">
                 <table class="table table-no-end-line table-sm mb-0">
+                    {{ _self.headerRoute() }}
                     <tbody>
                     {% for route in debug_routes %}
-                        {{ tools.rowInfo(route.name, route.path, 'ps-3') }}
+                        {{ _self.rowRoute(route) }}
                     {% endfor %}
                     </tbody>
                 </table>

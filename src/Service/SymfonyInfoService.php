@@ -27,7 +27,7 @@ use Symfony\Component\Routing\RouterInterface;
  * @see https://github.com/symfony/symfony/blob/7.1/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
  * @see https://github.com/EasyCorp/easy-doc-bundle/blob/master/src/Command/DocCommand.php
  *
- * @psalm-type RouteType = array{name: string, path: string}
+ * @psalm-type RouteType = array{name: string, path: string, methods: string}
  * @psalm-type PackageType = array{name: string, version: string, description: string, homepage: string}
  * @psalm-type BundleType = array{name: string, namespace: string, path: string, package: string, homepage?: string}
  *
@@ -529,9 +529,11 @@ final class SymfonyInfoService
         $routes = $this->router->getRouteCollection()->all();
         foreach ($routes as $name => $route) {
             $key = $this->isDebugRoute($name) ? self::KEY_DEBUG : self::KEY_RUNTIME;
+            $methods = $route->getMethods();
             $this->routes[$key][$name] = [
                 'name' => $name,
                 'path' => $route->getPath(),
+                'methods' => [] === $methods ? 'ANY' : \implode('|', $methods),
             ];
         }
         if (isset($this->routes[self::KEY_RUNTIME]) && [] !== $this->routes[self::KEY_RUNTIME]) {

@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Utils\StringUtils;
-use Doctrine\Bundle\DoctrineBundle\Twig\DoctrineExtension;
+use Doctrine\SqlFormatter\Highlighter;
+use Doctrine\SqlFormatter\HtmlHighlighter;
+use Doctrine\SqlFormatter\SqlFormatter;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Twig\Environment;
@@ -41,31 +43,23 @@ class HighlightExtension extends AbstractExtension
     private const SQL_REPLACES = [
         'array{' => '[',
         '}' => ']',
-        '"keyword"' => '"highlight-sql-keyword"',
-        '"word"' => '"highlight-sql-word"',
-        '"variable"' => '"highlight-sql-variable"',
-        '"symbol"' => '"highlight-sql-symbol"',
-        '"comment"' => '"highlight-sql-comment"',
         '"backtick"' => '"highlight-sql-backtick"',
-        '"string"' => '"highlight-sql-string"',
-        '"number"' => '"highlight-sql-number"',
-        '"error"' => '"highlight-sql-error"',
     ];
 
     private ?VarCloner $cloner = null;
-    private ?DoctrineExtension $doctrine = null;
     private ?HtmlDumper $dumper = null;
+    private ?SqlFormatter $sqlFormatter = null;
 
     public function getFilters(): array
     {
-        $options = [
-            'needs_environment' => true,
-            'is_safe' => ['html'],
-        ];
-
         return [
-            new TwigFilter('var_export_php', $this->exportPhp(...), $options),
-            new TwigFilter('var_export_sql', $this->exportSql(...), $options),
+            new TwigFilter('var_export_php', $this->exportPhp(...), [
+                'needs_environment' => true,
+                'is_safe' => ['html'],
+            ]),
+            new TwigFilter('var_export_sql', $this->exportSql(...), [
+                'is_safe' => ['html'],
+            ]),
         ];
     }
 
@@ -74,6 +68,7 @@ class HighlightExtension extends AbstractExtension
         if (null === $variable || '' === $variable) {
             return null;
         }
+
         $cloner = $this->getCloner();
         $dumper = $this->getDumper($env);
         $data = $cloner->cloneVar($variable);
@@ -92,13 +87,13 @@ class HighlightExtension extends AbstractExtension
         return \trim($content);
     }
 
-    private function exportSql(Environment $env, ?string $sql): ?string
+    private function exportSql(?string $sql): ?string
     {
-        if (null === $sql || '' === $sql) {
+        if (!StringUtils::isString($sql)) {
             return null;
         }
-        $doctrine = $this->getDoctrine($env);
-        $content = $doctrine->formatSql($sql, true);
+
+        $content = $this->getSqlFormatter()->format($sql);
         $content = StringUtils::replace(self::SQL_REPLACES, $content);
 
         return \trim($content);
@@ -107,11 +102,6 @@ class HighlightExtension extends AbstractExtension
     private function getCloner(): VarCloner
     {
         return $this->cloner ??= new VarCloner();
-    }
-
-    private function getDoctrine(Environment $env): DoctrineExtension
-    {
-        return $this->doctrine ??= $env->getExtension(DoctrineExtension::class);
     }
 
     private function getDumper(Environment $env): HtmlDumper
@@ -123,5 +113,27 @@ class HighlightExtension extends AbstractExtension
         }
 
         return $this->dumper;
+    }
+
+    private function getSqlFormatter(): SqlFormatter
+    {
+        if ($this->sqlFormatter instanceof SqlFormatter) {
+            return $this->sqlFormatter;
+        }
+
+        $highlighter = new HtmlHighlighter([
+            HtmlHighlighter::HIGHLIGHT_PRE => 'class="highlight highlight-sql"',
+            Highlighter::HIGHLIGHT_QUOTE => 'class="highlight-sql-string"',
+            Highlighter::HIGHLIGHT_BACKTICK_QUOTE => 'class="highlight-sql-string"',
+            Highlighter::HIGHLIGHT_RESERVED => 'class="highlight-sql-keyword"',
+            Highlighter::HIGHLIGHT_BOUNDARY => 'class="highlight-sql-symbol"',
+            Highlighter::HIGHLIGHT_NUMBER => 'class="highlight-sql-number"',
+            Highlighter::HIGHLIGHT_WORD => 'class="highlight-sql-word"',
+            Highlighter::HIGHLIGHT_ERROR => 'class="highlight-sql-error"',
+            Highlighter::HIGHLIGHT_COMMENT => 'class="highlight-sql-comment"',
+            Highlighter::HIGHLIGHT_VARIABLE => 'class="highlight-sql-variable"',
+        ], true);
+
+        return $this->sqlFormatter = new SqlFormatter($highlighter);
     }
 }

@@ -171,7 +171,7 @@ class SymfonyReport extends AbstractReport
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
-                PdfColumn::left('Name', 30),
+                PdfColumn::left('Name', 32),
                 PdfColumn::left('Version', 10),
                 PdfColumn::left('Description', 60)
             )
@@ -198,14 +198,19 @@ class SymfonyReport extends AbstractReport
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
-                PdfColumn::left('Name', 30),
-                PdfColumn::left('Path', 70)
+                PdfColumn::left('Name', 40),
+                PdfColumn::left('Path', 70),
+                PdfColumn::left('Method', 22, true)
             )
             ->setGroupBeforeHeader(true)
             ->setGroupKey($title)
             ->outputHeaders();
         foreach ($routes as $route) {
-            $this->outputRow($table, $route['name'], $route['path']);
+            $table->addRow(
+                $route['name'],
+                $route['path'],
+                $route['methods']
+            );
         }
     }
 

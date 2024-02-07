@@ -177,9 +177,16 @@ class SymfonyDocument extends AbstractDocument
         $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
             'Path' => HeaderFormat::instance(),
+            'Method' => HeaderFormat::instance(),
         ]);
         foreach ($routes as $route) {
-            $this->outputRow($sheet, $row++, $route['name'], $route['path']);
+            $this->outputRow(
+                $sheet,
+                $row++,
+                $route['name'],
+                $route['path'],
+                $route['methods']
+            );
         }
         $sheet->setAutoSize(1, 2)
             ->finish();

@@ -151,7 +151,7 @@ abstract class AbstractEntityTable extends AbstractTable
         $this->addLimit($query, $builder);
 
         $q = $builder->getQuery();
-        if (empty($builder->getDQLPart(self::JOIN_PART))) {
+        if ([] === $builder->getDQLPart(self::JOIN_PART)) {
             $q->setHint(CountWalker::HINT_DISTINCT, false);
         }
 

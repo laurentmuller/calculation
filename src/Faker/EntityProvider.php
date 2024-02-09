@@ -77,15 +77,16 @@ class EntityProvider extends Base
     protected function distinctValue(string $field, bool $allowNull = false): mixed
     {
         // already loaded?
-        if (!\array_key_exists($field, $this->distinctValues) || empty($this->distinctValues[$field])) {
+        if (!\array_key_exists($field, $this->distinctValues) || [] === $this->distinctValues[$field]) {
             $this->distinctValues[$field] = $this->repository->getDistinctValues($field);
         }
 
+        $values = $this->distinctValues[$field];
         if ($allowNull) {
-            return static::randomElement(\array_merge($this->distinctValues[$field], [null]));
+            $values += [null];
         }
 
-        return static::randomElement($this->distinctValues[$field]);
+        return static::randomElement($values);
     }
 
     /**

@@ -28,6 +28,7 @@ use App\Spreadsheet\SpreadsheetDocument;
 use App\Traits\ExceptionContextTrait;
 use App\Traits\RequestTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
+use App\Utils\StringUtils;
 use App\Word\AbstractWordDocument;
 use App\Word\WordDocument;
 use Psr\Container\ContainerExceptionInterface;
@@ -354,8 +355,9 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractReport && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-        if ('' === $name && null !== $doc->getTitle()) {
-            $name = (string) $doc->getTitle();
+        if ('' === $name && StringUtils::isString($doc->getTitle())) {
+            /** @psalm-var string $name */
+            $name = $doc->getTitle();
         }
 
         return new PdfResponse($doc, $inline, $name);
@@ -381,8 +383,9 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractDocument && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-        if ('' === $name && null !== $doc->getTitle()) {
-            $name = (string) $doc->getTitle();
+        if ('' === $name && StringUtils::isString($doc->getTitle())) {
+            /** @psalm-var string $name */
+            $name = $doc->getTitle();
         }
 
         return new SpreadsheetResponse($doc, $inline, $name);
@@ -405,8 +408,9 @@ abstract class AbstractController extends BaseController
         if ($doc instanceof AbstractWordDocument && !$doc->render()) {
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
-        if ('' === $name && null !== $doc->getTitle()) {
-            $name = (string) $doc->getTitle();
+        if ('' === $name && StringUtils::isString($doc->getTitle())) {
+            /** @psalm-var string $name */
+            $name = $doc->getTitle();
         }
 
         return new WordResponse($doc, $inline, $name);

@@ -80,7 +80,7 @@ class CustomerInformation
         if ($translator instanceof TranslatorInterface) {
             return $translator->trans('report.phone', ['{0}' => $fax]);
         }
-        if ($translator && \method_exists($translator, 'trans')) {
+        if (null !== $translator && \method_exists($translator, 'trans')) {
             return (string) $translator->trans('report.fax', ['{0}' => $fax]);
         }
 
@@ -99,7 +99,7 @@ class CustomerInformation
         if ($translator instanceof TranslatorInterface) {
             return $translator->trans('report.phone', ['{0}' => $phone]);
         }
-        if ($translator && \method_exists($translator, 'trans')) {
+        if (null !== $translator && \method_exists($translator, 'trans')) {
             return (string) $translator->trans('report.phone', ['{0}' => $phone]);
         }
 

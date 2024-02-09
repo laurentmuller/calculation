@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Spreadsheet;
 
+use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -219,10 +220,10 @@ class CellBuilder
 
     private function updateAlignment(Style $style): self
     {
-        if (!empty($this->horizontal)) {
+        if (StringUtils::isString($this->horizontal)) {
             $style->getAlignment()->setHorizontal($this->horizontal);
         }
-        if (!empty($this->vertical)) {
+        if (StringUtils::isString($this->vertical)) {
             $style->getAlignment()->setVertical($this->vertical);
         }
 
@@ -240,7 +241,7 @@ class CellBuilder
 
     private function updateFormat(Style $style): void
     {
-        if (!empty($this->format)) {
+        if (StringUtils::isString($this->format)) {
             $style->getNumberFormat()->setFormatCode($this->format);
         }
     }

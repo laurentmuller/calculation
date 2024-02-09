@@ -107,12 +107,12 @@ class AjaxTranslateController extends AbstractController
     #[Post(path: '/translate', name: 'ajax_translate')]
     public function translate(#[MapRequestPayload] TranslateQuery $query): JsonResponse
     {
-        if (empty($query->text)) {
+        if (!StringUtils::isString($query->text)) {
             return $this->jsonFalse([
                 'message' => $this->trans('translator.text_error'),
             ]);
         }
-        if (empty($query->to)) {
+        if (!StringUtils::isString($query->to)) {
             return $this->jsonFalse([
                 'message' => $this->trans('translator.to_error'),
             ]);
@@ -146,7 +146,7 @@ class AjaxTranslateController extends AbstractController
     {
         $error = $service->getLastError();
         if ($error instanceof HttpClientError) {
-            $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
+            $id = \sprintf('%s.%s', $service::getName(), $error->getCode());
             if ($this->isTransDefined($id, 'translator')) {
                 $error->setMessage($this->trans($id, [], 'translator'));
             }

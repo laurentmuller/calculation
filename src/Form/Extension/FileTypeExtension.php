@@ -34,7 +34,9 @@ class FileTypeExtension extends AbstractFileTypeExtension
         return [FileType::class];
     }
 
-    /** @psalm-suppress MixedAssignment */
+    /**
+     * @psalm-suppress MixedAssignment
+     */
     protected function updateOptions(FormInterface $form, array $options): array
     {
         $parent = $form->getParent();

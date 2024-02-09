@@ -279,7 +279,7 @@ class PdfDocument extends \FPDF
      */
     public function CreateLink(float $y = -1, int $page = -1): int
     {
-        $id = $this->addLinK();
+        $id = $this->AddLink();
         $this->SetLink($id, $y, $page);
 
         return $id;

@@ -312,7 +312,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      *
      * Items are empty if the price or the quantity is equal to 0.
      *
-     * @return CalculationItem[] an array, maybe empty of empty  items
+     * @return CalculationItem[] an array, maybe empty of empty items
      *
      * @see Calculation::hasEmptyItems()
      * @see Calculation::removeEmptyItems()
@@ -487,7 +487,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getOverallMarginAmount(): float
     {
-        if (!empty($this->itemsTotal)) {
+        if (0.0 !== $this->itemsTotal) {
             return $this->overallTotal - $this->itemsTotal;
         }
 
@@ -635,7 +635,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function isEditable(): bool
     {
-        return $this->isNew() || empty($this->state) || $this->state->isEditable();
+        return $this->isNew() || ($this->state instanceof CalculationState && $this->state->isEditable());
     }
 
     /**

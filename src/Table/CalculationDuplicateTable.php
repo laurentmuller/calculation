@@ -17,6 +17,8 @@ use Doctrine\Common\Collections\Criteria;
 
 /**
  * Calculation table for duplicate items.
+ *
+ * @psalm-import-type CalculationItemType from \App\Repository\CalculationRepository
  */
 class CalculationDuplicateTable extends AbstractCalculationItemsTable
 {
@@ -43,16 +45,23 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
         return $this->repository->getItemsDuplicate($orderColumn, $orderDirection);
     }
 
+    /**
+     * @psalm-param CalculationItemType[] $items
+     */
     protected function getItemsCount(array $items): int
     {
-        return \array_reduce($items, function (int $carry, array $item) {
-            /** @psalm-var array{description: string, quantity: float, price: float, count: int} $child*/
-            foreach ($item['items'] as $child) {
-                $carry += $child['count'];
-            }
+        return \array_reduce(
+            $items,
+            /** @psalm-param CalculationItemType $item */
+            function (int $carry, array $item) {
+                foreach ($item['items'] as $child) {
+                    $carry += $child['count'];
+                }
 
-            return $carry;
-        }, 0);
+                return $carry;
+            },
+            0
+        );
     }
 
     /**

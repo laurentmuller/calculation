@@ -55,11 +55,11 @@ final class PhpInfoService
         /** @psalm-var array<int, string> $array */
         $array = (array) \preg_split('/(<h2[^>]*>[^<]+<\/h2>)/i', $content, -1, \PREG_SPLIT_DELIM_CAPTURE);
         foreach ($array as $index => $entry) {
-            if (\preg_match($regexLine, $entry, $matchs)) {
+            if (1 === \preg_match($regexLine, $entry, $matchs)) {
                 $name = \trim($matchs[1]);
                 $vals = \explode(StringUtils::NEW_LINE, $array[$index + 1]);
                 foreach ($vals as $val) {
-                    if (\preg_match($regex3cols, $val, $matchs)) {
+                    if (1 === \preg_match($regex3cols, $val, $matchs)) {
                         // 3 columns
                         $match1 = \trim($matchs[1]);
                         $match2 = $this->convert(\trim($matchs[2]));
@@ -70,7 +70,7 @@ final class PhpInfoService
                                 'master' => $match3,
                             ];
                         }
-                    } elseif (\preg_match($regex2cols, $val, $matchs)) {
+                    } elseif (1 === \preg_match($regex2cols, $val, $matchs)) {
                         // 2 columns
                         $match1 = \trim($matchs[1]);
                         $match2 = $this->convert(\trim($matchs[2]));
@@ -161,10 +161,10 @@ final class PhpInfoService
         if (\in_array(\strtolower($var), ['yes', 'no', 'enabled', 'disabled', 'on', 'off', 'no value'], true)) {
             return StringUtils::capitalize($var);
         }
-        if (\preg_match('/^-?\d+$/', $var)) {
+        if (1 === \preg_match('/^-?\d+$/', $var)) {
             return (int) $var;
         }
-        if (\preg_match('/^-?\d+\.\d+$/', $var)) {
+        if (1 === \preg_match('/^-?\d+\.\d+$/', $var)) {
             $pos = (int) \strrpos($var, '.');
             $decimals = \strlen($var) - $pos - 1;
 

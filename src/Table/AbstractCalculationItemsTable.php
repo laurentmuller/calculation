@@ -21,6 +21,7 @@ use Doctrine\Common\Collections\Criteria;
  * Abstract Calculation table to display items.
  *
  * @psalm-import-type CalculationItemType from CalculationRepository
+ * @psalm-import-type CalculationItemEntry from CalculationRepository
  */
 abstract class AbstractCalculationItemsTable extends AbstractTable implements \Countable
 {
@@ -48,11 +49,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      *
      * @return string the formatted items
      *
-     * @psalm-param array<array{
-     *     description: string,
-     *     quantity: float,
-     *     price: float,
-     *     count: int}> $items
+     * @psalm-param CalculationItemEntry[] $items
      */
     abstract protected function formatItems(array $items): string;
 

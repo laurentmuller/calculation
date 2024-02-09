@@ -221,7 +221,7 @@ trait PdfBarChartTrait
                 $width = $label['width'];
                 $dx = $barWidth / 2.0 - \cos(self::TEXT_ANGLE) * ($width + self::LINE_HEIGHT);
                 $dy = \sin(self::TEXT_ANGLE) * ($width + 1.0);
-                $this->RotateText($text, self::TEXT_ANGLE, $x + $dx, $y + $dy);
+                $this->rotateText($text, self::TEXT_ANGLE, $x + $dx, $y + $dy);
             } else {
                 $this->SetXY($x, $y);
                 $this->Cell(w: $barWidth, txt: $text, align: PdfTextAlignment::CENTER);

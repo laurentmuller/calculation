@@ -84,7 +84,7 @@ class PhpIniDocument extends AbstractDocument
     {
         $color = null;
         $italic = false;
-        if (\preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
+        if (1 === \preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
             $color = \substr($var, 1);
         } elseif (\in_array(\strtolower($var), ['no', 'disabled', 'off'], true)) {
             $color = '7F7F7F';

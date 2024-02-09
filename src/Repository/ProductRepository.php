@@ -124,7 +124,7 @@ class ProductRepository extends AbstractCategoryItemRepository
             ->setMaxResults($maxResults);
         $param = ':search';
         $expr = $builder->expr();
-        $or = $expr->orx(
+        $or = $expr->orX(
             $expr->like('p.description', $param),
             $expr->like('c.code', $param),
             $expr->like('g.code', $param),

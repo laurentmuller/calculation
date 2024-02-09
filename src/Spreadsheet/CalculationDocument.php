@@ -15,6 +15,7 @@ namespace App\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Traits\CalculationDocumentMarginTrait;
+use App\Traits\MathTrait;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -26,6 +27,7 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 class CalculationDocument extends AbstractDocument
 {
     use CalculationDocumentMarginTrait;
+    use MathTrait;
 
     /**
      * The header background color.
@@ -382,7 +384,7 @@ class CalculationDocument extends AbstractDocument
      */
     private function renderUserMargin(WorksheetDocument $sheet, Calculation $calculation, int &$row): void
     {
-        if (empty($calculation->getUserMargin())) {
+        if ($this->isFloatZero($calculation->getUserMargin())) {
             return;
         }
 

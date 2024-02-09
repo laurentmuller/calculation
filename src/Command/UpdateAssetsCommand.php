@@ -90,7 +90,7 @@ class UpdateAssetsCommand extends Command
         if (!$this->propertyExists($configuration, ['target', 'plugins', 'sources'], true)) {
             return Command::INVALID;
         }
-        if ($input->getOption(self::DRY_RUN_OPTION)) {
+        if ($input->getOption(self::DRY_RUN_OPTION)) { // @phpstan-ignore-line
             return $this->dryRun($configuration);
         }
 
@@ -414,7 +414,7 @@ class UpdateAssetsCommand extends Command
     {
         $properties = (array) $properties;
         foreach ($properties as $property) {
-            if (empty($var[$property])) {
+            if (!isset($var[$property])) {
                 if ($log) {
                     $this->writeError("Unable to find the property '$property'.");
                 }

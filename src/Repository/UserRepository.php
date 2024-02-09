@@ -43,7 +43,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * @see ResetPasswordRequestRepositoryInterface
      *
-     * @psalm-param User $user
+     * @psalm-param User&object $user
      */
     public function createResetPasswordRequest(
         object $user,
@@ -87,7 +87,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * @see ResetPasswordRequestRepositoryInterface
      *
-     * @psalm-param User $user
+     * @psalm-param User&object $user
      */
     public function getMostRecentNonExpiredRequestDate(object $user): ?\DateTimeInterface
     {
@@ -197,7 +197,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     /**
      * @see ResetPasswordRequestRepositoryInterface
      *
-     * @psalm-param User $resetPasswordRequest
+     * @psalm-param User&object $resetPasswordRequest
      */
     public function removeResetPasswordRequest(ResetPasswordRequestInterface $resetPasswordRequest): void
     {

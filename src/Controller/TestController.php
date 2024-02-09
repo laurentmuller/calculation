@@ -309,7 +309,7 @@ class TestController extends AbstractController
             $message = $this->trans('password.success');
             $message .= '<ul>';
             foreach ($options as $option) {
-                if ($data[$option]) {
+                if (true === $data[$option]) {
                     $message .= '<li>' . $this->trans("password.$option") . '</li>';
                 }
             }
@@ -449,7 +449,7 @@ class TestController extends AbstractController
         $languages = $service->getLanguages();
         $error = $service->getLastError();
         if ($error instanceof HttpClientError) {
-            $id = \sprintf('%s.%s', $service->getName(), $error->getCode());
+            $id = \sprintf('%s.%s', $service::getName(), $error->getCode());
             if ($this->isTransDefined($id, 'translator')) {
                 $error->setMessage($this->trans($id, [], 'translator'));
             }
@@ -574,7 +574,14 @@ class TestController extends AbstractController
             ];
         }, Currencies::getCurrencyCodes());
         $currencies = \array_filter($currencies, static fn (array $currency): bool => 0 === \preg_match('/\d|\(/', $currency['name']));
-        \usort($currencies, static fn (array $left, array $right): int => \strnatcasecmp((string) $left['name'], (string) $right['name']));
+        \usort(
+            $currencies,
+            /**
+             * @psalm-param array{code: string, name: string} $left
+             * @psalm-param array{code: string, name: string} $right
+             */
+            static fn (array $left, array $right): int => \strnatcasecmp($left['name'], $right['name'])
+        );
 
         return $currencies;
     }

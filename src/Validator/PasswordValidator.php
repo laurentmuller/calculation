@@ -181,7 +181,7 @@ class PasswordValidator extends AbstractConstraintValidator
      */
     private function validateRegex(bool $apply, string $pattern, string $value, string $message, string $code): bool
     {
-        if ($apply && !\preg_match($pattern, $value)) {
+        if ($apply && 1 !== \preg_match($pattern, $value)) {
             return $this->addViolation($message, $value, [], $code);
         }
 

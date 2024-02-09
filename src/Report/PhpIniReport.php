@@ -80,7 +80,7 @@ class PhpIniReport extends AbstractReport
     {
         $color = null;
         $style = PdfFontStyle::REGULAR;
-        if (\preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
+        if (1 === \preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
             $color = PdfTextColor::create($var);
         } elseif (\in_array(\strtolower($var), ['no', 'disabled', 'off', '(none)'], true)) {
             $color = PdfTextColor::darkGray();
@@ -114,19 +114,19 @@ class PhpIniReport extends AbstractReport
         $table->setGroupKey($key);
         $this->sortEntries($entries);
 
-        foreach ($entries as $key => $entry) {
-            if (\is_array($entry)) {
-                $local = $this->convert($entry['local']);
-                $master = $this->convert($entry['master']);
+        foreach ($entries as $entryKey => $entryValue) {
+            if (\is_array($entryValue)) {
+                $local = $this->convert($entryValue['local']);
+                $master = $this->convert($entryValue['master']);
                 $table->startRow()
-                    ->add($this->convert($key))
+                    ->add($this->convert($entryKey))
                     ->add(text: $local, style: $this->getCellStyle($local))
                     ->add(text: $master, style: $this->getCellStyle($master))
                     ->endRow();
             } else {
-                $value = $this->convert($entry);
+                $value = $this->convert($entryValue);
                 $table->startRow()
-                    ->add($this->convert($key))
+                    ->add($this->convert($entryKey))
                     ->add($value, 2, $this->getCellStyle($value))
                     ->endRow();
             }

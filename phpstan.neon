@@ -17,3 +17,8 @@ parameters:
         -
             message: '#@extends contains generic type#'
             path: src/Form/*
+        - message: '#should be contravariant#'
+        - message: '#Variable property access#'
+        - message: '#Variable static method call#'
+        - message: '#Dynamic call to static method#'
+        - message: '#Call to static method .* will always evaluate to true.#'

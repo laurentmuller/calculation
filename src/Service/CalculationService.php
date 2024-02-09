@@ -174,7 +174,7 @@ final class CalculationService implements ServiceSubscriberInterface
         /** @psalm-var ServiceGroupType[] $groups */
         $groups = [];
         $source_groups = $this->getArrayByKey($source, 'groups');
-        if (null === $source_groups) {
+        if (!\is_array($source_groups)) {
             return $this->createEmptyParameters();
         }
         /** @psalm-var array<int, float> $item_groups */
@@ -185,7 +185,7 @@ final class CalculationService implements ServiceSubscriberInterface
             return $carry;
         }, []);
         foreach ($item_groups as $key => $value) {
-            if (empty($value)) {
+            if ($this->isFloatZero($value)) {
                 continue;
             }
             $group = $this->findGroup($key);
@@ -446,7 +446,7 @@ final class CalculationService implements ServiceSubscriberInterface
 
     private function getArrayByKey(array $array, string $key): ?array
     {
-        return (\array_key_exists($key, $array) && !empty($array[$key])) ? (array) $array[$key] : null;
+        return (\array_key_exists($key, $array) && \is_array($array[$key]) && [] !== $array[$key]) ? $array[$key] : null;
     }
 
     /**
@@ -506,29 +506,29 @@ final class CalculationService implements ServiceSubscriberInterface
     private function reduceCategory(array $category): float
     {
         $items = $this->getArrayByKey($category, 'items');
-        if (\is_array($items)) {
-            return \array_reduce(
-                $items,
-                /** @psalm-param array{price: float, quantity: float} $item */
-                static fn (float $carry, array $item): float => $carry + ($item['price'] * $item['quantity']),
-                0
-            );
+        if (!\is_array($items)) {
+            return 0.0;
         }
 
-        return 0;
+        return \array_reduce(
+            $items,
+            /** @psalm-param array{price: float, quantity: float} $item */
+            static fn (float $carry, array $item): float => $carry + ($item['price'] * $item['quantity']),
+            0.0
+        );
     }
 
     private function reduceGroup(array $group): float
     {
         $categories = $this->getArrayByKey($group, 'categories');
-        if (\is_array($categories)) {
-            return \array_reduce(
-                $categories,
-                fn (float $carry, array $category): float => $carry + $this->reduceCategory($category),
-                0
-            );
+        if (!\is_array($categories)) {
+            return 0.0;
         }
 
-        return 0;
+        return \array_reduce(
+            $categories,
+            fn (float $carry, array $category): float => $carry + $this->reduceCategory($category),
+            0.0
+        );
     }
 }

@@ -51,7 +51,7 @@ class FileUtilsTest extends TestCase
         $linesFile = self::getLinesFile();
         $lineSize = (int) \filesize($linesFile);
 
-        $thisSize = \round(\filesize(__FILE__) / $kb);
+        $thisSize = \round((int) \filesize(__FILE__) / $kb);
         $thisText = \sprintf('%d KB', $thisSize);
         yield [$linesFile, \sprintf('%d B', $lineSize)];
         yield [$lineSize, \sprintf('%d B', $lineSize)];

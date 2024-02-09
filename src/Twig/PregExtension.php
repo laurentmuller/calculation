@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Twig;
 
+use App\Utils\StringUtils;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
@@ -78,13 +79,15 @@ class PregExtension extends AbstractExtension
      */
     protected function pregMatch(?string $subject, string $pattern, int $flags = 0, int $offset = 0): array|false
     {
-        if (null === $subject) {
+        if (!StringUtils::isString($subject)) {
             return false;
         }
         $matches = [];
-        $result = \preg_match($pattern, $subject, $matches, $flags, $offset);
+        if (1 === \preg_match($pattern, $subject, $matches, $flags, $offset)) {
+            return $matches;
+        }
 
-        return empty($result) ? false : $matches;
+        return false;
     }
 
     /**

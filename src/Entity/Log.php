@@ -226,12 +226,12 @@ class Log extends AbstractEntity
 
     public function isChannel(): bool
     {
-        return !empty($this->channel);
+        return StringUtils::isString($this->channel);
     }
 
     public function isLevel(): bool
     {
-        return !empty($this->level);
+        return StringUtils::isString($this->level);
     }
 
     public function setChannel(string $channel): self

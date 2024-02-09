@@ -29,8 +29,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
 {
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        $attributes = $this->updateAttributes($options, $view->vars['attr'] ?? []);
-        $view->vars['attr'] = $attributes;
+        $view->vars['attr'] = $this->updateAttributes($options, $view->vars['attr']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -112,7 +111,7 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
         }
 
         $matches = [];
-        if (\preg_match('/^(\d++)(' . \implode('|', \array_keys($factors)) . ')$/i', (string) $size, $matches)) {
+        if (1 === \preg_match('/^(\d++)(' . \implode('|', \array_keys($factors)) . ')$/i', (string) $size, $matches)) {
             return (int) $matches[1] * $factors[\strtolower($matches[2])];
         }
 

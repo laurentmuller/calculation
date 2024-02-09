@@ -75,7 +75,7 @@ trait DaysTrait
      */
     public function getFirstDay(): ?Day
     {
-        return empty($this->days) ? null : \reset($this->days);
+        return [] === $this->days ? null : \reset($this->days);
     }
 
     /**
@@ -91,6 +91,6 @@ trait DaysTrait
      */
     public function getLastDay(): ?Day
     {
-        return empty($this->days) ? null : \end($this->days);
+        return [] === $this->days ? null : \end($this->days);
     }
 }

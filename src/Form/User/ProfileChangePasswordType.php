@@ -82,7 +82,7 @@ class ProfileChangePasswordType extends AbstractEntityType
         $root = $context->getRoot();
 
         // must check password?
-        if (!$root->get('checkPassword')->getData()) {
+        if (!(bool) $root->get('checkPassword')->getData()) {
             return;
         }
 
@@ -92,7 +92,7 @@ class ProfileChangePasswordType extends AbstractEntityType
             ->validate($password->getData(), new NotCompromisedPassword());
 
         // if compromised assign the error to the password field
-        if ($violations->count() > 0 && $violations instanceof \Stringable) {
+        if ($violations->count() > 0) {
             $password->addError(new FormError((string) $violations));
         }
     }

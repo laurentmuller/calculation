@@ -62,7 +62,7 @@ class ResetAllPasswordType extends AbstractType
         /** @var array $data */
         $data = $event->getData();
         $form = $event->getForm();
-        if ($form->isRequired() && empty(\array_filter($data))) {
+        if ($form->isRequired() && [] === \array_filter($data)) {
             $form->addError(new FormError($this->translator->trans('user.reset_all.error')));
         }
     }

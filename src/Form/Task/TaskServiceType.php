@@ -25,6 +25,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class TaskServiceType extends AbstractHelperType
 {
+    /**
+     * @psalm-param array{simple_widget: bool, ...} $options
+     */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if ($options['simple_widget']) {

@@ -870,10 +870,10 @@ class FormHelper
         $newValues = \array_filter(\explode(' ', $classNames));
         $className = \implode(' ', \array_unique([...$oldValues, ...$newValues]));
 
-        if (empty($className)) {
-            unset($array['class']);
-        } else {
+        if (StringUtils::isString($className)) {
             $array['class'] = $className;
+        } else {
+            unset($array['class']);
         }
 
         return $this;

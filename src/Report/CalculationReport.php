@@ -105,7 +105,7 @@ class CalculationReport extends AbstractReport
         // header + groups + footer
         $lines = $calculation->getGroupsCount() + 2;
         // net total + user margin
-        if (!empty($calculation->getUserMargin())) {
+        if (!$this->isFloatZero($calculation->getUserMargin())) {
             $lines += 2;
         }
         // global margin + overall total + timestampable

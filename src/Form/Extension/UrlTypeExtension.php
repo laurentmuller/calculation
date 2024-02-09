@@ -25,18 +25,14 @@ use Symfony\Component\Form\FormView;
 class UrlTypeExtension extends AbstractTypeExtension
 {
     /**
-     * @psalm-param array<array-key, mixed> $options
+     * @psalm-param array{default_protocol?: string, ...} $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        if (!isset($options['default_protocol'])) {
-            return;
+        if (isset($options['default_protocol'])) {
+            $protocol = $options['default_protocol'];
+            $view->vars['attr'] = \array_replace($view->vars['attr'], ['data-protocol' => $protocol]);
         }
-
-        /** @psalm-var string $value */
-        $value = $options['default_protocol'];
-        $attr = $view->vars['attr'] ?? [];
-        $view->vars['attr'] = \array_merge($attr, ['data-protocol' => $value]);
     }
 
     public static function getExtendedTypes(): iterable

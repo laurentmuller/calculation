@@ -85,7 +85,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                         } else {
                             $table->add();
                         }
-                        $style = empty($margin->getValue()) ? $emptyStyle : null;
+                        $style = $this->isFloatZero($margin->getValue()) ? $emptyStyle : null;
                         $table->add()
                             ->add()
                             ->add(FormatUtils::formatAmount($margin->getMinimum()))

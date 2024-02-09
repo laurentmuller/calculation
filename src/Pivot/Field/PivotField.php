@@ -88,7 +88,7 @@ class PivotField implements \JsonSerializable
     {
         /** @psalm-var mixed $value */
         $value = $this->getRowValue($row);
-        if ($value) {
+        if (\is_scalar($value)) {
             return match ($this->method) {
                 self::METHOD_FLOAT => (float) $value,
                 self::METHOD_INTEGER => (int) $value,

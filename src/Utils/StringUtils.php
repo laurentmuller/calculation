@@ -125,7 +125,7 @@ final class StringUtils
     public static function encodeJson(mixed $value, int $flags = 0): string
     {
         try {
-            return (string) \json_encode($value, $flags | \JSON_THROW_ON_ERROR);
+            return \json_encode($value, $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }

@@ -199,7 +199,9 @@ class Customer extends AbstractEntity
      */
     public function getNameOrCompany(): ?string
     {
-        return $this->getFullName() ?: $this->getCompany();
+        $fullName = $this->getFullName();
+
+        return '' === $fullName ? $this->getCompany() : $fullName;
     }
 
     /**

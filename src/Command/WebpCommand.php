@@ -115,14 +115,14 @@ class WebpCommand extends Command
 
             $targetFile = $this->getTargetFile($file);
             $targetName = \basename($targetFile);
-            if (!$overwrite && FileUtils::exists($targetFile)) {
+            if (!$overwrite && FileUtils::exists($targetFile)) { // @phpstan-ignore-line
                 $this->writeVerbose(\sprintf('Skip : %s - Image already exist.', $targetName));
                 \imagedestroy($image);
                 ++$skip;
                 continue;
             }
 
-            if ($dry_run) {
+            if ($dry_run) { // @phpstan-ignore-line
                 $this->writeVerbose(\sprintf('Save : %s (Simulate)', $targetName));
                 [$result, $size] = $this->saveImage($image);
             } else {

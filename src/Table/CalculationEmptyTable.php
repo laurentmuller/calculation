@@ -19,6 +19,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Calculation table for empty items.
+ *
+ * @psalm-import-type CalculationItemType from CalculationRepository
  */
 class CalculationEmptyTable extends AbstractCalculationItemsTable
 {
@@ -64,7 +66,12 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
 
     protected function getItemsCount(array $items): int
     {
-        return \array_reduce($items, fn (int $carry, array $item): int => $carry + \count((array) $item['items']), 0);
+        return \array_reduce(
+            $items,
+            /** @psalm-param CalculationItemType $item */
+            fn (int $carry, array $item): int => $carry + \count($item['items']),
+            0
+        );
     }
 
     /**

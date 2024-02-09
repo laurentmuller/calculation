@@ -55,7 +55,7 @@ class SimpleEditorType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         if ($options['required']) {
-            $view->vars['attr']['class'] = $this->getWidgetClass($view);
+            $view->vars['attr'] = \array_merge($view->vars['attr'], ['class' => $this->getWidgetClass($view)]);
         }
         $view->vars['groups'] = $this->getGroupedActions($options);
     }
@@ -71,6 +71,15 @@ class SimpleEditorType extends AbstractType
     public function getParent(): ?string
     {
         return HiddenType::class;
+    }
+
+    /**
+     * @psalm-param SimpleEditorActionType $action
+     */
+    private function filterAction(array $action): bool
+    {
+        return (isset($action['exec']) && '' !== $action['exec'])
+            || (isset($action['actions']) && [] !== $action['actions']);
     }
 
     /**
@@ -92,13 +101,17 @@ class SimpleEditorType extends AbstractType
      */
     private function getGroupedActions(array $options): array
     {
+        /** @psalm-var SimpleEditorActionType[] $actions */
         $actions = $options['actions'] ?? [];
         if ([] === $actions) {
             return [];
         }
 
-        /** @psalm-var SimpleEditorActionType[] $actions */
-        $actions = \array_filter($actions, static fn (array $action): bool => !empty($action['exec']) || !empty($action['actions']));
+        $actions = \array_filter(
+            $actions,
+            /** @psalm-param SimpleEditorActionType $action */
+            fn (array $action): bool => $this->filterAction($action)
+        );
         $this->updateActions($actions);
 
         return $this->groupBy($actions, static fn (array $action): string => $action['group'] ?? 'default');

@@ -49,7 +49,12 @@ class CalculationsEmptyReport extends AbstractCalculationItemsReport
      */
     protected function computeItemsCount(array $entities): int
     {
-        return \array_reduce($entities, fn (int $carry, array $item): int => $carry + \count((array) $item['items']), 0);
+        return \array_reduce(
+            $entities,
+            /** @psalm-param CalculationItemType $item */
+            fn (int $carry, array $item): int => $carry + \count($item['items']),
+            0
+        );
     }
 
     protected function getPriceLabel(): string

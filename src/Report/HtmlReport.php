@@ -94,9 +94,9 @@ class HtmlReport extends AbstractReport
     }
 
     /**
-     * @param string         $orientation
-     * @param string|float[] $size
-     * @param string         $rotation
+     * @psalm-param string       $orientation
+     * @psalm-param string|array $size
+     * @psalm-param int          $rotation
      */
     protected function _beginpage($orientation, $size, $rotation): void
     {
@@ -117,7 +117,7 @@ class HtmlReport extends AbstractReport
         $leftMargin = $this->lMargin;
         $rightMargin = $this->rMargin;
         if (null !== $this->leftMargin && $this->leftMargin !== $leftMargin) {
-            $this->lMargin = $this->x = $this->leftMargin;
+            $this->SetLeftMargin($this->GetX() + $this->leftMargin);
         }
         if (null !== $this->rightMargin && $this->rightMargin !== $rightMargin) {
             $this->rMargin = $this->rightMargin;

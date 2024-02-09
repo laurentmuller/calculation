@@ -22,7 +22,7 @@ class CustomCompany extends \Faker\Provider\fr_CH\Company
     /**
      * @psalm-var mixed
      *
-     * @phpstan-var string[]
+     * @phpstan-var array
      */
     protected static $formats = [
         '{{lastName}} {{companySuffix}}',

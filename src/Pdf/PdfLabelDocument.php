@@ -328,12 +328,12 @@ class PdfLabelDocument extends PdfDocument
         if ($this->labelTextListener instanceof PdfLabelTextListenerInterface) {
             $texts = \explode(StringUtils::NEW_LINE, $text);
             $lines = \count($texts);
-            foreach ($texts as $index => $text) {
+            foreach ($texts as $index => $value) {
                 $this->SetXY($x, $y);
-                $event = new PdfLabelTextEvent($this, $text, $index, $lines, $width, $height);
+                $event = new PdfLabelTextEvent($this, $value, $index, $lines, $width, $height);
                 // @phpstan-ignore-next-line
                 if (!$this->labelTextListener->drawLabelText($event)) {
-                    $this->Cell($width, $height, $text);
+                    $this->Cell($width, $height, $value);
                 }
                 $y += $this->lasth;
             }

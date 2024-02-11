@@ -218,7 +218,7 @@ class TestController extends AbstractController
     {
         $content = $this->renderView('test/html_report.html.twig');
         $report = new HtmlReport($this, $content);
-        $report->SetTitle($this->trans('test.html'), true);
+        $report->SetTitle($this->trans('test.html'));
 
         return $this->renderPdfDocument($report);
     }

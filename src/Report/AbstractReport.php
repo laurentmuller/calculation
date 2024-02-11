@@ -21,7 +21,6 @@ use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Traits\TranslatorTrait;
-use App\Twig\FormatExtension;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -31,7 +30,6 @@ abstract class AbstractReport extends PdfDocument
 {
     use TranslatorTrait;
 
-    private readonly FormatExtension $extension;
     private readonly TranslatorInterface $translator;
 
     /**
@@ -47,7 +45,6 @@ abstract class AbstractReport extends PdfDocument
     ) {
         parent::__construct($orientation, $unit, $size);
         $this->translator = $this->controller->getTranslator();
-        $this->extension = new FormatExtension($this->translator);
         $appName = $controller->getApplicationName();
         $this->SetCreator($appName);
         $userName = $controller->getUserIdentifier();
@@ -75,19 +72,6 @@ abstract class AbstractReport extends PdfDocument
         parent::addPageIndex($title, $titleStyle, $contentStyle, $addBookmark, $separator);
 
         return $this;
-    }
-
-    /**
-     * Filter to format a boolean value.
-     *
-     * @param bool    $value     the value to format
-     * @param ?string $true      the text to use when the value is <b>TRUE</b> or <code>null</code> to use default
-     * @param ?string $false     the text to use when the value is <b>FALSE</b> or <code>null</code> to use default
-     * @param bool    $translate <code>TRUE</code> to translate texts
-     */
-    public function formatBoolean(bool $value, ?string $true = null, ?string $false = null, bool $translate = false): string
-    {
-        return $this->extension->formatBoolean($value, $true, $false, $translate);
     }
 
     public function getTranslator(): TranslatorInterface

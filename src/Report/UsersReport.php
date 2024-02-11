@@ -69,6 +69,11 @@ class UsersReport extends AbstractArrayReport
             )->outputHeaders();
     }
 
+    private function formatEditable(bool $editable): string
+    {
+        return $this->trans($editable ? 'common.value_enabled' : 'common.value_disabled');
+    }
+
     /**
      * Format the last login date.
      */
@@ -108,7 +113,7 @@ class UsersReport extends AbstractArrayReport
     {
         $enabled = $entity->isEnabled();
         $style = $enabled ? $enabledStyle : $disabledStyle;
-        $text = $this->formatBoolean($enabled, 'common.value_enabled', 'common.value_disabled', true);
+        $text = $this->formatEditable($enabled);
         $role = $this->translateRole($entity->getRole());
         $cell = $this->getImageCell($entity);
         $table->startRow()

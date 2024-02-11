@@ -1043,7 +1043,7 @@ class PdfDocument extends \FPDF
      */
     private function _cleanText(?string $str): ?string
     {
-        if (null === $str || '' === $str) {
+        if (!StringUtils::isString($str)) {
             return $str;
         }
 

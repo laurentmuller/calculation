@@ -58,7 +58,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
             $table->startRow()
                 ->add($entity->getCode())
                 ->add($entity->getDescription())
-                ->add($this->formatBoolean($entity->isEditable()))
+                ->add($this->formatEditable($entity->isEditable()))
                 ->add(style: $this->getColorStyle($entity))
                 ->add(FormatUtils::formatInt($entity->countCalculations()))
                 ->endRow();
@@ -79,6 +79,11 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
                 PdfColumn::center($this->trans('calculationstate.fields.color'), 15, true),
                 PdfColumn::right($this->trans('calculationstate.fields.calculations'), 22, true)
             )->outputHeaders();
+    }
+
+    private function formatEditable(bool $editable): string
+    {
+        return $this->trans($editable ? 'common.value_true' : 'common.value_false');
     }
 
     /**

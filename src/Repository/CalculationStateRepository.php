@@ -84,6 +84,7 @@ class CalculationStateRepository extends AbstractRepository
             ->groupBy('s.id')
             ->orderBy('s.code', Criteria::ASC);
 
+        /** @psalm-var QueryCalculationType[] $result */
         $result = $builder->getQuery()->getArrayResult();
         $count = $this->getColumnSum($result, 'count');
         $total = $this->getColumnSum($result, 'total');

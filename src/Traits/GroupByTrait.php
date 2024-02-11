@@ -24,9 +24,11 @@ trait GroupByTrait
      *
      * @psalm-template T of array|object
      *
-     * @psalm-param array<T>              $array
+     * @psalm-param T[]                              $array
      * @psalm-param string|int|callable(T):array-key $key
      * @psalm-param string|int|callable(T):array-key ...$others
+     *
+     * @psalm-return array<array-key, T|mixed>
      */
     public function groupBy(array $array, string|int|callable $key, string|int|callable ...$others): array
     {
@@ -35,22 +37,23 @@ trait GroupByTrait
             $entry = $this->getGroupKey($value, $key);
             $result[$entry][] = $value;
         }
+        if (\func_num_args() <= 2) {
+            return $result;
+        }
 
-        if (\func_num_args() > 2) {
-            $function = [self::class, __FUNCTION__];
-            $slice_args = \array_slice(\func_get_args(), 2);
-            foreach ($result as $groupKey => $value) {
-                $params = \array_merge([$value], $slice_args);
-                // @phpstan-ignore-next-line
-                $result[$groupKey] = (array) \call_user_func_array($function, $params);
-            }
+        /** @psalm-var callable(array): array $function */
+        $function = [self::class, __FUNCTION__];
+        $slice_args = \array_slice(\func_get_args(), 2);
+        foreach ($result as $groupKey => $value) {
+            $params = \array_merge([$value], $slice_args);
+            $result[$groupKey] = \call_user_func_array($function, $params);
         }
 
         return $result;
     }
 
     /**
-     * @psalm-param string|int|callable(mixed): array-key $key
+     * @psalm-param string|int|(callable(mixed): array-key) $key
      */
     private function getGroupKey(array|object $value, string|int|callable $key): string|int
     {

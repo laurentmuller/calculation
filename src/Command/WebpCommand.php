@@ -229,6 +229,9 @@ class WebpCommand extends Command
         }
     }
 
+    /**
+     * @psalm-assert-if-true numeric-string $level
+     */
     private function validateLevel(mixed $level): bool
     {
         if (!\is_numeric($level)) {

@@ -5,6 +5,9 @@ parameters:
         - tests
         - public
 
+    excludePaths:
+        - vendor
+
     scanFiles:
         - vendor/twig/twig/src/Extension/CoreExtension.php
         - vendor/symfony/validator/Test/ConstraintValidatorTestCase.php

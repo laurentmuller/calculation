@@ -55,7 +55,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     /**
      * Gets the public constants for the given class name.
      *
-     * @template T
+     * @template T of object
      *
      * @param class-string<T> $className
      *

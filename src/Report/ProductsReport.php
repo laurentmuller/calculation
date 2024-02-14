@@ -14,7 +14,6 @@ namespace App\Report;
 
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Utils\FormatUtils;
@@ -26,13 +25,10 @@ use App\Utils\FormatUtils;
  */
 class ProductsReport extends AbstractArrayReport
 {
-    /**
-     * @throws PdfException
-     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('product.list.title');
-        $this->AddPage();
+        $this->addPage();
         $table = $this->createTable();
         $style = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());

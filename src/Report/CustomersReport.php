@@ -14,12 +14,11 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Customer;
-use App\Pdf\Enums\PdfDocumentOrientation;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Utils\StringUtils;
+use fpdf\PdfOrientation;
 
 /**
  * Report for the list of customers.
@@ -37,17 +36,14 @@ class CustomersReport extends AbstractArrayReport
      */
     public function __construct(AbstractController $controller, array $entities, private readonly bool $grouped = true)
     {
-        parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE);
+        parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
         $this->other = $this->trans('report.other');
     }
 
-    /**
-     * @throws PdfException
-     */
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('customer.list.title');
-        $this->AddPage();
+        $this->addPage();
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
@@ -111,8 +107,6 @@ class CustomersReport extends AbstractArrayReport
 
     /**
      * @param Customer[] $entities
-     *
-     * @throws PdfException
      */
     private function outputGrouped(PdfGroupTable $table, array $entities): void
     {

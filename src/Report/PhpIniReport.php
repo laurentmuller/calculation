@@ -14,13 +14,12 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Service\PhpInfoService;
 use App\Utils\StringUtils;
+use fpdf\PdfFontStyle;
 
 /**
  * Report for php.ini.
@@ -41,15 +40,12 @@ class PhpIniReport extends AbstractReport
         $this->setTitleTrans('about.php_version', ['%version%' => $version]);
     }
 
-    /**
-     * @throws PdfException
-     */
     public function render(): bool
     {
-        $this->AddPage();
+        $this->addPage();
         $content = $this->service->asArray();
         if ([] === $content) {
-            $this->Cell(txt: $this->trans('about.error'));
+            $this->cell(text: $this->trans('about.error'));
 
             return true;
         }
@@ -101,8 +97,6 @@ class PhpIniReport extends AbstractReport
 
     /**
      * @psalm-param array<string, EntriesType> $entries
-     *
-     * @throws PdfException
      */
     private function outputEntries(PdfGroupTable $table, string $key, array $entries): void
     {

@@ -14,14 +14,13 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfDrawColor;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfException;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Service\HelpService;
 use App\Traits\ImageSizeTrait;
 use App\Utils\FileUtils;
+use fpdf\PdfTextAlignment;
 
 /**
  * Report for the help documentation.
@@ -53,9 +52,6 @@ class HelpReport extends AbstractReport
         $this->headerStyle = PdfStyle::getHeaderStyle();
     }
 
-    /**
-     * @throws PdfException
-     */
     public function render(): bool
     {
         $service = $this->service;
@@ -141,9 +137,9 @@ class HelpReport extends AbstractReport
         }
         $height = (float) $lines * self::LINE_HEIGHT + 3.0;
         if (!$this->isPrintable($height)) {
-            $this->AddPage();
+            $this->addPage();
         } else {
-            $this->Ln(3);
+            $this->lineBreak(3);
         }
         $this->outputText($description);
         $table = PdfTable::instance($this)
@@ -194,17 +190,15 @@ class HelpReport extends AbstractReport
             return;
         }
         $margin = $this->getLeftMargin();
-        $this->SetLeftMargin($margin + 4.0);
+        $this->setLeftMargin($margin + 4.0);
         foreach ($constraints as $constraint) {
-            $this->MultiCell(txt: \strip_tags("- $constraint"), align: PdfTextAlignment::LEFT);
+            $this->multiCell(text: \strip_tags("- $constraint"), align: PdfTextAlignment::LEFT);
         }
-        $this->SetLeftMargin($margin);
+        $this->setLeftMargin($margin);
     }
 
     /**
      * @psalm-param HelpDialogType $item
-     *
-     * @throws PdfException
      */
     private function outputDialog(array $item): void
     {
@@ -230,7 +224,7 @@ class HelpReport extends AbstractReport
         if (!isset($item['description'])) {
             return;
         }
-        $this->MultiCell(txt: $item['description']);
+        $this->multiCell(text: $item['description']);
     }
 
     /**
@@ -242,10 +236,10 @@ class HelpReport extends AbstractReport
         if ([] === $details) {
             return;
         }
-        $this->Ln(3);
+        $this->lineBreak(3);
         $this->outputText('help.labels.description');
         foreach ($details as $detail) {
-            $this->MultiCell(txt: $detail, align: PdfTextAlignment::LEFT);
+            $this->multiCell(text: $detail, align: PdfTextAlignment::LEFT);
         }
     }
 
@@ -271,12 +265,12 @@ class HelpReport extends AbstractReport
             return;
         }
         if (isset($item['displayEntityColumns'])) {
-            $this->Ln(3);
+            $this->lineBreak(3);
             $this->outputText('help.labels.edit_columns');
             $this->outputColumns($entity, $fields);
         }
         if (isset($item['displayEntityFields'])) {
-            $this->Ln(3);
+            $this->lineBreak(3);
             $this->outputText('help.labels.edit_fields');
             $this->outputFields($entity, $fields);
         }
@@ -300,12 +294,12 @@ class HelpReport extends AbstractReport
         $lines = 1 + \count($fields) + $this->getLinesCount($text);
         $height = (float) $lines * self::LINE_HEIGHT + 3.0;
         if (!$this->isPrintable($height)) {
-            $this->AddPage();
+            $this->addPage();
         } else {
-            $this->Ln(3);
+            $this->lineBreak(3);
         }
 
-        $this->MultiCell(txt: $text);
+        $this->multiCell(text: $text);
         $table = PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left($this->trans('help.fields.column'), 30, true),
@@ -328,7 +322,7 @@ class HelpReport extends AbstractReport
             return;
         }
         $forbidden = $item['forbidden'];
-        $this->Ln(3);
+        $this->lineBreak(3);
         $text = $forbidden['text'] ?? $this->trans('help.labels.forbidden_text');
         $this->outputText($text, false);
         $image = $forbidden['image'] ?? null;
@@ -359,7 +353,7 @@ class HelpReport extends AbstractReport
         if (!isset($item['image'])) {
             return;
         }
-        $this->Ln(3);
+        $this->lineBreak(3);
         $this->outputText('help.labels.screenshot');
         $this->outputImage($item['image']);
     }
@@ -374,15 +368,13 @@ class HelpReport extends AbstractReport
             return;
         }
         foreach ($images as $image) {
-            $this->Ln(3);
+            $this->lineBreak(3);
             $this->outputImage($image);
         }
     }
 
     /**
      * @psalm-param array<string, HelpDialogType[]> $groupedDialogs
-     *
-     * @throws PdfException
      */
     private function outputDialogs(array $groupedDialogs, bool $newPage): bool
     {
@@ -391,7 +383,7 @@ class HelpReport extends AbstractReport
         }
 
         if ($newPage) {
-            $this->AddPage();
+            $this->addPage();
             $newPage = false;
         }
 
@@ -402,13 +394,13 @@ class HelpReport extends AbstractReport
 
         foreach ($groupedDialogs as $group => $dialogs) {
             if ($newPage) {
-                $this->AddPage();
+                $this->addPage();
                 $newPage = false;
             }
             $this->addBookmark($group, true, 1, false);
             foreach ($dialogs as $dialog) {
                 if ($newPage) {
-                    $this->AddPage();
+                    $this->addPage();
                 }
                 $this->outputDialog($dialog);
                 $newPage = true;
@@ -420,8 +412,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpEntityType[] $entities
-     *
-     * @throws PdfException
      */
     private function outputEntities(array $entities, bool $newPage): void
     {
@@ -430,7 +420,7 @@ class HelpReport extends AbstractReport
         }
 
         if ($newPage) {
-            $this->AddPage();
+            $this->addPage();
             $newPage = false;
         }
 
@@ -441,7 +431,7 @@ class HelpReport extends AbstractReport
 
         foreach ($entities as $entity) {
             if ($newPage) {
-                $this->AddPage();
+                $this->addPage();
             }
             $this->outputEntity($entity);
             $newPage = true;
@@ -450,8 +440,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpEntityType $item
-     *
-     * @throws PdfException
      */
     private function outputEntity(array $item): void
     {
@@ -459,18 +447,18 @@ class HelpReport extends AbstractReport
         $this->addBookmark($this->trans($id), true, 1, false);
         $this->outputTitle($id);
         if (isset($item['description'])) {
-            $this->MultiCell(txt: $item['description']);
+            $this->multiCell(text: $item['description']);
         }
         $fields = $this->findFields($item);
         if (null !== $fields) {
-            $this->Ln(3);
+            $this->lineBreak(3);
             $this->outputText('help.labels.edit_fields');
             $this->outputFields($item, $fields);
         } else {
             $this->outputText('help.labels.entity_empty');
         }
         if (isset($item['constraints'])) {
-            $this->Ln(3);
+            $this->lineBreak(3);
             $this->outputText('help.labels.constraints');
             $this->outputConstraints($item['constraints']);
         }
@@ -519,7 +507,7 @@ class HelpReport extends AbstractReport
         }
         $width = $this->pixels2UserUnit($size[0]);
         $width = \min($width, $this->getPrintableWidth());
-        $this->Image(file: $file, w: $width);
+        $this->image(file: $file, width: $width);
     }
 
     private function outputLine(): void
@@ -531,8 +519,6 @@ class HelpReport extends AbstractReport
 
     /**
      * @psalm-param HelpMenuType[] $menus
-     *
-     * @throws PdfException
      */
     private function outputMainMenus(array $menus): bool
     {
@@ -540,7 +526,7 @@ class HelpReport extends AbstractReport
             return false;
         }
 
-        $this->AddPage();
+        $this->addPage();
         $id = 'help.main_menu';
         $this->addBookmark($this->trans($id), true, 0, false);
         $this->outputTitle($id, 12);
@@ -551,12 +537,12 @@ class HelpReport extends AbstractReport
             $this->outputText($rootMenu['description'], false);
         }
         if (isset($rootMenu['image'])) {
-            $this->Ln(3);
+            $this->lineBreak(3);
             $this->outputText('help.labels.screenshot');
             $this->outputImage($rootMenu['image']);
         }
 
-        $this->Ln(3);
+        $this->lineBreak(3);
         $this->outputText('help.labels.edit_actions');
         $table = PdfTable::instance($this)
             ->addColumns(
@@ -603,7 +589,7 @@ class HelpReport extends AbstractReport
         if ($translate) {
             $id = $this->splitTrans($id);
         }
-        $this->MultiCell(txt: $id);
+        $this->multiCell(text: $id);
     }
 
     private function outputTitle(string $id, float $size = 10): void

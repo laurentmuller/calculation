@@ -21,8 +21,8 @@ class PdfBorderTest extends TestCase
     public static function getBorders(): \Iterator
     {
         yield [-1, PdfBorder::INHERITED];
-        yield [0, PdfBorder::NONE];
-        yield [1, PdfBorder::ALL];
+        yield [false, PdfBorder::NONE];
+        yield [true, PdfBorder::ALL];
         yield ['F', PdfBorder::FILL];
         yield ['D', PdfBorder::BORDER];
         yield ['FD', PdfBorder::BOTH];
@@ -45,7 +45,7 @@ class PdfBorderTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getBorders')]
-    public function testBorder(string|int $value, string|int $expected): void
+    public function testBorder(bool|string|int $value, bool|string|int $expected): void
     {
         $border = new PdfBorder($value);
         $actual = $border->getValue();

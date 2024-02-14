@@ -12,27 +12,22 @@ declare(strict_types=1);
 
 namespace App\Response;
 
-use App\Interfaces\MimeTypeInterface;
-use App\Traits\MimeTypeTrait;
-use Symfony\Component\HttpFoundation\StreamedResponse;
-
 /**
  * The CsvResponse represents an HTTP streamed response within an CSV content.
  */
-class CsvResponse extends StreamedResponse implements MimeTypeInterface
+class CsvResponse extends AbstractStreamedResponse
 {
-    use MimeTypeTrait;
-
     /**
      * @param callable|null $callback the callback to output content
-     * @param bool          $inline   <code>true</code> to send the file inline to the browser. The CSV viewer is used if available.
-     *                                <code>false</code> to send to the browser and force a file download with the name given.
-     * @param string        $name     the name of the document file or <code>''</code> to use the default name ('document.csv')
+     * @param bool          $inline   <code>true</code> to send the file inline to the browser. The document viewer is
+     *                                used if available. <code>false</code> to send to the browser and force a file
+     *                                download with the name given.
+     * @param string        $name     the name of the document file or <code>''</code> to use the default
+     *                                name ('document.csv')
      */
     public function __construct(?callable $callback = null, bool $inline = true, string $name = '')
     {
-        $headers = $this->buildHeaders($name, $inline);
-        parent::__construct($callback, self::HTTP_OK, $headers);
+        parent::__construct($callback, $inline, $name);
     }
 
     public function getFileExtension(): string

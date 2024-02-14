@@ -13,14 +13,14 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfDocumentSize;
-use App\Pdf\Enums\PdfDocumentUnit;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Traits\TranslatorTrait;
+use fpdf\PdfOrientation;
+use fpdf\PdfPageSize;
+use fpdf\PdfTextAlignment;
+use fpdf\PdfUnit;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -32,24 +32,19 @@ abstract class AbstractReport extends PdfDocument
 
     private readonly TranslatorInterface $translator;
 
-    /**
-     * @param PdfDocumentOrientation $orientation the page orientation
-     * @param PdfDocumentUnit        $unit        the user unit
-     * @param PdfDocumentSize        $size        the document size
-     */
     public function __construct(
         protected readonly AbstractController $controller,
-        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
-        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
-        PdfDocumentSize $size = PdfDocumentSize::A4
+        PdfOrientation $orientation = PdfOrientation::PORTRAIT,
+        PdfUnit $unit = PdfUnit::MILLIMETER,
+        PdfPageSize $size = PdfPageSize::A4
     ) {
         parent::__construct($orientation, $unit, $size);
         $this->translator = $this->controller->getTranslator();
         $appName = $controller->getApplicationName();
-        $this->SetCreator($appName);
+        $this->setCreator($appName);
         $userName = $controller->getUserIdentifier();
         if (null !== $userName) {
-            $this->SetAuthor($userName);
+            $this->setAuthor($userName);
         }
         $service = $this->controller->getUserService();
         $this->getHeader()->setCustomer($service->getCustomer());
@@ -109,7 +104,7 @@ abstract class AbstractReport extends PdfDocument
     public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false, ?string $domain = null): static
     {
         $title = $this->trans($id, $parameters, $domain);
-        $this->SetTitle($title, $isUTF8);
+        $this->setTitle($title, $isUTF8);
 
         return $this;
     }

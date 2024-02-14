@@ -15,10 +15,6 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfFontName;
-use App\Pdf\Enums\PdfRectangleStyle;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Events\PdfPdfDrawHeadersEvent;
@@ -36,6 +32,10 @@ use App\Pdf\Traits\PdfBarChartTrait;
 use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
+use fpdf\PdfFontName;
+use fpdf\PdfOrientation;
+use fpdf\PdfRectangleStyle;
+use fpdf\PdfTextAlignment;
 
 /**
  * Report for calculations by months.
@@ -74,12 +74,12 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
      */
     public function __construct(AbstractController $controller, array $entities)
     {
-        $orientation = PdfDocumentOrientation::PORTRAIT;
+        $orientation = PdfOrientation::PORTRAIT;
         if (\count($entities) > 12) {
-            $orientation = PdfDocumentOrientation::LANDSCAPE;
+            $orientation = PdfOrientation::LANDSCAPE;
         }
         parent::__construct($controller, $entities, $orientation);
-        $this->SetTitle($this->transChart('title_by_month'));
+        $this->setTitle($this->transChart('title_by_month'));
         $this->minMargin = $controller->getMinMargin();
         $this->colors = new \WeakMap();
     }
@@ -136,7 +136,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
 
     protected function doRender(array $entities): bool
     {
-        $this->AddPage();
+        $this->addPage();
         $this->renderChart($entities);
         $this->renderTable($entities);
 
@@ -170,11 +170,11 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $table = $event->table;
         $bounds = $event->bounds;
         $parent = $table->getParent();
-        $textWidth = $parent->GetStringWidth($text) + $parent->getCellMargin();
+        $textWidth = $parent->getStringWidth($text) + $parent->getCellMargin();
         $offset = ($bounds->width() - $textWidth - self::RECT_WIDTH) / 2.0;
 
         $color->apply($parent);
-        $parent->Rect(
+        $parent->rect(
             $bounds->x() + $offset,
             $bounds->y() + self::RECT_MARGIN,
             self::RECT_WIDTH,
@@ -182,8 +182,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             PdfRectangleStyle::BOTH
         );
 
-        $parent->SetX($bounds->x() + $offset + self::RECT_WIDTH);
-        $parent->Cell(w: $textWidth, txt: $text);
+        $parent->setX($bounds->x() + $offset + self::RECT_WIDTH);
+        $parent->cell(width: $textWidth, text: $text);
 
         return true;
     }
@@ -245,13 +245,13 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
 
         $this->getArrowColor($color)->apply($this);
         $oldFont = $this->getCurrentFont();
-        $this->SetFont(PdfFontName::ZAPFDINGBATS);
-        $width = $this->GetStringWidth($chr);
+        $this->setFont(PdfFontName::ZAPFDINGBATS);
+        $width = $this->getStringWidth($chr);
         if ($rotate) {
             $delta = $this->getCellMargin() + $width;
             $this->rotateText($chr, 90.0, $bounds->x() + $delta, $bounds->y() + $delta);
         } else {
-            $this->Cell(w: $width, txt: $chr);
+            $this->cell(width: $width, text: $chr);
         }
         $oldFont->apply($this);
 
@@ -265,9 +265,9 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     {
         $h = 100;
         $newPage = \count($entities) > 12;
-        $top = $this->tMargin + $this->getHeader()->getHeight();
+        $top = $this->topMargin + $this->getHeader()->getHeight();
         if ($newPage) {
-            $h = $this->PageBreakTrigger - $top - 2.0 * self::LINE_HEIGHT;
+            $h = $this->pageBreakTrigger - $top - 2.0 * self::LINE_HEIGHT;
         }
         $rows = \array_map(function (array $entity): array {
             return [
@@ -284,9 +284,9 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         ];
         $this->renderBarChart(rows: $rows, axis: $axis, y: $top + self::LINE_HEIGHT, h: $h);
         if ($newPage) {
-            $this->AddPage();
+            $this->addPage();
         } else {
-            $this->Ln();
+            $this->lineBreak();
         }
     }
 

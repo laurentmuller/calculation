@@ -14,13 +14,13 @@ namespace App\Report;
 
 use App\Entity\CalculationState;
 use App\Pdf\Colors\PdfFillColor;
-use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
+use fpdf\PdfRectangleStyle;
 
 /**
  * Report for the list of calculation states.
@@ -50,7 +50,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
     {
         $this->setTitleTrans('calculationstate.list.title');
 
-        $this->AddPage();
+        $this->addPage();
         $table = $this->createTable();
 
         foreach ($entities as $entity) {

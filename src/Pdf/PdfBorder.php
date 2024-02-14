@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Utils\StringUtils;
+use fpdf\PdfRectangleStyle;
 
 /**
  * Define a cell border.
@@ -22,7 +23,7 @@ class PdfBorder
     /**
      * Draw a border on all four sides.
      */
-    final public const ALL = 1;
+    final public const ALL = true;
 
     /**
      * Draw the border around the rectangle.
@@ -57,7 +58,7 @@ class PdfBorder
     /**
      * No border is draw.
      */
-    final public const NONE = 0;
+    final public const NONE = false;
 
     /**
      * Draw a border on the right side.
@@ -72,9 +73,9 @@ class PdfBorder
     /**
      * The value.
      */
-    private string|int $value = self::ALL;
+    private string|int|bool $value = self::ALL;
 
-    public function __construct(string|int $value = self::ALL)
+    public function __construct(string|int|bool $value = self::ALL)
     {
         $this->setValue($value);
     }
@@ -128,27 +129,37 @@ class PdfBorder
     }
 
     /**
-     * Gets the style used to draw a rectangle.
+     * Convert to style to string or bool.
      *
-     * @see PdfBorder::isRectangleStyle()
-     * @see PdfDocument::rectangle()
-     * @see PdfDocument::Rect()
+     * @return string|bool the cell style
      */
-    public function getRectangleStyle(): string
+    public function getCellStyle(): string|bool
+    {
+        if (\is_string($this->value) || \is_bool($this->value)) {
+            return $this->value;
+        }
+
+        return self::NONE;
+    }
+
+    /**
+     * Gets the style used to draw a rectangle.
+     */
+    public function getRectangleStyle(): ?PdfRectangleStyle
     {
         return match ($this->value) {
-            self::ALL => self::BORDER,
-            self::BOTH,
-            self::FILL,
-            self::BORDER => $this->value,
-            default => ''
+            self::BORDER,
+            self::ALL => PdfRectangleStyle::BORDER,
+            self::BOTH => PdfRectangleStyle::BOTH,
+            self::FILL => PdfRectangleStyle::FILL,
+            default => null
         };
     }
 
     /**
      * Gets the value.
      */
-    public function getValue(): int|string
+    public function getValue(): bool|int|string
     {
         return $this->value;
     }
@@ -262,7 +273,7 @@ class PdfBorder
     /**
      * Returns if the given value is set.
      */
-    public function isSet(string|int $value): bool
+    public function isSet(string|int|bool $value): bool
     {
         if (\is_string($value)) {
             return StringUtils::contains((string) $this->value, $value);
@@ -290,7 +301,7 @@ class PdfBorder
     /**
      * Sets the value.
      */
-    public function setValue(int|string $value): self
+    public function setValue(bool|int|string $value): self
     {
         $this->value = match ($value) {
             self::ALL,
@@ -313,7 +324,7 @@ class PdfBorder
         return new self(self::TOP);
     }
 
-    private function parseBorders(string $value): string|int
+    private function parseBorders(string $value): bool|string
     {
         $allowed = [self::TOP, self::LEFT, self::BOTTOM, self::RIGHT];
         $chars = \array_unique(\str_split(\strtoupper($value)));

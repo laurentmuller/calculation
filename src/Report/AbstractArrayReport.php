@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfDocumentSize;
-use App\Pdf\Enums\PdfDocumentUnit;
+use fpdf\PdfOrientation;
+use fpdf\PdfPageSize;
+use fpdf\PdfUnit;
 
 /**
  * Abstract report rendering an array of objects.
@@ -25,18 +25,14 @@ use App\Pdf\Enums\PdfDocumentUnit;
 abstract class AbstractArrayReport extends AbstractReport
 {
     /**
-     * @param AbstractController     $controller  the parent controller
-     * @param T[]                    $entities    the entities to render
-     * @param PdfDocumentOrientation $orientation the page orientation
-     * @param PdfDocumentUnit        $unit        the user unit
-     * @param PdfDocumentSize        $size        the document size
+     * @param T[] $entities the entities to render
      */
     public function __construct(
         AbstractController $controller,
         protected array $entities,
-        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
-        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
-        PdfDocumentSize $size = PdfDocumentSize::A4
+        PdfOrientation $orientation = PdfOrientation::PORTRAIT,
+        PdfUnit $unit = PdfUnit::MILLIMETER,
+        PdfPageSize $size = PdfPageSize::A4
     ) {
         parent::__construct($controller, $orientation, $unit, $size);
     }

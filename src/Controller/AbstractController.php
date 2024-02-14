@@ -40,6 +40,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -348,7 +349,7 @@ abstract class AbstractController extends BaseController
      *                            the name given.
      * @param string      $name   the name of the PDF file or null to use default ('document.pdf')
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report can not be rendered
+     * @throws NotFoundHttpException
      */
     protected function renderPdfDocument(PdfDocument $doc, bool $inline = true, string $name = ''): PdfResponse
     {
@@ -356,7 +357,6 @@ abstract class AbstractController extends BaseController
             throw $this->createNotFoundException($this->trans('errors.render_document'));
         }
         if ('' === $name && StringUtils::isString($doc->getTitle())) {
-            /** @psalm-var string $name */
             $name = $doc->getTitle();
         }
 
@@ -372,7 +372,7 @@ abstract class AbstractController extends BaseController
      *                                    <code>false</code> to send to the browser and force a file download.
      * @param string              $name   the name of the Spreadsheet file or null to use default ('document.xlsx')
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws NotFoundHttpException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     protected function renderSpreadsheetDocument(
@@ -400,7 +400,7 @@ abstract class AbstractController extends BaseController
      *                             with the name given.
      * @param string       $name   the name of the PDF file or null to use default ('document.pdf')
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws NotFoundHttpException
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     protected function renderWordDocument(WordDocument $doc, bool $inline = true, string $name = ''): WordResponse

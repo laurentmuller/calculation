@@ -14,8 +14,8 @@ namespace App\Pdf\Traits;
 
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
-use App\Pdf\Enums\PdfRectangleStyle;
 use App\Traits\ArrayTrait;
+use fpdf\PdfRectangleStyle;
 
 /**
  * Trait to draw pie chart.
@@ -36,20 +36,20 @@ trait PdfPieChartTrait
      *
      * Does nothing if the radius is not positive, if rows are empty, or if the sum of the values is equal to 0.
      *
-     * @param float                    $centerX   the abscissa of the center
-     * @param float                    $centerY   the ordinate of the center
-     * @param float                    $radius    the radius
-     * @param ColorValueType[]         $rows      the data to draw
-     * @param PdfRectangleStyle|string $style     the draw and fill style
-     * @param bool                     $clockwise indicates whether to go clockwise (true) or counter-clockwise (false)
-     * @param float                    $origin    the origin of angles (0=right, 90=top, 180=left, 270=for bottom)
+     * @param float             $centerX   the abscissa of the center
+     * @param float             $centerY   the ordinate of the center
+     * @param float             $radius    the radius
+     * @param ColorValueType[]  $rows      the data to draw
+     * @param PdfRectangleStyle $style     the draw and fill style
+     * @param bool              $clockwise indicates whether to go clockwise (true) or counter-clockwise (false)
+     * @param float             $origin    the origin of angles (0=right, 90=top, 180=left, 270=for bottom)
      */
     public function renderPieChart(
         float $centerX,
         float $centerY,
         float $radius,
         array $rows,
-        PdfRectangleStyle|string $style = PdfRectangleStyle::BOTH,
+        PdfRectangleStyle $style = PdfRectangleStyle::BOTH,
         bool $clockwise = true,
         float $origin = 90
     ): void {
@@ -63,14 +63,14 @@ trait PdfPieChartTrait
 
         // check new page
         if (!$this->isPrintable($radius, $centerY + $radius)) {
-            $this->AddPage();
-            $centerY = $this->GetY() + $radius;
+            $this->addPage();
+            $centerY = $this->getY() + $radius;
         }
 
         $startAngle = 0.0;
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($rows as $row) {
-            $this->_pieApplyFillColor($row);
+            $this->pieApplyFillColor($row);
             $endAngle = $startAngle + 360.0 * $row['value'] / $total;
             $this->sector($centerX, $centerY, $radius, $startAngle, $endAngle, $style, $clockwise, $origin);
             $startAngle = $endAngle;
@@ -81,7 +81,7 @@ trait PdfPieChartTrait
     /**
      * @psalm-param ColorValueType $row
      */
-    private function _pieApplyFillColor(array $row): void
+    private function pieApplyFillColor(array $row): void
     {
         $color = $row['color'];
         if (\is_string($color)) {

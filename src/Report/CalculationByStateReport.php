@@ -15,13 +15,11 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Events\PdfPdfDrawHeadersEvent;
 use App\Pdf\Interfaces\PdfChartInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
@@ -31,6 +29,8 @@ use App\Pdf\Traits\PdfPieChartTrait;
 use App\Traits\MathTrait;
 use App\Traits\StateTotalsTrait;
 use App\Utils\FormatUtils;
+use fpdf\PdfRectangleStyle;
+use fpdf\PdfTextAlignment;
 
 /**
  * Report for calculations by states.
@@ -56,7 +56,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     public function __construct(AbstractController $controller, array $entities)
     {
         parent::__construct($controller, $entities);
-        $this->SetTitle($this->transChart('title_by_state'));
+        $this->setTitle($this->transChart('title_by_state'));
         $this->minMargin = $controller->getMinMargin();
     }
 
@@ -111,7 +111,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
 
     protected function doRender(array $entities): bool
     {
-        $this->AddPage();
+        $this->addPage();
         $this->renderChart($entities);
         $this->renderTable($entities);
 
@@ -154,12 +154,12 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         $bounds = $event->bounds;
         $parent = $event->getDocument();
         $margin = $parent->getCellMargin();
-        $parent->Rect(
+        $parent->rect(
             $bounds->x() + $margin,
             $bounds->y() + $margin,
             5.0,
             $bounds->height() - 2.0 * $margin,
-            PdfBorder::BOTH
+            PdfRectangleStyle::BOTH
         );
     }
 
@@ -167,11 +167,11 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     {
         $offset = 6.0;
         $parent = $event->getDocument();
-        $parent->SetX($event->bounds->x() + $offset);
-        $parent->Cell(
-            w: $event->bounds->width() - $offset,
-            h: $event->height,
-            txt: $event->text,
+        $parent->setX($event->bounds->x() + $offset);
+        $parent->cell(
+            width: $event->bounds->width() - $offset,
+            height: $event->height,
+            text: $event->text,
             align: $event->align
         );
     }
@@ -208,7 +208,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     {
         $margin = $this->getLeftMargin();
         $printableWidth = $this->getPrintableWidth();
-        $top = $this->tMargin + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
+        $top = $this->topMargin + $this->getHeader()->getHeight() + self::LINE_HEIGHT;
         $radius = $printableWidth / 4.0;
         $centerX = $margin + $printableWidth / 2.0;
         $centerY = $top + $radius;
@@ -221,9 +221,9 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         }, $entities);
 
         $this->renderPieChart($centerX, $centerY, $radius, $rows);
-        $this->SetY($centerY + $radius + self::LINE_HEIGHT);
+        $this->setY($centerY + $radius + self::LINE_HEIGHT);
         $this->legends($rows, true);
-        $this->Ln();
+        $this->lineBreak();
     }
 
     /**

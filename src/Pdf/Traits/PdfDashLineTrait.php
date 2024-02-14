@@ -38,11 +38,11 @@ trait PdfDashLineTrait
         int $dashes = 15,
         PdfLine|float|null $line = null
     ): void {
-        $oldWidth = $this->LineWidth;
+        $oldWidth = $this->lineWidth;
         if ($line instanceof PdfLine) {
             $line->apply($this);
         } elseif (\is_float($line)) {
-            $this->SetLineWidth($line);
+            $this->setLineWidth($line);
         }
 
         $right = $x + $w;
@@ -54,19 +54,19 @@ trait PdfDashLineTrait
         $endValue = $right - 1.0;
         for ($currentX = $x; $currentX <= $right; $currentX += $increment) {
             $end = \min($currentX + $length, $endValue);
-            $this->Line($currentX, $y, $end, $y);
-            $this->Line($currentX, $bottom, $end, $bottom);
+            $this->line($currentX, $y, $end, $y);
+            $this->line($currentX, $bottom, $end, $bottom);
         }
 
         // left and right dashes
         $endValue = $bottom - 1.0;
         for ($currentY = $y; $currentY <= $bottom; $currentY += $increment) {
             $end = \min($currentY + $length, $endValue);
-            $this->Line($x, $currentY, $x, $end);
-            $this->Line($right, $currentY, $right, $end);
+            $this->line($x, $currentY, $x, $end);
+            $this->line($right, $currentY, $right, $end);
         }
 
-        $this->SetLineWidth($oldWidth);
+        $this->setLineWidth($oldWidth);
     }
 
     /**
@@ -99,9 +99,9 @@ trait PdfDashLineTrait
     public function setDashPattern(?float $black = null, ?float $white = null): void
     {
         if (null !== $black && null !== $white) {
-            $this->_outParams('[%.3F %.3F] 0 d', $black * $this->k, $white * $this->k);
+            $this->outf('[%.3F %.3F] 0 d', $black * $this->scaleFactor, $white * $this->scaleFactor);
         } else {
-            $this->_out('[] 0 d');
+            $this->out('[] 0 d');
         }
     }
 }

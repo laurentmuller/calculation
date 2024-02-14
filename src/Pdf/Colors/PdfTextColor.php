@@ -21,7 +21,7 @@ class PdfTextColor extends AbstractPdfColor
 {
     public function apply(PdfDocument $doc): void
     {
-        $doc->SetTextColor($this->red, $this->green, $this->blue);
+        $doc->setTextColor($this->red, $this->green, $this->blue);
     }
 
     /**

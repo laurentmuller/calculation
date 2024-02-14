@@ -48,10 +48,6 @@ class PdfColorTest extends TestCase
         $rgb = [0x00, 0x00, 0xFF];
         yield [$rgb[0], $rgb[1], $rgb[2], '0000ff'];
         yield [$rgb[0], $rgb[1], $rgb[2], '0x0000ff', '0x'];
-
-        //        $rgb = [0xFF, 0x00, 0x00];
-        //        yield [$rgb[0], $rgb[1], $rgb[2], 'ff0000'];
-        //        yield [$rgb[0], $rgb[1], $rgb[2], '0xff0000', '0x'];
     }
 
     public static function getIntColors(): \Generator

@@ -16,7 +16,6 @@ use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Service\SymfonyInfoService;
@@ -40,12 +39,9 @@ class SymfonyReport extends AbstractReport
         $this->setTitleTrans('about.symfony_version', ['%version%' => $this->service->getVersion()]);
     }
 
-    /**
-     * @throws PdfException
-     */
     public function render(): bool
     {
-        $this->AddPage();
+        $this->addPage();
         $this->outputInfo($this->service);
         $info = $this->service;
         if ([] !== $bundles = $info->getBundles()) {
@@ -86,13 +82,11 @@ class SymfonyReport extends AbstractReport
 
     private function halfLineBreak(): void
     {
-        $this->Ln(self::LINE_HEIGHT / 2.0);
+        $this->lineBreak(self::LINE_HEIGHT / 2.0);
     }
 
     /**
      * @psalm-param non-empty-array<BundleType> $bundles
-     *
-     * @throws PdfException
      */
     private function outputBundles(array $bundles): void
     {
@@ -100,7 +94,7 @@ class SymfonyReport extends AbstractReport
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
-                PdfColumn::left('Name', 30),
+                PdfColumn::left('Name', 40),
                 PdfColumn::left('Path', 70),
                 PdfColumn::right('Size', 18, true)
             )
@@ -116,9 +110,6 @@ class SymfonyReport extends AbstractReport
         }
     }
 
-    /**
-     * @throws PdfException
-     */
     private function outputInfo(SymfonyInfoService $info): void
     {
         $this->addBookmark('Kernel');
@@ -161,8 +152,6 @@ class SymfonyReport extends AbstractReport
 
     /**
      * @psalm-param non-empty-array<string, PackageType> $packages
-     *
-     * @throws PdfException
      */
     private function outputPackages(string $title, array $packages): void
     {
@@ -170,9 +159,9 @@ class SymfonyReport extends AbstractReport
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
-                PdfColumn::left('Name', 32),
-                PdfColumn::left('Version', 10),
-                PdfColumn::left('Description', 60)
+                PdfColumn::left('Name', 40),
+                PdfColumn::left('Version', 18, true),
+                PdfColumn::left('Description', 70)
             )
             ->setGroupBeforeHeader(true)
             ->setGroupKey($title)
@@ -188,8 +177,6 @@ class SymfonyReport extends AbstractReport
 
     /**
      * @psalm-param non-empty-array<RouteType> $routes
-     *
-     * @throws PdfException
      */
     private function outputRoutes(string $title, array $routes): void
     {
@@ -197,8 +184,8 @@ class SymfonyReport extends AbstractReport
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
-                PdfColumn::left('Name', 40),
-                PdfColumn::left('Path', 60),
+                PdfColumn::left('Name', 42),
+                PdfColumn::left('Path', 69),
                 PdfColumn::left('Method', 25, true)
             )
             ->setGroupBeforeHeader(true)

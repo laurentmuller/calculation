@@ -14,14 +14,14 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Group;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfDocumentSize;
-use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
+use fpdf\PdfOrientation;
+use fpdf\PdfPageSize;
+use fpdf\PdfUnit;
 
 /**
  * Report for the list of groups.
@@ -33,16 +33,20 @@ class GroupsReport extends AbstractArrayReport
     /**
      * @param Group[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities, PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER, PdfDocumentSize $size = PdfDocumentSize::A4)
-    {
-        parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE, $unit, $size);
+    public function __construct(
+        AbstractController $controller,
+        array $entities,
+        PdfUnit $unit = PdfUnit::MILLIMETER,
+        PdfPageSize $size = PdfPageSize::A4
+    ) {
+        parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE, $unit, $size);
     }
 
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('group.list.title', [], true);
 
-        $this->AddPage();
+        $this->addPage();
         $table = $this->createTable();
         $last = \end($entities);
         $emptyStyle = PdfStyle::getCellStyle()->setBorder(PdfBorder::LEFT . PdfBorder::RIGHT);

@@ -15,9 +15,9 @@ namespace App\Pdf;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\Enums\PdfFontName;
-use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
+use fpdf\PdfFontName;
+use fpdf\PdfFontStyle;
 
 /**
  * This class describe a style that can be applied to a PDF document.
@@ -400,9 +400,9 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the border.
      */
-    public function setBorder(PdfBorder|string|int $border): static
+    public function setBorder(PdfBorder|string|int|bool $border): static
     {
-        $this->border = \is_string($border) || \is_int($border) ? new PdfBorder($border) : $border;
+        $this->border = \is_string($border) || \is_int($border) || \is_bool($border) ? new PdfBorder($border) : $border;
 
         return $this;
     }

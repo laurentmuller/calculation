@@ -78,7 +78,7 @@ class TableItems extends PdfGroupTable
         }
         $this->setInProgress(true);
         $this->outputTotal($calculation->getItemsTotal());
-        $this->getParent()->Ln(3);
+        $this->getParent()->lineBreak(3);
     }
 
     /**
@@ -93,7 +93,7 @@ class TableItems extends PdfGroupTable
     }
 
     /**
-     * Adds formatted amount with an error style if the amount is equal to 0.
+     * Adds format amount with an error style if the amount is equal to 0.
      *
      * @param float     $amount     the amount to output
      * @param ?PdfStyle $errorStyle the error style to use when amount is equal to 0

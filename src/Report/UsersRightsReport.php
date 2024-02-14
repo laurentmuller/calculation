@@ -17,13 +17,9 @@ use App\Entity\User;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Model\Role;
-use App\Pdf\Enums\PdfMove;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
@@ -31,6 +27,8 @@ use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
 use Elao\Enum\FlagBag;
+use fpdf\PdfMove;
+use fpdf\PdfTextAlignment;
 
 /**
  * Report for the list of user rights.
@@ -77,14 +75,14 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         if ($key instanceof User) {
             $text = $key->getUserIdentifier();
             $description = $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
-            [$x, $y] = $this->GetXY();
+            [$x, $y] = $this->getXY();
             $event->group->apply($this);
-            $this->Cell(border: PdfBorder::default());
-            $this->SetXY($x, $y);
-            $width = $this->GetStringWidth($text);
-            $this->Cell(w: $width, txt: $text);
+            $this->cell(border: true);
+            $this->setXY($x, $y);
+            $width = $this->getStringWidth($text);
+            $this->cell(width: $width, text: $text);
             PdfStyle::default()->apply($this);
-            $this->Cell(txt: ' - ' . $description, ln: PdfMove::NEW_LINE);
+            $this->cell(text: ' - ' . $description, move: PdfMove::NEW_LINE);
 
             return true;
         }
@@ -92,12 +90,9 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         return false;
     }
 
-    /**
-     * @throws PdfException
-     */
     protected function doRender(array $entities): bool
     {
-        $this->AddPage();
+        $this->addPage();
         $this->rightStyle = PdfStyle::getBulletStyle();
         $this->titleStyle = PdfStyle::getCellStyle()->setIndent(2);
         $table = $this->createTableBuilder();
@@ -165,8 +160,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     /**
      * Output rights for a role.
-     *
-     * @throws PdfException
      */
     private function outputRole(PdfGroupTable $table, Role|User $entity): void
     {
@@ -177,7 +170,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             --$lines;
         }
         if (!$this->isPrintable((float) $lines * self::LINE_HEIGHT)) {
-            $this->AddPage();
+            $this->addPage();
         }
         if ($entity instanceof User) {
             $this->addBookmark($entity->getUserIdentifier(), true, 1);
@@ -200,8 +193,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      * Output default rights for the administrator role.
      *
      * @param PdfGroupTable $table the builder to output to
-     *
-     * @throws PdfException
      */
     private function outputRoleAdmin(PdfGroupTable $table): void
     {
@@ -212,8 +203,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      * Output default rights for the user role.
      *
      * @param PdfGroupTable $table the builder to output to
-     *
-     * @throws PdfException
      */
     private function outputRoleUser(PdfGroupTable $table): void
     {
@@ -225,8 +214,6 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
      *
      * @param User[]        $users the users
      * @param PdfGroupTable $table the builder to output to
-     *
-     * @throws PdfException
      */
     private function outputUsers(array $users, PdfGroupTable $table): void
     {

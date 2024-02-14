@@ -13,10 +13,10 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\Enums\PdfFontName;
-use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\PdfFont;
 use App\Utils\StringUtils;
+use fpdf\PdfFontName;
+use fpdf\PdfFontStyle;
 
 /**
  * Html tag enumeration.

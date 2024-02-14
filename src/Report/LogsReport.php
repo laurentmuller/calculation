@@ -16,21 +16,20 @@ use App\Controller\AbstractController;
 use App\Entity\Log;
 use App\Model\LogFile;
 use App\Pdf\Colors\PdfDrawColor;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfMove;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Events\PdfCellBorderEvent;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfException;
 use App\Pdf\PdfFont;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
+use fpdf\PdfMove;
+use fpdf\PdfOrientation;
+use fpdf\PdfTextAlignment;
 use Psr\Log\LogLevel;
 
 /**
@@ -72,7 +71,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
 
     public function __construct(AbstractController $controller, private readonly LogFile $logFile)
     {
-        parent::__construct($controller, PdfDocumentOrientation::LANDSCAPE);
+        parent::__construct($controller, PdfOrientation::LANDSCAPE);
         $this->setTitleTrans('log.title');
         $description = $this->trans('log.list.file', [
             '%file%' => $this->logFile->getFile(),
@@ -92,15 +91,12 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         return (0 === $event->index) && $this->drawBorder($event, $this->level);
     }
 
-    /**
-     * @throws PdfException
-     */
     public function render(): bool
     {
-        $this->AddPage();
+        $this->addPage();
         $logFile = $this->logFile;
         if ($logFile->isEmpty()) {
-            $this->Cell(txt: $this->trans('log.list.empty'));
+            $this->cell(text: $this->trans('log.list.empty'));
 
             return true;
         }
@@ -111,9 +107,6 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         return true;
     }
 
-    /**
-     * @throws PdfException
-     */
     private function addDateBookmark(int $date): void
     {
         $start_text = FormatUtils::formatDateTime($date, \IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT);
@@ -124,7 +117,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     private function cellTitle(): void
     {
         PdfFont::default()->bold()->apply($this);
-        $this->Cell(txt: $this->trans('log.name'), ln: PdfMove::BELOW);
+        $this->cell(text: $this->trans('log.name'), move: PdfMove::BELOW);
         $this->resetStyle();
     }
 
@@ -146,8 +139,8 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $parent = $event->getDocument();
         $parent->rectangle($bounds, $event->border);
         $color->apply($parent);
-        $parent->SetLineWidth(self::FULL_WIDTH);
-        $parent->Line($x, $y, $x, $y + $h);
+        $parent->setLineWidth(self::FULL_WIDTH);
+        $parent->line($x, $y, $x, $y + $h);
 
         return true;
     }
@@ -185,8 +178,6 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     /**
      * @psalm-param array<string, int> $levels
      * @psalm-param array<string, int> $channels
-     *
-     * @throws PdfException
      */
     private function outputCards(array $levels, array $channels, int $count): void
     {
@@ -232,13 +223,11 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
             ->addStyledRow($valueCells, PdfStyle::getCellStyle()->setFontSize(14))
             ->setBorderListener(null);
         $this->drawCards = false;
-        $this->Ln(3);
+        $this->lineBreak(3);
     }
 
     /**
      * @psalm-param Log[] $logs the logs
-     *
-     * @throws PdfException
      */
     private function outputLogs(array $logs): void
     {

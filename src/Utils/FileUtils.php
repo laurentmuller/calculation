@@ -385,15 +385,17 @@ final class FileUtils
     /**
      * Create temporary file in the given directory with a unique name.
      *
-     * @param string $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first three characters of prefix.
+     * @param string $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first
+     *                             three characters of prefix.
      * @param bool   $deleteOnExit if true, the file is deleted at the end of the script
+     * @param string $suffix       The suffix of the generated temporary filename
      *
      * @return string|null the new temporary file name (with path); null on failure
      */
-    public static function tempFile(string $prefix = 'tmp', bool $deleteOnExit = true): ?string
+    public static function tempFile(string $prefix = 'tmp', bool $deleteOnExit = true, string $suffix = ''): ?string
     {
         try {
-            $file = self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix);
+            $file = self::getFilesystem()->tempnam(\sys_get_temp_dir(), $prefix, $suffix);
             if ($deleteOnExit) {
                 \register_shutdown_function(fn (): bool => self::remove($file));
             }

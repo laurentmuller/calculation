@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
 use App\Utils\StringUtils;
+use fpdf\PdfTextAlignment;
 
 /**
  * Represent a group in the grouping table.

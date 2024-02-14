@@ -13,9 +13,9 @@ declare(strict_types=1);
 namespace App\Pdf;
 
 use App\Model\CustomerInformation;
-use App\Pdf\Enums\PdfMove;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Utils\StringUtils;
+use fpdf\PdfMove;
+use fpdf\PdfTextAlignment;
 
 /**
  * Class to output header in PDF documents.
@@ -81,7 +81,7 @@ class PdfHeader
 
         $parent = $this->parent;
         $width = $parent->getPrintableWidth();
-        $parent->SetFontSize(self::NORMAL_FONT_SIZE);
+        $parent->setFontSize(self::NORMAL_FONT_SIZE);
         $lines = $parent->getLinesCount($this->description, $width, 0.0);
         $height += self::SMALL_HEIGHT * (float) $lines;
         $parent->resetStyle();
@@ -103,7 +103,7 @@ class PdfHeader
             $this->outputLine3($printableWidth, $isAddress);
             $this->outputDescription();
         });
-        $parent->resetStyle()->Ln(2);
+        $parent->resetStyle()->lineBreak(2);
     }
 
     /**
@@ -168,7 +168,7 @@ class PdfHeader
             $width,
             self::SMALL_HEIGHT,
             $text,
-            PdfBorder::NONE,
+            false,
             PdfTextAlignment::LEFT
         );
     }
@@ -180,11 +180,7 @@ class PdfHeader
             return;
         }
         $this->applySmallStyle();
-        $this->parent->MultiCell(
-            h: self::SMALL_HEIGHT,
-            txt: $description,
-            align: PdfTextAlignment::LEFT
-        );
+        $this->parent->multiCell(height: self::SMALL_HEIGHT, text: $description, align: PdfTextAlignment::LEFT);
     }
 
     private function outputEmail(float $width): void
@@ -211,7 +207,7 @@ class PdfHeader
             $width,
             self::SMALL_HEIGHT,
             $text,
-            PdfBorder::NONE,
+            false,
             PdfTextAlignment::RIGHT,
             PdfMove::NEW_LINE
         );
@@ -259,7 +255,7 @@ class PdfHeader
         $name = $this->customer?->getName();
         $link = $this->customer?->getUrl() ?? '';
         $align = $isAddress ? PdfTextAlignment::LEFT : PdfTextAlignment::RIGHT;
-        $border = $isAddress ? PdfBorder::NONE : PdfBorder::BOTTOM;
+        $border = $isAddress ? false : PdfBorder::BOTTOM;
         $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
         $this->outputText(
             $width,
@@ -280,20 +276,20 @@ class PdfHeader
             $width,
             self::SMALL_HEIGHT,
             $text,
-            PdfBorder::NONE,
+            false,
             PdfTextAlignment::RIGHT,
             PdfMove::NEW_LINE
         );
     }
 
-    private function outputText(float $width, float $height, ?string $text, string|int $border, PdfTextAlignment $align, PdfMove $move = PdfMove::RIGHT, string $link = ''): void
+    private function outputText(float $width, float $height, ?string $text, bool|string $border, PdfTextAlignment $align, PdfMove $move = PdfMove::RIGHT, string $link = ''): void
     {
-        $this->parent->Cell(
-            w: $width,
-            h: $height,
-            txt: $text ?? '',
+        $this->parent->cell(
+            width: $width,
+            height: $height,
+            text: $text ?? '',
             border: $border,
-            ln: $move,
+            move: $move,
             align: $align,
             link: $link
         );
@@ -304,7 +300,7 @@ class PdfHeader
         $this->applyTitleStyle();
         $title = $this->parent->getTitle();
         $align = $isAddress ? PdfTextAlignment::CENTER : PdfTextAlignment::LEFT;
-        $border = $isAddress ? PdfBorder::NONE : PdfBorder::BOTTOM;
+        $border = $isAddress ? false : PdfBorder::BOTTOM;
         $this->outputText(
             $width,
             PdfDocument::LINE_HEIGHT,

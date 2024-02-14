@@ -14,7 +14,7 @@ namespace App\Pdf\Traits;
 
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
-use App\Pdf\Enums\PdfRectangleStyle;
+use fpdf\PdfRectangleStyle;
 
 /**
  * Trait to draw chart legends.
@@ -64,7 +64,7 @@ trait PdfChartLegendTrait
             return 0.0;
         }
 
-        $widths = $this->_getLegendWidths($legends);
+        $widths = $this->getLegendWidths($legends);
         if ($horizontal) {
             return \array_sum($widths) + self::SEP_WIDTH * (float) (\count($legends) - 1);
         }
@@ -113,19 +113,19 @@ trait PdfChartLegendTrait
             return $this;
         }
 
-        $widths = $this->_getLegendWidths($legends);
+        $widths = $this->getLegendWidths($legends);
         $totalWidth = $this->getLegendsWidth($legends, true);
 
-        $y ??= $this->GetY();
+        $y ??= $this->getY();
         $x ??= $this->getLeftMargin() + ($this->getPrintableWidth() - $totalWidth) / 2.0;
 
-        $radius = $this->_getLegendRadius();
+        $radius = $this->getLegendRadius();
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($legends as $index => $legend) {
-            $this->_outputLegend($x, $y, $radius, $legend, $circle);
+            $this->outputLegend($x, $y, $radius, $legend, $circle);
             $x += $widths[$index] + self::SEP_WIDTH;
         }
-        $this->resetStyle()->Ln();
+        $this->resetStyle()->lineBreak();
 
         return $this;
     }
@@ -146,18 +146,18 @@ trait PdfChartLegendTrait
             return $this;
         }
 
-        [$oldX, $oldY] = $this->GetXY();
+        [$oldX, $oldY] = $this->getXY();
         $x ??= $oldX;
         $y ??= $oldY;
 
-        $radius = $this->_getLegendRadius();
+        $radius = $this->getLegendRadius();
         PdfDrawColor::cellBorder()->apply($this);
         foreach ($legends as $legend) {
-            $this->_outputLegend($x, $y, $radius, $legend, $circle);
+            $this->outputLegend($x, $y, $radius, $legend, $circle);
             $y += self::LINE_HEIGHT;
         }
         $this->resetStyle()
-            ->SetXY($oldX, $oldY);
+            ->setXY($oldX, $oldY);
 
         return $this;
     }
@@ -165,7 +165,7 @@ trait PdfChartLegendTrait
     /**
      * @psalm-param ColorStringType $legend
      */
-    private function _applyLegendColor(array $legend): void
+    private function applyLegendColor(array $legend): void
     {
         $color = $legend['color'];
         if (\is_string($color)) {
@@ -175,7 +175,7 @@ trait PdfChartLegendTrait
         $color->apply($this);
     }
 
-    private function _getLegendRadius(): float
+    private function getLegendRadius(): float
     {
         return (self::LINE_HEIGHT - 2.0 * $this->getCellMargin()) / 2.0;
     }
@@ -185,20 +185,20 @@ trait PdfChartLegendTrait
      *
      * @psalm-return non-empty-array<float>
      */
-    private function _getLegendWidths(array $legends): array
+    private function getLegendWidths(array $legends): array
     {
-        $offset = 2.0 * ($this->_getLegendRadius() + $this->getCellMargin());
+        $offset = 2.0 * ($this->getLegendRadius() + $this->getCellMargin());
 
-        return \array_map(fn (array $legend): float => $this->GetStringWidth($legend['label']) + $offset, $legends);
+        return \array_map(fn (array $legend): float => $this->getStringWidth($legend['label']) + $offset, $legends);
     }
 
     /**
      * @psalm-param ColorStringType $legend
      */
-    private function _outputLegend(float $x, float $y, float $radius, array $legend, bool $circle = true): void
+    private function outputLegend(float $x, float $y, float $radius, array $legend, bool $circle = true): void
     {
         $diameter = 2.0 * $radius;
-        $this->_applyLegendColor($legend);
+        $this->applyLegendColor($legend);
         if ($circle) {
             $this->circle(
                 $x + $radius,
@@ -207,7 +207,7 @@ trait PdfChartLegendTrait
                 PdfRectangleStyle::BOTH
             );
         } else {
-            $this->Rect(
+            $this->rect(
                 $x,
                 $y + $this->getCellMargin(),
                 $diameter,
@@ -216,7 +216,7 @@ trait PdfChartLegendTrait
             );
         }
 
-        $this->SetXY($x + $diameter, $y);
-        $this->Cell(txt: $legend['label']);
+        $this->setXY($x + $diameter, $y);
+        $this->cell(text: $legend['label']);
     }
 }

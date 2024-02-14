@@ -13,16 +13,15 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use App\Pdf\Enums\PdfFontName;
-use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfException;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Service\SchemaService;
 use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
+use fpdf\PdfFontName;
+use fpdf\PdfMove;
 
 /**
  * Report to display database schema.
@@ -51,9 +50,6 @@ class SchemaReport extends AbstractReport
         $this->setDescription($this->trans('schema.description'));
     }
 
-    /**
-     * @throws PdfException
-     */
     public function render(): bool
     {
         $tables = $this->service->getTables();
@@ -61,7 +57,7 @@ class SchemaReport extends AbstractReport
             return false;
         }
 
-        $this->AddPage();
+        $this->addPage();
         $this->booleanStyle = PdfStyle::getCellStyle()
             ->setFontName(PdfFontName::ZAPFDINGBATS);
 
@@ -85,7 +81,7 @@ class SchemaReport extends AbstractReport
     private function createLinks(array $names): void
     {
         foreach ($names as $name) {
-            $this->tableLinks[$name] = $this->AddLink();
+            $this->tableLinks[$name] = $this->addLink();
         }
     }
 
@@ -181,7 +177,7 @@ class SchemaReport extends AbstractReport
                 ->add($column['default'])
                 ->completeRow();
         }
-        $this->Ln();
+        $this->lineBreak();
     }
 
     /**
@@ -207,21 +203,19 @@ class SchemaReport extends AbstractReport
                 ->add(text: $this->formatBool($index['unique']), style: $this->booleanStyle)
                 ->completeRow();
         }
-        $this->Ln();
+        $this->lineBreak();
     }
 
     /**
      * @psalm-param SchemaTableType $table
-     *
-     * @throws PdfException
      */
     private function outputTable(array $table): void
     {
-        $this->AddPage();
+        $this->addPage();
         $name = $table['name'];
         $link = $this->findLink($name);
         if (\is_int($link)) {
-            $this->SetLink($link);
+            $this->setLink($link);
         }
         $this->outputTitle('schema.table.title', ['%name%' => $name]);
         $this->outputColumns($table['columns']);
@@ -231,8 +225,6 @@ class SchemaReport extends AbstractReport
 
     /**
      * @psalm-param SchemaSoftTableType[] $tables
-     *
-     * @throws PdfException
      */
     private function outputTables(array $tables): void
     {
@@ -260,16 +252,13 @@ class SchemaReport extends AbstractReport
         }
     }
 
-    /**
-     * @throws PdfException
-     */
     private function outputTitle(string $id, array $parameters = []): void
     {
         $text = $this->trans($id, $parameters);
         PdfStyle::default()->setFontBold()->apply($this);
         $this->addBookmark(text: $text, currentY: false);
-        $this->useCellMargin(fn () => $this->Cell(txt: $text, ln: PdfMove::NEW_LINE));
-        $this->Ln($this->getCellMargin());
+        $this->useCellMargin(fn () => $this->cell(text: $text, move: PdfMove::NEW_LINE));
+        $this->lineBreak($this->getCellMargin());
         $this->resetStyle();
     }
 }

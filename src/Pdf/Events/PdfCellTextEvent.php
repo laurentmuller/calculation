@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Pdf\Events;
 
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfTable;
+use fpdf\PdfTextAlignment;
 
 /**
  * The event raised when a cell text must be drawn.

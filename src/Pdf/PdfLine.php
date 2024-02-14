@@ -33,7 +33,7 @@ class PdfLine implements PdfDocumentUpdaterInterface
 
     public function apply(PdfDocument $doc): void
     {
-        $doc->SetLineWidth($this->width);
+        $doc->setLineWidth($this->width);
     }
 
     /**

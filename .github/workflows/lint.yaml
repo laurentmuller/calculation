@@ -51,7 +51,7 @@ jobs:
 
       - name: Lint Markdown
         if: always() && steps.install.outcome == 'success'
-        uses: DavidAnson/markdownlint-cli2-action@v14
+        uses: DavidAnson/markdownlint-cli2-action@v15
         with:
           globs: '*.md'
 

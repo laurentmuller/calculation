@@ -54,6 +54,9 @@ class EntityVoter extends Voter
         return parent::vote($token, $subject, $attributes);
     }
 
+    /**
+     * @phpstan-assert-if-true true $this->supportsAttribute()
+     */
     protected function supports(string $attribute, mixed $subject): bool
     {
         return $this->supportsAttribute($attribute) && EntityName::tryFromMixed($subject) instanceof EntityName;

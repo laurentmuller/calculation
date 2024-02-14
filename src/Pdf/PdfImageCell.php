@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Traits\ImageSizeTrait;
 use App\Traits\MathTrait;
 use App\Utils\FileUtils;
+use fpdf\PdfTextAlignment;
 
 /**
  * Specialized cell containing an image.
@@ -90,12 +90,12 @@ class PdfImageCell extends PdfCell
         };
 
         // draw
-        $parent->Image(
+        $parent->image(
             file: $this->path,
             x: $x,
             y: $y,
-            w: $width,
-            h: $height,
+            width: $width,
+            height: $height,
             link: $this->getLink()
         );
     }

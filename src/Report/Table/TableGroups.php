@@ -14,17 +14,17 @@ namespace App\Report\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationGroup;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
+use fpdf\PdfTextAlignment;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Table to render the totals by group of a calculation.
+ * Table to render the totals by calculation's group.
  */
 class TableGroups extends PdfTable
 {
@@ -46,7 +46,7 @@ class TableGroups extends PdfTable
     }
 
     /**
-     * Output totals by group.
+     * Output totals by calculation's group.
      */
     public function output(): void
     {

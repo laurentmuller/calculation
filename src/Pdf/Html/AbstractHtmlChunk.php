@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
 use App\Traits\ArrayTrait;
+use fpdf\PdfTextAlignment;
 
 /**
  * Represents an HTML chunk.
@@ -307,16 +307,16 @@ abstract class AbstractHtmlChunk
     protected function outputText(HtmlReport $report, string $text): void
     {
         $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
-        $border = $this->getParentBorder();
+        $border = $this->getParentBorder() ?? false;
         if ($border instanceof PdfBorder) {
-            $required = $report->GetStringWidth($text) + 2.0 * $report->getCellMargin();
+            $required = $report->getStringWidth($text) + 2.0 * $report->getCellMargin();
             if ($required > $report->getRemainingWidth()) {
-                $report->MultiCell(0, $height, $text, $border);
+                $report->multiCell(0, $height, $text, $border->getCellStyle());
             } else {
-                $report->Cell($required, $height, $text, $border);
+                $report->cell($required, $height, $text, $border->getCellStyle());
             }
         } else {
-            $report->Write($height, $text);
+            $report->write($height, $text);
         }
     }
 
@@ -333,7 +333,7 @@ abstract class AbstractHtmlChunk
     private function getParentBorder(): ?PdfBorder
     {
         $border = $this->parent?->style?->getBorder();
-        if (null !== $border && $border->isDrawable()) {
+        if ($border instanceof PdfBorder && $border->isDrawable()) {
             return $border;
         }
 

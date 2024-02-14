@@ -15,7 +15,6 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Service\DatabaseInfoService;
@@ -33,9 +32,6 @@ class MySqlReport extends AbstractReport
         $this->setTitleTrans('about.mysql_version', ['%version%' => $this->service->getVersion()]);
     }
 
-    /**
-     * @throws PdfException
-     */
     public function render(): bool
     {
         $database = $this->service->getDatabase();
@@ -44,7 +40,7 @@ class MySqlReport extends AbstractReport
             return false;
         }
 
-        $this->AddPage();
+        $this->addPage();
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
@@ -73,8 +69,6 @@ class MySqlReport extends AbstractReport
 
     /**
      * @param array<string, string> $values
-     *
-     * @throws PdfException
      */
     private function outputArray(PdfGroupTable $table, string $title, array $values): void
     {

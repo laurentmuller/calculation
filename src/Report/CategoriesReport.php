@@ -32,7 +32,7 @@ class CategoriesReport extends AbstractArrayReport
     {
         $this->setTitleTrans('category.list.title', [], true);
 
-        $this->AddPage();
+        $this->addPage();
         $table = $this->createTable();
         /** @psalm-var array<string, Category[]> $groups */
         $groups = $this->groupEntities($entities);

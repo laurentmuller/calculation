@@ -12,10 +12,9 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
-use App\Pdf\PdfException;
 use App\Report\HtmlReport;
+use fpdf\PdfTextAlignment;
 
 /**
  * Represents a text chunk.
@@ -75,9 +74,6 @@ class HtmlTextChunk extends AbstractHtmlChunk
         return $this->text;
     }
 
-    /**
-     * @throws PdfException
-     */
     protected function outputText(HtmlReport $report, string $text): void
     {
         $parent = $this->getParent();
@@ -94,7 +90,7 @@ class HtmlTextChunk extends AbstractHtmlChunk
                     case PdfTextAlignment::CENTER:
                     case PdfTextAlignment::JUSTIFIED:
                         $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
-                        $report->MultiCell(h: $height, txt: $text, align: $align);
+                        $report->multiCell(height: $height, text: $text, align: $align);
                         $report->moveY(-$report->getLastHeight());
 
                         return;

@@ -26,7 +26,7 @@ class GlobalMarginsReport extends AbstractArrayReport
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('globalmargin.list.title');
-        $this->AddPage();
+        $this->addPage();
 
         $table = PdfTable::instance($this)
             ->addColumns(

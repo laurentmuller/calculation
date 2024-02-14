@@ -57,49 +57,41 @@ trait PdfTransparencyTrait
             'alpha' => $this->validateRange($alpha, 0.0, 1.0),
         ];
         $this->gStates[] = $gState;
-        $this->_outParams('/GS%d gs', $key);
+        $this->outf('/GS%d gs', $key);
     }
 
-    protected function _enddoc(): void
-    {
-        if ([] !== $this->gStates && $this->PDFVersion < '1.4') {
-            $this->PDFVersion = '1.4';
-        }
-        parent::_enddoc();
-    }
-
-    protected function _putresourcedict(): void
-    {
-        parent::_putresourcedict();
-        if ([] !== $this->gStates) {
-            $this->_put('/ExtGState <<');
-            foreach ($this->gStates as $gState) {
-                $this->_putParams('/GS%d %d 0 R', $gState['key'], $gState['object']);
-            }
-            $this->_put('>>');
-        }
-    }
-
-    protected function _putresources(): void
-    {
-        foreach ($this->gStates as &$gState) {
-            $this->_newobj();
-            $gState['object'] = $this->n;
-            $this->_put('<</Type /ExtGState');
-            $this->_putParams('/ca %.3F', $gState['alpha']);
-            $this->_putParams('/CA %.3F', $gState['alpha']);
-            $this->_putParams('/BM /%s', $gState['blend_mode']);
-            $this->_put('>>');
-            $this->_endobj();
-        }
-        parent::_putresources();
-    }
-
-    protected function updateTransparenceEnddoc(): void
+    protected function endDoc(): void
     {
         if ([] !== $this->gStates) {
             $this->updateVersion('1.4');
         }
-        parent::_enddoc();
+        parent::endDoc();
+    }
+
+    protected function putResourceDictionary(): void
+    {
+        parent::putResourceDictionary();
+        if ([] !== $this->gStates) {
+            $this->put('/ExtGState <<');
+            foreach ($this->gStates as $gState) {
+                $this->putf('/GS%d %d 0 R', $gState['key'], $gState['object']);
+            }
+            $this->put('>>');
+        }
+    }
+
+    protected function putResources(): void
+    {
+        foreach ($this->gStates as &$gState) {
+            $this->putNewObj();
+            $gState['object'] = $this->objectNumber;
+            $this->put('<</Type /ExtGState');
+            $this->putf('/ca %.3F', $gState['alpha']);
+            $this->putf('/CA %.3F', $gState['alpha']);
+            $this->putf('/BM /%s', $gState['blend_mode']);
+            $this->put('>>');
+            $this->putEndObj();
+        }
+        parent::putResources();
     }
 }

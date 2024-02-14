@@ -13,41 +13,42 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfDocumentSize;
-use App\Pdf\Enums\PdfDocumentUnit;
 use App\Pdf\Html\HtmlParentChunk;
 use App\Pdf\Html\HtmlParser;
+use fpdf\PdfOrientation;
+use fpdf\PdfPageSize;
+use fpdf\PdfRotation;
+use fpdf\PdfUnit;
 
 /**
  * Report to output HTML content.
  */
 class HtmlReport extends AbstractReport
 {
-    private ?float $leftMargin = null;
-    private ?float $rightMargin = null;
+    private ?float $currentLeftMargin = null;
+    private ?float $currentRightMargin = null;
 
     public function __construct(
         AbstractController $controller,
         private readonly string $html,
-        PdfDocumentOrientation $orientation = PdfDocumentOrientation::PORTRAIT,
-        PdfDocumentUnit $unit = PdfDocumentUnit::MILLIMETER,
-        PdfDocumentSize $size = PdfDocumentSize::A4
+        PdfOrientation $orientation = PdfOrientation::PORTRAIT,
+        PdfUnit $unit = PdfUnit::MILLIMETER,
+        PdfPageSize $size = PdfPageSize::A4
     ) {
         parent::__construct($controller, $orientation, $unit, $size);
     }
 
-    public function Footer(): void
+    public function footer(): void
     {
         $previousMargins = $this->applyDefaultMargins();
-        parent::Footer();
+        parent::footer();
         $this->applyPreviousMargins($previousMargins);
     }
 
-    public function Header(): void
+    public function header(): void
     {
         $previousMargins = $this->applyDefaultMargins();
-        parent::Header();
+        parent::header();
         $this->applyPreviousMargins($previousMargins);
     }
 
@@ -62,7 +63,7 @@ class HtmlReport extends AbstractReport
             return false;
         }
 
-        $this->AddPage();
+        $this->addPage();
         $root->output($this);
 
         return true;
@@ -71,12 +72,12 @@ class HtmlReport extends AbstractReport
     /**
      * Update the left margin.
      *
-     * @param float $margin the margin to set
+     * @param float $leftMargin the margin to set
      */
-    public function updateLeftMargin(float $margin): self
+    public function updateLeftMargin(float $leftMargin): self
     {
-        $this->SetLeftMargin($margin);
-        $this->SetX($margin);
+        $this->setLeftMargin($leftMargin);
+        $this->setX($leftMargin);
 
         return $this;
     }
@@ -84,26 +85,24 @@ class HtmlReport extends AbstractReport
     /**
      * Update the right margin.
      *
-     * @param float $margin the margin to set
+     * @param float $rightMargin the margin to set
      */
-    public function updateRightMargin(float $margin): self
+    public function updateRightMargin(float $rightMargin): self
     {
-        $this->SetRightMargin($margin);
+        $this->setRightMargin($rightMargin);
 
         return $this;
     }
 
-    /**
-     * @psalm-param string       $orientation
-     * @psalm-param string|array $size
-     * @psalm-param int          $rotation
-     */
-    protected function _beginpage($orientation, $size, $rotation): void
-    {
-        parent::_beginpage($orientation, $size, $rotation);
+    protected function beginPage(
+        ?PdfOrientation $orientation = null,
+        PdfPageSize|array|null $size = null,
+        ?PdfRotation $rotation = null
+    ): void {
+        parent::beginPage($orientation, $size, $rotation);
         if (1 === $this->page) {
-            $this->leftMargin = $this->lMargin;
-            $this->rightMargin = $this->rMargin;
+            $this->currentLeftMargin = $this->leftMargin;
+            $this->currentRightMargin = $this->rightMargin;
         }
     }
 
@@ -114,13 +113,13 @@ class HtmlReport extends AbstractReport
      */
     private function applyDefaultMargins(): array
     {
-        $leftMargin = $this->lMargin;
-        $rightMargin = $this->rMargin;
-        if (null !== $this->leftMargin && $this->leftMargin !== $leftMargin) {
-            $this->SetLeftMargin($this->GetX() + $this->leftMargin);
+        $leftMargin = $this->leftMargin;
+        $rightMargin = $this->rightMargin;
+        if (null !== $this->currentLeftMargin && $this->currentLeftMargin !== $leftMargin) {
+            $this->setLeftMargin($this->getX() + $this->currentLeftMargin);
         }
-        if (null !== $this->rightMargin && $this->rightMargin !== $rightMargin) {
-            $this->rMargin = $this->rightMargin;
+        if (null !== $this->currentRightMargin && $this->currentRightMargin !== $rightMargin) {
+            $this->rightMargin = $this->currentRightMargin;
         }
 
         return [$leftMargin, $rightMargin];
@@ -134,10 +133,10 @@ class HtmlReport extends AbstractReport
     private function applyPreviousMargins(array $previousMargins): void
     {
         if ($previousMargins[0] !== $this->leftMargin) {
-            $this->lMargin = $this->x = $previousMargins[0];
+            $this->leftMargin = $this->x = $previousMargins[0];
         }
         if ($previousMargins[1] !== $this->rightMargin) {
-            $this->rMargin = $previousMargins[1];
+            $this->rightMargin = $previousMargins[1];
         }
     }
 

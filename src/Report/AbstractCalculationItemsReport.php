@@ -14,12 +14,12 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfMove;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
+use fpdf\PdfMove;
+use fpdf\PdfOrientation;
 
 /**
  * Report for calculations with invalid items.
@@ -36,7 +36,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
      */
     protected function __construct(AbstractController $controller, array $entities, string $title, string $description)
     {
-        parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE);
+        parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
         $this->getHeader()->setDescription($this->trans($description));
         $this->setTitleTrans($title, [], true);
     }
@@ -52,7 +52,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
 
     protected function doRender(array $entities): bool
     {
-        $this->AddPage();
+        $this->addPage();
         $table = $this->createTable();
         $style = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
@@ -72,7 +72,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
             '%items%' => $this->computeItemsCount($entities),
         ];
         $text = $this->transCount($parameters);
-        $this->useCellMargin(fn () => $this->Cell(txt: $text, ln: PdfMove::NEW_LINE));
+        $this->useCellMargin(fn () => $this->cell(text: $text, move: PdfMove::NEW_LINE));
 
         return true;
     }

@@ -28,10 +28,8 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
 use App\Interfaces\UserInterface;
 use App\Model\HttpClientError;
-use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
-use App\Pdf\PdfException;
 use App\Pdf\PdfLabelDocument;
 use App\Report\HtmlReport;
 use App\Repository\CalculationStateRepository;
@@ -59,6 +57,7 @@ use App\Validator\Strength;
 use App\Word\HtmlDocument;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
+use fpdf\PdfFontStyle;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Form\Event\PreSubmitEvent;
@@ -151,8 +150,6 @@ class TestController extends AbstractController
 
     /**
      * Export a report label.
-     *
-     * @throws PdfException
      */
     #[Get(path: '/label', name: 'test_label')]
     public function exportLabel(CustomerRepository $repository): PdfResponse
@@ -166,8 +163,8 @@ class TestController extends AbstractController
 
                 $parent = $event->parent;
                 $font = $parent->getCurrentFont();
-                $parent->SetFont('', PdfFontStyle::BOLD);
-                $parent->Cell($event->width, $event->height, $event->text);
+                $parent->setFont(style: PdfFontStyle::BOLD);
+                $parent->cell($event->width, $event->height, $event->text);
                 $font->apply($parent);
 
                 return true;
@@ -176,7 +173,7 @@ class TestController extends AbstractController
 
         $format = '5161';
         $report = new PdfLabelDocument($format);
-        $report->SetTitle("Etiquette - Format Avery $format");
+        $report->setTitle("Etiquette - Format Avery $format");
         $report->setLabelTextListener($listener);
         $report->setLabelBorder(true);
 
@@ -200,11 +197,11 @@ class TestController extends AbstractController
             $report->addLabel($text);
         }
 
-        $report->AddPage();
-        $report->SetLineWidth(0.25);
+        $report->addPage();
+        $report->setLineWidth(0.25);
         $report->dashedRect(55, 30, 100, 50);
         $report->setDashPattern(5, 3);
-        $report->Rect(55, 100, 100, 50);
+        $report->rect(55, 100, 100, 50);
         $report->setDashPattern();
 
         return $this->renderPdfDocument($report);
@@ -218,7 +215,7 @@ class TestController extends AbstractController
     {
         $content = $this->renderView('test/html_report.html.twig');
         $report = new HtmlReport($this, $content);
-        $report->SetTitle($this->trans('test.html'));
+        $report->setTitle($this->trans('test.html'));
 
         return $this->renderPdfDocument($report);
     }

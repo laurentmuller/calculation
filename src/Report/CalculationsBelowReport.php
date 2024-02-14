@@ -15,13 +15,13 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
+use fpdf\PdfOrientation;
+use fpdf\PdfTextAlignment;
 
 /**
  * Report for the list of calculations.
@@ -48,12 +48,12 @@ class CalculationsBelowReport extends AbstractArrayReport
      */
     public function __construct(AbstractController $controller, array $entities)
     {
-        parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE);
+        parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
     }
 
     protected function doRender(array $entities): bool
     {
-        $this->AddPage();
+        $this->addPage();
         $table = $this->createTable();
         $this->outputEntities($table, $entities);
         $this->outputTotal($table, $entities);

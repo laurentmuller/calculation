@@ -132,7 +132,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
         foreach ($this->children as $child) {
             $child->output($report);
             if ($child->isNewLine()) {
-                $report->Ln();
+                $report->lineBreak();
             }
         }
     }

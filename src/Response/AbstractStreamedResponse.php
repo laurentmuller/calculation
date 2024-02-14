@@ -10,19 +10,27 @@
 
 declare(strict_types=1);
 
-namespace App\Traits;
+namespace App\Response;
 
+use App\Interfaces\MimeTypeInterface;
 use App\Utils\StringUtils;
 use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Mime\MimeTypes;
 
 /**
- * Trait for class implementing the <code>MimeTypeInterface</code> interface.
- *
- * @psalm-require-implements \App\Interfaces\MimeTypeInterface
+ * This abstract class extends streamed response with the mime type interface.
  */
-trait MimeTypeTrait
+abstract class AbstractStreamedResponse extends StreamedResponse implements MimeTypeInterface
 {
+    private ?string $mimeType = null;
+
+    public function __construct(?callable $callback = null, bool $inline = true, string $name = '')
+    {
+        $headers = $this->buildHeaders($name, $inline);
+        parent::__construct(callback: $callback, headers: $headers);
+    }
+
     public function getAttachmentMimeType(): string
     {
         return 'application/x-download';
@@ -30,25 +38,24 @@ trait MimeTypeTrait
 
     public function getInlineMimeType(): string
     {
-        /** @psalm-var string|null $mimeType */
-        static $mimeType = null;
-        if (null === $mimeType) {
-            $types = new MimeTypes();
-            $extension = $this->getFileExtension();
-            $mimeType = $types->getMimeTypes($extension)[0];
+        if (null === $this->mimeType) {
+            $ext = $this->getFileExtension();
+            $types = MimeTypes::getDefault();
+            $this->mimeType = $types->getMimeTypes($ext)[0];
         }
 
-        return $mimeType;
+        return $this->mimeType;
     }
 
     /**
      * Build response header for an attachment.
      *
      * @param string $name   the document name
-     * @param bool   $inline true to send the file inline to the browser. The document viewer is used if available,
-     *                       false to send to the browser and force a file download with the name given.
+     * @param bool   $inline <code>true</code> to send the file inline to the browser. The document viewer is used
+     *                       if available, <code>false</code> to send to the browser and force a file download with
+     *                       the name given.
      */
-    protected function buildHeaders(string $name, bool $inline): array
+    private function buildHeaders(string $name, bool $inline): array
     {
         $name = $this->validate($name);
         $encoded = StringUtils::ascii($name);
@@ -69,9 +76,9 @@ trait MimeTypeTrait
     private function validate(string $name): string
     {
         $name = '' === $name ? 'document' : \basename($name);
-        $extension = '.' . $this->getFileExtension();
-        if (!\str_ends_with($name, $extension)) {
-            return $name . $extension;
+        $ext = '.' . $this->getFileExtension();
+        if (!\str_ends_with($name, $ext)) {
+            return $name . $ext;
         }
 
         return $name;

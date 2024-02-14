@@ -47,7 +47,7 @@ class UsersReport extends AbstractArrayReport
         $disabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::red());
         $enabledStyle = PdfStyle::getCellStyle()->setTextColor(PdfTextColor::darkGreen());
 
-        $this->AddPage();
+        $this->addPage();
         $table = $this->createTable();
         foreach ($entities as $entity) {
             $this->outputEntity($table, $entity, $enabledStyle, $disabledStyle);

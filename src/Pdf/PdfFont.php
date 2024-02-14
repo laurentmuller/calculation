@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Pdf\Enums\PdfFontName;
-use App\Pdf\Enums\PdfFontStyle;
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
+use fpdf\PdfFontName;
+use fpdf\PdfFontStyle;
 
 /**
  * Define a font style.
@@ -45,7 +45,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
 
     public function apply(PdfDocument $doc): void
     {
-        $doc->SetFont($this->name, $this->style, $this->size);
+        $doc->setFont($this->name, $this->style, $this->size);
     }
 
     /**
@@ -180,7 +180,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     {
         if ($add) {
             $newStyle = $this->style->value . $style->value;
-            $this->style = PdfFontStyle::fromStyle($newStyle);
+            $this->style = PdfFontStyle::tryFrom($newStyle) ?? PdfFontStyle::REGULAR;
         } else {
             $this->style = $style;
         }

@@ -13,11 +13,11 @@ declare(strict_types=1);
 namespace App\Pdf\Traits;
 
 use App\Pdf\Colors\PdfFillColor;
-use App\Pdf\Enums\PdfRectangleStyle;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBarScale;
 use App\Pdf\PdfStyle;
 use App\Traits\ArrayTrait;
+use fpdf\PdfRectangleStyle;
+use fpdf\PdfTextAlignment;
 
 /**
  * Trait to draw bar chart.
@@ -82,15 +82,15 @@ trait PdfBarChartTrait
 
         // get values
         $x ??= $this->getLeftMargin();
-        $y ??= $this->GetY();
+        $y ??= $this->getY();
         $w ??= $this->getPrintableWidth();
         $h ??= 200.0;
         $endY = $y + $h;
 
         // check new page
         if (!$this->isPrintable($h, $y)) {
-            $this->AddPage();
-            $y = $this->GetY();
+            $this->addPage();
+            $y = $this->getY();
             $endY = $y + $h;
         }
 
@@ -100,19 +100,19 @@ trait PdfBarChartTrait
         $this->setCellMargin(0.0);
 
         // y axis values
-        $min = $axis['min'] ?? $this->_barComputeRowsValues($rows, fn (float $a, float $b): float => \min($a, $b));
-        $max = $axis['max'] ?? $this->_barComputeRowsValues($rows, fn (float $a, float $b): float => \max($a, $b));
+        $min = $axis['min'] ?? $this->barComputeRowsValues($rows, fn (float $a, float $b): float => \min($a, $b));
+        $max = $axis['max'] ?? $this->barComputeRowsValues($rows, fn (float $a, float $b): float => \max($a, $b));
         $formatter = $axis['formatter'] ?? fn (float $value): string => (string) $value;
 
         // y axis
         $scale = new PdfBarScale($min, $max);
-        $labelsY = $this->_barGetLabelsY($scale, $formatter);
+        $labelsY = $this->barGetLabelsY($scale, $formatter);
         $widthY = $this->getColumnMax($labelsY, 'width');
 
         // x axis
-        $labelsX = $this->_barGetLabelsX($rows);
+        $labelsX = $this->barGetLabelsX($rows);
         $widthX = $this->getColumnMax($labelsX, 'width');
-        $barWidth = $this->_barGetBarWidth($rows, $w - $widthY - 1.0);
+        $barWidth = $this->barGetBarWidth($rows, $w - $widthY - 1.0);
         $rotation = $barWidth < $widthX;
 
         // draw Y axis
@@ -122,21 +122,21 @@ trait PdfBarChartTrait
         } else {
             $h -= self::LINE_HEIGHT;
         }
-        $this->_barDrawAxisY($labelsY, $widthY, $x, $y, $w, $h);
+        $this->barDrawAxisY($labelsY, $widthY, $x, $y, $w, $h);
 
         // restrict axis x area
         $x += $widthY + 1.0 + self::SEP_BARS;
         $y += self::LINE_HEIGHT / 2.0;
 
         // draw axis X and data
-        $data = $this->_barComputeData($rows, $barWidth, $x, $y, $h, $scale);
-        $this->_barDrawAxisX($labelsX, $barWidth, $rotation, $x, $y + $h);
-        $this->_barDrawData($data);
+        $data = $this->barComputeData($rows, $barWidth, $x, $y, $h, $scale);
+        $this->barDrawAxisX($labelsX, $barWidth, $rotation, $x, $y + $h);
+        $this->barDrawData($data);
 
         // reset
-        $this->setCellMargin($margin)
-            ->resetStyle()
-            ->SetY($endY);
+        $this->setCellMargin($margin);
+        $this->resetStyle()
+            ->setY($endY);
     }
 
     /**
@@ -144,7 +144,7 @@ trait PdfBarChartTrait
      *
      * @psalm-return BarChartRowDataType[]
      */
-    private function _barComputeData(
+    private function barComputeData(
         array $rows,
         float $barWidth,
         float $x,
@@ -163,7 +163,7 @@ trait PdfBarChartTrait
         foreach ($rows as $row) {
             $entry = [
                 'label' => $row['label'],
-                'width' => $this->GetStringWidth($row['label']),
+                'width' => $this->getStringWidth($row['label']),
                 'x' => $currentX,
                 'w' => $barWidth,
                 'values' => [],
@@ -176,7 +176,7 @@ trait PdfBarChartTrait
                     continue;
                 }
                 $entry['values'][] = [
-                    'color' => $this->_barGetFillColor($value),
+                    'color' => $this->barGetFillColor($value),
                     'value' => $currentValue,
                     'y' => $startY - $heightValue,
                     'h' => $heightValue,
@@ -194,7 +194,7 @@ trait PdfBarChartTrait
      * @psalm-param non-empty-array<BarChartRowType> $rows
      * @psalm-param callable(float, float): float $callback
      */
-    private function _barComputeRowsValues(array $rows, callable $callback): float
+    private function barComputeRowsValues(array $rows, callable $callback): float
     {
         $result = null;
         foreach ($rows as $row) {
@@ -208,7 +208,7 @@ trait PdfBarChartTrait
     /**
      * @psalm-param BarChartLabelType[] $labels
      */
-    private function _barDrawAxisX(
+    private function barDrawAxisX(
         array $labels,
         float $barWidth,
         bool $rotation,
@@ -223,8 +223,8 @@ trait PdfBarChartTrait
                 $dy = \sin(self::TEXT_ANGLE) * ($width + 1.0);
                 $this->rotateText($text, self::TEXT_ANGLE, $x + $dx, $y + $dy);
             } else {
-                $this->SetXY($x, $y);
-                $this->Cell(w: $barWidth, txt: $text, align: PdfTextAlignment::CENTER);
+                $this->setXY($x, $y);
+                $this->cell(width: $barWidth, text: $text, align: PdfTextAlignment::CENTER);
             }
             $x += $barWidth + self::SEP_BARS;
         }
@@ -233,7 +233,7 @@ trait PdfBarChartTrait
     /**
      * @psalm-param  BarChartLabelType[] $labels
      */
-    private function _barDrawAxisY(
+    private function barDrawAxisY(
         array $labels,
         float $width,
         float $x,
@@ -245,9 +245,9 @@ trait PdfBarChartTrait
         $deltaY = $this->safeDivide($h, \count($labels) - 1);
         foreach ($labels as $label) {
             $text = $label['label'];
-            $this->SetXY($x, $y);
-            $this->Cell(w: $width, txt: $text, align: PdfTextAlignment::RIGHT);
-            $this->Line($x + $width + 1.0, $y + $halfHeight, $x + $w, $y + $halfHeight);
+            $this->setXY($x, $y);
+            $this->cell(width: $width, text: $text, align: PdfTextAlignment::RIGHT);
+            $this->line($x + $width + 1.0, $y + $halfHeight, $x + $w, $y + $halfHeight);
             $y += $deltaY;
         }
     }
@@ -255,17 +255,17 @@ trait PdfBarChartTrait
     /**
      * @psalm-param BarChartRowDataType[] $data
      */
-    private function _barDrawData(array $data): void
+    private function barDrawData(array $data): void
     {
         foreach ($data as $row) {
             foreach ($row['values'] as $value) {
                 $value['color']->apply($this);
-                $this->Rect($row['x'], $value['y'], $row['w'], $value['h'], PdfRectangleStyle::FILL);
+                $this->rect($row['x'], $value['y'], $row['w'], $value['h'], PdfRectangleStyle::FILL);
             }
         }
     }
 
-    private function _barGetBarWidth(array $rows, float $w): float
+    private function barGetBarWidth(array $rows, float $w): float
     {
         $countRows = (float) \count($rows);
 
@@ -275,7 +275,7 @@ trait PdfBarChartTrait
     /**
      * @psalm-param ColorValueType $row
      */
-    private function _barGetFillColor(array $row): PdfFillColor
+    private function barGetFillColor(array $row): PdfFillColor
     {
         $color = $row['color'];
         if (\is_string($color)) {
@@ -290,12 +290,12 @@ trait PdfBarChartTrait
      *
      * @psalm-return non-empty-array<BarChartLabelType>
      */
-    private function _barGetLabelsX(array $rows): array
+    private function barGetLabelsX(array $rows): array
     {
         return \array_map(function (array $row): array {
             return [
                 'label' => $row['label'],
-                'width' => $this->GetStringWidth($row['label']),
+                'width' => $this->getStringWidth($row['label']),
             ];
         }, $rows);
     }
@@ -305,7 +305,7 @@ trait PdfBarChartTrait
      *
      * @psalm-return non-empty-array<BarChartLabelType>
      */
-    private function _barGetLabelsY(PdfBarScale $scale, callable $formatter): array
+    private function barGetLabelsY(PdfBarScale $scale, callable $formatter): array
     {
         /** @psalm-var non-empty-array<BarChartLabelType> $result */
         $result = [];
@@ -313,7 +313,7 @@ trait PdfBarChartTrait
             $text = $formatter($value);
             $result[] = [
                 'label' => $text,
-                'width' => $this->GetStringWidth($text),
+                'width' => $this->getStringWidth($text),
             ];
         }
 

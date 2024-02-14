@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
 use App\Utils\StringUtils;
+use fpdf\PdfTextAlignment;
 
 /**
  * A specialized chunk for HTML list item (li).
@@ -46,10 +46,10 @@ class HtmlLiChunk extends HtmlParentChunk
         $this->applyFont($report, $this->findFont(), function (HtmlReport $report) use ($text): void {
             $width = $this->getBulletMargin($report);
             $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
-            $report->Cell(
-                w: $width,
-                h: $height,
-                txt: $text,
+            $report->cell(
+                width: $width,
+                height: $height,
+                text: $text,
                 align: PdfTextAlignment::RIGHT
             );
         });
@@ -88,7 +88,7 @@ class HtmlLiChunk extends HtmlParentChunk
 
         if (StringUtils::isString($text)) {
             $this->applyFont($report, $this->findFont(), function (HtmlReport $report) use (&$width, $text): void {
-                $width = $report->GetStringWidth($text);
+                $width = $report->getStringWidth($text);
             });
         }
 

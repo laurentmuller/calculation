@@ -15,10 +15,10 @@ namespace App\Pdf\Html;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\Enums\PdfFontName;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfBorder;
 use App\Pdf\PdfStyle;
+use fpdf\PdfFontName;
+use fpdf\PdfTextAlignment;
 
 /**
  * The HTML style.

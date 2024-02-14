@@ -12,32 +12,28 @@ declare(strict_types=1);
 
 namespace App\Response;
 
-use App\Interfaces\MimeTypeInterface;
-use App\Pdf\Enums\PdfDocumentOutput;
 use App\Pdf\PdfDocument;
-use App\Traits\MimeTypeTrait;
-use Symfony\Component\HttpFoundation\Response;
+use fpdf\PdfDestination;
 
 /**
  * The PdfResponse represents an HTTP response within a PDF document.
  *
  * @see PdfDocument
  */
-class PdfResponse extends Response implements MimeTypeInterface
+class PdfResponse extends AbstractStreamedResponse
 {
-    use MimeTypeTrait;
-
     /**
      * @param PdfDocument $doc    the document to output
-     * @param bool        $inline <code>true</code> to send the file inline to the browser. The PDF viewer is used if available.
-     *                            <code>false</code> to send to the browser and force a file download with the name given.
-     * @param string      $name   the name of the document file or <code>''</code> to use the default name ('document.pdf').
+     * @param bool        $inline <code>true</code> to send the file inline to the browser. The document viewer
+     *                            is used if available. <code>false</code> to send to the browser and force a file
+     *                            download with the name given.
+     * @param string      $name   the name of the document file or <code>''</code> to use the default name
+     *                            ('document.pdf').
      */
     public function __construct(PdfDocument $doc, bool $inline = true, string $name = '')
     {
-        $headers = $this->buildHeaders($name, $inline);
-        $content = $doc->Output(PdfDocumentOutput::STRING);
-        parent::__construct($content, self::HTTP_OK, $headers);
+        $callback = fn (): string => $doc->output(PdfDestination::FILE, 'php://output');
+        parent::__construct($callback, $inline, $name);
     }
 
     public function getFileExtension(): string

@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Pdf\Enums\PdfRectangleStyle;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Events\PdfCellBorderEvent;
 use App\Pdf\Events\PdfCellTextEvent;
@@ -24,6 +22,8 @@ use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
+use fpdf\PdfRectangleStyle;
+use fpdf\PdfTextAlignment;
 
 /**
  * Class to build and output a table.
@@ -258,7 +258,7 @@ class PdfTable
             return false;
         }
 
-        $this->parent->AddPage();
+        $this->parent->addPage();
         if (!$this->isHeaders && $this->isRepeatHeader()) {
             $this->outputHeaders();
         }
@@ -576,7 +576,7 @@ class PdfTable
      */
     protected function drawCellLink(PdfDocument $parent, PdfRectangle $bounds, string|int $link): void
     {
-        $parent->Link($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $link);
+        $parent->link($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $link);
     }
 
     /**
@@ -599,13 +599,13 @@ class PdfTable
                 case PdfTextAlignment::JUSTIFIED:
                     $w = (float) \array_sum($widths);
                     $x = $parent->getLeftMargin() + ($parent->getPrintableWidth() - $w) / 2.0;
-                    $parent->SetX($x);
+                    $parent->setX($x);
                     break;
                 case PdfTextAlignment::RIGHT:
                     /** @psalm-var float $w */
                     $w = \array_sum($widths);
-                    $x = $parent->GetPageWidth() - $parent->getRightMargin() - $w;
-                    $parent->SetX($x);
+                    $x = $parent->getPageWidth() - $parent->getRightMargin() - $w;
+                    $parent->setX($x);
                     break;
                 default:
                     break;
@@ -618,7 +618,7 @@ class PdfTable
         }
 
         // next line
-        $parent->Ln($height);
+        $parent->lineBreak($height);
     }
 
     /**
@@ -816,7 +816,7 @@ class PdfTable
      */
     private function drawCell(PdfDocument $parent, int $index, float $width, float $height, string $text, PdfTextAlignment $alignment, PdfStyle $style, PdfCell $cell): void
     {
-        [$x, $y] = $parent->GetXY();
+        [$x, $y] = $parent->getXY();
         $bounds = new PdfRectangle($x, $y, $width, $height);
 
         // background
@@ -825,13 +825,13 @@ class PdfTable
 
         // border
         $style->apply($parent);
-        $parent->SetXY($x, $y);
+        $parent->setXY($x, $y);
         $border = $style->getBorder()->isInherited() ? $this->border : $style->getBorder();
         $this->drawCellBorder($parent, $index, $bounds, $border);
 
         // image or text
         $style->apply($parent);
-        $parent->SetXY($x, $y);
+        $parent->setXY($x, $y);
         $margin = $parent->getCellMargin();
         $textBounds = clone $bounds;
         $line_height = PdfDocument::LINE_HEIGHT;
@@ -845,7 +845,7 @@ class PdfTable
             }
             $indent = $style->getIndent();
             if ($indent > 0) {
-                $parent->SetX($x + $indent);
+                $parent->setX($x + $indent);
                 $textBounds->indent($indent);
             }
             $this->drawCellText($parent, $index, $textBounds, $text, $alignment, $line_height);
@@ -853,14 +853,14 @@ class PdfTable
 
         if ($cell->isLink()) {
             $textBounds->inflate(-$margin);
-            $linkWidth = $parent->GetStringWidth($text);
+            $linkWidth = $parent->getStringWidth($text);
             $linesCount = \max(1, $parent->getLinesCount($text, $textBounds->width()));
             $linkHeight = (float) $linesCount * $line_height - 2.0 * $margin;
             $textBounds->setSize($linkWidth, $linkHeight);
             $this->drawCellLink($parent, $textBounds, $cell->getLink());
         }
 
-        $parent->SetXY($x + $width, $y);
+        $parent->setXY($x + $width, $y);
     }
 
     /**
@@ -913,16 +913,16 @@ class PdfTable
             $right = $bounds->right();
             $bottom = $bounds->bottom();
             if ($border->isLeft()) {
-                $parent->Line($x, $y, $x, $bottom);
+                $parent->line($x, $y, $x, $bottom);
             }
             if ($border->isRight()) {
-                $parent->Line($right, $y, $right, $bottom);
+                $parent->line($right, $y, $right, $bottom);
             }
             if ($border->isTop()) {
-                $parent->Line($x, $y, $right, $y);
+                $parent->line($x, $y, $right, $y);
             }
             if ($border->isBottom()) {
-                $parent->Line($x, $bottom, $right, $bottom);
+                $parent->line($x, $bottom, $right, $bottom);
             }
         }
     }
@@ -937,8 +937,14 @@ class PdfTable
      * @param PdfTextAlignment $alignment the text alignment
      * @param float            $height    the line height
      */
-    private function drawCellText(PdfDocument $parent, int $index, PdfRectangle $bounds, string $text, PdfTextAlignment $alignment, float $height): void
-    {
+    private function drawCellText(
+        PdfDocument $parent,
+        int $index,
+        PdfRectangle $bounds,
+        string $text,
+        PdfTextAlignment $alignment,
+        float $height
+    ): void {
         if ($this->textListener instanceof PdfDrawCellTextInterface) {
             $event = new PdfCellTextEvent($this, $index, clone $bounds, $text, $alignment, $height);
             if ($this->textListener->drawCellText($event)) {
@@ -946,7 +952,7 @@ class PdfTable
             }
         }
         if (StringUtils::isString($text)) {
-            $parent->MultiCell(w: $bounds->width(), h: $height, txt: $text, align: $alignment);
+            $parent->multiCell(width: $bounds->width(), height: $height, text: $text, align: $alignment);
         }
     }
 }

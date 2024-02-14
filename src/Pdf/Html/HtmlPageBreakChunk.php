@@ -21,6 +21,6 @@ class HtmlPageBreakChunk extends AbstractHtmlChunk
 {
     public function output(HtmlReport $report): void
     {
-        $report->AddPage();
+        $report->addPage();
     }
 }

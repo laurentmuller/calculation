@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
-use App\Pdf\Enums\PdfRectangleStyle;
 use App\Pdf\PdfBorder;
+use fpdf\PdfRectangleStyle;
 
 /**
  * Trait to perform a rotation around a given center.
@@ -33,7 +33,7 @@ trait PdfRotationTrait
     public function endRotate(): void
     {
         if (!$this->isFloatZero($this->angle)) {
-            $this->_out('Q');
+            $this->out('Q');
             $this->angle = 0.0;
         }
     }
@@ -53,14 +53,14 @@ trait PdfRotationTrait
             return;
         }
         $this->angle = $angle;
-        $x ??= $this->GetX();
-        $y ??= $this->GetY();
+        $x ??= $this->getX();
+        $y ??= $this->getY();
         $angle *= \M_PI / 180.0;
         $cos = \cos($angle);
         $sin = \sin($angle);
-        $cx = $x * $this->k;
-        $cy = ($this->h - $y) * $this->k;
-        $this->_outParams(
+        $cx = $x * $this->scaleFactor;
+        $cy = ($this->height - $y) * $this->scaleFactor;
+        $this->outf(
             'q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm',
             $cos,
             $sin,
@@ -78,27 +78,30 @@ trait PdfRotationTrait
      *
      * It can be drawn (border only), filled (with no border) or both. Do nothing if the angle is equal to 0.0.
      *
-     * @param float                              $x     the abscissa of upper-left corner
-     * @param float                              $y     the ordinate of upper-left corner
-     * @param float                              $w     the width
-     * @param float                              $h     the height
-     * @param float                              $angle the rotation angle
-     * @param PdfBorder|PdfRectangleStyle|string $style the style of rendering. Possible values are:
-     *                                                  <ul>
-     *                                                  <li>A PdfBorder instance.</li>
-     *                                                  <li>A PdfRectangleStyle enumeration.</li>
-     *                                                  <li><code>'D'</code> or an empty string (""): Draw (default value).</li>
-     *                                                  <li><code>'F'</code>: Fill.</li>
-     *                                                  <li><code>'DF'</code>: Draw and fill.</li>
-     *                                                  </ul>
+     * @param float                       $x     the abscissa of upper-left corner
+     * @param float                       $y     the ordinate of upper-left corner
+     * @param float                       $w     the width
+     * @param float                       $h     the height
+     * @param float                       $angle the rotation angle
+     * @param PdfBorder|PdfRectangleStyle $style the style of rendering. Possible values are:
+     *                                           <ul>
+     *                                           <li>A PdfBorder instance.</li>
+     *                                           <li>A PdfRectangleStyle enumeration.</li>
+     *                                           </ul>
      */
-    public function rotateRect(float $x, float $y, float $w, float $h, float $angle, PdfBorder|PdfRectangleStyle|string $style = ''): void
-    {
+    public function rotateRect(
+        float $x,
+        float $y,
+        float $w,
+        float $h,
+        float $angle,
+        PdfBorder|PdfRectangleStyle $style = PdfRectangleStyle::BORDER
+    ): void {
         if ($this->isFloatZero($angle)) {
             return;
         }
         $this->rotate($angle, $x, $y);
-        $this->Rect($x, $y, $w, $h, $style);
+        $this->rect($x, $y, $w, $h, $style);
         $this->endRotate();
     }
 
@@ -117,16 +120,16 @@ trait PdfRotationTrait
         if ('' === $txt || $this->isFloatZero($angle)) {
             return;
         }
-        $x ??= $this->GetX();
-        $y ??= $this->GetY();
+        $x ??= $this->getX();
+        $y ??= $this->getY();
         $this->rotate($angle, $x, $y);
-        $this->Text($x, $y, $txt);
+        $this->text($x, $y, $txt);
         $this->endRotate();
     }
 
-    protected function _endpage(): void
+    protected function endPage(): void
     {
         $this->endRotate();
-        parent::_endpage();
+        parent::endPage();
     }
 }

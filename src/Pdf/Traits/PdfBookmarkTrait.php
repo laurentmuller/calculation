@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
-use App\Pdf\Enums\PdfMove;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfDocument;
-use App\Pdf\PdfException;
 use App\Pdf\PdfStyle;
 use App\Utils\FormatUtils;
+use fpdf\PdfException;
+use fpdf\PdfMove;
+use fpdf\PdfTextAlignment;
 
 /**
  * Trait to handle bookmarks and page index.
@@ -83,18 +83,18 @@ trait PdfBookmarkTrait
         bool $link = true
     ): self {
         // validate
-        $this->_validateLevel($level);
+        $this->validateLevel($level);
 
         // convert
         if (!$isUTF8) {
-            $text = (string) $this->_UTF8encode($text);
+            $text = $this->convertIsoToUtf8($text);
         }
 
         // add
         $page = $this->page;
         $y = $currentY ? $this->y : 0.0;
-        $id = $link ? $this->CreateLink($y, $page) : '';
-        $y = ($this->h - $y) * $this->k;
+        $id = $link ? $this->createLink($y, $page) : '';
+        $y = ($this->height - $y) * $this->scaleFactor;
         $this->bookmarks[] = [
             'text' => $text,
             'level' => $level,
@@ -136,8 +136,8 @@ trait PdfBookmarkTrait
         }
 
         // title
-        $this->AddPage();
-        $titleBookmark = $this->_outputIndexTitle($title, $titleStyle, $addBookmark);
+        $this->addPage();
+        $titleBookmark = $this->outputIndexTitle($title, $titleStyle, $addBookmark);
 
         // content style
         $contentStyle ??= PdfStyle::default();
@@ -158,52 +158,52 @@ trait PdfBookmarkTrait
 
             // page text and size
             $page_text = FormatUtils::formatInt($bookmark['page']);
-            $page_size = $this->GetStringWidth($page_text) + self::SPACE;
+            $page_size = $this->getStringWidth($page_text) + self::SPACE;
             // level offset
-            $offset = $this->_outputIndexLevel($bookmark['level']);
+            $offset = $this->outputIndexLevel($bookmark['level']);
             // text
             $link = $bookmark['link'];
             $width = $printable_width - $offset - $page_size - self::SPACE;
-            $text_size = $this->_outputIndexText($bookmark['text'], $width, $height, $link);
+            $text_size = $this->outputIndexText($bookmark['text'], $width, $height, $link);
             // separator
             $width -= $text_size + self::SPACE;
-            $this->_outputIndexSeparator($separator, $width, $height, $link);
+            $this->outputIndexSeparator($separator, $width, $height, $link);
             // page
-            $this->_outputIndexPage($page_text, $page_size, $height, $link);
+            $this->outputIndexPage($page_text, $page_size, $height, $link);
         }
 
         return $this->resetStyle();
     }
 
-    protected function _putcatalog(): void
+    protected function putCatalog(): void
     {
-        parent::_putcatalog();
+        parent::putCatalog();
         if ([] === $this->bookmarks) {
             return;
         }
-        $this->_putParams('/Outlines %d 0 R', $this->bookmarkRoot);
-        $this->_put('/PageMode /UseOutlines');
+        $this->putf('/Outlines %d 0 R', $this->bookmarkRoot);
+        $this->put('/PageMode /UseOutlines');
     }
 
-    protected function _putresources(): void
+    protected function putResources(): void
     {
-        parent::_putresources();
+        parent::putResources();
         if ([] === $this->bookmarks) {
             return;
         }
-        $n = $this->n + 1;
-        $lastReference = $this->_updateBookmarks();
+        $number = $this->objectNumber + 1;
+        $lastReference = $this->updateBookmarks();
         foreach ($this->bookmarks as $bookmark) {
-            $this->_putBookmark($bookmark, $n);
+            $this->putBookmark($bookmark, $number);
         }
-        $this->_newobj();
-        $this->bookmarkRoot = $this->n;
-        $this->_putParams('<</Type /Outlines /First %d 0 R', $n);
-        $this->_putParams('/Last %d 0 R>>', $n + $lastReference);
-        $this->_endobj();
+        $this->putNewObj();
+        $this->bookmarkRoot = $this->objectNumber;
+        $this->putf('<</Type /Outlines /First %d 0 R', $number);
+        $this->putf('/Last %d 0 R>>', $number + $lastReference);
+        $this->putEndObj();
     }
 
-    private function _outputIndexLevel(int $level): float
+    private function outputIndexLevel(int $level): float
     {
         $offset = 0;
         if ($level > 0) {
@@ -214,36 +214,36 @@ trait PdfBookmarkTrait
         return $offset;
     }
 
-    private function _outputIndexPage(
+    private function outputIndexPage(
         string $page,
         float $width,
         float $height,
         string|int $link
     ): void {
-        $this->Cell(
-            w: $width,
-            h: $height,
-            txt: $page,
-            ln: PdfMove::NEW_LINE,
+        $this->cell(
+            width: $width,
+            height: $height,
+            text: $page,
+            move: PdfMove::NEW_LINE,
             align: PdfTextAlignment::RIGHT,
             link: $link
         );
     }
 
-    private function _outputIndexSeparator(
+    private function outputIndexSeparator(
         string $separator,
         float $width,
         float $height,
         string|int $link
     ): void {
-        $count = (int) ($width / $this->GetStringWidth($separator));
+        $count = (int) ($width / $this->getStringWidth($separator));
         $width += self::SPACE;
         if ($count > 0) {
             $text = \str_repeat($separator, $count);
-            $this->Cell(
-                w: $width,
-                h: $height,
-                txt: $text,
+            $this->cell(
+                width: $width,
+                height: $height,
+                text: $text,
                 align: PdfTextAlignment::RIGHT,
                 link: $link
             );
@@ -252,22 +252,22 @@ trait PdfBookmarkTrait
         }
     }
 
-    private function _outputIndexText(
+    private function outputIndexText(
         string $text,
         float $width,
         float $height,
         string|int $link
     ): float {
-        $text = $this->_cleanText($text);
-        $text_width = $this->GetStringWidth($text);
+        $text = $this->cleanText($text);
+        $text_width = $this->getStringWidth($text);
         while ($text_width > $width) {
             $text = \substr($text, 0, -1);
-            $text_width = $this->GetStringWidth($text);
+            $text_width = $this->getStringWidth($text);
         }
-        $this->Cell(
-            w: $text_width + self::SPACE,
-            h: $height,
-            txt: $text,
+        $this->cell(
+            width: $text_width + self::SPACE,
+            height: $height,
+            text: $text,
             link: $link
         );
 
@@ -277,7 +277,7 @@ trait PdfBookmarkTrait
     /**
      * @psalm-return PdfBookmarkType|false
      */
-    private function _outputIndexTitle(?string $title, ?PdfStyle $titleStyle, bool $addBookmark): array|false
+    private function outputIndexTitle(?string $title, ?PdfStyle $titleStyle, bool $addBookmark): array|false
     {
         $title ??= self::INDEX_TITLE;
         $titleStyle ??= PdfStyle::getBoldCellStyle();
@@ -291,7 +291,7 @@ trait PdfBookmarkTrait
             }
         }
         $titleStyle->apply($this);
-        $this->Cell(txt: $title, ln: PdfMove::NEW_LINE, align: PdfTextAlignment::CENTER);
+        $this->cell(text: $title, move: PdfMove::NEW_LINE, align: PdfTextAlignment::CENTER);
         $this->resetStyle();
 
         return $result;
@@ -300,20 +300,20 @@ trait PdfBookmarkTrait
     /**
      * @psalm-param PdfBookmarkType $bookmark
      */
-    private function _putBookmark(array $bookmark, int $n): void
+    private function putBookmark(array $bookmark, int $n): void
     {
-        $this->_newobj();
-        $this->_putParams('<</Title %s', $this->_textstring($bookmark['text']));
+        $this->putNewObj();
+        $this->putf('<</Title %s', $this->textString($bookmark['text']));
         foreach ($bookmark['hierarchy'] as $key => $value) {
-            $this->_putParams('/%s %d 0 R', $key, $n + $value);
+            $this->putf('/%s %d 0 R', $key, $n + $value);
         }
-        $page = $this->PageInfo[$bookmark['page']]['n'];
-        $this->_putParams('/Dest [%d 0 R /XYZ 0 %.2F null]', $page, $bookmark['y']);
-        $this->_put('/Count 0>>');
-        $this->_endobj();
+        $page = $this->pageInfos[$bookmark['page']]['number'];
+        $this->putf('/Dest [%d 0 R /XYZ 0 %.2F null]', $page, $bookmark['y']);
+        $this->put('/Count 0>>');
+        $this->putEndObj();
     }
 
-    private function _updateBookmarks(): int
+    private function updateBookmarks(): int
     {
         $level = 0;
         $references = [];
@@ -345,7 +345,7 @@ trait PdfBookmarkTrait
     /**
      * @throws PdfException
      */
-    private function _validateLevel(int $level): void
+    private function validateLevel(int $level): void
     {
         $maxLevel = 0;
         if ([] !== $this->bookmarks) {
@@ -355,7 +355,7 @@ trait PdfBookmarkTrait
         if ($level < 0 || $level > $maxLevel) {
             $allowed = \implode('...', \array_unique([0, $maxLevel]));
             $message = \sprintf('Invalid bookmark level: %d. Allowed value: %s.', $level, $allowed);
-            $this->Error($message);
+            throw new PdfException($message);
         }
     }
 }

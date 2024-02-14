@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Pdf\Enums\PdfTextAlignment;
+use fpdf\PdfTextAlignment;
 
 /**
  * Define a column for a Pdf table.
@@ -26,8 +26,12 @@ class PdfColumn
      * @param bool              $fixed     true if the column width is fixed. This property is used only if the
      *                                     parent's table use all the document width.
      */
-    public function __construct(private ?string $text, private float $width = 0.0, private ?PdfTextAlignment $alignment = PdfTextAlignment::LEFT, private bool $fixed = false)
-    {
+    public function __construct(
+        private ?string $text,
+        private float $width = 0.0,
+        private ?PdfTextAlignment $alignment = PdfTextAlignment::LEFT,
+        private bool $fixed = false
+    ) {
     }
 
     /**

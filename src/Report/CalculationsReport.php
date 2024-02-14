@@ -15,14 +15,13 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\Enums\PdfDocumentOrientation;
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfException;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Traits\MathTrait;
 use App\Utils\FormatUtils;
+use fpdf\PdfOrientation;
+use fpdf\PdfTextAlignment;
 
 /**
  * Report for the list of calculations.
@@ -59,17 +58,14 @@ class CalculationsReport extends AbstractArrayReport
      */
     public function __construct(AbstractController $controller, array $entities)
     {
-        parent::__construct($controller, $entities, PdfDocumentOrientation::LANDSCAPE);
+        parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
         $this->minMargin = $controller->getMinMargin();
         $this->setTitleTrans('calculation.list.title');
     }
 
-    /**
-     * @throws PdfException
-     */
     protected function doRender(array $entities): bool
     {
-        $this->AddPage();
+        $this->addPage();
         $table = $this->createTable();
         $this->outputEntities($table, $entities);
         $this->outputTotal($table, $entities);
@@ -105,8 +101,6 @@ class CalculationsReport extends AbstractArrayReport
 
     /**
      * @psalm-param Calculation[] $entities
-     *
-     * @throws PdfException
      */
     private function outputEntities(PdfGroupTable $table, array $entities): void
     {

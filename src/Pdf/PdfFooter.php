@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Pdf;
 
-use App\Pdf\Enums\PdfTextAlignment;
 use App\Report\AbstractReport;
 use App\Utils\FormatUtils;
+use fpdf\PdfTextAlignment;
 
 /**
  * Class to output footer in PDF documents.
@@ -23,11 +23,6 @@ use App\Utils\FormatUtils;
  */
 class PdfFooter
 {
-    /**
-     * The top border.
-     */
-    private readonly PdfBorder $border;
-
     /**
      * The content text.
      */
@@ -45,7 +40,6 @@ class PdfFooter
 
     public function __construct(private readonly PdfDocument $parent)
     {
-        $this->border = PdfBorder::top();
     }
 
     /**
@@ -56,7 +50,7 @@ class PdfFooter
         $parent = $this->parent;
         $parent->useCellMargin(function () use ($parent): void {
             // position and cells width
-            $parent->SetY(-PdfDocument::FOOTER_OFFSET);
+            $parent->setY(-PdfDocument::FOOTER_OFFSET);
             $cellWidth = $parent->getPrintableWidth() / 3.0;
             // style
             PdfStyle::default()->setFontSize(8)->apply($parent);
@@ -96,7 +90,7 @@ class PdfFooter
     private function getPage(): string
     {
         $parent = $this->parent;
-        $page = $parent->PageNo();
+        $page = $parent->getPage();
         if ($parent instanceof AbstractReport) {
             return $parent->trans('report.page', ['{0}' => $page, '{1}' => '{nb}']);
         }
@@ -109,10 +103,10 @@ class PdfFooter
      */
     private function outputText(string $text, float $cellWidth, PdfTextAlignment $align, string $link = ''): self
     {
-        $this->parent->Cell(
-            w: $cellWidth,
-            txt: $text,
-            border: $this->border,
+        $this->parent->cell(
+            width: $cellWidth,
+            text: $text,
+            border: 'T',
             align: $align,
             link: $link
         );

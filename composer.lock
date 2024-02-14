@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e6270e2af64a52e1b3935691ca62898",
+    "content-hash": "9975823867eca1e22b7c0335ba98eb81",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1981,10 +1981,16 @@
         {
             "name": "laurentmuller/fpdf2",
             "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laurentmuller/fpdf2.git",
+                "reference": "3a96fa2ac2f16d4fe0faa7b0bab710b493a157e7"
+            },
             "dist": {
-                "type": "path",
-                "url": "D:/Github/fpdf2",
-                "reference": "872671e953fa9581fb9eafd8ce16fd5e5e835d0b"
+                "type": "zip",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/3a96fa2ac2f16d4fe0faa7b0bab710b493a157e7",
+                "reference": "3a96fa2ac2f16d4fe0faa7b0bab710b493a157e7",
+                "shasum": ""
             },
             "require": {
                 "ext-gd": "*",
@@ -2006,44 +2012,14 @@
                 "rector/rector": "^0.19",
                 "vimeo/psalm": "^5.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "fpdf\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "fpdf\\": "tests/"
-                }
-            },
-            "scripts": {
-                "fixer-fix": [
-                    "vendor/bin/php-cs-fixer fix --diff"
-                ],
-                "fixer": [
-                    "vendor/bin/php-cs-fixer fix --diff --dry-run"
-                ],
-                "psalm": [
-                    "vendor/bin/psalm --config psalm.xml"
-                ],
-                "phpstan": [
-                    "vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G"
-                ],
-                "rector": [
-                    "vendor/bin/rector process --dry-run --config rector.php"
-                ],
-                "tests": [
-                    "vendor/bin/phpunit"
-                ],
-                "all": [
-                    "@fixer",
-                    "@psalm",
-                    "@phpstan",
-                    "@rector",
-                    "@tests"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2065,9 +2041,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "transport-options": {
-                "relative": false
-            }
+            "time": "2024-02-14T15:00:18+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",

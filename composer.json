@@ -190,11 +190,5 @@
             "@app-twigcs",
             "@app-test"
         ]
-    },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "D:/Github/fpdf2/"
-        }
-    ]
+    }
 }

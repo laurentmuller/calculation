@@ -249,7 +249,7 @@ class PdfBorder
      *
      * @see PdfBorder::getRectangleStyle()
      * @see PdfDocument::rectangle()
-     * @see PdfDocument::Rect()
+     * @see PdfDocument::rect()
      */
     public function isRectangleStyle(): bool
     {

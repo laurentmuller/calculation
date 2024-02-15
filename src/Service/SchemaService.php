@@ -288,14 +288,12 @@ class SchemaService implements ServiceSubscriberInterface
     {
         $indexes = $table->getIndexes();
 
-        $results = \array_map(function (Index $index): array {
-            return [
-                'name' => \strtolower($index->getName()),
-                'primary' => $index->isPrimary(),
-                'unique' => $index->isUnique(),
-                'columns' => $index->getColumns(),
-            ];
-        }, $indexes);
+        $results = \array_map(fn (Index $index): array => [
+            'name' => \strtolower($index->getName()),
+            'primary' => $index->isPrimary(),
+            'unique' => $index->isUnique(),
+            'columns' => $index->getColumns(),
+        ], $indexes);
 
         return $this->sortIndexes($results);
     }
@@ -434,15 +432,13 @@ class SchemaService implements ServiceSubscriberInterface
         $tables = $this->getSchemaManager()->listTables();
         \usort($tables, static fn (Table $a, Table $b): int => \strnatcmp($a->getName(), $b->getName()));
 
-        return \array_map(function (Table $table): array {
-            return [
-                'name' => $this->mapTableName($table),
-                'columns' => $this->countColumns($table),
-                'indexes' => $this->countIndexes($table),
-                'associations' => $this->countAssociations($table),
-                'sql' => $this->getSqlCounter($table),
-            ];
-        }, $tables);
+        return \array_map(fn (Table $table): array => [
+            'name' => $this->mapTableName($table),
+            'columns' => $this->countColumns($table),
+            'indexes' => $this->countIndexes($table),
+            'associations' => $this->countAssociations($table),
+            'sql' => $this->getSqlCounter($table),
+        ], $tables);
     }
 
     /**

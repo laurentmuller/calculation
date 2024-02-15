@@ -44,23 +44,23 @@ class SymfonyReport extends AbstractReport
         $this->addPage();
         $this->outputInfo($this->service);
         $info = $this->service;
-        if ([] !== $bundles = $info->getBundles()) {
+        if ([] !== ($bundles = $info->getBundles())) {
             $this->halfLineBreak();
             $this->outputBundles($bundles);
         }
-        if ([] !== $packages = $info->getRuntimePackages()) {
+        if ([] !== ($packages = $info->getRuntimePackages())) {
             $this->halfLineBreak();
             $this->outputPackages('Packages', $packages);
         }
-        if ([] !== $packages = $info->getDebugPackages()) {
+        if ([] !== ($packages = $info->getDebugPackages())) {
             $this->halfLineBreak();
             $this->outputPackages('Debug Packages', $packages);
         }
-        if ([] !== $routes = $info->getRuntimeRoutes()) {
+        if ([] !== ($routes = $info->getRuntimeRoutes())) {
             $this->halfLineBreak();
             $this->outputRoutes('Routes', $routes);
         }
-        if ([] !== $routes = $info->getDebugRoutes()) {
+        if ([] !== ($routes = $info->getDebugRoutes())) {
             $this->halfLineBreak();
             $this->outputRoutes('Debug Routes', $routes);
         }

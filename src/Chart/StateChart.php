@@ -142,21 +142,19 @@ class StateChart extends AbstractHighchart
      */
     private function mapData(array $states): array
     {
-        return \array_map(function (array $state): array {
-            return [
-                'name' => $state['code'],
-                'y' => $state['total'],
-                'calculations' => FormatUtils::formatInt($state['count']),
-                'calculations_percent' => $this->formatPercent($state['percent_calculation']),
-                'net_amount' => FormatUtils::formatInt($state['items']),
-                'margin_percent' => FormatUtils::formatPercent($state['margin_percent']),
-                'margin_amount' => FormatUtils::formatInt($state['margin_amount']),
-                'margin_color' => $this->getMarginColor($state['margin_percent']),
-                'total_amount' => FormatUtils::formatInt($state['total']),
-                'total_percent' => $this->formatPercent($state['percent_amount']),
-                'url' => $this->getURL($state['id']),
-            ];
-        }, $states);
+        return \array_map(fn (array $state): array => [
+            'name' => $state['code'],
+            'y' => $state['total'],
+            'calculations' => FormatUtils::formatInt($state['count']),
+            'calculations_percent' => $this->formatPercent($state['percent_calculation']),
+            'net_amount' => FormatUtils::formatInt($state['items']),
+            'margin_percent' => FormatUtils::formatPercent($state['margin_percent']),
+            'margin_amount' => FormatUtils::formatInt($state['margin_amount']),
+            'margin_color' => $this->getMarginColor($state['margin_percent']),
+            'total_amount' => FormatUtils::formatInt($state['total']),
+            'total_percent' => $this->formatPercent($state['percent_amount']),
+            'url' => $this->getURL($state['id']),
+        ], $states);
     }
 
     /**

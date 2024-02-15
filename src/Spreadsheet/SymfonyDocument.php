@@ -41,19 +41,19 @@ class SymfonyDocument extends AbstractDocument
         $this->start($this->trans('about.symfony_version', ['%version%' => $info->getVersion()]));
         $this->setActiveTitle('Configuration', $this->controller);
         $this->outputInfo($info);
-        if ([] !== $bundles = $info->getBundles()) {
+        if ([] !== ($bundles = $info->getBundles())) {
             $this->outputBundles($bundles);
         }
-        if ([] !== $packages = $info->getRuntimePackages()) {
+        if ([] !== ($packages = $info->getRuntimePackages())) {
             $this->outputPackages('Packages', $packages);
         }
-        if ([] !== $packages = $info->getDebugPackages()) {
+        if ([] !== ($packages = $info->getDebugPackages())) {
             $this->outputPackages('Debug Packages', $packages);
         }
-        if ([] !== $routes = $info->getRuntimeRoutes()) {
+        if ([] !== ($routes = $info->getRuntimeRoutes())) {
             $this->outputRoutes('Routes', $routes);
         }
-        if ([] !== $routes = $info->getDebugRoutes()) {
+        if ([] !== ($routes = $info->getDebugRoutes())) {
             $this->outputRoutes('Debug Routes', $routes);
         }
         $this->setActiveSheetIndex(0);

@@ -212,13 +212,11 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         $radius = $printableWidth / 4.0;
         $centerX = $margin + $printableWidth / 2.0;
         $centerY = $top + $radius;
-        $rows = \array_map(function (array $entity): array {
-            return [
-                'label' => $entity['code'],
-                'color' => $entity['color'],
-                'value' => $entity['percent_amount'],
-            ];
-        }, $entities);
+        $rows = \array_map(fn (array $entity): array => [
+            'label' => $entity['code'],
+            'color' => $entity['color'],
+            'value' => $entity['percent_amount'],
+        ], $entities);
 
         $this->renderPieChart($centerX, $centerY, $radius, $rows);
         $this->setY($centerY + $radius + self::LINE_HEIGHT);

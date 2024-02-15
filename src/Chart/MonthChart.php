@@ -149,12 +149,10 @@ class MonthChart extends AbstractHighchart
      */
     private function getItemsSeries(array $series): array
     {
-        return \array_map(function (array $item): array {
-            return [
-                'y' => $item['items'],
-                'url' => $this->getURL($item['date']),
-            ];
-        }, $series);
+        return \array_map(fn (array $item): array => [
+            'y' => $item['items'],
+            'url' => $this->getURL($item['date']),
+        ], $series);
     }
 
     private function getMarginColor(float $value): string
@@ -174,19 +172,17 @@ class MonthChart extends AbstractHighchart
      */
     private function getMarginsSeries(array $series): array
     {
-        return \array_map(function (array $item): array {
-            return [
-                'y' => $item['margin_amount'],
-                'date' => $this->formatDate($item['date']),
-                'calculations' => FormatUtils::formatInt($item['count']),
-                'net_amount' => FormatUtils::formatInt($item['items']),
-                'margin_percent' => FormatUtils::formatPercent($item['margin_percent']),
-                'margin_amount' => FormatUtils::formatInt($item['margin_amount']),
-                'margin_color' => $this->getMarginColor($item['margin_percent']),
-                'total_amount' => FormatUtils::formatInt($item['total']),
-                'url' => $this->getURL($item['date']),
-            ];
-        }, $series);
+        return \array_map(fn (array $item): array => [
+            'y' => $item['margin_amount'],
+            'date' => $this->formatDate($item['date']),
+            'calculations' => FormatUtils::formatInt($item['count']),
+            'net_amount' => FormatUtils::formatInt($item['items']),
+            'margin_percent' => FormatUtils::formatPercent($item['margin_percent']),
+            'margin_amount' => FormatUtils::formatInt($item['margin_amount']),
+            'margin_color' => $this->getMarginColor($item['margin_percent']),
+            'total_amount' => FormatUtils::formatInt($item['total']),
+            'url' => $this->getURL($item['date']),
+        ], $series);
     }
 
     private function getSeriesOptions(): array

@@ -269,15 +269,13 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         if ($newPage) {
             $h = $this->pageBreakTrigger - $top - 2.0 * self::LINE_HEIGHT;
         }
-        $rows = \array_map(function (array $entity): array {
-            return [
-                'label' => $this->formatDate($entity['date'], false),
-                'values' => [
-                    ['color' => self::COLOR_ITEM, 'value' => $entity['items']],
-                    ['color' => self::COLOR_MARGIN, 'value' => $entity['margin_amount']],
-                ],
-            ];
-        }, $entities);
+        $rows = \array_map(fn (array $entity): array => [
+            'label' => $this->formatDate($entity['date'], false),
+            'values' => [
+                ['color' => self::COLOR_ITEM, 'value' => $entity['items']],
+                ['color' => self::COLOR_MARGIN, 'value' => $entity['margin_amount']],
+            ],
+        ], $entities);
         $axis = [
             'min' => 0,
             'formatter' => fn (float $value): string => FormatUtils::formatInt($value),

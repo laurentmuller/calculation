@@ -292,12 +292,10 @@ trait PdfBarChartTrait
      */
     private function barGetLabelsX(array $rows): array
     {
-        return \array_map(function (array $row): array {
-            return [
-                'label' => $row['label'],
-                'width' => $this->getStringWidth($row['label']),
-            ];
-        }, $rows);
+        return \array_map(fn (array $row): array => [
+            'label' => $row['label'],
+            'width' => $this->getStringWidth($row['label']),
+        ], $rows);
     }
 
     /**

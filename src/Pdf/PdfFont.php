@@ -118,8 +118,6 @@ class PdfFont implements PdfDocumentUpdaterInterface
 
     /**
      * Reset all properties to the default values.
-     *
-     * @return self this instance
      */
     public function reset(): self
     {
@@ -133,7 +131,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     /**
      * Sets the font name.
      *
-     * @param ?PdfFontName $name the font name or null to use the default name ("ARIAL")
+     * @param ?PdfFontName $name the font name to set or null to use the default font name (ARIAL)
      */
     public function setName(?PdfFontName $name = null): self
     {
@@ -145,13 +143,13 @@ class PdfFont implements PdfDocumentUpdaterInterface
     /**
      * Sets the font size.
      *
-     * @param float $size the size to set
+     * @param ?float $size the font size to set or null to use the default size (9.0).
      *
      * @return self this instance
      */
-    public function setSize(float $size): self
+    public function setSize(?float $size = null): self
     {
-        $this->size = $size;
+        $this->size = $size ?? self::DEFAULT_SIZE;
 
         return $this;
     }
@@ -159,11 +157,13 @@ class PdfFont implements PdfDocumentUpdaterInterface
     /**
      * Sets the font style.
      *
-     * @param ?PdfFontStyle $style the font style or null to use the default style ("Regular")
+     * @param ?PdfFontStyle $style the font style to set or null to use the default style (Regular)
      */
     public function setStyle(?PdfFontStyle $style = null): self
     {
-        return $this->updateStyle($style ?? self::DEFAULT_STYLE, false);
+        $this->style = $style ?? self::DEFAULT_STYLE;
+
+        return $this;
     }
 
     /**
@@ -180,7 +180,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     {
         if ($add) {
             $newStyle = $this->style->value . $style->value;
-            $this->style = PdfFontStyle::tryFrom($newStyle) ?? PdfFontStyle::REGULAR;
+            $this->style = PdfFontStyle::fromStyle($newStyle);
         } else {
             $this->style = $style;
         }

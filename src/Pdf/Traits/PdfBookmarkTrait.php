@@ -84,12 +84,10 @@ trait PdfBookmarkTrait
     ): self {
         // validate
         $this->validateLevel($level);
-
         // convert
         if (!$isUTF8) {
             $text = $this->convertIsoToUtf8($text);
         }
-
         // add
         $page = $this->page;
         $y = $currentY ? $this->y : 0.0;
@@ -300,15 +298,15 @@ trait PdfBookmarkTrait
     /**
      * @psalm-param PdfBookmarkType $bookmark
      */
-    private function putBookmark(array $bookmark, int $n): void
+    private function putBookmark(array $bookmark, int $number): void
     {
         $this->putNewObj();
         $this->putf('<</Title %s', $this->textString($bookmark['text']));
         foreach ($bookmark['hierarchy'] as $key => $value) {
-            $this->putf('/%s %d 0 R', $key, $n + $value);
+            $this->putf('/%s %d 0 R', $key, $number + $value);
         }
-        $page = $this->pageInfos[$bookmark['page']]['number'];
-        $this->putf('/Dest [%d 0 R /XYZ 0 %.2F null]', $page, $bookmark['y']);
+        $pageNumber = $this->pageInfos[$bookmark['page']]['number'];
+        $this->putf('/Dest [%d 0 R /XYZ 0 %.2F null]', $pageNumber, $bookmark['y']);
         $this->put('/Count 0>>');
         $this->putEndObj();
     }

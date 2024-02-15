@@ -141,16 +141,14 @@ final class CalculationService implements ServiceSubscriberInterface
         if ($calculation->isEmpty()) {
             return [$this->createEmptyGroup()];
         }
-        $mapper = function (CalculationGroup $group): array {
-            return $this->createGroup(
-                id: self::ROW_GROUP,
-                description: (string) $group->getCode(),
-                amount: $group->getAmount(),
-                margin: $group->getMargin(),
-                margin_amount: $group->getMarginAmount(),
-                total: $group->getTotal(),
-            );
-        };
+        $mapper = fn (CalculationGroup $group): array => $this->createGroup(
+            id: self::ROW_GROUP,
+            description: (string) $group->getCode(),
+            amount: $group->getAmount(),
+            margin: $group->getMargin(),
+            margin_amount: $group->getMarginAmount(),
+            total: $group->getTotal(),
+        );
         $user_margin = $calculation->getUserMargin();
         $global_margin = $calculation->getGlobalMargin();
         $groups = $calculation->getGroups()->toArray();

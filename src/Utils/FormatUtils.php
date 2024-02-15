@@ -156,9 +156,10 @@ final class FormatUtils
      */
     public static function formatInt(\Countable|array|int|float|string|null $number): string
     {
-        if ($number instanceof \Countable || \is_array($number)) {
+        if (\is_countable($number)) {
             $number = \count($number);
         }
+        /** @psalm-var int|float|string|null $number */
         $value = self::checkNegativeZero($number);
 
         return (string) self::getNumberFormatter(\NumberFormatter::DECIMAL, 0)->format($value);

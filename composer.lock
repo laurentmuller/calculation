@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9975823867eca1e22b7c0335ba98eb81",
+    "content-hash": "aa7c2a9131591f8f476159dda51db3da",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -484,16 +484,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.8.1",
+            "version": "3.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "c9ea252cdce4da324ede3d6c5913dd89f769afd2"
+                "reference": "a19a1d05ca211f41089dffcc387733a6875196cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/c9ea252cdce4da324ede3d6c5913dd89f769afd2",
-                "reference": "c9ea252cdce4da324ede3d6c5913dd89f769afd2",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/a19a1d05ca211f41089dffcc387733a6875196cb",
+                "reference": "a19a1d05ca211f41089dffcc387733a6875196cb",
                 "shasum": ""
             },
             "require": {
@@ -577,7 +577,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.8.1"
+                "source": "https://github.com/doctrine/dbal/tree/3.8.2"
             },
             "funding": [
                 {
@@ -593,7 +593,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-03T17:33:49+00:00"
+            "time": "2024-02-12T18:36:36+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1980,16 +1980,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "dev-main",
+            "version": "1.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "3a96fa2ac2f16d4fe0faa7b0bab710b493a157e7"
+                "reference": "be3e7efb0cb9df6329b41af373d654076abd6697"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/3a96fa2ac2f16d4fe0faa7b0bab710b493a157e7",
-                "reference": "3a96fa2ac2f16d4fe0faa7b0bab710b493a157e7",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/be3e7efb0cb9df6329b41af373d654076abd6697",
+                "reference": "be3e7efb0cb9df6329b41af373d654076abd6697",
                 "shasum": ""
             },
             "require": {
@@ -2012,7 +2012,6 @@
                 "rector/rector": "^0.19",
                 "vimeo/psalm": "^5.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -2041,7 +2040,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-02-14T15:00:18+00:00"
+            "time": "2024-02-14T17:19:13+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -11060,16 +11059,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.19.8",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "de3b3bb159abd704b144aa86fb244f7f1f4ac947"
+                "reference": "362258a1f6369fc88d02d469a5478d220f78b0e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/de3b3bb159abd704b144aa86fb244f7f1f4ac947",
-                "reference": "de3b3bb159abd704b144aa86fb244f7f1f4ac947",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/362258a1f6369fc88d02d469a5478d220f78b0e6",
+                "reference": "362258a1f6369fc88d02d469a5478d220f78b0e6",
                 "shasum": ""
             },
             "require": {
@@ -11104,7 +11103,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.19.8"
+                "source": "https://github.com/rectorphp/rector/tree/1.0.0"
             },
             "funding": [
                 {
@@ -11112,7 +11111,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-05T10:59:13+00:00"
+            "time": "2024-02-06T13:38:07+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -12977,9 +12976,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "laurentmuller/fpdf2": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

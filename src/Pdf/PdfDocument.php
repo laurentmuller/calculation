@@ -27,7 +27,7 @@ use fpdf\PdfUnit;
 use fpdf\PdfZoom;
 
 /**
- * PDF document with default header, footer, outline and index capabilities.
+ * PDF document with default header, footer, bookmarks and page index capabilities.
  *
  * @phpstan-import-type PageSizeType from BaseDocument
  */
@@ -89,7 +89,7 @@ class PdfDocument extends BaseDocument
         $this->footer = new PdfFooter($this);
 
         $this->setDisplayMode(PdfZoom::FULL_PAGE, PdfLayout::SINGLE);
-        $this->setAutoPageBreak(true, $this->getBottomMargin() - self::LINE_HEIGHT);
+        $this->setAutoPageBreak(true, $this->bottomMargin - self::LINE_HEIGHT);
     }
 
     /**
@@ -121,7 +121,6 @@ class PdfDocument extends BaseDocument
         if ($border instanceof PdfBorder) {
             $border = $border->getCellStyle();
         }
-
         parent::cell($width, $height, $text, $border, $move, $align, $fill, $link);
 
         return $this;
@@ -177,7 +176,6 @@ class PdfDocument extends BaseDocument
         if ($border instanceof PdfBorder) {
             $border = $border->getCellStyle();
         }
-
         parent::multiCell($width, $height, $text, $border, $align, $fill);
 
         return $this;
@@ -210,11 +208,11 @@ class PdfDocument extends BaseDocument
      * @param PdfRectangle                $bounds the rectangle to output
      * @param PdfBorder|PdfRectangleStyle $border the style of rendering
      */
-    public function rectangle(PdfRectangle $bounds, PdfBorder|PdfRectangleStyle $border): static
-    {
-        $this->rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $border);
-
-        return $this;
+    public function rectangle(
+        PdfRectangle $bounds,
+        PdfBorder|PdfRectangleStyle $border = PdfRectangleStyle::BORDER
+    ): self {
+        return $this->rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $border);
     }
 
     /**

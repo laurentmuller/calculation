@@ -18,6 +18,7 @@ use App\Pdf\Html\HtmlParser;
 use fpdf\PdfOrientation;
 use fpdf\PdfPageSize;
 use fpdf\PdfRotation;
+use fpdf\PdfSize;
 use fpdf\PdfUnit;
 
 /**
@@ -96,7 +97,7 @@ class HtmlReport extends AbstractReport
 
     protected function beginPage(
         ?PdfOrientation $orientation = null,
-        PdfPageSize|array|null $size = null,
+        PdfPageSize|PdfSize|null $size = null,
         ?PdfRotation $rotation = null
     ): void {
         parent::beginPage($orientation, $size, $rotation);

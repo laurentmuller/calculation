@@ -15,6 +15,7 @@ namespace App\Pdf;
 use App\Traits\ImageSizeTrait;
 use App\Traits\MathTrait;
 use App\Utils\FileUtils;
+use fpdf\PdfRectangle;
 use fpdf\PdfTextAlignment;
 
 /**
@@ -81,12 +82,12 @@ class PdfImageCell extends PdfCell
         $height = $parent->pixels2UserUnit($this->height);
 
         // get default position
-        $y = $bounds->y() + ($bounds->height() - $height) / 2.0;
+        $y = $bounds->y + ($bounds->height - $height) / 2.0;
         $x = match ($alignment) {
             PdfTextAlignment::RIGHT => $bounds->right() - $width,
             PdfTextAlignment::CENTER,
-            PdfTextAlignment::JUSTIFIED => $bounds->x() + ($bounds->width() - $width) / 2.0,
-            default => $bounds->x(),
+            PdfTextAlignment::JUSTIFIED => $bounds->x + ($bounds->width - $width) / 2.0,
+            default => $bounds->x,
         };
 
         // draw

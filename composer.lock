@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca58f0baaf79be42330d09ab10f519e8",
+    "content-hash": "3eee71a355449f4e9570f83cafadcdcf",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1980,16 +1980,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "1.8.4.1",
+            "version": "1.8.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "c413094c480b1f444108f85f8f79d7e22f690a2d"
+                "reference": "15ba71790a615e35b938ecc9322b95cc5e8457a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/c413094c480b1f444108f85f8f79d7e22f690a2d",
-                "reference": "c413094c480b1f444108f85f8f79d7e22f690a2d",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/15ba71790a615e35b938ecc9322b95cc5e8457a9",
+                "reference": "15ba71790a615e35b938ecc9322b95cc5e8457a9",
                 "shasum": ""
             },
             "require": {
@@ -2040,7 +2040,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-02-19T04:47:32+00:00"
+            "time": "2024-02-19T15:03:48+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",

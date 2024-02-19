@@ -14,9 +14,9 @@ namespace App\Pdf\Events;
 
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\PdfDocument;
-use App\Pdf\PdfRectangle;
 use App\Pdf\PdfTable;
 use fpdf\PdfBorder;
+use fpdf\PdfRectangle;
 
 /**
  * The event raised when a cell border must be drawn.

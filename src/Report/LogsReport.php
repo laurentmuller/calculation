@@ -133,9 +133,9 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         }
 
         $bounds = $event->bounds;
-        $x = $bounds->x() + self::HALF_WIDTH;
-        $y = $bounds->y() + self::HALF_WIDTH;
-        $h = $bounds->height() - self::FULL_WIDTH;
+        $x = $bounds->x + self::HALF_WIDTH;
+        $y = $bounds->y + self::HALF_WIDTH;
+        $h = $bounds->height - self::FULL_WIDTH;
         $parent = $event->getDocument();
         $parent->rectangle($bounds, $event->border);
         $color->apply($parent);

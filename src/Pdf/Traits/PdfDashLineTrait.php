@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf\Traits;
 
 use App\Pdf\PdfLine;
-use App\Pdf\PdfRectangle;
+use fpdf\PdfRectangle;
 
 /**
  * Trait to draw dash lines.
@@ -79,10 +79,10 @@ trait PdfDashLineTrait
     public function dashedRectangle(PdfRectangle $rectangle, int $dashes = 15, PdfLine|float|null $line = null): void
     {
         $this->dashedRect(
-            $rectangle->x(),
-            $rectangle->y(),
-            $rectangle->width(),
-            $rectangle->height(),
+            $rectangle->x,
+            $rectangle->y,
+            $rectangle->width,
+            $rectangle->height,
             $dashes,
             $line
         );

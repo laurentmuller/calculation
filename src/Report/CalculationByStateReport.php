@@ -155,10 +155,10 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         $parent = $event->getDocument();
         $margin = $parent->getCellMargin();
         $parent->rect(
-            $bounds->x() + $margin,
-            $bounds->y() + $margin,
+            $bounds->x + $margin,
+            $bounds->y + $margin,
             5.0,
-            $bounds->height() - 2.0 * $margin,
+            $bounds->height - 2.0 * $margin,
             PdfRectangleStyle::BOTH
         );
     }
@@ -167,9 +167,9 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     {
         $offset = 6.0;
         $parent = $event->getDocument();
-        $parent->setX($event->bounds->x() + $offset);
+        $parent->setX($event->bounds->x + $offset);
         $parent->cell(
-            width: $event->bounds->width() - $offset,
+            width: $event->bounds->width - $offset,
             height: $event->height,
             text: $event->text,
             align: $event->align

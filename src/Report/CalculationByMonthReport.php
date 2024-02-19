@@ -25,7 +25,6 @@ use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfRectangle;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfBarChartTrait;
@@ -34,6 +33,7 @@ use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
 use fpdf\PdfFontName;
 use fpdf\PdfOrientation;
+use fpdf\PdfRectangle;
 use fpdf\PdfRectangleStyle;
 use fpdf\PdfTextAlignment;
 
@@ -171,18 +171,18 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $bounds = $event->bounds;
         $parent = $table->getParent();
         $textWidth = $parent->getStringWidth($text) + $parent->getCellMargin();
-        $offset = ($bounds->width() - $textWidth - self::RECT_WIDTH) / 2.0;
+        $offset = ($bounds->width - $textWidth - self::RECT_WIDTH) / 2.0;
 
         $color->apply($parent);
         $parent->rect(
-            $bounds->x() + $offset,
-            $bounds->y() + self::RECT_MARGIN,
+            $bounds->x + $offset,
+            $bounds->y + self::RECT_MARGIN,
             self::RECT_WIDTH,
-            $bounds->height() - 2.0 * self::RECT_MARGIN,
+            $bounds->height - 2.0 * self::RECT_MARGIN,
             PdfRectangleStyle::BOTH
         );
 
-        $parent->setX($bounds->x() + $offset + self::RECT_WIDTH);
+        $parent->setX($bounds->x + $offset + self::RECT_WIDTH);
         $parent->cell(width: $textWidth, text: $text);
 
         return true;
@@ -249,7 +249,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $width = $this->getStringWidth($chr);
         if ($rotate) {
             $delta = $this->getCellMargin() + $width;
-            $this->rotateText($chr, 90.0, $bounds->x() + $delta, $bounds->y() + $delta);
+            $this->rotateText($chr, 90.0, $bounds->x + $delta, $bounds->y + $delta);
         } else {
             $this->cell(width: $width, text: $chr);
         }

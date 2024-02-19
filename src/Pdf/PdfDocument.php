@@ -15,20 +15,17 @@ namespace App\Pdf;
 use App\Pdf\Traits\PdfBookmarkTrait;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
-use fpdf\PdfBorder;
 use fpdf\PdfDocument as BaseDocument;
 use fpdf\PdfFontName;
 use fpdf\PdfLayout;
 use fpdf\PdfOrientation;
 use fpdf\PdfPageSize;
-use fpdf\PdfRectangleStyle;
+use fpdf\PdfSize;
 use fpdf\PdfUnit;
 use fpdf\PdfZoom;
 
 /**
  * PDF document with default header, footer, bookmarks and page index capabilities.
- *
- * @phpstan-import-type PageSizeType from BaseDocument
  */
 class PdfDocument extends BaseDocument
 {
@@ -73,14 +70,12 @@ class PdfDocument extends BaseDocument
      *
      * @param PdfOrientation      $orientation the page orientation
      * @param PdfUnit             $unit        the document unit to use
-     * @param PdfPageSize|float[] $size        the page size
-     *
-     * @phpstan-param PdfPageSize|PageSizeType $size
+     * @param PdfPageSize|PdfSize $size        the page size
      */
     public function __construct(
         PdfOrientation $orientation = PdfOrientation::PORTRAIT,
         PdfUnit $unit = PdfUnit::MILLIMETER,
-        PdfPageSize|array $size = PdfPageSize::A4
+        PdfPageSize|PdfSize $size = PdfPageSize::A4
     ) {
         parent::__construct($orientation, $unit, $size);
 
@@ -114,7 +109,7 @@ class PdfDocument extends BaseDocument
      */
     public function getCurrentFont(): PdfFont
     {
-        $name = PdfFontName::tryFromIgnoreCase($this->fontFamily) ?? PdfFontName::ARIAL;
+        $name = PdfFontName::tryFromFamily($this->fontFamily) ?? PdfFontName::ARIAL;
 
         return new PdfFont($name, $this->fontSizeInPoint, $this->fontStyle);
     }
@@ -138,16 +133,6 @@ class PdfDocument extends BaseDocument
     public function header(): void
     {
         $this->header->output();
-    }
-
-    /**
-     * Outputs a rectangle.
-     */
-    public function rectangle(
-        PdfRectangle $bounds,
-        PdfRectangleStyle|PdfBorder $border = PdfRectangleStyle::BORDER
-    ): static {
-        return $this->rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $border);
     }
 
     /**

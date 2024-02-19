@@ -23,7 +23,9 @@ use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
 use fpdf\PdfBorder;
+use fpdf\PdfRectangle;
 use fpdf\PdfRectangleStyle;
+use fpdf\PdfSize;
 use fpdf\PdfTextAlignment;
 
 /**
@@ -577,7 +579,7 @@ class PdfTable
      */
     protected function drawCellLink(PdfDocument $parent, PdfRectangle $bounds, string|int $link): void
     {
-        $parent->link($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $link);
+        $parent->link($bounds->x, $bounds->y, $bounds->width, $bounds->height, $link);
     }
 
     /**
@@ -855,9 +857,9 @@ class PdfTable
         if ($cell->isLink()) {
             $textBounds->inflate(-$margin);
             $linkWidth = $parent->getStringWidth($text);
-            $linesCount = \max(1, $parent->getLinesCount($text, $textBounds->width()));
+            $linesCount = \max(1, $parent->getLinesCount($text, $textBounds->width));
             $linkHeight = (float) $linesCount * $line_height - 2.0 * $margin;
-            $textBounds->setSize($linkWidth, $linkHeight);
+            $textBounds->setSize(PdfSize::instance($linkWidth, $linkHeight));
             $this->drawCellLink($parent, $textBounds, $cell->getLink());
         }
 
@@ -912,8 +914,8 @@ class PdfTable
         }
 
         // draw each applicable border side
-        $x = $bounds->x();
-        $y = $bounds->y();
+        $x = $bounds->x;
+        $y = $bounds->y;
         $right = $bounds->right();
         $bottom = $bounds->bottom();
         if ($border->isLeft()) {
@@ -955,7 +957,7 @@ class PdfTable
             }
         }
         if (StringUtils::isString($text)) {
-            $parent->multiCell(width: $bounds->width(), height: $height, text: $text, align: $alignment);
+            $parent->multiCell(width: $bounds->width, height: $height, text: $text, align: $alignment);
         }
     }
 }

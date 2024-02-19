@@ -179,8 +179,8 @@ class PdfFont implements PdfDocumentUpdaterInterface
     private function updateStyle(PdfFontStyle $style, bool $add): self
     {
         if ($add) {
-            $newStyle = $this->style->value . $style->value;
-            $this->style = PdfFontStyle::fromStyle($newStyle);
+            $str = $this->style->value . $style->value;
+            $this->style = PdfFontStyle::fromString($str);
         } else {
             $this->style = $style;
         }

@@ -14,8 +14,8 @@ namespace App\Pdf\Events;
 
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\PdfDocument;
-use App\Pdf\PdfRectangle;
 use App\Pdf\PdfTable;
+use fpdf\PdfRectangle;
 use fpdf\PdfTextAlignment;
 
 /**

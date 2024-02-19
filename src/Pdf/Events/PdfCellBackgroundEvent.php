@@ -14,8 +14,8 @@ namespace App\Pdf\Events;
 
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\PdfDocument;
-use App\Pdf\PdfRectangle;
 use App\Pdf\PdfTable;
+use fpdf\PdfRectangle;
 
 /**
  * The event raised when a cell background must be drawn.

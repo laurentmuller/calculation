@@ -41,33 +41,26 @@ class SymfonyDocument extends AbstractDocument
         $this->start($this->trans('about.symfony_version', ['%version%' => $info->getVersion()]));
         $this->setActiveTitle('Configuration', $this->controller);
         $this->outputInfo($info);
-        if ([] !== ($bundles = $info->getBundles())) {
-            $this->outputBundles($bundles);
-        }
-        if ([] !== ($packages = $info->getRuntimePackages())) {
-            $this->outputPackages('Packages', $packages);
-        }
-        if ([] !== ($packages = $info->getDebugPackages())) {
-            $this->outputPackages('Debug Packages', $packages);
-        }
-        if ([] !== ($routes = $info->getRuntimeRoutes())) {
-            $this->outputRoutes('Routes', $routes);
-        }
-        if ([] !== ($routes = $info->getDebugRoutes())) {
-            $this->outputRoutes('Debug Routes', $routes);
-        }
+        $this->outputBundles($info->getBundles());
+        $this->outputPackages('Packages', $info->getRuntimePackages());
+        $this->outputPackages('Debug Packages', $info->getDebugPackages());
+        $this->outputRoutes('Routes', $info->getRuntimeRoutes());
+        $this->outputRoutes('Debug Routes', $info->getDebugRoutes());
         $this->setActiveSheetIndex(0);
 
         return true;
     }
 
     /**
-     * @param BundleType[] $bundles
+     * @psalm-param BundleType[] $bundles
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     private function outputBundles(array $bundles): void
     {
+        if ([] === $bundles) {
+            return;
+        }
         $sheet = $this->createSheetAndTitle($this->controller, 'Bundles');
         $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),
@@ -148,12 +141,15 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
-     * @param array<string, PackageType> $packages
+     * @psalm-param array<string, PackageType> $packages
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     private function outputPackages(string $title, array $packages): void
     {
+        if ([] === $packages) {
+            return;
+        }
         $row = 1;
         $sheet = $this->createSheetAndTitle($this->controller, $title);
         $sheet->setHeaders([
@@ -180,12 +176,15 @@ class SymfonyDocument extends AbstractDocument
     }
 
     /**
-     * @param RouteType[] $routes
+     * @psalm-param RouteType[] $routes
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
     private function outputRoutes(string $title, array $routes): void
     {
+        if ([] === $routes) {
+            return;
+        }
         $sheet = $this->createSheetAndTitle($this->controller, $title);
         $row = $sheet->setHeaders([
             'Name' => HeaderFormat::instance(),

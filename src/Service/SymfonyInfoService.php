@@ -636,7 +636,8 @@ final class SymfonyInfoService
     private function updateBundles(array $packages, array $bundles): void
     {
         foreach ($bundles as &$bundle) {
-            if (null !== ($package = $this->findPackage($packages, $bundle['package']))) {
+            $package = $this->findPackage($packages, $bundle['package']);
+            if (null !== $package) {
                 $bundle['homepage'] = $package['homepage'];
             }
         }

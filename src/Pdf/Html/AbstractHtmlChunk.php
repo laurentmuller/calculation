@@ -12,11 +12,11 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\PdfBorder;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
 use App\Traits\ArrayTrait;
+use fpdf\PdfBorder;
+use fpdf\PdfDocument;
 use fpdf\PdfTextAlignment;
 
 /**
@@ -311,9 +311,9 @@ abstract class AbstractHtmlChunk
         if ($border instanceof PdfBorder) {
             $required = $report->getStringWidth($text) + 2.0 * $report->getCellMargin();
             if ($required > $report->getRemainingWidth()) {
-                $report->multiCell(0, $height, $text, $border->getCellStyle());
+                $report->multiCell(height: $height, text: $text, border: $border);
             } else {
-                $report->cell($required, $height, $text, $border->getCellStyle());
+                $report->cell($required, $height, $text, $border);
             }
         } else {
             $report->write($height, $text);
@@ -332,12 +332,7 @@ abstract class AbstractHtmlChunk
 
     private function getParentBorder(): ?PdfBorder
     {
-        $border = $this->parent?->style?->getBorder();
-        if ($border instanceof PdfBorder && $border->isDrawable()) {
-            return $border;
-        }
-
-        return null;
+        return $this->parent?->style?->getBorder();
     }
 
     private function parseBookmark(string $class): void

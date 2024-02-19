@@ -19,7 +19,6 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Events\PdfCellBorderEvent;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfFont;
@@ -27,6 +26,7 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
+use fpdf\PdfBorder;
 use fpdf\PdfMove;
 use fpdf\PdfOrientation;
 use fpdf\PdfTextAlignment;
@@ -211,7 +211,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         /** @psalm-var positive-int $levelsCount */
         $levelsCount = \count($levels) * 2;
         $channelsCount = \count($channels) * 2 + 1;
-        $titleStyle = PdfStyle::default()->setBorder(PdfBorder::NONE)->setFontBold();
+        $titleStyle = PdfStyle::default()->setBorder(PdfBorder::none())->setFontBold();
         PdfTable::instance($this)
             ->addColumns(...$columns)
             ->startRow()

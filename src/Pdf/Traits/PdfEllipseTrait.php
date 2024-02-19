@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
-use App\Pdf\PdfBorder;
 use fpdf\PdfRectangleStyle;
 
 /**
@@ -25,20 +24,16 @@ trait PdfEllipseTrait
     /**
      * Draw a circle.
      *
-     * @param float                       $x     the abscissa position
-     * @param float                       $y     the ordinate position
-     * @param float                       $r     the radius
-     * @param PdfBorder|PdfRectangleStyle $style the style of rendering. Possible values are:
-     *                                           <ul>
-     *                                           <li>A PdfBorder instance.</li>
-     *                                           <li>A PdfRectangleStyle enumeration.</li>
-     *                                           </ul>
+     * @param float             $x     the abscissa position
+     * @param float             $y     the ordinate position
+     * @param float             $r     the radius
+     * @param PdfRectangleStyle $style the style of rendering
      */
     public function circle(
         float $x,
         float $y,
         float $r,
-        PdfBorder|PdfRectangleStyle $style = PdfRectangleStyle::BORDER
+        PdfRectangleStyle $style = PdfRectangleStyle::BORDER
     ): void {
         $this->ellipse($x, $y, $r, $r, $style);
     }
@@ -46,33 +41,23 @@ trait PdfEllipseTrait
     /**
      * Draw an ellipse.
      *
-     * @param float                       $x     the abscissa position
-     * @param float                       $y     the ordinate position
-     * @param float                       $rx    the horizontal radius
-     * @param float                       $ry    the vertical radius
-     * @param PdfBorder|PdfRectangleStyle $style the style of rendering. Possible values are:
-     *                                           <ul>
-     *                                           <li>A PdfBorder instance.</li>
-     *                                           <li>A PdfRectangleStyle enumeration.</li>
-     *                                           </ul>
+     * @param float             $x     the abscissa position
+     * @param float             $y     the ordinate position
+     * @param float             $rx    the horizontal radius
+     * @param float             $ry    the vertical radius
+     * @param PdfRectangleStyle $style the style of rendering
      */
     public function ellipse(
         float $x,
         float $y,
         float $rx,
         float $ry,
-        PdfBorder|PdfRectangleStyle $style = PdfRectangleStyle::BORDER
+        PdfRectangleStyle $style = PdfRectangleStyle::BORDER
     ): void {
-        if ($style instanceof PdfBorder) {
-            $style = $style->getRectangleStyle();
-            if (!$style instanceof PdfRectangleStyle) {
-                return;
-            }
-        }
+        $height = $this->height;
+        $scaleFactor = $this->scaleFactor;
         $lx = 4.0 / 3.0 * (\M_SQRT2 - 1.0) * $rx;
         $ly = 4.0 / 3.0 * (\M_SQRT2 - 1.0) * $ry;
-        $scaleFactor = $this->scaleFactor;
-        $height = $this->height;
 
         $this->outf(
             '%.2F %.2F m %.2F %.2F %.2F %.2F %.2F %.2F c',

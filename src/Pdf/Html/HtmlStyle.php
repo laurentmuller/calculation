@@ -15,8 +15,8 @@ namespace App\Pdf\Html;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfStyle;
+use fpdf\PdfBorder;
 use fpdf\PdfFontName;
 use fpdf\PdfTextAlignment;
 
@@ -58,7 +58,7 @@ class HtmlStyle extends PdfStyle
     public function __construct()
     {
         parent::__construct();
-        $this->setBorder(PdfBorder::NONE);
+        $this->setBorder(PdfBorder::none());
     }
 
     /**
@@ -241,19 +241,19 @@ class HtmlStyle extends PdfStyle
     private function updateBorders(string $class): self
     {
         $border = match ($class) {
-            'border' => PdfBorder::ALL,
-            'border-top' => PdfBorder::TOP,
-            'border-bottom' => PdfBorder::BOTTOM,
-            'border-start' => PdfBorder::LEFT,
-            'border-end' => PdfBorder::RIGHT,
-            'border-0' => PdfBorder::NONE,
-            'border-top-0' => PdfBorder::LEFT . PdfBorder::RIGHT . PdfBorder::BOTTOM,
-            'border-start-0' => PdfBorder::RIGHT . PdfBorder::TOP . PdfBorder::BOTTOM,
-            'border-end-0' => PdfBorder::LEFT . PdfBorder::TOP . PdfBorder::BOTTOM,
-            'border-bottom-0' => PdfBorder::LEFT . PdfBorder::RIGHT . PdfBorder::TOP,
+            'border' => PdfBorder::all(),
+            'border-top' => PdfBorder::top(),
+            'border-bottom' => PdfBorder::bottom(),
+            'border-start' => PdfBorder::left(),
+            'border-end' => PdfBorder::right(),
+            'border-0' => PdfBorder::none(),
+            'border-top-0' => PdfBorder::all()->setTop(false),
+            'border-start-0' => PdfBorder::all()->setLeft(false),
+            'border-end-0' => PdfBorder::all()->setRight(false),
+            'border-bottom-0' => PdfBorder::all()->setBottom(false),
             default => null
         };
-        if (null !== $border) {
+        if ($border instanceof PdfBorder) {
             $this->setDrawColor($this->getDefaultBorderColor())
                 ->setBorder($border);
         }

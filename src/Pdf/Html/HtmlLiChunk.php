@@ -12,10 +12,10 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
 use App\Utils\StringUtils;
+use fpdf\PdfDocument;
 use fpdf\PdfTextAlignment;
 
 /**

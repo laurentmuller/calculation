@@ -226,7 +226,7 @@ class PdfLabelDocument extends PdfDocument
      */
     private function getDocumentSize(array $format): PdfPageSize
     {
-        $pageSize = $format['pageSize'];
+        $pageSize = \strtoupper($format['pageSize']);
 
         try {
             return PdfPageSize::from($pageSize);

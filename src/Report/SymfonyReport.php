@@ -44,26 +44,11 @@ class SymfonyReport extends AbstractReport
         $this->addPage();
         $this->outputInfo($this->service);
         $info = $this->service;
-        if ([] !== ($bundles = $info->getBundles())) {
-            $this->halfLineBreak();
-            $this->outputBundles($bundles);
-        }
-        if ([] !== ($packages = $info->getRuntimePackages())) {
-            $this->halfLineBreak();
-            $this->outputPackages('Packages', $packages);
-        }
-        if ([] !== ($packages = $info->getDebugPackages())) {
-            $this->halfLineBreak();
-            $this->outputPackages('Debug Packages', $packages);
-        }
-        if ([] !== ($routes = $info->getRuntimeRoutes())) {
-            $this->halfLineBreak();
-            $this->outputRoutes('Routes', $routes);
-        }
-        if ([] !== ($routes = $info->getDebugRoutes())) {
-            $this->halfLineBreak();
-            $this->outputRoutes('Debug Routes', $routes);
-        }
+        $this->outputBundles($info->getBundles());
+        $this->outputPackages('Packages', $info->getRuntimePackages());
+        $this->outputPackages('Debug Packages', $info->getDebugPackages());
+        $this->outputRoutes('Routes', $info->getRuntimeRoutes());
+        $this->outputRoutes('Debug Routes', $info->getDebugRoutes());
 
         return true;
     }
@@ -86,10 +71,14 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @psalm-param non-empty-array<BundleType> $bundles
+     * @psalm-param BundleType[] $bundles
      */
     private function outputBundles(array $bundles): void
     {
+        if ([] === $bundles) {
+            return;
+        }
+        $this->halfLineBreak();
         $this->addBookmark('Bundles');
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
@@ -151,10 +140,14 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @psalm-param non-empty-array<string, PackageType> $packages
+     * @psalm-param array<string, PackageType> $packages
      */
     private function outputPackages(string $title, array $packages): void
     {
+        if ([] === $packages) {
+            return;
+        }
+        $this->halfLineBreak();
         $this->addBookmark($title);
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
@@ -176,10 +169,14 @@ class SymfonyReport extends AbstractReport
     }
 
     /**
-     * @psalm-param non-empty-array<RouteType> $routes
+     * @psalm-param RouteType[] $routes
      */
     private function outputRoutes(string $title, array $routes): void
     {
+        if ([] === $routes) {
+            return;
+        }
+        $this->halfLineBreak();
         $this->addBookmark($title);
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())

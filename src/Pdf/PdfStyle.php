@@ -16,6 +16,7 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Interfaces\PdfDocumentUpdaterInterface;
+use fpdf\PdfBorder;
 use fpdf\PdfFontName;
 use fpdf\PdfFontStyle;
 
@@ -34,7 +35,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * The border style.
      */
-    private PdfBorder $border;
+    private ?PdfBorder $border;
 
     /**
      * The draw color.
@@ -70,7 +71,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     {
         $this->font = PdfFont::default();
         $this->line = PdfLine::default();
-        $this->border = PdfBorder::default();
+        $this->border = PdfBorder::all();
         $this->textColor = PdfTextColor::default();
         $this->drawColor = PdfDrawColor::default();
         $this->fillColor = PdfFillColor::default();
@@ -81,7 +82,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
         // deep clone
         $this->font = clone $this->font;
         $this->line = clone $this->line;
-        $this->border = clone $this->border;
+        $this->border = $this->border instanceof PdfBorder ? clone $this->border : null;
         $this->textColor = clone $this->textColor;
         $this->drawColor = clone $this->drawColor;
         $this->fillColor = clone $this->fillColor;
@@ -154,7 +155,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Gets the border.
      */
-    public function getBorder(): PdfBorder
+    public function getBorder(): ?PdfBorder
     {
         return $this->border;
     }
@@ -292,7 +293,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     public static function getNoBorderStyle(): self
     {
         return self::default()
-            ->setBorder(PdfBorder::NONE);
+            ->setBorder(PdfBorder::none());
     }
 
     /**
@@ -342,7 +343,7 @@ class PdfStyle implements PdfDocumentUpdaterInterface
      */
     public function resetBorder(): static
     {
-        return $this->setBorder(PdfBorder::ALL);
+        return $this->setBorder(PdfBorder::all());
     }
 
     /**
@@ -400,9 +401,9 @@ class PdfStyle implements PdfDocumentUpdaterInterface
     /**
      * Sets the border.
      */
-    public function setBorder(PdfBorder|string|int|bool $border): static
+    public function setBorder(?PdfBorder $border): static
     {
-        $this->border = \is_string($border) || \is_int($border) || \is_bool($border) ? new PdfBorder($border) : $border;
+        $this->border = $border;
 
         return $this;
     }

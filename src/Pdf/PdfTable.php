@@ -22,6 +22,7 @@ use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
+use fpdf\PdfBorder;
 use fpdf\PdfRectangleStyle;
 use fpdf\PdfTextAlignment;
 
@@ -104,7 +105,7 @@ class PdfTable
      */
     public function __construct(private readonly PdfDocument $parent, private readonly bool $fullWidth = true)
     {
-        $this->border = PdfBorder::default();
+        $this->border = PdfBorder::all();
     }
 
     /**
@@ -465,9 +466,9 @@ class PdfTable
     /**
      * Sets the border.
      */
-    public function setBorder(PdfBorder|string|int $border): static
+    public function setBorder(PdfBorder $border): static
     {
-        $this->border = \is_string($border) || \is_int($border) ? new PdfBorder($border) : $border;
+        $this->border = $border;
 
         return $this;
     }
@@ -644,7 +645,7 @@ class PdfTable
         $style->apply($parent);
         $width = \max(0, $width - $style->getIndent());
         $lines = (float) $parent->getLinesCount($text, $width);
-        $height = PdfDocument::LINE_HEIGHT;
+        $height = \fpdf\PdfDocument::LINE_HEIGHT;
         if (!$style->getFont()->isDefaultSize()) {
             $fontSize = $style->getFont()->getSize();
             $margins = 2.0 * $parent->getCellMargin();
@@ -826,7 +827,7 @@ class PdfTable
         // border
         $style->apply($parent);
         $parent->setXY($x, $y);
-        $border = $style->getBorder()->isInherited() ? $this->border : $style->getBorder();
+        $border = $style->getBorder() ?? $this->border;
         $this->drawCellBorder($parent, $index, $bounds, $border);
 
         // image or text
@@ -834,7 +835,7 @@ class PdfTable
         $parent->setXY($x, $y);
         $margin = $parent->getCellMargin();
         $textBounds = clone $bounds;
-        $line_height = PdfDocument::LINE_HEIGHT;
+        $line_height = \fpdf\PdfDocument::LINE_HEIGHT;
         if ($cell instanceof PdfImageCell) {
             $textBounds->inflate(-$margin);
             $cell->drawImage($parent, clone $textBounds, $alignment);
@@ -900,30 +901,32 @@ class PdfTable
             }
         }
 
-        if (!$border->isDrawable()) {
+        if ($border->isNone()) {
             return;
         }
 
+        if ($border->isAll()) {
+            $parent->rectangle($bounds);
+
+            return;
+        }
+
+        // draw each applicable border side
         $x = $bounds->x();
         $y = $bounds->y();
-        if ($border->isRectangleStyle()) {
-            $parent->rectangle($bounds, $border);
-        } else {
-            // draw each applicable border side
-            $right = $bounds->right();
-            $bottom = $bounds->bottom();
-            if ($border->isLeft()) {
-                $parent->line($x, $y, $x, $bottom);
-            }
-            if ($border->isRight()) {
-                $parent->line($right, $y, $right, $bottom);
-            }
-            if ($border->isTop()) {
-                $parent->line($x, $y, $right, $y);
-            }
-            if ($border->isBottom()) {
-                $parent->line($x, $bottom, $right, $bottom);
-            }
+        $right = $bounds->right();
+        $bottom = $bounds->bottom();
+        if ($border->isLeft()) {
+            $parent->line($x, $y, $x, $bottom);
+        }
+        if ($border->isRight()) {
+            $parent->line($right, $y, $right, $bottom);
+        }
+        if ($border->isTop()) {
+            $parent->line($x, $y, $right, $y);
+        }
+        if ($border->isBottom()) {
+            $parent->line($x, $bottom, $right, $bottom);
         }
     }
 

@@ -17,12 +17,12 @@ use App\Entity\CalculationCategory;
 use App\Entity\CalculationItem;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfDocument;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
+use fpdf\PdfDocument;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

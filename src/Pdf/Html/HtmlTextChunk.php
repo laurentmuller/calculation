@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Pdf\Html;
 
-use App\Pdf\PdfDocument;
 use App\Report\HtmlReport;
+use fpdf\PdfDocument;
 use fpdf\PdfTextAlignment;
 
 /**

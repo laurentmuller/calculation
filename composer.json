@@ -46,7 +46,7 @@
         "fakerphp/faker": "^1.0",
         "google/recaptcha": "^1.0",
         "imagine/imagine": "^1.0",
-        "laurentmuller/fpdf2": "^1.0",
+        "laurentmuller/fpdf2": "^1.8",
         "laurentmuller/highcharts-bundle": "^2.0",
         "phpoffice/phpspreadsheet": "^2.0",
         "phpoffice/phpword": "^1.0",
@@ -109,7 +109,7 @@
         "symfony/stopwatch": "7.0.*",
         "symfony/var-dumper": "7.0.*",
         "symfony/web-profiler-bundle": "7.0.*",
-        "vimeo/psalm": "5.21.*",
+        "vimeo/psalm": "^5.0",
         "weirdan/doctrine-psalm-plugin": "^2.0"
     },
     "replace": {

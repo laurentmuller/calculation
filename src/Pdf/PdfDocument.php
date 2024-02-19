@@ -15,14 +15,13 @@ namespace App\Pdf;
 use App\Pdf\Traits\PdfBookmarkTrait;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
+use fpdf\PdfBorder;
 use fpdf\PdfDocument as BaseDocument;
 use fpdf\PdfFontName;
 use fpdf\PdfLayout;
-use fpdf\PdfMove;
 use fpdf\PdfOrientation;
 use fpdf\PdfPageSize;
 use fpdf\PdfRectangleStyle;
-use fpdf\PdfTextAlignment;
 use fpdf\PdfUnit;
 use fpdf\PdfZoom;
 
@@ -40,11 +39,6 @@ class PdfDocument extends BaseDocument
      * The footer offset in mm.
      */
     final public const FOOTER_OFFSET = 15.0;
-
-    /**
-     * The default line height in mm.
-     */
-    final public const LINE_HEIGHT = 5.0;
 
     /**
      * The encoding source.
@@ -72,9 +66,14 @@ class PdfDocument extends BaseDocument
     private readonly PdfHeader $header;
 
     /**
+     * Create a new instance.
+     *
+     * It allows to set up the page orientation, the page size and the unit of measure used in all methods (except for
+     * font sizes).
+     *
      * @param PdfOrientation      $orientation the page orientation
-     * @param PdfUnit             $unit        the user unit
-     * @param PdfPageSize|float[] $size        the document size
+     * @param PdfUnit             $unit        the document unit to use
+     * @param PdfPageSize|float[] $size        the page size
      *
      * @phpstan-param PdfPageSize|PageSizeType $size
      */
@@ -103,27 +102,6 @@ class PdfDocument extends BaseDocument
         $font->apply($this);
 
         return $oldFont;
-    }
-
-    /**
-     * @phpstan-param PdfBorder|string|bool $border
-     */
-    public function cell(
-        float $width = 0.0,
-        float $height = self::LINE_HEIGHT,
-        string $text = '',
-        PdfBorder|string|bool $border = false,
-        PdfMove $move = PdfMove::RIGHT,
-        PdfTextAlignment $align = PdfTextAlignment::LEFT,
-        bool $fill = false,
-        string|int $link = ''
-    ): self {
-        if ($border instanceof PdfBorder) {
-            $border = $border->getCellStyle();
-        }
-        parent::cell($width, $height, $text, $border, $move, $align, $fill, $link);
-
-        return $this;
     }
 
     public function footer(): void
@@ -163,55 +141,12 @@ class PdfDocument extends BaseDocument
     }
 
     /**
-     * @phpstan-param PdfBorder|string|bool $border
-     */
-    public function multiCell(
-        float $width = 0.0,
-        float $height = self::LINE_HEIGHT,
-        string $text = '',
-        PdfBorder|string|bool $border = false,
-        PdfTextAlignment $align = PdfTextAlignment::JUSTIFIED,
-        bool $fill = false
-    ): self {
-        if ($border instanceof PdfBorder) {
-            $border = $border->getCellStyle();
-        }
-        parent::multiCell($width, $height, $text, $border, $align, $fill);
-
-        return $this;
-    }
-
-    public function rect(
-        float $x,
-        float $y,
-        float $width,
-        float $height,
-        PdfBorder|PdfRectangleStyle $style = PdfRectangleStyle::BORDER
-    ): self {
-        if ($style instanceof PdfBorder) {
-            $style = $style->getRectangleStyle();
-            if (!$style instanceof PdfRectangleStyle) {
-                return $this;
-            }
-        }
-
-        parent::rect($x, $y, $width, $height, $style);
-
-        return $this;
-    }
-
-    /**
      * Outputs a rectangle.
-     *
-     * It can be drawn (border only), filled (with no border) or both.
-     *
-     * @param PdfRectangle                $bounds the rectangle to output
-     * @param PdfBorder|PdfRectangleStyle $border the style of rendering
      */
     public function rectangle(
         PdfRectangle $bounds,
-        PdfBorder|PdfRectangleStyle $border = PdfRectangleStyle::BORDER
-    ): self {
+        PdfRectangleStyle|PdfBorder $border = PdfRectangleStyle::BORDER
+    ): static {
         return $this->rect($bounds->x(), $bounds->y(), $bounds->width(), $bounds->height(), $border);
     }
 

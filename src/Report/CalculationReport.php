@@ -14,7 +14,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
@@ -28,6 +27,7 @@ use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
+use fpdf\PdfBorder;
 use fpdf\PdfMove;
 use fpdf\PdfTextAlignment;
 use Psr\Log\LoggerInterface;
@@ -134,10 +134,12 @@ class CalculationReport extends AbstractReport
     private function renderCalculation(): void
     {
         $calculation = $this->calculation;
+        $leftBorder = new PdfBorder(true, true, false, true);
         $leftStyle = PdfStyle::getHeaderStyle()
-            ->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::LEFT);
+            ->setBorder($leftBorder);
+        $rightBorder = new PdfBorder(false, true, true, true);
         $rightStyle = PdfStyle::getHeaderStyle()
-            ->setBorder(PdfBorder::TOP . PdfBorder::BOTTOM . PdfBorder::RIGHT);
+            ->setBorder($rightBorder);
         PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left(null, 100),
@@ -164,7 +166,7 @@ class CalculationReport extends AbstractReport
         $this->cell(
             height: self::LINE_HEIGHT * 1.8,
             text: $message,
-            border: true,
+            border: PdfBorder::all(),
             move: PdfMove::NEW_LINE,
             align: PdfTextAlignment::CENTER,
             fill: true

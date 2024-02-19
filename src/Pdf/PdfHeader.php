@@ -14,6 +14,7 @@ namespace App\Pdf;
 
 use App\Model\CustomerInformation;
 use App\Utils\StringUtils;
+use fpdf\PdfBorder;
 use fpdf\PdfMove;
 use fpdf\PdfTextAlignment;
 
@@ -168,7 +169,7 @@ class PdfHeader
             $width,
             self::SMALL_HEIGHT,
             $text,
-            false,
+            PdfBorder::none(),
             PdfTextAlignment::LEFT
         );
     }
@@ -192,7 +193,7 @@ class PdfHeader
             $width,
             self::SMALL_HEIGHT,
             $text,
-            PdfBorder::BOTTOM,
+            PdfBorder::bottom(),
             PdfTextAlignment::RIGHT,
             PdfMove::NEW_LINE,
             $link
@@ -207,7 +208,7 @@ class PdfHeader
             $width,
             self::SMALL_HEIGHT,
             $text,
-            false,
+            PdfBorder::none(),
             PdfTextAlignment::RIGHT,
             PdfMove::NEW_LINE
         );
@@ -255,7 +256,7 @@ class PdfHeader
         $name = $this->customer?->getName();
         $link = $this->customer?->getUrl() ?? '';
         $align = $isAddress ? PdfTextAlignment::LEFT : PdfTextAlignment::RIGHT;
-        $border = $isAddress ? false : PdfBorder::BOTTOM;
+        $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
         $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
         $this->outputText(
             $width,
@@ -276,14 +277,21 @@ class PdfHeader
             $width,
             self::SMALL_HEIGHT,
             $text,
-            false,
+            PdfBorder::none(),
             PdfTextAlignment::RIGHT,
             PdfMove::NEW_LINE
         );
     }
 
-    private function outputText(float $width, float $height, ?string $text, bool|string $border, PdfTextAlignment $align, PdfMove $move = PdfMove::RIGHT, string $link = ''): void
-    {
+    private function outputText(
+        float $width,
+        float $height,
+        ?string $text,
+        PdfBorder $border,
+        PdfTextAlignment $align,
+        PdfMove $move = PdfMove::RIGHT,
+        string $link = ''
+    ): void {
         $this->parent->cell(
             width: $width,
             height: $height,
@@ -300,7 +308,7 @@ class PdfHeader
         $this->applyTitleStyle();
         $title = $this->parent->getTitle();
         $align = $isAddress ? PdfTextAlignment::CENTER : PdfTextAlignment::LEFT;
-        $border = $isAddress ? false : PdfBorder::BOTTOM;
+        $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
         $this->outputText(
             $width,
             PdfDocument::LINE_HEIGHT,
@@ -318,7 +326,7 @@ class PdfHeader
             $width,
             self::SMALL_HEIGHT,
             $text,
-            PdfBorder::BOTTOM,
+            PdfBorder::bottom(),
             PdfTextAlignment::LEFT
         );
     }

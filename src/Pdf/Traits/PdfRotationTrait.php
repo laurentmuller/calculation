@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
-use App\Pdf\PdfBorder;
 use fpdf\PdfRectangleStyle;
 
 /**
@@ -78,16 +77,16 @@ trait PdfRotationTrait
      *
      * It can be drawn (border only), filled (with no border) or both. Do nothing if the angle is equal to 0.0.
      *
-     * @param float                       $x     the abscissa of upper-left corner
-     * @param float                       $y     the ordinate of upper-left corner
-     * @param float                       $w     the width
-     * @param float                       $h     the height
-     * @param float                       $angle the rotation angle
-     * @param PdfBorder|PdfRectangleStyle $style the style of rendering. Possible values are:
-     *                                           <ul>
-     *                                           <li>A PdfBorder instance.</li>
-     *                                           <li>A PdfRectangleStyle enumeration.</li>
-     *                                           </ul>
+     * @param float             $x     the abscissa of upper-left corner
+     * @param float             $y     the ordinate of upper-left corner
+     * @param float             $w     the width
+     * @param float             $h     the height
+     * @param float             $angle the rotation angle
+     * @param PdfRectangleStyle $style the style of rendering. Possible values are:
+     *                                 <ul>
+     *                                 <li>A PdfBorder instance.</li>
+     *                                 <li>A PdfRectangleStyle enumeration.</li>
+     *                                 </ul>
      */
     public function rotateRect(
         float $x,
@@ -95,7 +94,7 @@ trait PdfRotationTrait
         float $w,
         float $h,
         float $angle,
-        PdfBorder|PdfRectangleStyle $style = PdfRectangleStyle::BORDER
+        PdfRectangleStyle $style = PdfRectangleStyle::BORDER
     ): void {
         if ($this->isFloatZero($angle)) {
             return;

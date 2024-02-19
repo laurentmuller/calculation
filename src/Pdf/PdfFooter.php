@@ -14,6 +14,7 @@ namespace App\Pdf;
 
 use App\Report\AbstractReport;
 use App\Utils\FormatUtils;
+use fpdf\PdfBorder;
 use fpdf\PdfTextAlignment;
 
 /**
@@ -106,7 +107,7 @@ class PdfFooter
         $this->parent->cell(
             width: $cellWidth,
             text: $text,
-            border: 'T',
+            border: PdfBorder::top(),
             align: $align,
             link: $link
         );

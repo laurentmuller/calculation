@@ -14,11 +14,11 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Group;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
+use fpdf\PdfBorder;
 use fpdf\PdfOrientation;
 use fpdf\PdfPageSize;
 use fpdf\PdfUnit;
@@ -49,7 +49,7 @@ class GroupsReport extends AbstractArrayReport
         $this->addPage();
         $table = $this->createTable();
         $last = \end($entities);
-        $emptyStyle = PdfStyle::getCellStyle()->setBorder(PdfBorder::LEFT . PdfBorder::RIGHT);
+        $emptyStyle = PdfStyle::getCellStyle()->setBorder(PdfBorder::leftRight());
         foreach ($entities as $entity) {
             $this->outputGroup($table, $entity);
             if ($entity !== $last) {

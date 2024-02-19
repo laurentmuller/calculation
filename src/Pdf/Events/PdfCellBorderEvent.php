@@ -13,10 +13,10 @@ declare(strict_types=1);
 namespace App\Pdf\Events;
 
 use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
-use App\Pdf\PdfBorder;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfRectangle;
 use App\Pdf\PdfTable;
+use fpdf\PdfBorder;
 
 /**
  * The event raised when a cell border must be drawn.

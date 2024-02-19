@@ -27,6 +27,7 @@ use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
 use Elao\Enum\FlagBag;
+use fpdf\PdfBorder;
 use fpdf\PdfMove;
 use fpdf\PdfTextAlignment;
 
@@ -77,7 +78,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
             $description = $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
             [$x, $y] = $this->getXY();
             $event->group->apply($this);
-            $this->cell(border: true);
+            $this->cell(border: PdfBorder::all());
             $this->setXY($x, $y);
             $width = $this->getStringWidth($text);
             $this->cell(width: $width, text: $text);

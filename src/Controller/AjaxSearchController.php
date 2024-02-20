@@ -20,6 +20,7 @@ use App\Repository\CalculationRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\ProductRepository;
 use App\Service\SwissPostService;
+use App\Utils\StringUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,16 +54,14 @@ class AjaxSearchController extends AbstractController
         #[MapQueryParameter(flags: \FILTER_NULL_ON_FAILURE)]
         ?int $limit = null
     ): JsonResponse {
-        if (null === $limit) {
-            $limit = 15;
-        }
-        if (null !== $zip && '' !== $zip) {
+        $limit ??= 15;
+        if (StringUtils::isString($zip)) {
             return $this->json($service->findZip($zip, $limit));
         }
-        if (null !== $city && '' !== $city) {
+        if (StringUtils::isString($city)) {
             return $this->json($service->findCity($city, $limit));
         }
-        if (null !== $street && '' !== $street) {
+        if (StringUtils::isString($street)) {
             return $this->json($service->findStreet($street, $limit));
         }
 

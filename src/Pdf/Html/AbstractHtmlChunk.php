@@ -15,6 +15,7 @@ namespace App\Pdf\Html;
 use App\Pdf\PdfFont;
 use App\Report\HtmlReport;
 use App\Traits\ArrayTrait;
+use App\Utils\StringUtils;
 use fpdf\PdfBorder;
 use fpdf\PdfDocument;
 use fpdf\PdfTextAlignment;
@@ -207,7 +208,7 @@ abstract class AbstractHtmlChunk
     {
         $this->applyStyle($report);
         $text = $this->getOutputText();
-        if (\is_string($text) && '' !== $text) {
+        if (StringUtils::isString($text)) {
             $this->outputText($report, $text);
         }
     }
@@ -218,7 +219,7 @@ abstract class AbstractHtmlChunk
     public function setClassName(?string $className): static
     {
         $this->classes = [];
-        if (null !== $className && '' !== $className) {
+        if (StringUtils::isString($className)) {
             $this->classes = $this->getUniqueFiltered(\explode(' ', \strtolower($className)));
         }
 
@@ -306,9 +307,9 @@ abstract class AbstractHtmlChunk
      */
     protected function outputText(HtmlReport $report, string $text): void
     {
+        $border = $this->getParentBorder();
         $height = \max($report->getFontSize(), PdfDocument::LINE_HEIGHT);
-        $border = $this->getParentBorder() ?? false;
-        if ($border instanceof PdfBorder) {
+        if ($border instanceof PdfBorder && !$border->isNone()) {
             $required = $report->getStringWidth($text) + 2.0 * $report->getCellMargin();
             if ($required > $report->getRemainingWidth()) {
                 $report->multiCell(height: $height, text: $text, border: $border);

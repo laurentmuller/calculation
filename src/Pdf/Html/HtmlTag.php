@@ -202,8 +202,12 @@ enum HtmlTag: string
         };
     }
 
-    private function createStyle(bool $bold = false, float $sizeFactor = 1.0, float $bottomMargin = 0.0, float $leftMargin = 0.0): HtmlStyle
-    {
+    private function createStyle(
+        bool $bold = false,
+        float $sizeFactor = 1.0,
+        float $bottomMargin = 0.0,
+        float $leftMargin = 0.0
+    ): HtmlStyle {
         $style = new HtmlStyle();
         if ($bold || 1.0 !== $sizeFactor) {
             $font = PdfFont::default()

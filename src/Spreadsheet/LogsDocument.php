@@ -15,6 +15,7 @@ namespace App\Spreadsheet;
 use App\Controller\AbstractController;
 use App\Model\LogFile;
 use App\Pdf\Html\HtmlBootstrapColor;
+use App\Utils\StringUtils;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use Psr\Log\LogLevel;
@@ -97,7 +98,7 @@ class LogsDocument extends AbstractDocument
 
     private function setBorderStyle(WorksheetDocument $sheet, int $row, ?string $level): void
     {
-        if (null !== $level && '' !== $level) {
+        if (StringUtils::isString($level)) {
             $sheet->getStyle("A$row")
                 ->getBorders()
                 ->getLeft()

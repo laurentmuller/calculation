@@ -77,8 +77,7 @@ class HtmlReport extends AbstractReport
      */
     public function updateLeftMargin(float $leftMargin): self
     {
-        $this->setLeftMargin($leftMargin);
-        $this->setX($leftMargin);
+        $this->x = $this->leftMargin = $leftMargin;
 
         return $this;
     }
@@ -90,7 +89,7 @@ class HtmlReport extends AbstractReport
      */
     public function updateRightMargin(float $rightMargin): self
     {
-        $this->setRightMargin($rightMargin);
+        $this->rightMargin = $rightMargin;
 
         return $this;
     }
@@ -117,7 +116,7 @@ class HtmlReport extends AbstractReport
         $leftMargin = $this->leftMargin;
         $rightMargin = $this->rightMargin;
         if (null !== $this->currentLeftMargin && $this->currentLeftMargin !== $leftMargin) {
-            $this->setLeftMargin($this->getX() + $this->currentLeftMargin);
+            $this->x = $this->rightMargin = $this->currentLeftMargin;
         }
         if (null !== $this->currentRightMargin && $this->currentRightMargin !== $rightMargin) {
             $this->rightMargin = $this->currentRightMargin;

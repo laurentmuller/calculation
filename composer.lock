@@ -1980,16 +1980,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "1.8.4.2",
+            "version": "1.8.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "15ba71790a615e35b938ecc9322b95cc5e8457a9"
+                "reference": "e98339b06cf137d5f7c1569f7a8db4699f108835"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/15ba71790a615e35b938ecc9322b95cc5e8457a9",
-                "reference": "15ba71790a615e35b938ecc9322b95cc5e8457a9",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/e98339b06cf137d5f7c1569f7a8db4699f108835",
+                "reference": "e98339b06cf137d5f7c1569f7a8db4699f108835",
                 "shasum": ""
             },
             "require": {
@@ -2040,7 +2040,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-02-19T15:03:48+00:00"
+            "time": "2024-02-20T15:36:55+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -7730,16 +7730,16 @@
         },
         {
             "name": "symfonycasts/reset-password-bundle",
-            "version": "v1.20.2",
+            "version": "v1.20.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/reset-password-bundle.git",
-                "reference": "b79a28c975d72b5ac7febeebe139de436add26c4"
+                "reference": "df64d82cca2ee371da5e8c03c227457069ae663e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/b79a28c975d72b5ac7febeebe139de436add26c4",
-                "reference": "b79a28c975d72b5ac7febeebe139de436add26c4",
+                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/df64d82cca2ee371da5e8c03c227457069ae663e",
+                "reference": "df64d82cca2ee371da5e8c03c227457069ae663e",
                 "shasum": ""
             },
             "require": {
@@ -7770,22 +7770,22 @@
             "description": "Symfony bundle that adds password reset functionality.",
             "support": {
                 "issues": "https://github.com/SymfonyCasts/reset-password-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.20.2"
+                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.20.3"
             },
-            "time": "2024-01-22T12:46:34+00:00"
+            "time": "2024-02-20T10:51:53+00:00"
         },
         {
             "name": "symfonycasts/verify-email-bundle",
-            "version": "v1.16.1",
+            "version": "v1.16.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/verify-email-bundle.git",
-                "reference": "418f33c5112bb2ee2ae7132e52100b279264ff52"
+                "reference": "572c94ffcf9ab7ada585f3e9ca1a16b3f0d1e77e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/verify-email-bundle/zipball/418f33c5112bb2ee2ae7132e52100b279264ff52",
-                "reference": "418f33c5112bb2ee2ae7132e52100b279264ff52",
+                "url": "https://api.github.com/repos/SymfonyCasts/verify-email-bundle/zipball/572c94ffcf9ab7ada585f3e9ca1a16b3f0d1e77e",
+                "reference": "572c94ffcf9ab7ada585f3e9ca1a16b3f0d1e77e",
                 "shasum": ""
             },
             "require": {
@@ -7816,9 +7816,9 @@
             "description": "Simple, stylish Email Verification for Symfony",
             "support": {
                 "issues": "https://github.com/SymfonyCasts/verify-email-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/verify-email-bundle/tree/v1.16.1"
+                "source": "https://github.com/SymfonyCasts/verify-email-bundle/tree/v1.16.2"
             },
-            "time": "2024-01-05T15:51:10+00:00"
+            "time": "2024-02-20T10:50:54+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -10008,16 +10008,16 @@
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "fad452781b3d774e3337b0c0b245dd8e5a4455fc"
+                "reference": "bc3dc91a5e9b14aa06d1d9e90647c5c5a2cc5353"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/fad452781b3d774e3337b0c0b245dd8e5a4455fc",
-                "reference": "fad452781b3d774e3337b0c0b245dd8e5a4455fc",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/bc3dc91a5e9b14aa06d1d9e90647c5c5a2cc5353",
+                "reference": "bc3dc91a5e9b14aa06d1d9e90647c5c5a2cc5353",
                 "shasum": ""
             },
             "require": {
@@ -10060,9 +10060,9 @@
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
             "support": {
                 "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
-                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.8.0"
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.8.1"
             },
-            "time": "2024-01-11T11:49:22+00:00"
+            "time": "2024-01-18T19:15:27+00:00"
         },
         {
             "name": "phpstan/extension-installer",
@@ -10157,16 +10157,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.58",
+            "version": "1.10.59",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "a23518379ec4defd9e47cbf81019526861623ec2"
+                "reference": "e607609388d3a6d418a50a49f7940e8086798281"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a23518379ec4defd9e47cbf81019526861623ec2",
-                "reference": "a23518379ec4defd9e47cbf81019526861623ec2",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e607609388d3a6d418a50a49f7940e8086798281",
+                "reference": "e607609388d3a6d418a50a49f7940e8086798281",
                 "shasum": ""
             },
             "require": {
@@ -10215,7 +10215,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-12T20:02:57+00:00"
+            "time": "2024-02-20T13:59:13+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",

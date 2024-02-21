@@ -203,25 +203,21 @@ function handleEmail() {
     });
 
     // add handlers
-    $('.btn-default-all').on('click', function (e) {
-        e.preventDefault();
-        setDefaultValues();
-    });
-    $('.btn-default-visible').on('click', function (e) {
-        e.preventDefault();
+    $('.btn-item-visible').on('click', function (e) {
         const $source = getActivePage();
         if ($source) {
             setDefaultValues($source);
         }
     });
+    $('.btn-item-all').on('click', function (e) {
+        setDefaultValues();
+    });
     $('.btn-notify').on('click', (e) => {
-        e.preventDefault();
         const $items = $('.dropdown-notify');
         const index = Math.floor(Math.random() * $items.length);
         $items.eq(index).trigger('click');
     });
     $('.dropdown-notify').on('click', (e) => {
-        e.preventDefault();
         displayNotification($(e.currentTarget));
     });
     $('.card-parameter .collapse').on('shown.bs.collapse', function () {

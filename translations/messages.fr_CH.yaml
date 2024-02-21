@@ -65,6 +65,7 @@ calculation:
     delete_category: Supprimer la catégorie
     delete_group: Supprimer le groupe
     delete_item: Supprimer l'article
+    copy_item: Copier l'article
     delete_task: Supprimer la tâche
     edit_item: Modifier l'article
     edit_task: Modifier la tâche

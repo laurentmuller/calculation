@@ -27,6 +27,9 @@
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
                 {{ dropdownItemWithClass('#', 'calculation.edit.edit_item', ICON_EDIT, 'btn-default btn-edit-item') }}
                 {{ dropdownItemWithClass('#', 'calculation.edit.delete_item', ICON_DELETE, 'btn-delete-item') }}
+                {#
+                {{ dropdownItemWithClass('#', 'calculation.edit.copy_item', ICON_COPY, 'btn-copy-item') }}
+                #}
                 {{ dropdownSeparator() }}
                 {{ dropdownItemWithClass('#', 'calculation.edit.price.edit', 'highlighter', 'btn-edit-price') }}
                 {{ dropdownItemWithClass('#', 'calculation.edit.quantity.edit', 'paint-brush', 'btn-edit-quantity') }}

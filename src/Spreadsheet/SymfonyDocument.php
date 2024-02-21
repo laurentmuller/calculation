@@ -68,14 +68,11 @@ class SymfonyDocument extends AbstractDocument
             'Size' => HeaderFormat::right(),
         ]);
         foreach ($bundles as $bundle) {
-            $this->outputLinkRow(
-                $sheet,
-                $row++,
-                $bundle['homepage'],
+            $sheet->setRowValues($row++, [
                 $bundle['name'],
                 $bundle['path'],
-                $bundle['size']
-            );
+                $bundle['size'],
+            ]);
         }
         $sheet->setAutoSize(1, 2)->finish();
     }

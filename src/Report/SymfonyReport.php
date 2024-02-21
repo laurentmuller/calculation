@@ -91,11 +91,7 @@ class SymfonyReport extends AbstractReport
             ->setGroupKey('Bundles')
             ->outputHeaders();
         foreach ($bundles as $bundle) {
-            $table->startRow()
-                ->addCell(new PdfCell(text: $bundle['name'], link: $bundle['homepage']))
-                ->add($bundle['path'])
-                ->add($bundle['size'])
-                ->endRow();
+            $table->addRow($bundle['name'], $bundle['path'], $bundle['size']);
         }
     }
 

@@ -66,7 +66,7 @@ enum FlashType: string implements TranslatableEnumInterface
      *
      * @psalm-api
      */
-    public function getStyleColor(): string
+    public function getStyle(): string
     {
         return \sprintf('var(--bs-%s)', $this->value);
     }

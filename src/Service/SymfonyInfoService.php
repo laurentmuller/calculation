@@ -30,58 +30,49 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @see https://github.com/symfony/symfony/blob/7.1/src/Symfony/Bundle/FrameworkBundle/Command/AboutCommand.php
  * @see https://github.com/EasyCorp/easy-doc-bundle/blob/master/src/Command/DocCommand.php
  *
- * @psalm-type RouteType = array{name: string, path: string, methods: string}
- * @psalm-type RoutesType = array{runtime: array<string, RouteType>, debug: array<string, RouteType>}
- * @psalm-type PackageType = array{name: string, version: string, description: string, homepage: string}
- * @psalm-type PackagesType = array{runtime: array<string, PackageType>, debug: array<string, PackageType>}
- * @psalm-type BundleType = array{name: string, namespace: string, path: string, package: string, homepage: string, size: string}
+ * @psalm-type RouteType = array{
+ *     name: string,
+ *     path: string,
+ *     methods: string}
+ * @psalm-type RoutesType = array{
+ *     runtime: array<string, RouteType>,
+ *     debug: array<string, RouteType>}
+ * @psalm-type PackageSourceType = array{
+ *      name: string,
+ *      version_normalized: string,
+ *      description?: string,
+ *      homepage?: string}
+ * @psalm-type PackageType = array{
+ *     name: string,
+ *     version: string,
+ *     description: string,
+ *     homepage: string}
+ * @psalm-type PackagesType = array{
+ *     runtime: array<string, PackageType>,
+ *     debug: array<string, PackageType>}
+ * @psalm-type BundleType = array{
+ *     name: string,
+ *     namespace: string,
+ *     path: string,
+ *     package: string,
+ *     size: string}
  * @psalm-type BundlesType = array<string, BundleType>
- *
- * @internal
  */
 final class SymfonyInfoService
 {
-    /**
-     * The array key for debug packages and routes.
-     */
+    // the array key for debug packages and routes
     private const KEY_DEBUG = 'debug';
-
-    /**
-     * The array key for runtime packages and routes.
-     */
+    // the array key for runtime packages and routes
     private const KEY_RUNTIME = 'runtime';
-
-    /**
-     * The file name containing composer information.
-     */
+    // the JSON file containing composer information
     private const PACKAGE_FILE_NAME = '/vendor/composer/installed.json';
-
-    /**
-     * The package properties.
-     */
-    private const PACKAGE_PROPERTIES = [
-        'name',
-        'version',
-        'description',
-        'homepage',
-    ];
-
-    /**
-     * The release information URL.
-     */
+    // the release information URL
     private const RELEASE_URL = 'https://symfony.com/releases/%s.%s.json';
-
-    /**
-     * The unknown label.
-     */
+    // the unknown label
     private const UNKNOWN = 'Unknown';
 
     private readonly Environment $environment;
     private readonly Environment $mode;
-
-    /**
-     * The project directory.
-     */
     private readonly string $projectDir;
 
     public function __construct(
@@ -135,13 +126,7 @@ final class SymfonyInfoService
                         'path' => $this->makePathRelative($path, $projectDir),
                         'package' => $this->makePathRelative($path, $vendorDir),
                         'size' => FileUtils::formatSize($path),
-                        'homepage' => '',
                     ];
-                }
-                if ([] !== $bundles) {
-                    $packages = $this->getPackages();
-                    $this->updateBundles($packages, $bundles);
-                    \ksort($bundles);
                 }
 
                 return $bundles;
@@ -386,24 +371,9 @@ final class SymfonyInfoService
         return $description;
     }
 
-    private function cleanVersion(string $version): string
-    {
-        return \ltrim($version, 'v');
-    }
-
     private function createDate(string $date): \DateTimeImmutable|false
     {
         return \DateTimeImmutable::createFromFormat('d/m/Y', '01/' . $date);
-    }
-
-    /**
-     * @psalm-param PackagesType $packages
-     *
-     * @psalm-return PackageType|null
-     */
-    private function findPackage(array $packages, string $name): ?array
-    {
-        return $packages[self::KEY_RUNTIME][$name] ?? $packages[self::KEY_DEBUG][$name] ?? null;
     }
 
     /**
@@ -487,7 +457,7 @@ final class SymfonyInfoService
     {
         try {
             return $this->cache->get('packages', function (): array {
-                $path = $this->projectDir . self::PACKAGE_FILE_NAME;
+                $path = FileUtils::buildPath($this->projectDir, self::PACKAGE_FILE_NAME);
                 if (!FileUtils::exists($path)) {
                     return [
                         self::KEY_RUNTIME => [],
@@ -498,8 +468,8 @@ final class SymfonyInfoService
                 try {
                     /**
                      * @psalm-var array{
-                     *     packages: array<string, PackageType>|null,
-                     *     'dev-package-names': string[]|null
+                     *     packages: array<string, PackageSourceType>|null,
+                     *     dev-package-names: string[]|null
                      * } $content
                      */
                     $content = FileUtils::decodeJson($path);
@@ -588,8 +558,8 @@ final class SymfonyInfoService
     }
 
     /**
-     * @psalm-param array<string, PackageType> $runtimePackages
-     * @psalm-param string[]                   $debugPackages
+     * @psalm-param array<string, PackageSourceType> $runtimePackages
+     * @psalm-param string[]                         $debugPackages
      *
      * @psalm-return PackagesType
      */
@@ -606,15 +576,12 @@ final class SymfonyInfoService
 
         foreach ($runtimePackages as $package) {
             $name = $package['name'];
-            $entry = ['name' => $name];
-            foreach (self::PACKAGE_PROPERTIES as $key) {
-                $value = $package[$key] ?? '';
-                $entry[$key] = match ($key) {
-                    'description' => $this->cleanDescription($value),
-                    'version' => $this->cleanVersion($value),
-                    default => $value,
-                };
-            }
+            $entry = [
+                'name' => $name,
+                'homepage' => $package['homepage'] ?? '',
+                'version' => $package['version_normalized'],
+                'description' => $this->cleanDescription($package['description'] ?? ''),
+            ];
             $type = \in_array($name, $debugPackages, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
             $result[$type][$name] = $entry;
         }
@@ -625,21 +592,6 @@ final class SymfonyInfoService
             \ksort($result[self::KEY_DEBUG]);
         }
 
-        // @phpstan-ignore-next-line
         return $result;
-    }
-
-    /**
-     * @psalm-param PackagesType $packages
-     * @psalm-param BundlesType $bundles
-     */
-    private function updateBundles(array $packages, array $bundles): void
-    {
-        foreach ($bundles as &$bundle) {
-            $package = $this->findPackage($packages, $bundle['package']);
-            if (null !== $package) {
-                $bundle['homepage'] = $package['homepage'];
-            }
-        }
     }
 }

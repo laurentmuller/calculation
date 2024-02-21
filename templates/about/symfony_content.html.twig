@@ -13,9 +13,7 @@
 {%- endmacro %}
 {% macro rowBundle(bundle) -%}
 <tr>
-    <td class="e">
-        {{- bundle.name -}}{%- if bundle.homepage|default(false) %}{{- linkExternal(bundle.homepage, '', 'mx-1 d-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
-    </td>
+    <td class="e">{{- bundle.name -}}</td>
     <td class="v">{{ bundle.path }}</td>
     <td class="v text-percent">{{ bundle.size }}</td>
 </tr>

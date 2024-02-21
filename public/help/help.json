@@ -2408,6 +2408,10 @@
                 },
                 {
                     "action": "submit_cancel"
+                },
+                {
+                    "id": "parameters.default",
+                    "description": "Remplace les paramètres par leurs valeurs par défaut."
                 }
             ]
         },
@@ -2608,6 +2612,10 @@
                 },
                 {
                     "action": "submit_cancel"
+                },
+                {
+                    "id": "parameters.default",
+                    "description": "Remplace les paramètres par leurs valeurs par défaut."
                 }
             ],
             "links": [

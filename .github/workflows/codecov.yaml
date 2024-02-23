@@ -16,6 +16,7 @@ jobs:
           extensions: intl
           php-version: '8.2'
           tools: composer
+          coverage: xdebug
 
       - name: Determine composer cache directory
         id: composer-cache

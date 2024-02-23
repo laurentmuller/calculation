@@ -1,20 +1,41 @@
-name: Workflow for Codecov example-php
+name: Codecov
+
 on: [push, pull_request]
+
 jobs:
-  run:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-      - name: Set up php 8.2
+
+      - name: Install PHP with extensions
         uses: shivammathur/setup-php@v2
         with:
+          extensions: intl
           php-version: '8.2'
+          tools: composer
+
+      - name: Determine composer cache directory
+        id: composer-cache
+        run: echo "directory=$(composer config cache-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache dependencies installed with composer
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.directory }}
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.*') }}
+          restore-keys: composer-${{ runner.os }}-composer-
+
       - name: Install dependencies
-        run: composer self-update && composer install && composer dump-autoload
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
       - name: Run tests and collect coverage
-        run: vendor/bin/phpunit --coverage-clover coverage.xml .
+        run: vendor/bin/phpunit --coverage-clover coverage.xml
+
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4-beta
+        uses: codecov/codecov-action@v4.0.1
         env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}
+          token: ${{ secrets.CODECOV_TOKEN  }}
+          slug: laurentmuller/calculation

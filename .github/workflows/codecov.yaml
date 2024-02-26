@@ -25,6 +25,6 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: '60f14338-70bc-4144-9a64-de624687906b'
           slug: laurentmuller/calculation
           files: ./clover.xml

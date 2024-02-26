@@ -24,16 +24,22 @@
     const THEME_DARK = 'dark';
 
     /**
-     * The cookie entry name.
+     * The theme cookie entry name.
      * @type {string}
      */
-    const COOKIE_ENTRY = 'THEME=';
+    const THEME_COOKIE = 'THEME=';
 
     /**
      * The theme changed event name.
      * @type {string}
      */
     const THEME_EVENT_NAME = 'theme_changed';
+
+    /**
+     * The match media to get value for or to listen for.
+     * @type {string}
+     */
+    const THEME_MEDIA = '(prefers-color-scheme: dark)';
 
     /**
      * Gets the stored theme.
@@ -44,8 +50,8 @@
         const entries = decodedCookie.split(';');
         for (let i = 0; i < entries.length; i++) {
             const entry = entries[i].trim();
-            if (entry.startsWith(COOKIE_ENTRY)) {
-                return entry.substring(COOKIE_ENTRY.length);
+            if (entry.startsWith(THEME_COOKIE)) {
+                return entry.substring(THEME_COOKIE.length);
             }
         }
         return THEME_AUTO;
@@ -59,7 +65,7 @@
         const date = new Date();
         date.setFullYear(date.getFullYear() + 1);
         const path = document.body.dataset.cookiePath || '/';
-        let entry = `${COOKIE_ENTRY}${encodeURIComponent(theme)};`;
+        let entry = `${THEME_COOKIE}${encodeURIComponent(theme)};`;
         entry += `expires=${date.toUTCString()};`;
         entry += `path=${path};`;
         entry += 'samesite=lax;';
@@ -71,7 +77,7 @@
      * Return a value indicating if the preferred color scheme is dark.
      * @return {boolean} true if dark.
      */
-    const isPreferredDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isPreferredDark = () => window.matchMedia(THEME_MEDIA).matches;
 
     /**
      * Gets the preferred theme.
@@ -157,7 +163,7 @@
     /**
      * Handle the prefer color scheme change.
      */
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    window.matchMedia(THEME_MEDIA).addEventListener('change', () => {
         const storedTheme = getStoredTheme();
         if (storedTheme !== THEME_LIGHT && storedTheme !== THEME_DARK) {
             setTheme(getPreferredTheme());

@@ -37,9 +37,9 @@
         <a{{ attributes(header_attributes) }}>
             {{- icon('database ms-1', 'index.panel_catalog') -}}
         </a>
-        <a href="#" class="d-print-none hide-panel text-body" title="{{ 'index.panel_catalog_hide'|trans }}">
+        <button type="button" class="btn btn-link hide-panel text-body p-0" title="{{ 'index.panel_catalog_hide'|trans }}">
             {{- icon('xmark') -}}
-        </a>
+        </button>
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
         <div class="card-body index-parent g-0 p-1">

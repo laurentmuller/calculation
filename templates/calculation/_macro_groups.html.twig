@@ -1,6 +1,6 @@
 {# Macro for calculation groups #}
 {% macro outputGroupRow(group, editable, first, last) -%}
-{% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownSeparator, dropdownItemWithClass %}
+{% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownSeparator, dropdownItemButton %}
 {% from 'calculation/_macro_categories.html.twig' import outputCategoryRow %}
 {# head #}
 <thead class="group"{% if editable %} data-prototype="{{ outputCategoryRow(group.categories.vars.prototype, editable, false, false)|e('html_attr') }}"{% endif -%}>
@@ -16,15 +16,15 @@
                 {%- set menu_id = 'dropdownMenuGroup_' ~ group.vars.id -%}
                     {{ dropdownEllipsis(menu_id) }}
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
-                    {{ dropdownItemWithClass('#', 'calculation.edit.delete_group', ICON_DELETE, 'btn-delete-group') }}
+                    {{ dropdownItemButton('calculation.edit.delete_group', ICON_DELETE, 'btn-delete-group') }}
                     {{ dropdownSeparator() }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-default btn-add-item') }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}
+                    {{ dropdownItemButton('calculation.edit.add_item', ICON_PRODUCT, 'btn-default btn-add-item') }}
+                    {{ dropdownItemButton('calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}
                     {{ dropdownSeparator(first and last) }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-group', first) }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.move_up', 'chevron-up', 'btn-up-group', first) }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.move_down', 'chevron-down', 'btn-down-group', last) }}
-                    {{ dropdownItemWithClass('#', 'calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-group', last) }}
+                    {{ dropdownItemButton('calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-group', first) }}
+                    {{ dropdownItemButton('calculation.edit.move_up', 'chevron-up', 'btn-up-group', first) }}
+                    {{ dropdownItemButton('calculation.edit.move_down', 'chevron-down', 'btn-down-group', last) }}
+                    {{ dropdownItemButton('calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-group', last) }}
                 </ul>
             </div>
         </th>

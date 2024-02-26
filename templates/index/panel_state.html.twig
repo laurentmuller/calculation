@@ -40,14 +40,14 @@
             {{- icon(ICON_CALCULATION_STATE ~ ' ms-1', 'index.panel_state') -}}
         </a>
         {%- if table_path and is_states -%}
-            {{ link(path('chart_state'), null, 'd-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}
+            {{ link(path('chart_state'), null, 'btn btn-link p-0 d-print-none', 'chart-pie fa-fw', 'index.menu_chart_title') }}
             {% if is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
-                {{ linkExternal(path('chart_state_pdf'), null, 'd-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
+                {{ linkExternal(path('chart_state_pdf'), null, 'btn btn-link p-0 d-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
             {% endif %}
         {%- endif -%}
-        <a href="#" class="hide-panel d-print-none text-body" title="{{ 'index.panel_state_hide'|trans }}">
+        <button type="button" class="btn btn-link hide-panel text-body p-0" title="{{ 'index.panel_state_hide'|trans }}">
             {{- icon('xmark') -}}
-        </a>
+        </button>
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
     {% if is_states %}

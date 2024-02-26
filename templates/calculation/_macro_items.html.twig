@@ -1,6 +1,6 @@
 {# Macro for a calculation items #}
 {% macro outputItemRow(item, editable, first, last) -%}
-{% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownItemWithClass, dropdownSeparator, button_pdf %}
+{% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownItemButton, dropdownSeparator, button_pdf %}
 {% set edit_class = editable ? 'text-editable text-currency rowlink-skip' : 'text-currency' %}
 <tr class="item">
     {# hidden inputs #}
@@ -13,10 +13,18 @@
     {% if editable %}
     <td class="text-description text-cell ps-3"><a href='#' class="btn-edit-item">{{ item.description.vars.value }}</a></td>
     <td class="text-unit">{{ item.unit.vars.value }}</td>
-    <td class="text-editable text-currency rowlink-skip cursor-text" title="{{ 'calculation.edit.price.title'|trans }}" data-target="#{{ item.price.vars.id }}" data-tooltip-edit="{{ 'calculation.edit.price.tooltip'|trans }}" data-tooltip-error="{{ 'calculation.edit.price.error'|trans }}">
+    <td class="text-editable text-currency rowlink-skip cursor-text"
+        title="{{ 'calculation.edit.price.title'|trans }}"
+        data-target="#{{ item.price.vars.id }}"
+        data-tooltip-edit="{{ 'calculation.edit.price.tooltip'|trans }}"
+        data-tooltip-error="{{ 'calculation.edit.price.error'|trans }}">
         {{- item.price.vars.value|amount -}}
     </td>
-    <td class="text-editable text-currency rowlink-skip cursor-text" title="{{ 'calculation.edit.quantity.title'|trans }}" data-target="#{{ item.quantity.vars.id }}" data-tooltip-edit="{{ 'calculation.edit.quantity.tooltip'|trans }}" data-tooltip-error="{{ 'calculation.edit.quantity.error'|trans }}">
+    <td class="text-editable text-currency rowlink-skip cursor-text"
+        title="{{ 'calculation.edit.quantity.title'|trans }}"
+        data-target="#{{ item.quantity.vars.id }}"
+        data-tooltip-edit="{{ 'calculation.edit.quantity.tooltip'|trans }}"
+        data-tooltip-error="{{ 'calculation.edit.quantity.error'|trans }}">
         {{- item.quantity.vars.value|amount -}}
     </td>
     <td class="text-currency">{{ item.total.vars.value|amount }}</td>
@@ -25,22 +33,20 @@
             {%- set menu_id = 'dropdownMenuItem_' ~ item.vars.id -%}
             {{ dropdownEllipsis(menu_id) }}
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
-                {{ dropdownItemWithClass('#', 'calculation.edit.edit_item', ICON_EDIT, 'btn-default btn-edit-item') }}
-                {{ dropdownItemWithClass('#', 'calculation.edit.delete_item', ICON_DELETE, 'btn-delete-item') }}
-                {#
-                {{ dropdownItemWithClass('#', 'calculation.edit.copy_item', ICON_COPY, 'btn-copy-item') }}
-                #}
+                {{ dropdownItemButton('calculation.edit.edit_item', ICON_EDIT, 'btn-default btn-edit-item') }}
+                {{ dropdownItemButton('calculation.edit.delete_item', ICON_DELETE, 'btn-delete-item') }}
                 {{ dropdownSeparator() }}
-                {{ dropdownItemWithClass('#', 'calculation.edit.price.edit', 'highlighter', 'btn-edit-price') }}
-                {{ dropdownItemWithClass('#', 'calculation.edit.quantity.edit', 'paint-brush', 'btn-edit-quantity') }}
+                {{ dropdownItemButton('calculation.edit.price.edit', 'highlighter', 'btn-edit-price') }}
+                {{ dropdownItemButton('calculation.edit.quantity.edit', 'paint-brush', 'btn-edit-quantity') }}
                 {{ dropdownSeparator() }}
-                {{ dropdownItemWithClass('#', 'calculation.edit.add_item', ICON_PRODUCT, 'btn-add-item') }}
-                {{ dropdownItemWithClass('#', 'calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}
+                {{ dropdownItemButton('calculation.edit.add_item', ICON_PRODUCT, 'btn-add-item') }}
+                {{ dropdownItemButton('calculation.edit.copy_item', ICON_COPY, 'btn-copy-item') }}
+                {{ dropdownItemButton('calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}
                 {{ dropdownSeparator(first and last) }}
-                {{ dropdownItemWithClass('#', 'calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-item', first) }}
-                {{ dropdownItemWithClass('#', 'calculation.edit.move_up', 'chevron-up', 'btn-up-item', first) }}
-                {{ dropdownItemWithClass('#', 'calculation.edit.move_down', 'chevron-down', 'btn-down-item', last) }}
-                {{ dropdownItemWithClass('#', 'calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-item', last) }}
+                {{ dropdownItemButton('calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-item', first) }}
+                {{ dropdownItemButton('calculation.edit.move_up', 'chevron-up', 'btn-up-item', first) }}
+                {{ dropdownItemButton('calculation.edit.move_down', 'chevron-down', 'btn-down-item', last) }}
+                {{ dropdownItemButton('calculation.edit.move_last', 'step-forward fa-rotate-90', 'btn-last-item', last) }}
             </ul>
         </div>
     </td>

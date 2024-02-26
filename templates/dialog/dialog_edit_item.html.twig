@@ -1,10 +1,12 @@
 {# Modal dialog to edit a calculation item #}
 {% extends 'dialog/dialog_edit.html.twig' %}
 {# parameters #}
-{%- set icon = ICON_PRODUCT -%}
 {%- set form_prefix = 'item' -%}
-{%- set add_title = 'calculationitem.add.title'|trans -%}
-{%- set edit_title = 'calculationitem.edit.title'|trans -%}
+{%- set dialog_icon = ICON_PRODUCT -%}
+{%- set add_title = 'calculation.edit.add_item'|trans -%}
+{%- set edit_title = 'calculation.edit.edit_item'|trans -%}
+{%- set copy_title = 'calculation.edit.copy_item'|trans -%}
+{%- set form_attr = form_attr|default({})|merge({'data-copy': copy_title}) -%}
 {# body #}
 {% block modal_body %}
 <div class="row" id="item_search_row">

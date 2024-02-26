@@ -133,13 +133,14 @@ class CalculationReport extends AbstractReport
      */
     private function renderCalculation(): void
     {
-        $calculation = $this->calculation;
-        $leftBorder = new PdfBorder(true, true, false, true);
+        $border = PdfBorder::all()->setRight(false);
         $leftStyle = PdfStyle::getHeaderStyle()
-            ->setBorder($leftBorder);
-        $rightBorder = new PdfBorder(false, true, true, true);
+            ->setBorder($border);
+        $border = PdfBorder::all()->setLeft(false);
         $rightStyle = PdfStyle::getHeaderStyle()
-            ->setBorder($rightBorder);
+            ->setBorder($border);
+
+        $calculation = $this->calculation;
         PdfTable::instance($this)
             ->addColumns(
                 PdfColumn::left(null, 100),
@@ -183,7 +184,7 @@ class CalculationReport extends AbstractReport
         }
 
         $file = FileUtils::tempFile();
-        if (!\is_string($file)) {
+        if (!StringUtils::isString($file)) {
             $this->logError($this->trans('report.calculation.error_qr_code'));
 
             return;

@@ -1,9 +1,9 @@
 {# Modal dialog to edit a calculation task #}
 {% extends 'dialog/dialog_edit.html.twig' %}
 {# parameters #}
-{%- set icon = ICON_TASK -%}
 {%- set form_prefix = 'task' -%}
-{%- set add_title = 'task_compute.add'|trans -%}
+{%- set dialog_icon = ICON_TASK -%}
+{%- set add_title = 'calculation.edit.add_task'|trans -%}
 {%- set edit_title = 'task_compute.edit'|trans -%}
 {%- set form_attr = form_attr|default({})|merge({'data-url': path('ajax_task'), 'data-failed': 'task_compute.failed'|trans}) -%}
 {# body #}

@@ -1,0 +1,32 @@
+{% from 'macros/_icons.html.twig' import button_close_modal %}
+{% set dialog_id = 'license-modal' %}
+<div id="{{ dialog_id }}" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true"
+     aria-labelledby="modal-license-title"
+     data-copy-success="{{ 'about.dialog.copy_success'|trans }}"
+     data-copy-error="{{ 'about.dialog.copy_error'|trans }}"
+     data-url="{{ path('ajax_license') }}">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                    <span id="modal-license-title" class="dialog-title">{{ 'about.dialog.title'|trans }}</span>
+                </h1>
+                {{- button_close_modal(true, null, dialog_id) -}}
+            </div>
+            <div class="modal-body">
+                <div id="license-content" class="border pre-scrollable small-scrollbar">
+                    <div id="license-content-html" class="p-2 overflow-x-hidden d-none"></div>
+                    <pre id="license-content-text" class="p-2 overflow-x-hidden d-none"
+                         style="font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size)"></pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-form btn-primary btn-copy-license" data-clipboard-target="#license-content">
+                    {{- 'common.button_copy'|trans -}}
+                </button>
+                {{- button_close_modal(false, null, dialog_id) }}
+            </div>
+        </div>
+    </div>
+</div>

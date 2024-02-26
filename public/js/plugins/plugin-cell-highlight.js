@@ -191,7 +191,7 @@
 
             // Iterate through each hypothetical table row.
             $.each(tableIndex, function (y) {
-                // Note that columns.length <= table width
+                // Note that columns length is smaller than or equal to the table width
                 const row = rows.eq(y);
                 const columns = row.children();
                 let cellIndex = 0;

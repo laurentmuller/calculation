@@ -78,12 +78,14 @@ class PhpIniReport extends AbstractReport
         $style = PdfFontStyle::REGULAR;
         if (1 === \preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
             $color = PdfTextColor::create($var);
-        } elseif (\in_array(\strtolower($var), ['no', 'disabled', 'off', '(none)'], true)) {
+        } elseif (\in_array(
+            \strtolower($var),
+            ['no', 'disabled', 'off', 'no value', PhpInfoService::REDACTED],
+            true
+        )) {
             $color = PdfTextColor::darkGray();
-        } elseif (StringUtils::equalIgnoreCase(PhpInfoService::REDACTED, $var)) {
-            $color = PdfTextColor::darkGray();
-        } elseif (StringUtils::equalIgnoreCase('no value', $var)) {
-            $color = PdfTextColor::darkGray();
+        }
+        if (StringUtils::equalIgnoreCase('no value', $var)) {
             $style = PdfFontStyle::ITALIC;
         }
         if (!$color instanceof PdfTextColor) {

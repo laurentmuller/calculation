@@ -210,7 +210,7 @@
             // the toasts position
             position: 'bottom-right',
 
-            // the toast icon.
+            // The toast icon.
             // Possible values:
             // - false: No icon is displayed.
             // - true: The default icon is displayed depending on the type.
@@ -308,7 +308,7 @@
          * Gets target container.
          *
          * @param {Object} options - The toast options.
-         * @returns {jQuery} The target container.
+         * @returns {JQuery.Selector} The target container.
          * @private
          */
         _getTarget: function (options) {
@@ -333,6 +333,7 @@
 
             // exist?
             if ($div.length === 0) {
+                /** @type {JQuery.Selector} */
                 const $target = this._getTarget(options);
                 return $('<div/>', {
                     id: id,
@@ -366,7 +367,7 @@
         /**
          * Append the toast header.
          *
-         * @param {jQuery} $parent - the parent to append header to.
+         * @param {jQuery} $parent - the parent to append the header to.
          * @param {Object} options - The toast options.
          * @private
          */
@@ -389,7 +390,7 @@
         /**
          * Append the header icon.
          *
-         * @param {jQuery} $parent - the parent to append icon to.
+         * @param {jQuery} $parent - the parent to append the icon to.
          * @param {Object} options - The options.
          * @returns {jQuery|undefined} The icon or null if no icon.
          * @private
@@ -495,7 +496,7 @@
         /**
          * Append the toast message.
          *
-         * @param {jQuery} $parent - the parent to append message to.
+         * @param {jQuery} $parent - the parent to append the message to.
          * @param {Object} options - The toast options.
          * @private
          */

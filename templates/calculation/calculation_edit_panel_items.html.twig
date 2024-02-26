@@ -1,5 +1,5 @@
 {# imports #}
-{% from 'macros/_icons.html.twig' import icon, link %}
+{% from 'macros/_icons.html.twig' import icon %}
 {% from 'calculation/_macro_groups.html.twig' import outputGroupRow %}
 {# panel #}
 <div id='items-panel' class="card mb-3">
@@ -9,9 +9,15 @@
             <h1 class="card-title me-auto">{{ icon(ICON_PRODUCT, 'calculation.edit.panel_items') }}</h1>
             <div class="d-print-none">
                 <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
-                    {{ link('#', null, 'btn btn-secondary btn-add-item', ICON_PRODUCT, 'calculation.edit.add_item') }}
-                    {{ link('#', null, 'btn btn-secondary btn-add-task', ICON_TASK, 'calculation.edit.add_task') }}
-                    {{ link('#', null, 'btn btn-secondary btn-sort-items' ~ (item.sortable ? '' : ' disabled'), 'sort-alpha-up', 'calculation.edit.sort_item') }}
+                    <button type="button" class="btn btn-secondary btn-add-item" title="{{ 'calculation.edit.add_item'|trans }}">
+                        {{- icon(ICON_PRODUCT) -}}
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-add-task" title="{{ 'calculation.edit.add_task'|trans }}">
+                        {{- icon(ICON_TASK) -}}
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sort-items" title="{{ 'calculation.edit.sort_item'|trans }}"{% if not item.sortable %} disabled="disabled"{% endif %}>
+                        {{- icon('sort-alpha-up') -}}
+                    </button>
                 </div>
             </div>
         </div>

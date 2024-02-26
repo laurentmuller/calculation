@@ -31,6 +31,32 @@ class EditItemDialog extends EditDialog {
     }
 
     /**
+     * Display the copy dialog.
+     * @param {jQuery} $row - the selected row.
+     * @return {this} This instance for chaining.
+     */
+    showCopy($row) {
+        'use strict';
+        // loaded?
+        if (!this._isDialogLoaded()) {
+            this._loadDialog('showCopy', $row);
+            return this;
+        }
+
+        // initialize
+        this.$editingRow = $row;
+        this._resetValidator();
+        this._initEdit($row);
+        this.$description.val(this.$description.val() + ' - Copie');
+        this.copy = true;
+
+        // show
+        this.$modal.modal('show');
+
+        return this;
+    }
+
+    /**
      * Initialize the dialog add.
      * @param {jQuery} $row - the selected row.
      * @return {this} This instance for chaining.
@@ -46,6 +72,7 @@ class EditItemDialog extends EditDialog {
             }
         }
         // set values
+        this.copy = false;
         this.$price.floatVal(1);
         this.$quantity.floatVal(1);
         this.$total.text($.formatFloat(1));
@@ -63,6 +90,7 @@ class EditItemDialog extends EditDialog {
         'use strict';
 
         // copy values
+        this.copy = false;
         this.$description.val($row.findNamedInput('description').val());
         this.$unit.val($row.findNamedInput('unit').val());
         this.$category.val($row.parent().findNamedInput('category').val());
@@ -82,6 +110,7 @@ class EditItemDialog extends EditDialog {
         'use strict';
         // get elements
         const that = this;
+        that.copy = false;
         that.$form = $('#item_form');
         that.$modal = $('#item_modal');
         that.$description = $('#item_description');
@@ -157,7 +186,12 @@ class EditItemDialog extends EditDialog {
         'use strict';
         if (this.$editingRow) {
             this.$searchRow.hide();
-            this.$deleteButton.show();
+            if (this.copy) {
+                this.$editingRow = null;
+                this.$deleteButton.hide();
+            } else {
+                this.$deleteButton.show();
+            }
         } else {
             this.$searchRow.show();
             this.$deleteButton.hide();
@@ -174,6 +208,8 @@ class EditItemDialog extends EditDialog {
         'use strict';
         if (this.$price.attr('readonly')) {
             this.$cancelButton.trigger('focus');
+        } else if (this.copy) {
+            this.$description.selectFocus();
         } else if (this.$editingRow) {
             if (this.$price.isEmptyValue()) {
                 this.$price.selectFocus();
@@ -203,6 +239,17 @@ class EditItemDialog extends EditDialog {
      */
     _getDialogUrl() {
         return this.application.getItemDialogUrl();
+    }
+
+    /**
+     * @return {string}
+     * @private
+     */
+    _getDialogTitle() {
+        if (this.copy) {
+            return this.$form.data('copy');
+        }
+        return super._getDialogTitle();
     }
 
     /**

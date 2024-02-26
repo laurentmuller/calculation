@@ -24,9 +24,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class CalculationUpdateQuery extends AbstractSimulateQuery
 {
     private \DateTimeInterface $dateFrom;
-
     private \DateTimeInterface $dateTo;
-
     /** @var CalculationState[] */
     #[Assert\Count(min: 1)]
     private array $states = [];

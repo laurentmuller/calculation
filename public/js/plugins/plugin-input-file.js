@@ -252,7 +252,7 @@
                 file.result = event.target.result;
                 $element.find('.file-input-filename').text(file.name);
                 // if parent has max-height, using `(max-)height: 100%` on
-                // child doesn't take padding and border into account
+                // the child doesn't take padding and border into account
                 if ($preview.css('max-height') !== 'none') {
                     const mh = parseInt($preview.css('max-height'), 10) || 0;
                     const pt = parseInt($preview.css('padding-top'), 10) || 0;

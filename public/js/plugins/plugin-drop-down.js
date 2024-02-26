@@ -84,7 +84,7 @@
         // -----------------------------
 
         /**
-         * Initialize widget.
+         * Initialize the widget.
          * @private
          */
         _init() {

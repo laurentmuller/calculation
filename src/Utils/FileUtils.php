@@ -354,7 +354,7 @@ final class FileUtils
     }
 
     /**
-     * Create temporary directory in the given directory with a unique name.
+     * Create the temporary directory in the given directory with a unique name.
      *
      * @param string $dir          The directory where the temporary directory will be created
      * @param string $prefix       The prefix of the generated temporary directory
@@ -383,14 +383,14 @@ final class FileUtils
     }
 
     /**
-     * Create temporary file in the given directory with a unique name.
+     * Create the temporary file in the given directory with a unique name.
      *
      * @param string $prefix       the prefix of the generated temporary file name. Note: Windows uses only the first
      *                             three characters of prefix.
      * @param bool   $deleteOnExit if true, the file is deleted at the end of the script
      * @param string $suffix       The suffix of the generated temporary filename
      *
-     * @return string|null the new temporary file name (with path); null on failure
+     * @return string|null the new temporary file name (with the path); null on failure
      */
     public static function tempFile(string $prefix = 'tmp', bool $deleteOnExit = true, string $suffix = ''): ?string
     {

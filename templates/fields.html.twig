@@ -235,3 +235,21 @@
     </div>
 </div>
 {%- endblock -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        {%- if form is rootform -%}
+            <hr class="mt-2 mb-1">
+            <p class="mb-1">{{ 'error_page.description'|trans }}</p>
+            <ul class="my-1">
+            {%- for error in errors -%}
+                <li>{{ error.message }}</li>
+            {%- endfor -%}
+            </ul>
+        {%- else -%}
+            {%- for error in errors -%}
+                <small class="is-invalid invalid-feedback">{{ error.message }}</small>
+            {%- endfor -%}
+        {%- endif %}
+    {%- endif %}
+{%- endblock form_errors -%}

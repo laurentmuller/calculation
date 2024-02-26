@@ -118,7 +118,7 @@ const Application = {
     },
 
     /**
-     * Initialize group and item menus.
+     * Initialize the groups and item menus.
      *
      * @return {Application} This instance for chaining.
      */
@@ -128,54 +128,39 @@ const Application = {
         const that = this;
         const $buttonAdjust = $('.btn-adjust');
         if ($buttonAdjust.length) {
-            $buttonAdjust.on('click', function (e) {
-                e.preventDefault();
+            $buttonAdjust.on('click', () => {
                 $buttonAdjust.tooltip('hide');
                 that.updateTotals(true);
             }).tooltip();
         }
-
-        // add item button
-        $('#items-panel .card-header .btn-add-item').on('click', function (e) {
-            e.preventDefault();
+        // toolbar buttons
+        $('#items-panel .card-header .btn-add-item').on('click', function () {
             that.showAddItemDialog($(this));
         });
-
-        $('#items-panel .card-header .btn-add-task').on('click', function (e) {
-            e.preventDefault();
+        $('#items-panel .card-header .btn-add-task').on('click', function () {
             that.showAddTaskDialog($(this));
         });
-
-        // sort calculation button
-        $('.btn-sort-items').on('click', function (e) {
-            e.preventDefault();
+        $('.btn-sort-items').on('click', function () {
             that.sortCalculation();
         });
-
         // data table buttons
-        $('#data-table-edit').on('click', '.btn-add-item', function (e) {
-            e.preventDefault();
+        $('#data-table-edit').on('click', '.btn-add-item', function () {
             that.showAddItemDialog($(this));
-        }).on('click', '.btn-add-task', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-add-task', function () {
             that.showAddTaskDialog($(this));
-        }).on('click', '.btn-edit-item', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-edit-item', function () {
             that.showEditItemDialog($(this));
-        }).on('click', '.btn-delete-item', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-copy-item', function () {
+            that.showCopyItemDialog($(this));
+        }).on('click', '.btn-delete-item', function () {
             that.removeItem($(this));
-        }).on('click', '.btn-delete-category', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-delete-category', function () {
             that.removeCategory($(this));
-        }).on('click', '.btn-delete-group', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-delete-group', function () {
             that.removeGroup($(this));
-        }).on('click', '.btn-edit-price', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-edit-price', function () {
             that.editItemPrice($(this));
-        }).on('click', '.btn-edit-quantity', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-edit-quantity', function () {
             that.editItemQuantity($(this));
         });
 
@@ -197,7 +182,7 @@ const Application = {
     },
 
     /**
-     * Update the move up/down buttons.
+     * Update the move up/down and the sort buttons.
      *
      * @return {Application} This instance for chaining.
      */
@@ -220,7 +205,8 @@ const Application = {
             $group.find('.btn-up-group').toggleClass('d-none', hideUp);
             $group.find('.btn-down-group').toggleClass('d-none', hideDown);
             $group.find('.btn-last-group').toggleClass('d-none', hideDown);
-            $group.find('.btn-first-group').prev('.dropdown-divider').toggleClass('d-none', hideUp && hideDown);
+            $group.find('.btn-first-group').prev('.dropdown-divider')
+                .toggleClass('d-none', hideUp && hideDown);
 
             // sortable?
             const newGroup = $group.find('th:first').text();
@@ -368,7 +354,7 @@ const Application = {
                 $buttonAdjust.toggleDisabled(true).addClass('cursor-default');
             }
             $('#calculation_customer').trigger('input');
-            $("#data-table-edit").updateErrors();
+            $('#data-table-edit').updateErrors();
             return that;
 
         }).fail(function (_jqXHR, textStatus) {
@@ -381,7 +367,7 @@ const Application = {
     },
 
     /**
-     * Disable edition.
+     * Disable edition mode.
      *
      * @param {string} [message] - the error message to display.
      * @return {Application} This instance for chaining.
@@ -606,7 +592,6 @@ const Application = {
         'use strict';
 
         const that = this;
-
         that.sortGroups();
         that.getGroups().each(function () {
             that.sortCategories($(this));
@@ -638,7 +623,7 @@ const Application = {
             }
         });
 
-        // create group and update
+        // create a group and update
         const $parent = $('#data-table-edit');
         const prototype = $parent.getPrototype(/__groupIndex__/g, 'groupIndex');
         const $group = $(prototype);
@@ -707,7 +692,7 @@ const Application = {
     },
 
     /**
-     * Display the add item dialog.
+     * Display the dialog to add an item.
      *
      * @param {jQuery} $source - the caller element (normally a button).
      */
@@ -741,7 +726,7 @@ const Application = {
 
     /**
      * Display the edit item dialog. This function copy the element to the
-     * dialog and display it.
+     * dialog and display it. If the user click OK, the item is updated.
      *
      * @param {jQuery} $source - the caller element (normally a button).
      */
@@ -752,6 +737,22 @@ const Application = {
         if ($row && $row.length) {
             $row.addClass('table-primary').scrollInViewport();
             this.getItemDialog().showEdit($row);
+        }
+    },
+
+    /**
+     * Display the edit item dialog. This function copy the selected element to the
+     * dialog and display it. If the user click OK, a new item is added.
+     *
+     * @param {jQuery} $source - the caller element (normally a button).
+     */
+    showCopyItemDialog: function ($source) {
+        'use strict';
+
+        const $row = $source.getParentRow();
+        if ($row && $row.length) {
+            $row.addClass('table-primary').scrollInViewport();
+            this.getItemDialog().showCopy($row);
         }
     },
 
@@ -841,12 +842,12 @@ const Application = {
         const category = dialog.getCategory();
         const item = dialog.getItem();
 
-        // get or create group and category
+        // get or create the group and the category
         const $group = this.findOrCreateGroup(group);
         const $category = this.findOrCreateCategory($group, category);
 
         // append
-        const $row = $category.appendRow(item);
+        const $row = $category.appendRowItem(item);
         $row.scrollInViewport().timeoutToggle('table-success');
 
         // update
@@ -892,12 +893,12 @@ const Application = {
 
         // same group and category?
         if (oldGroupId !== group.id || oldCategoryId !== category.id) {
-            // get or create group and category
+            // get or create the group and the category
             const $group = this.findOrCreateGroup(group);
             const $category = this.findOrCreateCategory($group, category);
 
             // append
-            const $row = $category.appendRow(item);
+            const $row = $category.appendRowItem(item);
 
             // check if empty
             const $next = $oldHead.nextUntil('.group');
@@ -915,7 +916,7 @@ const Application = {
             $row.scrollInViewport().timeoutToggle('table-success');
         } else {
             // update
-            $editingRow.updateRow(item).timeoutToggle('table-success');
+            $editingRow.updateRowItem(item).timeoutToggle('table-success');
             this.updateAll();
         }
         return this;
@@ -940,13 +941,13 @@ const Application = {
         const category = dialog.getCategory();
         const items = dialog.getItems();
 
-        // get or create group and category
+        // get or create the group and the category
         const $group = this.findOrCreateGroup(group);
         const $category = this.findOrCreateCategory($group, category);
 
         // append items and select
         items.forEach(function (item) {
-            const $row = $category.appendRow(item);
+            const $row = $category.appendRowItem(item);
             $row.scrollInViewport().timeoutToggle('table-success');
         });
 
@@ -977,7 +978,7 @@ const Application = {
     /**
      * Handles the row drag stop event.
      *
-     * @param {Event} e - the source event.
+     * @param {CustomEvent} e - the source event.
      */
     onDragStop: function (e) {
         'use strict';
@@ -995,7 +996,7 @@ const Application = {
             // create template and replace content
             const item = $row.getRowItem();
             const $newBody = $(destination.container);
-            const $newRow = $newBody.appendRow(item);
+            const $newRow = $newBody.appendRowItem(item);
             $row.replaceWith($newRow);
 
             // remove old category if empty
@@ -1096,11 +1097,11 @@ $.fn.extend({
      * substring.
      *
      * @param {string} name - the partial attribute name.
-     * @return {jQuery} - The input, if found; null otherwise.
+     * @return {jQuery|null} - The input, if found; null otherwise.
      */
     findNamedInput: function (name) {
         'use strict';
-        const selector = "input[name*='" + name + "']";
+        const selector = 'input[name*=\'' + name + '\']';
         const $result = $(this).find(selector);
         return $result.length ? $result : null;
     },
@@ -1171,7 +1172,7 @@ $.fn.extend({
      * @param {Object} item - the item values used to update the row
      * @returns {jQuery} the created row.
      */
-    appendRow: function (item) {
+    appendRowItem: function (item) {
         'use strict';
         // tbody
         const $parent = $(this);
@@ -1180,7 +1181,7 @@ $.fn.extend({
         const prototype = $parent.getPrototype(/__itemIndex__/g, 'itemIndex');
 
         // append and update
-        return $(prototype).appendTo($parent).updateRow(item);
+        return $(prototype).appendTo($parent).updateRowItem(item);
     },
 
     /**
@@ -1189,7 +1190,7 @@ $.fn.extend({
      * @param {Object} item - the item to get values from.
      * @returns {jQuery} The updated row.
      */
-    updateRow: function (item) {
+    updateRowItem: function (item) {
         'use strict';
         const $row = $(this);
         // update inputs
@@ -1278,48 +1279,35 @@ const MoveHandler = {
         const that = this;
         const $dataTableEdit = $('#data-table-edit');
         // groupes
-        $dataTableEdit.on('click', '.btn-first-group', function (e) {
-            e.preventDefault();
+        $dataTableEdit.on('click', '.btn-first-group', function () {
             that.moveGroupFirst($(this).getParentGroup());
-        }).on('click', '.btn-up-group', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-up-group', function () {
             that.moveGroupUp($(this).getParentGroup());
-        }).on('click', '.btn-down-group', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-down-group', function () {
             that.moveGroupDown($(this).getParentGroup());
-        }).on('click', '.btn-last-group', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-last-group', function () {
             that.moveGroupLast($(this).getParentGroup());
         });
 
-
         // categories
-        $dataTableEdit.on('click', '.btn-first-category', function (e) {
-            e.preventDefault();
+        $dataTableEdit.on('click', '.btn-first-category', function () {
             that.moveCategoryFirst($(this).getParentCategory());
-        }).on('click', '.btn-up-category', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-up-category', function () {
             that.moveCategoryUp($(this).getParentCategory());
-        }).on('click', '.btn-down-category', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-down-category', function () {
             that.moveCategoryDown($(this).getParentCategory());
-        }).on('click', '.btn-last-category', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-last-category', function () {
             that.moveCategoryLast($(this).getParentCategory());
         });
 
         // items
-        $dataTableEdit.on('click', '.btn-first-item', function (e) {
-            e.preventDefault();
+        $dataTableEdit.on('click', '.btn-first-item', function () {
             that.moveItemFirst($(this).getParentRow());
-        }).on('click', '.btn-up-item', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-up-item', function () {
             that.moveItemUp($(this).getParentRow());
-        }).on('click', '.btn-down-item', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-down-item', function () {
             that.moveItemDown($(this).getParentRow());
-        }).on('click', '.btn-last-item', function (e) {
-            e.preventDefault();
+        }).on('click', '.btn-last-item', function () {
             that.moveItemLast($(this).getParentRow());
         });
     },
@@ -1339,7 +1327,7 @@ const MoveHandler = {
 
         // check
         if ($source && $target && $source !== $target) {
-            // save source tbody
+            // save the source tbody
             const $bodies = $source.nextUntil('.group');
 
             // move

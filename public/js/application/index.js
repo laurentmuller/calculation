@@ -218,14 +218,12 @@ function createKeydownHandler($parent) {
 /**
  * Hide a panel.
  *
- * @param {Event} e - the source event.
+ * @param {JQuery} $source - the source event.
  */
-function hidePanel(e) {
+function hidePanel($source) {
     'use strict';
-    e.preventDefault();
-    const $this = $(e.currentTarget);
-    const $card = $this.parents('.card');
-    const title = $card.find('.card-title').text();
+    const $card = $source.parents('.card');
+    const title = $source.find('.card-title').text();
     const url = $card.data('path');
     $.post(url, function (message) {
         $card.fadeOut(200, function () {
@@ -279,7 +277,7 @@ function selectRow($source) {
  */
 function initCollapsePanel($link) {
     'use strict';
-    const href= $link.attr('href');
+    const href = $link.attr('href');
     const $element = $(href);
     const path = $('body').data('cookie-path');
     const key = $element.attr('id').toUpperCase();
@@ -359,8 +357,8 @@ function initCollapsePanel($link) {
     // handle hide panels
     const $panels = $('.hide-panel');
     if ($panels.length) {
-        $panels.on('click', function (e) {
-            hidePanel(e);
+        $panels.on('click', function () {
+            hidePanel($(this));
         });
     }
 

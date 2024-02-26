@@ -28,6 +28,8 @@ use App\Service\TaskService;
 use App\Service\UserService;
 use App\Traits\CookieTrait;
 use App\Traits\MathTrait;
+use App\Utils\FileUtils;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -35,6 +37,7 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Twig\Extra\Markdown\MarkdownInterface;
 
 /**
  * Controller for all XMLHttpRequest (Ajax) calls.
@@ -67,6 +70,36 @@ class AjaxController extends AbstractController
         ]);
 
         return $this->jsonTrue($data);
+    }
+
+    #[IsGranted(RoleInterface::ROLE_ADMIN)]
+    #[Get(path: '/license', name: 'ajax_license')]
+    public function getLicense(
+        #[MapQueryParameter]
+        string $file,
+        MarkdownInterface $markdown,
+        #[Autowire('%kernel.project_dir%')]
+        string $projectDir,
+    ): JsonResponse {
+        $file = FileUtils::buildPath($projectDir, $file);
+        if (!FileUtils::exists($file)) {
+            return $this->jsonFalse(['message' => $this->trans('about.license.not_found')]);
+        }
+        $content = \file_get_contents($file);
+        if (!\is_string($content)) {
+            return $this->jsonFalse(['message' => $this->trans('about.license.not_loaded')]);
+        }
+        if (\str_ends_with($file, '.md')) {
+            return $this->jsonTrue([
+                'html' => true,
+                'content' => $markdown->convert($content),
+            ]);
+        }
+
+        return $this->jsonTrue([
+            'html' => false,
+            'content' => $content,
+        ]);
     }
 
     /**

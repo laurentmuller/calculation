@@ -69,6 +69,7 @@
         _onKeyup() {
             let result;
             const that = this;
+            /** @type {string} */
             const text = that.$element.val();
             const options = that.options;
             if (text.length) {
@@ -287,7 +288,7 @@
          *
          * @param {string} type - the tag type.
          * @param {string} [className] - the class name.
-         * @param {Object} [css] - the css style.
+         * @param {Object} [css] - the CSS style.
          * @return {jQuery} the newly created element.
          * @private
          */

@@ -83,17 +83,16 @@ class PhpIniDocument extends AbstractDocument
     private function applyStyle(Worksheet $sheet, int $column, int $row, string $var): self
     {
         $color = null;
-        $italic = false;
         if (1 === \preg_match('/#[\dA-Fa-f]{6}/i', $var)) {
             $color = \substr($var, 1);
-        } elseif (\in_array(\strtolower($var), ['no', 'disabled', 'off'], true)) {
+        } elseif (\in_array(
+            \strtolower($var),
+            ['no', 'disabled', 'off', 'no value', PhpInfoService::REDACTED],
+            true
+        )) {
             $color = '7F7F7F';
-        } elseif (StringUtils::equalIgnoreCase(PhpInfoService::REDACTED, $var)) {
-            $color = '7F7F7F';
-        } elseif (StringUtils::equalIgnoreCase('no value', $var)) {
-            $color = '7F7F7F';
-            $italic = true;
         }
+        $italic = StringUtils::equalIgnoreCase('no value', $var);
         if (null === $color && !$italic) {
             return $this;
         }

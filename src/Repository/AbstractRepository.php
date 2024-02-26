@@ -17,6 +17,7 @@ use App\Interfaces\EntityInterface;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
@@ -160,8 +161,7 @@ abstract class AbstractRepository extends ServiceEntityRepository
      * Gets the name of the single identifier field. Note that this only works on entity classes that have a
      * single-field primary key.
      *
-     * @throws \Doctrine\ORM\Exception\ORMException if the class doesn't have an identifier, or it has a composite
-     *                                              primary key
+     * @throws MappingException if the class doesn't have an identifier, or it has a composite primary key
      */
     public function getSingleIdentifierFieldName(): string
     {

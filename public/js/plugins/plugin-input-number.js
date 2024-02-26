@@ -93,6 +93,7 @@
             }
 
             const $element = this.$element;
+            /** @type {string} */
             const value = $element.val();
             const beginVal = value.substring(0, selectionStart);
             const endVal = value.substring(selectionEnd, value.length - 1);
@@ -106,6 +107,7 @@
             const options = this.options;
             const decimal = options.decimal;
             const $element = this.$element;
+            /** @type {string} */
             const value = $element.val();
             const parts = value.split(this.inputRegex);
             if (decimal > 0 && parts.length === 2 && parts[1].length > decimal) {

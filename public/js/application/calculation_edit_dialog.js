@@ -24,7 +24,7 @@ class EditDialog {
     }
 
     /**
-     * Display the add item dialog.
+     * Display the dialog to add item.
      * @param {jQuery} $row - the selected row.
      * @return {this} This instance for chaining.
      */
@@ -188,10 +188,18 @@ class EditDialog {
      */
     _onDialogShow() {
         'use strict';
-        const key = this.$editingRow ? 'edit' : 'add';
-        const title = this.$form.data(key);
+        const title = this._getDialogTitle();
         this.$modal.find('.dialog-title').text(String(title));
         return this;
+    }
+
+    /**
+     * @return {string}
+     * @protected
+     */
+    _getDialogTitle() {
+        const key = this.$editingRow ? 'edit' : 'add';
+        return this.$form.data(key);
     }
 
     /**
@@ -231,7 +239,7 @@ class EditDialog {
 
     /**
      * Load the modal dialog.
-     * @param {string} callback - the function name to call after dialog is loaded.
+     * @param {string} callback - the function name to call after the dialog is loaded.
      * @param {jQuery} $row - the editing row.
      * @protected
      */
@@ -272,7 +280,7 @@ class EditDialog {
 
     /**
      * Initialize the type ahead search units.
-     * @param {jQuery} selector - the input.
+     * @param {jQuery} $input - the input.
      * @protected
      */
     _initSearchUnits($input) {

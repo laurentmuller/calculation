@@ -14,8 +14,6 @@ about:
   app_github_url: GitHub
   error: Erreur lors du chargement des informations.
   extern_link: Accéder au site
-  licence: Accord de licence
-  licence_short: Licence
   loading: Recherche des informations...
   mysql: Configuration de MySQL
   mysql_version: Configuration de MySQL v%version%
@@ -29,6 +27,14 @@ about:
   expand: Afficher le contenu
   collapse: Masquer le contenu
   toggle: Inverser l'affichage du contenu
+  licence: Accord de license
+  dialog:
+    title: Accord de license
+    display: Afficher l'accord de licence
+    not_found: Impossible de trouver l'accord de licence.
+    not_loaded: Impossible de charger l'accord de licence.
+    copy_success: L'accord de license a été copié avec succès dans le presse-papier
+    copy_error: Une erreur s'est produite lors de la copie de l'accord de license dans le presse-papiers.
 admin:
   rights:
     title: Droits d'accès
@@ -65,7 +71,7 @@ calculation:
     delete_category: Supprimer la catégorie
     delete_group: Supprimer le groupe
     delete_item: Supprimer l'article
-    copy_item: Copier l'article
+    copy_item: Créer une copie de l'article
     delete_task: Supprimer la tâche
     edit_item: Modifier l'article
     edit_task: Modifier la tâche

@@ -10,6 +10,10 @@
     // CellEdit public class definition
     // ------------------------------------
 
+    /**
+     * @property {JQuery<HTMLElement>} $element
+     * @property {JQuery<HTMLInputElement>} $input
+     */
     const CellEdit = class {
 
         // -----------------------------
@@ -42,7 +46,7 @@
         /**
          * Gets the input element.
          *
-         * @return {jQuery|null|jQuery<HTMLElement>}
+         * @return {JQuery<HTMLInputElement>}
          */
         getInput() {
             return this.$input;
@@ -78,6 +82,11 @@
             }
         }
 
+        /**
+         * @param {MouseEvent} [e]
+         * @return {CellEdit}
+         * @private
+         */
         _click(e) {
             if (e) {
                 e.stopPropagation();
@@ -109,6 +118,7 @@
                 'value': this.value,
                 'class': className
             }, options.attributes);
+
             this.$input = $('<input>', attributes);
 
             this.$element.addClass(options.cellClass)
@@ -132,7 +142,11 @@
 
             return this;
         }
-
+        /**
+         * @param {KeyboardEvent} [e]
+         * @return {CellEdit}
+         * @private
+         */
         _blur(e) {
             return this._cancel(e, true);
         }
@@ -158,6 +172,11 @@
             return this;
         }
 
+        /**
+         * @param {KeyboardEvent} [e]
+         * @return {CellEdit}
+         * @private
+         */
         _keydown(e) {
             if (!e) {
                 return this;
@@ -172,12 +191,18 @@
             }
         }
 
+        /**
+         * @param {KeyboardEvent} [e]
+         * @return {CellEdit}
+         * @private
+         */
         _update(e) {
             if (e) {
+                e.preventDefault();
                 e.stopPropagation();
             }
             if (!this.$input.val()) {
-                return;
+                return this;
             }
             const options = this.options;
             const oldValue = this.value;
@@ -201,6 +226,12 @@
             return this;
         }
 
+        /**
+         * @param {KeyboardEvent} [e]
+         * @param {boolean} notify
+         * @return {CellEdit}
+         * @private
+         */
         _cancel(e, notify) {
             if (e) {
                 e.stopPropagation();
@@ -282,7 +313,7 @@
         'autoDispose': false,
         // the function to parse the value
         'parser': null,
-        // the  function to format the value
+        // the function to format the value
         'formatter': null,
         // the function on start edit event
         'onStartEdit': null,

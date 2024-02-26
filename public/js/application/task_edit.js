@@ -346,8 +346,7 @@ function expand($caller) {
 (function ($) {
     'use strict';
     // handle add button
-    $('.btn-add-item').on('click', function (e) {
-        e.preventDefault();
+    $('.btn-add-item').on('click', function () {
         addItem();
     });
 

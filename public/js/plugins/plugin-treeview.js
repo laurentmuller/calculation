@@ -166,7 +166,7 @@
         }
 
         /**
-         * Set focus to the selected item ,if any; the element otherwise.
+         * Set focus to the selected item, if any; the element otherwise.
          *
          * @return {BoostrapTreeView} this instance for chaining.
          */
@@ -439,7 +439,7 @@
                     break;
                 }
 
-                case 'ArrowUp': { // => select previous
+                case 'ArrowUp': { // select previous
                     const $items = this.$element.find('.list-group-item:visible');
                     const index = $items.index($target);
                     if (index > 0) {
@@ -449,7 +449,7 @@
                     break;
                 }
 
-                case 'ArrowRight': { // => expand or select first child
+                case 'ArrowRight': { // expand or select first child
                     const $group = $target.next('.list-group:first:not(:visible)');
                     if ($group.length) {
                         this._toggleGroup($group);
@@ -460,7 +460,7 @@
                     break;
                 }
 
-                case 'ArrowDown': {  // => select next
+                case 'ArrowDown': {  // select next
                     const $items = this.$element.find('.list-group-item:visible');
                     const index = $items.index($target);
                     const length = $items.length;

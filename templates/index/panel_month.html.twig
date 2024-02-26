@@ -41,14 +41,14 @@
             {{- icon('calendar-alt ms-1 far', 'index.panel_month') -}}
         </a>
         {%- if list_path and is_months -%}
-            {{ link(path('chart_month'), null, 'd-print-none', 'chart-column fa-fw', 'index.menu_chart_title') }}
+            {{ link(path('chart_month'), null, 'btn btn-link p-0 d-print-none', 'chart-column fa-fw', 'index.menu_chart_title') }}
             {% if is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
-                {{ linkExternal(path('chart_month_pdf', {'count': months|length}), null, 'd-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
+                {{ linkExternal(path('chart_month_pdf', {'count': months|length}), null, 'btn btn-link p-0 d-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
             {% endif %}
         {%- endif -%}
-        <a href="#" class="hide-panel d-print-none text-body" title="{{ 'index.panel_month_hide'|trans }}">
+        <button type="button" class="btn btn-link hide-panel text-body p-0" title="{{ 'index.panel_month_hide'|trans }}">
             {{- icon('xmark') -}}
-        </a>
+        </button>
     </div>
     <div class="collapse{% if panel_show %} show{% endif %}" id="{{ panel_key }}">
     {% if is_months %}

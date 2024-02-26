@@ -241,9 +241,11 @@ abstract class AbstractEntityController extends AbstractController
     protected function redirectToDefaultRoute(
         Request $request,
         EntityInterface|int|null $item = 0,
-        ?string $route = null
+        ?string $route = null,
+        int $status = Response::HTTP_FOUND,
     ): RedirectResponse {
-        return $this->getUrlGenerator()->redirect($request, $item, $route ?? $this->getDefaultRoute());
+        return $this->getUrlGenerator()
+            ->redirect($request, $item, $route ?? $this->getDefaultRoute(), $status);
     }
 
     /**

@@ -14,6 +14,7 @@ namespace App\Spreadsheet;
 
 use App\Controller\AbstractController;
 use App\Service\DatabaseInfoService;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 
 /**
  * Document containing MySql configuration.
@@ -36,15 +37,26 @@ class MySqlDocument extends AbstractDocument
             return false;
         }
 
+        $color = new Color('7F7F7F');
         $this->start($this->trans('about.mysql_version', ['%version%' => $this->service->getVersion()]));
         $sheet = $this->getActiveSheet();
-        if ($this->outputArray($sheet, 'Database', $database)) {
+        if ($this->outputArray($sheet, 'Database', $database, $color)) {
             $sheet = $this->createSheet();
         }
-        $this->outputArray($sheet, 'Configuration', $configuration);
+        $this->outputArray($sheet, 'Configuration', $configuration, $color);
         $this->setActiveSheetIndex(0);
 
         return true;
+    }
+
+    private function applyStyle(WorksheetDocument $sheet, int $row, string $value, Color $color): void
+    {
+        if (!\in_array(\strtolower($value), ['off', 'no', 'false', 'disabled'], true)) {
+            return;
+        }
+        $sheet->getCell([2, $row])
+            ->getStyle()->getFont()
+            ->setColor($color);
     }
 
     /**
@@ -52,18 +64,21 @@ class MySqlDocument extends AbstractDocument
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    private function outputArray(WorksheetDocument $sheet, string $title, array $values): bool
+    private function outputArray(WorksheetDocument $sheet, string $title, array $values, Color $color): bool
     {
         if ([] === $values) {
             return false;
         }
+
         $sheet->setTitle($title);
         $row = $sheet->setHeaders([
             'Name' => HeaderFormat::left(),
             'Value' => HeaderFormat::left(),
         ]);
         foreach ($values as $key => $value) {
-            $sheet->setRowValues($row++, [$key, $value]);
+            $sheet->setRowValues($row, [$key, $value]);
+            $this->applyStyle($sheet, $row, $value, $color);
+            ++$row;
         }
         $sheet->setAutoSize(1, 2)
             ->finish();

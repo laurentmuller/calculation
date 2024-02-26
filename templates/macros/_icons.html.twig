@@ -61,6 +61,15 @@
 </li>
 {%- endmacro %}
 
+{% macro dropdownItemButton(text, icon, class, hidden=false, domain=null, parameters=[]) -%}
+{%- set class = ('dropdown-item rowlink-skip ' ~ (hidden ? 'd-none ' : '') ~ class|default(''))|trim -%}
+<li>
+    <button type="button" class="{{ class }}">
+        {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}
+    </button>
+</li>
+{%- endmacro %}
+
 {% macro dropdownSeparator(hidden=false, class='') -%}
 {%- set class = (class ~ (hidden ? ' d-none' : ''))|trim -%}
 <li{% if class %} class="{{ class }}"{% endif %}>

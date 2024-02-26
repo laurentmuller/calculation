@@ -233,6 +233,7 @@
             }
             this._setTheme(newTheme);
             this._setCookieValue(newTheme);
+            /** @type {jQuery} */
             const $link = $(this._getInputCheckedSelector());
             if ($link.length) {
                 const message = $link.data(this.options.success);

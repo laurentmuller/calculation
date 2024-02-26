@@ -203,16 +203,16 @@ function handleEmail() {
     });
 
     // add handlers
-    $('.btn-item-visible').on('click', function (e) {
+    $('.btn-item-visible').on('click', function () {
         const $source = getActivePage();
         if ($source) {
             setDefaultValues($source);
         }
     });
-    $('.btn-item-all').on('click', function (e) {
+    $('.btn-item-all').on('click', function () {
         setDefaultValues();
     });
-    $('.btn-notify').on('click', (e) => {
+    $('.btn-notify').on('click', () => {
         const $items = $('.dropdown-notify');
         const index = Math.floor(Math.random() * $items.length);
         $items.eq(index).trigger('click');

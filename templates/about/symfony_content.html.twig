@@ -1,5 +1,5 @@
 {% import 'about/_about_macro.html.twig' as tools %}
-{% from 'macros/_icons.html.twig' import linkExternal %}
+{% from 'macros/_icons.html.twig' import linkExternal, link %}
 {# macros #}
 {% macro headerLinkInfo(title, id, countable=null) -%}
 <div class="d-flex-wrap-center border-bottom" id="{{ id }}-header">
@@ -24,16 +24,25 @@
         <th class="fw-normal">Name</th>
         <th class="fw-normal text-id">Version</th>
         <th class="fw-normal">Description</th>
+        <th class="fw-normal">&nbsp;</th>
     </tr>
 </thead>
 {% endmacro %}
 {% macro rowPackage(package) -%}
-<tr>
+<tr{% if package.license %} data-license="{{ package.license }}"{% endif %}>
     <td class="e">
-        {{- package.name -}}{%- if package.homepage %}{{- linkExternal(package.homepage, '', 'mx-1 d-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}{%- endif -%}
+        {{- package.name -}}
+        {%- if package.homepage -%}
+            {{- linkExternal(package.homepage, '', 'mx-1 d-print-none', 'arrow-up-right-from-square', 'about.extern_link') -}}
+        {%- endif -%}
     </td>
     <td class="text-id">{{ package.version }}</td>
     <td class="text">{{ package.description }}</td>
+    {% if package.license %}
+        <td>{{ link('#', '', 'link-license', 'book-open-reader', 'about.dialog.display') }}</td>
+    {% else %}
+        <td>&nbsp;</td>
+    {% endif %}
 </tr>
 {%- endmacro %}
 {% macro headerRoute() -%}
@@ -195,3 +204,4 @@
         {% endif %}
      </div>
 </div>
+{{ include('dialog/dialog_license.html.twig') }}

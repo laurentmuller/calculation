@@ -1,19 +1,9 @@
 {# edit modal dialog #}
 {% from 'macros/_icons.html.twig' import icon, button_close_modal %}
-{# macro #}
-{% macro attributes(attr) -%}
-    {%- for attrname, attrvalue in attr -%}
-        {{- ' ' -}}
-        {%- if attrvalue is same as(true) -%}
-            {{- attrname }}="{{ attrname }}"
-        {%- elseif attrvalue is not same as(false) -%}
-            {{- attrname }}="{{ attrvalue }}"
-        {%- endif -%}
-    {%- endfor -%}
-{%- endmacro -%}
+{% from 'macros/_attributes.html.twig' import attributes %}
 {# parameters #}
-{%- set icon = icon|default(ICON_EDIT) -%}
 {%- set form_prefix = form_prefix|default('edit') -%}
+{%- set dialog_icon = dialog_icon|default(ICON_EDIT) -%}
 {%- set dialog_id = form_prefix ~ '_modal' -%}
 {%- set add_title = add_title|default('common.button_add'|trans) -%}
 {%- set edit_title = edit_title|default('common.button_edit'|trans) -%}
@@ -22,9 +12,9 @@
 <div id="{{ dialog_id }}" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="{{ dialog_id }}" aria-hidden="true">
     <div class="modal-dialog modal-lg">
        <div class="modal-content">
-            <form id="{{ form_prefix }}_form" autocomplete="off" data-add="{{ add_title }}" data-edit="{{ edit_title }}"{{ _self.attributes(form_attr) }}>
+            <form id="{{ form_prefix }}_form" autocomplete="off" data-add="{{ add_title }}" data-edit="{{ edit_title }}"{{ attributes(form_attr) }}>
                 <div class="modal-header cursor-move">
-                    <h1 class="modal-title fs-5" id="{{ dialog_id }}">{{ icon(icon) }}&nbsp;<span class="dialog-title">{{ edit_title }}</span></h1>
+                    <h1 class="modal-title fs-5" id="{{ dialog_id }}">{{ icon(dialog_icon) }}&nbsp;<span class="dialog-title">{{ edit_title }}</span></h1>
                     {{- button_close_modal(true, 'common.button_close', dialog_id) }}
                 </div>
                 <div class="modal-body">

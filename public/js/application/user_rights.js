@@ -152,12 +152,10 @@ function setDefaultValues() {
     $('#default').on('click', function () {
         setDefaultValues();
     });
-    $('.link-col').on('click', function (e) {
-        e.preventDefault();
+    $('.link-col').on('click', function () {
         onColumnClick($(this));
     });
-    $('.link-row').on('click', function (e) {
-        e.preventDefault();
+    $('.link-row').on('click', function () {
         onRowClick($(this));
     });
     $('#user_rights_overwrite').on('click', function () {

@@ -17,6 +17,7 @@ use App\Utils\FileUtils;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Intl\Locales;
@@ -41,12 +42,15 @@ use Symfony\Contracts\Cache\CacheInterface;
  *      name: string,
  *      version_normalized: string,
  *      description?: string,
- *      homepage?: string}
+ *      homepage?: string,
+ *      install-path: string,
+ *      support?: array{source?: string}}
  * @psalm-type PackageType = array{
  *     name: string,
  *     version: string,
  *     description: string,
- *     homepage: string}
+ *     homepage: string,
+ *     license: string|null}
  * @psalm-type PackagesType = array{
  *     runtime: array<string, PackageType>,
  *     debug: array<string, PackageType>}
@@ -128,6 +132,7 @@ final class SymfonyInfoService
                         'size' => FileUtils::formatSize($path),
                     ];
                 }
+                \ksort($bundles);
 
                 return $bundles;
             });
@@ -226,21 +231,21 @@ final class SymfonyInfoService
      */
     public function getMaintenanceStatus(): string
     {
-        $now = new \DateTimeImmutable();
         $eol = $this->getEndOfMonth(Kernel::END_OF_LIFE);
         $eom = $this->getEndOfMonth(Kernel::END_OF_MAINTENANCE);
-        if ($eom instanceof \DateTimeImmutable && $eol instanceof \DateTimeImmutable) {
-            if ($now > $eol) {
-                return 'Unmaintained';
-            }
-            if ($now > $eom) {
-                return 'Security Fixes Only';
-            }
-
-            return 'Maintained';
+        if (!$eom instanceof \DateTimeImmutable || !$eol instanceof \DateTimeImmutable) {
+            return self::UNKNOWN;
         }
 
-        return self::UNKNOWN;
+        $now = new \DateTimeImmutable();
+        if ($now > $eol) {
+            return 'Unmaintained';
+        }
+        if ($now > $eom) {
+            return 'Security Fixes Only';
+        }
+
+        return 'Maintained';
     }
 
     /**
@@ -261,6 +266,8 @@ final class SymfonyInfoService
 
     /**
      * Get the release date.
+     *
+     * @psalm-api
      */
     public function getReleaseDate(): string
     {
@@ -275,10 +282,8 @@ final class SymfonyInfoService
 
                     return $this->formatMonthYear($date);
                 } catch (\Psr\Cache\CacheException|\InvalidArgumentException) {
-                    // ignore
+                    return self::UNKNOWN;
                 }
-
-                return self::UNKNOWN;
             });
         } catch (InvalidArgumentException) {
             return self::UNKNOWN;
@@ -326,7 +331,7 @@ final class SymfonyInfoService
      */
     public function isApcuLoaded(): bool
     {
-        return \extension_loaded('apcu') && \filter_var(\ini_get('apc.enabled'), \FILTER_VALIDATE_BOOLEAN);
+        return $this->isExtensionLoaded('apcu', 'apc.enabled');
     }
 
     /**
@@ -351,7 +356,7 @@ final class SymfonyInfoService
      */
     public function isXdebugLoaded(): bool
     {
-        return \extension_loaded('xdebug');
+        return $this->isExtensionLoaded('xdebug');
     }
 
     /**
@@ -359,7 +364,7 @@ final class SymfonyInfoService
      */
     public function isZendCacheLoaded(): bool
     {
-        return \extension_loaded('Zend OPcache') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN);
+        return $this->isExtensionLoaded('Zend OPcache', 'opcache.enable');
     }
 
     private function cleanDescription(string $description): string
@@ -414,13 +419,12 @@ final class SymfonyInfoService
     private function getDaysBeforeExpiration(string $date): string
     {
         $date = $this->getEndOfMonth($date);
-        if ($date instanceof \DateTimeImmutable) {
-            $today = new \DateTimeImmutable();
-
-            return $today->diff($date)->format('%R%a days');
+        if (!$date instanceof \DateTimeImmutable) {
+            return self::UNKNOWN;
         }
+        $today = new \DateTimeImmutable();
 
-        return self::UNKNOWN;
+        return $today->diff($date)->format('%R%a days');
     }
 
     private function getDirectoryInfo(string $path): string
@@ -429,6 +433,19 @@ final class SymfonyInfoService
         $size = FileUtils::formatSize($path);
 
         return \sprintf('%s (%s)', $relativePath, $size);
+    }
+
+    /**
+     * Gets empty packages information.
+     *
+     * @return PackagesType
+     */
+    private function getEmptyPackages(): array
+    {
+        return [
+            self::KEY_RUNTIME => [],
+            self::KEY_DEBUG => [],
+        ];
     }
 
     /**
@@ -449,6 +466,27 @@ final class SymfonyInfoService
     }
 
     /**
+     * @psalm-param PackageSourceType $package
+     */
+    private function getLicense(array $package): ?string
+    {
+        $pattern = '/LICENSE(\.txt|\.md)?$/i';
+        $dir = FileUtils::buildPath(
+            $this->projectDir,
+            'vendor/composer',
+            $package['install-path']
+        );
+        $finder = new Finder();
+        $finder->files()->in($dir)
+            ->name($pattern);
+        foreach ($finder as $file) {
+            return FileUtils::makePathRelative($file->getRealPath(), $this->projectDir);
+        }
+
+        return null;
+    }
+
+    /**
      * Gets packages information.
      *
      * @return PackagesType
@@ -459,10 +497,7 @@ final class SymfonyInfoService
             return $this->cache->get('packages', function (): array {
                 $path = FileUtils::buildPath($this->projectDir, self::PACKAGE_FILE_NAME);
                 if (!FileUtils::exists($path)) {
-                    return [
-                        self::KEY_RUNTIME => [],
-                        self::KEY_DEBUG => [],
-                    ];
+                    return $this->getEmptyPackages();
                 }
 
                 try {
@@ -476,12 +511,9 @@ final class SymfonyInfoService
                     $runtimePackages = $content['packages'] ?? [];
                     $debugPackages = $content['dev-package-names'] ?? [];
 
-                    return $this->processPackages($runtimePackages, $debugPackages);
+                    return $this->parsePackages($runtimePackages, $debugPackages);
                 } catch (\InvalidArgumentException) {
-                    return [
-                        self::KEY_RUNTIME => [],
-                        self::KEY_DEBUG => [],
-                    ];
+                    return $this->getEmptyPackages();
                 }
             });
         } catch (InvalidArgumentException) {
@@ -513,12 +545,8 @@ final class SymfonyInfoService
                         $runtimeRoutes[$name] = $this->parseRoute($name, $route);
                     }
                 }
-                if ([] !== $runtimeRoutes) {
-                    \ksort($runtimeRoutes);
-                }
-                if ([] !== $debugRoutes) {
-                    \ksort($debugRoutes);
-                }
+                \ksort($runtimeRoutes);
+                \ksort($debugRoutes);
 
                 return [
                     self::KEY_RUNTIME => $runtimeRoutes,
@@ -538,9 +566,49 @@ final class SymfonyInfoService
         return \str_starts_with($name, '_');
     }
 
+    private function isExtensionLoaded(string $extension, string $enabled = ''): bool
+    {
+        if (!\extension_loaded($extension)) {
+            return false;
+        }
+
+        return '' === $enabled || \filter_var(\ini_get($enabled), \FILTER_VALIDATE_BOOLEAN);
+    }
+
     private function makePathRelative(string $endPath, string $startPath): string
     {
         return \rtrim(FileUtils::makePathRelative($endPath, $startPath), '/src');
+    }
+
+    /**
+     * @psalm-param array<string, PackageSourceType> $runtimePackages
+     * @psalm-param string[]                         $debugPackages
+     *
+     * @psalm-return PackagesType
+     */
+    private function parsePackages(array $runtimePackages, array $debugPackages): array
+    {
+        $result = $this->getEmptyPackages();
+        if ([] === $runtimePackages && [] === $debugPackages) {
+            return $result;
+        }
+
+        foreach ($runtimePackages as $package) {
+            $name = $package['name'];
+            $entry = [
+                'name' => $name,
+                'license' => $this->getLicense($package),
+                'version' => $package['version_normalized'],
+                'description' => $this->cleanDescription($package['description'] ?? ''),
+                'homepage' => $package['homepage'] ?? $package['support']['source'] ?? '',
+            ];
+            $type = \in_array($name, $debugPackages, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
+            $result[$type][$name] = $entry;
+        }
+        \ksort($result[self::KEY_RUNTIME]);
+        \ksort($result[self::KEY_DEBUG]);
+
+        return $result;
     }
 
     /**
@@ -555,43 +623,5 @@ final class SymfonyInfoService
             'path' => $route->getPath(),
             'methods' => [] === $methods ? 'ANY' : \implode('|', $methods),
         ];
-    }
-
-    /**
-     * @psalm-param array<string, PackageSourceType> $runtimePackages
-     * @psalm-param string[]                         $debugPackages
-     *
-     * @psalm-return PackagesType
-     */
-    private function processPackages(array $runtimePackages, array $debugPackages): array
-    {
-        $result = [
-            self::KEY_RUNTIME => [],
-            self::KEY_DEBUG => [],
-        ];
-
-        if ([] === $runtimePackages && [] === $debugPackages) {
-            return $result;
-        }
-
-        foreach ($runtimePackages as $package) {
-            $name = $package['name'];
-            $entry = [
-                'name' => $name,
-                'homepage' => $package['homepage'] ?? '',
-                'version' => $package['version_normalized'],
-                'description' => $this->cleanDescription($package['description'] ?? ''),
-            ];
-            $type = \in_array($name, $debugPackages, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
-            $result[$type][$name] = $entry;
-        }
-        if ([] !== $result[self::KEY_RUNTIME]) {
-            \ksort($result[self::KEY_RUNTIME]);
-        }
-        if ([] !== $result[self::KEY_DEBUG]) {
-            \ksort($result[self::KEY_DEBUG]);
-        }
-
-        return $result;
     }
 }

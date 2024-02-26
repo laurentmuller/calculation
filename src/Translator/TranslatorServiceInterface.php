@@ -48,7 +48,7 @@ interface TranslatorServiceInterface
     public static function getApiUrl(): string;
 
     /**
-     * Gets the set of languages currently supported by other operations of the service.
+     * Gets the set of languages supported by other operations of the service.
      *
      * @return array<string, string>|false an array containing the language name as key and the BCP 47
      *                                     language tag as value; false if an error occurs

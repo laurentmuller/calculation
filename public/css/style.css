@@ -588,10 +588,23 @@ table.table-fixed-header th {
 
 @media (max-width: 992px) {
     .index-child {
-        min-width: 33.33%;
+        min-width: 25%;
     }
 }
 
+@media (max-width: 768px) {
+    .index-child {
+        min-width: 33%;
+    }
+}
+
+@media (max-width: 576px) {
+    .index-child {
+        min-width: 50%;
+    }
+}
+
+/*
 @media (max-width: 768px) {
     .index-child {
         min-width: 50%;
@@ -603,6 +616,7 @@ table.table-fixed-header th {
         min-width: 100%;
     }
 }
+*/
 
 /* bold font for default action */
 .dropdown-menu .btn-default {
@@ -628,7 +642,7 @@ table.table-fixed-header th {
 
 .small-scrollbar::-webkit-scrollbar-thumb {
     visibility: hidden;
-    border-radius: 3px;
+    border-radius: 0;
     background-color: var(--bs-secondary-bg-subtle);
 }
 
@@ -641,6 +655,14 @@ html[data-bs-theme=dark] .small-scrollbar::-webkit-scrollbar-thumb {
 .small-scrollbar:focus::-webkit-scrollbar,
 .small-scrollbar:focus::-webkit-scrollbar-thumb {
     visibility: visible;
+}
+
+.small-scrollbar::-webkit-scrollbar-corner {
+    background-color: var(--bs-secondary-bg-subtle);
+}
+
+html[data-bs-theme=dark] .small-scrollbar::-webkit-scrollbar-corner {
+    background-color: var(--bs-secondary-bg);
 }
 
 .card-footer hr.card-footer-line {

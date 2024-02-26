@@ -12,12 +12,14 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Traits\CacheAwareTrait;
-use App\Traits\TranslatorAwareTrait;
+use App\Traits\TranslatorTrait;
 use App\Utils\FileUtils;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Exception\InvalidArgumentException as CacheException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to provide help.
@@ -86,26 +88,17 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *      entities: array<string, HelpEntityType>,
  *      mainMenu: HelpMainMenuType}
  */
-class HelpService implements ServiceSubscriberInterface
+class HelpService
 {
-    use CacheAwareTrait;
-    use ServiceSubscriberTrait;
-    use TranslatorAwareTrait;
+    use TranslatorTrait;
 
     /**
      * The image extension.
      */
     final public const IMAGES_EXT = '.png';
 
-    /**
-     * The key name to cache content.
-     */
+    // the key name to cache content.
     private const CACHE_KEY = 'help';
-
-    /**
-     * The cache timeout (1 hour).
-     */
-    private const CACHE_TIMEOUT = 3600;
 
     /**
      * @param string $file      the absolute path to the JSON help file
@@ -115,7 +108,10 @@ class HelpService implements ServiceSubscriberInterface
         #[Autowire('%kernel.project_dir%/public/help/help.json')]
         private readonly string $file,
         #[Autowire('%kernel.project_dir%/public/help/images')]
-        private readonly string $imagePath
+        private readonly string $imagePath,
+        private readonly TranslatorInterface $translator,
+        #[Target('cache.service.help')]
+        private readonly CacheInterface $cache
     ) {
     }
 
@@ -176,11 +172,6 @@ class HelpService implements ServiceSubscriberInterface
     public function getActions(): array
     {
         return $this->getHelp()['actions'];
-    }
-
-    public function getCacheTimeout(): int
-    {
-        return self::CACHE_TIMEOUT;
     }
 
     /**
@@ -248,10 +239,23 @@ class HelpService implements ServiceSubscriberInterface
      */
     public function getHelp(): array
     {
-        /** @psalm-var HelpContentType $help */
-        $help = $this->getCacheValue(self::CACHE_KEY, fn (): array => $this->loadHelp());
+        try {
+            /** @psalm-var HelpContentType $help */
+            $help = $this->cache->get(self::CACHE_KEY, fn (): array => $this->loadHelp());
 
-        return $help;
+            return $help;
+        } catch (InvalidArgumentException) {
+            return [
+                'actions' => [],
+                'dialogs' => [],
+                'entities' => [],
+                'mainMenu' => [
+                    'image' => null,
+                    'description' => null,
+                    'menus' => [],
+                ],
+            ];
+        }
     }
 
     /**
@@ -282,6 +286,11 @@ class HelpService implements ServiceSubscriberInterface
     public function getMainMenus(): array
     {
         return $this->getMainMenu()['menus'];
+    }
+
+    public function getTranslator(): TranslatorInterface
+    {
+        return $this->translator;
     }
 
     /**
@@ -337,20 +346,18 @@ class HelpService implements ServiceSubscriberInterface
         try {
             /** @psalm-var HelpContentType $help */
             $help = FileUtils::decodeJson($this->file);
-
             $entities = $help['entities'];
             if ([] !== $entities) {
                 $help['entities'] = $this->updateEntities($entities);
             }
-
             $dialogs = $help['dialogs'];
             if ([] !== $dialogs) {
                 $help['dialogs'] = $this->updateDialogs($dialogs);
             }
 
             return $help;
-        } catch (\InvalidArgumentException) {
-            return [];
+        } catch (\InvalidArgumentException $e) {
+            throw new CacheException($e->getMessage(), $e->getCode(), $e->getPrevious());
         }
     }
 

@@ -67,9 +67,7 @@ class SchemaService implements ServiceSubscriberInterface
     use CacheAwareTrait;
     use ServiceSubscriberTrait;
 
-    /**
-     * The cache timeout (1 day).
-     */
+    // the cache timeout (1 day)
     private const CACHE_TIMEOUT = 86_400;
 
     private ?Connection $connection = null;

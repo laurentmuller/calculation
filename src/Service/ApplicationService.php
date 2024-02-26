@@ -49,7 +49,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
         private readonly RoleBuilderService $builder,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
-        #[Target('cache.app.service')]
+        #[Target('cache.service.application')]
         CacheItemPoolInterface $cacheItemPool
     ) {
         $this->setCacheItemPool($cacheItemPool);

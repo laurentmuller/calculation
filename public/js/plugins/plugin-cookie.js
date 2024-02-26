@@ -2,9 +2,7 @@
 
 (() => {
     'use strict';
-
     window.Cookie = {
-
         /**
          * Sets a cookie value.
          *
@@ -63,9 +61,10 @@
          * @return {number} the cookie value, if found; the default value otherwise.
          */
         getInteger: function (key, defaultValue = 0) {
-            const str = this.getValue(key, defaultValue.toString(10));
-            const value = Number.parseInt(str, 10);
-            return Number.isNaN(value) ? defaultValue : value;
+            const value = defaultValue.toString(10);
+            const str = this.getValue(key, value);
+            const number = Number.parseInt(str, 10);
+            return Number.isNaN(number) ? defaultValue : number;
         },
 
         /**
@@ -77,7 +76,8 @@
          * @return {boolean} the cookie value, if found; the default value otherwise.
          */
         getBoolean: function (key, defaultValue = false) {
-            const str = this.getValue(key, JSON.stringify(defaultValue)).toLowerCase();
+            const value = JSON.stringify(defaultValue);
+            const str = this.getValue(key, value).toLowerCase();
             if (str === 'true') {
                 return true;
             } else if (str === 'false') {

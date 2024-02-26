@@ -12,7 +12,7 @@
      * The cookie entry name.
      * @type {string}
      */
-    const COOKIE_ENTRY = 'THEME=';
+    const COOKIE_KEY = 'THEME';
 
     /**
      * The auto theme.
@@ -348,15 +348,7 @@
          * @private
          */
         _getCookieValue() {
-            const decodedCookie = decodeURIComponent(document.cookie);
-            const entries = decodedCookie.split(';');
-            for (let i = 0; i < entries.length; i++) {
-                const entry = entries[i].trim();
-                if (entry.startsWith(COOKIE_ENTRY)) {
-                    return entry.substring(COOKIE_ENTRY.length);
-                }
-            }
-            return THEME_AUTO;
+            return window.Cookie.getValue(COOKIE_KEY, THEME_AUTO);
         }
 
         /**
@@ -365,14 +357,8 @@
          * @private
          */
         _setCookieValue(value) {
-            const date = new Date();
-            date.setFullYear(date.getFullYear() + 1);
             const path = document.body.dataset.cookiePath || '/';
-            let entry = `${COOKIE_ENTRY}${encodeURIComponent(value)};`;
-            entry += `expires=${date.toUTCString()};`;
-            entry += `path=${path};`;
-            entry += 'samesite=lax;';
-            document.cookie = entry;
+            window.Cookie.setValue(COOKIE_KEY, value, path);
         }
 
         _getInputSelector() {

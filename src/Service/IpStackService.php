@@ -12,8 +12,10 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -57,10 +59,12 @@ class IpStackService extends AbstractHttpClientService
         #[\SensitiveParameter]
         #[Autowire('%ip_stack_key%')]
         string $key,
+        CacheInterface $cache,
+        LoggerInterface $logger,
         private readonly PositionService $service,
         private readonly TranslatorInterface $translator
     ) {
-        parent::__construct($key);
+        parent::__construct($key, $cache, $logger);
     }
 
     public function getCacheTimeout(): int
@@ -78,10 +82,8 @@ class IpStackService extends AbstractHttpClientService
     public function getIpInfo(?Request $request = null): ?array
     {
         $url = $this->getUrl($request);
-        /** @psalm-var IpStackType|null $result */
-        $result = $this->getUrlCacheValue($url, fn (): ?array => $this->doGetIpInfo($url));
 
-        return $result;
+        return $this->getUrlCacheValue($url, fn (): ?array => $this->doGetIpInfo($url));
     }
 
     /**

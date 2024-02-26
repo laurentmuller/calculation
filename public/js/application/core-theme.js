@@ -24,10 +24,16 @@
     const THEME_DARK = 'dark';
 
     /**
-     * The theme cookie entry name.
+     * The theme cookie key name.
      * @type {string}
      */
-    const THEME_COOKIE = 'THEME=';
+    const THEME_COOKIE_KEY = 'THEME';
+
+    /**
+     * The theme chanel name.
+     * @type {string}
+     */
+    const THEME_CHANNEL = 'theme';
 
     /**
      * The theme changed event name.
@@ -46,15 +52,7 @@
      * @return {string} the stored theme.
      */
     const getStoredTheme = () => {
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const entries = decodedCookie.split(';');
-        for (let i = 0; i < entries.length; i++) {
-            const entry = entries[i].trim();
-            if (entry.startsWith(THEME_COOKIE)) {
-                return entry.substring(THEME_COOKIE.length);
-            }
-        }
-        return THEME_AUTO;
+        return window.Cookie.getValue(THEME_COOKIE_KEY, THEME_AUTO);
     };
 
     /**
@@ -62,15 +60,8 @@
      * @param {string} theme - the theme to store.
      */
     const setStoredTheme = (theme) => {
-        const date = new Date();
-        date.setFullYear(date.getFullYear() + 1);
         const path = document.body.dataset.cookiePath || '/';
-        let entry = `${THEME_COOKIE}${encodeURIComponent(theme)};`;
-        entry += `expires=${date.toUTCString()};`;
-        entry += `path=${path};`;
-        entry += 'samesite=lax;';
-        entry += 'secure';
-        document.cookie = entry;
+        window.Cookie.setValue(THEME_COOKIE_KEY, theme, path);
     };
 
     /**
@@ -173,7 +164,7 @@
     /*
      * Channel to update theme in other tabs
      */
-    const channel = new window.BroadcastChannel('Theme');
+    const channel = new window.BroadcastChannel(THEME_CHANNEL);
     channel.addEventListener('message', (e) => {
         if (e.data === THEME_EVENT_NAME) {
             const theme = getStoredTheme();

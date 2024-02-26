@@ -16,6 +16,18 @@ function notify(type, message) {
 }
 
 /**
+ * Handle success copy event.
+ */
+function onCopySuccess(e) {
+    'use strict';
+    e.clearSelection();
+    const $modal = $('#license-modal');
+    const message = $modal.data('copy-success');
+    $modal.modal('hide');
+    notify(Toaster.NotificationTypes.SUCCESS, message);
+}
+
+/**
  * Handle the error copy event.
  */
 function onCopyError(e) {
@@ -30,48 +42,12 @@ function onCopyError(e) {
 }
 
 /**
- * Handle success copy event.
- */
-function onCopySuccess(e) {
-    'use strict';
-    e.clearSelection();
-    const $modal = $('#license-modal');
-    const message = $modal.data('copy-success');
-    $modal.modal('hide');
-    notify(Toaster.NotificationTypes.SUCCESS, message);
-}
-
-/**
- * @param {jQuery} $row
- * @param {string} [content]
- * @param {boolean} [html]
- */
-const displayLicense = function ($row, content, html) {
-    'use strict';
-    if (content) {
-        $row.data('content', content);
-        $row.data('html', html);
-    } else {
-        content = $row.data('content');
-        html = $row.data('html');
-    }
-    if (html) {
-        $('#license-content-html').html(content).removeClass('d-none');
-        $('#license-content-text').addClass('d-none');
-    } else {
-        $('#license-content-text').html(content).removeClass('d-none');
-        $('#license-content-html').addClass('d-none');
-    }
-    $('#license-modal').one('hidden.bs.modal', function () {
-        $row.find('.link-license').scrollInViewport().trigger('focus');
-    }).modal('show');
-};
-
-/**
  * Ready function
  */
 (function ($) {
     'use strict';
+    let clipboard = null;
+    const $accordion = $('#aboutAccordion');
     const $configuration = $('#configuration');
 
     // jQuery extensions
@@ -108,11 +84,24 @@ const displayLicense = function ($row, content, html) {
         /** @param {string} title */
         updateTitle: function (title) {
             $(this).prev('div').find('[data-bs-toggle]').attr('title', title);
+        },
+
+        /** @param {string} [content] */
+        displayLicense: function (content) {
+            const $row = $(this);
+            if (content) {
+                $row.data('content', content);
+            } else {
+                content = $row.data('content');
+            }
+            $('#license-content').html(content);
+            $('#license-modal').one('hidden.bs.modal', function () {
+                $row.find('.link-license').scrollInViewport().trigger('focus');
+            }).modal('show');
         }
     });
 
     // .card-body
-    const $accordion = $('#aboutAccordion');
     $accordion.on('shown.bs.collapse', function (e) {
         const $this = $(e.target);
         const $content = $this.find('.collapse-content');
@@ -127,11 +116,12 @@ const displayLicense = function ($row, content, html) {
     });
 
     // license
-    let clipboard = null;
     $accordion.on('hide.bs.modal', '#license-modal', function () {
-        $(this).find('.pre-scrollable').scrollTop(0);
-    });
-    $accordion.on('click', '.btn-copy-license', function () {
+        $('#license-modal .pre-scrollable').scrollTop(0);
+    }).on('click', '#license-modal a', function (e) {
+        e.preventDefault();
+        window.open(e.target.href, '_blank');
+    }).on('click', '#license-modal .btn-copy-license', function () {
         if (!clipboard) {
             clipboard = new ClipboardJS('.btn-copy-license');
             clipboard.on('success', function (e) {
@@ -140,21 +130,30 @@ const displayLicense = function ($row, content, html) {
                 onCopyError(e);
             });
         }
-    });
-    $accordion.on('click', 'tr[data-license] .link-license', function (e) {
+    }).on('click', 'tr[data-license] .link-license', function (e) {
         e.preventDefault();
-        const $row = $(this).parents('tr');
+        const $this = $(this);
+        const $row = $this.parents('tr');
         if ($row.data('content')) {
-            displayLicense($row);
+            $row.displayLicense();
             return;
         }
+        const $modal = $('#license-modal');
         const file = $row.data('license');
-        const url = $('#license-modal').data('url');
+        const url = $modal.data('url');
+        if (!file || !url) {
+            $this.remove();
+            const message = $modal.data('load-error');
+            notify(Toaster.NotificationTypes.WARNING, message);
+            return;
+        }
         $.getJSON(url, {'file': file}, function (response) {
-            if (response.result) {
-                displayLicense($row, response.content, response.html);
+            if (response.result && response.content) {
+                $row.displayLicense(response.content);
             } else {
-                notify(Toaster.NotificationTypes.WARNING, response.message);
+                $this.remove();
+                const message = response.message || $modal.data('load-error');
+                notify(Toaster.NotificationTypes.WARNING, message);
             }
         });
     });

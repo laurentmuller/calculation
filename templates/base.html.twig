@@ -67,6 +67,7 @@
 {{- asset_css('css/style.css') }}
 {% endblock %}
 {# javascript #}
+{{- asset_js('js/plugins/plugin-cookie.js') }}
 {{- asset_js('js/application/core-theme.js') }}
 </head>
 <body{% if status_bar %} class="status-bar"{% endif %} data-cookie-path="{{ cookie_path }}">

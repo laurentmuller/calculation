@@ -15,67 +15,33 @@ namespace App\Twig;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Service\CalculationService;
-use App\Traits\CacheAwareTrait;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 
 /**
- * Twig extension to access global class and icon constants.
+ * Twig extension to access global constants.
  */
-final class ConstantExtension extends AbstractExtension implements GlobalsInterface, ServiceSubscriberInterface
+final class ConstantExtension extends AbstractExtension implements GlobalsInterface
 {
-    use CacheAwareTrait;
-    use ServiceSubscriberTrait;
-
-    /**
-     * The key name to cache constants.
-     */
+    // the key name to cache constants
     private const CACHE_KEY = 'twig_constant_extension';
 
-    /**
-     * The cache timeout (1 day).
-     */
-    private const CACHE_TIMEOUT = 86_400;
-
-    public function getCacheTimeout(): int
-    {
-        return self::CACHE_TIMEOUT;
+    public function __construct(
+        #[Target('cache.service.constant')]
+        private readonly CacheInterface $cache
+    ) {
     }
 
     public function getGlobals(): array
     {
-        /** @psalm-var array<string, mixed> $globals */
-        $globals = $this->getCacheValue(self::CACHE_KEY, fn (): array => $this->loadValues());
-
-        return $globals;
+        return $this->cache->get(self::CACHE_KEY, fn (): array => $this->loadValues());
     }
 
     /**
-     * Gets the public constants for the given class name.
-     *
-     * @template T of object
-     *
-     * @param class-string<T> $className
-     *
-     * @throws \ReflectionException
+     * @psalm-return array<string, string>
      */
-    private function getConstants(string $className): array
-    {
-        $reflection = new \ReflectionClass($className);
-        $constants = \array_filter(
-            $reflection->getReflectionConstants(),
-            static fn (\ReflectionClassConstant $c): bool => $c->isPublic()
-        );
-
-        return \array_reduce(
-            $constants,
-            static fn (array $carry, \ReflectionClassConstant $c): array => $carry + [$c->getName() => $c->getValue()],
-            []
-        );
-    }
-
     private function getIcons(): array
     {
         return [
@@ -104,7 +70,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     }
 
     /**
-     * @throws \ReflectionException
+     * @psalm-return array<string, mixed>
      */
     private function loadValues(): array
     {
@@ -112,7 +78,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
             $this->getIcons(),
             EntityName::constants(),
             EntityPermission::constants(),
-            $this->getConstants(CalculationService::class)
+            CalculationService::getConstants()
         );
     }
 }

@@ -51,8 +51,6 @@ class AjaxController extends AbstractController
 
     /**
      * Compute a task.
-     *
-     * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Post(path: '/task', name: 'ajax_task')]
@@ -72,9 +70,12 @@ class AjaxController extends AbstractController
         return $this->jsonTrue($data);
     }
 
+    /**
+     * Gets the license content.
+     */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
     #[Get(path: '/license', name: 'ajax_license')]
-    public function getLicense(
+    public function license(
         #[MapQueryParameter]
         string $file,
         MarkdownInterface $markdown,
@@ -83,22 +84,15 @@ class AjaxController extends AbstractController
     ): JsonResponse {
         $file = FileUtils::buildPath($projectDir, $file);
         if (!FileUtils::exists($file)) {
-            return $this->jsonFalse(['message' => $this->trans('about.license.not_found')]);
+            return $this->jsonFalse(['message' => $this->trans('about.dialog.not_found')]);
         }
         $content = \file_get_contents($file);
         if (!\is_string($content)) {
-            return $this->jsonFalse(['message' => $this->trans('about.license.not_loaded')]);
-        }
-        if (\str_ends_with($file, '.md')) {
-            return $this->jsonTrue([
-                'html' => true,
-                'content' => $markdown->convert($content),
-            ]);
+            return $this->jsonFalse(['message' => $this->trans('about.dialog.not_loaded')]);
         }
 
         return $this->jsonTrue([
-            'html' => false,
-            'content' => $content,
+            'content' => $markdown->convert($content),
         ]);
     }
 

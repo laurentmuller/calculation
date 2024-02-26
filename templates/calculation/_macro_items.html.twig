@@ -35,12 +35,12 @@
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="{{ menu_id }}">
                 {{ dropdownItemButton('calculation.edit.edit_item', ICON_EDIT, 'btn-default btn-edit-item') }}
                 {{ dropdownItemButton('calculation.edit.delete_item', ICON_DELETE, 'btn-delete-item') }}
+                {{ dropdownItemButton('calculation.edit.copy_item', ICON_COPY, 'btn-copy-item') }}
                 {{ dropdownSeparator() }}
                 {{ dropdownItemButton('calculation.edit.price.edit', 'highlighter', 'btn-edit-price') }}
                 {{ dropdownItemButton('calculation.edit.quantity.edit', 'paint-brush', 'btn-edit-quantity') }}
                 {{ dropdownSeparator() }}
                 {{ dropdownItemButton('calculation.edit.add_item', ICON_PRODUCT, 'btn-add-item') }}
-                {{ dropdownItemButton('calculation.edit.copy_item', ICON_COPY, 'btn-copy-item') }}
                 {{ dropdownItemButton('calculation.edit.add_task', ICON_TASK, 'btn-add-task') }}
                 {{ dropdownSeparator(first and last) }}
                 {{ dropdownItemButton('calculation.edit.move_first', 'step-backward fa-rotate-90', 'btn-first-item', first) }}

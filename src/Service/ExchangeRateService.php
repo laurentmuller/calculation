@@ -14,8 +14,10 @@ namespace App\Service;
 
 use App\Traits\ArrayTrait;
 use App\Utils\DateUtils;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Intl\Currencies;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -69,7 +71,7 @@ class ExchangeRateService extends AbstractHttpClientService
     private const URI_LATEST = 'latest/%s';
 
     /**
-     * The URI for quota.
+     * The URI for the quota.
      */
     private const URI_QUOTA = 'quota';
 
@@ -86,22 +88,24 @@ class ExchangeRateService extends AbstractHttpClientService
     /**
      * The cache timeout.
      */
-    private ?int $timeout = null;
+    private int $timeout = 600;
 
     /**
-     * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
+     * @throws \InvalidArgumentException if the API key is not defined, is null or empty
      */
     public function __construct(
         #[\SensitiveParameter]
         #[Autowire('%exchange_rate_key%')]
         string $key,
+        CacheInterface $cache,
+        LoggerInterface $logger,
         private readonly TranslatorInterface $translator
     ) {
-        parent::__construct($key);
+        parent::__construct($key, $cache, $logger);
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
     }
 
-    public function getCacheTimeout(): ?int
+    public function getCacheTimeout(): int
     {
         return $this->timeout;
     }
@@ -116,24 +120,20 @@ class ExchangeRateService extends AbstractHttpClientService
     public function getLatest(string $code): array
     {
         $url = $this->getUrl(self::URI_LATEST, $code);
-        /** @psalm-var array<string, float> $result */
-        $result = $this->getUrlCacheValue($url, fn (): ?array => $this->doGetLatest($url)) ?? [];
 
-        return $result;
+        return $this->getUrlCacheValue($url, fn (): array => $this->doGetLatest($url));
     }
 
     /**
-     * Gets the deadline, the  allowed and the remaining calls.
+     * Gets the deadline, the allowed and the remaining calls.
      *
      * @psalm-return ExchangeQuotaType|null
      */
     public function getQuota(): ?array
     {
         $url = self::URI_QUOTA;
-        /** @psalm-var ExchangeQuotaType|null $result */
-        $result = $this->getUrlCacheValue($url, fn (): ?array => $this->doGetQuota($url));
 
-        return $result;
+        return $this->getUrlCacheValue($url, fn (): ?array => $this->doGetQuota($url));
     }
 
     /**
@@ -143,12 +143,14 @@ class ExchangeRateService extends AbstractHttpClientService
      * @param string $targetCode the target currency code
      *
      * @return float the exchange rate or 0.0 if an error occurs.
+     *
+     * @psalm-api
      */
     public function getRate(string $baseCode, string $targetCode): float
     {
         $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
 
-        return (float) ($this->getUrlCacheValue($url, fn (): ?float => $this->doGetRate($url)) ?? 0.0);
+        return $this->getUrlCacheValue($url, fn (): float => $this->doGetRate($url));
     }
 
     /**
@@ -164,10 +166,8 @@ class ExchangeRateService extends AbstractHttpClientService
     public function getRateAndDates(string $baseCode, string $targetCode): ?array
     {
         $url = $this->getUrl(self::URI_RATE, $baseCode, $targetCode);
-        /** @psalm-var ExchangeRateAndDateType|null $result */
-        $result = $this->getUrlCacheValue($url, fn (): ?array => $this->doGetRateAndDates($url));
 
-        return $result;
+        return $this->getUrlCacheValue($url, fn (): ?array => $this->doGetRateAndDates($url));
     }
 
     /**
@@ -180,10 +180,8 @@ class ExchangeRateService extends AbstractHttpClientService
     public function getSupportedCodes(): array
     {
         $url = self::URI_CODES;
-        /** @psalm-var array<string, ExchangeRateType> $result */
-        $result = $this->getUrlCacheValue($url, fn (): ?array => $this->doGetSupportedCodes($url)) ?? [];
 
-        return $result;
+        return $this->getUrlCacheValue($url, fn (): array => $this->doGetSupportedCodes($url));
     }
 
     protected function getDefaultOptions(): array
@@ -205,20 +203,20 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * @psalm-return array<string, float>|null
+     * @psalm-return array<string, float>
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    private function doGetLatest(string $url): ?array
+    private function doGetLatest(string $url): array
     {
         $response = $this->get($url);
         if (!\is_array($response)) {
-            return null;
+            return [];
         }
         /** @psalm-var array<string, float>|null $rates */
         $rates = $response['conversion_rates'] ?? null;
         if (!\is_array($rates)) {
-            return null;
+            return [];
         }
         $this->timeout = $this->getDeltaTime($response);
 
@@ -249,16 +247,16 @@ class ExchangeRateService extends AbstractHttpClientService
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    private function doGetRate(string $url): ?float
+    private function doGetRate(string $url): float
     {
         $response = $this->get($url);
         if (!\is_array($response)) {
-            return null;
+            return 0.0;
         }
         /** @psalm-var float|null $rate */
         $rate = $response['conversion_rate'] ?? null;
         if (!\is_float($rate)) {
-            return null;
+            return 0.0;
         }
         $this->timeout = $this->getDeltaTime($response);
 
@@ -291,20 +289,20 @@ class ExchangeRateService extends AbstractHttpClientService
     }
 
     /**
-     * @return array<string, ExchangeRateType>|null
+     * @return array<string, ExchangeRateType>
      *
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    private function doGetSupportedCodes(string $url): ?array
+    private function doGetSupportedCodes(string $url): array
     {
         $response = $this->get($url);
         if (!\is_array($response)) {
-            return null;
+            return [];
         }
         /** @psalm-var string[]|null $codes */
         $codes = $response['supported_codes'] ?? null;
         if (!\is_array($codes)) {
-            return null;
+            return [];
         }
         $this->timeout = $this->getDeltaTime($response);
 

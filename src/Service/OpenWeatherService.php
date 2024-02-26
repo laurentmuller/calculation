@@ -15,10 +15,12 @@ namespace App\Service;
 use App\Database\OpenWeatherDatabase;
 use App\Utils\FormatUtils;
 use phpDocumentor\Reflection\DocBlock\Tags\See;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Exception\MissingResourceException;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Service to get weather from OpenWeatherMap.
@@ -151,17 +153,19 @@ class OpenWeatherService extends AbstractHttpClientService
     private const URI_ONECALL = 'onecall';
 
     /**
-     * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
+     * @throws \InvalidArgumentException if the API key is not defined, is null or empty
      */
     public function __construct(
         #[\SensitiveParameter]
         #[Autowire('%open_weather_key%')]
         string $key,
+        CacheInterface $cache,
+        LoggerInterface $logger,
         #[Autowire('%kernel.project_dir%/resources/data/openweather.sqlite')]
         private readonly string $databaseName,
         private readonly PositionService $service
     ) {
-        parent::__construct($key);
+        parent::__construct($key, $cache, $logger);
     }
 
     /**
@@ -355,7 +359,7 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         $key = $this->getCacheKey('search', ['name' => $name, 'units' => $units, 'limit' => $limit]);
 
-        return (array) ($this->getCacheValue($key, fn (): ?array => $this->doSearch($name, $limit)) ?? []);
+        return $this->getCacheValue($key, fn (): array => $this->doSearch($name, $limit));
     }
 
     protected function getDefaultOptions(): array
@@ -424,7 +428,7 @@ class OpenWeatherService extends AbstractHttpClientService
         return $results;
     }
 
-    private function doSearch(string $name, int $limit): ?array
+    private function doSearch(string $name, int $limit): array
     {
         $db = null;
 
@@ -433,7 +437,7 @@ class OpenWeatherService extends AbstractHttpClientService
             /** @psalm-var array<int, mixed> $result */
             $result = $db->findCity($name, $limit);
             if ([] === $result) {
-                return null;
+                return [];
             }
             $this->updateResults($result);
 
@@ -479,10 +483,8 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         $key = $this->getCacheKey($uri, $query);
 
-        /** @psalm-var array|false $value */
-        $value = $this->getCacheValue($key, fn (): array|false => $this->doGet($uri, $query));
-
-        return $value;
+        // @phpstan-ignore-next-line
+        return $this->getUrlCacheValue($key, fn (): array|false => $this->doGet($uri, $query));
     }
 
     /**

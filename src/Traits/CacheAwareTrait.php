@@ -14,7 +14,6 @@ namespace App\Traits;
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
@@ -25,6 +24,7 @@ use Symfony\Contracts\Service\Attribute\SubscribedService;
 trait CacheAwareTrait
 {
     use AwareTrait;
+    use CacheKeyTrait;
 
     /**
      * The cache.
@@ -53,7 +53,7 @@ trait CacheAwareTrait
     public function deleteCacheItem(string $key): bool
     {
         try {
-            return $this->getCacheItemPool()->deleteItem(self::cleanKey($key));
+            return $this->getCacheItemPool()->deleteItem($this->cleanKey($key));
         } catch (\Psr\Cache\InvalidArgumentException) {
             return false;
         }
@@ -65,7 +65,7 @@ trait CacheAwareTrait
     public function getCacheItem(string $key): ?CacheItemInterface
     {
         try {
-            return $this->getCacheItemPool()->getItem(self::cleanKey($key));
+            return $this->getCacheItemPool()->getItem($this->cleanKey($key));
         } catch (\Psr\Cache\InvalidArgumentException) {
             return null;
         }
@@ -109,7 +109,7 @@ trait CacheAwareTrait
      */
     public function getCacheValue(string $key, mixed $default = null, int|\DateInterval|null $time = null): mixed
     {
-        $key = self::cleanKey($key);
+        $key = $this->cleanKey($key);
         $item = $this->getCacheItem($key);
         if (null !== $item && $item->isHit()) {
             return $item->get();
@@ -131,7 +131,7 @@ trait CacheAwareTrait
     public function hasCacheItem(string $key): bool
     {
         try {
-            return $this->getCacheItemPool()->hasItem(self::cleanKey($key));
+            return $this->getCacheItemPool()->hasItem($this->cleanKey($key));
         } catch (\Psr\Cache\InvalidArgumentException) {
             return false;
         }
@@ -183,7 +183,7 @@ trait CacheAwareTrait
      */
     public function setCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
-        $key = self::cleanKey($key);
+        $key = $this->cleanKey($key);
         if (null === $value) {
             return $this->deleteCacheItem($key);
         }
@@ -196,19 +196,5 @@ trait CacheAwareTrait
         }
 
         return false;
-    }
-
-    /**
-     * Replace all reserved characters that cannot be used in a key by the underscore ('_') character.
-     */
-    private static function cleanKey(string $key): string
-    {
-        /** @psalm-var string[] $reservedCharacters */
-        static $reservedCharacters = [];
-        if ([] === $reservedCharacters) {
-            $reservedCharacters = \str_split(ItemInterface::RESERVED_CHARACTERS);
-        }
-
-        return \str_replace($reservedCharacters, '_', $key);
     }
 }

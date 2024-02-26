@@ -12,11 +12,13 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -60,17 +62,19 @@ class AkismetService extends AbstractHttpClientService
     private readonly string $endpoint;
 
     /**
-     * @throws \InvalidArgumentException if the API key  is not defined, is null or empty
+     * @throws \InvalidArgumentException if the API key is not defined, is null or empty
      */
     public function __construct(
         #[\SensitiveParameter]
         #[Autowire('%akismet_key%')]
         string $key,
+        CacheInterface $cache,
+        LoggerInterface $logger,
         private readonly Security $security,
         private readonly RequestStack $stack,
         private readonly TranslatorInterface $translator
     ) {
-        parent::__construct($key);
+        parent::__construct($key, $cache, $logger);
         $this->endpoint = \sprintf(self::HOST_NAME, $key);
     }
 
@@ -147,7 +151,7 @@ class AkismetService extends AbstractHttpClientService
      */
     public function verifyKey(): bool
     {
-        return (bool) ($this->getUrlCacheValue(self::URI_VERIFY, fn (): ?bool => $this->doVerifyKey()) ?? false);
+        return $this->getUrlCacheValue(self::URI_VERIFY, fn (): bool => $this->doVerifyKey());
     }
 
     protected function getDefaultOptions(): array
@@ -181,11 +185,11 @@ class AkismetService extends AbstractHttpClientService
     /**
      * @throws \Symfony\Contracts\HttpClient\Exception\ExceptionInterface
      */
-    private function doVerifyKey(): ?bool
+    private function doVerifyKey(): bool
     {
         $request = $this->getCurrentRequest();
         if (!$request instanceof Request) {
-            return null;
+            return false;
         }
         $body = [
             'key' => $this->key,
@@ -195,7 +199,7 @@ class AkismetService extends AbstractHttpClientService
             self::BODY => $body,
         ]);
         if (Response::HTTP_OK !== $response->getStatusCode() || !$this->checkError($response)) {
-            return null;
+            return false;
         }
 
         return self::VALUE_VALID === $response->getContent();

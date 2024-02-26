@@ -13,23 +13,23 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Model\HttpClientError;
-use App\Traits\CacheAwareTrait;
-use App\Traits\LoggerAwareTrait;
+use App\Traits\CacheKeyTrait;
+use App\Traits\LoggerTrait;
+use Psr\Cache\CacheItemInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service using the HttpClient.
  */
-abstract class AbstractHttpClientService implements ServiceSubscriberInterface
+abstract class AbstractHttpClientService
 {
-    use CacheAwareTrait;
-    use LoggerAwareTrait;
-    use ServiceSubscriberTrait;
+    use CacheKeyTrait;
+    use LoggerTrait;
 
     /**
      * The base URI parameter name.
@@ -69,8 +69,12 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     /**
      * @throws \InvalidArgumentException if the API key is null or empty
      */
-    public function __construct(#[\SensitiveParameter] protected readonly string $key)
-    {
+    public function __construct(
+        #[\SensitiveParameter]
+        protected readonly string $key,
+        protected readonly CacheInterface $cache,
+        protected readonly LoggerInterface $logger
+    ) {
         if ('' === $key) {
             throw new \InvalidArgumentException('The API key is empty.');
         }
@@ -93,12 +97,19 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
         return \Locale::canonicalize($locale);
     }
 
+    abstract public function getCacheTimeout(): int;
+
     /**
      * Gets the last error.
      */
     public function getLastError(): ?HttpClientError
     {
         return $this->lastError;
+    }
+
+    public function getLogger(): LoggerInterface
+    {
+        return $this->logger;
     }
 
     /**
@@ -124,6 +135,30 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     }
 
     /**
+     * Gets the value from this cache for the given key.
+     *
+     * @template T
+     *
+     * @param (callable():T) $callback the callback to call when value is not is the cache
+     *
+     * @return T
+     */
+    protected function getCacheValue(string $key, callable $callback): mixed
+    {
+        try {
+            return $this->cache->get($key, function (CacheItemInterface $item) use ($callback): mixed {
+                $item->expiresAfter($this->getCacheTimeout());
+
+                return \call_user_func($callback);
+            });
+        } catch (\Psr\Cache\InvalidArgumentException $e) {
+            $this->logException($e);
+
+            return \call_user_func($callback);
+        }
+    }
+
+    /**
      * Gets the HTTP client.
      */
     protected function getClient(): HttpClientInterface
@@ -146,20 +181,18 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     /**
      * Gets the value from this cache for the given URL.
      *
-     * @param string                 $url     The URL for which to return the corresponding value
-     * @param mixed                  $default The default value to return or a callable function to get the default value.
-     *                                        If the callable function returns a value, this value is saved to the cache.
-     * @param \DateInterval|int|null $time    The period of time from the present after which the item must be considered
-     *                                        expired. An integer parameter is understood to be the time in seconds until
-     *                                        expiration. If null is passed, the expiration time is not set.
+     * @template T
      *
-     * @return mixed the value, if found; the default otherwise
+     * @param string         $url      the URL for which to return the corresponding value
+     * @param (callable():T) $callback the callback to call when value is not is the cache
+     *
+     * @return T the value, if found; the default otherwise
      */
-    protected function getUrlCacheValue(string $url, mixed $default = null, int|\DateInterval|null $time = null): mixed
+    protected function getUrlCacheValue(string $url, callable $callback): mixed
     {
         $key = $this->getUrlKey($url);
 
-        return $this->getCacheValue($key, $default, $time);
+        return $this->getCacheValue($key, $callback);
     }
 
     /**
@@ -169,10 +202,10 @@ abstract class AbstractHttpClientService implements ServiceSubscriberInterface
     {
         $options = $this->getDefaultOptions();
         if (isset($options[self::BASE_URI]) && \is_string($options[self::BASE_URI])) {
-            return $options[self::BASE_URI] . $url;
+            return $this->cleanKey($options[self::BASE_URI] . $url);
         }
 
-        return $url;
+        return $this->cleanKey($url);
     }
 
     /**

@@ -79,10 +79,9 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     public function getLanguages(): array|false
     {
         $key = $this->getCacheKey();
-        /** @psalm-var array<string, string>|false $result */
-        $result = $this->getCacheValue($key, fn (): ?array => $this->doLoadLanguages()) ?? false;
 
-        return $result;
+        // @phpstan-ignore-next-line
+        return $this->getCacheValue($key, fn (): array|false => $this->doLoadLanguages());
     }
 
     /**
@@ -134,7 +133,7 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     }
 
     /**
-     * Gets the set of languages currently supported by other operations of the service.
+     * Gets the set of languages supported by other operations of the service.
      *
      * @return array|false an array containing the language name as key and the BCP 47 language tag as value; false if an error occurs
      *
@@ -143,16 +142,16 @@ abstract class AbstractTranslatorService extends AbstractHttpClientService imple
     abstract protected function loadLanguages(): array|false;
 
     /**
-     * @return array<string, string>|null
+     * @return array<string, string>|false
      */
-    private function doLoadLanguages(): ?array
+    private function doLoadLanguages(): array|false
     {
         $languages = $this->loadLanguages();
         if (false !== $languages && [] !== $languages && !$this->hasLastError()) {
             return $languages;
         }
 
-        return null;
+        return false;
     }
 
     private function getCacheKey(): string

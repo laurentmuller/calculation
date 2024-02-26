@@ -14,9 +14,11 @@ namespace App\Translator;
 
 use App\Model\TranslateQuery;
 use App\Utils\StringUtils;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
@@ -57,9 +59,11 @@ class BingTranslatorService extends AbstractTranslatorService
     public function __construct(
         #[\SensitiveParameter]
         #[Autowire('%bing_translator_key%')]
-        string $key
+        string $key,
+        CacheInterface $cache,
+        LoggerInterface $logger
     ) {
-        parent::__construct($key);
+        parent::__construct($key, $cache, $logger);
     }
 
     /**

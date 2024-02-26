@@ -30,9 +30,9 @@ about:
   licence: Accord de license
   dialog:
     title: Accord de license
-    display: Afficher l'accord de licence
-    not_found: Impossible de trouver l'accord de licence.
-    not_loaded: Impossible de charger l'accord de licence.
+    display: Afficher l'accord de license
+    not_found: Impossible de trouver l'accord de license.
+    not_loaded: Impossible de charger l'accord de license.
     copy_success: L'accord de license a été copié avec succès dans le presse-papier
     copy_error: Une erreur s'est produite lors de la copie de l'accord de license dans le presse-papiers.
 admin:

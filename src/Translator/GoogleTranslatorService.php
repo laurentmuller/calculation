@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace App\Translator;
 
 use App\Model\TranslateQuery;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Google translator service v2.0.
@@ -48,9 +50,11 @@ class GoogleTranslatorService extends AbstractTranslatorService
     public function __construct(
         #[\SensitiveParameter]
         #[Autowire('%google_translator_key%')]
-        string $key
+        string $key,
+        CacheInterface $cache,
+        LoggerInterface $logger
     ) {
-        parent::__construct($key);
+        parent::__construct($key, $cache, $logger);
     }
 
     /**

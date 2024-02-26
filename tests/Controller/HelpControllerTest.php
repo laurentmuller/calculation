@@ -14,6 +14,7 @@ namespace App\Tests\Controller;
 
 use App\Controller\HelpController;
 use App\Service\HelpService;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 
@@ -46,6 +47,9 @@ class HelpControllerTest extends AbstractControllerTestCase
         yield ['/help/dialog/product.list.title', self::ROLE_SUPER_ADMIN];
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testDialogs(): void
     {
         $dialogs = $this->help->getDialogs();
@@ -55,6 +59,9 @@ class HelpControllerTest extends AbstractControllerTestCase
         }
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testEntities(): void
     {
         $entities = $this->help->getEntities();
@@ -64,6 +71,9 @@ class HelpControllerTest extends AbstractControllerTestCase
         }
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testImages(): void
     {
         foreach ($this->getImages() as $file) {
@@ -71,6 +81,9 @@ class HelpControllerTest extends AbstractControllerTestCase
         }
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testUnusedImages(): void
     {
         $expected = \iterator_to_array($this->getImages());
@@ -122,6 +135,8 @@ class HelpControllerTest extends AbstractControllerTestCase
 
     /**
      * @return \Generator<string>
+     *
+     * @throws InvalidArgumentException
      */
     private function getImages(): \Generator
     {

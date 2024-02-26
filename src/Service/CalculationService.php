@@ -226,6 +226,24 @@ final class CalculationService implements ServiceSubscriberInterface
     }
 
     /**
+     * Gets the row constants.
+     *
+     * @return array<string, mixed>
+     */
+    public static function getConstants(): array
+    {
+        $reflection = new \ReflectionClass(self::class);
+        $constants = $reflection->getReflectionConstants(\ReflectionClassConstant::IS_PUBLIC);
+
+        return \array_reduce(
+            $constants,
+            /** @psalm-param array<string, mixed> $carry */
+            static fn (array $carry, \ReflectionClassConstant $c): array => $carry + [$c->getName() => $c->getValue()],
+            []
+        );
+    }
+
+    /**
      * Gets the minimum margin, in percent, for a calculation.
      */
     public function getMinMargin(): float

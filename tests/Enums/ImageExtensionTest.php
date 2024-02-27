@@ -35,7 +35,7 @@ class ImageExtensionTest extends TestCase
 
     public static function getImages(): \Iterator
     {
-        $dir = __DIR__ . '../../Data/Images/';
+        $dir = \realpath(__DIR__ . '../../Data/Images') . \DIRECTORY_SEPARATOR;
         yield [ImageExtension::BMP, $dir . 'example.bmp'];
         yield [ImageExtension::GIF, $dir . 'example.gif'];
         yield [ImageExtension::JPEG, $dir . 'example.jpeg'];

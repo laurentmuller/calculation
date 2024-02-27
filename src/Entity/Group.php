@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\SortModeInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\GroupRepository;
 use App\Traits\TimestampableTrait;
@@ -19,7 +20,6 @@ use App\Traits\ValidateMarginsTrait;
 use App\Utils\StringUtils;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -42,7 +42,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      * @var ArrayCollection<int, Category>
      */
     #[ORM\OneToMany(mappedBy: 'group', targetEntity: Category::class, cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
-    #[ORM\OrderBy(['code' => Criteria::ASC])]
+    #[ORM\OrderBy(['code' => SortModeInterface::SORT_ASC])]
     private Collection $categories;
 
     /**
@@ -67,7 +67,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'group', targetEntity: GroupMargin::class, cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
-    #[ORM\OrderBy(['minimum' => Criteria::ASC])]
+    #[ORM\OrderBy(['minimum' => SortModeInterface::SORT_ASC])]
     private Collection $margins;
 
     public function __construct()

@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Group;
-use Doctrine\Common\Collections\Criteria;
+use App\Interfaces\SortModeInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -55,7 +55,7 @@ class GroupRepository extends AbstractRepository
      */
     public function findByCode(): array
     {
-        return $this->findBy([], ['code' => Criteria::ASC]);
+        return $this->findBy([], ['code' => SortModeInterface::SORT_ASC]);
     }
 
     /**
@@ -72,7 +72,7 @@ class GroupRepository extends AbstractRepository
             ->addSelect('g.code')
             ->innerJoin('g.categories', 'c')
             ->groupBy('g.id')
-            ->orderBy('g.code', Criteria::ASC)
+            ->orderBy('g.code', SortModeInterface::SORT_ASC)
             ->getQuery()
             ->getArrayResult();
 
@@ -89,7 +89,7 @@ class GroupRepository extends AbstractRepository
         $field = $this->getSortField('code', $alias);
 
         return $this->createQueryBuilder($alias)
-            ->orderBy($field, Criteria::ASC);
+            ->orderBy($field, SortModeInterface::SORT_ASC);
     }
 
     /**

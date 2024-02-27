@@ -12,12 +12,32 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
+use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Group::class)]
 class GroupTest extends AbstractEntityValidatorTestCase
 {
+    public function testCategory(): void
+    {
+        $group = new Group();
+        self::assertFalse($group->hasCategories());
+        self::assertCount(0, $group->getCategories());
+        self::assertSame(0, $group->countCategories());
+
+        $category = new Category();
+        $group->addCategory($category);
+        self::assertTrue($group->hasCategories());
+        self::assertCount(1, $group->getCategories());
+        self::assertSame(1, $group->countCategories());
+
+        $group->removeCategory($category);
+        self::assertFalse($group->hasCategories());
+        self::assertCount(0, $group->getCategories());
+        self::assertSame(0, $group->countCategories());
+    }
+
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -55,10 +75,21 @@ class GroupTest extends AbstractEntityValidatorTestCase
 
     public function testGroupMargin(): void
     {
+        $group = new Group();
+        self::assertFalse($group->hasMargins());
+        self::assertCount(0, $group->getMargins());
+        self::assertSame(0, $group->countMargins());
+
         $margin = $this->createMargin();
-        self::assertTrue($margin->contains(0));
-        self::assertFalse($margin->contains(100));
-        self::assertEqualsWithDelta(11.0, $margin->getMarginAmount(10), 0.1);
+        $group->addMargin($margin);
+        self::assertTrue($group->hasMargins());
+        self::assertCount(1, $group->getMargins());
+        self::assertSame(1, $group->countMargins());
+
+        $group->removeMargin($margin);
+        self::assertFalse($group->hasMargins());
+        self::assertCount(0, $group->getMargins());
+        self::assertSame(0, $group->countMargins());
     }
 
     public function testInvalidCode(): void

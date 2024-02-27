@@ -20,12 +20,28 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(FlashType::class)]
 class FlashTypeTest extends TestCase
 {
+    public static function getIcons(): \Iterator
+    {
+        yield [FlashType::DANGER, 'fas fa-lg fa-exclamation-triangle'];
+        yield [FlashType::INFO, 'fas fa-lg fa-info-circle'];
+        yield [FlashType::SUCCESS, 'fas fa-lg fa-check-circle'];
+        yield [FlashType::WARNING, 'fas fa-lg fa-exclamation-circle'];
+    }
+
     public static function getLabels(): \Iterator
     {
         yield [FlashType::DANGER, 'flash_bag.danger'];
         yield [FlashType::INFO, 'flash_bag.info'];
         yield [FlashType::SUCCESS, 'flash_bag.success'];
         yield [FlashType::WARNING, 'flash_bag.warning'];
+    }
+
+    public static function getStyles(): \Iterator
+    {
+        yield [FlashType::DANGER, 'var(--bs-danger)'];
+        yield [FlashType::INFO, 'var(--bs-info)'];
+        yield [FlashType::SUCCESS, 'var(--bs-success)'];
+        yield [FlashType::WARNING, 'var(--bs-warning)'];
     }
 
     public static function getValues(): \Iterator
@@ -41,10 +57,24 @@ class FlashTypeTest extends TestCase
         self::assertCount(4, FlashType::cases());
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('getIcons')]
+    public function testIcon(FlashType $type, string $expected): void
+    {
+        $actual = $type->getIcon();
+        self::assertSame($expected, $actual);
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
     public function testLabel(FlashType $type, string $expected): void
     {
         $actual = $type->getReadable();
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getStyles')]
+    public function testStyle(FlashType $type, string $expected): void
+    {
+        $actual = $type->getStyle();
         self::assertSame($expected, $actual);
     }
 

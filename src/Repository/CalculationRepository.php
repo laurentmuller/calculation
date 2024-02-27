@@ -14,7 +14,7 @@ namespace App\Repository;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
-use Doctrine\Common\Collections\Criteria;
+use App\Interfaces\SortModeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -207,8 +207,8 @@ class CalculationRepository extends AbstractRepository
             ->andWhere('c.date <= :to')
             ->setParameter('from', $from, Types::DATETIME_MUTABLE)
             ->setParameter('to', $to, Types::DATETIME_MUTABLE)
-            ->orderBy('c.date', Criteria::DESC)
-            ->addOrderBy('c.id', Criteria::DESC)
+            ->orderBy('c.date', SortModeInterface::SORT_DESC)
+            ->addOrderBy('c.id', SortModeInterface::SORT_DESC)
             ->getQuery()
             ->getResult();
     }
@@ -235,8 +235,8 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('ROUND(SUM(c.overallTotal) / SUM(c.itemsTotal), 4) as margin_percent')
             ->groupBy('year')
             ->addGroupBy('month')
-            ->orderBy('year', Criteria::DESC)
-            ->addOrderBy('month', Criteria::DESC)
+            ->orderBy('year', SortModeInterface::SORT_DESC)
+            ->addOrderBy('month', SortModeInterface::SORT_DESC)
             ->setMaxResults($maxResults);
 
         $result = $builder->getQuery()->getArrayResult();
@@ -380,7 +380,7 @@ class CalculationRepository extends AbstractRepository
     public function getItemsBelow(float $minMargin): array
     {
         $builder = $this->createQueryBuilder('c')
-            ->addOrderBy('c.id', Criteria::DESC);
+            ->addOrderBy('c.id', SortModeInterface::SORT_DESC);
         $builder = self::addBelowFilter($builder, $minMargin);
 
         return $builder->getQuery()->getResult();
@@ -394,7 +394,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @psalm-return CalculationItemType[]
      */
-    public function getItemsDuplicate(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
+    public function getItemsDuplicate(string $orderColumn = 'id', string $orderDirection = SortModeInterface::SORT_DESC): array
     {
         $builder = $this->createQueryBuilder('e')
             // calculation
@@ -457,7 +457,7 @@ class CalculationRepository extends AbstractRepository
      *
      * @psalm-return CalculationItemType[]
      */
-    public function getItemsEmpty(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
+    public function getItemsEmpty(string $orderColumn = 'id', string $orderDirection = SortModeInterface::SORT_DESC): array
     {
         $builder = $this->createQueryBuilder('e')
             // calculation
@@ -524,9 +524,9 @@ class CalculationRepository extends AbstractRepository
     public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array
     {
         $builder = $this->getTableQueryBuilder();
-        $builder->addOrderBy('e.updatedAt', Criteria::DESC)
-            ->addOrderBy('e.date', Criteria::DESC)
-            ->addOrderBy('e.id', Criteria::DESC)
+        $builder->addOrderBy('e.updatedAt', SortModeInterface::SORT_DESC)
+            ->addOrderBy('e.date', SortModeInterface::SORT_DESC)
+            ->addOrderBy('e.id', SortModeInterface::SORT_DESC)
             ->setMaxResults($maxResults);
         if ($user instanceof UserInterface) {
             $identifier = $user->getUserIdentifier();
@@ -688,7 +688,7 @@ class CalculationRepository extends AbstractRepository
     {
         return $this->createQueryBuilder('c')
             ->orderBy('c.date')
-            ->addOrderBy('c.id', Criteria::DESC)
+            ->addOrderBy('c.id', SortModeInterface::SORT_DESC)
             ->where('YEAR(c.date) = :year')
             ->setParameter('year', $year, Types::INTEGER);
     }

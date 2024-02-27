@@ -16,6 +16,7 @@ use App\Interfaces\MarginInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -42,7 +43,7 @@ trait ValidateMarginsTrait
             return;
         }
         $criteria = Criteria::create()
-            ->orderBy(['minimum' => Criteria::ASC]);
+            ->orderBy(['minimum' => Order::Ascending]);
         $margins = $margins->matching($criteria);
         $lastMax = null;
         foreach ($margins as $key => $margin) {

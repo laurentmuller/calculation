@@ -12,12 +12,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\SortModeInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\TaskRepository;
 use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -48,7 +48,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
      */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'task', targetEntity: TaskItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\OrderBy(['position' => Criteria::ASC])]
+    #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
     private Collection $items;
 
     /**

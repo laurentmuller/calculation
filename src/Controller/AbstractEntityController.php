@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Interfaces\EntityInterface;
+use App\Interfaces\SortModeInterface;
 use App\Pdf\PdfDocument;
 use App\Repository\AbstractRepository;
 use App\Response\PdfResponse;
@@ -212,7 +213,7 @@ abstract class AbstractEntityController extends AbstractController
         string $alias = AbstractRepository::DEFAULT_ALIAS
     ): array {
         if (\is_string($sortedFields)) {
-            $sortedFields = [$sortedFields => Criteria::ASC];
+            $sortedFields = [$sortedFields => SortModeInterface::SORT_ASC];
         }
 
         return $this->repository->getSearchQuery($sortedFields, $criteria, $alias)

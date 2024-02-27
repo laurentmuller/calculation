@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Task;
-use Doctrine\Common\Collections\Criteria;
+use App\Interfaces\SortModeInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -56,7 +56,7 @@ class TaskRepository extends AbstractCategoryItemRepository
     {
         $field = $this->getSortField('name', $alias);
         $builder = $this->createQueryBuilder($alias)
-            ->orderBy($field, Criteria::ASC);
+            ->orderBy($field, SortModeInterface::SORT_ASC);
         if (!$all) {
             $builder->innerJoin("$alias.items", 'item')
                 ->innerJoin('item.margins', 'margin')

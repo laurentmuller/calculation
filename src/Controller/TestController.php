@@ -26,6 +26,7 @@ use App\Form\Type\CaptchaImageType;
 use App\Form\Type\SimpleEditorType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
+use App\Interfaces\SortModeInterface;
 use App\Interfaces\UserInterface;
 use App\Model\HttpClientError;
 use App\Pdf\Events\PdfLabelTextEvent;
@@ -55,7 +56,6 @@ use App\Validator\Captcha;
 use App\Validator\Password;
 use App\Validator\Strength;
 use App\Word\HtmlDocument;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use fpdf\PdfFontStyle;
 use Psr\Log\LoggerInterface;
@@ -180,7 +180,7 @@ class TestController extends AbstractController
         $sortField = $repository->getSortField(CustomerRepository::NAME_COMPANY_FIELD);
         /** @psalm-var \App\Entity\Customer[] $customers */
         $customers = $repository->createDefaultQueryBuilder()
-            ->orderBy($sortField, Criteria::ASC)
+            ->orderBy($sortField, SortModeInterface::SORT_ASC)
             ->setMaxResults(40)
             ->getQuery()
             ->getResult();

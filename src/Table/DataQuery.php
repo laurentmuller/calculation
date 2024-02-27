@@ -42,12 +42,8 @@ class DataQuery
         /** The sorted field. */
         #[Assert\NotNull]
         public string $sort = '',
+        /** The sort order ('asc' or 'desc'). */
         #[Assert\Choice([SortModeInterface::SORT_ASC, SortModeInterface::SORT_DESC])]
-        /**
-         * The sort order ('asc' or 'desc').
-         *
-         * @var SortModeInterface::*
-         */
         public string $order = SortModeInterface::SORT_ASC,
         /** The cookie prefix */
         #[Assert\NotNull]

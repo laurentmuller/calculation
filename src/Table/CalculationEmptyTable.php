@@ -12,9 +12,9 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Interfaces\SortModeInterface;
 use App\Repository\CalculationRepository;
 use App\Traits\EmptyItemsTrait;
-use Doctrine\Common\Collections\Criteria;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -59,7 +59,7 @@ class CalculationEmptyTable extends AbstractCalculationItemsTable
         return 0 === $this->count() ? 'empty.empty' : null;
     }
 
-    protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
+    protected function getEntities(string $orderColumn = 'id', string $orderDirection = SortModeInterface::SORT_DESC): array
     {
         return $this->repository->getItemsEmpty($orderColumn, $orderDirection);
     }

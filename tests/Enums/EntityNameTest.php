@@ -128,6 +128,7 @@ class EntityNameTest extends TestCase
         yield ['Log', EntityName::LOG];
         yield [Log::class, EntityName::LOG];
         yield [new Log(), EntityName::LOG];
+        yield [EntityName::CALCULATION, EntityName::CALCULATION];
     }
 
     public static function getValue(): \Iterator

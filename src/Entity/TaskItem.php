@@ -14,12 +14,12 @@ namespace App\Entity;
 
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
+use App\Interfaces\SortModeInterface;
 use App\Repository\TaskItemRepository;
 use App\Traits\PositionTrait;
 use App\Traits\ValidateMarginsTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -45,7 +45,7 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
      */
     #[Assert\Valid]
     #[ORM\OneToMany(mappedBy: 'taskItem', targetEntity: TaskItemMargin::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[ORM\OrderBy(['minimum' => Criteria::ASC])]
+    #[ORM\OrderBy(['minimum' => SortModeInterface::SORT_ASC])]
     private Collection $margins;
 
     #[Assert\NotBlank]

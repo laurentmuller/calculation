@@ -19,6 +19,57 @@ use App\Entity\Product;
 #[\PHPUnit\Framework\Attributes\CoversClass(Product::class)]
 class ProductTest extends AbstractEntityValidatorTestCase
 {
+    public static function getPrices(): \Generator
+    {
+        yield [1.245, 1.24];
+        yield [1.246, 1.25];
+        yield [1.249, 1.25];
+
+        yield [1.25, 1.25];
+
+        yield [1.251, 1.25];
+        yield [1.255, 1.25];
+        yield [1.256, 1.26];
+    }
+
+    public function testCategoryAndGroup(): void
+    {
+        $product = new Product();
+        $product->setDescription('product');
+
+        self::assertNull($product->getCategory());
+        self::assertSame('', $product->getCategoryCode());
+        self::assertNull($product->getCategoryId());
+
+        self::assertNull($product->getGroup());
+        self::assertSame('', $product->getGroupCode());
+
+        $group = $this->getGroup();
+        $category = $this->getCategory($group);
+        $product->setCategory($category);
+
+        self::assertNotNull($product->getCategory());
+        self::assertNotNull($product->getCategoryCode());
+        self::assertSame('category', $product->getCategoryCode());
+
+        self::assertNotNull($product->getGroup());
+        self::assertNotNull($product->getGroupCode());
+        self::assertSame('group', $product->getGroupCode());
+    }
+
+    public function testClone(): void
+    {
+        $product = new Product();
+        $product->setDescription('product');
+
+        $clone = $product->clone();
+        self::assertSame($product->getDescription(), $clone->getDescription());
+
+        $clone = $product->clone('new-product');
+        self::assertNotSame($product->getDescription(), $clone->getDescription());
+        self::assertSame('new-product', $clone->getDescription());
+    }
+
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -96,6 +147,30 @@ class ProductTest extends AbstractEntityValidatorTestCase
             $this->deleteEntity($category);
             $this->deleteEntity($group);
         }
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getPrices')]
+    public function testPrice(float $price, float $expected): void
+    {
+        $product = new Product();
+        $product->setPrice($price);
+        self::assertSame($expected, $product->getPrice());
+    }
+
+    public function testSupplier(): void
+    {
+        $product = new Product();
+        self::assertNull($product->getSupplier());
+        $product->setSupplier('supplier');
+        self::assertSame('supplier', $product->getSupplier());
+    }
+
+    public function testUnit(): void
+    {
+        $product = new Product();
+        self::assertNull($product->getUnit());
+        $product->setUnit('unit');
+        self::assertSame('unit', $product->getUnit());
     }
 
     public function testValid(): void

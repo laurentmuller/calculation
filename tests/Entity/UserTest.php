@@ -21,9 +21,30 @@ class UserTest extends AbstractEntityValidatorTestCase
     public function testAddProperty(): void
     {
         $user = new User();
+        self::assertCount(0, $user->getProperties());
         $property = new UserProperty();
         $user->addProperty($property);
         self::assertCount(1, $user->getProperties());
+    }
+
+    public function testAvatar(): void
+    {
+        $user = new User();
+
+        $actual = $user->getAvatar();
+        self::assertSame('https://robohash.org/?size=32x32', $actual);
+
+        $actual = $user->getAvatar(16);
+        self::assertSame('https://robohash.org/?size=16x16', $actual);
+
+        $actual = $user->getAvatar(set: 2);
+        self::assertSame('https://robohash.org/?size=32x32&set=set2', $actual);
+
+        $actual = $user->getAvatar(background: 2);
+        self::assertSame('https://robohash.org/?size=32x32&bgset=bg2', $actual);
+
+        $actual = $user->getAvatar(32, 2, 2);
+        self::assertSame('https://robohash.org/?size=32x32&set=set2&bgset=bg2', $actual);
     }
 
     public function testContainsProperty(): void
@@ -103,6 +124,21 @@ class UserTest extends AbstractEntityValidatorTestCase
         }
     }
 
+    public function testEmailAddress(): void
+    {
+        $user = new User();
+        $user->setUsername('user')
+            ->setEmail('user@mail.com');
+        self::assertSame('user', $user->getUsername());
+        self::assertSame('user', $user->getUserIdentifier());
+        self::assertSame('user@mail.com', $user->getEmail());
+        self::assertSame('user (user@mail.com)', $user->getNameAndEmail());
+
+        $address = $user->getEmailAddress();
+        self::assertSame('user', $address->getName());
+        self::assertSame('user@mail.com', $address->getAddress());
+    }
+
     public function testEnabled(): void
     {
         $user = new User();
@@ -167,6 +203,29 @@ class UserTest extends AbstractEntityValidatorTestCase
         } finally {
             $this->deleteEntity($first);
         }
+    }
+
+    public function testPasswordRequest(): void
+    {
+        $user = new User();
+        $expiresAt = new \DateTime();
+        $selector = 'selector';
+        $hashedToken = 'hashedToken';
+        $user->setResetPasswordRequest($expiresAt, $selector, $hashedToken);
+        self::assertSame($expiresAt, $user->getExpiresAt());
+        self::assertSame($selector, $user->getSelector());
+        self::assertSame($hashedToken, $user->getHashedToken());
+        self::assertNotNull($user->getRequestedAt());
+        self::assertTrue($user->isResetPassword());
+        self::assertSame($user, $user->getUser());
+
+        $user->eraseResetPasswordRequest();
+        self::assertNotNull($user->getExpiresAt());
+        self::assertNull($user->getSelector());
+        self::assertSame('', $user->getHashedToken());
+        self::assertNotNull($user->getRequestedAt());
+        self::assertSame($user, $user->getUser());
+        self::assertFalse($user->isResetPassword());
     }
 
     public function testRemoveProperty(): void

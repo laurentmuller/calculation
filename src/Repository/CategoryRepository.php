@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Category;
+use App\Interfaces\SortModeInterface;
 use App\Traits\GroupByTrait;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -117,8 +117,8 @@ class CategoryRepository extends AbstractRepository
         $codeField = $this->getSortField('code', $alias);
         $builder = $this->createQueryBuilder($alias)
             ->innerJoin("$alias.group", self::GROUP_ALIAS)
-            ->orderBy($groupField, Criteria::ASC)
-            ->addOrderBy($codeField, Criteria::ASC);
+            ->orderBy($groupField, SortModeInterface::SORT_ASC)
+            ->addOrderBy($codeField, SortModeInterface::SORT_ASC);
 
         return match ($filterType) {
             self::FILTER_PRODUCTS => $builder->innerJoin("$alias.products", 'p'),
@@ -179,8 +179,8 @@ class CategoryRepository extends AbstractRepository
             ->addSelect("$groupId AS groupId")
             ->innerJoin('c.group', self::GROUP_ALIAS)
             ->groupBy('c.id')
-            ->orderBy($group, Criteria::ASC)
-            ->addOrderBy('c.code', Criteria::ASC);
+            ->orderBy($group, SortModeInterface::SORT_ASC)
+            ->addOrderBy('c.code', SortModeInterface::SORT_ASC);
     }
 
     /**

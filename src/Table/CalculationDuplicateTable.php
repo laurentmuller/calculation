@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Table;
 
+use App\Interfaces\SortModeInterface;
 use App\Traits\DuplicateItemsTrait;
-use Doctrine\Common\Collections\Criteria;
 
 /**
  * Calculation table for duplicate items.
@@ -40,7 +40,7 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
         return 0 === $this->count() ? 'duplicate.empty' : null;
     }
 
-    protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array
+    protected function getEntities(string $orderColumn = 'id', string $orderDirection = SortModeInterface::SORT_DESC): array
     {
         return $this->repository->getItemsDuplicate($orderColumn, $orderDirection);
     }

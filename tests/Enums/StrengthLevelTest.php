@@ -37,6 +37,18 @@ class StrengthLevelTest extends TestCase
         yield ['strength_level.weak', StrengthLevel::WEAK];
     }
 
+    public static function getSmallerValues(): \Iterator
+    {
+        yield [StrengthLevel::NONE, StrengthLevel::VERY_WEAK, true];
+        yield [StrengthLevel::VERY_WEAK, StrengthLevel::WEAK, true];
+        yield [StrengthLevel::WEAK, StrengthLevel::MEDIUM, true];
+        yield [StrengthLevel::MEDIUM, StrengthLevel::STRONG, true];
+        yield [StrengthLevel::STRONG, StrengthLevel::VERY_STRONG, true];
+
+        yield [StrengthLevel::VERY_WEAK, StrengthLevel::NONE, false];
+        yield [StrengthLevel::VERY_WEAK, -1, false];
+    }
+
     public static function getValues(): \Iterator
     {
         yield [StrengthLevel::NONE, -1];
@@ -77,6 +89,13 @@ class StrengthLevelTest extends TestCase
         self::assertSame(100, StrengthLevel::VERY_STRONG->percent());
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('getSmallerValues')]
+    public function testSmaller(StrengthLevel $level, int|StrengthLevel $other, bool $expected): void
+    {
+        $actual = $level->isSmaller($other);
+        self::assertSame($expected, $actual);
+    }
+
     public function testSorted(): void
     {
         $expected = [
@@ -106,6 +125,13 @@ class StrengthLevelTest extends TestCase
     public function testValue(StrengthLevel $level, int $expected): void
     {
         $actual = $level->value;
+        self::assertSame($expected, $actual);
+    }
+
+    public function testValues(): void
+    {
+        $expected = \range(-1, 4);
+        $actual = StrengthLevel::values();
         self::assertSame($expected, $actual);
     }
 

@@ -20,12 +20,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(Importance::class)]
 class ImportanceTest extends TestCase
 {
-    public static function getLabel(): \Iterator
+    public static function getLabels(): \Iterator
     {
         yield ['importance.high', Importance::HIGH];
         yield ['importance.low', Importance::LOW];
         yield ['importance.medium', Importance::MEDIUM];
         yield ['importance.urgent', Importance::URGENT];
+    }
+
+    public static function getLabelsFull(): \Iterator
+    {
+        yield ['importance.high_full', Importance::HIGH];
+        yield ['importance.low_full', Importance::LOW];
+        yield ['importance.medium_full', Importance::MEDIUM];
+        yield ['importance.urgent_full', Importance::URGENT];
     }
 
     public static function getValues(): \Iterator
@@ -49,10 +57,17 @@ class ImportanceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
     public function testLabel(string $expected, Importance $importance): void
     {
         $actual = $importance->getReadable();
+        self::assertSame($expected, $actual);
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabelsFull')]
+    public function testLabelFull(string $expected, Importance $importance): void
+    {
+        $actual = $importance->getReadableFull();
         self::assertSame($expected, $actual);
     }
 
@@ -71,7 +86,7 @@ class ImportanceTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
     public function testTranslate(string $expected, Importance $importance): void
     {
         $translator = $this->createTranslator();

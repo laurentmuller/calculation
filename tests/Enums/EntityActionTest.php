@@ -90,6 +90,17 @@ class EntityActionTest extends TypeTestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testValues(): void
+    {
+        $actual = EntityAction::values();
+        $expected = [
+            'edit',
+            'show',
+            'none',
+        ];
+        self::assertSame($expected, $actual);
+    }
+
     /**
      * @throws Exception
      */

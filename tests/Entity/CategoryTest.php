@@ -14,20 +14,70 @@ namespace App\Tests\Entity;
 
 use App\Entity\Category;
 use App\Entity\Group;
+use App\Entity\Product;
+use App\Entity\Task;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Category::class)]
 class CategoryTest extends AbstractEntityValidatorTestCase
 {
+    public function testClone(): void
+    {
+        $object = new Category();
+        $object->setCode('code');
+
+        $clone = $object->clone();
+        self::assertSame($object->getCode(), $clone->getCode());
+
+        $clone = $object->clone('new-code');
+        self::assertNotSame($object->getCode(), $clone->getCode());
+    }
+
     public function testCount(): void
     {
         $object = new Category();
         self::assertSame(0, $object->countProducts());
         self::assertSame(0, $object->countTasks());
         self::assertSame(0, $object->countItems());
-
         self::assertCount(0, $object->getProducts());
         self::assertCount(0, $object->getTasks());
+        self::assertFalse($object->hasProducts());
+        self::assertFalse($object->hasTasks());
 
+        $product = new Product();
+        $object->addProduct($product);
+        self::assertSame(1, $object->countProducts());
+        self::assertSame(0, $object->countTasks());
+        self::assertSame(1, $object->countItems());
+        self::assertCount(1, $object->getProducts());
+        self::assertCount(0, $object->getTasks());
+        self::assertTrue($object->hasProducts());
+        self::assertFalse($object->hasTasks());
+
+        $task = new Task();
+        $object->addTask($task);
+        self::assertSame(1, $object->countProducts());
+        self::assertSame(1, $object->countTasks());
+        self::assertSame(2, $object->countItems());
+        self::assertCount(1, $object->getProducts());
+        self::assertCount(1, $object->getTasks());
+        self::assertTrue($object->hasProducts());
+        self::assertTrue($object->hasTasks());
+
+        $object->removeProduct($product);
+        self::assertSame(0, $object->countProducts());
+        self::assertSame(1, $object->countTasks());
+        self::assertSame(1, $object->countItems());
+        self::assertCount(0, $object->getProducts());
+        self::assertCount(1, $object->getTasks());
+        self::assertFalse($object->hasProducts());
+        self::assertTrue($object->hasTasks());
+
+        $object->removeTask($task);
+        self::assertSame(0, $object->countProducts());
+        self::assertSame(0, $object->countTasks());
+        self::assertSame(0, $object->countItems());
+        self::assertCount(0, $object->getProducts());
+        self::assertCount(0, $object->getTasks());
         self::assertFalse($object->hasProducts());
         self::assertFalse($object->hasTasks());
     }
@@ -62,6 +112,18 @@ class CategoryTest extends AbstractEntityValidatorTestCase
             $this->deleteEntity($first);
             $this->deleteEntity($group);
         }
+    }
+
+    public function testFullCode(): void
+    {
+        $object = new Category();
+        $object->setCode('code');
+        self::assertSame('code', $object->getFullCode());
+
+        $group = new Group();
+        $group->setCode('group');
+        $object->setGroup($group);
+        self::assertSame('code - group', $object->getFullCode());
     }
 
     public function testGroup(): void

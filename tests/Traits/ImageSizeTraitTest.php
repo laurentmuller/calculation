@@ -23,8 +23,8 @@ class ImageSizeTraitTest extends TestCase
     public static function getSizes(): \Iterator
     {
         yield ['', [0, 0]];
-        yield [__DIR__ . '/../Data/android.png', [124, 147]];
-        yield [__DIR__ . '/../Data/bibi.jpg', [360, 308]];
+        yield [__DIR__ . '/../Data/images/example.png', [124, 147]];
+        yield [__DIR__ . '/../Data/images/example.jpg', [500, 477]];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getSizes')]

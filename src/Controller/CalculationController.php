@@ -21,6 +21,7 @@ use App\Entity\Product;
 use App\Form\Calculation\CalculationEditStateType;
 use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
+use App\Interfaces\SortModeInterface;
 use App\Report\CalculationReport;
 use App\Report\CalculationsReport;
 use App\Repository\CalculationRepository;
@@ -31,7 +32,6 @@ use App\Spreadsheet\CalculationDocument;
 use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationTable;
 use App\Table\DataQuery;
-use Doctrine\Common\Collections\Criteria;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -130,7 +130,7 @@ class CalculationController extends AbstractEntityController
     #[Get(path: '/excel', name: 'calculation_excel')]
     public function excel(): SpreadsheetResponse
     {
-        $entities = $this->getEntities(['id' => Criteria::DESC]);
+        $entities = $this->getEntities(['id' => SortModeInterface::SORT_DESC]);
         if ([] === $entities) {
             $message = $this->trans('calculation.list.empty');
             throw $this->createNotFoundException($message);
@@ -163,9 +163,9 @@ class CalculationController extends AbstractEntityController
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities([
-            'editable' => Criteria::DESC,
-            'code' => Criteria::ASC,
-            'id' => Criteria::DESC,
+            'editable' => SortModeInterface::SORT_DESC,
+            'code' => SortModeInterface::SORT_ASC,
+            'id' => SortModeInterface::SORT_DESC,
         ]);
         if ([] === $entities) {
             $message = $this->trans('calculation.list.empty');

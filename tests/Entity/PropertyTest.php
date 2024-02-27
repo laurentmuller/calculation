@@ -38,6 +38,12 @@ class PropertyTest extends AbstractEntityValidatorTestCase
         }
     }
 
+    public function testInstance(): void
+    {
+        $object = Property::instance('name');
+        self::assertSame('name', $object->getName());
+    }
+
     public function testInvalidBoth(): void
     {
         $object = new Property();

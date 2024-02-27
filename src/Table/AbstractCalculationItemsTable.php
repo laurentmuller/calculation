@@ -15,7 +15,6 @@ namespace App\Table;
 use App\Interfaces\SortModeInterface;
 use App\Repository\CalculationRepository;
 use App\Utils\FileUtils;
-use Doctrine\Common\Collections\Criteria;
 
 /**
  * Abstract Calculation table to display items.
@@ -71,7 +70,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      *
      * @psalm-return CalculationItemType[]
      */
-    abstract protected function getEntities(string $orderColumn = 'id', string $orderDirection = Criteria::DESC): array;
+    abstract protected function getEntities(string $orderColumn = 'id', string $orderDirection = SortModeInterface::SORT_DESC): array;
 
     /**
      * Compute the number of calculation items.

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\ImageExtension;
+use App\Service\ImageService;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +31,19 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::WEBP, '*.webp'];
         yield [ImageExtension::XBM, '*.xbm'];
         yield [ImageExtension::XPM, '*.xpm'];
+    }
+
+    public static function getImages(): \Iterator
+    {
+        $dir = __DIR__ . '../../Data/Images/';
+        yield [ImageExtension::BMP, $dir . 'example.bmp'];
+        yield [ImageExtension::GIF, $dir . 'example.gif'];
+        yield [ImageExtension::JPEG, $dir . 'example.jpeg'];
+        yield [ImageExtension::JPG, $dir . 'example.jpg'];
+        yield [ImageExtension::PNG, $dir . 'example.png'];
+        yield [ImageExtension::WEBP, $dir . 'example.webp'];
+
+        yield [ImageExtension::BMP, __DIR__ . 'fake.bmp', false];
     }
 
     public static function getImageTypes(): \Iterator
@@ -119,6 +133,18 @@ class ImageExtensionTest extends TestCase
         self::assertCount($expected, ImageExtension::cases());
     }
 
+    #[\PHPUnit\Framework\Attributes\DataProvider('getImages')]
+    public function testCreateImage(ImageExtension $extension, string $filename, bool $expectedImage = true): void
+    {
+        $image = $extension->createImage($filename);
+        if ($expectedImage) {
+            self::assertInstanceOf(\GdImage::class, $image);
+            \imagedestroy($image);
+        } else {
+            self::assertFalse($image);
+        }
+    }
+
     public function testDefault(): void
     {
         $expected = ImageExtension::PNG;
@@ -159,6 +185,22 @@ class ImageExtensionTest extends TestCase
             self::fail('No exception throw');
         } finally {
             \imagedestroy($image);
+        }
+    }
+
+    public function testSaveImageService(): void
+    {
+        $file = FileUtils::tempFile();
+        self::assertIsString($file);
+
+        try {
+            $service = ImageService::fromTrueColor(50, 50);
+            self::assertNotNull($service);
+            $extension = ImageExtension::PNG;
+            $result = $extension->saveImage($service, $file);
+            self::assertTrue($result);
+        } finally {
+            FileUtils::remove($file);
         }
     }
 

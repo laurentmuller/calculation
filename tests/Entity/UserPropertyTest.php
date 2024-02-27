@@ -86,6 +86,19 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         }
     }
 
+    /**
+     * @throws NotSupported
+     */
+    public function testInstance(): void
+    {
+        $user = $this->getUser();
+        self::assertNotNull($user);
+        $property = UserProperty::instance('name', $user);
+        $property->setValue('value');
+        self::assertSame('name', $property->getName());
+        self::assertSame('value', $property->getString());
+    }
+
     public function testInvalidAll(): void
     {
         $object = new UserProperty();

@@ -18,6 +18,27 @@ use App\Entity\Group;
 #[\PHPUnit\Framework\Attributes\CoversClass(Category::class)]
 class CategoryTest extends AbstractEntityValidatorTestCase
 {
+    public function testCount(): void
+    {
+        $object = new Category();
+        self::assertSame(0, $object->countProducts());
+        self::assertSame(0, $object->countTasks());
+        self::assertSame(0, $object->countItems());
+
+        self::assertCount(0, $object->getProducts());
+        self::assertCount(0, $object->getTasks());
+
+        self::assertFalse($object->hasProducts());
+        self::assertFalse($object->hasTasks());
+    }
+
+    public function testDescription(): void
+    {
+        $object = new Category();
+        $object->setDescription('description');
+        self::assertSame('description', $object->getDescription());
+    }
+
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -41,6 +62,20 @@ class CategoryTest extends AbstractEntityValidatorTestCase
             $this->deleteEntity($first);
             $this->deleteEntity($group);
         }
+    }
+
+    public function testGroup(): void
+    {
+        $category = new Category();
+        self::assertNull($category->getGroup());
+        self::assertNull($category->getGroupId());
+        self::assertNull($category->getGroupCode());
+
+        $group = new Group();
+        $group->setCode('group');
+        $category->setGroup($group);
+        self::assertNotNull($category->getGroup());
+        self::assertSame('group', $category->getGroupCode());
     }
 
     public function testInvalidCode(): void
@@ -84,6 +119,7 @@ class CategoryTest extends AbstractEntityValidatorTestCase
         $group->setCode('group');
         $object = new Category();
         $object->setCode('code');
+        $object->setDescription('description');
         $object->setGroup($group);
         $this->validate($object);
     }

@@ -13,10 +13,27 @@ declare(strict_types=1);
 namespace App\Tests\Entity;
 
 use App\Entity\User;
+use App\Entity\UserProperty;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(User::class)]
 class UserTest extends AbstractEntityValidatorTestCase
 {
+    public function testAddProperty(): void
+    {
+        $user = new User();
+        $property = new UserProperty();
+        $user->addProperty($property);
+        self::assertCount(1, $user->getProperties());
+    }
+
+    public function testContainsProperty(): void
+    {
+        $user = new User();
+        $property = new UserProperty();
+        $user->addProperty($property);
+        self::assertTrue($user->contains($property));
+    }
+
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -86,6 +103,14 @@ class UserTest extends AbstractEntityValidatorTestCase
         }
     }
 
+    public function testEnabled(): void
+    {
+        $user = new User();
+        self::assertTrue($user->isEnabled());
+        $user->setEnabled(false);
+        self::assertFalse($user->isEnabled());
+    }
+
     public function testInvalidAll(): void
     {
         $user = new User();
@@ -144,6 +169,46 @@ class UserTest extends AbstractEntityValidatorTestCase
         }
     }
 
+    public function testRemoveProperty(): void
+    {
+        $user = new User();
+        $property = new UserProperty();
+        $user->addProperty($property);
+        self::assertCount(1, $user->getProperties());
+        $user->removeProperty($property);
+        self::assertCount(0, $user->getProperties());
+    }
+
+    public function testSerialize(): void
+    {
+        $user = new User();
+        $user->setUsername('user')
+            ->setPassword('password');
+        $values = $user->__serialize();
+        self::assertCount(3, $values);
+        self::assertNull($values[0]);
+        self::assertSame('user', $values[1]);
+        self::assertSame('password', $values[2]);
+    }
+
+    public function testUnserialize(): void
+    {
+        $values = [1, 'user', 'password'];
+        $user = new User();
+        $user->__unserialize($values);
+        self::assertSame(1, $user->getId());
+        self::assertSame('user', $user->getUsername());
+        self::assertSame('password', $user->getPassword());
+    }
+
+    public function testUpdateLastLogin(): void
+    {
+        $user = new User();
+        self::assertNull($user->getLastLogin());
+        $user->updateLastLogin();
+        self::assertNotNull($user->getLastLogin());
+    }
+
     public function testValid(): void
     {
         $user = new User();
@@ -151,5 +216,13 @@ class UserTest extends AbstractEntityValidatorTestCase
             ->setPassword('password')
             ->setEmail('email@email.com');
         $this->validate($user);
+    }
+
+    public function testVerified(): void
+    {
+        $user = new User();
+        self::assertFalse($user->isVerified());
+        $user->setVerified(true);
+        self::assertTrue($user->isVerified());
     }
 }

@@ -24,6 +24,10 @@ trait CacheKeyTrait
      */
     public function cleanKey(string $key): string
     {
+        if (false === \strpbrk($key, ItemInterface::RESERVED_CHARACTERS)) {
+            return $key;
+        }
+
         /** @psalm-var string[] $reservedCharacters */
         static $reservedCharacters = [];
         if ([] === $reservedCharacters) {

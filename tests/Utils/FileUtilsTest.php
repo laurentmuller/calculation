@@ -88,6 +88,13 @@ class FileUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testChangeExtension(): void
+    {
+        $old_name = 'test.jpeg';
+        $new_name = FileUtils::changeExtension($old_name, 'png');
+        self::assertSame('test.png', $new_name);
+    }
+
     public function testExist(): void
     {
         self::assertTrue(FileUtils::exists(__DIR__));

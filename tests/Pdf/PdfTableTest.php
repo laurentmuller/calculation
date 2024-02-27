@@ -16,6 +16,7 @@ use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfTable;
+use fpdf\PdfException;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(PdfTable::class)]
@@ -23,7 +24,7 @@ class PdfTableTest extends TestCase
 {
     public function testAddCellNoRowStarted(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(PdfException::class);
         $this->expectExceptionMessage('No row started.');
         $this->createTable()
             ->addCell(new PdfCell());
@@ -31,7 +32,7 @@ class PdfTableTest extends TestCase
 
     public function testAddCellsNoRowStarted(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(PdfException::class);
         $this->expectExceptionMessage('No row started.');
         $this->createTable()
             ->addValues(new PdfCell());
@@ -39,7 +40,7 @@ class PdfTableTest extends TestCase
 
     public function testCompleteRowNoRowStarted(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(PdfException::class);
         $this->expectExceptionMessage('No row started.');
         $this->createTable()
             ->completeRow();
@@ -74,7 +75,7 @@ class PdfTableTest extends TestCase
 
     public function testStartRowAlreadyStarted(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(PdfException::class);
         $this->expectExceptionMessage('Row already started.');
         $this->createTable()
             ->startRow()

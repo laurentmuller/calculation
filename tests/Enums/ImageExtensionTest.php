@@ -43,7 +43,7 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::PNG, $dir . 'example.png'];
         yield [ImageExtension::WEBP, $dir . 'example.webp'];
 
-        yield [ImageExtension::BMP, __DIR__ . 'fake.bmp', false];
+        yield [ImageExtension::BMP, $dir . 'fake.bmp', false];
     }
 
     public static function getImageTypes(): \Iterator

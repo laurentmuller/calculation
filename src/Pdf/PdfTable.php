@@ -23,6 +23,7 @@ use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Traits\MathTrait;
 use App\Utils\StringUtils;
 use fpdf\PdfBorder;
+use fpdf\PdfException;
 use fpdf\PdfRectangle;
 use fpdf\PdfRectangleStyle;
 use fpdf\PdfSize;
@@ -38,7 +39,7 @@ class PdfTable
     use MathTrait;
 
     /**
-     * The column alignment.
+     * The table alignment when not is full width.
      */
     private PdfTextAlignment $alignment = PdfTextAlignment::LEFT;
 
@@ -131,12 +132,12 @@ class PdfTable
      *
      * Do nothing if the cell is null.
      *
-     * @throws \LogicException if no current row is started
+     * @throws PdfException if no current row is started
      */
     public function addCell(?PdfCell $cell): static
     {
         if (!$this->isRowStarted()) {
-            throw new \LogicException('No row started.');
+            throw new PdfException('No row started.');
         }
         if ($cell instanceof PdfCell) {
             $this->cells[] = $cell;
@@ -180,7 +181,7 @@ class PdfTable
     /**
      * Create and add a header row with the given values.
      *
-     * @throws \LogicException      if the row is already started
+     * @throws PdfException         if the row is already started
      * @throws \LengthException     if values parameter is empty
      * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
      */
@@ -196,7 +197,7 @@ class PdfTable
     /**
      * Create and add a row with the given values.
      *
-     * @throws \LogicException      if the row is already started
+     * @throws PdfException         if the row is already started
      * @throws \LengthException     if values parameter is empty
      * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
      *
@@ -215,7 +216,7 @@ class PdfTable
      * @param array<PdfCell|string|null> $cells the cells to output
      * @param ?PdfStyle                  $style the row style or null for default cell style
      *
-     * @throws \LogicException      if a row is already started
+     * @throws PdfException         if a row is already started
      * @throws \LengthException     if cells parameter is empty
      * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
      *
@@ -231,7 +232,7 @@ class PdfTable
     /**
      * Adds the given values to the list of cells.
      *
-     * @throws \LogicException if no current row is started
+     * @throws PdfException if no current row is started
      */
     public function addValues(PdfCell|string|null ...$values): static
     {
@@ -274,12 +275,12 @@ class PdfTable
      *
      * @param bool $endRow true to ending the row after completed
      *
-     * @throws \LogicException if no current row is started
+     * @throws PdfException if no current row is started
      */
     public function completeRow(bool $endRow = true): static
     {
         if (!$this->isRowStarted()) {
-            throw new \LogicException('No row started.');
+            throw new PdfException('No row started.');
         }
         $remaining = $this->getColumnsCount() - $this->getCellsSpan();
         for ($i = 0; $i < $remaining; ++$i) {
@@ -524,7 +525,7 @@ class PdfTable
      * @param ?PdfStyle         $style     the row style to use or null to use the default cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
      *
-     * @throws \LogicException  if a row is already started
+     * @throws PdfException     if a row is already started
      * @throws \LengthException if no column is defined
      *
      * @see PdfTable::add()
@@ -542,7 +543,7 @@ class PdfTable
     /**
      * Starts a new row with the custom header style, if set; with the default header style otherwise.
      *
-     * @throws \LogicException if a row is already started
+     * @throws PdfException if a row is already started
      *
      * @see PdfStyle::getHeaderStyle()
      * @see PdfTable::getHeaderStyle()
@@ -560,7 +561,7 @@ class PdfTable
      *
      * @param ?PdfStyle $style the row style to use or null to use the default cell style
      *
-     * @throws \LogicException if the row is already started
+     * @throws PdfException if the row is already started
      */
     public function startRow(?PdfStyle $style = null): static
     {
@@ -722,12 +723,12 @@ class PdfTable
     /**
      * Check if output row is already started.
      *
-     * @throws \LogicException
+     * @throws PdfException
      */
     private function checkRowStarted(): void
     {
         if ($this->isRowStarted()) {
-            throw new \LogicException('Row already started.');
+            throw new PdfException('Row already started.');
         }
     }
 

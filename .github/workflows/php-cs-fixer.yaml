@@ -16,10 +16,8 @@ jobs:
       - name: Install PHP with extensions
         uses: shivammathur/setup-php@v2
         with:
-          coverage: none
-          extensions: intl
           php-version: '8.2'
-          tools: composer
+          coverage: none
 
       - name: Determine composer cache directory
         id: composer-cache

@@ -112,6 +112,10 @@ class TaskTest extends AbstractEntityValidatorTestCase
         self::assertSame(0, $task->countMargins());
         self::assertCount(1, $task->getItems());
 
+        // not add duplicate
+        $task->addItem($item);
+        self::assertCount(1, $task);
+
         $task->removeItem($item);
         self::assertTrue($task->isEmpty());
         self::assertCount(0, $task);

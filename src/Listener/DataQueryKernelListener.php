@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Handle the kernel controller arguments event to update properties of data query.
  */
-class DataQueryKernelListener
+class DataQueryKernelListener implements SortModeInterface
 {
     use CookieTrait;
 
@@ -58,9 +58,15 @@ class DataQueryKernelListener
         return $this->getCookieInt($request, TableInterface::PARAM_LIMIT, $prefix, $view->getPageSize());
     }
 
+    /**
+     * @psalm-return self::SORT_*
+     */
     private function getOrder(Request $request, string $prefix): string
     {
-        return $this->getCookieString($request, TableInterface::PARAM_ORDER, $prefix, SortModeInterface::SORT_ASC);
+        /** @psalm-var self::SORT_* $order */
+        $order = $this->getCookieString($request, TableInterface::PARAM_ORDER, $prefix, self::SORT_ASC);
+
+        return $order;
     }
 
     private function getPrefix(Request $request): string

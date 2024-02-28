@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
+use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
 
@@ -37,6 +38,23 @@ class TaskItemMarginTest extends AbstractEntityValidatorTestCase
         $margin = $this->getTaskItemMargin(-1, 1, 0);
         $results = $this->validate($margin, 1);
         $this->validatePaths($results, 'minimum');
+    }
+
+    public function testParent(): void
+    {
+        $entity = new TaskItemMargin();
+        self::assertNull($entity->getTaskItem());
+        self::assertNull($entity->getParentEntity());
+
+        $item = new TaskItem();
+        $entity->setTaskItem($item);
+        self::assertSame($item, $entity->getTaskItem());
+        self::assertNull($entity->getParentEntity());
+
+        $task = new Task();
+        $task->addItem($item);
+        self::assertSame($item, $entity->getTaskItem());
+        self::assertSame($task, $entity->getParentEntity());
     }
 
     public function testValid(): void

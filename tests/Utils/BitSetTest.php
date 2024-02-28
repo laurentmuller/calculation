@@ -18,6 +18,18 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(BitSet::class)]
 class BitSetTest extends TestCase
 {
+    public function testApplyLogical(): void
+    {
+        $bs1 = BitSet::fromArray([4, 63]);
+        $bs2 = BitSet::fromArray([4, 63]);
+
+        $bs1->and($bs2);
+        self::assertTrue($bs1->isEqual($bs2));
+
+        $bs1->or($bs2);
+        self::assertTrue($bs1->isEqual($bs2));
+    }
+
     public function testBinary(): void
     {
         $bs = new BitSet();
@@ -322,5 +334,9 @@ class BitSetTest extends TestCase
         self::assertFalse($bs->get(63));
         self::assertTrue($bs->get(4));
         self::assertSame(5, $bs->size());
+
+        $bs = new BitSet();
+        $bs->trim();
+        self::assertFalse($bs->get(0));
     }
 }

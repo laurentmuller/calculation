@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\CalculationState;
-use App\Interfaces\SortModeInterface;
 use App\Traits\ArrayTrait;
 use App\Traits\GroupByTrait;
 use App\Traits\MathTrait;
@@ -82,7 +81,7 @@ class CalculationStateRepository extends AbstractRepository
             ->addSelect('ROUND(SUM(c.overallTotal) - sum(c.itemsTotal), 2) as margin_amount')
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
-            ->orderBy('s.code', SortModeInterface::SORT_ASC);
+            ->orderBy('s.code', self::SORT_ASC);
 
         /** @psalm-var QueryCalculationType[] $result */
         $result = $builder->getQuery()->getArrayResult();
@@ -186,8 +185,8 @@ class CalculationStateRepository extends AbstractRepository
         $codeField = $this->getSortField('code', $alias);
 
         return $this->createQueryBuilder($alias)
-            ->orderBy($editField, SortModeInterface::SORT_ASC)
-            ->addOrderBy($codeField, SortModeInterface::SORT_ASC);
+            ->orderBy($editField, self::SORT_ASC)
+            ->addOrderBy($codeField, self::SORT_ASC);
     }
 
     /**
@@ -200,7 +199,7 @@ class CalculationStateRepository extends AbstractRepository
         $field = $this->getSortField('code', $alias);
 
         return $this->createQueryBuilder($alias)
-            ->orderBy($field, SortModeInterface::SORT_ASC);
+            ->orderBy($field, self::SORT_ASC);
     }
 
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string
@@ -250,8 +249,8 @@ class CalculationStateRepository extends AbstractRepository
             ->addSelect('s.editable')
             ->innerJoin('s.calculations', 'c')
             ->groupBy('s.id')
-            ->orderBy('s.editable', SortModeInterface::SORT_DESC)
-            ->addOrderBy('s.code', SortModeInterface::SORT_ASC);
+            ->orderBy('s.editable', self::SORT_DESC)
+            ->addOrderBy('s.code', self::SORT_ASC);
     }
 
     /**

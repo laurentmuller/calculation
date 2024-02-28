@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\GlobalMargin;
-use App\Interfaces\SortModeInterface;
 use App\Repository\GlobalMarginRepository;
 use App\Utils\FileUtils;
 
@@ -36,7 +35,7 @@ class GlobalMarginTable extends AbstractEntityTable
 
     protected function getDefaultOrder(): array
     {
-        return ['minimum' => SortModeInterface::SORT_ASC];
+        return ['minimum' => self::SORT_ASC];
     }
 
     protected function updateDataQuery(DataQuery $query): void

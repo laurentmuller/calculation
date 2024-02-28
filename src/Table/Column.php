@@ -24,7 +24,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  *
  * @psalm-type EntityType = EntityInterface|array{id: int, ...}
  */
-class Column implements \Stringable
+class Column implements \Stringable, SortModeInterface
 {
     /**
      * The property name of the field formatter.
@@ -78,9 +78,9 @@ class Column implements \Stringable
     /**
      * The sort order.
      *
-     * @psalm-var SortModeInterface::*
+     * @psalm-var self::SORT_*
      */
-    private string $order = SortModeInterface::SORT_ASC;
+    private string $order = self::SORT_ASC;
 
     /**
      * The property path for array object.
@@ -239,7 +239,7 @@ class Column implements \Stringable
     /**
      * Gets the default sorting order.
      *
-     * @psalm-return SortModeInterface::*
+     * @psalm-return self::SORT_*
      */
     public function getOrder(): string
     {
@@ -366,8 +366,8 @@ class Column implements \Stringable
     {
         $order = \strtolower($order);
         $this->order = match ($order) {
-            SortModeInterface::SORT_ASC,
-            SortModeInterface::SORT_DESC => $order,
+            self::SORT_ASC,
+            self::SORT_DESC => $order,
             default => $this->order,
         };
 

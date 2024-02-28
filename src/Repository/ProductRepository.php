@@ -14,7 +14,6 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Product;
-use App\Interfaces\SortModeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -55,7 +54,7 @@ class ProductRepository extends AbstractCategoryItemRepository
      */
     public function findByDescription(): array
     {
-        return $this->findBy([], ['description' => SortModeInterface::SORT_ASC]);
+        return $this->findBy([], ['description' => self::SORT_ASC]);
     }
 
     /**

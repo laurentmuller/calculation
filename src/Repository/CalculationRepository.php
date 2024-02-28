@@ -14,7 +14,6 @@ namespace App\Repository;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
-use App\Interfaces\SortModeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -207,8 +206,8 @@ class CalculationRepository extends AbstractRepository
             ->andWhere('c.date <= :to')
             ->setParameter('from', $from, Types::DATETIME_MUTABLE)
             ->setParameter('to', $to, Types::DATETIME_MUTABLE)
-            ->orderBy('c.date', SortModeInterface::SORT_DESC)
-            ->addOrderBy('c.id', SortModeInterface::SORT_DESC)
+            ->orderBy('c.date', self::SORT_DESC)
+            ->addOrderBy('c.id', self::SORT_DESC)
             ->getQuery()
             ->getResult();
     }
@@ -235,8 +234,8 @@ class CalculationRepository extends AbstractRepository
             ->addSelect('ROUND(SUM(c.overallTotal) / SUM(c.itemsTotal), 4) as margin_percent')
             ->groupBy('year')
             ->addGroupBy('month')
-            ->orderBy('year', SortModeInterface::SORT_DESC)
-            ->addOrderBy('month', SortModeInterface::SORT_DESC)
+            ->orderBy('year', self::SORT_DESC)
+            ->addOrderBy('month', self::SORT_DESC)
             ->setMaxResults($maxResults);
 
         $result = $builder->getQuery()->getArrayResult();
@@ -380,7 +379,7 @@ class CalculationRepository extends AbstractRepository
     public function getItemsBelow(float $minMargin): array
     {
         $builder = $this->createQueryBuilder('c')
-            ->addOrderBy('c.id', SortModeInterface::SORT_DESC);
+            ->addOrderBy('c.id', self::SORT_DESC);
         $builder = self::addBelowFilter($builder, $minMargin);
 
         return $builder->getQuery()->getResult();
@@ -392,9 +391,11 @@ class CalculationRepository extends AbstractRepository
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
+     * @psalm-param self::SORT_* $orderDirection
+     *
      * @psalm-return CalculationItemType[]
      */
-    public function getItemsDuplicate(string $orderColumn = 'id', string $orderDirection = SortModeInterface::SORT_DESC): array
+    public function getItemsDuplicate(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
     {
         $builder = $this->createQueryBuilder('e')
             // calculation
@@ -455,9 +456,11 @@ class CalculationRepository extends AbstractRepository
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
+     * @psalm-param self::SORT_* $orderDirection
+     *
      * @psalm-return CalculationItemType[]
      */
-    public function getItemsEmpty(string $orderColumn = 'id', string $orderDirection = SortModeInterface::SORT_DESC): array
+    public function getItemsEmpty(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
     {
         $builder = $this->createQueryBuilder('e')
             // calculation
@@ -524,9 +527,9 @@ class CalculationRepository extends AbstractRepository
     public function getLastCalculations(int $maxResults, ?UserInterface $user = null): array
     {
         $builder = $this->getTableQueryBuilder();
-        $builder->addOrderBy('e.updatedAt', SortModeInterface::SORT_DESC)
-            ->addOrderBy('e.date', SortModeInterface::SORT_DESC)
-            ->addOrderBy('e.id', SortModeInterface::SORT_DESC)
+        $builder->addOrderBy('e.updatedAt', self::SORT_DESC)
+            ->addOrderBy('e.date', self::SORT_DESC)
+            ->addOrderBy('e.id', self::SORT_DESC)
             ->setMaxResults($maxResults);
         if ($user instanceof UserInterface) {
             $identifier = $user->getUserIdentifier();
@@ -688,7 +691,7 @@ class CalculationRepository extends AbstractRepository
     {
         return $this->createQueryBuilder('c')
             ->orderBy('c.date')
-            ->addOrderBy('c.id', SortModeInterface::SORT_DESC)
+            ->addOrderBy('c.id', self::SORT_DESC)
             ->where('YEAR(c.date) = :year')
             ->setParameter('year', $year, Types::INTEGER);
     }

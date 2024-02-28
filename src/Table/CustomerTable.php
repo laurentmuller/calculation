@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Customer;
-use App\Interfaces\SortModeInterface;
 use App\Repository\CustomerRepository;
 use App\Utils\FileUtils;
 
@@ -36,6 +35,6 @@ class CustomerTable extends AbstractEntityTable
 
     protected function getDefaultOrder(): array
     {
-        return [CustomerRepository::NAME_COMPANY_FIELD => SortModeInterface::SORT_ASC];
+        return [CustomerRepository::NAME_COMPANY_FIELD => self::SORT_ASC];
     }
 }

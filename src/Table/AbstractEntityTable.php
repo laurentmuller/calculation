@@ -118,7 +118,7 @@ abstract class AbstractEntityTable extends AbstractTable
      * @return array<string, string> an array where each key is the field name and the value is the order
      *                               direction ('asc' or 'desc')
      *
-     * @psalm-return array<string, \App\Interfaces\SortModeInterface::*>
+     * @psalm-return array<string, self::SORT_*>
      */
     protected function getDefaultOrder(): array
     {

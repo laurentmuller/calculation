@@ -18,15 +18,15 @@ use App\Interfaces\SortModeInterface;
  * Attribute to define the sort order of an object.
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
-readonly class SortableEntity
+readonly class SortableEntity implements SortModeInterface
 {
     /**
      * @param string $name  the property name
      * @param string $order the sort order
      *
-     * @psalm-param SortModeInterface::* $order
+     * @psalm-param self::SORT_* $order
      */
-    public function __construct(public string $name, public string $order = SortModeInterface::SORT_ASC)
+    public function __construct(public string $name, public string $order = self::SORT_ASC)
     {
     }
 

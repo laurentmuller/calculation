@@ -16,7 +16,6 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
-use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\GroupRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
@@ -123,6 +122,6 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
 
     protected function getDefaultOrder(): array
     {
-        return ['code' => SortModeInterface::SORT_ASC];
+        return ['code' => self::SORT_ASC];
     }
 }

@@ -14,6 +14,7 @@ namespace App\Repository;
 
 use App\Attribute\SortableEntity;
 use App\Interfaces\EntityInterface;
+use App\Interfaces\SortModeInterface;
 use App\Utils\StringUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -28,7 +29,7 @@ use Doctrine\ORM\QueryBuilder;
  *
  * @template-extends ServiceEntityRepository<TEntity>
  */
-abstract class AbstractRepository extends ServiceEntityRepository
+abstract class AbstractRepository extends ServiceEntityRepository implements SortModeInterface
 {
     /**
      * The default entity alias used to create query builder (value = 'e').

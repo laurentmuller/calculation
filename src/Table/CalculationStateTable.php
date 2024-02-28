@@ -14,7 +14,6 @@ namespace App\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
-use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CalculationStateRepository;
 use App\Traits\AuthorizationCheckerAwareTrait;
@@ -93,7 +92,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
 
     protected function getDefaultOrder(): array
     {
-        return ['code' => SortModeInterface::SORT_ASC];
+        return ['code' => self::SORT_ASC];
     }
 
     protected function updateResults(DataQuery $query, DataResults &$results): void

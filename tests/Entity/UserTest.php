@@ -14,6 +14,10 @@ namespace App\Tests\Entity;
 
 use App\Entity\User;
 use App\Entity\UserProperty;
+use PHPUnit\Framework\MockObject\Exception;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Exception\MappingNotFoundException;
+use Vich\UploaderBundle\Storage\StorageInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(User::class)]
 class UserTest extends AbstractEntityValidatorTestCase
@@ -31,6 +35,9 @@ class UserTest extends AbstractEntityValidatorTestCase
     {
         $user = new User();
 
+        $actual = $user->getAvatar(0);
+        self::assertSame('https://robohash.org/', $actual);
+
         $actual = $user->getAvatar();
         self::assertSame('https://robohash.org/?size=32x32', $actual);
 
@@ -45,6 +52,10 @@ class UserTest extends AbstractEntityValidatorTestCase
 
         $actual = $user->getAvatar(32, 2, 2);
         self::assertSame('https://robohash.org/?size=32x32&set=set2&bgset=bg2', $actual);
+
+        $user->setUsername('user');
+        $actual = $user->getAvatar(0);
+        self::assertSame('https://robohash.org/user', $actual);
     }
 
     public function testContainsProperty(): void
@@ -147,6 +158,43 @@ class UserTest extends AbstractEntityValidatorTestCase
         self::assertFalse($user->isEnabled());
     }
 
+    public function testImageFile(): void
+    {
+        $user = new User();
+        $user->setImageFile();
+        self::assertNull($user->getImageFile());
+
+        $file = new File(__FILE__, false);
+        $user->setImageFile($file);
+        self::assertSame($file, $user->getImageFile());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testImagePath(): void
+    {
+        $user = new User();
+        $storage = $this->createMock(StorageInterface::class);
+        $storage->method('resolvePath')
+            ->willReturn(null);
+        self::assertNull($user->getImagePath($storage));
+
+        $user->setImageName('file');
+        self::assertNull($user->getImagePath($storage));
+
+        $storage = $this->createMock(StorageInterface::class);
+        $storage->method('resolvePath')
+            ->willThrowException(new MappingNotFoundException());
+        self::assertNull($user->getImagePath($storage));
+
+        $file = __FILE__;
+        $storage = $this->createMock(StorageInterface::class);
+        $storage->method('resolvePath')
+            ->willReturn($file);
+        self::assertSame($file, $user->getImagePath($storage));
+    }
+
     public function testInvalidAll(): void
     {
         $user = new User();
@@ -183,6 +231,22 @@ class UserTest extends AbstractEntityValidatorTestCase
         $this->validatePaths($results, 'username');
     }
 
+    public function testIsExpired(): void
+    {
+        $user = new User();
+        self::assertTrue($user->isExpired());
+
+        $expiresAt = new \DateTime();
+        $expiresAt = $expiresAt->sub(new \DateInterval('P7D'));
+        $user->setResetPasswordRequest($expiresAt, '', '');
+        self::assertTrue($user->isExpired());
+
+        $expiresAt = new \DateTime();
+        $expiresAt = $expiresAt->add(new \DateInterval('P7D'));
+        $user->setResetPasswordRequest($expiresAt, '', '');
+        self::assertFalse($user->isExpired());
+    }
+
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -208,6 +272,8 @@ class UserTest extends AbstractEntityValidatorTestCase
     public function testPasswordRequest(): void
     {
         $user = new User();
+        $user->eraseCredentials();
+
         $expiresAt = new \DateTime();
         $selector = 'selector';
         $hashedToken = 'hashedToken';

@@ -21,6 +21,24 @@ use App\Entity\TaskItemMargin;
 #[\PHPUnit\Framework\Attributes\CoversClass(TaskItem::class)]
 class TaskItemTest extends AbstractEntityValidatorTestCase
 {
+    use IdTrait;
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testClone(): void
+    {
+        $item = new TaskItem();
+        $margin = $this->createMargin(0);
+        $this->setId($margin, 1);
+        $item->addMargin($margin);
+
+        $clone = clone $item;
+        foreach ($clone->getMargins() as $currentMargin) {
+            self::assertNull($currentMargin->getId());
+        }
+    }
+
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -64,6 +82,17 @@ class TaskItemTest extends AbstractEntityValidatorTestCase
         self::assertEqualsWithDelta(0, $item->findValue(100), 0.01);
     }
 
+    public function testNameAndDisplay(): void
+    {
+        $item = new TaskItem();
+        self::assertNull($item->getName());
+        self::assertSame('', $item->getDisplay());
+
+        $item->setName('name');
+        self::assertSame('name', $item->getName());
+        self::assertSame('name', $item->getDisplay());
+    }
+
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
@@ -87,6 +116,29 @@ class TaskItemTest extends AbstractEntityValidatorTestCase
             $this->deleteEntity($category);
             $this->deleteEntity($group);
         }
+    }
+
+    public function testTaskMargin(): void
+    {
+        $item = new TaskItem();
+        self::assertCount(0, $item);
+        self::assertCount(0, $item->getMargins());
+        self::assertTrue($item->isEmpty());
+
+        $margin = $this->createMargin(0);
+        $item->addMargin($margin);
+        self::assertCount(1, $item);
+        self::assertCount(1, $item->getMargins());
+        self::assertFalse($item->isEmpty());
+
+        // not add duplicate
+        $item->addMargin($margin);
+        self::assertCount(1, $item);
+
+        $item->removeMargin($margin);
+        self::assertCount(0, $item);
+        self::assertCount(0, $item->getMargins());
+        self::assertTrue($item->isEmpty());
     }
 
     public function testValid(): void

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Table;
 
-use App\Interfaces\SortModeInterface;
 use App\Traits\DuplicateItemsTrait;
 
 /**
@@ -40,7 +39,12 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
         return 0 === $this->count() ? 'duplicate.empty' : null;
     }
 
-    protected function getEntities(string $orderColumn = 'id', string $orderDirection = SortModeInterface::SORT_DESC): array
+    /**
+     * @psalm-param self::SORT_* $orderDirection
+     *
+     * @psalm-return CalculationItemType[]
+     */
+    protected function getEntities(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array
     {
         return $this->repository->getItemsDuplicate($orderColumn, $orderDirection);
     }

@@ -44,6 +44,16 @@ class GroupMarginsTest extends AbstractEntityValidatorTestCase
         $this->validatePaths($results, 'margins[1].minimum');
     }
 
+    public function testParent(): void
+    {
+        $margin = new GroupMargin();
+        self::assertNull($margin->getParentEntity());
+
+        $group = new Group();
+        $group->addMargin($margin);
+        self::assertSame($group, $margin->getParentEntity());
+    }
+
     public function testValid(): void
     {
         $group = $this->createGroup();

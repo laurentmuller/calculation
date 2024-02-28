@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Contains the data query parameters.
  */
-class DataQuery
+class DataQuery implements SortModeInterface
 {
     public function __construct(
         /** The callback state (XMLHttpRequest). */
@@ -42,9 +42,13 @@ class DataQuery
         /** The sorted field. */
         #[Assert\NotNull]
         public string $sort = '',
-        /** The sort order ('asc' or 'desc'). */
-        #[Assert\Choice([SortModeInterface::SORT_ASC, SortModeInterface::SORT_DESC])]
-        public string $order = SortModeInterface::SORT_ASC,
+        /**
+         * The sort order ('asc' or 'desc').
+         *
+         * @psalm-var self::SORT_*
+         */
+        #[Assert\Choice([self::SORT_ASC, self::SORT_DESC])]
+        public string $order = self::SORT_ASC,
         /** The cookie prefix */
         #[Assert\NotNull]
         public string $prefix = '',

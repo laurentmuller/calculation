@@ -16,7 +16,6 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
-use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
@@ -124,7 +123,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
 
     protected function getDefaultOrder(): array
     {
-        return ['code' => SortModeInterface::SORT_ASC];
+        return ['code' => self::SORT_ASC];
     }
 
     protected function updateResults(DataQuery $query, DataResults &$results): void

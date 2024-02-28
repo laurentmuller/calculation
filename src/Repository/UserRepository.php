@@ -14,7 +14,6 @@ namespace App\Repository;
 
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
-use App\Interfaces\SortModeInterface;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
@@ -118,7 +117,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         $field = $this->getSortField('username', $alias);
 
         return $this->createQueryBuilder($alias)
-            ->orderBy($field, SortModeInterface::SORT_ASC);
+            ->orderBy($field, self::SORT_ASC);
     }
 
     public function getSortField(string $field, string $alias = self::DEFAULT_ALIAS): string

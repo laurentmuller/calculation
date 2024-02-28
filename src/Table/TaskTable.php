@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Task;
-use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
@@ -48,7 +47,7 @@ class TaskTable extends AbstractCategoryItemTable
 
     protected function getDefaultOrder(): array
     {
-        return ['name' => SortModeInterface::SORT_ASC];
+        return ['name' => self::SORT_ASC];
     }
 
     protected function getDropDownValues(): array

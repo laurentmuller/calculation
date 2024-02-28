@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Customer;
-use App\Interfaces\SortModeInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -58,7 +57,7 @@ class CustomerRepository extends AbstractRepository
         $fields = $this->concat(self::DEFAULT_ALIAS, self::NAME_COMPANY_FIELDS, 'ZZZ');
 
         return $this->createQueryBuilder(self::DEFAULT_ALIAS)
-            ->orderBy($fields, SortModeInterface::SORT_ASC)
+            ->orderBy($fields, self::SORT_ASC)
             ->getQuery()
             ->getResult();
     }

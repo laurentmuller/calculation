@@ -15,10 +15,14 @@ namespace App\Tests\Entity;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
+use App\Entity\Product;
+use App\Entity\Task;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Group::class)]
 class GroupTest extends AbstractEntityValidatorTestCase
 {
+    use IdTrait;
+
     public function testCategory(): void
     {
         $group = new Group();
@@ -39,6 +43,89 @@ class GroupTest extends AbstractEntityValidatorTestCase
     }
 
     /**
+     * @throws \ReflectionException
+     */
+    public function testClone(): void
+    {
+        $group = new Group();
+        $margin = $this->createMargin();
+        $this->setId($margin, 10);
+        $group->addMargin($margin);
+
+        $clone = clone $group;
+        foreach ($clone->getMargins() as $currentMargin) {
+            self::assertNull($currentMargin->getId());
+        }
+
+        $clone = $group->clone();
+        self::assertNull($clone->getCode());
+
+        $clone = $group->clone('new-code');
+        self::assertSame('new-code', $clone->getCode());
+    }
+
+    public function testCount(): void
+    {
+        $group = new Group();
+        self::assertSame(0, $group->countCategories());
+        self::assertSame(0, $group->countItems());
+        self::assertSame(0, $group->countMargins());
+        self::assertSame(0, $group->countProducts());
+        self::assertSame(0, $group->countTasks());
+
+        self::assertFalse($group->hasCategories());
+        self::assertFalse($group->hasMargins());
+        self::assertFalse($group->hasProducts());
+        self::assertFalse($group->hasTasks());
+
+        $group->addMargin(new GroupMargin());
+        self::assertSame(0, $group->countCategories());
+        self::assertSame(0, $group->countItems());
+        self::assertSame(1, $group->countMargins());
+        self::assertSame(0, $group->countProducts());
+        self::assertSame(0, $group->countTasks());
+
+        self::assertFalse($group->hasCategories());
+        self::assertTrue($group->hasMargins());
+        self::assertFalse($group->hasProducts());
+        self::assertFalse($group->hasTasks());
+
+        $category = new Category();
+        $group->addCategory($category);
+        self::assertSame(0, $group->countItems());
+        self::assertSame(1, $group->countMargins());
+        self::assertSame(0, $group->countProducts());
+        self::assertSame(0, $group->countTasks());
+
+        self::assertTrue($group->hasCategories());
+        self::assertTrue($group->hasMargins());
+        self::assertFalse($group->hasProducts());
+        self::assertFalse($group->hasTasks());
+
+        $category->addProduct(new Product());
+        self::assertSame(1, $group->countItems());
+        self::assertSame(1, $group->countMargins());
+        self::assertSame(1, $group->countProducts());
+        self::assertSame(0, $group->countTasks());
+
+        self::assertTrue($group->hasCategories());
+        self::assertTrue($group->hasMargins());
+        self::assertTrue($group->hasProducts());
+        self::assertFalse($group->hasTasks());
+
+        $category->addTask(new Task());
+        self::assertSame(2, $group->countItems());
+        self::assertSame(1, $group->countMargins());
+        self::assertSame(1, $group->countProducts());
+        self::assertSame(1, $group->countTasks());
+
+        self::assertTrue($group->hasCategories());
+        self::assertTrue($group->hasMargins());
+        self::assertTrue($group->hasProducts());
+        self::assertTrue($group->hasTasks());
+    }
+
+    /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     public function testDuplicate(): void
@@ -55,6 +142,14 @@ class GroupTest extends AbstractEntityValidatorTestCase
         } finally {
             $this->deleteEntity($first);
         }
+    }
+
+    public function testFields(): void
+    {
+        $group = new Group();
+        self::assertNull($group->getDescription());
+        $group->setDescription('description');
+        self::assertSame('description', $group->getDescription());
     }
 
     public function testFindMargin(): void

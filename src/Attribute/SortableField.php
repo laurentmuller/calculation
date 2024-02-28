@@ -18,14 +18,14 @@ use App\Interfaces\SortModeInterface;
  * Attribute to define the sort order of a property.
  */
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
-readonly class SortableField
+readonly class SortableField implements SortModeInterface
 {
     /**
      * @param string $order the field order
      *
-     * @psalm-param SortModeInterface::* $order
+     * @psalm-param self::SORT_* $order
      */
-    public function __construct(public string $order = SortModeInterface::SORT_ASC)
+    public function __construct(public string $order = self::SORT_ASC)
     {
     }
 

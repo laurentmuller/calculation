@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Table;
 
-use App\Interfaces\SortModeInterface;
 use App\Repository\CalculationRepository;
 use App\Utils\FileUtils;
 
@@ -59,7 +58,7 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
 
     protected function getDefaultOrder(): array
     {
-        return ['id' => SortModeInterface::SORT_DESC];
+        return ['id' => self::SORT_DESC];
     }
 
     /**
@@ -68,9 +67,11 @@ abstract class AbstractCalculationItemsTable extends AbstractTable implements \C
      * @param string $orderColumn    the order column
      * @param string $orderDirection the order direction ('ASC' or 'DESC')
      *
+     * @psalm-param self::SORT_* $orderDirection
+     *
      * @psalm-return CalculationItemType[]
      */
-    abstract protected function getEntities(string $orderColumn = 'id', string $orderDirection = SortModeInterface::SORT_DESC): array;
+    abstract protected function getEntities(string $orderColumn = 'id', string $orderDirection = self::SORT_DESC): array;
 
     /**
      * Compute the number of calculation items.

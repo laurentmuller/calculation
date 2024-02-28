@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Log;
-use App\Interfaces\SortModeInterface;
 use App\Model\LogFile;
 use App\Service\LogService;
 use App\Utils\FileUtils;
@@ -153,7 +152,7 @@ class LogTable extends AbstractTable implements \Countable
     private function sort(DataQuery $query, array &$entities): void
     {
         $sort = $query->sort;
-        $ascending = SortModeInterface::SORT_ASC === $query->order;
+        $ascending = self::SORT_ASC === $query->order;
         if ('' !== $sort && !LogSorter::isDefaultSort($sort, $ascending)) {
             $sorter = new LogSorter($sort, $ascending);
             $sorter->sort($entities);

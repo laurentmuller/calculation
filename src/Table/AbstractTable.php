@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Interfaces\EntityInterface;
+use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Utils\FormatUtils;
 
@@ -21,7 +22,7 @@ use App\Utils\FormatUtils;
  *
  * @psalm-import-type EntityType from Column
  */
-abstract class AbstractTable
+abstract class AbstractTable implements SortModeInterface
 {
     /**
      * The column definitions.

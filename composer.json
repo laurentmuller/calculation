@@ -175,6 +175,7 @@
             "@php bin/console doctrine:schema:validate",
             "@composer validate --strict"
         ],
+        "app-fixer-fix": "vendor/bin/php-cs-fixer fix --diff",
         "app-fixer": "vendor/bin/php-cs-fixer fix --diff --dry-run",
         "app-psalm": "vendor/bin/psalm --config psalm.xml",
         "app-stan": "vendor/bin/phpstan analyse --configuration phpstan.neon --memory-limit 2G",

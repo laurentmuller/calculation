@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Utils;
 
+use App\Enums\ImageExtension;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\TestCase;
 
@@ -93,6 +94,27 @@ class FileUtilsTest extends TestCase
         $old_name = 'test.jpeg';
         $new_name = FileUtils::changeExtension($old_name, 'png');
         self::assertSame('test.png', $new_name);
+
+        $new_name = FileUtils::changeExtension($old_name, ImageExtension::BMP);
+        self::assertSame('test.bmp', $new_name);
+    }
+
+    public function testDecodeJson(): void
+    {
+        $actual = FileUtils::decodeJson($this->getJsonFile());
+        self::assertCount(10, $actual);
+
+        self::expectException(\InvalidArgumentException::class);
+        FileUtils::decodeJson($this->getFakeFile());
+        self::fail('An invalid argument exception must be raised.');
+    }
+
+    public function testDumFile(): void
+    {
+        $file = FileUtils::tempFile();
+        self::assertIsString($file);
+        $actual = FileUtils::dumpFile($file, 'My Content');
+        self::assertTrue($actual);
     }
 
     public function testExist(): void
@@ -115,8 +137,15 @@ class FileUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testIsDir(): void
+    {
+        self::assertTrue(FileUtils::isDir(__DIR__));
+        self::assertFalse(FileUtils::isDir(__FILE__));
+    }
+
     public function testIsFile(): void
     {
+        self::assertFalse(FileUtils::isFile(__DIR__));
         self::assertTrue(FileUtils::isFile(__FILE__));
     }
 
@@ -131,6 +160,24 @@ class FileUtilsTest extends TestCase
         self::assertSame(6, FileUtils::getLinesCount($lines, false));
     }
 
+    public function testMakePathRelative(): void
+    {
+        $actual = FileUtils::makePathRelative('/tmp/videos', '/tmp');
+        self::assertSame('videos/', $actual);
+    }
+
+    public function testNormalize(): void
+    {
+        $actual = FileUtils::normalize('C:\\Temp\\');
+        self::assertSame('C:/Temp/', $actual);
+    }
+
+    public function testNormalizeDirectory(): void
+    {
+        $actual = FileUtils::normalizeDirectory('C:\\Temp');
+        self::assertSame('C:' . \DIRECTORY_SEPARATOR . 'Temp', $actual);
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getRealPath')]
     public function testRealPath(string|\SplFileInfo $file, string $expected): void
     {
@@ -138,9 +185,76 @@ class FileUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testRemove(): void
+    {
+        $file = FileUtils::tempFile();
+        self::assertIsString($file);
+        $actual = FileUtils::remove($file);
+        self::assertTrue($actual);
+
+        $file = $this->getFakeFile();
+        $actual = FileUtils::remove($file);
+        self::assertFalse($actual);
+    }
+
+    public function testRename(): void
+    {
+        $file = FileUtils::tempFile();
+        self::assertIsString($file);
+        $actual = FileUtils::rename($file, $file);
+        self::assertFalse($actual);
+
+        $target = FileUtils::changeExtension($file, 'png');
+        $actual = FileUtils::rename($file, $target);
+        FileUtils::remove($target);
+        self::assertTrue($actual);
+    }
+
+    public function testSize(): void
+    {
+        $file = $this->getFakeFile();
+        $actual = FileUtils::size($file);
+        self::assertSame(0, $actual);
+
+        $file = self::getEmptyFile();
+        $actual = FileUtils::size($file);
+        self::assertSame(0, $actual);
+
+        $file = __FILE__;
+        $actual = FileUtils::size($file);
+        $expected = \filesize($file);
+        self::assertSame($expected, $actual);
+
+        $file = __DIR__;
+        $actual = FileUtils::size($file);
+        self::assertGreaterThan(0, $actual);
+    }
+
+    public function testTempDir(): void
+    {
+        $dir = FileUtils::tempDir(__DIR__);
+        self::assertNotNull($dir);
+    }
+
+    public function testTempFile(): void
+    {
+        $dir = FileUtils::tempFile(__DIR__);
+        self::assertNotNull($dir);
+    }
+
     private static function getEmptyFile(): string
     {
         return __DIR__ . '/../Data/empty.txt';
+    }
+
+    private function getFakeFile(): string
+    {
+        return __DIR__ . '/fake.txt';
+    }
+
+    private function getJsonFile(): string
+    {
+        return __DIR__ . '/../Data/city.list.json';
     }
 
     private static function getLinesFile(): string

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Utils;
 
+use App\Model\LogFile;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\TestCase;
 
@@ -86,6 +87,8 @@ class FormatUtilsTest extends TestCase
         yield [$date, 'dimanche, 20 février 2022', \IntlDateFormatter::FULL];
         yield [null, null];
         yield [self::TIME_STAMP, '20.02.2022'];
+
+        yield [self::TIME_STAMP, 'Février', null, 'MMMM'];
     }
 
     /**
@@ -115,8 +118,18 @@ class FormatUtilsTest extends TestCase
         yield [$date, 'dimanche, 20 février 2022', \IntlDateFormatter::FULL, \IntlDateFormatter::NONE];
         yield [$date, 'dimanche, 20 février 2022 à 12:59', \IntlDateFormatter::FULL, \IntlDateFormatter::SHORT];
         yield [$date, 'dimanche, 20 février 2022 à 12:59:59', \IntlDateFormatter::FULL, \IntlDateFormatter::MEDIUM];
-        yield [$date, 'dimanche, 20 février 2022 à 12:59:59 UTC+1', \IntlDateFormatter::FULL, \IntlDateFormatter::LONG];
-        yield [$date, 'dimanche, 20 février 2022 à 12.59:59 h heure normale d’Europe centrale', \IntlDateFormatter::FULL, \IntlDateFormatter::FULL];
+        yield [
+            $date,
+            'dimanche, 20 février 2022 à 12:59:59 UTC+1',
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::LONG,
+        ];
+        yield [
+            $date,
+            'dimanche, 20 février 2022 à 12.59:59 h heure normale d’Europe centrale',
+            \IntlDateFormatter::FULL,
+            \IntlDateFormatter::FULL,
+        ];
 
         yield [null, null];
         yield [self::TIME_STAMP, '20.02.2022 12:59'];
@@ -171,6 +184,9 @@ class FormatUtilsTest extends TestCase
         yield [null, '0'];
         yield [1000, "1'000"];
         yield [-1000, "-1'000"];
+
+        yield [[1, 2, 3], '3'];
+        yield [new LogFile(''), '0'];
     }
 
     public static function getPercents(): \Iterator
@@ -218,8 +234,12 @@ class FormatUtilsTest extends TestCase
      * @psalm-param int<-1,3>|null $timeType
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getDateFormatterPatterns')]
-    public function testDateFormatterPattern(string $pattern, string $expected, ?int $dateType = null, ?int $timeType = null): void
-    {
+    public function testDateFormatterPattern(
+        string $pattern,
+        string $expected,
+        ?int $dateType = null,
+        ?int $timeType = null
+    ): void {
         $actual = FormatUtils::getDateFormatter($dateType, $timeType, $pattern, self::TIME_ZONE);
         self::assertSame($expected, $actual->getPattern());
     }
@@ -250,9 +270,13 @@ class FormatUtilsTest extends TestCase
      * @psalm-param int<-1,3>|null $dateType
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getDates')]
-    public function testFormatDate(\DateTimeInterface|int|null $date, string|null $expected, ?int $dateType = null): void
-    {
-        $actual = FormatUtils::formatDate($date, $dateType, timezone: self::TIME_ZONE);
+    public function testFormatDate(
+        \DateTimeInterface|int|null $date,
+        string|null $expected,
+        ?int $dateType = null,
+        ?string $pattern = null
+    ): void {
+        $actual = FormatUtils::formatDate($date, $dateType, $pattern, self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 
@@ -261,9 +285,14 @@ class FormatUtilsTest extends TestCase
      * @psalm-param int<-1,3>|null $timeType
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getDateTimes')]
-    public function testFormatDateTime(\DateTimeInterface|int|null $date, string|null $expected, ?int $dateType = null, ?int $timeType = null): void
-    {
-        $actual = FormatUtils::formatDateTime($date, $dateType, $timeType, timezone: self::TIME_ZONE);
+    public function testFormatDateTime(
+        \DateTimeInterface|int|null $date,
+        string|null $expected,
+        ?int $dateType = null,
+        ?int $timeType = null,
+        ?string $pattern = null
+    ): void {
+        $actual = FormatUtils::formatDateTime($date, $dateType, $timeType, $pattern, self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 
@@ -275,7 +304,7 @@ class FormatUtilsTest extends TestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getIntegers')]
-    public function testFormatInteger(int|float|string|null $number, string $expected): void
+    public function testFormatInteger(\Countable|array|int|float|string|null $number, string $expected): void
     {
         $actual = FormatUtils::formatInt($number);
         self::assertSame($expected, $actual);
@@ -285,8 +314,13 @@ class FormatUtilsTest extends TestCase
      * @psalm-param \NumberFormatter::ROUND_* $roundingMode
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getPercents')]
-    public function testFormatPercent(int|float|string|null $number, string $expected, bool $includeSign = true, int $decimals = 0, int $roundingMode = \NumberFormatter::ROUND_DOWN): void
-    {
+    public function testFormatPercent(
+        int|float|string|null $number,
+        string $expected,
+        bool $includeSign = true,
+        int $decimals = 0,
+        int $roundingMode = \NumberFormatter::ROUND_DOWN
+    ): void {
         $actual = FormatUtils::formatPercent($number, $includeSign, $decimals, $roundingMode);
         self::assertSame($expected, $actual);
 
@@ -301,9 +335,13 @@ class FormatUtilsTest extends TestCase
      * @psalm-param int<-1,3>|null $timeType
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTimes')]
-    public function testFormatTime(\DateTimeInterface|int|null $date, string|null $expected, ?int $timeType = null): void
-    {
-        $actual = FormatUtils::formatTime(date: $date, timeType: $timeType, timezone: self::TIME_ZONE);
+    public function testFormatTime(
+        \DateTimeInterface|int|null $date,
+        string|null $expected,
+        ?int $timeType = null,
+        ?string $pattern = null
+    ): void {
+        $actual = FormatUtils::formatTime($date, $timeType, $pattern, self::TIME_ZONE);
         self::assertSame($expected, $actual);
     }
 

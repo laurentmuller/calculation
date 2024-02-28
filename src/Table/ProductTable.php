@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Table;
 
 use App\Entity\Product;
-use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\GroupRepository;
@@ -48,7 +47,7 @@ class ProductTable extends AbstractCategoryItemTable
 
     protected function getDefaultOrder(): array
     {
-        return ['description' => SortModeInterface::SORT_ASC];
+        return ['description' => self::SORT_ASC];
     }
 
     protected function getDropDownValues(): array

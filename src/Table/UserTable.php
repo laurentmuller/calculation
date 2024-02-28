@@ -14,7 +14,6 @@ namespace App\Table;
 
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
-use App\Interfaces\SortModeInterface;
 use App\Repository\AbstractRepository;
 use App\Repository\UserRepository;
 use App\Traits\RoleTranslatorTrait;
@@ -124,7 +123,7 @@ class UserTable extends AbstractEntityTable
 
     protected function getDefaultOrder(): array
     {
-        return ['username' => SortModeInterface::SORT_ASC];
+        return ['username' => self::SORT_ASC];
     }
 
     protected function updateResults(DataQuery $query, DataResults &$results): void

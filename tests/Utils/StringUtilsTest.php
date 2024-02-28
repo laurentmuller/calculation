@@ -215,6 +215,12 @@ class StringUtilsTest extends TestCase
         self::assertSame("\n", StringUtils::NEW_LINE);
     }
 
+    public function testSlug(): void
+    {
+        $actual = StringUtils::slug('Wôrķšƥáçè ~~sèťtïñğš~~');
+        self::assertSame('Workspace-settings', $actual);
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getStartWith')]
     public function testStartWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {

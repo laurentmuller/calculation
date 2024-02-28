@@ -27,11 +27,6 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 
 ## Actions
 
-[![PHP-CS-Fixer](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-cs-fixer.yaml)
+[![Continuous Integration](https://github.com/laurentmuller/calculation/actions/workflows/ci.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/ci.yaml)
 [![Lint](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml)
-[![PHP-Stan](https://github.com/laurentmuller/calculation/actions/workflows/php-stan.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-stan.yaml)
-[![PHPUnit](https://github.com/laurentmuller/calculation/actions/workflows/php-unit.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/php-unit.yaml)
-[![Rector](https://github.com/laurentmuller/calculation/actions/workflows/rector.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/rector.yaml)
-[![Psalm](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/psalm.yaml)
-[![Twigcs](https://github.com/laurentmuller/calculation/actions/workflows/twigcs.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/twigcs.yaml)
 [![StyleCI](https://github.styleci.io/repos/229945132/shield?branch=master)](https://github.styleci.io/repos/229945132?branch=master)

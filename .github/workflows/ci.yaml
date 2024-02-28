@@ -58,28 +58,25 @@ jobs:
                     slug: laurentmuller/calculation
                     files: ./clover.xml
 
+            -   name: Download Symfony CLI
+                run: wget https://get.symfony.com/cli/installer -O - | bash
+
             -   name: Lint YAML
-                if: always() && steps.install.outcome == 'success'
                 run: php bin/console lint:yaml translations .github/workflows --parse-tags
 
             -   name: Lint Twig
-                if: always() && steps.install.outcome == 'success'
                 run: php bin/console lint:twig templates
 
             -   name: Lint Container
-                if: always() && steps.install.outcome == 'success'
                 run: php bin/console lint:container
 
             -   name: Lint Markdown
-                if: always() && steps.install.outcome == 'success'
                 uses: DavidAnson/markdownlint-cli2-action@v15
                 with:
                     globs: '*.md'
 
             -   name: Schema validate
-                if: always() && steps.install.outcome == 'success'
                 run: php bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
 
             -   name: Composer validate
-                if: always() && steps.install.outcome == 'success'
                 run: composer validate --strict

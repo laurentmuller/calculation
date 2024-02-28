@@ -34,21 +34,16 @@ jobs:
                 run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
             -   name: Run PHP CS Fixer
-                if: always() && steps.install.outcome == 'success'
                 run: vendor/bin/php-cs-fixer fix --diff --dry-run --verbose
 
             -   name: Run PHPStan
-                if: always() && steps.install.outcome == 'success'
                 run: vendor/bin/phpstan analyze --no-progress
 
             -   name: Run Psalm
-                if: always() && steps.install.outcome == 'success'
                 run: vendor/bin/psalm --config=psalm.xml
 
             -   name: Run Rector
-                if: always() && steps.install.outcome == 'success'
                 run: vendor/bin/rector process --dry-run
 
             -   name: Run Twigcs
-                if: always() && steps.install.outcome == 'success'
                 run: vendor/bin/twigcs --config .twig_cs.dist.php

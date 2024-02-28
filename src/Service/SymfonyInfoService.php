@@ -68,6 +68,8 @@ final class SymfonyInfoService
     private const KEY_DEBUG = 'debug';
     // the array key for runtime packages and routes
     private const KEY_RUNTIME = 'runtime';
+    // the pattern to search license file
+    private const LICENSE_PATTERN = '/license(\.txt|\.md)?$/i';
     // the JSON file containing composer information
     private const PACKAGE_FILE_NAME = '/vendor/composer/installed.json';
     // the release information URL
@@ -470,15 +472,14 @@ final class SymfonyInfoService
      */
     private function getLicense(array $package): ?string
     {
-        $pattern = '/LICENSE(\.txt|\.md)?$/i';
         $dir = FileUtils::buildPath(
             $this->projectDir,
             'vendor/composer',
             $package['install-path']
         );
         $finder = new Finder();
-        $finder->files()->in($dir)
-            ->name($pattern);
+        $finder->in($dir)->depth(0)->files()
+            ->name(self::LICENSE_PATTERN);
         foreach ($finder as $file) {
             return FileUtils::makePathRelative($file->getRealPath(), $this->projectDir);
         }

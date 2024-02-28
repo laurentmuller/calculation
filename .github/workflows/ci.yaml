@@ -17,7 +17,7 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: '8.2'
-                    coverage: none
+                    coverage: xdebug
 
             -   name: Determine composer cache directory
                 id: composer-cache
@@ -34,16 +34,26 @@ jobs:
                 run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
             -   name: Run PHP CS Fixer
-                run: vendor/bin/php-cs-fixer fix --diff --dry-run --verbose
+                run: vendor/bin/php-cs-fixer fix --diff --dry-run
 
             -   name: Run PHPStan
                 run: vendor/bin/phpstan analyze --no-progress
 
             -   name: Run Psalm
-                run: vendor/bin/psalm --config=psalm.xml
+                run: vendor/bin/psalm --config=psalm.xml --no-progress
 
             -   name: Run Rector
-                run: vendor/bin/rector process --dry-run
+                run: vendor/bin/rector process --dry-run --no-progress-bar
 
             -   name: Run Twigcs
                 run: vendor/bin/twigcs --config .twig_cs.dist.php
+
+            -   name: Run PHPUnit and collect coverage
+                run: vendor/bin/phpunit --no-progress --coverage-clover ./clover.xml
+
+            -   name: Upload coverage to Codecov
+                uses: codecov/codecov-action@v4.0.1
+                with:
+                    token: '60f14338-70bc-4144-9a64-de624687906b'
+                    slug: laurentmuller/calculation
+                    files: ./clover.xml

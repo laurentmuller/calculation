@@ -14,13 +14,15 @@ namespace App\Tests\Enums;
 
 use App\Enums\EntityAction;
 use App\Interfaces\PropertyServiceInterface;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityAction::class)]
 class EntityActionTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public static function getDefault(): \Iterator
     {
         yield [EntityAction::getDefault(), EntityAction::EDIT];
@@ -99,17 +101,5 @@ class EntityActionTest extends TestCase
             'none',
         ];
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 }

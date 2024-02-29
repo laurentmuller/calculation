@@ -13,15 +13,20 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Enums\StrengthLevel;
+use App\Tests\TranslatorMockTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
+use App\Validator\Strength;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Context\ExecutionContext;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(StrengthLevelTranslatorTrait::class)]
 class StrengthLevelTranslatorTraitTest extends TestCase
 {
     use StrengthLevelTranslatorTrait;
+    use TranslatorMockTrait;
 
     private ?TranslatorInterface $translator = null;
 
@@ -51,6 +56,36 @@ class StrengthLevelTranslatorTraitTest extends TestCase
 
     /**
      * @throws Exception
+     *
+     * @psalm-suppress InternalClass
+     * @psalm-suppress InternalMethod
+     */
+    public function testAddStrengthLevelViolation(): void
+    {
+        $validator = $this->createMock(ValidatorInterface::class);
+        $root = new \stdClass();
+        $translator = $this->getTranslator();
+        $context = new ExecutionContext($validator, $root, $translator);
+        $constraint = new Strength();
+        $minimum = StrengthLevel::MEDIUM;
+        $score = StrengthLevel::VERY_WEAK;
+        $this->addStrengthLevelViolation(
+            $context,
+            $constraint,
+            $minimum,
+            $score
+        );
+        self::assertCount(1, $context->getViolations());
+    }
+
+    public function testTranslateInvalidLevel(): void
+    {
+        $actual = $this->translateInvalidLevel(-10);
+        self::assertStringContainsString('password.strength_invalid', $actual);
+    }
+
+    /**
+     * @throws Exception
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTranslateLevels')]
     public function testTranslateLevel(int $value, string $message): void
@@ -62,15 +97,9 @@ class StrengthLevelTranslatorTraitTest extends TestCase
         self::assertSame($actual, $expected);
     }
 
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(string $message = ''): TranslatorInterface
+    public function testTranslateScore(): void
     {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturn($message);
-
-        return $translator;
+        $actual = $this->translateScore(StrengthLevel::VERY_STRONG, StrengthLevel::VERY_WEAK);
+        self::assertStringContainsString('password.strength_level', $actual);
     }
 }

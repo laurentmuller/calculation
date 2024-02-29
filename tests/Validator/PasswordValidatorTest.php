@@ -58,6 +58,13 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         yield ['123@', ['special_char' => true]];
     }
 
+    public function testAll(): void
+    {
+        $constraint = $this->createPassword(['all' => true]);
+        $this->validator->validate('zTp9F??TvRcG?+Z', $constraint);
+        self::assertNoViolation();
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('getConstraints')]
     public function testEmptyIsValid(string $constraint): void
     {

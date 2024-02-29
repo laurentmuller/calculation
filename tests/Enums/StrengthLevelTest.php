@@ -14,13 +14,15 @@ namespace App\Tests\Enums;
 
 use App\Enums\StrengthLevel;
 use App\Interfaces\PropertyServiceInterface;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(StrengthLevel::class)]
 class StrengthLevelTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public static function getDefault(): \Iterator
     {
         yield [StrengthLevel::getDefault(), StrengthLevel::NONE];
@@ -133,17 +135,5 @@ class StrengthLevelTest extends TestCase
         $expected = \range(-1, 4);
         $actual = StrengthLevel::values();
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 }

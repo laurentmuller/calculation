@@ -13,14 +13,16 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\Theme;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Theme::class)]
 class ThemeTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public static function getHelps(): \Iterator
     {
         yield [Theme::AUTO, 'theme.auto.help'];
@@ -173,17 +175,5 @@ class ThemeTest extends TestCase
     {
         $actual = $theme->value;
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 }

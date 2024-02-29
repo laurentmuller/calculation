@@ -14,13 +14,15 @@ namespace App\Tests\Enums;
 
 use App\Enums\MessagePosition;
 use App\Interfaces\PropertyServiceInterface;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(MessagePosition::class)]
 class MessagePositionTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public static function getAngle(): \Iterator
     {
         yield [MessagePosition::TOP_LEFT, 315];
@@ -149,17 +151,5 @@ class MessagePositionTest extends TestCase
     {
         $actual = $position->value;
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 }

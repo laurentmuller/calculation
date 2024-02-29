@@ -14,13 +14,15 @@ namespace App\Tests\Enums;
 
 use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(TableView::class)]
 class TableViewTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public static function getDefault(): \Iterator
     {
         yield [TableView::getDefault(), TableView::TABLE];
@@ -83,17 +85,5 @@ class TableViewTest extends TestCase
     {
         $actual = $view->value;
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 }

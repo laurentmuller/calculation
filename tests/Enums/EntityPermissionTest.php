@@ -13,14 +13,16 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\EntityPermission;
+use App\Tests\TranslatorMockTrait;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityPermission::class)]
 class EntityPermissionTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public static function getLabel(): \Iterator
     {
         yield [EntityPermission::ADD, 'rights.add'];
@@ -178,18 +180,6 @@ class EntityPermissionTest extends TestCase
     {
         $actual = $permission->value;
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 
     /**

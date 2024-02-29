@@ -13,13 +13,15 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\Environment;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Environment::class)]
 class EnvironmentTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public static function getIsDevelopment(): \Iterator
     {
         yield [Environment::DEVELOPMENT, true];
@@ -106,17 +108,5 @@ class EnvironmentTest extends TestCase
     {
         $actual = $environment->value;
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 }

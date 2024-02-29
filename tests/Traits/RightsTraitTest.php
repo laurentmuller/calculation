@@ -64,6 +64,24 @@ class RightsTraitTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @psalm-suppress InvalidPropertyAssignmentValue
+     * @psalm-suppress InvalidArgument
+     */
+    public function testIsSet(): void
+    {
+        self::assertFalse($this->__isset('fake'));
+        $this->LogRights = FlagBag::fromAll(EntityPermission::class); // @phpstan-ignore-line
+        self::assertTrue($this->__isset('LogRights'));
+    }
+
+    public function testOverwrite(): void
+    {
+        self::assertFalse($this->isOverwrite());
+        $this->setOverwrite(true);
+        self::assertTrue($this->isOverwrite());
+    }
+
     public function testPermissionEmpty(): void
     {
         $permission = new FlagBag(EntityPermission::class);
@@ -80,6 +98,20 @@ class RightsTraitTest extends TestCase
         $this->CalculationRights = $permission;
         $actual = $this->CalculationRights->getValue();
         self::assertSame($expected, $actual);
+    }
+
+    /**
+     * @psalm-suppress InvalidPropertyAssignmentValue
+     * @psalm-suppress InvalidArgument
+     * @psalm-suppress UndefinedThisPropertyAssignment
+     */
+    public function testSetInvalid(): void
+    {
+        self::assertSame(0, $this->getPermission(EntityName::LOG)->getValue());
+        $this->__set('LogRights', null);
+        self::assertSame(0, $this->getPermission(EntityName::LOG)->getValue());
+        $this->__set('fake', FlagBag::fromAll(EntityPermission::class)); // @phpstan-ignore-line
+        self::assertSame(0, $this->getPermission(EntityName::LOG)->getValue());
     }
 
     private function checkAttribute(string $field, string $key): void

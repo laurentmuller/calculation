@@ -13,13 +13,15 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\PositionService;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(PositionService::class)]
 class PositionServiceTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public static function getDirections(): \Iterator
     {
         yield [0, 'N'];
@@ -151,17 +153,5 @@ class PositionServiceTest extends TestCase
         $translator = $this->createTranslator();
 
         return new PositionService($translator);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 }

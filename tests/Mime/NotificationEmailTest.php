@@ -15,15 +15,16 @@ namespace App\Tests\Mime;
 use App\Enums\Importance;
 use App\Mime\CspViolationEmail;
 use App\Mime\NotificationEmail;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(NotificationEmail::class)]
 class NotificationEmailTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public function testAttachFromUploadedFile(): void
     {
         $mail = new CspViolationEmail();
@@ -94,17 +95,5 @@ class NotificationEmailTest extends TestCase
 
         self::assertArrayHasKey('importance_text', $context);
         self::assertSame('importance.medium_full', $context['importance_text']);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): MockObject&TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 }

@@ -13,13 +13,15 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\Importance;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Importance::class)]
 class ImportanceTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public static function getLabels(): \Iterator
     {
         yield ['importance.high', Importance::HIGH];
@@ -99,17 +101,5 @@ class ImportanceTest extends TestCase
     {
         $actual = $importance->value;
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 }

@@ -70,11 +70,20 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
     /**
      * @throws Exception
      */
+    public function testSuccess(): void
+    {
+        $contraint = $this->createConstraint();
+        $validator = $this->initValidator();
+        $validator->validate('dummy', $contraint);
+        self::assertNoViolation();
+    }
+
+    /**
+     * @throws Exception
+     */
     protected function createValidator(): RecaptchaValidator
     {
-        $service = $this->createService();
-
-        return new RecaptchaValidator($service);
+        return new RecaptchaValidator($this->createService());
     }
 
     private function createConstraint(): Recaptcha
@@ -87,13 +96,13 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
      */
     private function createService(string $code = ''): RecaptchaService
     {
-        $service = $this->getMockBuilder(RecaptchaService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $success = '' === $code;
         $errorCodes = $success ? [] : [$code];
         $response = new Response($success, $errorCodes);
-        $service->method('verify')
+
+        $service = $this->createMock(RecaptchaService::class);
+        $service->expects(self::any())
+            ->method('verify')
             ->willReturn($response);
 
         return $service;

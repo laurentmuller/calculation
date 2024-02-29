@@ -24,13 +24,15 @@ use App\Entity\Task;
 use App\Entity\User;
 use App\Enums\EntityName;
 use App\Model\Role;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityName::class)]
 class EntityNameTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public static function getLabel(): \Iterator
     {
         yield ['calculation.name', EntityName::CALCULATION];
@@ -237,17 +239,5 @@ class EntityNameTest extends TestCase
     {
         $actual = $entityName->value;
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 }

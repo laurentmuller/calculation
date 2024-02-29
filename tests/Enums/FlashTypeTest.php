@@ -13,13 +13,15 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\FlashType;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(FlashType::class)]
 class FlashTypeTest extends TestCase
 {
+    use TranslatorMockTrait;
+
     public static function getIcons(): \Iterator
     {
         yield [FlashType::DANGER, 'fas fa-lg fa-exclamation-triangle'];
@@ -94,17 +96,5 @@ class FlashTypeTest extends TestCase
     {
         $actual = $type->value;
         self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function createTranslator(): TranslatorInterface
-    {
-        $translator = $this->createMock(TranslatorInterface::class);
-        $translator->method('trans')
-            ->willReturnArgument(0);
-
-        return $translator;
     }
 }

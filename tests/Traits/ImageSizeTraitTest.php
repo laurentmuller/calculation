@@ -33,4 +33,10 @@ class ImageSizeTraitTest extends TestCase
         $actual = $this->getImageSize($filename);
         self::assertSame($expected, $actual);
     }
+
+    public function testSizeInvalid(): void
+    {
+        $actual = $this->getImageSize(__FILE__);
+        self::assertSame([0, 0], $actual);
+    }
 }

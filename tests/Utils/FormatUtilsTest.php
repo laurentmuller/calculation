@@ -272,7 +272,7 @@ class FormatUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getDates')]
     public function testFormatDate(
         \DateTimeInterface|int|null $date,
-        string|null $expected,
+        ?string $expected,
         ?int $dateType = null,
         ?string $pattern = null
     ): void {
@@ -287,7 +287,7 @@ class FormatUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getDateTimes')]
     public function testFormatDateTime(
         \DateTimeInterface|int|null $date,
-        string|null $expected,
+        ?string $expected,
         ?int $dateType = null,
         ?int $timeType = null,
         ?string $pattern = null
@@ -337,7 +337,7 @@ class FormatUtilsTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getTimes')]
     public function testFormatTime(
         \DateTimeInterface|int|null $date,
-        string|null $expected,
+        ?string $expected,
         ?int $timeType = null,
         ?string $pattern = null
     ): void {

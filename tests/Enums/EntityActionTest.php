@@ -15,11 +15,11 @@ namespace App\Tests\Enums;
 use App\Enums\EntityAction;
 use App\Interfaces\PropertyServiceInterface;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Component\Form\Test\TypeTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityAction::class)]
-class EntityActionTest extends TypeTestCase
+class EntityActionTest extends TestCase
 {
     public static function getDefault(): \Iterator
     {

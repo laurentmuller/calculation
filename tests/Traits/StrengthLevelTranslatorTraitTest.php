@@ -14,6 +14,7 @@ namespace App\Tests\Traits;
 
 use App\Enums\StrengthLevel;
 use App\Traits\StrengthLevelTranslatorTrait;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -36,15 +37,21 @@ class StrengthLevelTranslatorTraitTest extends TestCase
         yield [5, 'very_strong'];
     }
 
+    /**
+     * @throws Exception
+     */
     public function getTranslator(): TranslatorInterface
     {
         if (!$this->translator instanceof TranslatorInterface) {
-            $this->translator = $this->createTranslator('');
+            $this->translator = $this->createTranslator();
         }
 
         return $this->translator;
     }
 
+    /**
+     * @throws Exception
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTranslateLevels')]
     public function testTranslateLevel(int $value, string $message): void
     {
@@ -55,9 +62,11 @@ class StrengthLevelTranslatorTraitTest extends TestCase
         self::assertSame($actual, $expected);
     }
 
-    private function createTranslator(string $message): TranslatorInterface
+    /**
+     * @throws Exception
+     */
+    private function createTranslator(string $message = ''): TranslatorInterface
     {
-        /* @noinspection PhpUnhandledExceptionInspection */
         $translator = $this->createMock(TranslatorInterface::class);
         $translator->method('trans')
             ->willReturn($message);

@@ -61,7 +61,7 @@ class PregExtension extends AbstractExtension
      * @psalm-param int<0,1> $flags
      * @psalm-param non-empty-string $pattern
      */
-    protected function pregGrep(array|null $subject, string $pattern, int $flags = 0): array|false
+    protected function pregGrep(?array $subject, string $pattern, int $flags = 0): array|false
     {
         if (null === $subject) {
             return false;

@@ -820,8 +820,8 @@ class PdfTable
      */
     private function drawCell(PdfDocument $parent, int $index, float $width, float $height, string $text, PdfTextAlignment $alignment, PdfStyle $style, PdfCell $cell): void
     {
-        [$x, $y] = $parent->getXY();
-        $bounds = new PdfRectangle($x, $y, $width, $height);
+        $position = $parent->getPosition();
+        $bounds = new PdfRectangle($position->x, $position->y, $width, $height);
 
         // background
         $style->apply($parent);
@@ -829,13 +829,13 @@ class PdfTable
 
         // border
         $style->apply($parent);
-        $parent->setXY($x, $y);
+        $parent->setPosition($position);
         $border = $style->getBorder() ?? $this->border;
         $this->drawCellBorder($parent, $index, $bounds, $border);
 
         // image or text
         $style->apply($parent);
-        $parent->setXY($x, $y);
+        $parent->setPosition($position);
         $margin = $parent->getCellMargin();
         $textBounds = clone $bounds;
         $line_height = \fpdf\PdfDocument::LINE_HEIGHT;
@@ -849,7 +849,7 @@ class PdfTable
             }
             $indent = $style->getIndent();
             if ($indent > 0) {
-                $parent->setX($x + $indent);
+                $parent->setX($position->x + $indent);
                 $textBounds->indent($indent);
             }
             $this->drawCellText($parent, $index, $textBounds, $text, $alignment, $line_height);
@@ -864,7 +864,8 @@ class PdfTable
             $this->drawCellLink($parent, $textBounds, $cell->getLink());
         }
 
-        $parent->setXY($x + $width, $y);
+        $position->x += $width;
+        $parent->setPosition($position);
     }
 
     /**

@@ -182,6 +182,7 @@
         "app-rector": "vendor/bin/rector process --dry-run --config rector.php",
         "app-twigcs": "vendor/bin/twigcs --config .twig_cs.dist.php",
         "app-test": "phpunit",
+        "app-markdown": "markdownlint-cli2 *.md",
         "app-all": [
             "@app-lint",
             "@app-fixer",
@@ -189,7 +190,8 @@
             "@app-stan",
             "@app-rector",
             "@app-twigcs",
-            "@app-test"
+            "@app-test",
+            "@app-markdown"
         ]
     }
 }

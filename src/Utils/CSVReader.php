@@ -54,10 +54,7 @@ class CSVReader extends AbstractReader
     protected function getNextData($stream): ?array
     {
         $data = \fgetcsv($stream, $this->length, $this->separator, $this->enclosure, $this->escape);
-        if (\is_array($data)) {
-            return $data;
-        }
 
-        return null;
+        return \is_array($data) ? $data : null;
     }
 }

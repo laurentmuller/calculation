@@ -27,6 +27,5 @@ Ce programme est distribué avec une [licence propriétaire](LICENSE.md) et une
 
 ## Actions
 
-[![Continuous Integration](https://github.com/laurentmuller/calculation/actions/workflows/ci.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/ci.yaml)
-[![Lint](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/lint.yaml)
+[![CI](https://github.com/laurentmuller/calculation/actions/workflows/ci.yaml/badge.svg)](https://github.com/laurentmuller/calculation/actions/workflows/ci.yaml)
 [![StyleCI](https://github.styleci.io/repos/229945132/shield?branch=master)](https://github.styleci.io/repos/229945132?branch=master)

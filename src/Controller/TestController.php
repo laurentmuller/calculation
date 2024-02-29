@@ -32,6 +32,7 @@ use App\Model\HttpClientError;
 use App\Pdf\Events\PdfLabelTextEvent;
 use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfLabelDocument;
+use App\Report\HtmlColorNameReport;
 use App\Report\HtmlReport;
 use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
@@ -234,6 +235,14 @@ class TestController extends AbstractController
         $doc->setTitleTrans('test.html');
 
         return $this->renderWordDocument($doc);
+    }
+
+    #[Get(path: '/colors', name: 'test_colors')]
+    public function htmlColorNames(): PdfResponse
+    {
+        $report = new HtmlColorNameReport($this);
+
+        return $this->renderPdfDocument($report);
     }
 
     /**

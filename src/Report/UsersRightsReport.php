@@ -74,12 +74,12 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         }
 
         if ($key instanceof User) {
+            $position = $this->getPosition();
             $text = $key->getUserIdentifier();
             $description = $key->isEnabled() ? $this->translateRole($key) : $this->trans('common.value_disabled');
-            [$x, $y] = $this->getXY();
             $event->group->apply($this);
             $this->cell(border: PdfBorder::all());
-            $this->setXY($x, $y);
+            $this->setPosition($position);
             $width = $this->getStringWidth($text);
             $this->cell(width: $width, text: $text);
             PdfStyle::default()->apply($this);

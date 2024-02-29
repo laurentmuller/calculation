@@ -138,7 +138,7 @@ trait PdfChartLegendTrait
      * @param ColorStringType[] $legends the legends to draw
      * @param ?float            $x       the abscissa of the legends or null to use current position
      * @param ?float            $y       the ordinate of the legends or null to use current position
-     * @param bool              $circle  true to a draw circle shape; false to draw a square shape
+     * @param bool              $circle  true to draw a circle shape; false to draw a square shape
      */
     public function legendsVertical(array $legends, ?float $x = null, ?float $y = null, bool $circle = true): static
     {
@@ -146,9 +146,9 @@ trait PdfChartLegendTrait
             return $this;
         }
 
-        [$oldX, $oldY] = $this->getXY();
-        $x ??= $oldX;
-        $y ??= $oldY;
+        $position = $this->getPosition();
+        $x ??= $position->x;
+        $y ??= $position->y;
 
         $radius = $this->getLegendRadius();
         PdfDrawColor::cellBorder()->apply($this);
@@ -157,7 +157,7 @@ trait PdfChartLegendTrait
             $y += self::LINE_HEIGHT;
         }
         $this->resetStyle()
-            ->setXY($oldX, $oldY);
+            ->setPosition($position);
 
         return $this;
     }

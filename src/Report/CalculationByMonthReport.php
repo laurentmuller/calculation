@@ -20,6 +20,7 @@ use App\Pdf\Events\PdfCellTextEvent;
 use App\Pdf\Events\PdfPdfDrawHeadersEvent;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\Interfaces\PdfChartInterface;
+use App\Pdf\Interfaces\PdfColorInterface;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
@@ -60,7 +61,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     private const PATTERN_TABLE = 'MMMM Y';
     private const RECT_MARGIN = 1.25;
     private const RECT_WIDTH = 4.5;
-    /** @psalm-var \WeakMap<HtmlBootstrapColor, PdfTextColor>  */
+    /** @psalm-var \WeakMap<PdfColorInterface, PdfTextColor>  */
     private \WeakMap $colors;
     /*** @psalm-var CalculationByMonthType|null */
     private ?array $currentItem = null;
@@ -206,7 +207,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return $cell->setStyle($style);
     }
 
-    private function getArrowColor(HtmlBootstrapColor $color): PdfTextColor
+    private function getArrowColor(PdfColorInterface $color): PdfTextColor
     {
         if (!isset($this->colors[$color])) {
             return $this->colors[$color] = $color->getTextColor();
@@ -226,15 +227,14 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             return false;
         }
 
+        $rotate = false;
         $precision = $percent ? 2 : 0;
         $oldValue = $this->roundValue((float) $this->lastItem[$key], $precision);
         $newValue = $this->roundValue((float) $this->currentItem[$key], $precision);
         if ($oldValue < $newValue) {
-            $rotate = false;
             $chr = \chr(self::ARROW_UP);
             $color = HtmlBootstrapColor::SUCCESS;
         } elseif ($oldValue > $newValue) {
-            $rotate = false;
             $chr = \chr(self::ARROW_DOWN);
             $color = HtmlBootstrapColor::DANGER;
         } else {

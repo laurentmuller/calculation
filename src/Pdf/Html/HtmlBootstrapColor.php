@@ -15,15 +15,18 @@ namespace App\Pdf\Html;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\PdfDocument;
+use App\Pdf\Interfaces\PdfColorInterface;
+use App\Pdf\Traits\PdfColorTrait;
 
 /**
  * Bootstrap color enumeration.
  *
  * @version 4.4.1
  */
-enum HtmlBootstrapColor: string
+enum HtmlBootstrapColor: string implements PdfColorInterface
 {
+    use PdfColorTrait;
+
     case DANGER = '#DC3545';
     case DARK = '#343A40';
     case INFO = '#17A2B8';
@@ -32,95 +35,6 @@ enum HtmlBootstrapColor: string
     case SECONDARY = '#6C757D';
     case SUCCESS = '#28A745';
     case WARNING = '#FFC107';
-
-    /**
-     * Apply this draw color to the given document.
-     *
-     * @throws \InvalidArgumentException if the color can not be created
-     *
-     * @see HtmlBootstrapColor::getDrawColor()
-     */
-    public function applyDrawColor(PdfDocument $doc): void
-    {
-        $this->getDrawColor()->apply($doc);
-    }
-
-    /**
-     * Apply this fill color to the given document.
-     *
-     * @throws \InvalidArgumentException if the color can not be created
-     *
-     * @see HtmlBootstrapColor::getFillColor()
-     */
-    public function applyFillColor(PdfDocument $doc): void
-    {
-        $this->getFillColor()->apply($doc);
-    }
-
-    /**
-     * Apply this text color to the given document.
-     *
-     * @throws \InvalidArgumentException if the color can not be created
-     *
-     * @see HtmlBootstrapColor::getTextColor()
-     */
-    public function applyTextColor(PdfDocument $doc): void
-    {
-        $this->getTextColor()->apply($doc);
-    }
-
-    /**
-     * Gets this value as draw color.
-     *
-     * @throws \InvalidArgumentException if the color can not be created
-     */
-    public function getDrawColor(): PdfDrawColor
-    {
-        $color = PdfDrawColor::create($this->value);
-        if (!$color instanceof PdfDrawColor) {
-            throw new \InvalidArgumentException('Unable to create draw color.');
-        }
-
-        return $color;
-    }
-
-    /**
-     * Gets this value as fill color.
-     *
-     * @throws \InvalidArgumentException if the color can not be created
-     */
-    public function getFillColor(): PdfFillColor
-    {
-        $color = PdfFillColor::create($this->value);
-        if (!$color instanceof PdfFillColor) {
-            throw new \InvalidArgumentException('Unable to create fill color.');
-        }
-
-        return $color;
-    }
-
-    /**
-     * Gets this value for PHP Spreadsheet or PHP Word.
-     */
-    public function getPhpOfficeColor(): string
-    {
-        return \substr($this->value, 1);
-    }
-
-    /**
-     * Gets this value as text color.
-     *
-     * @throws \InvalidArgumentException if the color can not be created
-     */
-    public function getTextColor(): PdfTextColor
-    {
-        $color = PdfTextColor::create($this->value);
-        if (!$color instanceof PdfTextColor) {
-            throw new \InvalidArgumentException('Unable to create text color.');
-        }
-
-        return $color;
-    }
 
     /**
      * Gets the border color for the given class name.

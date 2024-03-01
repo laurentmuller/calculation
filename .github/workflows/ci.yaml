@@ -56,8 +56,9 @@ jobs:
                 uses: codecov/codecov-action@v4.0.1
                 with:
                     token: ${{ secrets.CODECOV_TOKEN }}
-                    slug: laurentmuller/calculation
-                    files: ./clover.xml
+                    slug: 'laurentmuller/calculation'
+                    disable_search: true
+                    file: ./clover.xml
 
             -   name: Lint YAML
                 run: php bin/console lint:yaml translations .github/workflows --parse-tags

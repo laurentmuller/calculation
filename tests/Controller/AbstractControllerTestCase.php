@@ -91,7 +91,7 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
         bool $xmlHttpRequest = false
     ): void {
         $officeDocument = $this->isOfficeDocument($url);
-        if ('' !== $username) {
+        if ($this->mustLogin($username)) {
             $this->loginUsername($username);
         }
         if ($officeDocument) {
@@ -131,13 +131,13 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
         return null;
     }
 
+    protected function isOfficeDocument(string $url): bool
+    {
+        return false !== \stripos($url, '/excel') || false !== \stripos($url, '/word');
+    }
+
     protected function mustDeleteEntities(): bool
     {
         return false;
-    }
-
-    private function isOfficeDocument(string $url): bool
-    {
-        return false !== \stripos($url, '/excel') || false !== \stripos($url, '/word');
     }
 }

@@ -22,6 +22,7 @@ use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 /**
  * Abstract class for authenticate user.
@@ -115,7 +116,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     }
 
     /**
-     * Login with the given username.
+     * Load and login with the given username.
      *
      * @param string $username the username to login
      * @param bool   $verify   true to check if the user is not null
@@ -130,5 +131,13 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
         } else {
             self::fail("Unable to find the user '$username'.");
         }
+    }
+
+    /**
+     * Returns if the given username is valid to be login.
+     */
+    protected function mustLogin(string $username): bool
+    {
+        return '' !== $username && AuthenticatedVoter::PUBLIC_ACCESS !== $username;
     }
 }

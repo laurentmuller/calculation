@@ -82,7 +82,7 @@ class PdfHeader
 
         $parent = $this->parent;
         $width = $parent->getPrintableWidth();
-        $parent->setFontSize(self::NORMAL_FONT_SIZE);
+        $parent->setFontSizeInPoint(self::NORMAL_FONT_SIZE);
         $lines = $parent->getLinesCount($this->description, $width, 0.0);
         $height += self::SMALL_HEIGHT * (float) $lines;
         $parent->resetStyle();

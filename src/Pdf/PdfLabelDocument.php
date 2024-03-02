@@ -352,6 +352,6 @@ class PdfLabelDocument extends PdfDocument
     private function updateFontSize(int $pt): void
     {
         $this->lineHeight = $this->getHeightChars($pt);
-        $this->setFontSize($pt);
+        $this->setFontSizeInPoint($pt);
     }
 }

@@ -1,9 +1,6 @@
 {# common data menu #}
 {% from 'macros/_icons.html.twig' import dropdownItem %}
 <ul class="dropdown-menu">
-    {% if display_calculations and is_granted_calculation -%}
-        {{ dropdownItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
-    {% endif %}
     {% if is_granted_product -%}
         {{ dropdownItem(path('product_table'), 'product.list.title', ICON_PRODUCT) }}
     {% endif -%}

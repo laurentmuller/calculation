@@ -25,7 +25,10 @@
         <include>
             <directory suffix=".php">./src</directory>
         </include>
+        <exclude>
+            <file>.php-cs-fixer.dist.php</file>
+            <file>rector.php</file>
+        </exclude>
     </source>
-
     <coverage />
 </phpunit>

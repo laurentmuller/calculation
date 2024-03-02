@@ -102,6 +102,10 @@ class DataQuery implements SortModeInterface
      */
     public function getPage(): int
     {
+        if (0 === $this->limit) {
+            return 1;
+        }
+
         return 1 + \intdiv($this->offset, $this->limit);
     }
 

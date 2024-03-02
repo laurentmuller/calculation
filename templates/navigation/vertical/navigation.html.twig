@@ -1,5 +1,5 @@
 {# imports #}
-{% from 'macros/_icons.html.twig' import icon, dropdownSeparator %}
+{% from 'macros/_icons.html.twig' import icon, dropdownItem, dropdownSeparator %}
 {% from 'macros/_attributes.html.twig' import attributes %}
 {# attributes #}
 {%- set sidebar_attributes = {
@@ -31,7 +31,10 @@
         {{- icon('home', 'index.title') -}}
     </a>
     {# menus #}
-    <ul class="navbar-nav mb-auto border-top w-100">
+    <ul class="navbar-nav mb-auto pt-1 border-top w-100">
+        {% if is_granted_calculation -%}
+            {{ dropdownItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
+        {% endif %}
         {% if is_granted_data %}
             {{ include('navigation/vertical/navigation_data.html.twig') }}
         {% endif %}

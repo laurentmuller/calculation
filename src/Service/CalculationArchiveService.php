@@ -22,7 +22,6 @@ use App\Traits\LoggerAwareTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -157,8 +156,9 @@ class CalculationArchiveService implements ServiceSubscriberInterface
                 ->setParameter('states', $sources);
         }
         if ($date instanceof \DateTimeInterface) {
+            $type = $this->calculationRepository->getDateTimeType($date);
             $builder->andWhere('c.date <= :date')
-                ->setParameter('date', $date, Types::DATE_MUTABLE);
+                ->setParameter('date', $date, $type);
         }
 
         return $builder;

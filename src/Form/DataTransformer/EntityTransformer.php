@@ -14,7 +14,7 @@ namespace App\Form\DataTransformer;
 
 use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
-use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\Proxy\DefaultProxyClassNameResolver;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -84,6 +84,10 @@ readonly class EntityTransformer implements DataTransformerInterface
 
     private function validate(mixed $entity): bool
     {
-        return \is_object($entity) && $this->className === ClassUtils::getClass($entity);
+        if (!\is_object($entity)) {
+            return false;
+        }
+
+        return $this->className === DefaultProxyClassNameResolver::getClass($entity);
     }
 }

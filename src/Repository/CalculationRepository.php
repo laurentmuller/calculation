@@ -192,7 +192,7 @@ class CalculationRepository extends AbstractRepository
     }
 
     /**
-     * Gets calculation by the given date range.
+     * Gets calculation for the given date range.
      *
      * @param \DateTimeInterface $from the start date (exclusive)
      * @param \DateTimeInterface $to   the end date (inclusive)
@@ -201,11 +201,14 @@ class CalculationRepository extends AbstractRepository
      */
     public function getByInterval(\DateTimeInterface $from, \DateTimeInterface $to): array
     {
+        $fromType = $this->getDateTimeType($from);
+        $toType = $this->getDateTimeType($to);
+
         return $this->createQueryBuilder('c')
             ->where('c.date > :from')
             ->andWhere('c.date <= :to')
-            ->setParameter('from', $from, Types::DATETIME_MUTABLE)
-            ->setParameter('to', $to, Types::DATETIME_MUTABLE)
+            ->setParameter('from', $from, $fromType)
+            ->setParameter('to', $to, $toType)
             ->orderBy('c.date', self::SORT_DESC)
             ->addOrderBy('c.id', self::SORT_DESC)
             ->getQuery()

@@ -19,9 +19,9 @@ use App\Form\Extension\VichImageTypeExtension;
 use App\Interfaces\EntityInterface;
 use App\Repository\AbstractRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\Exception;
@@ -76,7 +76,8 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     protected function createEntityManager(): MockObject&EntityManager
     {
         $manager = $this->createMock(EntityManager::class);
-        $manager->method('getClassMetadata')
+        $manager->expects(self::any())
+            ->method('getClassMetadata')
             ->willReturn(new ClassMetadata($this->getEntityClass()));
 
         return $manager;
@@ -85,10 +86,11 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     /**
      * @throws Exception
      */
-    protected function createQuery(): MockObject&AbstractQuery
+    protected function createQuery(): MockObject&Query
     {
-        $query = $this->createMock(AbstractQuery::class);
-        $query->method('getSQL')
+        $query = $this->createMock(Query::class);
+        $query->expects(self::any())
+            ->method('getSQL')
             ->willReturn('FakeSQL');
 
         return $query;
@@ -97,13 +99,15 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     /**
      * @throws Exception
      */
-    protected function createQueryBuilder(AbstractQuery $query): MockObject&QueryBuilder
+    protected function createQueryBuilder(MockObject&Query $query): MockObject&QueryBuilder
     {
         $parameters = new ArrayCollection();
         $builder = $this->createMock(QueryBuilder::class);
-        $builder->method('getParameters')
+        $builder->expects(self::any())
+            ->method('getParameters')
             ->willReturn($parameters);
-        $builder->method('getQuery')
+        $builder->expects(self::any())
+            ->method('getQuery')
             ->willReturn($query);
 
         return $builder;
@@ -112,10 +116,11 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     /**
      * @throws Exception
      */
-    protected function createRegistry(EntityManager $manager): MockObject&ManagerRegistry
+    protected function createRegistry(MockObject&EntityManager $manager): MockObject&ManagerRegistry
     {
         $registry = $this->createMock(ManagerRegistry::class);
-        $registry->method('getManagerForClass')
+        $registry->expects(self::any())
+            ->method('getManagerForClass')
             ->willReturn($manager);
 
         return $registry;
@@ -126,7 +131,7 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
      *
      * @param class-string<TRepository> $repositoryClass
      *
-     * @return MockObject&TRepository
+     * @psalm-return MockObject&TRepository
      *
      * @throws Exception
      */

@@ -336,19 +336,18 @@ class SearchService implements ServiceSubscriberInterface
      */
     private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {
+        $alias = 'e';
         $name = StringUtils::getShortName($class);
-        $content ??= "e.$field";
-        /** @psalm-var literal-string $from */
-        $from = $class;
+        $content ??= "$alias.$field";
         /** @psalm-var literal-string $where */
         $where = "$content LIKE :" . self::SEARCH_PARAM;
 
         return $this->manager->createQueryBuilder()
-            ->select('e.id')
+            ->select("$alias.id")
             ->addSelect("'$name'")
             ->addSelect("'$field'")
             ->addSelect($content)
-            ->from($from, 'e')
+            ->from($class, $alias)
             ->where($where);
     }
 

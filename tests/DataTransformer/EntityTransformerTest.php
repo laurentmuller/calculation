@@ -16,6 +16,7 @@ use App\Entity\Group;
 use App\Form\DataTransformer\EntityTransformer;
 use App\Interfaces\EntityInterface;
 use App\Repository\GroupRepository;
+use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -23,6 +24,8 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityTransformer::class)]
 class EntityTransformerTest extends TestCase
 {
+    use IdTrait;
+
     public static function getReverseTransformValues(): \Generator
     {
         yield [null, null];
@@ -43,7 +46,7 @@ class EntityTransformerTest extends TestCase
     /**
      * @psalm-param string|int|null $value
      *
-     * @throws Exception
+     * @throws Exception|\ReflectionException
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getReverseTransformValues')]
     public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
@@ -63,7 +66,7 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\ReflectionException
      */
     public function testReverseTransformGroup(): void
     {
@@ -77,7 +80,7 @@ class EntityTransformerTest extends TestCase
     /**
      * @psalm-param EntityInterface|null $value
      *
-     * @throws Exception
+     * @throws Exception|\ReflectionException
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]
     public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
@@ -97,7 +100,7 @@ class EntityTransformerTest extends TestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\ReflectionException
      */
     public function testTransformGroup(): void
     {
@@ -108,11 +111,13 @@ class EntityTransformerTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     private function createGroup(): Group
     {
         $group = new Group();
-        $property = new \ReflectionProperty(Group::class, 'id');
-        $property->setValue($group, 1);
+        $this->setId($group, 1);
 
         return $group;
     }
@@ -123,9 +128,11 @@ class EntityTransformerTest extends TestCase
     private function createRepository(?Group $group = null): GroupRepository
     {
         $repository = $this->createMock(GroupRepository::class);
-        $repository->method('find')
+        $repository->expects(self::any())
+            ->method('find')
             ->willReturn($group);
-        $repository->method('getClassName')
+        $repository->expects(self::any())
+            ->method('getClassName')
             ->willReturn(Group::class);
 
         return $repository;

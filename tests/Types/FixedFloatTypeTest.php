@@ -48,17 +48,6 @@ class FixedFloatTypeTest extends TestCase
     /**
      * @psalm-suppress InternalMethod
      */
-    public function testName(): void
-    {
-        $type = new FixedFloatType();
-        $actual = $type->getName(); // @phpstan-ignore-line
-        $expected = 'fixed_float';
-        self::assertSame($expected, $actual);
-    }
-
-    /**
-     * @psalm-suppress InternalMethod
-     */
     public function testSQLDeclaration(): void
     {
         $platform = new MySQLPlatform();

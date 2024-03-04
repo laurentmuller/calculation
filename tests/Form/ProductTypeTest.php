@@ -16,6 +16,7 @@ use App\Entity\Category;
 use App\Entity\Product;
 use App\Form\Product\ProductType;
 use App\Repository\CategoryRepository;
+use App\Tests\Entity\IdTrait;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,6 +29,8 @@ use Symfony\Component\Form\PreloadedExtension;
 #[\PHPUnit\Framework\Attributes\CoversClass(ProductType::class)]
 class ProductTypeTest extends AbstractEntityTypeTestCase
 {
+    use IdTrait;
+
     private static ?Category $category = null;
 
     protected function getData(): array
@@ -47,7 +50,7 @@ class ProductTypeTest extends AbstractEntityTypeTestCase
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\ReflectionException
      */
     protected function getExtensions(): array
     {
@@ -66,20 +69,22 @@ class ProductTypeTest extends AbstractEntityTypeTestCase
         return ProductType::class;
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     private function getCategory(): Category
     {
         if (!self::$category instanceof Category) {
             self::$category = new Category();
             self::$category->setCode('category');
-            $property = new \ReflectionProperty(Category::class, 'id');
-            $property->setValue(self::$category, 1);
+            $this->setId(self::$category, 1);
         }
 
         return self::$category;
     }
 
     /**
-     * @throws Exception
+     * @throws Exception|\ReflectionException
      */
     private function getRegistry(): MockObject&ManagerRegistry
     {
@@ -89,13 +94,16 @@ class ProductTypeTest extends AbstractEntityTypeTestCase
         $repository = $this->createRepository(CategoryRepository::class);
         $registry = $this->createRegistry($manager);
 
-        $query->method('execute')
+        $query->expects(self::any())
+            ->method('execute')
             ->willReturn([$this->getCategory()]);
 
-        $repository->method('getQueryBuilderByGroup')
+        $repository->expects(self::any())
+            ->method('getQueryBuilderByGroup')
             ->willReturn($builder);
 
-        $manager->method('getRepository')
+        $manager->expects(self::any())
+            ->method('getRepository')
             ->willReturn($repository);
 
         return $registry;

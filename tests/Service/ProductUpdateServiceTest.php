@@ -211,15 +211,18 @@ class ProductUpdateServiceTest extends TestCase
     private function createService(): ProductUpdateService
     {
         $productRepository = $this->createMock(ProductRepository::class);
-        $productRepository->method('findByCategory')
+        $productRepository->expects(self::any())
+            ->method('findByCategory')
             ->willReturn([$this->product]);
 
         $categoryRepository = $this->createMock(CategoryRepository::class);
-        $categoryRepository->method('find')
+        $categoryRepository->expects(self::any())
+            ->method('find')
             ->willReturn($this->category);
 
         $security = $this->createMock(Security::class);
-        $security->method('getUser')
+        $security->expects(self::any())
+            ->method('getUser')
             ->willReturn($this->user);
 
         $service = $this->createMock(SuspendEventListenerService::class);

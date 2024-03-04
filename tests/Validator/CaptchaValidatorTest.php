@@ -94,9 +94,11 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
     private function createService(bool $validateTimeout = true, bool $validateToken = true): CaptchaImageService
     {
         $service = $this->createMock(CaptchaImageService::class);
-        $service->method('validateTimeout')
+        $service->expects(self::any())
+            ->method('validateTimeout')
             ->willReturn($validateTimeout);
-        $service->method('validateToken')
+        $service->expects(self::any())
+            ->method('validateToken')
             ->willReturn($validateToken);
 
         return $service;

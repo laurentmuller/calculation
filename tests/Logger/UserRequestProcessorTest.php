@@ -73,7 +73,8 @@ class UserRequestProcessorTest extends TestCase
     private function createSecurity(?User $user = null): MockObject&Security
     {
         $security = $this->createMock(Security::class);
-        $security->method('getUser')
+        $security->expects(self::any())
+            ->method('getUser')
             ->willReturn($user);
 
         return $security;

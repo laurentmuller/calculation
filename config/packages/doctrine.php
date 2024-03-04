@@ -18,7 +18,7 @@ return static function (DoctrineConfig $config): void {
     $dbal->connection('default')
         ->url('%env(resolve:DATABASE_URL)%');
 
-    $dbal->type('fixed_float')
+    $dbal->type(FixedFloatType::NAME)
         ->class(FixedFloatType::class);
 
     $orm = $config->orm();

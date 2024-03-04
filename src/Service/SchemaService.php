@@ -24,7 +24,7 @@ use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\DBAL\Types\FloatType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
@@ -50,17 +50,17 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  *     inverse: bool,
  *     table: string}
  * @psalm-type SchemaTableType=array{
- *          name: string,
- *          columns: SchemaColumnType[],
- *          indexes: SchemaIndexType[],
- *          associations: SchemaAssociationType[]}
+ *     name: string,
+ *     columns: SchemaColumnType[],
+ *     indexes: SchemaIndexType[],
+ *     associations: SchemaAssociationType[]}
  * @psalm-type SchemaSoftTableType=array{
- *          name: string,
- *          columns: int,
- *          records: int,
- *          indexes: int,
- *          associations: int,
- *          sql: string}
+ *     name: string,
+ *     columns: int,
+ *     records: int,
+ *     indexes: int,
+ *     associations: int,
+ *     sql: string}
  */
 class SchemaService implements ServiceSubscriberInterface
 {
@@ -132,7 +132,7 @@ class SchemaService implements ServiceSubscriberInterface
     private function countAssociations(Table $table): int
     {
         $data = $this->getMetaData($table);
-        if ($data instanceof ClassMetadataInfo) {
+        if ($data instanceof ClassMetadata) {
             return \count($data->getAssociationNames());
         }
 
@@ -190,7 +190,7 @@ class SchemaService implements ServiceSubscriberInterface
     private function getAssociations(Table $table): array
     {
         $data = $this->getMetaData($table);
-        if (!$data instanceof ClassMetadataInfo) {
+        if (!$data instanceof ClassMetadata) {
             return [];
         }
         $names = $data->getAssociationNames();
@@ -201,7 +201,7 @@ class SchemaService implements ServiceSubscriberInterface
         foreach ($names as $name) {
             $target = $data->getAssociationTargetClass($name);
             $targetData = $this->getTargetMetaData($target);
-            if ($targetData instanceof ClassMetadataInfo) {
+            if ($targetData instanceof ClassMetadata) {
                 $inverse = $data->isAssociationInverseSide($name);
                 $result[] = [
                     'name' => $name,
@@ -297,9 +297,9 @@ class SchemaService implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-return ClassMetadataInfo<object>|null
+     * @psalm-return ClassMetadata<object>|null
      */
-    private function getMetaData(Table|string $name): ?ClassMetadataInfo
+    private function getMetaData(Table|string $name): ?ClassMetadata
     {
         $name = $this->mapTableName($name);
 
@@ -307,11 +307,11 @@ class SchemaService implements ServiceSubscriberInterface
     }
 
     /**
-     * @return array<string, ClassMetadataInfo<object>>
+     * @return array<string, ClassMetadata<object>>
      */
     private function getMetaDatas(): array
     {
-        /** @psalm-var array<string, ClassMetadataInfo<object>> $result */
+        /** @psalm-var array<string, ClassMetadata<object>> $result */
         $result = $this->getCacheValue(
             'schema_service.metadata',
             fn (): array => $this->loadMetaDatas($this->manager),
@@ -352,9 +352,9 @@ class SchemaService implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-return ClassMetadataInfo<object>|null
+     * @psalm-return ClassMetadata<object>|null
      */
-    private function getTargetMetaData(string $name): ?ClassMetadataInfo
+    private function getTargetMetaData(string $name): ?ClassMetadata
     {
         foreach ($this->getMetaDatas() as $data) {
             if ($data->getName() === $name) {
@@ -388,7 +388,7 @@ class SchemaService implements ServiceSubscriberInterface
     }
 
     /**
-     * @return array<string, ClassMetadataInfo<object>>
+     * @return array<string, ClassMetadata<object>>
      */
     private function loadMetaDatas(EntityManagerInterface $manager): array
     {
@@ -440,13 +440,13 @@ class SchemaService implements ServiceSubscriberInterface
     }
 
     /**
-     * @psalm-param Table|ClassMetadataInfo<object>|string $name
+     * @psalm-param Table|ClassMetadata<object>|string $name
      */
-    private function mapTableName(Table|ClassMetadataInfo|string $name): string
+    private function mapTableName(Table|ClassMetadata|string $name): string
     {
         if ($name instanceof Table) {
             $name = $name->getName();
-        } elseif ($name instanceof ClassMetadataInfo) {
+        } elseif ($name instanceof ClassMetadata) {
             $name = $name->table['name'];
         }
         foreach (\array_keys($this->getMetaDatas()) as $key) {

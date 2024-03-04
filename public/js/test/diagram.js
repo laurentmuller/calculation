@@ -29,7 +29,7 @@
     };
 
     const saveOriginalData = () => {
-        getElements().forEach(element => {
+        getElements().forEach((element) => {
             element.setAttribute(DATA_CODE, element.innerHTML);
         });
     };

@@ -12,9 +12,9 @@
     {{ parent() }}
     <div class="d-flex-wrap-center ms-sm-auto">
         <label class="form-label mb-0" for="diagrams">Diagramme</label>
-        <select class="form-select form-select-sm w-auto d-print-none" id="diagrams" name="diagrams" data-diagram="{{ diagram_name }}">
-            {% for key, value in diagram_files %}
-                <option value="{{ key }}"{% if diagram_name == key %} selected="selected"{% endif %}>{{ value }}</option>
+        <select class="form-select form-select-sm w-auto d-print-none" id="diagrams" name="diagrams">
+            {% for key, value in files %}
+                <option value="{{ key }}"{% if name == key %} selected="selected"{% endif %}>{{ value.title }}</option>
             {% endfor %}
         </select>
     </div>
@@ -23,7 +23,7 @@
 {# body #}
 {% block card_body -%}
 <pre id="diagram" class="mermaid">
-    {{ diagram_content }}
+    {{ file.content }}
 </pre>
 {% endblock %}
 {# javascripts #}

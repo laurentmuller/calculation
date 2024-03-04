@@ -21,6 +21,9 @@ class TestControllerTest extends AbstractControllerTestCase
     private const ROUTES = [
         'editor',
         'label',
+        'pdf',
+        'word',
+        'colors',
         'notifications',
         'password',
         'recaptcha',
@@ -28,9 +31,7 @@ class TestControllerTest extends AbstractControllerTestCase
         'swiss',
         'translate',
         'tree',
-        'pdf',
-        'word',
-        ];
+    ];
 
     public static function getRoutes(): \Generator
     {

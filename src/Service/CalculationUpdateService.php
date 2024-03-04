@@ -22,7 +22,6 @@ use App\Traits\LoggerAwareTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -106,6 +105,11 @@ class CalculationUpdateService implements ServiceSubscriberInterface
      */
     private function getCalculations(CalculationUpdateQuery $query): array
     {
+        $from = $query->getDateFrom();
+        $to = $query->getDateTo();
+        $fromType = $this->calculationRepository->getDateTimeType($from);
+        $toType = $this->calculationRepository->getDateTimeType($to);
+
         /** @psalm-var Query<int, Calculation> $q */
         $q = $this->calculationRepository
             ->createQueryBuilder('c')
@@ -113,8 +117,8 @@ class CalculationUpdateService implements ServiceSubscriberInterface
             ->andWhere('c.date >= :from')
             ->andWhere('c.date <= :to')
             ->setParameter('states', $query->getStates())
-            ->setParameter('from', $query->getDateFrom(), Types::DATE_MUTABLE)
-            ->setParameter('to', $query->getDateTo(), Types::DATE_MUTABLE)
+            ->setParameter('from', $from, $fromType)
+            ->setParameter('to', $to, $toType)
             ->getQuery();
 
         return $q->getResult();

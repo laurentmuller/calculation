@@ -176,7 +176,8 @@ class UserTest extends AbstractEntityValidatorTestCase
     {
         $user = new User();
         $storage = $this->createMock(StorageInterface::class);
-        $storage->method('resolvePath')
+        $storage->expects(self::any())
+            ->method('resolvePath')
             ->willReturn(null);
         self::assertNull($user->getImagePath($storage));
 
@@ -184,13 +185,15 @@ class UserTest extends AbstractEntityValidatorTestCase
         self::assertNull($user->getImagePath($storage));
 
         $storage = $this->createMock(StorageInterface::class);
-        $storage->method('resolvePath')
+        $storage->expects(self::any())
+            ->method('resolvePath')
             ->willThrowException(new MappingNotFoundException());
         self::assertNull($user->getImagePath($storage));
 
         $file = __FILE__;
         $storage = $this->createMock(StorageInterface::class);
-        $storage->method('resolvePath')
+        $storage->expects(self::any())
+            ->method('resolvePath')
             ->willReturn($file);
         self::assertSame($file, $user->getImagePath($storage));
     }

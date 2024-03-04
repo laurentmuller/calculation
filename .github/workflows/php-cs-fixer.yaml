@@ -1,0 +1,26 @@
+name: PHP-CS-Fixer
+
+on: [ push, pull_request ]
+
+env:
+    PHP_CS_FIXER_IGNORE_ENV: 1
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Install PHP with extensions
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.2'
+                    coverage: none
+
+            -   name: Install dependencies
+                run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+            -   name: Run PHP CS Fixer
+                run: vendor/bin/php-cs-fixer fix --diff --dry-run --show-progress=none

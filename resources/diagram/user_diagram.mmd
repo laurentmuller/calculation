@@ -1,0 +1,49 @@
+---
+title: User
+---
+classDiagram
+    class User {
+        -string username
+        -string email
+        -string password
+        -bool enabled
+        -bool verified
+        -Collection~UserProperty~ properties
+        +getUsername() string
+        +getEmail() string
+        +getPassword() string
+        +getUserIdentifier() string
+        +isEnabled() bool
+        +isVerified() bool
+        +addProperty(UserProperty)
+        +removeProperty(UserProperty)
+        +getProperties() Collection~UserProperty~
+    }
+
+    class UserProperty {
+        -User user
+        +getUser() User
+        +setUser(User)
+    }
+
+
+    class AbstractProperty {
+        <<Abstract>>
+        -string name
+        -string value
+        +getName() string
+        +setName(string)
+        +getBoolean() bool
+        +setBoolean(bool)
+        +getArray() array|null
+        +setArray(array|null)
+        +getDate() \DateTimeInterface|null
+        +setDate(\DateTimeInterface|null)
+        +getInteger() int
+        +setInteger(int)
+        +getString() string|null
+        +setString(string|null)
+    }
+
+    User --> "0..*" UserProperty
+    AbstractProperty <|-- UserProperty

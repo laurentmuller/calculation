@@ -1,0 +1,73 @@
+---
+title: Abstract Entity
+---
+classDiagram
+    class EntityInterface {
+        <<Interface>>
+        +getId() ?int
+        +getDisplay() string
+        +isNew() bool
+    }
+
+    class AbstractEntity {
+        <<Abstract>>
+    }
+
+    EntityInterface <|.. AbstractEntity
+
+    AbstractEntity <|-- AbstractCategoryItemEntity
+    AbstractEntity <|-- AbstractMargin
+    AbstractEntity <|-- AbstractProperty
+
+    AbstractEntity <|-- Calculation
+    AbstractEntity <|-- CalculationState
+    AbstractEntity <|-- Group
+    AbstractEntity <|-- Category
+    AbstractEntity <|-- TaskItem
+    AbstractEntity <|-- TaskItemMargin
+    AbstractEntity <|-- User
+
+    AbstractCategoryItemEntity <|-- Product
+    AbstractCategoryItemEntity <|-- Task
+
+    AbstractProperty <|-- UserProperty
+    AbstractProperty <|-- Property
+
+    AbstractMargin <|-- GlobalMargin
+    AbstractMargin <|-- GroupMargin
+
+    class AbstractCategoryItemEntity {
+        <<Abstract>>
+    }
+    class AbstractProperty {
+        <<Abstract>>
+    }
+    class AbstractMargin {
+        <<Abstract>>
+    }
+    class Calculation {
+    }
+    class Group {
+    }
+    class GroupMargin {
+    }
+    class Category {
+    }
+    class Product {
+    }
+    class Task {
+    }
+    class TaskItem {
+    }
+    class TaskItemMargin {
+    }
+    class User {
+    }
+    class UserProperty {
+    }
+    class Property {
+    }
+    class GlobalMargin {
+    }
+    class CalculationState {
+    }

@@ -1,0 +1,52 @@
+---
+title: Task
+---
+
+classDiagram
+    class Task {
+        -string name
+        -Category category
+        -Collection~TaskItem~ items
+        +getName() string
+        +setName(string)
+        +getCategory() Category
+        +setCategory(Category)
+        +count() int
+        +addItem(TaskItem)
+        +removeItem(TaskItem)
+        +getItems() Collection~TaskItem~
+    }
+
+    class TaskItem {
+        -string name
+        -Task task
+        -Collection~TaskItemMargin~ margins
+        +getName() string
+        +setName(string)
+        +getTask() Task
+        +setTask(Task)
+        +addMargin(TaskItemMargin)
+        +removeMargin(TaskItemMargin)
+        +getMargins() Collection~TaskItemMargin~
+    }
+    class TaskItemMargin {
+        -TaskItem taskItem
+        -float minimum
+        -float maximum
+        -float value
+        +getTaskItem() TaskItem
+        +setTaskItem(TaskItem)
+        +getMinimum() float
+        +setMinimum(float)
+        +getMaximum() float
+        +setMaximum(float)
+        +getValue() float
+        +setValue(float)
+    }
+
+    class Category {
+    }
+
+    Task "0" --> "*" TaskItem
+    TaskItem "0" --> "*" TaskItemMargin
+    Task "1" <--> "1" Category

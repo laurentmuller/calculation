@@ -1,0 +1,44 @@
+---
+title: Timestampable
+---
+
+classDiagram
+    class EntityInterface {
+        <<Interface>>
+        +getId() ?int
+        +getDisplay() string
+        +isNew() bool
+    }
+
+    class TimestampableInterface {
+        <<Interface>>
+        +getCreatedAt() ?DateTimeInterface
+        +getCreatedBy() ?string
+        +getUpdatedAt() ?DateTimeInterface
+        +getUpdatedBy() ?string
+        +updateTimestampable(DateTimeImmutable date, string user)
+    }
+
+    class Calculation {
+    }
+    class CalculationState {
+    }
+    class Category {
+    }
+    class Group {
+    }
+    class Product {
+    }
+    class User {
+    }
+    class GlobalMargin {
+    }
+
+    EntityInterface <|.. TimestampableInterface
+    TimestampableInterface <|.. Calculation
+    TimestampableInterface <|.. CalculationState
+    TimestampableInterface <|.. Group
+    TimestampableInterface <|.. Category
+    TimestampableInterface <|.. Product
+    TimestampableInterface <|.. User
+    TimestampableInterface <|.. GlobalMargin

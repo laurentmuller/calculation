@@ -943,3 +943,14 @@ span.bottom-border-gradient {
     margin-top: 1rem !important;
     margin-bottom: 0.5rem !important;
 }
+
+/**
+ * Diagram
+ */
+.mermaid {
+    display: none;
+}
+
+.mermaid:has(svg) {
+    display: block;
+}

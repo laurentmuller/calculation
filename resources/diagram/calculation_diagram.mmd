@@ -1,0 +1,111 @@
+---
+title: Calculation
+---
+
+classDiagram
+    class Calculation {
+        -DateTimeInterface date
+        -CalculationState state
+        -string customer
+        -string description
+        -float globalMargin
+        -float userMargin
+        -float itemsTotal
+        -float overallTotal
+        -Collection~CalculationGroup~ groups
+        +getDate() DateTimeInterface
+        +setDate(DateTimeInterface)
+        +getState() CalculationState
+        +setState(CalculationState)
+        +getCustomer() string
+        +setCustomer(string)
+        +getDescription() string
+        +setDescription(string)
+        +getGlobalMargin() float
+        +setGlobalMargin(float)
+        +getUserMargin() float
+        +setUserMargin(float)
+        +getItemsTotal() float
+        +setItemsTotal(float)
+        +getOverallTotal() float
+        +setOverallTotal(float)
+        +addGroup(CalculationGroup)
+        +removeGroup(CalculationGroup)
+        +getGroups() Collection~CalculationGroup~
+    }
+
+    class CalculationGroup {
+        -Calculation calculation
+        -Group group
+        -Collection~CalculationCategory~ categories
+        -string code
+        -float amount
+        -float margin
+        +getCalculation() Calculation
+        +setCalculation(Calculation)
+        +getGroup() Group
+        +setGroup(Group)
+        +addCategory(CalculationCategory)
+        +removeCategory(CalculationCategory)
+        +getCategories() Collection~CalculationCategory~
+        getCode() string
+        +setCode(string)
+        +getAmount() float
+        +setAmount(float)
+        +getMargin() float
+        +setMargin(float)
+    }
+
+    class CalculationCategory {
+        -CalculationGroup group
+        -Category category
+        -Collection~CalculationItem~ items
+        -string code
+        -float amount
+        +getGroup() CalculationGroup
+        +setGroup(CalculationGroup)
+        +getCategory() Category
+        +setCategory(Category)
+        +addItem(CalculationItem)
+        +removeItem(CalculationItem)
+        +getItems() Collection~CalculationItem~
+        getCode() string
+        +setCode(string)
+        +getAmount() float
+        +setAmount(float)
+    }
+
+    class CalculationItem {
+        -CalculationCategory category
+        -string description
+        -float price
+        -float quantity
+        -string unit
+        +getCategory() CalculationCategory
+        +setCategory(CalculationCategory)
+        +getDescription() string
+        +setDescription(string)
+        +getPrice() float
+        +setPrice(float)
+        +getQuantity() float
+        +setQuantity(float)
+        +getUnit() string
+        +setUnit(string)
+        +getTotal() float
+    }
+
+    class CalculationState {
+    }
+
+    class Group {
+    }
+
+    class Category {
+    }
+
+    Calculation "0" --> "*" CalculationGroup
+    CalculationGroup "0" --> "*" CalculationCategory
+    CalculationCategory "0" --> "*" CalculationItem
+    CalculationState "1" <--> "1" Calculation
+    CalculationGroup "1" <--> "1" Group
+    CalculationCategory "1" <--> "1" Category

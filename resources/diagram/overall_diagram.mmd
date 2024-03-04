@@ -1,0 +1,208 @@
+---
+title: Overall
+---
+classDiagram
+    class EntityInterface {
+        <<Interface>>
+        +getId() ?int
+        +getDisplay() string
+        +isNew() bool
+    }
+
+    class AbstractEntity {
+        <<Abstract>>
+        +int id
+        +getDisplay() string
+        +getId() ?int
+        +isNew() bool
+    }
+
+    class AbstractCategoryItemEntity {
+        <<Abstract>>
+        -Category category
+        -string supplier
+        -string unit
+        +getCategory() Category
+        +setCategory(Category)
+        +getSupplier() string
+        +setSupplier(string)
+        +getUnit() string
+        +setUnit(string)
+    }
+
+    class AbstractProperty {
+        <<Abstract>>
+        -string name
+        -string value
+        +getName() string
+        +setName(string)
+        +getBoolean() bool
+        +setBoolean(bool)
+        +getArray() array
+        +setArray(?array)
+        +getDate() ?\DateTimeInterface
+        +setDate(?\DateTimeInterface)
+        +getInteger() int
+        +setInteger(int)
+        +getString() ?string
+        +setString(?string)
+    }
+
+    class AbstractMargin {
+        <<Abstract>>
+        -float margin
+        -float minimum
+        -float maximum
+        +getMargin() float
+        +setMargin(float)
+        +getMinimum() float
+        +setMinimum(float)
+        +getMaximum() float
+        +setMaximum(float)
+    }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- AbstractCategoryItemEntity
+    AbstractEntity <|-- AbstractMargin
+    AbstractEntity <|-- User
+    AbstractEntity <|-- Group
+    AbstractEntity <|-- TaskItem
+    AbstractEntity <|-- TaskItemMargin
+    AbstractEntity <|-- Category
+    AbstractProperty <|-- Property
+    AbstractProperty <|-- UserProperty
+    AbstractMargin <|-- GroupMargin
+    AbstractMargin <|-- GlobalMargin
+    AbstractCategoryItemEntity <|-- Product
+    AbstractCategoryItemEntity <|-- Task
+    User --> "0..*" UserProperty
+    Group --> "0..*" GroupMargin
+    Group --> "0..*" Category
+    Category --> "0..*" Product
+    Category --> "0..*" Task
+    Task -->  "0..*" TaskItem
+    TaskItem -->  "0..*" TaskItemMargin
+
+    class Product {
+        -string description
+        -float price
+        +getDescription() string
+        +setDescription(string)
+        +getPrice() float
+        +setPrice(float)
+    }
+
+    class Task {
+        -string name
+        -Category category
+        -Collection~TaskItem~ items
+        +getName() string
+        +setName(string)
+        +getCategory() Category
+        +setCategory(Category)
+        +count() int
+        +addItem(TaskItem)
+        +removeItem(TaskItem)
+        +getItems() Collection~TaskItem~
+    }
+
+    class TaskItem {
+        -string name
+        -Task task
+        -Collection~TaskItemMargin~ margins
+        +getName() string
+        +setName(string)
+        +getTask() Task
+        +setTask(Task)
+        +addMargin(TaskItemMargin)
+        +removeMargin(TaskItemMargin)
+        +getMargins() Collection~TaskItemMargin~
+    }
+
+    class TaskItemMargin {
+        -TaskItem taskItem
+        -float minimum
+        -float maximum
+        -float value
+        +getTaskItem() TaskItem
+        +setTaskItem(TaskItem)
+        +getMinimum() float
+        +setMinimum(float)
+        +getMaximum() float
+        +setMaximum(float)
+        +getValue() float
+        +setValue(float)
+    }
+
+    class User {
+        -string username
+        -string email
+        -string password
+        -bool enabled
+        -bool verified
+        -Collection~UserProperty~ properties
+        +getUsername() string
+        +getEmail() string
+        +getPassword() string
+        +getUserIdentifier() string
+        +isEnabled() bool
+        +isVerified() bool
+        +addProperty(UserProperty)
+        +removeProperty(UserProperty)
+        +getProperties() Collection~UserProperty~
+    }
+
+    class UserProperty {
+        -User user
+        +getUser() User
+        +setUser(User)
+    }
+
+    class Group {
+        -string code
+        -string description
+        -Collection~GroupMargin~ margins
+        -Collection~Category~ categories
+        +getCode() string
+        +setCode(string)
+        +getDescription() string
+        +setDescription(string)
+        +addMargin(GroupMargin)
+        +removeMargin(GroupMargin)
+        +getMargins() Collection~GroupMargin~
+        +addCategory(Category)
+        +removeCategory(Category)
+        +getCategories() Collection~Category~
+    }
+
+    class GroupMargin {
+        -Group group
+        +getGroup() Group
+        +set(Group)
+    }
+
+    class Category {
+        -Group group
+        -Collection~Product~ products
+        -Collection~Task~ tasks
+        -string code
+        -string description
+        +getGroup() Group
+        +set(Group)
+        +getCode() string
+        +setCode(string)
+        +getDescription() string
+        +setDescription(string)
+        +addProduct(Product)
+        +removeProduct(Product)
+        +getProducts() Collection~Product~
+        +addTask(Task)
+        +removeTask(Task)
+        +getTasks() Collection~Task~
+    }
+
+    class GlobalMargin {
+    }
+
+    class Property {
+    }

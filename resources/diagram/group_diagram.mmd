@@ -1,0 +1,64 @@
+---
+title: Group
+---
+
+classDiagram
+    class Group {
+        -string code
+        -string description
+        -Collection~GroupMargin~ margins
+        -Collection~Category~ categories
+        +getCode() string
+        +setCode(string)
+        +getDescription() string
+        +setDescription(string)
+        +addMargin(GroupMargin)
+        +removeMargin(GroupMargin)
+        +getMargins() Collection~GroupMargin~
+        +addCategory(Category)
+        +removeCategory(Category)
+        +getCategories() Collection~Category~
+    }
+
+    class GroupMargin {
+        -Group group
+        +getGroup() Group
+        +set(Group)
+    }
+
+    class Category {
+        -Group group
+        -Collection~Product~ products
+        -Collection~Task~ tasks
+        -string code
+        -string description
+        +getGroup() Group
+        +set(Group)
+        +getCode() string
+        +setCode(string)
+        +getDescription() string
+        +setDescription(string)
+        +addProduct(Product)
+        +removeProduct(Product)
+        +getProducts() Collection~Product~
+        +addTask(Task)
+        +removeTask(Task)
+        +getTasks() Collection~Task~
+    }
+
+    class AbstractMargin {
+        <<Abstract>>
+        -float margin
+        -float minimum
+        -float maximum
+        +getMargin() float
+        +setMargin(float)
+        +getMinimum() float
+        +setMinimum(float)
+        +getMaximum() float
+        +setMaximum(float)
+    }
+
+    Group "0" --> "*" GroupMargin
+    Group "0" --> "*" Category
+    AbstractMargin --|> GroupMargin

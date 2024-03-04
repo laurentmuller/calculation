@@ -1,0 +1,34 @@
+{% extends 'cards/card_base.html.twig' %}
+{% from 'macros/_icons.html.twig' import icon %}
+{# parameters #}
+{%- set title = 'test.diagram' -%}
+{%- set title_icon = 'diagram-project' -%}
+{% block container_class 'container-fluid' %}
+{% block card_container_class '' %}
+{% block card_footer_class ' d-none' %}
+{# header #}
+{% block card_header %}
+<div class="d-flex-wrap-center">
+    {{ parent() }}
+    <div class="d-flex-wrap-center ms-sm-auto">
+        <label class="form-label mb-0" for="diagrams">Diagramme</label>
+        <select class="form-select form-select-sm w-auto d-print-none" id="diagrams" name="diagrams" data-diagram="{{ diagram_name }}">
+            {% for key, value in diagram_files %}
+                <option value="{{ key }}"{% if diagram_name == key %} selected="selected"{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+{% endblock %}
+{# body #}
+{% block card_body -%}
+<pre id="diagram" class="mermaid">
+    {{ diagram_content }}
+</pre>
+{% endblock %}
+{# javascripts #}
+{% block javascripts %}
+    {{ parent() }}
+    {{- asset_js('vendor/mermaid/mermaid.min.js') }}
+    {{ asset_js('js/test/diagram.js') }}
+{% endblock %}

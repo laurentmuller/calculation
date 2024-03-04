@@ -1,0 +1,33 @@
+---
+title: Abstract Property
+---
+classDiagram
+    class AbstractProperty {
+        <<Abstract>>
+        -string name
+        -string value
+        +getName() string
+        +setName(string)
+        +getBoolean() bool
+        +setBoolean(bool)
+        +getArray() array|null
+        +setArray(array|null)
+        +getDate() \DateTimeInterface|null
+        +setDate(\DateTimeInterface|null)
+        +getInteger() int
+        +setInteger(int)
+        +getString() string|null
+        +setString(string|null)
+    }
+
+    class UserProperty {
+        -User user
+        +getUser() User
+        +setUser(User)
+    }
+
+    class GlobalProperty {
+    }
+
+    AbstractProperty <|-- UserProperty
+    AbstractProperty <|-- GlobalProperty

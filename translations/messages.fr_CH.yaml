@@ -1253,6 +1253,7 @@ test:
   tree_view: Tree View
   use_notification: Utiliser une notification.
   ip_stack: Adresse IP
+  diagram: Diagramme de classe
 theme:
   title: Thème
   help: Appliquer un thème sur ce site

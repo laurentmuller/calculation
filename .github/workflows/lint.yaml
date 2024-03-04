@@ -1,0 +1,40 @@
+name: Lint
+
+on: [ push, pull_request ]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Install PHP with extensions
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.2'
+                    coverage: none
+
+            -   name: Install dependencies
+                run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+            -   name: Lint YAML
+                run: php bin/console lint:yaml translations .github/workflows --parse-tags
+
+            -   name: Lint Twig
+                run: php bin/console lint:twig templates
+
+            -   name: Lint Container
+                run: php bin/console lint:container
+
+            -   name: Lint Markdown
+                uses: DavidAnson/markdownlint-cli2-action@v15
+                with:
+                    globs: '*.md'
+
+            -   name: Validate Schema
+                run: php bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
+
+            -   name: Validate Composer
+                run: composer validate --strict

@@ -35,3 +35,7 @@ classDiagram
     Group "0" --* "*" Category
     Category "0" --* "*" Product
     Category "0" --* "*" Task
+
+    click Group call nodeCallback()
+    click Product call nodeCallback()
+    click Task call nodeCallback()

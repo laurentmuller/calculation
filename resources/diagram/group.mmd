@@ -54,3 +54,8 @@ classDiagram
     AbstractMargin --|> GroupMargin
     Category "0" --* "*" Product
     Category "0" --* "*" Task
+
+    click AbstractMargin call nodeCallback()
+    click Category call nodeCallback()
+    click Product call nodeCallback()
+    click Task call nodeCallback()

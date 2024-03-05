@@ -110,3 +110,7 @@ classDiagram
     CalculationState "1" <--> "1" Calculation
     CalculationGroup "1" <--> "1" Group
     CalculationCategory "1" <--> "1" Category
+
+    click CalculationState call nodeCallback()
+    click Category call nodeCallback()
+    click Group call nodeCallback()

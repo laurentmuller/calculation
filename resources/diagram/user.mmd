@@ -2,7 +2,14 @@
 title: User
 ---
 classDiagram
-    direction TB
+    direction BT
+
+    class UserInterface {
+        <<Interface>>
+        +getRoles() array
+        +getUserIdentifier() string
+    }
+
     class User {
         -string username
         -string email
@@ -10,6 +17,8 @@ classDiagram
         -bool enabled
         -bool verified
         -Collection~UserProperty~ properties
+        +getRoles() array
+        +getUserIdentifier() string
         +getUsername() string
         +getEmail() string
         +getPassword() string
@@ -45,5 +54,8 @@ classDiagram
         +setString(string|null)
     }
 
+    User <|.. UserInterface
     User "0" --* "*" UserProperty
     AbstractProperty <|-- UserProperty
+
+    click AbstractProperty call nodeCallback()

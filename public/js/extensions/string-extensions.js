@@ -52,9 +52,9 @@ String.prototype.equalsIgnoreCase = function (value) {
 };
 
 /**
- * Replace camel cased to dashed ('isAnEntry' => 'is-an-entry').
+ * Replace a camel cased to a dashed ('isAnEntry' => 'is-an-entry').
  *
- * @return {string} this dashed string.
+ * @return {string}
  */
 /* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.dasherize = function () {
@@ -69,7 +69,7 @@ String.prototype.dasherize = function () {
 /**
  * Replace dashed to camel cased ('is-an-entry' => 'isAnEntry').
  *
- * @return {string} this camelized string.
+ * @return {string}
  */
 /* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
 String.prototype.camelize = function () {

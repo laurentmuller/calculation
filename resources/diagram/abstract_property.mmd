@@ -32,6 +32,9 @@ classDiagram
 
     class User {
     }
+
     AbstractProperty <|-- UserProperty
     AbstractProperty <|-- GlobalProperty
     User "0" --* "*" UserProperty
+
+    click User call nodeCallback()

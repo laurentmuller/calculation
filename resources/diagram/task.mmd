@@ -51,3 +51,5 @@ classDiagram
     Task "0" --* "*" TaskItem
     TaskItem "0" --* "*" TaskItemMargin
     Task "1" <--> "1" Category
+
+    click Category call nodeCallback()

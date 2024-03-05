@@ -32,3 +32,5 @@ classDiagram
     AbstractMargin <|-- GroupMargin
     AbstractMargin <|-- GlobalMargin
     Group "0" --* "*" GroupMargin
+
+    click Group call nodeCallback()

@@ -4,8 +4,12 @@ title: Product
 classDiagram
     direction LR
 
+    class Group {
+    }
+
     class Category {
     }
+
     class AbstractCategoryItemEntity {
         <<Abstract>>
         -Category category
@@ -30,3 +34,8 @@ classDiagram
 
     AbstractCategoryItemEntity <|-- Product
     AbstractCategoryItemEntity "0" --* "*" Category
+    Category "0" --* "*" Group
+
+    click AbstractCategoryItemEntity call nodeCallback()
+    click Category call nodeCallback()
+    click Group call nodeCallback()

@@ -1,0 +1,15 @@
+php_version: 8.2
+global_exclude_dirs:
+    - vendor
+    - tests
+    - features
+    - var
+rules:
+    web.apache_config:
+        enabled: false
+    composer.using_migrations:
+        enabled: false
+    twig.xss_vulnerability:
+        enabled: false
+    symfony.verbose_logging_in_production:
+        enabled: false

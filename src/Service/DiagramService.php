@@ -49,12 +49,7 @@ class DiagramService
      */
     public function getFile(string $name): ?array
     {
-        $files = $this->getFiles();
-        if (\array_key_exists($name, $files)) {
-            return $files[$name];
-        }
-
-        return null;
+        return $this->getFiles()[$name] ?? null;
     }
 
     /**

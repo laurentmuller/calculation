@@ -12,25 +12,25 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Property;
+use App\Entity\GlobalProperty;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * Repository for property entity.
+ * Repository for global property entity.
  *
- * @template-extends AbstractRepository<Property>
+ * @template-extends AbstractRepository<GlobalProperty>
  */
-class PropertyRepository extends AbstractRepository
+class GlobalPropertyRepository extends AbstractRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Property::class);
+        parent::__construct($registry, GlobalProperty::class);
     }
 
     /**
      * Gets a property for the given name.
      */
-    public function findOneByName(string $name): ?Property
+    public function findOneByName(string $name): ?GlobalProperty
     {
         return $this->findOneBy(['name' => $name]);
     }

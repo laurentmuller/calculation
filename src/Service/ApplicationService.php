@@ -15,8 +15,8 @@ namespace App\Service;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Entity\Category;
+use App\Entity\GlobalProperty;
 use App\Entity\Product;
-use App\Entity\Property;
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
 use App\Enums\StrengthLevel;
@@ -25,7 +25,7 @@ use App\Interfaces\EntityInterface;
 use App\Interfaces\PropertyServiceInterface;
 use App\Model\CustomerInformation;
 use App\Model\Role;
-use App\Repository\PropertyRepository;
+use App\Repository\GlobalPropertyRepository;
 use App\Traits\MathTrait;
 use App\Traits\PropertyServiceTrait;
 use App\Utils\StringUtils;
@@ -476,7 +476,7 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     {
         $repository = $this->getPropertyRepository();
         $property = $repository->findOneByName($name);
-        if ($property instanceof Property) {
+        if ($property instanceof GlobalProperty) {
             $repository->remove($property);
             $this->updateAdapter();
         }
@@ -585,48 +585,48 @@ class ApplicationService implements PropertyServiceInterface, ServiceSubscriberI
     }
 
     /**
-     * @psalm-return  array<string, Property>
+     * @psalm-return  array<string, GlobalProperty>
      */
     private function getExistingProperties(): array
     {
-        /** @psalm-var Property[] $properties */
+        /** @psalm-var GlobalProperty[] $properties */
         $properties = $this->manager
-            ->getRepository(Property::class)
+            ->getRepository(GlobalProperty::class)
             ->findAll();
 
         return \array_reduce(
             $properties,
-            /** @psalm-param array<string, Property> $carry */
-            fn (array $carry, Property $property) => $carry + [$property->getName() => $property],
+            /** @psalm-param array<string, GlobalProperty> $carry */
+            fn (array $carry, GlobalProperty $property) => $carry + [$property->getName() => $property],
             []
         );
     }
 
-    private function getPropertyRepository(): PropertyRepository
+    private function getPropertyRepository(): GlobalPropertyRepository
     {
-        /** @psalm-var PropertyRepository $repository */
-        $repository = $this->manager->getRepository(Property::class);
+        /** @psalm-var GlobalPropertyRepository $repository */
+        $repository = $this->manager->getRepository(GlobalProperty::class);
 
         return $repository;
     }
 
     /**
      * @psalm-param array<string, mixed> $defaultValues
-     * @psalm-param array<string, Property> $existingProperties
+     * @psalm-param array<string, GlobalProperty> $existingProperties
      */
     private function saveProperty(
         string $name,
         mixed $value,
         array $defaultValues,
         array $existingProperties,
-        PropertyRepository $repository
+        GlobalPropertyRepository $repository
     ): void {
         if ($this->isDefaultValue($defaultValues, $name, $value)) {
             if (isset($existingProperties[$name])) {
                 $repository->remove($existingProperties[$name], false);
             }
         } else {
-            $property = $existingProperties[$name] ?? Property::instance($name);
+            $property = $existingProperties[$name] ?? GlobalProperty::instance($name);
             $property->setValue($value);
             $repository->persist($property, false);
         }

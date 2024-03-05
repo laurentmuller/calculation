@@ -2,6 +2,7 @@
 title: User
 ---
 classDiagram
+    direction TB
     class User {
         -string username
         -string email
@@ -26,7 +27,6 @@ classDiagram
         +setUser(User)
     }
 
-
     class AbstractProperty {
         <<Abstract>>
         -string name
@@ -45,5 +45,5 @@ classDiagram
         +setString(string|null)
     }
 
-    User --> "0..*" UserProperty
+    User "0" --* "*" UserProperty
     AbstractProperty <|-- UserProperty

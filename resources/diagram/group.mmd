@@ -3,6 +3,7 @@ title: Group
 ---
 
 classDiagram
+    direction LR
     class Group {
         -string code
         -string description
@@ -27,23 +28,6 @@ classDiagram
     }
 
     class Category {
-        -Group group
-        -Collection~Product~ products
-        -Collection~Task~ tasks
-        -string code
-        -string description
-        +getGroup() Group
-        +set(Group)
-        +getCode() string
-        +setCode(string)
-        +getDescription() string
-        +setDescription(string)
-        +addProduct(Product)
-        +removeProduct(Product)
-        +getProducts() Collection~Product~
-        +addTask(Task)
-        +removeTask(Task)
-        +getTasks() Collection~Task~
     }
 
     class AbstractMargin {
@@ -59,6 +43,14 @@ classDiagram
         +setMaximum(float)
     }
 
-    Group "0" --> "*" GroupMargin
-    Group "0" --> "*" Category
+    class Product {
+    }
+
+    class Task {
+    }
+
+    Group "0" --* "*" GroupMargin
+    Group "0" --* "*" Category
     AbstractMargin --|> GroupMargin
+    Category "0" --* "*" Product
+    Category "0" --* "*" Task

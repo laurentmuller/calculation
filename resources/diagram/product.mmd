@@ -1,0 +1,32 @@
+---
+title: Product
+---
+classDiagram
+    direction LR
+
+    class Category {
+    }
+    class AbstractCategoryItemEntity {
+        <<Abstract>>
+        -Category category
+        -string supplier
+        -string unit
+        +getCategory() Category
+        +setCategory(Category)
+        +getSupplier() string
+        +setSupplier(string)
+        +getUnit() string
+        +setUnit(string)
+    }
+
+    class Product {
+        -string description
+        -float price
+        +getDescription() string
+        +setDescription(string)
+        +getPrice() float
+        +setPrice(float)
+    }
+
+    AbstractCategoryItemEntity <|-- Product
+    AbstractCategoryItemEntity "0" --* "*" Category

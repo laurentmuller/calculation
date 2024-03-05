@@ -2,6 +2,7 @@
 title: Abstract Property
 ---
 classDiagram
+    direction TB
     class AbstractProperty {
         <<Abstract>>
         -string name
@@ -29,5 +30,8 @@ classDiagram
     class GlobalProperty {
     }
 
+    class User {
+    }
     AbstractProperty <|-- UserProperty
     AbstractProperty <|-- GlobalProperty
+    User "0" --* "*" UserProperty

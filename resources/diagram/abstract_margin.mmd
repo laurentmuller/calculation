@@ -1,0 +1,34 @@
+---
+title: Abstract Margin
+---
+classDiagram
+    direction TB
+
+    class AbstractMargin {
+        <<Abstract>>
+        -float margin
+        -float minimum
+        -float maximum
+        +getMargin() float
+        +setMargin(float)
+        +getMinimum() float
+        +setMinimum(float)
+        +getMaximum() float
+        +setMaximum(float)
+    }
+
+    class GroupMargin {
+        -Group group
+        +getGroup() Group
+        +set(Group)
+    }
+
+    class GlobalMargin {
+    }
+
+    class Group {
+    }
+
+    AbstractMargin <|-- GroupMargin
+    AbstractMargin <|-- GlobalMargin
+    Group "0" --* "*" GroupMargin

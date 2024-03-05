@@ -3,6 +3,7 @@ title: Calculation
 ---
 
 classDiagram
+    direction LR
     class Calculation {
         -DateTimeInterface date
         -CalculationState state
@@ -103,9 +104,9 @@ classDiagram
     class Category {
     }
 
-    Calculation "0" --> "*" CalculationGroup
-    CalculationGroup "0" --> "*" CalculationCategory
-    CalculationCategory "0" --> "*" CalculationItem
+    Calculation "0" --* "*" CalculationGroup
+    CalculationGroup "0" --* "*" CalculationCategory
+    CalculationCategory "0" --* "*" CalculationItem
     CalculationState "1" <--> "1" Calculation
     CalculationGroup "1" <--> "1" Group
     CalculationCategory "1" <--> "1" Category

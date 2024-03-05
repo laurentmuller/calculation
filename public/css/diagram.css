@@ -1,0 +1,14 @@
+@import 'style.css';
+
+/**! compression tag for ftp-deployment */
+
+/**
+ * Diagram
+ */
+.mermaid {
+    display: none;
+}
+
+.mermaid:has(svg) {
+    display: block;
+}

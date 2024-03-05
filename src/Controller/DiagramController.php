@@ -16,6 +16,7 @@ use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Service\DiagramService;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -24,6 +25,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display Mermaid diagrams.
+ *
+ * @see https://mermaid.js.org/
  */
 #[AsController]
 #[Route(path: '/test')]
@@ -39,7 +42,7 @@ class DiagramController extends AbstractController
     public function diagram(
         DiagramService $service,
         #[MapQueryParameter]
-        string $name = 'overall_diagram'
+        string $name = 'overall'
     ): Response {
         $file = $service->getFile($name);
         if (null === $file) {
@@ -47,9 +50,29 @@ class DiagramController extends AbstractController
         }
 
         return $this->render('test/diagram.html.twig', [
-            'name' => $name,
             'file' => $file,
             'files' => $service->getFiles(),
         ]);
+    }
+
+    /**
+     * Load a diagram.
+     *
+     * @throws InvalidArgumentException
+     */
+    #[Get(path: '/diagram/load', name: 'test_diagram_load')]
+    public function load(
+        DiagramService $service,
+        #[MapQueryParameter]
+        string $name = 'overall_diagram'
+    ): JsonResponse {
+        $file = $service->getFile($name);
+        if (null === $file) {
+            return $this->jsonFalse([
+                'message' => "Unable to find the diagram '$name'.",
+            ]);
+        }
+
+        return $this->jsonTrue(['file' => $file]);
     }
 }

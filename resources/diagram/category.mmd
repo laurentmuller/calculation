@@ -1,0 +1,37 @@
+---
+title: Category
+---
+classDiagram
+    direction LR
+
+    class Category {
+        -Group group
+        -Collection~Product~ products
+        -Collection~Task~ tasks
+        -string code
+        -string description
+        +getGroup() Group
+        +set(Group)
+        +getCode() string
+        +setCode(string)
+        +getDescription() string
+        +setDescription(string)
+        +addProduct(Product)
+        +removeProduct(Product)
+        +getProducts() Collection~Product~
+        +addTask(Task)
+        +removeTask(Task)
+        +getTasks() Collection~Task~
+    }
+
+    class Group {
+    }
+    class Task {
+    }
+
+    class Product {
+    }
+
+    Group "0" --* "*" Category
+    Category "0" --* "*" Product
+    Category "0" --* "*" Task

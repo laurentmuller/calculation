@@ -18,24 +18,18 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
- * Service to get diagrams.
+ * Service to get Mermaid diagrams.
+ *
+ * @see https://mermaid.js.org/
  *
  * @psalm-type DiagramType = array{
+ *     name: string,
  *     title: string,
  *     content: string
  * }
  */
 class DiagramService
 {
-    public const EMPTY_DIAGRAM = <<<DIAGRAM
-            ---
-            title: Empty
-            ---
-            classDiagram
-                class EmptyClass {
-                }
-        DIAGRAM;
-
     private const FILE_SUFFIX = '.mmd';
     private const TITLE_PATTERN = '/title\s?:\s?(.*)/m';
 
@@ -47,7 +41,7 @@ class DiagramService
     }
 
     /**
-     * Gets the file title and content for the given name.
+     * Gets the diagram file for the given name.
      *
      * @psalm-return DiagramType|null
      *
@@ -82,7 +76,9 @@ class DiagramService
                 $content = $file->getContents();
                 $title = $this->findTitle($content) ?? 'Diagram';
                 $content = $this->removeTitle($content);
-                $files[$file->getBasename(self::FILE_SUFFIX)] = [
+                $name = $file->getBasename(self::FILE_SUFFIX);
+                $files[$name] = [
+                    'name' => $name,
                     'title' => $title,
                     'content' => $content,
                 ];
@@ -91,21 +87,6 @@ class DiagramService
 
             return $files;
         });
-    }
-
-    /**
-     * Gets the diagram title for the given content.
-     *
-     * @throws InvalidArgumentException
-     */
-    public function getTitle(string $name, string $default = 'Diagram'): ?string
-    {
-        $files = $this->getFiles();
-        if (\array_key_exists($name, $files)) {
-            return $files[$name]['title'];
-        }
-
-        return $default;
     }
 
     private function findTitle(string $content): ?string

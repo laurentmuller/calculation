@@ -3,6 +3,7 @@ title: Task
 ---
 
 classDiagram
+    direction LR
     class Task {
         -string name
         -Category category
@@ -47,6 +48,6 @@ classDiagram
     class Category {
     }
 
-    Task "0" --> "*" TaskItem
-    TaskItem "0" --> "*" TaskItemMargin
+    Task "0" --* "*" TaskItem
+    TaskItem "0" --* "*" TaskItemMargin
     Task "1" <--> "1" Category

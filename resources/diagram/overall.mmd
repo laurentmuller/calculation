@@ -2,6 +2,7 @@
 title: Overall
 ---
 classDiagram
+    direction TB
     class EntityInterface {
         <<Interface>>
         +getId() ?int
@@ -60,28 +61,6 @@ classDiagram
         +getMaximum() float
         +setMaximum(float)
     }
-
-    EntityInterface <|.. AbstractEntity
-    AbstractEntity <|-- AbstractCategoryItemEntity
-    AbstractEntity <|-- AbstractMargin
-    AbstractEntity <|-- User
-    AbstractEntity <|-- Group
-    AbstractEntity <|-- TaskItem
-    AbstractEntity <|-- TaskItemMargin
-    AbstractEntity <|-- Category
-    AbstractProperty <|-- Property
-    AbstractProperty <|-- UserProperty
-    AbstractMargin <|-- GroupMargin
-    AbstractMargin <|-- GlobalMargin
-    AbstractCategoryItemEntity <|-- Product
-    AbstractCategoryItemEntity <|-- Task
-    User --> "0..*" UserProperty
-    Group --> "0..*" GroupMargin
-    Group --> "0..*" Category
-    Category --> "0..*" Product
-    Category --> "0..*" Task
-    Task -->  "0..*" TaskItem
-    TaskItem -->  "0..*" TaskItemMargin
 
     class Product {
         -string description
@@ -204,5 +183,28 @@ classDiagram
     class GlobalMargin {
     }
 
-    class Property {
+    class GlobalProperty {
     }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- AbstractCategoryItemEntity
+    AbstractEntity <|-- AbstractMargin
+    AbstractEntity <|-- User
+    AbstractEntity <|-- Group
+    AbstractEntity <|-- TaskItem
+    AbstractEntity <|-- TaskItemMargin
+    AbstractEntity <|-- Category
+    AbstractEntity <|-- AbstractProperty
+    AbstractProperty <|-- GlobalProperty
+    AbstractProperty <|-- UserProperty
+    AbstractMargin <|-- GroupMargin
+    AbstractMargin <|-- GlobalMargin
+    AbstractCategoryItemEntity <|-- Product
+    AbstractCategoryItemEntity <|-- Task
+    User "0" --> "*" UserProperty
+    Group "0" --> "*" GroupMargin
+    Group "0" --> "*" Category
+    Category "0" --> "*" Product
+    Category "0" --> "*" Task
+    Task "0" --> "*" TaskItem
+    TaskItem "0" --> "*" TaskItemMargin

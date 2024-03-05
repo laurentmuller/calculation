@@ -14,7 +14,7 @@
         <label class="form-label mb-0" for="diagrams">Diagramme</label>
         <select class="form-select form-select-sm w-auto d-print-none" id="diagrams" name="diagrams">
             {% for key, value in files %}
-                <option value="{{ key }}"{% if name == key %} selected="selected"{% endif %}>{{ value.title }}</option>
+                <option value="{{ key }}"{% if file.name == key %} selected="selected"{% endif %}>{{ value.title }}</option>
             {% endfor %}
         </select>
     </div>
@@ -22,10 +22,14 @@
 {% endblock %}
 {# body #}
 {% block card_body -%}
-<pre id="diagram" class="mermaid">
+<pre id="diagram" class="mermaid" data-url="{{ path('test_diagram_load') }}">
     {{ file.content }}
 </pre>
 {% endblock %}
+{# stylesheets #}
+{% block stylesheets %}
+    {{ asset_css('css/diagram.css') }}
+{%- endblock -%}
 {# javascripts #}
 {% block javascripts %}
     {{ parent() }}

@@ -26,6 +26,17 @@ classDiagram
     class Calculation {
     }
 
+    class AbstractEntity {
+        <<Abstract>>
+    }
+    class EntityInterface {
+        <<Interface>>
+    }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- CalculationState
     CalculationState "0" --> "*" Calculation
 
+    click EntityInterface call nodeCallback()
+    click AbstractEntity call nodeCallback()
     click Calculation call nodeCallback()

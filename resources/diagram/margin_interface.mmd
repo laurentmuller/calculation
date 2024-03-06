@@ -1,0 +1,36 @@
+---
+title: Margin Interface
+---
+classDiagram
+    direction LR
+
+    class MarginInterface {
+        <<Interface>>
+        +getMinimum() float
+        +getMaximum() float
+        +contains(float) bool
+    }
+
+    class TaskItemMargin {
+    }
+
+    class AbstractMargin {
+    }
+
+    class GlobalMargin {
+    }
+
+    class GroupMargin {
+    }
+
+    class Group {
+    }
+
+    MarginInterface <|.. AbstractMargin
+    MarginInterface <|.. TaskItemMargin
+    AbstractMargin <|-- GlobalMargin
+    AbstractMargin <|-- GroupMargin
+    Group "0" --* "*" GroupMargin
+
+    click AbstractMargin call nodeCallback()
+    click Group call nodeCallback()

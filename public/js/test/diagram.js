@@ -5,9 +5,8 @@
 (() => {
     'use strict';
 
-    const DIAGRAM_SELECTOR = '.mermaid';
-    const DATA_PROCESSED = 'data-processed';
     const DATA_CODE = 'data-code';
+    const DATA_PROCESSED = 'data-processed';
 
     const THEME_COOKIE_KEY = 'THEME';
     const THEME_CHANNEL = 'theme';
@@ -15,6 +14,23 @@
     const THEME_LIGHT = 'light';
 
     const CLASS_REGEX = /classId-(.*)-\d+/;
+    const REPLACE_REGEX = /([a-z])([A-Z])/g;
+    const REPLACE_TARGET = '$1_$2';
+
+    /**
+     * The diagram renderer.
+     * @var {jQuery<HTMLPreElement>}
+     */
+    const $diagram = $('#diagram');
+
+    /**
+     * The diagrams list.
+     * @var {jQuery<HTMLSelectElement>}
+     */
+    const $diagrams = $('#diagrams');
+
+    // Gets the selected theme (light or dark).
+    const getTheme = () => window.Cookie.getValue(THEME_COOKIE_KEY, THEME_LIGHT);
 
     /**
      * Show an error message.
@@ -26,101 +42,65 @@
     };
 
     /**
-     * Handle the node click.
+     * Handle the diagram node click.
      * @param {string} nodeId - the node identifier like: "classId-Category-0".
      */
     window.nodeCallback = (nodeId) => {
-        const result = CLASS_REGEX.exec(nodeId);
-        if (!result || result.length < 2) {
-            showError(`Unable to find a corresponding diagram for the node "${nodeId}".`);
-            return;
-        }
-
-        const className = result[1].replace(/([a-z])([A-Z])/, '$1_$2');
-        // window.console.log('Found class: ' + className);
         let found = false;
-        $('#diagrams option').each(function () {
-            const value = $(this).val();
-            if (className.equalsIgnoreCase(value)) {
-                $('#diagrams').val(value).trigger('change');
-                found = true;
-                return false;
-            }
-        });
+        const result = CLASS_REGEX.exec(nodeId);
+        if (result && result.length >= 2) {
+            const className = result[1].replace(REPLACE_REGEX, REPLACE_TARGET);
+            $diagrams.find('option').each(function () {
+                const value = $(this).val();
+                if (className.equalsIgnoreCase(value)) {
+                    $diagrams.val(value).trigger('change');
+                    found = true;
+                    return false;
+                }
+            });
+        }
         if (!found) {
             showError(`Unable to find a corresponding diagram for the node "${nodeId}".`);
         }
     };
 
-    /**
-     * Gets the selected theme (light or dark).
-     * @return {string}
-     */
-    const getTheme = () => window.Cookie.getValue(THEME_COOKIE_KEY, THEME_LIGHT);
-
-    /**
-     * Gets the diagram elements.
-     *
-     * @return {NodeListOf<Element>}
-     */
-    const getElements = () => document.querySelectorAll(DIAGRAM_SELECTOR);
-
-    /**
-     * Gets the diagram options.
-     * @return {{theme: string, securityLevel: string}}
-     */
-    const getOptions = function () {
-        return {
-            theme: getTheme(), securityLevel: 'loose'
-        };
-    };
-
-    /**
-     * Reload diagrams.
-     */
-    const reloadDiagrams = function () {
-        const options = getOptions();
-        mermaid.initialize(options);
-        mermaid.init(options, getElements());
-    };
-
-    /**
-     * Save inner content of diagrams.
-     */
-    const saveDiagrams = () => {
-        getElements().forEach((element) => {
-            element.setAttribute(DATA_CODE, element.innerHTML);
+    // Reload the diagram.
+    const reloadDiagram = function () {
+        mermaid.initialize({
+            theme: getTheme(),
+            startOnLoad: false,
+            securityLevel: 'loose'
+        });
+        mermaid.run({
+            nodes: [$diagram[0]],
         });
     };
 
-    /**
-     * Reset processed diagrams.
-     */
-    const resetDiagrams = () => {
-        getElements().forEach(element => {
-            const code = element.getAttribute(DATA_CODE);
-            if (code !== null) {
-                element.removeAttribute(DATA_PROCESSED);
-                element.innerHTML = code;
-            }
-        });
+    // Save the HTML content of the diagram.
+    const saveDiagram = () => {
+        $diagram.attr(DATA_CODE, $diagram.html());
     };
 
-    /**
-     * Create and handle theme channel.
-     */
+    // Reset processed diagram.
+    const resetDiagram = () => {
+        const code = $diagram.attr(DATA_CODE);
+        if (code) {
+            $diagram.attr(DATA_PROCESSED, null);
+            $diagram.html(code);
+        }
+    };
+
+    // Create and handle theme channel.
     const channel = new window.BroadcastChannel(THEME_CHANNEL);
     channel.addEventListener('message', (e) => {
         if (e.data === THEME_EVENT_NAME) {
-            resetDiagrams();
-            reloadDiagrams();
+            resetDiagram();
+            reloadDiagram();
         }
     });
 
-    /**
-     * Handle diagram selection.
-     */
-    $('#diagrams').on('change', function () {
+    // Handle diagrams change selection.
+    $diagrams.on('change', function () {
         const url = $('#diagram').data('url');
         if (!url) {
             showError('Unable to find the corresponding diagram (URL not defined).');
@@ -134,30 +114,28 @@
                 showError(response.message);
                 return;
             }
-            $('#diagram').text(response.file.content);
-            saveDiagrams();
-            resetDiagrams();
-            reloadDiagrams();
+            // reload diagram
+            $diagram.text(response.file.content);
+            saveDiagram();
+            resetDiagram();
+            reloadDiagram();
 
+            // update history
             const name = response.file.name;
             const url = `?name=${name}`;
             window.history.pushState({'name': name}, null, url);
-            // location.replace(`https://example.com/#${location.pathname}`);
-            // window.history.replaceState({'name': response.file.name}, null, url);
         });
     }).trigger('focus');
 
-    /**
-     * Handle history pop state.
-     */
+    // Handle history pop state.
     window.addEventListener('popstate', (e) => {
         if (e.state && e.state.name) {
             const name = e.state.name;
-            $('#diagrams').val(name).trigger('change');
+            $diagrams.val(name).trigger('change');
         }
     });
 
     // save and initialize diagrams.
-    saveDiagrams();
-    mermaid.initialize(getOptions());
+    saveDiagram();
+    reloadDiagram();
 })();

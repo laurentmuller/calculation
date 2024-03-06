@@ -2,7 +2,11 @@
 title: Abstract Margin
 ---
 classDiagram
-    direction TB
+    direction LR
+
+    class MarginInterface {
+        <<Interface>>
+    }
 
     class AbstractMargin {
         <<Abstract>>
@@ -15,6 +19,7 @@ classDiagram
         +setMinimum(float)
         +getMaximum() float
         +setMaximum(float)
+        +contains(float) bool
     }
 
     class GroupMargin {
@@ -29,8 +34,22 @@ classDiagram
     class Group {
     }
 
+    class AbstractEntity {
+        <<Abstract>>
+    }
+
+    class EntityInterface {
+        <<Interface>>
+    }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- AbstractMargin
+    MarginInterface <|.. AbstractMargin
     AbstractMargin <|-- GroupMargin
     AbstractMargin <|-- GlobalMargin
     Group "0" --* "*" GroupMargin
 
+    click MarginInterface call nodeCallback()
+    click EntityInterface call nodeCallback()
+    click AbstractEntity call nodeCallback()
     click Group call nodeCallback()

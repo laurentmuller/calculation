@@ -105,13 +105,24 @@ classDiagram
     class Category {
     }
 
+    class AbstractEntity {
+        <<Abstract>>
+    }
+    class EntityInterface {
+        <<Interface>>
+    }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- Calculation
     Calculation "0" --* "*" CalculationGroup
     CalculationGroup "0" --* "*" CalculationCategory
     CalculationCategory "0" --* "*" CalculationItem
-    CalculationState "1" <--> "1" Calculation
-    CalculationGroup "1" <--> "1" Group
-    CalculationCategory "1" <--> "1" Category
+    CalculationState "*" <--> "1" Calculation
+    CalculationGroup "1" <--> "*" Group
+    CalculationCategory "1" <--> "*" Category
 
+    click EntityInterface call nodeCallback()
+    click AbstractEntity call nodeCallback()
     click CalculationState call nodeCallback()
     click Category call nodeCallback()
     click Group call nodeCallback()

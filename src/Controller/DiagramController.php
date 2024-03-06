@@ -29,7 +29,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @see https://mermaid.js.org/
  */
 #[AsController]
-#[Route(path: '/test')]
+#[Route(path: '/test/diagram')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class DiagramController extends AbstractController
 {
@@ -38,11 +38,11 @@ class DiagramController extends AbstractController
      *
      * @throws InvalidArgumentException
      */
-    #[Get(path: '/diagram', name: 'test_diagram')]
+    #[Get(path: '', name: 'test_diagram')]
     public function diagram(
         DiagramService $service,
         #[MapQueryParameter]
-        string $name = 'relations'
+        string $name = 'entity_interface'
     ): Response {
         $file = $service->getFile($name);
         if (null === $file) {
@@ -60,7 +60,7 @@ class DiagramController extends AbstractController
      *
      * @throws InvalidArgumentException
      */
-    #[Get(path: '/diagram/load', name: 'test_diagram_load')]
+    #[Get(path: '/load', name: 'test_diagram_load')]
     public function load(
         DiagramService $service,
         #[MapQueryParameter]

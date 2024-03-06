@@ -1,0 +1,41 @@
+---
+title: Log
+---
+classDiagram
+    direction LR
+
+    class Log {
+        -createdAt \DateTimeInterface
+        -message string
+        -channel string
+        -level string
+        -context ?array
+        -extra ?array
+        +getCreatedAt() \DateTimeInterface
+        +setCreatedAt(\DateTimeInterface)
+        +getMessage() string
+        +setMessage(string)
+        +getChannel() string
+        +setChannel(string)
+        +getLevel() string
+        +setLevel(string)
+        +getContext() ?array
+        +setContext(?array)
+        +getExtra() ?array
+        +setExtra(?array)
+        +getUser() ?string
+    }
+
+    class AbstractEntity {
+        <<Abstract>>
+    }
+
+    class EntityInterface {
+        <<Interface>>
+    }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- Log
+
+    click EntityInterface call nodeCallback()
+    click AbstractEntity call nodeCallback()

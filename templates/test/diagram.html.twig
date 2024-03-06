@@ -22,7 +22,7 @@
 {% endblock %}
 {# body #}
 {% block card_body -%}
-<pre id="diagram" class="mermaid" data-url="{{ path('test_diagram_load') }}">
+<pre id="diagram" class="diagram" data-url="{{ path('test_diagram_load') }}">
     {{ file.content }}
 </pre>
 {% endblock %}
@@ -32,7 +32,7 @@
 {%- endblock -%}
 {# javascripts #}
 {% block javascripts %}
-    {{ parent() }}
-    {{- asset_js('vendor/mermaid/mermaid.min.js') }}
-    {{ asset_js('js/test/diagram.js') }}
+{{ parent() }}
+{{ asset_js('vendor/mermaid/mermaid.min.js') }}
+{{ asset_js('js/test/diagram.js') }}
 {% endblock %}

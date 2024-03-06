@@ -12,15 +12,6 @@ classDiagram
 
     class AbstractCategoryItemEntity {
         <<Abstract>>
-        -Category category
-        -string supplier
-        -string unit
-        +getCategory() Category
-        +setCategory(Category)
-        +getSupplier() string
-        +setSupplier(string)
-        +getUnit() string
-        +setUnit(string)
     }
 
     class Product {
@@ -32,9 +23,21 @@ classDiagram
         +setPrice(float)
     }
 
+    class AbstractEntity {
+        <<Abstract>>
+    }
+    class EntityInterface {
+        <<Interface>>
+    }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- AbstractCategoryItemEntity
     AbstractCategoryItemEntity <|-- Product
     AbstractCategoryItemEntity "0" --> "*" Category
     Category "0" --> "*" Group
 
+    click EntityInterface call nodeCallback()
+    click AbstractEntity call nodeCallback()
+    click AbstractCategoryItemEntity call nodeCallback()
     click Category call nodeCallback()
     click Group call nodeCallback()

@@ -6,13 +6,14 @@ classDiagram
 
     class EntityInterface {
         <<Interface>>
-        +getId() ?int
-        +getDisplay() string
-        +isNew() bool
     }
 
     class AbstractEntity {
         <<Abstract>>
+        -id ?int
+        +getId() ?int
+        +getDisplay() string
+        +isNew() bool
     }
 
     class AbstractCategoryItemEntity {

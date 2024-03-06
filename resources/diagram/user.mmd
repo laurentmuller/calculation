@@ -2,7 +2,7 @@
 title: User
 ---
 classDiagram
-    direction BT
+    direction LR
 
     class UserInterface {
         <<Interface>>
@@ -20,11 +20,16 @@ classDiagram
         +getRoles() array
         +getUserIdentifier() string
         +getUsername() string
+        +setUsername(string)
         +getEmail() string
+        +setEmail(string)
         +getPassword() string
+        +setPassword(string)
         +getUserIdentifier() string
         +isEnabled() bool
+        +setEnabled(bool)
         +isVerified() bool
+        +setVerified(bool)
         +addProperty(UserProperty)
         +removeProperty(UserProperty)
         +getProperties() Collection~UserProperty~
@@ -38,23 +43,21 @@ classDiagram
 
     class AbstractProperty {
         <<Abstract>>
-        -string name
-        -string value
-        +getName() string
-        +setName(string)
-        +getBoolean() bool
-        +setBoolean(bool)
-        +getArray() array|null
-        +setArray(array|null)
-        +getDate() \DateTimeInterface|null
-        +setDate(\DateTimeInterface|null)
-        +getInteger() int
-        +setInteger(int)
-        +getString() string|null
-        +setString(string|null)
     }
 
-    User <|.. UserInterface
+    class AbstractEntity {
+        <<Abstract>>
+    }
+    class EntityInterface {
+        <<Interface>>
+    }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- User
+    User ..|> UserInterface
     User "0" --* "*" UserProperty
     AbstractProperty <|-- UserProperty
+
+    click EntityInterface call nodeCallback()
+    click AbstractEntity call nodeCallback()
     click AbstractProperty call nodeCallback()

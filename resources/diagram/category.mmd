@@ -32,10 +32,21 @@ classDiagram
     class Product {
     }
 
+    class AbstractEntity {
+        <<Abstract>>
+    }
+    class EntityInterface {
+        <<Interface>>
+    }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- Category
     Group "0" --> "*" Category
     Category "0" --> "*" Product
     Category "0" --> "*" Task
 
+    click EntityInterface call nodeCallback()
+    click AbstractEntity call nodeCallback()
     click Group call nodeCallback()
     click Product call nodeCallback()
     click Task call nodeCallback()

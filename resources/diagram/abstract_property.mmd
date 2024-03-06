@@ -2,7 +2,7 @@
 title: Abstract Property
 ---
 classDiagram
-    direction TB
+    direction LR
 
     class AbstractProperty {
         <<Abstract>>
@@ -34,8 +34,21 @@ classDiagram
     class User {
     }
 
+
+    class AbstractEntity {
+        <<Abstract>>
+    }
+
+    class EntityInterface {
+        <<Interface>>
+    }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- AbstractProperty
     AbstractProperty <|-- UserProperty
     AbstractProperty <|-- GlobalProperty
     User "0" --* "*" UserProperty
 
+    click EntityInterface call nodeCallback()
+    click AbstractEntity call nodeCallback()
     click User call nodeCallback()

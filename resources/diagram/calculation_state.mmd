@@ -26,6 +26,6 @@ classDiagram
     class Calculation {
     }
 
-    CalculationState "0" --* "*" Calculation
+    CalculationState "0" --> "*" Calculation
 
     click Calculation call nodeCallback()

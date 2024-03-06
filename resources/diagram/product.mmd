@@ -33,9 +33,8 @@ classDiagram
     }
 
     AbstractCategoryItemEntity <|-- Product
-    AbstractCategoryItemEntity "0" --* "*" Category
-    Category "0" --* "*" Group
+    AbstractCategoryItemEntity "0" --> "*" Category
+    Category "0" --> "*" Group
 
-    click AbstractCategoryItemEntity call nodeCallback()
     click Category call nodeCallback()
     click Group call nodeCallback()

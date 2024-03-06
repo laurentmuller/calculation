@@ -17,6 +17,15 @@
     const CLASS_REGEX = /classId-(.*)-\d+/;
 
     /**
+     * Show an error message.
+     * @param {string} message
+     */
+    const showError = (message) => {
+        const title = $('.card-title').text();
+        Toaster.danger(message, title);
+    };
+
+    /**
      * Handle the node click.
      * @param {string} nodeId - the node identifier like: "classId-Category-0".
      */
@@ -43,7 +52,6 @@
         }
     };
 
-
     /**
      * Gets the selected theme (light or dark).
      * @return {string}
@@ -65,15 +73,6 @@
         return {
             theme: getTheme(), securityLevel: 'loose'
         };
-    };
-
-    /**
-     * Show an error message.
-     * @param {string} message
-     */
-    const showError = (message) => {
-        const title = $('.card-title').text();
-        Toaster.danger(message, title);
     };
 
     /**

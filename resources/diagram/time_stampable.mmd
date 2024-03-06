@@ -4,6 +4,7 @@ title: Timestampable
 
 classDiagram
     direction TB
+
     class EntityInterface {
         <<Interface>>
         +getId() ?int
@@ -44,6 +45,7 @@ classDiagram
     TimestampableInterface <|.. User
     TimestampableInterface <|.. GlobalMargin
 
+    click EntityInterface call nodeCallback()
     click Calculation call nodeCallback()
     click CalculationState call nodeCallback()
     click Group call nodeCallback()

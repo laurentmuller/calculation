@@ -4,14 +4,32 @@ title: Task
 
 classDiagram
     direction LR
+
+    class Group {
+    }
+
+    class Category {
+    }
+
+    class AbstractCategoryItemEntity {
+        <<Abstract>>
+        -Category category
+        -string supplier
+        -string unit
+        +getCategory() Category
+        +setCategory(Category)
+        +getSupplier() string
+        +setSupplier(string)
+        +getUnit() string
+        +setUnit(string)
+    }
+
     class Task {
         -string name
         -Category category
         -Collection~TaskItem~ items
         +getName() string
         +setName(string)
-        +getCategory() Category
-        +setCategory(Category)
         +count() int
         +addItem(TaskItem)
         +removeItem(TaskItem)
@@ -30,6 +48,7 @@ classDiagram
         +removeMargin(TaskItemMargin)
         +getMargins() Collection~TaskItemMargin~
     }
+
     class TaskItemMargin {
         -TaskItem taskItem
         -float minimum
@@ -45,11 +64,11 @@ classDiagram
         +setValue(float)
     }
 
-    class Category {
-    }
-
+    AbstractCategoryItemEntity <|-- Task
+    AbstractCategoryItemEntity "1" <--> "1" Category
     Task "0" --* "*" TaskItem
     TaskItem "0" --* "*" TaskItemMargin
-    Task "1" <--> "1" Category
+    Category "0" --> "*" Group
 
     click Category call nodeCallback()
+    click Group call nodeCallback()

@@ -3,6 +3,7 @@ title: Abstract Entity
 ---
 classDiagram
     direction TB
+
     class EntityInterface {
         <<Interface>>
         +getId() ?int
@@ -13,12 +14,15 @@ classDiagram
     class AbstractEntity {
         <<Abstract>>
     }
+
     class AbstractCategoryItemEntity {
         <<Abstract>>
     }
+
     class AbstractProperty {
         <<Abstract>>
     }
+
     class AbstractMargin {
         <<Abstract>>
     }
@@ -62,6 +66,7 @@ classDiagram
     }
 
     EntityInterface <|.. AbstractEntity
+
     AbstractEntity <|-- AbstractCategoryItemEntity
     AbstractEntity <|-- AbstractMargin
     AbstractEntity <|-- AbstractProperty
@@ -72,13 +77,17 @@ classDiagram
     AbstractEntity <|-- TaskItem
     AbstractEntity <|-- TaskItemMargin
     AbstractEntity <|-- User
+
     AbstractCategoryItemEntity <|-- Product
     AbstractCategoryItemEntity <|-- Task
+
     AbstractProperty <|-- UserProperty
     AbstractProperty <|-- GlobalProperty
+
     AbstractMargin <|-- GlobalMargin
     AbstractMargin <|-- GroupMargin
 
+    click EntityInterface call nodeCallback()
     click AbstractMargin call nodeCallback()
     click AbstractProperty call nodeCallback()
     click Calculation call nodeCallback()

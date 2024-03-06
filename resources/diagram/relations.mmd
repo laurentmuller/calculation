@@ -1,8 +1,9 @@
 ---
-title: Overall
+title: <Relations>
 ---
 classDiagram
     direction TB
+
     class EntityInterface {
         <<Interface>>
     }
@@ -56,7 +57,20 @@ classDiagram
     class GlobalProperty {
     }
 
+    class Calculation {
+    }
+
+    class CalculationGroup {
+    }
+
+    class CalculationCategory {
+    }
+
+    class CalculationItem {
+    }
+
     EntityInterface <|.. AbstractEntity
+
     AbstractEntity <|-- AbstractCategoryItemEntity
     AbstractEntity <|-- AbstractMargin
     AbstractEntity <|-- User
@@ -65,16 +79,40 @@ classDiagram
     AbstractEntity <|-- TaskItemMargin
     AbstractEntity <|-- Category
     AbstractEntity <|-- AbstractProperty
+    AbstractEntity <|-- CalculationState
+    AbstractEntity <|-- Calculation
+
     AbstractProperty <|-- GlobalProperty
     AbstractProperty <|-- UserProperty
+
     AbstractMargin <|-- GroupMargin
     AbstractMargin <|-- GlobalMargin
+
     AbstractCategoryItemEntity <|-- Product
     AbstractCategoryItemEntity <|-- Task
-    User "0" --> "*" UserProperty
-    Group "0" --> "*" GroupMargin
+
+    User "0" --* "*" UserProperty
+    Group "0" --* "*" GroupMargin
     Group "0" --> "*" Category
     Category "0" --> "*" Product
     Category "0" --> "*" Task
-    Task "0" --> "*" TaskItem
-    TaskItem "0" --> "*" TaskItemMargin
+    Task "0" --* "*" TaskItem
+    TaskItem "0" --* "*" TaskItemMargin
+
+    Calculation "0" --* "*" CalculationGroup
+    CalculationGroup "0" --* "*" CalculationCategory
+    CalculationCategory "0" --* "*" CalculationItem
+    CalculationState "1" <--> "1" Calculation
+    CalculationGroup "1" <--> "1" Group
+    CalculationCategory "1" <--> "1" Category
+
+    click AbstractEntity call nodeCallback()
+    click AbstractMargin call nodeCallback()
+    click AbstractProperty call nodeCallback()
+    click Calculation call nodeCallback()
+    click CalculationState call nodeCallback()
+    click Category call nodeCallback()
+    click Group call nodeCallback()
+    click Product call nodeCallback()
+    click Task call nodeCallback()
+    click User call nodeCallback()

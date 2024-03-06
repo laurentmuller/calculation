@@ -42,7 +42,7 @@ class DiagramController extends AbstractController
     public function diagram(
         DiagramService $service,
         #[MapQueryParameter]
-        string $name = 'overall'
+        string $name = 'relations'
     ): Response {
         $file = $service->getFile($name);
         if (null === $file) {

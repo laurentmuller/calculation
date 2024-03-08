@@ -13,3 +13,9 @@ rules:
         enabled: false
     symfony.verbose_logging_in_production:
         enabled: false
+    # required by PdfVariableStreamWrapper class
+    php.psr1:
+        enabled: false
+    # required by PdfVariableStreamWrapper class and PdfMemoryImageTrait trait
+    use_global_variable_or_function:
+        enabled: false

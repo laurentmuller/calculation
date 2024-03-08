@@ -28,12 +28,6 @@ classDiagram
         +set(Group)
     }
 
-    class GlobalMargin {
-    }
-
-    class Group {
-    }
-
     class AbstractEntity {
         <<Abstract>>
     }
@@ -53,3 +47,4 @@ classDiagram
     click EntityInterface call nodeCallback()
     click AbstractEntity call nodeCallback()
     click Group call nodeCallback()
+    click GlobalMargin call nodeCallback()

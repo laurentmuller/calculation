@@ -777,6 +777,14 @@ a.disabled {
     margin-right: -3rem !important;
 }
 
+.mb-n1 {
+    margin-bottom: -0.25rem !important;
+}
+
+.mb-n2 {
+    margin-bottom: -0.5rem !important;
+}
+
 /* dropdown menu with checked item on the right */
 .navbar-menu:has(.dropdown-item-checked-right),
 .dropdown-menu:has(.dropdown-item-checked-right) {

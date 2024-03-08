@@ -7,6 +7,7 @@
 
     const DATA_CODE = 'data-code';
     const DATA_PROCESSED = 'data-processed';
+    const DIAGRAM_SELECTOR = '#diagram';
 
     const THEME_COOKIE_KEY = 'THEME';
     const THEME_CHANNEL = 'theme';
@@ -21,7 +22,7 @@
      * The diagram renderer.
      * @var {jQuery<HTMLPreElement>}
      */
-    const $diagram = $('#diagram');
+    const $diagram = $(DIAGRAM_SELECTOR);
 
     /**
      * The diagrams list.
@@ -64,12 +65,40 @@
         }
     };
 
-    // Reload the diagram.
+    // Gets the color variables, depending on the selected theme.
+    const getVariables = () => {
+        if (THEME_LIGHT === getTheme()) {
+            return {
+                primaryColor: '#21252908',
+                primaryTextColor: '#000',
+                primaryBorderColor: '#6C757D',
+                lineColor: '#6C757D',
+                secondaryColor: '#006100',
+                tertiaryColor: '#FFF',
+                errorTextColor: '#DC3545',
+                errorBkgColo: '#FFF',
+            };
+        }
+        return {
+            primaryColor: '#DEE2E608',
+            primaryTextColor: '#FFF',
+            primaryBorderColor: '#6C757D',
+            lineColor: '#6C757D',
+            secondaryColor: '#006100',
+            tertiaryColor: '#FFF',
+            errorTextColor: '#DC3545',
+            errorBkgColo: '#FFF',
+        };
+    };
+
+    // load the diagram.
     const reloadDiagram = function () {
         mermaid.initialize({
-            theme: getTheme(),
+            theme: 'base',
+            useMaxWidth: false,
             startOnLoad: false,
-            securityLevel: 'loose'
+            securityLevel: 'loose',
+            themeVariables: getVariables()
         });
         mermaid.run({
             nodes: [$diagram[0]],

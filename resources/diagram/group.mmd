@@ -32,19 +32,14 @@ classDiagram
         <<Abstract>>
     }
 
-    class Category {
-    }
-
-    class Product {
-    }
-
-    class Task {
-    }
-
     class AbstractEntity {
         <<Abstract>>
     }
     class EntityInterface {
+        <<Interface>>
+    }
+
+    class TimestampableInterface {
         <<Interface>>
     }
 
@@ -55,6 +50,7 @@ classDiagram
     AbstractMargin --|> GroupMargin
     Category "0" --> "*" Product
     Category "0" --> "*" Task
+    TimestampableInterface <|-- Group
 
     click EntityInterface call nodeCallback()
     click AbstractEntity call nodeCallback()
@@ -62,3 +58,4 @@ classDiagram
     click Category call nodeCallback()
     click Product call nodeCallback()
     click Task call nodeCallback()
+    click TimestampableInterface call nodeCallback()

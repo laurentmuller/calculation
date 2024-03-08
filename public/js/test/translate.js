@@ -170,7 +170,9 @@ function handleExchange() {
 function handleTextChange() {
     'use strict';
     const $from = $('#from');
+    /** @var {jQuery<HTMLInputElement>}  */
     const $to = $('#to');
+    /** @var {jQuery<HTMLInputElement>}  */
     const $text = $('#text');
 
     const oldFrom = $from.data('old-value');

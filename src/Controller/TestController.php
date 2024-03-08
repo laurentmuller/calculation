@@ -34,6 +34,7 @@ use App\Pdf\Interfaces\PdfLabelTextListenerInterface;
 use App\Pdf\PdfLabelDocument;
 use App\Report\HtmlColorNameReport;
 use App\Report\HtmlReport;
+use App\Report\MemoryImageReport;
 use App\Repository\CalculationStateRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\CustomerRepository;
@@ -60,6 +61,7 @@ use App\Word\HtmlDocument;
 use Doctrine\ORM\EntityManagerInterface;
 use fpdf\PdfFontStyle;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -237,10 +239,26 @@ class TestController extends AbstractController
         return $this->renderWordDocument($doc);
     }
 
+    /**
+     * Output a report with HTML color names.
+     */
     #[Get(path: '/colors', name: 'test_colors')]
     public function htmlColorNames(): PdfResponse
     {
         $report = new HtmlColorNameReport($this);
+
+        return $this->renderPdfDocument($report);
+    }
+
+    /**
+     * Output a report with memory images.
+     */
+    #[Get(path: '/memory', name: 'test_memory')]
+    public function memoryImage(
+        #[Autowire('%kernel.project_dir%/public/images/logo/logo-customer-148x148.png')]
+        string $image
+    ): PdfResponse {
+        $report = new MemoryImageReport($this, $image);
 
         return $this->renderPdfDocument($report);
     }

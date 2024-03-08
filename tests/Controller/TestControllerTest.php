@@ -24,6 +24,7 @@ class TestControllerTest extends AbstractControllerTestCase
         'pdf',
         'word',
         'colors',
+        'memory',
         'notifications',
         'password',
         'recaptcha',

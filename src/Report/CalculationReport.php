@@ -17,6 +17,7 @@ use App\Entity\Calculation;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use App\Pdf\Traits\PdfMemoryImageTrait;
 use App\Report\Table\TableGroups;
 use App\Report\Table\TableItems;
 use App\Report\Table\TableOverall;
@@ -27,6 +28,7 @@ use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Writer\Result\GdResult;
 use fpdf\PdfBorder;
 use fpdf\PdfMove;
 use fpdf\PdfTextAlignment;
@@ -38,6 +40,7 @@ use Psr\Log\LoggerInterface;
 class CalculationReport extends AbstractReport
 {
     use LoggerTrait;
+    use PdfMemoryImageTrait;
 
     private const QR_CODE_SIZE = 38.0;
 
@@ -191,6 +194,7 @@ class CalculationReport extends AbstractReport
         }
 
         try {
+            /** @psalm-var GdResult $result */
             $result = Builder::create()
                 ->errorCorrectionLevel(ErrorCorrectionLevel::Medium)
                 ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
@@ -200,10 +204,10 @@ class CalculationReport extends AbstractReport
                 ->margin(0)
                 ->build();
 
-            $result->saveToFile($file);
+            $image = $result->getImage();
             $x = $this->getPageWidth() - $this->getRightMargin() - self::QR_CODE_SIZE;
             $y = $this->getPageHeight() - self::FOOTER_OFFSET - self::QR_CODE_SIZE;
-            $this->image($file, $x, $y, self::QR_CODE_SIZE, self::QR_CODE_SIZE, 'png', $this->qrcode);
+            $this->imageGD($image, $x, $y, self::QR_CODE_SIZE, self::QR_CODE_SIZE, $this->qrcode);
         } catch (\Exception $e) {
             $this->logException($e, $this->trans('report.calculation.error_qr_code'));
         }

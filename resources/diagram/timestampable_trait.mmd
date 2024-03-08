@@ -1,0 +1,26 @@
+---
+title: Timestampable Trait
+---
+classDiagram
+    direction TB
+
+    class TimestampableInterface {
+        <<Interface>>
+    }
+
+    class TimestampableTrait {
+        <<Trait>>
+        -?DateTimeInterface createdAt
+        -?string createdBy
+        -?DateTimeInterface updatedAt
+        -?string $updatedBy
+        +getCreatedAt() ?DateTimeInterface
+        +getCreatedBy() ?string
+        +getUpdatedAt() ?DateTimeInterface
+        +getUpdatedBy() ?string
+        +updateTimestampable(DateTimeImmutable date, string user) bool
+    }
+
+    TimestampableInterface <|.. TimestampableTrait
+
+    click TimestampableInterface call nodeCallback()

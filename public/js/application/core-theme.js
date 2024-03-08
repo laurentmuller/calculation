@@ -179,14 +179,15 @@
     window.addEventListener('DOMContentLoaded', () => {
         updateActiveTheme(getPreferredTheme());
         document.querySelectorAll('[data-theme]').forEach((element) => {
+            element.addEventListener('mousedown', () => {
+                setTimeout(() => hideThemeTooltip(), 100);
+            });
             element.addEventListener('click', (e) => {
                 e.preventDefault();
-                setTimeout(() => hideThemeTooltip(), 100);
                 const theme = element.getAttribute('data-theme');
                 updateActiveTheme(theme);
                 setStoredTheme(theme);
                 setTheme(theme);
-
                 // notify
                 channel.postMessage(THEME_EVENT_NAME);
             });

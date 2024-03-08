@@ -253,8 +253,8 @@
             /**
              * Find elements with the same name attribute.
              *
-             * @param {jQuery} $element the element to search same name for.
-             * @return {jQuery[]}} the elements, if found; the argument element otherwise.
+             * @param {jQuery<Element>} $element the element to search same name for.
+             * @return {jQuery[]|jQuery<Element>} the elements, if found; the argument element otherwise.
              */
             $.validator.prototype.findNamedElements = function ($element) {
                 const name = $element.attr('name') || '';
@@ -378,6 +378,7 @@
 
             // set focus to first editable field
             if (!found) {
+                /** @type {jQuery<HTMLInputElement>} */
                 let $input = $that.find(toFind).filter(selector);
                 if ($input.is(':radio') && !$input.isChecked()) {
                     $input = $input.parents('.form-group').find(':radio:checked');
@@ -626,9 +627,10 @@
     }, 'The field must contain a lesser than or equal value.');
 
     /*
-     * check for unique value
+     * Check for unique value
      */
     $.validator.addMethod('unique', function (value, element, param) {
+        /** @var {jQuery<HTMLDivElement>} */
         const $fields = $(param, element.form);
         const $fieldsFirst = $fields.eq(0);
         const validator = $fieldsFirst.data('valid_unique') ? $fieldsFirst.data('valid_unique') : $.extend({}, this);
@@ -647,11 +649,11 @@
         // If element isn't being validated, run each require_from_group field's
         // validation rules
         if (!$(element).data('being_validated')) {
-            $fields.data('being_validated', true);
+            $fields.data('being_validated', JSON.stringify(true));
             $fields.each(function () {
                 validator.element(this);
             });
-            $fields.data('being_validated', false);
+            $fields.data('being_validated', JSON.stringify(false));
         }
 
         return isValid;

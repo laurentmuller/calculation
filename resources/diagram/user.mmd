@@ -52,12 +52,18 @@ classDiagram
         <<Interface>>
     }
 
+    class TimestampableInterface {
+        <<Interface>>
+    }
+
     EntityInterface <|.. AbstractEntity
     AbstractEntity <|-- User
     User ..|> UserInterface
     User "0" --* "*" UserProperty
     AbstractProperty <|-- UserProperty
+    TimestampableInterface <|-- User
 
     click EntityInterface call nodeCallback()
     click AbstractEntity call nodeCallback()
     click AbstractProperty call nodeCallback()
+    click TimestampableInterface call nodeCallback()

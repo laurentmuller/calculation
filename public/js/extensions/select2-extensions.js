@@ -55,7 +55,7 @@
                         newIndex = Math.min(oldIndex + 1, lastIndex);
                         break;
                     default:
-                        // find from after index to end
+                        // find from after the index to end
                         if (newIndex === -1) {
                             for (let i = oldIndex + 1; i <= lastIndex; i++) {
                                 if (options[i].text.startsWithIgnoreCase(e.key)) {

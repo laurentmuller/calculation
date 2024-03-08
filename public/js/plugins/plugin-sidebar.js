@@ -269,7 +269,7 @@
             const params = (new URL(document.location)).searchParams;
             const search = params.get(pathname) || window.location.pathname;
             let paths = search.split('/');
-            while (paths.length > 1) {
+            while (paths.length > 2) {
                 const path = paths.join('/');
                 const $element = $(`.nav-item a[href="${path}"]`);
                 if ($element.length) {
@@ -278,6 +278,9 @@
                 }
                 paths.pop();
             }
+
+            // active target element
+            this.$element.find(`a[href="${search}"]:not(.navbar-brand)`).addClass('active bg-body-secondary');
         }
 
         /**

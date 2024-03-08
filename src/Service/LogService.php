@@ -114,7 +114,7 @@ class LogService implements ServiceSubscriberInterface
     /**
      * Gets the log date.
      */
-    private function parseDate(string $value): \DateTimeImmutable|false
+    private function parseDate(string $value): \DateTimeInterface|false
     {
         return \DateTimeImmutable::createFromFormat($this->dateFormat, $value);
     }

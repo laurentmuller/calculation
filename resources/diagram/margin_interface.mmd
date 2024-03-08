@@ -11,26 +11,12 @@ classDiagram
         +contains(float) bool
     }
 
-    class TaskItemMargin {
-    }
-
-    class AbstractMargin {
-    }
-
-    class GlobalMargin {
-    }
-
-    class GroupMargin {
-    }
-
-    class Group {
-    }
-
-    MarginInterface <|.. AbstractMargin
     MarginInterface <|.. TaskItemMargin
+    MarginInterface <|.. AbstractMargin
     AbstractMargin <|-- GlobalMargin
     AbstractMargin <|-- GroupMargin
     Group "0" --* "*" GroupMargin
 
     click AbstractMargin call nodeCallback()
+    click GlobalMargin call nodeCallback()
     click Group call nodeCallback()

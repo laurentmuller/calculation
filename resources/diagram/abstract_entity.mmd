@@ -27,44 +27,6 @@ classDiagram
     class AbstractMargin {
         <<Abstract>>
     }
-    class Calculation {
-    }
-
-    class Group {
-    }
-
-    class GroupMargin {
-    }
-
-    class Category {
-    }
-
-    class Product {
-    }
-
-    class Task {
-    }
-
-    class TaskItem {
-    }
-
-    class TaskItemMargin {
-    }
-
-    class User {
-    }
-
-    class UserProperty {
-    }
-
-    class GlobalProperty {
-    }
-
-    class GlobalMargin {
-    }
-
-    class CalculationState {
-    }
 
     EntityInterface <|.. AbstractEntity
 
@@ -78,6 +40,7 @@ classDiagram
     AbstractEntity <|-- TaskItem
     AbstractEntity <|-- TaskItemMargin
     AbstractEntity <|-- User
+    AbstractEntity <|-- Log
 
     AbstractCategoryItemEntity <|-- Product
     AbstractCategoryItemEntity <|-- Task
@@ -98,3 +61,6 @@ classDiagram
     click Product call nodeCallback()
     click Task call nodeCallback()
     click User call nodeCallback()
+    click GlobalMargin call nodeCallback()
+    click AbstractCategoryItemEntity call nodeCallback()
+    click Log call nodeCallback()

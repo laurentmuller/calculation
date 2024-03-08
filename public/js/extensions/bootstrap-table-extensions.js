@@ -353,7 +353,7 @@ function loadingTemplate(message) {
          * @return {string} the search text.
          */
         getSearchText: function () {
-            return String($(this).data('search-text') || '');
+            return String($(this).data('search-text')) || '';
         },
 
         /**
@@ -456,11 +456,12 @@ function loadingTemplate(message) {
         /**
          * Gets the custom view container.
          *
-         * @return {jQuery} the custom view container, if displayed, null otherwise.
+         * @return {jQuery<HTMLDivElement>|null} the custom view container, if displayed, null otherwise.
          */
         getCustomView: function () {
             const $this = $(this);
             if ($this.isCustomView()) {
+                /** @type {jQuery<HTMLDivElement>} */
                 const $parent = $this.parents('.bootstrap-table');
                 return $parent.find('.fixed-table-custom-view');
             }

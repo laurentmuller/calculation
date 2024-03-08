@@ -1,0 +1,45 @@
+---
+title: Global Margin
+---
+classDiagram
+    direction TB
+
+    class GlobalMargin {
+    }
+
+    class AbstractMargin {
+        <<Abstract>>
+    }
+
+    class AbstractEntity {
+        <<Abstract>>
+    }
+
+    class MarginInterface {
+        <<Interface>>
+    }
+
+    class TimestampableInterface {
+        <<Interface>>
+    }
+
+    class AbstractEntity {
+        <<Abstract>>
+    }
+
+    class EntityInterface {
+        <<Interface>>
+    }
+
+    EntityInterface <|.. AbstractEntity
+    AbstractEntity <|-- AbstractMargin
+    AbstractMargin <|-- GlobalMargin
+    MarginInterface <|.. AbstractMargin
+    TimestampableInterface <|-- GlobalMargin
+
+    click EntityInterface call nodeCallback()
+    click AbstractEntity call nodeCallback()
+    click AbstractMargin call nodeCallback()
+    click AbstractEntity call nodeCallback()
+    click MarginInterface call nodeCallback()
+    click TimestampableInterface call nodeCallback()

@@ -14,8 +14,8 @@ classDiagram
         +setBoolean(bool)
         +getArray() array|null
         +setArray(array|null)
-        +getDate() \DateTimeInterface|null
-        +setDate(\DateTimeInterface|null)
+        +getDate() DateTimeInterface|null
+        +setDate(DateTimeInterface|null)
         +getInteger() int
         +setInteger(int)
         +getString() string|null
@@ -27,13 +27,6 @@ classDiagram
         +getUser() User
         +setUser(User)
     }
-
-    class GlobalProperty {
-    }
-
-    class User {
-    }
-
 
     class AbstractEntity {
         <<Abstract>>

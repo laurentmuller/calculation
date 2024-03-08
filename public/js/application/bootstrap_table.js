@@ -465,6 +465,7 @@ function showSortDialog($table, $button) {
          * @return {object} the context menu items.
          */
         getContextMenuItems: function () {
+            /** @type {jQuery<HTMLDivElement|HTMLTableRowElement>} */
             let $parent;
             const $this = $(this);
             if ($this.is('div')) {

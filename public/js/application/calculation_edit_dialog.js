@@ -4,9 +4,9 @@
 
 /**
  * Abstract edit dialog class.
- * @property {jQuery} $form
- * @property {jQuery} $modal
- * @property {jQuery} $category
+ * @property {jQuery<HTMLFormElement>} $form
+ * @property {jQuery<HTMLDialogElement>} $modal
+ * @property {jQuery<HTMLInputElement>} $category
  * @property {Application} application
  */
 class EditDialog {
@@ -189,7 +189,7 @@ class EditDialog {
     _onDialogShow() {
         'use strict';
         const title = this._getDialogTitle();
-        this.$modal.find('.dialog-title').text(String(title));
+        this.$modal.find('.dialog-title').text(title);
         return this;
     }
 

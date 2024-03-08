@@ -88,22 +88,23 @@ AddDefaultCharset utf-8
 <ifmodule mod_expires.c="">
       # Turn on Expires and set default to now
      ExpiresActive On
-     ExpiresDefault "now"
+     # ExpiresDefault "now"
+     ExpiresDefault "access plus 1 year"
 
-     # Set up caching on media files for 1 month
-     <filesmatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav|swf|woff|woff2)$"="">
-        ExpiresDefault "access plus 1 month"
-     </filesmatch>
+     # Set up caching on media files for 1 year
+     # <filesmatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav|swf|woff|woff2)$"="">
+     #    ExpiresDefault "access plus 1 year"
+     # </filesmatch>
 
-     # Set up caching on images, CSS and JS files for 1 week
-     <filesmatch "\.(gif|jpg|jpeg|png|js|css)$"="">
-        ExpiresDefault "access plus 1 week"
-     </filesmatch>
+     # Set up caching on images, CSS and JS files for 1 year
+     # <filesmatch "\.(gif|jpg|jpeg|png|js|css)$"="">
+     #    ExpiresDefault "access plus 1 year"
+     # </filesmatch>
 
      # Set up 1 hour caching on commonly updated files
-     <filesmatch "\.(xml|xsl|html|htm|txt)$"="">
-        ExpiresDefault "access plus 1 hour"
-     </filesmatch>
+     # <filesmatch "\.(xml|xsl|html|htm|txt)$"="">
+     #    ExpiresDefault "access plus 1 hour"
+     # </filesmatch>
 
      # Force no caching for dynamic files
      <filesmatch "\.(php|cgi|pl)$"="">
@@ -144,7 +145,7 @@ AddDefaultCharset utf-8
 
      # mod_headers can't match by content-type
      Header set X-UA-Compatible "IE=Edge,chrome=1"
-     <FilesMatch "\.(appcache|crx|css|eot|gif|htc|ico|jpe?g|js|m4a|m4v|manifest|mp4|oex|oga|ogg|ogv|otf|pdf|png|safariextz|svg|svgz|ttf|vcf|webm|webp|woff|xml|xpi)$">
+     <FilesMatch "\.(appcache|crx|css|eot|gif|htc|ico|jpe?g|js|m4a|m4v|manifest|mp4|oex|oga|ogg|ogv|otf|pdf|png|safariextz|svg|svgz|ttf|vcf|webm|webp|woff|woff2|xml|xpi)$">
          Header unset X-UA-Compatible
      </FilesMatch>
 

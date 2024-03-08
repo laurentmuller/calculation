@@ -5,14 +5,14 @@ classDiagram
     direction LR
 
     class Log {
-        -createdAt \DateTimeInterface
+        -createdAt DateTimeInterface
         -message string
         -channel string
         -level string
         -context ?array
         -extra ?array
-        +getCreatedAt() \DateTimeInterface
-        +setCreatedAt(\DateTimeInterface)
+        +getCreatedAt() DateTimeInterface
+        +setCreatedAt(DateTimeInterface)
         +getMessage() string
         +setMessage(string)
         +getChannel() string

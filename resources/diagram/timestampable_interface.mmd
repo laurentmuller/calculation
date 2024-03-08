@@ -1,5 +1,5 @@
 ---
-title: Timestampable
+title: Timestampable Interface
 ---
 
 classDiagram
@@ -15,22 +15,7 @@ classDiagram
         +getCreatedBy() ?string
         +getUpdatedAt() ?DateTimeInterface
         +getUpdatedBy() ?string
-        +updateTimestampable(DateTimeImmutable date, string user)
-    }
-
-    class Calculation {
-    }
-    class CalculationState {
-    }
-    class Category {
-    }
-    class Group {
-    }
-    class Product {
-    }
-    class User {
-    }
-    class GlobalMargin {
+        +updateTimestampable(DateTimeImmutable date, string user) bool
     }
 
     EntityInterface <|.. TimestampableInterface
@@ -49,3 +34,4 @@ classDiagram
     click Category call nodeCallback()
     click Product call nodeCallback()
     click User call nodeCallback()
+    click GlobalMargin call nodeCallback()

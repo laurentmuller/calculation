@@ -24,18 +24,14 @@ classDiagram
         +getTasks() Collection~Task~
     }
 
-    class Group {
-    }
-    class Task {
-    }
-
-    class Product {
-    }
-
     class AbstractEntity {
         <<Abstract>>
     }
     class EntityInterface {
+        <<Interface>>
+    }
+
+    class TimestampableInterface {
         <<Interface>>
     }
 
@@ -44,9 +40,11 @@ classDiagram
     Group "0" --> "*" Category
     Category "0" --> "*" Product
     Category "0" --> "*" Task
+    TimestampableInterface <|-- Category
 
     click EntityInterface call nodeCallback()
     click AbstractEntity call nodeCallback()
     click Group call nodeCallback()
     click Product call nodeCallback()
     click Task call nodeCallback()
+    click TimestampableInterface call nodeCallback()

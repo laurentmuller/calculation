@@ -23,16 +23,20 @@
 {# body #}
 {% block card_body -%}
 <pre id="diagram" class="diagram" data-url="{{ path('test_diagram_load') }}">
-    {{ file.content }}
+    {{- file.content -}}
 </pre>
 {% endblock %}
 {# stylesheets #}
 {% block stylesheets %}
-    {{ asset_css('css/diagram.css') }}
+{{ asset_css('css/diagram.css') }}
 {%- endblock -%}
 {# javascripts #}
 {% block javascripts %}
-{{ parent() }}
-{{ asset_js('vendor/mermaid/mermaid.min.js') }}
-{{ asset_js('js/test/diagram.js') }}
+{% if app.debug %}
+    {{ parent() }}
+    {{ asset_js('vendor/mermaid/mermaid.min.js') }}
+    {{ asset_js('js/test/diagram.js') }}
+{% else %}
+    {{ asset_js('js/compiled/diagram.js') }}
+{% endif %}
 {% endblock %}

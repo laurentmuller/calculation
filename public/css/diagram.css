@@ -11,16 +11,13 @@
 }
 
 .diagram svg {
-    font-size: var(--bs-body-font-size) !important;
     font-family: var(--bs-body-font-family) !important;
-    font-weight: var(--bs-body-font-weight) !important;
 }
 
-.diagram svg rect.outer {
-    fill: var(--bs-card-cap-bg) !important;
-    stroke: var(--bs-border-color) !important;
+.diagram svg .error-icon {
+    fill: var(--bs-danger) !important;
 }
-
-.diagram svg line.divider {
-    stroke: var(--bs-border-color) !important;
+.diagram svg .error-text {
+    fill: var(--bs-danger) !important;
+    stroke: var(--bs-danger) !important;
 }

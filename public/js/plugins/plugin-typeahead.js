@@ -481,7 +481,7 @@
          * @private
          */
         _getQueryText() {
-            return this.$element.val().trim();
+            return String(this.$element.val()).trim();
         }
 
         /**

@@ -17,5 +17,5 @@ rules:
     php.psr1:
         enabled: false
     # required by PdfVariableStreamWrapper class and PdfMemoryImageTrait trait
-    use_global_variable_or_function:
+    php.use_global_variable_or_function:
         enabled: false

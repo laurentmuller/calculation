@@ -22,7 +22,6 @@ use App\Report\Table\TableGroups;
 use App\Report\Table\TableItems;
 use App\Report\Table\TableOverall;
 use App\Traits\LoggerTrait;
-use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\ErrorCorrectionLevel;
@@ -88,12 +87,14 @@ class CalculationReport extends AbstractReport
         $this->addPage();
         if ($calculation->isEmpty()) {
             $this->renderEmpty();
-        } else {
-            TableItems::render($this);
-            $this->checkEndHeight($calculation);
-            TableGroups::render($this);
-            TableOverall::render($this);
+
+            return true;
         }
+
+        TableItems::render($this);
+        $this->checkEndHeight($calculation);
+        TableGroups::render($this);
+        TableOverall::render($this);
         $this->renderTimestampable($calculation);
         $this->renderQrCode();
 
@@ -183,13 +184,6 @@ class CalculationReport extends AbstractReport
     private function renderQrCode(): void
     {
         if (!$this->isQrCode()) {
-            return;
-        }
-
-        $file = FileUtils::tempFile();
-        if (!StringUtils::isString($file)) {
-            $this->logError($this->trans('report.calculation.error_qr_code'));
-
             return;
         }
 

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
-use App\Pdf\PdfVariableStreamWrapper;
 use fpdf\PdfDocument;
 use fpdf\PdfException;
 
@@ -23,8 +22,6 @@ use fpdf\PdfException;
  */
 trait PdfMemoryImageTrait
 {
-    private const MEMORY_PROTOCOL = 'memory';
-
     /**
      * Output a GD image.
      *
@@ -55,7 +52,7 @@ trait PdfMemoryImageTrait
      *                           </ul>
      * @param string|int $link   the URL or an identifier returned by <code>addLink()</code>
      *
-     * @throws PdfException if the image can not be converted or if the stream wrapper can not be registered
+     * @throws PdfException if the image can not be converted
      */
     public function imageGD(
         \GdImage $image,
@@ -102,7 +99,7 @@ trait PdfMemoryImageTrait
      *                           </ul>
      * @param string|int $link   the URL or an identifier returned by <code>addLink()</code>
      *
-     * @throws PdfException if the image data is invalid or if the stream wrapper can not be registered
+     * @throws PdfException if the image data is invalid
      */
     public function imageMemory(
         string $data,
@@ -112,39 +109,13 @@ trait PdfMemoryImageTrait
         float $height = 0.0,
         string|int $link = ''
     ): void {
-        $this->registerWrapper();
-        $variable = 'image-' . \md5($data);
-        $filename = \sprintf('%s://%s', self::MEMORY_PROTOCOL, $variable);
-        $GLOBALS[$variable] = $data;
-
-        try {
-            $size = \getimagesize($filename);
-            if (!\is_array($size)) {
-                throw new PdfException(\sprintf('Incorrect image data: "%s".', $filename));
-            }
-            $mime = $size['mime'];
-            if ('' === $mime || !\str_contains($mime, '/')) {
-                throw new PdfException(\sprintf('Empty or incorrect mime type: "%s".', $mime));
-            }
-            $type = \substr((string) \strstr($mime, '/'), 1);
-            $this->image($filename, $x, $y, $width, $height, $type, $link);
-        } finally {
-            unset($GLOBALS[$variable]);
+        $info = new \finfo(\FILEINFO_MIME_TYPE);
+        $mime = $info->buffer($data);
+        if (!\is_string($mime) || !\str_contains($mime, '/')) {
+            throw new PdfException(\sprintf('Empty or incorrect mime type: "%s".', $mime));
         }
-    }
-
-    /**
-     * Register the memory variable wrapper.
-     */
-    private function registerWrapper(): void
-    {
-        if (\in_array(self::MEMORY_PROTOCOL, \stream_get_wrappers(), true)) {
-            return;
-        }
-        if (\stream_wrapper_register(self::MEMORY_PROTOCOL, PdfVariableStreamWrapper::class)) {
-            return;
-        }
-
-        throw new PdfException(\sprintf('Unable to register the stream wrapper protocol "%s://".', self::MEMORY_PROTOCOL));
+        $type = \substr((string) \strstr($mime, '/'), 1);
+        $filename = \sprintf('data://%s;base64,%s', $mime, \base64_encode($data));
+        $this->image($filename, $x, $y, $width, $height, $type, $link);
     }
 }

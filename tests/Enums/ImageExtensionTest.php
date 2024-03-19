@@ -21,6 +21,17 @@ use Symfony\Component\Filesystem\Path;
 #[\PHPUnit\Framework\Attributes\CoversClass(ImageExtension::class)]
 class ImageExtensionTest extends TestCase
 {
+    public static function getCreateImages(): \Iterator
+    {
+        $dir = Path::canonicalize((string) \realpath(__DIR__ . '../../Data/Images'));
+        yield [ImageExtension::BMP, $dir . '/example.bmp'];
+        yield [ImageExtension::GIF, $dir . '/example.gif'];
+        yield [ImageExtension::JPEG, $dir . '/example.jpeg'];
+        yield [ImageExtension::JPG, $dir . '/example.jpg'];
+        yield [ImageExtension::PNG, $dir . '/example.png'];
+        yield [ImageExtension::WEBP, $dir . '/example.webp'];
+    }
+
     public static function getFilters(): \Iterator
     {
         yield [ImageExtension::BMP, '*.bmp'];
@@ -32,17 +43,6 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::WEBP, '*.webp'];
         yield [ImageExtension::XBM, '*.xbm'];
         yield [ImageExtension::XPM, '*.xpm'];
-    }
-
-    public static function getCreateImages(): \Iterator
-    {
-        $dir = Path::canonicalize(__DIR__ . '../../Data/Images');
-        yield [ImageExtension::BMP, $dir . '/example.bmp'];
-        yield [ImageExtension::GIF, $dir . '/example.gif'];
-        yield [ImageExtension::JPEG, $dir . '/example.jpeg'];
-        yield [ImageExtension::JPG, $dir . '/example.jpg'];
-        yield [ImageExtension::PNG, $dir . '/example.png'];
-        yield [ImageExtension::WEBP, $dir . '/example.webp'];
     }
 
     public static function getImageTypes(): \Iterator

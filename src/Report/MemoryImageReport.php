@@ -14,6 +14,7 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Traits\PdfMemoryImageTrait;
+use App\Service\ImageService;
 use fpdf\PdfException;
 
 /**
@@ -41,56 +42,31 @@ class MemoryImageReport extends AbstractReport
 
     private function addImageGD(): void
     {
-        $image = \imagecreate(200, 150);
-        if (!$image instanceof \GdImage) {
-            return;
+        $service = ImageService::fromTrueColor(200, 150);
+        if (!$service instanceof ImageService) {
+            throw new PdfException('Unable to create image.');
         }
 
-        $background = $this->allocateColor($image, 255, 255, 255);
-        \imagefilledrectangle($image, 0, 0, 199, 149, $background);
+        $service->fill((int) $service->allocateWhite());
+        $service->rectangle(0, 0, 199, 149, (int) $service->allocateBlack());
+        $service->fillRectangle(30, 100, 30, 48, (int) $service->allocate(255, 0, 0));
+        $service->fillRectangle(80, 80, 30, 68, (int) $service->allocate(0, 255, 0));
+        $service->fillRectangle(130, 40, 30, 108, (int) $service->allocate(0, 0, 255));
 
-        $border = $this->allocateColor($image, 169, 169, 169);
-        \imagerectangle($image, 0, 0, 199, 149, $border);
-
-        $color1 = $this->allocateColor($image, 255, 0, 0);
-        \imagefilledrectangle($image, 30, 100, 60, 148, $color1);
-
-        $color2 = $this->allocateColor($image, 0, 255, 0);
-        \imagefilledrectangle($image, 80, 80, 110, 148, $color2);
-
-        $color3 = $this->allocateColor($image, 0, 0, 255);
-        \imagefilledrectangle($image, 130, 40, 160, 148, $color3);
-
-        $this->imageGD($image, 160, 20, 40);
-
-        // free memory
-        \imagecolordeallocate($image, $background);
-        \imagecolordeallocate($image, $border);
-        \imagecolordeallocate($image, $color1);
-        \imagecolordeallocate($image, $color2);
-        \imagecolordeallocate($image, $color3);
-        \imagedestroy($image);
+        $this->imageGD($service->getImage(), 160, 20, 40);
     }
 
     private function addImageMemory(): void
     {
         if (!\file_exists($this->image)) {
-            return;
+            throw new PdfException('Unable to get image.');
         }
+
         $data = \file_get_contents($this->image);
         if (!\is_string($data)) {
-            return;
+            throw new PdfException('Unable to get image content.');
         }
+
         $this->imageMemory($data, 10, 20, 30);
-    }
-
-    private function allocateColor(\GdImage $image, int $red, int $green, int $blue): int
-    {
-        $color = \imagecolorallocate($image, $red, $green, $blue);
-        if (!\is_int($color)) {
-            throw new PdfException('Unable to allocate color.');
-        }
-
-        return $color;
     }
 }

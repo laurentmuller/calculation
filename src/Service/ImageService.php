@@ -177,18 +177,36 @@ class ImageService
      * Fill this image's bounds with the given color.
      *
      * @param int $color the fill color. A color identifier created with allocate.
+     * @param int $x     the x-coordinate of start point
+     * @param int $y     the y-coordinate of start point
      *
      * @return bool true on success or false on failure
      *
      * @see ImageService::allocate()
      */
-    public function fill(int $color): bool
+    public function fill(int $color, int $x = 0, int $y = 0): bool
     {
-        return \imagefill($this->image, 0, 0, $color);
+        return \imagefill($this->image, $x, $y, $color);
     }
 
     /**
-     * Create a new image handler from file or URL.
+     * Draw a filled rectangle with the give color.
+     *
+     * @param int $x      the x-coordinate
+     * @param int $y      the y-coordinate
+     * @param int $width  the rectangle width
+     * @param int $height the rectangle height
+     * @param int $color  the fill color. A color identifier created with allocate.
+     *
+     * @return bool true on success or false on failure
+     */
+    public function fillRectangle(int $x, int $y, int $width, int $height, int $color): bool
+    {
+        return \imagefilledrectangle($this->image, $x, $y, $x + $width, $y + $height, $color);
+    }
+
+    /**
+     * Create a new image handler from a file or a URL.
      *
      * This method uses the file extension to create the handler.
      *
@@ -265,6 +283,22 @@ class ImageService
     public function line(int $x1, int $y1, int $x2, int $y2, int $color): bool
     {
         return \imageline($this->image, $x1, $y1, $x2, $y2, $color);
+    }
+
+    /**
+     * Draw a rectangle with the given border color.
+     *
+     * @param int $x      the x-coordinate
+     * @param int $y      the y-coordinate
+     * @param int $width  the rectangle width
+     * @param int $height the rectangle height
+     * @param int $color  the border color. A color identifier created with allocate.
+     *
+     * @return bool true on success or false on failure
+     */
+    public function rectangle(int $x, int $y, int $width, int $height, int $color): bool
+    {
+        return \imagerectangle($this->image, $x, $y, $x + $width, $y + $height, $color);
     }
 
     /**

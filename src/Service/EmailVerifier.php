@@ -93,9 +93,8 @@ readonly class EmailVerifier
      */
     private function validateEmail(Request $request, User $user): void
     {
-        $url = $request->getUri();
         $id = (string) $user->getId();
         $email = (string) $user->getEmail();
-        $this->helper->validateEmailConfirmation($url, $id, $email);
+        $this->helper->validateEmailConfirmationFromRequest($request, $id, $email);
     }
 }

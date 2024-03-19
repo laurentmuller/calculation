@@ -109,13 +109,30 @@ trait PdfMemoryImageTrait
         float $height = 0.0,
         string|int $link = ''
     ): void {
+        $mimeType = $this->getMimeType($data);
+        $fileType = $this->getFileType($mimeType);
+        $filename = $this->getFileName($mimeType, $data);
+        $this->image($filename, $x, $y, $width, $height, $fileType, $link);
+    }
+
+    private function getFileName(string $mimeType, string $data): string
+    {
+        return \sprintf('data://%s;base64,%s', $mimeType, \base64_encode($data));
+    }
+
+    private function getFileType(string $mimeType): string
+    {
+        return \substr((string) \strrchr($mimeType, '/'), 1);
+    }
+
+    private function getMimeType(string $data): string
+    {
         $info = new \finfo(\FILEINFO_MIME_TYPE);
         $mime = $info->buffer($data);
         if (!\is_string($mime) || !\str_contains($mime, '/')) {
             throw new PdfException(\sprintf('Empty or incorrect mime type: "%s".', $mime));
         }
-        $type = \substr((string) \strstr($mime, '/'), 1);
-        $filename = \sprintf('data://%s;base64,%s', $mime, \base64_encode($data));
-        $this->image($filename, $x, $y, $width, $height, $type, $link);
+
+        return $mime;
     }
 }

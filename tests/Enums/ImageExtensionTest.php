@@ -22,7 +22,7 @@ class ImageExtensionTest extends TestCase
 {
     public static function getCreateImages(): \Iterator
     {
-        $dir = \getcwd() . '/tests/Data/images';
+        $dir = \realpath(__DIR__ . '/../Data/images');
         yield [ImageExtension::BMP, $dir . '/example.bmp'];
         yield [ImageExtension::GIF, $dir . '/example.gif'];
         yield [ImageExtension::JPEG, $dir . '/example.jpeg'];

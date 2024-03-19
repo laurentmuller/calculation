@@ -60,6 +60,6 @@ enum TableView: string implements EnumDefaultInterface, EnumSortableInterface, T
         return [
             self::TABLE,
             self::CUSTOM,
-       ];
+        ];
     }
 }

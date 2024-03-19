@@ -38,11 +38,11 @@ class GlobalMarginsDocument extends AbstractArrayDocument
 
         foreach ($entities as $entity) {
             $sheet->setRowValues($row++, [
-                    $entity->getMinimum(),
-                    $entity->getMaximum(),
-                    $entity->getDelta(),
-                    $entity->getMargin(),
-                ]);
+                $entity->getMinimum(),
+                $entity->getMaximum(),
+                $entity->getDelta(),
+                $entity->getMargin(),
+            ]);
         }
 
         for ($i = 1; $i < 5; ++$i) {

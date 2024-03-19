@@ -24,8 +24,10 @@ trait PdfEllipseTrait
     /**
      * Draw a circle.
      *
-     * @param float             $x     the abscissa position
-     * @param float             $y     the ordinate position
+     * It can be drawn (border only), filled (with no border) or both.
+     *
+     * @param float             $x     the abscissa of the center
+     * @param float             $y     the ordinate of the center
      * @param float             $r     the radius
      * @param PdfRectangleStyle $style the style of rendering
      */
@@ -41,8 +43,10 @@ trait PdfEllipseTrait
     /**
      * Draw an ellipse.
      *
-     * @param float             $x     the abscissa position
-     * @param float             $y     the ordinate position
+     * It can be drawn (border only), filled (with no border) or both.
+     *
+     * @param float             $x     the abscissa of the center
+     * @param float             $y     the ordinate of the center
      * @param float             $rx    the horizontal radius
      * @param float             $ry    the vertical radius
      * @param PdfRectangleStyle $style the style of rendering

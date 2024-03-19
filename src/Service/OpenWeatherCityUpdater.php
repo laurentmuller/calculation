@@ -87,8 +87,8 @@ class OpenWeatherCityUpdater
             $cities = $this->getFileContent($file);
             if (false === $cities) {
                 return $this->falseResult('swisspost.error.open_archive', [
-                        '%name%' => $file->getClientOriginalName(),
-                    ]);
+                    '%name%' => $file->getClientOriginalName(),
+                ]);
             }
             $db = new OpenWeatherDatabase($temp_name);
             [$valid, $error] = $this->insertCities($db, $cities);

@@ -42,8 +42,6 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::JPG, $dir . 'example.jpg'];
         yield [ImageExtension::PNG, $dir . 'example.png'];
         yield [ImageExtension::WEBP, $dir . 'example.webp'];
-
-        yield [ImageExtension::BMP, $dir . 'fake.bmp', false];
     }
 
     public static function getImageTypes(): \Iterator
@@ -129,24 +127,15 @@ class ImageExtensionTest extends TestCase
 
     public function testCount(): void
     {
-        $expected = 9;
-        self::assertCount($expected, ImageExtension::cases());
+        self::assertCount(9, ImageExtension::cases());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getImages')]
-    public function testCreateImage(ImageExtension $extension, string $filename, bool $expectedImage = true): void
+    public function testCreateImage(ImageExtension $extension, string $filename): void
     {
-        if ($expectedImage && !\file_exists($filename)) {
-            self::markTestSkipped(\sprintf('File "%s" not found.', $filename));
-        }
-
         $image = $extension->createImage($filename);
-        if ($expectedImage) {
-            self::assertInstanceOf(\GdImage::class, $image);
-            \imagedestroy($image);
-        } else {
-            self::assertFalse($image);
-        }
+        self::assertInstanceOf(\GdImage::class, $image);
+        \imagedestroy($image);
     }
 
     public function testDefault(): void

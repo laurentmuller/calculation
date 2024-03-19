@@ -25,11 +25,11 @@ class PregExtension extends AbstractExtension
     {
         return [
             new TwigFilter('preg_filter', $this->pregFilter(...)),
-             new TwigFilter('preg_grep', $this->pregGrep(...)),
-             new TwigFilter('preg_match', $this->pregMatch(...)),
-             new TwigFilter('preg_quote', $this->pregQuote(...)),
-             new TwigFilter('preg_replace', $this->pregReplace(...)),
-             new TwigFilter('preg_split', $this->pregSplit(...)),
+            new TwigFilter('preg_grep', $this->pregGrep(...)),
+            new TwigFilter('preg_match', $this->pregMatch(...)),
+            new TwigFilter('preg_quote', $this->pregQuote(...)),
+            new TwigFilter('preg_replace', $this->pregReplace(...)),
+            new TwigFilter('preg_split', $this->pregSplit(...)),
         ];
     }
 

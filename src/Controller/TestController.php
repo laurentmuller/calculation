@@ -482,7 +482,7 @@ class TestController extends AbstractController
             $message .= $this->trans('translator.last_error', [
                 '%code%' => $error->getCode(),
                 '%message%' => $error->getMessage(),
-                ]);
+            ]);
             $this->error($message);
             $error = true;
         }

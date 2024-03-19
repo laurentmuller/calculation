@@ -36,4 +36,7 @@ return static function (DoctrineConfig $config): void {
         ->isBundle(false)
         ->prefix('App\Entity')
         ->dir('%kernel.project_dir%/src/Entity');
+
+    $orm->controllerResolver()
+        ->autoMapping(true);
 };

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Pdf\Traits;
 
+use fpdf\PdfRectangle;
 use fpdf\PdfRectangleStyle;
 
 /**
@@ -41,8 +42,8 @@ trait PdfRotationTrait
      * Set the rotation angle.
      *
      * @param float      $angle the rotation angle or 0.0 to stop rotation
-     * @param float|null $x     the abscissa position or null to use the current abscissa
-     * @param float|null $y     the ordinate position or null to use the current ordinate
+     * @param float|null $x     the abscissa position or <code>null</code> to use the current abscissa
+     * @param float|null $y     the ordinate position or <code>null</code> to use the current ordinate
      */
     public function rotate(float $angle, ?float $x = null, ?float $y = null): void
     {
@@ -77,22 +78,18 @@ trait PdfRotationTrait
      *
      * It can be drawn (border only), filled (with no border) or both. Do nothing if the angle is equal to 0.0.
      *
-     * @param float             $x     the abscissa of upper-left corner
-     * @param float             $y     the ordinate of upper-left corner
-     * @param float             $w     the width
-     * @param float             $h     the height
-     * @param float             $angle the rotation angle
-     * @param PdfRectangleStyle $style the style of rendering. Possible values are:
-     *                                 <ul>
-     *                                 <li>A PdfBorder instance.</li>
-     *                                 <li>A PdfRectangleStyle enumeration.</li>
-     *                                 </ul>
+     * @param float             $x      the abscissa of upper-left corner
+     * @param float             $y      the ordinate of upper-left corner
+     * @param float             $width  the width
+     * @param float             $height the height
+     * @param float             $angle  the rotation angle
+     * @param PdfRectangleStyle $style  the border and fill style
      */
     public function rotateRect(
         float $x,
         float $y,
-        float $w,
-        float $h,
+        float $width,
+        float $height,
         float $angle,
         PdfRectangleStyle $style = PdfRectangleStyle::BORDER
     ): void {
@@ -100,8 +97,32 @@ trait PdfRotationTrait
             return;
         }
         $this->rotate($angle, $x, $y);
-        $this->rect($x, $y, $w, $h, $style);
+        $this->rect($x, $y, $width, $height, $style);
         $this->endRotate();
+    }
+
+    /**
+     * Rotate the given rectangle and end rotation.
+     *
+     * It can be drawn (border only), filled (with no border) or both. Do nothing if the angle is equal to 0.0.
+     *
+     * @param PdfRectangle      $rectangle the rectangle to rotate
+     * @param float             $angle     the rotation angle
+     * @param PdfRectangleStyle $style     the border and fill style
+     */
+    public function rotateRectangle(
+        PdfRectangle $rectangle,
+        float $angle,
+        PdfRectangleStyle $style = PdfRectangleStyle::BORDER
+    ): void {
+        $this->rotateRect(
+            $rectangle->x,
+            $rectangle->y,
+            $rectangle->width,
+            $rectangle->height,
+            $angle,
+            $style
+        );
     }
 
     /**
@@ -111,8 +132,8 @@ trait PdfRotationTrait
      *
      * @param string     $txt   the text to rotate
      * @param float      $angle the rotation angle
-     * @param float|null $x     the abscissa position or null to use the current abscissa
-     * @param float|null $y     the ordinate position or null to use the current ordinate
+     * @param float|null $x     the abscissa position or <code>null</code> to use the current abscissa
+     * @param float|null $y     the ordinate position or <code>null</code> to use the current ordinate
      */
     public function rotateText(string $txt, float $angle, ?float $x = null, ?float $y = null): void
     {

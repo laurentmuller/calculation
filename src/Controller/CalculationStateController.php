@@ -89,7 +89,7 @@ class CalculationStateController extends AbstractEntityController
             $message = $this->trans('calculationstate.delete.failure', [
                 '%name%' => $display,
                 '%calculations%' => $calculations,
-                ]);
+            ]);
             $parameters = [
                 'title' => 'calculationstate.delete.title',
                 'message' => $message,

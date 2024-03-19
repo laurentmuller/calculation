@@ -295,7 +295,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
                 $data[4],               // zip code
                 $this->clean($data[8]), // city name
                 $data[9],               // state (canton)
-        ]);
+            ]);
     }
 
     private function processReader(SwissPostUpdateResult $result, SwissDatabase $database, CSVReader $reader): bool
@@ -357,7 +357,7 @@ class SwissPostUpdater implements ServiceSubscriberInterface
             && $database->insertStreet([
                 $data[2],                         // city identifier
                 \ucfirst($this->clean($data[6])), // street name
-        ]);
+            ]);
     }
 
     /**

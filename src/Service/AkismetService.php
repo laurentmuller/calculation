@@ -217,18 +217,18 @@ class AkismetService extends AbstractHttpClientService
         $headers = $request->headers;
 
         return \array_filter(\array_merge([
-             'user_ip' => $request->getClientIp(),
-             'user_agent' => $headers->get('User-Agent'),
-             'referrer' => $headers->get('referer'),
-             'comment_content' => $content,
-             'comment_type' => 'contact-form',
-             'comment_author' => $user?->getUserIdentifier(),
-             'comment_author_email' => $user?->getEmail(),
-             'blog' => $request->getSchemeAndHttpHost(),
-             'blog_lang' => $request->getLocale(),
-             'blog_charset' => 'UTF-8',
-             'is_test' => true,
-         ], $options));
+            'user_ip' => $request->getClientIp(),
+            'user_agent' => $headers->get('User-Agent'),
+            'referrer' => $headers->get('referer'),
+            'comment_content' => $content,
+            'comment_type' => 'contact-form',
+            'comment_author' => $user?->getUserIdentifier(),
+            'comment_author_email' => $user?->getEmail(),
+            'blog' => $request->getSchemeAndHttpHost(),
+            'blog_lang' => $request->getLocale(),
+            'blog_charset' => 'UTF-8',
+            'is_test' => true,
+        ], $options));
     }
 
     private function trans(string $id): string

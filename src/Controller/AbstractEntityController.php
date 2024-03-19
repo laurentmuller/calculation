@@ -123,7 +123,7 @@ abstract class AbstractEntityController extends AbstractController
             'title' => $this->getMessageId('.delete.title', 'common.delete_title'),
             'message' => $this->getMessageId('.delete.message', 'common.delete_message'),
             'message_parameters' => ['%name%' => $item],
-            ], $parameters);
+        ], $parameters);
         $this->updateQueryParameters($request, $parameters, $item);
 
         return $this->render('cards/card_delete.html.twig', $parameters);

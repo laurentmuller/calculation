@@ -16,6 +16,7 @@ use App\Enums\ImageExtension;
 use App\Service\ImageService;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Path;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ImageExtension::class)]
 class ImageExtensionTest extends TestCase
@@ -33,15 +34,15 @@ class ImageExtensionTest extends TestCase
         yield [ImageExtension::XPM, '*.xpm'];
     }
 
-    public static function getImages(): \Iterator
+    public static function getCreateImages(): \Iterator
     {
-        $dir = \realpath(__DIR__ . '../../Data/Images') . \DIRECTORY_SEPARATOR;
-        yield [ImageExtension::BMP, $dir . 'example.bmp'];
-        yield [ImageExtension::GIF, $dir . 'example.gif'];
-        yield [ImageExtension::JPEG, $dir . 'example.jpeg'];
-        yield [ImageExtension::JPG, $dir . 'example.jpg'];
-        yield [ImageExtension::PNG, $dir . 'example.png'];
-        yield [ImageExtension::WEBP, $dir . 'example.webp'];
+        $dir = Path::canonicalize(__DIR__ . '../../Data/Images');
+        yield [ImageExtension::BMP, $dir . '/example.bmp'];
+        yield [ImageExtension::GIF, $dir . '/example.gif'];
+        yield [ImageExtension::JPEG, $dir . '/example.jpeg'];
+        yield [ImageExtension::JPG, $dir . '/example.jpg'];
+        yield [ImageExtension::PNG, $dir . '/example.png'];
+        yield [ImageExtension::WEBP, $dir . '/example.webp'];
     }
 
     public static function getImageTypes(): \Iterator
@@ -130,7 +131,7 @@ class ImageExtensionTest extends TestCase
         self::assertCount(9, ImageExtension::cases());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getImages')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('getCreateImages')]
     public function testCreateImage(ImageExtension $extension, string $filename): void
     {
         $image = $extension->createImage($filename);

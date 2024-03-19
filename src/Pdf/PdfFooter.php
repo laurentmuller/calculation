@@ -50,16 +50,12 @@ class PdfFooter
     {
         $parent = $this->parent;
         $parent->useCellMargin(function () use ($parent): void {
-            // position and cells width
             $parent->setY(-PdfDocument::FOOTER_OFFSET);
-            $cellWidth = $parent->getPrintableWidth() / 3.0;
-            // style
+            $width = $parent->getPrintableWidth() / 3.0;
             PdfStyle::default()->setFontSize(8)->apply($parent);
-            // pages (left) +  text and url (center) + date (right)
-            $this->outputText($this->getPage(), $cellWidth, PdfTextAlignment::LEFT)
-                ->outputText($this->content ?? '', $cellWidth, PdfTextAlignment::CENTER, $this->url ?? '')
-                ->outputText($this->getDate(), $cellWidth, PdfTextAlignment::RIGHT);
-            // reset
+            $this->outputText($this->getPage(), $width, PdfTextAlignment::LEFT)
+                ->outputText($this->content ?? '', $width, PdfTextAlignment::CENTER, $this->url ?? '')
+                ->outputText($this->getDate(), $width, PdfTextAlignment::RIGHT);
             $parent->resetStyle();
         });
     }
@@ -102,10 +98,10 @@ class PdfFooter
     /**
      * Output the given text.
      */
-    private function outputText(string $text, float $cellWidth, PdfTextAlignment $align, string $link = ''): self
+    private function outputText(string $text, float $width, PdfTextAlignment $align, string $link = ''): self
     {
         $this->parent->cell(
-            width: $cellWidth,
+            width: $width,
             text: $text,
             border: PdfBorder::top(),
             align: $align,

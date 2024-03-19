@@ -26,17 +26,22 @@ class PdfHeader
     /**
      *  The default font size.
      */
-    private const NORMAL_FONT_SIZE = 8;
+    private const DEFAULT_FONT_SIZE = PdfFont::DEFAULT_SIZE - 1.0;
 
     /**
-     * The line height for customer address and contact.
+     * The default line height.
      */
-    private const SMALL_HEIGHT = PdfDocument::LINE_HEIGHT - 1.0;
+    private const LINE_HEIGHT = \fpdf\PdfDocument::LINE_HEIGHT;
+
+    /**
+     * The line height for customer address.
+     */
+    private const SMALL_HEIGHT = \fpdf\PdfDocument::LINE_HEIGHT - 1.0;
 
     /**
      * The title font size.
      */
-    private const TITLE_FONT_SIZE = 10;
+    private const TITLE_FONT_SIZE = PdfFont::DEFAULT_SIZE + 1.0;
 
     /**
      * The customer information.
@@ -72,7 +77,7 @@ class PdfHeader
      */
     public function getHeight(): float
     {
-        $height = PdfDocument::LINE_HEIGHT;
+        $height = self::LINE_HEIGHT;
         if ($this->isPrintAddress()) {
             $height += 7.0;
         }
@@ -82,7 +87,7 @@ class PdfHeader
 
         $parent = $this->parent;
         $width = $parent->getPrintableWidth();
-        $parent->setFontSizeInPoint(self::NORMAL_FONT_SIZE);
+        $parent->setFontSizeInPoint(self::DEFAULT_FONT_SIZE);
         $lines = $parent->getLinesCount($this->description, $width, 0.0);
         $height += self::SMALL_HEIGHT * (float) $lines;
         $parent->resetStyle();
@@ -96,15 +101,17 @@ class PdfHeader
     public function output(): void
     {
         $parent = $this->parent;
-        $isAddress = $this->isPrintAddress();
-        $printableWidth = $parent->getPrintableWidth();
-        $parent->useCellMargin(function () use ($isAddress, $printableWidth): void {
+        $parent->useCellMargin(function () use ($parent): void {
+            $isAddress = $this->isPrintAddress();
+            $printableWidth = $parent->getPrintableWidth();
             $this->outputLine1($printableWidth, $isAddress);
-            $this->outputLine2($printableWidth, $isAddress);
-            $this->outputLine3($printableWidth, $isAddress);
+            if ($isAddress) {
+                $this->outputLine2($printableWidth);
+                $this->outputLine3($printableWidth);
+            }
             $this->outputDescription();
+            $parent->resetStyle()->lineBreak(2);
         });
-        $parent->resetStyle()->lineBreak(2);
     }
 
     /**
@@ -131,7 +138,7 @@ class PdfHeader
     {
         if (!$this->nameStyle instanceof PdfStyle) {
             $this->nameStyle = PdfStyle::default()
-                ->setFontSize(self::NORMAL_FONT_SIZE)
+                ->setFontSize(self::DEFAULT_FONT_SIZE)
                 ->setFontBold();
         }
         $this->nameStyle->apply($this->parent);
@@ -141,7 +148,7 @@ class PdfHeader
     {
         if (!$this->smallStyle instanceof PdfStyle) {
             $this->smallStyle = PdfStyle::default()
-                ->setFontSize(self::NORMAL_FONT_SIZE);
+                ->setFontSize(self::DEFAULT_FONT_SIZE);
         }
         $this->smallStyle->apply($this->parent);
     }
@@ -230,21 +237,15 @@ class PdfHeader
         }
     }
 
-    private function outputLine2(float $printableWidth, bool $isAddress): void
+    private function outputLine2(float $printableWidth): void
     {
-        if (!$isAddress) {
-            return;
-        }
         $cellWidth = $printableWidth / 2.0;
         $this->outputAddress($cellWidth);
         $this->outputFax($cellWidth);
     }
 
-    private function outputLine3(float $printableWidth, bool $isAddress): void
+    private function outputLine3(float $printableWidth): void
     {
-        if (!$isAddress) {
-            return;
-        }
         $cellWidth = $printableWidth / 2.0;
         $this->outputZipCity($cellWidth);
         $this->outputEmail($cellWidth);
@@ -260,7 +261,7 @@ class PdfHeader
         $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
         $this->outputText(
             $width,
-            PdfDocument::LINE_HEIGHT,
+            self::LINE_HEIGHT,
             $name,
             $border,
             $align,
@@ -311,7 +312,7 @@ class PdfHeader
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
         $this->outputText(
             $width,
-            PdfDocument::LINE_HEIGHT,
+            self::LINE_HEIGHT,
             $title,
             $border,
             $align

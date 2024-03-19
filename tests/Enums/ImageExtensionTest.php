@@ -22,7 +22,7 @@ class ImageExtensionTest extends TestCase
 {
     public static function getCreateImages(): \Iterator
     {
-        $dir = \realpath(__DIR__ . '/../Data/Images');
+        $dir = 'tests/Data/Images';
         yield [ImageExtension::BMP, $dir . '/example.bmp'];
         yield [ImageExtension::GIF, $dir . '/example.gif'];
         yield [ImageExtension::JPEG, $dir . '/example.jpeg'];
@@ -136,7 +136,7 @@ class ImageExtensionTest extends TestCase
     public function testCreateImage(ImageExtension $extension, string $filename): void
     {
         if (!\file_exists($filename)) {
-            self::markTestSkipped("Unable to find the image file $filename.");
+            self::markTestSkipped("Unable to find the image file: $filename.");
         }
 
         $image = $extension->createImage($filename);

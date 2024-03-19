@@ -135,6 +135,10 @@ class ImageExtensionTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getCreateImages')]
     public function testCreateImage(ImageExtension $extension, string $filename): void
     {
+        if (!\file_exists($filename)) {
+            self::markTestSkipped("Unable to find the image file $filename.");
+        }
+
         $image = $extension->createImage($filename);
         self::assertInstanceOf(\GdImage::class, $image);
         \imagedestroy($image);

@@ -16,20 +16,21 @@ use App\Enums\ImageExtension;
 use App\Service\ImageService;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Filesystem\Path;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ImageExtension::class)]
 class ImageExtensionTest extends TestCase
 {
     public static function getCreateImages(): \Iterator
     {
-        $dir = Path::canonicalize((string) \realpath(__DIR__ . '../../Data/Images'));
+        $dir = \realpath(__DIR__ . '/../Data/Images');
         yield [ImageExtension::BMP, $dir . '/example.bmp'];
         yield [ImageExtension::GIF, $dir . '/example.gif'];
         yield [ImageExtension::JPEG, $dir . '/example.jpeg'];
         yield [ImageExtension::JPG, $dir . '/example.jpg'];
         yield [ImageExtension::PNG, $dir . '/example.png'];
         yield [ImageExtension::WEBP, $dir . '/example.webp'];
+        yield [ImageExtension::XBM, $dir . '/example.xbm'];
+        yield [ImageExtension::XPM, $dir . '/example.xpm'];
     }
 
     public static function getFilters(): \Iterator

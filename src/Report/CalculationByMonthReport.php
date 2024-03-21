@@ -37,6 +37,7 @@ use fpdf\PdfOrientation;
 use fpdf\PdfRectangle;
 use fpdf\PdfRectangleStyle;
 use fpdf\PdfTextAlignment;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Report for calculations by months.
@@ -73,8 +74,11 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     /**
      * @param CalculationByMonthType[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities)
-    {
+    public function __construct(
+        AbstractController $controller,
+        array $entities,
+        private readonly UrlGeneratorInterface $generator
+    ) {
         $orientation = PdfOrientation::PORTRAIT;
         if (\count($entities) > 12) {
             $orientation = PdfOrientation::LANDSCAPE;
@@ -152,7 +156,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
                 PdfColumn::right($this->transChart('fields.count'), 22, true),
                 PdfColumn::right($this->transChart('fields.net'), 25, true),
                 PdfColumn::right($this->transChart('fields.margin'), 20, true),
-                PdfColumn::right($this->transChart('fields.margin_percent'), 15, true),
+                PdfColumn::right($this->transChart('fields.margin_percent'), 18, true),
                 PdfColumn::right($this->transChart('fields.total'), 25, true),
             )
             ->setHeadersListener($this)
@@ -216,6 +220,13 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return $this->colors[$color];
     }
 
+    private function getURL(\DateTimeInterface $date): string
+    {
+        $parameters = ['search' => $date->format('m.Y')];
+
+        return $this->generator->generate('calculation_table', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
     private function isMinMargin(float $value): bool
     {
         return !$this->isFloatZero($value) && $value < $this->minMargin;
@@ -271,6 +282,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         }
         $rows = \array_map(fn (array $entity): array => [
             'label' => $this->formatDate($entity['date'], false),
+            'link' => $this->getURL($entity['date']),
             'values' => [
                 ['color' => self::COLOR_ITEM, 'value' => $entity['items']],
                 ['color' => self::COLOR_MARGIN, 'value' => $entity['margin_amount']],
@@ -297,7 +309,10 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
 
         // entities
         $table->setBackgroundListener($this);
+        $width = $this->getPrintableWidth();
         foreach ($entities as $entity) {
+            $x = $this->getX();
+            $y = $this->getY();
             $this->currentItem = $entity;
             $table->addRow(
                 $this->formatDate($entity['date'], true),
@@ -307,6 +322,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
                 $this->formatPercent($entity['margin_percent']),
                 FormatUtils::formatInt($entity['total'])
             );
+            $link = $this->getURL($entity['date']);
+            $this->link($x, $y, $width, $this->getY() - $y, $link);
             $this->lastItem = $entity;
         }
         $this->currentItem = $this->lastItem = null;

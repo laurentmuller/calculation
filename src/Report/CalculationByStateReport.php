@@ -26,11 +26,13 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Pdf\Traits\PdfPieChartTrait;
+use App\Table\CalculationTable;
 use App\Traits\MathTrait;
 use App\Traits\StateTotalsTrait;
 use App\Utils\FormatUtils;
 use fpdf\PdfRectangleStyle;
 use fpdf\PdfTextAlignment;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Report for calculations by states.
@@ -53,8 +55,11 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     /**
      * @psalm-param QueryCalculationType[] $entities
      */
-    public function __construct(AbstractController $controller, array $entities)
-    {
+    public function __construct(
+        AbstractController $controller,
+        array $entities,
+        private readonly UrlGeneratorInterface $generator
+    ) {
         parent::__construct($controller, $entities);
         $this->setTitle($this->transChart('title_by_state'));
         $this->minMargin = $controller->getMinMargin();
@@ -196,6 +201,11 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         return $cell;
     }
 
+    private function getURL(int $id): string
+    {
+        return $this->generator->generate('calculation_table', [CalculationTable::PARAM_STATE => $id]);
+    }
+
     private function isMinMargin(float $value): bool
     {
         return !$this->isFloatZero($value) && $value < $this->minMargin;
@@ -230,8 +240,10 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     private function renderTable(array $entities): void
     {
         $table = $this->createTable();
-
+        $width = $this->getPrintableWidth();
         foreach ($entities as $entity) {
+            $x = $this->getX();
+            $y = $this->getY();
             $this->currentRow = $entity;
             $table->addRow(
                 $entity['code'],
@@ -243,6 +255,8 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
                 FormatUtils::formatAmount($entity['total']),
                 $this->formatPercent($entity['percent_amount'])
             );
+            $link = $this->getURL($entity['id']);
+            $this->link($x, $y, $width, $this->getY() - $y, $link);
         }
         $this->currentRow = null;
 

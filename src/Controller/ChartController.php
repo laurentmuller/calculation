@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -66,12 +67,15 @@ class ChartController extends AbstractController
      * @throws \Exception
      */
     #[Get(path: '/month/pdf', name: 'chart_month_pdf')]
-    public function monthPdf(Request $request, CalculationRepository $repository): PdfResponse
-    {
+    public function monthPdf(
+        Request $request,
+        CalculationRepository $repository,
+        UrlGeneratorInterface $generator
+    ): PdfResponse {
         $this->checkAccess(EntityPermission::EXPORT);
         $months = $this->getMonths($request);
         $data = $repository->getByMonth($months);
-        $report = new CalculationByMonthReport($this, $data);
+        $report = new CalculationByMonthReport($this, $data, $generator);
 
         return $this->renderPdfDocument($report);
     }
@@ -89,11 +93,11 @@ class ChartController extends AbstractController
     }
 
     #[Get(path: '/state/pdf', name: 'chart_state_pdf')]
-    public function statePdf(CalculationStateRepository $repository): PdfResponse
+    public function statePdf(CalculationStateRepository $repository, UrlGeneratorInterface $generator): PdfResponse
     {
         $this->checkAccess(EntityPermission::EXPORT);
         $data = $repository->getCalculations();
-        $report = new CalculationByStateReport($this, $data);
+        $report = new CalculationByStateReport($this, $data, $generator);
 
         return $this->renderPdfDocument($report);
     }

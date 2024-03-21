@@ -19,7 +19,7 @@ use App\Pdf\Colors\PdfFillColor;
  *
  * @psalm-type ColorStringType = array{color: PdfFillColor|string, label: string, ...}
  * @psalm-type ColorValueType = array{color: PdfFillColor|string, value: float, ...}
- * @psalm-type BarChartRowType = array{label: string, values: ColorValueType[]}
+ * @psalm-type BarChartRowType = array{label: string, values: ColorValueType[], link?: string|int, ...}
  * @psalm-type BarChartAxisType = array{min?: float, max?: float, step?: float, formatter?: callable(float): string}
  */
 interface PdfChartInterface

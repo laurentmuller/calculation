@@ -41,19 +41,7 @@ enum HtmlBootstrapColor: string implements PdfColorInterface
      */
     public static function parseBorderColor(string $class): ?PdfDrawColor
     {
-        $color = match ($class) {
-            'border-primary' => HtmlBootstrapColor::PRIMARY,
-            'border-secondary' => HtmlBootstrapColor::SECONDARY,
-            'border-success' => HtmlBootstrapColor::SUCCESS,
-            'border-danger' => HtmlBootstrapColor::DANGER,
-            'border-warning' => HtmlBootstrapColor::WARNING,
-            'border-info' => HtmlBootstrapColor::INFO,
-            'border-light' => HtmlBootstrapColor::LIGHT,
-            'border-dark' => HtmlBootstrapColor::DARK,
-            default => null,
-        };
-
-        return $color?->getDrawColor();
+        return HtmlBootstrapColor::parseClass($class)?->getDrawColor();
     }
 
     /**
@@ -61,27 +49,7 @@ enum HtmlBootstrapColor: string implements PdfColorInterface
      */
     public static function parseFillColor(string $class): ?PdfFillColor
     {
-        $color = match ($class) {
-            'bg-primary',
-            'text-bg-primary' => HtmlBootstrapColor::PRIMARY,
-            'bg-secondary',
-            'text-bg-secondary' => HtmlBootstrapColor::SECONDARY,
-            'bg-success',
-            'text-bg-success' => HtmlBootstrapColor::SUCCESS,
-            'bg-danger',
-            'text-bg-danger' => HtmlBootstrapColor::DANGER,
-            'bg-warning',
-            'text-bg-warning' => HtmlBootstrapColor::WARNING,
-            'bg-info',
-            'text-bg-info' => HtmlBootstrapColor::INFO,
-            'bg-light',
-            'text-bg-light' => HtmlBootstrapColor::LIGHT,
-            'bg-dark',
-            'text-bg-dark' => HtmlBootstrapColor::DARK,
-            default => null,
-        };
-
-        return $color?->getFillColor();
+        return HtmlBootstrapColor::parseClass($class)?->getFillColor();
     }
 
     /**
@@ -89,18 +57,23 @@ enum HtmlBootstrapColor: string implements PdfColorInterface
      */
     public static function parseTextColor(string $class): ?PdfTextColor
     {
-        $color = match ($class) {
-            'text-primary' => HtmlBootstrapColor::PRIMARY,
-            'text-secondary' => HtmlBootstrapColor::SECONDARY,
-            'text-success' => HtmlBootstrapColor::SUCCESS,
-            'text-danger' => HtmlBootstrapColor::DANGER,
-            'text-warning' => HtmlBootstrapColor::WARNING,
-            'text-info' => HtmlBootstrapColor::INFO,
-            'text-light' => HtmlBootstrapColor::LIGHT,
-            'text-dark' => HtmlBootstrapColor::DARK,
+        return HtmlBootstrapColor::parseClass($class)?->getTextColor();
+    }
+
+    private static function parseClass(string $class): ?HtmlBootstrapColor
+    {
+        $values = \explode('-', $class);
+
+        return match (\end($values)) {
+            'primary' => HtmlBootstrapColor::PRIMARY,
+            'secondary' => HtmlBootstrapColor::SECONDARY,
+            'success' => HtmlBootstrapColor::SUCCESS,
+            'danger' => HtmlBootstrapColor::DANGER,
+            'warning' => HtmlBootstrapColor::WARNING,
+            'info' => HtmlBootstrapColor::INFO,
+            'light' => HtmlBootstrapColor::LIGHT,
+            'dark' => HtmlBootstrapColor::DARK,
             default => null,
         };
-
-        return $color?->getTextColor();
     }
 }

@@ -98,7 +98,22 @@ class UrlGeneratorService
             return $caller;
         }
 
-        return $this->generator->generate($defaultRoute, $params, $referenceType);
+        return $this->generate($defaultRoute, $params, $referenceType);
+    }
+
+    /**
+     * Generates a URL or path for a specific route based on the given parameters.
+     *
+     * @param string $name          the route name
+     * @param array  $parameters    the parameters that reference placeholders in the route pattern
+     * @param int    $referenceType the reference type
+     */
+    public function generate(
+        string $name,
+        array $parameters = [],
+        int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH
+    ): string {
+        return $this->generator->generate($name, $parameters, $referenceType);
     }
 
     /**

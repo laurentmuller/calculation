@@ -63,7 +63,7 @@ trait PdfTransparencyTrait
     protected function endDoc(): void
     {
         if ([] !== $this->gStates) {
-            $this->updateVersion('1.4');
+            $this->updatePdfVersion('1.4');
         }
         parent::endDoc();
     }

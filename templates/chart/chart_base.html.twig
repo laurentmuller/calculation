@@ -14,9 +14,7 @@
 {%- set list_path = 'calculation_table' -%}
 {# body #}
 {% block card_body %}
-{% block chart %}
-    <div class="chart" id="{{ constant('App\\Chart\\AbstractHighchart::CONTAINER') }}"></div>
-{% endblock %}
+<div class="chart" id="{{ constant('App\\Chart\\AbstractHighchart::CONTAINER') }}"></div>
 <div id="data" class="table-responsive my-2">
     <table class="table table-bordered table-hover table-list table-sm">
         {% block data %}{% endblock %}

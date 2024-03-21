@@ -1876,26 +1876,26 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "1.8.4.8",
+            "version": "1.8.4.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "57c5aede17dee000ba273b7a844b31b24dc9f5c8"
+                "reference": "43823cf747dce12440d3805ff9e15725e2889a7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/57c5aede17dee000ba273b7a844b31b24dc9f5c8",
-                "reference": "57c5aede17dee000ba273b7a844b31b24dc9f5c8",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/43823cf747dce12440d3805ff9e15725e2889a7b",
+                "reference": "43823cf747dce12440d3805ff9e15725e2889a7b",
                 "shasum": ""
             },
             "require": {
+                "elao/enum": "^2.0",
                 "ext-gd": "*",
                 "ext-iconv": "*",
                 "ext-zlib": "*",
                 "php": "^8.2"
             },
             "require-dev": {
-                "elao/enum": "^2.0",
                 "friendsofphp/php-cs-fixer": "^3.0",
                 "orklah/psalm-insane-comparison": "^2.0",
                 "orklah/psalm-not-empty": "^1.0",
@@ -1937,20 +1937,20 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-03-19T07:19:38+00:00"
+            "time": "2024-03-21T11:20:09+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.20.8",
+            "version": "2.20.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/HighchartsBundle.git",
-                "reference": "11fd15dd09f5440e800809e059bc45fa70a51889"
+                "reference": "970e2049a5939f47c6e04bcf47f7c8c23c81a036"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/11fd15dd09f5440e800809e059bc45fa70a51889",
-                "reference": "11fd15dd09f5440e800809e059bc45fa70a51889",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/970e2049a5939f47c6e04bcf47f7c8c23c81a036",
+                "reference": "970e2049a5939f47c6e04bcf47f7c8c23c81a036",
                 "shasum": ""
             },
             "require": {
@@ -1964,12 +1964,17 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
+                "orklah/psalm-insane-comparison": "^2.0",
+                "orklah/psalm-not-empty": "^1.0",
+                "orklah/psalm-strict-equality": "^2.0",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-deprecation-rules": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.0",
+                "phpstan/phpstan-strict-rules": "^1.5",
                 "phpunit/phpunit": "^10.0",
-                "rector/rector": "dev-main",
+                "psalm/plugin-phpunit": "^0.18",
+                "rector/rector": "^0.19",
                 "slam/phpstan-extensions": "^6.0",
                 "spaze/phpstan-disallowed-calls": "^2.0",
                 "symfony/framework-bundle": "^6.0| ^7.0",
@@ -1977,11 +1982,6 @@
                 "vimeo/psalm": "^5.0"
             },
             "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.8.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "HighchartsBundle\\": "src/"
@@ -2015,7 +2015,7 @@
                 "issues": "https://github.com/laurentmuller/HighchartsBundle/issues",
                 "source": "https://github.com/laurentmuller/HighchartsBundle"
             },
-            "time": "2024-01-09T19:43:06+00:00"
+            "time": "2024-03-21T08:03:35+00:00"
         },
         {
             "name": "lorenzo/pinky",
@@ -9144,16 +9144,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.52.0",
+            "version": "v3.52.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "a3564bd66f4bce9bc871ef18b690e2dc67a7f969"
+                "reference": "6e77207f0d851862ceeb6da63e6e22c01b1587bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/a3564bd66f4bce9bc871ef18b690e2dc67a7f969",
-                "reference": "a3564bd66f4bce9bc871ef18b690e2dc67a7f969",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/6e77207f0d851862ceeb6da63e6e22c01b1587bc",
+                "reference": "6e77207f0d851862ceeb6da63e6e22c01b1587bc",
                 "shasum": ""
             },
             "require": {
@@ -9224,7 +9224,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.52.0"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.52.1"
             },
             "funding": [
                 {
@@ -9232,7 +9232,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-18T18:40:11+00:00"
+            "time": "2024-03-19T21:02:43+00:00"
         },
         {
             "name": "friendsoftwig/twigcs",
@@ -9524,25 +9524,25 @@
         },
         {
             "name": "orklah/psalm-insane-comparison",
-            "version": "v2.2.0",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orklah/psalm-insane-comparison.git",
-                "reference": "f0e44bf31678d189c8ee4556598d0ad6e3f853c9"
+                "reference": "d9e608e787e5ae1c994ae07095eea26029d6d0bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orklah/psalm-insane-comparison/zipball/f0e44bf31678d189c8ee4556598d0ad6e3f853c9",
-                "reference": "f0e44bf31678d189c8ee4556598d0ad6e3f853c9",
+                "url": "https://api.github.com/repos/orklah/psalm-insane-comparison/zipball/d9e608e787e5ae1c994ae07095eea26029d6d0bd",
+                "reference": "d9e608e787e5ae1c994ae07095eea26029d6d0bd",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
-                "php": "^7.3|^8.0"
+                "php": "^7.3|^8.0",
+                "vimeo/psalm": "^4|^5|dev-master"
             },
             "require-dev": {
-                "nikic/php-parser": "^4.0",
-                "vimeo/psalm": "^4.0|^5"
+                "nikic/php-parser": "^4.0|^5"
             },
             "type": "psalm-plugin",
             "extra": {
@@ -9572,9 +9572,9 @@
             "description": "Detects possible insane comparison (\"string\" == 0) to help migrate to PHP8",
             "support": {
                 "issues": "https://github.com/orklah/psalm-insane-comparison/issues",
-                "source": "https://github.com/orklah/psalm-insane-comparison/tree/v2.2.0"
+                "source": "https://github.com/orklah/psalm-insane-comparison/tree/v2.3.0"
             },
-            "time": "2023-01-06T09:06:11+00:00"
+            "time": "2024-03-20T21:49:45+00:00"
         },
         {
             "name": "orklah/psalm-not-empty",
@@ -10015,16 +10015,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "1.26.0",
+            "version": "1.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "231e3186624c03d7e7c890ec662b81e6b0405227"
+                "reference": "86e4d5a4b036f8f0be1464522f4c6b584c452757"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/231e3186624c03d7e7c890ec662b81e6b0405227",
-                "reference": "231e3186624c03d7e7c890ec662b81e6b0405227",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/86e4d5a4b036f8f0be1464522f4c6b584c452757",
+                "reference": "86e4d5a4b036f8f0be1464522f4c6b584c452757",
                 "shasum": ""
             },
             "require": {
@@ -10056,22 +10056,22 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https://github.com/phpstan/phpdoc-parser/issues",
-                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.26.0"
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/1.27.0"
             },
-            "time": "2024-02-23T16:05:55+00:00"
+            "time": "2024-03-21T13:14:53+00:00"
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.63",
+            "version": "1.10.64",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "ad12836d9ca227301f5fb9960979574ed8628339"
+                "reference": "fb9f270daffedcb5ff46275dcafe92538b1bc4bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ad12836d9ca227301f5fb9960979574ed8628339",
-                "reference": "ad12836d9ca227301f5fb9960979574ed8628339",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/fb9f270daffedcb5ff46275dcafe92538b1bc4bb",
+                "reference": "fb9f270daffedcb5ff46275dcafe92538b1bc4bb",
                 "shasum": ""
             },
             "require": {
@@ -10120,7 +10120,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-18T16:53:53+00:00"
+            "time": "2024-03-21T09:57:47+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -10172,21 +10172,21 @@
         },
         {
             "name": "phpstan/phpstan-doctrine",
-            "version": "1.3.63",
+            "version": "1.3.64",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-doctrine.git",
-                "reference": "6ccde2b243e30ba47f7cd29f87fb752263bcb25c"
+                "reference": "f42828ad684e026054c3d94161d89870150bc3da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/6ccde2b243e30ba47f7cd29f87fb752263bcb25c",
-                "reference": "6ccde2b243e30ba47f7cd29f87fb752263bcb25c",
+                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/f42828ad684e026054c3d94161d89870150bc3da",
+                "reference": "f42828ad684e026054c3d94161d89870150bc3da",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.10.63"
+                "phpstan/phpstan": "^1.10.64"
             },
             "conflict": {
                 "doctrine/collections": "<1.0",
@@ -10238,9 +10238,9 @@
             "description": "Doctrine extensions for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-doctrine/issues",
-                "source": "https://github.com/phpstan/phpstan-doctrine/tree/1.3.63"
+                "source": "https://github.com/phpstan/phpstan-doctrine/tree/1.3.64"
             },
-            "time": "2024-03-18T18:05:58+00:00"
+            "time": "2024-03-21T10:19:51+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -10738,16 +10738,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.13",
+            "version": "10.5.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "20a63fc1c6db29b15da3bd02d4b6cf59900088a7"
+                "reference": "4cf8824bab39c2dd57b57b9f6332f7135e2a3a49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/20a63fc1c6db29b15da3bd02d4b6cf59900088a7",
-                "reference": "20a63fc1c6db29b15da3bd02d4b6cf59900088a7",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4cf8824bab39c2dd57b57b9f6332f7135e2a3a49",
+                "reference": "4cf8824bab39c2dd57b57b9f6332f7135e2a3a49",
                 "shasum": ""
             },
             "require": {
@@ -10819,7 +10819,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.13"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.14"
             },
             "funding": [
                 {
@@ -10835,7 +10835,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-12T15:37:41+00:00"
+            "time": "2024-03-21T07:31:09+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",

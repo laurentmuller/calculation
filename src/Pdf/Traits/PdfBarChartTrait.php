@@ -33,6 +33,7 @@ use fpdf\PdfTextAlignment;
  *      h: float}
  * @psalm-type BarChartRowDataType = array{
  *      label: string,
+ *      link: string|int,
  *      width: float,
  *      x: float,
  *      w: float,
@@ -163,11 +164,13 @@ trait PdfBarChartTrait
         foreach ($rows as $row) {
             $entry = [
                 'label' => $row['label'],
+                'link' => $row['link'] ?? '',
                 'width' => $this->getStringWidth($row['label']),
                 'x' => $currentX,
                 'w' => $barWidth,
                 'values' => [],
             ];
+
             $startY = $bottom;
             foreach ($row['values'] as $value) {
                 $currentValue = $this->validateRange($value['value'], $min, $max);
@@ -260,7 +263,14 @@ trait PdfBarChartTrait
         foreach ($data as $row) {
             foreach ($row['values'] as $value) {
                 $value['color']->apply($this);
-                $this->rect($row['x'], $value['y'], $row['w'], $value['h'], PdfRectangleStyle::FILL);
+                $this->rect(
+                    $row['x'],
+                    $value['y'],
+                    $row['w'],
+                    $value['h'],
+                    PdfRectangleStyle::FILL,
+                    $row['link']
+                );
             }
         }
     }

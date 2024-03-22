@@ -118,11 +118,11 @@ class PdfTable
      * @param int               $cols      the number of columns to span
      * @param ?PdfStyle         $style     the cell style to use or null to use the default cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param string|int        $link      the cell link. A URL or identifier returned by AddLink().
+     * @param string|int|null   $link      the cell link. A URL or identifier returned by AddLink().
      *
      * @psalm-param positive-int $cols
      */
-    public function add(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, string|int $link = ''): static
+    public function add(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, string|int|null $link = null): static
     {
         return $this->addCell(new PdfCell($text, $cols, $style, $alignment, $link));
     }
@@ -577,6 +577,8 @@ class PdfTable
      * @param PdfDocument  $parent the parent document
      * @param PdfRectangle $bounds the link bounds
      * @param string|int   $link   the link URL
+     *
+     * @psalm-param non-empty-string|positive-int $link
      */
     protected function drawCellLink(PdfDocument $parent, PdfRectangle $bounds, string|int $link): void
     {
@@ -856,12 +858,14 @@ class PdfTable
         }
 
         if ($cell->isLink()) {
+            /** @psalm-var non-empty-string|positive-int $link */
+            $link = $cell->getLink();
             $textBounds->inflate(-$margin);
             $linkWidth = $parent->getStringWidth($text);
             $linesCount = \max(1, $parent->getLinesCount($text, $textBounds->width));
             $linkHeight = (float) $linesCount * $line_height - 2.0 * $margin;
             $textBounds->setSize(PdfSize::instance($linkWidth, $linkHeight));
-            $this->drawCellLink($parent, $textBounds, $cell->getLink());
+            $this->drawCellLink($parent, $textBounds, $link);
         }
 
         $position->x += $width;

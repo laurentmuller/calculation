@@ -27,7 +27,9 @@
     <table class="table table-bordered table-list" id="table-edit">
         <thead>
            <tr class="text-center">
-               <th class="text-start text-nowrap fw-normal">{{ icon('arrow-down') }} {{ 'user.rights.table_title'|trans }} {{ icon('arrow-right') }}</th>
+               <th class="text-start text-nowrap fw-normal">
+                   {{ icon('arrow-down me-1', 'user.rights.table_title') }}{{ icon('arrow-right ms-1') }}
+               </th>
                {% for permission in permissions %}
                    {{ _self.header(permission, overwrite) }}
                {% endfor %}

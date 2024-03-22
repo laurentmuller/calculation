@@ -61,7 +61,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         private readonly UrlGeneratorInterface $generator
     ) {
         parent::__construct($controller, $entities);
-        $this->setTitle($this->transChart('title_by_state'));
+        $this->setTitle($this->trans('chart.state.title'));
         $this->minMargin = $controller->getMinMargin();
     }
 
@@ -143,13 +143,13 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             ->setHeadersListener($this)
             ->setTextListener($this)
             ->addColumns(
-                PdfColumn::left($this->transChart('fields.state'), 20),
-                PdfColumn::right($this->transChart('fields.count'), 18, true),
+                PdfColumn::left($this->trans('calculation.fields.state'), 20),
+                PdfColumn::right($this->trans('calculation.list.title'), 18, true),
                 PdfColumn::right('', 18, true),
-                PdfColumn::right($this->transChart('fields.net'), 24, true),
-                PdfColumn::right($this->transChart('fields.margin'), 24, true),
+                PdfColumn::right($this->trans('calculationgroup.fields.amount'), 24, true),
+                PdfColumn::right($this->trans('calculation.fields.margin'), 24, true),
                 PdfColumn::right('', 14, true),
-                PdfColumn::right($this->transChart('fields.total'), 24, true),
+                PdfColumn::right($this->trans('calculation.fields.total'), 24, true),
                 PdfColumn::right('', 18, true)
             )->outputHeaders();
     }
@@ -255,6 +255,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
                 FormatUtils::formatAmount($entity['total']),
                 $this->formatPercent($entity['percent_amount'])
             );
+            /** @psalm-var non-empty-string $link */
             $link = $this->getURL($entity['id']);
             $this->link($x, $y, $width, $this->getY() - $y, $link);
         }
@@ -263,7 +264,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         // totals
         $totals = $this->getStateTotals($entities);
         $table->addHeaderRow(
-            $this->transChart('fields.total'),
+            $this->trans('calculation.fields.total'),
             FormatUtils::formatInt($totals['calculation_count']),
             $this->formatPercent($totals['calculation_percent'], bold: true),
             FormatUtils::formatAmount($totals['items_amount']),
@@ -272,10 +273,5 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             FormatUtils::formatAmount($totals['total_amount']),
             $this->formatPercent($totals['total_percent'], bold: true)
         );
-    }
-
-    private function transChart(string $key): string
-    {
-        return $this->trans($key, [], 'chart');
     }
 }

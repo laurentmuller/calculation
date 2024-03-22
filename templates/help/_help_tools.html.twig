@@ -60,14 +60,7 @@
 
 {% macro output_icon(icon, text) -%}
 {% from 'macros/_icons.html.twig' import icon %}
-{%- if text -%}
-    {%- set values = text|split('|') -%}
-    {%- set text = values[0] -%}
-    {%- set domain = values[1]|default(null) -%}
-    {{- icon(icon ? icon ~ ' me-1' : null, text, domain) -}}
-{%- else -%}
-    {{- icon(icon ? icon ~ ' me-1' : null, text) -}}
-{%- endif -%}
+{{- icon(icon ? icon ~ ' me-1' : null, text) -}}
 {%- endmacro %}
 
 {% macro home_button() -%}

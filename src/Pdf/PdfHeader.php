@@ -100,18 +100,7 @@ class PdfHeader
      */
     public function output(): void
     {
-        $parent = $this->parent;
-        $parent->useCellMargin(function () use ($parent): void {
-            $isAddress = $this->isPrintAddress();
-            $printableWidth = $parent->getPrintableWidth();
-            $this->outputLine1($printableWidth, $isAddress);
-            if ($isAddress) {
-                $this->outputLine2($printableWidth);
-                $this->outputLine3($printableWidth);
-            }
-            $this->outputDescription();
-            $parent->resetStyle()->lineBreak(2);
-        });
+        $this->parent->useCellMargin(fn () => $this->outputLines());
     }
 
     /**
@@ -249,6 +238,20 @@ class PdfHeader
         $cellWidth = $printableWidth / 2.0;
         $this->outputZipCity($cellWidth);
         $this->outputEmail($cellWidth);
+    }
+
+    private function outputLines(): void
+    {
+        $parent = $this->parent;
+        $isAddress = $this->isPrintAddress();
+        $printableWidth = $parent->getPrintableWidth();
+        $this->outputLine1($printableWidth, $isAddress);
+        if ($isAddress) {
+            $this->outputLine2($printableWidth);
+            $this->outputLine3($printableWidth);
+        }
+        $this->outputDescription();
+        $parent->resetStyle()->lineBreak(2);
     }
 
     private function outputName(float $width, bool $isAddress): void

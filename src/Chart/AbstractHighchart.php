@@ -194,19 +194,6 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         return $this;
     }
 
-    /**
-     * Translate the given key within the 'chart' domain.
-     *
-     * @param string $id         the message identifier (may also be an object that can be cast to string)
-     * @param array  $parameters an array of parameters for the message
-     *
-     * @return string the translated string or the message identifier if this translator is not defined
-     */
-    protected function transChart(string $id, array $parameters = []): string
-    {
-        return $this->trans($id, $parameters, 'chart');
-    }
-
     private function getAxisOptions(): array
     {
         return [

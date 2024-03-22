@@ -825,16 +825,16 @@
                 "description": "Menu d'accès aux statistiques.",
                 "menus": [
                     {
-                        "id": "title_by_month|chart",
+                        "id": "chart.month.title",
                         "icon": "calendar-alt far",
                         "description": "Page affichant un graphique des calculations par mois.",
-                        "dialog": "title_by_month|chart"
+                        "dialog": "chart.month.title"
                     },
                     {
-                        "id": "title_by_state|chart",
+                        "id": "chart.state.title",
                         "icon": "flag far",
                         "description": "Page affichant un graphique des calculations par statut.",
-                        "dialog": "title_by_state|chart"
+                        "dialog": "chart.state.title"
                     }
                 ]
             },
@@ -2298,7 +2298,7 @@
             ]
         },
         {
-            "id": "title_by_month|chart",
+            "id": "chart.month.title",
             "image": "chart/chart_month",
             "group": "index.menu_graphics",
             "icon": "calendar-alt far",
@@ -2315,36 +2315,36 @@
             ],
             "links": [
                 {
-                    "id": "title_by_state|chart",
+                    "id": "chart.state.title",
                     "type": "dialog"
                 }
             ],
             "fields": [
                 {
-                    "name": "fields.month|chart",
+                    "name": "chart.month.fields.month",
                     "description": "Mois et année (clé de regroupement).",
                     "required": false
                 },
                 {
-                    "name": "fields.count|chart",
+                    "name": "calculation.list.title",
                     "description": "Nombre de calculations.",
                     "type": "quantity",
                     "required": false
                 },
                 {
-                    "name": "fields.net|chart",
+                    "name": "calculationgroup.fields.amount",
                     "description": "Montant net des calculations.",
                     "type": "quantity",
                     "required": false
                 },
                 {
-                    "name": "fields.margin|chart",
+                    "name": "calculation.fields.margin",
                     "description": "Marge (valeur et pourcentage) des calculations.",
                     "type": "amount",
                     "required": false
                 },
                 {
-                    "name": "fields.total|chart",
+                    "name": "calculation.fields.total",
                     "description": "Montant total des calculations.",
                     "type": "amount",
                     "required": false
@@ -2352,7 +2352,7 @@
             ]
         },
         {
-            "id": "title_by_state|chart",
+            "id": "chart.state.title",
             "image": "chart/chart_state",
             "group": "index.menu_graphics",
             "icon": "flag far",
@@ -2369,29 +2369,29 @@
             ],
             "fields": [
                 {
-                    "name": "fields.state|chart",
+                    "name": "calculation.fields.state",
                     "description": "Statut de la calculation (clé de regroupement)."
                 },
                 {
-                    "name": "fields.count|chart",
+                    "name": "calculation.list.title",
                     "description": "Nombre (valeur et pourcentage) des calculations."
                 },
                 {
-                    "name": "fields.net|chart",
+                    "name": "calculationgroup.fields.amount",
                     "description": "Montant net des calculations."
                 },
                 {
-                    "name": "fields.margin|chart",
+                    "name": "calculation.fields.margin",
                     "description": "Marge (valeur et pourcentage) des calculations."
                 },
                 {
-                    "name": "fields.total|chart",
+                    "name": "calculation.fields.total",
                     "description": "Total (valeur et pourcentage) des calculations."
                 }
             ],
             "links": [
                 {
-                    "id": "title_by_month|chart",
+                    "id": "chart.month.title",
                     "type": "dialog"
                 }
             ]

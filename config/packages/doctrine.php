@@ -26,17 +26,18 @@ return static function (DoctrineConfig $config): void {
         ->autoGenerateProxyClasses(true)
         ->proxyDir('%kernel.cache_dir%/doctrine/orm/Proxies');
 
-    $orm->entityManager('default')
-        ->autoMapping(true)
+    $orm->controllerResolver()
+        ->autoMapping(true);
+
+    $manager = $orm->entityManager('default');
+    $manager->autoMapping(true)
         ->validateXmlMapping(true)
         ->reportFieldsWhereDeclared(true)
-        ->namingStrategy('doctrine.orm.naming_strategy.underscore_number_aware')
-        ->mapping('App')
+        ->namingStrategy('doctrine.orm.naming_strategy.underscore_number_aware');
+
+    $manager->mapping('App')
         ->alias('App')
         ->isBundle(false)
         ->prefix('App\Entity')
         ->dir('%kernel.project_dir%/src/Entity');
-
-    $orm->controllerResolver()
-        ->autoMapping(true);
 };

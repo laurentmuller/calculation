@@ -98,9 +98,13 @@ class SchemaReport extends AbstractReport
             ->outputHeaders();
     }
 
-    private function findLink(?string $name): int|string
+    private function findLink(?string $name): ?int
     {
-        return $this->tableLinks[$name ?? ''] ?? '';
+        if (null !== $name && isset($this->tableLinks[$name])) {
+            return $this->tableLinks[$name];
+        }
+
+        return null;
     }
 
     private function formatBool(bool $value): ?string

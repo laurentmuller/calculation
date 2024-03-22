@@ -24,7 +24,7 @@ class PdfCell
      * @param int               $cols      the cell columns span
      * @param ?PdfStyle         $style     the cell style
      * @param ?PdfTextAlignment $alignment the cell alignment
-     * @param string|int        $link      the cell link. A URL or identifier returned by AddLink().
+     * @param string|int|null   $link      the cell link. A URL or identifier returned by AddLink().
      *
      * @psalm-param positive-int $cols
      */
@@ -33,7 +33,7 @@ class PdfCell
         private readonly int $cols = 1,
         private ?PdfStyle $style = null,
         private readonly ?PdfTextAlignment $alignment = null,
-        private readonly string|int $link = ''
+        private readonly string|int|null $link = null
     ) {
     }
 
@@ -63,7 +63,7 @@ class PdfCell
     /**
      * Gets the link.
      */
-    public function getLink(): string|int
+    public function getLink(): string|int|null
     {
         return $this->link;
     }
@@ -85,11 +85,14 @@ class PdfCell
     }
 
     /**
-     * Return a value indicating if this link is not an empty string.
+     * Return a value indicating if this link is valid.
+     *
+     * @psalm-assert-if-true (non-empty-string|positive-int) $this->link
+     * @psalm-assert-if-true (non-empty-string|positive-int) $this->getLink()
      */
     public function isLink(): bool
     {
-        return '' !== $this->link;
+        return (\is_string($this->link) && '' !== $this->link) || (\is_int($this->link) && $this->link > 0);
     }
 
     /**

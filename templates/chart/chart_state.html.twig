@@ -1,24 +1,23 @@
 {% extends 'chart/chart_base.html.twig' %}
 {% from 'macros/_properties.html.twig' import stateCss %}
-{% trans_default_domain 'chart' %}
 {# parameters #}
-{%- set title = 'title_by_state' -%}
+{%- set title = 'chart.state.title' -%}
 {%- set title_icon = ICON_CALCULATION_STATE -%}
 {%- set pdf_route = 'chart_state_pdf' -%}
 {# data #}
 {% block data %}
 <thead>
     <tr>
-        <th class="text-nowrap">{{ 'fields.state'|trans }}</th>
-        <th class="text-center" colspan="2">{{ 'fields.count'|trans }}</th>
-        <th class="text-currency">{{ 'fields.net'|trans }}</th>
-        <th class="text-center" colspan="2">{{ 'fields.margin'|trans }}</th>
-        <th class="text-center" colspan="2">{{ 'fields.total'|trans }}</th>
+        <th class="text-nowrap">{{ 'calculation.fields.state'|trans }}</th>
+        <th class="text-center" colspan="2">{{ 'calculation.list.title'|trans }}</th>
+        <th class="text-currency">{{ 'calculationgroup.fields.amount'|trans }}</th>
+        <th class="text-center" colspan="2">{{ 'calculation.fields.margin'|trans }}</th>
+        <th class="text-center" colspan="2">{{ 'calculation.fields.total'|trans }}</th>
     </tr>
 </thead>
 <tbody data-link="row" class="rowlink">
     {% for item in data -%}
-    <tr title="{{ 'row_by_state'|trans({'%name%': item.code}) }}">
+    <tr title="{{ 'chart.state.row'|trans({'%name%': item.code}) }}">
         <td class="text-nowrap">
             <div class="d-flex align-items-center">
                 <span class="border me-1" style="width: 1.5rem; height: 1rem; background: {{ item.color }}"></span>
@@ -34,9 +33,9 @@
         <td class="text-percent">{{ item.percent_amount|percent(true, 2, 5) }}</td>
     </tr>
     {% endfor -%}
-    <tr title="{{ 'row_show_all'|trans }}">
+    <tr title="{{ 'chart.row_all'|trans }}">
         <td class="fw-bold text-nowrap">
-            <a href="{{ path(list_path) }}">{{ 'fields.total'|trans }}</a>
+            <a href="{{ path(list_path) }}">{{ 'calculation.fields.total'|trans }}</a>
         </td>
         <td class="fw-bold text-currency">{{ totals.calculation_count|integer }}</td>
         <td class="fw-bold text-percent">{{ totals.calculation_percent|percent(true, 2, 5) }}</td>
@@ -51,5 +50,5 @@
 {# body #}
 {% block card_body %}
     {{ parent() }}
-    <p class="small mb-0">{{ 'state_chart.tooltip'|trans|raw }}</p>
+    <p class="small mb-0">{{ 'chart.state.tooltip'|trans|raw }}</p>
 {%- endblock %}

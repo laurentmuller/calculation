@@ -1,5 +1,5 @@
 /* global Highcharts */
-{% trans_default_domain 'chart' %}
+
 /**
  * @typedef Point
  * @property {string} color
@@ -17,7 +17,7 @@ function renderTooltip () {
     let html = '<table class="m-1">';
         html +=
             '<tr>' +
-            '<th>{{ 'fields.month'|trans }}</th>' +
+            '<th>{{ 'chart.month.fields.month'|trans }}</th>' +
             '<th class="px-1">:</th>' +
             '<th class="text-calculation">' + point.date + '</th>' +
             '<th class="text-calculation">&nbsp;</th>' +
@@ -25,7 +25,7 @@ function renderTooltip () {
         html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
         html +=
             '<tr>' +
-            '<td class="text-category">{{ 'fields.count'|trans }}</td>' +
+            '<td class="text-category">{{ 'calculation.list.title'|trans }}</td>' +
             '<td class="px-1">:</td>' +
             '<td class="text-calculation">' + point.calculations + '</td>' +
             '<td class="text-calculation">&nbsp;</td>' +
@@ -36,7 +36,7 @@ function renderTooltip () {
             '<td class="text-category">' +
                 '<div class="d-flex align-items-center">' +
                     '<span class="border me-1" style="width: 1rem; height: 0.75rem; background:darkgreen"></span>' +
-                    '<span>{{ 'fields.net'|trans }}</span>' +
+                    '<span>{{ 'calculationgroup.fields.amount'|trans }}</span>' +
                 '</div>' +
             '</td>' +
             '<td class="px-1">:</td>' +
@@ -48,7 +48,7 @@ function renderTooltip () {
             '<td class="text-category">' +
                 '<div class="d-flex align-items-center">' +
                     '<span class="border me-1" style="width: 1rem; height: 0.75rem; background:darkred"></span>' +
-                    '<span>{{ 'fields.margin'|trans }}</span>' +
+                    '<span>{{ 'calculation.fields.margin'|trans }}</span>' +
                 '</div>' +
             '</td>' +
             '<td class="px-1">:</td>' +
@@ -58,7 +58,7 @@ function renderTooltip () {
         html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
         html +=
             '<tr>' +
-            '<th>{{ 'fields.total'|trans }}</th>' +
+            '<th>{{ 'calculation.fields.total'|trans }}</th>' +
             '<th class="px-1">:</th>' +
             '<th class="text-calculation">' + point.total_amount + '</th>' +
             '<th class="text-calculation">&nbsp;</th>' +

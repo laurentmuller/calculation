@@ -1,6 +1,6 @@
 {# common chart menu #}
 {% from 'macros/_icons.html.twig' import dropdownItem %}
 <ul class="dropdown-menu">
-    {{ dropdownItem(path('chart_month'), 'title_by_month', 'calendar-alt far', 'chart') }}
-    {{ dropdownItem(path('chart_state'), 'title_by_state', ICON_CALCULATION_STATE, 'chart') }}
+    {{ dropdownItem(path('chart_month'), 'chart.month.title', 'calendar-alt far') }}
+    {{ dropdownItem(path('chart_state'), 'chart.state.title', ICON_CALCULATION_STATE) }}
 </ul>

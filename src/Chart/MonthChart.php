@@ -262,12 +262,12 @@ class MonthChart extends AbstractHighchart
     {
         $this->series->merge([
             [
-                'name' => $this->transChart('fields.margin'),
+                'name' => $this->trans('calculation.fields.margin'),
                 'data' => $this->getMarginsSeries($series),
                 'color' => 'darkred',
             ],
             [
-                'name' => $this->transChart('fields.net'),
+                'name' => $this->trans('calculationgroup.fields.amount'),
                 'data' => $this->getItemsSeries($series),
                 'color' => 'darkgreen',
             ],

@@ -84,7 +84,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             $orientation = PdfOrientation::LANDSCAPE;
         }
         parent::__construct($controller, $entities, $orientation);
-        $this->setTitle($this->transChart('title_by_month'));
+        $this->setTitle($this->trans('chart.month.title'));
         $this->minMargin = $controller->getMinMargin();
         $this->colors = new \WeakMap();
     }
@@ -152,12 +152,12 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     {
         return PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::left($this->transChart('fields.month'), 20),
-                PdfColumn::right($this->transChart('fields.count'), 22, true),
-                PdfColumn::right($this->transChart('fields.net'), 25, true),
-                PdfColumn::right($this->transChart('fields.margin'), 20, true),
-                PdfColumn::right($this->transChart('fields.margin_percent'), 18, true),
-                PdfColumn::right($this->transChart('fields.total'), 25, true),
+                PdfColumn::left($this->trans('chart.month.fields.month'), 20),
+                PdfColumn::right($this->trans('calculation.list.title'), 22, true),
+                PdfColumn::right($this->trans('calculationgroup.fields.amount'), 25, true),
+                PdfColumn::right($this->trans('calculation.fields.margin'), 20, true),
+                PdfColumn::right('', 18, true),
+                PdfColumn::right($this->trans('calculation.fields.total'), 25, true),
             )
             ->setHeadersListener($this)
             ->setTextListener($this)
@@ -322,6 +322,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
                 $this->formatPercent($entity['margin_percent']),
                 FormatUtils::formatInt($entity['total'])
             );
+            /** @psalm-var non-empty-string $link */
             $link = $this->getURL($entity['date']);
             $this->link($x, $y, $width, $this->getY() - $y, $link);
             $this->lastItem = $entity;
@@ -338,7 +339,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $net = $total - $items;
         $margin = 1.0 + $this->safeDivide($net, $items);
         $table->addHeaderRow(
-            $this->transChart('fields.total'),
+            $this->trans('calculation.fields.total'),
             FormatUtils::formatInt($count),
             FormatUtils::formatInt($items),
             FormatUtils::formatInt($net),
@@ -356,10 +357,5 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $power = 10.0 ** (float) $precision;
 
         return \floor($value * $power) / $power;
-    }
-
-    private function transChart(string $key): string
-    {
-        return $this->trans($key, [], 'chart');
     }
 }

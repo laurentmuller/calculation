@@ -1059,16 +1059,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "716fc97b70cf8116f74eaa0588eef51420874bf9"
+                "reference": "9c560713925ac5859342e6ff370c4c997acf2fd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/716fc97b70cf8116f74eaa0588eef51420874bf9",
-                "reference": "716fc97b70cf8116f74eaa0588eef51420874bf9",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/9c560713925ac5859342e6ff370c4c997acf2fd4",
+                "reference": "9c560713925ac5859342e6ff370c4c997acf2fd4",
                 "shasum": ""
             },
             "require": {
@@ -1085,7 +1085,7 @@
                 "php": "^8.1",
                 "psr/cache": "^1 || ^2 || ^3",
                 "symfony/console": "^5.4 || ^6.0 || ^7.0",
-                "symfony/var-exporter": "~6.2.13 || ^6.3.2 || ^7.0"
+                "symfony/var-exporter": "^6.3.9 || ^7.0"
             },
             "require-dev": {
                 "doctrine/coding-standard": "^12.0",
@@ -1141,9 +1141,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/3.1.0"
+                "source": "https://github.com/doctrine/orm/tree/3.1.1"
             },
-            "time": "2024-03-03T17:45:20+00:00"
+            "time": "2024-03-21T11:37:52+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -1876,16 +1876,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "1.8.4.10",
+            "version": "1.8.4.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "43823cf747dce12440d3805ff9e15725e2889a7b"
+                "reference": "e69798e593690560bdaa5bbfd7f7dfae8e3b8fc2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/43823cf747dce12440d3805ff9e15725e2889a7b",
-                "reference": "43823cf747dce12440d3805ff9e15725e2889a7b",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/e69798e593690560bdaa5bbfd7f7dfae8e3b8fc2",
+                "reference": "e69798e593690560bdaa5bbfd7f7dfae8e3b8fc2",
                 "shasum": ""
             },
             "require": {
@@ -1937,7 +1937,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-03-21T11:20:09+00:00"
+            "time": "2024-03-22T06:48:29+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -8488,16 +8488,16 @@
     "packages-dev": [
         {
             "name": "amphp/amp",
-            "version": "v2.6.2",
+            "version": "v2.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/amp.git",
-                "reference": "9d5100cebffa729aaffecd3ad25dc5aeea4f13bb"
+                "reference": "ded3d9be08f526089eb7ee8d9f16a9768f9dec2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/amp/zipball/9d5100cebffa729aaffecd3ad25dc5aeea4f13bb",
-                "reference": "9d5100cebffa729aaffecd3ad25dc5aeea4f13bb",
+                "url": "https://api.github.com/repos/amphp/amp/zipball/ded3d9be08f526089eb7ee8d9f16a9768f9dec2d",
+                "reference": "ded3d9be08f526089eb7ee8d9f16a9768f9dec2d",
                 "shasum": ""
             },
             "require": {
@@ -8509,8 +8509,8 @@
                 "ext-json": "*",
                 "jetbrains/phpstorm-stubs": "^2019.3",
                 "phpunit/phpunit": "^7 | ^8 | ^9",
-                "psalm/phar": "^3.11@dev",
-                "react/promise": "^2"
+                "react/promise": "^2",
+                "vimeo/psalm": "^3.12"
             },
             "type": "library",
             "extra": {
@@ -8565,7 +8565,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/amphp",
                 "issues": "https://github.com/amphp/amp/issues",
-                "source": "https://github.com/amphp/amp/tree/v2.6.2"
+                "source": "https://github.com/amphp/amp/tree/v2.6.4"
             },
             "funding": [
                 {
@@ -8573,7 +8573,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-20T17:52:18+00:00"
+            "time": "2024-03-21T18:52:26+00:00"
         },
         {
             "name": "amphp/byte-stream",
@@ -10738,16 +10738,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.14",
+            "version": "10.5.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "4cf8824bab39c2dd57b57b9f6332f7135e2a3a49"
+                "reference": "86376e05e8745ed81d88232ff92fee868247b07b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4cf8824bab39c2dd57b57b9f6332f7135e2a3a49",
-                "reference": "4cf8824bab39c2dd57b57b9f6332f7135e2a3a49",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/86376e05e8745ed81d88232ff92fee868247b07b",
+                "reference": "86376e05e8745ed81d88232ff92fee868247b07b",
                 "shasum": ""
             },
             "require": {
@@ -10819,7 +10819,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.14"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.15"
             },
             "funding": [
                 {
@@ -10835,7 +10835,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-21T07:31:09+00:00"
+            "time": "2024-03-22T04:17:47+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
@@ -12208,16 +12208,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.56.0",
+            "version": "v1.57.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "bbb7949ae048363df7c8439abeddef8befd155ce"
+                "reference": "2c90181911241648356b828b86b04fe3571aca0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/bbb7949ae048363df7c8439abeddef8befd155ce",
-                "reference": "bbb7949ae048363df7c8439abeddef8befd155ce",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/2c90181911241648356b828b86b04fe3571aca0b",
+                "reference": "2c90181911241648356b828b86b04fe3571aca0b",
                 "shasum": ""
             },
             "require": {
@@ -12280,7 +12280,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.56.0"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.57.0"
             },
             "funding": [
                 {
@@ -12296,7 +12296,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-04T13:36:45+00:00"
+            "time": "2024-03-22T12:00:21+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",

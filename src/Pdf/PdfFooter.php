@@ -48,16 +48,7 @@ class PdfFooter
      */
     public function output(): void
     {
-        $parent = $this->parent;
-        $parent->useCellMargin(function () use ($parent): void {
-            $parent->setY(-PdfDocument::FOOTER_OFFSET);
-            $width = $parent->getPrintableWidth() / 3.0;
-            PdfStyle::default()->setFontSize(8)->apply($parent);
-            $this->outputText($this->getPage(), $width, PdfTextAlignment::LEFT)
-                ->outputText($this->content ?? '', $width, PdfTextAlignment::CENTER, $this->url ?? '')
-                ->outputText($this->getDate(), $width, PdfTextAlignment::RIGHT);
-            $parent->resetStyle();
-        });
+        $this->parent->useCellMargin(fn () => $this->outputTexts());
     }
 
     /**
@@ -109,5 +100,17 @@ class PdfFooter
         );
 
         return $this;
+    }
+
+    private function outputTexts(): void
+    {
+        $parent = $this->parent;
+        $parent->setY(-PdfDocument::FOOTER_OFFSET);
+        $width = $parent->getPrintableWidth() / 3.0;
+        PdfStyle::default()->setFontSize(PdfFont::DEFAULT_SIZE - 1.0)->apply($parent);
+        $this->outputText($this->getPage(), $width, PdfTextAlignment::LEFT)
+            ->outputText($this->content ?? '', $width, PdfTextAlignment::CENTER, $this->url ?? '')
+            ->outputText($this->getDate(), $width, PdfTextAlignment::RIGHT);
+        $parent->resetStyle();
     }
 }

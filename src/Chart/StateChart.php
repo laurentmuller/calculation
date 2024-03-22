@@ -185,7 +185,7 @@ class StateChart extends AbstractHighchart
         $this->series->merge([
             [
                 'data' => $this->mapData($states),
-                'name' => $this->transChart('title_by_state'),
+                'name' => $this->trans('chart.state.title'),
             ],
         ]);
     }

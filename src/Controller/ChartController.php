@@ -115,7 +115,7 @@ class ChartController extends AbstractController
         $count = $this->getSessionInt(self::KEY_MONTHS, 6);
         $months = $this->getRequestInt($request, 'count', $count);
         if ($months <= 0) {
-            throw new BadRequestHttpException($this->trans('error.month', [], 'chart'));
+            throw new BadRequestHttpException($this->trans('chart.month.error'));
         }
 
         return $months;

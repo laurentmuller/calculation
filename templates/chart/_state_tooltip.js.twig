@@ -1,5 +1,4 @@
 /* global Highcharts */
-{% trans_default_domain 'chart' %}
 /**
  * @typedef Point
  * @property {string} color
@@ -18,7 +17,7 @@ function renderTooltip () {
     let html = '<table class="m-1">';
     html +=
         '<tr>' +
-        '<th>{{ 'fields.state'|trans }}</th>' +
+        '<th>{{ 'calculation.fields.state'|trans }}</th>' +
         '<th class="px-1">:</th>' +
         '<th class="text-calculation">' +
             '<div class="d-flex align-items-center">' +
@@ -31,7 +30,7 @@ function renderTooltip () {
     html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
     html +=
         '<tr>' +
-        '<td>{{ 'fields.count'|trans }}</td>' +
+        '<td>{{ 'calculation.list.title'|trans }}</td>' +
         '<td class="px-1">:</td>' +
         '<td class="text-calculation">' + point.calculations + '</td>' +
         '<td class="text-calculation ps-3">' + point.calculations_percent + '</td>' +
@@ -39,14 +38,14 @@ function renderTooltip () {
     html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
     html +=
         '<tr>' +
-        '<td>{{ 'fields.net'|trans }}</td>' +
+        '<td>{{ 'calculationgroup.fields.amount'|trans }}</td>' +
         '<td class="px-1">:</td>' +
         '<td class="text-calculation">' + point.net_amount + '</td>' +
         '<td class="text-calculation">&nbsp;</td>' +
         '</tr>';
     html +=
         '<tr>' +
-        '<td>{{ 'fields.margin'|trans }}</td>' +
+        '<td>{{ 'calculation.fields.margin'|trans }}</td>' +
         '<td class="px-1">:</td>' +
         '<td class="text-calculation">' + point.margin_amount + '</td>' +
         '<td class="text-calculation" style="color:'+ point.margin_color + '">' + point.margin_percent + '</td>' +
@@ -54,7 +53,7 @@ function renderTooltip () {
     html += '<tr><td colspan="4"><hr class="my-1"></td></tr>';
     html +=
         '<tr>' +
-        '<th>{{ 'fields.total'|trans }}</th>' +
+        '<th>{{ 'calculation.fields.total'|trans }}</th>' +
         '<th class="px-1">:</th>' +
         '<th class="text-calculation">' + point.total_amount + '</th>' +
         '<th class="text-calculation ps-3">' + point.total_percent + '</th>' +

@@ -80,7 +80,7 @@
                     <ul class="dropdown-menu d-block border-0 pt-0">
                         {{ dropdownItem(path('calculation_pivot'), 'pivot.title', 'table') }}
                         {{ dropdownItem(path('timeline'), 'timeline.title', 'stream') }}
-                        {{ dropdownItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', null, {'%year%': 'now'|date('Y')}) }}
+                        {{ dropdownItem(path('calendar_year'), 'calendar.year_title', 'calendar-alt far', {'%year%': 'now'|date('Y')}) }}
                     </ul>
                 </div>
             </li>

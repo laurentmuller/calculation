@@ -12,10 +12,10 @@
     {% endif %}
     {% if is_env_dev -%}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(link_prod, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.prod'|trans}) }}
+        {{ dropdownItem(link_prod, 'environment.switch', 'location-arrow', {'%name%': 'environment.prod'|trans}) }}
     {% elseif is_env_prod or is_env_local -%}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(link_dev, 'environment.switch', 'location-arrow', null, {'%name%': 'environment.dev'|trans}) }}
+        {{ dropdownItem(link_dev, 'environment.switch', 'location-arrow', {'%name%': 'environment.dev'|trans}) }}
     {% endif %}
     {{ dropdownSeparator() }}
     {% if is_granted_data %}
@@ -27,6 +27,6 @@
     {% endif %}
     {% if not status_bar %}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(path('about'), 'index.menu_info', 'info-circle', null, {'%app_name%': app_name}) }}
+        {{ dropdownItem(path('about'), 'index.menu_info', 'info-circle', {'%app_name%': app_name}) }}
     {% endif %}
 </ul>

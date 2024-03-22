@@ -1,5 +1,5 @@
 {# macros for icons, links and navigation entries #}
-{% macro icon(icon, text, domain=null, parameters=[]) -%}
+{% macro icon(icon, text, parameters=[]) -%}
 {%- if icon -%}
     {%- if 'fab' in icon -%}
         {%- set class = 'fa-brands fa-' ~ icon|split(' ')|filter(c => c != 'fab')|join(' ') -%}
@@ -11,24 +11,24 @@
     {%- if text -%}{%- set class = class ~ ' me-1' -%}{%- endif -%}
     <i class="{{ class }}"></i>
 {%- endif %}
-{{- text|trans(parameters, domain) -}}
+{{- text|trans(parameters) -}}
 {%- endmacro %}
 
-{% macro link(href, text, class, icon, title=null, domain=null, parameters=[]) -%}
+{% macro link(href, text, class, icon, title=null, parameters=[]) -%}
 {%- set role = (class and 'btn' in class) ? ' role="button"' : '' -%}
-{%- set title = title ? ' title="' ~ title|trans(parameters, domain) ~ '"' : '' -%}
+{%- set title = title ? ' title="' ~ title|trans(parameters) ~ '"' : '' -%}
 {%- set class = class ? ' class="' ~ class ~ '"' : '' -%}
 <a href="{{ href }}"{{ class|raw }}{{ role|raw }}{{ title|raw }}>
-    {{- _self.icon(icon, text, domain, parameters) -}}
+    {{- _self.icon(icon, text, parameters) -}}
 </a>
 {%- endmacro %}
 
-{% macro linkExternal(href, text, class, icon, title=null, domain=null, parameters=[]) -%}
+{% macro linkExternal(href, text, class, icon, title=null, parameters=[]) -%}
 {%- set role = (class and 'btn' in class) ? ' role="button"' : '' -%}
-{%- set title = title ? ' title="' ~ title|trans(parameters, domain) ~ '"' : '' -%}
+{%- set title = title ? ' title="' ~ title|trans(parameters) ~ '"' : '' -%}
 {%- set class = class ? ' class="' ~ class ~ '"' : '' -%}
 <a href="{{ href }}" target="_blank" rel="noopener noreferrer"{{ class|raw }}{{ title|raw }}{{ role|raw }}>
-    {{- _self.icon(icon, text, domain, parameters) -}}
+    {{- _self.icon(icon, text, parameters) -}}
 </a>
 {%- endmacro %}
 
@@ -36,36 +36,36 @@
     {{ _self.linkExternal(href, 'common.api_documentation', class, icon, 'common.api_documentation_help') -}}
 {%- endmacro %}
 
-{% macro dropdownItem(href, text, icon, domain=null, parameters=[]) -%}
+{% macro dropdownItem(href, text, icon, parameters=[]) -%}
 <li>
-    {{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, domain, parameters) -}}
+    {{- _self.link(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) -}}
 </li>
 {%- endmacro %}
 
-{% macro dropdownItemExternal(href, text, icon, domain=null, parameters=[]) -%}
-{{- _self.linkExternal(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, domain, parameters) -}}
+{% macro dropdownItemExternal(href, text, icon, parameters=[]) -%}
+{{- _self.linkExternal(href, text, 'dropdown-item rowlink-skip', (icon ? icon ~ ' fa-fw' : null), null, parameters) -}}
 {%- endmacro %}
 
-{% macro dropdownItemWithId(href, text, icon, id, disabled, domain=null, parameters=[]) -%}
+{% macro dropdownItemWithId(href, text, icon, id, disabled, parameters=[]) -%}
 <a href="{{ href }}" class="dropdown-item rowlink-skip{% if disabled %} disabled {% endif %}" id="{{ id }}">
-    {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}
+    {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, parameters) -}}
 </a>
 {%- endmacro %}
 
-{% macro dropdownItemWithClass(href, text, icon, class, hidden, domain=null, parameters=[]) -%}
+{% macro dropdownItemWithClass(href, text, icon, class, hidden, parameters=[]) -%}
 {%- set class = ('dropdown-item rowlink-skip ' ~ (hidden ? 'd-none ' : '') ~ class|default(''))|trim -%}
 <li>
     <a href="{{ href }}" class="{{ class }}">
-        {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}
+        {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, parameters) -}}
     </a>
 </li>
 {%- endmacro %}
 
-{% macro dropdownItemButton(text, icon, class, hidden=false, domain=null, parameters=[]) -%}
+{% macro dropdownItemButton(text, icon, class, hidden=false, parameters=[]) -%}
 {%- set class = ('dropdown-item rowlink-skip ' ~ (hidden ? 'd-none ' : '') ~ class|default(''))|trim -%}
 <li>
     <button type="button" class="{{ class }}">
-        {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, domain, parameters) -}}
+        {{- _self.icon((icon ? icon ~ ' fa-fw' : null), text, parameters) -}}
     </button>
 </li>
 {%- endmacro %}
@@ -95,9 +95,9 @@
 </button>
 {%- endmacro %}
 
-{% macro homepage(href=null, text='index.title', class='btn btn-form btn-primary', domain=null) -%}
+{% macro homepage(href=null, text='index.title', class='btn btn-form btn-primary') -%}
 {%- set href = href|default(path('homepage')) -%}
-{{- _self.link(href, text, class, 'home', 'index.title_help', domain) -}}
+{{- _self.link(href, text, class, 'home', 'index.title_help') -}}
 {%- endmacro %}
 
 {% macro button_submit(text='common.button_ok', class='btn btn-form btn-primary', parameters=[]) -%}
@@ -142,7 +142,7 @@
 
 {% macro copyright_link(class=null) -%}
 {%- set parameters = {'%year%': 'now'|date('Y'), '%owner%': app_owner_name} -%}
-{{- _self.linkExternal(app_owner_url, 'footer.copyright', class, null, 'footer.copyright_title', null, parameters) -}}
+{{- _self.linkExternal(app_owner_url, 'footer.copyright', class, null, 'footer.copyright_title', parameters) -}}
 {%- endmacro %}
 
 {% macro dropdownItemCard(route_name, parameters=[]) -%}
@@ -181,9 +181,9 @@
 </div>
 {%- endmacro %}
 
-{% macro vertical_title(icon, text, domain) -%}
+{% macro vertical_title(icon, text) -%}
 <h6 class="dropdown-header text-uppercase">
-    {{- _self.icon(icon, text, domain) -}}
+    {{- _self.icon(icon, text) -}}
 </h6>
 {% endmacro %}
 

@@ -39,21 +39,21 @@
             {# today month #}
             {% if today %}
                 {% set href = path('calendar_month', {'year': today.year, 'month': today.month}) %}
-                {{ link(href, null, 'btn btn-primary', 'arrows-alt', 'calendar.month_current', null, {'%year%': today.year, '%month%': calendar.monthNames[today.month]}) }}
+                {{ link(href, null, 'btn btn-primary', 'arrows-alt', 'calendar.month_current', {'%year%': today.year, '%month%': calendar.monthNames[today.month]}) }}
             {% endif %}
             {# previous month #}
             {% if previous %}
                 {% set href = path('calendar_month', {'year': previous.year, 'month': previous.month}) %}
-                {{ link(href, null, 'btn btn-primary', 'chevron-left', 'calendar.month_previous', null, {'%year%': previous.year, '%month%': calendar.monthNames[previous.month]}) }}
+                {{ link(href, null, 'btn btn-primary', 'chevron-left', 'calendar.month_previous', {'%year%': previous.year, '%month%': calendar.monthNames[previous.month]}) }}
             {% endif %}
             {# next month #}
             {% if next %}
                 {% set href = path('calendar_month', {'year': next.year, 'month': next.month}) %}
-                {{ link(href, null, 'btn btn-primary', 'chevron-right', 'calendar.month_next', null, {'%year%': next.year, '%month%': calendar.monthNames[next.month]}) }}
+                {{ link(href, null, 'btn btn-primary', 'chevron-right', 'calendar.month_next', {'%year%': next.year, '%month%': calendar.monthNames[next.month]}) }}
             {% endif %}
             {# current year calendar #}
             {% set href = path('calendar_year', {'year': calendar.year}) %}
-            {{ link(href, null, 'btn btn-primary', 'calendar-alt far', 'calendar.year_show', null, {'%year%': calendar.year}) }}
+            {{ link(href, null, 'btn btn-primary', 'calendar-alt far', 'calendar.year_show', {'%year%': calendar.year}) }}
             {# calculations #}
             {{ helper.linkCalculations('%02d.%d'|format(month.number, month.year), month.name ~ ' ' ~ month.year, calculations|length, 'btn btn-primary') }}
         </div>

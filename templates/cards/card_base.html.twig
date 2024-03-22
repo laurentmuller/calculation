@@ -12,7 +12,7 @@
             <div class="card-header{% block card_header_class %}{% endblock %}">
                 {% block card_header %}
                 <h1 class="card-title py-1">
-                    {{- icon(title_icon, title, title_domain|default(null), title_parameters|default({})) -}}
+                    {{- icon(title_icon, title, title_parameters|default({})) -}}
                 </h1>
                 {% if title_description is defined and title_description %}
                     <small>{{ title_description|trans }}</small>

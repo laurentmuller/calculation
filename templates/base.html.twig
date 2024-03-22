@@ -10,8 +10,7 @@
 {%- set is_actived = is_remembered and app.user.enabled|default(false) -%}
 {%- set is_test = is_dev and is_remembered and app.user.userIdentifier == 'Bibi' -%}
 {%- set title_parameters = title_parameters|default({}) -%}
-{%- set title_domain = title_domain|default(null) -%}
-{%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters, title_domain) : '') -%}
+{%- set page_title = app_name ~ (title is defined ? ' - ' ~ title|trans(title_parameters) : '') -%}
 {%- set sidebar_show = is_remembered and is_actived ? app.request.cookies.boolean('MENU_SIDEBAR_SHOW') : false -%}
 {%- set sidebar_class = sidebar_show ? ' sidebar-show' : '' -%}
 {%- set status_bar = status_bar is defined ? status_bar : user_service.statusBar and is_remembered and is_actived -%}

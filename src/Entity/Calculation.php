@@ -678,11 +678,13 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function isSortable(): bool
     {
-        if (!$this->isEmpty()) {
-            foreach ($this->groups as $group) {
-                if ($group->isSortable()) {
-                    return true;
-                }
+        if ($this->isEmpty()) {
+            return false;
+        }
+
+        foreach ($this->groups as $group) {
+            if ($group->isSortable()) {
+                return true;
             }
         }
 

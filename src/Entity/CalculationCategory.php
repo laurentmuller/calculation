@@ -190,7 +190,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     }
 
     /**
-     * Returns if this group is sortable.
+     * Returns if this category is sortable.
      *
      * @return bool true if sortable; false otherwise
      */

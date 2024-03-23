@@ -16,8 +16,10 @@ use App\Pdf\Colors\AbstractPdfColor;
 use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\PdfDocument;
 use PHPUnit\Framework\TestCase;
 
+#[\PHPUnit\Framework\Attributes\CoversClass(AbstractPdfColor::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(PdfDrawColor::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(PdfFillColor::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(PdfTextColor::class)]
@@ -111,6 +113,19 @@ class PdfColorTest extends TestCase
         yield [$value, $rgb[0], $rgb[1], $rgb[2]];
     }
 
+    public function testApply(): void
+    {
+        $doc = new PdfDocument();
+        $draw = new PdfDrawColor(100, 100, 100);
+        $fill = new PdfFillColor(100, 100, 100);
+        $text = new PdfTextColor(100, 100, 100);
+        $draw->apply($doc);
+        $fill->apply($doc);
+        $text->apply($doc);
+        $doc->close();
+        self::assertSame(1, $doc->getPage());
+    }
+
     /**
      * @psalm-param int<0, 255> $red
      * @psalm-param int<0, 255> $green
@@ -135,6 +150,66 @@ class PdfColorTest extends TestCase
         $color = new PdfDrawColor($red, $green, $blue);
         $actual = $color->asInt();
         self::assertSame($expected, $actual);
+    }
+
+    public function testColorBlack(): void
+    {
+        $color = PdfFillColor::black();
+        self::assertEqualValues($color, 0, 0, 0);
+    }
+
+    public function testColorBlue(): void
+    {
+        $color = PdfFillColor::blue();
+        self::assertEqualValues($color, 0, 0, 255);
+    }
+
+    public function testColorCellBorder(): void
+    {
+        $color = PdfFillColor::cellBorder();
+        self::assertEqualValues($color, 221, 221, 221);
+    }
+
+    public function testColorDarkGray(): void
+    {
+        $color = PdfFillColor::darkGray();
+        self::assertEqualValues($color, 169, 169, 169);
+    }
+
+    public function testColorDarkGreen(): void
+    {
+        $color = PdfFillColor::darkGreen();
+        self::assertEqualValues($color, 0, 128, 0);
+    }
+
+    public function testColorGreen(): void
+    {
+        $color = PdfFillColor::green();
+        self::assertEqualValues($color, 0, 255, 0);
+    }
+
+    public function testColorHeader(): void
+    {
+        $color = PdfFillColor::header();
+        self::assertEqualValues($color, 245, 245, 245);
+    }
+
+    public function testColorLink(): void
+    {
+        $color = PdfFillColor::link();
+        self::assertEqualValues($color, 0, 0, 255);
+    }
+
+    public function testColorRed(): void
+    {
+        $color = PdfFillColor::red();
+        self::assertEqualValues($color, 255, 0, 0);
+    }
+
+    public function testColorWhite(): void
+    {
+        $color = PdfFillColor::white();
+        self::assertEqualValues($color, 255, 255, 255);
     }
 
     public function testDefaultColors(): void
@@ -168,6 +243,14 @@ class PdfColorTest extends TestCase
     {
         $color = PdfTextColor::create($rgb);
         self::assertNull($color);
+    }
+
+    public function testIsFillColor(): void
+    {
+        $fill = new PdfFillColor(100, 100, 100);
+        self::assertTrue($fill->isFillColor());
+        $fill = new PdfFillColor(255, 255, 255);
+        self::assertFalse($fill->isFillColor());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getNamedColors')]

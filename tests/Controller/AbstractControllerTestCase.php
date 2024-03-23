@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Controller\AbstractController;
 use App\Interfaces\EntityInterface;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use Doctrine\ORM\Exception\ORMException;
@@ -21,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Abstract unit test for controllers.
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(AbstractController::class)]
 abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCase
 {
     /**

@@ -21,6 +21,7 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
+use App\Utils\FormatUtils;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Calculation::class)]
 class CalculationTest extends AbstractEntityValidatorTestCase
@@ -30,10 +31,10 @@ class CalculationTest extends AbstractEntityValidatorTestCase
     public function testAddProduct(): void
     {
         $product1 = new Product();
-        $product1->setDescription('product1')
+        $product1->setDescription('product2')
             ->setPrice(1.0);
         $product2 = new Product();
-        $product2->setDescription('product2')
+        $product2->setDescription('product1')
             ->setPrice(2.0);
 
         $category = new Category();
@@ -59,14 +60,21 @@ class CalculationTest extends AbstractEntityValidatorTestCase
         foreach ($calculation->getGroups() as $currentGroup) {
             $currentGroup->update();
         }
+        $calculation->updatePositions();
+        $calculation->getSortedGroups();
+
+        $group->setCode('group1');
+        $category->setCode('category1');
+        $calculation->updateCodes();
+        $calculation->getOverallMarginAmount();
+
         self::assertSame(1.1, $calculation->getGroupsMargin());
         self::assertSame(0.3, \round($calculation->getGroupsMarginAmount(), 2));
         self::assertSame(3.3, \round($calculation->getGroupsTotal(), 2));
-
         self::assertSame(1, $calculation->getCategoriesCount());
 
-        $calculation->getSortedGroups();
         self::assertTrue($calculation->isSortable());
+        $calculation->sort();
     }
 
     /**
@@ -260,6 +268,16 @@ class CalculationTest extends AbstractEntityValidatorTestCase
         self::assertSame(200.0, $calculation->getOverallTotal());
     }
 
+    public function testFormattedDate(): void
+    {
+        $date = new \DateTimeImmutable('2000-01-01');
+        $calculation = new Calculation();
+        $calculation->setDate($date);
+        $actual = $calculation->getFormattedDate();
+        $expected = FormatUtils::formatDate($date);
+        self::assertSame($expected, $actual);
+    }
+
     public function testGroup(): void
     {
         $group = new CalculationGroup();
@@ -311,6 +329,60 @@ class CalculationTest extends AbstractEntityValidatorTestCase
             ->setCustomer('my customer');
         $results = $this->validate($calculation, 1);
         $this->validatePaths($results, 'state');
+    }
+
+    public function testMarginBelow(): void
+    {
+        $calculation = new Calculation();
+        self::assertFalse($calculation->isMarginBelow(0.0));
+
+        $product = new Product();
+        $product->setDescription('product1')
+            ->setPrice(1.0);
+
+        $category = new Category();
+        $category->setCode('category')
+            ->addProduct($product);
+
+        $margin = new GroupMargin();
+        $margin->setMinimum(0.0)
+            ->setMaximum(1000.0)
+            ->setMargin(1.1);
+        $group = new Group();
+        $group->setCode('group')
+            ->addCategory($category);
+
+        $calculation->addProduct($product);
+        $calculation->setItemsTotal(100);
+        $calculation->setOverallTotal(130);
+        self::assertTrue($calculation->isMarginBelow(3.0));
+    }
+
+    public function testOverallMarginAmount(): void
+    {
+        $calculation = new Calculation();
+        $calculation->setItemsTotal(100.0);
+        $calculation->setOverallTotal(200.0);
+        self::assertSame(100.0, $calculation->getOverallMarginAmount());
+    }
+
+    public function testRemoveGroup(): void
+    {
+        $calculation = new Calculation();
+        self::assertCount(0, $calculation->getGroups());
+        $group = new CalculationGroup();
+        $calculation->removeGroup($group);
+        self::assertCount(0, $calculation->getGroups());
+    }
+
+    public function testSortable(): void
+    {
+        $group = new CalculationGroup();
+        $group->setCode('group');
+        $calculation = new Calculation();
+        $calculation->addGroup($group);
+        self::assertFalse($calculation->isSortable());
+        $calculation->sort();
     }
 
     public function testState(): void

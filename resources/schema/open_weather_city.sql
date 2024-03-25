@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS city
     country   TEXT    NOT NULL,
     latitude  REAL    NOT NULL,
     longitude REAL    NOT NULL
-) WITHOUT ROWID;
+);

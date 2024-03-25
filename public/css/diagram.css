@@ -11,12 +11,15 @@
 }
 
 .diagram svg {
+    font-size: var(--bs-body-font-size) !important;
+    font-weight: var(--bs-body-font-weight) !important;
     font-family: var(--bs-body-font-family) !important;
 }
 
 .diagram svg .error-icon {
     fill: var(--bs-danger) !important;
 }
+
 .diagram svg .error-text {
     fill: var(--bs-danger) !important;
     stroke: var(--bs-danger) !important;

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Utils\StringUtils;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
@@ -34,8 +35,8 @@ class DiagramService
     private const TITLE_PATTERN = '/title\s?:\s?(.*)/m';
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%/resources/diagram/')]
-        private readonly string $root,
+        #[Autowire('%kernel.project_dir%/resources/diagrams/')]
+        private readonly string $path,
         private readonly CacheInterface $cache
     ) {
     }
@@ -64,14 +65,14 @@ class DiagramService
         return $this->cache->get('diagram_files', function (): array {
             $files = [];
             $finder = new Finder();
-            $finder->in($this->root)
+            $finder->in($this->path)
                 ->files()
                 ->name('*' . self::FILE_SUFFIX);
             foreach ($finder as $file) {
                 $content = $file->getContents();
-                $title = $this->findTitle($content) ?? 'Diagram';
-                $content = $this->removeTitle($content);
                 $name = $file->getBasename(self::FILE_SUFFIX);
+                $title = $this->findTitle($content, $name);
+                $content = $this->removeTitle($content);
                 $files[$name] = [
                     'name' => $name,
                     'title' => $title,
@@ -84,14 +85,18 @@ class DiagramService
         });
     }
 
-    private function findTitle(string $content): ?string
+    private function findTitle(string $content, string $name): string
     {
         $matches = [];
-        if (false !== \preg_match_all(self::TITLE_PATTERN, $content, $matches, \PREG_SET_ORDER)) {
+        $found = \preg_match_all(self::TITLE_PATTERN, $content, $matches, \PREG_SET_ORDER);
+        if (\is_int($found) && 0 !== $found) {
             return $matches[0][1];
         }
 
-        return null;
+        return StringUtils::unicode($name)
+            ->camel()
+            ->title()
+            ->toString();
     }
 
     private function removeTitle(string $content): string

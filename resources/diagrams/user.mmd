@@ -8,24 +8,28 @@ classDiagram
         <<Interface>>
         +getRoles() array
         +getUserIdentifier() string
+        +eraseCredentials()
     }
 
     class User {
         -string username
         -string email
         -string password
+        -string role
         -bool enabled
         -bool verified
         -Collection~UserProperty~ properties
         +getRoles() array
         +getUserIdentifier() string
+        +eraseCredentials()
         +getUsername() string
         +setUsername(string)
         +getEmail() string
         +setEmail(string)
         +getPassword() string
         +setPassword(string)
-        +getUserIdentifier() string
+        +getRole() string
+        +setRole(string)
         +isEnabled() bool
         +setEnabled(bool)
         +isVerified() bool
@@ -48,6 +52,7 @@ classDiagram
     class AbstractEntity {
         <<Abstract>>
     }
+
     class EntityInterface {
         <<Interface>>
     }
@@ -60,8 +65,8 @@ classDiagram
     AbstractEntity <|-- User
     User ..|> UserInterface
     User "0" --* "*" UserProperty
-    AbstractProperty <|-- UserProperty
     TimestampableInterface <|-- User
+    AbstractProperty <|-- UserProperty
 
     click EntityInterface call nodeCallback()
     click AbstractEntity call nodeCallback()

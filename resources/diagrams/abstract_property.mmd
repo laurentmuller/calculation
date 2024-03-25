@@ -22,24 +22,24 @@ classDiagram
         +setString(string|null)
     }
 
-    class UserProperty {
-        -User user
-        +getUser() User
-        +setUser(User)
+    class EntityInterface {
+        <<Interface>>
     }
 
     class AbstractEntity {
         <<Abstract>>
     }
 
-    class EntityInterface {
-        <<Interface>>
+    class UserProperty {
+        -User user
+        +getUser() User
+        +setUser(User)
     }
 
     EntityInterface <|.. AbstractEntity
     AbstractEntity <|-- AbstractProperty
-    AbstractProperty <|-- UserProperty
     AbstractProperty <|-- GlobalProperty
+    AbstractProperty <|-- UserProperty
     User "0" --* "*" UserProperty
 
     click EntityInterface call nodeCallback()

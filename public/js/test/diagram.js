@@ -74,9 +74,7 @@
                 primaryBorderColor: '#6C757D',
                 lineColor: '#6C757D',
                 secondaryColor: '#006100',
-                tertiaryColor: '#FFF',
-                errorTextColor: '#DC3545',
-                errorBkgColo: '#FFF',
+                tertiaryColor: '#FFF'
             };
         }
         return {
@@ -85,14 +83,12 @@
             primaryBorderColor: '#6C757D',
             lineColor: '#6C757D',
             secondaryColor: '#006100',
-            tertiaryColor: '#FFF',
-            errorTextColor: '#DC3545',
-            errorBkgColo: '#FFF',
+            tertiaryColor: '#FFF'
         };
     };
 
     // load the diagram.
-    const reloadDiagram = function () {
+    const reloadDiagram = () => {
         mermaid.initialize({
             theme: 'base',
             useMaxWidth: false,

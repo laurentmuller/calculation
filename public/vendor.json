@@ -19,7 +19,7 @@
             ]
         },
         "highcharts": {
-            "example": "https://code.highcharts.com/11.2.0/highcharts.js",
+            "example": "https://code.highcharts.com/11.4.0/highcharts.js",
             "source": "https://code.highcharts.com/",
             "format": "{source}{version}/{file}"
         }
@@ -87,7 +87,7 @@
         },
         {
             "name": "highcharts",
-            "version": "11.3.0",
+            "version": "11.4.0",
             "source": "cdnjs",
             "files": [
                 "highcharts.js"
@@ -220,13 +220,12 @@
         {
             "example": "https://cdn.jsdelivr.net/npm/mermaid@10.8.0/dist/mermaid.min.js",
             "name": "mermaid",
-            "version": "10.8.0",
+            "version": "10.9.0",
             "source": "jsdelivr",
             "prefix": "dist/",
             "files": [
                 "dist/mermaid.min.js"
             ]
-
         }
     ]
 }

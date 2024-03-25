@@ -245,7 +245,7 @@ class SwissDatabase extends AbstractDatabase
     /**
      * Insert a city.
      *
-     * @psalm-param array{0: int, 1: int, 2: string, 3:string} $data the data to insert with the following values:
+     * @param array{0: int, 1: int, 2: string, 3:string} $data the data to insert with the following values:
      *                                                         <table class="table table-bordered" border="1" cellpadding="5" style="border-collapse: collapse;">
      *                                                         <tr>
      *                                                         <th>Index</th><th>Type</th><th>Description</th>

@@ -27,14 +27,13 @@ class LogDatabase extends AbstractDatabase
      */
     private const SQL_CREATE = <<<'sql'
         CREATE TABLE IF NOT EXISTS sy_Log (
-            id         INTEGER NOT NULL,
+            id         INTEGER PRIMARY KEY,
             created_at INTEGER NOT NULL,
             channel    TEXT NOT NULL,
             level      TEXT NOT NULL,
             message    TEXT NOT NULL,
             context    TEXT,
-            extra      TEXT,
-            PRIMARY KEY(id)
+            extra      TEXT
         )
         sql;
 

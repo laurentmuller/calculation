@@ -138,6 +138,9 @@ function sortMargins() {
         removeMargin($(this));
     });
 
+    // first char uppercase
+    $('input.uc-first').ucFirst();
+
     // update UI
     updateUI();
 

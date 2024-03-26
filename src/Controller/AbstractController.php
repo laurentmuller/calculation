@@ -42,6 +42,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -57,6 +58,11 @@ abstract class AbstractController extends BaseController
      * The home route name.
      */
     final public const HOME_PAGE = 'homepage';
+
+    /**
+     * The route requirement for identifier.
+     */
+    final protected const ID_REQUIREMENT = ['id' => Requirement::DIGITS];
 
     // services
     private ?UrlGeneratorService $generatorService = null;

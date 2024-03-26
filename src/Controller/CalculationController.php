@@ -39,7 +39,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -85,7 +84,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetPost(path: '/clone/{id}', name: 'calculation_clone', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/clone/{id}', name: 'calculation_clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Calculation $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
@@ -103,7 +102,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Delete a calculation.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'calculation_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[GetDelete(path: '/delete/{id}', name: 'calculation_delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Calculation $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -114,7 +113,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetPost(path: '/edit/{id}', name: 'calculation_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/edit/{id}', name: 'calculation_edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Calculation $item): Response
     {
         return $this->editEntity($request, $item);
@@ -145,7 +144,7 @@ class CalculationController extends AbstractEntityController
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel/{id}', name: 'calculation_excel_id', requirements: ['id' => Requirement::DIGITS])]
+    #[Get(path: '/excel/{id}', name: 'calculation_excel_id', requirements: self::ID_REQUIREMENT)]
     public function excelOne(Calculation $calculation): SpreadsheetResponse
     {
         $doc = new CalculationDocument($this, $calculation);
@@ -179,9 +178,12 @@ class CalculationController extends AbstractEntityController
     /**
      * Export a single calculation to a PDF document.
      */
-    #[Get(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: ['id' => Requirement::DIGITS])]
-    public function pdfOne(Calculation $calculation, UrlGeneratorInterface $generator, LoggerInterface $logger): PdfResponse
-    {
+    #[Get(path: '/pdf/{id}', name: 'calculation_pdf_id', requirements: self::ID_REQUIREMENT)]
+    public function pdfOne(
+        Calculation $calculation,
+        UrlGeneratorInterface $generator,
+        LoggerInterface $logger
+    ): PdfResponse {
         $minMargin = $this->getMinMargin();
         $qrcode = $this->getQrCode($generator, $calculation);
         $doc = new CalculationReport($this, $calculation, $minMargin, $qrcode, $logger);
@@ -192,7 +194,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Show properties of a calculation.
      */
-    #[Get(path: '/show/{id}', name: 'calculation_show', requirements: ['id' => Requirement::DIGITS])]
+    #[Get(path: '/show/{id}', name: 'calculation_show', requirements: self::ID_REQUIREMENT)]
     public function show(Calculation $item): Response
     {
         $parameters = [
@@ -207,7 +209,7 @@ class CalculationController extends AbstractEntityController
     /**
      * Edit the state of a calculation.
      */
-    #[GetPost(path: '/state/{id}', name: 'calculation_state', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/state/{id}', name: 'calculation_state', requirements: self::ID_REQUIREMENT)]
     public function state(Request $request, Calculation $item): Response
     {
         $form = $this->createForm(CalculationEditStateType::class, $item);
@@ -278,14 +280,15 @@ class CalculationController extends AbstractEntityController
      */
     private function getQrCode(UrlGeneratorInterface $generator, Calculation $calculation): string
     {
-        if ($this->getUserService()->isQrCode()) {
-            $name = 'calculation_show';
-            $parameters = ['id' => (int) $calculation->getId()];
-
-            return $generator->generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+        if (!$this->getUserService()->isQrCode()) {
+            return '';
         }
 
-        return '';
+        return $generator->generate(
+            'calculation_show',
+            ['id' => $calculation->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
     }
 
     private function isMarginBelow(Calculation $calculation): bool

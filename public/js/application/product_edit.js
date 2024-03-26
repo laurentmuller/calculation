@@ -15,9 +15,8 @@
     $("#product_supplier").initTypeahead({
         url: $form.data("supplier-search"),
         error: $form.data("supplier-error")
-    });
-
-    // initialize price
+    }).ucFirst();
+    $('#product_description').ucFirst();
     $('#product_price').inputNumberFormat();
 
     // validation

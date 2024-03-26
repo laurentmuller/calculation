@@ -24,13 +24,15 @@ function getValueSelector() {
  */
 function updateUI() {
     'use strict';
-    // initialize the number input formats
+    // initialize the number and first char
     $(getMinimumSelector()).inputNumberFormat();
     $(getMaximumSelector()).inputNumberFormat();
-    $(getValueSelector).inputNumberFormat();
+    $(getValueSelector()).inputNumberFormat();
+    $('.unique-name').ucFirst();
 
     // update tables
     $('#items .table-edit').each(function () {
+        /** @var {jquery<HTMLTableElement>} $table */
         const $table = $(this);
         const rows = $table.find('tbody > tr').length;
         $table.toggleClass('d-none', rows === 0);
@@ -384,7 +386,9 @@ function expand($caller) {
     $('#task_supplier').initTypeahead({
         url: $form.data('supplier-search'),
         error: $form.data('supplier-error')
-    });
+    }).ucFirst();
+
+    $('#task_name').ucFirst();
 
     // start drag & drop
     startDragItems();
@@ -395,4 +399,7 @@ function expand($caller) {
     // initialize validation
     addMarginsMethods();
     $form.initValidator();
+
+    // $('#task_name').on('keydown', (e) =>  window.console.log(e.key));
+
 }(jQuery));

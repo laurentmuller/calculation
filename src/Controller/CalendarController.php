@@ -51,7 +51,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Get(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => Requirement::DIGITS, 'month' => Requirement::DIGITS])]
+    #[Get(path: '/month/{year}/{month}', name: 'calendar_month', requirements: ['year' => Requirement::POSITIVE_INT, 'month' => Requirement::POSITIVE_INT])]
     public function month(?int $year = null, ?int $month = null): Response
     {
         $year = $this->validateYear($year);
@@ -87,7 +87,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Get(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => Requirement::DIGITS, 'week' => Requirement::DIGITS])]
+    #[Get(path: '/week/{year}/{week}', name: 'calendar_week', requirements: ['year' => Requirement::POSITIVE_INT, 'week' => Requirement::POSITIVE_INT])]
     public function week(?int $year = null, ?int $week = null): Response
     {
         $year = $this->validateYear($year);
@@ -128,7 +128,7 @@ class CalendarController extends AbstractController
      *
      * @throws \App\Calendar\CalendarException
      */
-    #[Get(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => Requirement::DIGITS])]
+    #[Get(path: '/year/{year}', name: 'calendar_year', requirements: ['year' => Requirement::POSITIVE_INT])]
     public function year(?int $year = null): Response
     {
         $year = $this->validateYear($year);

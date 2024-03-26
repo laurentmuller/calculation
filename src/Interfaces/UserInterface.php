@@ -19,7 +19,7 @@ use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 /**
  * Extends the user interface.
  */
-interface UserInterface extends BaseUserInterface, EntityInterface, PasswordAuthenticatedUserInterface, ResetPasswordRequestInterface, RoleInterface
+interface UserInterface extends BaseUserInterface, PasswordAuthenticatedUserInterface, ResetPasswordRequestInterface, RoleInterface
 {
     /**
      * The maximum length for a username property.

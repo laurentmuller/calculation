@@ -32,7 +32,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -62,7 +61,7 @@ class GroupController extends AbstractEntityController
     /**
      * Clone (copy) a group.
      */
-    #[GetPost(path: '/clone/{id}', name: 'group_clone', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/clone/{id}', name: 'group_clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Group $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -80,7 +79,7 @@ class GroupController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetDelete(path: '/delete/{id}', name: 'group_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[GetDelete(path: '/delete/{id}', name: 'group_delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
     {
         // external references?
@@ -115,7 +114,7 @@ class GroupController extends AbstractEntityController
     /**
      * Edit a group.
      */
-    #[GetPost(path: '/edit/{id}', name: 'group_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/edit/{id}', name: 'group_edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Group $item): Response
     {
         return $this->editEntity($request, $item);
@@ -163,7 +162,7 @@ class GroupController extends AbstractEntityController
     /**
      * Show properties of a group.
      */
-    #[Get(path: '/show/{id}', name: 'group_show', requirements: ['id' => Requirement::DIGITS])]
+    #[Get(path: '/show/{id}', name: 'group_show', requirements: self::ID_REQUIREMENT)]
     public function show(Group $item): Response
     {
         return $this->showEntity($item);

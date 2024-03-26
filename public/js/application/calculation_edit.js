@@ -1666,11 +1666,15 @@ const MoveHandler = {
         }
     });
 
-    // initialize the type ahead search customer
-    $('#calculation_customer').initTypeahead({
-        url: $form.data('search-customer'),
-        error: $form.data('error-customer')
-    });
+    $('#calculation_customer').ucFirst()
+        .initTypeahead({
+            // initialize the type ahead
+            url: $form.data('search-customer'),
+            error: $form.data('error-customer')
+        });
+
+    // set first letter to uppercase
+    $('#calculation_description').ucFirst();
 
     // edit the default product if new calculation
     const edit = $form.data('edit') || false;

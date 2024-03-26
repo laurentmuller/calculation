@@ -142,6 +142,7 @@
 
             return this;
         }
+
         /**
          * @param {KeyboardEvent} [e]
          * @return {CellEdit}

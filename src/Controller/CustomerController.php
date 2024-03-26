@@ -30,7 +30,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -62,7 +61,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Delete a customer.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'customer_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[GetDelete(path: '/delete/{id}', name: 'customer_delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Customer $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -71,7 +70,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Edit a customer.
      */
-    #[GetPost(path: '/edit/{id}', name: 'customer_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/edit/{id}', name: 'customer_edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Customer $item): Response
     {
         return $this->editEntity($request, $item);
@@ -118,7 +117,7 @@ class CustomerController extends AbstractEntityController
     /**
      * Show properties of a customer.
      */
-    #[Get(path: '/show/{id}', name: 'customer_show', requirements: ['id' => Requirement::DIGITS])]
+    #[Get(path: '/show/{id}', name: 'customer_show', requirements: self::ID_REQUIREMENT)]
     public function show(Customer $item): Response
     {
         return $this->showEntity($item);

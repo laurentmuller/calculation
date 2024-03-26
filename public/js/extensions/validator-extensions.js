@@ -306,7 +306,7 @@
                 },
 
                 invalidHandler: function (e, validator) {
-                    // expand collapsed parent (if any)
+                    // expand the collapsed parent (if any)
                     const $element = $(validator.findLastActive() || (validator.errorList.length && validator.errorList[0].element));
                     const $collapse = $element.parents('.collapse:not(.show)');
                     if ($collapse.length) {

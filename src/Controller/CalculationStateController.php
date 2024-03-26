@@ -32,7 +32,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -62,7 +61,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Clone (copy) a calculation state.
      */
-    #[GetPost(path: '/clone/{id}', name: 'calculationstate_clone', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/clone/{id}', name: 'calculationstate_clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, CalculationState $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -79,7 +78,7 @@ class CalculationStateController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetDelete(path: '/delete/{id}', name: 'calculationstate_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[GetDelete(path: '/delete/{id}', name: 'calculationstate_delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
     {
         $count = $repository->countStateReferences($item);
@@ -107,7 +106,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Edit a calculation state.
      */
-    #[GetPost(path: '/edit/{id}', name: 'calculationstate_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/edit/{id}', name: 'calculationstate_edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, CalculationState $item): Response
     {
         return $this->editEntity($request, $item);
@@ -155,7 +154,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Show properties of a calculation state.
      */
-    #[Get(path: '/show/{id}', name: 'calculationstate_show', requirements: ['id' => Requirement::DIGITS])]
+    #[Get(path: '/show/{id}', name: 'calculationstate_show', requirements: self::ID_REQUIREMENT)]
     public function show(CalculationState $item): Response
     {
         return $this->showEntity($item);

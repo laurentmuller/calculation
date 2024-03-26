@@ -5,11 +5,9 @@
  */
 (function ($) {
     'use strict';
-
-    // color
+    $('#calculation_state_code').ucFirst();
     $('#calculation_state_color').initColorPicker();
 
-    // validation
     $("form").initValidator({
         colorPicker: true
     });

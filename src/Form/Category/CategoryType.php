@@ -34,6 +34,7 @@ class CategoryType extends AbstractEntityType
     {
         $helper->field('code')
             ->maxLength(EntityInterface::MAX_CODE_LENGTH)
+            ->widgetClass('uc-first')
             ->addTextType();
 
         $helper->field('description')

@@ -35,7 +35,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -65,7 +64,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Clone (copy) a category.
      */
-    #[GetPost(path: '/clone/{id}', name: 'category_clone', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/clone/{id}', name: 'category_clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Category $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -83,7 +82,7 @@ class CategoryController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetDelete(path: '/delete/{id}', name: 'category_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[GetDelete(path: '/delete/{id}', name: 'category_delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
     {
         $tasks = $taskRepository->countCategoryReferences($item);
@@ -120,7 +119,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Edit a category.
      */
-    #[GetPost(path: '/edit/{id}', name: 'category_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/edit/{id}', name: 'category_edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Category $item): Response
     {
         return $this->editEntity($request, $item);
@@ -168,7 +167,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Show properties of a category.
      */
-    #[Get(path: '/show/{id}', name: 'category_show', requirements: ['id' => Requirement::DIGITS])]
+    #[Get(path: '/show/{id}', name: 'category_show', requirements: self::ID_REQUIREMENT)]
     public function show(Category $item): Response
     {
         return $this->showEntity($item);

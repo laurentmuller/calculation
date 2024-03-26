@@ -5,5 +5,6 @@
  */
 (function ($) {
     'use strict';
+    $('input.uc-first').ucFirst();
     $("form").initValidator();
 }(jQuery));

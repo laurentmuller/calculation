@@ -33,7 +33,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -139,7 +138,7 @@ class LogController extends AbstractController
     /**
      * Show properties of a log entry.
      */
-    #[Get(path: '/show/{id}', name: 'log_show', requirements: ['id' => Requirement::DIGITS])]
+    #[Get(path: '/show/{id}', name: 'log_show', requirements: self::ID_REQUIREMENT)]
     public function show(Request $request, int $id, LogService $service): Response
     {
         $item = $service->getLog($id);

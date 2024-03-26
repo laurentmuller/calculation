@@ -32,7 +32,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -120,7 +119,7 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Show properties of a global margin.
      */
-    #[Get(path: '/show/{id}', name: 'globalmargin_show', requirements: ['id' => Requirement::DIGITS])]
+    #[Get(path: '/show/{id}', name: 'globalmargin_show', requirements: self::ID_REQUIREMENT)]
     public function show(GlobalMargin $item): Response
     {
         return $this->showEntity($item);

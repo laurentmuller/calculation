@@ -48,7 +48,6 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -82,7 +81,7 @@ class UserController extends AbstractEntityController
     /**
      * Delete an user.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'user_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[GetDelete(path: '/delete/{id}', name: 'user_delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, User $item, Security $security, LoggerInterface $logger): Response
     {
         if ($this->isConnectedUser($item) || $this->isOriginalUser($item, $security)) {
@@ -97,7 +96,7 @@ class UserController extends AbstractEntityController
     /**
      * Edit a user.
      */
-    #[GetPost(path: '/edit/{id}', name: 'user_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/edit/{id}', name: 'user_edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, User $item): Response
     {
         return $this->editEntity($request, $item);
@@ -126,7 +125,7 @@ class UserController extends AbstractEntityController
     /**
      * Send an email from the current user to the selected user.
      */
-    #[GetPost(path: '/message/{id}', name: 'user_message', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/message/{id}', name: 'user_message', requirements: self::ID_REQUIREMENT)]
     public function message(Request $request, User $user, MailerService $service, LoggerInterface $logger): Response
     {
         if ($this->isConnectedUser($user)) {
@@ -163,7 +162,7 @@ class UserController extends AbstractEntityController
     /**
      * Change password for an existing user.
      */
-    #[GetPost(path: '/password/{id}', name: 'user_password', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/password/{id}', name: 'user_password', requirements: self::ID_REQUIREMENT)]
     public function password(Request $request, User $item): Response
     {
         $form = $this->createForm(UserChangePasswordType::class, $item);
@@ -240,7 +239,7 @@ class UserController extends AbstractEntityController
     /**
      * Clear the request reset password.
      */
-    #[GetPost(path: '/reset/{id}', name: 'user_reset', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/reset/{id}', name: 'user_reset', requirements: self::ID_REQUIREMENT)]
     public function resetPasswordRequest(Request $request, User $item): Response
     {
         $form = $this->createForm(FormType::class);
@@ -267,7 +266,7 @@ class UserController extends AbstractEntityController
     /**
      * Edit user access rights.
      */
-    #[GetPost(path: '/rights/{id}', name: 'user_rights', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/rights/{id}', name: 'user_rights', requirements: self::ID_REQUIREMENT)]
     public function rights(Request $request, User $item, RoleBuilderService $builder, RoleHierarchyService $service, EntityManagerInterface $manager): Response
     {
         if ($this->isConnectedUser($item) && !$service->hasRole($item, RoleInterface::ROLE_SUPER_ADMIN)) {
@@ -343,7 +342,7 @@ class UserController extends AbstractEntityController
     /**
      * Sends an email to the user for reset its password.
      */
-    #[GetPost(path: '/reset/send/{id}', name: 'user_reset_send', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/reset/send/{id}', name: 'user_reset_send', requirements: self::ID_REQUIREMENT)]
     public function sendPasswordRequest(Request $request, User $item, ResetPasswordService $service): Response
     {
         $form = $this->createForm(FormType::class);
@@ -374,7 +373,7 @@ class UserController extends AbstractEntityController
     /**
      * Show the properties of a user.
      */
-    #[Get(path: '/show/{id}', name: 'user_show', requirements: ['id' => Requirement::DIGITS])]
+    #[Get(path: '/show/{id}', name: 'user_show', requirements: self::ID_REQUIREMENT)]
     public function show(User $item): Response
     {
         return $this->showEntity($item);

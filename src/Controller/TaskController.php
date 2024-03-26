@@ -36,7 +36,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -72,7 +71,7 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a copy (cloned) task.
      */
-    #[GetPost(path: '/clone/{id}', name: 'task_clone', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/clone/{id}', name: 'task_clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Task $item): Response
     {
         $name = $this->trans('common.clone_description', ['%description%' => $item->getName()]);
@@ -88,7 +87,7 @@ class TaskController extends AbstractEntityController
     /**
      * Display the page to compute a task.
      */
-    #[Get(path: '/compute/{id?}', name: 'task_compute', requirements: ['id' => Requirement::DIGITS])]
+    #[Get(path: '/compute/{id?}', name: 'task_compute', requirements: self::ID_REQUIREMENT)]
     public function compute(Request $request, TaskService $service, ?Task $task = null): Response
     {
         [$tasks, $task] = $this->getTasks($service, $task);
@@ -114,7 +113,7 @@ class TaskController extends AbstractEntityController
     /**
      * Delete a task.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'task_delete', requirements: ['id' => Requirement::DIGITS])]
+    #[GetDelete(path: '/delete/{id}', name: 'task_delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -123,7 +122,7 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a task.
      */
-    #[GetPost(path: '/edit/{id}', name: 'task_edit', requirements: ['id' => Requirement::DIGITS])]
+    #[GetPost(path: '/edit/{id}', name: 'task_edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Task $item): Response
     {
         return $this->editEntity($request, $item);
@@ -171,7 +170,7 @@ class TaskController extends AbstractEntityController
     /**
      * Show properties of a task.
      */
-    #[Get(path: '/show/{id}', name: 'task_show', requirements: ['id' => Requirement::DIGITS])]
+    #[Get(path: '/show/{id}', name: 'task_show', requirements: self::ID_REQUIREMENT)]
     public function show(Task $item): Response
     {
         return $this->showEntity($item);

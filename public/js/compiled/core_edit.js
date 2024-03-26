@@ -17,3 +17,8 @@
  */
 <!--#include file="../extensions/validator-extensions.js" -->
 <!--#include file="../extensions/validator-extensions-fr.js" -->
+
+/**
+ * Plugin Files
+ */
+<!--#include file="../plugins/plugin-uc-first.js" -->

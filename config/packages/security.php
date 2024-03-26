@@ -88,7 +88,6 @@ return static function (SecurityConfig $config): void {
             '^/',
         ],
     ];
-
     foreach ($access as $role => $paths) {
         foreach ($paths as $path) {
             $config->accessControl()

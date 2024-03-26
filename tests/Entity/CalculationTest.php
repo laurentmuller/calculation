@@ -24,6 +24,9 @@ use App\Entity\Product;
 use App\Utils\FormatUtils;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(Calculation::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(CalculationGroup::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(CalculationCategory::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(CalculationItem::class)]
 class CalculationTest extends AbstractEntityValidatorTestCase
 {
     use IdTrait;
@@ -63,6 +66,7 @@ class CalculationTest extends AbstractEntityValidatorTestCase
         $calculation->updatePositions();
         $calculation->getSortedGroups();
 
+        $calculation->updateCodes();
         $group->setCode('group1');
         $category->setCode('category1');
         $calculation->updateCodes();

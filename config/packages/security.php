@@ -10,6 +10,7 @@
 
 declare(strict_types=1);
 
+use App\Controller\SecurityController;
 use App\Entity\User;
 use App\Interfaces\RoleInterface;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -46,17 +47,17 @@ return static function (SecurityConfig $config): void {
 
     // login
     $firewall->formLogin()
-        ->loginPath('app_login')
-        ->checkPath('app_login')
+        ->loginPath(SecurityController::LOGIN_ROUTE)
+        ->checkPath(SecurityController::LOGIN_ROUTE)
         ->enableCsrf(true)
         ->usernameParameter('username')
         ->passwordParameter('password');
 
     // logout
     $firewall->logout()
-        ->path('app_logout')
-        ->enableCsrf(true)
-        ->target('app_logout_success');
+        ->path(SecurityController::LOGOUT_ROUTE)
+        ->target(SecurityController::SUCCESS_ROUTE)
+        ->enableCsrf(true);
 
     // remember me
     $firewall->rememberMe()
@@ -68,32 +69,32 @@ return static function (SecurityConfig $config): void {
         ->samesite(Cookie::SAMESITE_LAX)
         ->secure(true);
 
-    // channel
-    $channel = '%env(SECURE_SCHEME)%';
-
-    // public
-    $paths = [
-        '^/login',
-        '^/logout/success',
-        '^/captcha',
-        '^/about/policy',
-        '^/about/licence',
-        '^/reset-password',
-        '^/ajax/check/user',
+    // access control
+    /** @psalm-var array<string, string[]> $access */
+    $access = [
+        AuthenticatedVoter::PUBLIC_ACCESS => [
+            '^/login',
+            '^/logout/success',
+            '^/captcha',
+            '^/about/policy',
+            '^/about/licence',
+            '^/reset-password',
+            '^/ajax/check/user',
+        ],
+        RoleInterface::ROLE_ADMIN => [
+            '^/admin/',
+        ],
+        RoleInterface::ROLE_USER => [
+            '^/',
+        ],
     ];
-    foreach ($paths as $path) {
-        $config->accessControl()->path($path)
-            ->roles(AuthenticatedVoter::PUBLIC_ACCESS)
-            ->requiresChannel($channel);
+
+    foreach ($access as $role => $paths) {
+        foreach ($paths as $path) {
+            $config->accessControl()
+                ->requiresChannel('%env(SECURE_SCHEME)%')
+                ->roles($role)
+                ->path($path);
+        }
     }
-
-    // admin
-    $config->accessControl()->path('^/admin/')
-        ->roles(RoleInterface::ROLE_ADMIN)
-        ->requiresChannel($channel);
-
-    // default
-    $config->accessControl()->path('^/')
-        ->roles(RoleInterface::ROLE_USER)
-        ->requiresChannel($channel);
 };

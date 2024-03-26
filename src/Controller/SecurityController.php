@@ -31,7 +31,20 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 #[AsController]
 class SecurityController extends AbstractController
 {
-    private const LOGIN_ROUTE = 'app_login';
+    /**
+     * The login route name.
+     */
+    public const LOGIN_ROUTE = 'app_login';
+
+    /**
+     * The logout route name.
+     */
+    public const LOGOUT_ROUTE = 'app_logout';
+
+    /**
+     * The logout success route name.
+     */
+    public const SUCCESS_ROUTE = 'app_logout_success';
 
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
     #[GetPost(path: '/login', name: self::LOGIN_ROUTE)]
@@ -52,7 +65,7 @@ class SecurityController extends AbstractController
     }
 
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/logout', name: 'app_logout')]
+    #[Get(path: '/logout', name: self::LOGOUT_ROUTE)]
     public function logout(): never
     {
         throw new \LogicException('This method should never be reached.');
@@ -62,7 +75,7 @@ class SecurityController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: '/logout/success', name: 'app_logout_success')]
+    #[Get(path: '/logout/success', name: self::SUCCESS_ROUTE)]
     public function logoutSuccess(): RedirectResponse
     {
         $this->successTrans('security.logout.success', ['%app_name_version%' => $this->getApplicationName()]);

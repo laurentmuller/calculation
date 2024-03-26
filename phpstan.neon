@@ -12,9 +12,6 @@ parameters:
         - vendor/twig/twig/src/Extension/CoreExtension.php
         - vendor/symfony/validator/Test/ConstraintValidatorTestCase.php
 
-    scanDirectories:
-        - var/cache/dev/Symfony
-
     reportUnmatchedIgnoredErrors: true
     checkUninitializedProperties: true
     checkMissingIterableValueType: false

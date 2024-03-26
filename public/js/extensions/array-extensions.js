@@ -4,6 +4,7 @@
  * -------------- Array Extensions --------------
  */
 
+/*eslint no-extend-native: ["error", { "exceptions": ["Array"] }]*/
 Object.defineProperty(Array.prototype, 'randomElement', {
     /**
      * Returns a random element that is different from the given index (if any).
@@ -31,6 +32,7 @@ Object.defineProperty(Array.prototype, 'randomElement', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["Array"] }]*/
 Object.defineProperty(Array.prototype, 'last', {
     /**
      * Returns the last element or null if empty.
@@ -43,6 +45,7 @@ Object.defineProperty(Array.prototype, 'last', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["Array"] }]*/
 Object.defineProperty(Array.prototype, 'unique', {
     /**
      * Returns unique elements.

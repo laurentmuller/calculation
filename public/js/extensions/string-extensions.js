@@ -4,6 +4,7 @@
  * -------------- String Extensions --------------
  */
 
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'clean', {
     /**
      * Clean this string.
@@ -18,6 +19,7 @@ Object.defineProperty(String.prototype, 'clean', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'indexOfIgnoreCase', {
     /**
      * Returns the index of the first occurrence in this string, ignoring case, of the specified value.
@@ -31,6 +33,7 @@ Object.defineProperty(String.prototype, 'indexOfIgnoreCase', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'equalsIgnoreCase', {
     /**
      * Check if the given value is equal to this string, ignoring case.
@@ -47,6 +50,7 @@ Object.defineProperty(String.prototype, 'equalsIgnoreCase', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'dasherize', {
     /**
      * Replace a camel cased to a dashed ('isAnEntry' > 'is-an-entry').
@@ -62,6 +66,7 @@ Object.defineProperty(String.prototype, 'dasherize', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'camelize', {
     /**
      * Replace dashed to camel cased ('is-an-entry' > 'isAnEntry').
@@ -75,6 +80,7 @@ Object.defineProperty(String.prototype, 'camelize', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'toBool', {
     /**
      * Converts this string to a boolean value
@@ -90,6 +96,7 @@ Object.defineProperty(String.prototype, 'toBool', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'format', {
     /**
      * Format a string. Example: 'First {0}. Second {1}'.format('ASP', 'PHP');
@@ -108,6 +115,7 @@ Object.defineProperty(String.prototype, 'format', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'startsWithIgnoreCase', {
     /**
      * Returns if this string start with the given value, ignoring case
@@ -122,6 +130,7 @@ Object.defineProperty(String.prototype, 'startsWithIgnoreCase', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'ucFirst', {
     /**
      * Return this string with the first character uppercase.

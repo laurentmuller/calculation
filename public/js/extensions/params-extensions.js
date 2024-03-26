@@ -6,6 +6,7 @@
  * -------------- URLSearchParams Extensions --------------
  */
 
+/*eslint no-extend-native: ["error", { "exceptions": ["URLSearchParams"] }]*/
 Object.defineProperty(URLSearchParams.prototype, 'length', {
     /**
      * Returns the number of parameters.
@@ -17,6 +18,7 @@ Object.defineProperty(URLSearchParams.prototype, 'length', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["URLSearchParams"] }]*/
 Object.defineProperty(URLSearchParams.prototype, 'toQuery', {
     /**
      * Returns the parameters query.
@@ -28,6 +30,7 @@ Object.defineProperty(URLSearchParams.prototype, 'toQuery', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["URLSearchParams"] }]*/
 Object.defineProperty(URLSearchParams.prototype, 'getOrDefault', {
     /**
      * Returns the parameter value or the default value if none.
@@ -41,6 +44,7 @@ Object.defineProperty(URLSearchParams.prototype, 'getOrDefault', {
     }
 });
 
+/*eslint no-extend-native: ["error", { "exceptions": ["URLSearchParams"] }]*/
 Object.defineProperty(URLSearchParams.prototype, 'getIntOrDefault', {
     /**
      * Returns the parameter value, as integer, or the default value if none.

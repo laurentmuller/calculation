@@ -39,17 +39,17 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     runtime: array<string, RouteType>,
  *     debug: array<string, RouteType>}
  * @psalm-type PackageSourceType = array{
- *      name: string,
- *      version_normalized: string,
- *      description?: string,
- *      homepage?: string,
- *      install-path: string,
- *      support?: array{source?: string}}
+ *     name: string,
+ *     version_normalized: string,
+ *     description?: string,
+ *     homepage?: string,
+ *     install-path: string,
+ *     support?: array{source?: string}}
  * @psalm-type PackageType = array{
  *     name: string,
  *     version: string,
  *     description: string,
- *     homepage: string,
+ *     homepage: string|null,
  *     license: string|null}
  * @psalm-type PackagesType = array{
  *     runtime: array<string, PackageType>,
@@ -601,7 +601,7 @@ final class SymfonyInfoService
                 'license' => $this->getLicense($package),
                 'version' => $package['version_normalized'],
                 'description' => $this->cleanDescription($package['description'] ?? ''),
-                'homepage' => $package['homepage'] ?? $package['support']['source'] ?? '',
+                'homepage' => $package['homepage'] ?? $package['support']['source'] ?? null,
             ];
             $type = \in_array($name, $debugPackages, true) ? self::KEY_DEBUG : self::KEY_RUNTIME;
             $result[$type][$name] = $entry;

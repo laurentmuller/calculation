@@ -497,9 +497,27 @@ class PdfTable
     }
 
     /**
+     * Sets the header style.
+     *
+     * @param ?PdfStyle $headerStyle the style to set or <code>null</code> to use the default header style
+     *
+     * @see PdfStyle::getHeaderStyle()
+     *
+     * @psalm-api
+     */
+    public function setHeaderStyle(?PdfStyle $headerStyle = null): static
+    {
+        $this->headerStyle = $headerStyle;
+
+        return $this;
+    }
+
+    /**
      * Sets a value indicating if the header row is printed when a new page is added.
      *
      * @param bool $repeatHeader true to print the header on each new pages
+     *
+     * @psalm-api
      */
     public function setRepeatHeader(bool $repeatHeader): static
     {
@@ -510,6 +528,8 @@ class PdfTable
 
     /**
      * Sets the draw cell text listener.
+     *
+     * @psalm-api
      */
     public function setTextListener(?PdfDrawCellTextInterface $textListener): static
     {
@@ -529,6 +549,8 @@ class PdfTable
      * @throws \LengthException if no column is defined
      *
      * @see PdfTable::add()
+     *
+     * @psalm-api
      */
     public function singleLine(?string $text = null, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null): static
     {

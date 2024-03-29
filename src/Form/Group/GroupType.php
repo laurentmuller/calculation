@@ -37,8 +37,9 @@ class GroupType extends AbstractEntityType
             ->addTextType();
 
         $helper->field('description')
-            ->notRequired()
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
+            ->widgetClass('uc-first')
+            ->notRequired()
             ->addTextareaType();
 
         $helper->field('margins')

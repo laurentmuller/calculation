@@ -34,6 +34,7 @@ class ProductType extends AbstractEntityType
     {
         $helper->field('description')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
+            ->widgetClass('uc-first')
             ->addTextType();
 
         $helper->field('unit')
@@ -51,6 +52,7 @@ class ProductType extends AbstractEntityType
         $helper->field('supplier')
             ->autocomplete('off')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
+            ->widgetClass('uc-first')
             ->notRequired()
             ->addTextType();
     }

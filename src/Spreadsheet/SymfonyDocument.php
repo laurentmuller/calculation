@@ -158,7 +158,7 @@ class SymfonyDocument extends AbstractDocument
             $this->outputLinkRow(
                 $sheet,
                 $row++,
-                $package['homepage'],
+                $package['homepage'] ?? '',
                 $package['name'],
                 $package['version'],
                 $package['description']

@@ -11,7 +11,6 @@
  */
 <!--#include file="../extensions/array-extensions.js" -->
 <!--#include file="../extensions/jquery-extensions.js" -->
-<!--#include file="../extensions/params-extensions.js" -->
 <!--#include file="../extensions/string-extensions.js" -->
 
 /**

@@ -51,7 +51,7 @@ class ApplicationParametersType extends AbstractParametersType
     {
         $helper->field(PropertyServiceInterface::P_CUSTOMER_NAME)
             ->updateAttribute('spellcheck', 'false')
-            ->widgetClass('must-validate')
+            ->widgetClass('must-validate uc-first')
             ->addTextType();
 
         $helper->field(PropertyServiceInterface::P_CUSTOMER_ADDRESS)

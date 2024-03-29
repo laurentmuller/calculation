@@ -27,7 +27,7 @@ use fpdf\PdfTextAlignment;
  *      level: non-negative-int,
  *      y: float,
  *      page: int,
- *      link: string|int,
+ *      link: int|null,
  *      hierarchy: array<string, int>}
  */
 trait PdfBookmarkTrait
@@ -57,12 +57,12 @@ trait PdfBookmarkTrait
     /**
      * Add a bookmark.
      *
-     * @param string $text     the bookmark text
-     * @param bool   $isUTF8   indicates if the text is encoded in ISO-8859-1 (false) or UTF-8 (true)
-     * @param int    $level    the outline level (0 is top level, 1 is just below, and so on)
-     * @param bool   $currentY indicate if the ordinate of the outline destination in the current page
-     *                         is the current position (true) or the top of the page (false)
-     * @param bool   $link     true to create and add a link at the given ordinate position and page
+     * @param string $text       the bookmark text
+     * @param bool   $isUTF8     indicates if the text is encoded in ISO-8859-1 (false) or UTF-8 (true)
+     * @param int    $level      the outline level (0 is top level, 1 is just below, and so on)
+     * @param bool   $currentY   indicate if the ordinate of the outline destination in the current page
+     *                           is the current position (true) or the top of the page (false)
+     * @param bool   $createLink true to create and add a link at the given ordinate position and page
      *
      * @throws PdfException if the given level is invalid. A level is not valid if:
      *                      <ul>
@@ -80,7 +80,7 @@ trait PdfBookmarkTrait
         bool $isUTF8 = false,
         int $level = 0,
         bool $currentY = true,
-        bool $link = true
+        bool $createLink = true
     ): self {
         // validate
         $this->validateLevel($level);
@@ -91,14 +91,14 @@ trait PdfBookmarkTrait
         // add
         $page = $this->page;
         $y = $currentY ? $this->y : 0.0;
-        $id = $link ? $this->createLink($y, $page) : '';
+        $link = $createLink ? $this->createLink($y, $page) : null;
         $y = ($this->height - $y) * $this->scaleFactor;
         $this->bookmarks[] = [
             'text' => $text,
             'level' => $level,
             'y' => $y,
             'page' => $page,
-            'link' => $id,
+            'link' => $link,
             'hierarchy' => [],
         ];
 
@@ -216,7 +216,7 @@ trait PdfBookmarkTrait
         string $page,
         float $width,
         float $height,
-        string|int $link
+        ?int $link
     ): void {
         $this->cell(
             width: $width,
@@ -232,7 +232,7 @@ trait PdfBookmarkTrait
         string $separator,
         float $width,
         float $height,
-        string|int $link
+        ?int $link
     ): void {
         $count = (int) ($width / $this->getStringWidth($separator));
         $width += self::SPACE;
@@ -254,7 +254,7 @@ trait PdfBookmarkTrait
         string $text,
         float $width,
         float $height,
-        string|int $link
+        ?int $link
     ): float {
         $text = $this->cleanText($text);
         $text_width = $this->getStringWidth($text);

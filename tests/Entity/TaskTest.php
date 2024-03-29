@@ -106,6 +106,9 @@ class TaskTest extends AbstractEntityValidatorTestCase
         self::assertCount(0, $task->getItems());
 
         $item = new TaskItem();
+        $task->removeItem($item);
+        self::assertCount(0, $task);
+
         $task->addItem($item);
         self::assertFalse($task->isEmpty());
         self::assertCount(1, $task);

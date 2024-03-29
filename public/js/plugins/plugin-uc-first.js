@@ -35,7 +35,7 @@
          * Destructor.
          */
         destroy() {
-            this.$element.off('focusout', this.blurProxy)
+            this.$element.off('focusout.bs.ucFirst', this.proxy)
                 .removeData(UCFirst.NAME);
         }
 
@@ -44,11 +44,11 @@
         // -----------------------------
 
         _init() {
-            this.blurProxy = () => this._blur();
-            this.$element.on('focusout', this.blurProxy);
+            this.proxy = () => this._focusout();
+            this.$element.on('focusout.bs.ucFirst', this.proxy);
         }
 
-        _blur() {
+        _focusout() {
             let value = String(this.$element.val());
             if (value.length) {
                 value = value.charAt(0).toUpperCase() + value.slice(1);
@@ -89,5 +89,16 @@
         $.fn.ucFirst = oldUcFirst;
         return this;
     };
+
+    // ------------------------------------
+    // UCFirst data-api
+    // ------------------------------------
+    $('form').on('focusout.bs.ucFirst.data-api', '.uc-first', function () {
+        const $this = $(this);
+        if (!$this.data(UCFirst.NAME)) {
+            $this.ucFirst($this.data());
+            $this.trigger('focusout');
+        }
+    });
 
 }(jQuery));

@@ -54,7 +54,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
      * @var ArrayCollection<int, CalculationCategory>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(mappedBy: 'group', targetEntity: CalculationCategory::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CalculationCategory::class, mappedBy: 'group', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
     private Collection $categories;
 

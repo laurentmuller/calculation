@@ -20,6 +20,7 @@ use App\Pdf\PdfTable;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
+use fpdf\PdfBorder;
 use fpdf\PdfTextAlignment;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -71,6 +72,17 @@ class TableGroups extends PdfTable
         $table->output();
 
         return $table;
+    }
+
+    public function startRow(?PdfStyle $style = null): static
+    {
+        if (!$style instanceof PdfStyle) {
+            $style = PdfStyle::getCellStyle()
+                ->setBorder(PdfBorder::leftRight());
+        }
+        parent::startRow($style);
+
+        return $this;
     }
 
     private function addAmount(float $number, ?PdfStyle $style = null): self

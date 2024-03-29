@@ -23,7 +23,7 @@ abstract class AbstractHeaderFooter
     /**
      * The document width.
      */
-    protected const TOTAL_WIDTH = 12000;
+    protected const TOTAL_WIDTH = 12_000;
 
     /**
      * @param AbstractWordDocument $parent the parent's document
@@ -56,15 +56,13 @@ abstract class AbstractHeaderFooter
     /**
      * Translates the given message.
      *
-     * @param string  $id         the message id (may also be an object that can be cast to string)
-     * @param array   $parameters an array of parameters for the message
-     * @param ?string $domain     the domain for the message or null to use the default
-     * @param ?string $locale     the locale or null to use the default
+     * @param string $id         the message identifier (may also be an object that can be cast to string)
+     * @param array  $parameters an array of parameters for the message
      *
      * @return string the translated string
      */
-    protected function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
+    protected function trans(string $id, array $parameters = []): string
     {
-        return $this->parent->trans($id, $parameters, $domain, $locale);
+        return $this->parent->trans($id, $parameters);
     }
 }

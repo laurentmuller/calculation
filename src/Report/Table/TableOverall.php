@@ -20,6 +20,7 @@ use App\Pdf\PdfTable;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
+use fpdf\PdfBorder;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -78,6 +79,17 @@ class TableOverall extends PdfTable
         return $table;
     }
 
+    public function startRow(?PdfStyle $style = null): static
+    {
+        if (!$style instanceof PdfStyle) {
+            $style = PdfStyle::getCellStyle()
+                ->setBorder(PdfBorder::leftRight());
+        }
+        parent::startRow($style);
+
+        return $this;
+    }
+
     /**
      * @psalm-param positive-int $cols
      */
@@ -105,9 +117,11 @@ class TableOverall extends PdfTable
     private function outputGlobalMargin(float $globalMargin, float $globalAmount): self
     {
         return $this->startRow()
-            ->add($this->trans('calculation.fields.globalMargin'), 2)
+            ->add($this->trans('calculation.fields.globalMargin'))
+            ->add('')
             ->addPercent($globalMargin)
-            ->addAmount($globalAmount, 2)
+            ->add('')
+            ->addAmount($globalAmount)
             ->endRow();
     }
 
@@ -132,13 +146,18 @@ class TableOverall extends PdfTable
     {
         if (0.0 !== $userMargin) {
             $this->startHeaderRow()
-                ->add($this->trans('calculation.fields.totalNet'), 4)
+                ->add($this->trans('calculation.fields.totalNet'))
+                ->add('')
+                ->add('')
+                ->add('')
                 ->addAmount($totalNet)
                 ->endRow();
             $this->startRow()
-                ->add($this->trans('calculation.fields.userMargin'), 2)
+                ->add($this->trans('calculation.fields.userMargin'))
+                ->add('')
                 ->addPercent($userMargin)
-                ->addAmount($userAmount, 2)
+                ->add('')
+                ->addAmount($userAmount)
                 ->endRow();
         }
 

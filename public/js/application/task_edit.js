@@ -28,7 +28,6 @@ function updateUI() {
     $(getMinimumSelector()).inputNumberFormat();
     $(getMaximumSelector()).inputNumberFormat();
     $(getValueSelector()).inputNumberFormat();
-    $('.unique-name').ucFirst();
 
     // update tables
     $('#items .table-edit').each(function () {
@@ -386,9 +385,7 @@ function expand($caller) {
     $('#task_supplier').initTypeahead({
         url: $form.data('supplier-search'),
         error: $form.data('supplier-error')
-    }).ucFirst();
-
-    $('#task_name').ucFirst();
+    });
 
     // start drag & drop
     startDragItems();

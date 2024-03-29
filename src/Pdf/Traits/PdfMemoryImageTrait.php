@@ -27,30 +27,30 @@ trait PdfMemoryImageTrait
      *
      * This function convert first the given image to the portable network graphics format ('png') before output.
      *
-     * @param \GdImage   $image  the GD image to output
-     * @param ?float     $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa is
-     *                           used.
-     * @param ?float     $y      the ordinate of the upper-left corner. If <code>null</code>, the current
-     *                           ordinate is used; moreover, a page break is triggered first if necessary (in case
-     *                           automatic page breaking is enabled) and, after the call, the current ordinate
-     *                           is move to the bottom of the image.
-     * @param float      $width  the width of the image in the page. There are three cases:
-     *                           <ul>
-     *                           <li>If the value is positive, it represents the width in user unit.</li>
-     *                           <li>If the value is negative, the absolute value represents the horizontal resolution
-     *                           in dpi.</li>
-     *                           <li>If the value is not specified or equal to zero, it is automatically
-     *                           calculated.</li>
-     *                           </ul>
-     * @param float      $height the height of the image in the page. There are three cases:
-     *                           <ul>
-     *                           <li>If the value is positive, it represents the width in user unit.</li>
-     *                           <li>If the value is negative, the absolute value represents the horizontal resolution
-     *                           in dpi.</li>
-     *                           <li>If the value is not specified or equal to zero, it is automatically
-     *                           calculated.</li>
-     *                           </ul>
-     * @param string|int $link   the URL or an identifier returned by <code>addLink()</code>
+     * @param \GdImage        $image  the GD image to output
+     * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
+     *                                is used.
+     * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
+     *                                is used; moreover, a page break is triggered first if necessary (in case
+     *                                automatic page breaking is enabled) and, after the call, the current ordinate
+     *                                is move to the bottom of the image.
+     * @param float           $width  the width of the image in the page. There are three cases:
+     *                                <ul>
+     *                                <li>If the value is positive, it represents the width in user unit.</li>
+     *                                <li>If the value is negative, the absolute value represents the horizontal
+     *                                resolution in dpi.</li>
+     *                                <li>If the value is not specified or equal to zero, it is automatically
+     *                                calculated.</li>
+     *                                </ul>
+     * @param float           $height the height of the image in the page. There are three cases:
+     *                                <ul>
+     *                                <li>If the value is positive, it represents the width in user unit.</li>
+     *                                <li>If the value is negative, the absolute value represents the horizontal
+     *                                resolution in dpi.</li>
+     *                                <li>If the value is not specified or equal to zero, it is automatically
+     *                                calculated.</li>
+     *                                </ul>
+     * @param string|int|null $link   the URL or an identifier returned by <code>addLink()</code>
      *
      * @throws PdfException if the image can not be converted
      */
@@ -60,7 +60,7 @@ trait PdfMemoryImageTrait
         ?float $y = null,
         float $width = 0.0,
         float $height = 0.0,
-        string|int $link = ''
+        string|int|null $link = null
     ): void {
         \ob_start();
         $result = \imagepng($image);
@@ -74,30 +74,30 @@ trait PdfMemoryImageTrait
     /**
      * Output an image data.
      *
-     * @param string     $data   the image data to output
-     * @param ?float     $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa is
-     *                           used.
-     * @param ?float     $y      the ordinate of the upper-left corner. If <code>null</code>, the current
-     *                           ordinate is used; moreover, a page break is triggered first if necessary (in case
-     *                           automatic page breaking is enabled) and, after the call, the current ordinate
-     *                           is move to the bottom of the image.
-     * @param float      $width  the width of the image in the page. There are three cases:
-     *                           <ul>
-     *                           <li>If the value is positive, it represents the width in user unit.</li>
-     *                           <li>If the value is negative, the absolute value represents the horizontal resolution
-     *                           in dpi.</li>
-     *                           <li>If the value is not specified or equal to zero, it is automatically
-     *                           calculated.</li>
-     *                           </ul>
-     * @param float      $height the height of the image in the page. There are three cases:
-     *                           <ul>
-     *                           <li>If the value is positive, it represents the width in user unit.</li>
-     *                           <li>If the value is negative, the absolute value represents the horizontal resolution
-     *                           in dpi.</li>
-     *                           <li>If the value is not specified or equal to zero, it is automatically
-     *                           calculated.</li>
-     *                           </ul>
-     * @param string|int $link   the URL or an identifier returned by <code>addLink()</code>
+     * @param string          $data   the image data to output
+     * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
+     *                                is used.
+     * @param ?float          $y      the ordinate of the upper-left corner. If <code>null</code>, the current ordinate
+     *                                is used; moreover, a page break is triggered first if necessary (in case automatic
+     *                                page breaking is enabled) and, after the call, the current ordinate is move to
+     *                                the bottom of the image.
+     * @param float           $width  the width of the image in the page. There are three cases:
+     *                                <ul>
+     *                                <li>If the value is positive, it represents the width in user unit.</li>
+     *                                <li>If the value is negative, the absolute value represents the horizontal
+     *                                resolution in dpi.</li>
+     *                                <li>If the value is not specified or equal to zero, it is automatically
+     *                                calculated.</li>
+     *                                </ul>
+     * @param float           $height the height of the image in the page. There are three cases:
+     *                                <ul>
+     *                                <li>If the value is positive, it represents the width in user unit.</li>
+     *                                <li>If the value is negative, the absolute value represents the horizontal
+     *                                resolution in dpi.</li>
+     *                                <li>If the value is not specified or equal to zero, it is automatically
+     *                                calculated.</li>
+     *                                </ul>
+     * @param string|int|null $link   the URL or an identifier returned by <code>addLink()</code>
      *
      * @throws PdfException if the image data is invalid
      */
@@ -107,7 +107,7 @@ trait PdfMemoryImageTrait
         ?float $y = null,
         float $width = 0.0,
         float $height = 0.0,
-        string|int $link = ''
+        string|int|null $link = null
     ): void {
         $mimeType = $this->getImageMimeType($data);
         $fileType = $this->getImageFileType($mimeType);

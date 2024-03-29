@@ -39,7 +39,7 @@ class SchemaReport extends AbstractReport
     private ?PdfStyle $booleanStyle = null;
 
     /**
-     * @var array<string, int>
+     * @psalm-var array<string, int>
      */
     private array $tableLinks = [];
 

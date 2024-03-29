@@ -33,7 +33,7 @@ use fpdf\PdfTextAlignment;
  *      h: float}
  * @psalm-type BarChartRowDataType = array{
  *      label: string,
- *      link: string|int,
+ *      link: string|int|null,
  *      width: float,
  *      x: float,
  *      w: float,
@@ -164,7 +164,7 @@ trait PdfBarChartTrait
         foreach ($rows as $row) {
             $entry = [
                 'label' => $row['label'],
-                'link' => $row['link'] ?? '',
+                'link' => $row['link'] ?? null,
                 'width' => $this->getStringWidth($row['label']),
                 'x' => $currentX,
                 'w' => $barWidth,

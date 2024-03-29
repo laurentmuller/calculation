@@ -36,10 +36,12 @@ class HtmlWordParser
         'text-center' => 'text-align:center;',
         'text-end' => 'text-align:right;',
         'text-justify' => 'text-align:justify;',
-        // font
+        // font style
         'fw-bold' => 'font-weight:bold;',
         'fst-italic' => 'font-style:italic;',
         'font-monospace' => 'font-family:Courier New;',
+        // page-break
+        'page-break' => 'page-break-after:always;',
     ];
 
     /**

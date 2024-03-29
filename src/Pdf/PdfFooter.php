@@ -89,7 +89,7 @@ class PdfFooter
     /**
      * Output the given text.
      */
-    private function outputText(string $text, float $width, PdfTextAlignment $align, string $link = ''): self
+    private function outputText(string $text, float $width, PdfTextAlignment $align, ?string $link = null): self
     {
         $this->parent->cell(
             width: $width,
@@ -109,7 +109,7 @@ class PdfFooter
         $width = $parent->getPrintableWidth() / 3.0;
         PdfStyle::default()->setFontSize(PdfFont::DEFAULT_SIZE - 1.0)->apply($parent);
         $this->outputText($this->getPage(), $width, PdfTextAlignment::LEFT)
-            ->outputText($this->content ?? '', $width, PdfTextAlignment::CENTER, $this->url ?? '')
+            ->outputText($this->content ?? '', $width, PdfTextAlignment::CENTER, $this->url)
             ->outputText($this->getDate(), $width, PdfTextAlignment::RIGHT);
         $parent->resetStyle();
     }

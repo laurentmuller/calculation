@@ -14,14 +14,18 @@ namespace App\Report\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationCategory;
+use App\Entity\CalculationGroup;
 use App\Entity\CalculationItem;
 use App\Pdf\Colors\PdfTextColor;
+use App\Pdf\Events\PdfGroupEvent;
+use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
 use App\Utils\FormatUtils;
+use fpdf\PdfBorder;
 use fpdf\PdfDocument;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -46,6 +50,17 @@ class TableItems extends PdfGroupTable
         $this->calculation = $parent->getCalculation();
     }
 
+    public function getGroupStyle(): PdfStyle
+    {
+        $style = parent::getGroupStyle();
+        if (!$style instanceof PdfStyle) {
+            $style = PdfStyle::getCellStyle()->setFontBold();
+        }
+        $style->setBorder(PdfBorder::leftRight());
+
+        return $style;
+    }
+
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
@@ -60,24 +75,24 @@ class TableItems extends PdfGroupTable
         $groups = $calculation->getGroups();
         $duplicateItems = $calculation->getDuplicateItems();
 
-        $groupStyle = $this->findGroupStyle();
-        $defaultStyle = PdfStyle::getCellStyle()->setIndent(self::INDENT);
+        $defaultStyle = PdfStyle::getCellStyle()->setIndent(self::INDENT)->setBorder(PdfBorder::leftRight());
         $errorStyle = (clone $defaultStyle)->setTextColor(PdfTextColor::red());
+        $listener = $this->createListener();
 
         $this->createColumns();
+        $this->setGroupListener($listener);
         foreach ($groups as $group) {
-            $this->checkLines(3);
-            $groupStyle->resetIndent();
-            $this->setGroupKey($group->getCode());
+            $this->setGroupKey($group);
             foreach ($group->getCategories() as $category) {
-                $this->outputCategory($category, $groupStyle);
+                $this->setGroupKey($category);
                 foreach ($category->getItems() as $item) {
-                    $this->outputItem($item, $duplicateItems, $defaultStyle, $errorStyle);
+                    $this->renderItem($item, $duplicateItems, $defaultStyle, $errorStyle);
                 }
             }
         }
         $this->setInProgress(true);
-        $this->outputTotal($calculation->getItemsTotal());
+        $this->renderTotal($calculation->getItemsTotal());
+        $this->setInProgress(false);
         $this->getParent()->lineBreak(3);
     }
 
@@ -90,6 +105,47 @@ class TableItems extends PdfGroupTable
         $table->output();
 
         return $table;
+    }
+
+    public function renderCategory(CalculationCategory $category, PdfStyle $style): true
+    {
+        $this->checkLines(2);
+        $style->setIndent(self::INDENT / 2);
+        $this->startRow($style)
+            ->add($category->getCode())
+            ->add('')
+            ->add('')
+            ->add('')
+            ->add('')
+            ->endRow();
+
+        return true;
+    }
+
+    public function renderGroup(CalculationGroup $group, PdfStyle $style): true
+    {
+        $this->checkLines(3);
+        $style->resetIndent();
+        $this->startRow($style)
+            ->add($group->getCode())
+            ->add('')
+            ->add('')
+            ->add('')
+            ->add('')
+            ->endRow();
+
+        return true;
+    }
+
+    public function startRow(?PdfStyle $style = null): static
+    {
+        if (!$style instanceof PdfStyle) {
+            $style = PdfStyle::getCellStyle()
+                ->setBorder(PdfBorder::leftRight());
+        }
+        parent::startRow($style);
+
+        return $this;
     }
 
     /**
@@ -139,27 +195,33 @@ class TableItems extends PdfGroupTable
         )->outputHeaders();
     }
 
-    private function findGroupStyle(): PdfStyle
+    private function createListener(): PdfGroupListenerInterface
     {
-        $style = $this->getGroupStyle();
-        if ($style instanceof PdfStyle) {
-            return $style;
-        }
+        return new class($this, $this->getGroupStyle()) implements PdfGroupListenerInterface {
+            public function __construct(private readonly TableItems $parent, private readonly PdfStyle $style)
+            {
+            }
 
-        return PdfStyle::getCellStyle()->setFontBold();
-    }
+            public function outputGroup(PdfGroupEvent $event): bool
+            {
+                /** @psalm-var mixed $key */
+                $key = $event->group->getKey();
+                if ($key instanceof CalculationGroup) {
+                    return $this->parent->renderGroup($key, $this->style);
+                }
+                if ($key instanceof CalculationCategory) {
+                    return $this->parent->renderCategory($key, $this->style);
+                }
 
-    private function outputCategory(CalculationCategory $category, PdfStyle $groupStyle): void
-    {
-        $this->checkLines(2);
-        $groupStyle->setIndent(self::INDENT / 2);
-        $this->setGroupKey($category->getCode());
+                return false;
+            }
+        };
     }
 
     /**
      * @psalm-param CalculationItem[] $duplicateItems
      */
-    private function outputItem(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): void
+    private function renderItem(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): void
     {
         $this->startRow()
             ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
@@ -170,10 +232,13 @@ class TableItems extends PdfGroupTable
             ->endRow();
     }
 
-    private function outputTotal(float $total): void
+    private function renderTotal(float $total): void
     {
         $this->startHeaderRow()
-            ->add($this->trans('calculation.fields.itemsTotal'), 4)
+            ->add($this->trans('calculation.fields.itemsTotal'))
+            ->add('')
+            ->add('')
+            ->add('')
             ->addAmount($total)
             ->endRow();
     }

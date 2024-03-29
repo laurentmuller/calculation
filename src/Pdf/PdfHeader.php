@@ -184,7 +184,7 @@ class PdfHeader
     {
         $this->applySmallStyle();
         $text = $this->customer?->getEmail() ?? '';
-        $link = '' === $text ? '' : "mailto:$text";
+        $link = '' === $text ? null : "mailto:$text";
         $this->outputText(
             $width,
             self::SMALL_HEIGHT,
@@ -258,7 +258,7 @@ class PdfHeader
     {
         $this->applyNameStyle();
         $name = $this->customer?->getName();
-        $link = $this->customer?->getUrl() ?? '';
+        $link = $this->customer?->getUrl() ?? null;
         $align = $isAddress ? PdfTextAlignment::LEFT : PdfTextAlignment::RIGHT;
         $border = $isAddress ? PdfBorder::none() : PdfBorder::bottom();
         $move = $isAddress ? PdfMove::RIGHT : PdfMove::NEW_LINE;
@@ -294,7 +294,7 @@ class PdfHeader
         PdfBorder $border,
         PdfTextAlignment $align,
         PdfMove $move = PdfMove::RIGHT,
-        string $link = ''
+        string|int|null $link = null
     ): void {
         $this->parent->cell(
             width: $width,

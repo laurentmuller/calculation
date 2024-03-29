@@ -86,13 +86,10 @@ class PdfCell
 
     /**
      * Return a value indicating if this link is valid.
-     *
-     * @psalm-assert-if-true (non-empty-string|positive-int) $this->link
-     * @psalm-assert-if-true (non-empty-string|positive-int) $this->getLink()
      */
     public function isLink(): bool
     {
-        return (\is_string($this->link) && '' !== $this->link) || (\is_int($this->link) && $this->link > 0);
+        return PdfDocument::isLink($this->link);
     }
 
     /**

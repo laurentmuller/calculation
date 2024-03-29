@@ -27,14 +27,14 @@ about:
   expand: Afficher le contenu
   collapse: Masquer le contenu
   toggle: Inverser l'affichage du contenu
-  licence: Accord de license
+  licence: Accord de licence
   dialog:
-    title: Accord de license
-    display: Afficher l'accord de license
-    not_found: Impossible de trouver l'accord de license.
-    not_loaded: Impossible de charger l'accord de license.
-    copy_success: L'accord de license a été copié avec succès dans le presse-papier
-    copy_error: Une erreur s'est produite lors de la copie de l'accord de license dans le presse-papiers.
+    title: Accord de licence
+    display: Afficher l'accord de licence
+    not_found: Impossible de trouver l'accord de licence.
+    not_loaded: Impossible de charger l'accord de licence.
+    copy_success: L'accord de licence a été copié avec succès dans le presse-papier
+    copy_error: Une erreur s'est produite lors de la copie de l'accord de licence dans le presse-papiers.
 admin:
   rights:
     title: Droits d'accès

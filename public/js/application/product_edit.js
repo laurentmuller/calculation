@@ -5,8 +5,6 @@
  */
 (function ($) {
     'use strict';
-
-    // initialize search
     const $form = $("#edit-form");
     $("#product_unit").initTypeahead({
         url: $form.data("unit-search"),
@@ -15,10 +13,7 @@
     $("#product_supplier").initTypeahead({
         url: $form.data("supplier-search"),
         error: $form.data("supplier-error")
-    }).ucFirst();
-    $('#product_description').ucFirst();
+    });
     $('#product_price').inputNumberFormat();
-
-    // validation
     $form.initValidator();
 }(jQuery));

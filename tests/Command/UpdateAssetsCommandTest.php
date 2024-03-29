@@ -15,6 +15,7 @@ namespace App\Tests\Command;
 use App\Command\UpdateAssetsCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(UpdateAssetsCommand::class)]
@@ -62,10 +63,11 @@ class UpdateAssetsCommandTest extends KernelTestCase
     {
         $kernel = self::bootKernel();
         $application = new Application($kernel);
-
         $command = $application->find('app:update-assets');
+
         $tester = new CommandTester($command);
-        $tester->execute($input);
+        $result = $tester->execute($input);
+        self::assertSame(Command::SUCCESS, $result);
 
         $tester->assertCommandIsSuccessful();
 

@@ -19,7 +19,7 @@ const KEY_MARGIN_VALIDATE = 'margin-validating';
 /**
  * Returns if the validation of margins is in progress.
  *
- * @param {jQuery} $element
+ * @param {jQuery<HTMLInputElement>} $element
  * @return {boolean} true if in progress.
  */
 function isMarginValidate($element) {
@@ -30,7 +30,7 @@ function isMarginValidate($element) {
 /**
  * Sets a value indicating validation of margins is in progress.
  *
- * @param {jQuery} $element
+ * @param {jQuery<HTMLInputElement>} $element
  * @param {boolean} value - true if in progress.
  */
 function setMarginValidate($element, value) {
@@ -84,7 +84,7 @@ function getMaximumInput(row) {
  * Gets the sorted rows by first the minimum and if equal,
  * then the maximum values.
  *
- * @param {jQuery} $element the element to get rows from.
+ * @param {jQuery<HTMLInputElement>} $element the element to get rows from.
  * @return {jQuery} the sorted rows.
  */
 function getSortedMargins($element) {
@@ -105,7 +105,7 @@ function getSortedMargins($element) {
 /**
  * Validate all other margins that contain errors.
  *
- * @param {jQuery} $element
+ * @param {jQuery<HTMLInputElement>} $element
  */
 function validateOtherMargins($element) {
     'use strict';
@@ -131,7 +131,7 @@ function validateOtherMargins($element) {
 /**
  * Gets a margin error message.
  *
- * @param {jQuery} $element
+ * @param {jQuery<HTMLInputElement>} $element
  * @return {string}
  */
 function getMarginError($element) {
@@ -145,7 +145,7 @@ function getMarginError($element) {
 /**
  * Sets or remove the margin error message.
  *
- * @param {jQuery} $element the element to update.
+ * @param {jQuery<HTMLInputElement>} $element the element to update.
  * @param {string} [error] the error message to set or null to remove.
  * @return {boolean} false if error message; true if valid.
  */
@@ -168,7 +168,7 @@ function setMarginError($element, error) {
 /**
  * Validate the minimum margin.
  *
- * @param {jQuery} $element the element to validate.
+ * @param {jQuery<HTMLInputElement>} $element the element to validate.
  * @return {boolean} false if error; true if valid.
  */
 function validateMinimumMargin($element) {
@@ -199,7 +199,7 @@ function validateMinimumMargin($element) {
 /**
  * Validate the maximum margin.
  *
- * @param {jQuery} $element the element to validate.
+ * @param {jQuery<HTMLInputElement>} $element the element to validate.
  * @return {boolean} false if error; true if valid.
  */
 function validateMaximumMargin($element) {

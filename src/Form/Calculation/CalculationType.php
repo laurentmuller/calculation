@@ -37,11 +37,13 @@ class CalculationType extends AbstractEntityType
 
         $helper->field('customer')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
+            ->widgetClass('uc-first')
             ->autocomplete('off')
             ->addTextType();
 
         $helper->field('description')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
+            ->widgetClass('uc-first')
             ->addTextType();
 
         $helper->field('userMargin')

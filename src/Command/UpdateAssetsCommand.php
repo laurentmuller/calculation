@@ -19,7 +19,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
@@ -90,7 +89,7 @@ class UpdateAssetsCommand extends Command
         if (!$this->propertyExists($configuration, ['target', 'plugins', 'sources'], true)) {
             return Command::INVALID;
         }
-        if ($input->getOption(self::DRY_RUN_OPTION)) { // @phpstan-ignore-line
+        if ($this->io->getOption(self::DRY_RUN_OPTION)) { // @phpstan-ignore-line
             return $this->dryRun($configuration);
         }
 

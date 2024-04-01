@@ -44,7 +44,7 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
      * @var ArrayCollection<int, TaskItemMargin>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(mappedBy: 'taskItem', targetEntity: TaskItemMargin::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: TaskItemMargin::class, mappedBy: 'taskItem', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['minimum' => SortModeInterface::SORT_ASC])]
     private Collection $margins;
 

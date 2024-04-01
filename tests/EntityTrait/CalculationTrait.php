@@ -28,17 +28,18 @@ trait CalculationTrait
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    public function getCalculation(CalculationState $state, string $customer = 'Test Customer', string $description = 'Test Description'): Calculation
+    public function getCalculation(?CalculationState $state = null, string $customer = 'Test Customer', string $description = 'Test Description'): Calculation
     {
-        if (!$this->calculation instanceof Calculation) {
-            $this->calculation = new Calculation();
-            $this->calculation->setState($state)
-                ->setCustomer($customer)
-                ->setDescription($description);
-            $this->addEntity($this->calculation);
+        if ($this->calculation instanceof Calculation) {
+            return $this->calculation;
         }
 
-        return $this->calculation; // @phpstan-ignore-line
+        $this->calculation = new Calculation();
+        $this->calculation->setState($state ?? $this->getCalculationState())
+            ->setCustomer($customer)
+            ->setDescription($description);
+
+        return $this->addEntity($this->calculation);
     }
 
     /**

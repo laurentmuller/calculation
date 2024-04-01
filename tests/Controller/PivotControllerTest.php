@@ -48,8 +48,7 @@ class PivotControllerTest extends AbstractControllerTestCase
             ->setPrice(10.0);
         $this->addEntity($product);
 
-        $state = $this->getCalculationState();
-        $calculation = $this->getCalculation($state)
+        $calculation = $this->getCalculation()
             ->addProduct($product, 10.0);
         $this->addEntity($calculation);
     }

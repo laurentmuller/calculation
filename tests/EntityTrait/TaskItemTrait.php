@@ -40,13 +40,14 @@ trait TaskItemTrait
      */
     protected function getTaskItem(Task $task, string $name = 'Test Task Item'): TaskItem
     {
-        if (!$this->taskItem instanceof TaskItem) {
-            $this->taskItem = new TaskItem();
-            $this->taskItem->setTask($task)
-                ->setName($name);
-            $this->addEntity($this->taskItem);
+        if ($this->taskItem instanceof TaskItem) {
+            return $this->taskItem;
         }
 
-        return $this->taskItem; // @phpstan-ignore-line
+        $this->taskItem = new TaskItem();
+        $this->taskItem->setTask($task)
+            ->setName($name);
+
+        return $this->addEntity($this->taskItem);
     }
 }

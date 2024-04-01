@@ -14,13 +14,13 @@ namespace App\Tests\Controller;
 
 use App\Controller\CalculationController;
 use App\Tests\EntityTrait\CalculationTrait;
-use App\Tests\EntityTrait\CategoryTrait;
+use App\Tests\EntityTrait\ProductTrait;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationController::class)]
 class CalculationControllerTest extends AbstractControllerTestCase
 {
     use CalculationTrait;
-    use CategoryTrait;
+    use ProductTrait;
 
     public static function getRoutes(): \Iterator
     {
@@ -67,10 +67,13 @@ class CalculationControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        $group = $this->getGroup();
-        $this->getCategory($group);
-        $state = $this->getCalculationState();
-        $this->getCalculation($state);
+        $product = $this->getProduct();
+        $this->getCalculation()
+            ->setOverallTotal(100.0)
+            ->setItemsTotal(100.0)
+            ->setGlobalMargin(1.1)
+            ->setUserMargin(0.1)
+            ->addProduct($product);
     }
 
     /**

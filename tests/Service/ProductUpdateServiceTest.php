@@ -72,7 +72,6 @@ class ProductUpdateServiceTest extends TestCase
     public function testEmptyProducts(): void
     {
         $service = $this->createService();
-
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_FIXED);
 
         $result = $service->update($query);

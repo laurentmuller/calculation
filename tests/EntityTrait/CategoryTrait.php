@@ -27,16 +27,17 @@ trait CategoryTrait
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    public function getCategory(Group $group, string $code = 'Test Category'): Category
+    public function getCategory(?Group $group = null, string $code = 'Test Category'): Category
     {
-        if (!$this->category instanceof Category) {
-            $this->category = new Category();
-            $this->category->setGroup($group)
-                ->setCode($code);
-            $this->addEntity($this->category);
+        if ($this->category instanceof Category) {
+            return $this->category;
         }
 
-        return $this->category; // @phpstan-ignore-line
+        $this->category = new Category();
+        $this->category->setGroup($group ?? $this->getGroup())
+            ->setCode($code);
+
+        return $this->addEntity($this->category);
     }
 
     /**

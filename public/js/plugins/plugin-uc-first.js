@@ -49,18 +49,29 @@
         }
 
         _focusout() {
-            let value = String(this.$element.val());
-            if (value.length) {
-                value = value.charAt(0).toUpperCase() + value.slice(1);
-                this.$element.val(value);
+            /** @type {string} */
+            const oldValue = this.$element.val();
+            if (!oldValue.length) {
+                return;
             }
+            let newValue = oldValue.charAt(0).toUpperCase() + oldValue.slice(1);
+            if (this.options.endPoint && newValue.slice(-1) !== '.') {
+                newValue = newValue + '.';
+            }
+            if (oldValue === newValue) {
+                return;
+            }
+            this.$element.val(newValue)
+                .trigger('input');
         }
     };
 
     // -----------------------------
     // Default options
     // -----------------------------
-    UCFirst.DEFAULTS = {};
+    UCFirst.DEFAULTS = {
+        endPoint: false
+    };
 
     // -------------------------------
     // The plugin name.
@@ -93,7 +104,7 @@
     // ------------------------------------
     // UCFirst data-api
     // ------------------------------------
-    $('form').on('focusout.bs.ucFirst.data-api', '.uc-first', function () {
+    $(document).on('focusout.bs.ucFirst.data-api', '.uc-first', function () {
         const $this = $(this);
         if (!$this.data(UCFirst.NAME)) {
             $this.ucFirst($this.data());

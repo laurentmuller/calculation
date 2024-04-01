@@ -14,6 +14,7 @@ namespace App\Tests\Service;
 
 use App\Service\CountryFlagService;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Intl\Countries;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CountryFlagService::class)]
 class CountryFlagServiceTest extends TestCase
@@ -42,6 +43,17 @@ class CountryFlagServiceTest extends TestCase
         yield ['FR', '🇫🇷'];
         yield ['ZZ', '', true, true];
         yield ['ZZ', '', false];
+    }
+
+    public function testChoices(): void
+    {
+        self::assertNotNull($this->service);
+        $expected = \count(Countries::getNames());
+        $choices = $this->service->getChoices();
+        self::assertCount($expected, $choices);
+
+        $choices = $this->service->getChoices(flagOnly: true);
+        self::assertCount($expected, $choices);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getDefaultCodes')]

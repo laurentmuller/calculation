@@ -27,18 +27,19 @@ trait GroupTrait
      */
     public function getGroup(string $code = 'Test Group'): Group
     {
-        if (!$this->group instanceof Group) {
-            $this->group = new Group();
-            $this->group->setCode($code);
-            $margin = new GroupMargin();
-            $margin->setMinimum(0)
-                ->setMaximum(1_000_000)
-                ->setMargin(1.1);
-            $this->group->addMargin($margin);
-            $this->addEntity($this->group);
+        if ($this->group instanceof Group) {
+            return $this->group;
         }
 
-        return $this->group; // @phpstan-ignore-line
+        $this->group = new Group();
+        $this->group->setCode($code);
+        $margin = new GroupMargin();
+        $margin->setMinimum(0)
+            ->setMaximum(1_000_000)
+            ->setMargin(1.1);
+        $this->group->addMargin($margin);
+
+        return $this->addEntity($this->group);
     }
 
     /**

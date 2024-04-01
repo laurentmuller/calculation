@@ -34,7 +34,6 @@ class TaskItemType extends AbstractEntityType
         $helper->field('name')
             ->widgetClass('unique-name')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
-            ->widgetClass('uc-first')
             ->addTextType();
 
         $helper->field('position')

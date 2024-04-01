@@ -43,7 +43,7 @@ class CalculationState extends AbstractEntity implements TimestampableInterface
      *
      * @var ArrayCollection<int, Calculation>
      */
-    #[ORM\OneToMany(mappedBy: 'state', targetEntity: Calculation::class, fetch: self::EXTRA_LAZY)]
+    #[ORM\OneToMany(targetEntity: Calculation::class, mappedBy: 'state', fetch: self::EXTRA_LAZY)]
     private Collection $calculations;
 
     /**

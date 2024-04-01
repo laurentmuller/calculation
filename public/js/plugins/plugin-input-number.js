@@ -1,7 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /**
- * Ready function
+ * Plugin to validate and format number input.
  */
 (function ($) {
     'use strict';
@@ -9,6 +9,10 @@
     // ------------------------------------------
     // InputNumberFormat public class definition
     // ------------------------------------------
+
+    /**
+     * @property {JQuery<HTMLInputElement>} $element
+     */
     const InputNumberFormat = class {
         // -----------------------------
         // public functions
@@ -17,7 +21,7 @@
         /**
          * Constructor
          *
-         * @param {HTMLElement} element - the element to handle.
+         * @param {HTMLInputElement} element - the element to handle.
          * @param {Object|string} [options] - the plugin options.
          */
         constructor(element, options) {
@@ -27,15 +31,14 @@
         }
 
         /**
-         * Remove handlers and data.
+         * Remove data and handlers.
          */
         destroy() {
-            const $element = this.$element;
-            $element.off('blur', this.updateProxy);
-            $element.off('change', this.updateProxy);
-            $element.off('input', this.inputProxy);
-            $element.off('keypress', this.keyPressProxy);
-            $element.removeData(InputNumberFormat.NAME);
+            this.$element.removeData(InputNumberFormat.NAME)
+                .off('blur', this.updateProxy)
+                .off('change', this.updateProxy)
+                .off('input', this.inputProxy)
+                .off('keypress', this.keyPressProxy);
         }
 
         // -----------------------------
@@ -68,8 +71,8 @@
 
             // add handlers
             const $element = this.$element;
-            $element.on('blur', this.updateProxy);
-            $element.on('change', this.updateProxy);
+            $element.on('blur', this.updateProxy)
+                .on('change', this.updateProxy);
             if ($element[0].selectionStart === null) {
                 $element.on('input', this.inputProxy);
             } else {
@@ -80,8 +83,12 @@
             this._update();
         }
 
+        /**
+         * @param {KeyboardEvent} e
+         * @private
+         */
         _keypress(e) {
-            if (e.ctrlKey || e.key.length > 1 || e.keyCode === 13) {
+            if (e.ctrlKey || e.key.length > 1 || e.key === 'Enter') {
                 return;
             }
 
@@ -103,6 +110,11 @@
             }
         }
 
+        /**
+         * Handle input event.
+         * @param {Event} e
+         * @private
+         */
         _input(e) {
             const options = this.options;
             const decimal = options.decimal;
@@ -119,7 +131,12 @@
             }
         }
 
+        /**
+         * Update input value.
+         * @private
+         */
         _update() {
+            /** @type {string} */
             const oldValue = this.$element.val();
             const newValue = this._formatValue(oldValue);
             if (oldValue !== newValue) {
@@ -127,6 +144,12 @@
             }
         }
 
+        /**
+         * Format the given value.
+         * @param {string} value
+         * @return {string}
+         * @private
+         */
         _formatValue(value) {
             if (!value) {
                 return value;
@@ -154,6 +177,9 @@
         }
     };
 
+    // -----------------------------
+    // Default options
+    // -----------------------------
     InputNumberFormat.DEFAULTS = {
         'decimal': 2,
         'decimalAuto': 2,
@@ -161,9 +187,9 @@
         'separatorAuthorized': ['.', ',']
     };
 
-    /**
-     * The plugin name.
-     */
+    // -----------------------------
+    // The plugin name.
+    // -----------------------------
     InputNumberFormat.NAME = 'bs.input-number-format';
 
     // ------------------------------------

@@ -21,7 +21,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -59,19 +58,20 @@ class WebpCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
 
-        $source = \trim((string) $input->getArgument(self::SOURCE_ARGUMENT));
+        $source = \trim($this->io->getStringArgument(self::SOURCE_ARGUMENT));
         if ('' === $source) {
             $this->writeError('The "--source" argument requires a non-empty value.');
 
             return Command::INVALID;
         }
+
         $fullPath = FileUtils::buildPath($this->projectDir, $source);
         if (!$this->validateSource($fullPath)) {
             return Command::INVALID;
         }
 
         /** @psalm-var mixed $level */
-        $level = $input->getOption(self::OPTION_LEVEL);
+        $level = $this->io->getOption(self::OPTION_LEVEL);
         if (!$this->validateLevel($level)) {
             return Command::INVALID;
         }
@@ -88,8 +88,8 @@ class WebpCommand extends Command
         $success = 0;
         $oldSize = 0;
         $newSize = 0;
-        $dry_run = $input->getOption(self::OPTION_DRY_RUN);
-        $overwrite = $input->getOption(self::OPTION_OVERWRITE);
+        $dry_run = $this->io->getBoolOption(self::OPTION_DRY_RUN);
+        $overwrite = $this->io->getBoolOption(self::OPTION_OVERWRITE);
         $this->writeVerbose(\sprintf('Process images in "%s"', $source));
 
         foreach ($finder as $file) {
@@ -115,14 +115,14 @@ class WebpCommand extends Command
 
             $targetFile = $this->getTargetFile($file);
             $targetName = \basename($targetFile);
-            if (!$overwrite && FileUtils::exists($targetFile)) { // @phpstan-ignore-line
+            if (!$overwrite && FileUtils::exists($targetFile)) {
                 $this->writeVerbose(\sprintf('Skip : %s - Image already exist.', $targetName));
                 \imagedestroy($image);
                 ++$skip;
                 continue;
             }
 
-            if ($dry_run) { // @phpstan-ignore-line
+            if ($dry_run) {
                 $this->writeVerbose(\sprintf('Save : %s (Simulate)', $targetName));
                 [$result, $size] = $this->saveImage($image);
             } else {

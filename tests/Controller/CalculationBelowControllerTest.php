@@ -42,12 +42,8 @@ class CalculationBelowControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        $group = $this->getGroup();
-        $category = $this->getCategory($group);
-        $product = $this->getProduct($category);
-        $state = $this->getCalculationState();
-
-        $calculation = $this->getCalculation($state)
+        $product = $this->getProduct();
+        $calculation = $this->getCalculation()
             ->addProduct($product)
             ->setItemsTotal(1.0)
             ->setGlobalMargin(1.0)

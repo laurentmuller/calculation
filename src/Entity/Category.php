@@ -61,7 +61,7 @@ class Category extends AbstractEntity implements TimestampableInterface
      *
      * @var ArrayCollection<int, Product>
      */
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class, fetch: self::EXTRA_LAZY)]
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category', fetch: self::EXTRA_LAZY)]
     private Collection $products;
 
     /**
@@ -69,7 +69,7 @@ class Category extends AbstractEntity implements TimestampableInterface
      *
      * @var ArrayCollection<int, Task>
      */
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Task::class, fetch: self::EXTRA_LAZY)]
+    #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'category', fetch: self::EXTRA_LAZY)]
     private Collection $tasks;
 
     public function __construct()

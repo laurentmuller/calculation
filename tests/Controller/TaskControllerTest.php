@@ -60,9 +60,7 @@ class TaskControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        $group = $this->getGroup();
-        $category = $this->getCategory($group);
-        $task = $this->getTask($category);
+        $task = $this->getTask();
         $this->getTaskItem($task);
     }
 

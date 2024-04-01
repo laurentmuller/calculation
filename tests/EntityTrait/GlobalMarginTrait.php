@@ -36,14 +36,15 @@ trait GlobalMarginTrait
      */
     protected function getGlobalMargin(float $minimum = 0.0, float $maximum = 1_000_000.0, float $margin = 1.1): GlobalMargin
     {
-        if (!$this->globalMargin instanceof GlobalMargin) {
-            $this->globalMargin = new GlobalMargin();
-            $this->globalMargin->setMinimum($minimum)
-                ->setMaximum($maximum)
-                ->setMargin($margin);
-            $this->addEntity($this->globalMargin);
+        if ($this->globalMargin instanceof GlobalMargin) {
+            return $this->globalMargin;
         }
 
-        return $this->globalMargin; // @phpstan-ignore-line
+        $this->globalMargin = new GlobalMargin();
+        $this->globalMargin->setMinimum($minimum)
+            ->setMaximum($maximum)
+            ->setMargin($margin);
+
+        return $this->addEntity($this->globalMargin);
     }
 }

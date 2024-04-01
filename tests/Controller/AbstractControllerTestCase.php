@@ -13,9 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\AbstractController;
-use App\Interfaces\EntityInterface;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
-use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -63,20 +61,6 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
     }
 
     /**
-     * Adds an entity to the database.
-     *
-     * @throws ORMException
-     */
-    protected function addEntity(?EntityInterface $entity): void
-    {
-        if ($entity instanceof EntityInterface) {
-            $em = self::getManager();
-            $em->persist($entity);
-            $em->flush();
-        }
-    }
-
-    /**
      * Checks the given route.
      *
      * @param string $url            the URL to be tested
@@ -113,24 +97,6 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      */
     protected function deleteEntities(): void
     {
-    }
-
-    /**
-     * Delete an entity from the database.
-     *
-     * @return null this function returns always null
-     *
-     * @throws ORMException
-     */
-    protected function deleteEntity(?EntityInterface $entity): null
-    {
-        if ($entity instanceof EntityInterface) {
-            $em = self::getManager();
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return null;
     }
 
     protected function isOfficeDocument(string $url): bool

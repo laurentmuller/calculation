@@ -18,8 +18,11 @@ class EditTaskDialog extends EditDialog {
     getItems() {
         'use strict';
         const that = this;
+        /** @type {string} */
         const unit = that.$unit.val();
+        /** @type {float} */
         const quantity = that.$quantity.floatVal();
+        /** @type {string} */
         const task = that.$task.getSelectedOption().text();
 
         return that._getCheckedItems().map(function () {

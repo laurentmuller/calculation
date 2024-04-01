@@ -34,7 +34,6 @@ class TaskType extends AbstractEntityType
     {
         $helper->field('name')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
-            ->widgetClass('uc-first')
             ->addTextType();
 
         $helper->field('category')
@@ -49,7 +48,6 @@ class TaskType extends AbstractEntityType
         $helper->field('supplier')
             ->autocomplete('off')
             ->maxLength(EntityInterface::MAX_STRING_LENGTH)
-            ->widgetClass('uc-first')
             ->notRequired()
             ->addTextType();
 

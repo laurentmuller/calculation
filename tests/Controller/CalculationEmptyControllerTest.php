@@ -41,15 +41,10 @@ class CalculationEmptyControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        $group = $this->getGroup();
-        $category = $this->getCategory($group);
-        $state = $this->getCalculationState();
-
-        $product = $this->getProduct($category)
+        $product = $this->getProduct()
             ->setPrice(0.0);
         $this->addEntity($product);
-
-        $calculation = $this->getCalculation($state)
+        $calculation = $this->getCalculation()
             ->addProduct($product);
         $this->addEntity($calculation);
     }

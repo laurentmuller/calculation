@@ -36,12 +36,13 @@ trait CalculationStateTrait
      */
     protected function getCalculationState(string $code = 'Test State'): CalculationState
     {
-        if (!$this->calculationState instanceof CalculationState) {
-            $this->calculationState = new CalculationState();
-            $this->calculationState->setCode($code);
-            $this->addEntity($this->calculationState);
+        if ($this->calculationState instanceof CalculationState) {
+            return $this->calculationState;
         }
 
-        return $this->calculationState; // @phpstan-ignore-line
+        $this->calculationState = new CalculationState();
+        $this->calculationState->setCode($code);
+
+        return $this->addEntity($this->calculationState);
     }
 }

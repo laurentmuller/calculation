@@ -41,7 +41,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      *
      * @var ArrayCollection<int, Category>
      */
-    #[ORM\OneToMany(mappedBy: 'group', targetEntity: Category::class, cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'group', cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
     #[ORM\OrderBy(['code' => SortModeInterface::SORT_ASC])]
     private Collection $categories;
 
@@ -66,7 +66,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      * @var ArrayCollection<int, GroupMargin>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(mappedBy: 'group', targetEntity: GroupMargin::class, cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: GroupMargin::class, mappedBy: 'group', cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
     #[ORM\OrderBy(['minimum' => SortModeInterface::SORT_ASC])]
     private Collection $margins;
 

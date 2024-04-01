@@ -15,6 +15,7 @@ namespace App\Tests\Service;
 use App\Enums\EntityAction;
 use App\Enums\MessagePosition;
 use App\Enums\TableView;
+use App\Interfaces\PropertyServiceInterface;
 use App\Service\UserService;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
@@ -40,10 +41,45 @@ class UserServiceTest extends KernelTestCase
         self::assertFalse($service->isActionNone());
     }
 
+    public function testDarkNavigation(): void
+    {
+        $service = $this->getUserService();
+        $actual = $service->isDarkNavigation();
+        self::assertTrue($actual);
+    }
+
     public function testDisplayMode(): void
     {
         $service = $this->getUserService();
         self::assertSame(TableView::TABLE, $service->getDisplayMode());
+    }
+
+    public function testGetApplication(): void
+    {
+        $service = $this->getUserService();
+        $application = $service->getApplication();
+        self::assertFalse($application->isPrintAddress());
+    }
+
+    public function testGetCustomer(): void
+    {
+        $service = $this->getUserService();
+        $actual = $service->getCustomer();
+        self::assertNotNull($actual->getName());
+    }
+
+    public function testGetMessageAttributes(): void
+    {
+        $service = $this->getUserService();
+        $actual = $service->getMessageAttributes();
+        self::assertCount(7, $actual);
+    }
+
+    public function testGetProperties(): void
+    {
+        $service = $this->getUserService();
+        $actual = $service->getProperties();
+        self::assertNotEmpty($actual);
     }
 
     public function testMessage(): void
@@ -68,6 +104,21 @@ class UserServiceTest extends KernelTestCase
         self::assertTrue($service->isPanelMonth());
         self::assertTrue($service->isPanelState());
         self::assertSame(12, $service->getPanelCalculation());
+    }
+
+    public function testSetPropertiesEmpty(): void
+    {
+        $service = $this->getUserService();
+        $actual = $service->setProperties([]);
+        self::assertFalse($actual);
+    }
+
+    public function testSetPropertiesSame(): void
+    {
+        $service = $this->getUserService();
+        $darkNavigation = $service->isDarkNavigation();
+        $actual = $service->setProperty(PropertyServiceInterface::P_DARK_NAVIGATION, $darkNavigation);
+        self::assertFalse($actual);
     }
 
     private function getUserService(): UserService

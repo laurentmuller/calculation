@@ -68,7 +68,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @var ArrayCollection<int, CalculationGroup>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(mappedBy: 'calculation', targetEntity: CalculationGroup::class, cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CalculationGroup::class, mappedBy: 'calculation', cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
     #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
     private Collection $groups;
 

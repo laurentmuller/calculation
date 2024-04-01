@@ -12,8 +12,10 @@ declare(strict_types=1);
 
 namespace App\Tests;
 
+use App\Interfaces\EntityInterface;
 use App\Tests\Data\Database;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Exception\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -38,6 +40,48 @@ trait DatabaseTrait
             self::$database = Database::deleteDatabase();
             self::$database = null;
         }
+    }
+
+    /**
+     * Adds an entity to the database.
+     *
+     * @template T of EntityInterface
+     *
+     * @psalm-param T|null $entity
+     *
+     * @psalm-return ($entity is null ? null : T)
+     *
+     * @throws ORMException
+     */
+    protected function addEntity(?EntityInterface $entity): ?EntityInterface
+    {
+        if ($entity instanceof EntityInterface) {
+            $em = $this->getManager();
+            $em->persist($entity);
+            $em->flush();
+
+            return $entity;
+        }
+
+        return null;
+    }
+
+    /**
+     * Delete an entity from the database.
+     *
+     * @return null this function returns always null
+     *
+     * @throws ORMException
+     */
+    protected function deleteEntity(?EntityInterface $entity): null
+    {
+        if ($entity instanceof EntityInterface) {
+            $em = $this->getManager();
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return null;
     }
 
     /**

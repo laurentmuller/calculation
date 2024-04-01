@@ -41,12 +41,8 @@ class CalculationDuplicateControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        $group = $this->getGroup();
-        $category = $this->getCategory($group);
-        $product = $this->getProduct($category);
-        $state = $this->getCalculationState();
-
-        $calculation = $this->getCalculation($state);
+        $product = $this->getProduct();
+        $calculation = $this->getCalculation();
         $calculation->addProduct($product)
             ->addProduct($product);
         $this->addEntity($calculation);

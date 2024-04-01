@@ -65,7 +65,7 @@ class AbstractPropertyTest extends TestCase
         self::assertFalse($entity->getBoolean());
         self::assertNull($entity->getDate());
         self::assertSame(0, $entity->getInteger());
-        self::assertNull($entity->getString());
+        self::assertNull($entity->getValue());
 
         $entity->setName('name');
         self::assertSame('name', $entity->getName());
@@ -102,11 +102,11 @@ class AbstractPropertyTest extends TestCase
     public function testString(): void
     {
         $entity = $this->getEntity();
-        self::assertNull($entity->getString());
+        self::assertNull($entity->getValue());
         $entity->setString('string');
-        self::assertSame('string', $entity->getString());
+        self::assertSame('string', $entity->getValue());
         $entity->setString(null);
-        self::assertNull($entity->getString());
+        self::assertNull($entity->getValue());
     }
 
     /**
@@ -139,14 +139,14 @@ class AbstractPropertyTest extends TestCase
 
         $theme = Theme::AUTO;
         $entity->setValue($theme);
-        self::assertSame($theme->value, $entity->getString());
+        self::assertSame($theme->value, $entity->getValue());
 
         $permission = EntityPermission::ADD;
         $entity->setValue($permission);
         self::assertSame($permission->value, $entity->getInteger());
 
         $entity->setValue(null);
-        self::assertSame('', $entity->getString());
+        self::assertSame('', $entity->getValue());
     }
 
     /**

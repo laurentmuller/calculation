@@ -38,15 +38,16 @@ trait TaskTrait
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function getTask(Category $category, string $name = 'Test Task'): Task
+    protected function getTask(?Category $category = null, string $name = 'Test Task'): Task
     {
-        if (!$this->task instanceof Task) {
-            $this->task = new Task();
-            $this->task->setCategory($category)
-                ->setName($name);
-            $this->addEntity($this->task);
+        if ($this->task instanceof Task) {
+            return $this->task;
         }
 
-        return $this->task; // @phpstan-ignore-line
+        $this->task = new Task();
+        $this->task->setCategory($category ?? $this->getCategory())
+            ->setName($name);
+
+        return $this->addEntity($this->task);
     }
 }

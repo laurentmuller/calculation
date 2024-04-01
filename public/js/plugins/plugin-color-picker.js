@@ -252,6 +252,7 @@
         _onColorButtonClick(e) {
             e.preventDefault();
             const $button = $(e.target);
+            /** @type {string} */
             const oldValue = this.$element.val();
             const newValue = $button.data('value');
             if (!newValue.equalsIgnoreCase(oldValue)) {

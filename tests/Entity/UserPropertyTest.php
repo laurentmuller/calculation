@@ -57,7 +57,7 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
             $actual = $this->getRepository()->findOneByUserAndName($user, 'name');
             self::assertNotNull($actual);
             self::assertSame($expected->getName(), $actual->getName());
-            self::assertSame($expected->getString(), $actual->getString());
+            self::assertSame($expected->getValue(), $actual->getValue());
             self::assertSame($expected->getUser(), $actual->getUser());
         } finally {
             $this->deleteEntity($expected);
@@ -96,7 +96,7 @@ class UserPropertyTest extends AbstractEntityValidatorTestCase
         $property = UserProperty::instance('name', $user);
         $property->setValue('value');
         self::assertSame('name', $property->getName());
-        self::assertSame('value', $property->getString());
+        self::assertSame('value', $property->getValue());
     }
 
     public function testInvalidAll(): void

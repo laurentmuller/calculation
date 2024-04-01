@@ -124,7 +124,7 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Gets the property value as string.
      */
-    public function getString(): ?string
+    public function getValue(): ?string
     {
         return $this->value;
     }

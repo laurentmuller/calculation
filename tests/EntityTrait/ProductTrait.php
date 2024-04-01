@@ -27,17 +27,18 @@ trait ProductTrait
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    public function getProduct(Category $category, float $price = 1.0, string $description = 'Test description'): Product
+    public function getProduct(?Category $category = null, float $price = 1.0, string $description = 'Test description'): Product
     {
-        if (!$this->product instanceof Product) {
-            $this->product = new Product();
-            $this->product->setCategory($category)
-                ->setPrice($price)
-                ->setDescription($description);
-            $this->addEntity($this->product);
+        if ($this->product instanceof Product) {
+            return $this->product;
         }
 
-        return $this->product; // @phpstan-ignore-line
+        $this->product = new Product();
+        $this->product->setCategory($category ?? $this->getCategory())
+            ->setPrice($price)
+            ->setDescription($description);
+
+        return $this->addEntity($this->product);
     }
 
     /**

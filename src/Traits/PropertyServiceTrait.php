@@ -311,7 +311,7 @@ trait PropertyServiceTrait
     {
         $this->clearCache();
         foreach ($properties as $property) {
-            $this->saveDeferredCacheValue($property->getName(), $property->getString());
+            $this->saveDeferredCacheValue($property->getName(), $property->getValue());
         }
         $this->saveDeferredCacheValue(self::P_CACHE_SAVED, true);
         if (!$this->commitDeferredValues()) {

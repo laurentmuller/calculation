@@ -69,7 +69,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
      * @var ArrayCollection<int, CalculationItem>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: CalculationItem::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CalculationItem::class, mappedBy: 'category', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
     private Collection $items;
 

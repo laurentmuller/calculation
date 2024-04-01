@@ -54,11 +54,8 @@ class ChartControllerTest extends AbstractControllerTestCase
     protected function addEntities(): void
     {
         $this->getGlobalMargin();
-        $group = $this->getGroup();
-        $category = $this->getCategory($group);
-        $product = $this->getProduct($category);
-        $state = $this->getCalculationState();
-        $calculation = $this->getCalculation($state);
+        $product = $this->getProduct();
+        $calculation = $this->getCalculation();
         $calculation->addProduct($product, 12.5);
         $this->updateCalculation();
     }

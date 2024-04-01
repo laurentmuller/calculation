@@ -23,7 +23,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Command to anonymous customer and description in calculations.
@@ -51,13 +50,12 @@ class AnonymousCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $count = $this->repository->count();
         if (0 === $count) {
-            $io->writeln('<info>No calculation to update.</info>');
+            $io->info('No calculation to update.');
 
             return Command::SUCCESS;
         }
 
-        $dryRun = $input->getOption(self::OPTION_DRY_RUN);
-        $this->listener->suspendListeners(function () use ($io, $count, $dryRun): void {
+        $this->listener->suspendListeners(function () use ($io, $count): void {
             $time = \time();
             $company = true;
             $query = $this->createQuery();
@@ -70,7 +68,7 @@ class AnonymousCommand extends Command
             }
             $io->writeln('End update calculations.');
 
-            if ($dryRun) { // @phpstan-ignore-line
+            if ($io->getBoolOption(self::OPTION_DRY_RUN)) {
                 $io->writeln(\sprintf('Simulate updated %d calculations.', $count));
             } else {
                 $io->writeln('Save change to database.');

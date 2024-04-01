@@ -13,10 +13,14 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\CategoryController;
+use App\Report\CategoriesReport;
+use App\Spreadsheet\CategoriesDocument;
 use App\Tests\EntityTrait\CategoryTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CategoryController::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(CategoriesReport::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(CategoriesDocument::class)]
 class CategoryControllerTest extends AbstractControllerTestCase
 {
     use CategoryTrait;
@@ -54,7 +58,7 @@ class CategoryControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        $this->getCategory($this->getGroup());
+        $this->getCategory();
     }
 
     /**

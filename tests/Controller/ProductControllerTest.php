@@ -54,9 +54,7 @@ class ProductControllerTest extends AbstractControllerTestCase
      */
     protected function addEntities(): void
     {
-        $group = $this->getGroup();
-        $category = $this->getCategory($group);
-        $this->getProduct($category);
+        $this->getProduct();
     }
 
     /**

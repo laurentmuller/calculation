@@ -113,11 +113,7 @@ class TableItems extends PdfGroupTable
         $style->setIndent(self::INDENT / 2);
         $this->startRow($style)
             ->add($category->getCode())
-            ->add('')
-            ->add('')
-            ->add('')
-            ->add('')
-            ->endRow();
+            ->completeRow();
 
         return true;
     }
@@ -128,11 +124,7 @@ class TableItems extends PdfGroupTable
         $style->resetIndent();
         $this->startRow($style)
             ->add($group->getCode())
-            ->add('')
-            ->add('')
-            ->add('')
-            ->add('')
-            ->endRow();
+            ->completeRow();
 
         return true;
     }
@@ -175,13 +167,11 @@ class TableItems extends PdfGroupTable
         return $this;
     }
 
-    private function checkLines(int $lines): bool
+    private function checkLines(int $lines): void
     {
         $this->setInProgress(true);
-        $result = $this->checkNewPage((float) $lines * PdfDocument::LINE_HEIGHT);
+        $this->checkNewPage((float) $lines * PdfDocument::LINE_HEIGHT);
         $this->setInProgress(false);
-
-        return $result;
     }
 
     private function createColumns(): self
@@ -205,7 +195,7 @@ class TableItems extends PdfGroupTable
             public function outputGroup(PdfGroupEvent $event): bool
             {
                 /** @psalm-var mixed $key */
-                $key = $event->group->getKey();
+                $key = $event->getGroupKey();
                 if ($key instanceof CalculationGroup) {
                     return $this->parent->renderGroup($key, $this->style);
                 }

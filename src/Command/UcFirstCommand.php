@@ -38,8 +38,13 @@ class UcFirstCommand extends Command
     private const OPTION_END_POINT = 'point';
     private const OPTION_FIELD = 'field';
 
-    /** @psalm-var  EntitiesType */
+    /** @psalm-var class-string|null */
+    private ?string $className = null;
+
+    /** @psalm-var EntitiesType */
     private array $entities = [];
+
+    private ?string $fieldName = null;
 
     public function __construct(
         private readonly SuspendEventListenerService $listener,
@@ -59,32 +64,48 @@ class UcFirstCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $className = $this->getClassName($io);
-        if (null === $className) {
+        if (!\is_string($this->className)) {
+            $io->error('No entity selected.');
+
             return Command::INVALID;
         }
 
-        $fieldName = $this->getFieldName($io, $className);
-        if (null === $fieldName) {
+        if (!\is_string($this->fieldName)) {
+            $io->error(\sprintf('No field selected for the entity "%s".', $this->className));
+
             return Command::INVALID;
         }
 
-        $this->listener->suspendListeners(function () use ($io, $className, $fieldName): void {
-            $endPoint = $io->getBoolOption(self::OPTION_END_POINT);
-            $dryRun = $io->getBoolOption(self::OPTION_DRY_RUN);
-            $count = $this->update($io, $className, $fieldName, $endPoint);
+        $this->listener->suspendListeners(function () use ($io): void {
+            $startTime = \time();
+            $count = $this->update($io, $io->getBoolOption(self::OPTION_END_POINT));
             $io->newLine();
             if (0 === $count) {
-                $io->info('No value updated.');
-            } elseif ($dryRun) {
-                $io->success(\sprintf('Updated %d values successfully. No change saved to database.', $count));
+                $io->info(\sprintf('No value updated. Duration: %s.', $io->formatDuration($startTime)));
+            } elseif ($io->getBoolOption(self::OPTION_DRY_RUN)) {
+                $io->success(\sprintf(
+                    'Updated %d values successfully. No change saved to database. Duration: %s.',
+                    $count,
+                    $io->formatDuration($startTime)
+                ));
             } else {
                 $this->manager->flush();
-                $io->success(\sprintf('Updated %d values successfully.', $count));
+                $io->success(\sprintf(
+                    'Updated %d values successfully. Duration: %s.',
+                    $count,
+                    $io->formatDuration($startTime)
+                ));
             }
         });
 
         return Command::SUCCESS;
+    }
+
+    protected function interact(InputInterface $input, OutputInterface $output): void
+    {
+        $io = new SymfonyStyle($input, $output);
+        $this->className = $this->getClassName($io);
+        $this->fieldName = $this->getFieldName($io);
     }
 
     /**
@@ -92,10 +113,6 @@ class UcFirstCommand extends Command
      */
     private function askClassName(SymfonyStyle $io): ?string
     {
-        if (!$this->isInteractive($io)) {
-            return null;
-        }
-
         $entities = $this->getEntities();
         $question = new ChoiceQuestion('Select an entity:', \array_column($entities, 'name'));
         $question->setMaxAttempts(1)
@@ -116,16 +133,12 @@ class UcFirstCommand extends Command
         return null;
     }
 
-    /**
-     * @psalm-param class-string $className
-     */
-    private function askFieldName(SymfonyStyle $io, string $className): ?string
+    private function askFieldName(SymfonyStyle $io): ?string
     {
-        if (!$this->isInteractive($io)) {
+        if (!\is_string($this->className)) {
             return null;
         }
-
-        $entry = $this->getEntities()[$className];
+        $entry = $this->getEntities()[$this->className];
         $name = $entry['name'];
         $question = new ChoiceQuestion("Select a field name for the '$name' entity:", $entry['fields'], 0);
         $question->setMaxAttempts(1)
@@ -210,17 +223,16 @@ class UcFirstCommand extends Command
         return $this->entities;
     }
 
-    /**
-     * @psalm-param class-string $className
-     */
-    private function getFieldName(SymfonyStyle $io, string $className): ?string
+    private function getFieldName(SymfonyStyle $io): ?string
     {
         $fieldName = $io->getOption(self::OPTION_FIELD);
         if (!\is_string($fieldName)) {
-            return $this->askFieldName($io, $className);
+            return $this->askFieldName($io);
         }
-
-        $entity = $this->getEntities()[$className];
+        if (!\is_string($this->className)) {
+            return null;
+        }
+        $entity = $this->getEntities()[$this->className];
         foreach ($entity['fields'] as $field) {
             if (StringUtils::equalIgnoreCase($field, $fieldName)) {
                 return $field;
@@ -247,39 +259,26 @@ class UcFirstCommand extends Command
         return $names;
     }
 
-    private function isInteractive(SymfonyStyle $io): bool
+    private function update(SymfonyStyle $io, bool $endPoint): int
     {
-        if ($io->isInteractive()) {
-            $io->error('Unable to ask question in interactive mode.');
-
-            return true;
+        if (!\is_string($this->className) || !\is_string($this->fieldName)) {
+            return 0;
         }
-
-        return false;
-    }
-
-    /**
-     * @psalm-param class-string $className
-     */
-    private function update(SymfonyStyle $io, string $className, string $fieldName, bool $endPoint): int
-    {
-        $entities = $this->manager->getRepository($className)->findAll();
+        $entities = $this->manager->getRepository($this->className)->findAll();
         if ([] === $entities) {
             return 0;
         }
 
         $count = 0;
         $accessor = PropertyAccess::createPropertyAccessor();
-        $io->progressStart(\count($entities));
-        foreach ($entities as $entity) {
+        foreach ($io->progressIterate($entities) as $entity) {
             /** @psalm-var string|null $oldValue */
-            $oldValue = $accessor->getValue($entity, $fieldName);
+            $oldValue = $accessor->getValue($entity, $this->fieldName);
             $newValue = $this->convert($oldValue, $endPoint);
             if ($oldValue !== $newValue) {
-                $accessor->setValue($entity, $fieldName, $newValue);
+                $accessor->setValue($entity, $this->fieldName, $newValue);
                 ++$count;
             }
-            $io->progressAdvance();
         }
 
         return $count;

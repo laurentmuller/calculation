@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle as BaseSymfonyStyle;
@@ -28,6 +29,16 @@ class SymfonyStyle extends BaseSymfonyStyle
     {
         $this->input = $input;
         parent::__construct($input, $output);
+    }
+
+    /**
+     * Gets the formatted duration for the given start time.
+     *
+     * @param int $startTime the start time
+     */
+    public function formatDuration(int $startTime): string
+    {
+        return Helper::formatTime(\time() - $startTime);
     }
 
     /**

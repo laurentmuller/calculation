@@ -31,7 +31,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     public function outputGroup(PdfGroupEvent $event): bool
     {
         /** @var Task $task */
-        $task = $event->group->getKey();
+        $task = $event->getGroupKey();
         $category = \sprintf('%s / %s', $task->getGroupCode(), $task->getCategoryCode());
         $event->table->startRow()
             ->add(text: $task->getName(), style: $event->group->getStyle())

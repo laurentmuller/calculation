@@ -43,4 +43,12 @@ readonly class PdfGroupEvent
     {
         return $this->table->getParent();
     }
+
+    /**
+     * Gets the group key.
+     */
+    public function getGroupKey(): mixed
+    {
+        return $this->group->getKey();
+    }
 }

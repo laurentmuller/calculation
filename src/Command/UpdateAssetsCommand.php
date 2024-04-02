@@ -72,7 +72,12 @@ class UpdateAssetsCommand extends Command
 
     protected function configure(): void
     {
-        $this->addOption(self::DRY_RUN_OPTION, 'd', InputOption::VALUE_NONE, 'Check only for version update without replacing files.');
+        $this->addOption(
+            self::DRY_RUN_OPTION,
+            'd',
+            InputOption::VALUE_NONE,
+            'Check only for version update without replacing files.'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -89,7 +94,7 @@ class UpdateAssetsCommand extends Command
         if (!$this->propertyExists($configuration, ['target', 'plugins', 'sources'], true)) {
             return Command::INVALID;
         }
-        if ($this->io->getOption(self::DRY_RUN_OPTION)) { // @phpstan-ignore-line
+        if ($this->io->getBoolOption(self::DRY_RUN_OPTION)) {
             return $this->dryRun($configuration);
         }
 
@@ -101,6 +106,7 @@ class UpdateAssetsCommand extends Command
 
         $countFiles = 0;
         $countPlugins = 0;
+        $startTime = \time();
         $plugins = $configuration['plugins'];
         $prefixes = $this->getConfigArray($configuration, 'prefixes');
 
@@ -121,7 +127,9 @@ class UpdateAssetsCommand extends Command
 
                 $pluginSource = $plugin['source'];
                 if (!isset($configuration['sources'][$pluginSource])) {
-                    $this->writeError("Unable to get source '$pluginSource' for the plugin '$display'.");
+                    $this->writeError(
+                        \sprintf('Unable to get source "%s" for the plugin "%s".', $pluginSource, $display)
+                    );
 
                     return Command::FAILURE;
                 }
@@ -145,20 +153,36 @@ class UpdateAssetsCommand extends Command
                 if (\is_string($versionUrl) && \is_array($versionPaths)) {
                     $this->checkVersion($versionUrl, $versionPaths, $name, $version, $display);
                 } else {
-                    $this->writeVerbose(\sprintf('Check  : %s %s - No version information.', $display, $version), 'fg=gray');
+                    $this->writeVerbose(
+                        \sprintf('Check  : %s %s - No version information.', $display, $version),
+                        'fg=gray'
+                    );
                 }
             }
             $expected = $this->countFiles($plugins);
             if ($expected !== $countFiles) {
-                $this->writeError("Not all files has been loaded! Expected: $expected, Loaded: $countFiles.");
+                $this->writeError(
+                    \sprintf('Not all files has been loaded! Expected: %d, Loaded: %d', $expected, $countFiles)
+                );
             }
-            $this->writeVerbose("Rename directory '$targetTemp' to '$target'.");
+            $this->writeVerbose(\sprintf('Rename directory "%s" to "%s".', $targetTemp, $target));
             if (!$this->rename($targetTemp, $target)) {
-                $this->writeError("Unable rename directory '$targetTemp' to '$target'.");
+                $this->writeError(\sprintf('Unable rename directory "%s" to "%s".', $targetTemp, $target));
 
                 return Command::FAILURE;
             }
-            $this->writeSuccess("Installed $countPlugins plugins and $countFiles files to the directory '$target'.");
+
+            // @phpstan-ignore-next-line
+            $duration = $this->io->formatDuration($startTime);
+            $this->writeSuccess(
+                \sprintf(
+                    'Installed %d plugins and %d files to the directory "%s". Duration: %s.',
+                    $countPlugins,
+                    $countFiles,
+                    $target,
+                    $duration
+                )
+            );
 
             return Command::SUCCESS;
         } catch (\Exception $e) {
@@ -179,7 +203,12 @@ class UpdateAssetsCommand extends Command
         if (null === $newVersion) {
             $this->writeln("Unable to find last version for the plugin '$display'.", 'error');
         } elseif (\version_compare($version, $newVersion, '<')) {
-            $this->writeln("The plugin '$display' version '$version' can be updated to the version '$newVersion'.", 'bg=red');
+            $this->writeln(\sprintf(
+                'The plugin "%s" version "%s" can be update to the new version "%s".',
+                $display,
+                $version,
+                $newVersion
+            ), 'bg=red');
         }
     }
 
@@ -216,6 +245,7 @@ class UpdateAssetsCommand extends Command
      */
     private function dryRun(array $configuration): int
     {
+        $startTime = \time();
         $this->writeln('Check versions:');
         $pattern = '%s %-30s %-12s %s';
 
@@ -246,6 +276,8 @@ class UpdateAssetsCommand extends Command
                 $this->writeln(\sprintf($pattern, '✗', $display, $version, 'No version information.'), 'fg=gray');
             }
         }
+        $duration = $this->io?->formatDuration($startTime) ?? 'Unknown';
+        $this->writeSuccess(\sprintf('Checked versions successfully. Duration: %s.', $duration));
 
         return Command::SUCCESS;
     }
@@ -377,7 +409,7 @@ class UpdateAssetsCommand extends Command
     {
         $vendorFile = FileUtils::buildPath($publicDir, self::VENDOR_FILE_NAME);
         if (!FileUtils::exists($vendorFile)) {
-            $this->writeVerbose("The file '$vendorFile' does not exist.");
+            $this->writeVerbose(\sprintf('The file "%s" does not exist.', $vendorFile));
 
             return null;
         }
@@ -400,7 +432,7 @@ class UpdateAssetsCommand extends Command
             return FileUtils::decodeJson($filename);
         } catch (\Exception $e) {
             $this->writeError($e->getMessage());
-            $this->writeError("Unable to decode file '$filename'.");
+            $this->writeError(\sprintf('Unable to decode file "%s".', $filename));
 
             return null;
         }
@@ -415,7 +447,7 @@ class UpdateAssetsCommand extends Command
         foreach ($properties as $property) {
             if (!isset($var[$property])) {
                 if ($log) {
-                    $this->writeError("Unable to find the property '$property'.");
+                    $this->writeError(\sprintf('Unable to find the property "%s".', $property));
                 }
 
                 return false;
@@ -427,15 +459,15 @@ class UpdateAssetsCommand extends Command
 
     private function readFile(string $filename): string|false
     {
-        $this->writeVeryVerbose("Load '$filename'");
+        $this->writeVeryVerbose(\sprintf('Load "%s".', $filename));
         $content = \file_get_contents($filename);
         if (!\is_string($content)) {
-            $this->writeError("Unable to get content of '$filename'.");
+            $this->writeError(\sprintf('Unable to get content of "%s".', $filename));
 
             return false;
         }
         if ('' === $content) {
-            $this->writeError("The content of '$filename' is empty.");
+            $this->writeError(\sprintf('The content of "%s" is empty.', $filename));
 
             return false;
         }
@@ -446,29 +478,29 @@ class UpdateAssetsCommand extends Command
     private function remove(string $file): void
     {
         if (FileUtils::exists($file)) {
-            $this->writeVeryVerbose("Remove '$file'.");
+            $this->writeVeryVerbose(\sprintf('Remove "%s".', $file));
             FileUtils::remove($file);
         }
     }
 
     private function rename(string $origin, string $target): bool
     {
-        $this->writeVeryVerbose("Rename '$origin' to '$target'.");
+        $this->writeVeryVerbose(\sprintf('Rename "%s" to "%s".', $origin, $target));
         if (FileUtils::rename($origin, $target, true)) {
             return true;
         }
-        $this->writeError("Unable to rename the file '$origin' to '$target'.");
+        $this->writeError(\sprintf('Unable to rename the file "%s" to "%s".', $origin, $target));
 
         return false;
     }
 
     private function writeFile(string $filename, string $content): bool
     {
-        $this->writeVeryVerbose("Save '$filename'");
+        $this->writeVeryVerbose(\sprintf('Save "%s"', $filename));
         if (FileUtils::dumpFile($filename, $content)) {
             return true;
         }
-        $this->writeError("Unable to write content to the file '$filename'.");
+        $this->writeError(\sprintf('Unable to write content to the file "%s".', $filename));
 
         return false;
     }

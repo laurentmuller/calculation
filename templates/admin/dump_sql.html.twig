@@ -1,0 +1,22 @@
+{% extends 'cards/card_base.html.twig' %}
+{% from 'macros/_icons.html.twig' import homepage %}
+{# parameters #}
+{%- set title = 'admin.dump_sql.title' -%}
+{%- set title_icon = 'database' -%}
+{%- set title_description = 'admin.dump_sql.description' -%}
+{%- set cancel_path = path('homepage') -%}
+{# body #}
+{% block card_body %}
+<div class="border pre-scrollable pre-scrollable-highlight-php small-scrollbar">
+    {{ content|var_export_sql|raw }}
+</div>
+{% endblock %}
+{# footer #}
+{% block card_footer %}
+    {{ homepage() }}
+{% endblock %}
+{# stylesheets #}
+{% block stylesheets %}
+    {{ parent() }}
+    {{- asset_css('css/highlight.css') }}
+{% endblock %}

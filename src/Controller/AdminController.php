@@ -26,6 +26,9 @@ use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
 use App\Utils\FileUtils;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,6 +88,33 @@ class AdminController extends AbstractController
             'pools' => $pools,
             'form' => $form,
         ]);
+    }
+
+    /**
+     * Show SQL schema change.
+     *
+     * @throws \Exception
+     */
+    #[GetPost(path: '/dump-sql', name: 'admin_dump_sql')]
+    public function dumpSql(KernelInterface $kernel): Response
+    {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => 'doctrine:schema:update',
+            '--dump-sql' => true,
+        ]);
+        $output = new BufferedOutput();
+
+        $application->run($input, $output);
+        $content = $output->fetch();
+
+        if ('' === $content) {
+            return $this->redirectToHomePage('admin.dump_sql.no_change', type: FlashType::INFO);
+        }
+
+        return $this->render('admin/dump_sql.html.twig', ['content' => $content]);
     }
 
     /**

@@ -31,7 +31,6 @@ use Symfony\Component\Finder\SplFileInfo;
 #[AsCommand(name: 'app:update-images', description: 'Convert images, from the given directory, to Webp format.')]
 class WebpCommand extends Command
 {
-    use LoggerTrait;
     use MathTrait;
 
     private const OPTION_DRY_RUN = 'dry-run';
@@ -56,29 +55,29 @@ class WebpCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->io = new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
 
-        $source = \trim($this->io->getStringArgument(self::SOURCE_ARGUMENT));
+        $source = \trim($io->getStringArgument(self::SOURCE_ARGUMENT));
         if ('' === $source) {
-            $this->writeError('The "--source" argument requires a non-empty value.');
+            $io->error('The "--source" argument requires a non-empty value.');
 
             return Command::INVALID;
         }
 
         $fullPath = FileUtils::buildPath($this->projectDir, $source);
-        if (!$this->validateSource($fullPath)) {
+        if (!$this->validateSource($io, $fullPath)) {
             return Command::INVALID;
         }
 
         /** @psalm-var mixed $level */
-        $level = $this->io->getOption(self::OPTION_LEVEL);
-        if (!$this->validateLevel($level)) {
+        $level = $io->getOption(self::OPTION_LEVEL);
+        if (!$this->validateLevel($io, $level)) {
             return Command::INVALID;
         }
 
         $finder = $this->createFinder($fullPath, (int) $level);
         if (!$finder->hasResults()) {
-            $this->writeWarning(\sprintf('No image found in directory "%s".', $source));
+            $io->warning(\sprintf('No image found in directory "%s".', $source));
 
             return Command::SUCCESS;
         }
@@ -88,9 +87,10 @@ class WebpCommand extends Command
         $success = 0;
         $oldSize = 0;
         $newSize = 0;
-        $dry_run = $this->io->getBoolOption(self::OPTION_DRY_RUN);
-        $overwrite = $this->io->getBoolOption(self::OPTION_OVERWRITE);
-        $this->writeVerbose(\sprintf('Process images in "%s"', $source));
+        $startTime = \time();
+        $dry_run = $io->getBoolOption(self::OPTION_DRY_RUN);
+        $overwrite = $io->getBoolOption(self::OPTION_OVERWRITE);
+        $this->writeVerbose($io, \sprintf('Process images in "%s"', $source));
 
         foreach ($finder as $file) {
             $path = $file->getRealPath();
@@ -98,17 +98,17 @@ class WebpCommand extends Command
             if (!$this->isImage($path)) {
                 continue;
             }
-            $this->writeVerbose(\sprintf('Load : %s', $name));
+            $this->writeVerbose($io, \sprintf('Load : %s', $name));
             $extension = $this->getImageExtension($file);
             if (!$extension instanceof ImageExtension) {
-                $this->writeVerbose(\sprintf('Skip : %s', $name));
+                $this->writeVerbose($io, \sprintf('Skip : %s', $name));
                 ++$skip;
                 continue;
             }
 
             $image = $extension->createImage($path);
             if (!$image instanceof \GdImage) {
-                $this->writeln(\sprintf('Skip : %s - Unable to load image.', $name), 'error');
+                $this->writeln($io, \sprintf('Skip : %s - Unable to load image.', $name), 'error');
                 ++$error;
                 continue;
             }
@@ -116,17 +116,17 @@ class WebpCommand extends Command
             $targetFile = $this->getTargetFile($file);
             $targetName = \basename($targetFile);
             if (!$overwrite && FileUtils::exists($targetFile)) {
-                $this->writeVerbose(\sprintf('Skip : %s - Image already exist.', $targetName));
+                $this->writeVerbose($io, \sprintf('Skip : %s - Image already exist.', $targetName));
                 \imagedestroy($image);
                 ++$skip;
                 continue;
             }
 
             if ($dry_run) {
-                $this->writeVerbose(\sprintf('Save : %s (Simulate)', $targetName));
+                $this->writeVerbose($io, \sprintf('Save : %s (Simulate)', $targetName));
                 [$result, $size] = $this->saveImage($image);
             } else {
-                $this->writeVerbose(\sprintf('Save : %s', $targetName));
+                $this->writeVerbose($io, \sprintf('Save : %s', $targetName));
                 [$result, $size] = $this->saveImage($image, $targetFile);
             }
             if ($result) {
@@ -134,7 +134,7 @@ class WebpCommand extends Command
                 $newSize += $size;
                 ++$success;
             } else {
-                $this->writeln(\sprintf('Error: %s - Unable to convert image.', $targetName), 'error');
+                $this->writeln($io, \sprintf('Error: %s - Unable to convert image.', $targetName), 'error');
                 ++$error;
             }
             \imagedestroy($image);
@@ -142,23 +142,24 @@ class WebpCommand extends Command
 
         $percent = $this->safeDivide($newSize - $oldSize, $oldSize);
         $message = \sprintf(
-            'Conversion: %s, Skip: %s, Error: %s, Old Size: %s, New Size: %s, Size reduction: %s.',
+            'Conversion: %s, Skip: %s, Error: %s, Old Size: %s, New Size: %s, Size reduction: %s, Duration: %s.',
             FormatUtils::formatInt($success),
             FormatUtils::formatInt($skip),
             FormatUtils::formatInt($error),
             FormatUtils::formatInt($oldSize),
             FormatUtils::formatInt($newSize),
-            FormatUtils::formatPercent($percent, decimals: 1)
+            FormatUtils::formatPercent($percent, decimals: 1),
+            $io->formatDuration($startTime)
         );
         if (0 !== $error) {
-            $this->writeError($message);
+            $io->error($message);
 
             return Command::FAILURE;
         }
         if ($percent > 0) {
-            $this->writeWarning($message);
+            $io->warning($message);
         } else {
-            $this->writeSuccess($message);
+            $io->success($message);
         }
 
         return Command::SUCCESS;
@@ -232,15 +233,15 @@ class WebpCommand extends Command
     /**
      * @psalm-assert-if-true numeric-string $level
      */
-    private function validateLevel(mixed $level): bool
+    private function validateLevel(SymfonyStyle $io, mixed $level): bool
     {
         if (!\is_numeric($level)) {
-            $this->writeError(\sprintf('The level argument must be of type int, %s given.', \get_debug_type($level)));
+            $io->error(\sprintf('The level argument must be of type int, %s given.', \get_debug_type($level)));
 
             return false;
         }
         if ((int) $level < 0) {
-            $this->writeError(\sprintf('The level argument must be greater than or equal to 0, %d given.', $level));
+            $io->error(\sprintf('The level argument must be greater than or equal to 0, %d given.', $level));
 
             return false;
         }
@@ -248,19 +249,31 @@ class WebpCommand extends Command
         return true;
     }
 
-    private function validateSource(string $path): bool
+    private function validateSource(SymfonyStyle $io, string $path): bool
     {
         if (!FileUtils::exists($path)) {
-            $this->writeError(\sprintf('Unable to find the source directory: "%s".', $path));
+            $io->error(\sprintf('Unable to find the source directory: "%s".', $path));
 
             return false;
         }
         if (!FileUtils::isDir($path)) {
-            $this->writeError(\sprintf('The source "%s" is not a directory.', $path));
+            $io->error(\sprintf('The source "%s" is not a directory.', $path));
 
             return false;
         }
 
         return true;
+    }
+
+    private function writeln(SymfonyStyle $io, string $message, string $style = 'info'): void
+    {
+        $io->writeln("<$style>$message</>");
+    }
+
+    private function writeVerbose(SymfonyStyle $io, string $message, string $style = 'info'): void
+    {
+        if ($io->isVerbose()) {
+            $this->writeln($io, $message, $style);
+        }
     }
 }

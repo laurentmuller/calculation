@@ -83,6 +83,7 @@ class UpdateAssetsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
+
         $publicDir = $this->getPublicDir();
         if (null === $publicDir) {
             return Command::INVALID;

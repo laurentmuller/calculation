@@ -20,7 +20,6 @@ use App\Service\SuspendEventListenerService;
 use Doctrine\ORM\Query;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Helper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -69,11 +68,11 @@ class AnonymousCommand extends Command
             }
             $io->writeln('End update calculations.');
             if ($io->getBoolOption(self::OPTION_DRY_RUN)) {
-                $io->success(\sprintf('Simulate updated %d calculations. Duration: %s.', $count, Helper::formatTime($time)));
+                $io->success(\sprintf('Simulate updated %d calculations. Duration: %s.', $count, $io->formatDuration($time)));
             } else {
                 $io->writeln('Save change to database.');
                 $this->repository->flush();
-                $io->success(\sprintf('Updated %d calculations successfully. Duration: %s.', $count, Helper::formatTime($time)));
+                $io->success(\sprintf('Updated %d calculations successfully. Duration: %s.', $count, $io->formatDuration($time)));
             }
         });
 

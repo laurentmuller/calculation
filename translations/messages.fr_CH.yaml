@@ -39,6 +39,10 @@ admin:
   rights:
     title: Droits d'accès
     success: Les droits d'accès pour le rôle <b>%name%</b> ont été mis à jour avec succès.
+  dump_sql:
+    title: Mise à jour du schéma
+    description: Déclaration SQL pour mettre à jour le schéma de la base de données.
+    no_change: Le schéma de la base de données est à jour et ne nécessite aucune mise a jour.
 application_service:
   clear_error: Une erreur s'est produite lors de l'effacement du cache des propriétés.
   commit_error: Impossible de valider les changements dans le cache des propriétés.

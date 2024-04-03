@@ -1,0 +1,75 @@
+{% extends 'cards/card_base.html.twig' %}
+{% from 'macros/_icons.html.twig' import homepage %}
+{# macros #}
+{% macro outputEntry(text) -%}
+    <p class="mb-1 text-warning">{{ text }}</p>
+{% endmacro %}
+{% macro outputParam(value) -%}
+    <td class="text-success"><pre class="mb-0">{{ value|default('') }}</pre></td>
+{% endmacro %}
+{# parameters #}
+{%- set title = 'admin.commands.title' -%}
+{%- set title_icon = 'code' -%}
+{%- set title_description = 'admin.commands.description' -%}
+{# body #}
+{% block card_body %}
+<div class="mb-3">
+    <label for="command" class="form-label">{{ 'admin.commands.fields.command'|trans }}</label>
+    <select id="command" name="command" class="form-select">
+    {% for name, description in commands %}
+        <option data-help="{{ description }}" >{{ name }}</option>
+    {% endfor %}
+    </select>
+    <small class="help ms-1 mt-1"></small>
+</div>
+
+{{ _self.outputEntry('Description :') }}
+<p class="ms-2">{{ command.description }}</p>
+
+{{ _self.outputEntry('Usage :') }}
+<pre class="ms-2">{{ command.usage|join('<br>') }}</pre>
+
+{% if command.definition.arguments|length %}
+    {{ _self.outputEntry('Arguments :') }}
+    <table class="table table-sm table-borderless ms-2">
+        <tbody>
+        {% for argument in command.definition.arguments %}
+            <tr>
+                {{ _self.outputParam(argument.name) }}
+                <td>{{ argument.description|default('')|raw }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if command.definition.options|length %}
+    {{ _self.outputEntry('Options :') }}
+    <table class="table table-sm table-borderless ms-2">
+        <tbody>
+        {% for option in command.definition.options %}
+            <tr>
+                {{ _self.outputParam(option.name) }}
+                {{ _self.outputParam(option.shortcut) }}
+                <td>{{ option.description|default('')|raw }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+{% if command.help %}
+    {{ _self.outputEntry('Help :') }}
+    <pre class="ms-2 mb-0">{{ command.help|raw }}</pre>
+{% endif %}
+
+{% endblock %}
+{# footer #}
+{% block card_footer %}
+    {{ homepage() }}
+{% endblock %}
+{# javascripts #}
+{% block javascripts -%}
+    {{ parent() }}
+    {{ asset_js('js/application/commands.js') }}
+{%- endblock %}

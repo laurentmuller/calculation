@@ -41,4 +41,9 @@ return static function (FrameworkConfig $config): void {
     $config->cache()->pool('cache.service.help')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
+
+    // used by the CommandService
+    $config->cache()->pool('cache.service.command')
+        ->adapters('cache.adapter.filesystem')
+        ->defaultLifetime($one_day);
 };

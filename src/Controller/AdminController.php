@@ -23,9 +23,11 @@ use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\ApplicationService;
 use App\Service\CacheService;
+use App\Service\CommandService;
 use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
 use App\Utils\FileUtils;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -89,6 +91,27 @@ class AdminController extends AbstractController
             'pools' => $pools,
             'form' => $form,
         ]);
+    }
+
+    /**
+     * Show all commands.
+     *
+     * @throws InvalidArgumentException
+     */
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
+    #[Get(path: '/commands', name: 'admin_commands')]
+    public function commands(CommandService $service): Response
+    {
+        $command = $service->getCommand('assets:install');
+        $commands = $service->getCommands();
+        $values = \array_column($commands, 'description', 'name');
+
+        $parameters = [
+            'command' => $command,
+            'commands' => $values,
+        ];
+
+        return $this->render('admin/commands.html.twig', $parameters);
     }
 
     /**

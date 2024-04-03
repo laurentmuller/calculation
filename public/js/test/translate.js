@@ -10,7 +10,7 @@
  */
 function notify(type, message) {
     'use strict';
-    const title = $('#edit-form').data('title');
+    const title = $('.card-title').text();
     Toaster.notify(type, message, title);
 }
 
@@ -271,12 +271,8 @@ function handleService() {
     // clipboard
     if (ClipboardJS.isSupported('copy')) {
         const clipboard = new ClipboardJS('.btn-copy');
-        clipboard.on('success', function (e) {
-            onCopySuccess(e);
-        });
-        clipboard.on('error', function (e) {
-            onCopyError(e);
-        });
+        clipboard.on('success', (e) => onCopySuccess(e));
+        clipboard.on('error', (e) => onCopyError(e));
     } else {
         $('.btn-copy').remove();
     }

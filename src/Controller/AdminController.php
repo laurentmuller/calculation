@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Attribute\Get;
 use App\Attribute\GetPost;
 use App\Enums\EntityPermission;
 use App\Enums\FlashType;
@@ -95,26 +96,29 @@ class AdminController extends AbstractController
      *
      * @throws \Exception
      */
-    #[GetPost(path: '/dump-sql', name: 'admin_dump_sql')]
+    #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
+    #[Get(path: '/dump-sql', name: 'admin_dump_sql')]
     public function dumpSql(KernelInterface $kernel): Response
     {
-        $application = new Application($kernel);
-        $application->setAutoExit(false);
-
         $input = new ArrayInput([
             'command' => 'doctrine:schema:update',
             '--dump-sql' => true,
         ]);
         $output = new BufferedOutput();
 
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
         $application->run($input, $output);
         $content = $output->fetch();
 
-        if ('' === $content) {
+        if (\str_contains($content, '[OK]')) {
             return $this->redirectToHomePage('admin.dump_sql.no_change', type: FlashType::INFO);
         }
 
-        return $this->render('admin/dump_sql.html.twig', ['content' => $content]);
+        return $this->render('admin/dump_sql.html.twig', [
+            'count' => \substr_count($content, ';'),
+            'content' => $content,
+        ]);
     }
 
     /**

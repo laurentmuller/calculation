@@ -1,1526 +1,1529 @@
 about:
-  title: A propos de
-  app_customer: Client
-  app_customer_email: E-mail
-  app_customer_fax: Télécopieur
-  app_customer_phone: Téléphone
-  app_environment: Environnement
-  app_mode: Mode d'exécution
-  app_name: Application
-  app_owner: Concepteur
-  app_description: Description
-  app_version: Version
-  app_github: Code source
-  app_github_url: GitHub
-  error: Erreur lors du chargement des informations.
-  extern_link: Accéder au site
-  loading: Recherche des informations...
-  mysql: Configuration de MySQL
-  mysql_version: Configuration de MySQL v%version%
-  php: Configuration de PHP
-  php_version: Configuration de PHP v%version%
-  policy: Politique de confidentialité
-  policy_short: Confidentialité
-  symfony: Configuration de Symfony
-  symfony_version: Configuration de Symfony v%version%
-  version: Version %version%
-  expand: Afficher le contenu
-  collapse: Masquer le contenu
-  toggle: Inverser l'affichage du contenu
-  licence: Accord de licence
-  dialog:
-    title: Accord de licence
-    display: Afficher l'accord de licence
-    not_found: Impossible de trouver l'accord de licence.
-    not_loaded: Impossible de charger l'accord de licence.
-    copy_success: L'accord de licence a été copié avec succès dans le presse-papier
-    copy_error: Une erreur s'est produite lors de la copie de l'accord de licence dans le presse-papiers.
+    title: A propos de
+    app_customer: Client
+    app_customer_email: E-mail
+    app_customer_fax: Télécopieur
+    app_customer_phone: Téléphone
+    app_environment: Environnement
+    app_mode: Mode d'exécution
+    app_name: Application
+    app_owner: Concepteur
+    app_description: Description
+    app_version: Version
+    app_github: Code source
+    app_github_url: GitHub
+    error: Erreur lors du chargement des informations.
+    extern_link: Accéder au site
+    loading: Recherche des informations...
+    mysql: Configuration de MySQL
+    mysql_version: Configuration de MySQL v%version%
+    php: Configuration de PHP
+    php_version: Configuration de PHP v%version%
+    policy: Politique de confidentialité
+    policy_short: Confidentialité
+    symfony: Configuration de Symfony
+    symfony_version: Configuration de Symfony v%version%
+    version: Version %version%
+    expand: Afficher le contenu
+    collapse: Masquer le contenu
+    toggle: Inverser l'affichage du contenu
+    licence: Accord de licence
+    dialog:
+        title: Accord de licence
+        display: Afficher l'accord de licence
+        not_found: Impossible de trouver l'accord de licence.
+        not_loaded: Impossible de charger l'accord de licence.
+        copy_success: L'accord de licence a été copié avec succès dans le presse-papier
+        copy_error: Une erreur s'est produite lors de la copie de l'accord de licence dans le presse-papiers.
 admin:
-  rights:
-    title: Droits d'accès
-    success: Les droits d'accès pour le rôle <b>%name%</b> ont été mis à jour avec succès.
-  dump_sql:
-    title: Mise à jour du schéma
-    description: Déclaration SQL pour mettre à jour le schéma de la base de données.
-    no_change: Le schéma de la base de données est à jour et ne nécessite aucune mise a jour.
+    rights:
+        title: Droits d'accès
+        success: Les droits d'accès pour le rôle <b>%name%</b> ont été mis à jour avec succès.
+    dump_sql:
+        title: Mise à jour du schéma
+        description: Déclaration SQL pour mettre à jour le schéma de la base de données.
+        count: 'Nombre de modifications : %count%'
+        no_change: Le schéma de la base de données est à jour et ne nécessite aucune migration.
+        copy_error: Une erreur s'est produite lors de la copie du schéma dans le presse-papier.
+        copy_success: La copie du schéma dans le presse-papier a été réalisée avec succès.
 application_service:
-  clear_error: Une erreur s'est produite lors de l'effacement du cache des propriétés.
-  commit_error: Impossible de valider les changements dans le cache des propriétés.
-  deferred_error: Impossible de différer la sauvegarde de la propriété '%key%'.
+    clear_error: Une erreur s'est produite lors de l'effacement du cache des propriétés.
+    commit_error: Impossible de valider les changements dans le cache des propriétés.
+    deferred_error: Impossible de différer la sauvegarde de la propriété '%key%'.
 below:
-  title: Marges insuffisantes
-  description: Calculations contenant une marge globale inférieure à %margin%.
-  empty: Aucune calculation ne contient une marge globale insuffisante.
-  count: 'Nombre de calculations : %calculations%'
+    title: Marges insuffisantes
+    description: Calculations contenant une marge globale inférieure à %margin%.
+    empty: Aucune calculation ne contient une marge globale insuffisante.
+    count: 'Nombre de calculations : %calculations%'
 breadcrumb:
-  add: Nouveau
-  clone: Copie
-  delete: Suppression
-  edit: Modification
-  property: Propriétés
+    add: Nouveau
+    clone: Copie
+    delete: Suppression
+    edit: Modification
+    property: Propriétés
 calculation:
-  add:
-    title: Nouvelle calculation
-    success: La calculation Nº <b>%name%</b> a été créée avec succès.
-  delete:
-    title: Supprimer la calculation
-    message: Êtes-vous sûr de vouloir supprimer la calculation Nº <b>%name%</b> ?
-    success: La calculation Nº <b>%name%</b> a été supprimée avec succès.
-    failure: Impossible de supprimer la calculation Nº <b>%name%</b>.
-  edit:
-    add_item: Ajouter un article
-    add_task: Ajouter une tâche
-    adjust_label: Ajuster la marge utilisateur
-    adjust_title: Ajuster la marge utilisateur pour atteindre le seuil minimal de <b>%minimum%</b>
-    delete_category: Supprimer la catégorie
-    delete_group: Supprimer le groupe
-    delete_item: Supprimer l'article
-    copy_item: Créer une copie de l'article
-    delete_task: Supprimer la tâche
-    edit_item: Modifier l'article
-    edit_task: Modifier la tâche
-    empty: La calculation ne contient aucun article ou le total est égale à 0.
-    empty_items: Aucun article.
-    empty_search: Aucun article ne correspond aux critères de recherche
-    error:
-      search_customer: Erreur lors de la recherche des clients.
-      search_product: Erreur lors de la recherche des articles.
-      search_unit: Erreur lors de la recherche des unités.
-      update_total: Une erreur s'est produite lors de la mise à jour des totaux de la calculation.<br><br>Veuillez ne plus modifier cette calculation et cliquer sur le bouton <b>Annuler</b>.
-      user_margin: La marge utilisateur doit être valide.
-    move_down: Déplacer vers le bas
-    move_first: Déplacer à la première place
-    move_last: Déplacer à la dernière place
-    move_up: Déplacer vers le haut
-    panel_items: Articles
-    panel_resume: Résumé
-    price:
-      title: Cliquez pour modifier directement le prix
-      edit: Modifier le prix
-      error: Le prix ne peut pas être vide.
-      tooltip: Modification du prix
-    quantity:
-      title: Cliquez pour modifier directement la quantité
-      edit: Modifier la quantité
-      error: La quantité ne peut pas être vide.
-      tooltip: Modification de la quantité
-    read_only: Calculation non-modifiable (Statut %name%).
-    sort_item: Trier les groupes, les catégories et les articles
-    success: La calculation Nº <b>%name%</b> a été mise à jour avec succès.
-    title: Calculation Nº %id%
-    title_short: Modifier la calculation
-  clone:
-    title: Copie d'une calculation
-  fields:
-    created: Création
-    createdAt: Création
-    createdBy: Création
-    customer: Client
-    date: Date
-    description: Description
-    globalMargin: Marge globale
-    group: Groupe
-    id: Numéro
-    item: Article
-    items: Articles
-    itemsTotal: Total des articles
-    margin: Marge
-    marginTotal: Total des marges
-    overallTotal: Total général
-    state: Statut
-    total: Total
-    totalNet: Total net
-    updated: Mise à jour
-    updatedAt: Mise à jour
-    updatedBy: Mise à jour
-    userMargin: Marge utilisateur
-  list:
-    title: Calculations
-    add_title: Créer une nouvelle calculation
-    empty: Aucune calculation définie.
-    excel_single_title: Exporter la calculation
-    excel_title: Exporter la liste des calculations
-    margin_below: La marge globale de <b>%margin%</b> est en dessous du seuil minimal de <b>%minimum%</b>
-    pdf_single_title: Télécharger la calculation
-    pdf_title: Télécharger la liste des calculations
-    state_all_description: Toutes les calculations
-    state_all_text: Tous les statuts
-    state_description: Statut des calculations
-    state_help: Afficher les calculations pour le statut sélectionné
-    state_title: Modifier le statut
-  name: Calculation
-  show:
-    title: Propriétés de la calculation
-  state:
-    new_state: Nouveau statut
-    success: Le statut de la calculation Nº <b>%name%</b> a été mis à jour avec succès.
-  update:
-    title: Mise à jour des calculations
-    description: Cette page vous permet de recalculer et de mettre à jour le total général des calculations.
-    dateFrom: Date de début
-    dateTo: Date de fin
-    states: Statuts
-    submit: Mettre à jour
-    last_update: 'Dernière mise à jour : %date%'
-  result:
-    description: Résultat de la mise à jour des calculations.
-    update: Nouvelle mise à jour
-    old_value: Ancien total
-    new_value: Nouveau total
-    delta: Différence
+    add:
+        title: Nouvelle calculation
+        success: La calculation Nº <b>%name%</b> a été créée avec succès.
+    delete:
+        title: Supprimer la calculation
+        message: Êtes-vous sûr de vouloir supprimer la calculation Nº <b>%name%</b> ?
+        success: La calculation Nº <b>%name%</b> a été supprimée avec succès.
+        failure: Impossible de supprimer la calculation Nº <b>%name%</b>.
+    edit:
+        add_item: Ajouter un article
+        add_task: Ajouter une tâche
+        adjust_label: Ajuster la marge utilisateur
+        adjust_title: Ajuster la marge utilisateur pour atteindre le seuil minimal de <b>%minimum%</b>
+        delete_category: Supprimer la catégorie
+        delete_group: Supprimer le groupe
+        delete_item: Supprimer l'article
+        copy_item: Créer une copie de l'article
+        delete_task: Supprimer la tâche
+        edit_item: Modifier l'article
+        edit_task: Modifier la tâche
+        empty: La calculation ne contient aucun article ou le total est égale à 0.
+        empty_items: Aucun article.
+        empty_search: Aucun article ne correspond aux critères de recherche
+        error:
+            search_customer: Erreur lors de la recherche des clients.
+            search_product: Erreur lors de la recherche des articles.
+            search_unit: Erreur lors de la recherche des unités.
+            update_total: Une erreur s'est produite lors de la mise à jour des totaux de la calculation.<br><br>Veuillez ne plus modifier cette calculation et cliquer sur le bouton <b>Annuler</b>.
+            user_margin: La marge utilisateur doit être valide.
+        move_down: Déplacer vers le bas
+        move_first: Déplacer à la première place
+        move_last: Déplacer à la dernière place
+        move_up: Déplacer vers le haut
+        panel_items: Articles
+        panel_resume: Résumé
+        price:
+            title: Cliquez pour modifier directement le prix
+            edit: Modifier le prix
+            error: Le prix ne peut pas être vide.
+            tooltip: Modification du prix
+        quantity:
+            title: Cliquez pour modifier directement la quantité
+            edit: Modifier la quantité
+            error: La quantité ne peut pas être vide.
+            tooltip: Modification de la quantité
+        read_only: Calculation non-modifiable (Statut %name%).
+        sort_item: Trier les groupes, les catégories et les articles
+        success: La calculation Nº <b>%name%</b> a été mise à jour avec succès.
+        title: Calculation Nº %id%
+        title_short: Modifier la calculation
+    clone:
+        title: Copie d'une calculation
+    fields:
+        created: Création
+        createdAt: Création
+        createdBy: Création
+        customer: Client
+        date: Date
+        description: Description
+        globalMargin: Marge globale
+        group: Groupe
+        id: Numéro
+        item: Article
+        items: Articles
+        itemsTotal: Total des articles
+        margin: Marge
+        marginTotal: Total des marges
+        overallTotal: Total général
+        state: Statut
+        total: Total
+        totalNet: Total net
+        updated: Mise à jour
+        updatedAt: Mise à jour
+        updatedBy: Mise à jour
+        userMargin: Marge utilisateur
+    list:
+        title: Calculations
+        add_title: Créer une nouvelle calculation
+        empty: Aucune calculation définie.
+        excel_single_title: Exporter la calculation
+        excel_title: Exporter la liste des calculations
+        margin_below: La marge globale de <b>%margin%</b> est en dessous du seuil minimal de <b>%minimum%</b>
+        pdf_single_title: Télécharger la calculation
+        pdf_title: Télécharger la liste des calculations
+        state_all_description: Toutes les calculations
+        state_all_text: Tous les statuts
+        state_description: Statut des calculations
+        state_help: Afficher les calculations pour le statut sélectionné
+        state_title: Modifier le statut
+    name: Calculation
+    show:
+        title: Propriétés de la calculation
+    state:
+        new_state: Nouveau statut
+        success: Le statut de la calculation Nº <b>%name%</b> a été mis à jour avec succès.
+    update:
+        title: Mise à jour des calculations
+        description: Cette page vous permet de recalculer et de mettre à jour le total général des calculations.
+        dateFrom: Date de début
+        dateTo: Date de fin
+        states: Statuts
+        submit: Mettre à jour
+        last_update: 'Dernière mise à jour : %date%'
+    result:
+        description: Résultat de la mise à jour des calculations.
+        update: Nouvelle mise à jour
+        old_value: Ancien total
+        new_value: Nouveau total
+        delta: Différence
 calculationgroup:
-  fields:
-    amount: Montant
-    calculation: Calculation
-    category: Catégorie
-    code: Groupe
-    items: Articles
-  name: Groupe
+    fields:
+        amount: Montant
+        calculation: Calculation
+        category: Catégorie
+        code: Groupe
+        items: Articles
+    name: Groupe
 calculationitem:
-  add:
-    title: Nouvel article
-  edit:
-    title: Edition d'un article
-  fields:
-    category: Catégorie
-    description: Description
-    price: Prix
-    quantity: Quantité
-    total: Total
-    unit: Unité
-  name: Article
+    add:
+        title: Nouvel article
+    edit:
+        title: Edition d'un article
+    fields:
+        category: Catégorie
+        description: Description
+        price: Prix
+        quantity: Quantité
+        total: Total
+        unit: Unité
+    name: Article
 calculationstate:
-  add:
-    title: Nouveau statut
-    success: Le statut <b>%name%</b> a été créé avec succès.
-  delete:
-    title: Supprimer le statut
-    message: Êtes-vous sûr de vouloir supprimer le statut <b>%name%</b> ?
-    success: Le statut <b>%name%</b> a été supprimé avec succès.
-    failure: Impossible de supprimer le statut <b>%name%</b>. Il est référencé dans %calculations%.
-  edit:
-    title: Modifier le statut
-    success: Le statut <b>%name%</b> a été mis à jour avec succès.
-  clone:
-    title: Copie d'un statut
-  fields:
-    calculations: Calculations
-    code: Nom
-    color: Couleur
-    description: Description
-    editable: Modifiable
-  list:
-    title: Statuts
-    add_title: Créer un nouveau statut
-    calculation_title: Afficher les calculations de ce statut
-    editable: Modifiable
-    empty: Aucun statut défini.
-    excel_title: Exporter la liste des statuts
-    not_editable: Non-Modifiable
-    pdf_title: Télécharger la liste des statuts
-  name: Statut
-  show:
-    title: Propriétés du statut
+    add:
+        title: Nouveau statut
+        success: Le statut <b>%name%</b> a été créé avec succès.
+    delete:
+        title: Supprimer le statut
+        message: Êtes-vous sûr de vouloir supprimer le statut <b>%name%</b> ?
+        success: Le statut <b>%name%</b> a été supprimé avec succès.
+        failure: Impossible de supprimer le statut <b>%name%</b>. Il est référencé dans %calculations%.
+    edit:
+        title: Modifier le statut
+        success: Le statut <b>%name%</b> a été mis à jour avec succès.
+    clone:
+        title: Copie d'un statut
+    fields:
+        calculations: Calculations
+        code: Nom
+        color: Couleur
+        description: Description
+        editable: Modifiable
+    list:
+        title: Statuts
+        add_title: Créer un nouveau statut
+        calculation_title: Afficher les calculations de ce statut
+        editable: Modifiable
+        empty: Aucun statut défini.
+        excel_title: Exporter la liste des statuts
+        not_editable: Non-Modifiable
+        pdf_title: Télécharger la liste des statuts
+    name: Statut
+    show:
+        title: Propriétés du statut
 calendar:
-  invalid_month: Le mois doit être compris entre 1 et 12.
-  invalid_week: La semaine doit être comprises entre 1 et 53.
-  month_current: Mois courant (%month% %year%)
-  month_next: Mois suivant (%month% %year%)
-  month_previous: Mois précédent (%month% %year%)
-  month_show: Afficher le mois (%month% %year%)
-  month_title: '%month% %year%'
-  week_current: Semaine courante (%week% / %year%)
-  week_next: Semaine suivante (%week% / %year%)
-  week_previous: Semaine précédente (%week% / %year%)
-  week_short: Sem.
-  week_show: Afficher la semaine (%week% / %year%)
-  week_title: Semaine %week% / %year%
-  year_current: Année courante (%year%)
-  year_next: Année suivante (%year%)
-  year_previous: Année précédente (%year%)
-  year_show: Afficher l'année (%year%)
-  year_title: Calendrier %year%
+    invalid_month: Le mois doit être compris entre 1 et 12.
+    invalid_week: La semaine doit être comprises entre 1 et 53.
+    month_current: Mois courant (%month% %year%)
+    month_next: Mois suivant (%month% %year%)
+    month_previous: Mois précédent (%month% %year%)
+    month_show: Afficher le mois (%month% %year%)
+    month_title: '%month% %year%'
+    week_current: Semaine courante (%week% / %year%)
+    week_next: Semaine suivante (%week% / %year%)
+    week_previous: Semaine précédente (%week% / %year%)
+    week_short: Sem.
+    week_show: Afficher la semaine (%week% / %year%)
+    week_title: Semaine %week% / %year%
+    year_current: Année courante (%year%)
+    year_next: Année suivante (%year%)
+    year_previous: Année précédente (%year%)
+    year_show: Afficher l'année (%year%)
+    year_title: Calendrier %year%
 captcha:
-  title: Image de contrôle
-  label: Code de contrôle
-  refresh: Générer une nouvelle image
+    title: Image de contrôle
+    label: Code de contrôle
+    refresh: Générer une nouvelle image
 category:
-  add:
-    title: Nouvelle catégorie
-    success: La catégorie <b>%name%</b> a été créée avec succès.
-  delete:
-    title: Supprimer la catégorie
-    message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
-    success: La catégorie <b>%name%</b> a été supprimée avec succès.
-    failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans :'
-  edit:
-    title: Modifier la catégorie
-    success: La catégorie <b>%name%</b> a été mise à jour avec succès.
-  clone:
-    title: Copie d'une catégorie
-  fields:
-    code: Nom
-    description: Description
-    group: Groupe
-    products: Articles
-    tasks: Tâches
-  list:
-    title: Catégories
-    add_title: Créer une nouvelle catégorie
-    empty: Aucune catégorie définie.
-    excel_title: Exporter la liste des catégories
-    group_all_text: Tous les groupes
-    group_help: Afficher les catégories pour le groupe sélectionné
-    pdf_title: Télécharger la liste des catégories
-    product_title: Afficher les articles de cette catégorie
-    task_title: Afficher les tâches de cette catégorie
-  name: Catégorie
-  show:
-    title: Propriétés de la catégorie
+    add:
+        title: Nouvelle catégorie
+        success: La catégorie <b>%name%</b> a été créée avec succès.
+    delete:
+        title: Supprimer la catégorie
+        message: Êtes-vous sûr de vouloir supprimer la catégorie <b>%name%</b> ?
+        success: La catégorie <b>%name%</b> a été supprimée avec succès.
+        failure: 'Impossible de supprimer la catégorie <b>%name%</b>. Elle est référencée dans :'
+    edit:
+        title: Modifier la catégorie
+        success: La catégorie <b>%name%</b> a été mise à jour avec succès.
+    clone:
+        title: Copie d'une catégorie
+    fields:
+        code: Nom
+        description: Description
+        group: Groupe
+        products: Articles
+        tasks: Tâches
+    list:
+        title: Catégories
+        add_title: Créer une nouvelle catégorie
+        empty: Aucune catégorie définie.
+        excel_title: Exporter la liste des catégories
+        group_all_text: Tous les groupes
+        group_help: Afficher les catégories pour le groupe sélectionné
+        pdf_title: Télécharger la liste des catégories
+        product_title: Afficher les articles de cette catégorie
+        task_title: Afficher les tâches de cette catégorie
+    name: Catégorie
+    show:
+        title: Propriétés de la catégorie
 clear_cache:
-  title: Vider le cache
-  message: "Êtes-vous sûr de vouloir vider le cache de l'application (taille actuelle : %size%) ?"
-  note: '<b>Note : </b>Cette opération peut durer un certain temps.'
-  submit: Vider
-  list: Liste des caches
-  success: Le cache de l'application a été vidé avec succès.
-  failure: Impossible de vider le cache de l'application.
+    title: Vider le cache
+    message: "Êtes-vous sûr de vouloir vider le cache de l'application (taille actuelle : %size%) ?"
+    note: '<b>Note : </b>Cette opération peut durer un certain temps.'
+    submit: Vider
+    list: Liste des caches
+    success: Le cache de l'application a été vidé avec succès.
+    failure: Impossible de vider le cache de l'application.
 common:
-  actions: Actions
-  button_add: Nouveau
-  button_back: Retour
-  button_back_list: Retour à la liste
-  button_browse: Parcourir
-  button_cancel: Annuler
-  button_clone: Créer une copie
-  button_close: Fermer
-  button_copy: Copier
-  button_delete: Supprimer
-  button_edit: Modifier
-  button_export: Exporter
-  button_export_pdf: Exporter vers le format de document portable (PDF)
-  button_export_excel: Exporter vers le format Microsoft® Excel®
-  button_export_word: Exporter vers le format Microsoft® Word®
-  button_excel_list: Exporter la liste
-  button_card: Mode mosaïque
-  button_import: Importer
-  button_ok: OK
-  button_pdf: Télécharger
-  button_pdf_list: Télécharger la liste
-  button_property: Propriétés
-  button_refresh: Actualiser
-  button_search: Rechercher
-  button_show: Afficher
-  button_table: Mode tabulaire
-  button_submit_edit: Enregistrer
-  button_submit_add: Ajouter
-  button_send: Envoyer
-  clone_description: '%description% - Copie'
-  count: "Nombre d'éléments : %count%"
-  add_success: L'objet <b>%name%</b> a été ajouté avec succès.
-  edit_success: L'objet <b>%name%</b> a été mis à jour avec succès.
-  delete_success: L'objet <b>%name%</b> a été supprimé avec succès.
-  delete_title: Supprimer un objet
-  delete_message: Êtes-vous sûr de vouloir supprimer l'objet <b>%name%</b> ?
-  delete_failure: Impossible de supprimer l'objet <b>%name%</b> de la base de données.
-  empty: ''
-  empty_date: Inconnue
-  empty_user: Système
-  entity_created: 'Création : %date% - %user%'
-  entity_created_empty: 'Création : Système'
-  entity_created_short: '%date% - %user%'
-  entity_created_tooltip: Date de création et nom de l'utilisateur
-  entity_updated: 'Mise à jour : %date% - %user%'
-  entity_updated_empty: 'Mise à jour : Système         '
-  entity_updated_short: '%date% - %user%'
-  entity_updated_tooltip: Date de mise à jour et nom de l'utilisateur
-  hide_password: Masquer le mot de passe
-  id: Numéro
-  no_script_support: Votre navigateur ne supporte pas JavaScript !
-  other_actions: Autre actions
-  global_actions: Actions globales
-  required: <span class="text-danger">*</span> = Valeur requise
-  show_password: Afficher le mot de passe
-  toggle_password: Afficher/Masquer le mot de passe
-  top_of_page: Haut de la page
-  value_disabled: Désactivé
-  value_enabled: Activé
-  value_false: Non
-  value_none: Aucune
-  value_null: Vide
-  value_true: Oui
-  value_unknown: Inconnu
-  save_data: Sauvegarde des données...
-  data_changed: Données modifiées
-  api_documentation: Documentation (API)
-  api_documentation_help: Accéder à la documentation de l'interface d'application
+    actions: Actions
+    button_add: Nouveau
+    button_back: Retour
+    button_back_list: Retour à la liste
+    button_browse: Parcourir
+    button_cancel: Annuler
+    button_clone: Créer une copie
+    button_close: Fermer
+    button_copy: Copier
+    button_delete: Supprimer
+    button_edit: Modifier
+    button_export: Exporter
+    button_export_pdf: Exporter vers le format de document portable (PDF)
+    button_export_excel: Exporter vers le format Microsoft® Excel®
+    button_export_word: Exporter vers le format Microsoft® Word®
+    button_excel_list: Exporter la liste
+    button_card: Mode mosaïque
+    button_import: Importer
+    button_ok: OK
+    button_pdf: Télécharger
+    button_pdf_list: Télécharger la liste
+    button_property: Propriétés
+    button_refresh: Actualiser
+    button_search: Rechercher
+    button_show: Afficher
+    button_table: Mode tabulaire
+    button_submit_edit: Enregistrer
+    button_submit_add: Ajouter
+    button_send: Envoyer
+    clone_description: '%description% - Copie'
+    count: "Nombre d'éléments : %count%"
+    add_success: L'objet <b>%name%</b> a été ajouté avec succès.
+    edit_success: L'objet <b>%name%</b> a été mis à jour avec succès.
+    delete_success: L'objet <b>%name%</b> a été supprimé avec succès.
+    delete_title: Supprimer un objet
+    delete_message: Êtes-vous sûr de vouloir supprimer l'objet <b>%name%</b> ?
+    delete_failure: Impossible de supprimer l'objet <b>%name%</b> de la base de données.
+    empty: ''
+    empty_date: Inconnue
+    empty_user: Système
+    entity_created: 'Création : %date% - %user%'
+    entity_created_empty: 'Création : Système'
+    entity_created_short: '%date% - %user%'
+    entity_created_tooltip: Date de création et nom de l'utilisateur
+    entity_updated: 'Mise à jour : %date% - %user%'
+    entity_updated_empty: 'Mise à jour : Système         '
+    entity_updated_short: '%date% - %user%'
+    entity_updated_tooltip: Date de mise à jour et nom de l'utilisateur
+    hide_password: Masquer le mot de passe
+    id: Numéro
+    no_script_support: Votre navigateur ne supporte pas JavaScript !
+    other_actions: Autre actions
+    global_actions: Actions globales
+    required: <span class="text-danger">*</span> = Valeur requise
+    show_password: Afficher le mot de passe
+    toggle_password: Afficher/Masquer le mot de passe
+    top_of_page: Haut de la page
+    value_disabled: Désactivé
+    value_enabled: Activé
+    value_false: Non
+    value_none: Aucune
+    value_null: Vide
+    value_true: Oui
+    value_unknown: Inconnu
+    save_data: Sauvegarde des données...
+    data_changed: Données modifiées
+    api_documentation: Documentation (API)
+    api_documentation_help: Accéder à la documentation de l'interface d'application
 simulate:
-  label: Simuler la mise à jour
-  help: Simule une mise à jour sans enregistrer les changements dans la base de données.
-  confirm: Confirmer la mise à jour des données
-  error: Vous devez cochez le message de confirmation.
-  message: La mise à jour a été simulée. Aucun changement n'a été effectué dans la base de données.
+    label: Simuler la mise à jour
+    help: Simule une mise à jour sans enregistrer les changements dans la base de données.
+    confirm: Confirmer la mise à jour des données
+    error: Vous devez cochez le message de confirmation.
+    message: La mise à jour a été simulée. Aucun changement n'a été effectué dans la base de données.
 cookie_banner:
-  accept: Accepter
-  accept_title: Accepter la politique de confidentialité
-  link: En savoir plus
-  link_title: Afficher la politique de confidentialité
-  success: Merci d'avoir accepté notre politique de confidentialité.
-  message: Afin de vous proposer le meilleur service possible, ce site utilise des cookies. En acceptant de continuer sur ce site, vous déclarez accepter leurs utilisations.
+    accept: Accepter
+    accept_title: Accepter la politique de confidentialité
+    link: En savoir plus
+    link_title: Afficher la politique de confidentialité
+    success: Merci d'avoir accepté notre politique de confidentialité.
+    message: Afin de vous proposer le meilleur service possible, ce site utilise des cookies. En acceptant de continuer sur ce site, vous déclarez accepter leurs utilisations.
 customer:
-  add:
-    title: Nouveau client
-    success: Le client <b>%name%</b> a été créé avec succès.
-  delete:
-    title: Supprimer le client
-    message: Êtes-vous sûr de vouloir supprimer le client <b>%name%</b> ?
-    success: Le client <b>%name%</b> a été supprimé avec succès.
-    failure: Impossible de supprimer le client <b>%name%</b>.
-  edit:
-    title: Modifier le client
-    success: Le client <b>%name%</b> a été mis à jour avec succès.
-    error_search: Une erreur s'est produite lors de la recherche de l'adresse.
-  fields:
-    address: Adresse
-    birthday: Date de naissance
-    city: Localité
-    company: Société
-    email: E-Mail
-    firstName: Prénom
-    fullName: Contact
-    lastName: Nom
-    nameAndCompany: Contact / Société
-    title: Titre
-    webSite: Site web
-    zipCity: NPA / Localité
-    zipCode: NPA
-    country: Pays
-  list:
-    title: Clients
-    add_title: Créer un nouveau client
-    pdf_title: Télécharger la liste des clients
-    excel_title: Exporter la liste des clients
-    empty: Aucun client défini.
-  name: Client
-  show:
-    title: Propriétés du client
+    add:
+        title: Nouveau client
+        success: Le client <b>%name%</b> a été créé avec succès.
+    delete:
+        title: Supprimer le client
+        message: Êtes-vous sûr de vouloir supprimer le client <b>%name%</b> ?
+        success: Le client <b>%name%</b> a été supprimé avec succès.
+        failure: Impossible de supprimer le client <b>%name%</b>.
+    edit:
+        title: Modifier le client
+        success: Le client <b>%name%</b> a été mis à jour avec succès.
+        error_search: Une erreur s'est produite lors de la recherche de l'adresse.
+    fields:
+        address: Adresse
+        birthday: Date de naissance
+        city: Localité
+        company: Société
+        email: E-Mail
+        firstName: Prénom
+        fullName: Contact
+        lastName: Nom
+        nameAndCompany: Contact / Société
+        title: Titre
+        webSite: Site web
+        zipCity: NPA / Localité
+        zipCode: NPA
+        country: Pays
+    list:
+        title: Clients
+        add_title: Créer un nouveau client
+        pdf_title: Télécharger la liste des clients
+        excel_title: Exporter la liste des clients
+        empty: Aucun client défini.
+    name: Client
+    show:
+        title: Propriétés du client
 datatable:
-  all: Tous
-  clear: Effacer les critères de recherche
-  elements: éléments
-  search: Rechercher
-  show: Afficher
-  no_action: Aucune action disponible
-  dialog_page: Page %page% / %pages%
-  dialog_title: Sélectionner une page
-  dialog_message: 'Veuillez sélectionner le numéro de page que vous désirez afficher :'
-duplicate:
-  count: "Nombre de calculations : %calculations% - Nombre d'articles : %items%"
-  description: Calculations contenant le même article plus d'une fois.
-  empty: Aucune calculation ne contient des articles en double.
-  title: Articles à double
-empty:
-  count: "Nombre de calculations : %calculations% - Nombre d'articles : %items%"
-  description: Calculations contenant un article avec une quantité ou un prix égale à 0.
-  empty: Aucune calculation ne contient des articles sans quantité ou sans prix.
-  title: Articles vides
-environment:
-  dev: Développement
-  local: Locale
-  prod: Production
-  test: Test
-  switch: Basculer en mode %name%
-error_page:
-  default_title: Erreur
-  description: Une erreur est survenue dans l'exécution du programme.
-  details: Détails de l'erreur
-  fields:
-    code: Code
-    file: Fichier
-    line: Ligne
-    message: Message
-    trace: Trace
-  link: N'hésitez pas à <a href="mailto:%mailto%?subject=%subject%">contacter le responsable</a> du site pour signaler cette erreur.
-  property: Propriété
-  title: Erreur %status_code%
-  value: Valeur
-errors:
-  invalid_request: La demande Http est invalide.
-  item_not_found: Impossible de retrouver l'objet '%class%' No %id% dans la base de données.
-  page_not_found: La page %page% n'existe pas.
-  render_document: Impossible de générer le document ou le document ne contient aucune donnée.
-exchange_rate:
-  amount: Montant
-  description: Choisissez les devises et le montant pour obtenir le taux de change.
-  last_update: 'Dernière mise à jour : %date%'
-  next_update: 'Prochaine mise à jour : %date%'
-  rate: 'Taux de change : %base% = %target%'
-  quota: "Demandes restantes jusqu'au %date% : %remaining% / %allowed%"
-  result: Résultat
-  source: Devise locale
-  swap_label: Inverser
-  target: Devise étrangère
-  title: Calculateur de change
-filetype:
-  image: Image
-  maxfiles: Le nombre maximal de fichiers sélectionnés ne doit pas dépasser {0}.
-  maxsize: La taille des fichiers ne doit pas dépasser {0} {1} chacun.
-  multiple: '{0} fichiers'
-  placeholder: Aucun fichier choisi
-  sizes: Bytes,Kb,Mb,Gb,Tb
-flash_bag:
-  danger: Erreur
-  info: Information
-  success: Confirmation
-  warning: Avertissement
-footer:
-  about_title: Afficher les informations à propos de l'application
-  breadcrumb_title: Accéder à la page %title%
-  copyright: Copyright © %year% %owner%
-  copyright_title: Afficher le site du concepteur de l'application
-  environment_title: Environnement d'exécution de l'application
-generate:
-  description: Cet outil permet de générer des données aléatoires.
-  error:
-    empty: Aucune donnée n'a été générée.
-    failed: Une erreur s'est produite lors de la génération des données.
-  fields:
-    count: Nombre
-    entity: Objet à générer
-  result_link: Afficher les données générées
-  result_text: Données générées
-  submit_text: Générer
-  title: Générateur de données
-globalmargin:
-  add:
-    success: La marge globale <b>%name%</b> a été créée avec succès.
-  delete:
-    success: La marge globale <b>%name%</b> a été supprimée avec succès.
-  edit:
-    title: Modifier les marges globales
-    success: La marge globale <b>%name%</b> a été mise à jour avec succès.
-  fields:
-    minimum: Minimum
-    maximum: Maximum
-    delta: Écart
-    margin: Marge
-    margin_percent: Marge (%)
-  list:
-    title: Marges globales
-    empty: Aucune marge globale définie.
-    excel_title: Exporter la liste des marges globales
-    pdf_title: Télécharger la liste des marges globales
-  name: Marge globale
-  show:
-    title: Propriétés de la marge globale
-group:
-  add:
-    title: Nouveau groupe
-    success: Le groupe <b>%name%</b> a été créé avec succès.
-  delete:
-    title: Supprimer le groupe
-    message: Êtes-vous sûr de vouloir supprimer le groupe <b>%name%</b> ?
-    success: Le groupe <b>%name%</b> a été supprimé avec succès.
-    failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans :'
-  edit:
-    title: Modifier le groupe
-    success: Le groupe <b>%name%</b> a été mise à jour avec succès.
-    add_margin: Ajouter une marge
-    delete_margin: Supprimer la marge
-    empty_margins: Aucune marge définie.
-    sort_margins: Trier les marges
-  clone:
-    title: Copie d'un groupe
-  fields:
-    categories: Catégories
-    code: Nom
-    description: Description
-    margins: Marges
-  list:
-    title: Groupes
-    add_title: Créer un nouveau groupe
-    empty: Aucun groupe défini.
-    excel_title: Exporter la liste des groupes
-    pdf_title: Télécharger la liste des groupes
-    category_title: Afficher les catégories de ce groupe
-    product_title: Afficher les articles de ce groupe
-    task_title: Afficher les tâches de ce groupe
-  name: Groupe
-  show:
-    title: Propriétés du groupe
-help:
-  title: Aide
-  title_name: Aide - %name%
-  navigation_menu: Barre de navigation
-  main_menu: Menu principal
-  home_menu: Page d'accueil de l'aide
-  dialog_menu: Pages de l'application
-  entity_menu: Catalogue (base de données)
-  description: Bienvenue dans le système d'aide de l'application <b>%app_name_version%</b>.
-  actions:
-    clear: Effacer
-    pages: Lignes par page
+    all: Tous
+    clear: Effacer les critères de recherche
+    elements: éléments
     search: Rechercher
-    sort: Trier
-    toggle: Affichage
-  fields:
-    action: Action
-    column: Colonne
-    description: Description
-    field: Champ
-    required: Requis
-    type: Type
-  labels:
-    constraints: 'Les contraintes suivantes sont appliquées :'
-    description: 'Description :'
-    edit_actions: 'Les actions suivantes peuvent être sélectionnées :'
-    edit_columns: 'La table contient les colonnes suivantes :'
-    edit_fields: 'Les champs de saisie sont définis comme suit :'
-    entity_actions: "Les actions possibles sur l'objet sélectionné sont les suivantes :"
-    entity_empty: Cet objet ne contient aucun champ.
-    entity_fields: 'Les champs sont définis comme suit :'
-    forbidden_text: Si l'objet sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.
-    global_actions: 'Les actions globales suivantes peuvent être sélectionnées :'
-    screenshot: "Capture d'écran :"
-    see_also: 'Voir aussi :'
-    switch: Basculer le mode
-  groups:
-    dialog: Dialogue
-    user_connected: Utilisateur (connecté)
-  types:
-    amount: Montant
-    collection: Collection
-    date: Date
-    identifier: Identifiant
-    percent: Pourcentage
-    quantity: Quantité
-    reference: Référence
-    text: Texte
-    boolean: Oui/Non
-    image: Image
-http_error:
-  description: Il y a eu une erreur inconnue (%status_code% - %status_text%) qui a empêché l'aboutissement de votre requête.
-  suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
-http_error_403:
-  description: Vous n'avez pas les droits pour accéder à cette page.
-  suggestion: Demandez à votre manager ou à votre administrateur système de vous donner les droits pour accéder à cette page.
-http_error_404:
-  description: Le serveur n'a pas pu trouver la page demandée.
-  suggestion: Vérifiez si l'URL ne comporte pas d'erreurs ou retournez sur la <a href="%url%">page d'accueil</a>.
-http_error_500:
-  description: Le serveur a rencontré un problème inattendu qui l'empêche de répondre à votre requête.
-  suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
-http_error_503:
-  description: Le service est temporairement indisponible ou en maintenance.
-  suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
-color_picker:
-  advanced_text: Avancé...
-  custom_text: Personnalisé
-index:
-  change_password: Modifier le mot de passe
-  disabled: <b>%username%</b>, vous ne pouvez pas accéder à ce site car votre profil a été désactivé.<br><br>Veuillez demander à votre supérieur hiérarchique de vous octroyer les droits nécessaires ou à l'administrateur du site de réactiver votre compte.
-  login: Connexion
-  logout: Déconnexion
-  menu_chart_title: Afficher le graphique
-  menu_data: Données
-  menu_info: A propos de %app_name%
-  menu_rights_admin: Droits d'accès de l'administrateur
-  menu_rights_user: Droits d'accès de l'utilisateur
-  menu_site_map: Plan du site
-  menu_table: Tables
-  menu_test: Tests
-  menu_service: Services
-  menu_theme: Thème (%name%)
-  menu_tools: Outils
-  menu_admin: Administration
-  menu_graphics: Statistiques
-  menu_graphics_month: Calculations par mois
-  menu_graphics_state: Calculations par statut
-  panel_catalog: Catalogue
-  panel_catalog_hide: Masquer le catalogue
-  panel_catalog_hide_success: Le catalogue a été masqué
-  panel_month: Calculations par mois
-  panel_month_title: Afficher les calculations pour %month%
-  panel_month_hide: Masquer les calculations par mois
-  panel_month_hide_success: Les calculations par mois ont été masquées
-  panel_table_title: Dernières calculations
-  panel_table_count: Nombre de calculations affichées
-  panel_table_count_success: Le nombre de calculations affichées a été mise à jour.
-  panel_table_user: Mes calculations
-  panel_table_user_help: Afficher uniquement les calculations que vous avez créés ou modifiés
-  panel_state: Calculations par statut
-  panel_state_title: Afficher les calculations pour le statut %code%
-  panel_state_title_all: Afficher toutes les calculations
-  panel_state_hide: Masquer les calculations par statut
-  panel_state_hide_success: Les calculations par statut ont été masquées
-  panel_title_total: Montant total des calculations
-  panel_title_count: Nombre de calculations
-  panel_title_calculation: Afficher la liste des calculations
-  panel_title_product: Afficher la liste des articles
-  panel_title_task: Afficher la liste des tâches
-  panel_title_category: Afficher la liste des catégories
-  panel_title_group: Afficher la liste des groupes
-  panel_title_calculationstate: Afficher la liste des statuts
-  panel_title_globalmargin: Afficher la liste des marges globales
-  panel_count_calculation: Nombre de calculations dans le catalogue
-  panel_count_product: Nombre d'articles dans le catalogue
-  panel_count_task: Nombre de tâches dans le catalogue
-  panel_count_category: Nombre de catégories dans le catalogue
-  panel_count_group: Nombre de groupes dans le catalogue
-  panel_count_calculationstate: Nombre de statuts dans le catalogue
-  panel_count_globalmargin: Nombre de marges globales dans le catalogue
-  title: Accueil
-  title_help: Afficher la page d'accueil
-  toggle_navigation: Basculer la navigation horizontal
-  sidebar_show: Afficher la barre latérale
-  sidebar_hide: Masquer la barre latérale
-  menu_show: Développer le menu
-  menu_hide: Réduire le menu
-list:
-  add_title: Créer un nouvel élément
-  empty_list: Aucune donnée correspondante.
-  filter: 'Filtre : {0}/{1}'
-  limit_title: Nombre d'éléments affichés par page
-  pdf_title: Télécharger la liste
-  search_placeholder: Rechercher
-  search_title: Effacer les critères de recherche
-  sort_title: Trier les données
-  sort_column: Colonne
-  sort_label: Ordre de tri
-  sort_default_title: Tri par défaut
-  sort_ascending: Tri croissant
-  sort_ascending_title: "Appliquer l'ordre de tri par défaut :<br>%name% en ordre croissant"
-  sort_descending: Tri décroissant
-  sort_descending_title: "Appliquer l'ordre de tri par défaut :<br>%name% en ordre décroissant"
-log:
-  name: Entré du journal
-  title: Journal de l'application
-  delete:
-    title: Supprimer le journal
-    message: Êtes-vous sûr de vouloir supprimer le journal de l'application ?
-    success: Le journal de l'application a été supprimé avec succès.
-    error: Impossible de supprimer le journal de l'application.
-    file: Fichier
-    size: Taille
-    entries: Nombre d'entrées
-  fields:
-    channel: Canal
-    context: Contexte
-    createdAt: Date
-    extra: Extra
-    level: Niveau
-    message: Message
-    user: Utilisateur
-  download:
-    error: Impossible de télécharger le journal de l'application.
-  list:
-    title: Journal de l'application
-    empty: Le journal de l'application ne contient aucune entrée.
-    pdf_title: Télécharger le journal
-    excel_title: Exporter le journal
-    download_title: Télécharger le fichier brut
-    refresh_title: Recharger le journal
-    file: 'Fichier : %file%'
-    level_all: Tous les niveaux
-    level_help: Afficher les entrées pour le niveau sélectionné
-    channel_all: Tous les canaux
-    channel_help: Afficher les entrées pour le canal sélectionné
-  show:
-    not_found: Impossible d'afficher l'entrée du journal.
-    title: Propriétés de l'entrée du journal
-openweather:
-  current:
-    date_calculation: Valeurs obtenue le %date%
-    empty: Aucune localité ne correspond aux <a href="#">critères de recherche</a>.
-    title: Météo
-    today: Aujourd'hui
-    imperial:
-      short: °F
-      text: Impériale (°F, mph)
-      title: Afficher les données en unités impériales (°F, mph)
-    metric:
-      short: °C
-      text: Métrique (°C, m/s)
-      title: Afficher les données en unités métriques (°C, m/s)
-  direction:
-    E: Est
-    N: Nord
-    S: Sud
-    W: Ouest
-  error:
-    empty_city: Aucune localité n'a été importée.
-  fields:
-    description: Description
-    clouds: Nébulosité
-    current: Valeurs actuelles
-    humidity: Humidité
-    last_3_hours: 3 dernières heures
-    last_hour: Dernière heure
-    locale_date: Date locale
-    miscellaneous: Divers
-    position: Position
-    position_lat: Latitude
-    position_lon: Longitude
-    position_title: Afficher la position sur Google Maps
-    pressure: Pression
-    rain: Précipitations
-    snow: Neige
-    sun: Soleil
-    sunrise: Levé
-    sunset: Couché
-    temp: Température
-    temp_current: Actuelle
-    temp_day: Température de jour
-    temp_feels_like: Ressentie
-    temp_max: Maximum
-    temp_min: Minimum
-    temp_night: Température de nuit
-    wind: Vent
-    wind_title: Vitesse du vent
-    wind_deg: Direction
-    wind_deg_title: 'Direction du vent : %degrees%'
-    wind_gust: Rafales
-    wind_speed: Vitesse
-    current_weather: Prévision actuelle
-    daily_weather: Prévision quotidienne
-    forecast_weather: Prévision horaire
-  import:
-    description: Permet de mettre à jour la liste de recherche des localités.
-    file: Fichier d'archive
-    link: Les données peuvent être téléchargées depuis le <a href="%s" target="_blank" rel="noopener noreferrer">répertoire de données</a> de <a href="%s" target="_blank" rel="noopener noreferrer">OpenWeather</a>.
-    title: Importer les localités
-  result:
-    description: Résultats de l'importation.
-    success: L'importation des localités a été réalisée avec succès.
-    failure: Une erreur s'est produite lors de l'importation des localités.
-    object: Objet
-    city: Localité
-    error: Erreur
-    valid: Valide
-    total: Total
-  search:
-    limit: Limite
-    place_holder: Veuillez saisir une localité
-    query: Localité
-    title: Rechercher une localité
-    units: Unités
-pagination:
-  counter: Entrées %start% à %end% sur %count%
-  page: Page %page%
-  page_first: Première page (1)
-  page_last: Dernière page (%page%)
-  page_next: Page suivante (%page%)
-  page_previous: Page précédente (%page%)
-parameters:
-  action_display: Afficher
-  action_test: Tester l'affichage d'une notification avec des données aléatoires
-  customize: Personnaliser
-  description: Définition des paramètres de l'application.
-  default: Valeurs par défaut
-  default_all: Toutes les préférences
-  default_visible: Les préférences affichées
-  default_help: Restaurer les préférences à leur valeur par défaut
-  display:
-    hide: Masquer
     show: Afficher
-  display_parameters:
-    hide: Masquer le groupe %name%
-    show: Afficher le groupe %name%
-  failure: Impossible d'afficher une notification.
-  fields:
-    customer_address: Adresse
-    customer_email: E-mail
-    customer_email_title: Envoyer un message électronique au client
-    customer_fax: Télécopieur
-    customer_fax_title: Envoyer un fax au client
-    customer_name: Nom
-    customer_phone: Téléphone
-    customer_phone_title: Passer un appel téléphonique au client
-    customer_url: Site internet
-    customer_url_title: Accéder au site internet du client
-    customer_zip_city: NPA / Localité
-    default_category: Catégorie
-    default_product: Article
-    default_product_edit: Éditer l'article lors de l'affichage de la nouvelle calculation
-    default_product_quantity: Quantité
-    default_state: Statut
-    security_display_captcha: Code de contrôle
-    display_mode: Mode d'affichage
-    edit_action: Action
-    message_auto_close: Fermer automatiquement
-    message_close: Fermer
-    message_icon: Icône
-    message_position: Position
-    message_progress: Barre de progression
-    message_sub_title: Sous-titre
-    message_timeout: Durée
-    message_title: Titre
-    message_height: Barre de progression
-    minimum_margin: Marge minimum
-    panel_calculation: Calculations
-    print_address: Imprimer l'adresse
-    qr_code: Code QR sur les calculations
-    time_format: Format des heures
-    status_bar: Barre d'état
-    dark_navigation: Thème sombre
-  group_customer: Client
-  group_customer_help: Données du client utilisées pour l'impression des documents.
-  group_default: Valeurs par défaut
-  group_default_help: Valeurs par défaut utilisées pour la création de nouveaux éléments et pour le calcul des marges.
-  group_display: Affichage
-  group_display_help: Mode d'affichage et d'édition des éléments.
-  group_home: Page d'accueil
-  group_home_help: Éléments affichés sur la page d'accueil.
-  group_message: Notification
-  group_message_help: Notifications affichés dans l'application.
-  group_options: Options
-  group_options_help: Autres options utilisées par l'application.
-  group_product: Article par défaut
-  group_product_help: Article à ajouter automatiquement lors de la création d'une nouvelle calculation.
-  group_security: Sécurité
-  group_security_help: Options de sécurité utilisées lors de la connection à l'application et de la définition du mot de passe.
-  helps:
-    panel_calculation: Nombre de calculations à afficher.
-    panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
-    panel_month: Afficher la liste des calculations regroupées par mois.
-    panel_state: Afficher la liste des calculations regroupées par statut.
-    print_address: L'adresse du client est imprimée sur les entêtes des documents Excel®, Word® et portable (PDF).
-    qr_code: Un code QR est imprimé à la fin du document portable (PDF) permettant d'afficher la calculation.
-    status_bar: Afficher la barre d'état au bas de l'application.
-    dark_navigation: Toujours utiliser le thème sombre pour le menu principal, le menu latéral et la barre d'état, indépendamment du thème choisi.
-  placeholders:
-    default_product: <Aucun article sélectionné>
-  success: Les paramètres de l'application ont été mis à jour avec succès.
-  title: Paramètres
-password:
-  input: Mot de passe
-  title: Mot de passe
-  success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
-  security_letters: Une lettre est obligatoire
-  security_special_char: Un caractère spécial est obligatoire
-  security_case_diff: Une majuscule et une minuscule est obligatoire
-  security_numbers: Un chiffre est obligatoire
-  security_email: Le mot de passe ne doit pas être une adresse e-mail
-  security_strength_level: Force minimum
-  security_pwned: Le mot de passe ne doit pas être compromis
-pivot:
-  column: Colonne
-  fields:
-    month: Mois
-    quarter: Trimestre
-    semester: Semestre
-    year: Année
-  highlight: Sélection en surbrillance
-  line: Ligne
-  popover: Info-bulle
-  quarter:
-    1: 1<sup>er</sup> trimestre
-    2: 2<sup>ème</sup> trimestre
-    3: 3<sup>ème</sup> trimestre
-    4: 4<sup>ème</sup> trimestre
-  semester:
-    1: 1<sup>er</sup> semestre
-    2: 2<sup>ème</sup> semestre
-  title: Tableau croisé dynamique
-  value: Valeur
-product:
-  add:
-    title: Nouvel article
-    success: L'article <b>%name%</b> a été créé avec succès.
-  delete:
-    title: Supprimer l'article
-    message: Êtes-vous sûr de vouloir supprimer l'article <b>%name%</b> ?
-    success: L'article <b>%name%</b> a été supprimé avec succès.
-    failure: Impossible de supprimer l'article <b>%name%</b>.
-  edit:
-    title: Modifier l'article
-    success: L'article <b>%name%</b> a été mis à jour avec succès.
-    error_search_unit: Une erreur s'est produite lors de la recherche des unités.
-    error_search_supplier: Une erreur s'est produite lors de la recherche des fournisseur.
-  clone:
-    title: Copie d'un article
-  fields:
-    category: Catégorie
-    description: Description
-    group: Groupe
-    price: Prix
-    supplier: Fournisseur
-    unit: Unité
-  list:
-    title: Articles
-    add_title: Créer un nouvel article
-    pdf_title: Télécharger la liste des articles
-    excel_title: Exporter la liste des articles
-    category_all_text: Toutes les catégorie
-    category_help: Afficher les articles pour le groupe ou la catégorie sélectionné
-    empty: Aucun article défini.
-  name: Article
-  result:
-    description: Résultats de la mise à jour des articles.
-    empty: Aucun article n'a été mise à jour.
-    new_price: Nouveau prix
-    new_update: Nouvelle mise à jour
-    old_price: Ancien prix
-    delta: Différence
-    updated: Articles mises à jour
+    no_action: Aucune action disponible
+    dialog_page: Page %page% / %pages%
+    dialog_title: Sélectionner une page
+    dialog_message: 'Veuillez sélectionner le numéro de page que vous désirez afficher :'
+duplicate:
+    count: "Nombre de calculations : %calculations% - Nombre d'articles : %items%"
+    description: Calculations contenant le même article plus d'une fois.
+    empty: Aucune calculation ne contient des articles en double.
+    title: Articles à double
+empty:
+    count: "Nombre de calculations : %calculations% - Nombre d'articles : %items%"
+    description: Calculations contenant un article avec une quantité ou un prix égale à 0.
+    empty: Aucune calculation ne contient des articles sans quantité ou sans prix.
+    title: Articles vides
+environment:
+    dev: Développement
+    local: Locale
+    prod: Production
+    test: Test
+    switch: Basculer en mode %name%
+error_page:
+    default_title: Erreur
+    description: Une erreur est survenue dans l'exécution du programme.
+    details: Détails de l'erreur
+    fields:
+        code: Code
+        file: Fichier
+        line: Ligne
+        message: Message
+        trace: Trace
+    link: N'hésitez pas à <a href="mailto:%mailto%?subject=%subject%">contacter le responsable</a> du site pour signaler cette erreur.
+    property: Propriété
+    title: Erreur %status_code%
     value: Valeur
-    total: Total
-  show:
-    title: Propriétés de l'article
-  update:
-    title: Mise à jour des articles
-    allProducts: Mettre à jour tous les articles
-    check_all: Sélectionner tous les articles
-    check_none: Supprimer la sélection des articles
-    check_reverse: Inverser la sélection des articles
-    description: Cette page vous permet de mettre à jour le prix des articles.
-    fixed: Montant fixe
-    fixed_help: 'Example : 50.00 + 12.00 = 62.00'
-    last_update: 'Dernière mise à jour : %date%'
-    percent: Pourcentage
-    percent_help: 'Example : 50.00 + 12% = 56.00'
-    products_error: Un ou plusieurs articles doivent être sélectionnés.
-    products_empty: '<b>Remarque :</b> Aucun article ne correspond aux critères. Veuillez sélectionner une autre catégorie ou un autre type de mise à jour.'
-    round: Arrondir au 5 centimes
-    round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
-    type: Type de mise à jour
-    submit: Mettre à jour
-profile:
-  change_password:
-    title: Modifier le mot de passe
-    success: <b>%username%</b>, votre mot de passe a été modifié avec succès.
-    failure: Impossible de trouver l'utilisateur actuel.
-  edit:
-    title: Modifier le profil
-    success: <b>%username%</b>, votre profil a été mis à jour avec succès.
-    failure: Impossible de trouver l'utilisateur actuel.
-    submit: Mettre à jour
-registration:
-  agreeTerms:
-    error: Vous devez accepter les conditions générales d'utilisation.
-    label: J'accepte les conditions générales d'utilisation de l'application.
-  confirmed: Félicitations <b>%username%</b>, votre compte est maintenant activé.
-  register:
-    title: Créer un compte
-    submit: Créer
-  subject: Création d'un compte
-  action: Confirmer
-report:
-  index: Index
-  page: Page {0} / {1}
-  fax: 'Fax : {0}'
-  phone: 'Tél. : {0}'
-  other: Autre
-  total: Total
-  calculation:
+errors:
+    invalid_request: La demande Http est invalide.
+    item_not_found: Impossible de retrouver l'objet '%class%' No %id% dans la base de données.
+    page_not_found: La page %page% n'existe pas.
+    render_document: Impossible de générer le document ou le document ne contient aucune donnée.
+exchange_rate:
     amount: Montant
-    margins: Marges
-    margin_amount: Marge (Fr.)
-    margin_percent: Marge (%)
-    resume: Résumé
+    description: Choisissez les devises et le montant pour obtenir le taux de change.
+    last_update: 'Dernière mise à jour : %date%'
+    next_update: 'Prochaine mise à jour : %date%'
+    rate: 'Taux de change : %base% = %target%'
+    quota: "Demandes restantes jusqu'au %date% : %remaining% / %allowed%"
+    result: Résultat
+    source: Devise locale
+    swap_label: Inverser
+    target: Devise étrangère
+    title: Calculateur de change
+filetype:
+    image: Image
+    maxfiles: Le nombre maximal de fichiers sélectionnés ne doit pas dépasser {0}.
+    maxsize: La taille des fichiers ne doit pas dépasser {0} {1} chacun.
+    multiple: '{0} fichiers'
+    placeholder: Aucun fichier choisi
+    sizes: Bytes,Kb,Mb,Gb,Tb
+flash_bag:
+    danger: Erreur
+    info: Information
+    success: Confirmation
+    warning: Avertissement
+footer:
+    about_title: Afficher les informations à propos de l'application
+    breadcrumb_title: Accéder à la page %title%
+    copyright: Copyright © %year% %owner%
+    copyright_title: Afficher le site du concepteur de l'application
+    environment_title: Environnement d'exécution de l'application
+generate:
+    description: Cet outil permet de générer des données aléatoires.
+    error:
+        empty: Aucune donnée n'a été générée.
+        failed: Une erreur s'est produite lors de la génération des données.
+    fields:
+        count: Nombre
+        entity: Objet à générer
+    result_link: Afficher les données générées
+    result_text: Données générées
+    submit_text: Générer
+    title: Générateur de données
+globalmargin:
+    add:
+        success: La marge globale <b>%name%</b> a été créée avec succès.
+    delete:
+        success: La marge globale <b>%name%</b> a été supprimée avec succès.
+    edit:
+        title: Modifier les marges globales
+        success: La marge globale <b>%name%</b> a été mise à jour avec succès.
+    fields:
+        minimum: Minimum
+        maximum: Maximum
+        delta: Écart
+        margin: Marge
+        margin_percent: Marge (%)
+    list:
+        title: Marges globales
+        empty: Aucune marge globale définie.
+        excel_title: Exporter la liste des marges globales
+        pdf_title: Télécharger la liste des marges globales
+    name: Marge globale
+    show:
+        title: Propriétés de la marge globale
+group:
+    add:
+        title: Nouveau groupe
+        success: Le groupe <b>%name%</b> a été créé avec succès.
+    delete:
+        title: Supprimer le groupe
+        message: Êtes-vous sûr de vouloir supprimer le groupe <b>%name%</b> ?
+        success: Le groupe <b>%name%</b> a été supprimé avec succès.
+        failure: 'Impossible de supprimer le groupe <b>%name%</b>. Il est référencé dans :'
+    edit:
+        title: Modifier le groupe
+        success: Le groupe <b>%name%</b> a été mise à jour avec succès.
+        add_margin: Ajouter une marge
+        delete_margin: Supprimer la marge
+        empty_margins: Aucune marge définie.
+        sort_margins: Trier les marges
+    clone:
+        title: Copie d'un groupe
+    fields:
+        categories: Catégories
+        code: Nom
+        description: Description
+        margins: Marges
+    list:
+        title: Groupes
+        add_title: Créer un nouveau groupe
+        empty: Aucun groupe défini.
+        excel_title: Exporter la liste des groupes
+        pdf_title: Télécharger la liste des groupes
+        category_title: Afficher les catégories de ce groupe
+        product_title: Afficher les articles de ce groupe
+        task_title: Afficher les tâches de ce groupe
+    name: Groupe
+    show:
+        title: Propriétés du groupe
+help:
+    title: Aide
+    title_name: Aide - %name%
+    navigation_menu: Barre de navigation
+    main_menu: Menu principal
+    home_menu: Page d'accueil de l'aide
+    dialog_menu: Pages de l'application
+    entity_menu: Catalogue (base de données)
+    description: Bienvenue dans le système d'aide de l'application <b>%app_name_version%</b>.
+    actions:
+        clear: Effacer
+        pages: Lignes par page
+        search: Rechercher
+        sort: Trier
+        toggle: Affichage
+    fields:
+        action: Action
+        column: Colonne
+        description: Description
+        field: Champ
+        required: Requis
+        type: Type
+    labels:
+        constraints: 'Les contraintes suivantes sont appliquées :'
+        description: 'Description :'
+        edit_actions: 'Les actions suivantes peuvent être sélectionnées :'
+        edit_columns: 'La table contient les colonnes suivantes :'
+        edit_fields: 'Les champs de saisie sont définis comme suit :'
+        entity_actions: "Les actions possibles sur l'objet sélectionné sont les suivantes :"
+        entity_empty: Cet objet ne contient aucun champ.
+        entity_fields: 'Les champs sont définis comme suit :'
+        forbidden_text: Si l'objet sélectionné ne peut pas être supprimé, l'avertissement ci-dessous est affiché.
+        global_actions: 'Les actions globales suivantes peuvent être sélectionnées :'
+        screenshot: "Capture d'écran :"
+        see_also: 'Voir aussi :'
+        switch: Basculer le mode
+    groups:
+        dialog: Dialogue
+        user_connected: Utilisateur (connecté)
+    types:
+        amount: Montant
+        collection: Collection
+        date: Date
+        identifier: Identifiant
+        percent: Pourcentage
+        quantity: Quantité
+        reference: Référence
+        text: Texte
+        boolean: Oui/Non
+        image: Image
+http_error:
+    description: Il y a eu une erreur inconnue (%status_code% - %status_text%) qui a empêché l'aboutissement de votre requête.
+    suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
+http_error_403:
+    description: Vous n'avez pas les droits pour accéder à cette page.
+    suggestion: Demandez à votre manager ou à votre administrateur système de vous donner les droits pour accéder à cette page.
+http_error_404:
+    description: Le serveur n'a pas pu trouver la page demandée.
+    suggestion: Vérifiez si l'URL ne comporte pas d'erreurs ou retournez sur la <a href="%url%">page d'accueil</a>.
+http_error_500:
+    description: Le serveur a rencontré un problème inattendu qui l'empêche de répondre à votre requête.
+    suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
+http_error_503:
+    description: Le service est temporairement indisponible ou en maintenance.
+    suggestion: Essayez de recharger cette page dans quelques minutes ou retournez sur la <a href="%url%">page d'accueil</a>.
+color_picker:
+    advanced_text: Avancé...
+    custom_text: Personnalisé
+index:
+    change_password: Modifier le mot de passe
+    disabled: <b>%username%</b>, vous ne pouvez pas accéder à ce site car votre profil a été désactivé.<br><br>Veuillez demander à votre supérieur hiérarchique de vous octroyer les droits nécessaires ou à l'administrateur du site de réactiver votre compte.
+    login: Connexion
+    logout: Déconnexion
+    menu_chart_title: Afficher le graphique
+    menu_data: Données
+    menu_info: A propos de %app_name%
+    menu_rights_admin: Droits d'accès de l'administrateur
+    menu_rights_user: Droits d'accès de l'utilisateur
+    menu_site_map: Plan du site
+    menu_table: Tables
+    menu_test: Tests
+    menu_service: Services
+    menu_theme: Thème (%name%)
+    menu_tools: Outils
+    menu_admin: Administration
+    menu_graphics: Statistiques
+    menu_graphics_month: Calculations par mois
+    menu_graphics_state: Calculations par statut
+    panel_catalog: Catalogue
+    panel_catalog_hide: Masquer le catalogue
+    panel_catalog_hide_success: Le catalogue a été masqué
+    panel_month: Calculations par mois
+    panel_month_title: Afficher les calculations pour %month%
+    panel_month_hide: Masquer les calculations par mois
+    panel_month_hide_success: Les calculations par mois ont été masquées
+    panel_table_title: Dernières calculations
+    panel_table_count: Nombre de calculations affichées
+    panel_table_count_success: Le nombre de calculations affichées a été mise à jour.
+    panel_table_user: Mes calculations
+    panel_table_user_help: Afficher uniquement les calculations que vous avez créés ou modifiés
+    panel_state: Calculations par statut
+    panel_state_title: Afficher les calculations pour le statut %code%
+    panel_state_title_all: Afficher toutes les calculations
+    panel_state_hide: Masquer les calculations par statut
+    panel_state_hide_success: Les calculations par statut ont été masquées
+    panel_title_total: Montant total des calculations
+    panel_title_count: Nombre de calculations
+    panel_title_calculation: Afficher la liste des calculations
+    panel_title_product: Afficher la liste des articles
+    panel_title_task: Afficher la liste des tâches
+    panel_title_category: Afficher la liste des catégories
+    panel_title_group: Afficher la liste des groupes
+    panel_title_calculationstate: Afficher la liste des statuts
+    panel_title_globalmargin: Afficher la liste des marges globales
+    panel_count_calculation: Nombre de calculations dans le catalogue
+    panel_count_product: Nombre d'articles dans le catalogue
+    panel_count_task: Nombre de tâches dans le catalogue
+    panel_count_category: Nombre de catégories dans le catalogue
+    panel_count_group: Nombre de groupes dans le catalogue
+    panel_count_calculationstate: Nombre de statuts dans le catalogue
+    panel_count_globalmargin: Nombre de marges globales dans le catalogue
+    title: Accueil
+    title_help: Afficher la page d'accueil
+    toggle_navigation: Basculer la navigation horizontal
+    sidebar_show: Afficher la barre latérale
+    sidebar_hide: Masquer la barre latérale
+    menu_show: Développer le menu
+    menu_hide: Réduire le menu
+list:
+    add_title: Créer un nouvel élément
+    empty_list: Aucune donnée correspondante.
+    filter: 'Filtre : {0}/{1}'
+    limit_title: Nombre d'éléments affichés par page
+    pdf_title: Télécharger la liste
+    search_placeholder: Rechercher
+    search_title: Effacer les critères de recherche
+    sort_title: Trier les données
+    sort_column: Colonne
+    sort_label: Ordre de tri
+    sort_default_title: Tri par défaut
+    sort_ascending: Tri croissant
+    sort_ascending_title: "Appliquer l'ordre de tri par défaut :<br>%name% en ordre croissant"
+    sort_descending: Tri décroissant
+    sort_descending_title: "Appliquer l'ordre de tri par défaut :<br>%name% en ordre décroissant"
+log:
+    name: Entré du journal
+    title: Journal de l'application
+    delete:
+        title: Supprimer le journal
+        message: Êtes-vous sûr de vouloir supprimer le journal de l'application ?
+        success: Le journal de l'application a été supprimé avec succès.
+        error: Impossible de supprimer le journal de l'application.
+        file: Fichier
+        size: Taille
+        entries: Nombre d'entrées
+    fields:
+        channel: Canal
+        context: Contexte
+        createdAt: Date
+        extra: Extra
+        level: Niveau
+        message: Message
+        user: Utilisateur
+    download:
+        error: Impossible de télécharger le journal de l'application.
+    list:
+        title: Journal de l'application
+        empty: Le journal de l'application ne contient aucune entrée.
+        pdf_title: Télécharger le journal
+        excel_title: Exporter le journal
+        download_title: Télécharger le fichier brut
+        refresh_title: Recharger le journal
+        file: 'Fichier : %file%'
+        level_all: Tous les niveaux
+        level_help: Afficher les entrées pour le niveau sélectionné
+        channel_all: Tous les canaux
+        channel_help: Afficher les entrées pour le canal sélectionné
+    show:
+        not_found: Impossible d'afficher l'entrée du journal.
+        title: Propriétés de l'entrée du journal
+openweather:
+    current:
+        date_calculation: Valeurs obtenue le %date%
+        empty: Aucune localité ne correspond aux <a href="#">critères de recherche</a>.
+        title: Météo
+        today: Aujourd'hui
+        imperial:
+            short: °F
+            text: Impériale (°F, mph)
+            title: Afficher les données en unités impériales (°F, mph)
+        metric:
+            short: °C
+            text: Métrique (°C, m/s)
+            title: Afficher les données en unités métriques (°C, m/s)
+    direction:
+        E: Est
+        N: Nord
+        S: Sud
+        W: Ouest
+    error:
+        empty_city: Aucune localité n'a été importée.
+    fields:
+        description: Description
+        clouds: Nébulosité
+        current: Valeurs actuelles
+        humidity: Humidité
+        last_3_hours: 3 dernières heures
+        last_hour: Dernière heure
+        locale_date: Date locale
+        miscellaneous: Divers
+        position: Position
+        position_lat: Latitude
+        position_lon: Longitude
+        position_title: Afficher la position sur Google Maps
+        pressure: Pression
+        rain: Précipitations
+        snow: Neige
+        sun: Soleil
+        sunrise: Levé
+        sunset: Couché
+        temp: Température
+        temp_current: Actuelle
+        temp_day: Température de jour
+        temp_feels_like: Ressentie
+        temp_max: Maximum
+        temp_min: Minimum
+        temp_night: Température de nuit
+        wind: Vent
+        wind_title: Vitesse du vent
+        wind_deg: Direction
+        wind_deg_title: 'Direction du vent : %degrees%'
+        wind_gust: Rafales
+        wind_speed: Vitesse
+        current_weather: Prévision actuelle
+        daily_weather: Prévision quotidienne
+        forecast_weather: Prévision horaire
+    import:
+        description: Permet de mettre à jour la liste de recherche des localités.
+        file: Fichier d'archive
+        link: Les données peuvent être téléchargées depuis le <a href="%s" target="_blank" rel="noopener noreferrer">répertoire de données</a> de <a href="%s" target="_blank" rel="noopener noreferrer">OpenWeather</a>.
+        title: Importer les localités
+    result:
+        description: Résultats de l'importation.
+        success: L'importation des localités a été réalisée avec succès.
+        failure: Une erreur s'est produite lors de l'importation des localités.
+        object: Objet
+        city: Localité
+        error: Erreur
+        valid: Valide
+        total: Total
+    search:
+        limit: Limite
+        place_holder: Veuillez saisir une localité
+        query: Localité
+        title: Rechercher une localité
+        units: Unités
+pagination:
+    counter: Entrées %start% à %end% sur %count%
+    page: Page %page%
+    page_first: Première page (1)
+    page_last: Dernière page (%page%)
+    page_next: Page suivante (%page%)
+    page_previous: Page précédente (%page%)
+parameters:
+    action_display: Afficher
+    action_test: Tester l'affichage d'une notification avec des données aléatoires
+    customize: Personnaliser
+    description: Définition des paramètres de l'application.
+    default: Valeurs par défaut
+    default_all: Toutes les préférences
+    default_visible: Les préférences affichées
+    default_help: Restaurer les préférences à leur valeur par défaut
+    display:
+        hide: Masquer
+        show: Afficher
+    display_parameters:
+        hide: Masquer le groupe %name%
+        show: Afficher le groupe %name%
+    failure: Impossible d'afficher une notification.
+    fields:
+        customer_address: Adresse
+        customer_email: E-mail
+        customer_email_title: Envoyer un message électronique au client
+        customer_fax: Télécopieur
+        customer_fax_title: Envoyer un fax au client
+        customer_name: Nom
+        customer_phone: Téléphone
+        customer_phone_title: Passer un appel téléphonique au client
+        customer_url: Site internet
+        customer_url_title: Accéder au site internet du client
+        customer_zip_city: NPA / Localité
+        default_category: Catégorie
+        default_product: Article
+        default_product_edit: Éditer l'article lors de l'affichage de la nouvelle calculation
+        default_product_quantity: Quantité
+        default_state: Statut
+        security_display_captcha: Code de contrôle
+        display_mode: Mode d'affichage
+        edit_action: Action
+        message_auto_close: Fermer automatiquement
+        message_close: Fermer
+        message_icon: Icône
+        message_position: Position
+        message_progress: Barre de progression
+        message_sub_title: Sous-titre
+        message_timeout: Durée
+        message_title: Titre
+        message_height: Barre de progression
+        minimum_margin: Marge minimum
+        panel_calculation: Calculations
+        print_address: Imprimer l'adresse
+        qr_code: Code QR sur les calculations
+        time_format: Format des heures
+        status_bar: Barre d'état
+        dark_navigation: Thème sombre
+    group_customer: Client
+    group_customer_help: Données du client utilisées pour l'impression des documents.
+    group_default: Valeurs par défaut
+    group_default_help: Valeurs par défaut utilisées pour la création de nouveaux éléments et pour le calcul des marges.
+    group_display: Affichage
+    group_display_help: Mode d'affichage et d'édition des éléments.
+    group_home: Page d'accueil
+    group_home_help: Éléments affichés sur la page d'accueil.
+    group_message: Notification
+    group_message_help: Notifications affichés dans l'application.
+    group_options: Options
+    group_options_help: Autres options utilisées par l'application.
+    group_product: Article par défaut
+    group_product_help: Article à ajouter automatiquement lors de la création d'une nouvelle calculation.
+    group_security: Sécurité
+    group_security_help: Options de sécurité utilisées lors de la connection à l'application et de la définition du mot de passe.
+    helps:
+        panel_calculation: Nombre de calculations à afficher.
+        panel_catalog: Afficher le nombre d'objets du catalogue (base de données).
+        panel_month: Afficher la liste des calculations regroupées par mois.
+        panel_state: Afficher la liste des calculations regroupées par statut.
+        print_address: L'adresse du client est imprimée sur les entêtes des documents Excel®, Word® et portable (PDF).
+        qr_code: Un code QR est imprimé à la fin du document portable (PDF) permettant d'afficher la calculation.
+        status_bar: Afficher la barre d'état au bas de l'application.
+        dark_navigation: Toujours utiliser le thème sombre pour le menu principal, le menu latéral et la barre d'état, indépendamment du thème choisi.
+    placeholders:
+        default_product: <Aucun article sélectionné>
+    success: Les paramètres de l'application ont été mis à jour avec succès.
+    title: Paramètres
+password:
+    input: Mot de passe
+    title: Mot de passe
+    success: 'Le mot de passe est valide. Les options suivantes ont été sélectionnées :'
+    security_letters: Une lettre est obligatoire
+    security_special_char: Un caractère spécial est obligatoire
+    security_case_diff: Une majuscule et une minuscule est obligatoire
+    security_numbers: Un chiffre est obligatoire
+    security_email: Le mot de passe ne doit pas être une adresse e-mail
+    security_strength_level: Force minimum
+    security_pwned: Le mot de passe ne doit pas être compromis
+pivot:
+    column: Colonne
+    fields:
+        month: Mois
+        quarter: Trimestre
+        semester: Semestre
+        year: Année
+    highlight: Sélection en surbrillance
+    line: Ligne
+    popover: Info-bulle
+    quarter:
+        1: 1<sup>er</sup> trimestre
+        2: 2<sup>ème</sup> trimestre
+        3: 3<sup>ème</sup> trimestre
+        4: 4<sup>ème</sup> trimestre
+    semester:
+        1: 1<sup>er</sup> semestre
+        2: 2<sup>ème</sup> semestre
+    title: Tableau croisé dynamique
+    value: Valeur
+product:
+    add:
+        title: Nouvel article
+        success: L'article <b>%name%</b> a été créé avec succès.
+    delete:
+        title: Supprimer l'article
+        message: Êtes-vous sûr de vouloir supprimer l'article <b>%name%</b> ?
+        success: L'article <b>%name%</b> a été supprimé avec succès.
+        failure: Impossible de supprimer l'article <b>%name%</b>.
+    edit:
+        title: Modifier l'article
+        success: L'article <b>%name%</b> a été mis à jour avec succès.
+        error_search_unit: Une erreur s'est produite lors de la recherche des unités.
+        error_search_supplier: Une erreur s'est produite lors de la recherche des fournisseur.
+    clone:
+        title: Copie d'un article
+    fields:
+        category: Catégorie
+        description: Description
+        group: Groupe
+        price: Prix
+        supplier: Fournisseur
+        unit: Unité
+    list:
+        title: Articles
+        add_title: Créer un nouvel article
+        pdf_title: Télécharger la liste des articles
+        excel_title: Exporter la liste des articles
+        category_all_text: Toutes les catégorie
+        category_help: Afficher les articles pour le groupe ou la catégorie sélectionné
+        empty: Aucun article défini.
+    name: Article
+    result:
+        description: Résultats de la mise à jour des articles.
+        empty: Aucun article n'a été mise à jour.
+        new_price: Nouveau prix
+        new_update: Nouvelle mise à jour
+        old_price: Ancien prix
+        delta: Différence
+        updated: Articles mises à jour
+        value: Valeur
+        total: Total
+    show:
+        title: Propriétés de l'article
+    update:
+        title: Mise à jour des articles
+        allProducts: Mettre à jour tous les articles
+        check_all: Sélectionner tous les articles
+        check_none: Supprimer la sélection des articles
+        check_reverse: Inverser la sélection des articles
+        description: Cette page vous permet de mettre à jour le prix des articles.
+        fixed: Montant fixe
+        fixed_help: 'Example : 50.00 + 12.00 = 62.00'
+        last_update: 'Dernière mise à jour : %date%'
+        percent: Pourcentage
+        percent_help: 'Example : 50.00 + 12% = 56.00'
+        products_error: Un ou plusieurs articles doivent être sélectionnés.
+        products_empty: '<b>Remarque :</b> Aucun article ne correspond aux critères. Veuillez sélectionner une autre catégorie ou un autre type de mise à jour.'
+        round: Arrondir au 5 centimes
+        round_help: Le nouveau prix sera arrondi au 5 centime supérieur.
+        type: Type de mise à jour
+        submit: Mettre à jour
+profile:
+    change_password:
+        title: Modifier le mot de passe
+        success: <b>%username%</b>, votre mot de passe a été modifié avec succès.
+        failure: Impossible de trouver l'utilisateur actuel.
+    edit:
+        title: Modifier le profil
+        success: <b>%username%</b>, votre profil a été mis à jour avec succès.
+        failure: Impossible de trouver l'utilisateur actuel.
+        submit: Mettre à jour
+registration:
+    agreeTerms:
+        error: Vous devez accepter les conditions générales d'utilisation.
+        label: J'accepte les conditions générales d'utilisation de l'application.
+    confirmed: Félicitations <b>%username%</b>, votre compte est maintenant activé.
+    register:
+        title: Créer un compte
+        submit: Créer
+    subject: Création d'un compte
+    action: Confirmer
+report:
+    index: Index
+    page: Page {0} / {1}
+    fax: 'Fax : {0}'
+    phone: 'Tél. : {0}'
+    other: Autre
     total: Total
-    error_qr_code: Une erreur s'est produite lors de la génération du code QR.
+    calculation:
+        amount: Montant
+        margins: Marges
+        margin_amount: Marge (Fr.)
+        margin_percent: Marge (%)
+        resume: Résumé
+        total: Total
+        error_qr_code: Une erreur s'est produite lors de la génération du code QR.
 resetting:
-  link: Mot de passe oublié ?
-  not_found_password_token: Aucun jeton de réinitialisation du mot de passe n'a été
-    trouvé dans l'URL ou dans la session.
-  request:
-    description: Entrez votre nom d'utilisateur ou votre adresse e-mail pour demander une réinitialisation du mot de passe.
-    submit: Réinitialiser
-    title: Réinitialiser le mot de passe
-    user: Nom d'utilisateur ou adresse e-mail
-  success: <b>%username%</b>, votre mot de passe a été réinitialisé avec succès.
+    link: Mot de passe oublié ?
+    not_found_password_token: Aucun jeton de réinitialisation du mot de passe n'a été
+        trouvé dans l'URL ou dans la session.
+    request:
+        description: Entrez votre nom d'utilisateur ou votre adresse e-mail pour demander une réinitialisation du mot de passe.
+        submit: Réinitialiser
+        title: Réinitialiser le mot de passe
+        user: Nom d'utilisateur ou adresse e-mail
+    success: <b>%username%</b>, votre mot de passe a été réinitialisé avec succès.
 rights:
-  add: Ajouter
-  delete: Supprimer
-  edit: Modifier
-  export: Exporter
-  list: Liste
-  show: Afficher
+    add: Ajouter
+    delete: Supprimer
+    edit: Modifier
+    export: Exporter
+    list: Liste
+    show: Afficher
 schema:
-  name: Schéma
-  description: Informations sur les tables de la base de données.
-  index:
-    title: Tables
-    description: Liste des tables de la base de données.
-    tooltip: Afficher la définition de la table %name%
-  table:
-    title: Table %name%
-    description: Liste des colonnes, des indexes et des associations de la table.
-    empty: Aucune colonne n'est définie.
-    error: La table '%name%' n'existe pas ou est introuvable.
-    one_to_many: Un à plusieurs.
-    many_to_one: Plusieurs à un.
-  fields:
-    name: Nom
-    table: Table
-    columns: Colonnes
-    indexes: Indexes
-    records: Enregistrements
-    associations: Associations
-    type: Type
-    length: Longueur
-    required: Requis
-    default: Valeur par défaut
-    relation: Relation
-    primary: Clé primaire
-    unique: Valeur unique
+    name: Schéma
+    description: Informations sur les tables de la base de données.
+    index:
+        title: Tables
+        description: Liste des tables de la base de données.
+        tooltip: Afficher la définition de la table %name%
+    table:
+        title: Table %name%
+        description: Liste des colonnes, des indexes et des associations de la table.
+        empty: Aucune colonne n'est définie.
+        error: La table '%name%' n'existe pas ou est introuvable.
+        one_to_many: Un à plusieurs.
+        many_to_one: Plusieurs à un.
+    fields:
+        name: Nom
+        table: Table
+        columns: Colonnes
+        indexes: Indexes
+        records: Enregistrements
+        associations: Associations
+        type: Type
+        length: Longueur
+        required: Requis
+        default: Valeur par défaut
+        relation: Relation
+        primary: Clé primaire
+        unique: Valeur unique
 search:
-  title: Rechercher
-  clear: Effacer les critères de recherche
-  empty: Aucun objet correspondant.
-  entity: Objet
-  all_entities: Tous les objets
-  entity_help: Afficher les résultats pour l'objet sélectionné
-  fields:
-    content: Contenu
+    title: Rechercher
+    clear: Effacer les critères de recherche
+    empty: Aucun objet correspondant.
     entity: Objet
-    field: Champ
-    query: Rechercher
-  minimum: Saisir 2 caractères au minimum.
-  placeholder: Rechercher
-  link: Afficher la page de recherche
-  search: Lancer la recherche
+    all_entities: Tous les objets
+    entity_help: Afficher les résultats pour l'objet sélectionné
+    fields:
+        content: Contenu
+        entity: Objet
+        field: Champ
+        query: Rechercher
+    minimum: Saisir 2 caractères au minimum.
+    placeholder: Rechercher
+    link: Afficher la page de recherche
+    search: Lancer la recherche
 security:
-  link: Déjà un compte ?
-  login:
-    title: Connexion à l'application
-    description: Connectez-vous avec votre nom d'utilisateur et votre mot de passe.
-    username: Nom d'utilisateur
-    password: Mot de passe
-    remember_me: Se souvenir de moi
-    submit: Connexion
-    success: Bienvenue <b>%user_name%</b>. Vous vous êtes connecté à l'application <b>%app_name_version%</b> avec succès.
-    error: Le nom de l'utilisateur ou le mot de passe est invalide.
-  logout:
-    success: Vous vous êtes déconnecté de l'application <b>%app_name_version%</b> avec succès.
+    link: Déjà un compte ?
+    login:
+        title: Connexion à l'application
+        description: Connectez-vous avec votre nom d'utilisateur et votre mot de passe.
+        username: Nom d'utilisateur
+        password: Mot de passe
+        remember_me: Se souvenir de moi
+        submit: Connexion
+        success: Bienvenue <b>%user_name%</b>. Vous vous êtes connecté à l'application <b>%app_name_version%</b> avec succès.
+        error: Le nom de l'utilisateur ou le mot de passe est invalide.
+    logout:
+        success: Vous vous êtes déconnecté de l'application <b>%app_name_version%</b> avec succès.
 show:
-  name: Nom
-  value: Valeur
-simple_editor:
-  titles: Style
-  h1: Titre 1
-  h2: Titre 2
-  h3: Titre 3
-  h4: Titre 4
-  h5: Titre 5
-  h6: Titre 6
-  normal: Normale
-  bold: Gras
-  italic: Italique
-  underline: Souligné
-  strikethrough: Barré
-  removeFormat: Supprimer le format
-  subscript: Indice
-  superscript: Exposant
-  indent: Augmenter le retrait
-  outdent: Diminuer le retrait
-  insertOrderedList: Liste numérotée
-  insertUnorderedList: Liste à puces
-  insertHorizontalRule: Ligne horizontale
-  justifyCenter: Centrer
-  justifyLeft: Aligner à gauche
-  justifyRight: Aligner à droite
-  justify_full: Justifier
-  line: Ligne horizontale
-  undo: Annuler la dernière action
-  redo: Rétablir la dernière action
-swisspost:
-  error:
-    file_temp: Impossible de créer un fichier temporaire.
-    file_none: Aucun fichier à importer n'a été défini.
-    file_empty: Le fichier à importer est vide.
-    file_not_exist: Le fichier à importer est introuvable ou n'existe pas.
-    file_states: Une erreur s'est produite de la mise à jour des cantons.
-    validity_none: Le fichier d'archive '%name%' ne contient aucune date de validité.
-    validity_before: La date de validité du %validity% dans fichier d'archive '%name%' est antérieure ou égale à la date de la dernière importation (%import%).
-    archive_open: Impossible d'ouvrir le fichier d'archive '%name%' (code d'erreur %error%).
-    archive_empty: Le fichier d'archive '%name%' ne contient aucune donnée.
-    archive_not_one: Le fichier d'archive '%name%' contient %count% entrées. Il ne doit en contenir qu'une seule.
-    archive_close: Une erreur s'est produite de la fermeture du fichier d'archive.
-    database_open: Impossible d'ouvrir la base de de données.
-    database_compact: Une erreur s'est produite du compactage de la base de données.
-    database_rename: Impossible de renommer la base de données.
-    database_close: Une erreur s'est produite lors de la fermeture de la base de données.
-    reader_name: Impossible de trouver un nom dans le ficher d'archive '%name%'.
-    reader_open: Impossible d'ouvrir le flux de données '%stream%' du fichier d'archive '%name%'.
-    reader_close: Une erreur s'est produite de la fermeture du flux de données.
-  fields:
-    file: Fichier d'archive
-    overwrite: Forcer l'importation
-    cities: Localités
-    objects: Objets
-    states: Cantons
-    streets: Rues
-    previous: Précédent
-    valid: Valides
-    invalid: Erreurs
-    difference: Différence
-    total: Total
-  helps:
-    file: Le fichier doit être un fichier compressé au format *.zip avec une seule entrée.
-    overwrite: Ne pas tenir compte de la date de validité contenue dans le fichier d'archive.
-  import:
-    description: Permet de mettre à jour la liste des localités et des rues de Suisse.
-    last_import: 'Date de validité de la dernière importation : %date%.'
-    data_url_text: 'Remarque : Les données peuvent être téléchargées depuis le site de'
-    data_url_content: La Poste
-  result:
-    description: Résultat de l'importation.
-    failure: Une erreur s'est produite lors de l'importation des localités et des rues.
-    new_import: Nouvelle importation
-    success: L'importation des localités et des rues a été réalisée avec succès. La nouvelle date de validité est le %date%.
-  title: Importer les localités
-task:
-  add:
-    title: Nouvelle tâche
-    success: La tâche <b>%name%</b> a été créée avec succès.
-  delete:
-    title: Supprimer la tâche
-    message: Êtes-vous sûr de vouloir supprimer la tâche <b>%name%</b> ?
-    success: La tâche <b>%name%</b> a été supprimée avec succès.
-    failure: Impossible de supprimer la tâche <b>%name%</b>.
-  edit:
-    title: Modifier la tâche
-    success: La tâche <b>%name%</b> a été mise à jour avec succès.
-    add_item: Ajouter une opération
-    delete_item: Supprimer l'opération et ses marges
-    move_down_item: Déplacer l'opération vers le bas
-    move_up_item: Déplacer l'opération vers le haut
-    empty_items: Aucune opération définie.
-  clone:
-    title: Copie d'une tâche
-  fields:
-    category: Catégorie
-    group: Groupe
-    items: Opérations
     name: Nom
-    supplier: Fournisseur
-    unit: Unité
-  list:
-    add_title: Créer une nouvelle tâche
-    category_all_text: Toutes les catégorie
-    category_help: Afficher les tâches pour le groupe ou la catégorie sélectionné
-    empty: Aucune tâche définie.
-    excel_title: Exporter la liste des tâche
-    pdf_title: Télécharger la liste des tâche
-    title: Tâches
-  name: Tâche
-  show:
-    title: Propriétés de la tâche
+    value: Valeur
+simple_editor:
+    titles: Style
+    h1: Titre 1
+    h2: Titre 2
+    h3: Titre 3
+    h4: Titre 4
+    h5: Titre 5
+    h6: Titre 6
+    normal: Normale
+    bold: Gras
+    italic: Italique
+    underline: Souligné
+    strikethrough: Barré
+    removeFormat: Supprimer le format
+    subscript: Indice
+    superscript: Exposant
+    indent: Augmenter le retrait
+    outdent: Diminuer le retrait
+    insertOrderedList: Liste numérotée
+    insertUnorderedList: Liste à puces
+    insertHorizontalRule: Ligne horizontale
+    justifyCenter: Centrer
+    justifyLeft: Aligner à gauche
+    justifyRight: Aligner à droite
+    justify_full: Justifier
+    line: Ligne horizontale
+    undo: Annuler la dernière action
+    redo: Rétablir la dernière action
+swisspost:
+    error:
+        file_temp: Impossible de créer un fichier temporaire.
+        file_none: Aucun fichier à importer n'a été défini.
+        file_empty: Le fichier à importer est vide.
+        file_not_exist: Le fichier à importer est introuvable ou n'existe pas.
+        file_states: Une erreur s'est produite de la mise à jour des cantons.
+        validity_none: Le fichier d'archive '%name%' ne contient aucune date de validité.
+        validity_before: La date de validité du %validity% dans fichier d'archive '%name%' est antérieure ou égale à la date de la dernière importation (%import%).
+        archive_open: Impossible d'ouvrir le fichier d'archive '%name%' (code d'erreur %error%).
+        archive_empty: Le fichier d'archive '%name%' ne contient aucune donnée.
+        archive_not_one: Le fichier d'archive '%name%' contient %count% entrées. Il ne doit en contenir qu'une seule.
+        archive_close: Une erreur s'est produite de la fermeture du fichier d'archive.
+        database_open: Impossible d'ouvrir la base de de données.
+        database_compact: Une erreur s'est produite du compactage de la base de données.
+        database_rename: Impossible de renommer la base de données.
+        database_close: Une erreur s'est produite lors de la fermeture de la base de données.
+        reader_name: Impossible de trouver un nom dans le ficher d'archive '%name%'.
+        reader_open: Impossible d'ouvrir le flux de données '%stream%' du fichier d'archive '%name%'.
+        reader_close: Une erreur s'est produite de la fermeture du flux de données.
+    fields:
+        file: Fichier d'archive
+        overwrite: Forcer l'importation
+        cities: Localités
+        objects: Objets
+        states: Cantons
+        streets: Rues
+        previous: Précédent
+        valid: Valides
+        invalid: Erreurs
+        difference: Différence
+        total: Total
+    helps:
+        file: Le fichier doit être un fichier compressé au format *.zip avec une seule entrée.
+        overwrite: Ne pas tenir compte de la date de validité contenue dans le fichier d'archive.
+    import:
+        description: Permet de mettre à jour la liste des localités et des rues de Suisse.
+        last_import: 'Date de validité de la dernière importation : %date%.'
+        data_url_text: 'Remarque : Les données peuvent être téléchargées depuis le site de'
+        data_url_content: La Poste
+    result:
+        description: Résultat de l'importation.
+        failure: Une erreur s'est produite lors de l'importation des localités et des rues.
+        new_import: Nouvelle importation
+        success: L'importation des localités et des rues a été réalisée avec succès. La nouvelle date de validité est le %date%.
+    title: Importer les localités
+task:
+    add:
+        title: Nouvelle tâche
+        success: La tâche <b>%name%</b> a été créée avec succès.
+    delete:
+        title: Supprimer la tâche
+        message: Êtes-vous sûr de vouloir supprimer la tâche <b>%name%</b> ?
+        success: La tâche <b>%name%</b> a été supprimée avec succès.
+        failure: Impossible de supprimer la tâche <b>%name%</b>.
+    edit:
+        title: Modifier la tâche
+        success: La tâche <b>%name%</b> a été mise à jour avec succès.
+        add_item: Ajouter une opération
+        delete_item: Supprimer l'opération et ses marges
+        move_down_item: Déplacer l'opération vers le bas
+        move_up_item: Déplacer l'opération vers le haut
+        empty_items: Aucune opération définie.
+    clone:
+        title: Copie d'une tâche
+    fields:
+        category: Catégorie
+        group: Groupe
+        items: Opérations
+        name: Nom
+        supplier: Fournisseur
+        unit: Unité
+    list:
+        add_title: Créer une nouvelle tâche
+        category_all_text: Toutes les catégorie
+        category_help: Afficher les tâches pour le groupe ou la catégorie sélectionné
+        empty: Aucune tâche définie.
+        excel_title: Exporter la liste des tâche
+        pdf_title: Télécharger la liste des tâche
+        title: Tâches
+    name: Tâche
+    show:
+        title: Propriétés de la tâche
 task_compute:
-  add: Nouvelle tâche
-  button_ok: Calculer
-  title: Calculer une tâche
-  edit: Edition d'une tâche
-  error:
-    items: Une opération doit être sélectionnée.
-    quantity: La quantité doit être égale ou supérieure à 1.
-    task: Impossible de trouver une tâche correspondante.
-  failed: Une erreur est intervenue lors du calcul de la tâche.
-  fields:
-    category: Catégorie
-    overall_total: Total générale
-    price: Prix
-    quantity: Quantité
-    task: Tâche
-    total: Total
-    unit: Unité
-  success: Le calcul de la tâche a été effectué avec succès.
+    add: Nouvelle tâche
+    button_ok: Calculer
+    title: Calculer une tâche
+    edit: Edition d'une tâche
+    error:
+        items: Une opération doit être sélectionnée.
+        quantity: La quantité doit être égale ou supérieure à 1.
+        task: Impossible de trouver une tâche correspondante.
+    failed: Une erreur est intervenue lors du calcul de la tâche.
+    fields:
+        category: Catégorie
+        overall_total: Total générale
+        price: Prix
+        quantity: Quantité
+        task: Tâche
+        total: Total
+        unit: Unité
+    success: Le calcul de la tâche a été effectué avec succès.
 taskitem:
-  edit:
-    add_item: Ajouter une marge
-    delete_item: Supprimer la marge
-    empty_items: Aucune marge définie.
-    items_hide: Masquer les marges
-    items_show: Afficher les marges
-    sort_items: Trier les marges
-  fields:
-    margins: Marges
+    edit:
+        add_item: Ajouter une marge
+        delete_item: Supprimer la marge
+        empty_items: Aucune marge définie.
+        items_hide: Masquer les marges
+        items_show: Afficher les marges
+        sort_items: Trier les marges
+    fields:
+        margins: Marges
+        name: Opération
+    list:
+        title: Opérations
     name: Opération
-  list:
-    title: Opérations
-  name: Opération
 taskitemmargin:
-  fields:
-    maximum: Maximum
-    minimum: Minimum
-    value: Prix
-  name: Marge
+    fields:
+        maximum: Maximum
+        minimum: Minimum
+        value: Prix
+    name: Marge
 test:
-  drag_drop: Drag & drop
-  editor: Message
-  html: Exportation HTML
-  minify: Minify
-  notification: Notifications
-  recaptcha: reCAPTCHA
-  tree_view: Tree View
-  use_notification: Utiliser une notification.
-  ip_stack: Adresse IP
-  diagram: Diagramme de classe
+    drag_drop: Drag & drop
+    editor: Message
+    html: Exportation HTML
+    minify: Minify
+    notification: Notifications
+    recaptcha: reCAPTCHA
+    tree_view: Tree View
+    use_notification: Utiliser une notification.
+    ip_stack: Adresse IP
+    diagram: Diagramme de classe
 theme:
-  title: Thème
-  help: Appliquer un thème sur ce site
-  description: Appliquer un thème sur le site.
-  success: Le thème <b>%name%</b> a été sélectionné avec succès.
-  error: Impossible de sélectionner le thème.
-  auto:
-    name: Thème système
-    title: Appliquer le thème système sur le site.
-    success: Le <b>thème système</b> a été sélectionné avec succès.
-    help: >-
-      Le thème système fait passer l'apparence de claire à sombre en fonction des préférences de l'utilisateur dans le système d'exploitation.<br>
-      Sur Microsoft® Windows® 10 et 11, il se trouve dans les paramètres de la section : <i>Personalisation</i> &gt; <i>Couleurs</i> &gt; <i>Choisir votre mode</i>.
-  dark:
-    name: Thème sombre
-    title: Appliquer le thème sombre sur le site.
-    success: Le <b>thème sombre</b> a été sélectionné avec succès.
-    help: >-
-      Le thème sombre affiche un arrière-plan foncé avec un premier plan clair contrastant.<br>
-      En mode sombre, vous verrez généralement du texte blanc ou clair sur des arrière-plans noirs ou foncés.
-  light:
-    name: Thème claire
-    title: Appliquer le thème claire sur le site.
-    success: Le <b>thème claire</b> a été sélectionné avec succès.
-    help: >-
-      Le thème claire affiche un arrière-plan clair avec un premier plan foncé contrastant.<br>
-      En mode clair, vous verrez généralement du texte noir ou foncé sur des arrière-plans blancs ou clairs.
+    title: Thème
+    help: Appliquer un thème sur ce site
+    description: Appliquer un thème sur le site.
+    success: Le thème <b>%name%</b> a été sélectionné avec succès.
+    error: Impossible de sélectionner le thème.
+    auto:
+        name: Thème système
+        title: Appliquer le thème système sur le site.
+        success: Le <b>thème système</b> a été sélectionné avec succès.
+        help: >-
+            Le thème système fait passer l'apparence de claire à sombre en fonction des préférences de l'utilisateur dans le système d'exploitation.<br>
+            Sur Microsoft® Windows® 10 et 11, il se trouve dans les paramètres de la section : <i>Personalisation</i> &gt; <i>Couleurs</i> &gt; <i>Choisir votre mode</i>.
+    dark:
+        name: Thème sombre
+        title: Appliquer le thème sombre sur le site.
+        success: Le <b>thème sombre</b> a été sélectionné avec succès.
+        help: >-
+            Le thème sombre affiche un arrière-plan foncé avec un premier plan clair contrastant.<br>
+            En mode sombre, vous verrez généralement du texte blanc ou clair sur des arrière-plans noirs ou foncés.
+    light:
+        name: Thème claire
+        title: Appliquer le thème claire sur le site.
+        success: Le <b>thème claire</b> a été sélectionné avec succès.
+        help: >-
+            Le thème claire affiche un arrière-plan clair avec un premier plan foncé contrastant.<br>
+            En mode clair, vous verrez généralement du texte noir ou foncé sur des arrière-plans blancs ou clairs.
 timeline:
-  title: Chronologie
-  date: Date
-  toolbar: Navigation
-  interval: Période
-  today: Période actuelle
-  first: Première période
-  previous: Période précédente
-  next: Période suivante
-  last: Dernière période
+    title: Chronologie
+    date: Date
+    toolbar: Navigation
+    interval: Période
+    today: Période actuelle
+    first: Première période
+    previous: Période précédente
+    next: Période suivante
+    last: Dernière période
 translator:
-  title: Traduction
-  auto_detect: Détecter la langue
-  copy_error: Une erreur s'est produite lors de la copie du texte dans le presse-papiers.
-  copy_success: La traduction du texte a été copiée avec succès dans le presse-papiers.
-  detect_error: Une erreur s'est produite lors de la détection du texte.
-  detect_label: 'Langue détectée : %name%'
-  from_label: Traduire de
-  languages_error: Une erreur s'est produite lors de la recherche des langues disponibles.
-  last_error: <hr>Erreur %code%. %message%
-  placeholder: Saisissez le texte à traduire
-  result_label: Résultat
-  service_label: Service
-  submit_text: Traduire
-  swap_label: Inverser
-  text_error: Le texte à traduire est absent ou vide.
-  text_label: Texte
-  to_error: La langue de destination est absente ou vide.
-  to_label: Vers
-  translate_error: Une erreur s'est produite lors de la traduction du texte.
-  translate_success: La traduction du texte <b>%from%</b> en <b>%to%</b> avec le service <b>%service%</b> a été réalisée avec succès.
+    title: Traduction
+    auto_detect: Détecter la langue
+    copy_error: Une erreur s'est produite lors de la copie du texte dans le presse-papiers.
+    copy_success: La traduction du texte a été copiée avec succès dans le presse-papiers.
+    detect_error: Une erreur s'est produite lors de la détection du texte.
+    detect_label: 'Langue détectée : %name%'
+    from_label: Traduire de
+    languages_error: Une erreur s'est produite lors de la recherche des langues disponibles.
+    last_error: <hr>Erreur %code%. %message%
+    placeholder: Saisissez le texte à traduire
+    result_label: Résultat
+    service_label: Service
+    submit_text: Traduire
+    swap_label: Inverser
+    text_error: Le texte à traduire est absent ou vide.
+    text_label: Texte
+    to_error: La langue de destination est absente ou vide.
+    to_label: Vers
+    translate_error: Une erreur s'est produite lors de la traduction du texte.
+    translate_success: La traduction du texte <b>%from%</b> en <b>%to%</b> avec le service <b>%service%</b> a été réalisée avec succès.
 user:
-  add:
-    title: Nouvel utilisateur
-    success: L'utilisateur <b>%name%</b> a été créé avec succès.
-  change_password:
-    title: Modifier le mot de passe
-    change_success: Le mot de passe de l'utilisateur <b>%name%</b> a été modifié avec succès.
-    check_password: Tester si le mot de passe est compromis
-  comment:
-    title: Commentaires
-    description: Envoyer vos commentaires au responsable du site.
-    error: Une erreur s'est produite lors de l'envoi de vos commentaires. Veuillez de nouveau tenter cette action plus tard.
-    success: Vos commentaires ont été envoyé avec succès au responsable du site et vous allez être contacté bientôt.
-  delete:
-    title: Supprimer l'utilisateur
-    message: Êtes-vous sûr de vouloir supprimer l'utilisateur <b>%name%</b> ?
-    success: L'utilisateur <b>%name%</b> a été supprimé avec succès.
-    failure: Impossible de supprimer l'utilisateur <b>%name%</b>.
-    connected: Impossible de supprimer l'utilisateur <b>%name%</b> qui est actuellement connecté à l'application.
-  edit:
-    title: Modifier l'utilisateur
-    success: L'utilisateur <b>%name%</b> a été mis à jour avec succès.
-    delete_image: Supprimer la photo de profil
-  fields:
-    attachments: Fichier
-    email: E-mail
-    enabled: Statut
-    fromAddress: Auteur
-    imageFile: Image
-    lastLogin: Connexion
-    message: Message
-    overwrite: Remplacer les droits d'accès par défaut
-    recaptcha: Vérification
-    role: Rôle
-    subject: Objet
-    toAddress: Destinataire
-    username: Nom d'utilisateur
-    username_short: Nom
-    password: Mot de passe
-  image:
-    failure: Une erreur s'est produite lors du redimensionnement de l'image.
-    success: L'image du profil de l'utilisateur <b>%name%</b> a été mise à jour avec succès.
-    title: Image du profil
-    action: Modifier l'image du profil
-  list:
-    title: Utilisateurs
-    add_title: Créer un nouvel utilisateur
-    empty: Aucun utilisateur défini.
-    excel_title: Exporter la liste des utilisateurs
-    pdf_title: Télécharger la liste des utilisateurs
-    rights_excel: Exporter la liste des droits d'accès
-    rights_export: Télécharger la liste des droits d'accès
-    rights_title: Droits d'accès
-  login:
-    reset: Mot de passe oublié
-  message:
-    title: Envoyer un message
-    description: Envoyer vos commentaires à l'utilisateur sélectionné.
-    success: Votre message ont été envoyé avec succès à l'utilisateur <b>%name%</b>.
-    error: Une erreur s'est produite lors de l'envoi de votre message. Veuillez de nouveau tenter cette action plus tard.
-    connected: Le nom de l'expéditeur et du destinataire sont les mêmes.
-  name: Utilisateur
-  password:
-    confirmation: Répéter le mot de passe
-    current: Mot de passe actuel
-    label: Mot de passe
-    new: Nouveau mot de passe
-    new_confirmation: Répéter le nouveau mot de passe
-  reset:
-    title: Supprimer la demande de mot de passe
-    send: Envoyer une demande de mot de passe
-    confirmation: Êtes-vous sûr de vouloir supprimer la demande de mot de passe pour l'utilisateur <b>%name%</b> ?
-    success: La demande de mot de passe pour l'utilisateur <b>%name%</b> a été supprimée avec succès.
-    error: Aucune demande de mot de passe pour l'utilisateur <b>%name%</b> n'a été requise.
-  reset_all:
-    title: Supprimer les demandes de mot de passe
-    confirmation: Êtes-vous sûr de vouloir supprimer les demandes de mot de passe pour les utilisateurs suivants ?
-    empty: Aucune demande de mot de passe n'a été requise.
-    success: Les %count% demandes de mot de passe ont été supprimées avec succès.
-    error: Un ou plusieurs utilisateurs doivent être sélectionnés.
-  send:
-    title: Renvoyer une demande de mot de passe
-    message: Êtes-vous sûr de vouloir renvoyer une nouvelle demande de mot de passe pour l'utilisateur <b>%name%</b> ?
-    submit : Renvoyer
-  rights:
-    title: Droits d'accès
-    all_title: Accorder tous les droits d'accès
-    col_title: Activer ou désactiver tous les droits d'accès pour cette action
-    connected: Impossible de modifier les droits d'accès de l'utilisateur actuellement connecté !
-    default_title: Rétablir les droits d'accès aux valeurs par défaut
-    description: Définition des droits d'accès à l'application.
-    none_title: N'accorder aucun droit d'accès
-    row_title: Activer ou désactiver tous les droits d'accès pour cet objet
-    success: Les droits d'accès de l'utilisateur <b>%name%</b> ont été mis à jour avec succès.
-    table_title: Objet / Action
-    toggle_title: Inverser les droits d'accès
-    action: Modifier les droits d'accès
-  roles:
-    name: Rôles
-    admin: Administrateur
-    super_admin: Administrateur du site
-    user: Utilisateur
-  parameters:
-    title: Préférences
-    description: Définition de vos préférences.
-    success: Vos préférences ont été mises à jour avec succès.
-  show:
-    title: Propriétés de l'utilisateur
-  switch:
-    connected: <b>%original%</b>, vous êtes connecté en tant qu'utilisateur <b>%current%</b>.
-    exit:
-      title: Reprendre son identité
-      success: <b>%name%</b>, vous avez repris votre identité avec succès.
-    take:
-      title: Prendre l'identité de l'utilisateur
-      default: Vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
-      success: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
+    add:
+        title: Nouvel utilisateur
+        success: L'utilisateur <b>%name%</b> a été créé avec succès.
+    change_password:
+        title: Modifier le mot de passe
+        change_success: Le mot de passe de l'utilisateur <b>%name%</b> a été modifié avec succès.
+        check_password: Tester si le mot de passe est compromis
+    comment:
+        title: Commentaires
+        description: Envoyer vos commentaires au responsable du site.
+        error: Une erreur s'est produite lors de l'envoi de vos commentaires. Veuillez de nouveau tenter cette action plus tard.
+        success: Vos commentaires ont été envoyé avec succès au responsable du site et vous allez être contacté bientôt.
+    delete:
+        title: Supprimer l'utilisateur
+        message: Êtes-vous sûr de vouloir supprimer l'utilisateur <b>%name%</b> ?
+        success: L'utilisateur <b>%name%</b> a été supprimé avec succès.
+        failure: Impossible de supprimer l'utilisateur <b>%name%</b>.
+        connected: Impossible de supprimer l'utilisateur <b>%name%</b> qui est actuellement connecté à l'application.
+    edit:
+        title: Modifier l'utilisateur
+        success: L'utilisateur <b>%name%</b> a été mis à jour avec succès.
+        delete_image: Supprimer la photo de profil
+    fields:
+        attachments: Fichier
+        email: E-mail
+        enabled: Statut
+        fromAddress: Auteur
+        imageFile: Image
+        lastLogin: Connexion
+        message: Message
+        overwrite: Remplacer les droits d'accès par défaut
+        recaptcha: Vérification
+        role: Rôle
+        subject: Objet
+        toAddress: Destinataire
+        username: Nom d'utilisateur
+        username_short: Nom
+        password: Mot de passe
+    image:
+        failure: Une erreur s'est produite lors du redimensionnement de l'image.
+        success: L'image du profil de l'utilisateur <b>%name%</b> a été mise à jour avec succès.
+        title: Image du profil
+        action: Modifier l'image du profil
+    list:
+        title: Utilisateurs
+        add_title: Créer un nouvel utilisateur
+        empty: Aucun utilisateur défini.
+        excel_title: Exporter la liste des utilisateurs
+        pdf_title: Télécharger la liste des utilisateurs
+        rights_excel: Exporter la liste des droits d'accès
+        rights_export: Télécharger la liste des droits d'accès
+        rights_title: Droits d'accès
+    login:
+        reset: Mot de passe oublié
+    message:
+        title: Envoyer un message
+        description: Envoyer vos commentaires à l'utilisateur sélectionné.
+        success: Votre message ont été envoyé avec succès à l'utilisateur <b>%name%</b>.
+        error: Une erreur s'est produite lors de l'envoi de votre message. Veuillez de nouveau tenter cette action plus tard.
+        connected: Le nom de l'expéditeur et du destinataire sont les mêmes.
+    name: Utilisateur
+    password:
+        confirmation: Répéter le mot de passe
+        current: Mot de passe actuel
+        label: Mot de passe
+        new: Nouveau mot de passe
+        new_confirmation: Répéter le nouveau mot de passe
+    reset:
+        title: Supprimer la demande de mot de passe
+        send: Envoyer une demande de mot de passe
+        confirmation: Êtes-vous sûr de vouloir supprimer la demande de mot de passe pour l'utilisateur <b>%name%</b> ?
+        success: La demande de mot de passe pour l'utilisateur <b>%name%</b> a été supprimée avec succès.
+        error: Aucune demande de mot de passe pour l'utilisateur <b>%name%</b> n'a été requise.
+    reset_all:
+        title: Supprimer les demandes de mot de passe
+        confirmation: Êtes-vous sûr de vouloir supprimer les demandes de mot de passe pour les utilisateurs suivants ?
+        empty: Aucune demande de mot de passe n'a été requise.
+        success: Les %count% demandes de mot de passe ont été supprimées avec succès.
+        error: Un ou plusieurs utilisateurs doivent être sélectionnés.
+    send:
+        title: Renvoyer une demande de mot de passe
+        message: Êtes-vous sûr de vouloir renvoyer une nouvelle demande de mot de passe pour l'utilisateur <b>%name%</b> ?
+        submit: Renvoyer
+    rights:
+        title: Droits d'accès
+        all_title: Accorder tous les droits d'accès
+        col_title: Activer ou désactiver tous les droits d'accès pour cette action
+        connected: Impossible de modifier les droits d'accès de l'utilisateur actuellement connecté !
+        default_title: Rétablir les droits d'accès aux valeurs par défaut
+        description: Définition des droits d'accès à l'application.
+        none_title: N'accorder aucun droit d'accès
+        row_title: Activer ou désactiver tous les droits d'accès pour cet objet
+        success: Les droits d'accès de l'utilisateur <b>%name%</b> ont été mis à jour avec succès.
+        table_title: Objet / Action
+        toggle_title: Inverser les droits d'accès
+        action: Modifier les droits d'accès
+    roles:
+        name: Rôles
+        admin: Administrateur
+        super_admin: Administrateur du site
+        user: Utilisateur
+    parameters:
+        title: Préférences
+        description: Définition de vos préférences.
+        success: Vos préférences ont été mises à jour avec succès.
+    show:
+        title: Propriétés de l'utilisateur
+    switch:
+        connected: <b>%original%</b>, vous êtes connecté en tant qu'utilisateur <b>%current%</b>.
+        exit:
+            title: Reprendre son identité
+            success: <b>%name%</b>, vous avez repris votre identité avec succès.
+        take:
+            title: Prendre l'identité de l'utilisateur
+            default: Vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
+            success: <b>%orignal%</b>, vous avez pris l'identité de l'utilisateur <b>%name%</b> avec succès.
 archive:
-  title: Archiver des calculations
-  editable_empty: Aucun statut modifiable n'est présent.
-  not_editable_empty: Aucun statut non-modifiable n'est présent.
-  edit:
-    description: Cette page vous permet d'archiver des calculations en modifiant leur statut.
-    last_update: 'Dernier archivage : %date%'
-    error: Au moins 1 statut doit être sélectionné.
-    submit: Archiver
-  result:
-    new_archive: Nouvel archivage
-    description: Résultat de l'archivage des calculations.
-    empty: Aucune calculation ne correspond aux critères de mise à jour.
-    total: Total
-    old_state: Ancien statut
-    calculations: Calculations
-    show: Afficher les calculations modifiées
-  fields:
-    date: Date limite
-    target: Nouveau statut
-    sources: Anciens statuts
+    title: Archiver des calculations
+    editable_empty: Aucun statut modifiable n'est présent.
+    not_editable_empty: Aucun statut non-modifiable n'est présent.
+    edit:
+        description: Cette page vous permet d'archiver des calculations en modifiant leur statut.
+        last_update: 'Dernier archivage : %date%'
+        error: Au moins 1 statut doit être sélectionné.
+        submit: Archiver
+    result:
+        new_archive: Nouvel archivage
+        description: Résultat de l'archivage des calculations.
+        empty: Aucune calculation ne correspond aux critères de mise à jour.
+        total: Total
+        old_state: Ancien statut
+        calculations: Calculations
+        show: Afficher les calculations modifiées
+    fields:
+        date: Date limite
+        target: Nouveau statut
+        sources: Anciens statuts
 notification:
-  csp_title: Violation de règles CSP
-  csp_description: L'agent utilisateur de l'application %name% a rapporté des violations des règles de la politique de sécurité de contenu (Content Security Policy).
-  footer: Notification envoyée depuis application %app_name_version%.
-  exception: La trace de la pile d'exception est en pièce jointe.
+    csp_title: Violation de règles CSP
+    csp_description: L'agent utilisateur de l'application %name% a rapporté des violations des règles de la politique de sécurité de contenu (Content Security Policy).
+    footer: Notification envoyée depuis application %app_name_version%.
+    exception: La trace de la pile d'exception est en pièce jointe.
 # enumerations
 message_position:
-  top-left: En haut à gauche
-  top-center: En haut centré
-  top-right: En haut à droite
-  center-left: Au milieu à gauche
-  center-center: Au milieu centré
-  center-right: Au milieu à droite
-  bottom-left: En bas à gauche
-  bottom-center: En bas centré
-  bottom-right: En bas à droite
+    top-left: En haut à gauche
+    top-center: En haut centré
+    top-right: En haut à droite
+    center-left: Au milieu à gauche
+    center-center: Au milieu centré
+    center-right: Au milieu à droite
+    bottom-left: En bas à gauche
+    bottom-center: En bas centré
+    bottom-right: En bas à droite
 strength_level:
-  medium: Moyenne
-  none: Aucune
-  strong: Forte
-  very_strong: Très forte
-  very_weak: Très faible
-  weak: Faible
+    medium: Moyenne
+    none: Aucune
+    strong: Forte
+    very_strong: Très forte
+    very_weak: Très faible
+    weak: Faible
 table_view:
-  custom: Vue mosaïque
-  table: Vue tabulaire
+    custom: Vue mosaïque
+    table: Vue tabulaire
 entity_action:
-  edit: Modifier l'objet
-  none: Aucune action
-  show: Afficher l'objet
+    edit: Modifier l'objet
+    none: Aucune action
+    show: Afficher l'objet
 importance:
-  name: Importance
-  low: Basse
-  low_full: Importance basse
-  medium: Moyenne
-  medium_full: Importance moyenne
-  high: Haute
-  high_full: Importance haute
-  urgent: Urgente
-  urgent_full: Urgent !
+    name: Importance
+    low: Basse
+    low_full: Importance basse
+    medium: Moyenne
+    medium_full: Importance moyenne
+    high: Haute
+    high_full: Importance haute
+    urgent: Urgente
+    urgent_full: Urgent !
 background:
-  danger: Danger
-  dark: Foncé
-  info: Information
-  light: Clair
-  primary: Primaire
-  secondary: Secondaire
-  success: Succès
-  warning: Avertissement
-  white: Blanc
+    danger: Danger
+    dark: Foncé
+    info: Information
+    light: Clair
+    primary: Primaire
+    secondary: Secondaire
+    success: Succès
+    warning: Avertissement
+    white: Blanc
 dialog_raw_data:
-  title: Données brutes
-  tooltip: Afficher les données brutes
-  empty: Aucune donnée brute à afficher.
-  copy_success: Les données brutes ont été copiées avec succès dans le presse-papiers.
-  copy_error: Une erreur s'est produite lors de la copie des données brutes dans le presse-papiers.
+    title: Données brutes
+    tooltip: Afficher les données brutes
+    empty: Aucune donnée brute à afficher.
+    copy_success: Les données brutes ont été copiées avec succès dans le presse-papiers.
+    copy_error: Une erreur s'est produite lors de la copie des données brutes dans le presse-papiers.
 chart:
-  row_all: Afficher toutes les calculations
-  month:
-    title: Calculations par mois
-    row: Afficher les calculations pour %name%
-    tooltip: '<b>Note :</b> Cliquez sur une colonne du graphique ou une ligne de la table pour afficher la liste correspondante des calculations.'
-    error: Le nombre de mois à afficher doit être positif.
-    fields:
-      month: Mois
-      period: Période
-  state:
-    title: Calculations par statut
-    row: Afficher les calculations pour le statut %name%
-    tooltip: '<b>Note :</b> Cliquez sur un secteur du graphique ou une ligne de la table pour afficher la liste correspondante des calculations.'
+    row_all: Afficher toutes les calculations
+    month:
+        title: Calculations par mois
+        row: Afficher les calculations pour %name%
+        tooltip: '<b>Note :</b> Cliquez sur une colonne du graphique ou une ligne de la table pour afficher la liste correspondante des calculations.'
+        error: Le nombre de mois à afficher doit être positif.
+        fields:
+            month: Mois
+            period: Période
+    state:
+        title: Calculations par statut
+        row: Afficher les calculations pour le statut %name%
+        tooltip: '<b>Note :</b> Cliquez sur un secteur du graphique ou une ligne de la table pour afficher la liste correspondante des calculations.'

@@ -1,6 +1,7 @@
 /**! compression tag for ftp-deployment */
 
 /* common for PHP light and dark mode */
+.pre-scrollable.pre-scrollable-highlight-sql,
 .pre-scrollable.pre-scrollable-highlight-php {
     max-height: 400px;
     padding: 0.5rem;
@@ -115,7 +116,7 @@ html[data-bs-theme=dark] pre.highlight-php .highlight-php-ellipsis {
     color: #FF8400
 }
 
-/* SQL highlight light mode */
+/* SQL highlight */
 pre.highlight-sql {
     font: 13px Menlo, Monaco, Consolas, monospace;
     line-height: 1.2em;
@@ -127,24 +128,24 @@ pre.highlight-sql {
 }
 
 pre.highlight-sql .highlight-sql-keyword {
-    color: blue;
+    color: var(--bs-link-color);
     font-weight: bold;
 }
 
 pre.highlight-sql .highlight-sql-word {
-    color: #222222;
+    color: var(--bs-body-color);
 }
 
 pre.highlight-sql .highlight-sql-variable {
-    color: #916319;
+    color: var(--bs-success);
 }
 
 pre.highlight-sql .highlight-sql-symbol {
-    color: #222222;
+    color: var(--bs-gray-500);
 }
 
 pre.highlight-sql .highlight-sql-comment {
-    color: #999999;
+    color: var(--bs-secondary);
 }
 
 pre.highlight-sql .highlight-sql-backtick {
@@ -156,28 +157,10 @@ pre.highlight-sql .highlight-sql-string {
 }
 
 pre.highlight-sql .highlight-sql-number {
-    color: #F5871F;
+    color: var(--bs-orange);
     font-weight: bold;
 }
 
 pre.highlight-sql .highlight-sql-error {
-    color: #C82829;
-}
-
-/* SQL highlight dark mode */
-html[data-bs-theme=dark] pre.highlight-sql .highlight-sql-keyword {
-    color: #1299DA;
-}
-
-html[data-bs-theme=dark] pre.highlight-sql .highlight-sql-word {
-    color: #d3d3d3;
-}
-
-html[data-bs-theme=dark] pre.highlight-sql .highlight-sql-symbol {
-    color: #FF8400;
-}
-
-html[data-bs-theme=dark] pre.highlight-sql .highlight-sql-string,
-html[data-bs-theme=dark] pre.highlight-sql .highlight-sql-variable {
-    color: #56DB3A;
+    color: var(--bs-danger);
 }

@@ -4,19 +4,29 @@
 {%- set title = 'admin.dump_sql.title' -%}
 {%- set title_icon = 'database' -%}
 {%- set title_description = 'admin.dump_sql.description' -%}
-{%- set cancel_path = path('homepage') -%}
 {# body #}
 {% block card_body %}
-<div class="border pre-scrollable pre-scrollable-highlight-php small-scrollbar">
+<div class="mb-1">{{ 'admin.dump_sql.count'|trans({'%count%': count|integer}) }}</div>
+<div class="border pre-scrollable pre-scrollable-highlight-sql small-scrollbar">
     {{ content|var_export_sql|raw }}
 </div>
 {% endblock %}
 {# footer #}
 {% block card_footer %}
     {{ homepage() }}
+    <button type="button" class="btn btn-form btn-success btn-copy"
+            data-copy-error="{{ 'admin.dump_sql.copy_error'|trans }}"
+            data-copy-success="{{ 'admin.dump_sql.copy_success'|trans }}"
+            data-clipboard-target=".highlight.highlight-sql">{{ 'common.button_copy'|trans }}</button>
 {% endblock %}
 {# stylesheets #}
 {% block stylesheets %}
     {{ parent() }}
     {{- asset_css('css/highlight.css') }}
 {% endblock %}
+{# javascripts #}
+{% block javascripts -%}
+    {{ parent() }}
+    {{ asset_js('vendor/clipboard/clipboard.js') }}
+    {{ asset_js('js/application/dump_sql.js') }}
+{%- endblock %}

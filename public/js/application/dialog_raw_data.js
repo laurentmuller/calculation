@@ -51,11 +51,8 @@ function onCopyError(e) {
     const $button = $(selector);
     if ($button.length && ClipboardJS && ClipboardJS.isSupported('copy')) {
         const clipboard = new ClipboardJS(selector);
-        clipboard.on('success', function (e) {
-            onCopySuccess(e);
-        }).on('error', function (e) {
-            onCopyError(e);
-        });
+        clipboard.on('success', (e) => onCopySuccess(e));
+        clipboard.on('error', (e) => onCopyError(e));
     } else {
         $button.remove();
     }

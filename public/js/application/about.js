@@ -124,11 +124,8 @@ function onCopyError(e) {
     }).on('click', '#license-modal .btn-copy-license', function () {
         if (!clipboard) {
             clipboard = new ClipboardJS('.btn-copy-license');
-            clipboard.on('success', function (e) {
-                onCopySuccess(e);
-            }).on('error', function (e) {
-                onCopyError(e);
-            });
+            clipboard.on('success', (e) => onCopySuccess(e));
+            clipboard.on('error', (e) => onCopyError(e));
         }
     }).on('click', 'tr[data-license] .link-license', function (e) {
         e.preventDefault();

@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster, ClipboardJS */
+/* globals Toaster */
 
 /**
  * Display a notification.
@@ -130,26 +130,6 @@ function translate(form, notification) {
 }
 
 /**
- * Handle success copy event.
- */
-function onCopySuccess(e) {
-    'use strict';
-    e.clearSelection();
-    const message = $('.btn-copy').data('success');
-    notify(Toaster.NotificationTypes.SUCCESS, message);
-}
-
-/**
- * Handle the error copy event.
- */
-function onCopyError(e) {
-    'use strict';
-    e.clearSelection();
-    const message = $('.btn-copy').data('error');
-    notify(Toaster.NotificationTypes.WARNING, message);
-}
-
-/**
  * Handle exchange click event.
  */
 function handleExchange() {
@@ -269,13 +249,9 @@ function handleService() {
     $fromTo.initSelect2();
 
     // clipboard
-    if (ClipboardJS && ClipboardJS.isSupported('copy')) {
-        const clipboard = new ClipboardJS('.btn-copy');
-        clipboard.on('success', (e) => onCopySuccess(e));
-        clipboard.on('error', (e) => onCopyError(e));
-    } else {
-        $('.btn-copy').remove();
-    }
+    $('.btn-copy').copyClipboard({
+        title: $('.card-title').text()
+    });
 
     // bind events
     $('.btn-exchange').on('click', function () {
@@ -294,6 +270,8 @@ function handleService() {
     });
     $text.on('keydown', function () {
         $(this).createTimer(handleTextChange, 500);
+    }).on('input', function () {
+        $('.btn-copy').toggleDisabled(!$text.val());
     });
 
     // validate

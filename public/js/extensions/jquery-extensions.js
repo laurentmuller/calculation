@@ -447,7 +447,7 @@
         /**
          * Gets select option in the list.
          *
-         * @return {?jQuery} the selected element, if any; null otherwise.
+         * @return {?jQuery<HTMLOptionElement>} the selected element, if any; null otherwise.
          */
         getSelectedOption: function () {
             return $(this).find(':selected');

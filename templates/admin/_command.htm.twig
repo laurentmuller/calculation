@@ -1,0 +1,70 @@
+{# macros #}
+{% macro outputEntry(text) -%}
+    <p class="mb-1 text-warning">{{ text }}</p>
+{% endmacro %}
+{% macro outputParam(value) -%}
+    <td class="text-success w-25"><pre class="mb-0 fs-6">{{ value|default('') }}</pre></td>
+{% endmacro %}
+{% macro outputDescription(value, default) -%}
+<td>
+    {{- value|default('')|raw -}}
+    {%- if default == [] -%}
+        <span class="text-warning"> (multiple values allowed)</span>
+    {%- elseif default != '' -%}
+        <span class="text-warning"> [default: {{ default }}]</span>
+    {%- endif -%}
+</td>
+{% endmacro %}
+{# content #}
+<div class="content">
+{# description #}
+{% if command.description %}
+    {{ _self.outputEntry('Description:') }}
+    <p class="ms-2">{{ command.description }}</p>
+{% endif %}
+{# usage #}
+{% if command.usage|length %}
+    {{ _self.outputEntry('Usage:') }}
+    {% for usage in command.usage %}
+        <pre class="ms-2 fs-6">{{ usage }}</pre>
+    {% endfor %}
+{% endif %}
+{# arguments #}
+{% if command.definition.arguments|length %}
+    {{ _self.outputEntry('Arguments:') }}
+    <table class="table table-sm table-borderless ms-2">
+        <tbody>
+        {% for argument in command.definition.arguments %}
+            <tr>
+                {{ _self.outputParam(argument.name) }}
+                {{ _self.outputDescription(argument.description, argument.default) }}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{# options #}
+{% if command.definition.options|length %}
+    {{ _self.outputEntry('Options:') }}
+    <table class="table table-sm table-borderless ms-2">
+        <tbody>
+        {% for option in command.definition.options %}
+            {% if option.shortcut %}
+                {%- set arg = option.shortcut ~ ', ' ~ option.name -%}
+            {% else %}
+                {%- set arg = '    ' ~ option.name -%}
+            {% endif %}
+            <tr>
+                {{ _self.outputParam(arg) }}
+                {{ _self.outputDescription(option.description, option.default) }}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+{# help #}
+{% if command.help %}
+    {{ _self.outputEntry('Help:') }}
+    <pre class="ms-2 mb-0 text-wrap">{{ command.help|raw }}</pre>
+{% endif %}
+</div>

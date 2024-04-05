@@ -49,8 +49,8 @@ admin:
     commands:
         title: Commandes
         description: Liste des commandes disponibles dans l'application.
-        fields:
-            command: Commande
+        command: Commande
+        counter: 'Nombre de commandes : %count%'
 application_service:
     clear_error: Une erreur s'est produite lors de l'effacement du cache des propriétés.
     commit_error: Impossible de valider les changements dans le cache des propriétés.

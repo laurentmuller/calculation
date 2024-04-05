@@ -8,7 +8,7 @@
 /**
  * Vendor Files
  */
-<!--#include file="../../vendor/mermaid/mermaid.min.js" -->
+<!--#include file="../../vendor/mermaid/mermaid.js" -->
 
 
 /**

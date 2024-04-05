@@ -29,7 +29,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_required: bool,
  *     is_array: bool,
  *     description: string,
- *     default: array|string|bool|null}
+ *     default: mixed}
  * @psalm-type OptionType = array{
  *     name: string,
  *     shortcut: string,
@@ -37,7 +37,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_value_required: bool,
  *     is_multiple: bool,
  *     description: string,
- *     default: array|string|bool|null}
+ *     default: mixed}
  * @psalm-type CommandType = array{
  *     name: string,
  *     description: string,
@@ -52,17 +52,16 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class CommandService
 {
-    // the key name to cache content.
-    private const CACHE_KEY = 'cache.service.command';
-
-    // the help replace
     private const HELP_REPLACE = [
         '<info>' => '<span class="text-success">',
         '<comment>' => '<span class="text-warning">',
         '</info>' => '</span>',
         '</comment>' => '</span>',
+        '</>' => '</span>',
         "\n" => '<br>',
     ];
+    private const USAGE_PATTERN = '/(\[.*)( \[--\])/m';
+    private const USAGE_REPLACE = '[options]$2';
 
     public function __construct(
         private readonly KernelInterface $kernel,
@@ -95,6 +94,8 @@ class CommandService
     }
 
     /**
+     * Gets the command for the given name.
+     *
      * @psalm-return CommandType|null
      *
      * @throws InvalidArgumentException
@@ -115,27 +116,97 @@ class CommandService
      */
     public function getCommands(): array
     {
-        return $this->cache->get(self::CACHE_KEY, function () {
+        return $this->cache->get('cache.service.command', function () {
+            $_SERVER['PHP_SELF'] = 'bin/console';
             $content = $this->execute('list', ['--format' => 'json']);
             /** @phpstan-var ContentType $decoded */
             $decoded = StringUtils::decodeJson($content);
+            $result = \array_reduce(
+                $decoded['commands'],
+                /**
+                 * @psalm-param array<string, CommandType> $carry
+                 * @psalm-param CommandType $command
+                 */
+                function (array $carry, array $command): array {
+                    if (!$command['hidden']) {
+                        $carry[$command['name']] = $this->updateCommand($command);
+                    }
 
-            $result = [];
-            $commands = $decoded['commands'];
-            $commands = \array_filter($commands, fn (array $command): bool => !$command['hidden']);
-            foreach ($commands as $command) {
-                $command['help'] = StringUtils::replace(self::HELP_REPLACE, $command['help']);
-                foreach ($command['definition']['arguments'] as &$argument) {
-                    $argument['description'] = StringUtils::replace(self::HELP_REPLACE, $argument['description']);
-                }
-                foreach ($command['definition']['options'] as &$option) {
-                    $option['description'] = StringUtils::replace(self::HELP_REPLACE, $option['description']);
-                }
-                $result[$command['name']] = $command;
-            }
+                    return $carry;
+                },
+                []
+            );
             \ksort($result);
 
             return $result;
         });
+    }
+
+    /**
+     * Returns all command names.
+     *
+     * @return string[]
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getNames(): array
+    {
+        return \array_keys($this->getCommands());
+    }
+
+    /**
+     * Returns if the given command name exist.
+     *
+     * @throws InvalidArgumentException
+     */
+    public function hasCommand(string $name): bool
+    {
+        return \array_key_exists($name, $this->getCommands());
+    }
+
+    private function encodeDefaultValue(mixed $default): array|string
+    {
+        if (false === $default || null === $default) {
+            return '';
+        }
+        if (\INF === $default) {
+            return 'INF';
+        }
+        if ([] === $default) {
+            return [];
+        }
+
+        return \str_replace('\\\\', '\\', (string) \json_encode($default, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
+     * @psalm-param CommandType $command
+     *
+     * @psalm-return CommandType
+     *
+     * @phpstan-ignore-next-line
+     */
+    private function updateCommand(array $command): array
+    {
+        if ($command['help'] === $command['description']) {
+            $command['help'] = '';
+        } else {
+            $command['help'] = StringUtils::replace(self::HELP_REPLACE, $command['help']);
+        }
+        if (0 === \count($command['definition']['arguments'])) {
+            $command['usage'] = [\sprintf('%s [options]', $command['name'])];
+        } else {
+            $command['usage'] = \preg_replace(self::USAGE_PATTERN, self::USAGE_REPLACE, $command['usage']);
+        }
+        foreach ($command['definition']['arguments'] as &$argument) {
+            $argument['description'] = StringUtils::replace(self::HELP_REPLACE, $argument['description']);
+            $argument['default'] = $this->encodeDefaultValue($argument['default']);
+        }
+        foreach ($command['definition']['options'] as &$option) {
+            $option['description'] = StringUtils::replace(self::HELP_REPLACE, $option['description']);
+            $option['default'] = $this->encodeDefaultValue($option['default']);
+        }
+
+        return $command;
     }
 }

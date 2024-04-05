@@ -97,9 +97,6 @@ class HelpService
      */
     final public const IMAGES_EXT = '.png';
 
-    // the key name to cache content.
-    private const CACHE_KEY = 'help';
-
     /**
      * @param string $file      the absolute path to the JSON help file
      * @param string $imagePath the absolute path to images
@@ -109,9 +106,9 @@ class HelpService
         private readonly string $file,
         #[Autowire('%kernel.project_dir%/public/help/images')]
         private readonly string $imagePath,
-        private readonly TranslatorInterface $translator,
         #[Target('cache.service.help')]
-        private readonly CacheInterface $cache
+        private readonly CacheInterface $cache,
+        private readonly TranslatorInterface $translator
     ) {
     }
 
@@ -241,7 +238,7 @@ class HelpService
     {
         try {
             /** @psalm-var HelpContentType $help */
-            $help = $this->cache->get(self::CACHE_KEY, fn (): array => $this->loadHelp());
+            $help = $this->cache->get('help', fn (): array => $this->loadHelp());
 
             return $help;
         } catch (InvalidArgumentException) {

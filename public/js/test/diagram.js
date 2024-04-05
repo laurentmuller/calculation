@@ -66,7 +66,7 @@
     };
 
     // Gets the color variables, depending on the selected theme.
-    const getVariables = () => {
+    const getThemeVariables = () => {
         if (THEME_LIGHT === getTheme()) {
             return {
                 primaryColor: '#21252908',
@@ -94,7 +94,7 @@
             useMaxWidth: false,
             startOnLoad: false,
             securityLevel: 'loose',
-            themeVariables: getVariables()
+            themeVariables: getThemeVariables()
         });
         mermaid.run({
             nodes: [$diagram[0]],

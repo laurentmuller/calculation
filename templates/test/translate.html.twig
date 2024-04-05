@@ -14,8 +14,6 @@
 {%- set form_attr = form_attr|default({})|merge({
                      'data-ajax': url('ajax_translate'),
                      'data-success': 'translator.translate_success'|trans,
-                     'data-copy-success': 'translator.copy_success'|trans,
-                     'data-copy-error': 'translator.copy_error'|trans,
                      'data-last-error': 'translator.last_error'|trans,
                      'data-detected': 'translator.detect_label'|trans,
                      'data-locale': app.locale}) -%}
@@ -85,7 +83,10 @@
 {# action form #}
 {% block actions_form -%}
 {{ parent() }}
-<button type="button" class="btn btn-form btn-success btn-copy" disabled="disabled" data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>
+<button type="button" class="btn btn-form btn-success btn-copy" disabled="disabled"
+        data-success="{{ 'common.copy_success'|trans }}"
+        data-error="{{ 'common.copy_error'|trans }}"
+        data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>
 {%- endblock %}
 {# stylesheets #}
 {% block stylesheets %}

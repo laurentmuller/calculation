@@ -135,7 +135,7 @@ function translate(form, notification) {
 function onCopySuccess(e) {
     'use strict';
     e.clearSelection();
-    const message = $('#edit-form').data('copy-success');
+    const message = $('.btn-copy').data('success');
     notify(Toaster.NotificationTypes.SUCCESS, message);
 }
 
@@ -145,7 +145,7 @@ function onCopySuccess(e) {
 function onCopyError(e) {
     'use strict';
     e.clearSelection();
-    const message = $('#edit-form').data('copy-error');
+    const message = $('.btn-copy').data('error');
     notify(Toaster.NotificationTypes.WARNING, message);
 }
 
@@ -269,7 +269,7 @@ function handleService() {
     $fromTo.initSelect2();
 
     // clipboard
-    if (ClipboardJS.isSupported('copy')) {
+    if (ClipboardJS && ClipboardJS.isSupported('copy')) {
         const clipboard = new ClipboardJS('.btn-copy');
         clipboard.on('success', (e) => onCopySuccess(e));
         clipboard.on('error', (e) => onCopyError(e));

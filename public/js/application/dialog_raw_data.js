@@ -22,7 +22,7 @@ function onCopySuccess(e) {
     e.clearSelection();
     const $modal = $(e.trigger).parents('.modal-raw-data');
     const title = $modal.find('.dialog-title').text();
-    const message = $modal.data('copy-success');
+    const message = $('.btn-copy').data('success');
     $modal.modal('hide');
     notify(Toaster.NotificationTypes.SUCCESS, message, title);
 }
@@ -36,7 +36,7 @@ function onCopyError(e) {
     const $button = $(e.trigger);
     const $modal = $button.parents('.modal-raw-data');
     const title = $modal.find('.dialog-title').text();
-    const message = $modal.data('copy-error');
+    const message = $('.btn-copy').data('error');
     $modal.modal('hide');
     $button.remove();
     notify(Toaster.NotificationTypes.WARNING, message, title);
@@ -47,10 +47,9 @@ function onCopyError(e) {
  */
 (function ($) {
     'use strict';
-    const selector = '.modal-raw-data .btn-copy';
-    const $button = $(selector);
+    const $button = $('.modal-raw-data .btn-copy');
     if ($button.length && ClipboardJS && ClipboardJS.isSupported('copy')) {
-        const clipboard = new ClipboardJS(selector);
+        const clipboard = new ClipboardJS('.modal-raw-data .btn-copy');
         clipboard.on('success', (e) => onCopySuccess(e));
         clipboard.on('error', (e) => onCopyError(e));
     } else {

@@ -33,8 +33,6 @@ about:
         display: Afficher l'accord de licence
         not_found: Impossible de trouver l'accord de licence.
         not_loaded: Impossible de charger l'accord de licence.
-        copy_success: L'accord de licence a été copié avec succès dans le presse-papier
-        copy_error: Une erreur s'est produite lors de la copie de l'accord de licence dans le presse-papiers.
 admin:
     rights:
         title: Droits d'accès
@@ -44,8 +42,6 @@ admin:
         description: Déclaration SQL pour mettre à jour le schéma de la base de données.
         count: 'Nombre de modifications : %count%'
         no_change: Le schéma de la base de données est à jour et ne nécessite aucune migration.
-        copy_error: Une erreur s'est produite lors de la copie du schéma dans le presse-papier.
-        copy_success: La copie du schéma dans le presse-papier a été réalisée avec succès.
     commands:
         title: Commandes
         description: Liste des commandes disponibles dans l'application.
@@ -362,6 +358,8 @@ common:
     data_changed: Données modifiées
     api_documentation: Documentation (API)
     api_documentation_help: Accéder à la documentation de l'interface d'application
+    copy_success: Les données ont été copiées avec succès dans le presse-papiers.
+    copy_error: Une erreur s'est produite lors de la copie des données dans le presse-papiers.
 simulate:
     label: Simuler la mise à jour
     help: Simule une mise à jour sans enregistrer les changements dans la base de données.
@@ -1306,8 +1304,6 @@ timeline:
 translator:
     title: Traduction
     auto_detect: Détecter la langue
-    copy_error: Une erreur s'est produite lors de la copie du texte dans le presse-papiers.
-    copy_success: La traduction du texte a été copiée avec succès dans le presse-papiers.
     detect_error: Une erreur s'est produite lors de la détection du texte.
     detect_label: 'Langue détectée : %name%'
     from_label: Traduire de
@@ -1516,8 +1512,6 @@ dialog_raw_data:
     title: Données brutes
     tooltip: Afficher les données brutes
     empty: Aucune donnée brute à afficher.
-    copy_success: Les données brutes ont été copiées avec succès dans le presse-papiers.
-    copy_error: Une erreur s'est produite lors de la copie des données brutes dans le presse-papiers.
 chart:
     row_all: Afficher toutes les calculations
     month:

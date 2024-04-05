@@ -53,6 +53,8 @@ use Symfony\Contracts\Cache\CacheInterface;
 class CommandService
 {
     private const HELP_REPLACE = [
+        '/index.php/command' => 'bin/console',
+        'bin/console/pdf' => 'bin/console',
         '<info>' => '<span class="text-success">',
         '<comment>' => '<span class="text-warning">',
         '</info>' => '</span>',
@@ -117,7 +119,6 @@ class CommandService
     public function getCommands(): array
     {
         return $this->cache->get('cache.service.command', function () {
-            $_SERVER['PHP_SELF'] = 'bin/console';
             $content = $this->execute('list', ['--format' => 'json']);
             /** @phpstan-var ContentType $decoded */
             $decoded = StringUtils::decodeJson($content);

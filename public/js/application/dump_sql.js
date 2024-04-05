@@ -20,7 +20,7 @@ function notify(type, message) {
 function onCopySuccess(e) {
     'use strict';
     e.clearSelection();
-    const message = $('.btn-copy').data('copy-success');
+    const message = $('.btn-copy').data('success');
     notify(Toaster.NotificationTypes.SUCCESS, message);
 }
 
@@ -30,7 +30,7 @@ function onCopySuccess(e) {
 function onCopyError(e) {
     'use strict';
     e.clearSelection();
-    const message = $('.btn-copy').data('copy-error');
+    const message = $('.btn-copy').data('error');
     notify(Toaster.NotificationTypes.WARNING, message);
 }
 
@@ -40,7 +40,7 @@ function onCopyError(e) {
 (function ($) {
     'use strict';
     // clipboard
-    if (ClipboardJS.isSupported('copy')) {
+    if (ClipboardJS && ClipboardJS.isSupported('copy')) {
         const clipboard = new ClipboardJS('.btn-copy');
         clipboard.on('success', (e) => onCopySuccess(e));
         clipboard.on('error', (e) => onCopyError(e));

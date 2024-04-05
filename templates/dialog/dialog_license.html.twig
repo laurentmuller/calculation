@@ -2,8 +2,6 @@
 {% set dialog_id = 'license-modal' %}
 <div id="{{ dialog_id }}" class="modal fade" tabindex="-1" aria-hidden="true"
      aria-labelledby="modal-license-title"
-     data-copy-success="{{ 'about.dialog.copy_success'|trans }}"
-     data-copy-error="{{ 'about.dialog.copy_error'|trans }}"
      data-load-error="{{ 'about.dialog.not_found'|trans }}"
      data-url="{{ path('ajax_license') }}">
     <div class="modal-dialog modal-lg">
@@ -21,7 +19,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-form btn-primary btn-copy-license" data-clipboard-target="#license-content">
+                <button type="button" class="btn btn-form btn-primary btn-copy"
+                        data-success="{{ 'common.copy_success'|trans }}"
+                        data-error="{{ 'common.copy_error'|trans }}"
+                        data-clipboard-target="#license-content">
                     {{- 'common.button_copy'|trans -}}
                 </button>
                 {{- button_close_modal(false, null, dialog_id) }}

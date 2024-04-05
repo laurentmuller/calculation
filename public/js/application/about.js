@@ -22,7 +22,7 @@ function onCopySuccess(e) {
     'use strict';
     e.clearSelection();
     const $modal = $('#license-modal');
-    const message = $modal.data('copy-success');
+    const message = $('.btn-copy').data('success');
     $modal.modal('hide');
     notify(Toaster.NotificationTypes.SUCCESS, message);
 }
@@ -35,7 +35,7 @@ function onCopyError(e) {
     e.clearSelection();
     const $button = $(e.trigger);
     const $modal = $('#license-modal');
-    const message = $modal.data('copy-error');
+    const message = $('.btn-copy').data('error');
     $modal.modal('hide');
     $button.remove();
     notify(Toaster.NotificationTypes.WARNING, message);
@@ -46,6 +46,7 @@ function onCopyError(e) {
  */
 (function ($) {
     'use strict';
+    /** @type {ClipboardJS|null} */
     let clipboard = null;
     const $accordion = $('#aboutAccordion');
     const $configuration = $('#configuration');
@@ -121,9 +122,9 @@ function onCopyError(e) {
     }).on('click', '#license-modal a', function (e) {
         e.preventDefault();
         window.open(e.target.href, '_blank');
-    }).on('click', '#license-modal .btn-copy-license', function () {
-        if (!clipboard) {
-            clipboard = new ClipboardJS('.btn-copy-license');
+    }).on('click', '#license-modal .btn-copy', function () {
+        if (ClipboardJS && ClipboardJS.isSupported('copy') && !clipboard) {
+            clipboard = new ClipboardJS('#license-modal .btn-copy');
             clipboard.on('success', (e) => onCopySuccess(e));
             clipboard.on('error', (e) => onCopyError(e));
         }

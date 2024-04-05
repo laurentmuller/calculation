@@ -15,8 +15,8 @@
 {% block card_footer %}
     {{ homepage() }}
     <button type="button" class="btn btn-form btn-success btn-copy"
-            data-copy-error="{{ 'admin.dump_sql.copy_error'|trans }}"
-            data-copy-success="{{ 'admin.dump_sql.copy_success'|trans }}"
+            data-error="{{ 'common.copy_error'|trans }}"
+            data-success="{{ 'common.copy_success'|trans }}"
             data-clipboard-target=".highlight.highlight-sql">{{ 'common.button_copy'|trans }}</button>
 {% endblock %}
 {# stylesheets #}

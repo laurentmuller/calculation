@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Traits\ArrayTrait;
 use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**
@@ -25,6 +26,7 @@ class CacheService
 
     public function __construct(
         private readonly CommandService $service,
+        #[Target('cache.service.cache')]
         private readonly CacheInterface $cache
     ) {
     }
@@ -36,10 +38,7 @@ class CacheService
      */
     public function clear(): bool
     {
-        $parameters = [
-            '--all' => true,
-            '--env' => $this->getEnvironment(),
-        ];
+        $parameters = ['--all' => true];
         $result = $this->service->execute('cache:pool:clear', $parameters);
 
         return $result->isSuccess();
@@ -53,19 +52,13 @@ class CacheService
     public function list(): array
     {
         return $this->cache->get('cache.pools', function (): array {
-            $parameters = ['--env' => $this->getEnvironment()];
-            $result = $this->service->execute('cache:pool:list', $parameters);
+            $result = $this->service->execute('cache:pool:list');
             if (!$result->isSuccess()) {
                 return [];
             }
 
             return $this->parseContent($result->content);
         });
-    }
-
-    private function getEnvironment(): string
-    {
-        return $this->service->getEnvironment();
     }
 
     private function parseContent(string $content): array

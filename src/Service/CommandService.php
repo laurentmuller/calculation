@@ -30,7 +30,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_required: bool,
  *     is_array: bool,
  *     description: string,
- *     default: mixed}
+ *     default: mixed,
+ *     display: string}
  * @psalm-type OptionType = array{
  *     name: string,
  *     shortcut: string,
@@ -38,7 +39,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_value_required: bool,
  *     is_multiple: bool,
  *     description: string,
- *     default: mixed}
+ *     default: mixed,
+ *     display: string}
  * @psalm-type CommandType = array{
  *     name: string,
  *     description: string,
@@ -54,18 +56,25 @@ use Symfony\Contracts\Cache\CacheInterface;
 class CommandService
 {
     private const HELP_REPLACE = [
+        // command name
+        '/development/public/index.php' => 'bin/console',
         '/development/public' => 'bin/console',
         '/index.php/command' => 'bin/console',
+        'bin/console/content' => 'bin/console',
         'bin/console/pdf' => 'bin/console',
+        // classes
         '<info>' => '<span class="text-success">',
         '<comment>' => '<span class="text-warning">',
         '</info>' => '</span>',
         '</comment>' => '</span>',
         '</>' => '</span>',
+        // line break
         "\n" => '<br>',
     ];
-    private const USAGE_PATTERN = '/(\[.*)( \[--\])/m';
-    private const USAGE_REPLACE = '[options]$2';
+
+    private const USAGE_REPLACE = [
+        '/(\[.*)( \[--\])/m' => '[options]$2',
+    ];
 
     public function __construct(
         private readonly KernelInterface $kernel,
@@ -122,7 +131,7 @@ class CommandService
      */
     public function getCommands(): array
     {
-        return $this->cache->get('cache.service.command', function () {
+        return $this->cache->get('cache.command.service', function () {
             $result = $this->execute('list', ['--format' => 'json']);
             if (!$result->isSuccess()) {
                 return [];
@@ -137,11 +146,13 @@ class CommandService
                  * @psalm-param CommandType $command
                  */
                 function (array $carry, array $command): array {
-                    if (!$command['hidden']) {
-                        $carry[$command['name']] = $this->updateCommand($command);
+                    if ($command['hidden']) {
+                        return $carry;
                     }
 
-                    return $carry;
+                    $this->updateCommand($command);
+
+                    return [$command['name'] => $command] + $carry;
                 },
                 []
             );
@@ -149,14 +160,6 @@ class CommandService
 
             return $result;
         });
-    }
-
-    /**
-     * Gets the environment.
-     */
-    public function getEnvironment(): string
-    {
-        return $this->kernel->getEnvironment();
     }
 
     /**
@@ -181,7 +184,7 @@ class CommandService
         return \array_key_exists($name, $this->getCommands());
     }
 
-    private function encodeDefaultValue(mixed $default): array|string
+    private function encodeDefaultValue(mixed $default): string
     {
         if (false === $default || null === $default) {
             return '';
@@ -190,7 +193,7 @@ class CommandService
             return 'INF';
         }
         if ([] === $default) {
-            return [];
+            return '[]';
         }
 
         return \str_replace('\\\\', '\\', (string) \json_encode($default, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE));
@@ -199,11 +202,9 @@ class CommandService
     /**
      * @psalm-param CommandType $command
      *
-     * @psalm-return CommandType
-     *
      * @phpstan-ignore-next-line
      */
-    private function updateCommand(array $command): array
+    private function updateCommand(array &$command): void
     {
         if ($command['help'] === $command['description']) {
             $command['help'] = '';
@@ -213,17 +214,15 @@ class CommandService
         if (0 === \count($command['definition']['arguments'])) {
             $command['usage'] = [\sprintf('%s [options]', $command['name'])];
         } else {
-            $command['usage'] = \preg_replace(self::USAGE_PATTERN, self::USAGE_REPLACE, $command['usage']);
+            $command['usage'] = StringUtils::pregReplace(self::USAGE_REPLACE, $command['usage']);
         }
         foreach ($command['definition']['arguments'] as &$argument) {
             $argument['description'] = StringUtils::replace(self::HELP_REPLACE, $argument['description']);
-            $argument['default'] = $this->encodeDefaultValue($argument['default']);
+            $argument['display'] = $this->encodeDefaultValue($argument['default']);
         }
         foreach ($command['definition']['options'] as &$option) {
             $option['description'] = StringUtils::replace(self::HELP_REPLACE, $option['description']);
-            $option['default'] = $this->encodeDefaultValue($option['default']);
+            $option['display'] = $this->encodeDefaultValue($option['default']);
         }
-
-        return $command;
     }
 }

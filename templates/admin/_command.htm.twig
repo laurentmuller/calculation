@@ -2,18 +2,50 @@
 {% macro outputEntry(text) -%}
     <p class="mb-1 text-warning">{{ text }}</p>
 {% endmacro %}
-{% macro outputParam(value) -%}
-    <td class="text-success w-25"><pre class="mb-0 fs-6">{{ value|default('') }}</pre></td>
+{% macro outputParam(value, popover=null) -%}
+    {% set value = value|default('') %}
+    <td class="text-success w-25"{% if popover %} data-custom-html="{{ popover|e }}" data-custom-title="{{ value }}"{% endif %}>
+        <pre class="mb-0 fs-6">{{ value }}</pre>
+    </td>
 {% endmacro %}
-{% macro outputDescription(value, default) -%}
+{% macro outputDescription(value, display) -%}
 <td>
     {{- value|default('')|raw -}}
-    {%- if default == [] -%}
+    {%- if display == [] -%}
         <span class="text-warning"> (multiple values allowed)</span>
-    {%- elseif default != '' -%}
-        <span class="text-warning"> [default: {{ default }}]</span>
+    {%- elseif display -%}
+        <span class="text-warning"> [default: {{ display }}]</span>
     {%- endif -%}
 </td>
+{% endmacro %}
+{% macro tooltipArgument(argument) -%}
+<table class="table table-sm">
+    <tr>
+        <td>Required</td><td>:</td><td>{{ argument.is_required|json_encode }}</td>
+    </tr>
+    <tr>
+        <td>Array</td><td>:</td><td>{{ argument.is_array|json_encode }}</td>
+    </tr>
+    {%- if argument.display -%}
+        <tr><td>Default</td><td>:</td><td>{{ argument.display }}</td></tr>
+    {% endif %}
+</table>
+{% endmacro %}
+{% macro tooltipOption(option) -%}
+<table class="table table-sm">
+    <tr>
+        <td>Accept Value</td><td>:</td><td>{{ option.accept_value|json_encode }}</td>
+    </tr>
+    <tr>
+        <td>Value Required</td><td>:</td><td>{{ option.is_value_required|json_encode }}</td>
+    </tr>
+    <tr>
+        <td>Multiple</td><td>:</td><td>{{ option.is_multiple|json_encode }}</td>
+    </tr>
+    {% if option.accept_value and option.display %}
+        <tr><td>Default</td><td>:</td><td>{{ option.display }}</td></tr>
+    {% endif %}
+</table>
 {% endmacro %}
 {# content #}
 <div class="content">
@@ -36,8 +68,8 @@
         <tbody>
         {% for argument in command.definition.arguments %}
             <tr>
-                {{ _self.outputParam(argument.name) }}
-                {{ _self.outputDescription(argument.description, argument.default) }}
+                {{ _self.outputParam(argument.name, _self.tooltipArgument(argument)) }}
+                {{ _self.outputDescription(argument.description, argument.display) }}
             </tr>
         {% endfor %}
         </tbody>
@@ -55,8 +87,8 @@
                 {%- set arg = '    ' ~ option.name -%}
             {% endif %}
             <tr>
-                {{ _self.outputParam(arg) }}
-                {{ _self.outputDescription(option.description, option.default) }}
+                {{ _self.outputParam(arg, _self.tooltipOption(option)) }}
+                {{ _self.outputDescription(option.description, option.display) }}
             </tr>
         {% endfor %}
         </tbody>
@@ -65,6 +97,6 @@
 {# help #}
 {% if command.help %}
     {{ _self.outputEntry('Help:') }}
-    <pre class="ms-2 mb-0 text-wrap">{{ command.help|raw }}</pre>
+    <pre class="ms-2 mb-0">{{ command.help|raw }}</pre>
 {% endif %}
 </div>

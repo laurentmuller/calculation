@@ -32,6 +32,8 @@ use fpdf\PdfTextAlignment;
  */
 class CommandReport extends AbstractArrayReport
 {
+    private const FIXED_WIDTH = 46.0;
+
     /**
      * @psalm-param CommandType[] $entities
      */
@@ -75,18 +77,25 @@ class CommandReport extends AbstractArrayReport
         $this->cell(2.0);
     }
 
-    private function encodeDescription(string $description, mixed $default): string
+    private function encodeDescription(string $description, string $display): string
     {
         $html = $this->replaceHtml($description);
-        if ([] === $default) {
+        if ('[]' === $display) {
             return \sprintf('%s (multiple values allowed)', $html);
         }
 
-        if (!\is_string($default) || '' === $default) {
-            return $html;
+        if ('' !== $display) {
+            return \sprintf('%s  [default: %s]', $html, $display);
         }
 
-        return \sprintf('%s  [default: %s]', $html, $default);
+        return $html;
+    }
+
+    private function fixedCell(string $text): void
+    {
+        $this->applyFixedStyle();
+        $this->cell(self::FIXED_WIDTH, text: $text);
+        $this->resetStyle();
     }
 
     /**
@@ -101,11 +110,9 @@ class CommandReport extends AbstractArrayReport
         $this->outputHeader('Arguments:');
         foreach ($arguments as $argument) {
             $this->cellIndent();
-            $this->applyFixedStyle();
-            $this->cell(46, text: $argument['name']);
-            $this->resetStyle();
+            $this->fixedCell($argument['name']);
             $this->multiCell(
-                text: $this->encodeDescription($argument['description'], $argument['default']),
+                text: $this->encodeDescription($argument['description'], $argument['display']),
                 align: PdfTextAlignment::LEFT
             );
         }
@@ -159,11 +166,9 @@ class CommandReport extends AbstractArrayReport
         $this->outputHeader('Options:');
         foreach ($options as $option) {
             $this->cellIndent();
-            $this->applyFixedStyle();
-            $this->cell(46, text: $this->buildOption($option['name'], $option['shortcut']));
-            $this->resetStyle();
+            $this->fixedCell($this->buildOption($option['name'], $option['shortcut']));
             $this->multiCell(
-                text: $this->encodeDescription($option['description'], $option['default']),
+                text: $this->encodeDescription($option['description'], $option['display']),
                 align: PdfTextAlignment::LEFT
             );
         }

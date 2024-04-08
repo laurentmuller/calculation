@@ -54,7 +54,7 @@ class CommandController extends AbstractController
 
         $command = $service->getCommand($name);
         $request->getSession()->set(self::LAST_COMMAND, $name);
-        $view = $this->renderView('admin/_command.htm.twig', ['command' => $command]);
+        $view = $this->renderView('command/_command.htm.twig', ['command' => $command]);
 
         return $this->jsonTrue(['content' => $view]);
     }
@@ -85,7 +85,7 @@ class CommandController extends AbstractController
             'names' => $service->getNames(),
         ];
 
-        return $this->render('admin/commands.html.twig', $parameters);
+        return $this->render('command/commands.html.twig', $parameters);
     }
 
     /**

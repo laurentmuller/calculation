@@ -28,9 +28,7 @@ function updatePopover() {
             return e.dataset.customTitle;
         },
         content: function (e) {
-            const template = document.createElement('template');
-            template.innerHTML = e.dataset.customHtml;
-            return template.content;
+            return $(e.dataset.customHtml);
         }
     };
     getPopovers().forEach(function (element) {
@@ -67,6 +65,7 @@ function loadContent(name) {
     'use strict';
     const $command = $('#command');
     const callback = () => {
+        hidePopover();
         const $selection = $command.getSelectedOption();
         if ($selection && $selection.length) {
             loadContent($selection.text());
@@ -74,7 +73,8 @@ function loadContent(name) {
             $('.content').fadeOut();
         }
     };
-    $command.on('change', function () {
+    $command.on('input', function () {
+        hidePopover();
         $command.createTimer(callback, 350);
     }).trigger('focus');
 

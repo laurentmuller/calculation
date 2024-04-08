@@ -11,7 +11,7 @@
 {% macro outputDescription(value, display) -%}
 <td>
     {{- value|default('')|raw -}}
-    {%- if display == [] -%}
+    {%- if display == '[]' -%}
         <span class="text-warning"> (multiple values allowed)</span>
     {%- elseif display -%}
         <span class="text-warning"> [default: {{ display }}]</span>
@@ -19,33 +19,38 @@
 </td>
 {% endmacro %}
 {% macro tooltipArgument(argument) -%}
-<table class="table table-sm">
-    <tr>
-        <td>Required</td><td>:</td><td>{{ argument.is_required|json_encode }}</td>
-    </tr>
-    <tr>
-        <td>Array</td><td>:</td><td>{{ argument.is_array|json_encode }}</td>
-    </tr>
-    {%- if argument.display -%}
-        <tr><td>Default</td><td>:</td><td>{{ argument.display }}</td></tr>
-    {% endif %}
-</table>
+<div class="mx-2 mt-1">
+    <table class="table table-sm">
+        <tr>
+            <td>Required</td><td>:</td><td>{{ argument.is_required|json_encode }}</td>
+        </tr>
+        <tr>
+            <td>Array</td><td>:</td><td>{{ argument.is_array|json_encode }}</td>
+        </tr>
+        {%- if argument.display -%}
+            <tr><td>Default</td><td>:</td><td>{{ argument.display }}</td></tr>
+        {% endif %}
+    </table>
+</div>
 {% endmacro %}
 {% macro tooltipOption(option) -%}
-<table class="table table-sm">
-    <tr>
-        <td>Accept Value</td><td>:</td><td>{{ option.accept_value|json_encode }}</td>
-    </tr>
-    <tr>
-        <td>Value Required</td><td>:</td><td>{{ option.is_value_required|json_encode }}</td>
-    </tr>
-    <tr>
-        <td>Multiple</td><td>:</td><td>{{ option.is_multiple|json_encode }}</td>
-    </tr>
-    {% if option.accept_value and option.display %}
-        <tr><td>Default</td><td>:</td><td>{{ option.display }}</td></tr>
-    {% endif %}
-</table>
+<div class="mx-2 mt-1">
+    <table class="table table-sm">
+        <tr>
+            <td>Accept Value</td><td>:</td><td>{{ option.accept_value|json_encode }}</td>
+        </tr>
+        <tr>
+            <td>Value Required</td><td>:</td><td>{{ option.is_value_required|json_encode }}</td>
+        </tr>
+        <tr>
+            <td>Multiple</td><td>:</td><td>{{ option.is_multiple|json_encode }}</td>
+        </tr>
+        {% if option.accept_value and option.display %}
+            <tr><td>Default</td><td>:</td><td>{{ option.display }}</td></tr>
+        {% endif %}
+    </table>
+</div>
+
 {% endmacro %}
 {# content #}
 <div class="content">

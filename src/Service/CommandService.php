@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Model\CommandResult;
 use App\Utils\StringUtils;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
@@ -53,6 +54,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 class CommandService
 {
     private const HELP_REPLACE = [
+        '/development/public' => 'bin/console',
         '/index.php/command' => 'bin/console',
         'bin/console/pdf' => 'bin/console',
         '<info>' => '<span class="text-success">',
@@ -78,21 +80,23 @@ class CommandService
      * @param string $command    the command name to execute
      * @param array  $parameters the command parameters
      *
-     * @return string the command output result
+     * @return CommandResult the result of the execution
      *
-     * @throws \Exception
+     * @throws \Exception if the running command fail
      */
-    public function execute(string $command, array $parameters = []): string
+    public function execute(string $command, array $parameters = []): CommandResult
     {
-        $parameters['command'] = $command;
+        $parameters = ['command' => $command] + $parameters;
         $input = new ArrayInput($parameters);
         $output = new BufferedOutput();
 
         $application = new Application($this->kernel);
         $application->setAutoExit(false);
-        $application->run($input, $output);
+        $status = $application->run($input, $output);
+        $content = $output->fetch();
+        unset($application);
 
-        return $output->fetch();
+        return new CommandResult($status, $content);
     }
 
     /**
@@ -119,9 +123,13 @@ class CommandService
     public function getCommands(): array
     {
         return $this->cache->get('cache.service.command', function () {
-            $content = $this->execute('list', ['--format' => 'json']);
+            $result = $this->execute('list', ['--format' => 'json']);
+            if (!$result->isSuccess()) {
+                return [];
+            }
+
             /** @phpstan-var ContentType $decoded */
-            $decoded = StringUtils::decodeJson($content);
+            $decoded = StringUtils::decodeJson($result->content);
             $result = \array_reduce(
                 $decoded['commands'],
                 /**
@@ -141,6 +149,14 @@ class CommandService
 
             return $result;
         });
+    }
+
+    /**
+     * Gets the environment.
+     */
+    public function getEnvironment(): string
+    {
+        return $this->kernel->getEnvironment();
     }
 
     /**

@@ -13,15 +13,8 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Traits\ArrayTrait;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Service for cache commands.
@@ -30,10 +23,10 @@ class CacheService
 {
     use ArrayTrait;
 
-    private const CACHE_KEY = 'cache.pools';
-
-    public function __construct(private readonly KernelInterface $kernel, private readonly RequestStack $requestStack)
-    {
+    public function __construct(
+        private readonly CommandService $service,
+        private readonly CacheInterface $cache
+    ) {
     }
 
     /**
@@ -43,74 +36,45 @@ class CacheService
      */
     public function clear(): bool
     {
-        $this->getSessions()->remove(self::CACHE_KEY);
+        $parameters = [
+            '--all' => true,
+            '--env' => $this->getEnvironment(),
+        ];
+        $result = $this->service->execute('cache:pool:clear', $parameters);
 
-        $input = new ArrayInput([
-            'command' => 'cache:pool:clear',
-            'pools' => ['cache.global_clearer'],
-            '--env' => $this->kernel->getEnvironment(),
-        ]);
-
-        return $this->run($input);
+        return $result->isSuccess();
     }
 
     /**
      * Gets all available cache pools.
      *
-     * @throws \Exception if the running command fail
+     * @throws InvalidArgumentException
      */
     public function list(): array
     {
-        $session = $this->getSessions();
-        /** @psalm-var string[]|null $pools */
-        $pools = $session->get(self::CACHE_KEY);
-        if (\is_array($pools)) {
-            return $pools;
-        }
+        return $this->cache->get('cache.pools', function (): array {
+            $parameters = ['--env' => $this->getEnvironment()];
+            $result = $this->service->execute('cache:pool:list', $parameters);
+            if (!$result->isSuccess()) {
+                return [];
+            }
 
-        $input = new ArrayInput([
-            'command' => 'cache:pool:list',
-            '--env' => $this->kernel->getEnvironment(),
-        ]);
-        $output = new BufferedOutput();
-        if (!$this->run($input, $output)) {
-            return [];
-        }
-
-        $pools = $this->parseContent($output->fetch());
-        if ([] !== $pools) {
-            $session->set(self::CACHE_KEY, $pools);
-        }
-
-        return $pools;
+            return $this->parseContent($result->content);
+        });
     }
 
-    private function getSessions(): SessionInterface
+    private function getEnvironment(): string
     {
-        return $this->requestStack->getSession();
+        return $this->service->getEnvironment();
     }
 
     private function parseContent(string $content): array
     {
         /** @psalm-var string[] $lines */
-        $lines = \preg_split('/\r\n|\n|\r/', $content, flags: \PREG_SPLIT_NO_EMPTY);
+        $lines = \preg_split('/$\R?^/m', $content, flags: \PREG_SPLIT_NO_EMPTY);
         $callback = static fn (string $line): bool => !\str_starts_with($line, '-')
             && !\str_starts_with($line, 'Pool name');
 
         return $this->getSorted($this->getFiltered(\array_map('trim', $lines), $callback));
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function run(InputInterface $input, ?OutputInterface $output = null): bool
-    {
-        $application = new Application($this->kernel);
-        $application->setCatchExceptions(false);
-        $application->setAutoExit(false);
-        $result = $application->run($input, $output);
-        unset($application);
-
-        return Command::SUCCESS === $result;
     }
 }

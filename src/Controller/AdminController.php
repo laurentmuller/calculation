@@ -26,6 +26,7 @@ use App\Service\CacheService;
 use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
 use App\Utils\FileUtils;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -50,6 +51,8 @@ class AdminController extends AbstractController
 
     /**
      * Clear the application cache.
+     *
+     * @throws InvalidArgumentException
      */
     #[GetPost(path: '/clear', name: 'admin_clear')]
     public function clearCache(

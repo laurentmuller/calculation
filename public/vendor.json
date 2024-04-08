@@ -219,10 +219,9 @@
         {
             "name": "mermaid",
             "version": "10.9.0",
-            "source": "jsdelivr",
-            "prefix": "dist/",
+            "source": "cdnjs",
             "files": [
-                "dist/mermaid.js"
+                "mermaid.js"
             ]
         }
     ]

@@ -141,11 +141,14 @@ class FormHelper
     /**
      * Add a checkbox type to the builder and reset all values to default.
      *
-     * @param bool $notRequired true if not required; false if required
+     * @param bool $notRequired <code>true</code> if not required; <code>false</code> if required
+     * @param bool $switch      <code>true</code> to use the checkbox switch style, <code>false</code> to use default style
      */
-    public function addCheckboxType(bool $notRequired = true): self
+    public function addCheckboxType(bool $notRequired = true, bool $switch = true): self
     {
-        $this->labelClass('checkbox-switch');
+        if ($switch) {
+            $this->labelClass('checkbox-switch');
+        }
         if ($notRequired) {
             $this->notRequired();
         }
@@ -554,12 +557,13 @@ class FormHelper
     /**
      * Sets the translation domain.
      *
-     * @param ?string $domain the translation domain or null for default
+     * Use <code>null</code> to reuse the translation domain of the parent form. Use <code>false</code>
+     * to disable translations.
+     *
+     * @param string|false|null $domain the translation domain to set
      */
-    public function domain(?string $domain): self
+    public function domain(string|false|null $domain): self
     {
-        $domain = StringUtils::isString($domain) ? $domain : null;
-
         return $this->updateOption('translation_domain', $domain);
     }
 
@@ -715,7 +719,7 @@ class FormHelper
      */
     public function notRequired(): self
     {
-        return $this->updateOption('required', false);
+        return $this->required(false);
     }
 
     /**
@@ -745,6 +749,16 @@ class FormHelper
     public function readonly(): self
     {
         return $this->updateAttribute('readonly', true);
+    }
+
+    /**
+     * Sets the required property.
+     *
+     * @param bool $required <code>true</code> if required, <code>false</code> otherwise
+     */
+    public function required(bool $required): self
+    {
+        return $this->updateOption('required', $required);
     }
 
     /**

@@ -30,7 +30,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_required: bool,
  *     is_array: bool,
  *     description: string,
- *     default: mixed,
+ *     default: array|string|int|bool|null,
  *     display: string}
  * @psalm-type OptionType = array{
  *     name: string,
@@ -39,7 +39,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_value_required: bool,
  *     is_multiple: bool,
  *     description: string,
- *     default: mixed,
+ *     default: array|string|int|bool|null,
  *     display: string}
  * @psalm-type CommandType = array{
  *     name: string,
@@ -53,19 +53,27 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @psalm-type ContentType = array{
  *     commands:  CommandType[]}
  */
-class CommandService
+class CommandService implements \Countable
 {
+    /**
+     * The group name for commands without name space.
+     */
+    public const GLOBAL_GROUP = '_global';
+
     private const HELP_REPLACE = [
-        // command name
+        // development
         '/development/public/index.php' => 'bin/console',
-        '/development/public' => 'bin/console',
+        // production
+        '/calculation/public/index.php' => 'bin/console',
+        // local development
+        '/index.php/command/pdf' => 'bin/console',
         '/index.php/command' => 'bin/console',
-        'bin/console/content' => 'bin/console',
-        'bin/console/pdf' => 'bin/console',
         // classes
         '<info>' => '<span class="text-success">',
+        '<error>' => '<span class="text-danger">',
         '<comment>' => '<span class="text-warning">',
         '</info>' => '</span>',
+        '</error>' => '</span>',
         '</comment>' => '</span>',
         '</>' => '</span>',
         // line break
@@ -84,28 +92,58 @@ class CommandService
     }
 
     /**
+     * Gets the number of commands.
+     *
+     * @throws InvalidArgumentException
+     */
+    public function count(): int
+    {
+        return \count($this->getCommands());
+    }
+
+    /**
      * Execute the given command.
      *
-     * @param string $command    the command name to execute
-     * @param array  $parameters the command parameters
+     * @param string $command         the command name to execute
+     * @param array  $parameters      the command parameters
+     * @param bool   $catchExceptions sets whether to catch exceptions or not during commands execution
+     * @param bool   $catchErrors     sets whether to catch errors or not during commands execution
      *
      * @return CommandResult the result of the execution
      *
-     * @throws \Exception if the running command fail
+     * @throws \Exception if the running command fail. Bypass when <code>$catchExceptions</code> is <code>false</code>.
      */
-    public function execute(string $command, array $parameters = []): CommandResult
-    {
+    public function execute(
+        string $command,
+        array $parameters = [],
+        bool $catchExceptions = true,
+        bool $catchErrors = false,
+    ): CommandResult {
         $parameters = ['command' => $command] + $parameters;
         $input = new ArrayInput($parameters);
         $output = new BufferedOutput();
 
         $application = new Application($this->kernel);
+        $application->setCatchExceptions($catchExceptions);
+        $application->setCatchErrors($catchErrors);
         $application->setAutoExit(false);
         $status = $application->run($input, $output);
         $content = $output->fetch();
         unset($application);
 
         return new CommandResult($status, $content);
+    }
+
+    /**
+     * Gets the first command.
+     *
+     * @throws InvalidArgumentException
+     */
+    public function first(): array
+    {
+        $commands = $this->getCommands();
+
+        return \reset($commands);
     }
 
     /**
@@ -160,6 +198,28 @@ class CommandService
 
             return $result;
         });
+    }
+
+    /**
+     * Gets all command names grouped by name space.
+     *
+     * The first group key is the {@link GLOBAL_GROUP}. This is for commands without name space.
+     *
+     * @return array<string, string[]>
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getGroupedNames(): array
+    {
+        $groups = [];
+        $names = $this->getNames();
+        foreach ($names as $name) {
+            $values = \explode(':', $name);
+            $group = 1 === \count($values) ? self::GLOBAL_GROUP : $values[0];
+            $groups[$group][] = $name;
+        }
+
+        return $groups;
     }
 
     /**

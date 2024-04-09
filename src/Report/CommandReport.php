@@ -40,7 +40,7 @@ class CommandReport extends AbstractArrayReport
     public function __construct(AbstractController $controller, array $entities)
     {
         parent::__construct($controller, $entities);
-        $this->setTitleTrans('admin.commands.title');
+        $this->setTitleTrans('command.list.title');
     }
 
     protected function doRender(array $entities): bool
@@ -107,7 +107,7 @@ class CommandReport extends AbstractArrayReport
             return;
         }
 
-        $this->outputHeader('Arguments:');
+        $this->outputHeader('command.list.fields.arguments');
         foreach ($arguments as $argument) {
             $this->cellIndent();
             $this->fixedCell($argument['name']);
@@ -124,16 +124,16 @@ class CommandReport extends AbstractArrayReport
         if (!StringUtils::isString($description)) {
             return;
         }
-        $this->outputHeader('Description:');
+        $this->outputHeader('command.list.fields.description');
         $this->cellIndent();
         $this->multiCell(text: $description, align: PdfTextAlignment::LEFT);
         $this->lineBreak(1.0);
     }
 
-    private function outputHeader(string $text): void
+    private function outputHeader(string $id): void
     {
         PdfStyle::getHeaderStyle()->apply($this);
-        $this->cell(text: $text, move: PdfMove::NEW_LINE);
+        $this->cell(text: $this->trans($id), move: PdfMove::NEW_LINE);
         $this->resetStyle();
     }
 
@@ -142,13 +142,13 @@ class CommandReport extends AbstractArrayReport
         if ('' === $help) {
             return;
         }
-        $this->outputHeader('Help:');
+        $this->outputHeader('command.list.fields.help');
         $this->multiCell(text: $this->replaceHtml($help), align: PdfTextAlignment::LEFT);
     }
 
     private function outputName(string $name): void
     {
-        $this->outputHeader('Command:');
+        $this->outputHeader('command.list.fields.command');
         $this->cellIndent();
         $this->cell(text: $name, move: PdfMove::NEW_LINE);
         $this->lineBreak(1.0);
@@ -163,7 +163,7 @@ class CommandReport extends AbstractArrayReport
             return;
         }
 
-        $this->outputHeader('Options:');
+        $this->outputHeader('command.list.fields.options');
         foreach ($options as $option) {
             $this->cellIndent();
             $this->fixedCell($this->buildOption($option['name'], $option['shortcut']));
@@ -184,7 +184,7 @@ class CommandReport extends AbstractArrayReport
             return;
         }
 
-        $this->outputHeader('Usage:');
+        $this->outputHeader('command.list.fields.usage');
         $this->cellIndent();
         $this->applyFixedStyle(PdfFont::DEFAULT_SIZE);
         $this->cell(text: \implode("\n", $usage), move: PdfMove::NEW_LINE);

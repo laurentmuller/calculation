@@ -1,17 +1,23 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import homepage, button_pdf %}
 {# parameters #}
-{%- set title = 'admin.commands.title' -%}
+{%- set title = 'command.list.title' -%}
 {%- set title_icon = 'code' -%}
-{%- set title_description = 'admin.commands.description' -%}
+{%- set title_description = 'command.list.description' -%}
 {%- set selection = command.name -%}
+{% block card_container_class ' col col-xl-10 offset-xl-1' %}
 {# body #}
 {% block card_body %}
 <div class="mb-3">
-    <label for="command" class="form-label">{{ 'admin.commands.command'|trans }}</label>
+    <label for="command" class="form-label">{{ 'command.list.fields.command'|trans }}</label>
     <select id="command" name="command" class="form-select" data-url="{{ path('command_content', {'name': 'query'}) }}">
-    {% for name in names %}
-        <option{% if name == selection %} selected="selected"{% endif %}>{{ name }}</option>
+    {% for key, group in groups %}
+        {% set is_group = key != constant('App\\Service\\CommandService::GLOBAL_GROUP') %}
+        {% if is_group %}<optgroup label="{{ key }}">{% endif %}
+        {% for name in group %}
+            <option{% if name == selection %} selected="selected"{% endif %}>{{ name }}</option>
+        {% endfor %}
+        {% if is_group %}</optgroup>{% endif %}
     {% endfor %}
     </select>
 </div>
@@ -21,8 +27,11 @@
 {% block card_footer %}
 <div class="d-flex-wrap">
     {{ homepage() }}
+    <a href="#" class="btn btn-form btn-warning btn-execute" data-url="{{ path('command_execute', {'name': 'query'}) }}">
+        {{- 'command.execute.title'|trans -}}
+    </a>
     {{ button_pdf('command_pdf') }}
-    <small class="ms-auto">{{ 'admin.commands.counter'|trans({'%count%': names|length|integer}) }}</small>
+    <small class="ms-auto">{{ 'command.list.counter'|trans({'%count%': count|integer}) }}</small>
 </div>
 {% endblock %}
 {# javascripts #}

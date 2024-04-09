@@ -13,9 +13,11 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Attribute\Get;
+use App\Attribute\GetPost;
 use App\Interfaces\RoleInterface;
 use App\Report\CommandReport;
 use App\Response\PdfResponse;
+use App\Service\CommandBuilderService;
 use App\Service\CommandService;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,6 +30,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller for the console commands.
+ *
+ * @psalm-import-type CommandType from CommandService
  */
 #[AsController]
 #[Route(path: '/command')]
@@ -46,7 +50,7 @@ class CommandController extends AbstractController
         #[MapQueryParameter]
         string $name,
         Request $request,
-        CommandService $service,
+        CommandService $service
     ): JsonResponse {
         if (!$service->hasCommand($name)) {
             throw $this->createNotFoundException("Unable to find the command '$name'.");
@@ -71,21 +75,55 @@ class CommandController extends AbstractController
         #[MapQueryParameter]
         ?string $name = null
     ): Response {
-        $commands = $service->getCommands();
         /** @psalm-var ?string $commandName */
         $commandName = $name ?? $request->getSession()->get(self::LAST_COMMAND);
         if (\is_string($commandName) && $service->hasCommand($commandName)) {
             $command = $service->getCommand($commandName);
         } else {
-            $command = \reset($commands);
+            $command = $service->first();
         }
 
         $parameters = [
             'command' => $command,
-            'names' => $service->getNames(),
+            'count' => $service->count(),
+            'groups' => $service->getGroupedNames(),
         ];
 
         return $this->render('command/commands.html.twig', $parameters);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    #[GetPost(path: '/execute', name: 'command_execute')]
+    public function execute(
+        #[MapQueryParameter]
+        string $name,
+        Request $request,
+        CommandService $service,
+        CommandBuilderService $builder,
+    ): Response {
+        if (!$service->hasCommand($name)) {
+            throw $this->createNotFoundException("Unable to find the command '$name'.");
+        }
+
+        /** @psalm-var CommandType $command */
+        $command = $service->getCommand($name);
+        $form = $builder->getForm($command);
+        if ($this->handleRequestForm($request, $form)) {
+            /** @psalm-var array<string, array|string|int|bool|null> $data */
+            $data = $form->getData();
+            $parameters = $builder->getParameters($data);
+            if ([] !== $parameters) {
+            }
+
+            return $this->redirectToRoute('command_all', ['name' => $name]);
+        }
+
+        return $this->render('command/command_execute_query.html.twig', [
+            'command' => $command,
+            'form' => $form,
+        ]);
     }
 
     /**

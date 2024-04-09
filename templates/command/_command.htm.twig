@@ -1,6 +1,6 @@
 {# macros #}
 {% macro outputEntry(text) -%}
-    <p class="mb-1 text-warning">{{ text }}</p>
+    <p class="mb-1 text-warning">{{ text|trans }}</p>
 {% endmacro %}
 {% macro outputParam(value, popover=null) -%}
     {% set value = value|default('') %}
@@ -56,19 +56,19 @@
 <div class="content">
 {# description #}
 {% if command.description %}
-    {{ _self.outputEntry('Description:') }}
+    {{ _self.outputEntry('command.list.fields.description') }}
     <p class="ms-2">{{ command.description }}</p>
 {% endif %}
 {# usage #}
 {% if command.usage|length %}
-    {{ _self.outputEntry('Usage:') }}
+    {{ _self.outputEntry('command.list.fields.usage') }}
     {% for usage in command.usage %}
         <pre class="ms-2 fs-6">{{ usage }}</pre>
     {% endfor %}
 {% endif %}
 {# arguments #}
 {% if command.definition.arguments|length %}
-    {{ _self.outputEntry('Arguments:') }}
+    {{ _self.outputEntry('command.list.fields.arguments') }}
     <table class="table table-sm table-borderless ms-2">
         <tbody>
         {% for argument in command.definition.arguments %}
@@ -82,7 +82,7 @@
 {% endif %}
 {# options #}
 {% if command.definition.options|length %}
-    {{ _self.outputEntry('Options:') }}
+    {{ _self.outputEntry('command.list.fields.options') }}
     <table class="table table-sm table-borderless ms-2">
         <tbody>
         {% for option in command.definition.options %}
@@ -101,7 +101,7 @@
 {% endif %}
 {# help #}
 {% if command.help %}
-    {{ _self.outputEntry('Help:') }}
+    {{ _self.outputEntry('command.list.fields.help') }}
     <pre class="ms-2 mb-0">{{ command.help|raw }}</pre>
 {% endif %}
 </div>

@@ -7,7 +7,7 @@ function getPopovers() {
     return document.querySelectorAll('.content [data-custom-html]');
 }
 
-function hidePopover() {
+function disposePopover() {
     'use strict';
     getPopovers().forEach(function (element) {
         const popover = bootstrap.Popover.getInstance(element);
@@ -17,7 +17,7 @@ function hidePopover() {
     });
 }
 
-function updatePopover() {
+function createPopover() {
     'use strict';
     const options = {
         html: true,
@@ -43,7 +43,6 @@ function updatePopover() {
  */
 function loadContent(name) {
     'use strict';
-    hidePopover();
     const url = $('#command').data('url').replace('query', name);
     $.get(url, function (data) {
         if (data.result) {
@@ -51,11 +50,20 @@ function loadContent(name) {
             const url = new URL(location);
             url.searchParams.set('name', name);
             window.history.pushState({}, '', url);
-            updatePopover();
+            updateExecute();
+            createPopover();
         } else {
             $('.content').fadeOut();
         }
     });
+}
+
+function updateExecute() {
+    'use strict';
+    const $command = $('#command');
+    const $execute = $('.btn-execute');
+    const href = $execute.data('url').replace('query', $command.val());
+    $execute.attr('href', href);
 }
 
 /**
@@ -65,19 +73,13 @@ function loadContent(name) {
     'use strict';
     const $command = $('#command');
     const callback = () => {
-        hidePopover();
-        const $selection = $command.getSelectedOption();
-        if ($selection && $selection.length) {
-            loadContent($selection.text());
-        } else {
-            $('.content').fadeOut();
-        }
+        loadContent($command.val());
     };
     $command.on('input', function () {
-        hidePopover();
+        disposePopover();
         $command.createTimer(callback, 350);
     }).trigger('focus');
 
-    // popover
-    updatePopover();
+    updateExecute();
+    createPopover();
 }(jQuery));

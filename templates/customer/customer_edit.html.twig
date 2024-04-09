@@ -1,5 +1,4 @@
 {% extends 'cards/card_edit.html.twig' %}
-
 {# parameters #}
 {%- set title = new ? 'customer.add.title' : 'customer.edit.title' -%}
 {%- set title_icon = ICON_CUSTOMER -%}
@@ -9,6 +8,7 @@
                      'data-search-title': url('ajax_search_title'),
                      'data-search-address': url('ajax_search_address'),
                      'data-error': 'customer.edit.error_search'|trans}) -%}
+{# body #}
 {% block card_body %}
 <div class="row">
     <div class="col-md-6">

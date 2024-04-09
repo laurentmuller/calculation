@@ -175,7 +175,7 @@ class CommandService implements \Countable
                 return [];
             }
 
-            /** @phpstan-var ContentType $decoded */
+            /** @psalm-var ContentType $decoded */
             $decoded = StringUtils::decodeJson($result->content);
             $result = \array_reduce(
                 $decoded['commands'],
@@ -262,7 +262,7 @@ class CommandService implements \Countable
     /**
      * @psalm-param CommandType $command
      *
-     * @phpstan-ignore-next-line
+     * @phpstan-param array $command
      */
     private function updateCommand(array &$command): void
     {

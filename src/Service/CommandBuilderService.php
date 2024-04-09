@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to build form for a command.
@@ -40,8 +41,10 @@ readonly class CommandBuilderService
      */
     public const OPTION_PREFIX = 'options-';
 
-    public function __construct(private FormFactoryInterface $factory)
-    {
+    public function __construct(
+        private FormFactoryInterface $factory,
+        private TranslatorInterface $translator
+    ) {
     }
 
     /**
@@ -95,48 +98,13 @@ readonly class CommandBuilderService
         );
 
         // name
-        $builder->add('name', PlainType::class, [
-            'label' => 'command.list.fields.command',
-            //'help' => $command['description'],
-            'help_html' => true,
-            'expanded' => true,
-        ]);
+        $this->addName($builder, $command);
 
         // arguments
-        foreach ($command['definition']['arguments'] as $key => $argument) {
-            if ($argument['is_array']) {
-                $this->addArgumentText($builder, $key, $argument, $transformer);
-                continue;
-            }
-
-            $default = $argument['default'];
-            if (\is_bool($default)) {
-                $this->addArgumentBool($builder, $key, $argument);
-                continue;
-            }
-
-            if (null === $default || \is_string($default)) {
-                $this->addArgumentText($builder, $key, $argument);
-            }
-        }
+        $this->addArguments($builder, $command, $transformer);
 
         // options
-        foreach ($command['definition']['options'] as $key => $option) {
-            if ($option['is_multiple']) {
-                $this->addOptionText($builder, $key, $option, $transformer);
-                continue;
-            }
-
-            $default = $option['default'];
-            if (null === $default || \is_string($default)) {
-                $this->addOptionText($builder, $key, $option);
-                continue;
-            }
-
-            if (!$option['accept_value'] || \is_bool($default)) {
-                $this->addOptionBool($builder, $key, $option);
-            }
-        }
+        $this->addOptions($builder, $command, $transformer);
 
         return $builder->getForm();
     }
@@ -158,7 +126,7 @@ readonly class CommandBuilderService
             if (\str_starts_with($key, self::ARGUMENT_PREFIX)) {
                 $key = \substr($key, \strlen(self::ARGUMENT_PREFIX));
             } elseif (\str_starts_with($key, self::OPTION_PREFIX)) {
-                $key = \substr($key, \strlen(self::OPTION_PREFIX));
+                $key = '--' . \substr($key, \strlen(self::OPTION_PREFIX));
             }
             $parameters[$key] = $value;
         }
@@ -179,6 +147,31 @@ readonly class CommandBuilderService
             'help_html' => true,
             'translation_domain' => false,
         ]);
+    }
+
+    /**
+     * @psalm-param CommandType $command
+     *
+     * @phpstan-param array $command
+     */
+    private function addArguments(FormBuilderInterface $builder, array $command, CallbackTransformer $transformer): void
+    {
+        foreach ($command['definition']['arguments'] as $key => $argument) {
+            if ($argument['is_array']) {
+                $this->addArgumentText($builder, $key, $argument, $transformer);
+                continue;
+            }
+
+            $default = $argument['default'];
+            if (\is_bool($default)) {
+                $this->addArgumentBool($builder, $key, $argument);
+                continue;
+            }
+
+            if (null === $default || \is_string($default)) {
+                $this->addArgumentText($builder, $key, $argument);
+            }
+        }
     }
 
     /**
@@ -206,6 +199,23 @@ readonly class CommandBuilderService
     }
 
     /**
+     * @psalm-param CommandType $command
+     *
+     * @phpstan-param array $command
+     */
+    private function addName(FormBuilderInterface $builder, array $command): void
+    {
+        // name
+        $builder->add('name', PlainType::class, [
+            'label' => $this->translator->trans('command.list.fields.command'),
+            'help' => $command['description'],
+            'help_html' => true,
+            'expanded' => true,
+            'translation_domain' => false,
+        ]);
+    }
+
+    /**
      * @psalm-param OptionType $option
      */
     private function addOptionBool(FormBuilderInterface $builder, string $key, array $option): void
@@ -218,6 +228,31 @@ readonly class CommandBuilderService
             'help_html' => true,
             'translation_domain' => false,
         ]);
+    }
+
+    /**
+     * @psalm-param CommandType $command
+     *
+     * @phpstan-param array $command
+     */
+    private function addOptions(FormBuilderInterface $builder, array $command, CallbackTransformer $transformer): void
+    {
+        foreach ($command['definition']['options'] as $key => $option) {
+            if ($option['is_multiple']) {
+                $this->addOptionText($builder, $key, $option, $transformer);
+                continue;
+            }
+
+            $default = $option['default'];
+            if (null === $default || \is_string($default)) {
+                $this->addOptionText($builder, $key, $option);
+                continue;
+            }
+
+            if (!$option['accept_value'] || \is_bool($default)) {
+                $this->addOptionBool($builder, $key, $option);
+            }
+        }
     }
 
     /**

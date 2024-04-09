@@ -114,10 +114,17 @@ class CommandController extends AbstractController
             /** @psalm-var array<string, array|string|int|bool|null> $data */
             $data = $form->getData();
             $parameters = $builder->getParameters($data);
-            if ([] !== $parameters) {
-            }
 
-            return $this->redirectToRoute('command_all', ['name' => $name]);
+            try {
+                $result = $service->execute($name, $parameters);
+
+                return $this->render('command/command_execute_result.html.twig', [
+                    'command' => $command,
+                    'result' => $result,
+                ]);
+            } catch (\Exception $e) {
+                return $this->renderFormException('command.result.error', $e);
+            }
         }
 
         return $this->render('command/command_execute_query.html.twig', [

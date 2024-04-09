@@ -1536,3 +1536,8 @@ command:
     execute:
         title: Exécuter
         description: Exécute la commande sélectionnée.
+    result:
+        title: Résultats
+        description: Résultat de l'exécution de la commande.
+        message: 'Message :'
+        error: Une erreur est survenue dans l'exécution de la command.

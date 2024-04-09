@@ -1,0 +1,27 @@
+{% extends 'cards/card_base.html.twig' %}
+{% from 'macros/_icons.html.twig' import homepage, button_cancel %}
+{# parameters #}
+{%- set title = 'command.result.title' -%}
+{%- set title_icon = 'code' -%}
+{%- set title_description = 'command.result.description' -%}
+{%- set cancel_path = path('command_all', {'name': command.name}) -%}
+{%- set is_error = not result.success -%}
+{# class #}
+{% block card_class is_error ? ' border-danger' : '' %}
+{% block card_header_class is_error ? ' text-bg-danger' : '' %}
+{# body #}
+{% block card_body %}
+    {% if is_error %}
+        <p class="mb-1 text-danger">{{ 'command.result.error'|trans }}</p>
+    {% else %}
+    {% endif %}
+    <p class="mb-1">{{ 'command.result.message'|trans }}</p>
+    <div class="border pre-scrollable pre-scrollable-highlight-php small-scrollbar font-monospace">
+        <pre class="highlight-php">{{- result.content -}}</pre>
+    </div>
+{% endblock %}
+{# footer #}
+{% block card_footer %}
+    {{ homepage() }}
+    {{ button_cancel(cancel_path, 'command.list.title') }}
+{% endblock %}

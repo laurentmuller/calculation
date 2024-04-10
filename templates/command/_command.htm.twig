@@ -2,10 +2,10 @@
 {% macro outputEntry(text) -%}
     <p class="mb-1 text-warning">{{ text|trans }}</p>
 {% endmacro %}
-{% macro outputParam(value, popover=null) -%}
+{% macro outputParam(value, popover, required=false) -%}
     {% set value = value|default('') %}
-    <td class="text-success w-25"{% if popover %} data-custom-html="{{ popover|e }}" data-custom-title="{{ value }}"{% endif %}>
-        <pre class="mb-0 fs-6">{{ value }}</pre>
+    <td class="text-success w-25" data-custom-html="{{ popover|e }}" data-custom-title="{{ value }}">
+        <pre class="mb-0 fs-6{% if required %} required{% endif %}">{{ value }}</pre>
     </td>
 {% endmacro %}
 {% macro outputDescription(value, display) -%}
@@ -28,7 +28,7 @@
             <td>Array</td><td>:</td><td>{{ argument.is_array|json_encode }}</td>
         </tr>
         {%- if argument.display -%}
-            <tr><td>Default</td><td>:</td><td>{{ argument.display }}</td></tr>
+            <tr><td>Default</td><td>:</td><td class="text-warning">{{ argument.display }}</td></tr>
         {% endif %}
     </table>
 </div>
@@ -46,7 +46,7 @@
             <td>Multiple</td><td>:</td><td>{{ option.is_multiple|json_encode }}</td>
         </tr>
         {% if option.accept_value and option.display %}
-            <tr><td>Default</td><td>:</td><td>{{ option.display }}</td></tr>
+            <tr><td>Default</td><td>:</td><td class="text-warning">{{ option.display }}</td></tr>
         {% endif %}
     </table>
 </div>
@@ -73,7 +73,7 @@
         <tbody>
         {% for argument in command.definition.arguments %}
             <tr>
-                {{ _self.outputParam(argument.name, _self.tooltipArgument(argument)) }}
+                {{ _self.outputParam(argument.name, _self.tooltipArgument(argument), argument.is_required) }}
                 {{ _self.outputDescription(argument.description, argument.display) }}
             </tr>
         {% endfor %}
@@ -92,7 +92,7 @@
                 {%- set arg = '    ' ~ option.name -%}
             {% endif %}
             <tr>
-                {{ _self.outputParam(arg, _self.tooltipOption(option)) }}
+                {{ _self.outputParam(arg, _self.tooltipOption(option), option.is_value_required) }}
                 {{ _self.outputDescription(option.description, option.display) }}
             </tr>
         {% endfor %}

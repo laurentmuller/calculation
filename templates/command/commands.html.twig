@@ -1,5 +1,5 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage, button_pdf %}
+{% from 'macros/_icons.html.twig' import button_pdf %}
 {# parameters #}
 {%- set title = 'command.list.title' -%}
 {%- set title_icon = 'code' -%}
@@ -26,8 +26,7 @@
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
-    {{ homepage() }}
-    <a href="#" class="btn btn-form btn-warning btn-execute" data-url="{{ path('command_execute', {'name': 'query'}) }}">
+    <a href="#" class="btn btn-form btn-outline-warning btn-execute" data-url="{{ path('command_execute', {'name': 'query'}) }}">
         {{- 'command.execute.title'|trans -}}
     </a>
     {{ button_pdf('command_pdf') }}

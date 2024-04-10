@@ -1,27 +1,40 @@
 {% extends 'cards/card_base.html.twig' %}
-{% from 'macros/_icons.html.twig' import homepage, button_cancel %}
+{% from 'macros/_icons.html.twig' import link %}
 {# parameters #}
 {%- set title = 'command.result.title' -%}
 {%- set title_icon = 'code' -%}
 {%- set title_description = 'command.result.description' -%}
-{%- set cancel_path = path('command_all', {'name': command.name}) -%}
 {%- set is_error = not result.success -%}
 {# class #}
 {% block card_class is_error ? ' border-danger' : '' %}
 {% block card_header_class is_error ? ' text-bg-danger' : '' %}
 {# body #}
 {% block card_body %}
-    {% if is_error %}
-        <p class="mb-1 text-danger">{{ 'command.result.error'|trans }}</p>
-    {% else %}
-    {% endif %}
-    <p class="mb-1">{{ 'command.result.message'|trans }}</p>
-    <div class="border pre-scrollable pre-scrollable-highlight-php small-scrollbar font-monospace">
-        <pre class="highlight-php">{{- result.content -}}</pre>
-    </div>
+{# name #}
+{{ include('command/_command_name.html.twig', {'command': command}, with_context=false) }}
+<p class="mb-1">{{ 'command.result.message'|trans }}</p>
+<div class="border pre-scrollable small-scrollbar font-monospace p-2">
+    <pre id="result" class="highlight-php pre-wrap">{{- result.content -}}</pre>
+</div>
+{# error #}
+{% if is_error %}
+    <p class="mb-1 text-danger">{{ 'command.result.error'|trans }}</p>
+{% endif %}
 {% endblock %}
 {# footer #}
 {% block card_footer %}
-    {{ homepage() }}
-    {{ button_cancel(cancel_path, 'command.list.title') }}
+    {{ link(path('command_all', {'name': command.name}), 'command.list.title', 'btn btn-form btn-primary') }}
+    {{ link(path('command_execute', {'name': command.name}), 'command.result.re_run', 'btn btn-form btn-outline-warning') }}
+    <button type="button" class="btn btn-form btn-success btn-copy"
+            data-success="{{ 'common.copy_success'|trans }}"
+            data-error="{{ 'common.copy_error'|trans }}"
+            data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>
 {% endblock %}
+
+{# javascripts #}
+{% block javascripts -%}
+    {{ parent() }}
+    {{ asset_js('vendor/clipboard/clipboard.js') }}
+    {{ asset_js('js/plugins/plugin-copy.js') }}
+    {{ asset_js('js/application/command_result.js') }}
+{%- endblock %}

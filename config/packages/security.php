@@ -27,7 +27,7 @@ return static function (SecurityConfig $config): void {
 
     // roles
     $config->roleHierarchy(RoleInterface::ROLE_ADMIN, RoleInterface::ROLE_USER)
-        ->roleHierarchy(RoleInterface::ROLE_SUPER_ADMIN, [RoleInterface::ROLE_ADMIN, 'ROLE_ALLOWED_TO_SWITCH']);
+        ->roleHierarchy(RoleInterface::ROLE_SUPER_ADMIN, [RoleInterface::ROLE_ADMIN]);
 
     // user provider
     $config->provider('app_user_provider')
@@ -41,9 +41,12 @@ return static function (SecurityConfig $config): void {
         ->security(false);
 
     // main firewall
-    $firewall = $config->firewall('main');
-    $firewall->lazy(true)
-        ->switchUser();
+    $firewall = $config->firewall('main')
+        ->lazy(true);
+
+    // switch user
+    $firewall->switchUser()
+        ->role(RoleInterface::ROLE_SUPER_ADMIN);
 
     // login
     $firewall->formLogin()
@@ -91,7 +94,7 @@ return static function (SecurityConfig $config): void {
     foreach ($access as $role => $paths) {
         foreach ($paths as $path) {
             $config->accessControl()
-                ->requiresChannel('%env(SECURE_SCHEME)%')
+                ->requiresChannel('%env(string:SECURE_SCHEME)%')
                 ->roles($role)
                 ->path($path);
         }

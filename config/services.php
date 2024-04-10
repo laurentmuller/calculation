@@ -32,7 +32,7 @@ return static function (ContainerConfigurator $config): void {
         'mailer_user_name' => '%app_name%',
         'mailer_user_email' => 'calculation@bibi.nu',
         // cookies
-        'cookie_path' => '%env(string:string:COOKIE_PATH)%',
+        'cookie_path' => '%env(string:COOKIE_PATH)%',
         // keys
         'akismet_key' => '%env(string:AKISMET_KEY)%',
         'ip_stack_key' => '%env(string:IP_STACK_KEY)%',

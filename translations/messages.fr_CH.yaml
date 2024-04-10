@@ -1526,6 +1526,7 @@ command:
         title: Commandes
         description: Liste des commandes disponibles dans l'application.
         counter: 'Nombre de commandes : %count%'
+        error: Impossible de trouver la commande '%name%'.
         fields:
             command: 'Commande :'
             description: 'Description :'
@@ -1540,4 +1541,5 @@ command:
         title: Résultats
         description: Résultat de l'exécution de la commande.
         message: 'Message :'
-        error: Une erreur est survenue dans l'exécution de la command.
+        re_run: Relancer
+        error: Une erreur est survenue dans l'exécution de la commande.

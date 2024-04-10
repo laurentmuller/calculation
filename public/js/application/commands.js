@@ -23,7 +23,7 @@ function createPopover() {
         html: true,
         trigger: 'hover',
         placement: 'top',
-        customClass: 'popover-table',
+        customClass: 'popover-table popover-w-100',
         title: function (e) {
             return e.dataset.customTitle;
         },

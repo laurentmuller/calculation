@@ -12,15 +12,11 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Form\Type\PlainType;
+use App\Form\FormHelper;
 use App\Utils\StringUtils;
 use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Service to build form for a command.
@@ -34,42 +30,33 @@ readonly class CommandBuilderService
     /**
      * The argument form prefix.
      */
-    public const ARGUMENT_PREFIX = 'arguments-';
+    public const ARGUMENT_PREFIX = 'argument-';
 
     /**
      * The option form prefix.
      */
-    public const OPTION_PREFIX = 'options-';
+    public const OPTION_PREFIX = 'option-';
 
-    public function __construct(
-        private FormFactoryInterface $factory,
-        private TranslatorInterface $translator
-    ) {
+    public function __construct(private FormFactoryInterface $factory)
+    {
     }
 
     /**
-     * Gets field names and default values for the given command.
+     * Create the model (names and default values) for the given command.
      *
      * @psalm-param CommandType $command
      *
-     * @return array<string, array|string|int|bool|null>
+     * @psalm-return array<string, array|scalar|null>
      *
-     * @phpstan-ignore-next-line
+     * @phpstan-param array $command
      */
-    public function getData(array $command): array
+    public function createData(array $command): array
     {
         $data = [];
-
-        // name
-        $data['name'] = $command['name'];
-
-        // arguments
         foreach ($command['definition']['arguments'] as $key => $argument) {
             $name = $this->addPrefix($key, self::ARGUMENT_PREFIX);
             $data[$name] = $argument['default'];
         }
-
-        // options
         foreach ($command['definition']['options'] as $key => $option) {
             $name = $this->addPrefix($key, self::OPTION_PREFIX);
             $data[$name] = $option['default'];
@@ -82,51 +69,43 @@ readonly class CommandBuilderService
      * Create a form for the given command.
      *
      * @psalm-param CommandType $command
+     * @psalm-param array<string, array|scalar|null> $data
      *
-     * @phpstan-ignore-next-line
+     * @phpstan-param array $command
      */
-    public function getForm(array $command): FormInterface
+    public function createForm(array $command, array $data): FormInterface
     {
-        $data = $this->getData($command);
         $builder = $this->factory->createBuilder(data: $data);
+        $helper = new FormHelper($builder);
 
-        // transformer for array
-        $transformer = new CallbackTransformer(
-            /** @psalm-param string[] $data */
-            fn (array $data) => \implode(',', \array_filter($data)),
-            fn (?string $data) => StringUtils::isString($data) ? \explode(',', $data) : []
-        );
+        $transformer = $this->createDataTransformerInterface();
+        $this->addArguments($helper, $command, $transformer);
+        $this->addOptions($helper, $command, $transformer);
 
-        // name
-        $this->addName($builder, $command);
-
-        // arguments
-        $this->addArguments($builder, $command, $transformer);
-
-        // options
-        $this->addOptions($builder, $command, $transformer);
-
-        return $builder->getForm();
+        return $helper->createForm();
     }
 
     /**
-     * Gets the command parameters from the given data.
+     * Create the command parameters from the given command and data.
      *
-     * @param array<string, array|string|int|bool|null> $data
+     * @psalm-param CommandType                      $command
+     * @psalm-param array<string, array|scalar|null> $data
      *
-     * @return array<string, array|string|int|bool|null> the command parameters
+     * @psalm-return array<string, array|scalar|null>
+     *
+     * @phpstan-param array $command
      */
-    public function getParameters(array $data): array
+    public function createParameters(array $command, array $data): array
     {
         $parameters = [];
         foreach ($data as $key => $value) {
-            if ('name' === $key || null === $value || false === $value || [] === $value) {
+            if (null === $value || false === $value || [] === $value) {
                 continue;
             }
-            if (\str_starts_with($key, self::ARGUMENT_PREFIX)) {
-                $key = \substr($key, \strlen(self::ARGUMENT_PREFIX));
-            } elseif (\str_starts_with($key, self::OPTION_PREFIX)) {
-                $key = '--' . \substr($key, \strlen(self::OPTION_PREFIX));
+            if ($this->isArgumentPrefix($key)) {
+                $key = $this->getArgumentName($command, $key);
+            } elseif ($this->isOptionPrefix($key)) {
+                $key = $this->getOptionName($command, $key);
             }
             $parameters[$key] = $value;
         }
@@ -135,18 +114,45 @@ readonly class CommandBuilderService
     }
 
     /**
+     * Validate the model (names) for the given command.
+     *
+     * @psalm-param CommandType $command
+     * @psalm-param array<string, array|scalar|null> $data
+     *
+     * @psalm-return array<string, array|scalar|null>
+     *
+     * @phpstan-param array $command
+     */
+    public function validateData(array $command, array $data): array
+    {
+        $arguments = $command['definition']['arguments'];
+        $options = $command['definition']['options'];
+
+        return \array_filter($data, function (string $key) use ($arguments, $options): bool {
+            if ($this->isArgumentPrefix($key)) {
+                return \array_key_exists($this->trimArgumentPrefix($key), $arguments);
+            }
+            if ($this->isOptionPrefix($key)) {
+                return \array_key_exists($this->trimOptionPrefix($key), $options);
+            }
+
+            return false;
+        }, \ARRAY_FILTER_USE_KEY);
+    }
+
+    /**
      * @psalm-param ArgumentType $argument
      */
-    private function addArgumentBool(FormBuilderInterface $builder, string $key, array $argument): void
+    private function addArgumentBool(FormHelper $helper, string $key, array $argument): void
     {
-        $name = $this->addPrefix($key, self::ARGUMENT_PREFIX);
-        $builder->add($name, CheckboxType::class, [
-            'label' => $argument['name'],
-            'help' => $argument['description'],
-            'required' => $argument['is_required'],
-            'help_html' => true,
-            'translation_domain' => false,
-        ]);
+        $field = $this->addPrefix($key, self::ARGUMENT_PREFIX);
+        $helper->field($field)
+            ->label($argument['name'])
+            ->help($argument['description'])
+            ->required($argument['is_required'])
+            ->domain(false)
+            ->helpHtml()
+            ->addCheckboxType(switch: false);
     }
 
     /**
@@ -154,22 +160,22 @@ readonly class CommandBuilderService
      *
      * @phpstan-param array $command
      */
-    private function addArguments(FormBuilderInterface $builder, array $command, CallbackTransformer $transformer): void
+    private function addArguments(FormHelper $helper, array $command, CallbackTransformer $transformer): void
     {
         foreach ($command['definition']['arguments'] as $key => $argument) {
             if ($argument['is_array']) {
-                $this->addArgumentText($builder, $key, $argument, $transformer);
+                $this->addArgumentText($helper, $key, $argument, $transformer);
                 continue;
             }
 
             $default = $argument['default'];
             if (\is_bool($default)) {
-                $this->addArgumentBool($builder, $key, $argument);
+                $this->addArgumentBool($helper, $key, $argument);
                 continue;
             }
 
             if (null === $default || \is_string($default)) {
-                $this->addArgumentText($builder, $key, $argument);
+                $this->addArgumentText($helper, $key, $argument);
             }
         }
     }
@@ -178,56 +184,36 @@ readonly class CommandBuilderService
      * @psalm-param ArgumentType $argument
      */
     private function addArgumentText(
-        FormBuilderInterface $builder,
+        FormHelper $helper,
         string $key,
         array $argument,
         ?CallbackTransformer $transformer = null
     ): void {
-        $name = $this->addPrefix($key, self::ARGUMENT_PREFIX);
+        $field = $this->addPrefix($key, self::ARGUMENT_PREFIX);
         $required = $transformer instanceof CallbackTransformer ? false : $argument['is_required'];
-        $builder->add($name, TextType::class, [
-            'label' => $argument['name'],
-            'help' => $argument['description'],
-            'required' => $required,
-            'help_html' => true,
-            'translation_domain' => false,
-        ]);
-        if ($transformer instanceof CallbackTransformer) {
-            $builder->get($name)
-                ->addModelTransformer($transformer);
-        }
-    }
-
-    /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
-     */
-    private function addName(FormBuilderInterface $builder, array $command): void
-    {
-        // name
-        $builder->add('name', PlainType::class, [
-            'label' => $this->translator->trans('command.list.fields.command'),
-            'help' => $command['description'],
-            'help_html' => true,
-            'expanded' => true,
-            'translation_domain' => false,
-        ]);
+        $helper->field($field)
+            ->label($argument['name'])
+            ->help($argument['description'])
+            ->modelTransformer($transformer)
+            ->required($required)
+            ->domain(false)
+            ->helpHtml()
+            ->addTextType();
     }
 
     /**
      * @psalm-param OptionType $option
      */
-    private function addOptionBool(FormBuilderInterface $builder, string $key, array $option): void
+    private function addOptionBool(FormHelper $helper, string $key, array $option): void
     {
-        $name = $this->addPrefix($key, self::OPTION_PREFIX);
-        $builder->add($name, CheckboxType::class, [
-            'label' => $option['name'],
-            'help' => $option['description'],
-            'required' => $option['is_value_required'],
-            'help_html' => true,
-            'translation_domain' => false,
-        ]);
+        $field = $this->addPrefix($key, self::OPTION_PREFIX);
+        $helper->field($field)
+            ->label($option['name'])
+            ->help($option['description'])
+            ->required($option['is_value_required'])
+            ->domain(false)
+            ->helpHtml()
+            ->addCheckboxType(switch: false);
     }
 
     /**
@@ -235,23 +221,20 @@ readonly class CommandBuilderService
      *
      * @phpstan-param array $command
      */
-    private function addOptions(FormBuilderInterface $builder, array $command, CallbackTransformer $transformer): void
+    private function addOptions(FormHelper $helper, array $command, CallbackTransformer $transformer): void
     {
         foreach ($command['definition']['options'] as $key => $option) {
             if ($option['is_multiple']) {
-                $this->addOptionText($builder, $key, $option, $transformer);
+                $this->addOptionText($helper, $key, $option, $transformer);
                 continue;
             }
 
-            $default = $option['default'];
-            if (null === $default || \is_string($default)) {
-                $this->addOptionText($builder, $key, $option);
+            if (!$option['accept_value'] || \is_bool($option['default'])) {
+                $this->addOptionBool($helper, $key, $option);
                 continue;
             }
 
-            if (!$option['accept_value'] || \is_bool($default)) {
-                $this->addOptionBool($builder, $key, $option);
-            }
+            $this->addOptionText($helper, $key, $option);
         }
     }
 
@@ -259,28 +242,86 @@ readonly class CommandBuilderService
      * @psalm-param OptionType $option
      */
     private function addOptionText(
-        FormBuilderInterface $builder,
+        FormHelper $helper,
         string $key,
         array $option,
         ?CallbackTransformer $transformer = null
     ): void {
-        $name = $this->addPrefix($key, self::OPTION_PREFIX);
+        $field = $this->addPrefix($key, self::OPTION_PREFIX);
         $required = $transformer instanceof CallbackTransformer ? false : $option['is_value_required'];
-        $builder->add($name, TextType::class, [
-            'label' => $option['name'],
-            'help' => $option['description'],
-            'required' => $required,
-            'help_html' => true,
-            'translation_domain' => false,
-        ]);
-        if ($transformer instanceof CallbackTransformer) {
-            $builder->get($name)
-                ->addModelTransformer($transformer);
-        }
+        $helper->field($field)
+            ->label($option['name'])
+            ->help($option['description'])
+            ->modelTransformer($transformer)
+            ->required($required)
+            ->domain(false)
+            ->helpHtml()
+            ->addTextType();
     }
 
     private function addPrefix(string $name, string $prefix): string
     {
         return $prefix . $name;
+    }
+
+    private function createDataTransformerInterface(): CallbackTransformer
+    {
+        return new CallbackTransformer(
+            /** @psalm-param string[] $data */
+            fn (array $data) => \implode(',', \array_filter($data)),
+            fn (?string $data) => StringUtils::isString($data) ? \explode(',', $data) : []
+        );
+    }
+
+    /**
+     * @psalm-param CommandType $command
+     *
+     * @phpstan-param array $command
+     */
+    private function getArgumentName(array $command, string $key): string
+    {
+        $key = $this->trimArgumentPrefix($key);
+        $arguments = $command['definition']['arguments'];
+        if (\array_key_exists($key, $arguments)) {
+            return $arguments[$key]['name'];
+        }
+
+        return $key;
+    }
+
+    /**
+     * @psalm-param CommandType $command
+     *
+     * @phpstan-param array $command
+     */
+    private function getOptionName(array $command, string $key): string
+    {
+        $key = $this->trimOptionPrefix($key);
+        $options = $command['definition']['options'];
+        if (\array_key_exists($key, $options)) {
+            return $options[$key]['name'];
+        }
+
+        return '--' . $key;
+    }
+
+    private function isArgumentPrefix(string $key): bool
+    {
+        return \str_starts_with($key, self::ARGUMENT_PREFIX);
+    }
+
+    private function isOptionPrefix(string $key): bool
+    {
+        return \str_starts_with($key, self::OPTION_PREFIX);
+    }
+
+    private function trimArgumentPrefix(string $key): string
+    {
+        return \substr($key, \strlen(self::ARGUMENT_PREFIX));
+    }
+
+    private function trimOptionPrefix(string $key): string
+    {
+        return \substr($key, \strlen(self::OPTION_PREFIX));
     }
 }

@@ -617,6 +617,18 @@ class FormHelper
     }
 
     /**
+     * Sets the help HTML property.
+     *
+     * Set this option to true to not escape them, which is useful when the help contains HTML elements.
+     *
+     * @param bool $html <code>true</code> if required, <code>false</code> otherwise
+     */
+    public function helpHtml(bool $html = true): self
+    {
+        return $this->updateOption('help_html', $html);
+    }
+
+    /**
      * Sets the label property.
      *
      * @param TranslatableInterface|string|false $label the translatable, the label identifier to translate or false
@@ -690,14 +702,14 @@ class FormHelper
     }
 
     /**
-     * Adds a model transformer.
+     * Sets the model transformer.
      *
      * @psalm-template TValue
      * @psalm-template TTransformedValue
      *
-     * @psalm-param DataTransformerInterface<TValue, TTransformedValue> $modelTransformer
+     * @psalm-param DataTransformerInterface<TValue, TTransformedValue>|null $modelTransformer
      */
-    public function modelTransformer(DataTransformerInterface $modelTransformer): static
+    public function modelTransformer(?DataTransformerInterface $modelTransformer): static
     {
         $this->modelTransformer = $modelTransformer;
 

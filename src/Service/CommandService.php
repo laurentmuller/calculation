@@ -30,7 +30,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_required: bool,
  *     is_array: bool,
  *     description: string,
- *     default: array|string|int|bool|null,
+ *     default: array|scalar|null,
  *     display: string}
  * @psalm-type OptionType = array{
  *     name: string,
@@ -39,7 +39,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_value_required: bool,
  *     is_multiple: bool,
  *     description: string,
- *     default: array|string|int|bool|null,
+ *     default: array|scalar|null,
  *     display: string}
  * @psalm-type CommandType = array{
  *     name: string,

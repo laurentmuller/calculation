@@ -19,6 +19,7 @@ use App\Report\CommandReport;
 use App\Response\PdfResponse;
 use App\Service\CommandBuilderService;
 use App\Service\CommandService;
+use App\Traits\CacheKeyTrait;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +39,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class CommandController extends AbstractController
 {
+    use CacheKeyTrait;
+
     private const LAST_COMMAND = 'last_command';
 
     /**
@@ -53,7 +56,7 @@ class CommandController extends AbstractController
         CommandService $service
     ): JsonResponse {
         if (!$service->hasCommand($name)) {
-            throw $this->createNotFoundException("Unable to find the command '$name'.");
+            throw $this->createNotFoundException($this->trans('command.list.error', ['%name%' => $name]));
         }
 
         $command = $service->getCommand($name);
@@ -104,18 +107,22 @@ class CommandController extends AbstractController
         CommandBuilderService $builder,
     ): Response {
         if (!$service->hasCommand($name)) {
-            throw $this->createNotFoundException("Unable to find the command '$name'.");
+            throw $this->createNotFoundException($this->trans('command.list.error', ['%name%' => $name]));
         }
 
         /** @psalm-var CommandType $command */
         $command = $service->getCommand($name);
-        $form = $builder->getForm($command);
-        if ($this->handleRequestForm($request, $form)) {
-            /** @psalm-var array<string, array|string|int|bool|null> $data */
-            $data = $form->getData();
-            $parameters = $builder->getParameters($data);
+        $key = $this->cleanKey('command.execute.' . $name);
+        $data = $this->getCommandData($request, $builder, $key, $command);
 
+        // form
+        $form = $builder->createForm($command, $data);
+        if ($this->handleRequestForm($request, $form)) {
             try {
+                /** @psalm-var array<string, array|scalar|null> $data */
+                $data = $form->getData();
+                $request->getSession()->set($key, $data);
+                $parameters = $builder->createParameters($command, $data);
                 $result = $service->execute($name, $parameters);
 
                 return $this->render('command/command_execute_result.html.twig', [
@@ -145,5 +152,24 @@ class CommandController extends AbstractController
         $report = new CommandReport($this, $commands);
 
         return $this->renderPdfDocument($report);
+    }
+
+    /**
+     * @psalm-param CommandType $command
+     *
+     * @psalm-return array<string, array|scalar|null>
+     *
+     * @phpstan-param array $command
+     */
+    private function getCommandData(Request $request, CommandBuilderService $builder, string $key, array $command): array
+    {
+        $data = $builder->createData($command);
+        /** @psalm-var array<string, array|scalar|null> $existing */
+        $existing = (array) $request->getSession()->get($key, []);
+        if ([] === $existing) {
+            return $data;
+        }
+
+        return $builder->validateData($command, \array_merge($data, $existing));
     }
 }

@@ -115,9 +115,9 @@ class CommandsReport extends AbstractArrayReport
     private function getGroupName(array $command, string $default): string
     {
         $name = $command['name'];
-        $values = \explode(':', $name);
+        $value = \explode(':', $name)[0];
 
-        return 1 === \count($values) ? $default : $values[0];
+        return $name === $value ? $default : $value;
     }
 
     /**

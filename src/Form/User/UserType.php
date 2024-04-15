@@ -17,7 +17,6 @@ use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\Event\PreSetDataEvent;
-use Symfony\Component\Form\FormEvent;
 
 /**
  * User edit type.
@@ -62,7 +61,7 @@ class UserType extends AbstractEntityType
             ->updateOption('maxsize', '10mi')
             ->addVichImageType();
 
-        $helper->listenerPreSetData(fn (FormEvent $event) => $this->onPreSetData($event));
+        $helper->listenerPreSetData(fn (PreSetDataEvent $event) => $this->onPreSetData($event));
     }
 
     /**

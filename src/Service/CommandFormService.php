@@ -17,56 +17,39 @@ use App\Utils\StringUtils;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 /**
- * Service to build form and parameters for a command.
+ * Service to build form for a command.
  *
  * @psalm-import-type CommandType from CommandService
  * @psalm-import-type ArgumentType from CommandService
  * @psalm-import-type OptionType from CommandService
  */
-readonly class CommandBuilderService
+readonly class CommandFormService
 {
     /**
-     * The argument form prefix.
+     * The argument's boolean field priority.
      */
-    public const ARGUMENT_PREFIX = 'argument-';
+    public const ARGUMENT_BOOL = 2;
 
     /**
-     * The option form prefix.
+     * The argument's text field priority.
      */
-    public const OPTION_PREFIX = 'option-';
+    public const ARGUMENT_TEXT = 1;
+
+    /**
+     * The option's boolean field priority.
+     */
+    public const OPTION_BOOL = 4;
+
+    /**
+     * The option's text field priority.
+     */
+    public const OPTION_TEXT = 3;
 
     public function __construct(private FormFactoryInterface $factory)
     {
-    }
-
-    /**
-     * Create the model (names and default values) for the given command.
-     *
-     * @psalm-param CommandType $command
-     *
-     * @psalm-return array<string, array|scalar|null>
-     *
-     * @phpstan-param array $command
-     */
-    public function createData(array $command): array
-    {
-        $data = [];
-
-        $arguments = $this->getSortedArguments($command);
-        foreach ($arguments as $key => $argument) {
-            $name = $this->addPrefix($key, self::ARGUMENT_PREFIX);
-            $data[$name] = $argument['default'];
-        }
-
-        $options = $this->getSortedOptions($command);
-        foreach ($options as $key => $option) {
-            $name = $this->addPrefix($key, self::OPTION_PREFIX);
-            $data[$name] = $option['default'];
-        }
-
-        return $data;
     }
 
     /**
@@ -82,7 +65,7 @@ readonly class CommandBuilderService
         $builder = $this->factory->createBuilder(data: $data);
         $helper = new FormHelper($builder);
 
-        $transformer = $this->createDataTransformerInterface();
+        $transformer = $this->createDataTransformer();
         $this->addArguments($helper, $command, $transformer);
         $this->addOptions($helper, $command, $transformer);
 
@@ -90,58 +73,18 @@ readonly class CommandBuilderService
     }
 
     /**
-     * Create the command parameters from the given command and data.
+     * Filter the view's children by the given priority.
      *
-     * @psalm-param CommandType                      $command
-     * @psalm-param array<string, array|scalar|null> $data
+     * @param FormView $view     the view to get filtered children
+     * @param int      $priority the priority
      *
-     * @psalm-return array<string, array|scalar|null>
+     * @return FormView[]
      *
-     * @phpstan-param array $command
+     * @psalm-param self::* $priority
      */
-    public function createParameters(array $command, array $data): array
+    public function filter(FormView $view, int $priority): array
     {
-        $parameters = [];
-        foreach ($data as $key => $value) {
-            if (null === $value || false === $value || [] === $value) {
-                continue;
-            }
-            if ($this->isArgumentPrefix($key)) {
-                $key = $this->getArgumentName($command, $key);
-            } elseif ($this->isOptionPrefix($key)) {
-                $key = $this->getOptionName($command, $key);
-            }
-            $parameters[$key] = $value;
-        }
-
-        return $parameters;
-    }
-
-    /**
-     * Validate the model (names) for the given command.
-     *
-     * @psalm-param CommandType $command
-     * @psalm-param array<string, array|scalar|null> $data
-     *
-     * @psalm-return array<string, array|scalar|null>
-     *
-     * @phpstan-param array $command
-     */
-    public function validateData(array $command, array $data): array
-    {
-        $arguments = $command['definition']['arguments'];
-        $options = $command['definition']['options'];
-
-        return \array_filter($data, function (string $key) use ($arguments, $options): bool {
-            if ($this->isArgumentPrefix($key)) {
-                return \array_key_exists($this->trimArgumentPrefix($key), $arguments);
-            }
-            if ($this->isOptionPrefix($key)) {
-                return \array_key_exists($this->trimOptionPrefix($key), $options);
-            }
-
-            return false;
-        }, \ARRAY_FILTER_USE_KEY);
+        return \array_filter($view->children, fn (FormView $child): bool => $priority === $this->getPriority($child));
     }
 
     /**
@@ -170,11 +113,15 @@ readonly class CommandBuilderService
     /**
      * @psalm-param ArgumentType $argument
      */
-    private function addBoolArgument(FormHelper $helper, string $key, array $argument): void
-    {
-        $field = $this->addPrefix($key, self::ARGUMENT_PREFIX);
+    private function addBoolArgument(
+        FormHelper $helper,
+        string $key,
+        array $argument
+    ): void {
+        $field = CommandDataService::getArgumentKey($key);
         $this->addBoolField(
             $helper,
+            self::ARGUMENT_BOOL,
             $field,
             $argument['name'],
             $argument['description'],
@@ -184,6 +131,7 @@ readonly class CommandBuilderService
 
     private function addBoolField(
         FormHelper $helper,
+        int $priority,
         string $field,
         string $name,
         string $description,
@@ -192,7 +140,9 @@ readonly class CommandBuilderService
         $attributes = $this->getTooltipAttributes($name, $description);
         $helper->field($field)
             ->label($name)
+            ->rowClass('col-md-4')
             ->updateRowAttributes($attributes)
+            ->updateOption('priority', $priority)
             ->required($required)
             ->domain(false)
             ->addCheckboxType(switch: false);
@@ -201,11 +151,15 @@ readonly class CommandBuilderService
     /**
      * @psalm-param OptionType $option
      */
-    private function addBoolOption(FormHelper $helper, string $key, array $option): void
-    {
-        $field = $this->addPrefix($key, self::OPTION_PREFIX);
+    private function addBoolOption(
+        FormHelper $helper,
+        string $key,
+        array $option
+    ): void {
+        $field = CommandDataService::getOptionKey($key);
         $this->addBoolField(
             $helper,
+            self::OPTION_BOOL,
             $field,
             $option['name'],
             $option['description'],
@@ -236,11 +190,6 @@ readonly class CommandBuilderService
         }
     }
 
-    private function addPrefix(string $name, string $prefix): string
-    {
-        return $prefix . $name;
-    }
-
     /**
      * @psalm-param ArgumentType $argument
      */
@@ -250,9 +199,10 @@ readonly class CommandBuilderService
         array $argument,
         ?CallbackTransformer $transformer = null
     ): void {
-        $field = $this->addPrefix($key, self::ARGUMENT_PREFIX);
+        $field = CommandDataService::getArgumentKey($key);
         $this->addTextField(
             $helper,
+            self::ARGUMENT_TEXT,
             $field,
             $argument['name'],
             $argument['description'],
@@ -263,6 +213,7 @@ readonly class CommandBuilderService
 
     private function addTextField(
         FormHelper $helper,
+        int $priority,
         string $field,
         string $name,
         string $description,
@@ -273,9 +224,9 @@ readonly class CommandBuilderService
         $required = $transformer instanceof CallbackTransformer ? false : $required;
         $helper->field($field)
             ->label($name)
-            ->labelClass('text-nowrap mb-1 w-50')
-            ->rowClass('d-flex-no-wrap-center')
-            ->updateRowAttributes($attributes)
+            ->rowClass('col-md-4')
+            ->updateAttributes($attributes)
+            ->updateOption('priority', $priority)
             ->modelTransformer($transformer)
             ->required($required)
             ->domain(false)
@@ -291,9 +242,10 @@ readonly class CommandBuilderService
         array $option,
         ?CallbackTransformer $transformer = null
     ): void {
-        $field = $this->addPrefix($key, self::OPTION_PREFIX);
+        $field = CommandDataService::getOptionKey($key);
         $this->addTextField(
             $helper,
+            self::OPTION_TEXT,
             $field,
             $option['name'],
             $option['description'],
@@ -302,7 +254,7 @@ readonly class CommandBuilderService
         );
     }
 
-    private function createDataTransformerInterface(): CallbackTransformer
+    private function createDataTransformer(): CallbackTransformer
     {
         return new CallbackTransformer(
             /** @psalm-param string[] $data */
@@ -311,84 +263,9 @@ readonly class CommandBuilderService
         );
     }
 
-    /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
-     */
-    private function getArgumentName(array $command, string $key): string
+    private function getPriority(FormView $view): int
     {
-        $key = $this->trimArgumentPrefix($key);
-        $arguments = $command['definition']['arguments'];
-        if (\array_key_exists($key, $arguments)) {
-            return $arguments[$key]['name'];
-        }
-
-        return $key;
-    }
-
-    /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
-     */
-    private function getOptionName(array $command, string $key): string
-    {
-        $key = $this->trimOptionPrefix($key);
-        $options = $command['definition']['options'];
-        if (\array_key_exists($key, $options)) {
-            return $options[$key]['name'];
-        }
-
-        return '--' . $key;
-    }
-
-    /**
-     * Create a form for the given command.
-     *
-     * @psalm-param CommandType $command
-     *
-     * @psalm-return array<string, ArgumentType>
-     *
-     * @phpstan-param array $command
-     */
-    private function getSortedArguments(array $command): array
-    {
-        $arguments = $command['definition']['arguments'];
-        \uasort(
-            $arguments,
-            /**
-             * @psalm-param ArgumentType $a
-             * @psalm-param ArgumentType $b
-             */
-            fn (array $a, array $b): int => (int) $this->isArgumentText($a) <=> (int) $this->isArgumentText($b)
-        );
-
-        return $arguments;
-    }
-
-    /**
-     * Create a form for the given command.
-     *
-     * @psalm-param CommandType $command
-     *
-     * @psalm-return array<string, OptionType>
-     *
-     * @phpstan-param array $command
-     */
-    private function getSortedOptions(array $command): array
-    {
-        $options = $command['definition']['options'];
-        \uasort(
-            $options,
-            /**
-             * @psalm-param OptionType $a
-             * @psalm-param OptionType $b
-             */
-            fn (array $a, array $b): int => (int) $this->isOptionText($a) <=> (int) $this->isOptionText($b)
-        );
-
-        return $options;
+        return (int) ($view->vars['priority'] ?? -1);
     }
 
     /**
@@ -404,11 +281,6 @@ readonly class CommandBuilderService
             'data-bs-toggle' => 'popover',
             'data-bs-placement' => 'left',
         ];
-    }
-
-    private function isArgumentPrefix(string $key): bool
-    {
-        return \str_starts_with($key, self::ARGUMENT_PREFIX);
     }
 
     /**
@@ -430,11 +302,6 @@ readonly class CommandBuilderService
         return null === $default || \is_string($default);
     }
 
-    private function isOptionPrefix(string $key): bool
-    {
-        return \str_starts_with($key, self::OPTION_PREFIX);
-    }
-
     /**
      * @psalm-param OptionType $option
      *
@@ -447,15 +314,5 @@ readonly class CommandBuilderService
         }
 
         return $option['accept_value'] && !\is_bool($option['default']);
-    }
-
-    private function trimArgumentPrefix(string $key): string
-    {
-        return \substr($key, \strlen(self::ARGUMENT_PREFIX));
-    }
-
-    private function trimOptionPrefix(string $key): string
-    {
-        return \substr($key, \strlen(self::OPTION_PREFIX));
     }
 }

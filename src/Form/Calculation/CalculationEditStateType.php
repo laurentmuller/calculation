@@ -19,7 +19,7 @@ use App\Form\FormHelper;
 use App\Form\Type\PlainType;
 use App\Service\ApplicationService;
 use App\Utils\FormatUtils;
-use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -61,7 +61,7 @@ class CalculationEditStateType extends AbstractEntityType
             ->label('calculation.state.new_state')
             ->add(CalculationStateListType::class);
 
-        $helper->listenerPreSetData(fn (FormEvent $event) => $this->onPreSetData($event));
+        $helper->listenerPreSetData(fn (PreSetDataEvent $event) => $this->onPreSetData($event));
     }
 
     private function getOverallAttributes(Calculation $data): array
@@ -89,7 +89,7 @@ class CalculationEditStateType extends AbstractEntityType
         return $this->service->isMarginBelow($data);
     }
 
-    private function onPreSetData(FormEvent $event): void
+    private function onPreSetData(PreSetDataEvent $event): void
     {
         /** @psalm-var Calculation $data */
         $data = $event->getData();

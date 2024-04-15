@@ -16,7 +16,6 @@ use App\Entity\User;
 use App\Form\FormHelper;
 use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\Form\Event\PreSetDataEvent;
-use Symfony\Component\Form\FormEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
@@ -56,7 +55,7 @@ class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSub
             ->updateAttribute('data-error', $this->trans('registration.agreeTerms.error'))
             ->addCheckboxType(false);
 
-        $helper->listenerPreSetData(fn (FormEvent $event) => $this->onPreSetData($event));
+        $helper->listenerPreSetData(fn (PreSetDataEvent $event) => $this->onPreSetData($event));
     }
 
     protected function getLabelPrefix(): ?string

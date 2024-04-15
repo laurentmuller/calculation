@@ -69,6 +69,7 @@ class CommandService implements \Countable
         // production
         '/calculation/public/index.php' => 'bin/console',
         // local development
+        '/index.php/command/execute' => 'bin/console',
         '/index.php/command/pdf' => 'bin/console',
         '/index.php/command' => 'bin/console',
         // classes

@@ -17,13 +17,15 @@ use App\Attribute\GetPost;
 use App\Interfaces\RoleInterface;
 use App\Report\CommandsReport;
 use App\Response\PdfResponse;
-use App\Service\CommandBuilderService;
+use App\Service\CommandDataService;
+use App\Service\CommandFormService;
 use App\Service\CommandService;
 use App\Traits\CacheKeyTrait;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
@@ -96,6 +98,8 @@ class CommandController extends AbstractController
     }
 
     /**
+     * Execute a command.
+     *
      * @throws InvalidArgumentException
      */
     #[GetPost(path: '/execute', name: 'command_execute')]
@@ -104,7 +108,8 @@ class CommandController extends AbstractController
         string $name,
         Request $request,
         CommandService $service,
-        CommandBuilderService $builder,
+        CommandFormService $formService,
+        CommandDataService $dataService,
     ): Response {
         if (!$service->hasCommand($name)) {
             throw $this->createNotFoundException($this->trans('command.list.error', ['%name%' => $name]));
@@ -112,17 +117,18 @@ class CommandController extends AbstractController
 
         /** @psalm-var CommandType $command */
         $command = $service->getCommand($name);
+        $session = $request->getSession();
         $key = $this->cleanKey('command.execute.' . $name);
-        $data = $this->getCommandData($request, $builder, $key, $command);
+        $data = $this->getCommandData($session, $dataService, $key, $command);
 
         // form
-        $form = $builder->createForm($command, $data);
+        $form = $formService->createForm($command, $data);
         if ($this->handleRequestForm($request, $form)) {
             try {
                 /** @psalm-var array<string, array|scalar|null> $data */
                 $data = $form->getData();
-                $request->getSession()->set($key, $data);
-                $parameters = $builder->createParameters($command, $data);
+                $session->set($key, $data);
+                $parameters = $dataService->createParameters($command, $data);
                 $result = $service->execute($name, $parameters);
 
                 return $this->render('command/command_execute_result.html.twig', [
@@ -134,10 +140,21 @@ class CommandController extends AbstractController
             }
         }
 
-        return $this->render('command/command_execute_query.html.twig', [
+        $view = $form->createView();
+        $parameters = [
+            'arguments' => [
+                'texts' => $formService->filter($view, CommandFormService::ARGUMENT_TEXT),
+                'checkboxes' => $formService->filter($view, CommandFormService::ARGUMENT_BOOL),
+            ],
+            'options' => [
+                'texts' => $formService->filter($view, CommandFormService::OPTION_TEXT),
+                'checkboxes' => $formService->filter($view, CommandFormService::OPTION_BOOL),
+            ],
             'command' => $command,
-            'form' => $form,
-        ]);
+            'form' => $view,
+        ];
+
+        return $this->render('command/command_execute_query.html.twig', $parameters);
     }
 
     /**
@@ -161,15 +178,15 @@ class CommandController extends AbstractController
      *
      * @phpstan-param array $command
      */
-    private function getCommandData(Request $request, CommandBuilderService $builder, string $key, array $command): array
+    private function getCommandData(SessionInterface $session, CommandDataService $dataService, string $key, array $command): array
     {
-        $data = $builder->createData($command);
+        $data = $dataService->createData($command);
         /** @psalm-var array<string, array|scalar|null> $existing */
-        $existing = (array) $request->getSession()->get($key, []);
+        $existing = (array) $session->get($key, []);
         if ([] === $existing) {
             return $data;
         }
 
-        return $builder->validateData($command, \array_merge($data, $existing));
+        return $dataService->validateData($command, \array_merge($data, $existing));
     }
 }

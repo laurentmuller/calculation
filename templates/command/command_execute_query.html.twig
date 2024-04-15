@@ -11,25 +11,25 @@
 {# name #}
 {{ include('command/_command_name.html.twig', {'command': command}, with_context=false) }}
 {# arguments #}
-{% set arguments = values|filter((value, name) => name|u.startsWith(constant('App\\Service\\CommandBuilderService::ARGUMENT_PREFIX'))) %}
-{% if (arguments|length) %}
-    <p class="mb-1 text-warning">{{ 'command.list.fields.arguments'|trans }}</p>
+{% set widgets = values|filter((value, name) => name|u.startsWith(constant('App\\Service\\CommandBuilderService::ARGUMENT_PREFIX'))) %}
+{% if (widgets|length) %}
+    <p class="text-warning horizontal-line">{{ 'command.list.fields.arguments'|trans }}</p>
     <div class="row">
-    {% for argument in arguments|keys %}
-        <div class="col-md-4">
-            {{ form_row(form[argument]) }}
+    {% for key in widgets|keys %}
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            {{ form_row(form[key]) }}
         </div>
     {% endfor %}
     </div>
 {% endif %}
 {# options #}
-{% set options = values|filter((value, name) => name|u.startsWith(constant('App\\Service\\CommandBuilderService::OPTION_PREFIX'))) %}
-{% if (options|length) %}
-    <p class="mb-1 text-warning">{{ 'command.list.fields.options'|trans }}</p>
+{% set widgets = values|filter((value, name) => name|u.startsWith(constant('App\\Service\\CommandBuilderService::OPTION_PREFIX'))) %}
+{% if (widgets|length) %}
+    <p class="text-warning horizontal-line">{{ 'command.list.fields.options'|trans }}</p>
     <div class="row">
-    {% for option in options|keys %}
-        <div class="col-md-4">
-            {{ form_row(form[option]) }}
+    {% for key in widgets|keys %}
+        <div class="col-lg-4 col-md-6 col-sm-6">
+            {{ form_row(form[key]) }}
         </div>
     {% endfor %}
     </div>
@@ -39,5 +39,5 @@
 {# javascript #}
 {% block javascripts -%}
     {{- parent() -}}
-    {{- asset_js('js/application/validation_edit.js') -}}
+    {{- asset_js('js/application/command_query.js') -}}
 {% endblock %}

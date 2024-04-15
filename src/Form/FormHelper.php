@@ -342,7 +342,7 @@ class FormHelper
      *
      * @param bool $expanded true to render the plain type within the label
      */
-    public function addPlainType(bool $expanded = false): self
+    public function addPlainType(bool $expanded = true): self
     {
         if ($expanded) {
             $this->updateOption('expanded', true);
@@ -407,9 +407,9 @@ class FormHelper
      */
     public function addTelType(?string $pattern = null): self
     {
-        return $this->updateAttribute('inputmode', 'tel')
-            ->updateOption('prepend_icon', 'fa-fw fa-solid fa-phone')
+        return $this->updateOption('prepend_icon', 'fa-fw fa-solid fa-phone')
             ->updateOption('prepend_class', 'input-group-phone')
+            ->updateAttribute('inputmode', 'tel')
             ->updateAttribute('pattern', $pattern)
             ->add(TelType::class);
     }
@@ -587,7 +587,7 @@ class FormHelper
     }
 
     /**
-     * Gets the form builder.
+     * Gets the underlaying form builder.
      */
     public function getBuilder(): FormBuilderInterface
     {
@@ -865,6 +865,21 @@ class FormHelper
             unset($this->rowAttributes[$name]);
         } else {
             $this->rowAttributes[$name] = $value;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Updates a row attributes.
+     *
+     * @param array<string, mixed> $attributes the attribute's names and values
+     */
+    public function updateRowAttributes(array $attributes): self
+    {
+        /** @psalm-var mixed $value */
+        foreach ($attributes as $name => $value) {
+            $this->updateRowAttribute($name, $value);
         }
 
         return $this;

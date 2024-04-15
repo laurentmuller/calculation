@@ -1,34 +1,36 @@
 {# macros #}
 {% macro outputEntry(text) -%}
-    <p class="mb-1 text-warning">{{ text|trans }}</p>
+    <p class="mb-1 horizontal-line">{{ text|trans }}</p>
 {% endmacro %}
-{% macro outputParam(value, popover, required=false) -%}
-    {% set value = value|default('') %}
-    <td class="text-success w-25" data-custom-html="{{ popover|e }}" data-custom-title="{{ value }}">
-        <pre class="mb-0 fs-6{% if required %} required{% endif %}">{{ value }}</pre>
-    </td>
-{% endmacro %}
-{% macro outputDescription(value, display) -%}
-<td>
-    {{- value|default('')|raw -}}
-    {%- if display == '[]' -%}
-        <span class="text-warning"> (multiple values allowed)</span>
-    {%- elseif display -%}
-        <span class="text-warning"> [default: {{ display }}]</span>
-    {%- endif -%}
-</td>
+{% macro outputRow(name, description, arguments, popover) -%}
+<div class="row">
+    <div class="col-md-4 col-lg-3 text-success text-nowrap" data-bs-title="{{ name|trim }}" data-content="{{ popover|e }}">
+        <pre class="mb-0">{{ name }}</pre>
+    </div>
+    <div class="col-md-8 col-lg-9">
+        {{- description|raw }} {{ arguments|raw -}}
+    </div>
+    </div>
 {% endmacro %}
 {% macro tooltipArgument(argument) -%}
 <div class="mx-2 mt-1">
     <table class="table table-sm">
         <tr>
-            <td>Required</td><td>:</td><td>{{ argument.is_required|json_encode }}</td>
+            <td>Required</td>
+            <td>:</td>
+            <td>{{ argument.is_required|json_encode }}</td>
         </tr>
         <tr>
-            <td>Array</td><td>:</td><td>{{ argument.is_array|json_encode }}</td>
+            <td>Array</td>
+            <td>:</td>
+            <td>{{ argument.is_array|json_encode }}</td>
         </tr>
         {%- if argument.display -%}
-            <tr><td>Default</td><td>:</td><td class="text-warning">{{ argument.display }}</td></tr>
+            <tr>
+                <td>Default</td>
+                <td>:</td>
+                <td class="text-secondary">{{ argument.display }}</td>
+            </tr>
         {% endif %}
     </table>
 </div>
@@ -37,16 +39,26 @@
 <div class="mx-2 mt-1">
     <table class="table table-sm">
         <tr>
-            <td>Accept Value</td><td>:</td><td>{{ option.accept_value|json_encode }}</td>
+            <td>Accept Value</td>
+            <td>:</td>
+            <td>{{ option.accept_value|json_encode }}</td>
         </tr>
         <tr>
-            <td>Value Required</td><td>:</td><td>{{ option.is_value_required|json_encode }}</td>
+            <td>Value Required</td>
+            <td>:</td>
+            <td>{{ option.is_value_required|json_encode }}</td>
         </tr>
         <tr>
-            <td>Multiple</td><td>:</td><td>{{ option.is_multiple|json_encode }}</td>
+            <td>Multiple</td>
+            <td>:</td>
+            <td>{{ option.is_multiple|json_encode }}</td>
         </tr>
         {% if option.accept_value and option.display %}
-            <tr><td>Default</td><td>:</td><td class="text-warning">{{ option.display }}</td></tr>
+            <tr>
+                <td>Default</td>
+                <td>:</td>
+                <td class="text-secondary">{{ option.display }}</td>
+            </tr>
         {% endif %}
     </table>
 </div>
@@ -69,35 +81,16 @@
 {# arguments #}
 {% if command.definition.arguments|length %}
     {{ _self.outputEntry('command.list.fields.arguments') }}
-    <table class="table table-sm table-borderless ms-2">
-        <tbody>
-        {% for argument in command.definition.arguments %}
-            <tr>
-                {{ _self.outputParam(argument.name, _self.tooltipArgument(argument), argument.is_required) }}
-                {{ _self.outputDescription(argument.description, argument.display) }}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% for argument in command.definition.arguments %}
+        {{ _self.outputRow(argument.name, argument.description, argument.arguments, _self.tooltipArgument(argument)) }}
+    {% endfor %}
 {% endif %}
 {# options #}
 {% if command.definition.options|length %}
     {{ _self.outputEntry('command.list.fields.options') }}
-    <table class="table table-sm table-borderless ms-2">
-        <tbody>
-        {% for option in command.definition.options %}
-            {% if option.shortcut %}
-                {%- set arg = option.shortcut ~ ', ' ~ option.name -%}
-            {% else %}
-                {%- set arg = '    ' ~ option.name -%}
-            {% endif %}
-            <tr>
-                {{ _self.outputParam(arg, _self.tooltipOption(option), option.is_value_required) }}
-                {{ _self.outputDescription(option.description, option.display) }}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% for option in command.definition.options %}
+        {{ _self.outputRow(option.name_shortcut, option.description, option.arguments, _self.tooltipOption(option)) }}
+    {% endfor %}
 {% endif %}
 {# help #}
 {% if command.help %}

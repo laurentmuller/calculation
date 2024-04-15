@@ -19,6 +19,7 @@ use App\Interfaces\RoleInterface;
 use App\Service\RoleHierarchyService;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\Event\PreSetDataEvent;
+use Symfony\Component\Form\FormEvent;
 
 /**
  * The access rights type.
@@ -41,7 +42,7 @@ class RightsType extends AbstractHelperType
         foreach ($entities as $entity) {
             $this->addRightType($helper, $entity);
         }
-        $helper->listenerPreSetData($this->onPreSetData(...));
+        $helper->listenerPreSetData(fn (FormEvent $event) => $this->onPreSetData($event));
     }
 
     private function addRightType(FormHelper $helper, EntityName $entity): void

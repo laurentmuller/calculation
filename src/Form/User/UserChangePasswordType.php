@@ -37,7 +37,7 @@ class UserChangePasswordType extends AbstractEntityType
     {
         $helper->field('username')
             ->updateOption('hidden_input', true)
-            ->addPlainType(true);
+            ->addPlainType();
         $helper->field('plainPassword')
             ->addRepeatPasswordType('user.password.new', 'user.password.new_confirmation');
     }

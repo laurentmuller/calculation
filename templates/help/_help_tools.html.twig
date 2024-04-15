@@ -70,7 +70,7 @@
 
 {% macro export_button() %}
     {% from 'macros/_icons.html.twig' import link_pdf %}
-    {{ link_pdf('help_pdf', [], 'common.button_export_pdf', null, 'btn btn-outline-secondary') }}
+    {{ link_pdf('help_pdf', 'btn btn-outline-secondary') }}
 {% endmacro %}
 
 {% macro dialogs_button() %}

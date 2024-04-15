@@ -1526,14 +1526,15 @@ command:
         title: Commandes
         description: Liste des commandes disponibles dans l'application.
         counter: 'Nombre de commandes : %count%'
+        available: Commandes disponibles
         error: Impossible de trouver la commande '%name%'.
         fields:
-            command: 'Commande :'
-            description: 'Description :'
-            arguments: 'Arguments :'
-            usage: 'Usage :'
-            options: 'Options :'
-            help: 'Aide :'
+            command: Commande
+            description: Description
+            arguments: Arguments
+            usage: Usage
+            options: Options
+            help: Aide
     execute:
         title: Exécuter
         description: Exécute la commande sélectionnée.
@@ -1542,4 +1543,5 @@ command:
         description: Résultat de l'exécution de la commande.
         message: 'Message :'
         re_run: Relancer
+        empty: La commande n'a renvoyée aucune donnée.
         error: Une erreur est survenue dans l'exécution de la commande.

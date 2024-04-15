@@ -44,7 +44,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *     date_format: self::FORMAT_*|null,
  *     time_format: self::FORMAT_*|null,
  *     date_pattern: string|null,
- *     time_zone: \DateTimeZone|string|null,
  *     empty_value: callable(mixed):string|string|null,
  *     display_transformer: (callable(mixed):(string|null))|null,
  *     value_transformer: (callable(mixed):mixed)|null,
@@ -131,41 +130,28 @@ class PlainType extends AbstractType
 
     private function configureDate(OptionsResolver $resolver): void
     {
+        $allowedValues = [
+            null,
+            self::FORMAT_FULL,
+            self::FORMAT_LONG,
+            self::FORMAT_MEDIUM,
+            self::FORMAT_SHORT,
+            self::FORMAT_NONE,
+        ];
+
         $resolver->define('date_format')
             ->default(null)
             ->allowedTypes('null', 'int')
-            ->allowedValues(
-                null,
-                self::FORMAT_FULL,
-                self::FORMAT_LONG,
-                self::FORMAT_MEDIUM,
-                self::FORMAT_SHORT,
-                self::FORMAT_NONE
-            );
+            ->allowedValues(...$allowedValues);
 
         $resolver->define('time_format')
             ->default(null)
             ->allowedTypes('null', 'int')
-            ->allowedValues(
-                null,
-                self::FORMAT_FULL,
-                self::FORMAT_LONG,
-                self::FORMAT_MEDIUM,
-                self::FORMAT_SHORT,
-                self::FORMAT_NONE
-            );
+            ->allowedValues(...$allowedValues);
 
         $resolver->define('date_pattern')
             ->default(null)
             ->allowedTypes('null', 'string');
-
-        $resolver->define('time_zone')
-            ->default(null)
-            ->allowedTypes(
-                'null',
-                'string',
-                'DateTimeZone'
-            );
     }
 
     private function configureDefaults(OptionsResolver $resolver): void
@@ -269,7 +255,6 @@ class PlainType extends AbstractType
             $options['date_format'],
             $options['time_format'],
             $options['date_pattern'],
-            $options['time_zone']
         );
     }
 

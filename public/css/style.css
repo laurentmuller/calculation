@@ -704,10 +704,6 @@ table.table-no-end-line tfoot tr:last-child td {
     overflow-y: scroll;
 }
 
-.pre-wrap {
-    white-space: pre-wrap
-}
-
 /* remove left space when no label is displayed */
 .form-check:has(.form-check-input.form-check-no-label) {
     padding-left: 0;

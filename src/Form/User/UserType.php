@@ -17,6 +17,7 @@ use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 use App\Utils\FormatUtils;
 use Symfony\Component\Form\Event\PreSetDataEvent;
+use Symfony\Component\Form\FormEvent;
 
 /**
  * User edit type.
@@ -55,13 +56,13 @@ class UserType extends AbstractEntityType
             ->updateOption('value_transformer', $this->formatLastLogin(...))
             ->updateOption('empty_value', 'common.value_none')
             ->widgetClass('text-center')
-            ->addPlainType(true);
+            ->addPlainType();
 
         $helper->field('imageFile')
             ->updateOption('maxsize', '10mi')
             ->addVichImageType();
 
-        $helper->listenerPreSetData($this->onPreSetData(...));
+        $helper->listenerPreSetData(fn (FormEvent $event) => $this->onPreSetData($event));
     }
 
     /**

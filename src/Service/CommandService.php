@@ -31,16 +31,19 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     is_array: bool,
  *     description: string,
  *     default: array|scalar|null,
- *     display: string}
+ *     display: string,
+ *     arguments: string}
  * @psalm-type OptionType = array{
  *     name: string,
  *     shortcut: string,
+ *     name_shortcut: string,
  *     accept_value: bool,
  *     is_value_required: bool,
  *     is_multiple: bool,
  *     description: string,
  *     default: array|scalar|null,
- *     display: string}
+ *     display: string,
+ *     arguments: string}
  * @psalm-type CommandType = array{
  *     name: string,
  *     description: string,
@@ -71,13 +74,18 @@ class CommandService implements \Countable
         // classes
         '<info>' => '<span class="text-success">',
         '<error>' => '<span class="text-danger">',
-        '<comment>' => '<span class="text-warning">',
+        '<comment>' => '<span class="text-secondary">',
+        '<fg=yellow>' => '<span class="text-secondary">',
         '</info>' => '</span>',
         '</error>' => '</span>',
         '</comment>' => '</span>',
         '</>' => '</span>',
         // line break
         "\n" => '<br>',
+    ];
+
+    private const HREF_REPLACE = [
+        '/(<href=)(.*?)>(.*?)(<\/>)/m' => '<a href=\"$2\">$3</a>',
     ];
 
     private const USAGE_REPLACE = [
@@ -188,9 +196,10 @@ class CommandService implements \Countable
                         return $carry;
                     }
 
+                    $name = $command['name'];
                     $this->updateCommand($command);
 
-                    return [$command['name'] => $command] + $carry;
+                    return [$name => $command] + $carry;
                 },
                 []
             );
@@ -203,19 +212,19 @@ class CommandService implements \Countable
     /**
      * Gets all command names grouped by name space.
      *
-     * The first group key is the {@link GLOBAL_GROUP}. This is for commands without name space.
+     * @param string $root the name of the group for commands without name space
      *
      * @return array<string, string[]>
      *
      * @throws InvalidArgumentException
      */
-    public function getGroupedNames(): array
+    public function getGroupedNames(string $root = self::GLOBAL_GROUP): array
     {
         $groups = [];
         $names = $this->getNames();
         foreach ($names as $name) {
             $values = \explode(':', $name);
-            $group = 1 === \count($values) ? self::GLOBAL_GROUP : $values[0];
+            $group = 1 === \count($values) ? $root : $values[0];
             $groups[$group][] = $name;
         }
 
@@ -260,29 +269,90 @@ class CommandService implements \Countable
     }
 
     /**
+     * @psalm-param ArgumentType $argument
+     */
+    private function getArgumentHelp(array $argument): string
+    {
+        $values = [];
+        if ($argument['is_required']) {
+            $values[] = '<span class="text-danger">required</span>';
+        }
+        $display = $argument['display'];
+        if ('[]' === $display || $argument['is_array']) {
+            $values[] = '<span class="text-secondary">multiple values allowed</span>';
+        } elseif ('' !== $display) {
+            $values[] = \sprintf('default: <span class="text-secondary">%s</span>', $display);
+        }
+        if ([] === $values) {
+            return '';
+        }
+
+        return \sprintf('(%s)', \implode(', ', $values));
+    }
+
+    /**
+     * @psalm-param OptionType $option
+     */
+    private function getOptionHelp(array $option): string
+    {
+        $values = [];
+        if ($option['is_value_required']) {
+            $values[] = '<span class="text-danger">required</span>';
+        }
+        $display = $option['display'];
+        if ('[]' === $display || $option['is_multiple']) {
+            $values[] = '<span class="text-secondary">multiple values allowed</span>';
+        } elseif ('' !== $display) {
+            $values[] = \sprintf('default: <span class="text-secondary">%s</span>', $display);
+        }
+        if ([] === $values) {
+            return '';
+        }
+
+        return \sprintf('(%s)', \implode(', ', $values));
+    }
+
+    private function getOptionNameAndShortcut(string $name, string $shortcut): string
+    {
+        $format = '' === $shortcut ? '%4s%s' : '%s, %s';
+
+        return \sprintf($format, $shortcut, $name);
+    }
+
+    private function replaceHelp(string $help): string
+    {
+        if (!StringUtils::isString($help)) {
+            return $help;
+        }
+
+        $help = StringUtils::pregReplace(self::HREF_REPLACE, $help);
+
+        return StringUtils::replace(self::HELP_REPLACE, $help);
+    }
+
+    /**
      * @psalm-param CommandType $command
      *
      * @phpstan-param array $command
      */
     private function updateCommand(array &$command): void
     {
-        if ($command['help'] === $command['description']) {
-            $command['help'] = '';
-        } else {
-            $command['help'] = StringUtils::replace(self::HELP_REPLACE, $command['help']);
-        }
+        $command['help'] = $command['help'] === $command['description'] ? '' : $this->replaceHelp($command['help']);
         if (0 === \count($command['definition']['arguments'])) {
             $command['usage'] = [\sprintf('%s [options]', $command['name'])];
         } else {
             $command['usage'] = StringUtils::pregReplace(self::USAGE_REPLACE, $command['usage']);
         }
         foreach ($command['definition']['arguments'] as &$argument) {
-            $argument['description'] = StringUtils::replace(self::HELP_REPLACE, $argument['description']);
+            $argument['description'] = $this->replaceHelp($argument['description']);
             $argument['display'] = $this->encodeDefaultValue($argument['default']);
+            $argument['arguments'] = $this->getArgumentHelp($argument);
         }
         foreach ($command['definition']['options'] as &$option) {
-            $option['description'] = StringUtils::replace(self::HELP_REPLACE, $option['description']);
+            $option['description'] = $this->replaceHelp($option['description']);
             $option['display'] = $this->encodeDefaultValue($option['default']);
+            $option['arguments'] = $this->getOptionHelp($option);
+            $option['name_shortcut'] = $this->getOptionNameAndShortcut($option['name'], $option['shortcut']);
         }
     }
 }

@@ -13,9 +13,9 @@
 {# name #}
 {{ include('command/_command_name.html.twig', {'command': command}, with_context=false) }}
 <p class="mb-1">{{ 'command.result.message'|trans }}</p>
-<div class="border pre-scrollable small-scrollbar font-monospace p-2">
-    <pre id="result" class="highlight-php pre-wrap">{{- result.content -}}</pre>
-</div>
+<pre id="result" class="border p-2 small-scrollbar" style="max-height: 340px;">
+    {{- result.content|default('command.result.empty'|trans) -}}
+</pre>
 {# error #}
 {% if is_error %}
     <p class="mb-1 text-danger">{{ 'command.result.error'|trans }}</p>
@@ -23,14 +23,17 @@
 {% endblock %}
 {# footer #}
 {% block card_footer %}
+<div class="d-flex-wrap">
     {{ link(path('command_all', {'name': command.name}), 'command.list.title', 'btn btn-form btn-primary') }}
-    {{ link(path('command_execute', {'name': command.name}), 'command.result.re_run', 'btn btn-form btn-outline-warning') }}
-    <button type="button" class="btn btn-form btn-success btn-copy"
-            data-success="{{ 'common.copy_success'|trans }}"
-            data-error="{{ 'common.copy_error'|trans }}"
-            data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>
+    {{ link(path('command_execute', {'name': command.name}), 'command.result.re_run', 'btn btn-form btn-warning') }}
+    {% if result.content %}
+        <button type="button" class="btn btn-form btn-success btn-copy"
+                data-success="{{ 'common.copy_success'|trans }}"
+                data-error="{{ 'common.copy_error'|trans }}"
+                data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>
+    {% endif %}
+</div>
 {% endblock %}
-
 {# javascripts #}
 {% block javascripts -%}
     {{ parent() }}

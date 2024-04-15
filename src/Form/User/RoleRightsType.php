@@ -24,6 +24,6 @@ class RoleRightsType extends RightsType
         parent::addFormFields($helper);
         $helper->field('name')
             ->label('user.fields.role')
-            ->addPlainType(true);
+            ->addPlainType();
     }
 }

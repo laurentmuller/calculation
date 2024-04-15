@@ -317,7 +317,7 @@ abstract class AbstractHtmlChunk
                 $report->cell($required, $height, $text, $border);
             }
         } else {
-            $report->write($height, $text);
+            $report->write($text, $height);
         }
     }
 

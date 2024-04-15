@@ -39,13 +39,13 @@ class UserRightsType extends RightsType implements ServiceSubscriberInterface
     {
         parent::addFormFields($helper);
         $helper->field('username')
-            ->addPlainType(true);
+            ->addPlainType();
         $helper->field('role')
             ->updateOption('value_transformer', $this->translateRole(...))
-            ->addPlainType(true);
+            ->addPlainType();
         $helper->field('enabled')
             ->updateOption('value_transformer', $this->translateEnabled(...))
-            ->addPlainType(true);
+            ->addPlainType();
         $helper->field('overwrite')
             ->rowClass('mt-3')
             ->addCheckboxType();

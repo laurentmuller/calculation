@@ -1,6 +1,6 @@
 {# Macro for a calculation items #}
 {% macro outputItemRow(item, editable, first, last) -%}
-{% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownItemButton, dropdownSeparator, button_pdf %}
+{% from 'macros/_icons.html.twig' import dropdownEllipsis, dropdownItemButton, dropdownSeparator %}
 {% set edit_class = editable ? 'text-editable text-currency rowlink-skip' : 'text-currency' %}
 <tr class="item">
     {# hidden inputs #}

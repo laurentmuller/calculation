@@ -116,28 +116,28 @@
 {{- _self.link(href, text, class) -}}
 {%- endmacro %}
 
-{% macro link_pdf(route, parameters=[], title='common.button_export_pdf', text=null, class=null) -%}
-{{- _self.linkExternal(path(route, parameters), text, class, ICON_PDF, title) -}}
+{% macro link_pdf(route, class=null) -%}
+{{- _self.linkExternal(path(route), null, class, ICON_PDF, 'common.button_export_pdf') -}}
 {%- endmacro %}
 
-{% macro button_pdf(route, parameters=[], title='common.button_export_pdf') -%}
-{{- _self.linkExternal(path(route, parameters), 'common.button_pdf', 'btn btn-form btn-outline-secondary', ICON_PDF, title) -}}
+{% macro button_pdf(route) -%}
+{{- _self.linkExternal(path(route), 'common.button_pdf', 'btn btn-form btn-outline-secondary', ICON_PDF, 'common.button_export_pdf') -}}
 {%- endmacro %}
 
-{% macro link_excel(route, parameters=[], title='common.button_export_excel') -%}
-{{ _self.linkExternal(path(route, parameters), null, null, ICON_EXCEL, title) }}
+{% macro link_excel(route) -%}
+{{ _self.linkExternal(path(route), null, null, ICON_EXCEL, 'common.button_export_excel') }}
 {%- endmacro %}
 
-{% macro button_excel(route, parameters=[], title='common.button_export_excel') -%}
-{{- _self.linkExternal(path(route, parameters), 'common.button_export', 'btn btn-form btn-outline-secondary', ICON_EXCEL, title) -}}
+{% macro button_excel(route) -%}
+{{- _self.linkExternal(path(route), 'common.button_export', 'btn btn-form btn-outline-secondary', ICON_EXCEL, 'common.button_export_excel') -}}
 {%- endmacro %}
 
-{% macro link_word(route, parameters=[], title='common.button_export_word') -%}
-{{- _self.linkExternal(path(route, parameters), null, null, ICON_WORD, title) -}}
+{% macro link_word(route) -%}
+{{- _self.linkExternal(path(route), null, null, ICON_WORD, 'common.button_export_word') -}}
 {%- endmacro %}
 
-{% macro button_word(route, parameters=[], title='common.button_export_word') -%}
-{{- _self.linkExternal(path(route, parameters), 'common.button_export', 'btn btn-form btn-outline-secondary', ICON_WORD, title) -}}
+{% macro button_word(route) -%}
+{{- _self.linkExternal(path(route), 'common.button_export', 'btn btn-form btn-outline-secondary', ICON_WORD, 'common.button_export_word') -}}
 {%- endmacro %}
 
 {% macro copyright_link(class=null) -%}

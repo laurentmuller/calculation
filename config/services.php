@@ -10,6 +10,7 @@
 
 declare(strict_types=1);
 
+use App\Service\LogService;
 use Monolog\Formatter\LineFormatter;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -48,8 +49,6 @@ return static function (ContainerConfigurator $config): void {
         // optimize
         '.container.dumper.inline_factories' => true,
         'debug.container.dump' => false,
-        // the date format for log entries
-        'log_date_format' => 'd.m.Y H:i:s.v',
     ];
     $parameters = $config->parameters();
     foreach ($values as $key => $value) {
@@ -82,6 +81,9 @@ return static function (ContainerConfigurator $config): void {
         ]);
 
     // custom line and date formatter for monolog
-    $services->set('monolog.custom_formatter', LineFormatter::class)
-        ->args(["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", '%log_date_format%']);
+    $service = 'monolog.custom_formatter';
+    $services->set($service, LineFormatter::class)
+        ->args(["%%datetime%%|%%channel%%|%%level_name%%|%%message%%|%%context%%|%%extra%%\n", LogService::DATE_FORMAT]);
+    $services->get($service)
+        ->call('setBasePath', ['%kernel.project_dir%']);
 };

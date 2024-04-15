@@ -40,7 +40,7 @@ class UserCommentType extends AbstractType
         $address = $data->isMail() ? 'toAddress' : 'fromAddress';
         $helper->field($address)
             ->modelTransformer($this->transformer)
-            ->addPlainType(true);
+            ->addPlainType();
 
         $helper->field('subject')
             ->addTextType();

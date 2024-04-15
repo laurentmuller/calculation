@@ -39,44 +39,29 @@ class CalculationEditStateType extends AbstractEntityType
         $helper->field('id')
             ->updateOption('number_pattern', PlainType::NUMBER_IDENTIFIER)
             ->widgetClass('text-center')
-            ->addPlainType(true);
+            ->addPlainType();
 
         $helper->field('date')
             ->updateOption('time_format', PlainType::FORMAT_NONE)
             ->widgetClass('text-center')
-            ->addPlainType(true);
+            ->addPlainType();
 
         $helper->field('overallTotal')
             ->updateOption('number_pattern', PlainType::NUMBER_AMOUNT)
             ->widgetClass('text-end')
-            ->addPlainType(true);
+            ->addPlainType();
 
         $helper->field('customer')
-            ->addPlainType(true);
+            ->addPlainType();
 
         $helper->field('description')
-            ->addPlainType(true);
+            ->addPlainType();
 
         $helper->field('state')
             ->label('calculation.state.new_state')
             ->add(CalculationStateListType::class);
 
-        $helper->listenerPreSetData(fn (FormEvent $event) => $this->addOverallMargin($event));
-    }
-
-    private function addOverallMargin(FormEvent $event): void
-    {
-        /** @psalm-var Calculation $data */
-        $data = $event->getData();
-        $options = [
-            'label' => 'calculation.fields.margin',
-            'expanded' => true,
-            'percent_decimals' => 0,
-            'number_pattern' => PlainType::NUMBER_PERCENT,
-            'attr' => $this->getOverallAttributes($data),
-            'text_class' => $this->getOverallTextClass($data),
-        ];
-        $event->getForm()->add('overallMargin', PlainType::class, $options);
+        $helper->listenerPreSetData(fn (FormEvent $event) => $this->onPreSetData($event));
     }
 
     private function getOverallAttributes(Calculation $data): array
@@ -102,6 +87,21 @@ class CalculationEditStateType extends AbstractEntityType
     private function isMarginBelow(Calculation $data): bool
     {
         return $this->service->isMarginBelow($data);
+    }
+
+    private function onPreSetData(FormEvent $event): void
+    {
+        /** @psalm-var Calculation $data */
+        $data = $event->getData();
+        $options = [
+            'expanded' => true,
+            'percent_decimals' => 0,
+            'label' => 'calculation.fields.margin',
+            'number_pattern' => PlainType::NUMBER_PERCENT,
+            'attr' => $this->getOverallAttributes($data),
+            'text_class' => $this->getOverallTextClass($data),
+        ];
+        $event->getForm()->add('overallMargin', PlainType::class, $options);
     }
 
     private function translateMarginBelow(Calculation $data): string

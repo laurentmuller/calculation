@@ -5,5 +5,6 @@
  */
 (function ($) {
     'use strict';
-    $('form').initValidator();
+    $('#edit-form').initValidator();
+    $('#edit-form [data-bs-toggle="popover"]').popover();
 }(jQuery));

@@ -35,6 +35,11 @@ class LogService implements ServiceSubscriberInterface
     use TranslatorAwareTrait;
 
     /**
+     * The date format.
+     */
+    public const DATE_FORMAT = 'd.m.Y H:i:s.v';
+
+    /**
      * The cache timeout (15 minutes).
      */
     private const CACHE_TIMEOUT = 900;
@@ -52,8 +57,6 @@ class LogService implements ServiceSubscriberInterface
     public function __construct(
         #[Autowire('%kernel.logs_dir%/%kernel.environment%.log')]
         private readonly string $fileName,
-        #[Autowire('%log_date_format%')]
-        private readonly string $dateFormat,
     ) {
     }
 
@@ -116,7 +119,7 @@ class LogService implements ServiceSubscriberInterface
      */
     private function parseDate(string $value): \DateTimeInterface|false
     {
-        return \DateTimeImmutable::createFromFormat($this->dateFormat, $value);
+        return \DateTimeImmutable::createFromFormat(self::DATE_FORMAT, $value);
     }
 
     /**

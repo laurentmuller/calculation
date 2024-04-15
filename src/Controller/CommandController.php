@@ -15,7 +15,7 @@ namespace App\Controller;
 use App\Attribute\Get;
 use App\Attribute\GetPost;
 use App\Interfaces\RoleInterface;
-use App\Report\CommandReport;
+use App\Report\CommandsReport;
 use App\Response\PdfResponse;
 use App\Service\CommandBuilderService;
 use App\Service\CommandService;
@@ -85,11 +85,11 @@ class CommandController extends AbstractController
         } else {
             $command = $service->first();
         }
-
+        $root = $this->trans('command.list.available');
         $parameters = [
             'command' => $command,
             'count' => $service->count(),
-            'groups' => $service->getGroupedNames(),
+            'groups' => $service->getGroupedNames($root),
         ];
 
         return $this->render('command/commands.html.twig', $parameters);
@@ -149,7 +149,7 @@ class CommandController extends AbstractController
     public function pdf(CommandService $service): PdfResponse
     {
         $commands = $service->getCommands();
-        $report = new CommandReport($this, $commands);
+        $report = new CommandsReport($this, $commands);
 
         return $this->renderPdfDocument($report);
     }

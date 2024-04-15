@@ -1,38 +1,21 @@
 /**! compression tag for ftp-deployment */
 
-/* global bootstrap */
-
-function getPopovers() {
-    'use strict';
-    return document.querySelectorAll('.content [data-custom-html]');
-}
-
 function disposePopover() {
     'use strict';
-    getPopovers().forEach(function (element) {
-        const popover = bootstrap.Popover.getInstance(element);
-        if (popover) {
-            popover.dispose();
-        }
-    });
+    $('.content [data-content').popover('dispose');
 }
 
 function createPopover() {
     'use strict';
-    const options = {
+    $('.content [data-content').popover({
         html: true,
         trigger: 'hover',
         placement: 'top',
         customClass: 'popover-table popover-w-100',
-        title: function (e) {
-            return e.dataset.customTitle;
-        },
         content: function (e) {
-            return $(e.dataset.customHtml);
+            const $content = $(e).data('content');
+            return $($content);
         }
-    };
-    getPopovers().forEach(function (element) {
-        bootstrap.Popover.getOrCreateInstance(element, options);
     });
 }
 

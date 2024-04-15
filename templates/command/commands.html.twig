@@ -12,12 +12,11 @@
     <label for="command" class="form-label">{{ 'command.list.fields.command'|trans }}</label>
     <select id="command" name="command" class="form-select" data-url="{{ path('command_content', {'name': 'query'}) }}">
     {% for key, group in groups %}
-        {% set is_group = key != constant('App\\Service\\CommandService::GLOBAL_GROUP') %}
-        {% if is_group %}<optgroup label="{{ key }}">{% endif %}
+        <optgroup label="{{ key }}">
         {% for name in group %}
             <option{% if name == selection %} selected="selected"{% endif %}>{{ name }}</option>
         {% endfor %}
-        {% if is_group %}</optgroup>{% endif %}
+        </optgroup>
     {% endfor %}
     </select>
 </div>
@@ -26,11 +25,11 @@
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
-    <a href="#" class="btn btn-form btn-outline-warning btn-execute" data-url="{{ path('command_execute', {'name': 'query'}) }}">
+    <a href="#" class="btn btn-form btn-warning btn-execute" data-url="{{ path('command_execute', {'name': 'query'}) }}">
         {{- 'command.execute.title'|trans -}}
     </a>
     {{ button_pdf('command_pdf') }}
-    <small class="ms-auto">{{ 'command.list.counter'|trans({'%count%': count|integer}) }}</small>
+    <small class="ms-sm-auto">{{ 'command.list.counter'|trans({'%count%': count|integer}) }}</small>
 </div>
 {% endblock %}
 {# javascripts #}

@@ -129,9 +129,10 @@ class CommandController extends AbstractController
                 $data = $form->getData();
                 $session->set($key, $data);
                 $parameters = $dataService->createParameters($command, $data);
-                $result = $service->execute($name, $parameters);
+                $result = $service->execute($name, $parameters, true);
 
                 return $this->render('command/command_execute_result.html.twig', [
+                    'parameters' => $parameters,
                     'command' => $command,
                     'result' => $result,
                 ]);
@@ -178,8 +179,12 @@ class CommandController extends AbstractController
      *
      * @phpstan-param array $command
      */
-    private function getCommandData(SessionInterface $session, CommandDataService $dataService, string $key, array $command): array
-    {
+    private function getCommandData(
+        SessionInterface $session,
+        CommandDataService $dataService,
+        string $key,
+        array $command
+    ): array {
         $data = $dataService->createData($command);
         /** @psalm-var array<string, array|scalar|null> $existing */
         $existing = (array) $session->get($key, []);

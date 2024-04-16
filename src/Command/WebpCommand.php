@@ -56,7 +56,6 @@ class WebpCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-
         $source = \trim($io->getStringArgument(self::SOURCE_ARGUMENT));
         if ('' === $source) {
             $io->error('The "--source" argument requires a non-empty value.');

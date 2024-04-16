@@ -12,9 +12,18 @@
 {% block card_body %}
 {# name #}
 {{ include('command/_command_name.html.twig', {'command': command}, with_context=false) }}
-<p class="mb-1">{{ 'command.result.message'|trans }}</p>
-<pre id="result" class="border p-2 small-scrollbar" style="max-height: 340px;">
-    {{- result.content|default('command.result.empty'|trans) -}}
+{# parameters #}
+{% if parameters|length %}
+    <div class="mb-3">
+        <span class="form-label">{{ 'command.list.fields.arguments'|trans }}</span>
+        <div class="border pre-scrollable pre-scrollable-highlight-php small-scrollbar font-monospace rounded">
+            {{ parameters|var_export_php }}
+        </div>
+    </div>
+{% endif %}
+<span class="form-label">{{ 'command.result.message'|trans }}</span>
+<pre id="result" class="border rounded p-2 mb-0 small-scrollbar" style="max-height: 340px;">
+    {{- result.content|default('command.result.empty'|trans)|raw -}}
 </pre>
 {# error #}
 {% if is_error %}
@@ -33,6 +42,11 @@
                 data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>
     {% endif %}
 </div>
+{% endblock %}
+{# stylesheets #}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ asset_css('css/highlight.css') }}
 {% endblock %}
 {# javascripts #}
 {% block javascripts -%}

@@ -66,19 +66,24 @@ class CommandDataService
      * @psalm-return array<string, array|scalar|null>
      *
      * @phpstan-param array $command
+     *
+     * @throws \LogicException if a parameter name is not found
      */
     public function createParameters(array $command, array $data): array
     {
         $parameters = [];
         foreach ($data as $key => $value) {
-            if (null === $value || false === $value || [] === $value) {
+            $default = $this->getDefaultValue($command, $key);
+            if ($default === $value || (null === $default && false === $value)) {
                 continue;
             }
+
             if ($this->isArgumentPrefix($key)) {
                 $key = $this->getArgumentName($command, $key);
             } elseif ($this->isOptionPrefix($key)) {
                 $key = $this->getOptionName($command, $key);
             }
+
             $parameters[$key] = $value;
         }
 
@@ -132,32 +137,62 @@ class CommandDataService
      * @psalm-param CommandType $command
      *
      * @phpstan-param array $command
+     *
+     * @throws \LogicException if the argument name is not found
      */
     private function getArgumentName(array $command, string $key): string
     {
         $key = $this->trimArgumentPrefix($key);
         $arguments = $command['definition']['arguments'];
-        if (\array_key_exists($key, $arguments)) {
-            return $arguments[$key]['name'];
+        if (!\array_key_exists($key, $arguments)) {
+            throw new \LogicException("Unable to find the argument '$key'.");
         }
 
-        return $key;
+        return $arguments[$key]['name'];
     }
 
     /**
      * @psalm-param CommandType $command
      *
      * @phpstan-param array $command
+     *
+     * @psalm-return array|scalar|null
+     */
+    private function getDefaultValue(array $command, string $key): mixed
+    {
+        if ($this->isArgumentPrefix($key)) {
+            $key = $this->trimArgumentPrefix($key);
+            if (\array_key_exists($key, $command['definition']['arguments'])) {
+                return $command['definition']['arguments'][$key]['default'];
+            }
+        }
+
+        if ($this->isOptionPrefix($key)) {
+            $key = $this->trimOptionPrefix($key);
+            if (\array_key_exists($key, $command['definition']['options'])) {
+                return $command['definition']['options'][$key]['default'];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @psalm-param CommandType $command
+     *
+     * @phpstan-param array $command
+     *
+     * @throws \LogicException if the option name is not found
      */
     private function getOptionName(array $command, string $key): string
     {
         $key = $this->trimOptionPrefix($key);
         $options = $command['definition']['options'];
-        if (\array_key_exists($key, $options)) {
-            return $options[$key]['name'];
+        if (!\array_key_exists($key, $options)) {
+            throw new \LogicException("Unable to find the option '$key'.");
         }
 
-        return '--' . $key;
+        return $options[$key]['name'];
     }
 
     private function isArgumentPrefix(string $key): bool

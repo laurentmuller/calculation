@@ -82,7 +82,7 @@ class CommandService implements \Countable
         '</comment>' => '</span>',
         '</>' => '</span>',
         // line break
-        "\n" => '<br>',
+        // "\n" => '<br>',
     ];
 
     private const HREF_REPLACE = [
@@ -115,6 +115,7 @@ class CommandService implements \Countable
      *
      * @param string $command         the command name to execute
      * @param array  $parameters      the command parameters
+     * @param bool   $replaceResult   set whether if the result content must be updated by replacing tags
      * @param bool   $catchExceptions sets whether to catch exceptions or not during commands execution
      * @param bool   $catchErrors     sets whether to catch errors or not during commands execution
      *
@@ -125,6 +126,7 @@ class CommandService implements \Countable
     public function execute(
         string $command,
         array $parameters = [],
+        bool $replaceResult = false,
         bool $catchExceptions = true,
         bool $catchErrors = false,
     ): CommandResult {
@@ -132,12 +134,13 @@ class CommandService implements \Countable
         $input = new ArrayInput($parameters);
         $output = new BufferedOutput();
 
-        $application = new Application($this->kernel);
-        $application->setCatchExceptions($catchExceptions);
-        $application->setCatchErrors($catchErrors);
-        $application->setAutoExit(false);
+        $application = $this->createApplication($catchExceptions, $catchErrors);
         $status = $application->run($input, $output);
         $content = $output->fetch();
+        if ($replaceResult) {
+            $content = $this->replaceHelp($content);
+            $content = \str_replace('<br>', "\n", $content);
+        }
         unset($application);
 
         return new CommandResult($status, $content);
@@ -254,14 +257,22 @@ class CommandService implements \Countable
         return \array_key_exists($name, $this->getCommands());
     }
 
+    private function createApplication(bool $catchExceptions, bool $catchErrors): Application
+    {
+        $application = new Application($this->kernel);
+        $application->setCatchExceptions($catchExceptions);
+        $application->setCatchErrors($catchErrors);
+        $application->setAutoExit(false);
+
+        return $application;
+    }
+
     private function encodeDefaultValue(mixed $default): string
     {
         if (false === $default || null === $default) {
             return '';
         }
-        if (\INF === $default) {
-            return 'INF';
-        }
+
         if ([] === $default) {
             return '[]';
         }

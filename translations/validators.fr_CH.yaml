@@ -95,3 +95,5 @@ Using hidden overlay characters is not allowed.: L'utilisation de caractères su
 date_less_today: La date doit être plus petite ou égale à aujourd'hui.
 date_less_to: La date doit être plus petite ou égale à la date de fin.
 date_less_one_month: La date doit être de 1 mois au maximum avant la date de fin.
+# miscellaneous
+Error: Erreur

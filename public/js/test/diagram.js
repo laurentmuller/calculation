@@ -135,6 +135,7 @@
             'name': $(this).val()
         };
         $.getJSON(url, data, function (response) {
+            // error?
             if (!response.result) {
                 showError(response.message);
                 return;
@@ -147,12 +148,13 @@
 
             // update history
             const name = response.file.name;
-            const url = `?name=${name}`;
-            window.history.pushState({'name': name}, null, url);
+            const url = new URL(location);
+            url.searchParams.set('name', name);
+            window.history.pushState({'name': name}, '', url);
         });
     }).trigger('focus');
 
-    // Handle history pop state.
+    // Handle history pop state
     window.addEventListener('popstate', (e) => {
         if (e.state && e.state.name) {
             const name = e.state.name;

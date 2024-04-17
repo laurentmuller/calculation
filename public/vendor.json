@@ -217,6 +217,7 @@
             ]
         },
         {
+            "remark": "Comment lines 172649 to 172651 !",
             "name": "mermaid",
             "version": "10.9.0",
             "source": "cdnjs",

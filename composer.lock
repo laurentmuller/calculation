@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a364188240a25098028a08a6103c04de",
+    "content-hash": "09661670d95c75b5d3ab9dee5e35b5a5",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1876,16 +1876,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "1.8.4.14",
+            "version": "1.8.4.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "6a76b9e424078e5f0562c282058fe4d587b940bb"
+                "reference": "a624420c8c32dba8cc8420cdc5f193ae69e91f8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/6a76b9e424078e5f0562c282058fe4d587b940bb",
-                "reference": "6a76b9e424078e5f0562c282058fe4d587b940bb",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/a624420c8c32dba8cc8420cdc5f193ae69e91f8a",
+                "reference": "a624420c8c32dba8cc8420cdc5f193ae69e91f8a",
                 "shasum": ""
             },
             "require": {
@@ -1937,7 +1937,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-04-12T04:49:48+00:00"
+            "time": "2024-04-17T13:27:10+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -9208,16 +9208,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.53.0",
+            "version": "v3.54.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "69a19093a9ded8d1baac62ed6c009b8bc148d008"
+                "reference": "2aecbc8640d7906c38777b3dcab6f4ca79004d08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/69a19093a9ded8d1baac62ed6c009b8bc148d008",
-                "reference": "69a19093a9ded8d1baac62ed6c009b8bc148d008",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/2aecbc8640d7906c38777b3dcab6f4ca79004d08",
+                "reference": "2aecbc8640d7906c38777b3dcab6f4ca79004d08",
                 "shasum": ""
             },
             "require": {
@@ -9289,7 +9289,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.53.0"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.54.0"
             },
             "funding": [
                 {
@@ -9297,7 +9297,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-08T15:03:00+00:00"
+            "time": "2024-04-17T08:12:13+00:00"
         },
         {
             "name": "friendsoftwig/twigcs",
@@ -10806,16 +10806,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.18",
+            "version": "10.5.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "835df1709ac6c968ba34bf23f3c30e5d5a266de8"
+                "reference": "c726f0de022368f6ed103e452a765d3304a996a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/835df1709ac6c968ba34bf23f3c30e5d5a266de8",
-                "reference": "835df1709ac6c968ba34bf23f3c30e5d5a266de8",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c726f0de022368f6ed103e452a765d3304a996a4",
+                "reference": "c726f0de022368f6ed103e452a765d3304a996a4",
                 "shasum": ""
             },
             "require": {
@@ -10887,7 +10887,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.18"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.19"
             },
             "funding": [
                 {
@@ -10903,7 +10903,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-14T07:05:31+00:00"
+            "time": "2024-04-17T14:06:18+00:00"
         },
         {
             "name": "psalm/plugin-phpunit",
@@ -12813,6 +12813,86 @@
                 "source": "https://github.com/vimeo/psalm"
             },
             "time": "2024-03-11T20:33:46+00:00"
+        },
+        {
+            "name": "vincentlanglet/twig-cs-fixer",
+            "version": "2.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/VincentLanglet/Twig-CS-Fixer.git",
+                "reference": "edfa847ea335d28e2b6f8c0cfa68dc6b4de79211"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/edfa847ea335d28e2b6f8c0cfa68dc6b4de79211",
+                "reference": "edfa847ea335d28e2b6f8c0cfa68dc6b4de79211",
+                "shasum": ""
+            },
+            "require": {
+                "composer-runtime-api": "^2.0.0",
+                "ext-ctype": "*",
+                "ext-json": "*",
+                "php": ">=8.0",
+                "symfony/console": "^5.4.9 || ^6.0 || ^7.0",
+                "symfony/filesystem": "^5.4 || ^6.0 || ^7.0",
+                "symfony/finder": "^5.4 || ^6.0 || ^7.0",
+                "symfony/string": "^5.4 || ^6.0 || ^7.0",
+                "twig/twig": "^2.14.0 || ^3.0.5",
+                "webmozart/assert": "^1.10"
+            },
+            "require-dev": {
+                "dereuromark/composer-prefer-lowest": "^0.1.10",
+                "ergebnis/composer-normalize": "^2.29",
+                "friendsofphp/php-cs-fixer": "^3.13.0",
+                "icanhazstring/composer-unused": "^0.8.5",
+                "infection/infection": "^0.26.16 || ^0.27.0",
+                "maglnet/composer-require-checker": "^3.8 || ^4.3",
+                "phpstan/phpstan": "^1.9.1",
+                "phpstan/phpstan-phpunit": "^1.2.2",
+                "phpstan/phpstan-strict-rules": "^1.4.4",
+                "phpstan/phpstan-symfony": "^1.2.16",
+                "phpstan/phpstan-webmozart-assert": "^1.2.2",
+                "phpunit/phpunit": "^9.5.26 || ^10.0.9",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "psalm/plugin-symfony": "^5.0.0",
+                "rector/rector": "^1.0.0",
+                "symfony/process": "^5.4 || ^6.0 || ^7.0",
+                "symfony/twig-bridge": "^5.4 || ^6.0 || ^7.0",
+                "symfony/ux-twig-component": "^2.2.0",
+                "twig/cache-extra": "^3.2",
+                "vimeo/psalm": "^5.2.0"
+            },
+            "bin": [
+                "bin/twig-cs-fixer"
+            ],
+            "type": "coding-standard",
+            "autoload": {
+                "psr-4": {
+                    "TwigCsFixer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vincent Langlet"
+                }
+            ],
+            "description": "A tool to automatically fix Twig code style",
+            "homepage": "https://github.com/VincentLanglet/Twig-CS-Fixer",
+            "support": {
+                "issues": "https://github.com/VincentLanglet/Twig-CS-Fixer/issues",
+                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/2.7.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/VincentLanglet",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-04-16T11:33:19+00:00"
         },
         {
             "name": "webmozart/assert",

@@ -33,11 +33,6 @@ class CommandsReport extends AbstractArrayReport
 {
     private const HELP_PATTERN = '/<span\s*class="(.*?)"\>([\s\S]*?)<\/span>/im';
 
-    protected function cleanText(string $str): string
-    {
-        return '' === $str ? $str : \str_replace("\r", '', $str);
-    }
-
     protected function doRender(array $entities): bool
     {
         $this->setTitleTrans('command.list.title');

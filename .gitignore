@@ -30,4 +30,5 @@ symfony.lock
 ###> ci ###
 .php-cs-fixer.cache
 .phpunit.result.cache
+.twig-cs-fixer.cache
 ###< ci ###

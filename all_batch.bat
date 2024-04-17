@@ -18,6 +18,8 @@ ECHO ----- PHP-RECTOR ------------------------------------------------- && ^
 .\vendor\bin\rector.bat process --dry-run --config=rector.php           && ^
 ECHO ----- PHP-TWIG-CS ------------------------------------------------ && ^
 .\vendor\bin\twigcs.bat --severity error --display blocking templates   && ^
+ECHO ----- PHP-TWIG-CS-FIXER ------------------------------------------ && ^
+.\vendor\bin\twig-cs-fixer.bat lint --config=.twig-cs-fixer.php         && ^
 ECHO ----- PHP-UNIT --------------------------------------------------- && ^
 .\vendor\bin\phpunit.bat
 SET STA__TIME=%TIME: =0%

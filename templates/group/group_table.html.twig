@@ -12,7 +12,7 @@
     {{ link(path('group_add', params), 'group.add.title', 'add-link p-0') }}
 {% endif %}
 {%- endblock %}
-{#  global actions #}
+{# global actions #}
 {% block global_actions -%}
 {{- _self.item_external(path('group_pdf'), 'group.list.pdf_title', ICON_PDF) }}
 {{- _self.item_external(path('group_excel'), 'group.list.excel_title', ICON_EXCEL) }}
@@ -21,7 +21,7 @@
 {% block edit_actions -%}
 {{- _self.item_path(path('group_edit', params), 'group.edit.title', ICON_EDIT, edit_class) }}
 {%- endblock %}
-{#  delete actions #}
+{# delete actions #}
 {% block delete_actions -%}
 {{- _self.item_path(path('group_delete', params), 'group.delete.title', ICON_DELETE, 'btn-delete') }}
 {%- endblock %}

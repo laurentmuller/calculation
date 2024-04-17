@@ -32,7 +32,7 @@ function loadContent(name) {
             $('.content').html(data.content).fadeIn();
             const url = new URL(location);
             url.searchParams.set('name', name);
-            window.history.pushState({}, '', url);
+            window.history.pushState({'name': name}, '', url);
             updateExecute();
             createPopover();
         } else {

@@ -40,7 +40,7 @@
 {% block edit_actions -%}
 {{- _self.item_path(path('task_edit', params), 'task.edit.title', ICON_EDIT, edit_class) }}
 {%- endblock %}
-{#  delete actions #}
+{# delete actions #}
 {% block delete_actions -%}
 {{- _self.item_path(path('task_delete', params), 'task.delete.title', ICON_DELETE, 'btn-delete') }}
 {%- endblock %}

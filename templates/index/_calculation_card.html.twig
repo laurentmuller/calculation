@@ -8,7 +8,7 @@
     {% if id == selection %}
         {% set class_name = class_name ~ ' table-primary' %}
     {% endif %}
-    {%if not is_editable %}
+    {% if not is_editable %}
         {% set class_name = class_name ~ ' text-body-secondary' %}
     {% endif %}
     <div class="col mb-2 px-1">

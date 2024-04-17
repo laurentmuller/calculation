@@ -50,7 +50,7 @@
 {{- _self.item_path(path('calculation_edit', params), 'calculation.edit.title_short', ICON_EDIT, edit_class ~ ' btn-calculation-edit') }}
 {{- _self.item_path(path('calculation_state', params), 'calculation.list.state_title', ICON_CALCULATION_STATE, 'btn-state') }}
 {%- endblock %}
-{#  delete actions #}
+{# delete actions #}
 {% block delete_actions -%}
 {{- _self.item_path(path('calculation_delete', params), 'calculation.delete.title', ICON_DELETE, 'btn-delete') }}
 {%- endblock %}

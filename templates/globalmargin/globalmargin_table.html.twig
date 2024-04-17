@@ -5,7 +5,7 @@
 {%- set title_icon = ICON_GLOBAL_MARGIN -%}
 {%- set object_type = ENTITY_GLOBAL_MARGIN -%}
 {% block card_container_class ' col col-xl-8 offset-xl-2' %}
-{# display mode  #}
+{# display mode #}
 {% block display_mode %}
 {% if allow_edit -%}
     {{- _self.item_path(path('globalmargin_edit', params), 'globalmargin.edit.title', ICON_EDIT) }}

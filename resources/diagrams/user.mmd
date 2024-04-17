@@ -11,6 +11,19 @@ classDiagram
         +eraseCredentials()
     }
 
+    class EntityInterface {
+        <<Interface>>
+    }
+
+    class TimestampableInterface {
+        <<Interface>>
+    }
+
+    class PasswordAuthenticatedUserInterface {
+        <<Interface>>
+        +getPassword() string
+    }
+
     class User {
         -string username
         -string email
@@ -53,19 +66,12 @@ classDiagram
         <<Abstract>>
     }
 
-    class EntityInterface {
-        <<Interface>>
-    }
-
-    class TimestampableInterface {
-        <<Interface>>
-    }
-
     EntityInterface <|.. AbstractEntity
     AbstractEntity <|-- User
     User ..|> UserInterface
+    User ..|> PasswordAuthenticatedUserInterface
+    User ..|> TimestampableInterface
     User "0" --* "*" UserProperty
-    TimestampableInterface <|-- User
     AbstractProperty <|-- UserProperty
 
     click EntityInterface call nodeCallback()

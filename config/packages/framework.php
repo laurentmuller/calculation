@@ -22,8 +22,9 @@ return static function (FrameworkConfig $config): void {
         ->enabledLocales([FormatUtils::DEFAULT_LOCALE]);
 
     $config->session()
-        ->enabled(true)
-        ->cookiePath('%cookie_path%');
+        ->name('CALCULATION_SESSION_ID')
+        ->cookiePath('%cookie_path%')
+        ->enabled(true);
 
     $config->mailer()
         ->dsn('%env(MAILER_DSN)%')

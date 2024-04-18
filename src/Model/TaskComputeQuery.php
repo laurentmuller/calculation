@@ -23,6 +23,9 @@ readonly class TaskComputeQuery
     /** @psalm-var int[] */
     private array $items;
 
+    /**
+     * @param int[] $items
+     */
     public function __construct(
         private int $id,
         private float $quantity = 1.0,

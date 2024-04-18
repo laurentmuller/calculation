@@ -62,8 +62,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     public function __construct(protected readonly ApplicationService $application)
     {
         parent::__construct();
-        $this->initializeChart()
-            ->initializeLanguage();
+        $this->initializeOptions();
     }
 
     /**
@@ -132,16 +131,15 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     /**
      * Gets the font style for the given color and for the optional font size.
      *
-     * @param string  $color    the font color
      * @param ?string $fontSize the font size or null to use the body font size
      *
      * @return array an array with a font color, a font size, a font weight and a font family
      */
-    protected function getColorFontStyle(string $color, ?string $fontSize = null): array
+    protected function getColorFontStyle(?string $fontSize = null): array
     {
         return \array_merge(
             $this->getFontStyle($fontSize),
-            ['color' => $color],
+            ['color' => $this->getBodyColor()],
         );
     }
 
@@ -198,16 +196,16 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
     {
         return [
             'labels' => [
-                'style' => $this->getColorFontStyle($this->getBodyColor(), '0.875rem'),
+                'style' => $this->getColorFontStyle('0.875rem'),
             ],
             'gridLineColor' => $this->getBorderColor(),
         ];
     }
 
     /**
-     * Initialize the chart, the legend and the axes options. Disable accessibility and credits.
+     * Initialize the chart options.
      */
-    private function initializeChart(): static
+    private function initializeOptions(): void
     {
         $this->chart->merge([
             'backgroundColor' => 'var(--bs-body-bg)',
@@ -217,7 +215,7 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
 
         $this->legend->merge([
             'itemHoverStyle' => $this->getLinkStyle(),
-            'itemStyle' => $this->getColorFontStyle($this->getBodyColor()),
+            'itemStyle' => $this->getColorFontStyle(),
         ]);
 
         $axisOptions = $this->getAxisOptions();
@@ -227,14 +225,6 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
         $this->accessibility['enabled'] = false;
         $this->credits['enabled'] = false;
 
-        return $this;
-    }
-
-    /**
-     * Initialize the language options.
-     */
-    private function initializeLanguage(): static
-    {
         $this->lang->merge([
             'decimalPoint' => FormatUtils::DECIMAL_SEP,
             'thousandsSep' => FormatUtils::THOUSANDS_SEP,
@@ -243,7 +233,5 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
             'shortMonths' => \array_values(DateUtils::getShortMonths()),
             'shortWeekdays' => \array_values(DateUtils::getShortWeekdays()),
         ]);
-
-        return $this;
     }
 }

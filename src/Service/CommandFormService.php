@@ -140,7 +140,7 @@ readonly class CommandFormService
         $attributes = $this->getTooltipAttributes($name, $description);
         $helper->field($field)
             ->label($name)
-            ->rowClass('col-md-4')
+            ->rowClass('col-6 col-md-3')
             ->updateRowAttributes($attributes)
             ->updateOption('priority', $priority)
             ->required($required)
@@ -224,7 +224,7 @@ readonly class CommandFormService
         $required = $transformer instanceof CallbackTransformer ? false : $required;
         $helper->field($field)
             ->label($name)
-            ->rowClass('col-md-4')
+            ->rowClass('col-6 col-md-3')
             ->updateAttributes($attributes)
             ->updateOption('priority', $priority)
             ->modelTransformer($transformer)

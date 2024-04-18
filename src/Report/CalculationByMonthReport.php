@@ -73,6 +73,8 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
 
     /**
      * @param CalculationByMonthType[] $entities
+     *
+     * @psalm-suppress PropertyTypeCoercion
      */
     public function __construct(
         AbstractController $controller,

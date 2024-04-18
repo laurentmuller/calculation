@@ -119,6 +119,8 @@ final class FormatExtension extends AbstractExtension
      * @return string the formatted date
      *
      * @throws RuntimeError if the date format or the time format is invalid
+     *
+     * @psalm-suppress UndefinedFunction
      */
     private function dateTimeFilter(
         Environment $env,

@@ -50,6 +50,8 @@ class EntityProvider extends Base
 
     /**
      * @psalm-param class-string<TEntity> $className the entity class name.
+     *
+     * @psalm-suppress PropertyTypeCoercion
      */
     public function __construct(Generator $generator, EntityManagerInterface $manager, string $className)
     {

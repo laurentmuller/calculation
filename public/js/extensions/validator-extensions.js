@@ -489,8 +489,11 @@
             }
             parent.addClass('position-relative');
             $alert.appendTo($(parent)).show(settings.show);
-            setTimeout(() => $alert.remove(), settings.hide);
-
+            window.onpagehide = () => $alert.remove();
+            // window.addEventListener('pagehide', () => {
+            //     $alert.remove();
+            // });
+            //setTimeout(() => $alert.remove(), settings.hide);
             return $this;
         }
     });

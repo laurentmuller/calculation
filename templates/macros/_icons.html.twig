@@ -160,8 +160,7 @@
 {% macro button_close_modal(for_header=true, label=null, data_target=false) -%}
 {% set text = (label|default('common.button_close'))|trans %}
 {% if for_header %}
-    <button type="button" class="btn-close" data-bs-dismiss="modal"{% if data_target %} data-bs-target="#{{ data_target }}"{% endif %} aria-label="{{ text }}" title="{{ text }}">
-    </button>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"{% if data_target %} data-bs-target="#{{ data_target }}"{% endif %} aria-label="{{ text }}" title="{{ text }}"></button>
 {% else %}
     <button type="button" class="btn btn-form btn-secondary" data-bs-dismiss="modal"{% if data_target %} data-bs-target="#{{ data_target }}"{% endif %}>
         {{- text -}}

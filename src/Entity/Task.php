@@ -18,6 +18,7 @@ use App\Repository\TaskRepository;
 use App\Traits\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -44,7 +45,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
     /**
      * The children items.
      *
-     * @var ArrayCollection<int, TaskItem>
+     * @var ArrayCollection<int, TaskItem>&ReadableCollection<int, TaskItem>
      */
     #[Assert\Valid]
     #[ORM\OneToMany(targetEntity: TaskItem::class, mappedBy: 'task', cascade: ['persist', 'remove'], orphanRemoval: true)]
@@ -108,15 +109,12 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
 
     /**
      * Gets the number of margins for all items.
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function countMargins(): int
     {
-        $count = 0;
-        foreach ($this->items as $item) {
-            $count += $item->count();
-        }
-
-        return $count;
+        return $this->items->reduce(fn (int $carry, TaskItem $item): int => $carry + $item->count(), 0);
     }
 
     /**
@@ -139,7 +137,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
     }
 
     /**
-     * @return Collection<int, TaskItem>
+     * @return ArrayCollection<int, TaskItem>&ReadableCollection<int, TaskItem>
      */
     public function getItems(): Collection
     {

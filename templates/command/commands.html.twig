@@ -11,9 +11,9 @@
 <div class="mb-3">
     <label for="command" class="form-label">{{ 'command.list.fields.command'|trans }}</label>
     <select id="command" name="command" class="form-select" data-url="{{ path('command_content', {'name': 'query'}) }}">
-    {% for key, group in groups %}
+    {% for key, names in groups %}
         <optgroup label="{{ key }}">
-        {% for name in group %}
+        {% for name in names %}
             <option{% if name == selection %} selected="selected"{% endif %}>{{ name }}</option>
         {% endfor %}
         </optgroup>

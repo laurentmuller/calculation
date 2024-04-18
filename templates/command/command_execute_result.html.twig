@@ -8,6 +8,7 @@
 {# class #}
 {% block card_class is_error ? ' border-danger' : '' %}
 {% block card_header_class is_error ? ' text-bg-danger' : '' %}
+{% block card_footer_class ' justify-content-start' %}
 {# body #}
 {% block card_body %}
 {# name #}
@@ -21,8 +22,9 @@
         </div>
     </div>
 {% endif %}
+{# content #}
 <span class="form-label">{{ 'command.result.message'|trans }}</span>
-<pre id="result" class="border rounded p-2 mb-0 small-scrollbar" style="max-height: 340px;">
+<pre id="result" class="border p-2 mb-0 small-scrollbar pre-scrollable">
     {{- result.content|default('command.result.empty'|trans)|raw -}}
 </pre>
 {# error #}

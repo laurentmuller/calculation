@@ -13,7 +13,7 @@
             <div class="modal-body">
             {%- if raw_data -%}
                 {% if description is defined and description %}
-                <p class="mb-1">{{ description }}</p>
+                <span class="form-label">{{ description }}</span>
                 {% endif %}
                 <div class="border pre-scrollable pre-scrollable-highlight-php small-scrollbar font-monospace">
                     {{- raw_data|var_export_php(raw_data_id) -}}
@@ -24,12 +24,12 @@
                 </p>
             {%- endif -%}
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer justify-content-start">
                 {% if raw_data and allow_copy is defined and allow_copy %}
                     <button type="button" class="btn btn-form btn-primary btn-copy"
-                        data-success="{{ 'common.copy_success'|trans }}"
-                        data-error="{{ 'common.copy_error'|trans }}"
-                        data-clipboard-target="#{{ raw_data_id }}">{{ 'common.button_copy'|trans }}</button>
+                            data-success="{{ 'common.copy_success'|trans }}"
+                            data-error="{{ 'common.copy_error'|trans }}"
+                            data-clipboard-target="#{{ raw_data_id }}">{{ 'common.button_copy'|trans }}</button>
                 {% endif %}
                 {{- button_close_modal(false, null, dialog_id) }}
             </div>

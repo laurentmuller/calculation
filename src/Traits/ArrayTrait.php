@@ -87,6 +87,8 @@ trait ArrayTrait
      * @return T[]
      *
      * @psalm-param 0|1|2 $mode
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function getFiltered(
         array $values,

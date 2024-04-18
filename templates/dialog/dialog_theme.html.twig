@@ -39,12 +39,10 @@
                     {{ _self.output_theme(theme, is_dark, theme_selection) }}
                 {% endfor %}
             </div>
-            <div class="modal-footer">
-                <div class="d-flex-wrap-center w-100">
-                    {{ button_ok() }}
-                    {{ button_close_modal(false, 'common.button_cancel', dialog_id) }}
-                    <small class="flex-grow-1 text-sm-end">{{ 'common.required'|trans|raw }}</small>
-                </div>
+            <div class="modal-footer justify-content-start">
+                {{ button_ok() }}
+                {{ button_close_modal(false, 'common.button_cancel', dialog_id) }}
+                <small class="flex-grow-1 text-sm-end">{{ 'common.required'|trans|raw }}</small>
             </div>
         </div>
     </div>

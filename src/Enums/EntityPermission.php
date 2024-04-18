@@ -86,6 +86,10 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
      * Gets a flag bag with all permission.
      *
      * @return FlagBag<EntityPermission>
+     *
+     * @psalm-suppress InvalidArgument
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      */
     public static function getAllPermission(): FlagBag
     {
@@ -96,6 +100,10 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
      * Gets a flag bag with default permission.
      *
      * @return FlagBag<EntityPermission>
+     *
+     * @psalm-suppress InvalidArgument
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      */
     public static function getDefaultPermission(): FlagBag
     {

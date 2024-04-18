@@ -80,11 +80,17 @@ class CommandDataService
 
             if ($this->isArgumentPrefix($key)) {
                 $key = $this->getArgumentName($command, $key);
-            } elseif ($this->isOptionPrefix($key)) {
-                $key = $this->getOptionName($command, $key);
+                $parameters[$key] = $value;
+                continue;
             }
 
-            $parameters[$key] = $value;
+            if ($this->isOptionPrefix($key)) {
+                $key = $this->getOptionName($command, $key);
+                $parameters[$key] = $value;
+                continue;
+            }
+
+            throw new \LogicException("Unable to find the argument '$key'.");
         }
 
         return $parameters;
@@ -118,19 +124,7 @@ class CommandDataService
      */
     public function validateData(array $command, array $data): array
     {
-        $arguments = $command['definition']['arguments'];
-        $options = $command['definition']['options'];
-
-        return \array_filter($data, function (string $key) use ($arguments, $options): bool {
-            if ($this->isArgumentPrefix($key)) {
-                return \array_key_exists($this->trimArgumentPrefix($key), $arguments);
-            }
-            if ($this->isOptionPrefix($key)) {
-                return \array_key_exists($this->trimOptionPrefix($key), $options);
-            }
-
-            return false;
-        }, \ARRAY_FILTER_USE_KEY);
+        return \array_filter($data, fn (string $key) => $this->validateKey($key, $command), \ARRAY_FILTER_USE_KEY);
     }
 
     /**
@@ -213,5 +207,23 @@ class CommandDataService
     private function trimOptionPrefix(string $key): string
     {
         return \substr($key, \strlen(self::OPTION_PREFIX));
+    }
+
+    /**
+     * @psalm-param CommandType $command
+     *
+     * @phpstan-param array $command
+     */
+    private function validateKey(string $key, array $command): bool
+    {
+        if ($this->isArgumentPrefix($key)) {
+            return \array_key_exists($this->trimArgumentPrefix($key), $command['definition']['arguments']);
+        }
+
+        if ($this->isOptionPrefix($key)) {
+            return \array_key_exists($this->trimOptionPrefix($key), $command['definition']['options']);
+        }
+
+        return false;
     }
 }

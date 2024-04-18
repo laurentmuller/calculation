@@ -29,6 +29,8 @@ trait AwareTrait
      * @return T
      *
      * @throws \LogicException if the service can not be found
+     *
+     * @psalm-suppress MixedInferredReturnType
      */
     protected function getContainerService(string $function, string $class): mixed
     {

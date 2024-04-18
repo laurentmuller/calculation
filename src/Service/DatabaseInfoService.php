@@ -71,6 +71,8 @@ final class DatabaseInfoService
      * Gets the database information.
      *
      * @return array<string, string>
+     *
+     * @psalm-suppress InternalMethod
      */
     public function getDatabase(): array
     {

@@ -150,8 +150,12 @@ class CommandService implements \Countable
      * Gets the first command.
      *
      * @throws InvalidArgumentException
+     *
+     * @psalm-return CommandType|false
+     *
+     * @phpstan-return array|false
      */
-    public function first(): array
+    public function first(): array|false
     {
         $commands = $this->getCommands();
 

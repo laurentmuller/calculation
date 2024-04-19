@@ -12,23 +12,25 @@ declare(strict_types=1);
 
 namespace App\Twig\Node;
 
+use Twig\Attribute\YieldReady;
 use Twig\Compiler;
 use Twig\Node\Node;
 
 /**
- * Class SwitchNode
- * Based on the rejected Twig pull request: https://github.com/fabpot/Twig/pull/185.
+ * Class SwitchNode.
+ *
+ * Based on the rejected Twig pull request: https://github.com/twigphp/Twig/pull/185.
  *
  * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
  *
  * @since 3.0
  */
+#[YieldReady]
 final class SwitchNode extends Node
 {
     public function compile(Compiler $compiler): void
     {
-        $compiler
-            ->addDebugInfo($this)
+        $compiler->addDebugInfo($this)
             ->write('switch (')
             ->subcompile($this->getNode('value'))
             ->raw(") {\n")
@@ -46,8 +48,7 @@ final class SwitchNode extends Node
                     ->subcompile($value)
                     ->raw(":\n");
             }
-            $compiler
-                ->write("{\n")
+            $compiler->write("{\n")
                 ->indent()
                 ->subcompile($case->getNode('body'))
                 ->write("break;\n")

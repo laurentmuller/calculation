@@ -60,9 +60,9 @@ readonly class CommandFormService
      *
      * @phpstan-param array $command
      */
-    public function createForm(array $command, array $data): FormInterface
+    public function createForm(array $command, array $data, array $options = []): FormInterface
     {
-        $builder = $this->factory->createBuilder(data: $data);
+        $builder = $this->factory->createBuilder(data: $data, options: $options);
         $helper = new FormHelper($builder);
 
         $transformer = $this->createDataTransformer();

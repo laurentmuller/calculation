@@ -81,8 +81,6 @@ class CommandService implements \Countable
         '</error>' => '</span>',
         '</comment>' => '</span>',
         '</>' => '</span>',
-        // line break
-        // "\n" => '<br>',
     ];
 
     private const HREF_REPLACE = [
@@ -95,7 +93,7 @@ class CommandService implements \Countable
 
     public function __construct(
         private readonly KernelInterface $kernel,
-        #[Target('cache.service.command')]
+        #[Target('cache.calculation.service.command')]
         private readonly CacheInterface $cache
     ) {
     }
@@ -218,37 +216,31 @@ class CommandService implements \Countable
     }
 
     /**
+     * Gets all commands grouped by name space.
+     *
+     * @param string $default the default name for commands without a name space
+     *
+     * @psalm-return array<string, CommandType[]>
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getGroupedCommands(string $default = self::GLOBAL_GROUP): array
+    {
+        return $this->getGroupedValues($default, static fn (array $command) => $command);
+    }
+
+    /**
      * Gets all command names grouped by name space.
      *
-     * @param string $root the name of the group for commands without name space
+     * @param string $default the default name for commands without a name space
      *
      * @return array<string, string[]>
      *
      * @throws InvalidArgumentException
      */
-    public function getGroupedNames(string $root = self::GLOBAL_GROUP): array
+    public function getGroupedNames(string $default = self::GLOBAL_GROUP): array
     {
-        $groups = [];
-        $names = $this->getNames();
-        foreach ($names as $name) {
-            $values = \explode(':', $name);
-            $group = 1 === \count($values) ? $root : $values[0];
-            $groups[$group][] = $name;
-        }
-
-        return $groups;
-    }
-
-    /**
-     * Returns all command names.
-     *
-     * @return string[]
-     *
-     * @throws InvalidArgumentException
-     */
-    public function getNames(): array
-    {
-        return \array_keys($this->getCommands());
+        return $this->getGroupedValues($default, static fn (array $command) => $command['name']);
     }
 
     /**
@@ -304,6 +296,46 @@ class CommandService implements \Countable
         }
 
         return \sprintf('(%s)', \implode(', ', $values));
+    }
+
+    /**
+     * @template TValue
+     *
+     * @psalm-param callable(CommandType):TValue $callback
+     *
+     * @psalm-return array<string, TValue[]>
+     *
+     * @throws InvalidArgumentException
+     */
+    private function getGroupedValues(string $default, callable $callback): array
+    {
+        return \array_reduce(
+            $this->getCommands(),
+            /**
+             * @psalm-param array<string, TValue[]> $carry
+             * @psalm-param CommandType $command
+             */
+            function (array $carry, array $command) use ($default, $callback): array {
+                $group = $this->getGroupName($command, $default);
+                $carry[$group][] = \call_user_func($callback, $command);
+
+                return $carry;
+            },
+            []
+        );
+    }
+
+    /**
+     * @psalm-param CommandType $command
+     *
+     * @phpstan-param array $command
+     */
+    private function getGroupName(array $command, string $default): string
+    {
+        $name = $command['name'];
+        $group = \explode(':', $name)[0];
+
+        return $name === $group ? $default : $group;
     }
 
     /**

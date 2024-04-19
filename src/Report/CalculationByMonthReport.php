@@ -324,7 +324,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
                 $this->formatPercent($entity['margin_percent']),
                 FormatUtils::formatInt($entity['total'])
             );
-            /** @psalm-var non-empty-string $link */
             $link = $this->getURL($entity['date']);
             $this->link($x, $y, $width, $this->getY() - $y, $link);
             $this->lastItem = $entity;

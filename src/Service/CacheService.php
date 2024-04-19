@@ -26,7 +26,7 @@ class CacheService
 
     public function __construct(
         private readonly CommandService $service,
-        #[Target('cache.service.cache')]
+        #[Target('cache.calculation.service.cache')]
         private readonly CacheInterface $cache
     ) {
     }

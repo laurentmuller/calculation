@@ -96,6 +96,24 @@ class CommandServiceTest extends KernelTestCase
     /**
      * @throws InvalidArgumentException
      */
+    public function testGetGroupeCommands(): void
+    {
+        $service = $this->getCommandService();
+
+        $groups = $service->getGroupedCommands();
+        self::assertArrayHasKey('app', $groups);
+        self::assertArrayHasKey(CommandService::GLOBAL_GROUP, $groups);
+        self::assertArrayNotHasKey('_fake_command_group', $groups);
+
+        $groups = $service->getGroupedCommands('MyGroup');
+        self::assertArrayHasKey('app', $groups);
+        self::assertArrayHasKey('MyGroup', $groups);
+        self::assertArrayNotHasKey('_fake_command_group', $groups);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
     public function testGetGroupedNames(): void
     {
         $service = $this->getCommandService();
@@ -109,17 +127,6 @@ class CommandServiceTest extends KernelTestCase
         self::assertArrayHasKey('app', $groups);
         self::assertArrayHasKey('MyGroup', $groups);
         self::assertArrayNotHasKey('_fake_command_group', $groups);
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function testGetNames(): void
-    {
-        $service = $this->getCommandService();
-        $names = $service->getNames();
-        self::assertContains('about', $names);
-        self::assertNotContains('_fake_command_test', $names);
     }
 
     /**

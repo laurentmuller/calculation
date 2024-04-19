@@ -20,6 +20,7 @@ use Twig\TokenParser\AbstractTokenParser;
 
 /**
  * Class SwitchTokenParser that parses {% switch %} tags.
+ *
  * Based on the rejected Twig pull request: https://github.com/fabpot/Twig/pull/185.
  *
  * @author Pixel & Tonic, Inc. <support@pixelandtonic.com>
@@ -37,8 +38,9 @@ final class SwitchTokenParser extends AbstractTokenParser
     {
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
+        $expressionParser = $this->parser->getExpressionParser();
         $nodes = [
-            'value' => $this->parser->getExpressionParser()->parseExpression(),
+            'value' => $expressionParser->parseExpression(),
         ];
         $stream->expect(Token::BLOCK_END_TYPE);
         while (Token::TEXT_TYPE === $stream->getCurrent()->getType() && '' === \trim((string) $stream->getCurrent()->getValue())) {
@@ -47,19 +49,16 @@ final class SwitchTokenParser extends AbstractTokenParser
         $stream->expect(Token::BLOCK_START_TYPE);
         $cases = [];
         $end = false;
-        $expressionParser = $this->parser->getExpressionParser();
         while (!$end) {
             $next = $stream->next();
             switch ($next->getValue()) {
                 case 'case':
-                    /** @psalm-var Node[] $values */
                     $values = [];
                     while (true) {
                         /** @psalm-var Node $node */
                         $node = $expressionParser->parsePrimaryExpression();
                         $values[] = $node;
-
-                        // Multiple allowed values?
+                        // multiple allowed values?
                         if ($stream->test(Token::OPERATOR_TYPE, 'or')) {
                             $stream->next();
                         } else {

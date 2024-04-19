@@ -78,12 +78,12 @@
         "symfony/web-link": "7.0.*",
         "symfonycasts/reset-password-bundle": "^1.0",
         "symfonycasts/verify-email-bundle": "^1.0",
-        "twig/cssinliner-extra": "3.8.*",
-        "twig/extra-bundle": "3.8.*",
-        "twig/inky-extra": "3.8.*",
-        "twig/markdown-extra": "3.8.*",
-        "twig/string-extra": "3.8.*",
-        "twig/twig": "3.8.*",
+        "twig/cssinliner-extra": "^3.0",
+        "twig/extra-bundle": "^3.0",
+        "twig/inky-extra": "^3.0",
+        "twig/markdown-extra": "^3.0",
+        "twig/string-extra": "^3.0",
+        "twig/twig": "^3.0",
         "vich/uploader-bundle": "^2.0"
     },
     "require-dev": {

@@ -166,8 +166,9 @@ class CommandController extends AbstractController
     #[Get(path: '/pdf', name: 'command_pdf')]
     public function pdf(CommandService $service): PdfResponse
     {
-        $commands = $service->getCommands();
-        $report = new CommandsReport($this, $commands);
+        $root = $this->trans('command.list.available');
+        $groups = $service->getGroupedCommands($root);
+        $report = new CommandsReport($this, $groups);
 
         return $this->renderPdfDocument($report);
     }

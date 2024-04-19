@@ -59,6 +59,9 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
 
     private const COMMENT_REGEX = '/\/\*(.|[\r\n])*?\*\//m';
 
+    /**
+     * @psalm-suppress TooManyArguments
+     */
     public function __construct(protected readonly ApplicationService $application)
     {
         parent::__construct();
@@ -204,6 +207,8 @@ class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
 
     /**
      * Initialize the chart options.
+     *
+     * @psalm-suppress TooManyArguments
      */
     private function initializeOptions(): void
     {

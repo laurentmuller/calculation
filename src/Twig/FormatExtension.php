@@ -19,6 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Error\RuntimeError;
 use Twig\Extension\AbstractExtension;
+use Twig\Extension\CoreExtension;
 use Twig\TwigFilter;
 
 /**
@@ -120,7 +121,7 @@ final class FormatExtension extends AbstractExtension
      *
      * @throws RuntimeError if the date format or the time format is invalid
      *
-     * @psalm-suppress UndefinedFunction
+     * @psalm-suppress InternalMethod
      */
     private function dateTimeFilter(
         Environment $env,
@@ -137,8 +138,7 @@ final class FormatExtension extends AbstractExtension
             return '';
         }
 
-        /** @psalm-var \DateTimeInterface $date */
-        $date = twig_date_converter($env, $date);
+        $date = CoreExtension::dateConverter($env, $date);
 
         return FormatUtils::formatDateTime($date, $dateType, $timeType, $pattern);
     }

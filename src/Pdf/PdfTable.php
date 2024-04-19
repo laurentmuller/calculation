@@ -599,8 +599,6 @@ class PdfTable
      * @param PdfDocument  $parent the parent document
      * @param PdfRectangle $bounds the link bounds
      * @param string|int   $link   the link URL
-     *
-     * @psalm-param non-empty-string|positive-int $link
      */
     protected function drawCellLink(PdfDocument $parent, PdfRectangle $bounds, string|int $link): void
     {
@@ -880,7 +878,7 @@ class PdfTable
         }
 
         if ($cell->isLink()) {
-            /** @psalm-var non-empty-string|positive-int $link */
+            /** @psalm-var string|int $link */
             $link = $cell->getLink();
             $textBounds->inflate(-$margin);
             $linkWidth = $parent->getStringWidth($text);

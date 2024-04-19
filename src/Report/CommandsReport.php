@@ -27,7 +27,7 @@ use fpdf\PdfTextAlignment;
  * @psalm-import-type ArgumentType from CommandService
  * @psalm-import-type OptionType from CommandService
  *
- * @extends AbstractArrayReport<CommandType>
+ * @extends AbstractArrayReport<CommandType[]>
  */
 class CommandsReport extends AbstractArrayReport
 {
@@ -38,43 +38,18 @@ class CommandsReport extends AbstractArrayReport
         $this->setTitleTrans('command.list.title');
         $this->setCellMargin(0.0);
 
-        $root = $this->trans('command.list.available');
-        $groups = \array_reduce(
-            $entities,
-            /**
-             * @psalm-param array<string, CommandType[]> $carry
-             * @psalm-param CommandType $entity
-             */
-            function (array $carry, array $entity) use ($root) {
-                $group = $this->getGroupName($entity, $root);
-                $carry[$group][] = $entity;
-
-                return $carry;
-            },
-            []
-        );
-
-        $currentGroup = '';
-        foreach ($groups as $group => $commands) {
+        /** @psalm-var string $group */
+        foreach ($entities as $group => $commands) {
+            $first = true;
             foreach ($commands as $command) {
                 $this->addPage();
-                if ($currentGroup !== $group) {
-                    $currentGroup = $group;
-                    $this->addBookmark($currentGroup, currentY: false);
+                if ($first) {
+                    $this->addBookmark($group, currentY: false);
+                    $first = false;
                 }
-
-                $name = $command['name'];
-                $this->addBookmark($name, level: 1, currentY: false);
-                $this->renderName($name);
-                $this->renderDescription($command['description']);
-                $this->renderUsage($command['usage']);
-                $width = $this->getMaxWidth($command);
-                $this->renderArguments($command['definition']['arguments'], $width);
-                $this->renderOptions($command['definition']['options'], $width);
-                $this->renderHelp($command['help']);
+                $this->renderCommand($command);
             }
         }
-
         $this->addPageIndex();
 
         return true;
@@ -100,19 +75,6 @@ class CommandsReport extends AbstractArrayReport
         }
 
         return \sprintf('%s %s', $description, $arguments);
-    }
-
-    /**
-     * @psalm-param CommandType $command
-     *
-     * @phpstan-param array $command
-     */
-    private function getGroupName(array $command, string $default): string
-    {
-        $name = $command['name'];
-        $value = \explode(':', $name)[0];
-
-        return $name === $value ? $default : $value;
     }
 
     /**
@@ -152,6 +114,24 @@ class CommandsReport extends AbstractArrayReport
             $this->lineBreak(0.0);
         }
         $this->lineBreak(1.0);
+    }
+
+    /**
+     * @psalm-param CommandType $command
+     *
+     * @phpstan-param array $command
+     */
+    private function renderCommand(array $command): void
+    {
+        $name = $command['name'];
+        $this->addBookmark($name, level: 1, currentY: false);
+        $this->renderName($name);
+        $this->renderDescription($command['description']);
+        $this->renderUsage($command['usage']);
+        $width = $this->getMaxWidth($command);
+        $this->renderArguments($command['definition']['arguments'], $width);
+        $this->renderOptions($command['definition']['options'], $width);
+        $this->renderHelp($command['help']);
     }
 
     private function renderDescription(string $description): void
@@ -221,7 +201,6 @@ class CommandsReport extends AbstractArrayReport
     private function renderStyledHelp(string $help): void
     {
         $matches = [];
-        $help = \str_replace('<br>', "\n", $help);
         $result = \preg_match_all(self::HELP_PATTERN, $help, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE);
         if (false === $result || 0 === $result) {
             $this->multiCell(text: $help, align: PdfTextAlignment::LEFT);

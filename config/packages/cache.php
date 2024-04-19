@@ -18,37 +18,37 @@ return static function (FrameworkConfig $config): void {
     $cache = $config->cache();
 
     // used by the ApplicationService
-    $cache->pool('cache.service.application')
+    $cache->pool('cache.calculation.service.application')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_hour);
 
     // used by the UserService
-    $config->cache()->pool('cache.service.user')
+    $config->cache()->pool('cache.calculation.service.user')
         ->adapters('cache.adapter.filesystem')
-        ->defaultLifetime($one_hour); // 1 hour
+        ->defaultLifetime($one_hour);
 
     // used by the SymfonyInfoService
-    $config->cache()->pool('cache.service.symfony')
+    $config->cache()->pool('cache.calculation.service.symfony')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
     // used by the ConstantExtension
-    $config->cache()->pool('cache.service.constant')
+    $config->cache()->pool('cache.calculation.service.constant')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
     // used by the HelpService
-    $config->cache()->pool('cache.service.help')
+    $config->cache()->pool('cache.calculation.service.help')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
     // used by the CommandService
-    $config->cache()->pool('cache.service.command')
+    $config->cache()->pool('cache.calculation.service.command')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
     // used by the CacheService
-    $config->cache()->pool('cache.service.cache')
+    $config->cache()->pool('cache.calculation.service.cache')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 };

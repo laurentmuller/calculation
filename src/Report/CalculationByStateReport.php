@@ -255,7 +255,6 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
                 FormatUtils::formatAmount($entity['total']),
                 $this->formatPercent($entity['percent_amount'])
             );
-            /** @psalm-var non-empty-string $link */
             $link = $this->getURL($entity['id']);
             $this->link($x, $y, $width, $this->getY() - $y, $link);
         }

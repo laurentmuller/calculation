@@ -30,13 +30,12 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\WrongEmailVerifyException;
 #[\PHPUnit\Framework\Attributes\CoversClass(UserExceptionService::class)]
 class UserExceptionServiceTest extends TestCase
 {
-    private ?Request $request = null;
-    private ?UserExceptionService $service = null;
+    private Request $request;
+    private UserExceptionService $service;
 
     protected function setUp(): void
     {
         $this->service = new UserExceptionService();
-
         $storage = new MockArraySessionStorage();
         $session = new Session($storage);
         $this->request = new Request();
@@ -72,8 +71,6 @@ class UserExceptionServiceTest extends TestCase
 
     private function mapException(\Throwable $e): CustomUserMessageAuthenticationException
     {
-        self::assertNotNull($this->request);
-        self::assertNotNull($this->service);
         $this->service->handleException($this->request, $e);
         $result = $this->request->getSession()->get(SecurityRequestAttributes::AUTHENTICATION_ERROR);
         self::assertInstanceOf(CustomUserMessageAuthenticationException::class, $result);

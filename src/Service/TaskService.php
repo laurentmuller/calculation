@@ -16,21 +16,18 @@ use App\Entity\Task;
 use App\Model\TaskComputeQuery;
 use App\Model\TaskComputeResult;
 use App\Repository\TaskRepository;
-use App\Traits\RequestTrait;
 
 /**
  * Service to compute a task.
  */
-class TaskService
+readonly class TaskService
 {
-    use RequestTrait;
-
-    public function __construct(private readonly TaskRepository $repository)
+    public function __construct(private TaskRepository $repository)
     {
     }
 
     /**
-     * Compute result for the given query.
+     * Compute the result for the given query.
      */
     public function computeQuery(TaskComputeQuery $query): ?TaskComputeResult
     {

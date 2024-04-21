@@ -28,7 +28,7 @@ trait IdTrait
      *
      * @throws \ReflectionException
      */
-    private function setId(object $entity, int $id): object
+    private function setId(object $entity, int $id = 1): object
     {
         $class = new \ReflectionClass($entity::class);
         $property = $class->getProperty('id');

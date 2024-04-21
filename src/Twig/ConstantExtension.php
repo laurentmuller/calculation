@@ -15,6 +15,7 @@ namespace App\Twig;
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Service\CalculationService;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Extension\AbstractExtension;
@@ -34,6 +35,9 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     ) {
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function getGlobals(): array
     {
         return $this->cache->get(self::CACHE_KEY, fn (): array => $this->loadValues());

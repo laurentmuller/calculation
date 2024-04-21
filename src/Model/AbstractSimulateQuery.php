@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 /**
- * Abstract query with simulate (no flush changes in the database) property.
+ * Abstract query with simulating (no flush changes in the database) property.
  */
 abstract class AbstractSimulateQuery
 {

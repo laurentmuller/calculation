@@ -26,14 +26,14 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 #[\PHPUnit\Framework\Attributes\CoversClass(EntityVoter::class)]
 class EntityVoterTest extends TestCase
 {
-    private ?EntityVoter $voter = null;
+    private EntityVoter $voter;
 
     /**
      * @throws Exception
      */
     protected function setUp(): void
     {
-        $this->voter = $this->getEntityVoter();
+        $this->voter = new EntityVoter($this->createMock(ApplicationService::class));
     }
 
     public static function getSupportsAttribute(): \Iterator
@@ -97,7 +97,6 @@ class EntityVoterTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getSupportsAttribute')]
     public function testSupportsAttribute(string $value, bool $expected): void
     {
-        self::assertNotNull($this->voter);
         $actual = $this->voter->supportsAttribute($value);
         self::assertSame($expected, $actual);
     }
@@ -105,7 +104,6 @@ class EntityVoterTest extends TestCase
     private function assertVote(User $user, mixed $subject, mixed $attribute, mixed $expected): void
     {
         $token = $this->getUserToken($user);
-        self::assertNotNull($this->voter);
         $actual = $this->voter->vote($token, $subject, [$attribute]);
         self::assertSame($expected, $actual);
     }
@@ -123,14 +121,6 @@ class EntityVoterTest extends TestCase
     private function getDisableUser(): User
     {
         return $this->getDefaultUser()->setEnabled(false);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function getEntityVoter(): EntityVoter
-    {
-        return new EntityVoter($this->createMock(ApplicationService::class));
     }
 
     private function getSuperAdminUser(): User

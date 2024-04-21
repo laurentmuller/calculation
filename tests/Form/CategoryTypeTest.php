@@ -76,7 +76,7 @@ class CategoryTypeTest extends AbstractEntityTypeTestCase
         if (!self::$group instanceof Group) {
             self::$group = new Group();
             self::$group->setCode('group');
-            $this->setId(self::$group, 1);
+            $this->setId(self::$group);
         }
 
         return self::$group;

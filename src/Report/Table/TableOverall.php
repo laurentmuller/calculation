@@ -146,10 +146,7 @@ class TableOverall extends PdfTable
     {
         if (0.0 !== $userMargin) {
             $this->startHeaderRow()
-                ->add($this->trans('calculation.fields.totalNet'))
-                ->add('')
-                ->add('')
-                ->add('')
+                ->add($this->trans('calculation.fields.totalNet'), 4)
                 ->addAmount($totalNet)
                 ->endRow();
             $this->startRow()

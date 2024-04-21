@@ -207,4 +207,9 @@ VALUES
     (3, 'ROLE_USER@TEST.COM',        'ROLE_USER',        1, 'ROLE_USER',        null),
     (4, 'ROLE_DISABLED@TEST.COM',    'ROLE_DISABLED',    0, 'ROLE_DISABLED',    null);
 
+INSERT INTO "sy_Property"
+('id', 'name', 'value')
+VALUES
+    (1, 'customer_name', 'customer_name');
+
 COMMIT;

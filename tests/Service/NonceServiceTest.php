@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 #[\PHPUnit\Framework\Attributes\CoversClass(NonceService::class)]
 class NonceServiceTest extends TestCase
 {
-    private ?NonceService $service = null;
+    private NonceService $service;
 
     /**
      * @throws \Exception
@@ -33,12 +33,8 @@ class NonceServiceTest extends TestCase
      */
     public function testCsp(): void
     {
-        $nonce = $this->service?->getNonce();
-        self::assertIsString($nonce);
-
-        $csp = $this->service?->getCspNonce();
-        self::assertIsString($csp);
-
+        $nonce = $this->service->getNonce();
+        $csp = $this->service->getCspNonce();
         self::stringStartsWith("'nonce-")->evaluate($csp);
         self::stringEndsWith("'")->evaluate($csp);
         self::stringContains($nonce)->evaluate($csp);
@@ -50,8 +46,7 @@ class NonceServiceTest extends TestCase
      */
     public function testLength32(): void
     {
-        $nonce = $this->service?->getNonce(32);
-        self::assertIsString($nonce);
+        $nonce = $this->service->getNonce(32);
         self::assertSame(64, \strlen($nonce));
     }
 
@@ -60,13 +55,7 @@ class NonceServiceTest extends TestCase
      */
     public function testLengthDefault(): void
     {
-        $nonce = $this->service?->getNonce();
-        self::assertIsString($nonce);
+        $nonce = $this->service->getNonce();
         self::assertSame(32, \strlen($nonce));
-    }
-
-    public function testServiceNotNull(): void
-    {
-        self::assertNotNull($this->service);
     }
 }

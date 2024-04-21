@@ -225,10 +225,7 @@ class TableItems extends PdfGroupTable
     private function renderTotal(float $total): void
     {
         $this->startHeaderRow()
-            ->add($this->trans('calculation.fields.itemsTotal'))
-            ->add('')
-            ->add('')
-            ->add('')
+            ->add($this->trans('calculation.fields.itemsTotal'), 4)
             ->addAmount($total)
             ->endRow();
     }

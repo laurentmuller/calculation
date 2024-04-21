@@ -13,17 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\CommandController;
-use App\Report\CommandsReport;
-use App\Service\CommandDataService;
-use App\Service\CommandFormService;
-use App\Service\CommandService;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CommandController::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(CommandsReport::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(CommandService::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(CommandDataService::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(CommandFormService::class)]
 class CommandControllerTest extends AbstractControllerTestCase
 {
     private const ROUTES = [

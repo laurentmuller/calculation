@@ -373,7 +373,7 @@ class Customer extends AbstractEntity
     /**
      * Join 2 elements with a string.
      * If both elements are empty, an empty string is returned;
-     * if one of elements is empty, the other element is returned
+     * if one of the elements is empty, the other element is returned
      * else both elements are returned with the separator.
      *
      * @param ?string $str1 the first element

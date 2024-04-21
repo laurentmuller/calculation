@@ -26,7 +26,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Controller to output licence information.
+ * Controller to output license information.
  */
 #[AsController]
 #[Route(path: '/about/licence')]

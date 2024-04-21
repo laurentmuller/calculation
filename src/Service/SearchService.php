@@ -19,6 +19,7 @@ use App\Entity\Customer;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
+use App\Interfaces\EntityInterface;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
@@ -173,7 +174,7 @@ class SearchService implements ServiceSubscriberInterface
     }
 
     /**
-     * Gets the entities class and name.
+     * Gets entity classes and names.
      *
      * @return array<string, string>
      */
@@ -202,7 +203,7 @@ class SearchService implements ServiceSubscriberInterface
      * @param ?string $search the term to search
      * @param ?string $entity the entity name to search in or null for all
      * @param int     $limit  the number of rows to return or -1 for all
-     * @param int     $offset the zero based index of the first row to return
+     * @param int     $offset the zero-based-index of the first row to return
      *
      * @return array the array of results for the given search (can be empty)
      *
@@ -307,10 +308,12 @@ class SearchService implements ServiceSubscriberInterface
     /**
      * Creates the SQL queries for the given entity.
      *
+     * @template TEntity of EntityInterface
+     *
      * @param string   $class  the entity class
      * @param string[] $fields the entity fields to search in
      *
-     * @psalm-param class-string $class
+     * @psalm-param class-string<TEntity> $class
      */
     private function createEntityQueries(string $class, array $fields): self
     {
@@ -328,11 +331,13 @@ class SearchService implements ServiceSubscriberInterface
     /**
      * Creates a query builder.
      *
+     * @template TEntity of EntityInterface
+     *
      * @param string  $class   the entity class
      * @param string  $field   the field name
      * @param ?string $content the field content to search in or null to use the field name
      *
-     * @psalm-param class-string $class
+     * @psalm-param class-string<TEntity> $class
      */
     private function createQueryBuilder(string $class, string $field, ?string $content = null): QueryBuilder
     {

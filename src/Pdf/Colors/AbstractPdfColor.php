@@ -49,7 +49,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      *
      * @param string $prefix the optional prefix to prepend
      *
-     * @return string the hexadecimal value as 6 lower case characters (like <code>'ff8040'</code>)
+     * @return string the hexadecimal value as six lower case characters (like <code>'ff8040'</code>)
      */
     public function asHex(string $prefix = ''): string
     {
@@ -106,7 +106,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
      * @param int[]|string|null $rgb an array containing the red, green and blue values, an integer value or a
      *                               hexadecimal string like <code>'#FF8040'</code> or <code>'FFF'</code>
      *
-     * @return static|null the color or null if the RGB value can not be parsed
+     * @return static|null the color or null if the RGB value cannot be parsed
      *
      * @psalm-param int<0, 255>[]|int|string|null $rgb
      */

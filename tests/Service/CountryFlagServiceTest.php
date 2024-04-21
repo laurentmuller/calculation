@@ -19,7 +19,7 @@ use Symfony\Component\Intl\Countries;
 #[\PHPUnit\Framework\Attributes\CoversClass(CountryFlagService::class)]
 class CountryFlagServiceTest extends TestCase
 {
-    private ?CountryFlagService $service = null;
+    private CountryFlagService $service;
 
     protected function setUp(): void
     {
@@ -47,7 +47,6 @@ class CountryFlagServiceTest extends TestCase
 
     public function testChoices(): void
     {
-        self::assertNotNull($this->service);
         $expected = \count(Countries::getNames());
         $choices = $this->service->getChoices();
         self::assertCount($expected, $choices);
@@ -71,7 +70,6 @@ class CountryFlagServiceTest extends TestCase
             self::expectException(\InvalidArgumentException::class);
             self::expectExceptionMessage("Invalid country code: '$alpha2Code'.");
         }
-        self::assertNotNull($this->service);
         $flag = $this->service->getFlag($alpha2Code, $validate);
         if ($exception) {
             self::fail('No exception raised');

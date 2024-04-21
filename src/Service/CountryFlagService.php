@@ -24,8 +24,8 @@ class CountryFlagService
     /**
      * Gets choice values used by country type form.
      *
-     * @param ?string $locale   the locale used to translate country name or null to use default
-     * @param bool    $flagOnly true to return flag only; false to return flag and country name
+     * @param ?string $locale   the locale used to translate country names or null to use default
+     * @param bool    $flagOnly true to return flag only; false to return flags and country names
      *
      * @return array<string, string> an array where key is the flag and the country name (if applicable) and value is the country code
      */

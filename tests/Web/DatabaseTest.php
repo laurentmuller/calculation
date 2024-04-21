@@ -69,7 +69,7 @@ class DatabaseTest extends KernelTestCase
         yield ['sy_CalculationGroup', 0];
         yield ['sy_CalculationItem', 0];
         yield ['sy_GlobalMargin', 0];
-        yield ['sy_Property', 0];
+        yield ['sy_Property', 1];
         yield ['sy_User', 4];
     }
 

@@ -65,7 +65,7 @@ abstract class AbstractCalendarItem implements \JsonSerializable, \Stringable
     }
 
     /**
-     * Gets the year as 4 digits (Examples: 1999 or 2003).
+     * Gets the year as four digits (Examples: 1999 or 2003).
      */
     public function getYear(): int
     {
@@ -73,7 +73,7 @@ abstract class AbstractCalendarItem implements \JsonSerializable, \Stringable
     }
 
     /**
-     * Returns if this item is the current item (for example curent month, current week or the current day).
+     * Returns if this item is the current item (for example, curent month, current week or the current day).
      *
      * @return bool true if current
      */

@@ -117,7 +117,8 @@ class PdfImageCell extends PdfCell
     /**
      * Gets the original image width and height.
      *
-     * @return int[] an array with 2 elements. Index 0 and 1 contains respectively the original width and the original height.
+     * @return int[] an array with two elements. Index 0 and 1 contain respectively the original width and the
+     *               original height.
      *
      * @psalm-return array{0: int, 1: int}
      */
@@ -137,7 +138,7 @@ class PdfImageCell extends PdfCell
     /**
      * Gets the current image size.
      *
-     * @return int[] an array with 2 elements. Index 0 and 1 contains respectively the width and the height.
+     * @return int[] an array with two elements. Index 0 and 1 contain respectively the width and the height.
      *
      * @psalm-return array{0: int, 1: int}
      */

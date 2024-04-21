@@ -71,7 +71,7 @@ final class StringUtils
     /**
      * Tests if a substring is contained within a string.
      *
-     * <b>NB:</b> If the needle is empty, this function return false.
+     * <b>NB:</b> If the needle is empty, this function returns false.
      *
      * @param string $haystack    the string to search in
      * @param string $needle      the string to search for
@@ -90,9 +90,9 @@ final class StringUtils
      * @param string $value the value to decode
      * @param bool   $assoc when true, returned objects will be converted into associative arrays
      *
-     * @return array|\stdClass the decoded value in appropriate PHP type
+     * @return array|\stdClass the decoded value in the appropriate PHP type
      *
-     * @throws \InvalidArgumentException if the value can not be decoded
+     * @throws \InvalidArgumentException if the value cannot be decoded
      *
      * @see StringUtils::encodeJson()
      *
@@ -118,7 +118,7 @@ final class StringUtils
      *
      * @return string a JSON encoded string
      *
-     * @throws \InvalidArgumentException if the value can not be encoded
+     * @throws \InvalidArgumentException if the value cannot be encoded
      *
      * @see StringUtils::decodeJson()
      */
@@ -134,7 +134,7 @@ final class StringUtils
     /**
      * Tests if a string ends within a substring.
      *
-     * <b>NB:</b> If the needle is empty, this function return false.
+     * <b>NB:</b> If the needle is empty, this function returns false.
      *
      * @param string $haystack    the string to search in
      * @param string $needle      the string to search for
@@ -262,7 +262,7 @@ final class StringUtils
     /**
      * Tests if a string starts within a substring.
      *
-     * <b>NB:</b> If the needle is empty, this function return false.
+     * <b>NB:</b> If the needle is empty, this function returns false.
      *
      * @param string $haystack    the string to search in
      * @param string $needle      the string to search for

@@ -25,7 +25,7 @@ class PdfLabelTextEvent
     /**
      * @param PdfLabelDocument $parent the parent's document
      * @param string           $text   the text to output
-     * @param int              $index  the text index (0 based line index)
+     * @param int              $index  the text index (zero-based line index)
      * @param int              $lines  the number of lines
      * @param float            $width  the output width
      * @param float            $height the output height (line height)

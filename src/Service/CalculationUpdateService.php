@@ -27,7 +27,7 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
- * Service to update overall total of calculations.
+ * Service to update the overall total of calculations.
  */
 class CalculationUpdateService implements ServiceSubscriberInterface
 {

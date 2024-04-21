@@ -138,6 +138,7 @@ final class FormatExtension extends AbstractExtension
             return '';
         }
 
+        /** @noinspection PhpInternalEntityUsedInspection */
         $date = CoreExtension::dateConverter($env, $date);
 
         return FormatUtils::formatDateTime($date, $dateType, $timeType, $pattern);

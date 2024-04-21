@@ -25,7 +25,7 @@ class OpenWeatherServiceTest extends KernelTestCase
 
     private const CITY_VALID = 2_660_718;
 
-    private ?OpenWeatherService $service = null;
+    private OpenWeatherService $service;
 
     protected function setUp(): void
     {
@@ -35,7 +35,6 @@ class OpenWeatherServiceTest extends KernelTestCase
 
     public function testCurrent(): void
     {
-        self::assertNotNull($this->service);
         $result = $this->service->current(self::CITY_VALID);
         self::assertIsArray($result);
         self::assertSame(self::CITY_VALID, $result['id']);
@@ -46,7 +45,6 @@ class OpenWeatherServiceTest extends KernelTestCase
 
     public function testCurrentInvalid(): void
     {
-        self::assertNotNull($this->service);
         $result = $this->service->current(self::CITY_INVALID);
         self::assertFalse($result);
     }
@@ -54,7 +52,6 @@ class OpenWeatherServiceTest extends KernelTestCase
     public function testDaily(): void
     {
         $count = 5;
-        self::assertNotNull($this->service);
         $result = $this->service->daily(self::CITY_VALID, $count);
         self::assertIsArray($result);
         self::assertSame($count, $result['cnt']);
@@ -81,14 +78,12 @@ class OpenWeatherServiceTest extends KernelTestCase
 
     public function testDailyInvalid(): void
     {
-        self::assertNotNull($this->service);
         $result = $this->service->daily(self::CITY_INVALID);
         self::assertFalse($result);
     }
 
     public function testGroup(): void
     {
-        self::assertNotNull($this->service);
         $cityIds = [self::CITY_VALID];
         $result = $this->service->group($cityIds);
 
@@ -114,7 +109,6 @@ class OpenWeatherServiceTest extends KernelTestCase
     public function testGroupInvalidCount(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        self::assertNotNull($this->service);
         $this->service->group(\range(0, 25));
     }
 

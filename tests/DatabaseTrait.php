@@ -47,23 +47,19 @@ trait DatabaseTrait
      *
      * @template T of EntityInterface
      *
-     * @psalm-param T|null $entity
+     * @psalm-param T $entity
      *
-     * @psalm-return ($entity is null ? null : T)
+     * @psalm-return T
      *
      * @throws ORMException
      */
-    protected function addEntity(?EntityInterface $entity): ?EntityInterface
+    protected function addEntity(EntityInterface $entity): EntityInterface
     {
-        if ($entity instanceof EntityInterface) {
-            $em = $this->getManager();
-            $em->persist($entity);
-            $em->flush();
+        $em = $this->getManager();
+        $em->persist($entity);
+        $em->flush();
 
-            return $entity;
-        }
-
-        return null;
+        return $entity;
     }
 
     /**

@@ -16,7 +16,7 @@ use App\Enums\ImageExtension;
 use App\Utils\FileUtils;
 
 /**
- * Service to manipulate image.
+ * Service to manipulate an image.
  *
  * The underlying image resource and allocated colors are automatically destroyed as soon
  * as there are no other references to this instance.
@@ -90,6 +90,11 @@ class ImageService
      * @param int $alpha a value between 0 and 127
      *
      * @return int|false the color identifier on success, false if the allocation failed
+     *
+     * @psalm-param int<0, 255> $red
+     * @psalm-param int<0, 255> $green
+     * @psalm-param int<0, 255> $blue
+     * @psalm-param int<0, 127> $alpha
      */
     public function allocateAlpha(int $red = 0, int $green = 0, int $blue = 0, int $alpha = 127): int|false
     {

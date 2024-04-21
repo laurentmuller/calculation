@@ -141,7 +141,7 @@ class OpenWeatherDatabase extends AbstractDatabase
      *
      * @param int    $id        the city identifier
      * @param string $name      the city name
-     * @param string $country   the 2 letters ISO code of the country
+     * @param string $country   the two letters ISO code of the country
      * @param float  $latitude  the city latitude
      * @param float  $longitude the city longitude
      *

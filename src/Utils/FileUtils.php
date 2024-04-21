@@ -85,9 +85,9 @@ final class FileUtils
      * @param string|\SplFileInfo $file  the path or URL to the file
      * @param bool                $assoc when true, returned objects will be converted into associative arrays
      *
-     * @return array|\stdClass the decoded file content in appropriate PHP type
+     * @return array|\stdClass the decoded file content in the appropriate PHP type
      *
-     * @throws \InvalidArgumentException if the file can not be decoded
+     * @throws \InvalidArgumentException if the file cannot be decoded
      *
      * @psalm-return ($assoc is true ? array : \stdClass)
      */

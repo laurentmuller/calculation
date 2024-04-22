@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "61e8a08283bee52c51a13f444fc90dbc",
+    "content-hash": "0e462cb14b87b227ccdfdb8e102ddea7",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1938,16 +1938,16 @@
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.20.11",
+            "version": "2.20.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/HighchartsBundle.git",
-                "reference": "fa0c5554dd4381ee7633dfa0cacab7f8c8f2837f"
+                "reference": "343117e47f153884e935ca644b1f00d68a945dfa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/fa0c5554dd4381ee7633dfa0cacab7f8c8f2837f",
-                "reference": "fa0c5554dd4381ee7633dfa0cacab7f8c8f2837f",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/343117e47f153884e935ca644b1f00d68a945dfa",
+                "reference": "343117e47f153884e935ca644b1f00d68a945dfa",
                 "shasum": ""
             },
             "require": {
@@ -1961,9 +1961,6 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
-                "orklah/psalm-insane-comparison": "^2.0",
-                "orklah/psalm-not-empty": "^1.0",
-                "orklah/psalm-strict-equality": "^2.0",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-deprecation-rules": "^1.0",
@@ -2012,7 +2009,7 @@
                 "issues": "https://github.com/laurentmuller/HighchartsBundle/issues",
                 "source": "https://github.com/laurentmuller/HighchartsBundle"
             },
-            "time": "2024-04-18T11:36:11+00:00"
+            "time": "2024-04-22T08:50:30+00:00"
         },
         {
             "name": "lorenzo/pinky",
@@ -9602,167 +9599,6 @@
                 "source": "https://github.com/nikic/PHP-Parser/tree/v4.19.1"
             },
             "time": "2024-03-17T08:10:35+00:00"
-        },
-        {
-            "name": "orklah/psalm-insane-comparison",
-            "version": "v2.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/orklah/psalm-insane-comparison.git",
-                "reference": "d9e608e787e5ae1c994ae07095eea26029d6d0bd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/orklah/psalm-insane-comparison/zipball/d9e608e787e5ae1c994ae07095eea26029d6d0bd",
-                "reference": "d9e608e787e5ae1c994ae07095eea26029d6d0bd",
-                "shasum": ""
-            },
-            "require": {
-                "ext-simplexml": "*",
-                "php": "^7.3|^8.0",
-                "vimeo/psalm": "^4|^5|dev-master"
-            },
-            "require-dev": {
-                "nikic/php-parser": "^4.0|^5"
-            },
-            "type": "psalm-plugin",
-            "extra": {
-                "psalm": {
-                    "pluginClass": "Orklah\\PsalmInsaneComparison\\Plugin"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Orklah\\PsalmInsaneComparison\\": [
-                        "."
-                    ],
-                    "Orklah\\PsalmInsaneComparison\\Hooks\\": [
-                        "hooks"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "orklah"
-                }
-            ],
-            "description": "Detects possible insane comparison (\"string\" == 0) to help migrate to PHP8",
-            "support": {
-                "issues": "https://github.com/orklah/psalm-insane-comparison/issues",
-                "source": "https://github.com/orklah/psalm-insane-comparison/tree/v2.3.0"
-            },
-            "time": "2024-03-20T21:49:45+00:00"
-        },
-        {
-            "name": "orklah/psalm-not-empty",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/orklah/psalm-not-empty.git",
-                "reference": "81c24879a8563be9b0691605fc923cb5986d1527"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/orklah/psalm-not-empty/zipball/81c24879a8563be9b0691605fc923cb5986d1527",
-                "reference": "81c24879a8563be9b0691605fc923cb5986d1527",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.3|^8.0",
-                "vimeo/psalm": "^5"
-            },
-            "require-dev": {
-                "nikic/php-parser": "^4.0",
-                "phpunit/phpunit": "^9.5",
-                "psalm/plugin-phpunit": "^0.18.0"
-            },
-            "type": "psalm-plugin",
-            "extra": {
-                "psalm": {
-                    "pluginClass": "Orklah\\NotEmpty\\Plugin"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Orklah\\NotEmpty\\": [
-                        "./src"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "orklah"
-                }
-            ],
-            "description": "Automatically change empty() into a more explicit expression",
-            "support": {
-                "issues": "https://github.com/orklah/psalm-not-empty/issues",
-                "source": "https://github.com/orklah/psalm-not-empty/tree/v1.1.0"
-            },
-            "time": "2022-12-02T21:52:27+00:00"
-        },
-        {
-            "name": "orklah/psalm-strict-equality",
-            "version": "v2.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/orklah/psalm-strict-equality.git",
-                "reference": "f733a5d7f575632404f0e002fdf8dcad8c5dd39a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/orklah/psalm-strict-equality/zipball/f733a5d7f575632404f0e002fdf8dcad8c5dd39a",
-                "reference": "f733a5d7f575632404f0e002fdf8dcad8c5dd39a",
-                "shasum": ""
-            },
-            "require": {
-                "nikic/php-parser": "^4.0",
-                "php": "^7.3|^8.0",
-                "vimeo/psalm": "^4.6.1|^5.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^9.5",
-                "psalm/plugin-phpunit": "^0.15.0"
-            },
-            "type": "psalm-plugin",
-            "extra": {
-                "psalm": {
-                    "pluginClass": "Orklah\\StrictEquality\\Plugin"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Orklah\\StrictEquality\\": [
-                        "./src"
-                    ],
-                    "Orklah\\StrictEquality\\Tests\\": [
-                        "./tests"
-                    ]
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "orklah"
-                }
-            ],
-            "description": "Automatically change == into === when safe ",
-            "support": {
-                "issues": "https://github.com/orklah/psalm-strict-equality/issues",
-                "source": "https://github.com/orklah/psalm-strict-equality/tree/v2.1.0"
-            },
-            "time": "2022-12-05T19:50:08+00:00"
         },
         {
             "name": "phar-io/manifest",

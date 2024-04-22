@@ -9,7 +9,7 @@
  * Vendor Files
  */
 <!--#include file="../../vendor/mermaid/mermaid.js" -->
-
+<!--#include file="../../vendor/mermaid/svg-pan-zoom.js" -->
 
 /**
  * Specific Files

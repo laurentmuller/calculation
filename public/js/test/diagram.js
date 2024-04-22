@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster, mermaid */
+/* globals Toaster, mermaid, svgPanZoom */
 
 (() => {
     'use strict';
@@ -32,6 +32,11 @@
 
     // Gets the selected theme (light or dark).
     const getTheme = () => window.Cookie.getValue(THEME_COOKIE_KEY, THEME_LIGHT);
+
+    // buttons
+    const $zoomIn = $('.btn-zoom-in');
+    const $zoomOut = $('.btn-zoom-out');
+    const $center = $('.btn-center');
 
     /**
      * Show an error message.
@@ -87,6 +92,58 @@
         };
     };
 
+    let panZoom = null;
+
+    /**
+     * @param {ShadowViewport} [panZoom]
+     * @return {null}
+     */
+    const destroySvgPanZoom = (panZoom) => {
+        if (panZoom) {
+            $center.off('click');
+            $zoomIn.off('click');
+            $zoomOut.off('click');
+            panZoom.destroy();
+        }
+        return null;
+    };
+
+    /**
+     * @return {ShadowViewport}
+     */
+    const initSvgPanZoom = () => {
+        const svg = $diagram.find('svg:first')[0];
+        const options = {
+            onZoom: (zoom) => {
+                const sizes = panZoom.getSizes();
+                if (zoom > 1.0) {
+                    svg.style.height = sizes.height * zoom;
+                } else {
+                    svg.style.height = sizes.height;
+                }
+            },
+            // beforePan: (oldPan, newPan) => {
+            //     return {
+            //         x: Math.max(0, newPan.x),
+            //         y: Math.max(0, newPan.y),
+            //     };
+            // }
+        };
+        panZoom = svgPanZoom(svg, options);
+        const sizes = panZoom.getSizes();
+        svg.style.height = sizes.height;
+        svg.style.maxWidth = 'none';
+
+        $zoomIn.on('click', () => panZoom.zoomIn());
+        $zoomOut.on('click', () => panZoom.zoomOut());
+        $center.on('click', () => {
+            panZoom.resetZoom();
+            panZoom.center();
+        });
+
+        return panZoom;
+    };
+
     // load the diagram.
     const reloadDiagram = () => {
         mermaid.initialize({
@@ -98,6 +155,9 @@
         });
         mermaid.run({
             nodes: [$diagram[0]],
+        }).then(() => {
+            panZoom = destroySvgPanZoom(panZoom);
+            panZoom = initSvgPanZoom();
         });
     };
 
@@ -115,7 +175,7 @@
         }
     };
 
-    // Create and handle theme channel.
+    // Create and handle the theme channel.
     const channel = new window.BroadcastChannel(THEME_CHANNEL);
     channel.addEventListener('message', (e) => {
         if (e.data === THEME_EVENT_NAME) {

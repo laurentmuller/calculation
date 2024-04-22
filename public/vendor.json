@@ -224,6 +224,17 @@
             "files": [
                 "mermaid.js"
             ]
+        },
+        {
+            "example": "https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.1/dist/svg-pan-zoom.js",
+            "name": "svg-pan-zoom",
+            "version": "3.6.1",
+            "source": "jsdelivr",
+            "prefix": "dist/",
+            "target": "mermaid",
+            "files": [
+                "dist/svg-pan-zoom.js"
+            ]
         }
     ]
 }

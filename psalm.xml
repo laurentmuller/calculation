@@ -33,9 +33,6 @@
     </issueHandlers>
 
     <plugins>
-        <pluginClass class="Orklah\NotEmpty\Plugin"/>
-        <pluginClass class="Orklah\PsalmInsaneComparison\Plugin"/>
-        <pluginClass class="Orklah\StrictEquality\Plugin"/>
         <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
         <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>

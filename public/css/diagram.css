@@ -14,6 +14,7 @@
     font-size: var(--bs-body-font-size) !important;
     font-weight: var(--bs-body-font-weight) !important;
     font-family: var(--bs-body-font-family) !important;
+    width: 100% !important;
 }
 
 .diagram svg .error-icon {

@@ -1,7 +1,7 @@
 {% extends 'cards/card_base.html.twig' %}
 {% from 'macros/_icons.html.twig' import icon %}
 {# parameters #}
-{%- set title = 'test.diagram' -%}
+{%- set title = 'diagram.title' -%}
 {%- set title_icon = 'diagram-project' -%}
 {% block container_class 'container-fluid' %}
 {% block card_container_class '' %}
@@ -10,19 +10,30 @@
 {% block card_header %}
 <div class="d-flex-wrap-center">
     {{ parent() }}
-    <div class="d-flex-wrap-center ms-sm-auto">
-        <label class="form-label mb-0" for="diagrams">Diagramme</label>
-        <select class="form-select form-select-sm w-auto d-print-none" id="diagrams" name="diagrams">
-            {% for key, value in files %}
-                <option value="{{ key }}"{% if file.name == key %} selected="selected"{% endif %}>{{ value.title }}</option>
-            {% endfor %}
-        </select>
+    <label class="form-label mb-0 ms-auto" for="diagrams">Diagramme</label>
+    <div class="d-flex-wrap-center">
+        <div class="input-group input-group-sm">
+            <select class="form-select form-select-sm w-auto d-print-none" id="diagrams" name="diagrams">
+                {% for key, value in files %}
+                    <option value="{{ key }}"{% if file.name == key %} selected="selected"{% endif %}>{{ value.title }}</option>
+                {% endfor %}
+            </select>
+            <button type="button" class="btn btn-outline-secondary btn-zoom-in" title="{{ 'diagram.zoom_in'|trans }}">
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-center" title="{{ 'diagram.center'|trans }}">
+                <i class="fa-solid fa-arrows-to-dot"></i>
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-zoom-out" title="{{ 'diagram.zoom_out'|trans }}">
+                <i class="fa-solid fa-magnifying-glass-minus"></i>
+            </button>
+        </div>
     </div>
 </div>
 {% endblock %}
 {# body #}
 {% block card_body -%}
-<pre id="diagram" class="diagram" data-url="{{ path('test_diagram_load') }}">
+<pre id="diagram" class="diagram mb-0" data-url="{{ path('test_diagram_load') }}">
     {{- file.content -}}
 </pre>
 {% endblock %}
@@ -35,6 +46,7 @@
 {% if app.debug %}
     {{ parent() }}
     {{ asset_js('vendor/mermaid/mermaid.js') }}
+    {{ asset_js('vendor/mermaid/svg-pan-zoom.js') }}
     {{ asset_js('js/test/diagram.js') }}
 {% else %}
     {{ asset_js('js/compiled/diagram.js') }}

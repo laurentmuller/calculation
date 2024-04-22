@@ -24,7 +24,7 @@ use Doctrine\ORM\Exception\ORMException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationUpdateService::class)]
 class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
@@ -147,7 +147,7 @@ class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
 
     private function getRequestStack(): RequestStack
     {
-        $session = new Session(new MockFileSessionStorage());
+        $session = new Session(new MockArraySessionStorage());
         $request = new Request();
         $request->setSession($session);
         /** @psalm-var RequestStack $requestStack */

@@ -1258,7 +1258,6 @@ test:
     tree_view: Tree View
     use_notification: Utiliser une notification.
     ip_stack: Adresse IP
-    diagram: Diagramme de classe
 theme:
     title: Thème
     help: Appliquer un thème sur ce site
@@ -1545,3 +1544,8 @@ command:
         re_run: Relancer
         empty: La commande n'a renvoyée aucune donnée.
         error: Une erreur est survenue dans l'exécution de la commande.
+diagram:
+    title: Diagramme de classe
+    center: Centrer
+    zoom_in: Zoom avant
+    zoom_out: Zoom arrière

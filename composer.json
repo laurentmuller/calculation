@@ -89,9 +89,6 @@
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",
         "friendsoftwig/twigcs": "^6.0",
-        "orklah/psalm-insane-comparison": "^2.0",
-        "orklah/psalm-not-empty": "^1.0",
-        "orklah/psalm-strict-equality": "^2.0",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-deprecation-rules": "^1.0",

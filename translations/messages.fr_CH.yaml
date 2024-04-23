@@ -1546,6 +1546,8 @@ command:
         error: Une erreur est survenue dans l'exécution de la commande.
 diagram:
     title: Diagramme de classe
+    list: Diagramme
     center: Centrer
+    zoom: Facteur d'agrandissement (Zoom)
     zoom_in: Zoom avant
     zoom_out: Zoom arrière

@@ -20,27 +20,53 @@ use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use App\Service\ProductUpdateService;
 use App\Service\SuspendEventListenerService;
+use App\Tests\Entity\IdTrait;
+use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(ProductUpdateService::class)]
 class ProductUpdateServiceTest extends TestCase
 {
-    private ?Category $category = null;
-    private ?Product $product = null;
-    private ?User $user = null;
+    use IdTrait;
+    use TranslatorMockTrait;
 
+    private Category $category;
+    private Product $product;
+    private Session $session;
+    private User $user;
+
+    /**
+     * @throws \ReflectionException
+     */
     protected function setUp(): void
     {
         $this->category = new Category();
         $this->category->setCode('category');
+        $this->setId($this->category);
+
         $this->product = new Product();
         $this->product->setDescription('description')
             ->setCategory($this->category)
             ->setPrice(1.0);
+        $this->setId($this->product);
+
         $this->user = new User();
         $this->user->setUsername('system');
+
+        $this->session = new Session(new MockArraySessionStorage());
+        $this->session->set('product.update.type', ProductUpdateQuery::UPDATE_PERCENT);
+        $this->session->set('product.update.percent', 1.0);
+        $this->session->set('product.update.fixed', 1.0);
+        $this->session->set('product.update.round', false);
+        $this->session->set('product.update.category', 1);
     }
 
     public static function getFixedRounded(): \Iterator
@@ -69,6 +95,28 @@ class ProductUpdateServiceTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testCreateQuery(): void
+    {
+        $service = $this->createService();
+        $query = $service->createQuery();
+        self::assertSame($this->category, $query->getCategory());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testCreateQueryEmpty(): void
+    {
+        $this->session->set('product.update.category', 0);
+        $service = $this->createService();
+        $query = $service->createQuery();
+        $this->session->set('product.update.category', 1);
+        self::assertNull($query->getCategory());
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testEmptyProducts(): void
     {
         $service = $this->createService();
@@ -85,10 +133,10 @@ class ProductUpdateServiceTest extends TestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getFixedRounded')]
     public function testFixedRounded(float $price, float $expected, float $fixed = 1.0): void
     {
-        self::assertNotNull($this->product);
         $this->product->setPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_FIXED, $this->product)
+            ->setSimulate(false)
             ->setFixed($fixed)
             ->setRound(true);
 
@@ -111,7 +159,6 @@ class ProductUpdateServiceTest extends TestCase
         $fixed = 1.0;
         $expected = $price + $fixed;
 
-        self::assertNotNull($this->product);
         $this->product->setPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_FIXED, $this->product)
@@ -130,10 +177,19 @@ class ProductUpdateServiceTest extends TestCase
     /**
      * @throws Exception
      */
+    public function testGetAllProducts(): void
+    {
+        $service = $this->createService();
+        $products = $service->getAllProducts();
+        self::assertSame([$this->product], $products);
+    }
+
+    /**
+     * @throws Exception
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getPercentRounded')]
     public function testPercentRounded(float $price, float $percent, float $expected): void
     {
-        self::assertNotNull($this->product);
         $this->product->setPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_PERCENT, $this->product)
@@ -159,7 +215,6 @@ class ProductUpdateServiceTest extends TestCase
         $percent = 0.1;
         $expected = $price * (1.0 + $percent);
 
-        self::assertNotNull($this->product);
         $this->product->setPrice($price);
 
         $query = $this->createQuery(ProductUpdateQuery::UPDATE_PERCENT, $this->product)
@@ -173,6 +228,17 @@ class ProductUpdateServiceTest extends TestCase
         self::assertCount(1, $products);
         $product = $products[0];
         self::assertProduct($product, $expected);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSaveQuery(): void
+    {
+        $service = $this->createService();
+        $query = $service->createQuery();
+        $service->saveQuery($query);
+        self::assertSame(1, $this->session->get('product.update.category'));
     }
 
     private function assertProduct(mixed $product, ?float $newPrice = null): void
@@ -207,11 +273,33 @@ class ProductUpdateServiceTest extends TestCase
     /**
      * @throws Exception
      */
+    private function createRequestStack(): RequestStack
+    {
+        $request = new Request();
+        $request->setSession($this->session);
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack->expects(self::any())
+            ->method('getCurrentRequest')
+            ->willReturn($request);
+        $requestStack->expects(self::any())
+            ->method('getSession')
+            ->willReturn($this->session);
+
+        return $requestStack;
+    }
+
+    /**
+     * @throws Exception
+     */
     private function createService(): ProductUpdateService
     {
         $productRepository = $this->createMock(ProductRepository::class);
         $productRepository->expects(self::any())
             ->method('findByCategory')
+            ->willReturn([$this->product]);
+
+        $productRepository->expects(self::any())
+            ->method('findByDescription')
             ->willReturn([$this->product]);
 
         $categoryRepository = $this->createMock(CategoryRepository::class);
@@ -224,14 +312,28 @@ class ProductUpdateServiceTest extends TestCase
             ->method('getUser')
             ->willReturn($this->user);
 
-        $service = $this->createMock(SuspendEventListenerService::class);
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::any())
+            ->method('has')
+            ->willReturn(false);
 
-        return new ProductUpdateService(
+        $logger = $this->createMock(LoggerInterface::class);
+        $suspendEventListenerService = $this->createMock(SuspendEventListenerService::class);
+        $productService = new ProductUpdateService(
             $productRepository,
             $categoryRepository,
-            $service,
+            $suspendEventListenerService,
             $security,
         );
+        $productService->setRequestStack($this->createRequestStack());
+        $productService->setTranslator($this->createTranslator());
+        $productService->setLogger($logger);
+
+        $class = new \ReflectionClass(ProductUpdateService::class);
+        $property = $class->getProperty('container');
+        $property->setValue($productService, $container);
+
+        return $productService;
     }
 
     private static function round05(float $value): float

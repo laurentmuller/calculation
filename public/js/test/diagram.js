@@ -52,6 +52,10 @@
      * @param {string} nodeId - the node identifier like: "classId-Category-0".
      */
     window.nodeCallback = (nodeId) => {
+        // window.console.log('nodeCallback');
+        // if (window.isMouseDown) {
+        //     return;
+        // }
         let found = false;
         const result = CLASS_REGEX.exec(nodeId);
         if (result && result.length >= 2) {
@@ -92,6 +96,18 @@
         };
     };
 
+    /**
+     * @param {number} value
+     * @return {string}
+     */
+    const formatPercent = (value) => {
+        return new Intl.NumberFormat('default', {
+            style: 'percent',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(value);
+    };
+
     let panZoom = null;
 
     /**
@@ -113,31 +129,28 @@
      */
     const initSvgPanZoom = () => {
         const svg = $diagram.find('svg:first')[0];
-        const options = {
-            onZoom: (zoom) => {
-                const sizes = panZoom.getSizes();
-                if (zoom > 1.0) {
-                    svg.style.height = sizes.height * zoom;
-                } else {
-                    svg.style.height = sizes.height;
-                }
-            },
-            // beforePan: (oldPan, newPan) => {
-            //     return {
-            //         x: Math.max(0, newPan.x),
-            //         y: Math.max(0, newPan.y),
-            //     };
-            // }
+        /** @param {number} zoom */
+        const zoomHandler = function (zoom) {
+            const sizes = this.getSizes();
+            if (zoom > 1.0) {
+                svg.style.height = sizes.height * zoom * 1.1;
+            } else {
+                svg.style.height = sizes.height;
+            }
+            $('#zoom').text(formatPercent(zoom));
         };
-        panZoom = svgPanZoom(svg, options);
+        const panZoom = svgPanZoom(svg, {
+            onZoom: zoomHandler,
+        });
         const sizes = panZoom.getSizes();
         svg.style.height = sizes.height;
-        svg.style.maxWidth = 'none';
+        svg.style.maxWidth = '100%';
+        svg.style.width = '100%';
 
-        $zoomIn.on('click', () => panZoom.zoomIn());
         $zoomOut.on('click', () => panZoom.zoomOut());
+        $zoomIn.on('click', () => panZoom.zoomIn());
         $center.on('click', () => {
-            panZoom.resetZoom();
+            panZoom.reset();
             panZoom.center();
         });
 

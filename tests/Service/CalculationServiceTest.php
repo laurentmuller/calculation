@@ -44,6 +44,12 @@ class CalculationServiceTest extends KernelTestCase
     private const PRODUCT_PRICE = 100.0;
     private const QUANTITY = 10.0;
 
+    public function testGetConstants(): void
+    {
+        $constants = CalculationService::getConstants();
+        self::assertCount(7, $constants);
+    }
+
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */

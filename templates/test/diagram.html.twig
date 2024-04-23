@@ -10,7 +10,7 @@
 {% block card_header %}
 <div class="d-flex-wrap-center">
     {{ parent() }}
-    <label class="form-label mb-0 ms-auto" for="diagrams">Diagramme</label>
+    <label class="form-label mb-0 ms-auto" for="diagrams">{{ 'diagram.list'|trans }}</label>
     <div class="d-flex-wrap-center">
         <div class="input-group input-group-sm">
             <select class="form-select form-select-sm w-auto d-print-none" id="diagrams" name="diagrams">
@@ -18,6 +18,7 @@
                     <option value="{{ key }}"{% if file.name == key %} selected="selected"{% endif %}>{{ value.title }}</option>
                 {% endfor %}
             </select>
+            <span class="input-group-text text-center d-inline" id="zoom" style="width: 60px;" title="{{ 'diagram.zoom'|trans }}">100 %</span>
             <button type="button" class="btn btn-outline-secondary btn-zoom-in" title="{{ 'diagram.zoom_in'|trans }}">
                 <i class="fa-solid fa-magnifying-glass-plus"></i>
             </button>
@@ -33,9 +34,9 @@
 {% endblock %}
 {# body #}
 {% block card_body -%}
-<pre id="diagram" class="diagram mb-0" data-url="{{ path('test_diagram_load') }}">
+<div id="diagram" class="diagram" data-url="{{ path('test_diagram_load') }}">
     {{- file.content -}}
-</pre>
+</div>
 {% endblock %}
 {# stylesheets #}
 {% block stylesheets %}

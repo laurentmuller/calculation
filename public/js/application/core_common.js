@@ -133,7 +133,7 @@
         link.title = 'Save Card Image';
         link.style.marginRight = '15px';
         link.classList.add('btn', 'btn-outline-secondary', 'position-absolute',
-            'top-50', 'end-0', 'translate-middle-y');
+            'top-50', 'end-0', 'translate-middle-y', 'd-print-none');
         document.querySelector('.page-content').append(link);
 
         link.addEventListener('click', () => {

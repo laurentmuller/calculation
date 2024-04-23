@@ -6,16 +6,17 @@
 {% block container_class 'container-fluid' %}
 {% block card_container_class '' %}
 {% block card_footer_class ' d-none' %}
+{% block card_body_class ' p-1' %}
 {# header #}
 {% block card_header %}
 <div class="d-flex-wrap-center">
     {{ parent() }}
-    <label class="form-label mb-0 ms-auto" for="diagrams">{{ 'diagram.list'|trans }}</label>
+    <label class="form-label mb-0 ms-auto d-print-none" for="diagrams">{{ 'diagram.list'|trans }}</label>
     <div class="d-flex-wrap-center">
-        <div class="input-group input-group-sm">
-            <select class="form-select form-select-sm w-auto d-print-none" id="diagrams" name="diagrams">
+        <div class="input-group input-group-sm d-print-none">
+            <select class="form-select form-select-sm w-auto" id="diagrams" name="diagrams">
                 {% for key, value in files %}
-                    <option value="{{ key }}"{% if file.name == key %} selected="selected"{% endif %}>{{ value.title }}</option>
+                    <option value="{{ key }}"{% if file.name == key %} selected="selected"{% endif %}>{{ value }}</option>
                 {% endfor %}
             </select>
             <span class="input-group-text text-center d-inline" id="zoom" style="width: 60px;" title="{{ 'diagram.zoom'|trans }}">100 %</span>
@@ -34,7 +35,7 @@
 {% endblock %}
 {# body #}
 {% block card_body -%}
-<div id="diagram" class="diagram" data-url="{{ path('test_diagram_load') }}">
+<div id="diagram" class="diagram" data-url="{{ path('diagram_load') }}">
     {{- file.content -}}
 </div>
 {% endblock %}

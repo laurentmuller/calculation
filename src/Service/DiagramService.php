@@ -26,8 +26,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  * @psalm-type DiagramType = array{
  *     name: string,
  *     title: string,
- *     content: string
- * }
+ *     content: string}
  */
 class DiagramService
 {
@@ -87,9 +86,8 @@ class DiagramService
 
     private function findTitle(string $content, string $name): string
     {
-        $matches = [];
         $found = \preg_match_all(self::TITLE_PATTERN, $content, $matches, \PREG_SET_ORDER);
-        if (\is_int($found) && 0 !== $found) {
+        if (1 === $found) {
             return $matches[0][1];
         }
 

@@ -6,6 +6,18 @@
     display: none;
 }
 
+body.status-bar .diagram {
+    height: calc(100vh - 120px);
+}
+
+body:not(.status-bar) .diagram {
+    height: calc(100vh - 90px);
+}
+
+.page-content:not(.sidebar-show) .diagram {
+    height: calc(100vh - 180px);
+}
+
 .diagram:has(svg) {
     display: block;
 }
@@ -14,6 +26,11 @@
     font-size: var(--bs-body-font-size) !important;
     font-weight: var(--bs-body-font-weight) !important;
     font-family: var(--bs-body-font-family) !important;
+    cursor: grab;
+}
+
+.diagram svg .clickable {
+    cursor: initial;
 }
 
 .diagram svg .error-icon {

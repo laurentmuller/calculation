@@ -200,7 +200,6 @@ class CommandsReport extends AbstractArrayReport
 
     private function renderStyledHelp(string $help): void
     {
-        $matches = [];
         $result = \preg_match_all(self::HELP_PATTERN, $help, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE);
         if (false === $result || 0 === $result) {
             $this->multiCell(text: $help, align: PdfTextAlignment::LEFT);

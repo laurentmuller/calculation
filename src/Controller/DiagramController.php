@@ -29,29 +29,32 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @see https://mermaid.js.org/
  */
 #[AsController]
-#[Route(path: '/test/diagram')]
+#[Route(path: '/diagram')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class DiagramController extends AbstractController
 {
+    private const DEFAULT_DIAGRAM = 'entity_interface';
+
+    public function __construct(private readonly DiagramService $service)
+    {
+    }
+
     /**
      * Display a diagram.
      *
      * @throws InvalidArgumentException
      */
-    #[Get(path: '', name: 'test_diagram')]
-    public function diagram(
-        DiagramService $service,
-        #[MapQueryParameter]
-        string $name = 'entity_interface'
-    ): Response {
-        $file = $service->getFile($name);
+    #[Get(path: '', name: 'diagram_index')]
+    public function index(#[MapQueryParameter] string $name = self::DEFAULT_DIAGRAM): Response
+    {
+        $file = $this->getFile($name);
         if (null === $file) {
-            throw $this->createNotFoundException("Unable to find the diagram '$name'.");
+            throw $this->createNotFoundException($this->transNotFound($name));
         }
 
         return $this->render('test/diagram.html.twig', [
             'file' => $file,
-            'files' => $service->getFiles(),
+            'files' => $this->getFiles(),
         ]);
     }
 
@@ -60,19 +63,37 @@ class DiagramController extends AbstractController
      *
      * @throws InvalidArgumentException
      */
-    #[Get(path: '/load', name: 'test_diagram_load')]
-    public function load(
-        DiagramService $service,
-        #[MapQueryParameter]
-        string $name = 'overall_diagram'
-    ): JsonResponse {
-        $file = $service->getFile($name);
+    #[Get(path: '/load', name: 'diagram_load')]
+    public function load(#[MapQueryParameter] string $name = self::DEFAULT_DIAGRAM): JsonResponse
+    {
+        $file = $this->getFile($name);
         if (null === $file) {
-            return $this->jsonFalse([
-                'message' => "Unable to find the diagram '$name'.",
-            ]);
+            return $this->jsonFalse(['message' => $this->transNotFound($name)]);
         }
 
         return $this->jsonTrue(['file' => $file]);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function getFile(string $name): ?array
+    {
+        return $this->service->getFile($name);
+    }
+
+    /**
+     * @return array<string, string>
+     *
+     * @throws InvalidArgumentException
+     */
+    private function getFiles(): array
+    {
+        return \array_column($this->service->getFiles(), 'title', 'name');
+    }
+
+    private function transNotFound(string $name): string
+    {
+        return $this->trans('diagram.error_not_found', ['%name%' => $name]);
     }
 }

@@ -2,6 +2,33 @@
 
 /* globals Toaster, mermaid, svgPanZoom */
 
+/**
+ * @typedef {Object} ShadowViewport
+ * @property {function} destroy
+ */
+
+/**
+ * @typedef {Object} SvgPoint
+ * @property {number} x
+ * @property {number} y
+ */
+
+/**
+ * @typedef {Object} SvgViewBox
+ * @property {number} x
+ * @property {number} y
+ * @property {number} width
+ * @property {number} height
+ */
+
+/**
+ * @typedef {Object} SvgSizes
+ * @property {number} width
+ * @property {number} height
+ * @property {number} realZoom
+ * @property {SvgViewBox} viewBox
+ */
+
 (() => {
     'use strict';
 
@@ -37,14 +64,16 @@
     const $zoomIn = $('.btn-zoom-in');
     const $zoomOut = $('.btn-zoom-out');
     const $center = $('.btn-center');
+    const $zoom = $('#zoom');
+    /** @type {ShadowViewport|null} */
+    let panZoom = null;
 
     /**
      * Show an error message.
      * @param {string} message
      */
     const showError = (message) => {
-        const title = $('.card-title').text();
-        Toaster.danger(message, title);
+        Toaster.danger(message, $('.card-title').text());
     };
 
     /**
@@ -52,10 +81,6 @@
      * @param {string} nodeId - the node identifier like: "classId-Category-0".
      */
     window.nodeCallback = (nodeId) => {
-        // window.console.log('nodeCallback');
-        // if (window.isMouseDown) {
-        //     return;
-        // }
         let found = false;
         const result = CLASS_REGEX.exec(nodeId);
         if (result && result.length >= 2) {
@@ -98,17 +123,18 @@
 
     /**
      * @param {number} value
-     * @return {string}
      */
-    const formatPercent = (value) => {
-        return new Intl.NumberFormat('default', {
+    const formatZoom = (value) => {
+        const text = new Intl.NumberFormat('default', {
             style: 'percent',
             minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
+            maximumFractionDigits: 0
         }).format(value);
+        $zoom.text(text);
     };
 
-    let panZoom = null;
+    /** @return {SVGSVGElement} */
+    const getDiagramSVG = () => $diagram.find('svg:first')[0];
 
     /**
      * @param {ShadowViewport} [panZoom]
@@ -124,26 +150,55 @@
         return null;
     };
 
+
+    /** @param {number} zoom */
+    const zoomHandler = function (zoom) {
+        // const svg = getDiagramSVG();
+        // const sizes = this.getSizes();
+        // if (zoom > 1.0) {
+        //     svg.style.height = String(sizes.height * zoom);
+        // } else {
+        //     svg.style.height = String(sizes.height);
+        // }
+        formatZoom(zoom);
+    };
+
+    /**
+     * @param  {SvgPoint} oldPane
+     * @param  {SvgPoint} newPan
+     * @return {SvgPoint|null}
+     */
+    const beforePanHandler = function (oldPane, newPan) {
+        const margin = 100;
+        const svg = getDiagramSVG();
+        /** @type {SvgSizes} */
+        const sizes = this.getSizes();
+        const width = Math.max(sizes.width, svg.clientWidth);
+        const height = Math.max(sizes.height, svg.clientHeight);
+        const left = -((sizes.viewBox.x + sizes.viewBox.width) * sizes.realZoom) + margin;
+        const right = width - margin - (sizes.viewBox.x * sizes.realZoom);
+        const top = -((sizes.viewBox.y + height) * sizes.realZoom) + margin;
+        const bottom = height - margin - (sizes.viewBox.y * sizes.realZoom);
+
+        return {
+            x: Math.max(left, Math.min(right, newPan.x)),
+            y: Math.max(top, Math.min(bottom, newPan.y))
+        };
+    };
+
     /**
      * @return {ShadowViewport}
      */
-    const initSvgPanZoom = () => {
-        const svg = $diagram.find('svg:first')[0];
-        /** @param {number} zoom */
-        const zoomHandler = function (zoom) {
-            const sizes = this.getSizes();
-            if (zoom > 1.0) {
-                svg.style.height = sizes.height * zoom * 1.1;
-            } else {
-                svg.style.height = sizes.height;
-            }
-            $('#zoom').text(formatPercent(zoom));
-        };
+    const createSvgPanZoom = () => {
+        const svg = getDiagramSVG();
         const panZoom = svgPanZoom(svg, {
-            onZoom: zoomHandler,
+            onZoom: zoomHandler, beforePan: beforePanHandler,
         });
+        /** @type {SvgSizes} */
         const sizes = panZoom.getSizes();
-        svg.style.height = sizes.height;
+        formatZoom(sizes.realZoom);
+        //svg.style.height = String(sizes.height);
+        svg.style.height = '100%';
         svg.style.maxWidth = '100%';
         svg.style.width = '100%';
 
@@ -158,7 +213,7 @@
     };
 
     // load the diagram.
-    const reloadDiagram = () => {
+    const loadDiagram = () => {
         mermaid.initialize({
             theme: 'base',
             useMaxWidth: false,
@@ -170,7 +225,7 @@
             nodes: [$diagram[0]],
         }).then(() => {
             panZoom = destroySvgPanZoom(panZoom);
-            panZoom = initSvgPanZoom();
+            panZoom = createSvgPanZoom();
         });
     };
 
@@ -193,7 +248,7 @@
     channel.addEventListener('message', (e) => {
         if (e.data === THEME_EVENT_NAME) {
             resetDiagram();
-            reloadDiagram();
+            loadDiagram();
         }
     });
 
@@ -217,7 +272,7 @@
             $diagram.text(response.file.content);
             saveDiagram();
             resetDiagram();
-            reloadDiagram();
+            loadDiagram();
 
             // update history
             const name = response.file.name;
@@ -237,5 +292,5 @@
 
     // save and initialize diagrams.
     saveDiagram();
-    reloadDiagram();
+    loadDiagram();
 })();

@@ -73,7 +73,6 @@ class AboutPhpController extends AbstractController
 
     private function getApacheVersion(Request $request): bool|string
     {
-        $matches = [];
         $regex = '/Apache\/(?P<version>[1-9]\d*\.\d[^\s]*)/i';
         /** @psalm-var mixed $version */
         $version = \function_exists('apache_get_version')

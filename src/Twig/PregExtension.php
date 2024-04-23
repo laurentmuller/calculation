@@ -82,7 +82,6 @@ class PregExtension extends AbstractExtension
         if (!StringUtils::isString($subject)) {
             return false;
         }
-        $matches = [];
         if (1 === \preg_match($pattern, $subject, $matches, $flags, $offset)) {
             return $matches;
         }

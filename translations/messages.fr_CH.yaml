@@ -1551,3 +1551,4 @@ diagram:
     zoom: Facteur d'agrandissement (Zoom)
     zoom_in: Zoom avant
     zoom_out: Zoom arrière
+    error_not_found: Impossible de trouver le diagramme '%name%'.

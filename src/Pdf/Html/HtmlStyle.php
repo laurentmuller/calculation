@@ -308,7 +308,6 @@ class HtmlStyle extends PdfStyle
 
     private function updateMargins(string $class): self
     {
-        $matches = [];
         if (1 === \preg_match_all(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
             $match = $matches[0];
             $value = (float) $match[3];

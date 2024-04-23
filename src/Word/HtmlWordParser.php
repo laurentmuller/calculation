@@ -178,7 +178,6 @@ class HtmlWordParser
      */
     private function parseMargins(string $class): string
     {
-        $matches = [];
         if (1 === \preg_match_all(self::MARGINS_PATTERN, $class, $matches, \PREG_SET_ORDER)) {
             $value = match ((int) $matches[0][3]) {
                 1 => '4px',     // 0.25rem

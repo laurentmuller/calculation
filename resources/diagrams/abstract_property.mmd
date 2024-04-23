@@ -10,6 +10,8 @@ classDiagram
         -string value
         +getName() string
         +setName(string)
+        +getValue() string|null
+        +setValue(string|null)
         +getBoolean() bool
         +setBoolean(bool)
         +getArray() array|null
@@ -18,8 +20,6 @@ classDiagram
         +setDate(DateTimeInterface|null)
         +getInteger() int
         +setInteger(int)
-        +getString() string|null
-        +setString(string|null)
     }
 
     class EntityInterface {

@@ -61,10 +61,13 @@ class CacheService
         });
     }
 
+    /**
+     * @return string[]
+     */
     private function parseContent(string $content): array
     {
         /** @psalm-var string[] $lines */
-        $lines = \preg_split('/$\R?^/m', $content, flags: \PREG_SPLIT_NO_EMPTY);
+        $lines = \preg_split('/$\R?^/m', \trim($content), flags: \PREG_SPLIT_NO_EMPTY);
         $callback = static fn (string $line): bool => !\str_starts_with($line, '-')
             && !\str_starts_with($line, 'Pool name');
 

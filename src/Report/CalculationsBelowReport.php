@@ -19,7 +19,6 @@ use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Traits\MathTrait;
-use App\Utils\FormatUtils;
 use fpdf\PdfOrientation;
 use fpdf\PdfTextAlignment;
 
@@ -98,9 +97,9 @@ class CalculationsBelowReport extends AbstractArrayReport
             ->add($entity->getStateCode())
             ->add($entity->getCustomer())
             ->add($entity->getDescription())
-            ->add(FormatUtils::formatAmount($items))
-            ->add(text: FormatUtils::formatPercent($entity->getOverallMargin()), style: $style)
-            ->add(FormatUtils::formatAmount($overall))
+            ->addAmount($items)
+            ->addPercent($entity->getOverallMargin(), style: $style)
+            ->addAmount($overall)
             ->endRow();
 
         $this->items += $items;
@@ -118,9 +117,9 @@ class CalculationsBelowReport extends AbstractArrayReport
             ->setFixed(false);
         $table->startHeaderRow()
             ->add($text, $cols)
-            ->add(FormatUtils::formatAmount($this->items))
-            ->add(FormatUtils::formatPercent($margins), style: $style)
-            ->add(FormatUtils::formatAmount($this->overall))
+            ->addAmount($this->items)
+            ->addPercent($margins, style: $style)
+            ->addAmount($this->overall)
             ->endRow();
     }
 }

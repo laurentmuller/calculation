@@ -43,7 +43,7 @@ final class FormatUtils
     public const PERCENT_SYMBOL = '%';
 
     /**
-     * The thousand separator character.
+     * The thousand-separator character.
      */
     public const THOUSANDS_SEP = '\'';
 
@@ -86,7 +86,7 @@ final class FormatUtils
      * Format a date for the current locale; ignoring the time part.
      *
      * @param \DateTimeInterface|int|null $date     the date to format
-     * @param int<-1,3>|null              $dateType the type of date formatting, one of the format type
+     * @param int<-1,3>|null              $dateType the type of date formatting, one of the format types
      *                                              constants or null to use default
      * @param ?string                     $pattern  the optional pattern to use when formatting
      * @param \DateTimeZone|string|null   $timezone the timezone identifier
@@ -108,9 +108,10 @@ final class FormatUtils
      * Format a date and time for the current locale.
      *
      * @param \DateTimeInterface|int|null $date     the date and time to format
-     * @param int<-1,3>|null              $dateType the type of date formatting, one of the format type
+     * @param int<-1,3>|null              $dateType the type of date formatting, one of the format types
      *                                              constants or null to use default
-     * @param int<-1,3>|null              $timeType the type of time formatting, one of the format type constants or null to use default
+     * @param int<-1,3>|null              $timeType the type of time formatting, one of the format type constants or
+     *                                              null to use default
      * @param ?string                     $pattern  the optional pattern to use when formatting
      * @param \DateTimeZone|string|null   $timezone the timezone identifier
      *
@@ -142,7 +143,7 @@ final class FormatUtils
     }
 
     /**
-     * Format an integer identifier with 0 left padding (Ex: 123 > 000123).
+     * Format an integer identifier with 0 left paddings (Ex: 123 > 000123).
      */
     public static function formatId(float|int|string|null $number): string
     {
@@ -192,7 +193,7 @@ final class FormatUtils
      * Format a time for the current locale; ignoring the date part.
      *
      * @param \DateTimeInterface|int|null $date     the time to format
-     * @param int<-1,3>|null              $timeType the type of date formatting, one of the format type
+     * @param int<-1,3>|null              $timeType the type of date formatting, one of the format types
      *                                              constants or null to use default
      * @param ?string                     $pattern  the optional pattern to use when formatting
      * @param \DateTimeZone|string|null   $timezone the timezone identifier
@@ -213,9 +214,9 @@ final class FormatUtils
     /**
      * Creates a date formatter for the current locale.
      *
-     * @param int<-1,3>|null            $dateType the type of date formatting, one of the format type
+     * @param int<-1,3>|null            $dateType the type of date formatting, one of the format types
      *                                            constants or null to use default
-     * @param int<-1,3>|null            $timeType the type of time formatting, one of the format type
+     * @param int<-1,3>|null            $timeType the type of time formatting, one of the format types
      *                                            constants or null to use default
      * @param ?string                   $pattern  the optional pattern to use when formatting
      * @param \DateTimeZone|string|null $timezone the timezone identifier

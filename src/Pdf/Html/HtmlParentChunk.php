@@ -151,7 +151,7 @@ class HtmlParentChunk extends AbstractHtmlChunk implements \Countable
     }
 
     /**
-     * Returns if the last child, if any; has a new line.
+     * Returns if the last child, if any, has a new line.
      */
     protected static function isLastNewLine(self $parent): bool
     {

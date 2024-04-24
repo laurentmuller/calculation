@@ -90,21 +90,20 @@ trait ArrayTrait
      *
      * @psalm-suppress MixedArgumentTypeCoercion
      */
-    public function getFiltered(
-        array $values,
-        ?callable $callback = null,
-        int $mode = 0
-    ): array {
-        /** @psalm-var T[] $values */
-        $values = \is_callable($callback) ? \array_filter($values, $callback, $mode) : \array_filter($values);
-
-        return $values;
+    public function getFiltered(array $values, ?callable $callback = null, int $mode = 0): array
+    {
+        // @phpstan-ignore-next-line
+        return null === $callback ? \array_filter($values) : \array_filter($values, $callback, $mode);
     }
 
     /**
      * Sort the given array.
      *
-     * @return array the sorted array
+     * @template T
+     *
+     * @param T[] $array
+     *
+     * @return T[] the sorted array
      */
     public function getSorted(array $array, int $flags = \SORT_REGULAR): array
     {

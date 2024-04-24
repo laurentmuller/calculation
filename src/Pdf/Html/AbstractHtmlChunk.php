@@ -164,7 +164,7 @@ abstract class AbstractHtmlChunk
     /**
      * Gets index of this chunk.
      *
-     * @return int the index; -1 if root
+     * @return int the index; or -1 if is root
      */
     public function index(): int
     {
@@ -172,7 +172,7 @@ abstract class AbstractHtmlChunk
     }
 
     /**
-     * Returns if this name match one of the given tags, ignoring case consideration.
+     * Returns if this name matches one of the given tags, ignoring case consideration.
      */
     public function is(HtmlTag ...$tags): bool
     {
@@ -262,7 +262,8 @@ abstract class AbstractHtmlChunk
      * @param HtmlReport $report      the report to set and restore margins
      * @param float      $leftMargin  the left margin to add
      * @param float      $rightMargin the right margin to add
-     * @param callable   $callback    the callback to call after the margins has been set. The report is passed as argument.
+     * @param callable   $callback    the callback to call after the margins have been set. The report is passed
+     *                                as an argument.
      *
      * @psalm-param callable(HtmlReport):void $callback
      */

@@ -1,25 +1,45 @@
 {% extends 'cards/card_delete.html.twig' %}
+{% from 'macros/_icons.html.twig' import button_close_modal %}
 {# parameters #}
 {%- set title = 'clear_cache.title' -%}
 {%- set submit_text = 'clear_cache.submit' -%}
 {%- set message = 'clear_cache.message' %}
 {%- set message_parameters = {'%size%': size} -%}
+{%- set is_pools = pools|length -%}
 {# message #}
 {% block message %}
 {{ parent() }}
 <p class="my-2">{{ 'clear_cache.note'|trans|raw }}</p>
 {# pools #}
-{% if pools|length %}
-    <div class="dropdown border rounded p-2">
-        <a class="drop-down-icon-right text-body d-block" href="#pools" data-bs-toggle="collapse" aria-expanded="false">{{ 'clear_cache.list'|trans }}</a>
-        <div class="collapse" id="pools">
-            <hr class="mt-2 mb-2 mx-0">
-            <ul class="m-1">
-                {% for pool in pools %}
-                    <li>{{ pool }}</li>
-                {% endfor %}
-            </ul>
+{% if is_pools %}
+<div class="modal fade" id="modal-cache-list" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'clear_cache.list'|trans }}</h5>
+                {{ button_close_modal(true) }}
+            </div>
+            <div class="modal-body">
+                <ul class="my-1">
+                    {% for pool in pools %}
+                        <li>{{ pool }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="modal-footer justify-content-start">
+                {{- button_close_modal(false) -}}
+            </div>
         </div>
     </div>
+</div>
 {% endif %}
+{% endblock %}
+{# actions #}
+{% block actions_form -%}
+    {{ parent() }}
+    {% if is_pools %}
+        <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-cache-list">
+            {{- 'clear_cache.list'|trans -}}
+        </button>
+    {% endif %}
 {% endblock %}

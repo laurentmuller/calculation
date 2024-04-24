@@ -19,7 +19,6 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
-use App\Utils\FormatUtils;
 use fpdf\PdfBorder;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -90,19 +89,6 @@ class TableOverall extends PdfTable
         return $this;
     }
 
-    /**
-     * @psalm-param positive-int $cols
-     */
-    private function addAmount(float $number, int $cols = 1): self
-    {
-        return $this->add(FormatUtils::formatAmount($number), $cols);
-    }
-
-    private function addPercent(float $number, ?PdfStyle $style = null): self
-    {
-        return $this->add(text: FormatUtils::formatPercent($number), style: $style);
-    }
-
     private function createColumns(): self
     {
         return $this->addColumns(
@@ -118,9 +104,9 @@ class TableOverall extends PdfTable
     {
         return $this->startRow()
             ->add($this->trans('calculation.fields.globalMargin'))
-            ->add('')
+            ->add()
             ->addPercent($globalMargin)
-            ->add('')
+            ->add()
             ->addAmount($globalAmount)
             ->endRow();
     }
@@ -134,7 +120,7 @@ class TableOverall extends PdfTable
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.overallTotal'))
             ->addAmount($totalItems)
-            ->addPercent($calculation->getOverallMargin(), $style)
+            ->addPercent($calculation->getOverallMargin(), style: $style)
             ->addAmount($calculation->getOverallMarginAmount())
             ->addAmount($calculation->getOverallTotal())
             ->endRow();
@@ -151,9 +137,9 @@ class TableOverall extends PdfTable
                 ->endRow();
             $this->startRow()
                 ->add($this->trans('calculation.fields.userMargin'))
-                ->add('')
+                ->add()
                 ->addPercent($userMargin)
-                ->add('')
+                ->add()
                 ->addAmount($userAmount)
                 ->endRow();
         }

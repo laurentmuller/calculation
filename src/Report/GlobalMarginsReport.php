@@ -14,7 +14,6 @@ namespace App\Report;
 
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfTable;
-use App\Utils\FormatUtils;
 
 /**
  * Report for the list of global margins.
@@ -37,12 +36,12 @@ class GlobalMarginsReport extends AbstractArrayReport
             )->outputHeaders();
 
         foreach ($entities as $entity) {
-            $table->addRow(
-                FormatUtils::formatAmount($entity->getMinimum()),
-                FormatUtils::formatAmount($entity->getMaximum()),
-                FormatUtils::formatAmount($entity->getDelta()),
-                FormatUtils::formatPercent($entity->getMargin())
-            );
+            $table->startRow()
+                ->addAmount($entity->getMinimum())
+                ->addAmount($entity->getMaximum())
+                ->addAmount($entity->getDelta())
+                ->addPercent($entity->getMargin())
+                ->endRow();
         }
 
         return $this->renderCount($table, $entities, 'counters.margins');

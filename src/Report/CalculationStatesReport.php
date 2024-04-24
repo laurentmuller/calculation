@@ -19,7 +19,6 @@ use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Utils\FormatUtils;
 use fpdf\PdfRectangleStyle;
 
 /**
@@ -60,7 +59,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
                 ->add($entity->getDescription())
                 ->add($this->formatEditable($entity->isEditable()))
                 ->add(style: $this->getColorStyle($entity))
-                ->add(FormatUtils::formatInt($entity->countCalculations()))
+                ->addInt($entity->countCalculations())
                 ->endRow();
             $this->currentState = null;
         }

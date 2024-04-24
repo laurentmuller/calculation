@@ -1194,6 +1194,7 @@ task:
     fields:
         category: Catégorie
         group: Groupe
+        item: Opération
         items: Opérations
         name: Nom
         supplier: Fournisseur

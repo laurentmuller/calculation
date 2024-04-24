@@ -21,6 +21,7 @@ use App\Pdf\Interfaces\PdfDrawCellBorderInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Traits\MathTrait;
+use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use fpdf\PdfBorder;
 use fpdf\PdfException;
@@ -104,7 +105,7 @@ class PdfTable
 
     /**
      * @param PdfDocument $parent    the parent document to print in
-     * @param bool        $fullWidth a value indicating if the table take all the printable width
+     * @param bool        $fullWidth a value indicating if the table takes all the printable width
      */
     public function __construct(private readonly PdfDocument $parent, private readonly bool $fullWidth = true)
     {
@@ -122,9 +123,35 @@ class PdfTable
      *
      * @psalm-param positive-int $cols
      */
-    public function add(?string $text = null, int $cols = 1, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null, string|int|null $link = null): static
-    {
+    public function add(
+        ?string $text = null,
+        int $cols = 1,
+        ?PdfStyle $style = null,
+        ?PdfTextAlignment $alignment = null,
+        string|int|null $link = null
+    ): static {
         return $this->addCell(new PdfCell($text, $cols, $style, $alignment, $link));
+    }
+
+    /**
+     * Adds a right aligned cell, with formatted value as amount, to the current row.
+     *
+     * @param float|int|string|null $number the number to format
+     * @param int                   $cols   the number of columns to span
+     * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
+     * @param string|int|null       $link   the cell link. A URL or identifier returned by AddLink().
+     *
+     * @psalm-param positive-int $cols
+     */
+    public function addAmount(
+        float|int|string|null $number,
+        int $cols = 1,
+        ?PdfStyle $style = null,
+        string|int|null $link = null
+    ): static {
+        $text = FormatUtils::formatAmount($number);
+
+        return $this->addCell(new PdfCell($text, $cols, $style, PdfTextAlignment::RIGHT, $link));
     }
 
     /**
@@ -195,6 +222,48 @@ class PdfTable
     }
 
     /**
+     * Adds a right aligned cell, with formatted value as integer, to the current row.
+     *
+     * @param \Countable|array|int|float|string|null $number the number to format
+     * @param int                                    $cols   the number of columns to span
+     * @param ?PdfStyle                              $style  the cell style to use or null to use the default cell style
+     * @param string|int|null                        $link   the cell link. A URL or identifier returned by AddLink().
+     *
+     * @psalm-param positive-int $cols
+     */
+    public function addInt(
+        \Countable|array|int|float|string|null $number,
+        int $cols = 1,
+        ?PdfStyle $style = null,
+        string|int|null $link = null
+    ): static {
+        $text = FormatUtils::formatInt($number);
+
+        return $this->addCell(new PdfCell($text, $cols, $style, PdfTextAlignment::RIGHT, $link));
+    }
+
+    /**
+     * Adds a right aligned cell, with formatted value as percent, to the current row.
+     *
+     * @param float|int|string|null $number the number to format
+     * @param int                   $cols   the number of columns to span
+     * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
+     * @param string|int|null       $link   the cell link. A URL or identifier returned by AddLink().
+     *
+     * @psalm-param positive-int $cols
+     */
+    public function addPercent(
+        float|int|string|null $number,
+        int $cols = 1,
+        ?PdfStyle $style = null,
+        string|int|null $link = null
+    ): static {
+        $text = FormatUtils::formatPercent($number);
+
+        return $this->addCell(new PdfCell($text, $cols, $style, PdfTextAlignment::RIGHT, $link));
+    }
+
+    /**
      * Create and add a row with the given values.
      *
      * @throws PdfException         if the row is already started
@@ -217,7 +286,7 @@ class PdfTable
      * @param ?PdfStyle                  $style the row style or null for default cell style
      *
      * @throws PdfException         if a row is already started
-     * @throws \LengthException     if cells parameter is empty
+     * @throws \LengthException     if the cells are empty
      * @throws \OutOfRangeException if the number of spanned cells is greater than the number of columns
      *
      * @see PdfTable::addRow()
@@ -322,11 +391,11 @@ class PdfTable
             $this->adjustCellWidths($cells, $fixeds, $widths);
         }
 
-        // clear before adding new page
+        // clear before adding a new page
         $this->cells = [];
         $this->rowStyle = null;
 
-        // check new page
+        // check the new page
         $height = $this->getRowHeight($texts, $widths, $styles, $cells);
         $this->checkNewPage($height);
 
@@ -366,7 +435,7 @@ class PdfTable
     /**
      * Gets the header style.
      *
-     * @return PdfStyle the custom header style, if set; the default header style otherwise
+     * @return PdfStyle the custom header style, if set, the default header style otherwise
      *
      * @see PdfStyle::getHeaderStyle()
      */
@@ -387,7 +456,7 @@ class PdfTable
      * Creates a new instance.
      *
      * @param PdfDocument $parent    the parent document to print in
-     * @param bool        $fullWidth a value indicating if the table take all the printable width
+     * @param bool        $fullWidth a value indicating if the table takes all the printable width
      */
     public static function instance(PdfDocument $parent, bool $fullWidth = true): self
     {
@@ -395,7 +464,7 @@ class PdfTable
     }
 
     /**
-     * Gets a value indicating if the table take all the printable width.
+     * Gets a value indicating if the table takes all the printable width.
      */
     public function isFullWidth(): bool
     {
@@ -419,7 +488,7 @@ class PdfTable
     }
 
     /**
-     * Output a row with the header style and the columns texts.
+     * Output a row with the header style and the column's texts.
      *
      * @throws \LengthException if no column is defined
      */
@@ -515,7 +584,7 @@ class PdfTable
     /**
      * Sets a value indicating if the header row is printed when a new page is added.
      *
-     * @param bool $repeatHeader true to print the header on each new pages
+     * @param bool $repeatHeader true to print the header on each new page
      *
      * @psalm-api
      */
@@ -552,8 +621,11 @@ class PdfTable
      *
      * @psalm-api
      */
-    public function singleLine(?string $text = null, ?PdfStyle $style = null, ?PdfTextAlignment $alignment = null): static
-    {
+    public function singleLine(
+        ?string $text = null,
+        ?PdfStyle $style = null,
+        ?PdfTextAlignment $alignment = null
+    ): static {
         /** @psalm-var positive-int $cols */
         $cols = $this->getColumnsCount();
 
@@ -610,14 +682,21 @@ class PdfTable
      *
      * @param PdfDocument        $parent the parent document
      * @param float              $height the row height
-     * @param string[]           $texts  the cells text
-     * @param float[]            $widths the cells width
-     * @param PdfStyle[]         $styles the cells style
-     * @param PdfTextAlignment[] $aligns the cells alignment
+     * @param string[]           $texts  the cell texts
+     * @param float[]            $widths the cell widths
+     * @param PdfStyle[]         $styles the cell styles
+     * @param PdfTextAlignment[] $aligns the cell alignments
      * @param PdfCell[]          $cells  the cells
      */
-    protected function drawRow(PdfDocument $parent, float $height, array $texts, array $widths, array $styles, array $aligns, array $cells): void
-    {
+    protected function drawRow(
+        PdfDocument $parent,
+        float $height,
+        array $texts,
+        array $widths,
+        array $styles,
+        array $aligns,
+        array $cells
+    ): void {
         // horizontal alignment
         if (!$this->fullWidth) {
             switch ($this->alignment) {
@@ -732,7 +811,9 @@ class PdfTable
 
         // update resizable widths
         $remainingWidth = $parent->getPrintableWidth() - $fixedWidth;
-        if (!$this->isFloatZero($resizableWidth) && !$this->isFloatZero($remainingWidth) && $resizableWidth !== $remainingWidth) {
+        if (!$this->isFloatZero($resizableWidth)
+            && !$this->isFloatZero($remainingWidth)
+            && $resizableWidth !== $remainingWidth) {
             $factor = $remainingWidth / $resizableWidth;
             for ($i = 0; $i < $count; ++$i) {
                 if (!$fixeds[$i]) {
@@ -743,7 +824,7 @@ class PdfTable
     }
 
     /**
-     * Check if output row is already started.
+     * Check if the output row is already started.
      *
      * @throws PdfException
      */
@@ -840,8 +921,16 @@ class PdfTable
      * @param PdfStyle         $style     the cell style
      * @param PdfCell          $cell      the cell
      */
-    private function drawCell(PdfDocument $parent, int $index, float $width, float $height, string $text, PdfTextAlignment $alignment, PdfStyle $style, PdfCell $cell): void
-    {
+    private function drawCell(
+        PdfDocument $parent,
+        int $index,
+        float $width,
+        float $height,
+        string $text,
+        PdfTextAlignment $alignment,
+        PdfStyle $style,
+        PdfCell $cell
+    ): void {
         $position = $parent->getPosition();
         $bounds = new PdfRectangle($position->x, $position->y, $width, $height);
 

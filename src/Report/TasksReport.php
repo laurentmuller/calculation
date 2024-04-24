@@ -19,7 +19,6 @@ use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
-use App\Utils\FormatUtils;
 
 /**
  * Report for the list of tasks.
@@ -32,7 +31,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     {
         /** @var Task $task */
         $task = $event->getGroupKey();
-        $category = \sprintf('%s / %s', $task->getGroupCode(), $task->getCategoryCode());
+        $category = $this->joinTexts($task->getGroupCode(), $task->getCategoryCode());
         $event->table->startRow()
             ->add(text: $task->getName(), style: $event->group->getStyle())
             ->add($category)
@@ -52,7 +51,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         $table = $this->createTable();
         $table->getGroupStyle()?->setFontBold();
         $itemStyle = PdfStyle::getCellStyle()
-            ->setIndent(4);
+            ->setIndent(2);
         $emptyStyle = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
         foreach ($entities as $entity) {
@@ -71,9 +70,9 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                 }
                 if ($item->isEmpty()) {
                     $table->startRow()
-                        ->add(text: $item->getName(), style: $itemStyle)
-                        ->add('')
-                        ->add('')
+                        ->add($item->getName(), style: $itemStyle)
+                        ->add()
+                        ->add()
                         ->add($this->trans('taskitem.edit.empty_items'), 3)
                         ->endRow();
                 } else {
@@ -81,16 +80,16 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                     foreach ($item->getMargins() as $margin) {
                         $table->startRow();
                         if (0 === $index++) {
-                            $table->add(text: $item->getName(), style: $itemStyle);
+                            $table->add($item->getName(), style: $itemStyle);
                         } else {
                             $table->add();
                         }
                         $style = $this->isFloatZero($margin->getValue()) ? $emptyStyle : null;
                         $table->add()
                             ->add()
-                            ->add(FormatUtils::formatAmount($margin->getMinimum()))
-                            ->add(FormatUtils::formatAmount($margin->getMaximum()))
-                            ->add(text: FormatUtils::formatAmount($margin->getValue()), style: $style)
+                            ->addAmount($margin->getMinimum())
+                            ->addAmount($margin->getMaximum())
+                            ->addAmount($margin->getValue(), style: $style)
                             ->endRow();
                     }
                 }
@@ -105,9 +104,11 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
      */
     private function createTable(): PdfGroupTable
     {
+        $name = $this->joinTexts($this->trans('task.name'), $this->trans('task.fields.item'));
+
         return PdfGroupTable::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('task.fields.name'), 40),
+                PdfColumn::left($name, 40),
                 PdfColumn::left($this->trans('task.fields.category'), 50, true),
                 PdfColumn::left($this->trans('task.fields.unit'), 15, true),
                 PdfColumn::right($this->trans('taskitemmargin.fields.minimum'), 20, true),
@@ -115,5 +116,10 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                 PdfColumn::right($this->trans('taskitemmargin.fields.value'), 20, true)
             )->outputHeaders()
             ->setGroupListener($this);
+    }
+
+    private function joinTexts(string $first, string $second): string
+    {
+        return \sprintf('%s / %s', $first, $second);
     }
 }

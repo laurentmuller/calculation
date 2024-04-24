@@ -26,8 +26,8 @@ use fpdf\PdfUnit;
  */
 class HtmlReport extends AbstractReport
 {
-    private ?float $currentLeftMargin = null;
-    private ?float $currentRightMargin = null;
+    private ?float $defaultLeftMargin = null;
+    private ?float $defaultRightMargin = null;
 
     public function __construct(
         AbstractController $controller,
@@ -101,25 +101,25 @@ class HtmlReport extends AbstractReport
     ): void {
         parent::beginPage($orientation, $size, $rotation);
         if (1 === $this->page) {
-            $this->currentLeftMargin = $this->leftMargin;
-            $this->currentRightMargin = $this->rightMargin;
+            $this->defaultLeftMargin = $this->leftMargin;
+            $this->defaultRightMargin = $this->rightMargin;
         }
     }
 
     /**
      * Apply the default left and right margins.
      *
-     * @return float[] the previous left and right margins
+     * @return array{0: float, 1: float} the previous left and right margins
      */
     private function applyDefaultMargins(): array
     {
         $leftMargin = $this->leftMargin;
         $rightMargin = $this->rightMargin;
-        if (null !== $this->currentLeftMargin && $this->currentLeftMargin !== $leftMargin) {
-            $this->x = $this->rightMargin = $this->currentLeftMargin;
+        if (null !== $this->defaultLeftMargin && $this->defaultLeftMargin !== $leftMargin) {
+            $this->x = $this->defaultLeftMargin;
         }
-        if (null !== $this->currentRightMargin && $this->currentRightMargin !== $rightMargin) {
-            $this->rightMargin = $this->currentRightMargin;
+        if (null !== $this->defaultRightMargin && $this->defaultRightMargin !== $rightMargin) {
+            $this->rightMargin = $this->defaultRightMargin;
         }
 
         return [$leftMargin, $rightMargin];
@@ -128,7 +128,7 @@ class HtmlReport extends AbstractReport
     /**
      * Apply the previous left and right margins.
      *
-     * @param float[] $previousMargins the previous left and right margins to apply
+     * @param array{0: float, 1: float} $previousMargins the previous left and right margins to apply
      */
     private function applyPreviousMargins(array $previousMargins): void
     {

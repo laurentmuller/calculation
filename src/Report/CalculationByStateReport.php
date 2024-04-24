@@ -49,7 +49,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     use StateTotalsTrait;
 
     /** @psalm-var QueryCalculationType|null */
-    private ?array $currentRow = null;
+    private ?array $currentEntity = null;
     private float $minMargin;
 
     /**
@@ -67,10 +67,10 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
 
     public function drawCellText(PdfCellTextEvent $event): bool
     {
-        if (0 !== $event->index || null === $this->currentRow) {
+        if (0 !== $event->index || null === $this->currentEntity) {
             return false;
         }
-        if (!$this->applyFillColor($this->currentRow)) {
+        if (!$this->applyFillColor($this->currentEntity)) {
             return false;
         }
 
@@ -184,7 +184,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
     /**
      * @psalm-param \NumberFormatter::ROUND_* $roundingMode
      */
-    private function formatPercent(
+    private function getPercentCell(
         float $value,
         int $decimals = 2,
         bool $useStyle = false,
@@ -244,33 +244,33 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         foreach ($entities as $entity) {
             $x = $this->getX();
             $y = $this->getY();
-            $this->currentRow = $entity;
-            $table->addRow(
-                $entity['code'],
-                FormatUtils::formatInt($entity['count']),
-                $this->formatPercent($entity['percent_calculation']),
-                FormatUtils::formatAmount($entity['items']),
-                FormatUtils::formatAmount($entity['margin_amount']),
-                $this->formatPercent($entity['margin_percent'], 0, true),
-                FormatUtils::formatAmount($entity['total']),
-                $this->formatPercent($entity['percent_amount'])
-            );
+            $this->currentEntity = $entity;
+            $table->startRow()
+                ->add($entity['code'])
+                ->addInt($entity['count'])
+                ->addCell($this->getPercentCell($entity['percent_calculation']))
+                ->addAmount($entity['items'])
+                ->addAmount($entity['margin_amount'])
+                ->addCell($this->getPercentCell($entity['margin_percent'], 0, true))
+                ->addAmount($entity['total'])
+                ->addCell($this->getPercentCell($entity['percent_amount']))
+                ->endRow();
             $link = $this->getURL($entity['id']);
             $this->link($x, $y, $width, $this->getY() - $y, $link);
         }
-        $this->currentRow = null;
+        $this->currentEntity = null;
 
         // totals
         $totals = $this->getStateTotals($entities);
-        $table->addHeaderRow(
-            $this->trans('calculation.fields.total'),
-            FormatUtils::formatInt($totals['calculation_count']),
-            $this->formatPercent($totals['calculation_percent'], bold: true),
-            FormatUtils::formatAmount($totals['items_amount']),
-            FormatUtils::formatAmount($totals['margin_amount']),
-            $this->formatPercent($totals['margin_percent'], 0, bold: true, roundingMode: \NumberFormatter::ROUND_DOWN),
-            FormatUtils::formatAmount($totals['total_amount']),
-            $this->formatPercent($totals['total_percent'], bold: true)
-        );
+        $table->startHeaderRow()
+            ->add($this->trans('calculation.fields.total'))
+            ->addInt($totals['calculation_count'])
+            ->addCell($this->getPercentCell($totals['calculation_percent'], bold: true))
+            ->addAmount($totals['items_amount'])
+            ->addAmount($totals['margin_amount'])
+            ->addCell($this->getPercentCell($totals['margin_percent'], 0, bold: true, roundingMode: \NumberFormatter::ROUND_DOWN))
+            ->addAmount($totals['total_amount'])
+            ->addCell($this->getPercentCell($totals['total_percent'], bold: true))
+            ->endRow();
     }
 }

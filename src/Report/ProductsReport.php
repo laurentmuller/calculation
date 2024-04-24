@@ -16,7 +16,6 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
-use App\Utils\FormatUtils;
 
 /**
  * Report for the list of products.
@@ -55,7 +54,7 @@ class ProductsReport extends AbstractArrayReport
             $style = $this->isFloatZero($entity->getPrice()) ? $style : null;
             $table->startRow()
                 ->add($entity->getDescription())
-                ->add(text: FormatUtils::formatAmount($entity->getPrice()), style: $style)
+                ->addAmount($entity->getPrice(), style: $style)
                 ->add($entity->getUnit())
                 ->add($entity->getSupplier())
                 ->endRow();

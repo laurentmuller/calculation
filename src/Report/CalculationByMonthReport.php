@@ -65,7 +65,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     /** @psalm-var \WeakMap<PdfColorInterface, PdfTextColor>  */
     private \WeakMap $colors;
     /*** @psalm-var CalculationByMonthType|null */
-    private ?array $currentItem = null;
+    private ?array $currentEntity = null;
     private bool $drawHeaders = false;
     /*** @psalm-var CalculationByMonthType|null */
     private ?array $lastItem = null;
@@ -195,14 +195,23 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return true;
     }
 
-    private function formatDate(\DateTimeInterface $date, bool $forTable): string
+    private function getArrowColor(PdfColorInterface $color): PdfTextColor
+    {
+        if (!isset($this->colors[$color])) {
+            return $this->colors[$color] = $color->getTextColor();
+        }
+
+        return $this->colors[$color];
+    }
+
+    private function getDateCell(\DateTimeInterface $date, bool $forTable): string
     {
         $pattern = $forTable ? self::PATTERN_TABLE : self::PATTERN_CHART;
 
         return FormatUtils::formatDate(date: $date, pattern: $pattern);
     }
 
-    private function formatPercent(float $value, bool $bold = false): PdfCell
+    private function getPercentCell(float $value, bool $bold = false): PdfCell
     {
         $cell = new PdfCell(FormatUtils::formatPercent($value));
         $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
@@ -211,15 +220,6 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         }
 
         return $cell->setStyle($style);
-    }
-
-    private function getArrowColor(PdfColorInterface $color): PdfTextColor
-    {
-        if (!isset($this->colors[$color])) {
-            return $this->colors[$color] = $color->getTextColor();
-        }
-
-        return $this->colors[$color];
     }
 
     private function getURL(\DateTimeInterface $date): string
@@ -236,14 +236,14 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
 
     private function outputArrow(PdfRectangle $bounds, string $key, bool $percent = false): false
     {
-        if (null === $this->lastItem || null === $this->currentItem) {
+        if (null === $this->lastItem || null === $this->currentEntity) {
             return false;
         }
 
         $rotate = false;
         $precision = $percent ? 2 : 0;
         $oldValue = $this->roundValue((float) $this->lastItem[$key], $precision);
-        $newValue = $this->roundValue((float) $this->currentItem[$key], $precision);
+        $newValue = $this->roundValue((float) $this->currentEntity[$key], $precision);
         if ($oldValue < $newValue) {
             $chr = \chr(self::ARROW_UP);
             $color = HtmlBootstrapColor::SUCCESS;
@@ -283,7 +283,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             $h = $this->pageBreakTrigger - $top - 2.0 * self::LINE_HEIGHT;
         }
         $rows = \array_map(fn (array $entity): array => [
-            'label' => $this->formatDate($entity['date'], false),
+            'label' => $this->getDateCell($entity['date'], false),
             'link' => $this->getURL($entity['date']),
             'values' => [
                 ['color' => self::COLOR_ITEM, 'value' => $entity['items']],
@@ -315,20 +315,21 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         foreach ($entities as $entity) {
             $x = $this->getX();
             $y = $this->getY();
-            $this->currentItem = $entity;
-            $table->addRow(
-                $this->formatDate($entity['date'], true),
-                FormatUtils::formatInt($entity['count']),
-                FormatUtils::formatInt($entity['items']),
-                FormatUtils::formatInt($entity['margin_amount']),
-                $this->formatPercent($entity['margin_percent']),
-                FormatUtils::formatInt($entity['total'])
-            );
+            $this->currentEntity = $entity;
+
+            $table->startRow()
+                ->add($this->getDateCell($entity['date'], true))
+                ->addInt($entity['count'])
+                ->addInt($entity['items'])
+                ->addInt($entity['margin_amount'])
+                ->addCell($this->getPercentCell($entity['margin_percent']))
+                ->addInt($entity['total'])
+                ->endRow();
             $link = $this->getURL($entity['date']);
             $this->link($x, $y, $width, $this->getY() - $y, $link);
             $this->lastItem = $entity;
         }
-        $this->currentItem = $this->lastItem = null;
+        $this->currentEntity = $this->lastItem = null;
         $table->setBackgroundListener(null)
             ->setHeadersListener(null)
             ->setTextListener(null);
@@ -339,14 +340,14 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $total = $this->getColumnSum($entities, 'total');
         $net = $total - $items;
         $margin = 1.0 + $this->safeDivide($net, $items);
-        $table->addHeaderRow(
-            $this->trans('calculation.fields.total'),
-            FormatUtils::formatInt($count),
-            FormatUtils::formatInt($items),
-            FormatUtils::formatInt($net),
-            $this->formatPercent($margin, true),
-            FormatUtils::formatInt($total)
-        );
+        $table->startHeaderRow()
+            ->add($this->trans('calculation.fields.total'))
+            ->addInt($count)
+            ->addInt($items)
+            ->addInt($net)
+            ->addCell($this->getPercentCell($margin, true))
+            ->addInt($total)
+            ->endRow();
     }
 
     private function roundValue(float $value, int $precision = 0): float

@@ -24,7 +24,6 @@ use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
-use App\Utils\FormatUtils;
 use fpdf\PdfBorder;
 use fpdf\PdfDocument;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -141,17 +140,6 @@ class TableItems extends PdfGroupTable
     }
 
     /**
-     * Adds format amount with an error style if the amount is equal to 0.
-     *
-     * @param float     $amount     the amount to output
-     * @param ?PdfStyle $errorStyle the error style to use when amount is equal to 0
-     */
-    private function addAmount(float $amount, ?PdfStyle $errorStyle = null): self
-    {
-        return $this->add(text: FormatUtils::formatAmount($amount), style: 0.0 === $amount ? $errorStyle : null);
-    }
-
-    /**
      * Adds description with an error style if duplicate.
      *
      * @param CalculationItem $item           the item to get description for
@@ -165,6 +153,17 @@ class TableItems extends PdfGroupTable
         $this->add(text: $item->getDescription(), style: $style);
 
         return $this;
+    }
+
+    /**
+     * Adds format amount with an error style if the amount is equal to 0.
+     *
+     * @param float     $amount     the amount to output
+     * @param ?PdfStyle $errorStyle the error style to use when amount is equal to 0
+     */
+    private function addStyledAmount(float $amount, ?PdfStyle $errorStyle = null): self
+    {
+        return $this->addAmount($amount, style: 0.0 === $amount ? $errorStyle : null);
     }
 
     private function checkLines(int $lines): void
@@ -216,9 +215,9 @@ class TableItems extends PdfGroupTable
         $this->startRow()
             ->addDescription($item, $duplicateItems, $defaultStyle, $errorStyle)
             ->add($item->getUnit())
-            ->addAmount($item->getPrice(), $errorStyle)
-            ->addAmount($item->getQuantity(), $errorStyle)
-            ->addAmount($item->getTotal())
+            ->addStyledAmount($item->getPrice(), $errorStyle)
+            ->addStyledAmount($item->getQuantity(), $errorStyle)
+            ->addStyledAmount($item->getTotal())
             ->endRow();
     }
 

@@ -14,7 +14,10 @@ namespace App\Tests\Service;
 
 use App\Service\HelpService;
 use App\Tests\ServiceTrait;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(HelpService::class)]
 class HelpServiceTest extends KernelTestCase
@@ -116,6 +119,27 @@ class HelpServiceTest extends KernelTestCase
     {
         $help = $this->service->getHelp();
         self::assertNotEmpty($help);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testInvalidFile(): void
+    {
+        $file = __FILE__;
+        $imagePath = __DIR__;
+        $cache = $this->getService(CacheInterface::class);
+        $translator = $this->createMock(TranslatorInterface::class);
+        $service = new HelpService($file, $imagePath, $cache, $translator);
+
+        $help = $service->getHelp();
+        self::assertEmpty($help['actions']);
+        self::assertEmpty($help['dialogs']);
+        self::assertEmpty($help['entities']);
+        self::assertNull($help['mainMenu']['image']);
+        self::assertNull($help['mainMenu']['description']);
+        self::assertEmpty($help['mainMenu']['menus']);
+        self::assertEmpty($service->getDialogsByGroup());
     }
 
     public function testMergeAction(): void

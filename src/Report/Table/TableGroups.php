@@ -19,7 +19,6 @@ use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Report\CalculationReport;
 use App\Traits\TranslatorTrait;
-use App\Utils\FormatUtils;
 use fpdf\PdfBorder;
 use fpdf\PdfTextAlignment;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -85,16 +84,6 @@ class TableGroups extends PdfTable
         return $this;
     }
 
-    private function addAmount(float $number, ?PdfStyle $style = null): self
-    {
-        return $this->add(text: FormatUtils::formatAmount($number), style: $style);
-    }
-
-    private function addPercent(float $number, ?PdfStyle $style = null): self
-    {
-        return $this->add(text: FormatUtils::formatPercent($number), style: $style);
-    }
-
     private function createColumns(): void
     {
         $columns = [
@@ -130,9 +119,9 @@ class TableGroups extends PdfTable
         $style = PdfStyle::getHeaderStyle()->setFontRegular();
         $this->startHeaderRow()
             ->add($this->trans('calculation.fields.marginTotal'))
-            ->addAmount($calculation->getGroupsAmount(), $style)
-            ->addPercent($calculation->getGroupsMargin(), $style)
-            ->addAmount($calculation->getGroupsMarginAmount(), $style)
+            ->addAmount($calculation->getGroupsAmount(), style: $style)
+            ->addPercent($calculation->getGroupsMargin(), style: $style)
+            ->addAmount($calculation->getGroupsMarginAmount(), style: $style)
             ->addAmount($calculation->getGroupsTotal())
             ->endRow();
     }

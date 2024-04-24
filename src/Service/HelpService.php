@@ -358,16 +358,6 @@ class HelpService
         }
     }
 
-    private function transSplit(string $id): string
-    {
-        $values = \explode('|', $id);
-        if (\count($values) > 1) {
-            return $this->trans($values[0], [], $values[1]);
-        }
-
-        return $this->trans($values[0]);
-    }
-
     /**
      * @psalm-param HelpDialogType[] $dialogs
      *
@@ -382,8 +372,8 @@ class HelpService
         /** @psalm-param HelpDialogType $value */
         foreach ($dialogs as &$value) {
             $group = $this->getDialogGroup($value);
-            $value['group'] = $this->transSplit($group);
-            $value['name'] = $this->transSplit($value['name'] ?? $value['id']);
+            $value['group'] = $this->trans($group);
+            $value['name'] = $this->trans($value['name'] ?? $value['id']);
         }
 
         \usort(
@@ -406,8 +396,8 @@ class HelpService
                     return $isListA <=> $isListB;
                 }
 
-                $nameA = $this->transSplit($idA);
-                $nameB = $this->transSplit($idB);
+                $nameA = $this->trans($idA);
+                $nameB = $this->trans($idB);
 
                 return \strnatcmp($nameA, $nameB);
             }

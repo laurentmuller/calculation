@@ -171,7 +171,6 @@ final class CalculationService implements ServiceSubscriberInterface
     {
         /** @psalm-var ServiceGroupType[] $groups */
         $groups = [];
-        // $json = json_encode($source);
         $source_groups = $this->getArrayByKey($source, 'groups');
         if (!\is_array($source_groups)) {
             return $this->createEmptyParameters();

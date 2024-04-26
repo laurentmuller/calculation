@@ -49,7 +49,7 @@ class GroupTest extends AbstractEntityValidatorTestCase
     {
         $group = new Group();
         $margin = $this->createMargin();
-        $this->setId($margin, 10);
+        self::setId($margin, 10);
         $group->addMargin($margin);
 
         $clone = clone $group;

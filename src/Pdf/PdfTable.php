@@ -134,27 +134,6 @@ class PdfTable
     }
 
     /**
-     * Adds a right aligned cell, with formatted value as amount, to the current row.
-     *
-     * @param float|int|string|null $number the number to format
-     * @param int                   $cols   the number of columns to span
-     * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
-     * @param string|int|null       $link   the cell link. A URL or identifier returned by AddLink().
-     *
-     * @psalm-param positive-int $cols
-     */
-    public function addAmount(
-        float|int|string|null $number,
-        int $cols = 1,
-        ?PdfStyle $style = null,
-        string|int|null $link = null
-    ): static {
-        $text = FormatUtils::formatAmount($number);
-
-        return $this->addCell(new PdfCell($text, $cols, $style, PdfTextAlignment::RIGHT, $link));
-    }
-
-    /**
      * Adds the given cell to the list of cells.
      *
      * Do nothing if the cell is null.
@@ -171,6 +150,72 @@ class PdfTable
         }
 
         return $this;
+    }
+
+    /**
+     * Adds a right aligned cell, with formatted value as amount, to the current row.
+     *
+     * @param float|int|string|null $number the number to format
+     * @param int                   $cols   the number of columns to span
+     * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
+     * @param string|int|null       $link   the cell link. A URL or identifier returned by AddLink().
+     *
+     * @psalm-param positive-int $cols
+     */
+    public function addCellAmount(
+        float|int|string|null $number,
+        int $cols = 1,
+        ?PdfStyle $style = null,
+        ?PdfTextAlignment $alignment = PdfTextAlignment::RIGHT,
+        string|int|null $link = null
+    ): static {
+        return $this->addCell(
+            new PdfCell(FormatUtils::formatAmount($number), $cols, $style, $alignment, $link)
+        );
+    }
+
+    /**
+     * Adds a right aligned cell, with formatted value as integer, to the current row.
+     *
+     * @param \Countable|array|int|float|string|null $number the number to format
+     * @param int                                    $cols   the number of columns to span
+     * @param ?PdfStyle                              $style  the cell style to use or null to use the default cell style
+     * @param string|int|null                        $link   the cell link. A URL or identifier returned by AddLink().
+     *
+     * @psalm-param positive-int $cols
+     */
+    public function addCellInt(
+        \Countable|array|int|float|string|null $number,
+        int $cols = 1,
+        ?PdfStyle $style = null,
+        ?PdfTextAlignment $alignment = PdfTextAlignment::RIGHT,
+        string|int|null $link = null
+    ): static {
+        return $this->addCell(
+            new PdfCell(FormatUtils::formatInt($number), $cols, $style, $alignment, $link)
+        );
+    }
+
+    /**
+     * Adds a right aligned cell, with formatted value as percent, to the current row.
+     *
+     * @param float|int|string|null $number the number to format
+     * @param int                   $cols   the number of columns to span
+     * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
+     * @param string|int|null       $link   the cell link. A URL or identifier returned by AddLink().
+     *
+     * @psalm-param positive-int $cols
+     */
+    public function addCellPercent(
+        float|int|string|null $number,
+        int $cols = 1,
+        ?PdfStyle $style = null,
+        ?PdfTextAlignment $alignment = PdfTextAlignment::RIGHT,
+        string|int|null $link = null
+    ): static {
+        return $this->addCell(
+            new PdfCell(FormatUtils::formatPercent($number), $cols, $style, $alignment, $link)
+        );
     }
 
     /**
@@ -219,48 +264,6 @@ class PdfTable
             ->completeRow();
 
         return $this;
-    }
-
-    /**
-     * Adds a right aligned cell, with formatted value as integer, to the current row.
-     *
-     * @param \Countable|array|int|float|string|null $number the number to format
-     * @param int                                    $cols   the number of columns to span
-     * @param ?PdfStyle                              $style  the cell style to use or null to use the default cell style
-     * @param string|int|null                        $link   the cell link. A URL or identifier returned by AddLink().
-     *
-     * @psalm-param positive-int $cols
-     */
-    public function addInt(
-        \Countable|array|int|float|string|null $number,
-        int $cols = 1,
-        ?PdfStyle $style = null,
-        string|int|null $link = null
-    ): static {
-        $text = FormatUtils::formatInt($number);
-
-        return $this->addCell(new PdfCell($text, $cols, $style, PdfTextAlignment::RIGHT, $link));
-    }
-
-    /**
-     * Adds a right aligned cell, with formatted value as percent, to the current row.
-     *
-     * @param float|int|string|null $number the number to format
-     * @param int                   $cols   the number of columns to span
-     * @param ?PdfStyle             $style  the cell style to use or null to use the default cell style
-     * @param string|int|null       $link   the cell link. A URL or identifier returned by AddLink().
-     *
-     * @psalm-param positive-int $cols
-     */
-    public function addPercent(
-        float|int|string|null $number,
-        int $cols = 1,
-        ?PdfStyle $style = null,
-        string|int|null $link = null
-    ): static {
-        $text = FormatUtils::formatPercent($number);
-
-        return $this->addCell(new PdfCell($text, $cols, $style, PdfTextAlignment::RIGHT, $link));
     }
 
     /**
@@ -844,8 +847,7 @@ class PdfTable
      *     1: PdfStyle[],
      *     2: PdfTextAlignment[],
      *     3: float[],
-     *     4: bool[]
-     * }
+     *     4: bool[]}
      */
     private function computeCells(array $cells, array $columns): array
     {

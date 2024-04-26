@@ -18,14 +18,14 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfDocument;
 
 /**
- * Class implementing this interface handle colors.
+ * Class implementing this interface handles colors.
  */
 interface PdfColorInterface
 {
     /**
      * Apply this draw color to the given document.
      *
-     * @throws \InvalidArgumentException if the color can not be created
+     * @throws \InvalidArgumentException if the color cannot be created
      *
      * @see PdfColorInterface::getDrawColor()
      */
@@ -34,7 +34,7 @@ interface PdfColorInterface
     /**
      * Apply this fill color to the given document.
      *
-     * @throws \InvalidArgumentException if the color can not be created
+     * @throws \InvalidArgumentException if the color cannot be created
      *
      * @see PdfColorInterface::getFillColor()
      */
@@ -43,7 +43,7 @@ interface PdfColorInterface
     /**
      * Apply this text color to the given document.
      *
-     * @throws \InvalidArgumentException if the color can not be created
+     * @throws \InvalidArgumentException if the color cannot be created
      *
      * @see PdfColorInterface::getTextColor()
      */
@@ -68,14 +68,14 @@ interface PdfColorInterface
     /**
      * Gets this value as draw color.
      *
-     * @throws \InvalidArgumentException if the color can not be created
+     * @throws \InvalidArgumentException if the color cannot be created
      */
     public function getDrawColor(): PdfDrawColor;
 
     /**
      * Gets this value as fill color.
      *
-     * @throws \InvalidArgumentException if the color can not be created
+     * @throws \InvalidArgumentException if the color cannot be created
      */
     public function getFillColor(): PdfFillColor;
 
@@ -87,7 +87,7 @@ interface PdfColorInterface
     /**
      * Gets this value as text color.
      *
-     * @throws \InvalidArgumentException if the color can not be created
+     * @throws \InvalidArgumentException if the color cannot be created
      */
     public function getTextColor(): PdfTextColor;
 }

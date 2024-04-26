@@ -116,8 +116,8 @@ class PhpIniReport extends AbstractReport
                 $master = $this->convert($entryValue['master']);
                 $table->startRow()
                     ->add($this->convert($entryKey))
-                    ->add(text: $local, style: $this->getCellStyle($local))
-                    ->add(text: $master, style: $this->getCellStyle($master))
+                    ->add($local, style: $this->getCellStyle($local))
+                    ->add($master, style: $this->getCellStyle($master))
                     ->endRow();
             } else {
                 $value = $this->convert($entryValue);

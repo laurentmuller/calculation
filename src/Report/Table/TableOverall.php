@@ -16,34 +16,22 @@ use App\Entity\Calculation;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTable;
 use App\Report\CalculationReport;
-use App\Traits\TranslatorTrait;
 use fpdf\PdfBorder;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Table to render the overall totals of a calculation.
  */
-class TableOverall extends PdfTable
+class TableOverall extends ReportTable
 {
-    use TranslatorTrait;
-
     private readonly Calculation $calculation;
     private readonly float $minMargin;
-    private readonly TranslatorInterface $translator;
 
     public function __construct(CalculationReport $parent)
     {
-        parent::__construct($parent);
-        $this->translator = $parent->getTranslator();
+        parent::__construct($parent, $parent->getTranslator());
         $this->calculation = $parent->getCalculation();
         $this->minMargin = $parent->getMinMargin();
-    }
-
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
     }
 
     /**
@@ -103,11 +91,11 @@ class TableOverall extends PdfTable
     private function outputGlobalMargin(float $globalMargin, float $globalAmount): self
     {
         return $this->startRow()
-            ->add($this->trans('calculation.fields.globalMargin'))
+            ->addCellTrans('calculation.fields.globalMargin')
             ->add()
-            ->addPercent($globalMargin)
+            ->addCellPercent($globalMargin)
             ->add()
-            ->addAmount($globalAmount)
+            ->addCellAmount($globalAmount)
             ->endRow();
     }
 
@@ -118,11 +106,11 @@ class TableOverall extends PdfTable
             $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         }
         $this->startHeaderRow()
-            ->add($this->trans('calculation.fields.overallTotal'))
-            ->addAmount($totalItems)
-            ->addPercent($calculation->getOverallMargin(), style: $style)
-            ->addAmount($calculation->getOverallMarginAmount())
-            ->addAmount($calculation->getOverallTotal())
+            ->addCellTrans('calculation.fields.overallTotal')
+            ->addCellAmount($totalItems)
+            ->addCellPercent($calculation->getOverallMargin(), style: $style)
+            ->addCellAmount($calculation->getOverallMarginAmount())
+            ->addCellAmount($calculation->getOverallTotal())
             ->endRow();
 
         return $this;
@@ -132,15 +120,15 @@ class TableOverall extends PdfTable
     {
         if (0.0 !== $userMargin) {
             $this->startHeaderRow()
-                ->add($this->trans('calculation.fields.totalNet'), 4)
-                ->addAmount($totalNet)
+                ->addCellTrans('calculation.fields.totalNet', cols: 4)
+                ->addCellAmount($totalNet)
                 ->endRow();
             $this->startRow()
-                ->add($this->trans('calculation.fields.userMargin'))
+                ->addCellTrans('calculation.fields.userMargin')
                 ->add()
-                ->addPercent($userMargin)
+                ->addCellPercent($userMargin)
                 ->add()
-                ->addAmount($userAmount)
+                ->addCellAmount($userAmount)
                 ->endRow();
         }
 

@@ -63,7 +63,7 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
                 ->add($entity['stateCode'])
                 ->add($entity['customer'])
                 ->add($entity['description'])
-                ->add(text: $this->formatItems($entity['items']), style: $style)
+                ->add($this->formatItems($entity['items']), style: $style)
                 ->endRow();
         }
         PdfStyle::default()->apply($this);

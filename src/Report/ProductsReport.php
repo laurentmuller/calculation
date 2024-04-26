@@ -54,7 +54,7 @@ class ProductsReport extends AbstractArrayReport
             $style = $this->isFloatZero($entity->getPrice()) ? $style : null;
             $table->startRow()
                 ->add($entity->getDescription())
-                ->addAmount($entity->getPrice(), style: $style)
+                ->addCellAmount($entity->getPrice(), style: $style)
                 ->add($entity->getUnit())
                 ->add($entity->getSupplier())
                 ->endRow();

@@ -59,7 +59,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
                 ->add($entity->getDescription())
                 ->add($this->formatEditable($entity->isEditable()))
                 ->add(style: $this->getColorStyle($entity))
-                ->addInt($entity->countCalculations())
+                ->addCellInt($entity->countCalculations())
                 ->endRow();
             $this->currentState = null;
         }

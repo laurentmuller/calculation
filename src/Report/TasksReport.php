@@ -17,8 +17,8 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
+use App\Report\Table\ReportGroupTable;
 
 /**
  * Report for the list of tasks.
@@ -29,17 +29,19 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
 {
     public function outputGroup(PdfGroupEvent $event): bool
     {
+        /** @var ReportGroupTable $table */
+        $table = $event->table;
         /** @var Task $task */
         $task = $event->getGroupKey();
         $category = $this->joinTexts($task->getGroupCode(), $task->getCategoryCode());
-        $event->table->startRow()
-            ->add(text: $task->getName(), style: $event->group->getStyle())
+        $table->startRow()
+            ->add($task->getName(), style: $event->group->getStyle())
             ->add($category)
             ->add($task->getUnit());
         if ($task->isEmpty()) {
-            $event->table->add($this->trans('task.edit.empty_items'), 3);
+            $table->addCellTrans('task.edit.empty_items', cols: 3);
         }
-        $event->table->completeRow();
+        $table->completeRow();
 
         return true;
     }
@@ -73,7 +75,7 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                         ->add($item->getName(), style: $itemStyle)
                         ->add()
                         ->add()
-                        ->add($this->trans('taskitem.edit.empty_items'), 3)
+                        ->addCellTrans('taskitem.edit.empty_items', cols: 3)
                         ->endRow();
                 } else {
                     $index = 0;
@@ -87,9 +89,9 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
                         $style = $this->isFloatZero($margin->getValue()) ? $emptyStyle : null;
                         $table->add()
                             ->add()
-                            ->addAmount($margin->getMinimum())
-                            ->addAmount($margin->getMaximum())
-                            ->addAmount($margin->getValue(), style: $style)
+                            ->addCellAmount($margin->getMinimum())
+                            ->addCellAmount($margin->getMaximum())
+                            ->addCellAmount($margin->getValue(), style: $style)
                             ->endRow();
                     }
                 }
@@ -102,11 +104,11 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
     /**
      * Creates the table builder.
      */
-    private function createTable(): PdfGroupTable
+    private function createTable(): ReportGroupTable
     {
         $name = $this->joinTexts($this->trans('task.name'), $this->trans('task.fields.item'));
 
-        return PdfGroupTable::instance($this)
+        return ReportGroupTable::fromReport($this)
             ->addColumns(
                 PdfColumn::left($name, 40),
                 PdfColumn::left($this->trans('task.fields.category'), 50, true),

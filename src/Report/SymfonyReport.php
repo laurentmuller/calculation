@@ -14,7 +14,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
@@ -157,7 +156,7 @@ class SymfonyReport extends AbstractReport
             ->outputHeaders();
         foreach ($packages as $package) {
             $table->startRow()
-                ->addCell(new PdfCell(text: $package['name'], link: $package['homepage']))
+                ->add($package['name'], link: $package['homepage'])
                 ->add($package['version'])
                 ->add($package['description'])
                 ->endRow();

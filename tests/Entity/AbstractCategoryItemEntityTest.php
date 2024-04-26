@@ -36,7 +36,7 @@ class AbstractCategoryItemEntityTest extends TestCase
 
         $category = new Category();
         $category->setCode('code');
-        $this->setId($category);
+        self::setId($category);
         $entity->setCategory($category);
         self::assertSame($category, $entity->getCategory());
         self::assertSame(1, $entity->getCategoryId());
@@ -73,7 +73,7 @@ class AbstractCategoryItemEntityTest extends TestCase
     {
         $entity = new class() extends AbstractCategoryItemEntity {};
         if (\is_int($id)) {
-            return $this->setId($entity, $id);
+            return self::setId($entity, $id);
         }
 
         return $entity;

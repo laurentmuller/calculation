@@ -173,7 +173,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * conditions data for a specific location.
      *
      * @param int    $id    the city identifier
-     * @param int    $count the number of result to return or -1 for all
+     * @param int    $count the number of results to return or -1 for all
      * @param string $units the units to use
      *
      * @psalm-return array{current: array|false, forecast: array|false, daily: array|false}
@@ -188,7 +188,7 @@ class OpenWeatherService extends AbstractHttpClientService
     }
 
     /**
-     * Returns current conditions data for a specific location.
+     * Returns the current conditions data for a specific location.
      *
      * @param int    $id    the city identifier
      * @param string $units the units to use
@@ -209,7 +209,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * Returns daily forecast conditions data for a specific location.
      *
      * @param int    $id    the city identifier
-     * @param int    $count the number of result to return or -1 for all
+     * @param int    $count the number of results to return or -1 for all
      * @param string $units the units to use
      *
      * @return array|false the current conditions if success; false on error
@@ -231,7 +231,7 @@ class OpenWeatherService extends AbstractHttpClientService
      * Returns hourly forecast conditions data for a specific location.
      *
      * @param int    $id    the city identifier
-     * @param int    $count the number of result to return or -1 for all
+     * @param int    $count the number of results to return or -1 for all
      * @param string $units the units to use
      *
      * @return array|false the current conditions if success; false on error
@@ -293,7 +293,7 @@ class OpenWeatherService extends AbstractHttpClientService
     /**
      * Returns current conditions data for a group of cities.
      *
-     * @param int[]  $cityIds the city identifiers. The maximum number of city identifiers are 20.
+     * @param int[]  $cityIds the city identifiers. The maximum number is 20.
      * @param string $units   the units to use
      *
      * @return array|false the conditions for the given cities if success; false on error

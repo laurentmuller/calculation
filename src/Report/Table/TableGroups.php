@@ -16,33 +16,21 @@ use App\Entity\Calculation;
 use App\Entity\CalculationGroup;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTable;
 use App\Report\CalculationReport;
-use App\Traits\TranslatorTrait;
 use fpdf\PdfBorder;
 use fpdf\PdfTextAlignment;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Table to render the totals by calculation's group.
  */
-class TableGroups extends PdfTable
+class TableGroups extends ReportTable
 {
-    use TranslatorTrait;
-
     private readonly Calculation $calculation;
-    private readonly TranslatorInterface $translator;
 
     public function __construct(CalculationReport $parent)
     {
-        parent::__construct($parent);
-        $this->translator = $parent->getTranslator();
+        parent::__construct($parent, $parent->getTranslator());
         $this->calculation = $parent->getCalculation();
-    }
-
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
     }
 
     /**
@@ -98,7 +86,7 @@ class TableGroups extends PdfTable
         $this->startHeaderRow()
             ->add($columns[0]->getText())
             ->add($columns[1]->getText())
-            ->add(text: $this->trans('report.calculation.margins'), cols: 2, alignment: PdfTextAlignment::CENTER)
+            ->addCellTrans('report.calculation.margins', cols: 2, alignment: PdfTextAlignment::CENTER)
             ->add($columns[4]->getText())
             ->endRow();
     }
@@ -107,10 +95,10 @@ class TableGroups extends PdfTable
     {
         $this->startRow()
             ->add($group->getCode())
-            ->addAmount($group->getAmount())
-            ->addPercent($group->getMargin())
-            ->addAmount($group->getMarginAmount())
-            ->addAmount($group->getTotal())
+            ->addCellAmount($group->getAmount())
+            ->addCellPercent($group->getMargin())
+            ->addCellAmount($group->getMarginAmount())
+            ->addCellAmount($group->getTotal())
             ->endRow();
     }
 
@@ -118,11 +106,11 @@ class TableGroups extends PdfTable
     {
         $style = PdfStyle::getHeaderStyle()->setFontRegular();
         $this->startHeaderRow()
-            ->add($this->trans('calculation.fields.marginTotal'))
-            ->addAmount($calculation->getGroupsAmount(), style: $style)
-            ->addPercent($calculation->getGroupsMargin(), style: $style)
-            ->addAmount($calculation->getGroupsMarginAmount(), style: $style)
-            ->addAmount($calculation->getGroupsTotal())
+            ->addCellTrans('calculation.fields.marginTotal')
+            ->addCellAmount($calculation->getGroupsAmount(), style: $style)
+            ->addCellPercent($calculation->getGroupsMargin(), style: $style)
+            ->addCellAmount($calculation->getGroupsMarginAmount(), style: $style)
+            ->addCellAmount($calculation->getGroupsTotal())
             ->endRow();
     }
 }

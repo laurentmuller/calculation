@@ -35,7 +35,7 @@ class PdfFooter
     private ?string $date = null;
 
     /**
-     * The content URL.
+     * The link.
      */
     private ?string $url = null;
 

@@ -130,9 +130,9 @@ class CalculationsReport extends AbstractArrayReport
             ->add($entity->getFormattedDate())
             ->add($entity->getCustomer())
             ->add($entity->getDescription())
-            ->addAmount($items)
-            ->addPercent($entity->getOverallMargin(), style: $style)
-            ->addAmount($overall)
+            ->addCellAmount($items)
+            ->addCellPercent($entity->getOverallMargin(), style: $style)
+            ->addCellAmount($overall)
             ->endRow();
         $this->items += $items;
         $this->overall += $overall;
@@ -148,13 +148,14 @@ class CalculationsReport extends AbstractArrayReport
         $text = $this->translateCount($entities, 'counters.calculations');
         /** @psalm-var positive-int $columns */
         $columns = $table->getColumnsCount() - 3;
-        $table->getColumns()[0]->setAlignment(PdfTextAlignment::LEFT)
+        $table->getColumns()[0]
+            ->setAlignment(PdfTextAlignment::LEFT)
             ->setFixed(false);
         $table->startHeaderRow()
             ->add($text, $columns)
-            ->addAmount($this->items)
-            ->addPercent($margins, style: $style)
-            ->addAmount($this->overall)
+            ->addCellAmount($this->items)
+            ->addCellPercent($margins, style: $style)
+            ->addCellAmount($this->overall)
             ->endRow();
     }
 

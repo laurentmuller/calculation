@@ -28,30 +28,210 @@ use App\Repository\GroupRepository;
 use App\Service\ApplicationService;
 use App\Service\CalculationService;
 use App\Tests\DatabaseTrait;
+use App\Tests\Entity\IdTrait;
 use App\Tests\ServiceTrait;
+use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Exception\ORMException;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
+/**
+ * @psalm-import-type ServiceParametersType from CalculationService
+ */
 #[\PHPUnit\Framework\Attributes\CoversClass(CalculationService::class)]
 class CalculationServiceTest extends KernelTestCase
 {
     use DatabaseTrait;
+    use IdTrait;
     use ServiceTrait;
+    use TranslatorMockTrait;
 
     private const MARGIN_PERCENT = 1.1;
     private const MARGIN_USER = 0.1;
     private const PRODUCT_PRICE = 100.0;
     private const QUANTITY = 10.0;
 
+    /**
+     * @throws Exception
+     */
+    public function testAdjustUserMargin(): void
+    {
+        $service = $this->createCalculationService();
+
+        $group = [
+            'id' => 0,
+            'description' => 'description',
+            'amount' => 0.0,
+            'margin' => 0.0,
+            'margin_amount' => 0.0,
+            'total' => 0.0,
+        ];
+        $parameters = [
+            'result' => false,
+            'overall_below' => false,
+            'overall_margin' => 0.0,
+            'overall_total' => 0.0,
+            'min_margin' => 1.1,
+            'user_margin' => 0.05,
+            'groups' => [$group],
+        ];
+        $actual = $service->adjustUserMargin($parameters);
+        self::assertCount(7, $actual);
+
+        $parameters['groups'][] = [
+            'id' => 4,
+            'description' => 'ROW_TOTAL_NET',
+            'amount' => 10.0,
+            'margin' => 1.1,
+            'margin_amount' => 1.0,
+            'total' => 11.0,
+        ];
+        $parameters['groups'][] = [
+            'id' => 2,
+            'description' => 'ROW_TOTAL_GROUP',
+            'amount' => 10.0,
+            'margin' => 1.1,
+            'margin_amount' => 1.0,
+            'total' => 11.0,
+        ];
+
+        $actual = $service->adjustUserMargin($parameters);
+        self::assertCount(7, $actual);
+    }
+
+    /**
+     * @throws ORMException
+     * @throws Exception
+     */
+    public function testCreateGroupsFromCalculation(): void
+    {
+        self::bootKernel();
+
+        $product = $this->init();
+        $calculation = new Calculation();
+
+        $service = $this->createCalculationService();
+        $actual = $service->createGroupsFromCalculation($calculation);
+        self::assertCount(1, $actual);
+        self::assertArrayHasKey(0, $actual);
+
+        $row = $actual[0];
+        self::assertArrayHasKey('id', $row);
+        self::assertSame(0, $row['id']);
+        self::assertSame(0.0, $row['amount']);
+        self::assertSame(0.0, $row['margin']);
+        self::assertSame(0.0, $row['margin_amount']);
+        self::assertSame(0.0, $row['total']);
+
+        $calculation = new Calculation();
+        $calculation->addProduct($product, self::QUANTITY);
+        $actual = $service->createGroupsFromCalculation($calculation);
+        self::assertCount(6, $actual);
+
+        $calculation = new Calculation();
+        $calculation->addProduct($product, self::QUANTITY)
+            ->setUserMargin(self::MARGIN_USER);
+        $actual = $service->createGroupsFromCalculation($calculation);
+        self::assertCount(6, $actual);
+    }
+
+    /**
+     * @throws Exception
+     * @throws ORMException
+     * @throws \ReflectionException
+     */
+    public function testCreateGroupsFromData(): void
+    {
+        $json = <<<JSON
+            {
+                "userMargin": "5",
+                "groups": [
+                    {
+                        "position": "0",
+                        "code": "Travail",
+                        "group": "1",
+                        "categories": [
+                            {
+                                "position": "0",
+                                "code": "Employé",
+                                "category": "1",
+                                "items": [
+                                    {
+                                        "position": "0",
+                                        "description": "Fichier Préparation",
+                                        "unit": "heure",
+                                        "price": "90",
+                                        "quantity": "0.25"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+            JSON;
+
+        $group = new Group();
+        self::setId($group);
+
+        /** @psalm-var ServiceParametersType $source */
+        $source = \json_decode($json, true, \JSON_THROW_ON_ERROR);
+        $service = $this->createCalculationService($group);
+        $actual = $service->createGroupsFromData($source);
+        self::assertCount(7, $actual);
+        self::assertCount(7, $actual);
+        self::assertArrayHasKey('groups', $actual);
+        self::assertCount(6, $actual['groups']);
+    }
+
+    /**
+     * @throws Exception
+     * @throws ORMException
+     */
+    public function testCreateGroupsFromDataEmpty(): void
+    {
+        $service = $this->createCalculationService();
+        $actual = $service->createGroupsFromData([]);
+        self::assertCount(7, $actual);
+        self::assertArrayHasKey('groups', $actual);
+        self::assertCount(1, $actual['groups']);
+    }
+
     public function testGetConstants(): void
     {
         $constants = CalculationService::getConstants();
         self::assertCount(7, $constants);
+
+        self::assertArrayHasKey('ROW_EMPTY', $constants);
+        self::assertArrayHasKey('ROW_GLOBAL_MARGIN', $constants);
+        self::assertArrayHasKey('ROW_GROUP', $constants);
+        self::assertArrayHasKey('ROW_OVERALL_TOTAL', $constants);
+        self::assertArrayHasKey('ROW_TOTAL_GROUP', $constants);
+        self::assertArrayHasKey('ROW_TOTAL_NET', $constants);
+        self::assertArrayHasKey('ROW_USER_MARGIN', $constants);
+
+        self::assertSame(0, $constants['ROW_EMPTY']);
+        self::assertSame(3, $constants['ROW_GLOBAL_MARGIN']);
+        self::assertSame(1, $constants['ROW_GROUP']);
+        self::assertSame(6, $constants['ROW_OVERALL_TOTAL']);
+        self::assertSame(2, $constants['ROW_TOTAL_GROUP']);
+        self::assertSame(4, $constants['ROW_TOTAL_NET']);
+        self::assertSame(5, $constants['ROW_USER_MARGIN']);
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws Exception
+     */
+    public function testGetMinMargin(): void
+    {
+        $service = $this->createCalculationService();
+        self::assertSame(1.1, $service->getMinMargin());
+    }
+
+    /**
+     * @throws ORMException
      */
     public function testService(): void
     {
@@ -62,7 +242,7 @@ class CalculationServiceTest extends KernelTestCase
         $calculation->addProduct($product, self::QUANTITY)
             ->setUserMargin(self::MARGIN_USER);
 
-        $service = $this->getTestedService();
+        $service = $this->createCalculationService();
         $service->updateTotal($calculation);
 
         self::assertSame(1, $calculation->getGroupsCount());
@@ -108,6 +288,29 @@ class CalculationServiceTest extends KernelTestCase
         self::assertSame($totalOverall, $calculation->getOverallTotal());
     }
 
+    /**
+     * @throws Exception
+     */
+    protected function createCalculationService(?Group $group = null): CalculationService
+    {
+        // get services
+        $globalRepository = $this->getService(GlobalMarginRepository::class);
+        $marginRepository = $this->getService(GroupMarginRepository::class);
+        if ($group instanceof Group) {
+            $groupRepository = $this->createMock(GroupRepository::class);
+            $groupRepository->expects(self::any())
+                ->method('find')
+                ->willReturn($group);
+        } else {
+            $groupRepository = $this->getService(GroupRepository::class);
+        }
+        $application = $this->getService(ApplicationService::class);
+        $service = new CalculationService($globalRepository, $marginRepository, $groupRepository, $application);
+        $service->setTranslator($this->createTranslator());
+
+        return $service;
+    }
+
     protected function echo(string $name, mixed $value): void
     {
         if (\is_scalar($value) || (\is_object($value) && \method_exists($value, '__toString'))) {
@@ -115,19 +318,8 @@ class CalculationServiceTest extends KernelTestCase
         }
     }
 
-    protected function getTestedService(): CalculationService
-    {
-        // get services
-        $globalRepository = $this->getService(GlobalMarginRepository::class);
-        $marginRepository = $this->getService(GroupMarginRepository::class);
-        $groupRepository = $this->getService(GroupRepository::class);
-        $service = $this->getService(ApplicationService::class);
-
-        return new CalculationService($globalRepository, $marginRepository, $groupRepository, $service);
-    }
-
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function init(): Product
     {
@@ -139,7 +331,7 @@ class CalculationServiceTest extends KernelTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function initCategories(EntityManager $manager): Category
     {
@@ -169,7 +361,7 @@ class CalculationServiceTest extends KernelTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function initGlobalMargins(EntityManager $manager): void
     {
@@ -185,7 +377,7 @@ class CalculationServiceTest extends KernelTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function initProducts(EntityManager $manager, Category $category): Product
     {
@@ -209,7 +401,7 @@ class CalculationServiceTest extends KernelTestCase
      *
      * @psalm-return EntityRepository<TEntity> $repository
      *
-     * @throws \Doctrine\ORM\Exception\ORMException
+     * @throws ORMException
      */
     protected function initRepository(EntityManager $manager, string $entityName): EntityRepository
     {

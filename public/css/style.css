@@ -951,3 +951,13 @@ span.bottom-border-gradient {
     margin-top: 1rem !important;
     margin-bottom: 0.5rem !important;
 }
+
+/**
+ * Chart
+ */
+.chart.month {
+    min-height: 400px;
+}
+.chart.state {
+    min-height: 550px;
+}

@@ -42,7 +42,7 @@ class PdfGroupTable extends PdfTable
 
     /**
      * @param PdfDocument $parent    the parent document to print in
-     * @param bool        $fullWidth a value indicating if the table take all the printable width
+     * @param bool        $fullWidth a value indicating if the table takes all the printable width
      */
     public function __construct(PdfDocument $parent, bool $fullWidth = true)
     {
@@ -102,7 +102,7 @@ class PdfGroupTable extends PdfTable
      * Creates a new instance.
      *
      * @param PdfDocument $parent    the parent document to print in
-     * @param bool        $fullWidth a value indicating if the table take all the printable width
+     * @param bool        $fullWidth a value indicating if the table takes all the printable width
      */
     public static function instance(PdfDocument $parent, bool $fullWidth = true): self
     {

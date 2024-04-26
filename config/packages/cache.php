@@ -51,4 +51,9 @@ return static function (FrameworkConfig $config): void {
     $config->cache()->pool('cache.calculation.service.cache')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
+
+    // used by the AssetVersionService
+    $config->cache()->pool('cache.calculation.service.asset')
+        ->adapters('cache.adapter.filesystem')
+        ->defaultLifetime($one_day);
 };

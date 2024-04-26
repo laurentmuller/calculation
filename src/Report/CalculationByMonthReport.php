@@ -27,9 +27,9 @@ use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfBarChartTrait;
 use App\Pdf\Traits\PdfChartLegendTrait;
+use App\Report\Table\ReportTable;
 use App\Traits\ArrayTrait;
 use App\Utils\FormatUtils;
 use fpdf\PdfFontName;
@@ -62,6 +62,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     private const PATTERN_TABLE = 'MMMM Y';
     private const RECT_MARGIN = 1.25;
     private const RECT_WIDTH = 4.5;
+
     /** @psalm-var \WeakMap<PdfColorInterface, PdfTextColor>  */
     private \WeakMap $colors;
     /*** @psalm-var CalculationByMonthType|null */
@@ -81,12 +82,9 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         array $entities,
         private readonly UrlGeneratorInterface $generator
     ) {
-        $orientation = PdfOrientation::PORTRAIT;
-        if (\count($entities) > 12) {
-            $orientation = PdfOrientation::LANDSCAPE;
-        }
+        $orientation = \count($entities) > 12 ? PdfOrientation::LANDSCAPE : PdfOrientation::PORTRAIT;
         parent::__construct($controller, $entities, $orientation);
-        $this->setTitle($this->trans('chart.month.title'));
+        $this->setTitleTrans('chart.month.title');
         $this->minMargin = $controller->getMinMargin();
         $this->colors = new \WeakMap();
     }
@@ -150,9 +148,9 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return true;
     }
 
-    private function createTable(): PdfTable
+    private function createTable(): ReportTable
     {
-        return PdfTable::instance($this)
+        return ReportTable::fromReport($this)
             ->addColumns(
                 PdfColumn::left($this->trans('chart.month.fields.month'), 20),
                 PdfColumn::right($this->trans('calculation.list.title'), 22, true),
@@ -211,15 +209,14 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         return FormatUtils::formatDate(date: $date, pattern: $pattern);
     }
 
-    private function getPercentCell(float $value, bool $bold = false): PdfCell
+    private function getPercentStyle(float $value, bool $bold = false): PdfStyle
     {
-        $cell = new PdfCell(FormatUtils::formatPercent($value));
         $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
         if ($this->isMinMargin($value)) {
             $style->setTextColor(PdfTextColor::red());
         }
 
-        return $cell->setStyle($style);
+        return $style;
     }
 
     private function getURL(\DateTimeInterface $date): string
@@ -316,14 +313,14 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
             $x = $this->getX();
             $y = $this->getY();
             $this->currentEntity = $entity;
-
+            $margin = $entity['margin_percent'];
             $table->startRow()
                 ->add($this->getDateCell($entity['date'], true))
-                ->addInt($entity['count'])
-                ->addInt($entity['items'])
-                ->addInt($entity['margin_amount'])
-                ->addCell($this->getPercentCell($entity['margin_percent']))
-                ->addInt($entity['total'])
+                ->addCellInt($entity['count'])
+                ->addCellInt($entity['items'])
+                ->addCellInt($entity['margin_amount'])
+                ->addCellPercent($margin, style: $this->getPercentStyle($margin))
+                ->addCellInt($entity['total'])
                 ->endRow();
             $link = $this->getURL($entity['date']);
             $this->link($x, $y, $width, $this->getY() - $y, $link);
@@ -341,12 +338,12 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
         $net = $total - $items;
         $margin = 1.0 + $this->safeDivide($net, $items);
         $table->startHeaderRow()
-            ->add($this->trans('calculation.fields.total'))
-            ->addInt($count)
-            ->addInt($items)
-            ->addInt($net)
-            ->addCell($this->getPercentCell($margin, true))
-            ->addInt($total)
+            ->addCellTrans('calculation.fields.total')
+            ->addCellInt($count)
+            ->addCellInt($items)
+            ->addCellInt($net)
+            ->addCellPercent($margin, style: $this->getPercentStyle($margin, true))
+            ->addCellInt($total)
             ->endRow();
     }
 

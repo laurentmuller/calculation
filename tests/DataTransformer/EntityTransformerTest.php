@@ -117,9 +117,8 @@ class EntityTransformerTest extends TestCase
     private function createGroup(): Group
     {
         $group = new Group();
-        $this->setId($group);
 
-        return $group;
+        return self::setId($group);
     }
 
     /**

@@ -31,7 +31,7 @@ class Month extends AbstractCalendarItem implements \Stringable
 
     /**
      * @param Calendar $calendar the parent calendar
-     * @param int      $number   the month number (1 - 12)
+     * @param int      $number   the month number (1-12)
      *
      * @throws CalendarException if the number is not between 1 and 12 inclusive
      */
@@ -57,7 +57,7 @@ class Month extends AbstractCalendarItem implements \Stringable
      * Gets the key for the given year and month.
      *
      * @param int $year  the year
-     * @param int $month the month (1 - 12)
+     * @param int $month the month (1-12)
      */
     public static function formatKey(int $year, int $month): string
     {
@@ -75,7 +75,7 @@ class Month extends AbstractCalendarItem implements \Stringable
     }
 
     /**
-     * This implementation returns the month number (1 to 12).
+     * This implementation returns the month number (1-12).
      */
     public function getNumber(): int
     {

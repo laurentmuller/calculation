@@ -98,7 +98,7 @@ class AbstractEntityTest extends TestCase
             }
         };
         if (\is_int($id)) {
-            return $this->setId($entity, $id);
+            return self::setId($entity, $id);
         }
 
         return $entity;

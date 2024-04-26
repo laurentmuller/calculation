@@ -50,13 +50,13 @@ class ProductUpdateServiceTest extends TestCase
     {
         $this->category = new Category();
         $this->category->setCode('category');
-        $this->setId($this->category);
+        self::setId($this->category);
 
         $this->product = new Product();
         $this->product->setDescription('description')
             ->setCategory($this->category)
             ->setPrice(1.0);
-        $this->setId($this->product);
+        self::setId($this->product);
 
         $this->user = new User();
         $this->user->setUsername('system');

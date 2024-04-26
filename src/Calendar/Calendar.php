@@ -175,7 +175,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * Gets the month for the given key.
      *
-     * @param \DateTimeInterface|int|string $key the month key. Can be an integer (1 - 12), a date time interface or a formatted date ('Y.m').
+     * @param \DateTimeInterface|int|string $key the month key. Can be an integer (1-12), a date time interface or a formatted date ('Y.m').
      *
      * @return Month|null the month, if found, null otherwise
      *
@@ -212,7 +212,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     }
 
     /**
-     * Gets months when key is month number (1 - 12).
+     * Gets months when key is month number (1-12).
      *
      * @return Month[]
      */
@@ -256,7 +256,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * Gets the week for the given key.
      *
-     * @param \DateTimeInterface|int|string $key the week key. Can be an integer (1 - 53), a date time interface or a formatted date ('Y.W').
+     * @param \DateTimeInterface|int|string $key the week key. Can be an integer (1-53), a date time interface or a formatted date ('Y.W').
      *
      * @return Week|null the week, if found, null otherwise
      *
@@ -362,7 +362,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * Create and add a month.
      *
-     * @param int $number the month number (1 - 12)
+     * @param int $number the month number (1-12)
      *
      * @throws CalendarException if the number is not between 1 and 12 inclusive
      */
@@ -377,7 +377,7 @@ class Calendar extends AbstractCalendarItem implements \Stringable, MonthsInterf
     /**
      * Create and add a week.
      *
-     * @param int $number the week number (1 - 53)
+     * @param int $number the week number (1-53)
      */
     private function createWeek(int $number): Week
     {

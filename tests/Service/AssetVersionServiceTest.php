@@ -15,6 +15,8 @@ namespace App\Tests\Service;
 use App\Enums\Environment;
 use App\Service\AssetVersionService;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\InvalidArgumentException;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Filesystem\Path;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(AssetVersionService::class)]
@@ -24,6 +26,9 @@ class AssetVersionServiceTest extends TestCase
     private string $imagesVersion;
     private AssetVersionService $service;
 
+    /**
+     * @throws InvalidArgumentException
+     */
     protected function setUp(): void
     {
         $projectDir = Path::canonicalize(__DIR__ . '/../Data');
@@ -33,7 +38,7 @@ class AssetVersionServiceTest extends TestCase
         }
         $this->defaultVersion = (string) \filemtime($projectDir . '/composer.lock');
         $this->imagesVersion = (string) \filemtime($imagesDir);
-        $this->service = new AssetVersionService($projectDir, Environment::TEST->value);
+        $this->service = new AssetVersionService($projectDir, Environment::TEST->value, new ArrayAdapter());
     }
 
     public static function getPaths(): \Iterator
@@ -56,6 +61,9 @@ class AssetVersionServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getPaths')]
     public function testPath(string $path, bool $isImage = false): void
     {

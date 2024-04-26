@@ -133,7 +133,7 @@ class AbstractPropertyTest extends TestCase
         self::assertSame($date->getTimestamp(), $actual->getTimestamp());
 
         $category = new Category();
-        $this->setId($category, 10);
+        self::setId($category, 10);
         $entity->setValue($category);
         self::assertSame(10, $entity->getInteger());
 
@@ -156,7 +156,7 @@ class AbstractPropertyTest extends TestCase
     {
         $entity = new class() extends AbstractProperty {};
         if (\is_int($id)) {
-            return $this->setId($entity, $id);
+            return self::setId($entity, $id);
         }
 
         return $entity;

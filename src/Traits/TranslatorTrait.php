@@ -29,8 +29,8 @@ trait TranslatorTrait
     /**
      * Checks if a message has a translation (it does not take into account the fallback mechanism).
      *
-     * @param string  $id     the message id (may also be an object that can be cast to string)
-     * @param ?string $domain the domain for the message or null to use the default
+     * @param string  $id     the message identifier (may also be an object that can be cast to string)
+     * @param ?string $domain the domain for the message or null to use the default ('messages')
      * @param ?string $locale the locale or null to use the default
      *
      * @return bool true if the message has a translation, false otherwise
@@ -50,8 +50,8 @@ trait TranslatorTrait
     /**
      * Translates the given message.
      *
-     * @param string|\Stringable|TranslatableInterface $id         the message id, may also be an object that can be
-     *                                                             cast to string
+     * @param string|\Stringable|TranslatableInterface $id         the message identifier; may also be an object that
+     *                                                             can be cast to string
      * @param array                                    $parameters an array of parameters for the message
      * @param ?string                                  $domain     the domain for the message or null to use the default
      * @param ?string                                  $locale     the locale or null to use the default

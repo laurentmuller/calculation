@@ -365,10 +365,6 @@ class HelpService
      */
     private function updateDialogs(array $dialogs): array
     {
-        if ([] === $dialogs) {
-            return $dialogs;
-        }
-
         /** @psalm-param HelpDialogType $value */
         foreach ($dialogs as &$value) {
             $group = $this->getDialogGroup($value);
@@ -421,10 +417,6 @@ class HelpService
      */
     private function updateEntities(array $entities): array
     {
-        if ([] === $entities) {
-            return $entities;
-        }
-
         /** @psalm-param HelpEntityType $value */
         foreach ($entities as &$value) {
             $value['name'] = $this->trans($value['id'] . '.name');

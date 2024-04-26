@@ -35,11 +35,13 @@ return static function (MonologConfig $config): void {
     $config->handler('console')
         ->type('console')
         ->processPsr3Messages(false)
-        ->channels()->elements(['!event', '!doctrine', '!console', '!deprecation']);
+        ->channels()
+        ->elements(['!event', '!doctrine', '!console', '!deprecation']);
 
     $config->handler('deprecation')
         ->type('stream')
         ->path('%kernel.logs_dir%/%kernel.environment%.deprecations.log')
         ->formatter('monolog.custom_formatter')
-        ->channels()->elements(['deprecation']);
+        ->channels()
+        ->elements(['deprecation']);
 };

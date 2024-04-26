@@ -114,13 +114,13 @@ class CalculationTest extends AbstractEntityValidatorTestCase
         $calculation = new Calculation();
 
         $item = new CalculationItem();
-        $this->setId($item, 10);
+        self::setId($item, 10);
 
         $category = new CalculationCategory();
-        $this->setId($category, 20);
+        self::setId($category, 20);
 
         $group = new CalculationGroup();
-        $this->setId($group, 30);
+        self::setId($group, 30);
 
         $category->addItem($item);
         $group->addCategory($category);
@@ -167,7 +167,7 @@ class CalculationTest extends AbstractEntityValidatorTestCase
         self::assertSame('000000', $calculation->getDisplay());
         self::assertSame($calculation->getFormattedId(), $calculation->getDisplay());
 
-        $this->setId($calculation, 112233);
+        self::setId($calculation, 112233);
         self::assertSame('112233', $calculation->getDisplay());
         self::assertSame($calculation->getFormattedId(), $calculation->getDisplay());
     }

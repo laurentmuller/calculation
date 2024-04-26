@@ -39,7 +39,7 @@ class CalculationUpdateResultTest extends TestCase
     {
         $state = new CalculationState();
         $state->setCode('code');
-        $this->setId($state);
+        self::setId($state);
 
         $date = DateUtils::removeTime();
         $calculation = new Calculation();
@@ -48,7 +48,7 @@ class CalculationUpdateResultTest extends TestCase
             ->setCustomer('customer')
             ->setDescription('description')
             ->setOverallTotal(100.0);
-        $this->setId($calculation);
+        self::setId($calculation);
 
         $result = new CalculationUpdateResult();
         $result->addCalculation(50.0, $calculation);

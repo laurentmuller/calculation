@@ -105,7 +105,7 @@ class LogService implements ServiceSubscriberInterface
     }
 
     /**
-     * Checks if this log file name exist and is not empty.
+     * Checks if the log file name exists and is not empty.
      *
      * @return bool true if valid
      */

@@ -568,7 +568,7 @@ class HelpReport extends AbstractReport
             /** @psalm-var HelpMenuType $menu */
             $menu = $this->service->mergeAction($menu);
             $table->startRow()
-                ->add(text: $this->splitTrans($menu), style: $style)
+                ->add($this->splitTrans($menu), style: $style)
                 ->add($menu['description'] ?? null)
                 ->endRow();
 

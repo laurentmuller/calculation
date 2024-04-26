@@ -77,7 +77,8 @@ class ProductTypeTest extends AbstractEntityTypeTestCase
         if (!self::$category instanceof Category) {
             self::$category = new Category();
             self::$category->setCode('category');
-            $this->setId(self::$category);
+
+            return self::setId(self::$category);
         }
 
         return self::$category;

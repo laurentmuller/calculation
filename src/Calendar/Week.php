@@ -31,7 +31,7 @@ class Week extends AbstractCalendarItem
 
     /**
      * @param Calendar $calendar the parent calendar
-     * @param int      $number   the week number (1 - 53)
+     * @param int      $number   the week number (1-53)
      *
      * @throws CalendarException if the number is not between 1 and 53 inclusive
      */
@@ -57,7 +57,7 @@ class Week extends AbstractCalendarItem
      * Gets the key for the given year and week.
      *
      * @param int $year the year
-     * @param int $week the week (1 - 53)
+     * @param int $week the week (1-53)
      */
     public static function formatKey(int $year, int $week): string
     {

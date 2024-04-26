@@ -30,7 +30,7 @@ class TaskItemTest extends AbstractEntityValidatorTestCase
     {
         $item = new TaskItem();
         $margin = $this->createMargin(0);
-        $this->setId($margin);
+        self::setId($margin);
         $item->addMargin($margin);
 
         $clone = clone $item;

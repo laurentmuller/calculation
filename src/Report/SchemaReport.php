@@ -13,13 +13,12 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Controller\AbstractController;
-use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use App\Report\Table\ReportTable;
 use App\Service\SchemaService;
 use App\Traits\ArrayTrait;
-use App\Utils\FormatUtils;
 use fpdf\PdfFontName;
 use fpdf\PdfMove;
 
@@ -90,21 +89,17 @@ class SchemaReport extends AbstractReport
         /** @psalm-var positive-int $cols */
         $cols = \count($columns);
 
-        return PdfTable::instance($this)
+        return ReportTable::fromReport($this)
             ->addColumns(...$columns)
             ->startHeaderRow()
-            ->add($this->trans($id), $cols)
+            ->addCellTrans($id, cols: $cols)
             ->completeRow()
             ->outputHeaders();
     }
 
     private function findLink(?string $name): ?int
     {
-        if (null !== $name && isset($this->tableLinks[$name])) {
-            return $this->tableLinks[$name];
-        }
-
-        return null;
+        return $this->tableLinks[$name ?? ''] ?? null;
     }
 
     private function formatBool(bool $value): ?string
@@ -124,12 +119,10 @@ class SchemaReport extends AbstractReport
      */
     private function formatType(array $column): string
     {
+        $type = $column['type'];
         $length = $column['length'];
-        if ($length > 0) {
-            return \sprintf('%s(%d)', $column['type'], $length);
-        }
 
-        return $column['type'];
+        return $length > 0 ? \sprintf('%s(%d)', $type, $length) : $type;
     }
 
     /**
@@ -151,7 +144,7 @@ class SchemaReport extends AbstractReport
             $link = $this->findLink($name);
             $table->startRow()
                 ->add($association['name'])
-                ->addCell(new PdfCell(text: $name, link: $link))
+                ->add($name, link: $link)
                 ->add($this->formatInverse($association['inverse']))
                 ->completeRow();
         }
@@ -169,15 +162,15 @@ class SchemaReport extends AbstractReport
             'schema.fields.columns',
             PdfColumn::left($this->trans('schema.fields.name'), 100),
             PdfColumn::left($this->trans('schema.fields.type'), 35, true),
-            PdfColumn::center($this->trans('schema.fields.required'), 20, true),
-            PdfColumn::left($this->trans('schema.fields.default'), 35, true)
+            PdfColumn::center($this->trans('schema.fields.required'), 25, true),
+            PdfColumn::left($this->trans('schema.fields.default'), 30, true)
         );
         foreach ($columns as $column) {
             $link = $this->findLink($column['foreign_table']);
             $table->startRow()
-                ->addCell(new PdfCell(text: $column['name'], link: $link))
+                ->add($column['name'], link: $link)
                 ->add($this->formatType($column))
-                ->add(text: $this->formatBool($column['required']), style: $this->booleanStyle)
+                ->add($this->formatBool($column['required']), style: $this->booleanStyle)
                 ->add($column['default'])
                 ->completeRow();
         }
@@ -203,8 +196,8 @@ class SchemaReport extends AbstractReport
             $table->startRow()
                 ->add($index['name'])
                 ->add(\implode(', ', $index['columns']))
-                ->add(text: $this->formatBool($index['primary']), style: $this->booleanStyle)
-                ->add(text: $this->formatBool($index['unique']), style: $this->booleanStyle)
+                ->add($this->formatBool($index['primary']), style: $this->booleanStyle)
+                ->add($this->formatBool($index['unique']), style: $this->booleanStyle)
                 ->completeRow();
         }
         $this->lineBreak();
@@ -245,13 +238,11 @@ class SchemaReport extends AbstractReport
             $name = $table['name'];
             $link = $this->findLink($name);
             $instance->startRow()
-                ->addCell(new PdfCell(text: $name, link: $link))
-                ->addValues(
-                    FormatUtils::formatInt($table['columns']),
-                    FormatUtils::formatInt($table['records']),
-                    FormatUtils::formatInt($table['indexes']),
-                    FormatUtils::formatInt($table['associations'])
-                )
+                ->add($name, link: $link)
+                ->addCellInt($table['columns'])
+                ->addCellInt($table['records'])
+                ->addCellInt($table['indexes'])
+                ->addCellInt($table['associations'])
                 ->completeRow();
         }
     }

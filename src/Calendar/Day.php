@@ -69,7 +69,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     }
 
     /**
-     * Gets the day of the year (0 - 365).
+     * Gets the day of the year (0-365).
      *
      * @psalm-api
      */
@@ -140,7 +140,7 @@ class Day extends AbstractCalendarItem implements \Stringable, WeekDaysInterface
     }
 
     /**
-     * Gets ISO-8601 numeric representation of the day of the week.
+     * Gets ISO-8601 numeric representation for the day of the week.
      *
      * @return int 1 (for Monday) through 7 (for Sunday)
      */

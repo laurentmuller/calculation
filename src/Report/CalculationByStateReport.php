@@ -23,9 +23,9 @@ use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Pdf\PdfCell;
 use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
-use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Pdf\Traits\PdfPieChartTrait;
+use App\Report\Table\ReportTable;
 use App\Table\CalculationTable;
 use App\Traits\MathTrait;
 use App\Traits\StateTotalsTrait;
@@ -61,7 +61,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         private readonly UrlGeneratorInterface $generator
     ) {
         parent::__construct($controller, $entities);
-        $this->setTitle($this->trans('chart.state.title'));
+        $this->setTitleTrans('chart.state.title');
         $this->minMargin = $controller->getMinMargin();
     }
 
@@ -137,9 +137,9 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         return true;
     }
 
-    private function createTable(): PdfTable
+    private function createTable(): ReportTable
     {
-        return PdfTable::instance($this)
+        return ReportTable::fromReport($this)
             ->setHeadersListener($this)
             ->setTextListener($this)
             ->addColumns(
@@ -247,12 +247,12 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             $this->currentEntity = $entity;
             $table->startRow()
                 ->add($entity['code'])
-                ->addInt($entity['count'])
+                ->addCellInt($entity['count'])
                 ->addCell($this->getPercentCell($entity['percent_calculation']))
-                ->addAmount($entity['items'])
-                ->addAmount($entity['margin_amount'])
+                ->addCellAmount($entity['items'])
+                ->addCellAmount($entity['margin_amount'])
                 ->addCell($this->getPercentCell($entity['margin_percent'], 0, true))
-                ->addAmount($entity['total'])
+                ->addCellAmount($entity['total'])
                 ->addCell($this->getPercentCell($entity['percent_amount']))
                 ->endRow();
             $link = $this->getURL($entity['id']);
@@ -263,13 +263,13 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         // totals
         $totals = $this->getStateTotals($entities);
         $table->startHeaderRow()
-            ->add($this->trans('calculation.fields.total'))
-            ->addInt($totals['calculation_count'])
+            ->addCellTrans('calculation.fields.total')
+            ->addCellInt($totals['calculation_count'])
             ->addCell($this->getPercentCell($totals['calculation_percent'], bold: true))
-            ->addAmount($totals['items_amount'])
-            ->addAmount($totals['margin_amount'])
+            ->addCellAmount($totals['items_amount'])
+            ->addCellAmount($totals['margin_amount'])
             ->addCell($this->getPercentCell($totals['margin_percent'], 0, bold: true, roundingMode: \NumberFormatter::ROUND_DOWN))
-            ->addAmount($totals['total_amount'])
+            ->addCellAmount($totals['total_amount'])
             ->addCell($this->getPercentCell($totals['total_percent'], bold: true))
             ->endRow();
     }

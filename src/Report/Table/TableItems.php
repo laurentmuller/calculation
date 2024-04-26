@@ -20,32 +20,26 @@ use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
 use App\Pdf\PdfColumn;
-use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Report\CalculationReport;
-use App\Traits\TranslatorTrait;
 use fpdf\PdfBorder;
 use fpdf\PdfDocument;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Table to render the groups, categories and items of a calculation.
  */
-class TableItems extends PdfGroupTable
+class TableItems extends ReportGroupTable
 {
-    use TranslatorTrait;
     /**
      * The categories and items indent.
      */
     private const INDENT = 4;
 
     private readonly Calculation $calculation;
-    private readonly TranslatorInterface $translator;
 
     public function __construct(CalculationReport $parent)
     {
-        parent::__construct($parent);
-        $this->translator = $parent->getTranslator();
+        parent::__construct($parent, $parent->getTranslator());
         $this->calculation = $parent->getCalculation();
     }
 
@@ -58,11 +52,6 @@ class TableItems extends PdfGroupTable
         $style->setBorder(PdfBorder::leftRight());
 
         return $style;
-    }
-
-    public function getTranslator(): TranslatorInterface
-    {
-        return $this->translator;
     }
 
     /**
@@ -150,7 +139,7 @@ class TableItems extends PdfGroupTable
     private function addDescription(CalculationItem $item, array $duplicateItems, PdfStyle $defaultStyle, PdfStyle $errorStyle): self
     {
         $style = \in_array($item, $duplicateItems, true) ? $errorStyle : $defaultStyle;
-        $this->add(text: $item->getDescription(), style: $style);
+        $this->add($item->getDescription(), style: $style);
 
         return $this;
     }
@@ -163,7 +152,7 @@ class TableItems extends PdfGroupTable
      */
     private function addStyledAmount(float $amount, ?PdfStyle $errorStyle = null): self
     {
-        return $this->addAmount($amount, style: 0.0 === $amount ? $errorStyle : null);
+        return $this->addCellAmount($amount, style: 0.0 === $amount ? $errorStyle : null);
     }
 
     private function checkLines(int $lines): void
@@ -224,8 +213,8 @@ class TableItems extends PdfGroupTable
     private function renderTotal(float $total): void
     {
         $this->startHeaderRow()
-            ->add($this->trans('calculation.fields.itemsTotal'), 4)
-            ->addAmount($total)
+            ->addCellTrans('calculation.fields.itemsTotal', cols: 4)
+            ->addCellAmount($total)
             ->endRow();
     }
 }

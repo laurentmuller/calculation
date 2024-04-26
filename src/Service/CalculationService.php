@@ -110,7 +110,7 @@ final class CalculationService implements ServiceSubscriberInterface
         $min_margin = $parameters['min_margin'];
         $total_amount = $total_group['amount'];
         $net_total = $net_group['total'];
-        if ($this->isFloatZero($net_total)) {
+        if ($this->isFloatZero($net_total) || $this->isFloatZero($total_amount)) {
             return $parameters;
         }
         $user_margin = (($total_amount * $min_margin) - $net_total) / $net_total;
@@ -159,7 +159,7 @@ final class CalculationService implements ServiceSubscriberInterface
     /**
      * Creates groups from an array.
      *
-     * @param array $source the form data as array
+     * @param array $source the form data as an array
      *
      * @return array an array with the computed values used to render the total view
      *
@@ -171,6 +171,7 @@ final class CalculationService implements ServiceSubscriberInterface
     {
         /** @psalm-var ServiceGroupType[] $groups */
         $groups = [];
+        // $json = json_encode($source);
         $source_groups = $this->getArrayByKey($source, 'groups');
         if (!\is_array($source_groups)) {
             return $this->createEmptyParameters();
@@ -342,7 +343,7 @@ final class CalculationService implements ServiceSubscriberInterface
         ?callable $callback = null,
         ?float $global_margin = null
     ): array {
-        /** @psalm-var array<ServiceGroupType> $result */
+        /** @psalm-var ServiceGroupType[] $result */
         $result = \is_callable($callback) ? \array_map($callback, $groups) : $groups;
         $groups_amount = $this->round($this->getGroupsAmount($result));
         $groups_margin = $this->round($this->getGroupsMargin($result));
@@ -500,9 +501,9 @@ final class CalculationService implements ServiceSubscriberInterface
     {
         return \array_reduce(
             $groups,
-            /** @psalm-param array{amount: float} $group */
+            /** @psalm-param ServiceGroupType $group */
             static fn (float $carry, array $group): float => $carry + $group['amount'],
-            0
+            0.0
         );
     }
 
@@ -513,9 +514,9 @@ final class CalculationService implements ServiceSubscriberInterface
     {
         return \array_reduce(
             $groups,
-            /** @psalm-param array{margin_amount: float} $group */
+            /** @psalm-param ServiceGroupType $group */
             static fn (float $carry, array $group): float => $carry + $group['margin_amount'],
-            0
+            0.0
         );
     }
 

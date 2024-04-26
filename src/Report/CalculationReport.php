@@ -149,12 +149,12 @@ class CalculationReport extends AbstractReport
                 PdfColumn::right(null, 40, true)
             )
             ->startHeaderRow()
-            ->add(text: $calculation->getCustomer(), style: $leftStyle)
-            ->add(text: $calculation->getStateCode(), style: $rightStyle)
+            ->add($calculation->getCustomer(), style: $leftStyle)
+            ->add($calculation->getStateCode(), style: $rightStyle)
             ->endRow()
             ->startHeaderRow()
-            ->add(text: $calculation->getDescription(), style: $leftStyle)
-            ->add(text: $calculation->getFormattedDate(), style: $rightStyle)
+            ->add($calculation->getDescription(), style: $leftStyle)
+            ->add($calculation->getFormattedDate(), style: $rightStyle)
             ->endRow();
         $this->lineBreak(3);
     }
@@ -165,10 +165,9 @@ class CalculationReport extends AbstractReport
     private function renderEmpty(): void
     {
         PdfStyle::getHeaderStyle()->apply($this);
-        $message = $this->trans('calculation.edit.empty');
         $this->cell(
             height: self::LINE_HEIGHT * 1.8,
-            text: $message,
+            text: $this->trans('calculation.edit.empty'),
             border: PdfBorder::all(),
             move: PdfMove::NEW_LINE,
             align: PdfTextAlignment::CENTER,

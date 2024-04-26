@@ -198,8 +198,7 @@ class CalculationUpdateQueryTest extends TestCase
     {
         $state = new CalculationState();
         $state->setCode('code');
-        $this->setId($state);
 
-        return $state;
+        return self::setId($state);
     }
 }

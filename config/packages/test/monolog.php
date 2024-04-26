@@ -17,5 +17,6 @@ return static function (MonologConfig $config): void {
         ->type('stream')
         ->path('%kernel.logs_dir%/%kernel.environment%.log')
         ->formatter('monolog.custom_formatter')
-        ->channels()->elements(['app']);
+        ->channels()
+        ->elements(['app']);
 };

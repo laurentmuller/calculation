@@ -149,9 +149,9 @@ class TaskServiceTest extends TestCase
         $category = new Category();
         $category->setCode('code');
         $category->addTask($task);
-        $this->setId($category);
+        self::setId($category);
 
-        return $this->setId($task);
+        return self::setId($task);
     }
 
     private function createTaskItem(Task $task): TaskItem
@@ -160,6 +160,6 @@ class TaskServiceTest extends TestCase
         $item->setName('taskitem');
         $task->addItem($item);
 
-        return $this->setId($item);
+        return self::setId($item);
     }
 }

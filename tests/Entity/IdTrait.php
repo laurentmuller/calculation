@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity;
 
-use App\Entity\AbstractEntity;
+use App\Interfaces\EntityInterface;
 
 /**
  * Trait to set entity identifier.
@@ -20,7 +20,7 @@ use App\Entity\AbstractEntity;
 trait IdTrait
 {
     /**
-     * @template T of AbstractEntity
+     * @template T of EntityInterface
      *
      * @psalm-param T $entity
      *
@@ -28,7 +28,7 @@ trait IdTrait
      *
      * @throws \ReflectionException
      */
-    private function setId(object $entity, int $id = 1): object
+    protected static function setId(object $entity, int $id = 1): object
     {
         $class = new \ReflectionClass($entity::class);
         $property = $class->getProperty('id');

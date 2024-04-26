@@ -104,10 +104,10 @@ class GroupsReport extends AbstractArrayReport
                     $table->startRow()
                         ->addValues(...$emptyValue);
                 }
-                $table->addAmount($margin->getMinimum())
-                    ->addAmount($margin->getMaximum())
-                    ->addAmount($margin->getDelta())
-                    ->addPercent($margin->getMargin())
+                $table->addCellAmount($margin->getMinimum())
+                    ->addCellAmount($margin->getMaximum())
+                    ->addCellAmount($margin->getDelta())
+                    ->addCellPercent($margin->getMargin())
                     ->endRow();
                 $skip = true;
             }

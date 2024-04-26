@@ -97,9 +97,9 @@ class CalculationsBelowReport extends AbstractArrayReport
             ->add($entity->getStateCode())
             ->add($entity->getCustomer())
             ->add($entity->getDescription())
-            ->addAmount($items)
-            ->addPercent($entity->getOverallMargin(), style: $style)
-            ->addAmount($overall)
+            ->addCellAmount($items)
+            ->addCellPercent($entity->getOverallMargin(), style: $style)
+            ->addCellAmount($overall)
             ->endRow();
 
         $this->items += $items;
@@ -113,13 +113,14 @@ class CalculationsBelowReport extends AbstractArrayReport
         $style = PdfStyle::getHeaderStyle()->setTextColor(PdfTextColor::red());
         /** @psalm-var positive-int $cols */
         $cols = $table->getColumnsCount() - 3;
-        $table->getColumns()[0]->setAlignment(PdfTextAlignment::LEFT)
+        $table->getColumns()[0]
+            ->setAlignment(PdfTextAlignment::LEFT)
             ->setFixed(false);
         $table->startHeaderRow()
             ->add($text, $cols)
-            ->addAmount($this->items)
-            ->addPercent($margins, style: $style)
-            ->addAmount($this->overall)
+            ->addCellAmount($this->items)
+            ->addCellPercent($margins, style: $style)
+            ->addCellAmount($this->overall)
             ->endRow();
     }
 }

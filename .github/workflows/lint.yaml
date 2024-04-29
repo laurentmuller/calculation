@@ -30,8 +30,6 @@ jobs:
 
             -   name: Lint Markdown
                 uses: DavidAnson/markdownlint-cli2-action@v15
-                with:
-                    globs: '*.md'
 
             -   name: Validate Schema
                 run: php bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction

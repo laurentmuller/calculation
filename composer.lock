@@ -1873,16 +1873,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "1.8.4.15",
+            "version": "1.8.4.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "a624420c8c32dba8cc8420cdc5f193ae69e91f8a"
+                "reference": "e5ef84674e8fec6ef0712ec0b65a0993a94c8934"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/a624420c8c32dba8cc8420cdc5f193ae69e91f8a",
-                "reference": "a624420c8c32dba8cc8420cdc5f193ae69e91f8a",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/e5ef84674e8fec6ef0712ec0b65a0993a94c8934",
+                "reference": "e5ef84674e8fec6ef0712ec0b65a0993a94c8934",
                 "shasum": ""
             },
             "require": {
@@ -1894,9 +1894,6 @@
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
-                "orklah/psalm-insane-comparison": "^2.0",
-                "orklah/psalm-not-empty": "^1.0",
-                "orklah/psalm-strict-equality": "^2.0",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-deprecation-rules": "^1.0",
@@ -1934,7 +1931,7 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-04-17T13:27:10+00:00"
+            "time": "2024-04-27T07:42:55+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
@@ -12131,16 +12128,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.58.0",
+            "version": "v1.59.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "c4f8d2c5d55950e1a49e822efc83a8511bee8a36"
+                "reference": "1f02b59b98003b2c1f51bc8f178aee5cbf36779c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/c4f8d2c5d55950e1a49e822efc83a8511bee8a36",
-                "reference": "c4f8d2c5d55950e1a49e822efc83a8511bee8a36",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/1f02b59b98003b2c1f51bc8f178aee5cbf36779c",
+                "reference": "1f02b59b98003b2c1f51bc8f178aee5cbf36779c",
                 "shasum": ""
             },
             "require": {
@@ -12203,7 +12200,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.58.0"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.59.0"
             },
             "funding": [
                 {
@@ -12219,7 +12216,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-06T15:08:12+00:00"
+            "time": "2024-04-27T21:12:25+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",

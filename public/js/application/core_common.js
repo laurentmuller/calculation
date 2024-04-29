@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* globals Toaster, bootstrap, html2canvas, htmlToImage */
+/* globals Toaster, bootstrap */
 
 /**
  * Ready function
@@ -9,7 +9,7 @@
     'use strict';
 
     /**
-     * Handle horizontal search form.
+     * Handle the horizontal search form.
      */
     function initHorizontalSearch() {
         const $div = $('#search-div-horizontal');
@@ -82,7 +82,7 @@
     }
 
     /**
-     * Handle back to top button.
+     * Handle the back to top button.
      */
     function initBackToTop() {
         const $button = $('.btn-back-to-top');
@@ -96,87 +96,6 @@
             });
             $button.on('click', () => $(window).scrollTop(0));
         }
-    }
-
-    /**
-     * Save an image to the help cache.
-     * @param {string} image
-     * @param {number} index
-     * @param {string} location
-     */
-    function sendImage(image, index, location) {
-        $.post('/help/download', {
-            'image': image,
-            'index': index,
-            'location': location
-        }, (data) => {
-            const title = 'Html2Image';
-            if (data.result) {
-                Toaster.success(data.message, title);
-            } else {
-                Toaster.warning(data.message, title);
-            }
-        });
-    }
-
-    /**
-     * Create the copy button.
-     * @param {NodeListOf<Element>} cards
-     * @param {function} callback
-     */
-    function createCopyButton(cards, callback) {
-        const icon = document.createElement('i');
-        icon.classList.add('fa-fw', 'fa-regular', 'fa-copy');
-        const link = document.createElement('a');
-
-        link.append(icon);
-        link.title = 'Save Card Image';
-        link.style.marginRight = '15px';
-        link.classList.add('btn', 'btn-outline-secondary', 'position-absolute',
-            'top-50', 'end-0', 'translate-middle-y', 'd-print-none');
-        document.querySelector('.page-content').append(link);
-
-        link.addEventListener('click', () => {
-            const location = window.location.pathname;
-            const options = {backgroundColor: null};
-            cards.forEach(function (card, index) {
-                link.disabled = true;
-                link.setAttribute('disabled', 'disabled');
-                $('*').css('cursor', 'wait');
-                callback(card, index, location, options);
-                link.disabled = false;
-            });
-        });
-    }
-
-    /**
-     * Save card images.
-     */
-    function initHtml2Image() {
-        if (typeof htmlToImage === 'undefined') {
-            return;
-        }
-        const cards = document.querySelectorAll('.page-content .card');
-        if (!cards.length) {
-            return;
-        }
-
-        /**
-         * @param {Element} card
-         * @param {number} index
-         * @param {String} location
-         * @param {Object} options
-         */
-        const callback = function (card, index, location, options) {
-            htmlToImage.toPng(card, options).then((image) => {
-                $('*').css('cursor', 'wait');
-                sendImage(image, index, location);
-            }).catch(function (error) {
-                $('*').css('cursor', '');
-                window.console.warn(error);
-            });
-        };
-        createCopyButton(cards, callback);
     }
 
     /**
@@ -211,6 +130,5 @@
     window.addEventListener('DOMContentLoaded', () => {
         initThemeTooltip();
         showFlashBag();
-        initHtml2Image();
     });
 }(jQuery));

@@ -182,7 +182,7 @@
         "app-twig-cs": "vendor/bin/twigcs --config .twig_cs.dist.php",
         "app-twig-cs-fixer": "vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php",
         "app-test": "phpunit",
-        "app-markdown": "markdownlint-cli2 *.md",
+        "app-markdown": "markdownlint-cli2",
         "app-all": [
             "@app-lint",
             "@app-fixer",

@@ -79,7 +79,7 @@ class HtmlLiChunk extends HtmlParentChunk
      */
     private function getBulletMargin(HtmlReport $report): float
     {
-        $width = 0;
+        $width = 0.0;
         $text = null;
         $parent = $this->getParent();
         if ($parent instanceof AbstractHtmlListChunk) {
@@ -92,6 +92,6 @@ class HtmlLiChunk extends HtmlParentChunk
             });
         }
 
-        return (float) $width;
+        return $width;
     }
 }

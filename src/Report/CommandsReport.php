@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace App\Report;
 
+use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\PdfStyle;
 use App\Service\CommandService;
 use App\Utils\StringUtils;
+use fpdf\PdfDocument;
 use fpdf\PdfFontName;
 use fpdf\PdfMove;
 use fpdf\PdfTextAlignment;
@@ -31,12 +33,47 @@ use fpdf\PdfTextAlignment;
  */
 class CommandsReport extends AbstractArrayReport
 {
-    private const HELP_PATTERN = '/<span\s*class="(.*?)"\>([\s\S]*?)<\/span>/im';
+    private const CLASS_PATTERN = '/<span\s*class="(.*?)"\>([\s\S]*?)<\/span>/im';
+    private const LINK_PATTERN = '/<a href="(.*)">(.*)<\/a>/m';
+
+    /**
+     * Override default behavior by parsing links.
+     */
+    public function write(string $text, float $height = self::LINE_HEIGHT, int|string|null $link = null): PdfDocument
+    {
+        $text = \strip_tags($text, '<a>');
+        $result = \preg_match_all(self::LINK_PATTERN, $text, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE);
+        if (false === $result || 0 === $result) {
+            return parent::write($text);
+        }
+
+        $offset = 0;
+        foreach ($matches as $match) {
+            // previous chunk
+            $index = $match[0][1];
+            if ($index > $offset) {
+                parent::write(\substr($text, $offset, $index - $offset));
+                $offset = $index;
+            }
+            // current chunk (link)
+            PdfTextColor::link()->apply($this);
+            parent::write($match[2][0], link: $match[1][0]);
+            $this->resetStyle();
+            // move
+            $offset += \strlen($match[0][0]);
+        }
+        // last chunk
+        if ($offset < \strlen($text)) {
+            parent::write(\substr($text, $offset));
+        }
+
+        return $this;
+    }
 
     protected function doRender(array $entities): bool
     {
-        $this->setTitleTrans('command.list.title');
         $this->setCellMargin(0.0);
+        $this->setTitleTrans('command.list.title');
 
         /** @psalm-var string $group */
         foreach ($entities as $group => $commands) {
@@ -86,15 +123,21 @@ class CommandsReport extends AbstractArrayReport
     {
         $width = 0.0;
         $this->applyFixedStyle();
-        foreach ($command['definition']['arguments'] as $argument) {
-            $width = \max($width, $this->getStringWidth($argument['name']));
-        }
-        foreach ($command['definition']['options'] as $option) {
-            $width = \max($width, $this->getStringWidth($option['name_shortcut']));
-        }
+        $width = \array_reduce(
+            $command['definition']['arguments'],
+            /** @psalm-param ArgumentType $argument */
+            fn (float $carry, array $argument): float => \max($carry, $this->getStringWidth($argument['name'])),
+            $width
+        );
+        $width = \array_reduce(
+            $command['definition']['options'],
+            /** @psalm-param OptionType $option */
+            fn (float $carry, array $option): float => \max($carry, $this->getStringWidth($option['name_shortcut'])),
+            $width
+        );
         $this->resetStyle();
 
-        return $width + 2.0;
+        return \ceil($width) + 1.0;
     }
 
     /**
@@ -108,9 +151,10 @@ class CommandsReport extends AbstractArrayReport
 
         $this->renderHeader('command.list.fields.arguments');
         foreach ($arguments as $argument) {
+            $help = $this->getDescriptionHelp($argument['description'], $argument['arguments']);
             $this->cellIndent();
             $this->renderFixedCell($argument['name'], $width);
-            $this->renderStyledHelp($this->getDescriptionHelp($argument['description'], $argument['arguments']));
+            $this->renderStyledHelp($help);
             $this->lineBreak(0.0);
         }
         $this->lineBreak(1.0);
@@ -191,18 +235,21 @@ class CommandsReport extends AbstractArrayReport
 
         $this->renderHeader('command.list.fields.options');
         foreach ($options as $option) {
+            $help = $this->getDescriptionHelp($option['description'], $option['arguments']);
             $this->cellIndent();
             $this->renderFixedCell($option['name_shortcut'], $width);
-            $this->renderStyledHelp($this->getDescriptionHelp($option['description'], $option['arguments']));
+            $this->renderStyledHelp($help);
         }
         $this->lineBreak(1.0);
     }
 
     private function renderStyledHelp(string $help): void
     {
-        $result = \preg_match_all(self::HELP_PATTERN, $help, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE);
+        $help = \str_replace(' target="_blank" rel="noopener noreferrer"', '', $help);
+        $result = \preg_match_all(self::CLASS_PATTERN, $help, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE);
         if (false === $result || 0 === $result) {
-            $this->multiCell(text: $help, align: PdfTextAlignment::LEFT);
+            $this->write($help);
+            $this->lineBreak();
 
             return;
         }
@@ -217,25 +264,21 @@ class CommandsReport extends AbstractArrayReport
             $index = $match[0][1];
             if ($index > $offset) {
                 $text = \substr($help, $offset, $index - $offset);
-                $this->write(\strip_tags($text));
+                $this->write($text);
                 $offset = $index;
             }
-
             // current chunk
             $this->applyFixedStyle(10.0);
             HtmlBootstrapColor::parseTextColor($match[1][0])?->apply($this);
             $this->write($match[2][0]);
             $this->resetStyle();
-
             // move
             $offset += \strlen($match[0][0]);
         }
-
         // last chunk
         if ($offset < \strlen($help)) {
             $this->write(\substr($help, $offset));
         }
-
         // restore
         $this->leftMargin = $margin;
         $this->lineBreak();

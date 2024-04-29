@@ -1541,7 +1541,7 @@ command:
     result:
         title: Résultats
         description: Résultat de l'exécution de la commande.
-        message: 'Message :'
+        message: Message
         re_run: Relancer
         empty: La commande n'a renvoyée aucune donnée.
         error: Une erreur est survenue dans l'exécution de la commande.

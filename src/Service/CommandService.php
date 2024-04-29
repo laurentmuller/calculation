@@ -66,6 +66,7 @@ class CommandService implements \Countable
     private const HELP_REPLACE = [
         // development
         '/development/public/index.php' => 'bin/console',
+        '/bin/console/command' => 'bin/console',
         // production
         '/calculation/public/index.php' => 'bin/console',
         // local development
@@ -84,7 +85,7 @@ class CommandService implements \Countable
     ];
 
     private const HREF_REPLACE = [
-        '/(<href=)(.*?)>(.*?)(<\/>)/m' => '<a href=\"$2\">$3</a>',
+        '/(<href=)(.*?)>(.*?)(<\/>)/m' => '<a href="$2" target="_blank" rel="noopener noreferrer">$3</a>',
     ];
 
     private const USAGE_REPLACE = [
@@ -114,8 +115,8 @@ class CommandService implements \Countable
      * @param string $command         the command name to execute
      * @param array  $parameters      the command parameters
      * @param bool   $replaceResult   set whether if the result content must be updated by replacing tags
-     * @param bool   $catchExceptions sets whether to catch exceptions or not during commands execution
-     * @param bool   $catchErrors     sets whether to catch errors or not during commands execution
+     * @param bool   $catchExceptions sets whether to catch exceptions or not during command execution
+     * @param bool   $catchErrors     sets whether to catch errors or not during command execution
      *
      * @return CommandResult the result of the execution
      *
@@ -244,7 +245,7 @@ class CommandService implements \Countable
     }
 
     /**
-     * Returns if the given command name exist.
+     * Returns if the given command name exists.
      *
      * @throws InvalidArgumentException
      */

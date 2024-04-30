@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\CommandController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(CommandController::class)]
@@ -47,10 +48,14 @@ class CommandControllerTest extends AbstractControllerTestCase
         yield [
             '/command/content?name=fake_command_not_exist',
             self::ROLE_SUPER_ADMIN,
-            Response::HTTP_NOT_FOUND];
+            Response::HTTP_OK,
+            Request::METHOD_GET,
+            true];
+
         yield [
             '/command/execute?name=fake_command_not_exist',
             self::ROLE_SUPER_ADMIN,
-            Response::HTTP_NOT_FOUND];
+            Response::HTTP_NOT_FOUND,
+        ];
     }
 }

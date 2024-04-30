@@ -16,7 +16,6 @@ use App\Attribute\Get;
 use App\Attribute\GetPost;
 use App\Interfaces\RoleInterface;
 use App\Report\CommandsReport;
-use App\Response\PdfResponse;
 use App\Service\CommandDataService;
 use App\Service\CommandFormService;
 use App\Service\CommandService;
@@ -58,7 +57,9 @@ class CommandController extends AbstractController
         CommandService $service
     ): JsonResponse {
         if (!$service->hasCommand($name)) {
-            throw $this->createNotFoundException($this->trans('command.list.error', ['%name%' => $name]));
+            return $this->jsonFalse([
+                'message' => $this->trans('command.list.error', ['%name%' => $name]),
+            ]);
         }
 
         $command = $service->getCommand($name);
@@ -80,6 +81,11 @@ class CommandController extends AbstractController
         #[MapQueryParameter]
         ?string $name = null
     ): Response {
+        $count = $service->count();
+        if (0 === $count) {
+            return $this->redirectToHomePage('command.list.empty');
+        }
+
         /** @psalm-var ?string $commandName */
         $commandName = $name ?? $request->getSession()->get(self::LAST_COMMAND);
         if (\is_string($commandName) && $service->hasCommand($commandName)) {
@@ -89,8 +95,8 @@ class CommandController extends AbstractController
         }
         $root = $this->trans('command.list.available');
         $parameters = [
+            'count' => $count,
             'command' => $command,
-            'count' => $service->count(),
             'groups' => $service->getGroupedNames($root),
         ];
 
@@ -164,8 +170,12 @@ class CommandController extends AbstractController
      * @throws InvalidArgumentException
      */
     #[Get(path: '/pdf', name: 'command_pdf')]
-    public function pdf(CommandService $service): PdfResponse
+    public function pdf(CommandService $service): Response
     {
+        if (0 === $service->count()) {
+            return $this->redirectToHomePage('command.list.empty');
+        }
+
         $root = $this->trans('command.list.available');
         $groups = $service->getGroupedCommands($root);
         $report = new CommandsReport($this, $groups);

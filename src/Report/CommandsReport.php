@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlBootstrapColor;
 use App\Pdf\PdfStyle;
 use App\Service\CommandService;
@@ -124,7 +123,7 @@ class CommandsReport extends AbstractArrayReport
                 $offset = $index;
             }
             // current chunk (link)
-            PdfTextColor::link()->apply($this);
+            HtmlBootstrapColor::PRIMARY->applyTextColor($this);
             $this->write($match[2][0], link: $match[1][0]);
             $this->resetStyle();
             // move
@@ -241,19 +240,17 @@ class CommandsReport extends AbstractArrayReport
 
     private function renderStyledHelp(string $help): void
     {
+        // margin
+        $oldMargin = $this->leftMargin;
+        $this->leftMargin = $this->x;
+
         // find classes
         $help = \str_replace(' target="_blank" rel="noopener noreferrer"', '', $help);
         $result = \preg_match_all(self::CLASS_PATTERN, $help, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE);
         if (false === $result || 0 === $result) {
             $this->outputHelp($help);
-            $this->lineBreak();
-
-            return;
+            goto restore;
         }
-
-        // margin
-        $oldMargin = $this->leftMargin;
-        $this->leftMargin = $this->x;
 
         $offset = 0;
         foreach ($matches as $match) {
@@ -278,6 +275,7 @@ class CommandsReport extends AbstractArrayReport
         }
 
         // restore
+        restore:
         $this->leftMargin = $oldMargin;
         $this->lineBreak();
     }

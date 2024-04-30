@@ -1,5 +1,7 @@
 /**! compression tag for ftp-deployment */
 
+/* globals Toaster */
+
 function disposePopover() {
     'use strict';
     $('.content [data-content').popover('dispose');
@@ -27,9 +29,10 @@ function createPopover() {
 function loadContent(name) {
     'use strict';
     const url = $('#command').data('url').replace('query', name);
-    $.get(url, function (data) {
-        if (data.result) {
-            $('.content').html(data.content).fadeIn();
+    $.get(url, function (response) {
+        if (response.result) {
+            $('.btn-execute').fadeIn();
+            $('.content').html(response.content).fadeIn();
             const url = new URL(location);
             url.searchParams.set('name', name);
             window.history.pushState({'name': name}, '', url);
@@ -37,6 +40,9 @@ function loadContent(name) {
             createPopover();
         } else {
             $('.content').fadeOut();
+            $('.btn-execute').fadeOut();
+            const title = $(".card-title").text();
+            Toaster.notify(Toaster.NotificationTypes.DANGER, response.message, title);
         }
     });
 }

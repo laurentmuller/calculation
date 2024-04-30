@@ -1528,6 +1528,7 @@ command:
         counter: 'Nombre de commandes : %count%'
         available: Commandes disponibles
         error: Impossible de trouver la commande '%name%'.
+        empty: Aucune commande n'est disponible dans l'application.
         fields:
             command: Commande
             description: Description

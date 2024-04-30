@@ -140,10 +140,10 @@ function generate() {
     const $form = $('#edit-form');
     $.getJSON(url, data, function (response) {
         if (!response.result) {
-            notifyMessage('danger', response.message || $('#edit-form').data('error'));
+            notifyMessage(Toaster.NotificationTypes.DANGER, response.message || $('#edit-form').data('error'));
             return;
         } else if (!response.count) {
-            notifyMessage('warning', $('#edit-form').data('empty'));
+            notifyMessage(Toaster.NotificationTypes.WARNING, $('#edit-form').data('empty'));
             return;
         }
         const key = $('#form_entity').getSelectedOption().data('key');
@@ -158,7 +158,7 @@ function generate() {
                 renderProducts(response.items);
                 break;
             default:
-                notifyMessage('warning', $form.data('empty'));
+                notifyMessage(Toaster.NotificationTypes.WARNING, $form.data('empty'));
                 return;
         }
 
@@ -169,7 +169,7 @@ function generate() {
         $('#form_confirm').setChecked(false);
         enableButtons();
     }).fail(function () {
-        notifyMessage('danger', $form.data('error'));
+        notifyMessage(Toaster.NotificationTypes.DANGER, $form.data('error'));
     });
 }
 

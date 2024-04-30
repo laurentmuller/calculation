@@ -95,6 +95,6 @@
 {# help #}
 {% if command.help %}
     {{ _self.outputEntry('command.list.fields.help') }}
-    <pre class="ms-2 mb-0">{{ command.help|raw }}</pre>
+    <pre class="ms-2 mb-0 text-wrap">{{ command.help|raw|nl2br }}</pre>
 {% endif %}
 </div>

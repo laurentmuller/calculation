@@ -73,15 +73,15 @@ final class StringUtils
      *
      * <b>NB:</b> If the needle is empty, this function returns false.
      *
-     * @param string $haystack    the string to search in
+     * @param string $string      the string to search in
      * @param string $needle      the string to search for
      * @param bool   $ignore_case true for case-insensitive; false for case-sensitive
      *
      * @return bool true if substring is contained within a string
      */
-    public static function contains(string $haystack, string $needle, bool $ignore_case = true): bool
+    public static function contains(string $string, string $needle, bool $ignore_case = true): bool
     {
-        return self::unicode($haystack, $ignore_case)->containsAny($needle);
+        return self::unicode($string, $ignore_case)->containsAny($needle);
     }
 
     /**
@@ -132,19 +132,19 @@ final class StringUtils
     }
 
     /**
-     * Tests if a string ends within a substring.
+     * Tests if a string ends within the given suffix.
      *
      * <b>NB:</b> If the needle is empty, this function returns false.
      *
-     * @param string $haystack    the string to search in
-     * @param string $needle      the string to search for
+     * @param string $string      the string to search in
+     * @param string $suffix      the string suffix to search for
      * @param bool   $ignore_case true for case-insensitive; false for case-sensitive
      *
      * @return bool true if ends with substring
      */
-    public static function endWith(string $haystack, string $needle, bool $ignore_case = true): bool
+    public static function endWith(string $string, string $suffix, bool $ignore_case = true): bool
     {
-        return self::unicode($haystack, $ignore_case)->endsWith($needle);
+        return self::unicode($string, $ignore_case)->endsWith($suffix);
     }
 
     /**
@@ -260,19 +260,19 @@ final class StringUtils
     }
 
     /**
-     * Tests if a string starts within a substring.
+     * Tests if a string starts within the given prefix.
      *
      * <b>NB:</b> If the needle is empty, this function returns false.
      *
-     * @param string $haystack    the string to search in
-     * @param string $needle      the string to search for
+     * @param string $string      the string to search in
+     * @param string $prefix      the string prefix to search for
      * @param bool   $ignore_case true for case-insensitive; false for case-sensitive
      *
      * @return bool true if starts with substring
      */
-    public static function startWith(string $haystack, string $needle, bool $ignore_case = true): bool
+    public static function startWith(string $string, string $prefix, bool $ignore_case = true): bool
     {
-        return self::unicode($haystack, $ignore_case)->startsWith($needle);
+        return self::unicode($string, $ignore_case)->startsWith($prefix);
     }
 
     /**

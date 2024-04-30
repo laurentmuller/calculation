@@ -84,7 +84,8 @@ class CommandService implements \Countable
         '</>' => '</span>',
     ];
 
-    private const HREF_REPLACE = [
+    private const PREG_REPLACE = [
+        '/(.)(\n)(.)/m' => '$1 $3',
         '/(<href=)(.*?)>(.*?)(<\/>)/m' => '<a href="$2" target="_blank" rel="noopener noreferrer">$3</a>',
     ];
 
@@ -190,29 +191,30 @@ class CommandService implements \Countable
                 return [];
             }
 
+            // remove carriage return
+            $content = \str_replace('\r', '', $result->content);
+
             /** @psalm-var ContentType $decoded */
-            $decoded = StringUtils::decodeJson($result->content);
-            $result = \array_reduce(
+            $decoded = StringUtils::decodeJson($content);
+            $commands = \array_reduce(
                 $decoded['commands'],
                 /**
                  * @psalm-param array<string, CommandType> $carry
                  * @psalm-param CommandType $command
                  */
                 function (array $carry, array $command): array {
-                    if ($command['hidden']) {
-                        return $carry;
+                    if (!$command['hidden']) {
+                        $name = $command['name'];
+                        $carry[$name] = $this->updateCommand($command);
                     }
 
-                    $name = $command['name'];
-                    $this->updateCommand($command);
-
-                    return [$name => $command] + $carry;
+                    return $carry;
                 },
                 []
             );
-            \ksort($result);
+            \ksort($commands);
 
-            return $result;
+            return $commands;
         });
     }
 
@@ -374,7 +376,7 @@ class CommandService implements \Countable
             return $help;
         }
 
-        $help = StringUtils::pregReplace(self::HREF_REPLACE, $help);
+        $help = StringUtils::pregReplace(self::PREG_REPLACE, $help);
 
         return StringUtils::replace(self::HELP_REPLACE, $help);
     }
@@ -383,16 +385,21 @@ class CommandService implements \Countable
      * @psalm-param CommandType $command
      *
      * @phpstan-param array $command
+     *
+     * @psalm-return CommandType
+     *
+     * @phpstan-return array
      */
-    private function updateCommand(array &$command): void
+    private function updateCommand(array &$command): array
     {
+        $arguments = &$command['definition']['arguments'];
         $command['help'] = $command['help'] === $command['description'] ? '' : $this->replaceHelp($command['help']);
-        if (0 === \count($command['definition']['arguments'])) {
+        if (0 === \count($arguments)) {
             $command['usage'] = [\sprintf('%s [options]', $command['name'])];
         } else {
             $command['usage'] = StringUtils::pregReplace(self::USAGE_REPLACE, $command['usage']);
         }
-        foreach ($command['definition']['arguments'] as &$argument) {
+        foreach ($arguments as &$argument) {
             $argument['description'] = $this->replaceHelp($argument['description']);
             $argument['display'] = $this->encodeDefaultValue($argument['default']);
             $argument['arguments'] = $this->getArgumentHelp($argument);
@@ -403,5 +410,7 @@ class CommandService implements \Countable
             $option['arguments'] = $this->getOptionHelp($option);
             $option['name_shortcut'] = $this->getOptionNameAndShortcut($option['name'], $option['shortcut']);
         }
+
+        return $command;
     }
 }

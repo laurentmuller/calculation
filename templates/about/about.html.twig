@@ -2,7 +2,7 @@
 {% import 'about/_about_macro.html.twig' as tools %}
 {% from 'macros/_icons.html.twig' import link, linkExternal, homepage, sitemap, button_pdf, button_word, link_pdf, link_word, link_excel %}
 {# macros #}
-{% macro card(id, pdf_route, excel_route=false, word_route=false) -%}
+{% macro card(id, pdf_route, excel_route = false, word_route = false) -%}
     {%- set title = ('about.' ~ id)|trans -%}
     {%- set route = path('about_' ~ id ~ '_content') -%}
     <div class="card-header d-flex-wrap-center">

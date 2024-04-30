@@ -1,7 +1,7 @@
 {% import 'about/_about_macro.html.twig' as tools %}
 {% from 'macros/_icons.html.twig' import linkExternal, link %}
 {# macros #}
-{% macro headerLinkInfo(title, id, countable=null) -%}
+{% macro headerLinkInfo(title, id, countable = null) -%}
 <div class="d-flex-wrap-center border-bottom" id="{{ id }}-header">
     <a href="#{{ id }}" class="drop-down-icon-left flex-fill text-body my-1" data-bs-toggle="collapse" aria-expanded="false" aria-controls="{{ id }}" title="{{ 'about.expand'|trans }}">
         {{- title -}}

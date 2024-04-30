@@ -12,7 +12,7 @@
 {% endif %}
 {%- endmacro %}
 
-{% macro output_image(path, screenshot=true) -%}
+{% macro output_image(path, screenshot = true) -%}
 {%- set full_path = 'help/images/' ~ path ~ constant('App\\Service\\HelpService::IMAGES_EXT') -%}
 {% if asset_exists(full_path) %}
     {% if screenshot %}<p class="mb-2">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}

@@ -16,8 +16,6 @@ ECHO ----- PHP-STAN --------------------------------------------------- && ^
 .\vendor\bin\phpstan.bat analyse --memory-limit=2G                      && ^
 ECHO ----- PHP-RECTOR ------------------------------------------------- && ^
 .\vendor\bin\rector.bat process --dry-run --config=rector.php           && ^
-ECHO ----- PHP-TWIG-CS ------------------------------------------------ && ^
-.\vendor\bin\twigcs.bat --severity error --display blocking templates   && ^
 ECHO ----- PHP-TWIG-CS-FIXER ------------------------------------------ && ^
 .\vendor\bin\twig-cs-fixer.bat lint --config=.twig-cs-fixer.php         && ^
 ECHO ----- PHP-UNIT --------------------------------------------------- && ^

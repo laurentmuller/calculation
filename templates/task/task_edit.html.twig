@@ -29,7 +29,7 @@
     </div>
 {% endblock %}
 {# item #}
-{% macro outputTaskItem(item, show=false) %}
+{% macro outputTaskItem(item, show = false) %}
 {%- set id = item.vars.id|default(0) -%}
 {%- set id_header = 'item_header_' ~ id -%}
 {%- set id_content = 'item_content_' ~ id -%}

@@ -1,7 +1,7 @@
 {% extends 'cards/card_edit.html.twig' %}
 {% form_theme form with _self %}
 {# macros #}
-{% macro collapseLine(href, form, expanded=false, options=null) %}
+{% macro collapseLine(href, form, expanded = false, options = null) %}
 {%- set header_id = 'header_' ~ href -%}
 {%- set name = 'parameters.group_%s'|format(href)|trans -%}
 {%- set template = 'parameters/_parameters_%s.html.twig'|format(href) -%}

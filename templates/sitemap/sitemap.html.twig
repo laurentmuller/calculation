@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% from 'macros/_icons.html.twig' import icon, link, linkExternal %}
 {# output entry #}
-{% macro entry(entry, actions, entity=null, role='ROLE_USER') %}
+{% macro entry(entry, actions, entity = null, role = 'ROLE_USER') %}
 {% set role = entry.role is defined ? ('role_' ~ entry.role)|upper : role %}
 {% set route = entry.route|default(false) %}
 {% set entity = entry.entity|default(entity) %}

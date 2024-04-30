@@ -1,5 +1,5 @@
 {# create timestampable row #}
-{% macro timestampable_footer(item, separator=true) %}
+{% macro timestampable_footer(item, separator = true) %}
 {% if not item.new %}
     {# created date and user #}
     {% if not item.createdAt and not item.createdBy %}

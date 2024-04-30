@@ -6,7 +6,7 @@
 </option>
 {%- endmacro %}
 {# format the value with arrow #}
-{% macro cell_value(value, previous, user_percent=false) -%}
+{% macro cell_value(value, previous, user_percent = false) -%}
 {% if not previous %}
     {% set icon = false %}
 {% elseif previous == value %}

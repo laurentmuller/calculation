@@ -25,7 +25,7 @@
 </button>
 {% endmacro %}
 {# output a drop-down item #}
-{% macro output_dropdown(suffix, value, selection, text, attributes=[], icon=null) -%}
+{% macro output_dropdown(suffix, value, selection, text, attributes = [], icon = null) -%}
 {% apply spaceless %}
     {% set active = value == selection ? ' active' : '' %}
     {% set attributes = attributes|default([])|merge({
@@ -41,21 +41,21 @@
 {% endapply %}
 {%- endmacro %}
 {# output a drop-down header #}
-{% macro output_dropdown_header(text, translate=false, icon=null) -%}
+{% macro output_dropdown_header(text, translate = false, icon = null) -%}
     {{ _self.item_separator() }}
     <h6 class="dropdown-header">
         {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{% endif %}{{- (translate ? text|trans : text)|upper -}}
     </h6>
 {%- endmacro %}
 {# output a drop-down item path #}
-{% macro item_path(path, text, icon, class='') %}
+{% macro item_path(path, text, icon, class = '') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
 <li>
     {{- link(path, text, class, icon ~ ' fa-fw') -}}
 </li>
 {%- endmacro %}
 {# output an external drop-down item path #}
-{% macro item_path_external(path, text, icon, class='') %}
+{% macro item_path_external(path, text, icon, class = '') %}
 {%- set class = ('dropdown-item dropdown-item-path rowlink-skip ' ~ class|default(''))|trim -%}
 <li>
     {{- linkExternal(path, text, class, icon ~ ' fa-fw') -}}
@@ -66,18 +66,18 @@
 {{ dropdownItem(path, text, icon) }}
 {%- endmacro %}
 {# output an external drop-down item #}
-{% macro item_external(path, text, icon, class='') %}
+{% macro item_external(path, text, icon, class = '') %}
 {%- set class = ('dropdown-item rowlink-skip ' ~ class|default(''))|trim -%}
 <li>
     {{- linkExternal(path, text, class, icon ~ ' fa-fw') -}}
 </li>
 {%- endmacro %}
 {# output a drop-down separator #}
-{% macro item_separator(class='') %}
+{% macro item_separator(class = '') %}
 {{ dropdownSeparator(false, class) }}
 {%- endmacro %}
 {# output a property row #}
-{% macro property_row(field, value, class='') -%}
+{% macro property_row(field, value, class = '') -%}
 {% set class = ('col-8 text-truncate user-select-none ' ~ class)|trim %}
 <div class="row rowlink-skip g-0">
     <div class="col-4 user-select-none">{{ field|trans }}</div>
@@ -85,12 +85,12 @@
 </div>
 {%- endmacro %}
 {# output a property value #}
-{% macro property_value(value, class='') -%}
+{% macro property_value(value, class = '') -%}
 {% set class = ('text-truncate user-select-none ' ~ class)|trim %}
 <div class="{{ class }}">{{ value|raw }}</div>
 {%- endmacro %}
 {# output a property entry #}
-{% macro property_both(left_value, right_value, left_class='', right_class='') -%}
+{% macro property_both(left_value, right_value, left_class = '', right_class = '') -%}
 {% set left_class = ('col-4 user-select-none ' ~ left_class)|trim %}
 {% set right_class = ('col-8 user-select-none ' ~ right_class)|trim %}
 <div class="row rowlink-skip g-0">

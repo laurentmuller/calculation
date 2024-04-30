@@ -33,7 +33,7 @@
 {% endif %}
 {%- endmacro %}
 
-{% macro output_fields(fields, id=null, text=null) -%}
+{% macro output_fields(fields, id = null, text = null) -%}
 {% set text = text|default('help.labels.edit_fields') %}
 <p class="mt-2 mb-1">{{ text|trans }}</p>
 <div class="table-responsive">

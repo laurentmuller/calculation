@@ -1,5 +1,5 @@
 {# macros for calendar #}
-{% macro linkCalculations(query, date, count, class, title_message='counters.calculations_calendar') -%}
+{% macro linkCalculations(query, date, count, class, title_message = 'counters.calculations_calendar') -%}
 {% from 'macros/_icons.html.twig' import icon %}
 {%- set title = title_message|trans({date: date, count: count}) -%}
 <a class="{{ class }}" href="{{ path('calculation_table', {'search': query}) }}" title="{{ title }}">{{ icon(ICON_CALCULATION) }}</a>
@@ -15,7 +15,7 @@
 </table>
 {%- endmacro %}
 
-{% macro dataRow(calculation, extra_class='') %}
+{% macro dataRow(calculation, extra_class = '') %}
 {% from 'macros/_properties.html.twig' import stateCss %}
 {% set extra_class = ('text-nowrap ' ~ (extra_class|default('')))|trim %}
 {% set margin_class = user_service.application.marginBelow(calculation) ? 'text-percent text-danger' : 'text-percent' %}

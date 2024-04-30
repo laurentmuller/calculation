@@ -1,4 +1,4 @@
-name: Twigcs
+name: Twig-CS-Fixer
 
 on: [ push, pull_request ]
 
@@ -18,9 +18,6 @@ jobs:
 
             -   name: Install dependencies
                 run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-
-            -   name: Run Twigcs
-                run: vendor/bin/twigcs --config=.twig_cs.dist.php
 
             -   name: Run Twig-CS-Fixer
                 run: vendor/bin/twig-cs-fixer lint --config=.twig-cs-fixer.php

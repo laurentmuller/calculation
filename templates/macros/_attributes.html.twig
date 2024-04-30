@@ -1,5 +1,5 @@
 {# output attributes #}
-{% macro attributes(attributes, prefix='') -%}
+{% macro attributes(attributes, prefix = '') -%}
 {% for name, value in attributes %}
     {%- if value is same as(true) or value is same as(false) -%}
         {% set value = value|json_encode %}

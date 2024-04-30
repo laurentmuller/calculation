@@ -21,7 +21,7 @@
 </tr>
 {%- endmacro %}
 
-{% macro table(form, default, permissions, overwrite=true) %}
+{% macro table(form, default, permissions, overwrite = true) %}
 {% from 'macros/_icons.html.twig' import icon %}
 <div class="table-responsive">
     <table class="table table-bordered table-list" id="table-edit">
@@ -57,7 +57,7 @@
 </div>
 {% endmacro %}
 
-{% macro actions(overwrite=true) %}
+{% macro actions(overwrite = true) %}
 {%- set button_class = 'btn btn-secondary' -%}
 <div class="btn-group btn-group-sm" role="group" aria-label="{{ 'common.actions'|trans }}">
     <button type="button" id="all" class="{{ button_class }}" title="{{ 'user.rights.all_title'|trans }}"{%- if not overwrite -%} disabled="disabled"{%- endif -%}>

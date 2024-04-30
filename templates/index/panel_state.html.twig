@@ -2,7 +2,7 @@
 {% from 'macros/_attributes.html.twig' import attributes %}
 {% import 'index/_macros.html.twig' as macros %}
 {# macros #}
-{% macro cardEntry(state, table_path, parameters=[], min_margin) -%}
+{% macro cardEntry(state, table_path, parameters = [], min_margin) -%}
 {% from 'macros/_properties.html.twig' import stateCss %}
 <div class="border index-child m-1 {% if state.color %} text-border{% endif %}"{% if state.color %} style="{{ stateCss(state.color) }}"{% endif %}>
     <div class="position-relative body-tooltip p-2">

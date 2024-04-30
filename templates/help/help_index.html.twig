@@ -23,7 +23,7 @@
     </div>
 {%- endmacro %}
 
-{% macro output_menus(menus, service, indent=false) -%}
+{% macro output_menus(menus, service, indent = false) -%}
     <div class="help-item{% if indent %} ms-3{% endif %}">
         {%- for menu in menus -%}
             {{- _self.output_menu(menu, service, indent) -}}
@@ -31,7 +31,7 @@
     </div>
 {%- endmacro %}
 
-{% macro output_menu(menu, service, indent=false) -%}
+{% macro output_menu(menu, service, indent = false) -%}
     {% if menu.action|default(false) %}
         {%- set menu = service.mergeAction(menu) -%}
     {% endif %}

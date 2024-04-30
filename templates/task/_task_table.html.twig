@@ -1,10 +1,10 @@
 {# add a plain text input #}
-{% macro plain_text_input(id, class='') %}
+{% macro plain_text_input(id, class = '') %}
 {%- set class = ('form-control-plaintext form-control-readonly text-end ' ~ class)|trim -%}
 <span id="{{ id }}" class="{{ class }}">{{ 0|amount }}</span>
 {% endmacro %}
 {# add a task item #}
-{% macro task_item_input(task, item, visible=false, disabled=false) %}
+{% macro task_item_input(task, item, visible = false, disabled = false) %}
 {% set task_item_id = item.id %}
 <div class="row align-items-center mb-2 task-item-row{% if not visible %} d-none{% endif %}" data-id="{{ task.id }}" data-unit="{{ task.unit }}">
     <div class="col-sm-6">

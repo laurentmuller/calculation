@@ -67,7 +67,7 @@ abstract class AbstractTable implements SortModeInterface
     public function getColumns(): array
     {
         if (null === $this->columns) {
-            $this->columns = $this->createColumns();
+            return $this->columns = $this->createColumns();
         }
 
         return $this->columns;
@@ -235,7 +235,7 @@ abstract class AbstractTable implements SortModeInterface
     }
 
     /**
-     * Map the given entity or array to an array.
+     * Map the given entity or array.
      *
      * @param EntityType $objectOrArray the entity or array to map
      * @param Column[]   $columns       the columns
@@ -246,12 +246,8 @@ abstract class AbstractTable implements SortModeInterface
     {
         return \array_reduce(
             $columns,
-            /** @psalm-param array<string, string> $result */
-            static function (array $result, Column $column) use ($objectOrArray): array {
-                $result[$column->getAlias()] = $column->mapValue($objectOrArray);
-
-                return $result;
-            },
+            /** @psalm-param array<string, string> $carry */
+            fn (array $carry, Column $column) => $carry + [$column->getAlias() => $column->mapValue($objectOrArray)],
             []
         );
     }

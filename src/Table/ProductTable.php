@@ -21,7 +21,7 @@ use App\Utils\FileUtils;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * The products table.
+ * The product table.
  *
  * @template-extends AbstractCategoryItemTable<Product, ProductRepository>
  */

@@ -24,7 +24,7 @@ use Doctrine\ORM\QueryBuilder;
 use Twig\Environment;
 
 /**
- * The calculations table.
+ * The calculation table.
  *
  * @template-extends AbstractEntityTable<Calculation, CalculationRepository>
  */
@@ -33,7 +33,7 @@ class CalculationTable extends AbstractEntityTable
     use MathTrait;
 
     /**
-     * The state editable parameter name (bool).
+     * The editable state parameter name (bool).
      */
     final public const PARAM_EDITABLE = 'stateEditable';
 

@@ -48,7 +48,7 @@ class DataResults implements \JsonSerializable
     public int $filtered = 0;
 
     /**
-     * The pages list.
+     * The allowed pages list.
      *
      * @var int[]
      */
@@ -89,7 +89,7 @@ class DataResults implements \JsonSerializable
     }
 
     /**
-     * Adds a custom data to this list of custom datas.
+     * Adds custom data to this list of custom datas.
      */
     public function addCustomData(string $name, mixed $value): self
     {

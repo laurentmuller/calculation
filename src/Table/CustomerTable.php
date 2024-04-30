@@ -17,7 +17,7 @@ use App\Repository\CustomerRepository;
 use App\Utils\FileUtils;
 
 /**
- * The customers table.
+ * The customer table.
  *
  * @template-extends AbstractEntityTable<Customer, CustomerRepository>
  */

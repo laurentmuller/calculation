@@ -83,7 +83,7 @@ class Column implements \Stringable, SortModeInterface
     private string $order = self::SORT_ASC;
 
     /**
-     * The property path for array object.
+     * The property path for an array object.
      */
     private string $property = '';
 
@@ -442,7 +442,7 @@ class Column implements \Stringable, SortModeInterface
     }
 
     /**
-     * Update property path for array object.
+     * Update the property path for the array.
      */
     private function updateProperty(): self
     {

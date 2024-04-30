@@ -20,7 +20,7 @@ use Doctrine\ORM\QueryBuilder;
 use Twig\Environment;
 
 /**
- * The calculation table for margin below.
+ * The calculation table for the margin below.
  */
 class CalculationBelowTable extends CalculationTable implements \Countable
 {

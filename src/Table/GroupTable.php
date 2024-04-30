@@ -27,7 +27,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;
 
 /**
- * The groups table.
+ * The group table.
  *
  * @template-extends AbstractEntityTable<Group, GroupRepository>
  */

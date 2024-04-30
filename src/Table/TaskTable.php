@@ -21,7 +21,7 @@ use App\Utils\FileUtils;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * The tasks table.
+ * The task table.
  *
  * @template-extends AbstractCategoryItemTable<Task, TaskRepository>
  */

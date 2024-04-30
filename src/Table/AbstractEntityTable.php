@@ -115,7 +115,7 @@ abstract class AbstractEntityTable extends AbstractTable
     /**
      * Gets the default sort order.
      *
-     * @return array<string, string> an array where each key is the field name and the value is the order
+     * @return array<string, string> an array where each key is the field name, and the value is the order
      *                               direction ('asc' or 'desc')
      *
      * @psalm-return array<string, self::SORT_*>
@@ -177,7 +177,7 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
-     * Add the order by clause.
+     * Add the clause order by.
      *
      * @param DataQuery      $query   the data query
      * @param QueryBuilder   $builder the query builder to update
@@ -280,7 +280,7 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
-     * Update the order by clause.
+     * Update the clause order by.
      *
      * @psalm-param array<string, string> $orderBy
      * @psalm-param DataQuery|Column|array<string, string> $value
@@ -302,7 +302,7 @@ abstract class AbstractEntityTable extends AbstractTable
     }
 
     /**
-     * Remove the group by part and left join parts of the given builder.
+     * Remove the group by and left join parts of the given builder.
      *
      * @param literal-string $alias the root alias
      */

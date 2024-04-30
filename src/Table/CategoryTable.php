@@ -29,7 +29,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;
 
 /**
- * The categories table.
+ * The category table.
  *
  * @template-extends AbstractEntityTable<Category, CategoryRepository>
  */

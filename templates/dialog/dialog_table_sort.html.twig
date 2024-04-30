@@ -41,7 +41,13 @@
                 {% if column %}
                     {% set key = column.order == 'asc' ? 'list.sort_ascending_title' : 'list.sort_descending_title' %}
                     {% set text = key|trans({'%name%': column.title}) %}
-                    <button type="button" class="btn btn-form btn-success" id="sort-default-button" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-title="{{ text }}" data-bs-html="true" data-bs-placement="bottom" data-bs-custom-class="tooltip-lg">
+                    <button type="button" class="btn btn-form btn-success" id="sort-default-button"
+                            data-bs-toggle="tooltip"
+                            data-bs-trigger="hover"
+                            data-bs-title="{{ text }}"
+                            data-bs-html="true"
+                            data-bs-placement="bottom"
+                            data-bs-custom-class="tooltip-lg">
                         {{- 'list.sort_default_title'|trans -}}
                     </button>
                 {% endif %}

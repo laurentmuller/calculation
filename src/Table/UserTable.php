@@ -27,7 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
- * The users table.
+ * The user table.
  *
  * @template-extends AbstractEntityTable<User, UserRepository>
  */

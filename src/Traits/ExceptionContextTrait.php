@@ -20,7 +20,7 @@ use App\Utils\StringUtils;
 trait ExceptionContextTrait
 {
     /**
-     * Gets the context, as array; for the given exception.
+     * Gets the context, as the array; for the given exception.
      *
      * @param \Throwable $e the exception to get the context for
      *

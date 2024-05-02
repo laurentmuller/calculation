@@ -74,7 +74,7 @@ trait CookieTrait
     /**
      * Add or remove a cookie depending on the value.
      *
-     * If value is null or empty ('') the cookie is removed.
+     * If the value is null or empty (''), the cookie is removed.
      */
     protected function updateCookie(
         Response $response,

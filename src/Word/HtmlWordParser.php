@@ -174,7 +174,7 @@ class HtmlWordParser
     }
 
     /**
-     * Parses the margins class.
+     * Parses margins class.
      */
     private function parseMargins(string $class): string
     {

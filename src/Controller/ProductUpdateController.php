@@ -40,7 +40,7 @@ class ProductUpdateController extends AbstractController
     public function invoke(Request $request, ProductUpdateService $service): Response
     {
         $query = $service->createQuery();
-        $application = $this->getApplication();
+        $application = $this->getApplicationService();
         $form = $this->createQueryForm($service, $query);
         if ($this->handleRequestForm($request, $form)) {
             $service->saveQuery($query);

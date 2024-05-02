@@ -21,7 +21,6 @@ use App\Pdf\Interfaces\PdfChartInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Pdf\PdfCell;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\Traits\PdfChartLegendTrait;
 use App\Pdf\Traits\PdfPieChartTrait;
@@ -143,14 +142,14 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
             ->setHeadersListener($this)
             ->setTextListener($this)
             ->addColumns(
-                PdfColumn::left($this->trans('calculation.fields.state'), 20),
-                PdfColumn::right($this->trans('calculation.list.title'), 18, true),
-                PdfColumn::right('', 18, true),
-                PdfColumn::right($this->trans('calculationgroup.fields.amount'), 24, true),
-                PdfColumn::right($this->trans('calculation.fields.margin'), 24, true),
-                PdfColumn::right('', 14, true),
-                PdfColumn::right($this->trans('calculation.fields.total'), 24, true),
-                PdfColumn::right('', 18, true)
+                $this->leftColumn('calculation.fields.state', 20),
+                $this->rightColumn('calculation.list.title', 18, true),
+                $this->rightColumn('', 18, true),
+                $this->rightColumn('calculationgroup.fields.amount', 24, true),
+                $this->rightColumn('calculation.fields.margin', 24, true),
+                $this->rightColumn('', 14, true),
+                $this->rightColumn('calculation.fields.total', 24, true),
+                $this->rightColumn('', 18, true)
             )->outputHeaders();
     }
 
@@ -191,14 +190,13 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
         bool $bold = false,
         int $roundingMode = \NumberFormatter::ROUND_HALFDOWN
     ): PdfCell {
+        $text = FormatUtils::formatPercent($value, true, $decimals, $roundingMode);
         $style = $bold ? PdfStyle::getHeaderStyle() : PdfStyle::getCellStyle();
-        $cell = new PdfCell(FormatUtils::formatPercent($value, true, $decimals, $roundingMode));
         if ($useStyle && $this->isMinMargin($value)) {
             $style->setTextColor(PdfTextColor::red());
         }
-        $cell->setStyle($style);
 
-        return $cell;
+        return new PdfCell($text, style: $style);
     }
 
     private function getURL(int $id): string

@@ -67,7 +67,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the black color.
      *
-     * Value is RGB(0, 0, 0).
+     * The value is RGB(0, 0, 0).
      *
      * @return static
      */
@@ -79,7 +79,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the blue color.
      *
-     * Value is RGB(255, 0, 0).
+     * The value is RGB(255, 0, 0).
      *
      * @return static
      */
@@ -91,7 +91,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the border cell color.
      *
-     * Value is RGB(221, 221, 221).
+     * The value is RGB(221, 221, 221).
      *
      * @return static
      */
@@ -136,7 +136,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the dark-gray color.
      *
-     * Value is RGB(169, 169, 169).
+     * The value is RGB(169, 169, 169).
      *
      * @return static
      */
@@ -148,7 +148,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the dark-green color.
      *
-     * Value is RGB(0, 128, 0).
+     * The value is RGB(0, 128, 0).
      *
      * @return static
      */
@@ -160,7 +160,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the dark-red color.
      *
-     * Value is RGB(128, 0, 0).
+     * The value is RGB(128, 0, 0).
      *
      * @return static
      *
@@ -179,7 +179,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the green color.
      *
-     * Value is RGB(0, 255, 0).
+     * The value is RGB(0, 255, 0).
      *
      * @return static
      */
@@ -191,7 +191,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the header fill color.
      *
-     * Value is RGB(245, 245, 245).
+     * The value is RGB(245, 245, 245).
      *
      * @return static
      */
@@ -203,7 +203,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the link color (blue).
      *
-     * Value is RGB(0, 0, 255).
+     * The value is RGB(0, 0, 255).
      *
      * @return static
      */
@@ -215,7 +215,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the red color.
      *
-     * Value is RGB(255, 0, 0).
+     * The value is RGB(255, 0, 0).
      *
      * @return static
      */
@@ -227,7 +227,7 @@ abstract class AbstractPdfColor implements PdfDocumentUpdaterInterface
     /**
      * Gets the white color.
      *
-     * Value is RGB(255, 255, 255).
+     * The value is RGB(255, 255, 255).
      *
      * @return static
      */

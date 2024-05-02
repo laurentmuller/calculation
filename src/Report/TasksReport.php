@@ -111,11 +111,11 @@ class TasksReport extends AbstractArrayReport implements PdfGroupListenerInterfa
         return ReportGroupTable::fromReport($this)
             ->addColumns(
                 PdfColumn::left($name, 40),
-                PdfColumn::left($this->trans('task.fields.category'), 50, true),
-                PdfColumn::left($this->trans('task.fields.unit'), 15, true),
-                PdfColumn::right($this->trans('taskitemmargin.fields.minimum'), 20, true),
-                PdfColumn::right($this->trans('taskitemmargin.fields.maximum'), 20, true),
-                PdfColumn::right($this->trans('taskitemmargin.fields.value'), 20, true)
+                $this->leftColumn('task.fields.category', 50, true),
+                $this->leftColumn('task.fields.unit', 15, true),
+                $this->rightColumn('taskitemmargin.fields.minimum', 20, true),
+                $this->rightColumn('taskitemmargin.fields.maximum', 20, true),
+                $this->rightColumn('taskitemmargin.fields.value', 20, true)
             )->outputHeaders()
             ->setGroupListener($this);
     }

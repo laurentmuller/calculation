@@ -46,7 +46,7 @@ enum FlashType: string implements TranslatableEnumInterface
     case SUCCESS = 'success';
 
     /**
-     * Warning flash bag.
+     * Warning flash-bag.
      */
     #[EnumCase(extras: ['icon' => 'fas fa-lg fa-exclamation-circle'])]
     case WARNING = 'warning';

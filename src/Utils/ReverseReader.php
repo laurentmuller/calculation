@@ -20,7 +20,7 @@ namespace App\Utils;
  * <code>
  * $reader = new ReverseReader("path/to/file_name.txt");
  * foreach ($reader as $data) {
- *     echo $data ."\n";
+ *     echo $data . "\n";
  * }
  * </code>
  *

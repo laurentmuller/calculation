@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Entity\Category;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Traits\GroupByTrait;
@@ -74,10 +73,10 @@ class CategoriesReport extends AbstractArrayReport
     {
         return PdfGroupTable::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('category.fields.code'), 45, true),
-                PdfColumn::left($this->trans('category.fields.description'), 50),
-                PdfColumn::right($this->trans('category.fields.products'), 26, true),
-                PdfColumn::right($this->trans('category.fields.tasks'), 26, true)
+                $this->leftColumn('category.fields.code', 45, true),
+                $this->leftColumn('category.fields.description', 50),
+                $this->rightColumn('category.fields.products', 26, true),
+                $this->rightColumn('category.fields.tasks', 26, true)
             )->outputHeaders();
     }
 

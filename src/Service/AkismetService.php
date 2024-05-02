@@ -23,7 +23,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Service to check spams with the Akismet.
+ * Service to check spamming with the Akismet.
  *
  * @see https://akismet.com/
  */
@@ -89,9 +89,11 @@ class AkismetService extends AbstractHttpClientService
      * The parameters options can be one of the following:
      * </p>
      * <ul>
-     * <li><b>blog</b> (required): The front page or home URL of the instance making the request. For a blog or wiki this would be the front page. Note: Must be a full URI, including http://.</li>
+     * <li><b>blog</b> (required): The front page or home URL of the instance making the request. For a blog or wiki,
+     * this would be the front page. Note: Must be a full URI, including http://.</li>
      * <li><b>user_ip</b> (required): IP address of the comment submitter.</li>
-     * <li><b>user_agent</b>: User agent string of the web browser submitting the comment - typically the HTTP_USER_AGENT cgi variable. Not to be confused with the user agent of the Akismet library.</li>
+     * <li><b>user_agent</b>: User agent string of the web browser submitting the comment - typically the
+     * HTTP_USER_AGENT cgi variable. Not to be confused with the user agent of the Akismet library.</li>
      * <li><b>referrer</b>: The content of the HTTP_REFERER header should be sent here.</li>
      * <li><b>permalink</b>: The full permanent URL of the entry the comment was submitted to.</li>
      * <li><b>comment_type</b>: A string that describes the type of content being sent. Examples:
@@ -108,11 +110,16 @@ class AkismetService extends AbstractHttpClientService
      * <li><b>comment_author</b>: Name submitted with the comment.</li>
      * <li><b>comment_author_email</b>: Email address submitted with the comment.</li>
      * <li><b>comment_author_url</b>: URL submitted with comment.</li>
-     * <li><b>comment_date_gmt</b>: The UTC timestamp of the creation of the comment, in ISO 8601 format. May be omitted for comment-check requests if the comment is sent to the API at the time it is created.</li>
-     * <li><b>comment_post_modified_gmt</b>: The UTC timestamp of the publication time for the post, page or thread on which the comment was posted.</li>
-     * <li><b>blog_lang</b>: Indicates the language(s) in use on the blog or site, in ISO 639-1 format, comma-separated. A site with articles in English and French might use “en, fr_ca”.</li>
-     * <li><b>blog_charset</b>: The character encoding for the form values included in comment_* parameters, such as “UTF-8” or “ISO-8859-1”.</li>
-     * <li><b>user_role</b>: The user role of the user who submitted the comment. This is an optional parameter. If you set it to “administrator”, Akismet will always return false.</li>
+     * <li><b>comment_date_gmt</b>: The UTC timestamp of the creation of the comment, in ISO 8601 format. May be
+     * omitted for comment-check requests if the comment is sent to the API at the time it is created.</li>
+     * <li><b>comment_post_modified_gmt</b>: The UTC timestamp of the publication time for the post, page or thread
+     * on which the comment was posted.</li>
+     * <li><b>blog_lang</b>: Indicates the language(s) in use on the blog or site, in ISO 639-1 format, comma-separated.
+     * A site with articles in English and French might use "en, fr_ca".</li>
+     * <li><b>blog_charset</b>: The character encoding for the form values included in comment_* parameters, such as
+     * "UTF-8" or "ISO-8859-1".</li>
+     * <li><b>user_role</b>: The user role of the user who submitted the comment. This is an optional parameter.
+     * If you set it to "administrator", Akismet will always return false.</li>
      * <li><b>is_test</b>: This is an optional parameter. You can use it when submitting test queries.</li>
      * </ul>.
      *

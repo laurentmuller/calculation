@@ -32,37 +32,37 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
     use TranslatableEnumTrait;
 
     /**
-     * Allow to add an entity.
+     * Allows adding an entity.
      */
     #[EnumCase('add')]
     case ADD = 1 << 0;
 
     /**
-     * Allow to delete an entity.
+     * Allows deleting an entity.
      */
     #[EnumCase('delete')]
     case DELETE = 1 << 1;
 
     /**
-     * Allow to edit an entity.
+     * Allows editing an entity.
      */
     #[EnumCase('edit')]
     case EDIT = 1 << 2;
 
     /**
-     * Allow to export entities.
+     * Allows exporting entities.
      */
     #[EnumCase('export')]
     case EXPORT = 1 << 3;
 
     /**
-     * Allow to list entities.
+     * Allows listing entities.
      */
     #[EnumCase('list')]
     case LIST = 1 << 4;
 
     /**
-     * Allow to show an entity.
+     * Allows showing an entity.
      */
     #[EnumCase('show')]
     case SHOW = 1 << 5;

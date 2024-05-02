@@ -15,6 +15,7 @@ namespace App\Report\Table;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfCellTranslatorTrait;
+use App\Pdf\Traits\PdfColumnTranslatorTrait;
 use App\Report\AbstractReport;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -24,6 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ReportTable extends PdfTable
 {
     use PdfCellTranslatorTrait;
+    use PdfColumnTranslatorTrait;
 
     /**
      * @param PdfDocument         $parent     the parent document to print in

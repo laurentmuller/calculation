@@ -95,7 +95,7 @@ class SimpleEditorType extends AbstractType
     }
 
     /**
-     * Filter, update and group actions.
+     * Filters, updates, and groups actions.
      *
      * @psalm-param array{actions?: array, ...} $options
      */

@@ -16,7 +16,7 @@ use App\Entity\Calculation;
 use App\Entity\CalculationState;
 
 /**
- * Contains result of archive calculations.
+ * Contains the result of archive calculations.
  *
  * @psalm-type ResultsType = array<string, array{state: CalculationState, calculations: array<Calculation>}>
  */

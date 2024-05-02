@@ -97,7 +97,7 @@ class SymfonyReport extends AbstractReport
     private function outputInfo(SymfonyInfoService $info): void
     {
         $this->addBookmark('Kernel');
-        $app = $this->controller->getApplication();
+        $app = $this->controller->getApplicationService();
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(

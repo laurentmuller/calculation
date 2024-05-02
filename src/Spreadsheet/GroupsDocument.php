@@ -35,10 +35,8 @@ class GroupsDocument extends AbstractArrayDocument
             'group.fields.categories' => HeaderFormat::int(),
             'category.fields.products' => HeaderFormat::int(),
             'category.fields.tasks' => HeaderFormat::int(),
-
             'globalmargin.fields.minimum' => HeaderFormat::amount(),
             'globalmargin.fields.maximum' => HeaderFormat::amount(),
-            'globalmargin.fields.delta' => HeaderFormat::amount(),
             'globalmargin.fields.margin' => HeaderFormat::percent(),
         ]);
 
@@ -50,18 +48,22 @@ class GroupsDocument extends AbstractArrayDocument
                 $entity->countProducts(),
                 $entity->countTasks(),
             ]);
-            $first = true;
-            foreach ($entity->getMargins() as $margin) {
-                if (!$first) {
-                    ++$row;
+            if ($entity->hasMargins()) {
+                $first = true;
+                foreach ($entity->getMargins() as $margin) {
+                    if (!$first) {
+                        ++$row;
+                    }
+                    $sheet->setRowValues($row, [
+                        $margin->getMinimum(),
+                        $margin->getMaximum(),
+                        $margin->getMargin(),
+                    ], 6);
+                    $first = false;
                 }
-                $sheet->setRowValues($row, [
-                    $margin->getMinimum(),
-                    $margin->getMaximum(),
-                    $margin->getDelta(),
-                    $margin->getMargin(),
-                ], 6);
-                $first = false;
+            } else {
+                $sheet->setCellValue([6, $row], $this->trans('group.edit.empty_margins'));
+                $sheet->mergeContent(6, 8, $row);
             }
             ++$row;
         }

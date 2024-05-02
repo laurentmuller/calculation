@@ -14,7 +14,6 @@ namespace App\Report\Table;
 
 use App\Entity\Calculation;
 use App\Entity\CalculationGroup;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Report\CalculationReport;
 use fpdf\PdfBorder;
@@ -75,11 +74,11 @@ class TableGroups extends ReportTable
     private function createColumns(): void
     {
         $columns = [
-            PdfColumn::left($this->trans('report.calculation.resume'), 50),
-            PdfColumn::right($this->trans('report.calculation.amount'), 20, true),
-            PdfColumn::right($this->trans('report.calculation.margin_percent'), 20, true),
-            PdfColumn::right($this->trans('report.calculation.margin_amount'), 20, true),
-            PdfColumn::right($this->trans('report.calculation.total'), 20, true),
+            $this->leftColumn('report.calculation.resume', 50),
+            $this->rightColumn('report.calculation.amount', 20, true),
+            $this->rightColumn('report.calculation.margin_percent', 20, true),
+            $this->rightColumn('report.calculation.margin_amount', 20, true),
+            $this->rightColumn('report.calculation.total', 20, true),
         ];
         $this->addColumns(...$columns);
 

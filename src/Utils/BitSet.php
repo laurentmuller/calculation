@@ -18,7 +18,7 @@ namespace App\Utils;
 class BitSet implements \Stringable
 {
     /**
-     * The number of bits per word.
+     * The number of bits by words.
      */
     private const WORD_BITS = 31;
 
@@ -262,7 +262,7 @@ class BitSet implements \Stringable
     /**
      * Gets the "logical size".
      *
-     * @return int the index of the highest set bit plus one
+     * @return int the index of the highest-set bit plus one
      */
     public function size(): int
     {
@@ -373,7 +373,7 @@ class BitSet implements \Stringable
     }
 
     /**
-     * Apply  a function to the given range.
+     * Apply a function to the given range.
      *
      * @param int                 $fromIndex the start index (inclusive)
      * @param int                 $toIndex   the end index (exclusive)
@@ -413,7 +413,7 @@ class BitSet implements \Stringable
     }
 
     /**
-     * Gets the words index for the given bit.
+     * Gets words index for the given bit.
      *
      * @throws \InvalidArgumentException If the bit argument is negative
      */

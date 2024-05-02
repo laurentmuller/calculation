@@ -132,8 +132,7 @@ class GroupController extends AbstractEntityController
     {
         $entities = $this->getEntities('code');
         if ([] === $entities) {
-            $message = $this->trans('group.list.empty');
-            throw $this->createNotFoundException($message);
+            throw $this->createNotFoundException($this->trans('group.list.empty'));
         }
         $doc = new GroupsDocument($this, $entities);
 
@@ -143,7 +142,7 @@ class GroupController extends AbstractEntityController
     /**
      * Export the groups to a PDF document.
      *
-     * @throws NotFoundHttpException                if no group is found
+     * @throws NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Get(path: '/pdf', name: 'group_pdf')]
@@ -151,8 +150,7 @@ class GroupController extends AbstractEntityController
     {
         $entities = $this->getEntities('code');
         if ([] === $entities) {
-            $message = $this->trans('group.list.empty');
-            throw $this->createNotFoundException($message);
+            throw $this->createNotFoundException($this->trans('group.list.empty'));
         }
         $doc = new GroupsReport($this, $entities);
 

@@ -135,9 +135,9 @@ class SchemaReport extends AbstractReport
         }
         $table = $this->createTable(
             'schema.fields.associations',
-            PdfColumn::left($this->trans('schema.fields.name'), 100),
-            PdfColumn::left($this->trans('schema.fields.table'), 100),
-            PdfColumn::left($this->trans('schema.fields.relation'), 55, true)
+            $this->leftColumn('schema.fields.name', 100),
+            $this->leftColumn('schema.fields.table', 100),
+            $this->leftColumn('schema.fields.relation', 55, true)
         );
         foreach ($associations as $association) {
             $name = $association['table'];
@@ -160,10 +160,10 @@ class SchemaReport extends AbstractReport
         }
         $table = $this->createTable(
             'schema.fields.columns',
-            PdfColumn::left($this->trans('schema.fields.name'), 100),
-            PdfColumn::left($this->trans('schema.fields.type'), 35, true),
-            PdfColumn::center($this->trans('schema.fields.required'), 25, true),
-            PdfColumn::left($this->trans('schema.fields.default'), 30, true)
+            $this->leftColumn('schema.fields.name', 100),
+            $this->leftColumn('schema.fields.type', 35, true),
+            $this->centerColumn('schema.fields.required', 25, true),
+            $this->leftColumn('schema.fields.default', 30, true)
         );
         foreach ($columns as $column) {
             $link = $this->findLink($column['foreign_table']);
@@ -187,10 +187,10 @@ class SchemaReport extends AbstractReport
         }
         $table = $this->createTable(
             'schema.fields.indexes',
-            PdfColumn::left($this->trans('schema.fields.name'), 100),
-            PdfColumn::left($this->trans('schema.fields.columns'), 100),
-            PdfColumn::center($this->trans('schema.fields.primary'), 25, true),
-            PdfColumn::center($this->trans('schema.fields.unique'), 30, true),
+            $this->leftColumn('schema.fields.name', 100),
+            $this->leftColumn('schema.fields.columns', 100),
+            $this->centerColumn('schema.fields.primary', 25, true),
+            $this->centerColumn('schema.fields.unique', 30, true),
         );
         foreach ($indexes as $index) {
             $table->startRow()
@@ -228,11 +228,11 @@ class SchemaReport extends AbstractReport
         $this->outputTitle('schema.index.title');
         $instance = PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('schema.fields.name'), 100),
-                PdfColumn::right($this->trans('schema.fields.columns'), 19, true),
-                PdfColumn::right($this->trans('schema.fields.records'), 30, true),
-                PdfColumn::right($this->trans('schema.fields.indexes'), 17, true),
-                PdfColumn::right($this->trans('schema.fields.associations'), 25, true)
+                $this->leftColumn('schema.fields.name', 100),
+                $this->rightColumn('schema.fields.columns', 19, true),
+                $this->rightColumn('schema.fields.records', 30, true),
+                $this->rightColumn('schema.fields.indexes', 17, true),
+                $this->rightColumn('schema.fields.associations', 25, true)
             )->outputHeaders();
         foreach ($tables as $table) {
             $name = $table['name'];

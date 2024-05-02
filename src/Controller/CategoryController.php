@@ -191,7 +191,7 @@ class CategoryController extends AbstractEntityController
      */
     protected function deleteFromDatabase(EntityInterface $item): void
     {
-        $this->getApplication()->updateDeletedCategory($item);
+        $this->getApplicationService()->updateDeletedCategory($item);
         parent::deleteFromDatabase($item);
     }
 }

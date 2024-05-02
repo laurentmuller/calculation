@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Report;
 
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfTable;
 
 /**
@@ -29,10 +28,10 @@ class GlobalMarginsReport extends AbstractArrayReport
 
         $table = PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::right($this->trans('globalmargin.fields.minimum'), 50),
-                PdfColumn::right($this->trans('globalmargin.fields.maximum'), 50),
-                PdfColumn::right($this->trans('globalmargin.fields.delta'), 50),
-                PdfColumn::right($this->trans('globalmargin.fields.margin'), 50)
+                $this->rightColumn('globalmargin.fields.minimum', 50),
+                $this->rightColumn('globalmargin.fields.maximum', 50),
+                $this->rightColumn('globalmargin.fields.delta', 50),
+                $this->rightColumn('globalmargin.fields.margin', 50)
             )->outputHeaders();
 
         foreach ($entities as $entity) {

@@ -134,7 +134,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     }
 
     /**
-     * Returns a value indicating if update is apply with the fixed amount.
+     * Returns a value indicating if update is applied with the fixed amount.
      */
     public function isFixed(): bool
     {
@@ -142,7 +142,7 @@ class ProductUpdateQuery extends AbstractSimulateQuery
     }
 
     /**
-     * Returns a value indicating if update is apply with the percent.
+     * Returns a value indicating if update is applied with the percent.
      */
     public function isPercent(): bool
     {

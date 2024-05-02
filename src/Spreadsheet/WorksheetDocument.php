@@ -119,7 +119,7 @@ class WorksheetDocument extends Worksheet
      * @param int  $startColumn the index of the first column ('A' = First column)
      * @param int  $endColumn   the index of the last column
      * @param int  $startRow    the index of first row (1 = First row)
-     * @param ?int $endRow      the index of the last cell or null to use the start row
+     * @param ?int $endRow      the index of the last row or null to use the start row
      *
      * @throws Exception if an exception occurs
      */
@@ -133,7 +133,7 @@ class WorksheetDocument extends Worksheet
     /**
      * Re-bind parent.
      *
-     * @throws Exception if the given $parent is not instance of WorksheetDocument
+     * @throws Exception if the given $parent is not an instance of WorksheetDocument
      */
     public function rebindParent(Spreadsheet $parent): static
     {
@@ -184,7 +184,7 @@ class WorksheetDocument extends Worksheet
      * Sets image at the given coordinate.
      *
      * @param string $path        the image path
-     * @param string $coordinates the coordinates (for example: 'A1')
+     * @param string $coordinates the coordinates of the cell (like 'A1')
      * @param int    $width       the image width
      * @param int    $height      the image height
      *

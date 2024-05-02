@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 /**
- * Contains result of updated products.
+ * Contains the result of updated products.
  *
  * @psalm-type ProductType = array{description: string|null, oldPrice: float, newPrice: float, delta: float}
  */

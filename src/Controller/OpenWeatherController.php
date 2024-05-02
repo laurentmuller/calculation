@@ -98,7 +98,7 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
-     * Returns current conditions data for a specific location.
+     * Returns the current conditions data for a specific location.
      *
      * @psalm-api
      */
@@ -143,7 +143,7 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
-     * Returns 5 days / 3 hours forecast conditions data for a specific location.
+     * Returns 5-days / 3-hour forecast conditions data for a specific location.
      *
      * @psalm-api
      */
@@ -233,7 +233,7 @@ class OpenWeatherController extends AbstractController
     }
 
     /**
-     * Returns current conditions data for a specific location.
+     * Returns the current conditions data for a specific location.
      */
     #[Get(path: '/current', name: 'openweather_current')]
     public function current(Request $request): Response

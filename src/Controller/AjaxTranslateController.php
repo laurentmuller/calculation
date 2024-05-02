@@ -40,7 +40,7 @@ class AjaxTranslateController extends AbstractController
     }
 
     /**
-     * Identifies the language of a piece of text.
+     * Identifies the language for a piece of text.
      *
      * @throws ServiceNotFoundException if the service is not found
      */

@@ -48,7 +48,7 @@ class GroupRepository extends AbstractRepository
     }
 
     /**
-     * Gets all group order by code.
+     * Gets all group ordered by code.
      *
      * @return Group[]
      */

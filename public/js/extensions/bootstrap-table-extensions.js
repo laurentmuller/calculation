@@ -44,7 +44,7 @@ function loadingTemplate(message) {
 }
 
 /**
- * JQuery extension for Bootstrap tables, rows and cells.
+ * JQuery extension for Bootstrap tables rows and cells.
  */
 (function ($) {
     'use strict';
@@ -204,7 +204,7 @@ function loadingTemplate(message) {
 
                     // data?
                     if (data.length !== 0) {
-                        // hide empty data message
+                        // hide the empty data message
                         $this.hideCustomViewMessage();
                         const params = $this.getParameters();
                         const selector = '.custom-view-actions:eq(%index%)';
@@ -230,7 +230,7 @@ function loadingTemplate(message) {
                         }
                         $this.highlight();
                     } else {
-                        // show empty data message
+                        // show the empty data message
                         $this.showCustomViewMessage();
                     }
                     $this.saveParameters();
@@ -932,8 +932,26 @@ function loadingTemplate(message) {
             options = options ? options : $this.getOptions();
             pageNumber = pageNumber || options.pageNumber;
             const text = $('#modal-page').data('page');
-            return text.replace('%page%', pageNumber)
-                .replace('%pages%', options.totalPages);
+            return text.replace('%page%', $.formatInt(pageNumber))
+                .replace('%pages%', $.formatInt(options.totalPages));
+        },
+
+        /**
+         * Format the records range.
+         *
+         * @param {Options} [options] the options to get pages from.
+         * @param {number} [pageNumber] the optional current page.
+         */
+        formatRecords: function (options, pageNumber) {
+            const $this = $(this);
+            options = options ? options : $this.getOptions();
+            pageNumber = pageNumber || options.pageNumber;
+            const pageSize = options.pageSize;
+            const record = Math.max(1 + (pageNumber - 1) * pageSize, 1);
+            const records = Math.min(record + pageSize - 1, options.totalRows);
+            const text = $('#modal-page').data('record');
+            return text.replace('%record%', $.formatInt(record))
+                .replace('%records%', $.formatInt(records));
         },
 
         /**
@@ -948,7 +966,8 @@ function loadingTemplate(message) {
 
             const $this = $(this);
             const $range = $('#page-range');
-            const $label = $('#page-label');
+            const $labelRecord = $('#page-record');
+            const $labelLabel = $('#page-label');
             const $button = $('#page-button');
             $dialog.on('keydown', function (e) {
                 if (e.key === 'Enter') {
@@ -982,9 +1001,12 @@ function loadingTemplate(message) {
             }
 
             $range.on('input', function () {
-                const title = $this.formatPages($range.data('options'), $range.intVal());
+                const value = $range.intVal();
+                const title = $this.formatPages($range.data('options'), value);
+                const records = $this.formatRecords($range.data('options'), value);
                 $range.attr('title', title);
-                $label.text(title);
+                $labelLabel.text(title);
+                $labelRecord.text(records);
             });
 
             $button.on('click', function () {

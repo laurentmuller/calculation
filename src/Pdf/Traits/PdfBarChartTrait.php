@@ -88,7 +88,7 @@ trait PdfBarChartTrait
         $h ??= 200.0;
         $endY = $y + $h;
 
-        // check new page
+        // check the new page
         if (!$this->isPrintable($h, $y)) {
             $this->addPage();
             $y = $this->getY();

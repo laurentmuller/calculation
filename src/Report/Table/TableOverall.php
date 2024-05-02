@@ -14,7 +14,6 @@ namespace App\Report\Table;
 
 use App\Entity\Calculation;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Report\CalculationReport;
 use fpdf\PdfBorder;
@@ -80,11 +79,11 @@ class TableOverall extends ReportTable
     private function createColumns(): self
     {
         return $this->addColumns(
-            PdfColumn::left(null, 50),
-            PdfColumn::right(null, 20, true),
-            PdfColumn::right(null, 20, true),
-            PdfColumn::right(null, 20, true),
-            PdfColumn::right(null, 20, true)
+            $this->leftColumn('', 50),
+            $this->rightColumn('', 20, true),
+            $this->rightColumn('', 20, true),
+            $this->rightColumn('', 20, true),
+            $this->rightColumn('', 20, true),
         )->setRepeatHeader(false);
     }
 
@@ -99,7 +98,7 @@ class TableOverall extends ReportTable
             ->endRow();
     }
 
-    private function outputOverallTotal(Calculation $calculation, float $totalItems): self
+    private function outputOverallTotal(Calculation $calculation, float $totalItems): void
     {
         $style = null;
         if ($calculation->isMarginBelow($this->minMargin)) {
@@ -112,8 +111,6 @@ class TableOverall extends ReportTable
             ->addCellAmount($calculation->getOverallMarginAmount())
             ->addCellAmount($calculation->getOverallTotal())
             ->endRow();
-
-        return $this;
     }
 
     private function outputUserMargin(float $userMargin, float $userAmount, float $totalNet): self

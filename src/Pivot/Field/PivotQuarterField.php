@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pivot\Field;
 
 /**
- * Pivot field that extract quarter (1 or 4).
+ * The pivot field that extracts quarter (1 or 4).
  */
 class PivotQuarterField extends PivotDateField
 {
@@ -45,7 +45,7 @@ class PivotQuarterField extends PivotDateField
     /**
      * Sets callback used to format a quarter.
      *
-     * The function receive the quarter (1 to 4) as parameter and must return a string.
+     * The function receives the quarter (1 to 4) as a parameter and must return a string.
      *
      * @param ?callable $formatter the optional callback
      *

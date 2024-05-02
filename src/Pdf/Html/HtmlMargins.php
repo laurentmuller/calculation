@@ -115,7 +115,7 @@ class HtmlMargins
     }
 
     /**
-     * Sets right margin.
+     * Sets the right margin.
      */
     public function setRight(float $right): self
     {

@@ -22,14 +22,14 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
- * Repeat password type.
+ * Repeat a password type.
  *
  * @extends AbstractType<PasswordType>
  */
 class RepeatPasswordType extends AbstractType
 {
     /**
-     * The default translatable confirm label.
+     * The default translatable confirmation label.
      */
     final public const CONFIRM_LABEL = 'user.password.confirmation';
 

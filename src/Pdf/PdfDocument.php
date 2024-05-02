@@ -33,7 +33,7 @@ class PdfDocument extends BaseDocument
     use PdfBookmarkTrait;
 
     /**
-     * The footer offset in mm.
+     * The footer offset in millimeters.
      */
     final public const FOOTER_OFFSET = 15.0;
 
@@ -64,9 +64,6 @@ class PdfDocument extends BaseDocument
 
     /**
      * Create a new instance.
-     *
-     * It allows to set up the page orientation, the page size and the unit of measure used in all methods (except for
-     * font sizes).
      *
      * @param PdfOrientation      $orientation the page orientation
      * @param PdfUnit             $unit        the document unit to use

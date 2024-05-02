@@ -59,7 +59,7 @@ readonly class AES256EncryptorService
     }
 
     /**
-     * @throws \JsonException if the data can not be decoded
+     * @throws \JsonException if the data cannot be decoded
      */
     public function decryptJson(string $data, bool $assoc = true, int $flags = 0): mixed
     {
@@ -89,7 +89,7 @@ readonly class AES256EncryptorService
     }
 
     /**
-     * @throws \JsonException if the data can not be encoded
+     * @throws \JsonException if the data cannot be encoded
      */
     public function encryptJson(mixed $data, int $flags = 0): string|false
     {

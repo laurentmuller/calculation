@@ -44,7 +44,8 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="modal-result-title">{{ title|trans }}</h1>{{ button_close_modal() }}
+                <h5 class="modal-title" id="modal-result-title">{{ title|trans }}</h5>
+                {{ button_close_modal() }}
             </div>
             <div class="modal-body">
                 <span class="form-label">{{ 'calculation.list.title'|trans }}</span>

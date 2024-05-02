@@ -48,7 +48,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
     private const FULL_WIDTH = 0.5;
 
     /**
-     * The half borderline width.
+     * The half-borderline width.
      */
     private const HALF_WIDTH = 0.25;
 
@@ -81,6 +81,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
 
     public function drawCellBorder(PdfCellBorderEvent $event): bool
     {
+        // cards
         if ($this->drawCards) {
             $columns = $event->table->getColumns();
             $text = $columns[$event->index]->getText();
@@ -88,7 +89,12 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
             return $this->drawBorder($event, $text);
         }
 
-        return (0 === $event->index) && $this->drawBorder($event, $this->level);
+        // row
+        if (!$event->table->isHeaders() && 0 === $event->index) {
+            return $this->drawBorder($event, $this->level);
+        }
+
+        return false;
     }
 
     public function render(): bool
@@ -123,7 +129,7 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
 
     private function drawBorder(PdfCellBorderEvent $event, ?string $level): bool
     {
-        if (null === $level || '' === $level) {
+        if (!StringUtils::isString($level)) {
             return false;
         }
 
@@ -237,11 +243,11 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
         $this->cellTitle();
         $table = PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('log.fields.level'), 20, true),
-                PdfColumn::left($this->trans('log.fields.channel'), 20, true),
-                PdfColumn::left($this->trans('log.fields.createdAt'), 34, true),
-                PdfColumn::left($this->trans('log.fields.message'), 150),
-                PdfColumn::left($this->trans('log.fields.user'), 20, true)
+                $this->leftColumn('log.fields.createdAt', 34, true),
+                $this->leftColumn('log.fields.message', 150),
+                $this->leftColumn('log.fields.level', 20, true),
+                $this->leftColumn('log.fields.channel', 20, true),
+                $this->leftColumn('log.fields.user', 20, true)
             )
             ->outputHeaders()
             ->setBorderListener($this);
@@ -254,10 +260,10 @@ class LogsReport extends AbstractReport implements PdfDrawCellBorderInterface
                 $this->addDateBookmark($date);
             }
             $table->addRow(
-                $log->getLevel(true),
-                $log->getChannel(true),
                 $log->getFormattedDate(),
                 $log->getMessage(),
+                $log->getLevel(true),
+                $log->getChannel(true),
                 $log->getUser()
             );
         }

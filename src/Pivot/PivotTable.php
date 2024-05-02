@@ -301,7 +301,7 @@ class PivotTable extends AbstractPivotAggregator
     }
 
     /**
-     * Sets the  key field.
+     * Sets the key field.
      */
     public function setKeyField(PivotField $keyField): self
     {

@@ -48,7 +48,7 @@ class ProductRepository extends AbstractCategoryItemRepository
     }
 
     /**
-     * Gets all products order by description.
+     * Gets all products ordered by description.
      *
      * @return Product[]
      */
@@ -58,7 +58,7 @@ class ProductRepository extends AbstractCategoryItemRepository
     }
 
     /**
-     * Gets all products order by group, category and description.
+     * Gets all products ordered by the group, the category and the description.
      *
      * @return Product[]
      */
@@ -77,7 +77,7 @@ class ProductRepository extends AbstractCategoryItemRepository
     }
 
     /**
-     * Gets the default query builder with all products order by the category code, the group code and the
+     * Gets the default query builder with all products ordered by the category code, the group code, and the
      * product description.
      */
     public function getQueryBuilderByCategory(): QueryBuilder

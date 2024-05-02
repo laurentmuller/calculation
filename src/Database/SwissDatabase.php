@@ -229,7 +229,7 @@ class SwissDatabase extends AbstractDatabase
     }
 
     /**
-     * Gets the records count for all tables.
+     * Gets the record's count for all tables.
      *
      * @return array{state: int, city: int, street: int}
      */

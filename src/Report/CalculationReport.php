@@ -14,7 +14,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Pdf\Traits\PdfMemoryImageTrait;
@@ -145,8 +144,8 @@ class CalculationReport extends AbstractReport
         $calculation = $this->calculation;
         PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::left(null, 100),
-                PdfColumn::right(null, 40, true)
+                $this->leftColumn('', 100),
+                $this->rightColumn('', 40, true)
             )
             ->startHeaderRow()
             ->add($calculation->getCustomer(), style: $leftStyle)

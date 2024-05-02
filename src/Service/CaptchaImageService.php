@@ -100,7 +100,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
      * @param int  $width  the image width
      * @param int  $height the image height
      *
-     * @return ?string the image encoded with the base 64 or null if the image can not be created
+     * @return ?string the image encoded with base 64 or null if the image cannot be created
      *
      * @throws \Exception
      *

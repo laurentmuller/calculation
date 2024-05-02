@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pivot\Field;
 
 /**
- * Pivot field that extract semester (1 or 2).
+ * The Pivot field that extracts semester (1 or 2).p.
  */
 class PivotSemesterField extends PivotDateField
 {
@@ -45,7 +45,7 @@ class PivotSemesterField extends PivotDateField
     /**
      * Sets callback used to format a semestre.
      *
-     * The function receive the semestre (1 or 2 ) as parameter and must return a string.
+     * The function receives the semestre (1 or 2) as a parameter and must return a string.
      *
      * @param ?callable $formatter the optional callback
      *

@@ -181,7 +181,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function findCategory(Category $category): CalculationCategory
     {
-        // find group
+        // find the group
         /** @var Group $categoryGroup */
         $categoryGroup = $category->getGroup();
         $group = $this->findGroup($categoryGroup);
@@ -208,7 +208,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function findGroup(Group $group): CalculationGroup
     {
-        // find group
+        // find the group
         $code = $group->getCode();
         foreach ($this->groups as $current) {
             if ($code === $current->getCode()) {
@@ -216,7 +216,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
             }
         }
 
-        // create group
+        // create the group
         $newGroup = CalculationGroup::create($group);
         $this->addGroup($newGroup);
 
@@ -266,7 +266,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the duplicates items.
+     * Gets the duplicate items.
      *
      * Items are duplicate when two or more item descriptions are equal, ignoring case considerations.
      *
@@ -547,7 +547,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Get total net. This is total of the groups multiplied by the global margin.
+     * Get total net. This is the total of the groups multiplied by the global margin.
      */
     public function getTotalNet(): float
     {
@@ -641,7 +641,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Checks whether the groups are empty (contains no elements).
      *
-     * @return bool true if the groups is empty, false otherwise
+     * @return bool true if groups are empty, false otherwise
      */
     public function isEmpty(): bool
     {
@@ -803,7 +803,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Sets the items total.
+     * Sets the item's total.
      */
     public function setItemsTotal(float $itemsTotal): self
     {
@@ -867,7 +867,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     /**
      * Update the group and category codes.
      *
-     * @return int the number of update
+     * @return int the number of updates
      *
      * @psalm-api
      */

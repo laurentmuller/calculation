@@ -31,9 +31,11 @@ class CSVReader extends AbstractReader
     /**
      * @param \SplFileInfo|string|resource $file      the CSV file to open or an opened resource
      * @param bool                         $binary    true to open the file with binary mode
-     * @param int                          $length    the line length. Must be greater than the longest line (in characters) to be found in
-     *                                                the CSV file (allowing for trailing line-end characters). Setting it to 0,
-     *                                                the maximum line length is not limited, which is slightly slower.
+     * @param int                          $length    the line length.
+     *                                                Must be greater than the longest line (in characters) to be found
+     *                                                in the CSV file (allowing for trailing line-end characters).
+     *                                                Setting it to 0, the maximum line length is not limited, which is
+     *                                                slightly slower.
      * @param string                       $separator the field delimiter (one character only)
      * @param string                       $enclosure the field enclosure character (one character only)
      * @param string                       $escape    the escape character (one character only)

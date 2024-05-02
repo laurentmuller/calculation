@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 /**
- * Contains result of updated states, cities and streets.
+ * Contains the result of updated states, cities and streets.
  *
  * @psalm-type SwissPostResultType = array{state: int, city: int, street: int}
  */
@@ -160,7 +160,7 @@ class SwissPostUpdateResult
     }
 
     /**
-     * Gets the overwrite option.
+     * Gets the overwritten option.
      */
     public function isOverwrite(): bool
     {
@@ -202,7 +202,7 @@ class SwissPostUpdateResult
     }
 
     /**
-     * Sets the overwrite option.
+     * Sets the overwritten option.
      *
      * @psalm-api
      */

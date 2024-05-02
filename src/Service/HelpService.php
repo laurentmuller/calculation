@@ -291,7 +291,7 @@ class HelpService
     }
 
     /**
-     * Merge current item with an action; if applicable.
+     * Merge current item with an action, if applicable.
      *
      * @psalm-param array{action?: string, ...} $item
      */

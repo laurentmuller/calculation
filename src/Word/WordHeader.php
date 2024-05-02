@@ -22,14 +22,14 @@ use PhpOffice\PhpWord\SimpleType\Jc;
 /**
  * Class to output header in Word documents.
  *
- * This header add the following texts, depending on the printing address state:
+ * This header adds the following texts, depending on the printing address state:
  * <ul>
  * <li>The customer's name at the left and the address if applicable.</li>
  * <li>The document's title at the center, if applicable; at the right else.</li>
  * <li>The phone, the fax and the email at the right if applicable.</li>
  * </ul>
  *
- * Do nothing if the document's title and the customer's name are empty.
+ * Do nothing if the document's title and the customer's name is empty.
  */
 class WordHeader extends AbstractHeaderFooter
 {

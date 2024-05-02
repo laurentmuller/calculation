@@ -118,7 +118,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
     /**
      * Gets the database search fields.
      *
-     * The default implementation returns the alias and the field separated by a dot ('.') character.
+     * The default implementation returns the alias and the field separated by a dot character ('.').
      *
      * @param string $field the field name
      * @param string $alias the entity alias
@@ -186,7 +186,7 @@ abstract class AbstractRepository extends ServiceEntityRepository implements Sor
     /**
      * Gets the database sort field.
      *
-     * The default implementation returns the alias and the field separated by a dot ('.') character.
+     * The default implementation returns the alias and the field separated by a dot character ('.').
      *
      * @param string $field the field name
      * @param string $alias the entity alias

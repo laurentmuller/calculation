@@ -91,7 +91,7 @@ class PdfFont implements PdfDocumentUpdaterInterface
     }
 
     /**
-     * Returns if this font use the default size.
+     * Returns if this font uses the default size.
      */
     public function isDefaultSize(): bool
     {

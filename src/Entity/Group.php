@@ -200,7 +200,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      *
      * @param float $amount the amount to get percent for
      *
-     * @return float the percent of the group margin, if found; 0 otherwise
+     * @return float the percentage of the group margin, if found; 0 otherwise
      *
      * @see Group::findMargin()
      */

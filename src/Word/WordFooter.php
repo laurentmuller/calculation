@@ -21,7 +21,7 @@ use PhpOffice\PhpWord\SimpleType\Jc;
 /**
  * Class to output footer in Word documents.
  *
- * This footer add the following texts:
+ * This footer adds the following texts:
  * <ul>
  * <li>The current and total pages at the left.</li>
  * <li>The application name at the center</li>

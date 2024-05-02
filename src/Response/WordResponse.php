@@ -22,9 +22,10 @@ class WordResponse extends AbstractStreamedResponse
 {
     /**
      * @param WordDocument $doc    the document to output
-     * @param bool         $inline <code>true</code> to send the file inline to the browser. The document viewer is
-     *                             used if available. <code>false</code> to send to the browser and force a file
-     *                             download with the name given.
+     * @param bool         $inline <code>true</code> to send the file inline to the browser.
+     *                             The document viewer is used if available.
+     *                             <code>false</code> to send to the browser and force a file download with the name
+     *                             given.
      * @param string       $name   the name of the document file or <code>''</code> to use the default
      *                             name ('document.docx')
      */

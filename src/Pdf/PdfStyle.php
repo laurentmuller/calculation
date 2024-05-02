@@ -21,7 +21,7 @@ use fpdf\PdfFontName;
 use fpdf\PdfFontStyle;
 
 /**
- * This class describe a style that can be applied to a PDF document.
+ * This class describes a style that can be applied to a PDF document.
  */
 class PdfStyle implements PdfDocumentUpdaterInterface
 {

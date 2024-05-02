@@ -21,7 +21,7 @@ use Symfony\Component\Mime\Part\AbstractPart;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Extends the NotificationEmail class with translated subject and custom footer.
+ * Extends the NotificationEmail class with the translated subject and custom footer.
  */
 class NotificationEmail extends BaseNotificationEmail
 {

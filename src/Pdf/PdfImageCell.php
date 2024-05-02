@@ -158,7 +158,7 @@ class PdfImageCell extends PdfCell
     /**
      * Resize the image.
      *
-     * If both height and width arguments are equal to 0, the new width and height are equals to original size.
+     * If both height and width arguments are equal to 0, the new width and height are equals to the original size.
      *
      * @param int $height the new height or 0 to take the original width as reference
      * @param int $width  the new width or 0 to take the original height as reference

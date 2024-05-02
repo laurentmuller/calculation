@@ -67,6 +67,8 @@ class AjaxCalculationController extends AbstractController
 
     /**
      * Update the total of a calculation.
+     *
+     * @throws \Doctrine\ORM\Exception\ORMException
      */
     #[Post(path: '/update', name: 'ajax_update')]
     public function update(Request $request, CalculationService $service, LoggerInterface $logger): JsonResponse

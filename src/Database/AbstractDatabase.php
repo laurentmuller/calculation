@@ -39,9 +39,11 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
     /**
      * Instantiates and opens the database.
      *
-     * @param string $filename       Path to the SQLite database, or <code>:memory:</code> to use in-memory database.
-     *                               If filename is an empty string, then a private, temporary on-disk database will be created.
-     *                               This private database will be automatically deleted as soon as the database connection is closed.
+     * @param string $filename       Path to the SQLite database, or <code>:memory:</code> to use the in-memory database.
+     *                               If filename is an empty string, then a private, temporary on-disk database will be
+     *                               created.
+     *                               This private database will be automatically deleted as soon as the database
+     *                               connection is closed.
      * @param bool   $readonly       true open the database for reading only. Note that if the file name
      *                               does not exist, the database is opened with the
      *                               <code>SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE</code> flags.
@@ -180,7 +182,7 @@ abstract class AbstractDatabase extends \SQLite3 implements \Stringable
      * @param string     $name  the pragma name
      * @param mixed|null $value the optional pragma value
      *
-     * @return bool true if the succeeded; false on failure
+     * @return bool true if succeeded; false on failure
      */
     public function pragma(string $name, mixed $value = null): bool
     {

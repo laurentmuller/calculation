@@ -19,7 +19,7 @@ use fpdf\PdfTextAlignment;
 use Symfony\Contracts\Translation\TranslatableInterface;
 
 /**
- * Trait to allow adding a translatable cell.
+ * Trait to allow adding translatable cells.
  *
  * @psalm-require-extends \App\Pdf\PdfTable
  */

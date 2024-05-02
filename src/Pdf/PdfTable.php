@@ -475,6 +475,16 @@ class PdfTable
     }
 
     /**
+     * Returns a value indicating if a header row is drawing.
+     *
+     * @return bool <code>true</code> if a header row is drawing; <code>false</code> otherwise
+     */
+    public function isHeaders(): bool
+    {
+        return $this->isHeaders;
+    }
+
+    /**
      * Returns if the header row is printed when a new page is added.
      */
     public function isRepeatHeader(): bool
@@ -710,8 +720,7 @@ class PdfTable
                     $parent->setX($x);
                     break;
                 case PdfTextAlignment::RIGHT:
-                    /** @psalm-var float $w */
-                    $w = \array_sum($widths);
+                    $w = (float) \array_sum($widths);
                     $x = $parent->getPageWidth() - $parent->getRightMargin() - $w;
                     $parent->setX($x);
                     break;
@@ -809,19 +818,19 @@ class PdfTable
             return;
         }
 
-        // get fixed and resizable widths
+        // compute widths and check values
         [$fixedWidth, $resizableWidth] = $this->computeCellWidths($fixeds, $widths);
+        $remainingWidth = $parent->getPrintableWidth() - $fixedWidth;
+        if ($this->isFloatZero($resizableWidth) || $this->isFloatZero($remainingWidth)
+            || $resizableWidth === $remainingWidth) {
+            return;
+        }
 
         // update resizable widths
-        $remainingWidth = $parent->getPrintableWidth() - $fixedWidth;
-        if (!$this->isFloatZero($resizableWidth)
-            && !$this->isFloatZero($remainingWidth)
-            && $resizableWidth !== $remainingWidth) {
-            $factor = $remainingWidth / $resizableWidth;
-            for ($i = 0; $i < $count; ++$i) {
-                if (!$fixeds[$i]) {
-                    $widths[$i] *= $factor;
-                }
+        $factor = $remainingWidth / $resizableWidth;
+        for ($i = 0; $i < $count; ++$i) {
+            if (!$fixeds[$i]) {
+                $widths[$i] *= $factor;
             }
         }
     }
@@ -848,6 +857,8 @@ class PdfTable
      *     2: PdfTextAlignment[],
      *     3: float[],
      *     4: bool[]}
+     *
+     * @psalm-suppress PossiblyNullReference
      */
     private function computeCells(array $cells, array $columns): array
     {

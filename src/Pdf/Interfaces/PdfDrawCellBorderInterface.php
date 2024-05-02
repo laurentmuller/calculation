@@ -15,7 +15,7 @@ namespace App\Pdf\Interfaces;
 use App\Pdf\Events\PdfCellBorderEvent;
 
 /**
- * Class implementing this interface handle the draw cell border event.
+ * Class implementing this interface handles the draw cell border event.
  */
 interface PdfDrawCellBorderInterface
 {
@@ -24,7 +24,7 @@ interface PdfDrawCellBorderInterface
      *
      * @param PdfCellBorderEvent $event the event
      *
-     * @return bool true if listener handle the draw function; false to call the default behavior
+     * @return bool true if listener handles the draw function; false to call the default behavior
      */
     public function drawCellBorder(PdfCellBorderEvent $event): bool;
 }

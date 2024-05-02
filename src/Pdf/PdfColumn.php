@@ -75,7 +75,8 @@ class PdfColumn
 
     /**
      * Gets a value indicating if the column's width is fixed.
-     * This property is used only when the parent's table take all the printable width.
+     *
+     * This property is used only when the parent's table takes all the printable width.
      *
      * @return bool true if fixed
      *
@@ -128,7 +129,7 @@ class PdfColumn
 
     /**
      * Sets a value indicating if the column's width is fixed.
-     * This property is used only when the parent's table take all the printable width.
+     * This property is used only when the parent's table takes all the printable width.
      *
      * @param bool $fixed true if fixed
      *

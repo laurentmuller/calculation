@@ -16,7 +16,7 @@ use App\Service\CommandService;
 use Symfony\Component\Console\Command\Command;
 
 /**
- * Contains result of executing a command.
+ * Contains the result of executing a command.
  *
  * @see CommandService::execute()
  */

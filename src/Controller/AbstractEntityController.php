@@ -130,7 +130,7 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * This function delete the given entity from the database.
+     * This function deletes the given entity from the database.
      *
      * @psalm-param TEntity $item
      */
@@ -286,9 +286,9 @@ abstract class AbstractEntityController extends AbstractController
     }
 
     /**
-     * This function save the given entity to the database.
+     * This function saves the given entity to the database.
      *
-     * Derived class can update entity before it is saved to the database.
+     * Derived class can update the entity before it is saved to the database.
      *
      * @psalm-param TEntity $item
      */

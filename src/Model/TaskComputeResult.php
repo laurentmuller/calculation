@@ -16,7 +16,7 @@ use App\Entity\Task;
 use App\Entity\TaskItem;
 
 /**
- * Contains result of a computed task.
+ * Contains the result of a computed task.
  *
  * @psalm-type ResultType = array{
  *     id: int,

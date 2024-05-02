@@ -49,11 +49,11 @@ interface RoleInterface
     public function getRoles(): array;
 
     /**
-     * Checks if this has the given role.
+     * Checks if this has a given role.
      *
      * @param string $role the role name to be tested
      *
-     * @return bool true if this has the given role
+     * @return bool true if this has a given role
      *
      * @psalm-param RoleInterface::ROLE_* $role
      */

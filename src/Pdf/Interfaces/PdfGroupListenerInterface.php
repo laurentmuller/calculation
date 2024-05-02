@@ -24,7 +24,7 @@ interface PdfGroupListenerInterface
      *
      * @param PdfGroupEvent $event the event
      *
-     * @return bool true if the listener handle the output; false to use the default output
+     * @return bool true if the listener handles the output; false to use the default output
      */
     public function outputGroup(PdfGroupEvent $event): bool;
 }

@@ -67,8 +67,8 @@ trait PdfBookmarkTrait
      * @throws PdfException if the given level is invalid. A level is not valid if:
      *                      <ul>
      *                      <li>Is smaller than 0.</li>
-     *                      <li>Is greater than the level of the previous bookmark plus 1. For example if the previous
-     *                      bookmark is 2; the allowed values are 0..3.</li>
+     *                      <li>Is greater than the level of the previous bookmark plus 1. For example, if the previous
+     *                      bookmark is 2, the allowed values are 0..3.</li>
      *                      </ul>
      *
      * @see PdfDocument::addPageIndex()
@@ -108,14 +108,14 @@ trait PdfBookmarkTrait
     /**
      * Add an index page (as new page) containing all bookmarks.
      *
-     * Each line contain the text on the left, the page number on the right and are separate by the given separator
+     * Each line contains the text on the left, the page number on the right and are separate by the given separator
      * characters.
      *
      * <b>Remark:</b> Do nothing if no bookmark is defined.
      *
      * @param ?string   $title        the index title or null to use the default title ('Index')
      * @param ?PdfStyle $titleStyle   the title style or null to use the default style (Font Arial 9 points Bold)
-     * @param ?PdfStyle $contentStyle the content style or null to use the default style (Font Arial 9 points Regular)
+     * @param ?PdfStyle $contentStyle the content style or null to use the default style (Font Arial 9-point Regular)
      * @param bool      $addBookmark  true to add the index page itself in the list of the bookmarks
      * @param string    $separator    the separator character used between the text and the page
      *

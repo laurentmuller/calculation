@@ -99,7 +99,7 @@ abstract class AbstractEntityTable extends AbstractTable
      */
     protected function count(): int
     {
-        return $this->repository->count([]);
+        return $this->repository->count();
     }
 
     /**

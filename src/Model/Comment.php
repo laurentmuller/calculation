@@ -33,7 +33,7 @@ class Comment
     private ?array $attachments = null;
 
     /**
-     * The from address.
+     * The address from.
      */
     #[Assert\NotNull]
     private ?Address $fromAddress = null;
@@ -57,7 +57,7 @@ class Comment
     private ?string $subject = null;
 
     /**
-     * The to address.
+     * The address to.
      */
     #[Assert\NotNull]
     private ?Address $toAddress = null;

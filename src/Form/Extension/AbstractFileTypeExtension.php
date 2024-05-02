@@ -85,11 +85,11 @@ abstract class AbstractFileTypeExtension extends AbstractTypeExtension
     /**
      * Normalize the given size.
      *
-     * @param int|string $size the size to normalize
+     * @param int|string $size the value to normalize
      *
      * @return int|null the normalized size
      *
-     * @throws InvalidOptionsException if the $size can not be parsed
+     * @throws InvalidOptionsException if the $size cannot be parsed
      *
      * @see https://symfony.com/doc/current/reference/constraints/File.html#maxsize
      */

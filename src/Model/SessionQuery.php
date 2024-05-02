@@ -30,7 +30,7 @@ class SessionQuery
     /**
      * Get the JSON decoded value.
      *
-     * @throws \JsonException if an error occur while decoding this value
+     * @throws \JsonException if an error occurs while decoding this value
      */
     public function decode(): mixed
     {

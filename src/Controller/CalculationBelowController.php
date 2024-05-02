@@ -44,7 +44,7 @@ class CalculationBelowController extends AbstractController
     /**
      * Export the calculations to a Spreadsheet document.
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report can not be rendered
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if the report cannot be rendered
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */

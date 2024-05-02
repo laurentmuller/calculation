@@ -162,7 +162,7 @@ interface PropertyServiceInterface
     final public const P_DATE_CALCULATION = 'archive_calculation';
 
     /**
-     * The property name for the last date of import of Swiss cities (date).
+     * The property name for the last date import of Swiss cities (date).
      */
     final public const P_DATE_IMPORT = 'last_import';
 
@@ -262,7 +262,7 @@ interface PropertyServiceInterface
     final public const P_MIN_STRENGTH = 'min_strength';
 
     /**
-     * The property name for the numbers of displayed calculation in the home page (int).
+     * The property name for the numbers of displayed calculations in the home page (int).
      */
     final public const P_PANEL_CALCULATION = 'panel_calculation';
 
@@ -369,7 +369,7 @@ interface PropertyServiceInterface
     public function getMessageTimeout(): int;
 
     /**
-     * Returns a value indicating numbers of displayed calculation in the home page.
+     * Returns a value indicating numbers of displayed calculations in the home page.
      */
     public function getPanelCalculation(): int;
 

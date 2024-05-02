@@ -28,7 +28,7 @@ trait AwareTrait
      *
      * @return T
      *
-     * @throws \LogicException if the service can not be found
+     * @throws \LogicException if the service cannot be found
      *
      * @psalm-suppress MixedInferredReturnType
      */

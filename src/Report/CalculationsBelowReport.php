@@ -15,7 +15,6 @@ namespace App\Report;
 use App\Controller\AbstractController;
 use App\Entity\Calculation;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Traits\MathTrait;
@@ -64,14 +63,14 @@ class CalculationsBelowReport extends AbstractArrayReport
     {
         return PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::center($this->trans('calculation.fields.id'), 17, true),
-                PdfColumn::center($this->trans('calculation.fields.date'), 20, true),
-                PdfColumn::left($this->trans('calculation.fields.state'), 20, true),
-                PdfColumn::left($this->trans('calculation.fields.customer'), 35),
-                PdfColumn::left($this->trans('calculation.fields.description'), 65),
-                PdfColumn::right($this->trans('report.calculation.amount'), 25, true),
-                PdfColumn::right($this->trans('report.calculation.margin_percent'), 20, true),
-                PdfColumn::right($this->trans('calculation.fields.total'), 25, true),
+                $this->centerColumn('calculation.fields.id', 17, true),
+                $this->centerColumn('calculation.fields.date', 20, true),
+                $this->leftColumn('calculation.fields.state', 20, true),
+                $this->leftColumn('calculation.fields.customer', 35),
+                $this->leftColumn('calculation.fields.description', 65),
+                $this->rightColumn('report.calculation.amount', 25, true),
+                $this->rightColumn('report.calculation.margin_percent', 20, true),
+                $this->rightColumn('calculation.fields.total', 25, true),
             )->outputHeaders();
     }
 

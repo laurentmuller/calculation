@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Service to deals with roles and hierarchy.
+ * Service to deal with roles and hierarchy.
  */
 readonly class RoleHierarchyService
 {
@@ -30,7 +30,7 @@ readonly class RoleHierarchyService
      *
      * @param mixed $data the data to get reachable role names
      *
-     * @return string[] an array, maybe empty; of reachable role names
+     * @return string[] an array, maybe empty, of reachable role names
      *
      * @pslam-return RoleInterface::ROLE_*[]
      */
@@ -44,7 +44,7 @@ readonly class RoleHierarchyService
     /**
      * Gets the role names for the given data.
      *
-     * @return string[] an array, maybe empty; of role names
+     * @return string[] an array, maybe empty, of role names
      *
      * @pslam-return RoleInterface::ROLE_*[]
      */

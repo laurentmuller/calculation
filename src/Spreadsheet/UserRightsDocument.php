@@ -56,7 +56,7 @@ class UserRightsDocument extends AbstractArrayDocument
         }
         $row = $sheet->setHeaders($headers);
 
-        $service = $this->controller->getApplication();
+        $service = $this->controller->getApplicationService();
         $this->outputRole($sheet, $service->getAdminRole(), $row);
         $this->outputRole($sheet, $service->getUserRole(), $row);
         foreach ($entities as $entity) {

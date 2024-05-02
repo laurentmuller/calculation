@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
- * Contains parameters to update overall total of calculations.
+ * Contains parameters to update the overall total of calculations.
  */
 class CalculationUpdateQuery extends AbstractSimulateQuery
 {

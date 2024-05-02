@@ -34,7 +34,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ProfileController extends AbstractController
 {
     /**
-     * Change password of the current user (if any).
+     * Change the password of the current user (if any).
      */
     #[GetPost(path: '/change-password', name: 'user_profile_change_password')]
     public function changePassword(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response

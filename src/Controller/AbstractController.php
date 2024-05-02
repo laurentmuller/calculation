@@ -80,16 +80,6 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Gets the application service.
-     *
-     * @throws \LogicException if the service can not be found
-     */
-    public function getApplication(): ApplicationService
-    {
-        return $this->getUserService()->getApplication();
-    }
-
-    /**
      * Gets the application name and version.
      */
     public function getApplicationName(): string
@@ -106,17 +96,27 @@ abstract class AbstractController extends BaseController
     }
 
     /**
+     * Gets the application service.
+     *
+     * @throws \LogicException if the service cannot be found
+     */
+    public function getApplicationService(): ApplicationService
+    {
+        return $this->getUserService()->getApplication();
+    }
+
+    /**
      * Gets the minimum margin, in percent, for a calculation.
      */
     public function getMinMargin(): float
     {
-        return $this->getApplication()->getMinMargin();
+        return $this->getApplicationService()->getMinMargin();
     }
 
     /**
      * Gets the request stack.
      *
-     * @throws \LogicException if the service can not be found
+     * @throws \LogicException if the service cannot be found
      *
      * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedReturnStatement
@@ -137,17 +137,18 @@ abstract class AbstractController extends BaseController
 
     public static function getSubscribedServices(): array
     {
-        return \array_merge(parent::getSubscribedServices(), [
+        return [
+            ...parent::getSubscribedServices(),
             UserService::class,
             TranslatorInterface::class,
             UrlGeneratorService::class,
-        ]);
+        ];
     }
 
     /**
      * Gets the translator.
      *
-     * @throws \LogicException if the service can not be found
+     * @throws \LogicException if the service cannot be found
      */
     public function getTranslator(): TranslatorInterface
     {
@@ -165,7 +166,7 @@ abstract class AbstractController extends BaseController
     /**
      * Gets the URL generator service.
      *
-     * @throws \LogicException if the service can not be found
+     * @throws \LogicException if the service cannot be found
      */
     public function getUrlGenerator(): UrlGeneratorService
     {
@@ -193,7 +194,7 @@ abstract class AbstractController extends BaseController
     /**
      * Gets the user service.
      *
-     * @throws \LogicException if the service can not be found
+     * @throws \LogicException if the service cannot be found
      */
     public function getUserService(): UserService
     {
@@ -209,7 +210,7 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Display a message, if not empty; and redirect to the home page.
+     * Display a message, if not empty, and redirect to the home page.
      *
      * If the request is not null, and the caller parameter is set, redirect to it.
      */
@@ -316,7 +317,7 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Returns a Json response with false as result.
+     * Returns a Json response with false as the result.
      *
      * @param array $data the data to merge within the response
      */
@@ -326,7 +327,7 @@ abstract class AbstractController extends BaseController
     }
 
     /**
-     * Returns a Json response with true as result.
+     * Returns a Json response with true as the result.
      *
      * @param array $data the data to merge within the response
      */

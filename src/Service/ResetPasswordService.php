@@ -72,7 +72,7 @@ class ResetPasswordService
     }
 
     /**
-     * Gets the translated expires lifetime.
+     * Gets translated lifetime expires.
      */
     public function getExpiresLifeTime(ResetPasswordToken $token): string
     {
@@ -112,7 +112,7 @@ class ResetPasswordService
     }
 
     /**
-     * Handle an exception by set the authentication error to the session, if applicable;  and log it.
+     * Handle an exception by set the authentication error to the session, if applicable, and log it.
      */
     public function handleException(Request $request, \Throwable $e): void
     {
@@ -120,9 +120,9 @@ class ResetPasswordService
     }
 
     /**
-     * Send email to the user for resetting the password.
+     * Send the email to the user for resetting the password.
      *
-     * @return ResetPasswordToken|false|null false if the user can not be found; the token on success; null on error
+     * @return ResetPasswordToken|false|null false if the user cannot be found; the token on success; null on error
      */
     public function sendEmail(Request $request, User|string $user): ResetPasswordToken|false|null
     {

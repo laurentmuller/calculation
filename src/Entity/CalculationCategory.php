@@ -182,7 +182,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     /**
      * Checks whether the category is empty (contains no items).
      *
-     * @return bool true if the groups is empty, false otherwise
+     * @return bool true if groups are empty, false otherwise
      */
     public function isEmpty(): bool
     {
@@ -265,7 +265,7 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     }
 
     /**
-     * Sorts this items by the alphabetical order of descriptions.
+     * Sorts items by the alphabetical order of descriptions.
      *
      * @return bool true if the order has changed
      */

@@ -15,7 +15,7 @@ namespace App\Pdf\Interfaces;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 
 /**
- * Class implementing this interface handle the draw cell background event.
+ * Class implementing this interface handles the draw cell background event.
  */
 interface PdfDrawCellBackgroundInterface
 {
@@ -24,7 +24,7 @@ interface PdfDrawCellBackgroundInterface
      *
      * @param PdfCellBackgroundEvent $event the event
      *
-     * @return bool true if listener handle the draw function; false to call the default behavior
+     * @return bool true if listener handles the draw function; false to call the default behavior
      */
     public function drawCellBackground(PdfCellBackgroundEvent $event): bool;
 }

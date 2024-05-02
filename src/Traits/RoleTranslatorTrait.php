@@ -15,7 +15,7 @@ namespace App\Traits;
 use App\Interfaces\RoleInterface;
 
 /**
- * Trait get translated and icon role.
+ * A trait to get translated and icon role.
  */
 trait RoleTranslatorTrait
 {

@@ -32,7 +32,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 interface TranslatorServiceInterface
 {
     /**
-     * Identifies the language of a piece of text.
+     * Identifies the language for a piece of text.
      *
      * @param string $text the text to detect
      *
@@ -50,7 +50,7 @@ interface TranslatorServiceInterface
     /**
      * Gets the set of languages supported by other operations of the service.
      *
-     * @return array<string, string>|false an array containing the language name as key and the BCP 47
+     * @return array<string, string>|false an array containing the language name as the key and the BCP 47
      *                                     language tag as value; false if an error occurs
      */
     public function getLanguages(): array|false;

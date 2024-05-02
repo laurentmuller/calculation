@@ -16,7 +16,6 @@ use App\Entity\CalculationState;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Events\PdfCellBackgroundEvent;
 use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use fpdf\PdfRectangleStyle;
@@ -52,6 +51,7 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
         $this->addPage();
         $table = $this->createTable();
 
+        $total = 0;
         foreach ($entities as $entity) {
             $this->currentState = $entity;
             $table->startRow()
@@ -62,9 +62,15 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
                 ->addCellInt($entity->countCalculations())
                 ->endRow();
             $this->currentState = null;
+            $total += $entity->countCalculations();
         }
 
-        return $this->renderCount($table, $entities, 'counters.states');
+        $table->startHeaderRow()
+            ->add($this->translateCount($entities, 'counters.states'), 4)
+            ->addCellInt($total)
+            ->endRow();
+
+        return true;
     }
 
     private function createTable(): PdfTable
@@ -72,11 +78,11 @@ class CalculationStatesReport extends AbstractArrayReport implements PdfDrawCell
         return PdfTable::instance($this)
             ->setBackgroundListener($this)
             ->addColumns(
-                PdfColumn::left($this->trans('calculationstate.fields.code'), 20),
-                PdfColumn::left($this->trans('calculationstate.fields.description'), 80),
-                PdfColumn::center($this->trans('calculationstate.fields.editable'), 20, true),
-                PdfColumn::center($this->trans('calculationstate.fields.color'), 15, true),
-                PdfColumn::right($this->trans('calculationstate.fields.calculations'), 22, true)
+                $this->leftColumn('calculationstate.fields.code', 20),
+                $this->leftColumn('calculationstate.fields.description', 80),
+                $this->centerColumn('calculationstate.fields.editable', 20, true),
+                $this->centerColumn('calculationstate.fields.color', 15, true),
+                $this->rightColumn('calculationstate.fields.calculations', 22, true)
             )->outputHeaders();
     }
 

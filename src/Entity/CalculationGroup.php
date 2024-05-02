@@ -206,7 +206,7 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     /**
      * Checks whether the categories are empty (contains no categories).
      *
-     * @return bool true if the groups is empty, false otherwise
+     * @return bool true if the groups are empty, false otherwise
      */
     public function isEmpty(): bool
     {

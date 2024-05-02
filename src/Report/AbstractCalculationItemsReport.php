@@ -14,7 +14,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Utils\FormatUtils;
@@ -104,12 +103,12 @@ abstract class AbstractCalculationItemsReport extends AbstractArrayReport
     {
         return PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::center($this->trans('calculation.fields.id'), 17, true),
-                PdfColumn::center($this->trans('calculation.fields.date'), 20, true),
-                PdfColumn::left($this->trans('calculation.fields.state'), 20, true),
-                PdfColumn::left($this->trans('calculation.fields.customer'), 60),
-                PdfColumn::left($this->trans('calculation.fields.description'), 60),
-                PdfColumn::left($this->trans('calculation.fields.items'), 70),
+                $this->centerColumn('calculation.fields.id', 17, true),
+                $this->centerColumn('calculation.fields.date', 20, true),
+                $this->leftColumn('calculation.fields.state', 20, true),
+                $this->leftColumn('calculation.fields.customer', 60),
+                $this->leftColumn('calculation.fields.description', 60),
+                $this->leftColumn('calculation.fields.items', 70),
             )->outputHeaders();
     }
 }

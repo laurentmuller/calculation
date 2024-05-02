@@ -75,7 +75,7 @@ class CellBuilder
     /**
      * Sets the cell value and style at the given coordinate.
      *
-     * @param string $coordinate the coordinate of the cell, eg: 'A1'
+     * @param string $coordinate the coordinate of the cell (like 'A1')
      * @param mixed  $value      the value of the cell
      */
     public function apply(string $coordinate, mixed $value): self

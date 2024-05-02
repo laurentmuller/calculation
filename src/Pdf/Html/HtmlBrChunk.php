@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Pdf\Html;
 
 /**
- * Specialized chunk for HTML line break (br).
+ * The specialized chunk for HTML line break (br).
  */
 class HtmlBrChunk extends AbstractHtmlChunk
 {

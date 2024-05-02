@@ -94,7 +94,7 @@ class SymfonyDocument extends AbstractDocument
      */
     private function outputInfo(SymfonyInfoService $info): void
     {
-        $app = $this->controller->getApplication();
+        $app = $this->controller->getApplicationService();
         $this->setActiveTitle('Symfony', $this->controller);
         $sheet = $this->getActiveSheet();
         $row = $sheet->setHeaders([

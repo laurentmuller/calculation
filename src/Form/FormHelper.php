@@ -159,7 +159,7 @@ class FormHelper
     /**
      * Adds a choice type to the builder and reset all values to default.
      *
-     * @param array $choices an array, where the array key is the item's label and the array value is the item's value
+     * @param array $choices an array, where the array key is the item's label, and the array value is the item's value
      */
     public function addChoiceType(array $choices): self
     {
@@ -170,7 +170,7 @@ class FormHelper
     /**
      * Add a collection type to the builder with the given entry type and reset all values to default.
      *
-     * @param string               $entryType the entry type class, must be a subclass of FormTypeInterface class
+     * @param string               $entryType the entry type class must be a subclass of FormTypeInterface class
      * @param array<string, mixed> $options   the default options to override
      *
      * @throws UnexpectedValueException if the entry type is not an instance of FormTypeInterface class
@@ -337,8 +337,9 @@ class FormHelper
 
     /**
      * Add a plain type to the builder and reset all values to default.
+     *
      * This type just renders the field as a span tag. This is useful for
-     * forms where certain field need to be shown but not editable.
+     * forms where certain field needs to be shown but not editable.
      *
      * @param bool $expanded true to render the plain type within the label
      */
@@ -453,7 +454,7 @@ class FormHelper
     /**
      * Add an Url type to the builder and reset all values to default.
      *
-     * @param string $protocol If a value is submitted, that doesn't begin with some protocol
+     * @param string $protocol If a value is submitted, that doesn't begin with some protocol,
      *                         (e.g. http://, ftp://, etc.), this protocol will be prepended to the string when the
      *                         data is submitted to the form.
      */
@@ -523,7 +524,7 @@ class FormHelper
     }
 
     /**
-     * Sets the constraints option.
+     * Sets constraints option.
      */
     public function constraints(Constraint ...$constrains): self
     {
@@ -587,7 +588,7 @@ class FormHelper
     }
 
     /**
-     * Gets the underlaying form builder.
+     * Gets the underlying form builder.
      */
     public function getBuilder(): FormBuilderInterface
     {
@@ -657,7 +658,7 @@ class FormHelper
      * Adds a pre-set-data event listener to this form builder.
      *
      * @param callable(PreSetDataEvent): void $listener the event listener to add
-     * @param int                             $priority The priority of the listener. Listeners with a higher
+     * @param int                             $priority The priority of the listener. Listeners with the higher
      *                                                  priority are called before listeners with a lower priority.
      */
     public function listenerPreSetData(callable $listener, int $priority = 0): self
@@ -671,7 +672,7 @@ class FormHelper
      * Adds a pre-submit event listener to this form builder.
      *
      * @param callable(PreSubmitEvent): void $listener $listener the event listener to add
-     * @param int                            $priority The priority of the listener. Listeners with a higher
+     * @param int                            $priority The priority of the listener. Listeners with the higher
      *                                                 priority are called before listeners with a lower priority.
      */
     public function listenerPreSubmit(callable $listener, int $priority = 0): self
@@ -747,8 +748,9 @@ class FormHelper
     /**
      * Sets the priority.
      *
-     * @param int $priority the priority to set. Fields with higher priorities are rendered first and fields with same
-     *                      priority are rendered in their original order.
+     * @param int $priority the priority to set.
+     *                      Fields with higher priorities are rendered first, and fields with the same priority
+     *                      are rendered in their original order.
      */
     public function priority(int $priority): self
     {
@@ -896,7 +898,7 @@ class FormHelper
     }
 
     /**
-     * Add one or more classes. Do nothing if the given classe names is empty.
+     * Add one or more classes. Do nothing if the given class names are empty.
      *
      * @psalm-param array<string, mixed> $array
      */

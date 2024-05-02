@@ -91,7 +91,7 @@ trait PdfDashLineTrait
     /**
      * Set the dash pattern to draw dashed lines or rectangles.
      *
-     * Call the function without parameter to restore normal drawing.
+     * Call the function without the parameter to restore normal drawing.
      *
      * @param float|null $black the length of dashes
      * @param float|null $white the length of gaps

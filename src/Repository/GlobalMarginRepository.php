@@ -30,7 +30,7 @@ class GlobalMarginRepository extends AbstractRepository
     }
 
     /**
-     * Gets all global margins order by minimum.
+     * Gets all global margins ordered by the minimum.
      *
      * @return GlobalMargin[]
      */

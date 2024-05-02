@@ -53,7 +53,9 @@ class PdfCell
     }
 
     /**
-     * Gets the columns span.
+     * Gets the cell columns span.
+     *
+     * @psalm-return positive-int
      */
     public function getCols(): int
     {
@@ -61,7 +63,7 @@ class PdfCell
     }
 
     /**
-     * Gets the link.
+     * Gets the cell link.
      */
     public function getLink(): string|int|null
     {
@@ -69,7 +71,7 @@ class PdfCell
     }
 
     /**
-     * Gets the style.
+     * Gets the cell style.
      */
     public function getStyle(): ?PdfStyle
     {
@@ -90,15 +92,5 @@ class PdfCell
     public function isLink(): bool
     {
         return PdfDocument::isLink($this->link);
-    }
-
-    /**
-     * Sets the style.
-     */
-    public function setStyle(?PdfStyle $style): self
-    {
-        $this->style = $style;
-
-        return $this;
     }
 }

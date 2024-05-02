@@ -28,7 +28,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Controller to update overall total of calculations.
+ * Controller to update the overall total of calculations.
  */
 #[AsController]
 #[Route(path: '/admin')]
@@ -42,7 +42,7 @@ class CalculationUpdateController extends AbstractController
     public function update(Request $request, CalculationUpdateService $service): Response
     {
         $query = $service->createQuery();
-        $application = $this->getApplication();
+        $application = $this->getApplicationService();
         $form = $this->createQueryForm($query);
         if ($this->handleRequestForm($request, $form)) {
             $service->saveQuery($query);

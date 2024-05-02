@@ -36,9 +36,9 @@ abstract class AbstractChoiceType extends AbstractType
     }
 
     /**
-     * Gets the choices array.
+     * Gets the choice array.
      *
-     * @return array an array, where the array key is the item's label and the array value is the item's value
+     * @return array an array, where the array key is the item's label, and the array value is the item's value
      */
     abstract protected function getChoices(): array;
 }

@@ -16,7 +16,7 @@ use App\Controller\AbstractController;
 use App\Pdf\PdfDocument;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
-use App\Traits\TranslatorTrait;
+use App\Pdf\Traits\PdfColumnTranslatorTrait;
 use fpdf\PdfOrientation;
 use fpdf\PdfPageSize;
 use fpdf\PdfTextAlignment;
@@ -28,7 +28,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 abstract class AbstractReport extends PdfDocument
 {
-    use TranslatorTrait;
+    use PdfColumnTranslatorTrait;
 
     private readonly TranslatorInterface $translator;
 
@@ -54,7 +54,7 @@ abstract class AbstractReport extends PdfDocument
     /**
      * {@inheritdoc}
      *
-     * Override the default behavior by adding a translated title if null and the page index to bookmarks.
+     * Override the default behavior by adding a translated title if null and the page index to the bookmarks.
      */
     public function addPageIndex(
         ?string $title = null,
@@ -77,33 +77,36 @@ abstract class AbstractReport extends PdfDocument
     /**
      * Render this document.
      *
-     * @return bool true if rendered successfully
+     * @return bool <code>true</code> if rendered successfully
      */
     abstract public function render(): bool;
 
     /**
      * Renders a single line with the given number of elements.
      *
-     * @return bool true if the given number of elements is greater than 0
+     * @return bool <code>true</code> if the given number of elements is greater than 0
      */
     public function renderCount(PdfTable $table, \Countable|array|int $count, string $message = 'common.count'): bool
     {
         $this->resetStyle();
+        if (!\is_int($count)) {
+            $count = \count($count);
+        }
         $text = $this->translateCount($count, $message);
         $table->singleLine($text, PdfStyle::getHeaderStyle(), PdfTextAlignment::LEFT);
 
-        return $this->toInt($count) > 0;
+        return $count > 0;
     }
 
     /**
      * Sets the title to be translated.
      *
-     * @param string $id     the title id (may also be an object that can be cast to string)
+     * @param string $id     the title identifier (may also be an object that can be cast to string)
      * @param bool   $isUTF8 indicates if the title is encoded in ISO-8859-1 (false) or UTF-8 (true)
      */
-    public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false, ?string $domain = null): static
+    public function setTitleTrans(string $id, array $parameters = [], bool $isUTF8 = false): static
     {
-        $title = $this->trans($id, $parameters, $domain);
+        $title = $this->trans($id, $parameters);
         $this->setTitle($title, $isUTF8);
 
         return $this;
@@ -114,11 +117,10 @@ abstract class AbstractReport extends PdfDocument
      */
     protected function translateCount(\Countable|array|int $count, string $message = 'common.count'): string
     {
-        return $this->trans($message, ['%count%' => $this->toInt($count)]);
-    }
+        if (!\is_int($count)) {
+            $count = \count($count);
+        }
 
-    private function toInt(\Countable|array|int $value): int
-    {
-        return \is_int($value) ? $value : \count($value);
+        return $this->trans($message, ['%count%' => $count]);
     }
 }

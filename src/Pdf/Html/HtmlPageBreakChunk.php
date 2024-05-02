@@ -15,7 +15,7 @@ namespace App\Pdf\Html;
 use App\Report\HtmlReport;
 
 /**
- * A special chunk to add a page break to report.
+ * A special chunk to add a page break to the report.
  */
 class HtmlPageBreakChunk extends AbstractHtmlChunk
 {

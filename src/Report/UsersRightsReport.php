@@ -19,7 +19,6 @@ use App\Enums\EntityPermission;
 use App\Model\Role;
 use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
@@ -117,10 +116,10 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getCellStyle()->setFontBold())
             ->setGroupListener($this)
-            ->addColumn(PdfColumn::left($this->trans('user.rights.table_title'), 50));
+            ->addColumn($this->leftColumn('user.rights.table_title', 50));
         $permissions = EntityPermission::sorted();
         foreach ($permissions as $permission) {
-            $table->addColumn(PdfColumn::center($this->trans($permission), 25, true));
+            $table->addColumn($this->centerColumn($permission, 25, true));
         }
         $table->outputHeaders();
 
@@ -129,7 +128,7 @@ class UsersRightsReport extends AbstractArrayReport implements PdfGroupListenerI
 
     private function getApplication(): ApplicationService
     {
-        return $this->controller->getApplication();
+        return $this->controller->getApplicationService();
     }
 
     /**

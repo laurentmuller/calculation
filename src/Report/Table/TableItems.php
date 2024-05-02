@@ -19,7 +19,6 @@ use App\Entity\CalculationItem;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Events\PdfGroupEvent;
 use App\Pdf\Interfaces\PdfGroupListenerInterface;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Report\CalculationReport;
 use fpdf\PdfBorder;
@@ -162,14 +161,14 @@ class TableItems extends ReportGroupTable
         $this->setInProgress(false);
     }
 
-    private function createColumns(): self
+    private function createColumns(): void
     {
-        return $this->addColumns(
-            PdfColumn::left($this->trans('calculationitem.fields.description'), 50),
-            PdfColumn::left($this->trans('calculationitem.fields.unit'), 20, true),
-            PdfColumn::right($this->trans('calculationitem.fields.price'), 20, true),
-            PdfColumn::right($this->trans('calculationitem.fields.quantity'), 20, true),
-            PdfColumn::right($this->trans('calculationitem.fields.total'), 20, true)
+        $this->addColumns(
+            $this->leftColumn('calculationitem.fields.description', 50),
+            $this->leftColumn('calculationitem.fields.unit', 20, true),
+            $this->rightColumn('calculationitem.fields.price', 20, true),
+            $this->rightColumn('calculationitem.fields.quantity', 20, true),
+            $this->rightColumn('calculationitem.fields.total', 20, true)
         )->outputHeaders();
     }
 

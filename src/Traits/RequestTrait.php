@@ -75,7 +75,7 @@ trait RequestTrait
     }
 
     /**
-     * Returns the request parameter value.
+     * Return the request parameter value.
      *
      * @psalm-return ($default is null ? (scalar|null) : scalar)
      */

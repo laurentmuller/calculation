@@ -64,7 +64,7 @@ class AdminController extends AbstractController
         $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
             $this->getUserService()->clearCache();
-            $this->getApplication()->clearCache();
+            $this->getApplicationService()->clearCache();
 
             try {
                 if ($service->clear()) {
@@ -130,7 +130,7 @@ class AdminController extends AbstractController
     #[GetPost(path: '/parameters', name: 'admin_parameters')]
     public function parameters(Request $request): Response
     {
-        $application = $this->getApplication();
+        $application = $this->getApplicationService();
         $data = $application->getProperties();
         $form = $this->createForm(ApplicationParametersType::class, $data);
         if ($this->handleRequestForm($request, $form)) {
@@ -156,7 +156,7 @@ class AdminController extends AbstractController
     #[GetPost(path: '/rights/admin', name: 'admin_rights_admin')]
     public function rightsAdmin(Request $request, RoleBuilderService $service): Response
     {
-        $application = $this->getApplication();
+        $application = $this->getApplicationService();
         $roleName = RoleInterface::ROLE_ADMIN;
         $rights = $application->getAdminRights();
         $default = $service->getRoleAdmin();
@@ -171,7 +171,7 @@ class AdminController extends AbstractController
     #[GetPost(path: '/rights/user', name: 'admin_rights_user')]
     public function rightsUser(Request $request, RoleBuilderService $service): Response
     {
-        $application = $this->getApplication();
+        $application = $this->getApplicationService();
         $roleName = RoleInterface::ROLE_USER;
         $rights = $application->getUserRights();
         $default = $service->getRoleUser();

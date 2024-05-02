@@ -24,7 +24,7 @@ use App\Utils\FileUtils;
 class ImageService
 {
     /**
-     * The default image resolution (96) in dot per each (DPI).
+     * The default image resolution (96) in the dot per each (DPI).
      */
     final public const DEFAULT_RESOLUTION = 96;
 
@@ -57,7 +57,7 @@ class ImageService
     /**
      * Allocate a color for this image.
      *
-     * The color is automatically de-allocate as soon as there are no other references to this instance.
+     * The color is automatically de-allocated as soon as there are no other references to this instance.
      *
      * @param int $red   the value of red component
      * @param int $green the value of green component
@@ -82,7 +82,7 @@ class ImageService
     /**
      * Allocate a color for this image.
      *
-     * The color is automatically de-allocate as soon as there are no other references to this instance.
+     * The color is automatically de-allocated as soon as there are no other references to this instance.
      *
      * @param int $red   the value of red component
      * @param int $green the value of green component
@@ -181,7 +181,7 @@ class ImageService
     /**
      * Fill this image's bounds with the given color.
      *
-     * @param int $color the fill color. A color identifier created with allocate.
+     * @param int $color the fill color. A color identifier created with the allocate method.
      * @param int $x     the x-coordinate of start point
      * @param int $y     the y-coordinate of start point
      *
@@ -201,7 +201,7 @@ class ImageService
      * @param int $y      the y-coordinate
      * @param int $width  the rectangle width
      * @param int $height the rectangle height
-     * @param int $color  the fill color. A color identifier created with allocate.
+     * @param int $color  the fill color. A color identifier created with the allocate method.
      *
      * @return bool true on success or false on failure
      */
@@ -279,7 +279,7 @@ class ImageService
      * @param int $y1    the y-coordinate for first point
      * @param int $x2    the x-coordinate for second point
      * @param int $y2    the y-coordinate for second point
-     * @param int $color the line color. A color identifier created with allocate.
+     * @param int $color the line color. A color identifier created with the allocate method.
      *
      * @return bool true on success or false on failure
      *
@@ -297,7 +297,7 @@ class ImageService
      * @param int $y      the y-coordinate
      * @param int $width  the rectangle width
      * @param int $height the rectangle height
-     * @param int $color  the border color. A color identifier created with allocate.
+     * @param int $color  the border color. A color identifier created with the allocate method.
      *
      * @return bool true on success or false on failure
      */
@@ -307,7 +307,7 @@ class ImageService
     }
 
     /**
-     * Get the horizontal resolution of this image in dot per inch (DPI).
+     * Get the horizontal resolution of this image in the dot per inch (DPI).
      *
      * @param int $default the default resolution to use on failure
      *
@@ -342,7 +342,7 @@ class ImageService
      *
      * @param int $x     the x-coordinate
      * @param int $y     the y-coordinate
-     * @param int $color a color identifier created with allocate
+     * @param int $color a color identifier created with the allocate method
      *
      * @return bool true on success or false on failure
      *
@@ -356,7 +356,7 @@ class ImageService
     /**
      * Define a color as transparent.
      *
-     * @param int $color a color identifier created with allocate
+     * @param int $color a color identifier created with the allocate method
      *
      * @return int the identifier of the new (or current, if none is specified) transparent color is returned. If color
      *             is null, and the image has no transparent color, the returned identifier will be -1.
@@ -374,7 +374,7 @@ class ImageService
      * @param string $fontFile the path to the TrueType font
      * @param string $text     the string to be measured
      *
-     * @return int[]|false an array with 8 elements representing four points making the bounding box of the
+     * @return int[]|false an array with 8 elements representing four points making the bounding box of
      *                     text on success and false on error.<br>
      *                     The points are relative to the text regardless of the angle, so "upper left" means in the
      *                     top left-hand corner seeing the text horizontally.<br><br>
@@ -465,9 +465,9 @@ class ImageService
      *                         value of 90 would result in bottom-to-top reading text.
      * @param int    $x        The coordinates given by x and y will define the base point of the first
      *                         character (roughly the lower-left corner of the character)
-     * @param int    $y        The y-coordinate. This sets the position of the font baseline, not the
+     * @param int    $y        The y-coordinate. This sets the position of the font baseline, not
      *                         very bottom of the character.
-     * @param int    $color    a color identifier created with allocate
+     * @param int    $color    a color identifier created with the allocate method
      * @param string $fontFile the path to the TrueType font
      * @param string $text     The text string in UTF-8 encoding.
      *                         <br>
@@ -483,7 +483,7 @@ class ImageService
      *                         If a character is used in the string which is not supported by the
      *                         font, a hollow rectangle will replace the character.
      *
-     * @return array|false an array with 8 elements representing four points making the bounding box of the
+     * @return array|false an array with 8 elements representing four points making the bounding box of
      *                     text on success and false on error.<br>
      *                     The points are relative to the text regardless of the angle, so "upper left" means in the
      *                     top left-hand corner seeing the text horizontally.<br>

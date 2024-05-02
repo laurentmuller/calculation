@@ -163,7 +163,7 @@ class HtmlStyle extends PdfStyle
     }
 
     /**
-     * Sets right margin.
+     * Sets the right margin.
      */
     public function setRightMargin(float $rightMargin): self
     {

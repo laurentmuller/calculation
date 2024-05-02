@@ -24,7 +24,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * A form type that just renders the field as a span tag.
  *
- * This is useful for forms where certain field need to be shown but not editable.
+ * This is useful for forms where certain field needs to be shown but not editable.
  * If the 'expanded' option is set to true, a div tag is added around the span tag.
  *
  * @extends AbstractType<mixed>
@@ -298,7 +298,7 @@ class PlainType extends AbstractType
     }
 
     /**
-     * @throws TransformationFailedException if the value can not be mapped to a string
+     * @throws TransformationFailedException if the value cannot be mapped to a string
      *
      * @psalm-param OptionsType $options
      */

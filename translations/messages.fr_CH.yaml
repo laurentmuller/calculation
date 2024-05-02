@@ -413,8 +413,9 @@ datatable:
     show: Afficher
     no_action: Aucune action disponible
     dialog_page: Page %page% / %pages%
+    dialog_record: Entrée %record% à %records%
     dialog_title: Sélectionner une page
-    dialog_message: 'Veuillez sélectionner le numéro de page que vous désirez afficher :'
+    dialog_message: Veuillez sélectionner le numéro de page que vous désirez afficher
 duplicate:
     count: "Nombre de calculations : %calculations% - Nombre d'articles : %items%"
     description: Calculations contenant le même article plus d'une fois.

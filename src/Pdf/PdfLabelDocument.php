@@ -75,7 +75,7 @@ class PdfLabelDocument extends PdfDocument
         'mm' => 1000.0,
     ];
 
-    // the number of horizontally labels
+    // the number of horizontal labels
     private int $cols = 0;
     // the current column (0 based index)
     private int $currentCol;
@@ -97,7 +97,7 @@ class PdfLabelDocument extends PdfDocument
     private float $marginTop = 0;
     // the padding inside labels
     private float $padding = 0;
-    // the number of vertically labels
+    // the number of vertical labels
     private int $rows = 0;
     // the horizontal space between 2 labels
     private float $spaceX = 0;
@@ -107,14 +107,14 @@ class PdfLabelDocument extends PdfDocument
     private string $unit;
 
     /**
-     * @param array|string $format     a label type or one of the predefined format name
+     * @param array|string $format     a label type or one of the predefined format names
      * @param PdfUnit      $unit       the user unit
-     * @param int          $startIndex the zero based index of the first label
+     * @param int          $startIndex the zero-based index of the first label
      *
      * @psalm-param LabelType|string $format
      * @psalm-param non-negative-int $startIndex
      *
-     * @throws PdfException if the format name is unknown or if the format array contain invalid value
+     * @throws PdfException if the format name is unknown, or if the format array contains invalid value
      */
     public function __construct(array|string $format, PdfUnit $unit = PdfUnit::MILLIMETER, int $startIndex = 0)
     {

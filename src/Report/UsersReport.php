@@ -16,7 +16,6 @@ use App\Controller\AbstractController;
 use App\Entity\User;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfCell;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfImageCell;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
@@ -60,12 +59,12 @@ class UsersReport extends AbstractArrayReport
     {
         return PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::center($this->trans('user.fields.imageFile'), 18, true),
-                PdfColumn::left($this->trans('user.fields.username'), 25),
-                PdfColumn::left($this->trans('user.fields.email'), 30),
-                PdfColumn::left($this->trans('user.fields.role'), 35, true),
-                PdfColumn::left($this->trans('user.fields.enabled'), 18, true),
-                PdfColumn::left($this->trans('user.fields.lastLogin'), 30, true)
+                $this->centerColumn('user.fields.imageFile', 18, true),
+                $this->leftColumn('user.fields.username', 25),
+                $this->leftColumn('user.fields.email', 30),
+                $this->leftColumn('user.fields.role', 35, true),
+                $this->leftColumn('user.fields.enabled', 18, true),
+                $this->leftColumn('user.fields.lastLogin', 30, true)
             )->outputHeaders();
     }
 

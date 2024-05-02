@@ -49,7 +49,7 @@ class SwitchUserListener implements ServiceSubscriberInterface
         $original = $this->getOriginalUsername($event);
         $action = $request->query->getString(self::SWITCH_USER);
 
-        // get message
+        // get the message
         if (self::EXIT_VALUE === $action) {
             $id = 'user.switch.exit.success';
         } elseif (null !== $original) {

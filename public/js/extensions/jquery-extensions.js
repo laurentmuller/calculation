@@ -48,10 +48,10 @@
         },
 
         /**
-         * Returns if the given data is a boolean.
+         * Returns if the given data is boolean.
          *
          * @param {any} data - The data to evaluate.
-         * @return {boolean} true if a boolean.
+         * @return {boolean} true if boolean.
          */
         isBoolean: function (data) {
             return typeof data === 'boolean';
@@ -102,7 +102,7 @@
         },
 
         /**
-         * Format a value with 0 decimal and grouping separator.
+         * Format a value with 0 decimal and the grouping separator.
          *
          * @param {number} value - the value to format.
          * @returns {string} the formatted value.
@@ -145,7 +145,7 @@
     $.fn.extend({
 
         /**
-         * Check if the element is visible into area of the browser window.
+         * Check if the element is visible into the area of the browser window.
          *
          * @param {int} bottomMargin - The bottom margin (default to 50).
          * @return {boolean} true if visible, false if not.
@@ -395,7 +395,7 @@
                 return false;
             }
 
-            // check type (copied from accept method)
+            // check the type (copied from accept method)
             let type = $(this).attr('accept') || false;
             if (type) {
                 type = type.replace(/[\-\[\]\/\{\}\(\)\+\?\.\\\^\$\|]/g, '\\$&')
@@ -520,7 +520,7 @@
         },
 
         /**
-         * Returns if the given attribute exist and is not false or null.
+         * Returns if the given attribute exists and is not false or null.
          *
          * @param {string} name - the attribute name to check existence for.
          * @return {boolean} true if the attribute name is set.

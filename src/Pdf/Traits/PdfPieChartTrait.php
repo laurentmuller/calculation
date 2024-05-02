@@ -61,7 +61,7 @@ trait PdfPieChartTrait
             return;
         }
 
-        // check new page
+        // check the new page
         if (!$this->isPrintable($radius, $centerY + $radius)) {
             $this->addPage();
             $centerY = $this->getY() + $radius;

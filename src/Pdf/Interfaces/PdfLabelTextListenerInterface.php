@@ -15,7 +15,7 @@ namespace App\Pdf\Interfaces;
 use App\Pdf\Events\PdfLabelTextEvent;
 
 /**
- * Class implementing this interface handle the draw label texts event.
+ * Class implementing this interface handles the draw label texts event.
  */
 interface PdfLabelTextListenerInterface
 {
@@ -24,7 +24,7 @@ interface PdfLabelTextListenerInterface
      *
      * @param PdfLabelTextEvent $event the event
      *
-     * @return bool true if listener handle the draw function; false to call the default behavior
+     * @return bool true if listener handles the draw function; false to call the default behavior
      */
     public function drawLabelText(PdfLabelTextEvent $event): bool;
 }

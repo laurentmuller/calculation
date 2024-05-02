@@ -249,7 +249,10 @@ class CommandsReport extends AbstractArrayReport
         $result = \preg_match_all(self::CLASS_PATTERN, $help, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE);
         if (false === $result || 0 === $result) {
             $this->outputHelp($help);
-            goto restore;
+            $this->leftMargin = $oldMargin;
+            $this->lineBreak();
+
+            return;
         }
 
         $offset = 0;
@@ -275,7 +278,6 @@ class CommandsReport extends AbstractArrayReport
         }
 
         // restore
-        restore:
         $this->leftMargin = $oldMargin;
         $this->lineBreak();
     }

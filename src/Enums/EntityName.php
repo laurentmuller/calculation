@@ -119,7 +119,7 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
     }
 
     /**
-     * Gets the rights field name.
+     * Gets rights field name.
      */
     public function getRightsField(): string
     {

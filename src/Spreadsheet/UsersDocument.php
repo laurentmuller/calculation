@@ -134,7 +134,7 @@ class UsersDocument extends AbstractArrayDocument
     /**
      * Gets the user's image full path.
      *
-     * @param User $user the user to get image path for
+     * @param User $user the user to get the image path for
      *
      * @return string|null the image path, if exists; null otherwise
      */

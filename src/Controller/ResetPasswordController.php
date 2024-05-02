@@ -76,7 +76,7 @@ class ResetPasswordController extends AbstractController
     }
 
     /**
-     * Display and process form to request a password reset.
+     * Display and process the form to request a password reset.
      */
     #[GetPost(path: '', name: self::ROUTE_REQUEST)]
     public function request(Request $request, AuthenticationUtils $utils): Response

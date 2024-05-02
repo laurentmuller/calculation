@@ -20,15 +20,15 @@ use App\Utils\StringUtils;
 final class PhpInfoService
 {
     /**
-     * The replace string for sensitive parameters.
+     * The replaced string for sensitive parameters.
      */
     public const REDACTED = '********';
 
     /**
-     * Gets PHP information as array.
+     * Gets PHP information as the array.
      *
-     * @param int $what The output may be customized by passing one or more of the following constants bitwise values summed
-     *                  together in the optional what parameter.
+     * @param int $what The output may be customized by passing one or more of the following constants bitwise values
+     *                  summed together in the optional what parameter.
      *                  One can also combine the respective constants or bitwise values
      *                  together with the bitwise or operator.
      *
@@ -86,8 +86,8 @@ final class PhpInfoService
     /**
      * Gets PHP information as HTML.
      *
-     * @param int $what The output may be customized by passing one or more of the following constants bitwise values summed
-     *                  together in the optional what parameter.
+     * @param int $what The output may be customized by passing one or more of the following constants bitwise
+     *                  values summed together in the optional what parameter.
      *                  One can also combine the respective constants or bitwise values
      *                  together with the bitwise or operator.
      */
@@ -133,8 +133,8 @@ final class PhpInfoService
     /**
      * Gets PHP information as text (raw data).
      *
-     * @param int $what The output may be customized by passing one or more of the following constants bitwise values summed
-     *                  together in the optional what parameter.
+     * @param int $what The output may be customized by passing one or more of the following constants bitwise values
+     *                  summed together in the optional what parameter.
      *                  One can also combine the respective constants or bitwise values
      *                  together with the bitwise or operator.
      */

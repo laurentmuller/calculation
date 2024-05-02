@@ -345,7 +345,7 @@ final class SymfonyInfoService
     }
 
     /**
-     * Returns if the long term support is enabled.
+     * Returns if the long-term support is enabled.
      */
     public function isLongTermSupport(): bool
     {

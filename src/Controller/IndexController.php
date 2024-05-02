@@ -192,7 +192,7 @@ class IndexController extends AbstractController
      */
     private function count($className): int
     {
-        return $this->manager->getRepository($className)->count([]);
+        return $this->manager->getRepository($className)->count();
     }
 
     private function getCalculations(int $maxResults, ?UserInterface $user): array

@@ -25,7 +25,6 @@ use App\Pdf\Interfaces\PdfDrawCellBackgroundInterface;
 use App\Pdf\Interfaces\PdfDrawCellTextInterface;
 use App\Pdf\Interfaces\PdfDrawHeadersInterface;
 use App\Pdf\PdfCell;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\Traits\PdfBarChartTrait;
 use App\Pdf\Traits\PdfChartLegendTrait;
@@ -152,12 +151,12 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     {
         return ReportTable::fromReport($this)
             ->addColumns(
-                PdfColumn::left($this->trans('chart.month.fields.month'), 20),
-                PdfColumn::right($this->trans('calculation.list.title'), 22, true),
-                PdfColumn::right($this->trans('calculationgroup.fields.amount'), 25, true),
-                PdfColumn::right($this->trans('calculation.fields.margin'), 20, true),
-                PdfColumn::right('', 18, true),
-                PdfColumn::right($this->trans('calculation.fields.total'), 25, true),
+                $this->leftColumn('chart.month.fields.month', 20),
+                $this->rightColumn('calculation.list.title', 22, true),
+                $this->rightColumn('calculationgroup.fields.amount', 25, true),
+                $this->rightColumn('calculation.fields.margin', 20, true),
+                $this->rightColumn('', 18, true),
+                $this->rightColumn('calculation.fields.total', 25, true),
             )
             ->setHeadersListener($this)
             ->setTextListener($this)

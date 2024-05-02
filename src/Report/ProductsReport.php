@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Report;
 
 use App\Pdf\Colors\PdfTextColor;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 
@@ -29,7 +28,7 @@ class ProductsReport extends AbstractArrayReport
         $this->setTitleTrans('product.list.title');
         $this->addPage();
         $table = $this->createTable();
-        $style = PdfStyle::getCellStyle()
+        $redStyle = PdfStyle::getCellStyle()
             ->setTextColor(PdfTextColor::red());
 
         $key = '';
@@ -51,7 +50,8 @@ class ProductsReport extends AbstractArrayReport
                 $key = $newKey;
                 $table->setGroupKey($key);
             }
-            $style = $this->isFloatZero($entity->getPrice()) ? $style : null;
+
+            $style = $this->isFloatZero($entity->getPrice()) ? $redStyle : null;
             $table->startRow()
                 ->add($entity->getDescription())
                 ->addCellAmount($entity->getPrice(), style: $style)
@@ -72,10 +72,10 @@ class ProductsReport extends AbstractArrayReport
     {
         return PdfGroupTable::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('product.fields.description'), 90),
-                PdfColumn::right($this->trans('product.fields.price'), 20, true),
-                PdfColumn::left($this->trans('product.fields.unit'), 20, true),
-                PdfColumn::left($this->trans('product.fields.supplier'), 40, true)
+                $this->leftColumn('product.fields.description', 90),
+                $this->rightColumn('product.fields.price', 20, true),
+                $this->leftColumn('product.fields.unit', 20, true),
+                $this->leftColumn('product.fields.supplier', 40, true)
             )->outputHeaders();
     }
 }

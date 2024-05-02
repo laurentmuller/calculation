@@ -15,7 +15,7 @@ namespace App\Traits;
 use Elao\Enum\ExtrasTrait;
 
 /**
- * Extends extras trait with typed values.
+ * Extends the extra trait with typed values.
  */
 trait EnumExtrasTrait
 {

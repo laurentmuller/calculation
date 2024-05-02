@@ -50,7 +50,7 @@ enum Environment: string implements TranslatableEnumInterface
     }
 
     /**
-     * Returns if this is enumeration the production environment.
+     * Returns if this enumeration is the production environment.
      *
      * @return bool true if production environment
      */

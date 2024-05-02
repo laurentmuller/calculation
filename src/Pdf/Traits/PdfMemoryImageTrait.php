@@ -25,7 +25,7 @@ trait PdfMemoryImageTrait
     /**
      * Output a GD image.
      *
-     * This function convert first the given image to the portable network graphics format ('png') before output.
+     * This function converts first the given image to the portable network graphics format ('png') before output.
      *
      * @param \GdImage        $image  the GD image to output
      * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa
@@ -52,7 +52,7 @@ trait PdfMemoryImageTrait
      *                                </ul>
      * @param string|int|null $link   the URL or an identifier returned by <code>addLink()</code>
      *
-     * @throws PdfException if the image can not be converted
+     * @throws PdfException if the image cannot be converted
      */
     public function imageGD(
         \GdImage $image,
@@ -72,7 +72,7 @@ trait PdfMemoryImageTrait
     }
 
     /**
-     * Output an image data.
+     * Output image data.
      *
      * @param string          $data   the image data to output
      * @param ?float          $x      the abscissa of the upper-left corner. If <code>null</code>, the current abscissa

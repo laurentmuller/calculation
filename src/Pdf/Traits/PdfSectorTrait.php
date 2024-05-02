@@ -62,7 +62,7 @@ trait PdfSectorTrait
         // put center
         $this->outf('%.2F %.2F m', $centerX * $scaleFactor, ($height - $centerY) * $scaleFactor);
 
-        // put first point
+        // put the first point
         $x = ($centerX + $radius * \cos($startAngle)) * $scaleFactor;
         $y = ($height - ($centerY - $radius * \sin($startAngle))) * $scaleFactor;
         $this->outf('%.2F %.2F l', $x, $y);

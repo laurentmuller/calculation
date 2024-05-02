@@ -15,7 +15,7 @@ namespace App\Traits;
 use Symfony\Contracts\Cache\ItemInterface;
 
 /**
- * Trait to clean cache key.
+ * Trait to get clean cache key.
  */
 trait CacheKeyTrait
 {

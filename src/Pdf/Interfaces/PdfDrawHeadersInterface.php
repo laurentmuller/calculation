@@ -15,7 +15,7 @@ namespace App\Pdf\Interfaces;
 use App\Pdf\Events\PdfPdfDrawHeadersEvent;
 
 /**
- * Class implementing this interface handle draw headers event.
+ * Class implementing this interface handles the draw table headers event.
  */
 interface PdfDrawHeadersInterface
 {
@@ -24,7 +24,7 @@ interface PdfDrawHeadersInterface
      *
      * @param PdfPdfDrawHeadersEvent $event the event
      *
-     * @return bool true if listener handle the draw function; false to call the default behavior
+     * @return bool true if the listener handles the draw function; false to call the default behavior
      */
     public function drawHeaders(PdfPdfDrawHeadersEvent $event): bool;
 }

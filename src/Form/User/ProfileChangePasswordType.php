@@ -91,7 +91,7 @@ class ProfileChangePasswordType extends AbstractEntityType
         $violations = $context->getValidator()
             ->validate($password->getData(), new NotCompromisedPassword());
 
-        // if compromised assign the error to the password field
+        // if compromised, assign the error to the password field
         if ($violations->count() > 0) {
             $password->addError(new FormError((string) $violations));
         }

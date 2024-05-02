@@ -26,7 +26,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 abstract class AbstractTranslatorService extends AbstractHttpClientService implements TranslatorServiceInterface
 {
     /**
-     * The field not found status code.
+     * The not found field status code.
      */
     final protected const ERROR_NOT_FOUND = 199;
 

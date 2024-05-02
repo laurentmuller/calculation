@@ -14,7 +14,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Pdf\Colors\PdfDrawColor;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
 use App\Service\HelpService;
@@ -144,8 +143,8 @@ class HelpReport extends AbstractReport
         $this->outputText($description);
         $table = PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('help.fields.action'), 70, true),
-                PdfColumn::left($this->trans('help.fields.description'), 50)
+                $this->leftColumn('help.fields.action', 70, true),
+                $this->leftColumn('help.fields.description', 50)
             )->outputHeaders();
 
         foreach ($actions as $action) {
@@ -170,8 +169,8 @@ class HelpReport extends AbstractReport
 
         $table = PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('help.fields.column'), 30, true),
-                PdfColumn::left($this->trans('help.fields.description'), 50)
+                $this->leftColumn('help.fields.column', 30, true),
+                $this->leftColumn('help.fields.description', 50)
             )->outputHeaders();
         foreach ($fields as $field) {
             $table->addRow(
@@ -302,8 +301,8 @@ class HelpReport extends AbstractReport
         $this->multiCell(text: $text);
         $table = PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('help.fields.column'), 30, true),
-                PdfColumn::left($this->trans('help.fields.description'), 50),
+                $this->leftColumn('help.fields.column', 30, true),
+                $this->leftColumn('help.fields.description', 50),
             )->outputHeaders();
         foreach ($fields as $field) {
             $table->addRow(
@@ -479,10 +478,10 @@ class HelpReport extends AbstractReport
 
         $table = PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('help.fields.field'), 30, true),
-                PdfColumn::left($this->trans('help.fields.description'), 50),
-                PdfColumn::left($this->trans('help.fields.type'), 30, true),
-                PdfColumn::center($this->trans('help.fields.required'), 18, true)
+                $this->leftColumn('help.fields.field', 30, true),
+                $this->leftColumn('help.fields.description', 50),
+                $this->leftColumn('help.fields.type', 30, true),
+                $this->centerColumn('help.fields.required', 18, true)
             )->outputHeaders();
 
         foreach ($fields as $field) {
@@ -546,8 +545,8 @@ class HelpReport extends AbstractReport
         $this->outputText('help.labels.edit_actions');
         $table = PdfTable::instance($this)
             ->addColumns(
-                PdfColumn::left($this->trans('help.fields.action'), 60, true),
-                PdfColumn::left($this->trans('help.fields.description'), 50)
+                $this->leftColumn('help.fields.action', 60, true),
+                $this->leftColumn('help.fields.description', 50)
             )->outputHeaders();
         $this->outputMenus($table, $menus);
 

@@ -502,7 +502,7 @@ class PivotNode extends AbstractPivotAggregator implements \Countable, \Stringab
     }
 
     /**
-     * Sets the sort mode and sort values if different from current sort mode.
+     * Sets the sort mode and sort values if different from the current sort mode.
      *
      * @psalm-api
      */

@@ -58,7 +58,7 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
-     * Gets this property value as an array. Internally the array is decoded from a JSON string.
+     * Gets this property value as an array. Internally, the array is decoded from a JSON string.
      *
      * @psalm-api
      */
@@ -130,7 +130,7 @@ abstract class AbstractProperty extends AbstractEntity
     }
 
     /**
-     * Sets the property value as an array. Internally the array is encoded as JSON string.
+     * Sets the property value as an array. Internally, the array is encoded as JSON string.
      */
     public function setArray(?array $value): static
     {
@@ -184,7 +184,7 @@ abstract class AbstractProperty extends AbstractEntity
     /**
      * Sets the property value.
      *
-     * This function try first to convert the value to an appropriate type (bool, int, etc...).
+     * This function tries first to convert the value to an appropriate type (bool, int, etc...).
      */
     public function setValue(mixed $value): static
     {

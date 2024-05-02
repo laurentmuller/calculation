@@ -59,7 +59,7 @@ class CalculationStateRepository extends AbstractRepository
     }
 
     /**
-     * Gets states with calculations statistics.
+     * Gets states with the calculation statistics.
      *
      * <b>Note:</b> Only states with at least one calculation are returned.
      *

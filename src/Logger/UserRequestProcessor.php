@@ -19,7 +19,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Log record processor to add user identifier, if any; to extra data.
+ * Log record processor to add user identifier, if any, to extra data.
  */
 readonly class UserRequestProcessor implements ProcessorInterface
 {

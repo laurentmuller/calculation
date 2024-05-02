@@ -178,7 +178,7 @@ class CalculationStateController extends AbstractEntityController
      */
     protected function deleteFromDatabase(EntityInterface $item): void
     {
-        $this->getApplication()->updateDeletedState($item);
+        $this->getApplicationService()->updateDeletedState($item);
         parent::deleteFromDatabase($item);
     }
 }

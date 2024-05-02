@@ -14,6 +14,7 @@ namespace App\Service;
 
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -60,7 +61,7 @@ final class DatabaseInfoService
                         default => $value
                     };
                 }
-            } catch (\Exception) {
+            } catch (\Exception|Exception) {
             }
         }
 
@@ -113,7 +114,7 @@ final class DatabaseInfoService
                 if (false !== $entries) {
                     $this->version = (string) $entries['Value'];
                 }
-            } catch (\Exception) {
+            } catch (\Exception|Exception) {
             }
         }
 
@@ -123,7 +124,7 @@ final class DatabaseInfoService
     /**
      * Prepares an SQL statement and return the result.
      *
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
     private function executeQuery(string $sql, bool $all): array|false
     {

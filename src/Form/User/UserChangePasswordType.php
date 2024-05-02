@@ -17,7 +17,7 @@ use App\Form\AbstractEntityType;
 use App\Form\FormHelper;
 
 /**
- * Change user password type.
+ * Change the user password type.
  *
  * @template-extends AbstractEntityType<User>
  */

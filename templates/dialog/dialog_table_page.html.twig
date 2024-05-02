@@ -1,17 +1,19 @@
 {% from 'macros/_icons.html.twig' import icon, button_close_modal %}
-<div class="modal fade" id="modal-page" aria-labelledby="modal-page-title" aria-hidden="true" tabindex="-1" data-page="{{ 'datatable.dialog_page'|trans }}">
+<div class="modal fade" id="modal-page" aria-labelledby="modal-page-title" aria-hidden="true" tabindex="-1" data-page="{{ 'datatable.dialog_page'|trans }}" data-record="{{ 'datatable.dialog_record'|trans }}"
+     >
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header cursor-move">
-                <h1 class="modal-title fs-5" id="modal-page-title">
-                    {{- icon('arrow-up-right-dots fa-fw', 'datatable.dialog_title') -}}
-                </h1>
+                <h5 class="modal-title" id="modal-page-title">{{ icon('arrow-up-right-dots fa-fw', 'datatable.dialog_title') }}</h5>
                 {{- button_close_modal() -}}
             </div>
             <div class="modal-body p-4">
                 <label for="page-range" class="form-label">{{ 'datatable.dialog_message'|trans }}</label>
                 <input id="page-range" type="range" class="form-range border rounded-pill px-1 py-2" min="1" max="100" step="1" value="1">
-                <label id="page-label" for="page-range" class="form-label w-100 text-end">&nbsp;</label>
+                <div class="d-flex-wrap-center">
+                    <label id="page-record" for="page-range" class="form-label me-auto">Entrée 1 - 15 / 299</label>
+                    <label id="page-label" for="page-range" class="form-label">&nbsp;</label>
+                </div>
             </div>
             <div class="modal-footer justify-content-start">
                 <button type="button" class="btn btn-form btn-primary" id="page-button">

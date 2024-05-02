@@ -14,14 +14,12 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Group;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfStyle;
 use App\Pdf\PdfTable;
+use App\Report\Table\ReportTable;
 use App\Utils\FormatUtils;
 use fpdf\PdfBorder;
 use fpdf\PdfOrientation;
-use fpdf\PdfPageSize;
-use fpdf\PdfUnit;
 
 /**
  * Report for the list of groups.
@@ -35,17 +33,14 @@ class GroupsReport extends AbstractArrayReport
      */
     public function __construct(
         AbstractController $controller,
-        array $entities,
-        PdfUnit $unit = PdfUnit::MILLIMETER,
-        PdfPageSize $size = PdfPageSize::A4
+        array $entities
     ) {
-        parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE, $unit, $size);
+        parent::__construct($controller, $entities, PdfOrientation::LANDSCAPE);
+        $this->setTitleTrans('group.list.title');
     }
 
     protected function doRender(array $entities): bool
     {
-        $this->setTitleTrans('group.list.title', [], true);
-
         $this->addPage();
         $table = $this->createTable();
         $last = \end($entities);
@@ -56,38 +51,60 @@ class GroupsReport extends AbstractArrayReport
                 $table->singleLine(null, $emptyStyle);
             }
         }
-        $this->renderTotal($table, $entities);
+        $this->outputTotals($table, $entities);
 
         return true;
     }
 
-    private function createTable(): PdfTable
+    private function createTable(): ReportTable
     {
-        return PdfTable::instance($this)
+        return ReportTable::fromReport($this)
             ->addColumns(
-                PdfColumn::left($this->trans('group.fields.code'), 40, true),
-                PdfColumn::left($this->trans('group.fields.description'), 50),
-                PdfColumn::right($this->trans('group.fields.categories'), 26, true),
-                PdfColumn::right($this->trans('category.fields.products'), 26, true),
-                PdfColumn::right($this->trans('category.fields.tasks'), 26, true),
-                PdfColumn::right($this->trans('globalmargin.fields.minimum'), 22, true),
-                PdfColumn::right($this->trans('globalmargin.fields.maximum'), 22, true),
-                PdfColumn::right($this->trans('globalmargin.fields.delta'), 22, true),
-                PdfColumn::right($this->trans('globalmargin.fields.margin'), 22, true)
+                $this->leftColumn('group.fields.code', 45, true),
+                $this->leftColumn('group.fields.description', 50),
+                $this->rightColumn('group.fields.categories', 26, true),
+                $this->rightColumn('category.fields.products', 26, true),
+                $this->rightColumn('category.fields.tasks', 26, true),
+                $this->rightColumn('globalmargin.fields.minimum', 22, true),
+                $this->rightColumn('globalmargin.fields.maximum', 22, true),
+                $this->rightColumn('globalmargin.fields.margin', 22, true)
             )->outputHeaders();
     }
 
-    private function formatCount(string $id, array|int $value): string
+    private function formatCount(string $id, int $value): string
     {
-        return $this->trans($id, ['count' => \is_array($value) ? \count($value) : $value]);
+        return $this->trans($id, ['count' => $value]);
     }
 
     private function formatInt(int $value): string
     {
-        return 0 === $value ? '' : FormatUtils::formatInt($value);
+        return 0 !== $value ? FormatUtils::formatInt($value) : '';
     }
 
-    private function outputGroup(PdfTable $table, Group $group): void
+    /**
+     * @param Group[] $entities
+     *
+     * @return int[]
+     */
+    private function getTotals(array $entities): array
+    {
+        return \array_reduce(
+            $entities,
+            /** @psalm-param int[] $carry */
+            function (array $carry, Group $group): array {
+                ++$carry[0];
+                $carry[1] += $group->countCategories();
+                $carry[2] += $group->countProducts();
+                $carry[3] += $group->countTasks();
+                $carry[4] += $group->countMargins();
+
+                return $carry;
+            },
+            [0, 0, 0, 0, 0]
+        );
+    }
+
+    private function outputGroup(ReportTable $table, Group $group): void
     {
         $emptyValue = \array_fill(0, 5, '');
         $table->startRow()
@@ -106,46 +123,35 @@ class GroupsReport extends AbstractArrayReport
                 }
                 $table->addCellAmount($margin->getMinimum())
                     ->addCellAmount($margin->getMaximum())
-                    ->addCellAmount($margin->getDelta())
                     ->addCellPercent($margin->getMargin())
                     ->endRow();
                 $skip = true;
             }
         } else {
-            $empty = $this->trans('group.edit.empty_margins');
-            $table->add($empty, 4)->endRow();
+            $table->addCellTrans('group.edit.empty_margins', 3)->endRow();
         }
     }
 
     /**
      * @param Group[] $entities
      */
-    private function renderTotal(PdfTable $table, array $entities): void
+    private function outputTotals(PdfTable $table, array $entities): void
     {
-        $margins = 0;
-        $categories = 0;
-        $products = 0;
-        $tasks = 0;
-
-        foreach ($entities as $entity) {
-            $margins += $entity->countMargins();
-            $categories += $entity->countCategories();
-            $products += $entity->countProducts();
-            $tasks += $entity->countTasks();
-        }
-
-        $txtEntities = $this->formatCount('counters.groups', $entities);
-        $txtCategories = $this->formatCount('counters.categories', $categories);
-        $txtProducts = $this->formatCount('counters.products', $products);
-        $txtTasks = $this->formatCount('counters.tasks', $tasks);
-        $txtMargins = $this->formatCount('counters.margins', $margins);
+        $values = $this->getTotals($entities);
+        $texts = [
+            $this->formatCount('counters.groups', $values[0]),
+            $this->formatCount('counters.categories', $values[1]),
+            $this->formatCount('counters.products', $values[2]),
+            $this->formatCount('counters.tasks', $values[3]),
+            $this->formatCount('counters.margins', $values[4]),
+        ];
 
         $table->startHeaderRow()
-            ->add($txtEntities, 2)
-            ->add($txtCategories)
-            ->add($txtProducts)
-            ->add($txtTasks)
-            ->add($txtMargins, 4)
+            ->add($texts[0], 2)
+            ->add($texts[1])
+            ->add($texts[2])
+            ->add($texts[3])
+            ->add($texts[4], 3)
             ->endRow();
     }
 }

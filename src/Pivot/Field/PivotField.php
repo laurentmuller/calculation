@@ -42,7 +42,8 @@ class PivotField implements \JsonSerializable
 
     /**
      * Gets the display value.
-     * The default implementation returns the value as is. Subclass can override, for example to map the value.
+     *
+     * The default implementation returns the value as is. Subclass can override, for example, to map the value.
      *
      * @param mixed $value the field value
      *
@@ -56,7 +57,7 @@ class PivotField implements \JsonSerializable
     /**
      * Gets the value method.
      *
-     * @return int one of the METHOD_XX constants
+     * @return int one of the <code>METHOD_XX</code> constants
      */
     public function getMethod(): int
     {
@@ -110,7 +111,7 @@ class PivotField implements \JsonSerializable
     /**
      * Sets the value method.
      *
-     * @param int $method one of the METHOD_XX constants
+     * @param int $method one of the <code>METHOD_XX</code> constants
      */
     public function setMethod(int $method): self
     {

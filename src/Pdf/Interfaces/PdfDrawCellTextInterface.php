@@ -15,7 +15,7 @@ namespace App\Pdf\Interfaces;
 use App\Pdf\Events\PdfCellTextEvent;
 
 /**
- * Class implementing this interface handle the draw cell text event.
+ * Class implementing this interface handles the draw cell text event.
  */
 interface PdfDrawCellTextInterface
 {
@@ -24,7 +24,7 @@ interface PdfDrawCellTextInterface
      *
      * @param PdfCellTextEvent $event the event
      *
-     * @return bool true if listener handle the draw function; false to call the default behavior
+     * @return bool true if listener handles the draw function; false to call the default behavior
      */
     public function drawCellText(PdfCellTextEvent $event): bool;
 }

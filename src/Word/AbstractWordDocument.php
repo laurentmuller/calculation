@@ -43,7 +43,7 @@ abstract class AbstractWordDocument extends WordDocument
     {
         parent::__construct();
         $this->translator = $this->controller->getTranslator();
-        $this->customer = $this->controller->getApplication()->getCustomer();
+        $this->customer = $this->controller->getApplicationService()->getCustomer();
         $this->printAddress = $this->controller->getUserService()->isPrintAddress();
         $this->header = new WordHeader($this);
         $this->footer = new WordFooter($this);
@@ -78,7 +78,7 @@ abstract class AbstractWordDocument extends WordDocument
     /**
      * Sets the title to be translated.
      *
-     * @param string  $id         the message id (may also be an object that can be cast to string)
+     * @param string  $id         the message identifier (may also be an object that can be cast to string)
      * @param array   $parameters an array of parameters for the message
      * @param ?string $domain     the domain for the message or null to use the default
      */
@@ -144,7 +144,7 @@ abstract class AbstractWordDocument extends WordDocument
         if (null !== $user) {
             $properties->setCreator($user);
         }
-        $customer = $this->controller->getApplication()->getCustomerName();
+        $customer = $this->controller->getApplicationService()->getCustomerName();
         if (null !== $customer) {
             $properties->setCompany($customer);
         }

@@ -77,7 +77,7 @@ final class DateUtils
     /**
      * Complete the give year with four digits.
      *
-     * For example, if year is set with 2 digits (10); the return value will be 2010.
+     * For example, if the year is set with 2 digits (10), the return value will be 2010.
      *
      * @param int $year   the year to complet
      * @param int $change the year change limit
@@ -123,7 +123,7 @@ final class DateUtils
 
     /**
      * Gets the localized month names.
-     * For example with 'fr' as locale, return
+     * For example, with 'fr' as locale, return
      * <pre>
      * Janvier
      * Février
@@ -143,7 +143,7 @@ final class DateUtils
 
     /**
      * Gets the localized short month names.
-     * For example with 'fr' as locale, return
+     * For example, with 'fr' as locale, return
      * <pre>
      * Janv.
      * Févr.
@@ -163,7 +163,7 @@ final class DateUtils
 
     /**
      * Gets the localized short week day names.
-     * For example with 'fr' as locale and 'sunday' as first day, return
+     * For example, with 'fr' as locale and 'sunday' as first day, return
      * <pre>
      * Dim.
      * Lun.
@@ -171,7 +171,7 @@ final class DateUtils
      * ...
      * </pre>.
      *
-     * @param string $firstDay The first day of the week, in english,  like 'sunday' or 'monday'
+     * @param string $firstDay The first day of the week, in english, like 'sunday' or 'monday'
      *
      * @return array<int, string>
      */
@@ -189,7 +189,7 @@ final class DateUtils
      *
      * The weeks are starting on Monday.
      *
-     * @return int a value 1 through 53
+     * @return int value 1 through 53
      */
     public static function getWeek(\DateTimeInterface $date): int
     {
@@ -198,7 +198,7 @@ final class DateUtils
 
     /**
      * Gets the localized week day names.
-     * For example with 'fr' as locale and 'sunday' as first day, return
+     * For example, with 'fr' as locale and 'sunday' as first day, return
      * <pre>
      * Dimanche
      * Lundi
@@ -220,7 +220,7 @@ final class DateUtils
     }
 
     /**
-     * Gets the full numeric representation of a year with 4 digit for the given date.
+     * Gets the full numeric representation of a year with 4 digits for the given date.
      */
     public static function getYear(\DateTimeInterface $date): int
     {

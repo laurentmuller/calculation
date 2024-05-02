@@ -50,7 +50,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param Worksheet $worksheet  the external sheet to add
      * @param ?int      $sheetIndex the index where sheet should go (0, 1, ... or null for last)
      *
-     * @throws Exception if the given worksheet is not instance of WorksheetDocument
+     * @throws Exception if the given worksheet is not an instance of WorksheetDocument
      */
     public function addExternalSheet(Worksheet $worksheet, ?int $sheetIndex = null): WorksheetDocument
     {
@@ -69,7 +69,7 @@ class SpreadsheetDocument extends Spreadsheet
      * @param Worksheet $worksheet  the worksheet to add
      * @param ?int      $sheetIndex the index where sheet should go (0, 1, ... or null for last)
      *
-     * @throws Exception if the given worksheet is not instance of WorksheetDocument
+     * @throws Exception if the given worksheet is not an instance of WorksheetDocument
      */
     public function addSheet(Worksheet $worksheet, ?int $sheetIndex = null): WorksheetDocument
     {
@@ -148,7 +148,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Get sheet by the given index.
+     * Get a sheet by the given index.
      *
      * @param int $sheetIndex Sheet index
      *
@@ -163,7 +163,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Get sheet by name.
+     * Get a sheet by name.
      *
      * @param string $worksheetName Sheet name
      */
@@ -176,7 +176,7 @@ class SpreadsheetDocument extends Spreadsheet
     }
 
     /**
-     * Get sheet by name, throwing exception if not found.
+     * Get a sheet by name, throwing exception if not found.
      *
      * @throws Exception
      */

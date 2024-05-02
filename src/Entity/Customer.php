@@ -92,7 +92,7 @@ class Customer extends AbstractEntity
     }
 
     /**
-     * Get age or null if birthday is null.
+     * Get age or null if the birthday is null.
      */
     public function getAge(): ?int
     {

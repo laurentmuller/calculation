@@ -14,7 +14,6 @@ namespace App\Report;
 
 use App\Controller\AbstractController;
 use App\Entity\Customer;
-use App\Pdf\PdfColumn;
 use App\Pdf\PdfGroupTable;
 use App\Pdf\PdfStyle;
 use App\Utils\StringUtils;
@@ -47,9 +46,9 @@ class CustomersReport extends AbstractArrayReport
         $table = PdfGroupTable::instance($this)
             ->setGroupStyle(PdfStyle::getHeaderStyle())
             ->addColumns(
-                PdfColumn::left($this->trans('customer.fields.nameAndCompany'), 50),
-                PdfColumn::left($this->trans('customer.fields.address'), 25),
-                PdfColumn::left($this->trans('customer.fields.zipCity'), 25)
+                $this->leftColumn('customer.fields.nameAndCompany', 50),
+                $this->leftColumn('customer.fields.address', 25),
+                $this->leftColumn('customer.fields.zipCity', 25)
             )->outputHeaders();
 
         if ($this->grouped) {

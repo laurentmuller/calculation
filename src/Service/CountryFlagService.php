@@ -25,7 +25,7 @@ class CountryFlagService
      * Gets choice values used by country type form.
      *
      * @param ?string $locale   the locale used to translate country names or null to use default
-     * @param bool    $flagOnly true to return flag only; false to return flags and country names
+     * @param bool    $flagOnly true to return a flag only; false to return flags and country names
      *
      * @return array<string, string> an array where key is the flag and the country name (if applicable) and value is the country code
      */
@@ -57,10 +57,10 @@ class CountryFlagService
     /**
      * Gets the Emoji flag for the given country code.
      *
-     * @param string $alpha2Code the country code (ISO 3166-1 alpha-2) to get Emoji flag for
+     * @param string $alpha2Code the country code (ISO 3166-1 alpha-2) to get the Emoji flag for
      * @param bool   $validate   true to validate the given country code
      *
-     * @throws \InvalidArgumentException if the validate parameter is true and the given country code does not exist
+     * @throws \InvalidArgumentException if validate parameter is true and the given country code does not exist
      *
      * @see Countries::exists()
      */

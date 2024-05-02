@@ -22,7 +22,7 @@ class PivotFieldFactory
      *
      * @param string  $name   the field name
      * @param ?string $title  the field title
-     * @param int     $method the field method (one of the PivotField::METHOD_XX)
+     * @param int     $method the field method (one of the <code></code>PivotField::METHOD_XX</code>)
      */
     public static function default(string $name, ?string $title = null, int $method = PivotField::METHOD_STRING): PivotField
     {
@@ -30,7 +30,7 @@ class PivotFieldFactory
     }
 
     /**
-     * Creates a new instance with the METHOD_FLOAT.
+     * Creates a new instance with the <code>METHOD_FLOAT</code>.
      *
      * @param string  $name  the field name
      * @param ?string $title the field title
@@ -41,7 +41,7 @@ class PivotFieldFactory
     }
 
     /**
-     * Creates a new instance with the METHOD_INTEGER.
+     * Creates a new instance with the <code>METHOD_INTEGER</code>.
      *
      * @param string  $name  the field name
      * @param ?string $title the field title
@@ -75,7 +75,7 @@ class PivotFieldFactory
     }
 
     /**
-     * Creates a new date instance for semester.
+     * Creates a new date instance for the semester.
      *
      * @param string  $name  the field name
      * @param ?string $title the field title
@@ -101,7 +101,7 @@ class PivotFieldFactory
      *
      * @param string  $name  the field name
      * @param ?string $title the field title
-     * @param bool    $short true to display the short day name, false to display the full day name
+     * @param bool    $short true to display the short day name, false to display the full-day name
      */
     public static function weekday(string $name, ?string $title = null, bool $short = false): PivotWeekdayField
     {
@@ -109,7 +109,7 @@ class PivotFieldFactory
     }
 
     /**
-     * Creates a new date instance for year.
+     * Creates a new date instance for the year.
      *
      * @param string  $name  the field name
      * @param ?string $title the field title

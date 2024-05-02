@@ -97,7 +97,7 @@ final class FileUtils
 
         // file or url?
         if (!self::isFile($file) && false === \filter_var($file, \FILTER_VALIDATE_URL)) {
-            throw new \InvalidArgumentException(\sprintf("The file '%s' can not be found.", $file));
+            throw new \InvalidArgumentException(\sprintf("The file '%s' cannot be found.", $file));
         }
         $content = \file_get_contents($file);
         if (false === $content) {
@@ -160,7 +160,7 @@ final class FileUtils
     }
 
     /**
-     * Returns the extension from a file path (without leading dot).
+     * Returns the extension from a file path (without the leading dot).
      *
      * @param bool $forceLowerCase forces the extension to be lower-case
      */

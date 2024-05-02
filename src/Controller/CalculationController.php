@@ -65,7 +65,7 @@ class CalculationController extends AbstractEntityController
     public function add(Request $request): Response
     {
         $item = new Calculation();
-        $application = $this->getApplication();
+        $application = $this->getApplicationService();
         $state = $application->getDefaultState();
         if ($state instanceof CalculationState) {
             $item->setState($state);
@@ -88,7 +88,7 @@ class CalculationController extends AbstractEntityController
     public function clone(Request $request, Calculation $item): Response
     {
         $description = $this->trans('common.clone_description', ['%description%' => $item->getDescription()]);
-        $state = $this->getApplication()->getDefaultState();
+        $state = $this->getApplicationService()->getDefaultState();
         $clone = $item->clone($state, $description);
         $parameters = [
             'title' => 'calculation.clone.title',
@@ -293,6 +293,6 @@ class CalculationController extends AbstractEntityController
 
     private function isMarginBelow(Calculation $calculation): bool
     {
-        return $this->getApplication()->isMarginBelow($calculation);
+        return $this->getApplicationService()->isMarginBelow($calculation);
     }
 }

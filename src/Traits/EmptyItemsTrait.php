@@ -15,7 +15,7 @@ namespace App\Traits;
 use App\Utils\StringUtils;
 
 /**
- * Trait to format empty items for table, PDF report and Excel document.
+ * Trait to format empty items for the table, the PDF report, and the Excel document.
  */
 trait EmptyItemsTrait
 {

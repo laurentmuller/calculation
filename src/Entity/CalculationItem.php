@@ -144,7 +144,7 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
     }
 
     /**
-     * Returns if the price or the quantity are equal to zero.
+     * Returns if the price or the quantity is equal to zero.
      */
     public function isEmpty(): bool
     {

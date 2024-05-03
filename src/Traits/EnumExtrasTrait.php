@@ -29,6 +29,14 @@ trait EnumExtrasTrait
         return \is_bool($value) ? $value : $default;
     }
 
+    public function getExtraFloat(string $key, float $default = 0.0, bool $throwOnMissingExtra = false): float
+    {
+        /** @psalm-var float|null $value */
+        $value = $this->getExtra($key, $throwOnMissingExtra);
+
+        return \is_float($value) ? $value : $default;
+    }
+
     public function getExtraInt(string $key, int $default = 0, bool $throwOnMissingExtra = false): int
     {
         /** @psalm-var int|null $value */

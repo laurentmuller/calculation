@@ -14,133 +14,160 @@ namespace App\Pdf\Html;
 
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfFont;
+use App\Traits\EnumExtrasTrait;
 use App\Utils\StringUtils;
+use Elao\Enum\Attribute\EnumCase;
 use fpdf\PdfFontName;
-use fpdf\PdfFontStyle;
 
 /**
  * Html tag enumeration.
  */
 enum HtmlTag: string
 {
+    use EnumExtrasTrait;
+
     /**
      * The body tag name.
      */
+    #[EnumCase(extras: ['style' => false])]
     case BODY = 'body';
 
     /**
      * The bold element.
      */
+    #[EnumCase(extras: ['font-bold' => true])]
     case BOLD = 'b';
 
     /**
      * The inline code element.
      */
+    #[EnumCase(extras: ['font-name' => 'courier', 'text-color' => '#FF0000'])]
     case CODE = 'code';
 
     /**
      * The emphasis element.
      */
+    #[EnumCase(extras: ['font-italic' => true])]
     case EMPHASIS = 'em';
 
     /**
      * The H1 tag name.
      */
+    #[EnumCase(extras: ['font-bold' => true, 'font-size' => 2.5, 'bottom-margin' => 2.0])]
     case H1 = 'h1';
 
     /**
      * The H2 tag name.
      */
+    #[EnumCase(extras: ['font-bold' => true, 'font-size' => 2.0, 'bottom-margin' => 2.0])]
     case H2 = 'h2';
 
     /**
      * The H3 tag name.
      */
+    #[EnumCase(extras: ['font-bold' => true, 'font-size' => 1.75, 'bottom-margin' => 2.0])]
     case H3 = 'h3';
 
     /**
      * The H4 tag name.
      */
+    #[EnumCase(extras: ['font-bold' => true, 'font-size' => 1.5, 'bottom-margin' => 2.0])]
     case H4 = 'h4';
 
     /**
      * The H5 tag name.
      */
+    #[EnumCase(extras: ['font-bold' => true, 'font-size' => 1.25, 'bottom-margin' => 2.0])]
     case H5 = 'h5';
 
     /**
      * The H6 tag name.
      */
+    #[EnumCase(extras: ['font-bold' => true, 'font-size' => 1.1, 'bottom-margin' => 2.0])]
     case H6 = 'h6';
 
     /**
      * The italic element.
      */
+    #[EnumCase(extras: ['font-italic' => true])]
     case ITALIC = 'i';
 
     /**
      * The keyboard input element.
      */
+    #[EnumCase(extras: ['font-name' => 'courier'])]
     case KEYBOARD = 'kbd';
 
     /**
      * The line break tag name.
      */
+    #[EnumCase(extras: ['style' => false])]
     case LINE_BREAK = 'br';
 
     /**
      * The list item tag name.
      */
+    #[EnumCase(extras: ['style' => false])]
     case LIST_ITEM = 'li';
 
     /**
      * The ordered list tag name.
      */
+    #[EnumCase(extras: ['bottom-margin' => 1.0, 'left-margin' => 2.0])]
     case LIST_ORDERED = 'ol';
 
     /**
      * The unordered list tag name.
      */
+    #[EnumCase(extras: ['bottom-margin' => 1.0, 'left-margin' => 2.0])]
     case LIST_UNORDERED = 'ul';
 
     /**
      * The page break class name.
      */
+    #[EnumCase(extras: ['style' => false])]
     case PAGE_BREAK = 'page-break';
 
     /**
      * The paragraph tag name.
      */
+    #[EnumCase(extras: ['bottom-margin' => 2.0])]
     case PARAGRAPH = 'p';
 
     /**
      * The sample output element.
      */
+    #[EnumCase(extras: ['font-name' => 'courier'])]
     case SAMPLE = 'samp';
 
     /**
      * The span tag name.
      */
+    #[EnumCase(extras: ['style' => false])]
     case SPAN = 'span';
 
     /**
      * The strong importance element.
      */
+    #[EnumCase(extras: ['font-bold' => true])]
     case STRONG = 'strong';
 
     /**
      * The text chunk.
      */
+    #[EnumCase(extras: ['style' => false])]
     case TEXT = '#text';
 
     /*
      * The underline element.
      */
+    #[EnumCase(extras: ['font-underline' => true])]
     case UNDERLINE = 'u';
 
     /**
      * The variable element.
      */
+    #[EnumCase(extras: ['font-name' => 'courier', 'font-italic' => true])]
     case VARIABLE = 'var';
 
     /**
@@ -177,47 +204,54 @@ enum HtmlTag: string
      */
     public function style(): ?HtmlStyle
     {
-        return match ($this) {
-            HtmlTag::H1 => $this->createStyle(true, 2.5, 2),
-            HtmlTag::H2 => $this->createStyle(true, 2.0, 2),
-            HtmlTag::H3 => $this->createStyle(true, 1.75, 2),
-            HtmlTag::H4 => $this->createStyle(true, 1.5, 2),
-            HtmlTag::H5 => $this->createStyle(true, 1.25, 2),
-            HtmlTag::H6 => $this->createStyle(true, 1.1, 2),
-            HtmlTag::PARAGRAPH => $this->createStyle(false, 1.0, 2),
-            HtmlTag::LIST_ORDERED,
-            HtmlTag::LIST_UNORDERED => $this->createStyle(false, 1.0, 2, 4),
-            HtmlTag::LIST_ITEM,
-            HtmlTag::SPAN => $this->createStyle(),
-            HtmlTag::BOLD,
-            HtmlTag::STRONG => $this->createStyle(true),
-            HtmlTag::ITALIC,
-            HtmlTag::EMPHASIS => $this->createStyle()->setFontItalic(true),
-            HtmlTag::UNDERLINE => $this->createStyle()->setFontUnderline(true),
-            HtmlTag::CODE => $this->createStyle()->setFontName(PdfFontName::COURIER)->setTextColor(PdfTextColor::red()),
-            HtmlTag::VARIABLE => $this->createStyle()->setFontName(PdfFontName::COURIER)->setFontItalic(),
-            HtmlTag::SAMPLE,
-            HtmlTag::KEYBOARD => $this->createStyle()->setFontName(PdfFontName::COURIER),
-            default => null
-        };
-    }
-
-    private function createStyle(
-        bool $bold = false,
-        float $sizeFactor = 1.0,
-        float $bottomMargin = 0.0,
-        float $leftMargin = 0.0
-    ): HtmlStyle {
-        $style = new HtmlStyle();
-        if ($bold || 1.0 !== $sizeFactor) {
-            $font = PdfFont::default()
-                ->setStyle($bold ? PdfFontStyle::BOLD : PdfFontStyle::REGULAR)
-                ->setSize($sizeFactor * PdfFont::DEFAULT_SIZE);
-            $style->setFont($font);
+        if (!$this->getExtraBool('style', true)) {
+            return null;
         }
 
-        return $style
-            ->setBottomMargin($bottomMargin)
-            ->setLeftMargin($leftMargin);
+        $style = new HtmlStyle();
+        $style->setBottomMargin($this->getExtraFloat('bottom-margin'))
+            ->setLeftMargin($this->getExtraFloat('left-margin'))
+            ->setFont($this->getFont());
+
+        $color = $this->getTextColor();
+        if ($color instanceof PdfTextColor) {
+            $style->setTextColor($color);
+        }
+
+        return $style;
+    }
+
+    private function getFont(): PdfFont
+    {
+        $font = PdfFont::default();
+        $fontName = PdfFontName::tryFromFamily($this->getExtraString('font-name'));
+        if ($fontName instanceof PdfFontName) {
+            $font->setName($fontName);
+        }
+        $fontSize = $this->getExtraFloat('font-size', 1.0);
+        if (1.0 !== $fontSize) {
+            $font->setSize($fontSize * PdfFont::DEFAULT_SIZE);
+        }
+        if ($this->getExtraBool('font-bold')) {
+            $font->bold(true);
+        }
+        if ($this->getExtraBool('font-italic')) {
+            $font->italic(true);
+        }
+        if ($this->getExtraBool('font-underline')) {
+            $font->underline(true);
+        }
+
+        return $font;
+    }
+
+    private function getTextColor(): ?PdfTextColor
+    {
+        $textColor = $this->getExtraString('text-color');
+        if ('' === $textColor) {
+            return null;
+        }
+
+        return PdfTextColor::create($textColor);
     }
 }

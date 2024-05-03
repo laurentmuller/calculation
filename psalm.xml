@@ -30,6 +30,11 @@
                 <referencedProperty name="Symfony\Component\HttpFoundation\Response::$version"/>
             </errorLevel>
         </PropertyNotSetInConstructor>
+        <PossiblyUnusedMethod>
+            <errorLevel type="suppress">
+                <directory name="src" />
+            </errorLevel>
+        </PossiblyUnusedMethod>
     </issueHandlers>
 
     <plugins>

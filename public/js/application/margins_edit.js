@@ -67,7 +67,7 @@ function getMinMargin() {
     $(selector).each(function () {
         minimum = Math.min(minimum, $(this).intVal());
     });
-    return minimum === Number.MAX_VALUE ? 1 : minimum;
+    return minimum === Number.MAX_VALUE ? 100 : minimum;
 }
 
 /**

@@ -91,11 +91,11 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
 
         // get modifications
         $unitOfWork = $args->getObjectManager()->getUnitOfWork();
-        $updates = $this->filterEntities($unitOfWork->getScheduledEntityUpdates());
+        $updates = $this->filterEntities($unitOfWork->getScheduledEntityUpdates(), true);
         $deletions = $this->filterEntities($unitOfWork->getScheduledEntityDeletions());
         $insertions = $this->filterEntities($unitOfWork->getScheduledEntityInsertions());
 
-        // merge updated
+        // merge updated and insertions
         $collections = $this->filterCollections($unitOfWork->getScheduledCollectionUpdates());
         if ([] !== $collections) {
             $updates = $this->getUniqueMerged($updates, $collections);

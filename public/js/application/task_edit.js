@@ -254,26 +254,22 @@ function addMargin($caller) {
     if ($table.length === 0) {
         return;
     }
-
     // get values before inserting the row
     const value = getMinValue($table);
     const minimum = getMaxValue($table);
     const maximum = Math.max(minimum * 2, 1);
-
     // create and add margin
     const index = getNextMarginIndex();
     const prototype = $table.data('prototype');
     const $row = $(prototype.replace(/__marginIndex__/g, index));
     $table.find('tbody').append($row);
-
     // update UI
     updateUI();
-
     // set values
-    $table.find(`${getMinimumSelector()}:last`).floatVal(minimum)
+    $(`${getMinimumSelector()}:last`).floatVal(minimum)
         .selectFocus().scrollInViewport();
-    $table.find(`${getMaximumSelector()}:last`).floatVal(maximum);
-    $table.find(`${getValueSelector()}:last`).floatVal(value);
+    $(`${getMaximumSelector()}:last`).floatVal(maximum);
+    $(`${getValueSelector()}:last`).floatVal(value);
 }
 
 /**

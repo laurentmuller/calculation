@@ -7,6 +7,37 @@
     'use strict';
 
     /**
+     * Find the next index for the given character.
+     *
+     * @param {string} key the character to search for.
+     * @param {number} oldIndex the old selection index.
+     * @param {number} newIndex the the current selection index.
+     * @param {number} lastIndex the last option index
+     * @param {Array.<{text: String}>} options the array of options.
+     */
+    function findNextIndex(key, oldIndex, newIndex, lastIndex, options) {
+        // find from after the index to end
+        if (newIndex === -1) {
+            for (let i = oldIndex + 1; i <= lastIndex; i++) {
+                if (options[i].text.startsWithIgnoreCase(key)) {
+                    newIndex = i;
+                    break;
+                }
+            }
+        }
+        // find from start to before index
+        if (newIndex === -1) {
+            for (let i = 0; i < oldIndex; i++) {
+                if (options[i].text.startsWithIgnoreCase(key)) {
+                    newIndex = i;
+                    break;
+                }
+            }
+        }
+        return newIndex;
+    }
+
+    /**
      * -------------- jQuery functions extensions --------------
      */
     $.fn.extend({
@@ -55,24 +86,7 @@
                         newIndex = Math.min(oldIndex + 1, lastIndex);
                         break;
                     default:
-                        // find from after the index to end
-                        if (newIndex === -1) {
-                            for (let i = oldIndex + 1; i <= lastIndex; i++) {
-                                if (options[i].text.startsWithIgnoreCase(e.key)) {
-                                    newIndex = i;
-                                    break;
-                                }
-                            }
-                        }
-                        // find from start to before index
-                        if (newIndex === -1) {
-                            for (let i = 0; i < oldIndex; i++) {
-                                if (options[i].text.startsWithIgnoreCase(e.key)) {
-                                    newIndex = i;
-                                    break;
-                                }
-                            }
-                        }
+                        newIndex = findNextIndex(e.key, oldIndex, newIndex, lastIndex, options);
                         break;
                 }
 

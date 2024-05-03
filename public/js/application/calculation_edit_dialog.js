@@ -1,6 +1,6 @@
 /**! compression tag for ftp-deployment */
 
-/* exported EditDialog */
+/* global EditDialog */
 
 /**
  * Abstract edit dialog class.

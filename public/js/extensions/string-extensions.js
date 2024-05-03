@@ -25,7 +25,7 @@ Object.defineProperty(String.prototype, 'indexOfIgnoreCase', {
      * Returns the index of the first occurrence in this string, ignoring case, of the specified value.
      * @param {string} value the value to search for.
      * @param {int} fromIndex the index at which to start the search (optional); the default value is 0.
-     * @return {int} the index of the first occurrence of searchValue, or -1 if not found.
+     * @return {int} the index of the first occurrence, or -1 if not found.
      */
     value: function (value, fromIndex) {
         'use strict';
@@ -58,7 +58,7 @@ Object.defineProperty(String.prototype, 'dasherize', {
      */
     value: function () {
         'use strict';
-        // first character is always in lower case
+        // the first character is always in lower case
         const trim = this.trim();
         const first = trim.substring(0, 1).toLowerCase();
         const other = trim.substring(1);
@@ -118,7 +118,7 @@ Object.defineProperty(String.prototype, 'format', {
 /*eslint no-extend-native: ["error", { "exceptions": ["String"] }]*/
 Object.defineProperty(String.prototype, 'startsWithIgnoreCase', {
     /**
-     * Returns if this string start with the given value, ignoring case
+     * Returns if this string starts with the given value, ignoring case
      * consideration.
      * @param {String} s the string to compare to.
      * @return {boolean}

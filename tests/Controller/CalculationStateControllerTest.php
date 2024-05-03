@@ -44,6 +44,10 @@ class CalculationStateControllerTest extends AbstractControllerTestCase
         yield ['/calculationstate/excel', self::ROLE_USER];
         yield ['/calculationstate/excel', self::ROLE_ADMIN];
         yield ['/calculationstate/excel', self::ROLE_SUPER_ADMIN];
+
+        yield ['/calculationstate/clone/1', self::ROLE_USER, Response::HTTP_FORBIDDEN];
+        yield ['/calculationstate/clone/1', self::ROLE_ADMIN];
+        yield ['/calculationstate/clone/1', self::ROLE_SUPER_ADMIN];
     }
 
     /**

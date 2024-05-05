@@ -26,8 +26,8 @@ use App\Utils\StringUtils;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to import zip codes, cities and streets from Switzerland.
@@ -45,7 +45,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 class SwissPostUpdater implements ServiceSubscriberInterface
 {
     use LoggerAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
     /**

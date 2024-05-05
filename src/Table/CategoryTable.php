@@ -24,8 +24,8 @@ use App\Traits\TableCellTrait;
 use App\Utils\FileUtils;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;
 
 /**
@@ -36,7 +36,7 @@ use Twig\Environment;
 class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {
     use AuthorizationCheckerAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TableCellTrait;
 
     /**

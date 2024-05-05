@@ -23,8 +23,8 @@ use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use Doctrine\ORM\Query;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to update the overall total of calculations.
@@ -32,7 +32,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 class CalculationUpdateService implements ServiceSubscriberInterface
 {
     use LoggerAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use SessionAwareTrait;
     use TranslatorAwareTrait;
 

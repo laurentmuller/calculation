@@ -21,8 +21,8 @@ use App\Utils\CSVReader;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to read and cache log file.
@@ -31,7 +31,7 @@ class LogService implements ServiceSubscriberInterface
 {
     use CacheAwareTrait;
     use LoggerAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
     /**

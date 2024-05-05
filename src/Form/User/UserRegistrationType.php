@@ -17,15 +17,15 @@ use App\Form\FormHelper;
 use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Type to register a new user.
  */
 class UserRegistrationType extends AbstractUserCaptchaType implements ServiceSubscriberInterface
 {
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -18,8 +18,8 @@ use App\Traits\MathTrait;
 use App\Traits\SessionAwareTrait;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to generate and validate a captcha image.
@@ -34,7 +34,7 @@ class CaptchaImageService implements ServiceSubscriberInterface
 {
     use ArrayTrait;
     use MathTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use SessionAwareTrait;
 
     /**

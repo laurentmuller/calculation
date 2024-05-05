@@ -23,8 +23,8 @@ use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\DateUtils;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to archive calculations.
@@ -32,7 +32,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 class CalculationArchiveService implements ServiceSubscriberInterface
 {
     use LoggerAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use SessionAwareTrait;
     use TranslatorAwareTrait;
 

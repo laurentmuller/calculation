@@ -19,8 +19,8 @@ use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use HighchartsBundle\Highcharts\Highchart;
 use Laminas\Json\Expr;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;
 
 /**
@@ -29,7 +29,7 @@ use Twig\Environment;
 class AbstractHighchart extends Highchart implements ServiceSubscriberInterface
 {
     use MathTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
     /**

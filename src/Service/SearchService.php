@@ -28,8 +28,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to search data in all entities.
@@ -46,7 +46,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 class SearchService implements ServiceSubscriberInterface
 {
     use AuthorizationCheckerAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
 
     /**
      * The action column name.

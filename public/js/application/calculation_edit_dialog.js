@@ -2,6 +2,8 @@
 
 /* global EditDialog */
 
+/* eslint no-unused-vars: ["error", { "varsIgnorePattern": "EditDialog" }] */
+
 /**
  * Abstract edit dialog class.
  * @property {jQuery<HTMLFormElement>} $form
@@ -163,6 +165,7 @@ class EditDialog {
      * @return {this} This instance for chaining.
      * @protected
      */
+
     /*eslint no-unused-vars: ["error", { "args": "none" }]*/
     _initAdd($row) {
         'use strict';
@@ -175,6 +178,7 @@ class EditDialog {
      * @return {this} This instance for chaining.
      * @protected
      */
+
     /*eslint no-unused-vars: ["error", { "args": "none" }]*/
     _initEdit($row) {
         'use strict';
@@ -265,7 +269,7 @@ class EditDialog {
      */
     _getDialogUrl() {
         'use strict';
-        throw new Error("Method must be implemented by derived class.");
+        throw new Error('Method must be implemented by derived class.');
     }
 
     /**
@@ -275,7 +279,7 @@ class EditDialog {
      */
     _isDialogLoaded() {
         'use strict';
-        throw new Error("Method must be implemented by derived class.");
+        throw new Error('Method must be implemented by derived class.');
     }
 
     /**

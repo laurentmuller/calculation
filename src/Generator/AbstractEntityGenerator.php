@@ -20,8 +20,8 @@ use App\Traits\LoggerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Class to generate entities.
@@ -31,7 +31,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 abstract class AbstractEntityGenerator implements GeneratorInterface, ServiceSubscriberInterface
 {
     use LoggerAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
     private readonly Generator $generator;

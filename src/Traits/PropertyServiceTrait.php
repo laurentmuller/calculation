@@ -17,7 +17,7 @@ use App\Enums\EntityAction;
 use App\Utils\StringUtils;
 use Psr\Container\ContainerInterface;
 use Symfony\Contracts\Service\Attribute\Required;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 
 /**
  * Trait for class implementing <code>PropertyServiceInterface</code>.
@@ -31,8 +31,8 @@ trait PropertyServiceTrait
         saveDeferredCacheValue as private doSaveDeferredCacheValue;
     }
     use LoggerAwareTrait;
-    use ServiceSubscriberTrait {
-        ServiceSubscriberTrait::setContainer as doSetContainer;
+    use ServiceMethodsSubscriberTrait {
+        ServiceMethodsSubscriberTrait::setContainer as doSetContainer;
     }
     use TranslatorAwareTrait;
 

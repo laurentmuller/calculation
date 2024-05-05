@@ -16,8 +16,8 @@ use App\Traits\SessionAwareTrait;
 use App\Utils\StringUtils;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Factory to provide translator services.
@@ -26,7 +26,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
  */
 class TranslatorFactory implements ServiceSubscriberInterface
 {
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use SessionAwareTrait;
 
     /**

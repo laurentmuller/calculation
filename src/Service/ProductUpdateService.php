@@ -23,8 +23,8 @@ use App\Traits\MathTrait;
 use App\Traits\SessionAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to update the price of products.
@@ -33,7 +33,7 @@ class ProductUpdateService implements ServiceSubscriberInterface
 {
     use LoggerAwareTrait;
     use MathTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use SessionAwareTrait;
     use TranslatorAwareTrait;
 

@@ -34,8 +34,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\UnitOfWork;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Listener to add flash messages when entities are created, updated or deleted.
@@ -45,7 +45,7 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
 {
     use ArrayTrait;
     use DisableListenerTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TranslatorFlashMessageAwareTrait;
 
     private const CLASS_NAMES = [

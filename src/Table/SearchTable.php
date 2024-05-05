@@ -17,8 +17,8 @@ use App\Service\SearchService;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\FileUtils;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * The search table.
@@ -28,7 +28,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 class SearchTable extends AbstractTable implements ServiceSubscriberInterface
 {
     use AuthorizationCheckerAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
     /**

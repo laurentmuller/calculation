@@ -21,8 +21,8 @@ use App\Traits\TableCellTrait;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\FileUtils;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 use Twig\Environment;
 
 /**
@@ -33,7 +33,7 @@ use Twig\Environment;
 class CalculationStateTable extends AbstractEntityTable implements ServiceSubscriberInterface
 {
     use AuthorizationCheckerAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TableCellTrait;
     use TranslatorAwareTrait;
 

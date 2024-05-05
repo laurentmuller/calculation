@@ -25,8 +25,8 @@ use Doctrine\DBAL\Types\FloatType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to get database schema information.
@@ -65,7 +65,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 class SchemaService implements ServiceSubscriberInterface
 {
     use CacheAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
 
     // the cache timeout (1 day)
     private const CACHE_TIMEOUT = 86_400;

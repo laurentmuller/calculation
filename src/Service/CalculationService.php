@@ -20,8 +20,8 @@ use App\Repository\GroupMarginRepository;
 use App\Repository\GroupRepository;
 use App\Traits\MathTrait;
 use App\Traits\TranslatorAwareTrait;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to update calculation totals.
@@ -46,7 +46,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 final class CalculationService implements ServiceSubscriberInterface
 {
     use MathTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
     /**

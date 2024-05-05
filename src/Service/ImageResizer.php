@@ -20,8 +20,8 @@ use App\Traits\TranslatorAwareTrait;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImagineInterface;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Service to resize images.
@@ -30,7 +30,7 @@ class ImageResizer implements ServiceSubscriberInterface
 {
     use ImageSizeTrait;
     use LoggerAwareTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
     private ImagineInterface $imagine;

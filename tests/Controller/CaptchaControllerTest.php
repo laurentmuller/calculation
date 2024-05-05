@@ -16,6 +16,7 @@ use App\Controller\CaptchaController;
 use App\Service\CaptchaImageService;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
@@ -40,20 +41,17 @@ class CaptchaControllerTest extends AbstractControllerTestCase
 
     /**
      * @throws Exception
-     * @throws \Exception
      */
     public function testInvalidImage(): void
     {
         $controller = $this->getController();
-        $service = $this->createMock(CaptchaImageService::class);
-        $service->expects(self::any())
-            ->method('generateImage')
-            ->willReturn(null);
+        $service = $this->createService(null, false, false);
 
         $response = $controller->image($service);
-        $content = \json_decode($response->getContent(), true, \JSON_THROW_ON_ERROR);
-        self::assertFalse($content['result']);
-        self::assertSame('captcha.generate', $content['message']);
+        $content = (string) $response->getContent();
+        $actual = (array) \json_decode($content, true, \JSON_THROW_ON_ERROR);
+        self::assertFalse($actual['result']);
+        self::assertSame('captcha.generate', $actual['message']);
     }
 
     /**
@@ -62,13 +60,14 @@ class CaptchaControllerTest extends AbstractControllerTestCase
     public function testInvalidTimeout(): void
     {
         $controller = $this->getController();
-        $service = $this->createMock(CaptchaImageService::class);
-        $service->expects(self::any())
+        $service = $this->createService(null, false, false);
+        $service->expects(self::once())
             ->method('validateTimeout')
             ->willReturn(false);
 
         $response = $controller->validate($service);
-        self::assertSame('"captcha.timeout"', $response->getContent());
+        $actual = $response->getContent();
+        self::assertSame('"captcha.timeout"', $actual);
     }
 
     /**
@@ -77,16 +76,11 @@ class CaptchaControllerTest extends AbstractControllerTestCase
     public function testInvalidToken(): void
     {
         $controller = $this->getController();
-        $service = $this->createMock(CaptchaImageService::class);
-        $service->expects(self::any())
-            ->method('validateTimeout')
-            ->willReturn(true);
-        $service->expects(self::any())
-            ->method('validateToken')
-            ->willReturn(false);
+        $service = $this->createService(null, true, false);
 
         $response = $controller->validate($service);
-        self::assertSame('"captcha.invalid"', $response->getContent());
+        $actual = $response->getContent();
+        self::assertSame('"captcha.invalid"', $actual);
     }
 
     /**
@@ -95,18 +89,35 @@ class CaptchaControllerTest extends AbstractControllerTestCase
     public function testValid(): void
     {
         $controller = $this->getController();
-        $service = $this->createMock(CaptchaImageService::class);
-        $service->expects(self::any())
-            ->method('validateTimeout')
-            ->willReturn(true);
-        $service->expects(self::any())
-            ->method('validateToken')
-            ->willReturn(true);
+        $service = $this->createService(null, true, true);
 
         $response = $controller->validate($service);
-        self::assertSame('true', $response->getContent());
+        $actual = $response->getContent();
+        self::assertSame('true', $actual);
     }
 
+    private function createService(
+        ?string $generateImage,
+        bool $validateTimeout,
+        bool $validateToken
+    ): MockObject&CaptchaImageService {
+        $service = $this->createMock(CaptchaImageService::class);
+        $service->expects(self::any())
+            ->method('generateImage')
+            ->willReturn($generateImage);
+        $service->expects(self::any())
+            ->method('validateTimeout')
+            ->willReturn($validateTimeout);
+        $service->expects(self::any())
+            ->method('validateToken')
+            ->willReturn($validateToken);
+
+        return $service;
+    }
+
+    /**
+     * @throws Exception
+     */
     private function getController(): CaptchaController
     {
         $controller = $this->getService(CaptchaController::class);

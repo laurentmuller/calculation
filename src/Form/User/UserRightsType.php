@@ -17,8 +17,8 @@ use App\Form\FormHelper;
 use App\Traits\RoleTranslatorTrait;
 use App\Traits\TranslatorAwareTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * User rights type.
@@ -26,7 +26,7 @@ use Symfony\Contracts\Service\ServiceSubscriberTrait;
 class UserRightsType extends RightsType implements ServiceSubscriberInterface
 {
     use RoleTranslatorTrait;
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
     public function configureOptions(OptionsResolver $resolver): void

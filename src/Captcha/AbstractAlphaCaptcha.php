@@ -15,15 +15,15 @@ namespace App\Captcha;
 use App\Service\DictionaryService;
 use App\Traits\TranslatorAwareTrait;
 use App\Utils\StringUtils;
+use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Service\ServiceSubscriberTrait;
 
 /**
  * Abstract implementation of the alpha captcha interface.
  */
 abstract class AbstractAlphaCaptcha implements AlphaCaptchaInterface, ServiceSubscriberInterface
 {
-    use ServiceSubscriberTrait;
+    use ServiceMethodsSubscriberTrait;
     use TranslatorAwareTrait;
 
     public function __construct(private readonly DictionaryService $dictionary)

@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Object to edit global margins.
  */
-class GlobalMargins
+class GlobalMargins implements \Countable
 {
     use ValidateMarginsTrait;
 
@@ -49,6 +49,11 @@ class GlobalMargins
         }
 
         return $this;
+    }
+
+    public function count(): int
+    {
+        return \count($this->margins);
     }
 
     /**

@@ -15,7 +15,7 @@ namespace App\Model;
 use App\Entity\Calculation;
 
 /**
- * Contains the result of an update overall total of calculations.
+ * Contains the result when update the overall total of calculations.
  */
 class CalculationUpdateResult implements \Countable
 {

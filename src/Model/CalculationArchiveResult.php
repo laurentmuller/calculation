@@ -49,6 +49,8 @@ class CalculationArchiveResult implements \Countable
 
     /**
      * @psalm-return ResultsType
+     *
+     * @psalm-api
      */
     public function getResults(): array
     {

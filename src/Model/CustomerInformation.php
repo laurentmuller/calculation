@@ -78,7 +78,7 @@ class CustomerInformation
             return $fax;
         }
         if ($translator instanceof TranslatorInterface) {
-            return $translator->trans('report.phone', ['{0}' => $fax]);
+            return $translator->trans('report.fax', ['{0}' => $fax]);
         }
         if (null !== $translator && \method_exists($translator, 'trans')) {
             return (string) $translator->trans('report.fax', ['{0}' => $fax]);

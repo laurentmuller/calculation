@@ -29,6 +29,6 @@ class PasswordQuery
 
     public function getInputs(): array
     {
-        return \array_filter([$this->email, $this->user]);
+        return \array_values(\array_filter([$this->email, $this->user]));
     }
 }

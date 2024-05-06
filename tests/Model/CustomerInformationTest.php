@@ -1,0 +1,99 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Tests\Model;
+
+use App\Model\CustomerInformation;
+use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(CustomerInformation::class)]
+class CustomerInformationTest extends TestCase
+{
+    use TranslatorMockTrait;
+
+    public function testDefaultValues(): void
+    {
+        $info = new CustomerInformation();
+        self::assertNull($info->getAddress());
+        self::assertNull($info->getEmail());
+        self::assertNull($info->getFax());
+        self::assertNull($info->getName());
+        self::assertNull($info->getPhone());
+        self::assertNull($info->getUrl());
+        self::assertNull($info->getZipCity());
+        self::assertFalse($info->isPrintAddress());
+    }
+
+    public function testSetValues(): void
+    {
+        $info = new CustomerInformation();
+        $info->setAddress('address');
+        $info->setEmail('email');
+        $info->setFax('fax');
+        $info->setName('name');
+        $info->setPhone('phone');
+        $info->setPrintAddress(true);
+        $info->setUrl('url');
+        $info->setZipCity('zipCity');
+
+        self::assertSame('address', $info->getAddress());
+        self::assertSame('email', $info->getEmail());
+        self::assertSame('fax', $info->getFax());
+        self::assertSame('name', $info->getName());
+        self::assertSame('phone', $info->getPhone());
+        self::assertSame('url', $info->getUrl());
+        self::assertSame('zipCity', $info->getZipCity());
+        self::assertTrue($info->isPrintAddress());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testTranslatedFax(): void
+    {
+        $info = new CustomerInformation();
+        self::assertSame('', $info->getTranslatedFax());
+
+        $info->setFax('0');
+        self::assertSame('Fax: 0', $info->getTranslatedFax());
+
+        $info->setFax('0');
+        $translator = $this->createTranslator();
+        self::assertSame('report.fax', $info->getTranslatedFax($translator));
+        self::assertSame('report.fax', $info->getTranslatedFax($this));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testTranslatedPhone(): void
+    {
+        $info = new CustomerInformation();
+        self::assertSame('', $info->getTranslatedPhone());
+
+        $info->setPhone('0');
+        self::assertSame('Phone: 0', $info->getTranslatedPhone());
+
+        $info->setFax('0');
+        $translator = $this->createTranslator();
+        self::assertSame('report.phone', $info->getTranslatedPhone($translator));
+        self::assertSame('report.phone', $info->getTranslatedPhone($this));
+    }
+
+    public function trans(string $id): string
+    {
+        return $id;
+    }
+}

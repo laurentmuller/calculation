@@ -17,6 +17,8 @@ use App\Validator\Recaptcha;
 use App\Validator\RecaptchaValidator;
 use PHPUnit\Framework\MockObject\Exception;
 use ReCaptcha\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
@@ -83,12 +85,29 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
      */
     protected function createValidator(): RecaptchaValidator
     {
-        return new RecaptchaValidator($this->createService());
+        $service = $this->createService();
+        $requestStack = $this->createRequestStack();
+
+        return new RecaptchaValidator($service, $requestStack);
     }
 
     private function createConstraint(): Recaptcha
     {
         return new Recaptcha();
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createRequestStack(): RequestStack
+    {
+        $request = $this->createMock(Request::class);
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack->expects(self::any())
+            ->method('getCurrentRequest')
+            ->willReturn($request);
+
+        return $requestStack;
     }
 
     /**
@@ -114,7 +133,8 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
     private function initValidator(string $code = ''): RecaptchaValidator
     {
         $service = $this->createService($code);
-        $this->validator = new RecaptchaValidator($service);
+        $requestStack = $this->createRequestStack();
+        $this->validator = new RecaptchaValidator($service, $requestStack);
         $this->validator->initialize($this->context);
 
         return $this->validator;

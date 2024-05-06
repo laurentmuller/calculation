@@ -13,6 +13,8 @@ declare(strict_types=1);
 namespace App\Validator;
 
 use App\Service\RecaptchaService;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -22,7 +24,7 @@ use Symfony\Component\Validator\Constraint;
  */
 class RecaptchaValidator extends AbstractConstraintValidator
 {
-    public function __construct(private readonly RecaptchaService $service)
+    public function __construct(private readonly RecaptchaService $service, private readonly RequestStack $requestStack)
     {
         parent::__construct(Recaptcha::class);
     }
@@ -32,7 +34,15 @@ class RecaptchaValidator extends AbstractConstraintValidator
      */
     protected function doValidate(string $value, Constraint $constraint): void
     {
-        $response = $this->service->verify($value);
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request instanceof Request) {
+            $this->context->buildViolation('recaptcha.no-request')
+                ->addViolation();
+
+            return;
+        }
+
+        $response = $this->service->verify($value, $request);
         if ($response->isSuccess()) {
             return;
         }

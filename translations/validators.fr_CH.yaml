@@ -63,6 +63,7 @@ recaptcha:
   timeout-or-duplicate: Le délai d'attente est atteint ou la validation a été appelée deux fois.
   unknown-error: Une erreur inconnue s'est produite durant de la validation.
   incorrect-captcha-sol: Une erreur inconnue s'est produite durant de la validation.
+  no-request: Aucune requête valide n'est définie.
 state:
   unique_code: Ce nom est déjà utilisé par un autre statut.
 task:

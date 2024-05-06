@@ -100,9 +100,8 @@ class RecaptchaService
         return \array_map(fn (mixed $code): string => $this->translateError("recaptcha.$code"), $codes);
     }
 
-    public function verify(string $response, ?Request $request = null): Response
+    public function verify(string $response, Request $request): Response
     {
-        $request ??= Request::createFromGlobals();
         $recaptcha = new ReCaptcha($this->secretKey);
         $recaptcha->setChallengeTimeout($this->challengeTimeout)
             ->setScoreThreshold($this->scoreThreshold)

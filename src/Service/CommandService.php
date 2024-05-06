@@ -115,7 +115,6 @@ class CommandService implements \Countable
      *
      * @param string $command         the command name to execute
      * @param array  $parameters      the command parameters
-     * @param bool   $replaceResult   set whether if the result content must be updated by replacing tags
      * @param bool   $catchExceptions sets whether to catch exceptions or not during command execution
      * @param bool   $catchErrors     sets whether to catch errors or not during command execution
      *
@@ -126,7 +125,6 @@ class CommandService implements \Countable
     public function execute(
         string $command,
         array $parameters = [],
-        bool $replaceResult = false,
         bool $catchExceptions = true,
         bool $catchErrors = false,
     ): CommandResult {
@@ -137,10 +135,6 @@ class CommandService implements \Countable
         $application = $this->createApplication($catchExceptions, $catchErrors);
         $status = $application->run($input, $output);
         $content = $output->fetch();
-        if ($replaceResult) {
-            $content = $this->replaceHelp($content);
-            $content = \str_replace('<br>', "\n", $content);
-        }
         unset($application);
 
         return new CommandResult($status, $content);
@@ -370,13 +364,15 @@ class CommandService implements \Countable
         return \sprintf($format, $shortcut, $name);
     }
 
-    private function replaceHelp(string $help): string
+    private function replaceHelp(string $help, bool $includRegex = true): string
     {
         if (!StringUtils::isString($help)) {
             return $help;
         }
 
-        $help = StringUtils::pregReplace(self::PREG_REPLACE, $help);
+        if ($includRegex) {
+            $help = StringUtils::pregReplace(self::PREG_REPLACE, $help);
+        }
 
         return StringUtils::replace(self::HELP_REPLACE, $help);
     }

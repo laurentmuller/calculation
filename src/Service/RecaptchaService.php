@@ -27,10 +27,10 @@ class RecaptchaService
 {
     use MathTrait;
     use TranslatorTrait;
+    private int $challengeTimeout = 60;
 
-    private string $action = 'login';
+    private string $expectedAction = 'login';
     private float $scoreThreshold = 0.5;
-    private int $timeoutSeconds = 60;
 
     public function __construct(
         #[\SensitiveParameter]
@@ -39,20 +39,13 @@ class RecaptchaService
         #[\SensitiveParameter]
         #[Autowire('%google_recaptcha_secret_key%')]
         private readonly string $secretKey,
-        #[Autowire('%kernel.debug%')]
-        private readonly bool $debug,
         private readonly TranslatorInterface $translator
     ) {
     }
 
-    public function getAction(): string
+    public function getExpectedAction(): string
     {
-        return $this->action;
-    }
-
-    public function getSecretKey(): string
-    {
-        return $this->secretKey;
+        return $this->expectedAction;
     }
 
     public function getSiteKey(): string
@@ -65,23 +58,32 @@ class RecaptchaService
         return $this->translator;
     }
 
-    public function setAction(string $action): self
+    /**
+     * @psalm-api
+     */
+    public function setChallengeTimeout(int $challengeTimeout): self
     {
-        $this->action = $action;
+        $this->challengeTimeout = \max(0, $challengeTimeout);
 
         return $this;
     }
 
+    /**
+     * @psalm-api
+     */
+    public function setExpectedAction(string $expectedAction): self
+    {
+        $this->expectedAction = $expectedAction;
+
+        return $this;
+    }
+
+    /**
+     * @psalm-api
+     */
     public function setScoreThreshold(float $scoreThreshold): self
     {
         $this->scoreThreshold = $this->validateRange($scoreThreshold, 0, 1);
-
-        return $this;
-    }
-
-    public function setTimeoutSeconds(int $timeoutSeconds): self
-    {
-        $this->timeoutSeconds = \max(0, $timeoutSeconds);
 
         return $this;
     }
@@ -91,28 +93,27 @@ class RecaptchaService
      */
     public function translateErrors(array $codes): array
     {
-        $errors = \array_map(fn (mixed $code): string => $this->trans("recaptcha.$code", [], 'validators'), $codes);
-        if ([] === $errors) {
-            $errors[] = $this->trans('recaptcha.unknown-error', [], 'validators');
+        if ([] === $codes) {
+            return [$this->translateError('recaptcha.unknown-error')];
         }
 
-        return $errors;
+        return \array_map(fn (mixed $code): string => $this->translateError("recaptcha.$code"), $codes);
     }
 
     public function verify(string $response, ?Request $request = null): Response
     {
+        $request ??= Request::createFromGlobals();
         $recaptcha = new ReCaptcha($this->secretKey);
-        $recaptcha->setChallengeTimeout($this->timeoutSeconds)
+        $recaptcha->setChallengeTimeout($this->challengeTimeout)
             ->setScoreThreshold($this->scoreThreshold)
-            ->setExpectedAction($this->action);
+            ->setExpectedAction($this->expectedAction)
+            ->setExpectedHostname($request->getHost());
 
-        $remoteIp = null;
-        if ($request instanceof Request) {
-            $hostname = (string) $request->server->get('SERVER_NAME');
-            $remoteIp = (string) $request->server->get('REMOTE_ADDR');
-            $recaptcha->setExpectedHostname($this->debug ? $remoteIp : $hostname);
-        }
+        return $recaptcha->verify($response, $request->getClientIp());
+    }
 
-        return $recaptcha->verify($response, $remoteIp);
+    private function translateError(string $id): string
+    {
+        return $this->trans($id, [], 'validators');
     }
 }

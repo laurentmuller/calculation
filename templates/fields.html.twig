@@ -241,7 +241,7 @@
         {%- if form is rootform -%}
             <hr class="mt-2 mb-1">
             <p class="mb-1">{{ 'error_page.description'|trans }}</p>
-            <ul class="my-1">
+            <ul class="my-1 text-danger">
             {%- for error in errors -%}
                 <li>{{ error.message }}</li>
             {%- endfor -%}
@@ -252,4 +252,4 @@
             {%- endfor -%}
         {%- endif %}
     {%- endif %}
-{%- endblock form_errors -%}
+{%- endblock -%}

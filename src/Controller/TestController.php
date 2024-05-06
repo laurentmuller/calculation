@@ -374,7 +374,7 @@ class TestController extends AbstractController
             $response = (string) $form->get('recaptcha')->getData();
             $result = $service->verify($response, $request);
             if ($result->isSuccess()) {
-                /** @psalm-var array<string, string[]|string> $values */
+                /** @psalm-var array<string, string[]|string|bool> $values */
                 $values = $result->toArray();
                 $html = $this->formatRecaptchaResult($values);
 
@@ -387,7 +387,7 @@ class TestController extends AbstractController
         }
 
         return $this->render('test/recaptcha.html.twig', [
-            'action' => $service->getAction(),
+            'action' => $service->getExpectedAction(),
             'key' => $service->getSiteKey(),
             'form' => $form,
         ]);
@@ -546,7 +546,7 @@ class TestController extends AbstractController
     }
 
     /**
-     * @psalm-param array<string, string[]|string> $values
+     * @psalm-param array<string, string[]|string|bool> $values
      */
     private function formatRecaptchaResult(array $values): string
     {
@@ -555,6 +555,10 @@ class TestController extends AbstractController
         foreach ($values as $key => $value) {
             if (\is_array($value)) {
                 $value = \implode('<br>', $value);
+            } elseif (\is_bool($value)) {
+                $value = \json_encode($value);
+            } elseif ('score' === $key) {
+                $value = FormatUtils::formatPercent($value);
             } elseif ('challenge_ts' === $key) {
                 $time = \strtotime($value);
                 if (false !== $time) {

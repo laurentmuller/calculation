@@ -29,12 +29,6 @@ class CommandServiceTest extends KernelTestCase
         self::bootKernel();
     }
 
-    public static function getExecuteReplace(): \Iterator
-    {
-        yield [false];
-        yield [true];
-    }
-
     /**
      * @throws InvalidArgumentException
      */
@@ -47,11 +41,10 @@ class CommandServiceTest extends KernelTestCase
     /**
      * @throws \Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getExecuteReplace')]
-    public function testExecute(bool $replaceResult): void
+    public function testExecute(): void
     {
         $service = $this->getCommandService();
-        $actual = $service->execute('about', [], $replaceResult);
+        $actual = $service->execute('about');
         self::assertTrue($actual->isSuccess());
         self::assertSame(Command::SUCCESS, $actual->status);
         self::assertNotEmpty($actual->content);

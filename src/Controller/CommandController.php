@@ -135,7 +135,7 @@ class CommandController extends AbstractController
                 $data = $form->getData();
                 $session->set($key, $data);
                 $parameters = $dataService->createParameters($command, $data);
-                $result = $service->execute($name, $parameters, true);
+                $result = $service->execute($name, $parameters);
 
                 return $this->render('command/command_execute_result.html.twig', [
                     'parameters' => $parameters,

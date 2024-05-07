@@ -1,5 +1,5 @@
 {
-    "base-uri": "self",
+    "base-uri": "none",
     "media-src": "none",
     "object-src": "none",
     "default-src": "self",
@@ -13,9 +13,7 @@
         "https://api.iconify.design"
     ],
     "connect-src": [
-        "self",
-        "https://raw.githack.com",
-        "https://openweathermap.org"
+        "self"
     ],
     "frame-src": [
         "self",

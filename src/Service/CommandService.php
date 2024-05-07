@@ -84,8 +84,7 @@ class CommandService implements \Countable
         '</>' => '</span>',
     ];
 
-    private const PREG_REPLACE = [
-        '/(.)(\n)(.)/m' => '$1 $3',
+    private const HREF_REPLACE = [
         '/(<href=)(.*?)>(.*?)(<\/>)/m' => '<a href="$2" target="_blank" rel="noopener noreferrer">$3</a>',
     ];
 
@@ -364,15 +363,13 @@ class CommandService implements \Countable
         return \sprintf($format, $shortcut, $name);
     }
 
-    private function replaceHelp(string $help, bool $includRegex = true): string
+    private function replaceHelp(string $help): string
     {
         if (!StringUtils::isString($help)) {
             return $help;
         }
 
-        if ($includRegex) {
-            $help = StringUtils::pregReplace(self::PREG_REPLACE, $help);
-        }
+        $help = StringUtils::pregReplace(self::HREF_REPLACE, $help);
 
         return StringUtils::replace(self::HELP_REPLACE, $help);
     }

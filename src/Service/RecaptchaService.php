@@ -27,8 +27,8 @@ class RecaptchaService
 {
     use MathTrait;
     use TranslatorTrait;
-    private int $challengeTimeout = 60;
 
+    private int $challengeTimeout = 60;
     private string $expectedAction = 'login';
     private float $scoreThreshold = 0.5;
 
@@ -43,9 +43,19 @@ class RecaptchaService
     ) {
     }
 
+    public function getChallengeTimeout(): int
+    {
+        return $this->challengeTimeout;
+    }
+
     public function getExpectedAction(): string
     {
         return $this->expectedAction;
+    }
+
+    public function getScoreThreshold(): float
+    {
+        return $this->scoreThreshold;
     }
 
     public function getSiteKey(): string
@@ -88,11 +98,19 @@ class RecaptchaService
         return $this;
     }
 
+    public function translateError(string $id): string
+    {
+        return $this->trans($id, [], 'validators');
+    }
+
     /**
      * @return string[]
      */
-    public function translateErrors(array $codes): array
+    public function translateErrors(Response|array $codes): array
     {
+        if ($codes instanceof Response) {
+            $codes = $codes->getErrorCodes();
+        }
         if ([] === $codes) {
             return [$this->translateError('recaptcha.unknown-error')];
         }
@@ -109,10 +127,5 @@ class RecaptchaService
             ->setExpectedHostname($request->getHost());
 
         return $recaptcha->verify($response, $request->getClientIp());
-    }
-
-    private function translateError(string $id): string
-    {
-        return $this->trans($id, [], 'validators');
     }
 }

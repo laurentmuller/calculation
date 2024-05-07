@@ -16,8 +16,9 @@ use App\Interfaces\MimeTypeInterface;
 use App\Service\NonceService;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
-use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\DependencyInjection\Attribute\Target;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
@@ -26,6 +27,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 
 /**
  * Response subscriber to add content security policy (CSP).
@@ -44,19 +46,44 @@ class ResponseListener
     ];
 
     /**
-     * The CSP none directive.
+     * The CSP nonce parameter.
      */
-    private const CSP_NONE = "'none'";
+    private const CSP_NONCE_PARAM = '%nonce%';
 
     /**
-     * The CSP self directive.
+     * The CSP none parameter.
      */
-    private const CSP_SELF = "'self'";
+    private const CSP_NONE_PARAM = 'none';
 
     /**
-     * The unsafe inline CSP directive.
+     * The CSP none directive value.
      */
-    private const CSP_UNSAFE_INLINE = "'unsafe-inline'";
+    private const CSP_NONE_VALUE = "'none'";
+
+    /**
+     * The CSP report parameter.
+     */
+    private const CSP_REPORT_PARAM = '%report%';
+
+    /**
+     * The CSP self directive parameter.
+     */
+    private const CSP_SELF_PARAM = 'self';
+
+    /**
+     * The CSP self directive value.
+     */
+    private const CSP_SELF_VALUE = "'self'";
+
+    /**
+     * The unsafe inline CSP parameter name.
+     */
+    private const CSP_UNSAFE_INLINE_PARAM = 'unsafe-inline';
+
+    /**
+     * The CSP unsafe inline directive value.
+     */
+    private const CSP_UNSAFE_INLINE_VALUE = "'unsafe-inline'";
 
     /**
      * The default headers to add.
@@ -70,7 +97,7 @@ class ResponseListener
         'X-FRAME-OPTIONS' => 'sameorigin',
         'X-XSS-Protection' => '1; mode=block',
         'X-Content-Type-Options' => 'nosniff',
-        'x-permitted-cross-domain-policies' => self::CSP_NONE,
+        'x-permitted-cross-domain-policies' => self::CSP_NONE_VALUE,
     ];
 
     /**
@@ -78,30 +105,23 @@ class ResponseListener
      */
     private const DEV_PATTERN = '/^\/(_(profiler|wdt)|css|images|js)\//mi';
 
-    /**
-     * The CSP directives.
-     *
-     * @var array<string, string[]>
-     */
-    private readonly array $csp;
-
-    /**
-     * @throws \Exception
-     */
     public function __construct(
         #[Autowire('%kernel.project_dir%/resources/data/csp.%kernel.environment%.json')]
-        string $file,
-        NonceService $service,
-        UrlGeneratorInterface $generator,
+        private readonly string $file,
+        private readonly UrlGeneratorInterface $generator,
+        private readonly NonceService $service,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
-        private readonly CacheItemPoolInterface $cache,
+        #[Target('cache.calculation.service.response')]
+        private readonly CacheInterface $cache,
         #[Autowire('%kernel.project_dir%/public')]
         private readonly string $publicDir
     ) {
-        $this->csp = $this->loadCSP($file, $service, $generator);
     }
 
+    /**
+     * @throws \Exception|InvalidArgumentException
+     */
     #[AsEventListener(event: KernelEvents::RESPONSE)]
     public function onKernelResponse(ResponseEvent $event): void
     {
@@ -109,52 +129,100 @@ class ResponseListener
             return;
         }
 
-        $request = $event->getRequest();
-        if ($this->debug) {
-            $name = \basename($request->getPathInfo());
-            $ext = Path::getExtension($name);
-            if (\in_array($ext, ['css', 'ttf', 'woff2'], true)) {
-                $this->updateResponse($event, $name);
-
-                return;
-            }
-
-            if ($this->isDevRequest($request)) {
-                return;
-            }
+        if ($this->debug && $this->handleDebug($event)) {
+            return;
         }
 
         $response = $event->getResponse();
         $headers = $response->headers;
         $headers->add(self::DEFAULT_HEADERS);
-        $csp = $this->getCSP($response);
-        if ('' !== $csp) {
-            foreach (self::CSP_HEADERS as $key) {
-                $headers->set($key, $csp);
-            }
+
+        $csp = $this->buildCSP($response);
+        if ('' === $csp) {
+            return;
+        }
+
+        foreach (self::CSP_HEADERS as $key) {
+            $headers->set($key, $csp);
         }
     }
 
     /**
      * Build the content security policy.
+     *
+     * @throws \Exception|InvalidArgumentException
      */
-    private function getCSP(Response $response): string
+    private function buildCSP(Response $response): string
     {
-        $csp = $this->csp;
+        $csp = $this->getCSP();
         if ([] === $csp) {
             return '';
         }
 
         if ($response instanceof MimeTypeInterface) {
-            $csp['object-src'] = [self::CSP_SELF];
+            $csp['object-src'] = [self::CSP_SELF_VALUE];
             $csp['plugin-types'] = [$response->getInlineMimeType()];
         }
+
+        $this->replaceNonce($csp);
 
         return \array_reduce(
             \array_keys($csp),
             fn (string $carry, string $key): string => \sprintf('%s%s %s;', $carry, $key, \implode(' ', $csp[$key])),
             ''
         );
+    }
+
+    /**
+     * Gets the CSP definitions.
+     *
+     * @return array<string, string[]>
+     *
+     * @throws InvalidArgumentException
+     */
+    private function getCSP(): array
+    {
+        return $this->cache->get('csp_content', function () {
+            if (!FileUtils::exists($this->file)) {
+                return [];
+            }
+
+            /* @psalm-var array<string, string|string[]> $content */
+            $content = FileUtils::decodeJson($this->file);
+
+            /** @psalm-var array<string, string[]> $csp */
+            $csp = \array_map(static fn (string|array $value): array => (array) $value, $content);
+
+            $values = [
+                self::CSP_REPORT_PARAM => $this->getReportURL(),
+                self::CSP_NONE_PARAM => self::CSP_NONE_VALUE,
+                self::CSP_SELF_PARAM => self::CSP_SELF_VALUE,
+                self::CSP_UNSAFE_INLINE_PARAM => self::CSP_UNSAFE_INLINE_VALUE,
+            ];
+
+            return \array_map(static fn (array $subject): array => StringUtils::replace($values, $subject), $csp);
+        });
+    }
+
+    private function getReportURL(): string
+    {
+        return $this->generator->generate(name: 'log_csp', referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
+    private function handleDebug(ResponseEvent $event): bool
+    {
+        $request = $event->getRequest();
+        if ($this->isDevRequest($request)) {
+            return true;
+        }
+
+        $name = \basename($request->getPathInfo());
+        $ext = Path::getExtension($name);
+        if (!\in_array($ext, ['css', 'ttf', 'woff2'], true)) {
+            return false;
+        }
+
+        return $this->updateResponse($event, $name);
     }
 
     /**
@@ -166,60 +234,27 @@ class ResponseListener
     }
 
     /**
-     * Load the CSP definitions.
-     *
-     * @return array<string, string[]>
-     */
-    private function loadCSP(string $file, NonceService $service, UrlGeneratorInterface $generator): array
-    {
-        try {
-            $item = $this->cache->getItem('csp_file');
-            if ($item->isHit()) {
-                return $this->replaceNonce($service, $item->get());
-            }
-
-            if (!FileUtils::exists($file)) {
-                return [];
-            }
-
-            /* @psalm-var array<string, string|string[]> $csp */
-            $csp = FileUtils::decodeJson($file);
-
-            /** @psalm-var array<string, string[]> $csp */
-            $csp = \array_map(static fn (string|array $value): array => (array) $value, $csp);
-
-            $values = [
-                '%report%' => $generator->generate(name: 'log_csp', referenceType: UrlGeneratorInterface::ABSOLUTE_URL),
-                'unsafe-inline' => self::CSP_UNSAFE_INLINE,
-                'none' => self::CSP_NONE,
-                'self' => self::CSP_SELF,
-            ];
-            $value = \array_map(static fn (array $subject): array => StringUtils::replace($values, $subject), $csp);
-            $item->set($value);
-            $this->cache->save($item);
-
-            return $this->replaceNonce($service, $value);
-        } catch (\Psr\Cache\InvalidArgumentException|\InvalidArgumentException|\Exception) {
-            return [];
-        }
-    }
-
-    /**
-     * @return array<string, string[]>
+     * @param-out array<string, string[]> $csp
      *
      * @throws \Exception
+     *
+     * @psalm-suppress ReferenceConstraintViolation
      */
-    private function replaceNonce(NonceService $service, mixed $value): array
+    private function replaceNonce(array &$csp): void
     {
-        $nonce = $service->getCspNonce();
-        $encoded = \str_replace('%nonce%', $nonce, (string) \json_encode($value));
-        /** @psalm-var array<string, string[]> $decoded */
-        $decoded = \json_decode($encoded, true);
-
-        return $decoded;
+        $nonce = $this->service->getCspNonce();
+        \array_walk_recursive(
+            $csp,
+            function (string &$value, string $key, string $nonce): void {
+                if (self::CSP_NONCE_PARAM === $value) {
+                    $value = $nonce;
+                }
+            },
+            $nonce
+        );
     }
 
-    private function updateResponse(ResponseEvent $event, string $name): void
+    private function updateResponse(ResponseEvent $event, string $name): true
     {
         $finder = new Finder();
         $finder->in($this->publicDir . '/css')
@@ -233,9 +268,11 @@ class ResponseListener
                 $response = new Response($content);
                 $event->setResponse($response);
             } catch (\RuntimeException) {
+                // ignore
             }
-
-            return;
+            break;
         }
+
+        return true;
     }
 }

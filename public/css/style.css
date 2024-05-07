@@ -958,6 +958,18 @@ span.bottom-border-gradient {
 .chart.month {
     min-height: 400px;
 }
+
 .chart.state {
     min-height: 550px;
+}
+
+/**
+ * Google recaptcha
+ */
+.grecaptcha-badge {
+    bottom: 5px !important;
+}
+
+body.status-bar .grecaptcha-badge {
+    bottom: 35px !important;
 }

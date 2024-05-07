@@ -56,4 +56,9 @@ return static function (FrameworkConfig $config): void {
     $config->cache()->pool('cache.calculation.service.asset')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
+
+    // used by the ResponseListener
+    $config->cache()->pool('cache.calculation.service.response')
+        ->adapters('cache.adapter.filesystem')
+        ->defaultLifetime($one_day);
 };

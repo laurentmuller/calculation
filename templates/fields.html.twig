@@ -23,151 +23,151 @@
 
 {# plain widget text #}
 {% block plain_label -%}
-{%- set element = 'span' -%}
-{{ block('form_label') }}
+    {%- set element = 'span' -%}
+    {{ block('form_label') }}
 {%- endblock %}
 
 {% block plain_widget -%}
-{% set display_value = display_value|default('&nbsp;') %}
-{% if expanded %}
-    {% set class = (attr.class|default('') ~ ' form-control-plaintext form-control-readonly')|trim %}
-    <div class="{{ class }}"{% if not hidden_input %}{{ block('widget_container_attributes') }}{% endif %}>
-        <span{% if text_class %} class="{{ text_class }}"{% endif %}>{{ display_value|raw }}</span>
-    </div>
-{% else %}
-    <span>{{ display_value|raw }}</span>
-{% endif %}
-{% if hidden_input %}
-    {{ block('hidden_widget') }}
-{% endif %}
+    {% set display_value = display_value|default('&nbsp;') %}
+    {% if expanded %}
+        {% set class = (attr.class|default('') ~ ' form-control-plaintext form-control-readonly')|trim %}
+        <div class="{{ class }}"{% if not hidden_input %}{{ block('widget_container_attributes') }}{% endif %}>
+            <span{% if text_class %} class="{{ text_class }}"{% endif %}>{{ display_value|raw }}</span>
+        </div>
+    {% else %}
+        <span>{{ display_value|raw }}</span>
+    {% endif %}
+    {% if hidden_input %}
+        {{ block('hidden_widget') }}
+    {% endif %}
 {%- endblock %}
 
 {# color widget #}
 {% block color_widget -%}
-{%- if 'color-picker' in attr.class|default('') -%}
-    {%- set type = type|default('color') -%}
-    {%- set attr = attr|default({})|merge({
-        'tabindex': -1,
-        'style': 'display:table-column',
-        'class': (required ? ' must-validate' : ''),
-        'data-custom-text': 'color_picker.custom_text'|trans,
-        'data-advanced-text': 'color_picker.advanced_text'|trans
-    }) -%}
-    {%- set button_attr = {
-        'type': 'button',
-        'role': 'combobox',
-        'data-bs-toggle': 'dropdown',
-        'aria-expanded': 'false',
-        'aria-label': form.vars.label|trans,
-        'class': 'color-picker dropdown-toggle form-control d-flex align-items-center',
-    } -%}
-    <button{% with {attr: button_attr} %}{{ block('attributes') }}{% endwith %}>
-        <span class="dropdown-color border" style="background-color: {{ value|default('#000000') }}"></span>
-        <span class="dropdown-text flex-fill"></span>
-    </button>
-    <div class="color-picker dropdown-menu p-2" role="menu"></div>
-    {{ block('form_widget_simple') }}
-{%- else -%}
-    {{- parent() -}}
-{%- endif -%}
+    {%- if 'color-picker' in attr.class|default('') -%}
+        {%- set type = type|default('color') -%}
+        {%- set attr = attr|default({})|merge({
+            tabindex: -1,
+            style: 'display:table-column',
+            class: (required ? ' must-validate' : ''),
+            'data-custom-text': 'color_picker.custom_text'|trans,
+            'data-advanced-text': 'color_picker.advanced_text'|trans
+        }) -%}
+        {%- set button_attr = {
+            type: 'button',
+            role: 'combobox',
+            'data-bs-toggle': 'dropdown',
+            'aria-expanded': 'false',
+            'aria-label': form.vars.label|trans,
+            class: 'color-picker dropdown-toggle form-control d-flex align-items-center',
+        } -%}
+        <button{% with {attr: button_attr} %}{{ block('attributes') }}{% endwith %}>
+            <span class="dropdown-color border" style="background-color: {{ value|default('#000000') }}"></span>
+            <span class="dropdown-text flex-fill"></span>
+        </button>
+        <div class="color-picker dropdown-menu p-2" role="menu"></div>
+        {{ block('form_widget_simple') }}
+    {%- else -%}
+        {{- parent() -}}
+    {%- endif -%}
 {%- endblock %}
 
 {# prepend and append icons, if applicable #}
 {% block form_widget_simple -%}
-{% set prepend_icon = (prepend_icon|default('') ~ ' ' ~ prepend_class|default(''))|trim %}
-{% set prepend_title = prepend_title|default(false) %}
-{% set append_icon = (append_icon|default('') ~ ' ' ~ append_class|default(''))|trim %}
-{% set append_title = append_title|default(false) %}
-{% if prepend_icon or append_icon %}
-    <div class="input-group">
-        {% if prepend_icon %}
-        <div class="input-group-text"{% if prepend_title %} title="{{ prepend_title|trans }}"{% endif %}>
-            <i class="{{ prepend_icon }}"></i>
+    {% set prepend_icon = (prepend_icon|default('') ~ ' ' ~ prepend_class|default(''))|trim %}
+    {% set prepend_title = prepend_title|default(false) %}
+    {% set append_icon = (append_icon|default('') ~ ' ' ~ append_class|default(''))|trim %}
+    {% set append_title = append_title|default(false) %}
+    {% if prepend_icon or append_icon %}
+        <div class="input-group">
+            {% if prepend_icon %}
+                <div class="input-group-text"{% if prepend_title %} title="{{ prepend_title|trans }}"{% endif %}>
+                    <i class="{{ prepend_icon }}"></i>
+                </div>
+            {% endif %}
+            {{- parent() -}}
+            {% if append_icon %}
+                <div class="input-group-text"{% if append_title %} title="{{ append_title|trans }}"{% endif %}>
+                    <i class="{{ append_icon }}"></i>
+                </div>
+            {% endif %}
         </div>
-        {% endif %}
+    {% else %}
         {{- parent() -}}
-        {% if append_icon %}
-        <div class="input-group-text"{% if append_title %} title="{{ append_title|trans }}"{% endif %}>
-           <i class="{{ append_icon }}"></i>
-        </div>
-        {% endif %}
-    </div>
-{% else %}
-    {{- parent() -}}
-{% endif %}
+    {% endif %}
 {%- endblock form_widget_simple %}
 
 {# use file-input style #}
 {% block file_widget -%}
-{%- if thumbnail is defined and thumbnail -%}
-    {%- set empty_image = empty_image|default(false) -%}
-    {%- set thumbnail_src = thumbnail_src|default(false) -%}
-    {%- set thumbnail_alt = thumbnail_alt|default('filetype.image') -%}
-    {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
-    <div class="text-center file-input {{ thumbnail_src ? 'file-input-exists' : 'file-input-new' }}" data-provider="file-input">
-        <div class="file-input-preview img-thumbnail" data-trigger="file-input" data-default="{{ empty_image }}">
-        {% if thumbnail_src or empty_image -%}
-            <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt|trans }}" title="{{ thumbnail_alt|trans }}">
-        {%- endif %}
-        </div>
-        <div class="text-start">
+    {%- if thumbnail is defined and thumbnail -%}
+        {%- set empty_image = empty_image|default(false) -%}
+        {%- set thumbnail_src = thumbnail_src|default(false) -%}
+        {%- set thumbnail_alt = thumbnail_alt|default('filetype.image') -%}
+        {%- if thumbnail_src -%}{%- set attr = attr|default({})|merge({'data-src': thumbnail_src}) -%}{%- endif -%}
+        <div class="text-center file-input {{ thumbnail_src ? 'file-input-exists' : 'file-input-new' }}" data-provider="file-input">
+            <div class="file-input-preview img-thumbnail" data-trigger="file-input" data-default="{{ empty_image }}">
+                {% if thumbnail_src or empty_image -%}
+                    <img src="{{ thumbnail_src|default(empty_image) }}" alt="{{ thumbnail_alt|trans }}" title="{{ thumbnail_alt|trans }}">
+                {%- endif %}
+            </div>
+            <div class="text-start">
             <span class="btn btn-file btn-sm btn-form-sm btn-outline-secondary">
                 <span class="file-input-new">{{ 'common.button_browse'|trans }}</span>
                 <span class="file-input-exists">{{ 'common.button_edit'|trans }}</span>
                 {%- set attr = attr|merge({'aria-label': thumbnail_alt|trans}) -%}
                 {{- block('form_widget_simple') -}}
             </span>
-            <button type="button" class="btn btn-sm btn-form-sm btn-outline-danger file-input-exists" data-dismiss="file-input">{{ 'common.button_delete'|trans }}</button>
+                <button type="button" class="btn btn-sm btn-form-sm btn-outline-danger file-input-exists" data-dismiss="file-input">{{ 'common.button_delete'|trans }}</button>
+            </div>
         </div>
-    </div>
-{%- else -%}
-    <div class="input-group">
-        {%- set is_empty = not value -%}
-        {% if is_empty %}
-            {% set attr = attr|merge({class: (attr.class|default('') ~ ' rounded-end')|trim}) %}
-        {% endif %}
-        {{- block('form_widget_simple') }}
-        <button class="btn btn-file-delete btn-outline-secondary{% if is_empty %} d-none{% endif %}" type="button" title="{{ 'common.button_delete'|trans }}">
-            <i class="fa-solid fa-times"></i>
-        </button>
-    </div>
-{%- endif -%}
+    {%- else -%}
+        <div class="input-group">
+            {%- set is_empty = not value -%}
+            {% if is_empty %}
+                {% set attr = attr|merge({class: (attr.class|default('') ~ ' rounded-end')|trim}) %}
+            {% endif %}
+            {{- block('form_widget_simple') }}
+            <button class="btn btn-file-delete btn-outline-secondary{% if is_empty %} d-none{% endif %}" type="button" title="{{ 'common.button_delete'|trans }}">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+    {%- endif -%}
 {%- endblock -%}
 
 {# vich_image #}
 {% block vich_image_widget -%}
-{# file #}
-{%- set alt = 'user.image.title' -%}
-{%- set src = asset_exists(image_uri) ? asset(image_uri|trim('/', 'left')) : false -%}
-{{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt}) -}}
-{# delete #}
-{% if form.delete is defined -%}
-    <div class="d-none">{{- form_widget(form.delete) -}}</div>
-{%- endif %}
+    {# file #}
+    {%- set alt = 'user.image.title' -%}
+    {%- set src = asset_exists(image_uri) ? asset(image_uri|trim('/', 'left')) : false -%}
+    {{- form_widget(form.file, {thumbnail: true, thumbnail_src: src, thumbnail_alt: alt}) -}}
+    {# delete #}
+    {% if form.delete is defined -%}
+        <div class="d-none">{{- form_widget(form.delete) -}}</div>
+    {%- endif %}
 {%- endblock %}
 
 {# captcha_image #}
 {% block captcha_image_widget -%}
-{%- set type = type|default('text') -%}
-{%- set image_title = 'captcha.title'|trans -%}
-{%- if remote|default(false) -%}
-    {%- set attr = attr|merge({'data-remote': remote}) -%}
-{%- endif -%}
-{%- if refresh|default(false) -%}
-    {%- set attr = attr|merge({'data-refresh': refresh}) -%}
-{%- endif -%}
-{%- set attr = attr|merge({class: (attr.class|default('') ~ ' text-lowercase')|trim}) -%}
-<div class="input-group">
+    {%- set type = type|default('text') -%}
+    {%- set image_title = 'captcha.title'|trans -%}
+    {%- if remote|default(false) -%}
+        {%- set attr = attr|merge({'data-remote': remote}) -%}
+    {%- endif -%}
+    {%- if refresh|default(false) -%}
+        {%- set attr = attr|merge({'data-refresh': refresh}) -%}
+    {%- endif -%}
+    {%- set attr = attr|merge({class: (attr.class|default('') ~ ' text-lowercase')|trim}) -%}
+    <div class="input-group">
     <span class="input-group-text py-0 px-1 bg-white">
         <img id="{{ id }}_image" class="captcha-image" alt="{{ image_title }}" title="{{ image_title }}" src="{{ image }}" width="150" height="30">
     </span>
-    {{- block('form_widget_simple') -}}
-    {% if refresh|default(false) %}
-        <button id="{{ id }}_refresh" name="{{ id }}_refresh" class="btn btn-outline-secondary captcha-refresh" type="button" title="{{ 'captcha.refresh'|trans }}">
-            <i class="fa-solid fa-sync"></i>
-        </button>
-    {% endif %}
-</div>
+        {{- block('form_widget_simple') -}}
+        {% if refresh|default(false) %}
+            <button id="{{ id }}_refresh" name="{{ id }}_refresh" class="btn btn-outline-secondary captcha-refresh" type="button" title="{{ 'captcha.refresh'|trans }}">
+                <i class="fa-solid fa-sync"></i>
+            </button>
+        {% endif %}
+    </div>
 {%- endblock %}
 
 {# simple editor #}
@@ -176,64 +176,61 @@
 {%- endblock %}
 
 {% macro simple_editor_button(action) %}
-{%- set translation_domain = 'messages' -%}
-{%- set attr_translation_parameters = [] -%}
-<button type="button"{% with {attr: action.attributes} %}{{ block('attributes') }}{% endwith %}>
-    {%- if action.text|default(false) -%}
-        {{- action.text|trans -}}
-    {%- elseif action.icon|default(false) -%}
-        <i class="{{- 'fa-fw fa-solid fa-' ~ action.icon -}}"></i>
-    {%- endif -%}
-</button>
+    {%- set translation_domain = 'messages' -%}
+    {%- set attr_translation_parameters = [] -%}
+    <button type="button"{% with {attr: action.attributes} %}{{ block('attributes') }}{% endwith %}>
+        {%- if action.text|default(false) -%}
+            {{- action.text|trans -}}
+        {%- elseif action.icon|default(false) -%}
+            <i class="{{- 'fa-fw fa-solid fa-' ~ action.icon -}}"></i>
+        {%- endif -%}
+    </button>
 {% endmacro %}
 
 {% block simple_editor_label -%}
-{%- set element = 'span' -%}
-{%- set label_attr = label_attr|merge({'class': 'cursor-default'}) -%}
-{{ block('form_label') }}
+    {%- set element = 'span' -%}
+    {%- set label_attr = label_attr|merge({class: 'cursor-default'}) -%}
+    {{ block('form_label') }}
 {%- endblock %}
 
 {% block simple_editor_widget -%}
-{%- set type = type|default('hidden') -%}
-{%- set editor_id = form.vars.id ~ '_editor' -%}
-<div class="simple-editor form-control p-0" id="{{ editor_id }}">
-    {% if groups|default([])|length -%}
-    <div class="simple-editor-toolbar btn-toolbar rounded-top d-print-none" role="toolbar">
-        {% for group, actions in groups %}
-        <div class="btn-group btn-group-sm" role="group" aria-label="{{ group }}">
-        {% for action in actions %}
-            {% if action.actions|default([])|length %}
-            <div class="btn-group btn-group-sm" role="group">
-                {{ _self.simple_editor_button(action) }}
-                <div class="dropdown-menu">
-                {% for child in action.actions %}
-                    {{ _self.simple_editor_button(child) }}
+    {%- set type = type|default('hidden') -%}
+    {%- set editor_id = form.vars.id ~ '_editor' -%}
+    <div class="simple-editor form-control p-0" id="{{ editor_id }}">
+        {% if groups|default([])|length -%}
+            <div class="simple-editor-toolbar btn-toolbar rounded-top d-print-none" role="toolbar">
+                {% for group, actions in groups %}
+                    <div class="btn-group btn-group-sm" role="group" aria-label="{{ group }}">
+                        {% for action in actions %}
+                            {% if action.actions|default([])|length %}
+                                <div class="btn-group btn-group-sm" role="group">
+                                    {{ _self.simple_editor_button(action) }}
+                                    <div class="dropdown-menu">
+                                        {% for child in action.actions %}
+                                            {{ _self.simple_editor_button(child) }}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                {{ _self.simple_editor_button(action) }}
+                            {% endif %}
+                        {% endfor %}
+                        {% if not loop.last %}
+                            <div class="border-start separator"></div>{% endif %}
+                    </div>
                 {% endfor %}
-                </div>
             </div>
-            {% else %}
-                {{ _self.simple_editor_button(action) }}
-            {% endif %}
-        {% endfor %}
-        {% if not loop.last %}<div class="border-start separator"></div>{% endif %}
-        </div>
-        {% endfor %}
+        {%- endif %}
+        <div class="simple-editor-content small-scrollbar border-top" contenteditable="true"></div>
+        {{- block('form_widget_simple') -}}
     </div>
-    {%- endif %}
-    <div class="simple-editor-content small-scrollbar border-top" contenteditable="true"></div>
-    {{- block('form_widget_simple') -}}
-</div>
 {%- endblock %}
 
 {%- block alpha_captcha_widget -%}
-<div class="row align-items-center">
-    <label for="{{ id }}" class="col-sm-10 col-form-label">
-        {{- question -}}
-    </label>
-    <div class="col-sm-2 col-3">
-        {{- block('form_widget_simple') -}}
+    <div class="row align-items-center">
+        <label for="{{ id }}" class="col-sm-10 col-form-label">{{- question -}}</label>
+        <div class="col-sm-2 col-3">{{- block('form_widget_simple') -}}</div>
     </div>
-</div>
 {%- endblock -%}
 
 {%- block form_errors -%}
@@ -242,14 +239,19 @@
             <hr class="mt-2 mb-1">
             <p class="mb-1">{{ 'error_page.description'|trans }}</p>
             <ul class="my-1 text-danger">
-            {%- for error in errors -%}
-                <li>{{ error.message }}</li>
-            {%- endfor -%}
+                {%- for error in errors -%}
+                    <li>{{ error.message }}</li>
+                {%- endfor -%}
             </ul>
         {%- else -%}
             {%- for error in errors -%}
-                <small class="is-invalid invalid-feedback">{{ error.message }}</small>
+                <small class="is-invalid invalid-feedback d-block">{{ error.message }}</small>
             {%- endfor -%}
         {%- endif %}
     {%- endif %}
+{%- endblock -%}
+
+{% block recaptcha_widget %}
+    {{ block('hidden_widget') }}
+    <script nonce="{{ csp_nonce() }}" src="{{ recaptcha_url }}" async defer></script>
 {%- endblock -%}

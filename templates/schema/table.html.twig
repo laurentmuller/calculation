@@ -34,7 +34,7 @@
                     {% if column.primary %}<i class="fa-solid fa-key fa-fw me-1" title="{{ 'schema.fields.primary'|trans }}"></i>{% endif %}
                     {% if column.unique and not column.primary %}<i class="fa-solid fa-lock fa-fw me-1" title="{{ 'schema.fields.unique'|trans }}"></i>{% endif %}
                     {%- if foreign_table -%}
-                        <a href="{{ path('schema_table', {'name': foreign_table}) }}" title="{% if foreign_table %}{{ 'schema.index.tooltip'|trans({'%name%': foreign_table}) }}"{% endif %}><i class="fa-solid fa-link fa-fw me-1"></i>{{ column.name -}}</a>
+                        <a href="{{ path('schema_table', {name: foreign_table}) }}" title="{% if foreign_table %}{{ 'schema.index.tooltip'|trans({'%name%': foreign_table}) }}"{% endif %}><i class="fa-solid fa-link fa-fw me-1"></i>{{ column.name -}}</a>
                     {%- else -%}
                         {{- column.name -}}
                     {%- endif -%}

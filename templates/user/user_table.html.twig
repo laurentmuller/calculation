@@ -58,7 +58,7 @@
     {% if allow_edit or allow_delete or allow_add or allow_show %}
         {{- _self.item_separator('user-switch-divider') }}
     {% endif %}
-    {{- _self.item_path(path('homepage', {'_switch_user': 'username'}), 'user.switch.take.title', 'user-plus', 'btn-user-switch') }}
+    {{- _self.item_path(path('homepage', {_switch_user: 'username'}), 'user.switch.take.title', 'user-plus', 'btn-user-switch') }}
 {%- endif -%}
 {%- endblock %}
 

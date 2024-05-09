@@ -2,7 +2,7 @@
 {# add a month option #}
 {% macro month(value, selected) -%}
 <option value="{{ value }}"{% if selected %} selected="selected"{% endif %}>
-    {{- 'counters.months'|trans({'count': value}) -}}
+    {{- 'counters.months'|trans({count: value}) -}}
 </option>
 {%- endmacro %}
 {# format the value with arrow #}
@@ -28,7 +28,7 @@
 {%- set title = 'chart.month.title' -%}
 {%- set title_icon = 'calendar-alt far' -%}
 {%- set pdf_route = 'chart_month_pdf' -%}
-{%- set pdf_params = {'count': months} -%}
+{%- set pdf_params = {count: months} -%}
 {# class #}
 {% block card_container_class '' -%}
 {% block chart_class ' month' -%}
@@ -72,7 +72,7 @@
 <tbody data-link="row" class="rowlink">
     {% for item in data -%}
     {%- set month = item.date|locale_date('none', 'MMMM Y') -%}
-    {%- set parameters = {'search': item.date|locale_date('none', 'MM.Y')} -%}
+    {%- set parameters = {search: item.date|locale_date('none', 'MM.Y')} -%}
     <tr title="{{ 'chart.month.row'|trans({'%name%': month}) }}">
         <td class="text-nowrap">
             <a href="{{ path(list_path, parameters) }}">{{ month }}</a>

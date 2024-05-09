@@ -12,7 +12,7 @@
 {# body #}
 {% block card_body %}
 {# name #}
-{{ include('command/_command_name.html.twig', {'command': command}, with_context = false) }}
+{{ include('command/_command_name.html.twig', {command: command}, with_context = false) }}
 {# parameters #}
 {% if parameters|length %}
     <div class="mb-3">
@@ -35,8 +35,8 @@
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
-    {{ link(path('command_all', {'name': command.name}), 'command.list.title', 'btn btn-form btn-primary') }}
-    {{ link(path('command_execute', {'name': command.name}), 'command.result.re_run', 'btn btn-form btn-warning') }}
+    {{ link(path('command_all', {name: command.name}), 'command.list.title', 'btn btn-form btn-primary') }}
+    {{ link(path('command_execute', {name: command.name}), 'command.result.re_run', 'btn btn-form btn-warning') }}
     {% if result.content %}
         <button type="button" class="btn btn-form btn-success btn-copy"
                 data-success="{{ 'common.copy_success'|trans }}"

@@ -4,10 +4,10 @@
     {% set id = 'form_theme_' ~ theme.value %}
     {% set id_help = id ~ '_help' %}
     {% set attributes = {
-        'type': 'radio',
-        'class': 'form-check-input',
-        'name': 'form_theme',
-        'value': theme.value,
+        type: 'radio',
+        class: 'form-check-input',
+        name: 'form_theme',
+        value: theme.value,
         'aria-describedby': id_help,
         'data-success': theme.success|trans,
         'data-icon-light': theme.iconLight ~ ' me-1',

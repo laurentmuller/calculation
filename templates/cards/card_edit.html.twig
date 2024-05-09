@@ -4,7 +4,7 @@
 {%- set submit_text = submit_text|default('common.button_ok') -%}
 {%- set submit_class = submit_class|default('btn btn-form btn-primary') -%}
 {%- set submit_params = submit_params|default({}) -%}
-{%- set form_attr = form_attr|default({})|merge({'id': 'edit-form', 'data-save': 'common.save_data'|trans, 'class': 'position-relative'}) -%}
+{%- set form_attr = form_attr|default({})|merge({id: 'edit-form', 'data-save': 'common.save_data'|trans, class: 'position-relative'}) -%}
 {%- set cancel_text = cancel_text|default('common.button_cancel') -%}
 {%- if cancel_path is not defined -%}
     {%- set cancel_path = cancel_url(app.request, item|default(null), page_list|default('homepage')) -%}
@@ -13,7 +13,7 @@
 {% block start_card_container %}
     {{ parent() -}}
     {% block start_form %}
-        {{ form_start(form, {'attr': form_attr}) }}
+        {{ form_start(form, {attr: form_attr}) }}
     {% endblock %}
 {% endblock %}
 {# header #}

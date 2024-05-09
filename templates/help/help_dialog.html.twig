@@ -155,7 +155,7 @@
 {% set links = dialog.links|default([]) %}
 {# entity #}
 {% if dialog.entity|default(false) -%}
-    {% set link = {'id': dialog.entity, 'type': 'entity'} %}
+    {% set link = {id: dialog.entity, type: 'entity'} %}
     {% set links = links|merge({link}) %}
 {%- endif %}
 {% if links|length -%}

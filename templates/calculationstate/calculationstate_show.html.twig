@@ -13,7 +13,7 @@
 {{ property('calculationstate.fields.code', item.code) }}
 {{ property('calculationstate.fields.description', item.description) }}
 {{ property('calculationstate.fields.editable', item.editable|boolean) }}
-{{ property('calculationstate.fields.calculations', 'counters.calculations'|trans({'count': item.countCalculations})) }}
+{{ property('calculationstate.fields.calculations', 'counters.calculations'|trans({count: item.countCalculations})) }}
 <tr>
     <td class="w-25">{{ 'calculationstate.fields.color'|trans }}</td>
     <td class="w-75"><span class="state-color border border-secondary" style="background-color: {{ item.color|default('transparent') }};"></span></td>

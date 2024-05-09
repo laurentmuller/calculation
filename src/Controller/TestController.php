@@ -23,6 +23,7 @@ use App\Enums\MessagePosition;
 use App\Enums\StrengthLevel;
 use App\Form\Type\AlphaCaptchaType;
 use App\Form\Type\CaptchaImageType;
+use App\Form\Type\ReCaptchaType;
 use App\Form\Type\SimpleEditorType;
 use App\Interfaces\PropertyServiceInterface;
 use App\Interfaces\RoleInterface;
@@ -61,11 +62,11 @@ use App\Word\HtmlDocument;
 use Doctrine\ORM\EntityManagerInterface;
 use fpdf\PdfFontStyle;
 use Psr\Log\LoggerInterface;
+use ReCaptcha\Response as ReCaptchaResponse;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -364,33 +365,29 @@ class TestController extends AbstractController
             'subject' => 'My subject',
             'message' => 'My message',
         ];
+        $expectedAction = 'register';
         $helper = $this->createFormHelper('user.fields.', $data);
         $helper->field('subject')->addTextType()
             ->field('message')->addTextType()
-            ->field('recaptcha')->addHiddenType()
+            ->field('captcha')
+            ->updateOption('expectedAction', $expectedAction)
+            ->add(ReCaptchaType::class)
             ->getBuilder()->setAttribute('block_name', '');
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
-            $response = (string) $form->get('recaptcha')->getData();
-            $result = $service->verify($response, $request);
-            if ($result->isSuccess()) {
+            $response = $service->getLastResponse();
+            if ($response instanceof ReCaptchaResponse) {
                 /** @psalm-var array<string, string[]|string|bool> $values */
-                $values = $result->toArray();
-                $html = $this->formatRecaptchaResult($values);
+                $values = $response->toArray();
+                $message = $this->formatRecaptchaResult($values);
 
-                return $this->redirectToHomePage($html);
+                return $this->redirectToHomePage($message);
             }
-            $errors = $service->translateErrors($result->getErrorCodes());
-            foreach ($errors as $error) {
-                $form->addError(new FormError($error));
-            }
+
+            return $this->redirectToHomePage('test.recaptcha_success');
         }
 
-        return $this->render('test/recaptcha.html.twig', [
-            'action' => $service->getExpectedAction(),
-            'key' => $service->getSiteKey(),
-            'form' => $form,
-        ]);
+        return $this->render('test/recaptcha.html.twig', ['form' => $form]);
     }
 
     #[Get(path: '/search', name: 'test_search')]
@@ -550,9 +547,10 @@ class TestController extends AbstractController
      */
     private function formatRecaptchaResult(array $values): string
     {
+        $html = '';
         $values = \array_filter($values);
-        $html = '<table class="table table-sm table-borderless mb-0"><tbody>';
         foreach ($values as $key => $value) {
+            $html .= '<div class="row">';
             if (\is_array($value)) {
                 $value = \implode('<br>', $value);
             } elseif (\is_bool($value)) {
@@ -565,10 +563,13 @@ class TestController extends AbstractController
                     $value = FormatUtils::formatDateTime($time, timeType: \IntlDateFormatter::MEDIUM);
                 }
             }
-            $html .= "<tr><td>$key</td><td>:</td><td>$value</td></tr>";
+            $html .= '<div class="col-4">' . $key . '</div>';
+            $html .= '<div class="col-1">:</div>';
+            $html .= '<div class="col-7">' . $value . '</div>';
+            $html .= '</div>';
         }
 
-        return $html . '</tbody></table>';
+        return $html;
     }
 
     private function getCategories(EntityManagerInterface $manager): array

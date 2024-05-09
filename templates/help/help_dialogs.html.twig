@@ -3,7 +3,7 @@
 {% from 'macros/_icons.html.twig' import icon %}
 {# macro #}
 {% macro output_dialog(dialog, entity) -%}
-{% set href = path('help_dialog', {'id': dialog.id}) %}
+{% set href = path('help_dialog', {id: dialog.id}) %}
 {% set icon = dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false) %}
 <div class="help-item">
     <a href="{{ href }}">

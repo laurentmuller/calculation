@@ -18,7 +18,7 @@
             <span title="{{ 'index.panel_title_total'|trans }}">{{- state.total|integer }}</span> {{ macros.margin(state.margin_percent, min_margin) -}}
         </div>
         <p class="mb-0" title="{{ 'index.panel_title_count'|trans }}">
-            {{- 'counters.calculations'|trans({'count': state.count}) -}}
+            {{- 'counters.calculations'|trans({count: state.count}) -}}
         </p>
     </div>
 </div>
@@ -30,8 +30,8 @@
 {%- set is_states = states|length -%}
 {%- set table_path = is_granted_calculation ? 'calculation_table' : false -%}
 {%- set header_attributes = header_attributes|merge({
-    'href': '#' ~ panel_key,
-    'title': panel_title|trans,
+    href: '#' ~ panel_key,
+    title: panel_title|trans,
     'aria-expanded': panel_show|json_encode}) -%}
 {# content #}
 <div class="card card-collapse card-state mb-2" data-path="{{ path('homepage_hide_state') }}">
@@ -53,7 +53,7 @@
     {% if is_states %}
         <div class="card-body index-parent g-0 p-1">
         {% for state in states %}
-            {% set parameters = state.id ? {'stateId': state.id} : {} %}
+            {% set parameters = state.id ? {stateId: state.id} : {} %}
             {{ _self.cardEntry(state, table_path, parameters, min_margin) }}
         {% endfor %}
         </div>

@@ -3,10 +3,10 @@
 <li class="nav-item dropdown">
     <button class="nav-link dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
         {% apply spaceless %}
-            {% set image = asset_image_user(app.user, '032', {'alt': 'user.fields.imageFile'|trans, 'title': app.user.userIdentifier, 'class': 'avatar rounded-circle me-1'}) %}
+            {% set image = asset_image_user(app.user, '032', {alt: 'user.fields.imageFile'|trans, title: app.user.userIdentifier, class: 'avatar rounded-circle me-1'}) %}
             {% if image %}{{ image|raw }}{% else %}{{ icon('user fa-lg far me-2') }}{% endif %}
             <span class="d-lg-none">{{ app.user.userIdentifier }}</span>
         {% endapply %}
     </button>
-    {{ include('navigation/menu/_menu_user.html.twig', {'class': 'dropdown-menu-end'}) }}
+    {{ include('navigation/menu/_menu_user.html.twig', {class: 'dropdown-menu-end'}) }}
 </li>

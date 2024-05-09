@@ -68,6 +68,9 @@
         }
     };
 
+    /**
+     * The default options.
+     */
     Simulate.DEFAULTS = {
         simulateSelector: '#form_simulate',
         confirmSelector: '#form_confirm',

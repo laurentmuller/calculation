@@ -19,29 +19,29 @@
         <div class="btn-group btn-group-sm" role="group">
             {# today week #}
             {% if today %}
-                {% set href = path('calendar_week', {'year': today.year, 'week': today.week}) %}
+                {% set href = path('calendar_week', {year: today.year, week: today.week}) %}
                 {{ link(href, null, 'btn btn-primary', 'arrows-alt', 'calendar.week_current', {'%year%': today.year, '%week%': today.week}) }}
             {% endif %}
             {# previous week #}
             {% if previous %}
-                {% set href = path('calendar_week', {'year': previous.year, 'week': previous.week}) %}
+                {% set href = path('calendar_week', {year: previous.year, week: previous.week}) %}
                 {{ link(href, null, 'btn btn-primary', 'chevron-left', 'calendar.week_previous', {'%year%': previous.year, '%week%': previous.week}) }}
             {% endif %}
             {# next week #}
             {% if next %}
-                {% set href = path('calendar_week', {'year': next.year, 'week': next.week}) %}
+                {% set href = path('calendar_week', {year: next.year, week: next.week}) %}
                 {{ link(href, null, 'btn btn-primary', 'chevron-right', 'calendar.week_next', {'%year%': next.year, '%week%': next.week}) }}
             {% endif %}
             {# current month calendar #}
             {%- set first_day = week.days|filter(day => (day.inWeek(week) and not day.empty))|first -%}
             {% if first_day -%}
                 {% set month = calendar.month(first_day.month) %}
-                {% set href = path('calendar_month', {'year': month.year, 'month': month.number}) %}
+                {% set href = path('calendar_month', {year: month.year, month: month.number}) %}
                 {{ link(href, null, 'btn btn-primary', 'calendar-week', 'calendar.month_show', {'%year%': month.year, '%month%': month.name}) }}
             {%- endif %}
             {# current year calendar #}
             {% if next %}
-                {% set href = path('calendar_year', {'year': next.year}) %}
+                {% set href = path('calendar_year', {year: next.year}) %}
                 {{ link(href, null, 'btn btn-primary', 'calendar-alt far', 'calendar.year_show', {'%year%': next.year}) }}
             {% endif %}
         </div>
@@ -52,7 +52,7 @@
         <thead>
         <tr class="text-bg-secondary">
             <td colspan="5" class="week-head ps-0">
-                <span>{{ day.date|locale_date('long') }}</span><span class="small"> - {{ 'counters.calculations'|trans({'count': day.count}) }}</span>
+                <span>{{ day.date|locale_date('long') }}</span><span class="small"> - {{ 'counters.calculations'|trans({count: day.count}) }}</span>
             </td>
             <td class="text-end">
                 {% if not day.empty -%}

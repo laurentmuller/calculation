@@ -21,7 +21,7 @@
 {%- set value = (item.enabled ? 'common.value_enabled' : 'common.value_disabled')|trans -%}
 {{ property('user.fields.enabled', value, item.enabled ? 'text-success' : 'text-danger') }}
 {{ property('user.fields.lastLogin', item.lastLogin ? item.lastLogin|locale_datetime : 'common.value_none'|trans) }}
-{%- set image = asset_image_user(item, '096', {'alt': 'user.fields.imageFile'|trans, 'title': 'user.image.title'|trans, 'class': 'border rounded avatar-lg'}) -%}
+{%- set image = asset_image_user(item, '096', {alt: 'user.fields.imageFile'|trans, title: 'user.image.title'|trans, class: 'border rounded avatar-lg'}) -%}
 {%- if image -%}
     {{ property('user.fields.imageFile', image) }}
 {%- endif -%}

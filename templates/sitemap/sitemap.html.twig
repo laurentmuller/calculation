@@ -33,7 +33,7 @@
 {% elseif route and entry.external|default(false) %}
     {{ linkExternal(path(route), entry.text, null, icon) }}
 {% elseif route %}
-    {{ link(path(route, {'caller': path('site_map')}), entry.text, null, icon) }}
+    {{ link(path(route, {caller: path('site_map')}), entry.text, null, icon) }}
 {% else %}
     <span>{{ icon(icon, entry.text) }}</span>
 {% endif %}

@@ -28,8 +28,8 @@
 {%- set margin_path = is_granted_global_margin ? 'globalmargin_table' : false -%}
 {%- set state_path = is_granted_calculation_state ? 'calculationstate_table' : false -%}
 {%- set header_attributes = header_attributes|merge({
-    'href': '#' ~ panel_key,
-    'title': panel_title|trans,
+    href: '#' ~ panel_key,
+    title: panel_title|trans,
     'aria-expanded': panel_show|json_encode}) -%}
 {# content #}
 <div class="card card-collapse card-catalog mb-2" data-path="{{ path('homepage_hide_catalog') }}">

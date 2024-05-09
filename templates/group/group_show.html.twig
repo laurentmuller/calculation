@@ -13,10 +13,10 @@
 {% block property_body %}
 {{ property('group.fields.code', item.code) }}
 {{ property('group.fields.description', item.description) }}
-{{- property('group.fields.margins', 'counters.margins'|trans({'count': item.countMargins})) }}
-{{- property('group.fields.categories', 'counters.categories'|trans({'count': item.countCategories})) }}
-{{ property('category.fields.products', 'counters.products'|trans({'count': item.countProducts})) }}
-{{ property('category.fields.tasks', 'counters.tasks'|trans({'count': item.countTasks})) }}
+{{- property('group.fields.margins', 'counters.margins'|trans({count: item.countMargins})) }}
+{{- property('group.fields.categories', 'counters.categories'|trans({count: item.countCategories})) }}
+{{ property('category.fields.products', 'counters.products'|trans({count: item.countProducts})) }}
+{{ property('category.fields.tasks', 'counters.tasks'|trans({count: item.countTasks})) }}
 {{ properties(item) }}
 {% endblock %}
 {# body #}

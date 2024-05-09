@@ -12,9 +12,9 @@
     </td>
     {% for entry in data %}
         {%- set checked = default.hasBits(entry.vars.value) -%}
-        {%- set attr = {'data-default': checked|json_encode, 'class': 'form-check-no-label'} -%}
+        {%- set attr = {'data-default': checked|json_encode, class: 'form-check-no-label'} -%}
         {%- if not overwrite -%}
-            {%- set attr = attr|merge({'disabled': 'disabled', 'checked': checked}) -%}
+            {%- set attr = attr|merge({disabled: 'disabled', checked: checked}) -%}
         {%- endif -%}
         <td>{{ form_widget(entry, {attr: attr}) }}</td>
     {% endfor %}

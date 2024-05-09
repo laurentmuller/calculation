@@ -32,11 +32,11 @@
     {%- if single_page_pdf or single_page_excel -%}
         {{- dropdownSeparator() }}
         {%- if single_page_pdf -%}
-            {%- set path = path(single_page_pdf, {'id': id}) -%}
+            {%- set path = path(single_page_pdf, {id: id}) -%}
             {{ dropdownItemExternal(path, 'calculation.list.pdf_single_title', ICON_PDF) }}
         {% endif %}
         {%- if single_page_excel -%}
-            {%- set path = path(single_page_excel, {'id': id}) -%}
+            {%- set path = path(single_page_excel, {id: id}) -%}
             {{ dropdownItemExternal(path, 'calculation.list.excel_single_title', ICON_EXCEL) }}
         {% endif %}
     {%- endif -%}

@@ -10,7 +10,7 @@
 {% block card_body %}
 <div class="mb-3">
     <label for="command" class="form-label">{{ 'command.list.fields.command'|trans }}</label>
-    <select id="command" name="command" class="form-select" data-url="{{ path('command_content', {'name': 'query'}) }}">
+    <select id="command" name="command" class="form-select" data-url="{{ path('command_content', {name: 'query'}) }}">
     {% for key, names in groups %}
         <optgroup label="{{ key }}">
         {% for name in names %}
@@ -20,12 +20,12 @@
     {% endfor %}
     </select>
 </div>
-{{ include('command/_command.htm.twig', {'command': command}, with_context = false) }}
+{{ include('command/_command.htm.twig', {command: command}, with_context = false) }}
 {% endblock %}
 {# footer #}
 {% block card_footer %}
 <div class="d-flex-wrap">
-    <a href="#" class="btn btn-form btn-warning btn-execute" data-url="{{ path('command_execute', {'name': 'query'}) }}">
+    <a href="#" class="btn btn-form btn-warning btn-execute" data-url="{{ path('command_execute', {name: 'query'}) }}">
         {{- 'command.execute.title'|trans -}}
     </a>
     {{ button_pdf('command_pdf') }}

@@ -9,7 +9,7 @@
 
 {% macro navigate(date, interval, icon, title) -%}
 {% if date %}
-    {% set href = path('timeline', {'date': date, 'interval': interval}) %}
+    {% set href = path('timeline', {date: date, interval: interval}) %}
     <a href="{{ href }}" title="{{ title|trans }}" class="btn btn-secondary">
         {{ icon(icon) }}
     </a>
@@ -51,13 +51,13 @@
         </div>
         {# toolbar #}
         <div class="btn-group btn-group-sm" role="group" title="{{ 'timeline.toolbar'|trans }}">
-            <a href="{{ path('timeline_first', {'interval': interval}) }}" class="btn btn-secondary{% if from == min_date %} disabled{% endif %}" title="{{ 'timeline.first'|trans }}">
+            <a href="{{ path('timeline_first', {interval: interval}) }}" class="btn btn-secondary{% if from == min_date %} disabled{% endif %}" title="{{ 'timeline.first'|trans }}">
                 {{- icon('angles-left') -}}
             </a>
             {{ _self.navigate(previous, interval, 'chevron-left', 'timeline.previous') }}
             {{ _self.navigate(today, interval, 'arrows-alt', 'timeline.today') }}
             {{ _self.navigate(next, interval, 'chevron-right', 'timeline.next') }}
-            <a href="{{ path('timeline_last', {'interval': interval}) }}" class="btn btn-secondary{% if to == max_date %} disabled{% endif %}" title="{{ 'timeline.last'|trans }}">
+            <a href="{{ path('timeline_last', {interval: interval}) }}" class="btn btn-secondary{% if to == max_date %} disabled{% endif %}" title="{{ 'timeline.last'|trans }}">
                 {{- icon('angles-right') -}}
             </a>
             <button class="btn btn-secondary btn-submit" type="submit" title="{{ 'common.button_refresh'|trans }}" style="min-width: 38px;">
@@ -71,7 +71,7 @@
     <div class="me-auto">
         {{- from|locale_date('long') }} - {{ to|locale_date('long') -}}
     </div>
-    {{- 'counters.calculations'|trans({'count': count}) -}}
+    {{- 'counters.calculations'|trans({count: count}) -}}
 </div>
 <hr class="mt-0 mb-2">
 {% if data|length %}
@@ -81,17 +81,17 @@
             {% for key, calculations in data %}
             {%- set count = calculations|length -%}
             {%- set query = calculations[0].date|locale_date('short') -%}
-            {%- set title = 'counters.calculations_day'|trans({'count': count, 'date': key}) -%}
+            {%- set title = 'counters.calculations_day'|trans({count: count, date: key}) -%}
             <li class="success">
                 <div class="position-relative table-responsive ms-2">
                     <table class="table table-sm table-borderless">
                         <tbody>
                             <tr>
                                 <td colspan="4" class="pt-0 ps-0">
-                                    <a class="text-decoration-none stretched-link" href="{{ path(route, {'search': query}) }}" title="{{ title }}">{{ key }}</a>
+                                    <a class="text-decoration-none stretched-link" href="{{ path(route, {search: query}) }}" title="{{ title }}">{{ key }}</a>
                                 </td>
                                 <td colspan="2" class="py-0 text-end">
-                                    <small class="text-body-secondary">{{ 'counters.calculations'|trans({'count': count}) }}</small>
+                                    <small class="text-body-secondary">{{ 'counters.calculations'|trans({count: count}) }}</small>
                                 </td>
                             </tr>
                             <tr>

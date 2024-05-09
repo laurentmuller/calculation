@@ -10,10 +10,10 @@
 {# output a drop-down menu #}
 {% macro output_dropdown_menu(id, icon, text, title, value, default) -%}
 {%- set attributes = attributes|default([])|merge({
-    'id': id,
-    'title': title|trans,
-    'type': 'button',
-    'class': 'btn btn-outline-secondary dropdown-toggle dropdown-input',
+    id: id,
+    title: title|trans,
+    type: 'button',
+    class: 'btn btn-outline-secondary dropdown-toggle dropdown-input',
     'aria-expanded': 'false',
     'data-bs-toggle': 'dropdown',
     'data-value': value,
@@ -29,10 +29,10 @@
 {% apply spaceless %}
     {% set active = value == selection ? ' active' : '' %}
     {% set attributes = attributes|default([])|merge({
-        'type': 'button',
-        'role': 'button',
+        type: 'button',
+        role: 'button',
         'data-value': value,
-        'class': ('dropdown-item dropdown-' ~ suffix ~ active)|trim}) %}
+        class: ('dropdown-item dropdown-' ~ suffix ~ active)|trim}) %}
     <li>
         <button{{ output_attributes(attributes) }}>
             {%- if icon -%}{{- icon(icon ~ ' me-1') -}}{%- endif -%}{{- text|default(value) -}}
@@ -137,12 +137,12 @@
 {%- set allow_global = allow_global is defined ? allow_global : is_granted(PERMISSION_EXPORT, object_type) -%}
 {%- set row_selector = 'table-primary' -%}
 {%- set caller = path(app.current_route) -%}
-{%- set params = params|default({})|merge({'caller': caller}) -%}
+{%- set params = params|default({})|merge({caller: caller}) -%}
 {%- set id = params.id|default(0) -%}
 {%- set limit = params.limit|default(20) -%}
 {%- set is_page_list = pageList is defined and pageList|length > 1 -%}
 {%- set attributes = attributes|default({})|merge({
-    'classes': 'table table-hover table-list table-no-end-line table-sm',
+    classes: 'table table-hover table-list table-no-end-line table-sm',
     'row-selector': 'tbody .' ~ row_selector,
     'custom-selector': '.custom-item.' ~ row_selector,
     'search-selector': '.form-control-search',
@@ -154,14 +154,14 @@
     'side-pagination': 'server',
     'show-custom-view': false,
     'custom-view': 'customViewFormatter',
-    'pagination': true,
+    pagination: true,
     'pagination-loop': false,
     'pagination-parts': "['pageInfo', 'pageList']",
     'pagination-pre-text': '<i class="fa fa-caret-left fa-lg"></i>',
     'pagination-next-text': '<i class="fa fa-caret-right fa-lg"></i>',
     'pagination-title': 'datatable.dialog_title'|trans,
     'show-extended-pagination': true,
-    'sortable': sortable,
+    sortable: sortable,
     'loading-template': 'loadingTemplate',
     'error-message': 'error_page.description'|trans,
     'no-action-title': 'datatable.no_action'|trans,
@@ -170,7 +170,7 @@
     'save-url': url('ajax_save_table'),
     'search-time-out': 750,
     'icon-size': 'sm',
-    'caller': caller
+    caller: caller
 }) -%}
 {# classes #}
 {% block card_container_class '' %}

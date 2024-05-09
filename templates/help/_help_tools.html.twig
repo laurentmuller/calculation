@@ -16,7 +16,7 @@
 {%- set full_path = 'help/images/' ~ path ~ constant('App\\Service\\HelpService::IMAGES_EXT') -%}
 {% if asset_exists(full_path) %}
     {% if screenshot %}<p class="mb-2">{{ 'help.labels.screenshot'|trans }}</p>{% endif %}
-    {{ asset_image(full_path, {'class': 'img-fluid rounded', 'alt': 'help.labels.screenshot'|trans}) }}
+    {{ asset_image(full_path, {class: 'img-fluid rounded', alt: 'help.labels.screenshot'|trans}) }}
 {% endif %}
 {%- endmacro %}
 
@@ -43,7 +43,7 @@
     {%- set action = service.mergeAction(action) -%}
 {% endif %}
 {%- set dialog = service.findDialog(action.dialog|default(action.id)) -%}
-{%- set href = dialog ? path('help_dialog', {'id': dialog.id}) : false -%}
+{%- set href = dialog ? path('help_dialog', {id: dialog.id}) : false -%}
 {%- set icon = action.icon|default(false) -%}
 {%- set text = action.label|default(action.id) -%}
 <tr>
@@ -92,13 +92,13 @@
         {% if type == 'dialog' %}
             {%- set dialog = service.findDialog(link.id) -%}
             {% if dialog %}
-                {%- set href = path('help_dialog', {'id': dialog.id}) -%}
+                {%- set href = path('help_dialog', {id: dialog.id}) -%}
                 <li><a href="{{ href }}">{{ dialog.name }}</a></li>
             {% endif %}
         {% elseif type == 'entity' %}
             {%- set entity = service.findEntity(link.id) -%}
             {% if entity %}
-                {%- set href = path('help_entity', {'id': entity.id}) -%}
+                {%- set href = path('help_entity', {id: entity.id}) -%}
                 <li><a href="{{ href }}">{{ entity.name }}</a></li>
             {% endif %}
         {% elseif link.href is defined and link.text is defined %}

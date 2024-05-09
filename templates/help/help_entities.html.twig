@@ -3,7 +3,7 @@
 {% from 'macros/_icons.html.twig' import link, icon %}
 {# macro #}
 {% macro output_entity(entity) -%}
-{% set href = path('help_entity', {'id': entity.id}) %}
+{% set href = path('help_entity', {id: entity.id}) %}
 <div class="help-item">
     <a href="{{ href }}">
         {%- if entity.icon|default(false) %}{{ icon(entity.icon ~ ' me-1') }}{% endif %}{{ entity.name -}}

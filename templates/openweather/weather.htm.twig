@@ -6,7 +6,7 @@
 {% set text = ('openweather.current.' ~ units ~ '.short')|trans %}
 {% set title = ('openweather.current.' ~ units ~ '.title')|trans %}
 {% if units != selection and route %}
-    {% set href = path(route, {'id': id, 'units': units, 'count': count}) %}
+    {% set href = path(route, {id: id, units: units, count: count}) %}
     <a href="{{ href }}" title="{{ title }}">{{ text }}</a>
 {% else %}
     <span title="{{ title }}">{{ text }}</span>

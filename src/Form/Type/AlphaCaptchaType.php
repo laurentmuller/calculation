@@ -39,6 +39,7 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
     use SessionAwareTrait;
 
     private const SESSION_KEY = 'alpha_captcha_answer';
+
     private readonly AlphaCaptchaInterface $captcha;
     private readonly string $dataError;
     private ?string $previousAnswer = null;
@@ -48,13 +49,12 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
      * @param iterable<AlphaCaptchaInterface> $captchas
      */
     public function __construct(
-        TranslatorInterface $translator,
         #[TaggedIterator(AlphaCaptchaInterface::class)]
-        iterable $captchas
+        iterable $captchas,
+        TranslatorInterface $translator
     ) {
+        $this->captcha = $this->randomCaptcha($captchas);
         $this->dataError = $translator->trans('required', [], 'captcha');
-        $captchas = $captchas instanceof \Traversable ? \iterator_to_array($captchas) : $captchas;
-        $this->captcha = $captchas[\array_rand($captchas)];
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -106,5 +106,15 @@ class AlphaCaptchaType extends AbstractType implements ServiceSubscriberInterfac
                 ->setTranslationDomain('captcha')
                 ->addViolation();
         }
+    }
+
+    /**
+     * @param iterable<AlphaCaptchaInterface> $captchas
+     */
+    private function randomCaptcha(iterable $captchas): AlphaCaptchaInterface
+    {
+        $captchas = $captchas instanceof \Traversable ? \iterator_to_array($captchas) : $captchas;
+
+        return $captchas[\array_rand($captchas)];
     }
 }

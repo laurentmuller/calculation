@@ -10,11 +10,11 @@
             {%- set title = 'calculation.edit.adjust_title'|trans({'%minimum%': min_margin|percent}) -%}
             {%- set class_name = 'btn btn-adjust btn-outline-secondary d-print-none' ~ (overall_below ? '' : ' cursor-default') -%}
             {%- set attrs = {
-                'type': 'button',
-                'id': 'btn-adjust',
-                'name': 'btn-adjust',
+                type: 'button',
+                id: 'btn-adjust',
+                name: 'btn-adjust',
                 'aria-label': label,
-                'class': class_name,
+                class: class_name,
                 'data-bs-html': 'true',
                 'data-bs-title': title,
                 'data-bs-toggle': 'tooltip',
@@ -31,7 +31,7 @@
 {# parameters #}
 {%- set title = title|default(new ? 'calculation.add.title' : 'calculation.edit.title') -%}
 {%- set title_parameters = new ? {} : {'%id%': item.id|identifier} -%}
-{%- set form_attr = form_attr|default({})|merge({'id': 'edit-form'}) -%}
+{%- set form_attr = form_attr|default({})|merge({id: 'edit-form'}) -%}
 {%- if editable -%}
     {%- set form_attr = form_attr|merge({
         'data-title': title|trans(title_parameters),

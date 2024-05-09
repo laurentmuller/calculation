@@ -16,7 +16,7 @@
 {%- set title_icon = 'comments-dollar' -%}
 {%- set title_description = 'exchange_rate.description' -%}
 {%- set form_attr = form_attr|default({})|merge({
-    'action': url('exchange_rate'),
+    action: url('exchange_rate'),
     'data-error': 'unknown'|trans({}, 'exchange_rate'),
     'data-rate': 'exchange_rate.rate'|trans}) -%}
 {# body #}

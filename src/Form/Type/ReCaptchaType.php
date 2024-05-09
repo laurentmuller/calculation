@@ -18,6 +18,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -31,6 +32,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ReCaptchaType extends AbstractType implements EventSubscriberInterface
 {
+    private const RECAPTCHA_URL = 'https://www.google.com/recaptcha/api.js?render=';
+
     public function __construct(
         private readonly RecaptchaService $service,
         private readonly RequestStack $requestStack
@@ -44,18 +47,39 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        $key = $this->service->getSiteKey();
+
+        $view->vars += [
+            'recaptcha_url' => self::RECAPTCHA_URL . $key,
+        ];
+
         $view->vars['attr'] += [
-            'data-toggle' => 'recaptcha',
-            'data-site-key' => $this->service->getSiteKey(),
-            'data-expected-action' => $this->service->getExpectedAction(),
+            'class' => 'recaptcha',
+            'data-key' => $key,
+            'data-event' => $options['event'],
+            'data-selector' => $options['selector'],
+            'data-action' => $options['expectedAction'],
         ];
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
+        $resolver->setDefault('mapped', false);
+
         $resolver->define('expectedAction')
             ->default($this->service->getExpectedAction())
-            ->allowedTypes('string');
+            ->allowedTypes('string')
+            ->required();
+
+        $resolver->define('selector')
+            ->default('[data-toggle="recaptcha"]')
+            ->allowedTypes('string')
+            ->required();
+
+        $resolver->define('event')
+            ->default('click')
+            ->allowedTypes('string')
+            ->required();
 
         $resolver->define('scoreThreshold')
             ->default($this->service->getScoreThreshold())
@@ -64,6 +88,11 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
         $resolver->define('challengeTimeout')
             ->default($this->service->getChallengeTimeout())
             ->allowedTypes('int');
+    }
+
+    public function getBlockPrefix(): string
+    {
+        return 'recaptcha';
     }
 
     public function getParent(): ?string
@@ -81,15 +110,13 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
     public function onPostSubmit(PostSubmitEvent $event): void
     {
         $form = $event->getForm();
-        $request = $this->requestStack->getCurrentRequest();
+        $request = $this->getCurrentRequest($form);
         if (!$request instanceof Request) {
-            $error = $this->service->translateError('recaptcha.no-request');
-            $form->addError(new FormError($error));
-
             return;
         }
 
         $data = (string) $event->getData();
+        $this->updateService($form->getConfig());
         $response = $this->service->verify($data, $request);
         if ($response->isSuccess()) {
             return;
@@ -98,6 +125,35 @@ class ReCaptchaType extends AbstractType implements EventSubscriberInterface
         $errors = $this->service->translateErrors($response);
         foreach ($errors as $error) {
             $form->addError(new FormError($error));
+        }
+    }
+
+    private function getCurrentRequest(FormInterface $form): Request|false
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        if ($request instanceof Request) {
+            return $request;
+        }
+
+        $error = $this->service->translateError('no-request');
+        $form->addError(new FormError($error));
+
+        return false;
+    }
+
+    private function updateService(FormConfigInterface $config): void
+    {
+        if ($config->hasOption('expectedAction')) {
+            $expectedAction = (string) $config->getOption('expectedAction');
+            $this->service->setExpectedAction($expectedAction);
+        }
+        if ($config->hasOption('scoreThreshold')) {
+            $scoreThreshold = (float) $config->getOption('scoreThreshold');
+            $this->service->setScoreThreshold($scoreThreshold);
+        }
+        if ($config->hasOption('challengeTimeout')) {
+            $challengeTimeout = (int) $config->getOption('challengeTimeout');
+            $this->service->setChallengeTimeout($challengeTimeout);
         }
     }
 }

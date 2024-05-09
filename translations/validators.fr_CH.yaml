@@ -49,21 +49,20 @@ property:
 recaptcha:
   action-mismatch: L'action ne correspond pas.
   bad-request: La demande est invalide ou malformée.
-  bad-response: Le service n'a pas retourné le code 200.
+  bad-response: Le service n'a pas retourné le code 200 (requête traitée avec succès).
   challenge-timeout: Le délai d'attente du défi est atteint.
   connection-failed: Impossible de se connecter au service.
   hostname-mismatch: Le nom d'hôte ne correspond pas.
+  incorrect-captcha-sol: Une erreur inconnue s'est produite durant de la validation.
   invalid-input-response: Le paramètre de réponse est invalide ou malformé.
   invalid-input-secret: Le paramètre secret est invalide ou malformé.
   invalid-json: La réponse a un format JSON invalide.
   missing-input-response: Le paramètre de réponse est manquant.
   missing-input-secret: Le paramètre secret est manquant.
-  required: Vous devez cocher la case "Je ne suis pas un robot".
+  no-request: Aucune requête valide n'est définie.
   score-threshold-not-met: Le seuil de points n'est pas atteint.
   timeout-or-duplicate: Le délai d'attente est atteint ou la validation a été appelée deux fois.
   unknown-error: Une erreur inconnue s'est produite durant de la validation.
-  incorrect-captcha-sol: Une erreur inconnue s'est produite durant de la validation.
-  no-request: Aucune requête valide n'est définie.
 state:
   unique_code: Ce nom est déjà utilisé par un autre statut.
 task:

@@ -43,7 +43,7 @@
         {% for field in fields %}
             {% set field_name = (entity.id ~ '.fields.' ~ field.name)|trans %}
             {% set field_entity = field.entity|default(false) %}
-            {% set path = field_entity ? path('help_entity', {'id': field_entity}) : false %}
+            {% set path = field_entity ? path('help_entity', {id: field_entity}) : false %}
             <tr>
                 <td class="text-nowrap">{% if path %}<a href="{{ path }}">{% endif %}{{ field_name }}{% if path %}</a>{% endif %}</td>
                 <td class="w-100">{{ field.description }}</td>

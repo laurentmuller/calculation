@@ -9,7 +9,7 @@
         {%- set text = month.date|locale_date('none', 'MMMM Y') -%}
         {%- if list_path -%}
             {%- set list_title = 'index.panel_month_title'|trans({'%month%': text}) -%}
-            <a href="{{ path(list_path, {'search': month.date|locale_date('none', 'MM.Y')}) }}" class="stretched-link" title="{{ list_title }}">
+            <a href="{{ path(list_path, {search: month.date|locale_date('none', 'MM.Y')}) }}" class="stretched-link" title="{{ list_title }}">
                 {{- text -}}
             </a>
         {%- else -%}
@@ -19,7 +19,7 @@
             <span title="{{ 'index.panel_title_total'|trans }}">{{- month.total|integer }}</span> {{ macros.margin(month.margin_percent, min_margin) -}}
         </div>
         <p class="mb-0" title="{{ 'index.panel_title_count'|trans }}">
-            {{- 'counters.calculations'|trans({'count': month.count}) -}}
+            {{- 'counters.calculations'|trans({count: month.count}) -}}
         </p>
     </div>
 </div>
@@ -31,8 +31,8 @@
 {%- set list_path = is_granted_calculation ? 'calculation_table' : false -%}
 {%- set is_months = months|length -%}
 {%- set header_attributes = header_attributes|merge({
-    'href': '#' ~ panel_key,
-    'title': panel_title|trans,
+    href: '#' ~ panel_key,
+    title: panel_title|trans,
     'aria-expanded': panel_show|json_encode}) -%}
 {# content #}
 <div class="card card-collapse card-month mb-2" data-path="{{ path('homepage_hide_month') }}">
@@ -43,7 +43,7 @@
         {%- if list_path and is_months -%}
             {{ link(path('chart_month'), null, 'btn btn-link p-0 d-print-none', 'chart-column fa-fw', 'index.menu_chart_title') }}
             {% if is_granted(PERMISSION_EXPORT, ENTITY_CALCULATION) %}
-                {{ linkExternal(path('chart_month_pdf', {'count': months|length}), null, 'btn btn-link p-0 d-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
+                {{ linkExternal(path('chart_month_pdf', {count: months|length}), null, 'btn btn-link p-0 d-print-none', ICON_PDF ~ ' fa-fw', 'common.button_export_pdf') }}
             {% endif %}
         {%- endif -%}
         <button type="button" class="btn btn-link hide-panel text-body p-0" title="{{ 'index.panel_month_hide'|trans }}">

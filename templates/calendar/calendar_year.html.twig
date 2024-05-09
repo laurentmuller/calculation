@@ -16,7 +16,7 @@
         {% if week.empty %}
             {{ week.number }}
         {% else %}
-            {% set href = path('calendar_week', {'year': week.year, 'week': week.number}) %}
+            {% set href = path('calendar_week', {year: week.year, week: week.number}) %}
             <a href="{{ href }}" class="text-white">{{ week.number }}</a>
         {% endif %}
     </td>
@@ -41,7 +41,7 @@
                     <span>&nbsp;</span>
                 </th>
                 <th colspan="6" class="{{ class }} text-center">
-                    <a class="text-white" href="{{ path('calendar_month', {'year': month.year, 'month': month.number}) }}" title="{{ 'calendar.month_show'|trans({'%month%': month.name, '%year%': month.year}) }}">{{ month.Name }}</a>
+                    <a class="text-white" href="{{ path('calendar_month', {year: month.year, month: month.number}) }}" title="{{ 'calendar.month_show'|trans({'%month%': month.name, '%year%': month.year}) }}">{{ month.Name }}</a>
                 </th>
                 <th class="{{ class }} text-end pe-2">
                     {{ helper.linkCalculations('%02d.%d'|format(month.number, month.year), month.name ~ ' ' ~ month.year, month.count, 'text-white') }}
@@ -83,17 +83,17 @@
         <div class="btn-group btn-group-sm" role="group">
             {# today year #}
             {% if today %}
-                {% set href = path('calendar_year', {'year': today}) %}
+                {% set href = path('calendar_year', {year: today}) %}
                 {{ link(href, null, 'btn btn-primary', 'arrows-alt', 'calendar.year_current', {'%year%': today}) }}
             {% endif %}
             {# previous year #}
             {% if previous %}
-                {% set href = path('calendar_year', {'year': previous}) %}
+                {% set href = path('calendar_year', {year: previous}) %}
                 {{ link(href, null, 'btn btn-primary', 'chevron-left', 'calendar.year_previous', {'%year%': previous}) }}
             {% endif %}
             {# next year #}
             {% if next %}
-                {% set href = path('calendar_year', {'year': next}) %}
+                {% set href = path('calendar_year', {year: next}) %}
                 {{ link(href, null, 'btn btn-primary', 'chevron-right', 'calendar.year_next', {'%year%': next}) }}
             {% endif %}
             {# calculations #}

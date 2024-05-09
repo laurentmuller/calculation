@@ -12,7 +12,7 @@
 {% block property_body %}
 {{ property('category.fields.code', item.code) }}
 {{ property('category.fields.description', item.description) }}
-{{ property('category.fields.products', 'counters.products'|trans({'count': item.countProducts})) }}
-{{ property('category.fields.tasks', 'counters.tasks'|trans({'count': item.countTasks})) }}
+{{ property('category.fields.products', 'counters.products'|trans({count: item.countProducts})) }}
+{{ property('category.fields.tasks', 'counters.tasks'|trans({count: item.countTasks})) }}
 {{ properties(item) }}
 {% endblock %}

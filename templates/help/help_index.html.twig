@@ -3,7 +3,7 @@
 {% from 'macros/_icons.html.twig' import icon, link %}
 {# macro #}
 {% macro output_dialog(dialog, entity) -%}
-    {% set href = path('help_dialog', {'id': dialog.id}) %}
+    {% set href = path('help_dialog', {id: dialog.id}) %}
     {% set icon = dialog.icon|default(entity ? entity.icon|default(false) : false)|default(false) %}
     <div class="help-item">
         <a href="{{ href }}">
@@ -14,7 +14,7 @@
 {%- endmacro %}
 
 {% macro output_entity(entity) -%}
-    {% set href = path('help_entity', {'id': entity.id}) %}
+    {% set href = path('help_entity', {id: entity.id}) %}
     <div class="help-item">
         <a href="{{ href }}">
             {%- if entity.icon|default(false) %}{{ icon(entity.icon ~ ' me-1') }}{% endif %}{{ entity.name -}}
@@ -41,7 +41,7 @@
     {%- if menu.dialog|default(false) -%}
         {%- set target = service.findDialog(menu.dialog) -%}
         {%- if target -%}
-            {%- set href = path('help_dialog', {'id': target.id}) -%}
+            {%- set href = path('help_dialog', {id: target.id}) -%}
             {%- set description = description|default(target.description|default) -%}
         {%- endif -%}
     {%- endif -%}

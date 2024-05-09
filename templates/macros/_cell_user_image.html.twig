@@ -1,5 +1,5 @@
 {%- set image = asset_image_user(user, '032', {
-    'class': 'rounded-1',
-    'title': 'user.image.title'|trans,
-    'alt': 'user.fields.imageFile'|trans}) -%}
+    class: 'rounded-1',
+    title: 'user.image.title'|trans,
+    alt: 'user.fields.imageFile'|trans}) -%}
 {%- if image -%}<span class="user-image bg-white rounded-1">{{ image|raw }}</span>{%- endif -%}

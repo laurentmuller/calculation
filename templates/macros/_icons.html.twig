@@ -102,7 +102,7 @@
 
 {% macro button_submit(text = 'common.button_ok', class = 'btn btn-form btn-primary', parameters = []) -%}
 {% from 'macros/_attributes.html.twig' import attributes %}
-{%- set parameters = parameters|merge({'type': 'submit', 'class': class, 'role': 'button'}) -%}
+{%- set parameters = parameters|merge({type: 'submit', class: class, role: 'button'}) -%}
 <button{{ attributes(parameters) }}>{{ text|trans }}</button>
 {%- endmacro %}
 
@@ -198,9 +198,9 @@
     {% set class = class ~ ' disabled' %}
 {% endif %}
 {% set attr = {
-    'href': '#',
-    'class': class,
-    'title': selection.title|trans,
+    href: '#',
+    class: class,
+    title: selection.title|trans,
     'data-theme': selection.value,
     'data-url': url('theme_save')
 } %}

@@ -1,15 +1,15 @@
 {% from 'macros/_icons.html.twig' import icon, link %}
 {% from 'macros/_attributes.html.twig' import attributes %}
 {%- set header_attributes = header_attributes|merge({
-    'href': '#' ~ panel_key,
-    'title': panel_title|trans,
+    href: '#' ~ panel_key,
+    title: panel_title|trans,
     'aria-expanded': panel_show|json_encode}) -%}
 <div class="card-header d-flex-wrap-center">
     <a{{ attributes(header_attributes) }}>
         {{- icon(ICON_CALCULATION ~ ' ms-1', 'index.panel_table_title') -}}
     </a>
     {%- if add_page -%}
-        {%- set add_params = route_params(app.request)|merge({'caller': caller}) -%}
+        {%- set add_params = route_params(app.request)|merge({caller: caller}) -%}
         {%- set add_path = path(add_page, add_params) -%}
         <a href="{{ add_path }}" class="btn btn-link p-0 d-print-none" role="button">
             <i class="fa-fw fa-solid fa-file-circle-plus d-md-none" title="{{ 'calculation.add.title'|trans }}"></i>

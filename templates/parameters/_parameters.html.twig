@@ -14,7 +14,7 @@
     </a>
 </div>
 <div id="{{ href }}" class="card-body pt-0 collapse{% if expanded %} show{% endif %}" data-bs-parent=".card-parameter">
-    {{ include(template, {'form': form, options: options}) }}
+    {{ include(template, {form: form, options: options}) }}
 </div>
 {% endmacro %}
 {# customized fields #}

@@ -23,7 +23,7 @@
         {% for table in tables %}
             {% set name = table.name %}
             <tr title="{{ 'schema.index.tooltip'|trans({'%name%': name}) }}">
-                <td class="w-100 text-nowrap"><a href="{{ path('schema_table', {'name': name}) }}">{{ name }}</a></td>
+                <td class="w-100 text-nowrap"><a href="{{ path('schema_table', {name: name}) }}">{{ name }}</a></td>
                 <td class="text-end">{{ table.columns|integer }}</td>
                 <td class="text-end">{{ table.records|integer }}</td>
                 <td class="text-end">{{ table.indexes|integer }}</td>

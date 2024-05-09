@@ -5,7 +5,7 @@
 {%- set product_price = item.vars.attr['data-price']|amount -%}
 {%- set product_category_id = item.vars.attr['data-category'] -%}
 <tr data-category="{{ product_category_id }}" class="text-secondary user-select-none{% if product_category_id != category_id %} d-none{% endif %}">
-    <td class="text-nowrap">{{- form_widget(item, {attr: {'disabled': 'disabled'}}) -}}</td>
+    <td class="text-nowrap">{{- form_widget(item, {attr: {disabled: 'disabled'}}) -}}</td>
     <td class="text-currency">{{ product_price }}</td>
     <td class="text-currency">{{ product_price }}</td>
     <td class="text-currency">{{ 0|amount }}</td>
@@ -44,8 +44,8 @@
 {%- set title_icon = ICON_PRODUCT -%}
 {%- set title_description = 'product.update.description' -%}
 {%- set is_percent = form.type.vars.value == 'percent' -%}
-{%- set percent_attr = is_percent ? {} : {'disabled': 'disabled'} -%}
-{%- set fixed_attr = is_percent ? {'disabled': 'disabled'} : {} -%}
+{%- set percent_attr = is_percent ? {} : {disabled: 'disabled'} -%}
+{%- set fixed_attr = is_percent ? {disabled: 'disabled'} : {} -%}
 {%- set category_id = form.category.vars.value|default(0) -%}
 {%- set submit_text = 'product.update.submit' -%}
 {# body #}
@@ -90,10 +90,10 @@
 <span class="form-label required">{{ 'product.update.type'|trans }}</span>
 <div class="row mb-3">
     <div class="col-md-6">
-        {{ form_widget(form.percent, {'attr': percent_attr, 'options': {'is_percent': is_percent}}) }}
+        {{ form_widget(form.percent, {attr: percent_attr, options: {is_percent: is_percent}}) }}
     </div>
     <div class="col-md-6">
-        {{ form_widget(form.fixed, {'attr': fixed_attr, 'options': {'is_percent': is_percent}}) }}
+        {{ form_widget(form.fixed, {attr: fixed_attr, options: {is_percent: is_percent}}) }}
     </div>
 </div>
 {{ form_row(form.round) }}

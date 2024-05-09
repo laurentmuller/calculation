@@ -61,6 +61,24 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
     /**
      * @throws Exception
      */
+    public function testNoRequest(): void
+    {
+        $service = $this->createService();
+        $requestStack = $this->createMock(RequestStack::class);
+        $requestStack->expects(self::any())
+            ->method('getCurrentRequest')
+            ->willReturn(null);
+        $validator = new RecaptchaValidator($service, $requestStack);
+        $validator->initialize($this->context);
+        $contraint = $this->createConstraint();
+        $validator->validate('dummy', $contraint);
+        $this->buildViolation('recaptcha.no-request')
+            ->assertRaised();
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testNullIsValid(): void
     {
         $contraint = $this->createConstraint();

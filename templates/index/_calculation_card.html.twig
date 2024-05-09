@@ -3,7 +3,7 @@
 {% for calculation in calculations %}
     {%- set id = calculation.id -%}
     {%- set is_editable = calculation.stateEditable -%}
-    {%- set params = route_params(app.request, id)|merge({'caller': caller}) -%}
+    {%- set params = route_params(app.request, id)|merge({caller: caller}) -%}
     {% set class_name = 'row-item border text-border h-100 px-2 py-1' %}
     {% if id == selection %}
         {% set class_name = class_name ~ ' table-primary' %}

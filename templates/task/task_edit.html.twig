@@ -6,15 +6,15 @@
 {# item label #}
 {% block _task_items_entry_name_label -%}
     {%- set label_attributes = {
-        'class': 'label-toggle drop-down-icon-left cursor-pointer flex-fill mb-0',
+        class: 'label-toggle drop-down-icon-left cursor-pointer flex-fill mb-0',
         'data-bs-target': '#' ~ id_content,
         'data-bs-toggle': 'collapse',
         'aria-expanded': show|json_encode,
         'aria-controls': id_content,
-        'role': 'button',
-        'title': title} -%}
+        role: 'button',
+        title: title} -%}
     <div class="d-flex-wrap-center mb-2">
-        {{ form_label(form, null, {'label_attr': label_attributes}) }}
+        {{ form_label(form, null, {label_attr: label_attributes}) }}
         <div class="btn-group btn-group-sm d-print-none" role="group">
             <button type="button" class="btn btn-edit btn-outline-secondary btn-up-item" title="{{ 'task.edit.move_up_item'|trans }}" disabled="disabled">
                 <i class="fa-solid fa-angle-up"></i>

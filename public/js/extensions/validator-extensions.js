@@ -53,7 +53,7 @@
         },
 
         /**
-         * Initialize captcha.
+         * Initialize the captcha.
          *
          * @return {jQuery} the caller for chaining.
          */
@@ -89,7 +89,7 @@
                         $this.val('').trigger('change').trigger('focus');
                     });
                     $this.on('change', function () {
-                        const empty = $this.val().length === 0;
+                        const empty = String($this.val()).length === 0;
                         $delete.toggleClass('d-none', empty);
                         $this.toggleClass('rounded-end', empty);
                         $this.valid();
@@ -278,6 +278,7 @@
 
                 errorPlacement: function (error, element) {
                     const $parent = $(element).closest('.form-group, .mb-3');
+                    $parent.find('invalid-feedback').remove();
                     error.addClass('invalid-feedback').appendTo($parent);
                 },
 
@@ -334,7 +335,7 @@
                 $that.initFocus();
             }
 
-            // display message on modification
+            // display the message on modification
             if (settings.showModification) {
                 const $message = $('#footer-message');
                 if ($message.length) {
@@ -363,7 +364,7 @@
             const selector = ':visible:enabled:not([readonly]):first';
             // :hidden:not(.must-validate)
 
-            // find first invalid field
+            // find the first invalid field
             $that.find('.invalid-feedback').each(function () {
                 const $group = $(this).closest('.form-group');
                 if ($group.length) {
@@ -526,7 +527,7 @@
                 $(element).valid();
             });
         }
-        const target = $target.val().trim();
+        const target = String($target.val()).trim();
         return target.length === 0 || value.indexOfIgnoreCase(target) === -1;
     }, 'The field can not contain the user name.');
 
@@ -609,7 +610,7 @@
     }, 'The field must contain a greater value.');
 
     /*
-     * check if contains a greater than or equal value
+     * check if contains a value greater than or equal value
      */
     $.validator.addMethod('greaterThanEqualValue', function (value, element, param) {
         return this.optional(element) || value >= param;
@@ -649,7 +650,7 @@
         // store the cloned validator for future validation
         $fieldsFirst.data('valid_unique', validator);
 
-        // If element isn't being validated, run each require_from_group field's
+        // If an element isn't being validated, run each require_from_group field's
         // validation rules
         if (!$(element).data('being_validated')) {
             $fields.data('being_validated', JSON.stringify(true));

@@ -28,10 +28,18 @@ class RecaptchaService
     use MathTrait;
     use TranslatorTrait;
 
+    public const ERROR_PREFIX = 'recaptcha.';
+
     private int $challengeTimeout = 60;
     private string $expectedAction = 'login';
+    private ?Response $lastResponse = null;
     private float $scoreThreshold = 0.5;
 
+    /**
+     * @param string              $siteKey    the site key (public key)
+     * @param string              $secretKey  the secret key (the key between the site and reCAPTCHA)
+     * @param TranslatorInterface $translator the translator used for errors
+     */
     public function __construct(
         #[\SensitiveParameter]
         #[Autowire('%google_recaptcha_site_key%')]
@@ -43,21 +51,41 @@ class RecaptchaService
     ) {
     }
 
+    /**
+     * Gets the timeout, in seconds, to test against the challenge timestamp in <code>verify()</code>.
+     */
     public function getChallengeTimeout(): int
     {
         return $this->challengeTimeout;
     }
 
+    /**
+     * Gets the action to match against in <code>verify()</code>.
+     */
     public function getExpectedAction(): string
     {
         return $this->expectedAction;
     }
 
+    /**
+     * Gets the response of the last <code>verify()</code> call.
+     */
+    public function getLastResponse(): ?Response
+    {
+        return $this->lastResponse;
+    }
+
+    /**
+     * Gets the threshold to meet or exceed in <code>verify()</code>.
+     */
     public function getScoreThreshold(): float
     {
         return $this->scoreThreshold;
     }
 
+    /**
+     * Gets the site key (public key).
+     */
     public function getSiteKey(): string
     {
         return $this->siteKey;
@@ -69,7 +97,7 @@ class RecaptchaService
     }
 
     /**
-     * @psalm-api
+     * Sets a timeout, in seconds, to test against the challenge timestamp in <code>verify()</code>.
      */
     public function setChallengeTimeout(int $challengeTimeout): self
     {
@@ -79,7 +107,9 @@ class RecaptchaService
     }
 
     /**
-     * @psalm-api
+     * Sets an action to match against in <code>verify()</code>.
+     *
+     * This should be set per page.
      */
     public function setExpectedAction(string $expectedAction): self
     {
@@ -89,7 +119,9 @@ class RecaptchaService
     }
 
     /**
-     * @psalm-api
+     * Sets a threshold to meet or exceed in verify().
+     *
+     * Threshold should be a float between 0 and 1, which will be tested as <code>response >= threshold</code>.
      */
     public function setScoreThreshold(float $scoreThreshold): self
     {
@@ -98,13 +130,20 @@ class RecaptchaService
         return $this;
     }
 
+    /**
+     * Translate the given identifier error.
+     */
     public function translateError(string $id): string
     {
-        return $this->trans($id, [], 'validators');
+        return $this->trans(self::ERROR_PREFIX . $id, [], 'validators');
     }
 
     /**
-     * @return string[]
+     * Translate the given response or errors.
+     *
+     * @param Response|string[] $codes the response or errors to translate
+     *
+     * @return string[] the translated errors
      */
     public function translateErrors(Response|array $codes): array
     {
@@ -112,20 +151,31 @@ class RecaptchaService
             $codes = $codes->getErrorCodes();
         }
         if ([] === $codes) {
-            return [$this->translateError('recaptcha.unknown-error')];
+            return [$this->translateError('unknown-error')];
         }
 
-        return \array_map(fn (mixed $code): string => $this->translateError("recaptcha.$code"), $codes);
+        return \array_map(fn (string $code): string => $this->translateError($code), $codes);
     }
 
+    /**
+     * Calls the reCAPTCHA site verify API to verify whether the user passes CAPTCHA test and additionally runs any
+     * specified additional checks.
+     *
+     * @param string  $response the user response token provided by reCAPTCHA, verifying the user on your site
+     * @param Request $request  the request used to get the host name and the client IP address
+     *
+     * @return Response the response from the service
+     */
     public function verify(string $response, Request $request): Response
     {
+        $this->lastResponse = null;
         $recaptcha = new ReCaptcha($this->secretKey);
         $recaptcha->setChallengeTimeout($this->challengeTimeout)
             ->setScoreThreshold($this->scoreThreshold)
             ->setExpectedAction($this->expectedAction)
             ->setExpectedHostname($request->getHost());
+        $this->lastResponse = $recaptcha->verify($response, $request->getClientIp());
 
-        return $recaptcha->verify($response, $request->getClientIp());
+        return $this->lastResponse;
     }
 }

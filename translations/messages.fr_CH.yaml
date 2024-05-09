@@ -1257,6 +1257,7 @@ test:
     minify: Minify
     notification: Notifications
     recaptcha: reCAPTCHA
+    recaptcha_success: La validation avec le service reCAPTCHA a été éffectué avec succès.
     tree_view: Tree View
     use_notification: Utiliser une notification.
     ip_stack: Adresse IP

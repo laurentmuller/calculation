@@ -71,8 +71,6 @@ final class FunctionExtension extends AbstractExtension
      * Output a link style sheet tag with a nonce.
      *
      * @param array<string, string|int> $parameters
-     *
-     * @throws \Exception
      */
     private function assetCss(string $path, array $parameters = []): string
     {
@@ -89,10 +87,10 @@ final class FunctionExtension extends AbstractExtension
     /**
      * Checks if the given asset path exists.
      */
-    private function assetExists(?string $path): bool
+    private function assetExists(?string $path = null): bool
     {
         $file = $this->getRealPath($path);
-        if (null === $file) {
+        if (!StringUtils::isString($file)) {
             return false;
         }
 
@@ -157,8 +155,6 @@ final class FunctionExtension extends AbstractExtension
      * Output a javascript source tag with a nonce.
      *
      * @param array<string, string|int> $parameters
-     *
-     * @throws \Exception
      */
     private function assetJs(string $path, array $parameters = []): string
     {
@@ -190,9 +186,6 @@ final class FunctionExtension extends AbstractExtension
         return $this->extension->getAssetUrl($path);
     }
 
-    /**
-     * @throws \Exception
-     */
     private function getNonce(): string
     {
         return $this->service->getNonce();

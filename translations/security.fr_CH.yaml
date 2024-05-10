@@ -16,6 +16,7 @@ recaptcha:
     score-threshold-not-met: Le seuil de points reCAPTCHA n'est pas atteint. Essayez de recharger cette page.
     timeout-or-duplicate: Le délai d'attente reCAPTCHA est atteint ou la validation a été appelée deux fois. Essayez de recharger cette page.
     unknown-error: Une erreur inconnue s'est produite durant de la validation reCAPTCHA. Essayez de recharger cette page.
+    browser-error: Une erreur s’est produite sur le navigateur. Essayez de recharger cette page.
 # captcha image
 captcha:
     invalid: Le code de contrôle est invalide.

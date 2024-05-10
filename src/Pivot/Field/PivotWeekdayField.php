@@ -39,7 +39,7 @@ class PivotWeekdayField extends PivotDateField
         $this->names = $short ? DateUtils::getShortWeekdays($firstDay) : DateUtils::getWeekdays($firstDay);
     }
 
-    public function getDisplayValue($value): mixed
+    public function getDisplayValue(mixed $value): mixed
     {
         if (\is_int($value) && \array_key_exists($value, $this->names)) {
             return $this->names[$value];

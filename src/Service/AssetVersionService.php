@@ -58,7 +58,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         #[Target('cache.calculation.service.asset')]
         private readonly CacheInterface $cache,
     ) {
-        $version = $this->cache->get('key_asset_version', fn () => $this->getBaseVersion($projectDir, $env));
+        $version = $this->cache->get('key_asset_version', fn (): string => $this->getBaseVersion($projectDir, $env));
         $this->imagesPath = $this->canonicalize($projectDir, 'public', self::IMAGES_PATH);
         $this->imagesVersion = $this->getFileTime($this->imagesPath, $version);
 

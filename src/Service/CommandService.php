@@ -222,7 +222,7 @@ class CommandService implements \Countable
      */
     public function getGroupedCommands(string $default = self::GLOBAL_GROUP): array
     {
-        return $this->getGroupedValues($default, static fn (array $command) => $command);
+        return $this->getGroupedValues($default, static fn (array $command): array => $command);
     }
 
     /**

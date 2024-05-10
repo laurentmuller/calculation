@@ -46,6 +46,7 @@ use App\Response\WordResponse;
 use App\Service\AbstractHttpClientService;
 use App\Service\CaptchaImageService;
 use App\Service\MailerService;
+use App\Service\RecaptchaResponseService;
 use App\Service\RecaptchaService;
 use App\Service\SearchService;
 use App\Service\SwissPostService;
@@ -53,7 +54,6 @@ use App\Traits\CookieTrait;
 use App\Traits\GroupByTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
 use App\Translator\TranslatorFactory;
-use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use App\Validator\Captcha;
 use App\Validator\Password;
@@ -359,8 +359,11 @@ class TestController extends AbstractController
      * Display the reCaptcha.
      */
     #[GetPost(path: '/recaptcha', name: 'test_recaptcha')]
-    public function recaptcha(Request $request, RecaptchaService $service): Response
-    {
+    public function recaptcha(
+        Request $request,
+        RecaptchaService $service,
+        RecaptchaResponseService $responseService
+    ): Response {
         $data = [
             'subject' => 'My subject',
             'message' => 'My message',
@@ -376,15 +379,10 @@ class TestController extends AbstractController
         $form = $helper->createForm();
         if ($this->handleRequestForm($request, $form)) {
             $response = $service->getLastResponse();
-            if ($response instanceof ReCaptchaResponse) {
-                /** @psalm-var array<string, string[]|string|bool> $values */
-                $values = $response->toArray();
-                $message = $this->formatRecaptchaResult($values);
+            $message = $response instanceof ReCaptchaResponse ?
+                $responseService->format($response) : 'test.recaptcha_success';
 
-                return $this->redirectToHomePage($message);
-            }
-
-            return $this->redirectToHomePage('test.recaptcha_success');
+            return $this->redirectToHomePage($message);
         }
 
         return $this->render('test/recaptcha.html.twig', ['form' => $form]);
@@ -540,36 +538,6 @@ class TestController extends AbstractController
             'currencies' => $this->getCurrencies(),
             'countries' => Countries::getNames(),
         ]);
-    }
-
-    /**
-     * @psalm-param array<string, string[]|string|bool> $values
-     */
-    private function formatRecaptchaResult(array $values): string
-    {
-        $html = '';
-        $values = \array_filter($values);
-        foreach ($values as $key => $value) {
-            $html .= '<div class="row">';
-            if (\is_array($value)) {
-                $value = \implode('<br>', $value);
-            } elseif (\is_bool($value)) {
-                $value = \json_encode($value);
-            } elseif ('score' === $key) {
-                $value = FormatUtils::formatPercent($value);
-            } elseif ('challenge_ts' === $key) {
-                $time = \strtotime($value);
-                if (false !== $time) {
-                    $value = FormatUtils::formatDateTime($time, timeType: \IntlDateFormatter::MEDIUM);
-                }
-            }
-            $html .= '<div class="col-4">' . $key . '</div>';
-            $html .= '<div class="col-1">:</div>';
-            $html .= '<div class="col-7">' . $value . '</div>';
-            $html .= '</div>';
-        }
-
-        return $html;
     }
 
     private function getCategories(EntityManagerInterface $manager): array

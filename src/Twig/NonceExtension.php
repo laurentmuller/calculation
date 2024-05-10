@@ -39,8 +39,6 @@ final class NonceExtension extends AbstractExtension
      * Gets the random nonce parameter.
      *
      * @psalm-param positive-int $length
-     *
-     * @throws \Exception
      */
     public function getNonce(?int $length = null): string
     {

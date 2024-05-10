@@ -57,7 +57,7 @@ class CalculationDuplicateTable extends AbstractCalculationItemsTable
         return \array_reduce(
             $items,
             /** @psalm-param CalculationItemType $item */
-            function (int $carry, array $item) {
+            function (int $carry, array $item): int {
                 foreach ($item['items'] as $child) {
                     $carry += $child['count'];
                 }

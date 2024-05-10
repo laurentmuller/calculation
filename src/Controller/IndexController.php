@@ -190,7 +190,7 @@ class IndexController extends AbstractController
     /**
      * @psalm-param class-string $className
      */
-    private function count($className): int
+    private function count(string $className): int
     {
         return $this->manager->getRepository($className)->count();
     }

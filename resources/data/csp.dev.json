@@ -6,9 +6,9 @@
     "form-action": "self",
     "manifest-src": "self",
     "frame-ancestors": "self",
-    "script-src": "%nonce%",
+    "script-src": "nonce",
     "script-src-elem": [
-        "%nonce%",
+        "nonce",
         "https://www.google.com",
         "https://api.iconify.design"
     ],

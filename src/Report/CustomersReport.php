@@ -81,7 +81,7 @@ class CustomersReport extends AbstractArrayReport
             $key = $this->firstChar($c->getNameAndCompany());
             $result[$key][] = $c;
         }
-        \uksort($result, function (string $str1, string $str2) {
+        \uksort($result, function (string $str1, string $str2): int {
             if ($str1 === $this->other) {
                 return -1;
             }

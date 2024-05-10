@@ -124,7 +124,7 @@ class CommandDataService
      */
     public function validateData(array $command, array $data): array
     {
-        return \array_filter($data, fn (string $key) => $this->validateKey($key, $command), \ARRAY_FILTER_USE_KEY);
+        return \array_filter($data, fn (string $key): bool => $this->validateKey($key, $command), \ARRAY_FILTER_USE_KEY);
     }
 
     /**

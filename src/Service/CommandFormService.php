@@ -258,8 +258,8 @@ readonly class CommandFormService
     {
         return new CallbackTransformer(
             /** @psalm-param string[] $data */
-            fn (array $data) => \implode(',', \array_filter($data)),
-            fn (?string $data) => StringUtils::isString($data) ? \explode(',', $data) : []
+            fn (array $data): string => \implode(',', \array_filter($data)),
+            fn (?string $data): array => StringUtils::isString($data) ? \explode(',', $data) : []
         );
     }
 

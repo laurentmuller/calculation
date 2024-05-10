@@ -37,7 +37,7 @@ class CalculationsDuplicateReport extends AbstractCalculationItemsReport
      */
     protected function computeItemsCount(array $entities): int
     {
-        return \array_reduce($entities, function (int $carry, array $item) {
+        return \array_reduce($entities, function (int $carry, array $item): int {
             /** @var array $child */
             foreach ($item['items'] as $child) {
                 $carry += (int) $child['count'];

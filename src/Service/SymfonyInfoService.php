@@ -431,7 +431,7 @@ final class SymfonyInfoService
 
     private function getDirectoryInfo(string $path): string
     {
-        $relativePath = $this->formatPath($path, $this->getProjectDir());
+        $relativePath = $this->formatPath($path, $this->projectDir);
         $size = FileUtils::formatSize($path);
 
         return \sprintf('%s (%s)', $relativePath, $size);

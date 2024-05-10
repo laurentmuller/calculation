@@ -77,7 +77,7 @@ class CalculationUpdateController extends AbstractController
             ->updateOptions([
                 'multiple' => true,
                 'expanded' => true,
-                'group_by' => fn () => null,
+                'group_by' => fn (): null => null,
                 'query_builder' => static fn (CalculationStateRepository $repository): QueryBuilder => $repository->getEditableQueryBuilder(),
             ])
             ->labelClass('checkbox-inline checkbox-switch')

@@ -1,0 +1,173 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Tests\Form;
+
+use App\Form\Type\ReCaptchaType;
+use App\Service\RecaptchaService;
+use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use ReCaptcha\Response;
+use Symfony\Component\Form\PreloadedExtension;
+use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+
+#[CoversClass(ReCaptchaType::class)]
+class ReCaptchaTypeTest extends TypeTestCase
+{
+    use TranslatorMockTrait;
+    private ?Request $request = null;
+    private MockObject&RequestStack $requestStack;
+    private MockObject&RecaptchaService $service;
+
+    /**
+     * @throws Exception
+     */
+    protected function setUp(): void
+    {
+        $this->service = $this->createService();
+        $this->request = $this->createMock(Request::class);
+        $this->requestStack = $this->createRequestStack();
+
+        parent::setUp();
+    }
+
+    public function testFormView(): void
+    {
+        $view = $this->factory->create(ReCaptchaType::class)
+            ->createView();
+
+        self::assertArrayHasKey('recaptcha_url', $view->vars);
+        self::assertIsString($view->vars['recaptcha_url']);
+        self::assertStringStartsWith('https://www.google.com/recaptcha/api.js?render=', $view->vars['recaptcha_url']);
+
+        self::assertArrayHasKey('attr', $view->vars);
+        $attr = $view->vars['attr'];
+        self::assertArrayHasKey('data-key', $attr);
+
+        self::assertArrayHasKey('class', $attr);
+        self::assertSame('recaptcha', $attr['class']);
+
+        self::assertArrayHasKey('data-event', $attr);
+        self::assertSame('click', $attr['data-event']);
+
+        self::assertArrayHasKey('data-selector', $attr);
+        self::assertSame('[data-toggle="recaptcha"]', $attr['data-selector']);
+
+        self::assertArrayHasKey('data-action', $attr);
+        self::assertSame('login', $attr['data-action']);
+    }
+
+    public function testSubmitError(): void
+    {
+        $data = 'test';
+        $error = 'action-mismatch';
+        $this->setRequest($this->request);
+        $this->setResponse($error);
+        $this->service->expects(self::any())
+            ->method('translateErrors')
+            ->willReturn([$error]);
+
+        $form = $this->factory->create(ReCaptchaType::class, $data);
+        $form->submit($data);
+        self::assertTrue($form->isSynchronized());
+        self::assertSame($data, $form->getData());
+
+        self::assertCount(1, $form->getErrors());
+        $errorForm = $form->getErrors()[0];
+        self::assertSame($error, $errorForm->getMessage());
+    }
+
+    public function testSubmitNoRequest(): void
+    {
+        $data = 'test';
+        $this->setRequest(null);
+        $this->setResponse();
+
+        $this->service->expects(self::any())
+            ->method('translateError')
+            ->willReturnArgument(0);
+
+        $form = $this->factory->create(ReCaptchaType::class, $data);
+        $form->submit($data);
+        self::assertTrue($form->isSynchronized());
+        self::assertSame($data, $form->getData());
+
+        self::assertCount(1, $form->getErrors());
+        $errorForm = $form->getErrors()[0];
+        self::assertSame('no-request', $errorForm->getMessage());
+    }
+
+    public function testSubmitSuccess(): void
+    {
+        $data = 'test';
+        $this->setRequest($this->request);
+        $this->setResponse();
+
+        $form = $this->factory->create(ReCaptchaType::class, $data);
+        $form->submit($data);
+        self::assertTrue($form->isSynchronized());
+        self::assertCount(0, $form->getErrors());
+        self::assertSame($data, $form->getData());
+    }
+
+    protected function getExtensions(): array
+    {
+        $type = new ReCaptchaType($this->service, $this->requestStack);
+
+        return [
+            new PreloadedExtension([$type], []),
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createRequestStack(): MockObject&RequestStack
+    {
+        return $this->createMock(RequestStack::class);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createService(): MockObject&RecaptchaService
+    {
+        $service = $this->createMock(RecaptchaService::class);
+        $service->expects(self::any())
+            ->method('getExpectedAction')
+            ->willReturn('login');
+
+        return $service;
+    }
+
+    private function setRequest(?Request $request): void
+    {
+        $this->requestStack
+            ->expects(self::any())
+            ->method('getCurrentRequest')
+            ->willReturn($request);
+    }
+
+    private function setResponse(string $code = ''): void
+    {
+        $success = '' === $code;
+        $errorCodes = $success ? [] : [$code];
+        $response = new Response($success, $errorCodes);
+        $this->service->expects(self::any())
+            ->method('verify')
+            ->willReturn($response);
+    }
+}

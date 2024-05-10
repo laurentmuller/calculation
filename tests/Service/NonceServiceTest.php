@@ -28,9 +28,6 @@ class NonceServiceTest extends TestCase
         $this->service = new NonceService();
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testCsp(): void
     {
         $nonce = $this->service->getNonce();
@@ -41,18 +38,12 @@ class NonceServiceTest extends TestCase
         self::assertSame("'nonce-" . $nonce . "'", $csp);
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testLength32(): void
     {
         $nonce = $this->service->getNonce(32);
         self::assertSame(64, \strlen($nonce));
     }
 
-    /**
-     * @throws \Exception
-     */
     public function testLengthDefault(): void
     {
         $nonce = $this->service->getNonce();

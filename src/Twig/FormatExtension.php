@@ -37,6 +37,8 @@ final class FormatExtension extends AbstractExtension
         'full' => \IntlDateFormatter::FULL,
     ];
 
+    private ?CoreExtension $extension = null;
+
     public function __construct(private readonly TranslatorInterface $translator)
     {
     }
@@ -120,8 +122,6 @@ final class FormatExtension extends AbstractExtension
      * @return string the formatted date
      *
      * @throws RuntimeError if the date format or the time format is invalid
-     *
-     * @psalm-suppress InternalMethod
      */
     private function dateTimeFilter(
         Environment $env,
@@ -138,10 +138,19 @@ final class FormatExtension extends AbstractExtension
             return '';
         }
 
-        /** @noinspection PhpInternalEntityUsedInspection */
-        $date = CoreExtension::dateConverter($env, $date);
+        $extension = $this->getCoreExtension($env);
+        $date = $extension->convertDate($date);
 
         return FormatUtils::formatDateTime($date, $dateType, $timeType, $pattern);
+    }
+
+    private function getCoreExtension(Environment $env): CoreExtension
+    {
+        if (!$this->extension instanceof CoreExtension) {
+            $this->extension = $env->getExtension(CoreExtension::class);
+        }
+
+        return $this->extension;
     }
 
     /**

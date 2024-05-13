@@ -1,0 +1,43 @@
+<?php
+/*
+ * This file is part of the Calculation package.
+ *
+ * (c) bibi.nu <bibi@bibi.nu>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types=1);
+
+namespace App\Tests\Pdf;
+
+use App\Pdf\PdfCell;
+use App\Pdf\PdfStyle;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(PdfCell::class)]
+class PdfCellTest extends TestCase
+{
+    public function testClone(): void
+    {
+        $style = PdfStyle::getCellStyle();
+        $cell = new PdfCell(style: $style);
+        self::assertSame($style, $cell->getStyle());
+
+        $clone = clone $cell;
+        self::assertNotSame($cell->getStyle(), $clone->getStyle());
+    }
+
+    public function testConstructor(): void
+    {
+        $cell = new PdfCell();
+        self::assertNull($cell->getText());
+        self::assertSame(1, $cell->getCols());
+        self::assertNull($cell->getStyle());
+        self::assertNull($cell->getAlignment());
+        self::assertNull($cell->getLink());
+        self::assertFalse($cell->isLink());
+    }
+}

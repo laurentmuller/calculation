@@ -32,8 +32,8 @@ class SessionQuery
      *
      * @throws \JsonException if an error occurs while decoding this value
      */
-    public function decode(): mixed
+    public function decode(bool $associative = false, int $flags = 0): mixed
     {
-        return \json_decode(json: $this->value, flags: \JSON_THROW_ON_ERROR);
+        return \json_decode($this->value, $associative, flags: $flags | \JSON_THROW_ON_ERROR);
     }
 }

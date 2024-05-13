@@ -119,8 +119,6 @@ abstract class AbstractController extends BaseController
      * @throws \LogicException if the service cannot be found
      *
      * @psalm-suppress MixedAssignment
-     * @psalm-suppress MixedReturnStatement
-     * @psalm-suppress MixedInferredReturnType
      */
     public function getRequestStack(): RequestStack
     {
@@ -129,6 +127,7 @@ abstract class AbstractController extends BaseController
         }
 
         try {
+            /** @psalm-var RequestStack */
             return $this->requestStack = $this->container->get('request_stack');
         } catch (ContainerExceptionInterface $e) {
             throw new \LogicException($e->getMessage(), $e->getCode(), $e);
@@ -277,10 +276,8 @@ abstract class AbstractController extends BaseController
      */
     protected function getParameterString(string $name): string
     {
-        /** @psalm-var string $value */
-        $value = $this->getParameter($name);
-
-        return $value;
+        /** @psalm-var string */
+        return $this->getParameter($name);
     }
 
     /**

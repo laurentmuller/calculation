@@ -29,8 +29,6 @@ trait AwareTrait
      * @return T
      *
      * @throws \LogicException if the service cannot be found
-     *
-     * @psalm-suppress MixedInferredReturnType
      */
     protected function getContainerService(string $function, string $class): mixed
     {
@@ -40,6 +38,7 @@ trait AwareTrait
         }
 
         try {
+            /** @psalm-var T */
             return $this->container->get($id);
         } catch (ContainerExceptionInterface $e) {
             throw new \LogicException($this->getErrorMessage($class, $id), $e->getCode(), $e);

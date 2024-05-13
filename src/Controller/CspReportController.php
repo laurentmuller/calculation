@@ -26,24 +26,30 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
- * Controller to handle CSP violation.
+ * Controller to send CSP violations by e-mail.
  */
 #[AsController]
 #[IsGranted(RoleInterface::ROLE_USER)]
-class CspController extends AbstractController
+class CspReportController extends AbstractController
 {
-    #[Get(path: '/csp', name: 'log_csp')]
+    /**
+     * The route name.
+     */
+    public const ROUTE_NAME = 'log_csp';
+
+    #[Get(path: '/csp', name: self::ROUTE_NAME)]
     public function invoke(LoggerInterface $logger, MailerInterface $mailer): Response
     {
         $context = $this->getContext();
         if (false !== $context) {
             try {
-                $title = $this->trans('notification.csp_title');
-                $logger->error($title, $context);
-                $this->sendNotification($title, $context, $mailer);
+                $message = $this->trans('notification.csp_title');
+                $logger->error($message, $context);
+                $this->sendNotification($message, $context, $mailer);
             } catch (TransportExceptionInterface $e) {
+                $message = $this->trans('notification.csp_error');
                 $context = $this->getExceptionContext($e);
-                $logger->error($e->getMessage(), $context);
+                $logger->error($message, $context);
             }
         }
 
@@ -58,7 +64,10 @@ class CspController extends AbstractController
             $entries = \array_filter(\explode(' ', $policy));
             if (\count($entries) > 1) {
                 $key = \reset($entries);
-                $values = \array_map(static fn (string $entry): string => \trim($entry, "'"), \array_slice($entries, 1));
+                $values = \array_map(
+                    static fn (string $entry): string => \trim($entry, "'"),
+                    \array_slice($entries, 1)
+                );
                 \sort($values);
                 $result[$key] = \implode(StringUtils::NEW_LINE, $values);
             }
@@ -74,9 +83,8 @@ class CspController extends AbstractController
 
     private function getContext(): array|false
     {
-        $content = (string) \file_get_contents('php://input');
-
         try {
+            $content = (string) \file_get_contents('php://input');
             /** @psalm-var array{csp-report: string[]} $data */
             $data = StringUtils::decodeJson($content);
             $context = \array_filter($data['csp-report']);
@@ -93,10 +101,10 @@ class CspController extends AbstractController
     /**
      * @throws TransportExceptionInterface
      */
-    private function sendNotification(string $title, array $context, MailerInterface $mailer): void
+    private function sendNotification(string $subject, array $context, MailerInterface $mailer): void
     {
         $notification = (new CspViolationEmail())
-            ->subject($title)
+            ->subject($subject)
             ->to($this->getAddressFrom())
             ->from($this->getAddressFrom())
             ->context(['context' => $context])

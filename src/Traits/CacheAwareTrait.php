@@ -106,8 +106,6 @@ trait CacheAwareTrait
      *                                        set.
      *
      * @return mixed the value, if found; the default otherwise
-     *
-     * @psalm-suppress MixedAssignment
      */
     public function getCacheValue(string $key, mixed $default = null, int|\DateInterval|null $time = null): mixed
     {
@@ -119,6 +117,7 @@ trait CacheAwareTrait
         if (!\is_callable($default)) {
             return $default;
         }
+        /** @psalm-var mixed $value */
         $value = \call_user_func($default);
         if (null !== $value) {
             $this->setCacheValue($key, $value, $time);

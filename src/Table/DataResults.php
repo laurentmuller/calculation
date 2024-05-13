@@ -129,10 +129,8 @@ class DataResults implements \JsonSerializable
      */
     public function getParameter(string $name, bool|string|int|\BackedEnum|null $default = null): bool|string|int|\BackedEnum|null
     {
-        /** @psalm-var bool|string|int|\BackedEnum|null $value */
-        $value = $this->params[$name] ?? $default;
-
-        return $value;
+        /** @psalm-var bool|string|int|\BackedEnum|null */
+        return $this->params[$name] ?? $default;
     }
 
     public function jsonSerialize(): array

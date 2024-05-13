@@ -111,10 +111,8 @@ class ProductProvider extends EntityProvider
      */
     public function productSupplier(): ?string
     {
-        /** @psalm-var string|null $value */
-        $value = $this->distinctValue('supplier', true);
-
-        return $value;
+        /** @psalm-var string|null */
+        return $this->distinctValue('supplier', true);
     }
 
     /**
@@ -124,9 +122,7 @@ class ProductProvider extends EntityProvider
      */
     public function productUnit(): ?string
     {
-        /** @psalm-var string|null $value */
-        $value = $this->distinctValue('unit', true);
-
-        return $value;
+        /** @psalm-var string|null */
+        return $this->distinctValue('unit', true);
     }
 }

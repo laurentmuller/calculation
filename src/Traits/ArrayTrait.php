@@ -72,7 +72,7 @@ trait ArrayTrait
      *
      * @template T
      *
-     * @param array<T|null> $values   the values to filter and to get unique values for
+     * @param array<T|null> $values   the values to filter
      * @param callable|null $callback the callback function to use. If no callback is supplied, all empty entries
      *                                of array will be removed.
      * @param int           $mode     a flag determining what arguments are sent to callback:
@@ -93,6 +93,7 @@ trait ArrayTrait
     public function getFiltered(array $values, ?callable $callback = null, int $mode = 0): array
     {
         // @phpstan-ignore-next-line
+        /** @psalm-var T[] */
         return null === $callback ? \array_filter($values) : \array_filter($values, $callback, $mode);
     }
 

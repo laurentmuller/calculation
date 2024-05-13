@@ -1458,6 +1458,7 @@ archive:
 notification:
     csp_title: Violation de règles CSP
     csp_description: L'agent utilisateur de l'application %name% a rapporté des violations des règles de la politique de sécurité de contenu (Content Security Policy).
+    csp_error: Impossible de rapporter les violations des règles de la politique de sécurité.
     footer: Notification envoyée depuis application %app_name_version%.
     exception: La trace de la pile d'exception est en pièce jointe.
 # enumerations

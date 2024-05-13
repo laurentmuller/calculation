@@ -114,6 +114,7 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
      */
     public function countMargins(): int
     {
+        /** @psalm-var int */
         return $this->items->reduce(fn (int $carry, TaskItem $item): int => $carry + $item->count(), 0);
     }
 

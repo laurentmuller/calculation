@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Listener;
 
+use App\Controller\CspReportController;
 use App\Service\NonceService;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
@@ -130,12 +131,7 @@ class ResponseListener
                 return [];
             }
 
-            /* @psalm-var array<string, string|string[]> $content */
-            $content = FileUtils::decodeJson($this->file);
-
-            /** @psalm-var array<string, string[]> $csp */
-            $csp = \array_map(static fn (string|array $value): array => (array) $value, $content);
-
+            $content = $this->loadFile();
             $values = [
                 'none' => "'none'",
                 'self' => "'self'",
@@ -143,18 +139,36 @@ class ResponseListener
                 'report' => $this->getReportURL(),
             ];
 
-            return \array_map(static fn (array $subject): array => StringUtils::replace($values, $subject), $csp);
+            return \array_map(
+                static fn (array $subject): array => StringUtils::replace($values, $subject),
+                $content
+            );
         });
     }
 
     private function getReportURL(): string
     {
-        return $this->generator->generate(name: 'log_csp', referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->generator->generate(CspReportController::ROUTE_NAME, [], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     private function isDevRequest(Request $request): bool
     {
         return 1 === \preg_match(self::DEV_PATTERN, $request->getRequestUri());
+    }
+
+    /**
+     * @psalm-return array<string, string[]>
+     */
+    private function loadFile(): array
+    {
+        /* @psalm-var array<string, string|string[]> $content */
+        $content = FileUtils::decodeJson($this->file);
+
+        /** @psalm-var array<string, string[]> */
+        return \array_map(
+            static fn (string|array $value): array => (array) $value,
+            $content
+        );
     }
 
     /**

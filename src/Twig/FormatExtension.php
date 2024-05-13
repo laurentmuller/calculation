@@ -89,6 +89,11 @@ final class FormatExtension extends AbstractExtension
         return $this->translator;
     }
 
+    private function convertDate(Environment $env, \DateTimeInterface|string|null $date): \DateTime|\DateTimeImmutable
+    {
+        return $this->getCoreExtension($env)->convertDate($date);
+    }
+
     /**
      * Formats a date for the current locale; ignoring the time part.
      *
@@ -138,8 +143,7 @@ final class FormatExtension extends AbstractExtension
             return '';
         }
 
-        $extension = $this->getCoreExtension($env);
-        $date = $extension->convertDate($date);
+        $date = $this->convertDate($env, $date);
 
         return FormatUtils::formatDateTime($date, $dateType, $timeType, $pattern);
     }

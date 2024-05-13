@@ -84,10 +84,8 @@ trait RequestTrait
         string $key,
         string|int|float|bool|null $default = null
     ): string|int|float|bool|null {
-        /** @psalm-var scalar $value */
-        $value = $this->getRequestBag($request, $key)?->get($key, $default) ?? $default;
-
-        return $value;
+        /** @psalm-var scalar */
+        return $this->getRequestBag($request, $key)?->get($key, $default) ?? $default;
     }
 
     private function getRequestBag(Request $request, string $key): ?ParameterBag

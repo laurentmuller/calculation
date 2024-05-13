@@ -14,9 +14,10 @@ parameters:
 
     reportUnmatchedIgnoredErrors: true
     checkUninitializedProperties: true
-    checkMissingIterableValueType: false
 
     ignoreErrors:
+        -
+            identifier: missingType.iterableValue
         -
             message: '#@extends contains generic type#'
             path: src/Form/*

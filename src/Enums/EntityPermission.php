@@ -88,11 +88,10 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
      * @return FlagBag<EntityPermission>
      *
      * @psalm-suppress InvalidArgument
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
      */
     public static function getAllPermission(): FlagBag
     {
+        /** @psalm-var FlagBag<EntityPermission> */
         return FlagBag::from(...EntityPermission::sorted());
     }
 
@@ -102,11 +101,10 @@ enum EntityPermission: int implements EnumConstantsInterface, EnumSortableInterf
      * @return FlagBag<EntityPermission>
      *
      * @psalm-suppress InvalidArgument
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
      */
     public static function getDefaultPermission(): FlagBag
     {
+        /** @psalm-var FlagBag<EntityPermission> */
         return FlagBag::from(
             EntityPermission::LIST,
             EntityPermission::EXPORT,

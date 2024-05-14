@@ -376,7 +376,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the total amount of all groups.
+     * Gets the total amounts of all groups.
      */
     public function getGroupsAmount(): float
     {
@@ -408,7 +408,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the total margin amount of all root groups.
+     * Gets the total margin amounts of all root groups.
      */
     public function getGroupsMarginAmount(): float
     {

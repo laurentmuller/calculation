@@ -92,8 +92,8 @@ trait ArrayTrait
      */
     public function getFiltered(array $values, ?callable $callback = null, int $mode = 0): array
     {
-        // @phpstan-ignore-next-line
         /** @psalm-var T[] */
+        // @phpstan-ignore-next-line
         return null === $callback ? \array_filter($values) : \array_filter($values, $callback, $mode);
     }
 

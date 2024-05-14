@@ -131,7 +131,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     }
 
     /**
-     * Returns the criteria clause to filter users where the role name is not the super administrator role name.
+     * Returns the criteria clause to filter users where the role name is not the super-administrator role name.
      */
     public function getSuperAdminFilter(string $alias = self::DEFAULT_ALIAS): string
     {

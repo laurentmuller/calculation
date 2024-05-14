@@ -54,7 +54,7 @@ class OpenWeatherController extends AbstractController
     private const KEY_COUNT = 'count';
 
     /**
-     * The exclude key name.
+     * The excluded key name.
      */
     private const KEY_EXCLUDE = 'exclude';
 

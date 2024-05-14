@@ -23,7 +23,7 @@ interface RoleInterface
     final public const ROLE_ADMIN = 'ROLE_ADMIN';
 
     /**
-     * The super administrator role name.
+     * The super-administrator role name.
      */
     final public const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 

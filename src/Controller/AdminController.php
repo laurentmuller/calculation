@@ -23,14 +23,12 @@ use App\Interfaces\RoleInterface;
 use App\Model\Role;
 use App\Service\ApplicationService;
 use App\Service\CacheService;
+use App\Service\CommandService;
 use App\Service\RoleBuilderService;
 use App\Traits\RoleTranslatorTrait;
 use App\Utils\FileUtils;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,9 +61,6 @@ class AdminController extends AbstractController
     ): Response {
         $form = $this->createForm(FormType::class);
         if ($this->handleRequestForm($request, $form)) {
-            $this->getUserService()->clearCache();
-            $this->getApplicationService()->clearCache();
-
             try {
                 if ($service->clear()) {
                     return $this->redirectToHomePage('clear_cache.success', request: $request);
@@ -83,8 +78,8 @@ class AdminController extends AbstractController
 
         try {
             $pools = $service->list();
-        } catch (\Exception $e) {
-            return $this->renderFormException('clear_cache.failure', $e, $logger);
+        } catch (\Exception) {
+            $pools = [];
         }
 
         return $this->render('admin/clear_cache.html.twig', [
@@ -101,26 +96,20 @@ class AdminController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
     #[Get(path: '/dump-sql', name: 'admin_dump_sql')]
-    public function dumpSql(KernelInterface $kernel): Response
+    public function dumpSql(CommandService $service): Response
     {
-        $input = new ArrayInput([
-            'command' => 'doctrine:schema:update',
-            '--dump-sql' => true,
-        ]);
-        $output = new BufferedOutput();
+        $result = $service->execute('doctrine:schema:update', ['--dump-sql' => true]);
+        if (!$result->isSuccess()) {
+            return $this->redirectToHomePage('admin.dump_sql.error', type: FlashType::WARNING);
+        }
 
-        $application = new Application($kernel);
-        $application->setAutoExit(false);
-        $application->run($input, $output);
-        $content = $output->fetch();
-
-        if (\str_contains($content, '[OK]')) {
+        if (\str_contains($result->content, '[OK]')) {
             return $this->redirectToHomePage('admin.dump_sql.no_change', type: FlashType::INFO);
         }
 
         return $this->render('admin/dump_sql.html.twig', [
-            'count' => \substr_count($content, ';'),
-            'content' => $content,
+            'count' => \substr_count($result->content, ';'),
+            'content' => $result->content,
         ]);
     }
 

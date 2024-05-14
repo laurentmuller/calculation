@@ -68,7 +68,7 @@ class ResponseListener
         private readonly NonceService $service,
         #[Autowire('%kernel.debug%')]
         private readonly bool $debug,
-        #[Target('cache.calculation.service.response')]
+        #[Target('calculation.service.response')]
         private readonly CacheInterface $cache,
     ) {
     }

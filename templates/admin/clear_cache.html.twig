@@ -5,41 +5,46 @@
 {%- set submit_text = 'clear_cache.submit' -%}
 {%- set message = 'clear_cache.message' %}
 {%- set message_parameters = {'%size%': size} -%}
-{%- set is_pools = pools|length -%}
+{%- set pools_length = pools|length -%}
+{% block card_container_class ' col-md-8 offset-md-2 col-xl-6 offset-xl-3' %}
 {# message #}
 {% block message %}
 {{ parent() }}
 <p class="my-2">{{ 'clear_cache.note'|trans|raw }}</p>
-{# pools #}
-{% if is_pools %}
-<div class="modal fade" id="modal-cache-list" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">{{ 'clear_cache.list'|trans }}</h5>
-                {{ button_close_modal(true) }}
-            </div>
-            <div class="modal-body">
-                <ul class="my-1">
+{% endblock %}
+{# body #}
+{% block body -%}
+{{ parent() }}
+{% if pools_length %}
+    <div class="modal fade" id="modal-cache-list" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ 'clear_cache.list'|trans }}</h5>
+                    {{ button_close_modal(true) }}
+                </div>
+                <div class="modal-body">
+                    <ul class="mb-0">
                     {% for pool in pools %}
                         <li>{{ pool }}</li>
                     {% endfor %}
-                </ul>
-            </div>
-            <div class="modal-footer justify-content-start">
-                {{- button_close_modal(false) -}}
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <span class="me-auto">{{ 'clear_cache.count'|trans({'%count%': pools_length|integer}) }}</span>
+                    {{- button_close_modal(false) -}}
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endif %}
 {% endblock %}
 {# actions #}
 {% block actions_form -%}
-    {{ parent() }}
-    {% if is_pools %}
-        <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-cache-list">
-            {{- 'clear_cache.list'|trans -}}
-        </button>
-    {% endif %}
+{{ parent() }}
+{% if pools_length %}
+    <button type="button" class="btn btn-form btn-outline-success" data-bs-toggle="modal" data-bs-target="#modal-cache-list">
+        {{- 'clear_cache.list'|trans -}}
+    </button>
+{% endif %}
 {% endblock %}

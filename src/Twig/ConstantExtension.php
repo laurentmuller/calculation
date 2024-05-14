@@ -30,7 +30,7 @@ final class ConstantExtension extends AbstractExtension implements GlobalsInterf
     private const CACHE_KEY = 'twig_constant_extension';
 
     public function __construct(
-        #[Target('cache.calculation.service.constant')]
+        #[Target('calculation.service.constant')]
         private readonly CacheInterface $cache
     ) {
     }

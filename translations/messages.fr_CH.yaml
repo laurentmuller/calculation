@@ -42,6 +42,7 @@ admin:
         description: Déclaration SQL pour mettre à jour le schéma de la base de données.
         count: 'Nombre de modifications : %count%'
         no_change: Le schéma de la base de données est à jour et ne nécessite aucune migration.
+        error: Une erreur s'est produite lors de la mise à jour du schéma de la base de données.
 application_service:
     clear_error: Une erreur s'est produite lors de l'effacement du cache des propriétés.
     commit_error: Impossible de valider les changements dans le cache des propriétés.
@@ -282,6 +283,7 @@ clear_cache:
     note: '<b>Note : </b>Cette opération peut durer un certain temps.'
     submit: Vider
     list: Liste des caches
+    count: 'Nombre de caches : %count%'
     success: Le cache de l'application a été vidé avec succès.
     failure: Impossible de vider le cache de l'application.
 common:

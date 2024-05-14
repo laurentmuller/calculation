@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represents an item of a calculation category.
+ * Represents a calculation item.
  *
  * @implements ParentTimestampableInterface<Calculation>
  */

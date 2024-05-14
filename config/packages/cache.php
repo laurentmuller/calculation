@@ -18,47 +18,47 @@ return static function (FrameworkConfig $config): void {
     $cache = $config->cache();
 
     // used by the ApplicationService
-    $cache->pool('cache.calculation.service.application')
+    $cache->pool('calculation.service.application')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_hour);
 
     // used by the UserService
-    $config->cache()->pool('cache.calculation.service.user')
+    $config->cache()->pool('calculation.service.user')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_hour);
 
     // used by the SymfonyInfoService
-    $config->cache()->pool('cache.calculation.service.symfony')
+    $config->cache()->pool('calculation.service.symfony')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
     // used by the ConstantExtension
-    $config->cache()->pool('cache.calculation.service.constant')
+    $config->cache()->pool('calculation.service.constant')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
     // used by the HelpService
-    $config->cache()->pool('cache.calculation.service.help')
+    $config->cache()->pool('calculation.service.help')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
     // used by the CommandService
-    $config->cache()->pool('cache.calculation.service.command')
+    $config->cache()->pool('calculation.service.command')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
     // used by the CacheService
-    $config->cache()->pool('cache.calculation.service.cache')
+    $config->cache()->pool('calculation.service.cache')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
     // used by the AssetVersionService
-    $config->cache()->pool('cache.calculation.service.asset')
+    $config->cache()->pool('calculation.service.asset')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 
     // used by the ResponseListener
-    $config->cache()->pool('cache.calculation.service.response')
+    $config->cache()->pool('calculation.service.response')
         ->adapters('cache.adapter.filesystem')
         ->defaultLifetime($one_day);
 };

@@ -99,7 +99,7 @@ enum EntityName: string implements EnumConstantsInterface, EnumSortableInterface
     private const ENTITY_PREFIX = 'Entity';
 
     /**
-     * The rights suffix.
+     * The right's suffix.
      */
     private const RIGHTS_SUFFIX = 'Rights';
 

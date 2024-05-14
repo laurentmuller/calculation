@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Represents a group of a calculation.
+ * Represents a calculation group.
  *
  * @implements ParentTimestampableInterface<Calculation>
  */

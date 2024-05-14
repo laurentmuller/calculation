@@ -26,7 +26,7 @@ class CacheService
 
     public function __construct(
         private readonly CommandService $service,
-        #[Target('cache.calculation.service.cache')]
+        #[Target('calculation.service.cache')]
         private readonly CacheInterface $cache
     ) {
     }
@@ -46,6 +46,8 @@ class CacheService
 
     /**
      * Gets all available cache pools.
+     *
+     * @return string[]
      *
      * @throws InvalidArgumentException
      */

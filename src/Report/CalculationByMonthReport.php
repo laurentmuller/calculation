@@ -222,7 +222,7 @@ class CalculationByMonthReport extends AbstractArrayReport implements PdfChartIn
     {
         $parameters = ['search' => $date->format('m.Y')];
 
-        return $this->generator->generate('calculation_table', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->generator->generate('calculation_index', $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     private function isMinMargin(float $value): bool

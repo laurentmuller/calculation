@@ -6,7 +6,7 @@
 {# actions #}
 {%- set edit_path = is_granted(PERMISSION_EDIT, item) ? path('customer_edit', params) : null -%}
 {%- set delete_path = is_granted(PERMISSION_DELETE, item) ? path('customer_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, item, 'customer_table') -%}
+{%- set cancel_path = cancel_url(app.request, item, 'customer_index') -%}
 {# properties #}
 {% block property_body %}
 {{ property('customer.fields.title', item.title) }}

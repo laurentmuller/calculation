@@ -25,7 +25,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to display calculations timeline.
  */
 #[AsController]
-#[Route(path: '/test/timeline')]
+#[Route(path: '/test/timeline', name: 'timeline')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TimelineController extends AbstractController
 {
@@ -36,7 +36,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '', name: 'timeline')]
+    #[Get(path: '', name: '')]
     public function current(
         #[MapQueryParameter]
         ?string $date = null,
@@ -51,7 +51,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '/first', name: 'timeline_first')]
+    #[Get(path: '/first', name: '_first')]
     public function first(#[MapQueryParameter] ?string $interval = null): Response
     {
         $parameters = $this->service->first($interval);
@@ -62,7 +62,7 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Get(path: '/last', name: 'timeline_last')]
+    #[Get(path: '/last', name: '_last')]
     public function last(#[MapQueryParameter] ?string $interval = null): Response
     {
         $parameters = $this->service->last($interval);

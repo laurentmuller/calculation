@@ -76,7 +76,7 @@
         },
         {
             "name": "jquery-validate",
-            "display": "jquery-validate-localization",
+            "display": "jquery-validate:localization",
             "version": "1.20.0",
             "source": "cdnjs",
             "prefix": "localization/",
@@ -141,7 +141,7 @@
         },
         {
             "name": "bootstrap-table",
-            "version": "1.22.5",
+            "version": "1.22.6",
             "source": "cdnjs",
             "files": [
                 "bootstrap-table.js",
@@ -150,8 +150,8 @@
         },
         {
             "name": "bootstrap-table",
-            "display": "bootstrap-table-defer-url",
-            "version": "1.22.5",
+            "display": "bootstrap-table:defer-url",
+            "version": "1.22.6",
             "source": "cdnjs",
             "prefix": "extensions/defer-url/",
             "files": [
@@ -160,8 +160,8 @@
         },
         {
             "name": "bootstrap-table",
-            "display": "bootstrap-table-custom-view",
-            "version": "1.22.5",
+            "display": "bootstrap-table:custom-view",
+            "version": "1.22.6",
             "source": "cdnjs",
             "prefix": "extensions/custom-view/",
             "files": [

@@ -3,12 +3,12 @@
 <ul class="dropdown-menu {{ class }}">
     {{ dropdownItem(logout_path(), 'index.logout', 'sign-out-alt') }}
     {{ dropdownItem(path('user_profile_edit'), 'profile.edit.title', 'user-gear') }}
-    {{ dropdownItem(path('user_profile_change_password'), 'profile.change_password.title', 'unlock') }}
+    {{ dropdownItem(path('user_profile_password'), 'profile.change_password.title', 'unlock') }}
     {{ dropdownSeparator() }}
     {{ dropdownItem(path('user_parameters'), 'user.parameters.title', 'user-gear') }}
     {% if is_impersonator -%}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(impersonation_exit_path(path('user_table')), 'user.switch.exit.title', 'user-slash') }}
+        {{ dropdownItem(impersonation_exit_path(path('user_index')), 'user.switch.exit.title', 'user-slash') }}
     {% endif %}
     {% if is_env_dev -%}
         {{ dropdownSeparator() }}

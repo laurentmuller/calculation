@@ -35,7 +35,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for calculations where margins are below the minimum.
  */
 #[AsController]
-#[Route(path: '/calculation/below')]
+#[Route(path: '/calculation/below', name: 'calculation_below')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationBelowController extends AbstractController
 {
@@ -48,7 +48,7 @@ class CalculationBelowController extends AbstractController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'below_excel')]
+    #[Get(path: '/excel', name: '_excel')]
     public function excel(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();
@@ -65,11 +65,24 @@ class CalculationBelowController extends AbstractController
     }
 
     /**
+     * Render the table view.
+     */
+    #[Get(path: '', name: '_index')]
+    public function index(
+        CalculationBelowTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'calculation/calculation_table_below.html.twig');
+    }
+
+    /**
      * Export calculations to a PDF document.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: 'below_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         $minMargin = $this->getMinMargin();
@@ -83,19 +96,6 @@ class CalculationBelowController extends AbstractController
             ->setDescription($this->getDescription($minMargin));
 
         return $this->renderPdfDocument($doc);
-    }
-
-    /**
-     * Render the table view.
-     */
-    #[Get(path: '', name: 'below_table')]
-    public function table(
-        CalculationBelowTable $table,
-        LoggerInterface $logger,
-        #[MapQueryString]
-        DataQuery $query = new DataQuery()
-    ): Response {
-        return $this->handleTableRequest($table, $logger, $query, 'calculation/calculation_table_below.html.twig');
     }
 
     private function getDescription(float $minMargin): string

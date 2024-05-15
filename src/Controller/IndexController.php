@@ -38,6 +38,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -45,6 +46,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to display the home page.
  */
 #[AsController]
+#[Route(path: '/', name: self::HOME_PAGE)]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class IndexController extends AbstractController
 {
@@ -71,7 +73,7 @@ class IndexController extends AbstractController
      *
      * @psalm-api
      */
-    #[Post(path: '/hide/catalog', name: 'homepage_hide_catalog')]
+    #[Post(path: '/hide/catalog', name: '_hide_catalog')]
     public function hideCatalog(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_CATALOG, 'index.panel_catalog_hide_success');
@@ -82,7 +84,7 @@ class IndexController extends AbstractController
      *
      * @psalm-api
      */
-    #[Post(path: '/hide/month', name: 'homepage_hide_month')]
+    #[Post(path: '/hide/month', name: '_hide_month')]
     public function hideMonth(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_MONTH, 'index.panel_month_hide_success');
@@ -93,7 +95,7 @@ class IndexController extends AbstractController
      *
      * @psalm-api
      */
-    #[Post(path: '/hide/state', name: 'homepage_hide_state')]
+    #[Post(path: '/hide/state', name: '_hide_state')]
     public function hideState(Request $request): JsonResponse
     {
         return $this->hidePanel($request, PropertyServiceInterface::P_PANEL_STATE, 'index.panel_state_hide_success');
@@ -104,7 +106,7 @@ class IndexController extends AbstractController
      *
      * @throws \Exception
      */
-    #[Get(path: '/', name: self::HOME_PAGE)]
+    #[Get(path: '', name: '')]
     public function index(
         Request $request,
         #[MapQueryParameter]
@@ -157,7 +159,7 @@ class IndexController extends AbstractController
      *
      * @psalm-api
      */
-    #[Post(path: '/update/count', name: 'homepage_calculation')]
+    #[Post(path: '/update/count', name: '_calculation')]
     public function updateCalculation(Request $request): JsonResponse
     {
         $this->checkAjaxRequest($request);

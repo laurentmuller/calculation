@@ -19,6 +19,8 @@ use App\Generator\CustomerGenerator;
 use App\Generator\ProductGenerator;
 use App\Interfaces\GeneratorInterface;
 use App\Interfaces\RoleInterface;
+use App\Service\SuspendEventListenerService;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,25 +32,81 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to generate entities.
  */
 #[AsController]
-#[Route(path: '/generate')]
+#[Route(path: '/generate', name: self::PREFIX)]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class GeneratorController extends AbstractController
 {
-    final public const ROUTE_CALCULATION = 'generate_calculation';
-    final public const ROUTE_CUSTOMER = 'generate_customer';
-    final public const ROUTE_PRODUCT = 'generate_product';
+    private const KEY_COUNT = 'generate.count';
+    private const KEY_ENTITY = 'generate.entity';
+    private const KEY_SIMULATE = 'generate.simulate';
 
-    private const KEY_COUNT = 'admin.generate.count';
-    private const KEY_ENTITY = 'admin.generate.entity';
-    private const KEY_SIMULATE = 'admin.generate.simulate';
+    private const PREFIX = 'generate';
+    private const ROUTE_CALCULATION = '_calculation';
+    private const ROUTE_CUSTOMER = '_customer';
+    private const ROUTE_PRODUCT = '_product';
 
-    #[GetPost(path: '', name: 'generate')]
+    #[GetPost(path: '', name: '')]
     public function generate(): Response
     {
         $data = $this->getSessionData();
-        $helper = $this->createFormHelper('generate.fields.', $data);
+        $form = $this->createGenerateForm($data);
+
+        return $this->render('admin/generate.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    /**
+     * Create one or more calculations with random data.
+     *
+     * @psalm-api
+     */
+    #[Get(path: '/calculation', name: self::ROUTE_CALCULATION)]
+    public function generateCalculations(
+        Request $request,
+        CalculationGenerator $generator,
+        SuspendEventListenerService $service
+    ): JsonResponse {
+        return $this->generateEntities($request, $generator, $service);
+    }
+
+    /**
+     * Create one or more customers with random data.
+     *
+     * @psalm-api
+     */
+    #[Get(path: '/customer', name: self::ROUTE_CUSTOMER)]
+    public function generateCustomers(
+        Request $request,
+        CustomerGenerator $generator,
+        SuspendEventListenerService $service
+    ): JsonResponse {
+        return $this->generateEntities($request, $generator, $service);
+    }
+
+    /**
+     * Create one or more products with random data.
+     *
+     * @psalm-api
+     */
+    #[Get(path: '/product', name: self::ROUTE_PRODUCT)]
+    public function generateProducts(
+        Request $request,
+        ProductGenerator $generator,
+        SuspendEventListenerService $service
+    ): JsonResponse {
+        return $this->generateEntities($request, $generator, $service);
+    }
+
+    /**
+     * @param array{entity: ?string, count: int, simulate: bool} $data
+     */
+    private function createGenerateForm(array $data): FormInterface
+    {
         $choices = $this->getChoices();
         $attributes = $this->getAttributes($choices);
+
+        $helper = $this->createFormHelper('generate.fields.', $data);
         $helper->field('entity')
             ->updateOption('choice_attr', $attributes)
             ->addChoiceType($choices);
@@ -60,60 +118,33 @@ class GeneratorController extends AbstractController
             ])->addNumberType(0);
         $helper->addSimulateAndConfirmType($this->getTranslator(), $data['simulate']);
 
-        return $this->render('admin/generate.html.twig', [
-            'form' => $helper->createForm(),
-        ]);
-    }
-
-    /**
-     * Create one or more calculations with random data.
-     *
-     * @psalm-api
-     */
-    #[Get(path: '/calculation', name: self::ROUTE_CALCULATION)]
-    public function generateCalculations(Request $request, CalculationGenerator $generator): JsonResponse
-    {
-        return $this->generateEntities($request, $generator);
-    }
-
-    /**
-     * Create one or more customers with random data.
-     *
-     * @psalm-api
-     */
-    #[Get(path: '/customer', name: self::ROUTE_CUSTOMER)]
-    public function generateCustomers(Request $request, CustomerGenerator $generator): JsonResponse
-    {
-        return $this->generateEntities($request, $generator);
-    }
-
-    /**
-     * Create one or more products with random data.
-     *
-     * @psalm-api
-     */
-    #[Get(path: '/product', name: self::ROUTE_PRODUCT)]
-    public function generateProducts(Request $request, ProductGenerator $generator): JsonResponse
-    {
-        return $this->generateEntities($request, $generator);
+        return $helper->createForm();
     }
 
     /**
      * Generate entities.
      */
-    private function generateEntities(Request $request, GeneratorInterface $generator): JsonResponse
-    {
-        $count = $this->getRequestInt($request, 'count');
+    private function generateEntities(
+        Request $request,
+        GeneratorInterface $generator,
+        SuspendEventListenerService $service
+    ): JsonResponse {
+        $count = $this->getRequestInt($request, 'count', 1);
         $simulate = $this->getRequestBoolean($request, 'simulate', true);
-        $route = $this->getRequestString($request, '_route', self::ROUTE_CUSTOMER);
+        $route = $this->getRequestString($request, '_route', $this->getRoute(self::ROUTE_CUSTOMER));
         $entity = $this->generateUrl($route);
+
         $this->setSessionValues([
+            self::KEY_ENTITY => $entity,
             self::KEY_COUNT => $count,
             self::KEY_SIMULATE => $simulate,
-            self::KEY_ENTITY => $entity,
         ]);
 
-        return $generator->generate($count, $simulate);
+        if ($simulate) {
+            return $generator->generate($count, true);
+        }
+
+        return $service->suspendListeners(fn (): JsonResponse => $generator->generate($count, false));
     }
 
     /**
@@ -134,20 +165,25 @@ class GeneratorController extends AbstractController
     private function getChoices(): array
     {
         return [
-            'customer.name' => $this->generateUrl(self::ROUTE_CUSTOMER),
-            'calculation.name' => $this->generateUrl(self::ROUTE_CALCULATION),
-            'product.name' => $this->generateUrl(self::ROUTE_PRODUCT),
+            'customer.name' => $this->generateUrl($this->getRoute(self::ROUTE_CUSTOMER)),
+            'calculation.name' => $this->generateUrl($this->getRoute(self::ROUTE_CALCULATION)),
+            'product.name' => $this->generateUrl($this->getRoute(self::ROUTE_PRODUCT)),
         ];
     }
 
+    private function getRoute(string $suffix): string
+    {
+        return self::PREFIX . $suffix;
+    }
+
     /**
-     * @return array{count: int, entity: ?string, simulate: bool}
+     * @return array{entity: ?string, count: int, simulate: bool}
      */
     private function getSessionData(): array
     {
         return [
-            'count' => $this->getSessionInt(self::KEY_COUNT, 1),
             'entity' => $this->getSessionString(self::KEY_ENTITY),
+            'count' => $this->getSessionInt(self::KEY_COUNT, 1),
             'simulate' => $this->isSessionBool(self::KEY_SIMULATE, true),
         ];
     }

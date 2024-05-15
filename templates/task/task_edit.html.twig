@@ -78,7 +78,7 @@
 {# parameters #}
 {%- set title = title|default(new ? 'task.add.title' : 'task.edit.title') -%}
 {%- set title_icon = ICON_TASK -%}
-{%- set page_list = 'task_table' -%}
+{%- set page_list = 'task_index' -%}
 {%- set form_attr = form_attr|default({})|merge({
      'data-title': title|trans,
      'data-category': 'taskitem.fields.name'|trans,

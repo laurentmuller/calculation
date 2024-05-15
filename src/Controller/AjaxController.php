@@ -43,7 +43,7 @@ use Twig\Extra\Markdown\MarkdownInterface;
  * Controller for all XMLHttpRequest (Ajax) calls.
  */
 #[AsController]
-#[Route(path: '/ajax')]
+#[Route(path: '/ajax', name: 'ajax')]
 class AjaxController extends AbstractController
 {
     use CookieTrait;
@@ -53,7 +53,7 @@ class AjaxController extends AbstractController
      * Compute a task.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/task', name: 'ajax_task')]
+    #[Post(path: '/task', name: '_task')]
     public function computeTask(#[MapRequestPayload] TaskComputeQuery $query, TaskService $service): JsonResponse
     {
         $result = $service->computeQuery($query);
@@ -74,7 +74,7 @@ class AjaxController extends AbstractController
      * Gets the license content.
      */
     #[IsGranted(RoleInterface::ROLE_ADMIN)]
-    #[Get(path: '/license', name: 'ajax_license')]
+    #[Get(path: '/license', name: '_license')]
     public function license(
         #[MapQueryParameter]
         string $file,
@@ -100,7 +100,7 @@ class AjaxController extends AbstractController
      * Validate a strength password.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/password', name: 'ajax_password')]
+    #[Post(path: '/password', name: '_password')]
     public function password(#[MapRequestPayload] PasswordQuery $query, PasswordService $service): JsonResponse
     {
         $results = $service->validate($query);
@@ -114,7 +114,7 @@ class AjaxController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/random/text', name: 'ajax_random_text')]
+    #[Get(path: '/random/text', name: '_random_text')]
     public function randomText(FakerService $service, #[MapQueryParameter] int $maxNbChars = 150): JsonResponse
     {
         $generator = $service->getGenerator();
@@ -131,7 +131,7 @@ class AjaxController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/dialog/page', name: 'ajax_dialog_page')]
+    #[Get(path: '/dialog/page', name: '_dialog_page')]
     public function renderDialogPage(): JsonResponse
     {
         return $this->renderTemplate('dialog/dialog_table_page.html.twig');
@@ -143,7 +143,7 @@ class AjaxController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/dialog/sort', name: 'ajax_dialog_sort')]
+    #[Post(path: '/dialog/sort', name: '_dialog_sort')]
     public function renderDialogSort(Request $request): JsonResponse
     {
         return $this->renderTemplate('dialog/dialog_table_sort.html.twig', ['columns' => $request->toArray()]);
@@ -155,7 +155,7 @@ class AjaxController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/session/set', name: 'ajax_session_set')]
+    #[Post(path: '/session/set', name: '_session_set')]
     public function saveSession(#[MapRequestPayload] SessionQuery $query): JsonResponse
     {
         try {
@@ -173,7 +173,7 @@ class AjaxController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/save', name: 'ajax_save_table')]
+    #[Post(path: '/save', name: '_save_table')]
     public function saveTable(
         Request $request,
         UserService $service

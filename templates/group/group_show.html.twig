@@ -8,7 +8,7 @@
 {# actions #}
 {%- set edit_path = is_granted(PERMISSION_EDIT, item) ? path('group_edit', params) : null -%}
 {%- set delete_path = is_granted(PERMISSION_DELETE, item) ? path('group_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, item, 'group_table') -%}
+{%- set cancel_path = cancel_url(app.request, item, 'group_index') -%}
 {# properties #}
 {% block property_body %}
 {{ property('group.fields.code', item.code) }}

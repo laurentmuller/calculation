@@ -34,6 +34,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\UnitOfWork;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Contracts\Service\ServiceMethodsSubscriberTrait;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
@@ -79,6 +80,10 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         'rights',
         'overwrite',
     ];
+
+    public function __construct(private readonly Security $security)
+    {
+    }
 
     /**
      * @psalm-api
@@ -170,6 +175,37 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
         return $this->isTransDefined($id) ? $id : $default;
     }
 
+    private function handleUserChangeSet(UnitOfWork $unitOfWork, User $user): bool
+    {
+        if ($this->isCurrentUser($user)) {
+            return true;
+        }
+
+        $changeSet = \array_keys($unitOfWork->getEntityChangeSet($user));
+        if ($this->isUserLogin($changeSet) || $this->isUserReset($changeSet)) {
+            return true;
+        }
+
+        if ($this->isUserRights($changeSet)) {
+            $this->notifyEntity($user, '', 'user.rights.success');
+
+            return true;
+        }
+
+        if ($this->isUserPassword($changeSet)) {
+            $this->notifyEntity($user, '', 'user.change_password.change_success');
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isCurrentUser(User $user): bool
+    {
+        return $user === $this->security->getUser();
+    }
+
     private function isMatchFields(array $changeSet, array $fields): bool
     {
         return [] !== \array_intersect($changeSet, $fields);
@@ -209,19 +245,8 @@ class PersistenceListener implements DisableListenerInterface, ServiceSubscriber
             return;
         }
         foreach ($entities as $entity) {
-            if (User::class === $entity::class) {
-                $changeSet = \array_keys($unitOfWork->getEntityChangeSet($entity));
-                if ($this->isUserLogin($changeSet) || $this->isUserReset($changeSet)) {
-                    continue;
-                }
-                if ($this->isUserRights($changeSet)) {
-                    $this->notifyEntity($entity, '', 'user.rights.success');
-                    continue;
-                }
-                if ($this->isUserPassword($changeSet)) {
-                    $this->notifyEntity($entity, '', 'user.change_password.change_success');
-                    continue;
-                }
+            if (User::class === $entity::class && $this->handleUserChangeSet($unitOfWork, $entity)) {
+                continue;
             }
             $this->notifyEntity($entity, $suffix, $default, $type);
         }

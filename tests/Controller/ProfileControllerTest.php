@@ -19,12 +19,12 @@ class ProfileControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator
     {
-        yield ['/profile/change-password', self::ROLE_USER];
-        yield ['/profile/change-password', self::ROLE_ADMIN];
-        yield ['/profile/change-password', self::ROLE_SUPER_ADMIN];
+        yield ['/user/profile/password', self::ROLE_USER];
+        yield ['/user/profile/password', self::ROLE_ADMIN];
+        yield ['/user/profile/password', self::ROLE_SUPER_ADMIN];
 
-        yield ['/profile/edit', self::ROLE_USER];
-        yield ['/profile/edit', self::ROLE_ADMIN];
-        yield ['/profile/edit', self::ROLE_SUPER_ADMIN];
+        yield ['/user/profile/edit', self::ROLE_USER];
+        yield ['/user/profile/edit', self::ROLE_ADMIN];
+        yield ['/user/profile/edit', self::ROLE_SUPER_ADMIN];
     }
 }

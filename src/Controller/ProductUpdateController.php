@@ -32,11 +32,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to update product prices.
  */
 #[AsController]
-#[Route(path: '/admin')]
+#[Route(path: '/admin', name: 'admin')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class ProductUpdateController extends AbstractController
 {
-    #[GetPost(path: '/product', name: 'admin_product')]
+    #[GetPost(path: '/product', name: '_product')]
     public function invoke(Request $request, ProductUpdateService $service): Response
     {
         $query = $service->createQuery();

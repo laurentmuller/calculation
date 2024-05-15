@@ -35,7 +35,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @psalm-import-type CalculationItemType from CalculationRepository
  */
 #[AsController]
-#[Route(path: '/calculation/empty')]
+#[Route(path: '/calculation/empty', name: 'calculation_empty')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationEmptyController extends AbstractController
 {
@@ -47,7 +47,7 @@ class CalculationEmptyController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/excel', name: 'empty_excel')]
+    #[Get(path: '/excel', name: '_excel')]
     public function excel(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -61,11 +61,24 @@ class CalculationEmptyController extends AbstractController
     }
 
     /**
+     * Render the table view.
+     */
+    #[Get(path: '', name: '_index')]
+    public function index(
+        CalculationEmptyTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'calculation/calculation_table_empty.html.twig');
+    }
+
+    /**
      * Export the calculations where items have the price or the quantity is equal to 0.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: 'empty_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -76,19 +89,6 @@ class CalculationEmptyController extends AbstractController
         $doc = new CalculationsEmptyReport($this, $items);
 
         return $this->renderPdfDocument($doc);
-    }
-
-    /**
-     * Render the table view.
-     */
-    #[Get(path: '', name: 'empty_table')]
-    public function table(
-        CalculationEmptyTable $table,
-        LoggerInterface $logger,
-        #[MapQueryString]
-        DataQuery $query = new DataQuery()
-    ): Response {
-        return $this->handleTableRequest($table, $logger, $query, 'calculation/calculation_table_empty.html.twig');
     }
 
     /**

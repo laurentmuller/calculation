@@ -40,7 +40,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @template-extends AbstractEntityController<GlobalMargin, GlobalMarginRepository>
  */
 #[AsController]
-#[Route(path: '/globalmargin')]
+#[Route(path: '/globalmargin', name: 'globalmargin')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class GlobalMarginController extends AbstractEntityController
 {
@@ -49,7 +49,7 @@ class GlobalMarginController extends AbstractEntityController
         parent::__construct($repository);
     }
 
-    #[GetPost(path: '/edit', name: 'globalmargin_edit')]
+    #[GetPost(path: '/edit', name: '_edit')]
     public function edit(Request $request): Response
     {
         $this->checkPermission(EntityPermission::ADD, EntityPermission::EDIT, EntityPermission::DELETE);
@@ -69,7 +69,7 @@ class GlobalMarginController extends AbstractEntityController
             }
             $repository->flush();
 
-            return $this->redirectToRoute('globalmargin_table');
+            return $this->redirectToRoute('globalmargin_index');
         }
 
         return $this->render('globalmargin/globalmargin_edit_list.html.twig', [
@@ -84,7 +84,7 @@ class GlobalMarginController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'globalmargin_excel')]
+    #[Get(path: '/excel', name: '_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('minimum');
@@ -98,12 +98,25 @@ class GlobalMarginController extends AbstractEntityController
     }
 
     /**
+     * Render the table view.
+     */
+    #[Get(path: '', name: '_index')]
+    public function index(
+        GlobalMarginTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'globalmargin/globalmargin_table.html.twig');
+    }
+
+    /**
      * Export the global margins to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no global margin is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: 'globalmargin_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('minimum');
@@ -119,22 +132,9 @@ class GlobalMarginController extends AbstractEntityController
     /**
      * Show properties of a global margin.
      */
-    #[Get(path: '/show/{id}', name: 'globalmargin_show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/show/{id}', name: '_show', requirements: self::ID_REQUIREMENT)]
     public function show(GlobalMargin $item): Response
     {
         return $this->showEntity($item);
-    }
-
-    /**
-     * Render the table view.
-     */
-    #[Get(path: '', name: 'globalmargin_table')]
-    public function table(
-        GlobalMarginTable $table,
-        LoggerInterface $logger,
-        #[MapQueryString]
-        DataQuery $query = new DataQuery()
-    ): Response {
-        return $this->handleTableRequest($table, $logger, $query, 'globalmargin/globalmargin_table.html.twig');
     }
 }

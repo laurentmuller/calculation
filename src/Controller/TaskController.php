@@ -44,7 +44,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @template-extends AbstractEntityController<Task, TaskRepository>
  */
 #[AsController]
-#[Route(path: '/task')]
+#[Route(path: '/task', name: 'task')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class TaskController extends AbstractEntityController
 {
@@ -56,7 +56,7 @@ class TaskController extends AbstractEntityController
     /**
      * Add a task.
      */
-    #[GetPost(path: '/add', name: 'task_add')]
+    #[GetPost(path: '/add', name: '_add')]
     public function add(Request $request): Response
     {
         $item = new Task();
@@ -71,7 +71,7 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a copy (cloned) task.
      */
-    #[GetPost(path: '/clone/{id}', name: 'task_clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/clone/{id}', name: '_clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Task $item): Response
     {
         $name = $this->trans('common.clone_description', ['%description%' => $item->getName()]);
@@ -87,7 +87,7 @@ class TaskController extends AbstractEntityController
     /**
      * Display the page to compute a task.
      */
-    #[Get(path: '/compute/{id?}', name: 'task_compute', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/compute/{id?}', name: '_compute', requirements: self::ID_REQUIREMENT)]
     public function compute(Request $request, TaskService $service, ?Task $task = null): Response
     {
         [$tasks, $task] = $this->getTasks($service, $task);
@@ -113,7 +113,7 @@ class TaskController extends AbstractEntityController
     /**
      * Delete a task.
      */
-    #[GetDelete(path: '/delete/{id}', name: 'task_delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: '/delete/{id}', name: '_delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Task $item, LoggerInterface $logger): Response
     {
         return $this->deleteEntity($request, $item, $logger);
@@ -122,7 +122,7 @@ class TaskController extends AbstractEntityController
     /**
      * Edit a task.
      */
-    #[GetPost(path: '/edit/{id}', name: 'task_edit', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/edit/{id}', name: '_edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Task $item): Response
     {
         return $this->editEntity($request, $item);
@@ -135,7 +135,7 @@ class TaskController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'task_excel')]
+    #[Get(path: '/excel', name: '_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('name');
@@ -149,12 +149,25 @@ class TaskController extends AbstractEntityController
     }
 
     /**
+     * Render the table view.
+     */
+    #[Get(path: '', name: '_index')]
+    public function index(
+        TaskTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'task/task_table.html.twig');
+    }
+
+    /**
      * Export tasks to a PDF document.
      *
      * @throws NotFoundHttpException                if no category is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: 'task_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('name');
@@ -170,23 +183,10 @@ class TaskController extends AbstractEntityController
     /**
      * Show properties of a task.
      */
-    #[Get(path: '/show/{id}', name: 'task_show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/show/{id}', name: '_show', requirements: self::ID_REQUIREMENT)]
     public function show(Task $item): Response
     {
         return $this->showEntity($item);
-    }
-
-    /**
-     * Render the table view.
-     */
-    #[Get(path: '', name: 'task_table')]
-    public function table(
-        TaskTable $table,
-        LoggerInterface $logger,
-        #[MapQueryString]
-        DataQuery $query = new DataQuery()
-    ): Response {
-        return $this->handleTableRequest($table, $logger, $query, 'task/task_table.html.twig');
     }
 
     /**

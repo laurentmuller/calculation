@@ -3,7 +3,7 @@
 {# parameters #}
 {%- set title_icon = ICON_PRODUCT -%}
 {%- set title = title|default(new ? 'product.add.title' : 'product.edit.title') -%}
-{%- set page_list = 'product_table' -%}
+{%- set page_list = 'product_index' -%}
 {%- set form_attr = form_attr|default({})|merge({
                      'data-title': title|trans,
                      'data-unit-search': url('ajax_search_unit'),

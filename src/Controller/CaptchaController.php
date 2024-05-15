@@ -28,7 +28,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @see CaptchaImageType
  */
 #[AsController]
-#[Route(path: '/captcha')]
+#[Route(path: '/captcha', name: 'captcha')]
 #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
 class CaptchaController extends AbstractController
 {
@@ -37,7 +37,7 @@ class CaptchaController extends AbstractController
      *
      * @throws \Exception
      */
-    #[Get(path: '/image', name: 'captcha_image')]
+    #[Get(path: '/image', name: '_image')]
     public function image(CaptchaImageService $service): JsonResponse
     {
         $data = $service->generateImage(true);
@@ -55,7 +55,7 @@ class CaptchaController extends AbstractController
     /**
      * Validate a captcha image.
      */
-    #[Get(path: '/validate', name: 'captcha_validate')]
+    #[Get(path: '/validate', name: '_validate')]
     public function validate(
         CaptchaImageService $service,
         #[MapQueryParameter]

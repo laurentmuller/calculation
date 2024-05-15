@@ -29,15 +29,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for user profile.
  */
 #[AsController]
-#[Route(path: '/profile')]
+#[Route(path: '/user/profile', name: 'user_profile')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class ProfileController extends AbstractController
 {
     /**
      * Change the password of the current user (if any).
      */
-    #[GetPost(path: '/change-password', name: 'user_profile_change_password')]
-    public function changePassword(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response
+    #[GetPost(path: '/password', name: '_password')]
+    public function editPassword(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(ProfileChangePasswordType::class, $user);
         if ($this->handleRequestForm($request, $form)) {
@@ -58,7 +58,7 @@ class ProfileController extends AbstractController
     /**
      * Edit the profile of the current user (if any).
      */
-    #[GetPost(path: '/edit', name: 'user_profile_edit')]
+    #[GetPost(path: '/edit', name: '_edit')]
     public function editProfil(Request $request, #[CurrentUser] User $user, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(ProfileEditType::class, $user);

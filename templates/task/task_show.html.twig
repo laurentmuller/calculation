@@ -7,7 +7,7 @@
 {# actions #}
 {%- set edit_path = is_granted(PERMISSION_EDIT, item) ? path('task_edit', params) : null -%}
 {%- set delete_path = is_granted(PERMISSION_DELETE, item) ? path('task_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, item, 'task_table') -%}
+{%- set cancel_path = cancel_url(app.request, item, 'task_index') -%}
 {# properties #}
 {% block property_body %}
 {{ property('task.fields.name', item.name) }}

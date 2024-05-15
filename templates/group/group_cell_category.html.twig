@@ -1,5 +1,5 @@
 {%- if count > 0 -%}
-    {%- set href = path('category_table', {'search[0][index]': 6, 'search[0][value]': id}) -%}
+    {%- set href = path('category_index', {'search[0][index]': 6, 'search[0][value]': id}) -%}
     <a href="{{ href }}" title="{{ 'group.list.category_title'|trans }}">{{ count|integer }}</a>
 {%- else -%}
     {{- count|integer -}}

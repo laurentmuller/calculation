@@ -4,7 +4,7 @@
 {# parameters #}
 {%- set title = 'globalmargin.show.title' -%}
 {%- set params = route_params(app.request, item) %}
-{%- set cancel_path = cancel_url(app.request, item, 'globalmargin_table') -%}
+{%- set cancel_path = cancel_url(app.request, item, 'globalmargin_index') -%}
 {# properties #}
 {% block property_body %}
 {{ property('globalmargin.fields.minimum', item.minimum|amount) }}

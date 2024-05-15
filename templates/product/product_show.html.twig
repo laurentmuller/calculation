@@ -7,7 +7,7 @@
 {# actions #}
 {%- set edit_path = is_granted(PERMISSION_EDIT, item) ? path('product_edit', params) : null -%}
 {%- set delete_path = is_granted(PERMISSION_DELETE, item) ? path('product_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, item, 'product_table') -%}
+{%- set cancel_path = cancel_url(app.request, item, 'product_index') -%}
 {# properties #}
 {% block property_body %}
 {{ property('product.fields.description', item.description) }}

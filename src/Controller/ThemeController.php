@@ -26,11 +26,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for website theme.
  */
 #[AsController]
-#[Route(path: '/theme')]
+#[Route(path: '/theme', name: 'theme')]
 #[IsGranted(new Expression('is_granted("ROLE_USER") and user.isEnabled()'))]
 class ThemeController extends AbstractController
 {
-    #[Get(path: '/dialog', name: 'theme_dialog')]
+    #[Get(path: '/dialog', name: '_dialog')]
     public function dialog(Request $request, ThemeService $service): JsonResponse
     {
         $result = $this->renderView('dialog/dialog_theme.html.twig', [
@@ -41,7 +41,7 @@ class ThemeController extends AbstractController
         return $this->json($result);
     }
 
-    #[Get(path: '/save', name: 'theme_save')]
+    #[Get(path: '/save', name: '_save')]
     public function saveTheme(Request $request, ThemeService $service): JsonResponse
     {
         /** @psalm-var Theme $theme */

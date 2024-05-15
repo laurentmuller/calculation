@@ -55,7 +55,7 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      */
     public function formatCategories(int $value, array $entity): string
     {
-        $route = $this->isGrantedList(Category::class) ? 'category_table' : false;
+        $route = $this->isGrantedList(Category::class) ? 'category_index' : false;
 
         return $this->renderCell(
             $value,
@@ -77,7 +77,7 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      */
     public function formatProducts(int $value, array $entity): string
     {
-        $route = $this->isGrantedList(Product::class) ? 'product_table' : false;
+        $route = $this->isGrantedList(Product::class) ? 'product_index' : false;
 
         return $this->renderCell(
             $value,
@@ -99,7 +99,7 @@ class GroupTable extends AbstractEntityTable implements ServiceSubscriberInterfa
      */
     public function formatTasks(int $value, array $entity): string
     {
-        $route = $this->isGrantedList(Task::class) ? 'task_table' : false;
+        $route = $this->isGrantedList(Task::class) ? 'task_index' : false;
 
         return $this->renderCell(
             $value,

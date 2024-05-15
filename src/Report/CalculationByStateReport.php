@@ -201,7 +201,7 @@ class CalculationByStateReport extends AbstractArrayReport implements PdfChartIn
 
     private function getURL(int $id): string
     {
-        return $this->generator->generate('calculation_table', [CalculationTable::PARAM_STATE => $id]);
+        return $this->generator->generate('calculation_index', [CalculationTable::PARAM_STATE => $id]);
     }
 
     private function isMinMargin(float $value): bool

@@ -40,7 +40,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @template-extends AbstractEntityController<Group, GroupRepository>
  */
 #[AsController]
-#[Route(path: '/group')]
+#[Route(path: '/group', name: 'group')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class GroupController extends AbstractEntityController
 {
@@ -52,7 +52,7 @@ class GroupController extends AbstractEntityController
     /**
      * Add a group.
      */
-    #[GetPost(path: '/add', name: 'group_add')]
+    #[GetPost(path: '/add', name: '_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new Group());
@@ -61,7 +61,7 @@ class GroupController extends AbstractEntityController
     /**
      * Clone (copy) a group.
      */
-    #[GetPost(path: '/clone/{id}', name: 'group_clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/clone/{id}', name: '_clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Group $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -79,7 +79,7 @@ class GroupController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetDelete(path: '/delete/{id}', name: 'group_delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: '/delete/{id}', name: '_delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Group $item, CalculationGroupRepository $groupRepository, LoggerInterface $logger): Response
     {
         // external references?
@@ -114,7 +114,7 @@ class GroupController extends AbstractEntityController
     /**
      * Edit a group.
      */
-    #[GetPost(path: '/edit/{id}', name: 'group_edit', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/edit/{id}', name: '_edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Group $item): Response
     {
         return $this->editEntity($request, $item);
@@ -127,7 +127,7 @@ class GroupController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'group_excel')]
+    #[Get(path: '/excel', name: '_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -140,12 +140,25 @@ class GroupController extends AbstractEntityController
     }
 
     /**
+     * Render the table view.
+     */
+    #[Get(path: '', name: '_index')]
+    public function index(
+        GroupTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'group/group_table.html.twig');
+    }
+
+    /**
      * Export the groups to a PDF document.
      *
      * @throws NotFoundHttpException
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: 'group_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -160,22 +173,9 @@ class GroupController extends AbstractEntityController
     /**
      * Show properties of a group.
      */
-    #[Get(path: '/show/{id}', name: 'group_show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/show/{id}', name: '_show', requirements: self::ID_REQUIREMENT)]
     public function show(Group $item): Response
     {
         return $this->showEntity($item);
-    }
-
-    /**
-     * Render the table view.
-     */
-    #[Get(path: '', name: 'group_table')]
-    public function table(
-        GroupTable $table,
-        LoggerInterface $logger,
-        #[MapQueryString]
-        DataQuery $query = new DataQuery()
-    ): Response {
-        return $this->handleTableRequest($table, $logger, $query, 'group/group_table.html.twig');
     }
 }

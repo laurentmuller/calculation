@@ -40,7 +40,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @template-extends AbstractEntityController<CalculationState, CalculationStateRepository>
  */
 #[AsController]
-#[Route(path: '/calculationstate')]
+#[Route(path: '/calculationstate', name: 'calculationstate')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CalculationStateController extends AbstractEntityController
 {
@@ -52,7 +52,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Add a new calculation state.
      */
-    #[GetPost(path: '/add', name: 'calculationstate_add')]
+    #[GetPost(path: '/add', name: '_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new CalculationState());
@@ -61,7 +61,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Clone (copy) a calculation state.
      */
-    #[GetPost(path: '/clone/{id}', name: 'calculationstate_clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/clone/{id}', name: '_clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, CalculationState $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -78,7 +78,7 @@ class CalculationStateController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetDelete(path: '/delete/{id}', name: 'calculationstate_delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: '/delete/{id}', name: '_delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, CalculationState $item, CalculationRepository $repository, LoggerInterface $logger): Response
     {
         $count = $repository->countStateReferences($item);
@@ -106,7 +106,7 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Edit a calculation state.
      */
-    #[GetPost(path: '/edit/{id}', name: 'calculationstate_edit', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/edit/{id}', name: '_edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, CalculationState $item): Response
     {
         return $this->editEntity($request, $item);
@@ -119,7 +119,7 @@ class CalculationStateController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'calculationstate_excel')]
+    #[Get(path: '/excel', name: '_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -133,12 +133,25 @@ class CalculationStateController extends AbstractEntityController
     }
 
     /**
+     * Render the table view.
+     */
+    #[Get(path: '', name: '_index')]
+    public function index(
+        CalculationStateTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'calculationstate/calculationstate_table.html.twig');
+    }
+
+    /**
      * Export the calculation states to a PDF document.
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException if no calculation state is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: 'calculationstate_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -154,23 +167,10 @@ class CalculationStateController extends AbstractEntityController
     /**
      * Show properties of a calculation state.
      */
-    #[Get(path: '/show/{id}', name: 'calculationstate_show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/show/{id}', name: '_show', requirements: self::ID_REQUIREMENT)]
     public function show(CalculationState $item): Response
     {
         return $this->showEntity($item);
-    }
-
-    /**
-     * Render the table view.
-     */
-    #[Get(path: '', name: 'calculationstate_table')]
-    public function table(
-        CalculationStateTable $table,
-        LoggerInterface $logger,
-        #[MapQueryString]
-        DataQuery $query = new DataQuery()
-    ): Response {
-        return $this->handleTableRequest($table, $logger, $query, 'calculationstate/calculationstate_table.html.twig');
     }
 
     /**

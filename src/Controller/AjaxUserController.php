@@ -29,7 +29,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for user XMLHttpRequest (Ajax) calls.
  */
 #[AsController]
-#[Route(path: '/ajax')]
+#[Route(path: '/ajax/check/user', name: 'ajax_check_user')]
 class AjaxUserController extends AbstractController
 {
     public function __construct(private readonly UserRepository $repository)
@@ -42,7 +42,7 @@ class AjaxUserController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/check/user/email', name: 'ajax_check_user_email')]
+    #[Get(path: '/email', name: '_email')]
     public function checkEmail(
         #[MapQueryParameter]
         ?string $email = null,
@@ -72,7 +72,7 @@ class AjaxUserController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/check/user/name', name: 'ajax_check_user_name')]
+    #[Get(path: '/name', name: '_name')]
     public function checkName(
         #[MapQueryParameter]
         ?string $username = null,
@@ -102,7 +102,7 @@ class AjaxUserController extends AbstractController
      * @psalm-api
      */
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: '/check/user', name: 'ajax_check_user')]
+    #[Get(path: '', name: '')]
     public function checkUser(#[MapQueryParameter] ?string $user = null): JsonResponse
     {
         $message = null;

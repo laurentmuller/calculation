@@ -55,7 +55,7 @@ class CalculationStateTable extends AbstractEntityTable implements ServiceSubscr
      */
     public function formatCalculations(int $value, array $entity): string
     {
-        $route = $this->isGrantedList(Calculation::class) ? 'calculation_table' : false;
+        $route = $this->isGrantedList(Calculation::class) ? 'calculation_index' : false;
 
         return $this->renderCell(
             $value,

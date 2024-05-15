@@ -17,7 +17,7 @@
             <ul class="navbar-nav me-auto">
                 {% if is_granted_calculation -%}
                     <li class="nav-item">
-                        {{- link(path('calculation_table'), 'calculation.list.title', 'nav-link', ICON_CALCULATION) -}}
+                        {{- link(path('calculation_index'), 'calculation.list.title', 'nav-link', ICON_CALCULATION) -}}
                     </li>
                 {% endif %}
                 {% if is_granted_data -%}

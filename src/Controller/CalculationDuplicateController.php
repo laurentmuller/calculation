@@ -35,7 +35,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @psalm-import-type CalculationItemType from CalculationRepository
  */
 #[AsController]
-#[Route(path: '/calculation/duplicate')]
+#[Route(path: '/calculation/duplicate', name: 'calculation_duplicate')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class CalculationDuplicateController extends AbstractController
 {
@@ -47,7 +47,7 @@ class CalculationDuplicateController extends AbstractController
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/excel', name: 'duplicate_excel')]
+    #[Get(path: '/excel', name: '_excel')]
     public function excel(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -61,11 +61,24 @@ class CalculationDuplicateController extends AbstractController
     }
 
     /**
+     * Render the table view.
+     */
+    #[Get(path: '', name: '_index')]
+    public function index(
+        CalculationDuplicateTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'calculation/calculation_table_duplicate.html.twig');
+    }
+
+    /**
      * Exports the duplicate items in the calculations.
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: 'duplicate_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(CalculationRepository $repository): Response
     {
         $response = $this->getEmptyResponse($repository);
@@ -76,19 +89,6 @@ class CalculationDuplicateController extends AbstractController
         $doc = new CalculationsDuplicateReport($this, $items);
 
         return $this->renderPdfDocument($doc);
-    }
-
-    /**
-     * Render the table view.
-     */
-    #[Get(path: '', name: 'duplicate_table')]
-    public function table(
-        CalculationDuplicateTable $table,
-        LoggerInterface $logger,
-        #[MapQueryString]
-        DataQuery $query = new DataQuery()
-    ): Response {
-        return $this->handleTableRequest($table, $logger, $query, 'calculation/calculation_table_duplicate.html.twig');
     }
 
     /**

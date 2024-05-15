@@ -15,8 +15,8 @@
 {%- endblock %}
 {# gloval actions #}
 {% block global_actions -%}
-{{- _self.item_external(path('empty_pdf'), 'calculation.list.pdf_title', ICON_PDF) }}
-{{- _self.item_external(path('empty_excel'), 'calculation.list.excel_title', ICON_EXCEL) }}
+{{- _self.item_external(path('calculation_empty_pdf'), 'calculation.list.pdf_title', ICON_PDF) }}
+{{- _self.item_external(path('calculation_empty_excel'), 'calculation.list.excel_title', ICON_EXCEL) }}
 {%- endblock %}
 {# actions #}
 {% block edit_actions -%}

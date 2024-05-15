@@ -78,13 +78,18 @@ class SuspendEventListenerService
     /**
      * Disabled listeners, call the given function and enabled listeners.
      *
-     * @param callable $callback the function to call while listeners are disabled
+     * @template TResult
+     *
+     * @param callable():TResult $callback the function to call while listeners are disabled
+     *
+     * @return TResult
      */
-    public function suspendListeners(callable $callback): void
+    public function suspendListeners(callable $callback): mixed
     {
         try {
             $this->disableListeners();
-            \call_user_func($callback);
+
+            return \call_user_func($callback);
         } finally {
             $this->enableListeners();
         }

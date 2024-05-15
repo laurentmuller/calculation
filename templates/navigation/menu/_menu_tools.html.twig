@@ -4,9 +4,9 @@
     {{ dropdownItem(path('search'), 'search.title', 'search') }}
     {% if is_admin %}
         {{ dropdownSeparator() }}
-        {{ dropdownItem(path('below_table'), 'below.title', ICON_GLOBAL_MARGIN) }}
-        {{ dropdownItem(path('duplicate_table'), 'duplicate.title', ICON_COPY) }}
-        {{ dropdownItem(path('empty_table'), 'empty.title', 'file-code far') }}
+        {{ dropdownItem(path('calculation_below_index'), 'below.title', ICON_GLOBAL_MARGIN) }}
+        {{ dropdownItem(path('calculation_duplicate_index'), 'duplicate.title', ICON_COPY) }}
+        {{ dropdownItem(path('calculation_empty_index'), 'empty.title', 'file-code far') }}
     {% endif -%}
     {%- if is_granted_task -%}
         {% if is_admin -%}

@@ -21,12 +21,12 @@
 {%- set panel_key = 'DISPLAY_CATALOG' -%}
 {%- set panel_show = app.request.cookies.boolean(panel_key, true) -%}
 {%- set panel_title = panel_show ? 'about.collapse' : 'about.expand' -%}
-{%- set task_path = is_granted_task ? 'task_table' : false -%}
-{%- set group_path = is_granted_group ? 'group_table' : false -%}
-{%- set product_path = is_granted_product ? 'product_table' : false -%}
-{%- set category_path = is_granted_category ? 'category_table' : false -%}
-{%- set margin_path = is_granted_global_margin ? 'globalmargin_table' : false -%}
-{%- set state_path = is_granted_calculation_state ? 'calculationstate_table' : false -%}
+{%- set task_path = is_granted_task ? 'task_index' : false -%}
+{%- set group_path = is_granted_group ? 'group_index' : false -%}
+{%- set product_path = is_granted_product ? 'product_index' : false -%}
+{%- set category_path = is_granted_category ? 'category_index' : false -%}
+{%- set margin_path = is_granted_global_margin ? 'globalmargin_index' : false -%}
+{%- set state_path = is_granted_calculation_state ? 'calculationstate_index' : false -%}
 {%- set header_attributes = header_attributes|merge({
     href: '#' ~ panel_key,
     title: panel_title|trans,

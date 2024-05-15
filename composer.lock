@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d05ff92174da209376a73303154e75f",
+    "content-hash": "0398a3ed0a7ccb753655e6b4cc57fbca",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -9735,16 +9735,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.11.0",
+            "version": "1.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "666cb1703742cea9cc80fee631f0940e1592fa6e"
+                "reference": "e524358f930e41a2b4cca1320e3b04fc26b39e0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/666cb1703742cea9cc80fee631f0940e1592fa6e",
-                "reference": "666cb1703742cea9cc80fee631f0940e1592fa6e",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e524358f930e41a2b4cca1320e3b04fc26b39e0b",
+                "reference": "e524358f930e41a2b4cca1320e3b04fc26b39e0b",
                 "shasum": ""
             },
             "require": {
@@ -9789,7 +9789,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-13T06:02:22+00:00"
+            "time": "2024-05-15T08:00:59+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -12360,16 +12360,16 @@
         },
         {
             "name": "vincentlanglet/twig-cs-fixer",
-            "version": "2.9.0",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VincentLanglet/Twig-CS-Fixer.git",
-                "reference": "30dc207f95298cff45ad3ddca20eab2c776ae030"
+                "reference": "ca9bdc216b0716b3faf50837a678a7eedc96abb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/30dc207f95298cff45ad3ddca20eab2c776ae030",
-                "reference": "30dc207f95298cff45ad3ddca20eab2c776ae030",
+                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/ca9bdc216b0716b3faf50837a678a7eedc96abb8",
+                "reference": "ca9bdc216b0716b3faf50837a678a7eedc96abb8",
                 "shasum": ""
             },
             "require": {
@@ -12428,7 +12428,7 @@
             "homepage": "https://github.com/VincentLanglet/Twig-CS-Fixer",
             "support": {
                 "issues": "https://github.com/VincentLanglet/Twig-CS-Fixer/issues",
-                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/2.9.0"
+                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/2.10.0"
             },
             "funding": [
                 {
@@ -12436,7 +12436,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-04T11:46:16+00:00"
+            "time": "2024-05-15T11:53:08+00:00"
         },
         {
             "name": "webmozart/assert",

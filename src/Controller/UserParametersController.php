@@ -30,13 +30,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to edit user preferences.
  */
 #[AsController]
-#[Route(path: '/user')]
+#[Route(path: '/user', name: 'user')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class UserParametersController extends AbstractController
 {
     use CookieTrait;
 
-    #[GetPost(path: '/parameters', name: 'user_parameters')]
+    #[GetPost(path: '/parameters', name: '_parameters')]
     public function invoke(Request $request, UserService $userService): Response
     {
         $form = $this->createForm(UserParametersType::class, $userService->getProperties());

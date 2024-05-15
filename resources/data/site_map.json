@@ -25,7 +25,7 @@
             "icon": "home"
         },
         {
-            "route": "calculation_table",
+            "route": "calculation_index",
             "entity": "Calculation",
             "permission": "list",
             "text": "calculation.list.title",
@@ -51,7 +51,7 @@
             "icon": "database",
             "entries": [
                 {
-                    "route": "product_table",
+                    "route": "product_index",
                     "entity": "Product",
                     "permission": "list",
                     "text": "product.list.title",
@@ -73,7 +73,7 @@
                     ]
                 },
                 {
-                    "route": "task_table",
+                    "route": "task_index",
                     "entity": "Task",
                     "permission": "list",
                     "text": "task.list.title",
@@ -95,7 +95,7 @@
                     ]
                 },
                 {
-                    "route": "category_table",
+                    "route": "category_index",
                     "entity": "Category",
                     "permission": "list",
                     "text": "category.list.title",
@@ -117,7 +117,7 @@
                     ]
                 },
                 {
-                    "route": "group_table",
+                    "route": "group_index",
                     "entity": "Group",
                     "permission": "list",
                     "text": "group.list.title",
@@ -139,7 +139,7 @@
                     ]
                 },
                 {
-                    "route": "calculationstate_table",
+                    "route": "calculationstate_index",
                     "entity": "CalculationState",
                     "permission": "list",
                     "text": "calculationstate.list.title",
@@ -161,7 +161,7 @@
                     ]
                 },
                 {
-                    "route": "globalmargin_table",
+                    "route": "globalmargin_index",
                     "entity": "GlobalMargin",
                     "permission": "list",
                     "text": "globalmargin.list.title",
@@ -213,17 +213,17 @@
                     "icon": "search"
                 },
                 {
-                    "route": "below_table",
+                    "route": "calculation_below_index",
                     "text": "below.title",
                     "icon": "percent"
                 },
                 {
-                    "route": "duplicate_table",
+                    "route": "calculation_duplicate_index",
                     "text": "duplicate.title",
                     "icon": "copy far"
                 },
                 {
-                    "route": "empty_table",
+                    "route": "calculation_empty_index",
                     "text": "empty.title",
                     "icon": "file-code far"
                 },
@@ -257,7 +257,7 @@
                     "icon": "calendar-xmark far"
                 },
                 {
-                    "route": "user_table",
+                    "route": "user_index",
                     "entity": "User",
                     "permission": "list",
                     "text": "user.list.title",
@@ -280,7 +280,7 @@
                     "icon": "cogs"
                 },
                 {
-                    "route": "log_table",
+                    "route": "log_index",
                     "text": "log.title",
                     "icon": "book"
                 },
@@ -326,7 +326,7 @@
             "icon": "pencil"
         },
         {
-            "route": "user_profile_change_password",
+            "route": "user_profile_password",
             "text": "profile.change_password.title",
             "icon": "unlock-alt"
         },

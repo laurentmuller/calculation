@@ -36,7 +36,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @psalm-import-type HelpEntityType from HelpService
  */
 #[AsController]
-#[Route(path: '/help')]
+#[Route(path: '/help', name: 'help')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class HelpController extends AbstractController
 {
@@ -47,7 +47,7 @@ class HelpController extends AbstractController
     /**
      * Display help for a dialog.
      */
-    #[Get(path: '/dialog/{id}', name: 'help_dialog')]
+    #[Get(path: '/dialog/{id}', name: '_dialog')]
     public function dialog(string $id): Response
     {
         /** @psalm-var HelpDialogType|null $dialog */
@@ -67,7 +67,7 @@ class HelpController extends AbstractController
     /**
      * Display help for dialogs.
      */
-    #[Get(path: '/dialogs', name: 'help_dialogs')]
+    #[Get(path: '/dialogs', name: '_dialogs')]
     public function dialogs(): Response
     {
         $dialogs = $this->service->getDialogs();
@@ -87,7 +87,7 @@ class HelpController extends AbstractController
      * Save screenshot image.
      */
     #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
-    #[Post(path: '/download', name: 'help_download')]
+    #[Post(path: '/download', name: '_download')]
     public function download(
         #[MapRequestPayload]
         HelpDownloadQuery $query,
@@ -116,7 +116,7 @@ class HelpController extends AbstractController
     /**
      * Display help for entities.
      */
-    #[Get(path: '/entities', name: 'help_entities')]
+    #[Get(path: '/entities', name: '_entities')]
     public function entities(): Response
     {
         $entities = $this->service->getEntities();
@@ -134,7 +134,7 @@ class HelpController extends AbstractController
     /**
      * Display help for an entity.
      */
-    #[Get(path: '/entity/{id}', name: 'help_entity')]
+    #[Get(path: '/entity/{id}', name: '_entity')]
     public function entity(string $id): Response
     {
         $entity = $this->service->findEntity($id);
@@ -151,7 +151,7 @@ class HelpController extends AbstractController
     /**
      * Display help index.
      */
-    #[Get(path: '/', name: 'help')]
+    #[Get(path: '', name: '')]
     public function index(): Response
     {
         return $this->render('help/help_index.html.twig', ['service' => $this->service]);
@@ -160,7 +160,7 @@ class HelpController extends AbstractController
     /**
      * Export the help to a PDF document.
      */
-    #[Get(path: '/pdf', name: 'help_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(): PdfResponse
     {
         $doc = new HelpReport($this, $this->service);

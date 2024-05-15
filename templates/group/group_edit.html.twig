@@ -4,7 +4,7 @@
 {# parameters #}
 {%- set title = title|default(new ? 'group.add.title' : 'group.edit.title') -%}
 {%- set title_icon = ICON_GROUP -%}
-{%- set page_list = 'group_table' -%}
+{%- set page_list = 'group_index' -%}
 {%- set form_attr = form_attr|default({})|merge({
     'data-minimum_smaller_maximum': 'margin.minimum_smaller_maximum'|trans([], 'validators'),
     'data-maximum_greater_minimum': 'margin.maximum_greater_minimum'|trans([], 'validators'),

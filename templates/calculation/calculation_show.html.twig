@@ -6,7 +6,7 @@
 {%- set title = 'calculation.show.title' -%}
 {%- set params = route_params(app.request, item) %}
 {# actions #}
-{%- set list_path = 'calculation_table' -%}
+{%- set list_path = 'calculation_index' -%}
 {%- set edit_path = is_granted(PERMISSION_EDIT, item) and item.editable ? path('calculation_edit', params) : null -%}
 {%- set state_path = is_granted(PERMISSION_EDIT, item) and not item.editable ? path('calculation_state', params) : null -%}
 {%- set delete_path = is_granted(PERMISSION_DELETE, item) ? path('calculation_delete', params) : null -%}

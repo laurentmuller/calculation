@@ -63,7 +63,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      */
     public function formatProducts(int $value, array $entity): string
     {
-        $route = $this->isGrantedList(Product::class) ? 'product_table' : false;
+        $route = $this->isGrantedList(Product::class) ? 'product_index' : false;
 
         return $this->renderCell(
             $value,
@@ -85,7 +85,7 @@ class CategoryTable extends AbstractEntityTable implements ServiceSubscriberInte
      */
     public function formatTasks(int $value, array $entity): string
     {
-        $route = $this->isGrantedList(Task::class) ? 'task_table' : false;
+        $route = $this->isGrantedList(Task::class) ? 'task_index' : false;
 
         return $this->renderCell(
             $value,

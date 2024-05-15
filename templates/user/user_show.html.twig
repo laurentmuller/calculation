@@ -9,7 +9,7 @@
 {%- set edit_path = is_granted(PERMISSION_EDIT, item) ? path('user_edit', params) : null -%}
 {%- set delete_path = is_granted(PERMISSION_DELETE, item) ? path('user_delete', params) : null -%}
 {%- set rights_path = is_granted(PERMISSION_EDIT, item) ? path('user_rights', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, item, 'user_table') -%}
+{%- set cancel_path = cancel_url(app.request, item, 'user_index') -%}
 {%- if item.userIdentifier == app.user.userIdentifier -%}
     {%- set delete_path = null -%}
 {%- endif -%}

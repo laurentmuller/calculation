@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Enums\Environment;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -65,7 +66,9 @@ class UpdateAssetsCommand extends Command
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
-        private readonly string $projectDir
+        private readonly string $projectDir,
+        #[Autowire('%kernel.environment%')]
+        private readonly string $env
     ) {
         parent::__construct();
     }
@@ -166,10 +169,8 @@ class UpdateAssetsCommand extends Command
                     \sprintf('Not all files has been loaded! Expected: %d, Loaded: %d', $expected, $countFiles)
                 );
             }
-            $this->writeVerbose(\sprintf('Rename directory "%s" to "%s".', $targetTemp, $target));
-            if (!$this->rename($targetTemp, $target)) {
-                $this->writeError(\sprintf('Unable rename directory "%s" to "%s".', $targetTemp, $target));
 
+            if (!$this->copyToTarget($targetTemp, $target)) {
                 return Command::FAILURE;
             }
 
@@ -222,6 +223,22 @@ class UpdateAssetsCommand extends Command
         if (\is_string($content)) {
             return $this->dumpFile($content, $targetFile, $prefixes);
         }
+
+        return false;
+    }
+
+    private function copyToTarget(string $source, string $target): bool
+    {
+        if ($this->isTestEnvironment()) {
+            return true;
+        }
+
+        $this->writeVerbose(\sprintf('Rename directory "%s" to "%s".', $source, $target));
+        if ($this->rename($source, $target)) {
+            return true;
+        }
+
+        $this->writeError(\sprintf('Unable rename directory "%s" to "%s".', $source, $target));
 
         return false;
     }
@@ -401,6 +418,11 @@ class UpdateAssetsCommand extends Command
     private function isPluginDisabled(array $plugin): bool
     {
         return isset($plugin['disabled']) && $plugin['disabled'];
+    }
+
+    private function isTestEnvironment(): bool
+    {
+        return Environment::tryFrom($this->env)?->isTest() ?? false;
     }
 
     /**

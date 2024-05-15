@@ -30,7 +30,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @psalm-import-type ExchangeRateAndDateType from ExchangeRateService
  */
 #[AsController]
-#[Route(path: '/exchange')]
+#[Route(path: '/exchange', name: 'exchange')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class ExchangeRateController extends AbstractController
 {
@@ -41,7 +41,7 @@ class ExchangeRateController extends AbstractController
     /**
      * Display the view.
      */
-    #[Get(path: '', name: 'exchange_display')]
+    #[Get(path: '', name: '_display')]
     public function display(): Response
     {
         return $this->render('test/exchange_rate.html.twig', [
@@ -56,7 +56,7 @@ class ExchangeRateController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/codes', name: 'exchange_codes')]
+    #[Get(path: '/codes', name: '_codes')]
     public function getCodes(): JsonResponse
     {
         $codes = $this->service->getSupportedCodes();
@@ -74,7 +74,7 @@ class ExchangeRateController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/latest/{code}', name: 'exchange_latest')]
+    #[Get(path: '/latest/{code}', name: '_latest')]
     public function getLatest(string $code): JsonResponse
     {
         $latest = $this->service->getLatest($code);
@@ -90,7 +90,7 @@ class ExchangeRateController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/rate', name: 'exchange_rate')]
+    #[Get(path: '/rate', name: '_rate')]
     public function getRate(
         #[MapQueryParameter]
         string $baseCode = '',

@@ -39,7 +39,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * The log controller.
  */
 #[AsController]
-#[Route(path: '/log')]
+#[Route(path: '/log', name: 'log')]
 #[IsGranted(RoleInterface::ROLE_ADMIN)]
 class LogController extends AbstractController
 {
@@ -48,7 +48,7 @@ class LogController extends AbstractController
     /**
      * Delete the content of the log file (if any).
      */
-    #[GetPost(path: '/delete', name: 'log_delete')]
+    #[GetPost(path: '/delete', name: '_delete')]
     public function delete(Request $request, LogService $service, LoggerInterface $logger): Response
     {
         $file = $this->getLogFile($service)?->getFile();
@@ -81,7 +81,7 @@ class LogController extends AbstractController
     /**
      * Download the file.
      */
-    #[Get(path: '/download', name: 'log_download')]
+    #[Get(path: '/download', name: '_download')]
     public function download(LogService $service): Response
     {
         if (!$service->isFileValid()) {
@@ -96,7 +96,7 @@ class LogController extends AbstractController
      *
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'log_excel')]
+    #[Get(path: '/excel', name: '_excel')]
     public function excel(LogService $service): Response
     {
         $logFile = $this->getLogFile($service);
@@ -109,9 +109,22 @@ class LogController extends AbstractController
     }
 
     /**
+     * Render the table view.
+     */
+    #[Get(path: '', name: '_index')]
+    public function index(
+        LogTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'log/log_table.html.twig');
+    }
+
+    /**
      * Export to PDF the content of the log file.
      */
-    #[Get(path: '/pdf', name: 'log_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(LogService $service): Response
     {
         $logFile = $this->getLogFile($service);
@@ -126,7 +139,7 @@ class LogController extends AbstractController
     /**
      * Clear the log file cache.
      */
-    #[Get(path: '/refresh', name: 'log_refresh')]
+    #[Get(path: '/refresh', name: '_refresh')]
     public function refresh(Request $request, LogService $service): Response
     {
         $service->clearCache();
@@ -138,7 +151,7 @@ class LogController extends AbstractController
     /**
      * Show properties of a log entry.
      */
-    #[Get(path: '/show/{id}', name: 'log_show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/show/{id}', name: '_show', requirements: self::ID_REQUIREMENT)]
     public function show(Request $request, int $id, LogService $service): Response
     {
         $item = $service->getLog($id);
@@ -153,31 +166,18 @@ class LogController extends AbstractController
     }
 
     /**
-     * Render the table view.
-     */
-    #[Get(path: '', name: 'log_table')]
-    public function table(
-        LogTable $table,
-        LoggerInterface $logger,
-        #[MapQueryString]
-        DataQuery $query = new DataQuery()
-    ): Response {
-        return $this->handleTableRequest($table, $logger, $query, 'log/log_table.html.twig');
-    }
-
-    /**
      * Gets the default route name used to display the logs.
      */
     private function getDefaultRoute(Request $request): string
     {
-        return $this->getRequestString($request, 'route', 'log_table');
+        return $this->getRequestString($request, 'route', 'log_index');
     }
 
     private function getEmptyResponse(
         string $message = 'log.list.empty',
         FlashType $type = FlashType::INFO
     ): RedirectResponse {
-        return $this->redirectToHomePage($message, type: $type);
+        return $this->redirectToHomePage($message, [], $type);
     }
 
     private function getLogFile(LogService $service): ?LogFile

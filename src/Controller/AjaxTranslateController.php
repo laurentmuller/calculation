@@ -32,7 +32,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller for translation XMLHttpRequest (Ajax) calls.
  */
 #[AsController]
-#[Route(path: '/ajax')]
+#[Route(path: '/ajax', name: 'ajax')]
 class AjaxTranslateController extends AbstractController
 {
     public function __construct(private readonly TranslatorFactory $factory)
@@ -45,7 +45,7 @@ class AjaxTranslateController extends AbstractController
      * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/detect', name: 'ajax_detect')]
+    #[Get(path: '/detect', name: '_detect')]
     public function detect(
         #[MapQueryParameter]
         ?string $text = null,
@@ -80,7 +80,7 @@ class AjaxTranslateController extends AbstractController
      * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/languages', name: 'ajax_languages')]
+    #[Get(path: '/languages', name: '_languages')]
     public function languages(#[MapQueryParameter(name: 'service')] ?string $class = null): JsonResponse
     {
         try {
@@ -104,7 +104,7 @@ class AjaxTranslateController extends AbstractController
      * @throws ServiceNotFoundException if the service is not found
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Post(path: '/translate', name: 'ajax_translate')]
+    #[Post(path: '/translate', name: '_translate')]
     public function translate(#[MapRequestPayload] TranslateQuery $query): JsonResponse
     {
         if (!StringUtils::isString($query->text)) {

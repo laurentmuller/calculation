@@ -9,7 +9,7 @@
 {%- endmacro %}
 {# parameters #}
 {%- set title_icon = title_icon|default('area-chart') -%}
-{%- set list_path = 'calculation_table' -%}
+{%- set list_path = 'calculation_index' -%}
 {# body #}
 {% block card_body %}
 <div id="{{ constant('App\\Chart\\AbstractHighchart::CONTAINER') }}" class="chart{% block chart_class %}{% endblock %}"></div>

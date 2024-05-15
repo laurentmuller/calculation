@@ -43,7 +43,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @template-extends AbstractEntityController<Category, CategoryRepository>
  */
 #[AsController]
-#[Route(path: '/category')]
+#[Route(path: '/category', name: 'category')]
 #[IsGranted(RoleInterface::ROLE_USER)]
 class CategoryController extends AbstractEntityController
 {
@@ -55,7 +55,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Add a category.
      */
-    #[GetPost(path: '/add', name: 'category_add')]
+    #[GetPost(path: '/add', name: '_add')]
     public function add(Request $request): Response
     {
         return $this->editEntity($request, new Category());
@@ -64,7 +64,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Clone (copy) a category.
      */
-    #[GetPost(path: '/clone/{id}', name: 'category_clone', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/clone/{id}', name: '_clone', requirements: self::ID_REQUIREMENT)]
     public function clone(Request $request, Category $item): Response
     {
         $code = $this->trans('common.clone_description', ['%description%' => $item->getCode()]);
@@ -82,7 +82,7 @@ class CategoryController extends AbstractEntityController
      *
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[GetDelete(path: '/delete/{id}', name: 'category_delete', requirements: self::ID_REQUIREMENT)]
+    #[GetDelete(path: '/delete/{id}', name: '_delete', requirements: self::ID_REQUIREMENT)]
     public function delete(Request $request, Category $item, TaskRepository $taskRepository, ProductRepository $productRepository, CalculationCategoryRepository $categoryRepository, LoggerInterface $logger): Response
     {
         $tasks = $taskRepository->countCategoryReferences($item);
@@ -119,7 +119,7 @@ class CategoryController extends AbstractEntityController
     /**
      * Edit a category.
      */
-    #[GetPost(path: '/edit/{id}', name: 'category_edit', requirements: self::ID_REQUIREMENT)]
+    #[GetPost(path: '/edit/{id}', name: '_edit', requirements: self::ID_REQUIREMENT)]
     public function edit(Request $request, Category $item): Response
     {
         return $this->editEntity($request, $item);
@@ -132,7 +132,7 @@ class CategoryController extends AbstractEntityController
      * @throws \Doctrine\ORM\Exception\ORMException
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    #[Get(path: '/excel', name: 'category_excel')]
+    #[Get(path: '/excel', name: '_excel')]
     public function excel(): SpreadsheetResponse
     {
         $entities = $this->getEntities('code');
@@ -146,12 +146,25 @@ class CategoryController extends AbstractEntityController
     }
 
     /**
+     * Render the table view.
+     */
+    #[Get(path: '', name: '_index')]
+    public function index(
+        CategoryTable $table,
+        LoggerInterface $logger,
+        #[MapQueryString]
+        DataQuery $query = new DataQuery()
+    ): Response {
+        return $this->handleTableRequest($table, $logger, $query, 'category/category_table.html.twig');
+    }
+
+    /**
      * Export the categories to a PDF document.
      *
      * @throws NotFoundHttpException                if no category is found
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    #[Get(path: '/pdf', name: 'category_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(): PdfResponse
     {
         $entities = $this->getEntities('code');
@@ -167,23 +180,10 @@ class CategoryController extends AbstractEntityController
     /**
      * Show properties of a category.
      */
-    #[Get(path: '/show/{id}', name: 'category_show', requirements: self::ID_REQUIREMENT)]
+    #[Get(path: '/show/{id}', name: '_show', requirements: self::ID_REQUIREMENT)]
     public function show(Category $item): Response
     {
         return $this->showEntity($item);
-    }
-
-    /**
-     * Render the table view.
-     */
-    #[Get(path: '', name: 'category_table')]
-    public function table(
-        CategoryTable $table,
-        LoggerInterface $logger,
-        #[MapQueryString]
-        DataQuery $query = new DataQuery()
-    ): Response {
-        return $this->handleTableRequest($table, $logger, $query, 'category/category_table.html.twig');
     }
 
     /**

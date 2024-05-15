@@ -31,14 +31,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to send comments to the webmaster.
  */
 #[AsController]
-#[Route(path: '/user')]
+#[Route(path: '/user', name: 'user')]
 class CommentController extends AbstractController
 {
     /**
      * Send a comment to the webmaster.
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[GetPost(path: '/comment', name: 'user_comment')]
+    #[GetPost(path: '/comment', name: '_comment')]
     public function invoke(Request $request, MailerService $service, LoggerInterface $logger): Response
     {
         /** @psalm-var User|Address $from */

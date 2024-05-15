@@ -29,11 +29,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to output license information.
  */
 #[AsController]
-#[Route(path: '/about/licence')]
+#[Route(path: '/about/licence', name: 'about_licence')]
 class AboutLicenceController extends AbstractController
 {
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/content', name: 'about_licence_content')]
+    #[Get(path: '/content', name: '_content')]
     public function content(): JsonResponse
     {
         $parameters = [
@@ -46,7 +46,7 @@ class AboutLicenceController extends AbstractController
     }
 
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: '', name: 'about_licence')]
+    #[Get(path: '', name: '')]
     public function index(): Response
     {
         $parameters = [
@@ -58,7 +58,7 @@ class AboutLicenceController extends AbstractController
     }
 
     #[IsGranted(AuthenticatedVoter::PUBLIC_ACCESS)]
-    #[Get(path: '/pdf', name: 'about_licence_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(): PdfResponse
     {
         $parameters = [
@@ -77,7 +77,7 @@ class AboutLicenceController extends AbstractController
      * @throws \PhpOffice\PhpWord\Exception\Exception
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
-    #[Get(path: '/word', name: 'about_licence_word')]
+    #[Get(path: '/word', name: '_word')]
     public function word(): WordResponse
     {
         $parameters = [

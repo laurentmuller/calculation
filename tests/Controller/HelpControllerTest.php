@@ -32,9 +32,9 @@ class HelpControllerTest extends AbstractControllerTestCase
 
     public static function getRoutes(): \Iterator
     {
-        yield ['/help/', self::ROLE_USER];
-        yield ['/help/', self::ROLE_ADMIN];
-        yield ['/help/', self::ROLE_SUPER_ADMIN];
+        yield ['/help', self::ROLE_USER];
+        yield ['/help', self::ROLE_ADMIN];
+        yield ['/help', self::ROLE_SUPER_ADMIN];
         yield ['/help/pdf', self::ROLE_USER];
         yield ['/help/pdf', self::ROLE_ADMIN];
         yield ['/help/pdf', self::ROLE_SUPER_ADMIN];

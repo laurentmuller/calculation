@@ -7,7 +7,7 @@
 {# actions #}
 {%- set edit_path = is_granted(PERMISSION_EDIT, item) ? path('calculationstate_edit', params) : null -%}
 {%- set delete_path = is_granted(PERMISSION_DELETE, item) ? path('calculationstate_delete', params) : null -%}
-{%- set cancel_path = cancel_url(app.request, item, 'calculationstate_table') -%}
+{%- set cancel_path = cancel_url(app.request, item, 'calculationstate_index') -%}
 {# properties #}
 {% block property_body %}
 {{ property('calculationstate.fields.code', item.code) }}

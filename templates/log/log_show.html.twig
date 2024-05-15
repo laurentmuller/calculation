@@ -2,7 +2,7 @@
 {% from 'macros/_properties.html.twig' import property %}
 {# parameters #}
 {%- set title = 'log.show.title' -%}
-{%- set route = route|default('log_table') -%}
+{%- set route = route|default('log_index') -%}
 {%- set params = route_params(app.request, item) -%}
 {%- set cancel_path = cancel_url(app.request, item, route) -%}
 {# classes #}

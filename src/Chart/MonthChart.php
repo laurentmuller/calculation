@@ -234,7 +234,7 @@ class MonthChart extends AbstractHighchart
 
     private function getURL(\DateTimeInterface $date): string
     {
-        return $this->generator->generate('calculation_table', [
+        return $this->generator->generate('calculation_index', [
             'search' => $date->format('m.Y'),
         ]);
     }

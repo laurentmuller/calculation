@@ -173,7 +173,7 @@ abstract class AbstractEntityController extends AbstractController
      */
     protected function getDefaultRoute(): string
     {
-        return \sprintf('%s_table', $this->lowerName);
+        return \sprintf('%s_index', $this->lowerName);
     }
 
     /**

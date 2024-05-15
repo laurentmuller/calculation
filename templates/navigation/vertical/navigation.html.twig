@@ -33,7 +33,7 @@
     {# menus #}
     <ul class="navbar-nav mb-auto pt-1 border-top w-100">
         {% if is_granted_calculation -%}
-            {{ dropdownItem(path('calculation_table'), 'calculation.list.title', ICON_CALCULATION) }}
+            {{ dropdownItem(path('calculation_index'), 'calculation.list.title', ICON_CALCULATION) }}
             {{ dropdownSeparator(false, 'mt-1') }}
         {% endif %}
         {% if is_granted_data %}

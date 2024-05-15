@@ -36,7 +36,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * @psalm-import-type CommandType from CommandService
  */
 #[AsController]
-#[Route(path: '/command')]
+#[Route(path: '/command', name: 'command')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class CommandController extends AbstractController
 {
@@ -49,7 +49,7 @@ class CommandController extends AbstractController
      *
      * @throws InvalidArgumentException
      */
-    #[Get(path: '/content', name: 'command_content')]
+    #[Get(path: '/content', name: '_content')]
     public function command(
         #[MapQueryParameter]
         string $name,
@@ -74,7 +74,7 @@ class CommandController extends AbstractController
      *
      * @throws InvalidArgumentException
      */
-    #[Get(path: '', name: 'command_all')]
+    #[Get(path: '', name: '_all')]
     public function commands(
         Request $request,
         CommandService $service,
@@ -108,7 +108,7 @@ class CommandController extends AbstractController
      *
      * @throws InvalidArgumentException
      */
-    #[GetPost(path: '/execute', name: 'command_execute')]
+    #[GetPost(path: '/execute', name: '_execute')]
     public function execute(
         #[MapQueryParameter]
         string $name,
@@ -169,7 +169,7 @@ class CommandController extends AbstractController
      *
      * @throws InvalidArgumentException
      */
-    #[Get(path: '/pdf', name: 'command_pdf')]
+    #[Get(path: '/pdf', name: '_pdf')]
     public function pdf(CommandService $service): Response
     {
         if (0 === $service->count()) {

@@ -18,15 +18,15 @@ use Symfony\Component\HttpFoundation\Response;
 #[\PHPUnit\Framework\Attributes\CoversClass(TimelineController::class)]
 class TimelineControllerTest extends AbstractControllerTestCase
 {
-    private const ROUTES = [
-        '/test/timeline',
-        '/test/timeline/first',
-        '/test/timeline/last',
-    ];
-
     public static function getRoutes(): \Generator
     {
-        foreach (self::ROUTES as $route) {
+        $routes = [
+            '/timeline',
+            '/timeline/first',
+            '/timeline/last',
+        ];
+
+        foreach ($routes as $route) {
             yield [$route, self::ROLE_USER, Response::HTTP_FORBIDDEN];
             yield [$route, self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
             yield [$route, self::ROLE_SUPER_ADMIN];

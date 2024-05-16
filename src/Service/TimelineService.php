@@ -20,11 +20,26 @@ use App\Utils\FormatUtils;
 
 /**
  * Service for calculations timeline.
+ *
+ * @psalm-type ParametersType=array{
+ *     from: \DateTimeInterface,
+ *     to: \DateTimeInterface,
+ *     interval: string,
+ *     date: string,
+ *     min_date: \DateTimeInterface,
+ *     max_date: \DateTimeInterface,
+ *     today: ?string,
+ *     previous: ?string,
+ *     next: ?string,
+ *     count: int,
+ *     data: array<string, Calculation[]>}
  */
 class TimelineService
 {
     use GroupByTrait;
+
     private const DATE_FORMAT = 'Y-m-d';
+    private const DEFAULT_INTERVAL = 'P1W';
 
     public function __construct(private readonly CalculationRepository $repository)
     {
@@ -34,10 +49,12 @@ class TimelineService
      * Gets the calculations for the given date and period.
      *
      * @throws \Exception
+     *
+     * @psalm-return ParametersType
      */
     public function current(?string $date = null, ?string $interval = null): array
     {
-        $interval ??= 'P1W';
+        $interval ??= self::DEFAULT_INTERVAL;
         [$today, $min_date, $max_date] = $this->getDates();
         $to = null !== $date ? new \DateTimeImmutable($date) : $max_date;
         $from = DateUtils::sub($to, $interval);
@@ -49,10 +66,12 @@ class TimelineService
      * Gets the first calculations for the given period.
      *
      * @throws \Exception
+     *
+     * @psalm-return ParametersType
      */
     public function first(?string $interval = null): array
     {
-        $interval ??= 'P1W';
+        $interval ??= self::DEFAULT_INTERVAL;
         [$today, $min_date, $max_date] = $this->getDates();
         $from = $min_date;
         $to = DateUtils::add($from, $interval);
@@ -64,10 +83,12 @@ class TimelineService
      * Gets the last calculations for the given period.
      *
      * @throws \Exception
+     *
+     * @psalm-return ParametersType
      */
     public function last(?string $interval = null): array
     {
-        $interval ??= 'P1W';
+        $interval ??= self::DEFAULT_INTERVAL;
         [$today, $min_date, $max_date] = $this->getDates();
         $to = $max_date;
         $from = DateUtils::sub($to, $interval);
@@ -114,8 +135,11 @@ class TimelineService
     /**
      * @throws \Exception
      */
-    private function getNextDate(\DateTimeInterface $date, string $interval, \DateTimeInterface $max_date): ?\DateTimeInterface
-    {
+    private function getNextDate(
+        \DateTimeInterface $date,
+        string $interval,
+        \DateTimeInterface $max_date
+    ): ?\DateTimeInterface {
         $nextDate = DateUtils::add($date, $interval);
 
         return $nextDate > $max_date ? null : $nextDate;
@@ -123,6 +147,8 @@ class TimelineService
 
     /**
      * @throws \Exception
+     *
+     * @psalm-return ParametersType
      */
     private function getParameters(
         ?\DateTimeInterface $today,
@@ -157,23 +183,31 @@ class TimelineService
     /**
      * @throws \Exception
      */
-    private function getPreviousDate(\DateTimeInterface $date, string $interval, \DateTimeInterface $min_date): ?\DateTimeInterface
-    {
+    private function getPreviousDate(
+        \DateTimeInterface $date,
+        string $interval,
+        \DateTimeInterface $min_date
+    ): ?\DateTimeInterface {
         $previous = DateUtils::sub($date, $interval);
 
         return $previous <= $min_date ? null : $previous;
     }
 
     /**
-     * @param Calculation[] $calculations
+     * @psalm-param Calculation[] $calculations
+     *
+     * @psalm-return array<string, Calculation[]>
      */
     private function groupByDate(array $calculations): array
     {
         if ([] === $calculations) {
             return [];
         }
-        $callback = static fn (Calculation $c): string => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG);
 
-        return $this->groupBy($calculations, $callback);
+        /** @psalm-var array<string, Calculation[]> */
+        return $this->groupBy(
+            $calculations,
+            static fn (Calculation $c): string => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG)
+        );
     }
 }

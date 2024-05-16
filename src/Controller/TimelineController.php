@@ -25,25 +25,29 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Controller to display calculations timeline.
  */
 #[AsController]
-#[Route(path: '/test/timeline', name: 'timeline')]
+#[Route(path: '/timeline', name: 'timeline')]
 #[IsGranted(RoleInterface::ROLE_SUPER_ADMIN)]
 class TimelineController extends AbstractController
 {
-    public function __construct(private readonly TimelineService $service)
-    {
-    }
+    private const KEY_DATE = 'timeline_date';
+    private const KEY_INTERVAL = 'timeline_interval';
 
     /**
      * @throws \Exception
      */
     #[Get(path: '', name: '')]
     public function current(
+        TimelineService $service,
         #[MapQueryParameter]
         ?string $date = null,
         #[MapQueryParameter]
         ?string $interval = null
     ): Response {
-        $parameters = $this->service->current($date, $interval);
+        $date ??= $this->getSessionString(self::KEY_DATE);
+        $interval ??= $this->getSessionString(self::KEY_INTERVAL);
+        $parameters = $service->current($date, $interval);
+        $this->setSessionValue(self::KEY_INTERVAL, $parameters['interval']);
+        $this->setSessionValue(self::KEY_DATE, $parameters['date']);
 
         return $this->renderTimeline($parameters);
     }
@@ -52,9 +56,14 @@ class TimelineController extends AbstractController
      * @throws \Exception
      */
     #[Get(path: '/first', name: '_first')]
-    public function first(#[MapQueryParameter] ?string $interval = null): Response
-    {
-        $parameters = $this->service->first($interval);
+    public function first(
+        TimelineService $service,
+        #[MapQueryParameter]
+        ?string $interval = null
+    ): Response {
+        $interval ??= $this->getSessionString(self::KEY_INTERVAL);
+        $parameters = $service->first($interval);
+        $this->setSessionValue(self::KEY_INTERVAL, $parameters['interval']);
 
         return $this->renderTimeline($parameters);
     }
@@ -63,9 +72,14 @@ class TimelineController extends AbstractController
      * @throws \Exception
      */
     #[Get(path: '/last', name: '_last')]
-    public function last(#[MapQueryParameter] ?string $interval = null): Response
-    {
-        $parameters = $this->service->last($interval);
+    public function last(
+        TimelineService $service,
+        #[MapQueryParameter]
+        ?string $interval = null
+    ): Response {
+        $interval ??= $this->getSessionString(self::KEY_INTERVAL);
+        $parameters = $service->last($interval);
+        $this->setSessionValue(self::KEY_INTERVAL, $parameters['interval']);
 
         return $this->renderTimeline($parameters);
     }

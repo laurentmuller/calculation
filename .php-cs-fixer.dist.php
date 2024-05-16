@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 use PhpCsFixer\Config;
 use PhpCsFixer\Finder;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 
 $comment = <<<COMMENT
     This file is part of the Calculation package.
@@ -66,6 +67,7 @@ $finder = Finder::create()
 $config = new Config();
 
 return $config
+    ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRiskyAllowed(true)
     ->setFinder($finder)
     ->setRules($rules);

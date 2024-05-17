@@ -33,7 +33,7 @@
     <div class="col-md-1">
         <div class="form-group mb-3 text-md-center">
             <span class="form-label">{{ 'translator.swap_label'|trans }}</span>
-            <button type="button" class="btn btn-secondary btn-exchange w-100" disabled="disabled">
+            <button type="button" class="btn btn-secondary btn-exchange w-100" disabled>
                 <i class="fa-solid fa-exchange-alt"></i>
             </button>
         </div>
@@ -83,7 +83,7 @@
 {# action form #}
 {% block actions_form -%}
 {{ parent() }}
-<button type="button" class="btn btn-form btn-success btn-copy" disabled="disabled"
+<button type="button" class="btn btn-form btn-success btn-copy" disabled
         data-success="{{ 'common.copy_success'|trans }}"
         data-error="{{ 'common.copy_error'|trans }}"
         data-clipboard-target="#result">{{ 'common.button_copy'|trans }}</button>

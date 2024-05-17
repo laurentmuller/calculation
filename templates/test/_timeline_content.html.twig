@@ -1,0 +1,48 @@
+{% from 'calendar/_calendar.html.twig' import dataRow %}
+<div class="d-flex align-items-center text-body-secondary my-1">
+    <div class="me-auto">
+        {{- from|locale_date('long') }} - {{ to|locale_date('long') -}}
+    </div>
+    {{- 'counters.calculations'|trans({count: count}) -}}
+</div>
+<hr class="mt-0 mb-2">
+{% if data|length %}
+    <div class="row table-responsive g-0">
+        <div class="col">
+            <ul class="timeline">
+                {% for key, calculations in data %}
+                    {%- set count = calculations|length -%}
+                    {%- set query = calculations[0].date|locale_date('short') -%}
+                    {%- set title = 'counters.calculations_day'|trans({count: count, date: key}) -%}
+                    <li class="success">
+                        <div class="position-relative table-responsive ms-2">
+                            <table class="table table-sm table-borderless">
+                                <tbody>
+                                <tr>
+                                    <td colspan="4" class="pt-0 ps-0">
+                                        <a class="text-decoration-none stretched-link" href="{{ path('calculation_index', {search: query}) }}" title="{{ title }}">{{ key }}</a>
+                                    </td>
+                                    <td colspan="2" class="py-0 text-end">
+                                        <small class="text-body-secondary">{{ 'counters.calculations'|trans({count: count}) }}</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6" class="p-0"><hr class="my-0"></td>
+                                </tr>
+                                {% for calculation in calculations %}
+                                    {{ dataRow(calculation, 'text-cell') }}
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="6" class="p-0"><hr class="my-0"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-warning mt-2" role="alert">{{ 'calculation.list.empty'|trans }}</div>
+{% endif %}

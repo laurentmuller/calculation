@@ -1,33 +1,26 @@
 {% extends 'base.html.twig' %}
 {% from 'macros/_icons.html.twig' import icon, link %}
-{% import 'calendar/_calendar.html.twig' as helper %}
+{% from 'calendar/_calendar.html.twig' import dataRow %}
 {# macros #}
 {% macro addInterval(value, count, message, selection) -%}
     {%- set text = message|trans({count: count}) -%}
     <option value="{{ value }}"{% if value == selection %} selected="selected"{% endif %}>{{ text }}</option>
 {%- endmacro %}
-
-{% macro navigate(date, interval, icon, title) -%}
-{% if date %}
-    {% set href = path('timeline', {date: date, interval: interval}) %}
-    <a href="{{ href }}" title="{{ title|trans }}" class="btn btn-secondary">
-        {{ icon(icon) }}
-    </a>
-{% else %}
-    <button title="{{ title|trans }}" class="btn btn-secondary" disabled="disabled" >
-        {{ icon(icon) }}
+{% macro addButton(class, disabled, path, title, icon, date = null) -%}
+    <button type="button" class="btn btn-secondary {{ class }}"{% if disabled %} disabled{% endif %} data-url="{{ url(path) }}" title="{{ title|trans }}"{% if date %} data-date="{{ date }}"{% endif %}>
+        {{- icon(icon) -}}
     </button>
- {% endif %}
 {%- endmacro %}
 {# parameters #}
 {%- set title = 'timeline.title' -%}
 {%- set title_icon = 'stream' -%}
-{%- set route = 'calculation_index' -%}
 {%- set min_date_locale = min_date|locale_date('none', 'yyyy-MM-dd') -%}
 {%- set max_date_locale = max_date|locale_date('none', 'yyyy-MM-dd') -%}
+{%- set is_first = from == min_date -%}
+{%- set is_last = to == max_date -%}
 {# body #}
 {% block body -%}
-<form name="search" id="search" action="{{ path('timeline') }}">
+<div>
     <div class="d-flex-wrap-center">
         <h4 class="flex-fill">{{ icon(title_icon, title) }}</h4>
         {# date #}
@@ -45,75 +38,25 @@
                 {{ _self.addInterval('P2W', 2, 'counters.weeks', interval) }}
                 {{ _self.addInterval('P3W', 3, 'counters.weeks', interval) }}
                 {{ _self.addInterval('P1M', 1, 'counters.months', interval) }}
-                {{ _self.addInterval('P2M', 2, 'counters.months', interval) }}
-                {{ _self.addInterval('P3M', 3, 'counters.months', interval) }}
             </select>
         </div>
         {# toolbar #}
-        <div class="btn-group btn-group-sm" role="group" title="{{ 'timeline.toolbar'|trans }}">
-            <a href="{{ path('timeline_first', {interval: interval}) }}" class="btn btn-secondary{% if from == min_date %} disabled{% endif %}" title="{{ 'timeline.first'|trans }}">
-                {{- icon('angles-left') -}}
-            </a>
-            {{ _self.navigate(previous, interval, 'chevron-left', 'timeline.previous') }}
-            {{ _self.navigate(today, interval, 'arrows-alt', 'timeline.today') }}
-            {{ _self.navigate(next, interval, 'chevron-right', 'timeline.next') }}
-            <a href="{{ path('timeline_last', {interval: interval}) }}" class="btn btn-secondary{% if to == max_date %} disabled{% endif %}" title="{{ 'timeline.last'|trans }}">
-                {{- icon('angles-right') -}}
-            </a>
-            <button class="btn btn-secondary btn-submit" type="submit" title="{{ 'common.button_refresh'|trans }}" style="min-width: 38px;">
-                {{- icon('sync') -}}
-            </button>
+        <div class="btn-group btn-group-sm" role="group">
+            {{ _self.addButton('btn-timeline-first', is_first, 'timeline_first', 'timeline.first', 'angles-left') }}
+            {{ _self.addButton('btn-timeline-previous', is_first, 'timeline_content', 'timeline.previous', 'chevron-left', previous|default) }}
+            {% if today %}
+                {{ _self.addButton('btn-timeline-today', false, 'timeline_today', 'timeline.today', 'arrows-alt') }}
+            {% endif %}
+            {{ _self.addButton('btn-timeline-next', is_last, 'timeline_content', 'timeline.next', 'chevron-right', next|default) }}
+            {{ _self.addButton('btn-timeline-last', is_last, 'timeline_last', 'timeline.last', 'angles-right') }}
         </div>
     </div>
     <hr class="my-1" />
-</form>
-<div class="d-flex align-items-center text-body-secondary my-1">
-    <div class="me-auto">
-        {{- from|locale_date('long') }} - {{ to|locale_date('long') -}}
-    </div>
-    {{- 'counters.calculations'|trans({count: count}) -}}
 </div>
-<hr class="mt-0 mb-2">
-{% if data|length %}
-<div class="row table-responsive g-0">
-    <div class="col">
-        <ul class="timeline">
-            {% for key, calculations in data %}
-            {%- set count = calculations|length -%}
-            {%- set query = calculations[0].date|locale_date('short') -%}
-            {%- set title = 'counters.calculations_day'|trans({count: count, date: key}) -%}
-            <li class="success">
-                <div class="position-relative table-responsive ms-2">
-                    <table class="table table-sm table-borderless">
-                        <tbody>
-                            <tr>
-                                <td colspan="4" class="pt-0 ps-0">
-                                    <a class="text-decoration-none stretched-link" href="{{ path(route, {search: query}) }}" title="{{ title }}">{{ key }}</a>
-                                </td>
-                                <td colspan="2" class="py-0 text-end">
-                                    <small class="text-body-secondary">{{ 'counters.calculations'|trans({count: count}) }}</small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="6" class="p-0"><hr class="my-0"></td>
-                            </tr>
-                            {% for calculation in calculations %}
-                                {{ helper.dataRow(calculation, 'text-cell') -}}
-                            {% endfor %}
-                            <tr>
-                                <td colspan="6" class="p-0"><hr class="my-0"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-    </div>
+
+<div id="content" data-url="{{ url('timeline_content') }}" data-min="{{ max_date_locale }}" data-max="{{ min_date_locale }}">
+    {{ include('test/_timeline_content.html.twig', {from: from, to: to, count: count, data: data}, with_context = false) }}
 </div>
-{% else %}
-<div class="alert alert-warning mt-2" role="alert">{{ 'calculation.list.empty'|trans }}</div>
-{% endif %}
 {%- endblock %}
 {# stylesheets #}
 {% block stylesheets -%}

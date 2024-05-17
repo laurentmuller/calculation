@@ -61,13 +61,14 @@ final class DateUtils
      *
      * @return \DateTimeInterface the new date
      *
-     * @throws \Exception
+     * @throws \Exception if the interval is a string and cannot be parsed
      */
     public static function add(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {
         if (\is_string($interval)) {
             $interval = new \DateInterval($interval);
         }
+
         /** @var \DateTime $clone */
         $clone = (clone $date);
 
@@ -249,13 +250,14 @@ final class DateUtils
      *
      * @return \DateTimeInterface the new date
      *
-     * @throws \Exception
+     * @throws \Exception if the interval is a string and cannot be parsed
      */
     public static function sub(\DateTimeInterface $date, \DateInterval|string $interval): \DateTimeInterface
     {
         if (\is_string($interval)) {
             $interval = new \DateInterval($interval);
         }
+
         /** @var \DateTime $clone */
         $clone = (clone $date);
 

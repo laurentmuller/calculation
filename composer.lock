@@ -1876,16 +1876,16 @@
         },
         {
             "name": "laurentmuller/fpdf2",
-            "version": "1.9.0.0",
+            "version": "1.9.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/fpdf2.git",
-                "reference": "80830aa7ec26feb022144b17ece9dbc674e38429"
+                "reference": "d83b87e7cf5f8bc9ebdf1671a24439f360a1df6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/80830aa7ec26feb022144b17ece9dbc674e38429",
-                "reference": "80830aa7ec26feb022144b17ece9dbc674e38429",
+                "url": "https://api.github.com/repos/laurentmuller/fpdf2/zipball/d83b87e7cf5f8bc9ebdf1671a24439f360a1df6a",
+                "reference": "d83b87e7cf5f8bc9ebdf1671a24439f360a1df6a",
                 "shasum": ""
             },
             "require": {
@@ -1902,7 +1902,7 @@
                 "phpstan/phpstan-deprecation-rules": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.0",
                 "phpunit/phpunit": "^10.0",
-                "psalm/plugin-phpunit": "^0.18",
+                "psalm/plugin-phpunit": "^0.19",
                 "rector/rector": "^1.0",
                 "vimeo/psalm": "^5.0"
             },
@@ -1934,20 +1934,20 @@
                 "issues": "https://github.com/laurentmuller/fpdf2/issues",
                 "source": "https://github.com/laurentmuller/fpdf2"
             },
-            "time": "2024-04-29T12:46:06+00:00"
+            "time": "2024-05-16T14:49:04+00:00"
         },
         {
             "name": "laurentmuller/highcharts-bundle",
-            "version": "2.20.12",
+            "version": "2.20.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laurentmuller/HighchartsBundle.git",
-                "reference": "343117e47f153884e935ca644b1f00d68a945dfa"
+                "reference": "e8185f792adeac627b7f77b4eb1da49781c02fd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/343117e47f153884e935ca644b1f00d68a945dfa",
-                "reference": "343117e47f153884e935ca644b1f00d68a945dfa",
+                "url": "https://api.github.com/repos/laurentmuller/HighchartsBundle/zipball/e8185f792adeac627b7f77b4eb1da49781c02fd9",
+                "reference": "e8185f792adeac627b7f77b4eb1da49781c02fd9",
                 "shasum": ""
             },
             "require": {
@@ -1967,8 +1967,8 @@
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.5",
                 "phpunit/phpunit": "^10.0",
-                "psalm/plugin-phpunit": "^0.18",
-                "rector/rector": "^0.19",
+                "psalm/plugin-phpunit": "^0.19",
+                "rector/rector": "^1.0",
                 "slam/phpstan-extensions": "^6.0",
                 "spaze/phpstan-disallowed-calls": "^2.0",
                 "symfony/framework-bundle": "^6.0| ^7.0",
@@ -2009,7 +2009,7 @@
                 "issues": "https://github.com/laurentmuller/HighchartsBundle/issues",
                 "source": "https://github.com/laurentmuller/HighchartsBundle"
             },
-            "time": "2024-04-22T08:50:30+00:00"
+            "time": "2024-05-16T15:03:36+00:00"
         },
         {
             "name": "lorenzo/pinky",
@@ -8185,16 +8185,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.10.2",
+            "version": "v3.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "7aaed0b8311a557cc8c4047a71fd03153a00e755"
+                "reference": "67f29781ffafa520b0bbfbd8384674b42db04572"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/7aaed0b8311a557cc8c4047a71fd03153a00e755",
-                "reference": "7aaed0b8311a557cc8c4047a71fd03153a00e755",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/67f29781ffafa520b0bbfbd8384674b42db04572",
+                "reference": "67f29781ffafa520b0bbfbd8384674b42db04572",
                 "shasum": ""
             },
             "require": {
@@ -8248,7 +8248,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.10.2"
+                "source": "https://github.com/twigphp/Twig/tree/v3.10.3"
             },
             "funding": [
                 {
@@ -8260,7 +8260,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-05-14T06:04:16+00:00"
+            "time": "2024-05-16T10:04:27+00:00"
         },
         {
             "name": "vich/uploader-bundle",

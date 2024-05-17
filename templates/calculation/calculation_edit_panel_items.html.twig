@@ -15,7 +15,7 @@
                     <button type="button" class="btn btn-secondary btn-add-task" title="{{ 'calculation.edit.add_task'|trans }}">
                         {{- icon(ICON_TASK) -}}
                     </button>
-                    <button type="button" class="btn btn-secondary btn-sort-items" title="{{ 'calculation.edit.sort_item'|trans }}"{% if not item.sortable %} disabled="disabled"{% endif %}>
+                    <button type="button" class="btn btn-secondary btn-sort-items" title="{{ 'calculation.edit.sort_item'|trans }}"{% if not item.sortable %} disabled{% endif %}>
                         {{- icon('sort-alpha-up') -}}
                     </button>
                 </div>

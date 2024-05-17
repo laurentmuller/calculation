@@ -553,6 +553,7 @@ class CalculationRepository extends AbstractRepository
      */
     public function getMinMaxDates(): array
     {
+        /** @psalm-var array{MIN_DATE: string, MAX_DATE: string}|null $values */
         $values = $this->createQueryBuilder('c')
             ->select('MIN(c.date) as MIN_DATE')
             ->addSelect('MAX(c.date) as MAX_DATE')
@@ -561,10 +562,11 @@ class CalculationRepository extends AbstractRepository
         if (!\is_array($values)) {
             return [null, null];
         }
-        $min_date = \is_string($values['MIN_DATE']) ? new \DateTime($values['MIN_DATE']) : null;
-        $max_date = \is_string($values['MAX_DATE']) ? new \DateTime($values['MAX_DATE']) : null;
 
-        return [$min_date, $max_date];
+        return [
+            new \DateTimeImmutable($values['MIN_DATE']),
+            new \DateTimeImmutable($values['MAX_DATE']),
+        ];
     }
 
     /**

@@ -15,6 +15,7 @@ namespace App\Controller;
 use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
 use App\Service\TimelineService;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -23,6 +24,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
  * Controller to display calculations timeline.
+ *
+ * @psalm-import-type ParametersType from TimelineService
  */
 #[AsController]
 #[Route(path: '/timeline', name: 'timeline')]
@@ -35,8 +38,38 @@ class TimelineController extends AbstractController
     /**
      * @throws \Exception
      */
+    #[Get(path: '/content', name: '_content')]
+    public function content(
+        TimelineService $service,
+        #[MapQueryParameter]
+        string $date,
+        #[MapQueryParameter]
+        string $interval
+    ): JsonResponse {
+        $parameters = $service->current($date, $interval);
+
+        return $this->renderContent($parameters);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Get(path: '/first', name: '_first')]
+    public function first(
+        TimelineService $service,
+        #[MapQueryParameter]
+        string $interval
+    ): JsonResponse {
+        $parameters = $service->first($interval);
+
+        return $this->renderContent($parameters);
+    }
+
+    /**
+     * @throws \Exception
+     */
     #[Get(path: '', name: '')]
-    public function current(
+    public function index(
         TimelineService $service,
         #[MapQueryParameter]
         ?string $date = null,
@@ -49,23 +82,7 @@ class TimelineController extends AbstractController
         $this->setSessionValue(self::KEY_INTERVAL, $parameters['interval']);
         $this->setSessionValue(self::KEY_DATE, $parameters['date']);
 
-        return $this->renderTimeline($parameters);
-    }
-
-    /**
-     * @throws \Exception
-     */
-    #[Get(path: '/first', name: '_first')]
-    public function first(
-        TimelineService $service,
-        #[MapQueryParameter]
-        ?string $interval = null
-    ): Response {
-        $interval ??= $this->getSessionString(self::KEY_INTERVAL);
-        $parameters = $service->first($interval);
-        $this->setSessionValue(self::KEY_INTERVAL, $parameters['interval']);
-
-        return $this->renderTimeline($parameters);
+        return $this->render('test/timeline.html.twig', $parameters);
     }
 
     /**
@@ -75,17 +92,44 @@ class TimelineController extends AbstractController
     public function last(
         TimelineService $service,
         #[MapQueryParameter]
-        ?string $interval = null
-    ): Response {
-        $interval ??= $this->getSessionString(self::KEY_INTERVAL);
+        string $interval
+    ): JsonResponse {
         $parameters = $service->last($interval);
-        $this->setSessionValue(self::KEY_INTERVAL, $parameters['interval']);
 
-        return $this->renderTimeline($parameters);
+        return $this->renderContent($parameters);
     }
 
-    private function renderTimeline(array $parameters): Response
+    /**
+     * @throws \Exception
+     */
+    #[Get(path: '/today', name: '_today')]
+    public function today(
+        TimelineService $service,
+        #[MapQueryParameter]
+        string $interval
+    ): JsonResponse {
+        $date = new \DateTimeImmutable('today');
+        $parameters = $service->current($date->format('Y-m-d'), $interval);
+
+        return $this->renderContent($parameters);
+    }
+
+    /**
+     * @psalm-param ParametersType $parameters
+     */
+    private function renderContent(array $parameters): JsonResponse
     {
-        return $this->render('test/timeline.html.twig', $parameters);
+        $this->setSessionValue(self::KEY_INTERVAL, $parameters['interval']);
+        $this->setSessionValue(self::KEY_DATE, $parameters['date']);
+        $content = $this->renderView('test/_timeline_content.html.twig', $parameters);
+
+        return $this->jsonTrue([
+            'date' => $parameters['date'],
+            'from' => $parameters['from']->format('Y-m-d'),
+            'to' => $parameters['to']->format('Y-m-d'),
+            'previous' => $parameters['previous'],
+            'next' => $parameters['next'],
+            'content' => $content,
+        ]);
     }
 }

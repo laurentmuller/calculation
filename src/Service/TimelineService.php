@@ -97,11 +97,22 @@ class TimelineService
     }
 
     /**
-     * @return Calculation[]
+     * @return array{0: int, 1: array<string, Calculation[]>}
      */
-    private function getByInterval(\DateTimeInterface $from, \DateTimeInterface $to): array
+    private function getCalculations(\DateTimeInterface $from, \DateTimeInterface $to): array
     {
-        return $this->repository->getByInterval($from, $to);
+        $calculations = $this->repository->getByInterval($from, $to);
+        if ([] === $calculations) {
+            return [0, []];
+        }
+
+        /** @var array<string, Calculation[]> $grouped */
+        $grouped = $this->groupBy(
+            $calculations,
+            static fn (Calculation $c): string => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG)
+        );
+
+        return [\count($calculations), $grouped];
     }
 
     /**
@@ -160,7 +171,7 @@ class TimelineService
     ): array {
         $previous = $this->getPreviousDate($to, $interval, $min_date);
         $next = $this->getNextDate($to, $interval, $max_date);
-        $calculations = $this->getByInterval($from, $to);
+        [$count, $calculations] = $this->getCalculations($from, $to);
 
         return [
             'from' => $from,
@@ -175,8 +186,8 @@ class TimelineService
             'previous' => $previous?->format(self::DATE_FORMAT),
             'next' => $next?->format(self::DATE_FORMAT),
 
-            'count' => \count($calculations),
-            'data' => $this->groupByDate($calculations),
+            'count' => $count,
+            'data' => $calculations,
         ];
     }
 
@@ -191,23 +202,5 @@ class TimelineService
         $previous = DateUtils::sub($date, $interval);
 
         return $previous <= $min_date ? null : $previous;
-    }
-
-    /**
-     * @psalm-param Calculation[] $calculations
-     *
-     * @psalm-return array<string, Calculation[]>
-     */
-    private function groupByDate(array $calculations): array
-    {
-        if ([] === $calculations) {
-            return [];
-        }
-
-        /** @psalm-var array<string, Calculation[]> */
-        return $this->groupBy(
-            $calculations,
-            static fn (Calculation $c): string => FormatUtils::formatDate($c->getDate(), \IntlDateFormatter::LONG)
-        );
     }
 }

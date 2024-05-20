@@ -60,7 +60,7 @@ class TaskComputeResultTest extends TestCase
     {
         $task = $this->createTask();
         $result = new TaskComputeResult($task, 1.0);
-        $actual = $result->getResults();
+        $actual = $result->getItems();
         self::assertSame([], $actual);
 
         $item = $this->createTaskItem($task);
@@ -73,7 +73,7 @@ class TaskComputeResultTest extends TestCase
             'amount' => 10.0,
             'checked' => true,
         ];
-        $actual = $result->getResults();
+        $actual = $result->getItems();
         self::assertSame([$expected], $actual);
     }
 
@@ -90,7 +90,7 @@ class TaskComputeResultTest extends TestCase
             'categoryId' => null,
             'quantity' => 1.0,
             'overall' => 0.0,
-            'results' => [],
+            'items' => [],
         ];
         $actual = $result->jsonSerialize();
         self::assertSame($expected, $actual);

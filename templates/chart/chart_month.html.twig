@@ -1,7 +1,7 @@
 {% extends 'chart/chart_base.html.twig' %}
 {# add a month option #}
 {% macro month(value, selected) -%}
-<option value="{{ value }}"{% if selected %} selected="selected"{% endif %}>
+<option value="{{ value }}"{% if selected %} selected{% endif %}>
     {{- 'counters.months'|trans({count: value}) -}}
 </option>
 {%- endmacro %}

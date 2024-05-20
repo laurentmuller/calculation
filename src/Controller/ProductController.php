@@ -21,6 +21,7 @@ use App\Interfaces\EntityInterface;
 use App\Interfaces\RoleInterface;
 use App\Report\ProductsReport;
 use App\Repository\ProductRepository;
+use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\ProductsDocument;
@@ -30,7 +31,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -124,7 +125,7 @@ class ProductController extends AbstractEntityController
     public function index(
         ProductTable $table,
         LoggerInterface $logger,
-        #[MapQueryString]
+        #[ValueResolver(DataQueryValueResolver::class)]
         DataQuery $query = new DataQuery()
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'product/product_table.html.twig');

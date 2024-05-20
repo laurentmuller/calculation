@@ -21,6 +21,7 @@ use App\Interfaces\RoleInterface;
 use App\Report\CalculationStatesReport;
 use App\Repository\CalculationRepository;
 use App\Repository\CalculationStateRepository;
+use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CalculationStatesDocument;
@@ -30,7 +31,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -139,7 +140,7 @@ class CalculationStateController extends AbstractEntityController
     public function index(
         CalculationStateTable $table,
         LoggerInterface $logger,
-        #[MapQueryString]
+        #[ValueResolver(DataQueryValueResolver::class)]
         DataQuery $query = new DataQuery()
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'calculationstate/calculationstate_table.html.twig');

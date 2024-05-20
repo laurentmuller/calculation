@@ -16,7 +16,7 @@
         <div class="input-group input-group-sm d-print-none">
             <select class="form-select form-select-sm w-auto" id="diagrams" name="diagrams">
                 {% for key, value in files %}
-                    <option value="{{ key }}"{% if file.name == key %} selected="selected"{% endif %}>{{ value }}</option>
+                    <option value="{{ key }}"{% if file.name == key %} selected{% endif %}>{{ value }}</option>
                 {% endfor %}
             </select>
             <span class="input-group-text text-center d-inline" id="zoom" style="width: 60px;" title="{{ 'diagram.zoom'|trans }}">100 %</span>

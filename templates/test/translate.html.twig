@@ -3,7 +3,7 @@
 {% from 'macros/_icons.html.twig' import apiLink %}
 {% macro fillLanguages(languages, language = false) %}
 {% for key, value in languages -%}
-    <option value="{{ value }}"{% if value == language %} selected="selected"{% endif %}>{{ key }}</option>
+    <option value="{{ value }}"{% if value == language %} selected{% endif %}>{{ key }}</option>
 {% endfor -%}
 {% endmacro %}
 {# parameters #}
@@ -51,7 +51,7 @@
             <label for="service" class="form-label required">{{ 'translator.service_label'|trans }}</label>
             <select id="service" name="service" class="form-select" data-languages="{{ path('ajax_languages') }}">
             {% for translator in translators -%}
-                <option data-api="{{ translator.apiUrl }}"{% if translator.name == service.name %} selected="selected"{% endif %}>{{ translator.name }}</option>
+                <option data-api="{{ translator.apiUrl }}"{% if translator.name == service.name %} selected{% endif %}>{{ translator.name }}</option>
             {% endfor -%}
             </select>
         </div>

@@ -14,13 +14,14 @@ namespace App\Controller;
 
 use App\Attribute\Get;
 use App\Interfaces\RoleInterface;
+use App\Resolver\DataQueryValueResolver;
 use App\Table\DataQuery;
 use App\Table\SearchTable;
 use App\Traits\TableTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 /**
@@ -39,7 +40,7 @@ class SearchController extends AbstractController
     public function search(
         SearchTable $table,
         LoggerInterface $logger,
-        #[MapQueryString]
+        #[ValueResolver(DataQueryValueResolver::class)]
         DataQuery $query = new DataQuery()
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'search/search.html.twig');

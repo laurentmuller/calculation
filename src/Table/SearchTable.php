@@ -37,11 +37,6 @@ class SearchTable extends AbstractTable implements ServiceSubscriberInterface
     final public const PARAM_ENTITY = 'entity';
 
     /**
-     * The type parameter name.
-     */
-    final public const PARAM_TYPE = 'type';
-
-    /**
      * The default sort columns order.
      */
     private const SORT_COLUMNS = [

@@ -18,6 +18,7 @@ use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationsBelowReport;
 use App\Repository\CalculationRepository;
+use App\Resolver\DataQueryValueResolver;
 use App\Spreadsheet\CalculationsDocument;
 use App\Table\CalculationBelowTable;
 use App\Table\DataQuery;
@@ -27,7 +28,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -71,7 +72,7 @@ class CalculationBelowController extends AbstractController
     public function index(
         CalculationBelowTable $table,
         LoggerInterface $logger,
-        #[MapQueryString]
+        #[ValueResolver(DataQueryValueResolver::class)]
         DataQuery $query = new DataQuery()
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'calculation/calculation_table_below.html.twig');

@@ -11,15 +11,15 @@ function updateUI(response) {
     const max = $date.attr('max');
     $date.val(response.date);
 
-    const is_min = response.from <= min;
-    $('.btn-timeline-first').toggleDisabled(is_min);
-    $('.btn-timeline-previous').toggleDisabled(is_min)
+    const isMinValue = response.from <= min;
+    $('.btn-timeline-first').toggleDisabled(isMinValue);
+    $('.btn-timeline-previous').toggleDisabled(isMinValue)
         .data('date', response.previous);
 
-    const is_max = response.to >= max;
-    $('.btn-timeline-next').toggleDisabled(is_max)
+    const isMaxValue = response.to >= max;
+    $('.btn-timeline-next').toggleDisabled(isMaxValue)
         .data('date', response.next);
-    $('.btn-timeline-last').toggleDisabled(is_max);
+    $('.btn-timeline-last').toggleDisabled(isMaxValue);
 }
 
 /**

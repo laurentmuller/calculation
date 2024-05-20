@@ -109,9 +109,14 @@ class TimelineController extends AbstractController
         string $interval
     ): JsonResponse {
         $date = new \DateTimeImmutable('today');
-        $parameters = $service->current($date->format('Y-m-d'), $interval);
+        $parameters = $service->current($this->formatDate($date), $interval);
 
         return $this->renderContent($parameters);
+    }
+
+    private function formatDate(\DateTimeInterface $date): string
+    {
+        return $date->format(TimelineService::DATE_FORMAT);
     }
 
     /**
@@ -119,14 +124,14 @@ class TimelineController extends AbstractController
      */
     private function renderContent(array $parameters): JsonResponse
     {
-        $this->setSessionValue(self::KEY_INTERVAL, $parameters['interval']);
         $this->setSessionValue(self::KEY_DATE, $parameters['date']);
+        $this->setSessionValue(self::KEY_INTERVAL, $parameters['interval']);
         $content = $this->renderView('test/_timeline_content.html.twig', $parameters);
 
         return $this->jsonTrue([
             'date' => $parameters['date'],
-            'from' => $parameters['from']->format('Y-m-d'),
-            'to' => $parameters['to']->format('Y-m-d'),
+            'from' => $this->formatDate($parameters['from']),
+            'to' => $this->formatDate($parameters['to']),
             'previous' => $parameters['previous'],
             'next' => $parameters['next'],
             'content' => $content,

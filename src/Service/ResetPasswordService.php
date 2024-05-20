@@ -33,7 +33,7 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 /**
  * Service to reset user password.
  */
-class ResetPasswordService
+readonly class ResetPasswordService
 {
     use LoggerTrait;
 
@@ -41,17 +41,17 @@ class ResetPasswordService
     private const THROTTLE_OFFSET = 'PT3300S';
 
     public function __construct(
-        private readonly ResetPasswordHelperInterface $helper,
-        private readonly UserRepository $repository,
-        private readonly UserExceptionService $service,
-        private readonly TranslatorInterface $translator,
-        private readonly UrlGeneratorInterface $generator,
-        private readonly MailerInterface $mailer,
-        private readonly LoggerInterface $logger,
+        private ResetPasswordHelperInterface $helper,
+        private UserRepository $repository,
+        private UserExceptionService $service,
+        private TranslatorInterface $translator,
+        private UrlGeneratorInterface $generator,
+        private MailerInterface $mailer,
+        private LoggerInterface $logger,
         #[Autowire('%mailer_user_email%')]
-        private readonly string $mailerUserEmail,
+        private string $mailerUserEmail,
         #[Autowire('%mailer_user_name%')]
-        private readonly string $mailerUserName
+        private string $mailerUserName
     ) {
     }
 

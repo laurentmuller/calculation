@@ -113,6 +113,6 @@ readonly class SwissPostService
      */
     private function getDatabase(): SwissDatabase
     {
-        return new SwissDatabase($this->getDatabaseName(), true);
+        return new SwissDatabase($this->databaseName, true);
     }
 }

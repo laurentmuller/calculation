@@ -31,13 +31,13 @@ readonly class TaskService
      */
     public function computeQuery(TaskComputeQuery $query): ?TaskComputeResult
     {
-        $task = $this->repository->find($query->getId());
+        $task = $this->repository->find($query->id);
         if (!$task instanceof Task) {
             return null;
         }
 
-        $quantity = $query->getQuantity();
-        $selectedItems = $query->getItems();
+        $quantity = $query->quantity;
+        $selectedItems = $query->items;
         $result = new TaskComputeResult($task, $quantity);
         foreach ($task->getItems() as $item) {
             $result->addItem($item, \in_array($item->getId(), $selectedItems, true));

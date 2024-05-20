@@ -22,6 +22,7 @@ use App\Model\PasswordQuery;
 use App\Model\SessionQuery;
 use App\Model\TaskComputeQuery;
 use App\Model\TaskComputeResult;
+use App\Resolver\TaskComputeQueryValueResolver;
 use App\Service\FakerService;
 use App\Service\PasswordService;
 use App\Service\TaskService;
@@ -35,6 +36,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Twig\Extra\Markdown\MarkdownInterface;
@@ -54,8 +56,11 @@ class AjaxController extends AbstractController
      */
     #[IsGranted(RoleInterface::ROLE_USER)]
     #[Post(path: '/task', name: '_task')]
-    public function computeTask(#[MapRequestPayload] TaskComputeQuery $query, TaskService $service): JsonResponse
-    {
+    public function computeTask(
+        #[ValueResolver(TaskComputeQueryValueResolver::class)]
+        TaskComputeQuery $query,
+        TaskService $service
+    ): JsonResponse {
         $result = $service->computeQuery($query);
         if (!$result instanceof TaskComputeResult) {
             return $this->jsonFalse(

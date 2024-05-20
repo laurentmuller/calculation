@@ -19,6 +19,7 @@ use App\Entity\Customer;
 use App\Interfaces\RoleInterface;
 use App\Report\CustomersReport;
 use App\Repository\CustomerRepository;
+use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\CustomersDocument;
@@ -28,7 +29,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -102,7 +103,7 @@ class CustomerController extends AbstractEntityController
     public function index(
         CustomerTable $table,
         LoggerInterface $logger,
-        #[MapQueryString]
+        #[ValueResolver(DataQueryValueResolver::class)]
         DataQuery $query = new DataQuery(),
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'customer/customer_table.html.twig');

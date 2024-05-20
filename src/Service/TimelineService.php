@@ -34,14 +34,18 @@ use App\Utils\FormatUtils;
  *     count: int,
  *     data: array<string, Calculation[]>}
  */
-class TimelineService
+readonly class TimelineService
 {
     use GroupByTrait;
 
-    private const DATE_FORMAT = 'Y-m-d';
+    /**
+     * The date format for HTML input.
+     */
+    public const DATE_FORMAT = 'Y-m-d';
+
     private const DEFAULT_INTERVAL = 'P1W';
 
-    public function __construct(private readonly CalculationRepository $repository)
+    public function __construct(private CalculationRepository $repository)
     {
     }
 

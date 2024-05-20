@@ -62,7 +62,7 @@ use Symfony\Contracts\Cache\CacheInterface;
  *     size: string}
  * @psalm-type BundlesType = array<string, BundleType>
  */
-final class SymfonyInfoService
+final readonly class SymfonyInfoService
 {
     // the array key for debug packages and routes
     private const KEY_DEBUG = 'debug';
@@ -77,15 +77,15 @@ final class SymfonyInfoService
     // the unknown label
     private const UNKNOWN = 'Unknown';
 
-    private readonly Environment $environment;
-    private readonly Environment $mode;
-    private readonly string $projectDir;
+    private Environment $environment;
+    private Environment $mode;
+    private string $projectDir;
 
     public function __construct(
-        private readonly KernelInterface $kernel,
-        private readonly RouterInterface $router,
+        private KernelInterface $kernel,
+        private RouterInterface $router,
         #[Target('calculation.service.symfony')]
-        private readonly CacheInterface $cache,
+        private CacheInterface $cache,
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
         #[Autowire('%app_mode%')]

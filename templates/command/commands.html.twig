@@ -14,7 +14,7 @@
     {% for key, names in groups %}
         <optgroup label="{{ key }}">
         {% for name in names %}
-            <option{% if name == selection %} selected="selected"{% endif %}>{{ name }}</option>
+            <option{% if name == selection %} selected{% endif %}>{{ name }}</option>
         {% endfor %}
         </optgroup>
     {% endfor %}

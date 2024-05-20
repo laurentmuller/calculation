@@ -17,6 +17,7 @@ use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Report\CalculationsEmptyReport;
 use App\Repository\CalculationRepository;
+use App\Resolver\DataQueryValueResolver;
 use App\Spreadsheet\CalculationsEmptyDocument;
 use App\Table\CalculationEmptyTable;
 use App\Table\DataQuery;
@@ -25,7 +26,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -67,7 +68,7 @@ class CalculationEmptyController extends AbstractController
     public function index(
         CalculationEmptyTable $table,
         LoggerInterface $logger,
-        #[MapQueryString]
+        #[ValueResolver(DataQueryValueResolver::class)]
         DataQuery $query = new DataQuery()
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'calculation/calculation_table_empty.html.twig');

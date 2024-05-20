@@ -26,14 +26,14 @@ class TaskComputeQueryTest extends TestCase
     public function testConstruct(): void
     {
         $query = new TaskComputeQuery(0);
-        self::assertSame(0, $query->getId());
-        self::assertSame(1.0, $query->getQuantity());
-        self::assertSame([], $query->getItems());
+        self::assertSame(0, $query->id);
+        self::assertSame(1.0, $query->quantity);
+        self::assertSame([], $query->items);
 
         $query = new TaskComputeQuery(1, 2.0, [1, 2, 3]);
-        self::assertSame(1, $query->getId());
-        self::assertSame(2.0, $query->getQuantity());
-        self::assertSame([1, 2, 3], $query->getItems());
+        self::assertSame(1, $query->id);
+        self::assertSame(2.0, $query->quantity);
+        self::assertSame([1, 2, 3], $query->items);
     }
 
     /**
@@ -43,9 +43,9 @@ class TaskComputeQueryTest extends TestCase
     {
         $task = $this->createTask();
         $query = TaskComputeQuery::instance($task);
-        self::assertSame(1, $query->getId());
-        self::assertSame(1.0, $query->getQuantity());
-        self::assertSame([], $query->getItems());
+        self::assertSame(1, $query->id);
+        self::assertSame(1.0, $query->quantity);
+        self::assertSame([], $query->items);
     }
 
     /**

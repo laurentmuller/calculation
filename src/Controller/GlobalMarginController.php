@@ -21,6 +21,7 @@ use App\Interfaces\RoleInterface;
 use App\Model\GlobalMargins;
 use App\Report\GlobalMarginsReport;
 use App\Repository\GlobalMarginRepository;
+use App\Resolver\DataQueryValueResolver;
 use App\Response\PdfResponse;
 use App\Response\SpreadsheetResponse;
 use App\Spreadsheet\GlobalMarginsDocument;
@@ -30,7 +31,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -104,7 +105,7 @@ class GlobalMarginController extends AbstractEntityController
     public function index(
         GlobalMarginTable $table,
         LoggerInterface $logger,
-        #[MapQueryString]
+        #[ValueResolver(DataQueryValueResolver::class)]
         DataQuery $query = new DataQuery()
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'globalmargin/globalmargin_table.html.twig');

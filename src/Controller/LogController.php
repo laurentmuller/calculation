@@ -19,6 +19,7 @@ use App\Enums\FlashType;
 use App\Interfaces\RoleInterface;
 use App\Model\LogFile;
 use App\Report\LogsReport;
+use App\Resolver\DataQueryValueResolver;
 use App\Service\LogService;
 use App\Spreadsheet\LogsDocument;
 use App\Table\DataQuery;
@@ -31,7 +32,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -115,7 +116,7 @@ class LogController extends AbstractController
     public function index(
         LogTable $table,
         LoggerInterface $logger,
-        #[MapQueryString]
+        #[ValueResolver(DataQueryValueResolver::class)]
         DataQuery $query = new DataQuery()
     ): Response {
         return $this->handleTableRequest($table, $logger, $query, 'log/log_table.html.twig');

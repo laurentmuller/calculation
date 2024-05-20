@@ -3,7 +3,7 @@
 {# macros #}
 {% macro fillCodes(codes, selection = '') %}
 {% for key, code in codes -%}
-    <option value="{{ key }}" data-name="{{ code.symbol }}" data-digits="{{ code.fractionDigits }}"{% if key == selection %} selected="selected"{% endif %}>{{ code.name ~ ' - ' ~ code.symbol }}</option>
+    <option value="{{ key }}" data-name="{{ code.symbol }}" data-digits="{{ code.fractionDigits }}"{% if key == selection %} selected{% endif %}>{{ code.name ~ ' - ' ~ code.symbol }}</option>
 {% endfor -%}
 {% endmacro %}
 {% macro fillEntries(codes, selection = '') %}

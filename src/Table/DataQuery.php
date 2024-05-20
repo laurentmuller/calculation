@@ -27,18 +27,18 @@ class DataQuery implements SortModeInterface
         public bool $callback = false,
         /** The selected identifier. */
         #[Assert\PositiveOrZero]
-        public readonly int $id = 0,
+        public int $id = 0,
         /** The view. */
         public TableView $view = TableView::TABLE,
         /** The position of the first result to retrieve (the "offset"). */
         #[Assert\PositiveOrZero]
-        public readonly int $offset = 0,
+        public int $offset = 0,
         /** The maximum number of results to retrieve (the "limit"). */
         #[Assert\PositiveOrZero]
         public int $limit = 0,
         /** The search term. */
         #[Assert\NotNull]
-        public readonly string $search = '',
+        public string $search = '',
         /** The sorted field. */
         #[Assert\NotNull]
         public string $sort = '',
@@ -73,9 +73,6 @@ class DataQuery implements SortModeInterface
         /** The search entity. */
         #[Assert\NotNull]
         public string $entity = '',
-        /** The search type. */
-        #[Assert\NotNull]
-        public string $type = '',
     ) {
     }
 

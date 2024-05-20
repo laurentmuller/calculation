@@ -9,18 +9,18 @@
 
 {% macro position(position, selection) -%}
 {%- set value = position.value -%}
-<option value="{{ value }}"{% if position == selection %} selected="selected"{% endif %}>{{ position|trans }}</option>
+<option value="{{ value }}"{% if position == selection %} selected{% endif %}>{{ position|trans }}</option>
 {%- endmacro %}
 
 {% macro timeout(seconds, selection) -%}
 {%- set milliseconds = seconds * 1000 -%}
 {%- set text = 'counters.seconds'|trans({'%count%': seconds}) -%}
-<option value="{{ milliseconds }}"{% if milliseconds == selection %} selected="selected"{% endif %}>{{ text }}</option>
+<option value="{{ milliseconds }}"{% if milliseconds == selection %} selected{% endif %}>{{ text }}</option>
 {%- endmacro %}
 
 {% macro progress(pixels, selection) -%}
 {%- set text = 'counters.pixels'|trans({'%count%': pixels}) -%}
-<option value="{{ pixels }}"{% if pixels == selection %} selected="selected"{% endif %}>{{ text }}</option>
+<option value="{{ pixels }}"{% if pixels == selection %} selected{% endif %}>{{ text }}</option>
 {%- endmacro %}
 
 {% macro checkbox(id, text, checked = true) -%}
@@ -77,7 +77,7 @@
         <label class="form-label" for="maxNbChars">Nombre de caractères</label>
         <select id="maxNbChars" name="maxNbChars" data-default="{{ 150 }}" class="form-select">
             {% for i in range(50, 500, 50) %}
-                <option value="{{ i }}"{% if i == 150 %} selected="selected"{% endif %}>{{ i }}</option>
+                <option value="{{ i }}"{% if i == 150 %} selected{% endif %}>{{ i }}</option>
             {% endfor %}
         </select>
     </div>

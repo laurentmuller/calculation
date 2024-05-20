@@ -31,7 +31,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Service to generate URL and parameters.
  */
-class UrlGeneratorService
+readonly class UrlGeneratorService
 {
     use RequestTrait;
 
@@ -69,11 +69,10 @@ class UrlGeneratorService
         CalculationTable::PARAM_EDITABLE,
         AbstractCategoryItemTable::PARAM_CATEGORY,
 
-        SearchTable::PARAM_TYPE,
         SearchTable::PARAM_ENTITY,
     ];
 
-    public function __construct(private readonly UrlGeneratorInterface $generator)
+    public function __construct(private UrlGeneratorInterface $generator)
     {
     }
 

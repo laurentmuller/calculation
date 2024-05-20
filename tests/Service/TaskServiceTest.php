@@ -44,7 +44,7 @@ class TaskServiceTest extends TestCase
 
         $actual = $service->computeQuery($query);
         self::assertNotNull($actual);
-        self::assertEmpty($actual->getResults());
+        self::assertEmpty($actual->getItems());
         self::assertSame($quantity, $actual->getQuantity());
         self::assertSame(0.0, $actual->getOverall());
         self::assertSame($task->getId(), $actual->getTask()->getId());
@@ -58,9 +58,9 @@ class TaskServiceTest extends TestCase
         $repository = $this->createRepository(null);
         $service = new TaskService($repository);
         $query = new TaskComputeQuery(1, 1.0, []);
-        self::assertSame(1, $query->getId());
-        self::assertSame(1.0, $query->getQuantity());
-        self::assertEmpty($query->getItems());
+        self::assertSame(1, $query->id);
+        self::assertSame(1.0, $query->quantity);
+        self::assertEmpty($query->items);
 
         $actual = $service->computeQuery($query);
         self::assertNull($actual);
@@ -81,7 +81,7 @@ class TaskServiceTest extends TestCase
 
         $actual = $service->computeQuery($query);
         self::assertNotNull($actual);
-        self::assertCount(1, $actual->getResults());
+        self::assertCount(1, $actual->getItems());
         self::assertSame($quantity, $actual->getQuantity());
         self::assertSame($task->getId(), $actual->getTask()->getId());
     }
@@ -115,7 +115,7 @@ class TaskServiceTest extends TestCase
             'categoryId' => $task->getCategoryId(),
             'quantity' => 1.0,
             'overall' => 0.0,
-            'results' => [],
+            'items' => [],
         ];
         $actual = $result->jsonSerialize();
         self::assertSame($expected, $actual);
@@ -154,6 +154,9 @@ class TaskServiceTest extends TestCase
         return self::setId($task);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     private function createTaskItem(Task $task): TaskItem
     {
         $item = new TaskItem();

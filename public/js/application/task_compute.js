@@ -3,6 +3,19 @@
 /* globals Toaster */
 
 /**
+ * @typedef {Object} InputData
+ * @property {number} id
+ * @property {number} quantity
+ * @property {number[]} items
+ *
+ * @typedef {Object} ResponseData
+ * @property {boolean} result
+ * @property {string} message
+ * @property {number} overall
+ * @property {Array.<{id: Number, value: number, amount: number}>} items
+ */
+
+/**
  * Update the given input.
  *
  * @param {string} id - the input identifier.
@@ -36,69 +49,106 @@ function showError(message) {
 }
 
 /**
- * Send form to server and update UI.
- *
- * @param {HTMLFormElement} form - the submitted form.
+ * @param {JQuery} $form
+ * @param {InputData} data
+ * @return {boolean}
  */
-function submitForm(form) {
+function isSameValues($form, data) {
     'use strict';
-    // same?
-    const $form = $(form);
+    const newValue = JSON.stringify(data);
     const oldValue = $form.data('value');
-    const newValue = $form.serialize();
     if (oldValue && oldValue === newValue) {
-        return;
+        return true;
     }
     $form.data('value', newValue);
+    return false;
+}
 
-    // get items
+/**
+ * Gets data to post.
+ * @return {InputData}
+ */
+function getData() {
+    'use strict';
     const $task = $('#task');
     const id = $task.intVal();
-    const $itemsEmpty = $('.task-items-empty');
     const selector = `#table-task-edit .task-item-row[data-id="${id}"] .item-input:checked`;
     const items = $(selector).map(function () {
         return $(this).intVal();
     }).get();
-    if (items.length === 0) {
-        const selector = `#table-task-edit .task-item-row[data-id="${id}"] .item-input:first`;
-        $(selector).trigger('focus');
-        $itemsEmpty.removeClass('d-none');
+
+    return {
+        'id': id,
+        'quantity': $('#quantity').floatVal(),
+        'items': items
+    };
+}
+
+/**
+ * Validate.
+ * @param {InputData} data
+ * @return {boolean}
+ */
+function isValid(data) {
+    'use strict';
+    if (data.items.length === 0) {
+        const id = $('#task').intVal();
+        $(`#table-task-edit .task-item-row[data-id="${id}"] .item-input:first`).trigger('focus');
+        $('.task-items-empty').removeClass('d-none');
         resetValues();
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Cancel post submit.
+ * @param {jQuery} $form
+ */
+function cancelSubmit($form) {
+    'use strict';
+    if ($form.jqXHR) {
+        $form.jqXHR.abort();
+        $form.jqXHR = null;
+    }
+}
+
+/**
+ * Send form to server and update UI.
+ * @param {HTMLFormElement} form - the submitted form.
+ */
+function submitForm(form) {
+    'use strict';
+    // get data
+    const data = getData();
+
+    // same?
+    const $form = $(form);
+    if (isSameValues($form, data)) {
+        return;
+    }
+
+    // valid?
+    if (!isValid(data)) {
         return;
     }
 
     // update UI
     $('#quantity-error').remove();
-    $itemsEmpty.addClass('d-none');
+    $('.task-items-empty').addClass('d-none');
 
-    // get data
-    const url = $form.prop('action');
-    const data = {
-        'id': $task.intVal(),
-        'quantity': $('#quantity').floatVal(),
-        'items': items
-    };
-
-    // cancel send
-    if ($form.jqXHR) {
-        $form.jqXHR.abort();
-        $form.jqXHR = null;
-    }
+    // cancel
+    cancelSubmit($form);
 
     // send
+    const url = $form.prop('action');
     $form.jqXHR = $.post(url, data, function (response) {
-        /**
-         * @param {Object} response
-         * @param {boolean} response.result
-         * @param {string} response.message
-         * @param {number} response.overall
-         * @param {Array.<{id: Number, value: number, amount: number}>}  response.results
-         */
+        /** @param {ResponseData} response */
         if (response.result) {
             // update
-            response.results.forEach(function (item) {
-                updateValue('task_value_' + item.id, item.value);
-                updateValue('task_total_' + item.id, item.amount);
+            response.items.forEach(function (item) {
+                updateValue(`task_value_${item.id}`, item.value);
+                updateValue(`task_total_${item.id}`, item.amount);
             });
             updateValue('task_overall', response.overall);
         } else {
@@ -116,7 +166,7 @@ function submitForm(form) {
  */
 function onInputChanged() {
     'use strict';
-    $("#edit-form").trigger('submit');
+    $('#edit-form').trigger('submit');
 }
 
 /**
@@ -141,7 +191,7 @@ function onTaskChanged() {
 
     // submit
     if (!empty) {
-        $("#edit-form").trigger('submit');
+        $('#edit-form').trigger('submit');
     }
 }
 
@@ -171,8 +221,8 @@ function onTaskChanged() {
             }
         }
     };
-    $("#edit-form").initValidator(options);
+    $('#edit-form').initValidator(options);
 
     // update
-    onInputChanged();
+   onInputChanged();
 }(jQuery));

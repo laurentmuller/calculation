@@ -34,7 +34,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *          lon: float}
  *     }
  */
-class OpenWeatherCityUpdater
+readonly class OpenWeatherCityUpdater
 {
     use TranslatorTrait;
 
@@ -44,9 +44,9 @@ class OpenWeatherCityUpdater
     private const FILE_EXTENSION = 'gz';
 
     public function __construct(
-        private readonly OpenWeatherService $service,
-        private readonly FormFactoryInterface $factory,
-        private readonly TranslatorInterface $translator,
+        private OpenWeatherService $service,
+        private FormFactoryInterface $factory,
+        private TranslatorInterface $translator,
     ) {
     }
 

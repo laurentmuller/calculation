@@ -10,47 +10,42 @@
 
 declare(strict_types=1);
 
-namespace App\Listener;
+namespace App\Resolver;
 
 use App\Enums\TableView;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TableInterface;
 use App\Table\DataQuery;
 use App\Traits\CookieTrait;
-use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
+use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * Handle the kernel controller arguments event to update properties of data query.
+ * Value resolver for DataQuery.
  */
-class DataQueryKernelListener implements SortModeInterface
+final readonly class DataQueryValueResolver implements SortModeInterface, ValueResolverInterface
 {
     use CookieTrait;
 
-    /**
-     * @psalm-api
-     */
-    #[AsEventListener(event: KernelEvents::CONTROLLER_ARGUMENTS, priority: -10)]
-    public function onKernelControllerArguments(ControllerArgumentsEvent $event): void
+    public function __construct(private PropertyAccessorInterface $accessor)
     {
-        if (!$event->isMainRequest()) {
-            return;
-        }
-        $arguments = $event->getArguments();
-        if ([] === $arguments) {
-            return;
+    }
+
+    public function resolve(Request $request, ArgumentMetadata $argument): iterable
+    {
+        $type = $argument->getType();
+        if (DataQuery::class !== $type) {
+            return [];
         }
 
-        /** @psalm-var ?DataQuery $argument */
-        foreach ($arguments as $index => $argument) {
-            if ($argument instanceof DataQuery) {
-                $arguments[$index] = $this->updateQuery($argument, $event->getRequest());
-                $event->setArguments($arguments);
-                break;
-            }
-        }
+        /** @psalm-var DataQuery $query */
+        $query = $argument->getDefaultValue();
+        $this->updateFromQuery($query, $request);
+        $this->updateFromRequest($query, $request);
+
+        return [$query];
     }
 
     private function getLimit(Request $request, string $prefix, TableView $view): int
@@ -63,10 +58,8 @@ class DataQueryKernelListener implements SortModeInterface
      */
     private function getOrder(Request $request, string $prefix): string
     {
-        /** @psalm-var self::SORT_* $order */
-        $order = $this->getCookieString($request, TableInterface::PARAM_ORDER, $prefix, self::SORT_ASC);
-
-        return $order;
+        /** @psalm-var self::SORT_* */
+        return $this->getCookieString($request, TableInterface::PARAM_ORDER, $prefix, self::SORT_ASC);
     }
 
     private function getPrefix(Request $request): string
@@ -89,7 +82,20 @@ class DataQueryKernelListener implements SortModeInterface
         return $request->isXmlHttpRequest();
     }
 
-    private function updateQuery(DataQuery $query, Request $request): DataQuery
+    private function updateFromQuery(DataQuery $query, Request $request): void
+    {
+        $data = $request->query;
+        /** @psalm-var string $key */
+        foreach ($data->keys() as $key) {
+            $value = match ($key) {
+                TableInterface::PARAM_VIEW => $data->getEnum($key, TableView::class, $query->view),
+                default => $data->get($key)
+            };
+            $this->accessor->setValue($query, $key, $value);
+        }
+    }
+
+    private function updateFromRequest(DataQuery $query, Request $request): void
     {
         $query->view = $this->getView($request);
         $query->prefix = $this->getPrefix($request);
@@ -101,7 +107,5 @@ class DataQueryKernelListener implements SortModeInterface
             $query->sort = $this->getSort($request, $query->prefix);
             $query->order = $this->getOrder($request, $query->prefix);
         }
-
-        return $query;
     }
 }

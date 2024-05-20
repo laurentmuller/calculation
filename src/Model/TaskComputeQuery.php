@@ -20,40 +20,20 @@ use App\Entity\TaskItem;
  */
 readonly class TaskComputeQuery
 {
-    /** @psalm-var int[] */
-    private array $items;
-
-    /**
-     * @param int[] $items
-     */
     public function __construct(
-        private int $id,
-        private float $quantity = 1.0,
-        array $items = []
+        public int $id,
+        public float $quantity = 1.0,
+        /** @var int[] */
+        public array $items = []
     ) {
-        $this->items = \array_map('intval', $items);
-    }
-
-    public function getId(): int
-    {
-        return $this->id;
     }
 
     /**
-     * @return int[]
+     * Create a new instance for the given task and quantity.
      */
-    public function getItems(): array
-    {
-        return $this->items;
-    }
-
-    public function getQuantity(): float
-    {
-        return $this->quantity;
-    }
-
     public static function instance(Task $task, float $quantity = 1.0): self
     {
+        /** @var int[] $items */
         $items = $task->getItems()->map(static fn (TaskItem $item): int => (int) $item->getId())->toArray();
 
         return new self((int) $task->getId(), $quantity, $items);

@@ -18,7 +18,7 @@ use App\Entity\TaskItem;
 /**
  * Contains the result of a computed task.
  *
- * @psalm-type ResultType = array{
+ * @psalm-type ItemType = array{
  *     id: int,
  *     name: string,
  *     value: float,
@@ -27,12 +27,11 @@ use App\Entity\TaskItem;
  */
 class TaskComputeResult implements \JsonSerializable
 {
-    private float $overall = 0;
-
     /**
-     * @psalm-var ResultType[]
+     * @psalm-var ItemType[]
      */
-    private array $results = [];
+    private array $items = [];
+    private float $overall = 0;
 
     public function __construct(private readonly Task $task, private readonly float $quantity)
     {
@@ -44,7 +43,7 @@ class TaskComputeResult implements \JsonSerializable
         $name = (string) $item->getName();
         $value = $item->findValue($this->quantity);
         $amount = $checked ? $this->quantity * $value : 0.0;
-        $this->results[] = [
+        $this->items[] = [
             'id' => $id,
             'name' => $name,
             'value' => $value,
@@ -54,6 +53,16 @@ class TaskComputeResult implements \JsonSerializable
         $this->overall += $amount;
 
         return $this;
+    }
+
+    /**
+     * @psalm-return ItemType[]
+     *
+     * @psalm-api
+     */
+    public function getItems(): array
+    {
+        return $this->items;
     }
 
     /**
@@ -73,16 +82,6 @@ class TaskComputeResult implements \JsonSerializable
     }
 
     /**
-     * @psalm-return ResultType[]
-     *
-     * @psalm-api
-     */
-    public function getResults(): array
-    {
-        return $this->results;
-    }
-
-    /**
      * @psalm-api
      */
     public function getTask(): Task
@@ -98,7 +97,7 @@ class TaskComputeResult implements \JsonSerializable
             'categoryId' => $this->task->getCategoryId(),
             'quantity' => $this->quantity,
             'overall' => $this->overall,
-            'results' => $this->results,
+            'items' => $this->items,
         ];
     }
 }

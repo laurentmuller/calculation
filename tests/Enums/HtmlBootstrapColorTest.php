@@ -16,9 +16,10 @@ use App\Pdf\Colors\PdfDrawColor;
 use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlBootstrapColor;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(HtmlBootstrapColor::class)]
+#[CoversClass(HtmlBootstrapColor::class)]
 class HtmlBootstrapColorTest extends TestCase
 {
     public static function getColorValues(): \Iterator

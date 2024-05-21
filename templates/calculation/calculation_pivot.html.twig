@@ -125,11 +125,11 @@
 <div class="d-flex-wrap-center mb-2">
     <h4 class="flex-grow-1">{{ icon(title_icon, title) }}</h4>
     <div class="form-check form-switch d-print-none">
-        <input type="checkbox" class="form-check-input" id="popover" name="popover"{% if popover %} checked="checked"{% endif %}>
+        <input type="checkbox" class="form-check-input" id="popover" name="popover"{% if popover %} checked{% endif %}>
         <label class="form-check-label" for="popover">{{ 'pivot.popover'|trans }}</label>
     </div>
     <div class="form-check form-switch d-print-none">
-        <input type="checkbox" class="form-check-input" id="highlight" name="highlight"{% if highlight %} checked="checked"{% endif %}>
+        <input type="checkbox" class="form-check-input" id="highlight" name="highlight"{% if highlight %} checked{% endif %}>
         <label class="form-check-label" for="highlight">{{ 'pivot.highlight'|trans }}</label>
     </div>
 </div>

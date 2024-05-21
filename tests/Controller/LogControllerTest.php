@@ -14,10 +14,11 @@ namespace App\Tests\Controller;
 
 use App\Controller\LogController;
 use App\Tests\ServiceTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(LogController::class)]
+#[CoversClass(LogController::class)]
 class LogControllerTest extends AbstractControllerTestCase
 {
     use ServiceTrait;

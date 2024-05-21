@@ -14,9 +14,10 @@ namespace App\Tests\Controller;
 
 use App\Controller\CustomerController;
 use App\Entity\Customer;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CustomerController::class)]
+#[CoversClass(CustomerController::class)]
 class CustomerControllerTest extends AbstractControllerTestCase
 {
     private ?Customer $entity = null;

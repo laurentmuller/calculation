@@ -16,12 +16,13 @@ use App\Entity\Customer;
 use App\Form\Customer\CustomerType;
 use App\Form\Type\CountryFlagType;
 use App\Service\CountryFlagService;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Form\PreloadedExtension;
 
 /**
  * @extends AbstractEntityTypeTestCase<Customer, CustomerType>
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(CustomerType::class)]
+#[CoversClass(CustomerType::class)]
 class CustomerTypeTest extends AbstractEntityTypeTestCase
 {
     protected function getData(): array

@@ -14,11 +14,12 @@ namespace App\Tests\Enums;
 
 use App\Enums\Theme;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(Theme::class)]
+#[CoversClass(Theme::class)]
 class ThemeTest extends TestCase
 {
     use TranslatorMockTrait;

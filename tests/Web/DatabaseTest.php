@@ -30,9 +30,10 @@ use App\Repository\UserRepository;
 use App\Tests\Data\Database;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(Database::class)]
+#[CoversClass(Database::class)]
 class DatabaseTest extends KernelTestCase
 {
     use DatabaseTrait;

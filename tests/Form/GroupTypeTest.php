@@ -15,11 +15,12 @@ namespace App\Tests\Form;
 use App\Entity\Group;
 use App\Form\Group\GroupType;
 use Doctrine\Common\Collections\ArrayCollection;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends AbstractEntityTypeTestCase<Group, GroupType>
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(GroupType::class)]
+#[CoversClass(GroupType::class)]
 class GroupTypeTest extends AbstractEntityTypeTestCase
 {
     protected function getData(): array

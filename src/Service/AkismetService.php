@@ -32,7 +32,7 @@ class AkismetService extends AbstractHttpClientService
     /**
      * The cache timeout (15 minutes).
      */
-    private const CACHE_TIMEOUT = 60 * 15;
+    private const CACHE_TIMEOUT = 900;
 
     /**
      * The host name.
@@ -94,7 +94,7 @@ class AkismetService extends AbstractHttpClientService
      * <li><b>user_ip</b> (required): IP address of the comment submitter.</li>
      * <li><b>user_agent</b>: User agent string of the web browser submitting the comment - typically the
      * HTTP_USER_AGENT cgi variable. Not to be confused with the user agent of the Akismet library.</li>
-     * <li><b>referrer</b>: The content of the HTTP_REFERER header should be sent here.</li>
+     * <li><b>referrer</b>: The content of the <code>HTTP_REFERER</code> header should be sent here.</li>
      * <li><b>permalink</b>: The full permanent URL of the entry the comment was submitted to.</li>
      * <li><b>comment_type</b>: A string that describes the type of content being sent. Examples:
      *      <ul>
@@ -227,6 +227,7 @@ class AkismetService extends AbstractHttpClientService
             'user_ip' => $request->getClientIp(),
             'user_agent' => $headers->get('User-Agent'),
             'referrer' => $headers->get('referer'),
+            'permalink' => $request->getUri(),
             'comment_content' => $content,
             'comment_type' => 'contact-form',
             'comment_author' => $user?->getUserIdentifier(),

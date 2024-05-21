@@ -29,9 +29,10 @@ use App\Pdf\PdfTable;
 use fpdf\PdfBorder;
 use fpdf\PdfException;
 use fpdf\PdfTextAlignment;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(PdfTable::class)]
+#[CoversClass(PdfTable::class)]
 class PdfTableTest extends TestCase
 {
     public function testAdd(): void

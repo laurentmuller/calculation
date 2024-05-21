@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\DiagramController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(DiagramController::class)]
+#[CoversClass(DiagramController::class)]
 class DiagramControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

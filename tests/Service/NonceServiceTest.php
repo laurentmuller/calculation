@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\NonceService;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(NonceService::class)]
+#[CoversClass(NonceService::class)]
 class NonceServiceTest extends TestCase
 {
     private NonceService $service;

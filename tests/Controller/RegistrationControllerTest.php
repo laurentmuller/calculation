@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\RegistrationController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(RegistrationController::class)]
+#[CoversClass(RegistrationController::class)]
 class RegistrationControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

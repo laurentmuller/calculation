@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Entity\Task;
-use App\Entity\TaskItem;
 
 /**
  * Contains parameters to compute a task.
@@ -33,9 +32,6 @@ readonly class TaskComputeQuery
      */
     public static function instance(Task $task, float $quantity = 1.0): self
     {
-        /** @var int[] $items */
-        $items = $task->getItems()->map(static fn (TaskItem $item): int => (int) $item->getId())->toArray();
-
-        return new self((int) $task->getId(), $quantity, $items);
+        return new self((int) $task->getId(), $quantity, $task->getIdentifiers());
     }
 }

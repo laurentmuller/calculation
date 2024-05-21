@@ -16,9 +16,10 @@ use App\Enums\EntityName;
 use App\Enums\EntityPermission;
 use App\Traits\RightsTrait;
 use Elao\Enum\FlagBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(RightsTrait::class)]
+#[CoversClass(RightsTrait::class)]
 class RightsTraitTest extends TestCase
 {
     use RightsTrait;

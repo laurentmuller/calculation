@@ -14,9 +14,10 @@ namespace App\Tests\Utils;
 
 use App\Enums\ImageExtension;
 use App\Utils\FileUtils;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(FileUtils::class)]
+#[CoversClass(FileUtils::class)]
 class FileUtilsTest extends TestCase
 {
     public static function getBuildPaths(): \Iterator

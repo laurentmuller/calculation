@@ -14,10 +14,11 @@ namespace App\Tests\Service;
 
 use App\Service\LogService;
 use App\Tests\ServiceTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(LogService::class)]
+#[CoversClass(LogService::class)]
 class LogServiceTest extends KernelTestCase
 {
     use ServiceTrait;

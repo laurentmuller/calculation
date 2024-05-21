@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Pdf;
 
 use App\Pdf\PdfBarScale;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(PdfBarScale::class)]
+#[CoversClass(PdfBarScale::class)]
 class PdfBarScaleTest extends TestCase
 {
     public static function getValues(): \Generator

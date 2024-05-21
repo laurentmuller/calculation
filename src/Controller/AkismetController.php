@@ -34,8 +34,8 @@ class AkismetController extends AbstractController
      *
      * @psalm-api
      */
-    #[Get(path: '/spam', name: '_comment')]
-    public function verifyComment(AkismetService $service, FakerService $faker): JsonResponse
+    #[Get(path: '/spam', name: '_spam')]
+    public function spam(AkismetService $service, FakerService $faker): JsonResponse
     {
         $comment = $faker->getGenerator()->realText(145);
         $results = $service->verifyComment($comment);
@@ -52,8 +52,8 @@ class AkismetController extends AbstractController
     /**
      * @psalm-api
      */
-    #[Get(path: '/verify', name: '_key')]
-    public function verifyKey(AkismetService $service): JsonResponse
+    #[Get(path: '/verify', name: '_verify')]
+    public function verify(AkismetService $service): JsonResponse
     {
         $results = $service->verifyKey();
         if ($service->hasLastError()) {

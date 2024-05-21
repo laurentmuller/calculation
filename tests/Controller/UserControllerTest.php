@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\UserController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(UserController::class)]
+#[CoversClass(UserController::class)]
 class UserControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

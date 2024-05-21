@@ -54,7 +54,12 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
      * @var ArrayCollection<int, CalculationCategory>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(targetEntity: CalculationCategory::class, mappedBy: 'group', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: CalculationCategory::class,
+        mappedBy: 'group',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
     private Collection $categories;
 
@@ -87,7 +92,9 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
     public function __clone()
     {
         parent::__clone();
-        $this->categories = $this->categories->map(fn (CalculationCategory $category): CalculationCategory => (clone $category)->setGroup($this));
+        $this->categories = $this->categories->map(
+            fn (CalculationCategory $category): CalculationCategory => (clone $category)->setGroup($this)
+        );
     }
 
     /**
@@ -318,7 +325,10 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
 
         // sort
         $categories = $this->categories->toArray();
-        \uasort($categories, static fn (CalculationCategory $a, CalculationCategory $b): int => \strcasecmp((string) $a->getCode(), (string) $b->getCode()));
+        \uasort(
+            $categories,
+            static fn (CalculationCategory $a, CalculationCategory $b): int => \strcasecmp((string) $a->getCode(), (string) $b->getCode())
+        );
 
         $position = 0;
         $changed = false;

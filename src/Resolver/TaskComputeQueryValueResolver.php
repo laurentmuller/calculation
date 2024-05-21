@@ -18,23 +18,28 @@ use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 /**
- * Value resolver for TaskComputeQuery.
+ * Value resolver for {@link TaskComputeQuery}.
  */
-final class TaskComputeQueryValueResolver implements ValueResolverInterface
+final readonly class TaskComputeQueryValueResolver implements ValueResolverInterface
 {
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-        $argumentType = $argument->getType();
-        if (TaskComputeQuery::class !== $argumentType) {
+        if (TaskComputeQuery::class !== $argument->getType()) {
             return [];
         }
 
+        $query = $this->createQuery($request);
+
+        return [$query];
+    }
+
+    private function createQuery(Request $request): TaskComputeQuery
+    {
         $payload = $request->getPayload();
         $id = $payload->getInt('id');
         $quantity = (float) $payload->get('quantity', 1.0);
         $items = \array_map('intval', $payload->all('items'));
-        $query = new TaskComputeQuery($id, $quantity, $items);
 
-        return [$query];
+        return new TaskComputeQuery($id, $quantity, $items);
     }
 }

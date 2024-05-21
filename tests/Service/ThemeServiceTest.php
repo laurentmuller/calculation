@@ -14,11 +14,12 @@ namespace App\Tests\Service;
 
 use App\Enums\Theme;
 use App\Service\ThemeService;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ThemeService::class)]
+#[CoversClass(ThemeService::class)]
 class ThemeServiceTest extends TestCase
 {
     public static function getIsDarkTheme(): \Generator

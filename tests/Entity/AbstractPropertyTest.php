@@ -16,9 +16,10 @@ use App\Entity\AbstractProperty;
 use App\Entity\Category;
 use App\Enums\EntityPermission;
 use App\Enums\Theme;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(AbstractProperty::class)]
+#[CoversClass(AbstractProperty::class)]
 class AbstractPropertyTest extends TestCase
 {
     use IdTrait;

@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\UserParametersController;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(UserParametersController::class)]
+#[CoversClass(UserParametersController::class)]
 class UserParametersControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

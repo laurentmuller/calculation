@@ -48,7 +48,12 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
      * @var ArrayCollection<int, TaskItem>&ReadableCollection<int, TaskItem>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(targetEntity: TaskItem::class, mappedBy: 'task', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: TaskItem::class,
+        mappedBy: 'task',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
     private Collection $items;
 
@@ -118,27 +123,28 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
         return $this->items->reduce(fn (int $carry, TaskItem $item): int => $carry + $item->count(), 0);
     }
 
-    /**
-     * Returns all the items that satisfy the predicate p.
-     *
-     * @param \Closure $p the predicate used for filtering
-     *
-     * @return Collection<int, TaskItem>
-     *
-     * @psalm-param \Closure(TaskItem=):bool $p
-     */
-    public function filter(\Closure $p): Collection
-    {
-        return $this->items->filter($p);
-    }
-
     public function getDisplay(): string
     {
         return (string) $this->name;
     }
 
     /**
-     * @return ArrayCollection<int, TaskItem>&ReadableCollection<int, TaskItem>
+     * Gets item's identifiers.
+     *
+     * @return int[]
+     */
+    public function getIdentifiers(): array
+    {
+        if ($this->isEmpty()) {
+            return [];
+        }
+
+        /** @psalm-var int[] */
+        return $this->items->map(static fn (TaskItem $item): int => (int) $item->getId())->toArray();
+    }
+
+    /**
+     * @return Collection<int, TaskItem>
      */
     public function getItems(): Collection
     {

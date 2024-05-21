@@ -16,6 +16,7 @@ use App\Attribute\Get;
 use App\Attribute\GetDelete;
 use App\Attribute\GetPost;
 use App\Attribute\Post;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
@@ -24,10 +25,10 @@ use Symfony\Component\Routing\Requirement\Requirement;
 /**
  * Unit test for route attributes.
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(Get::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(GetDelete::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(GetPost::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(Post::class)]
+#[CoversClass(Get::class)]
+#[CoversClass(GetDelete::class)]
+#[CoversClass(GetPost::class)]
+#[CoversClass(Post::class)]
 class RouteTest extends TestCase
 {
     private const NAME_VALUE = 'value_edit';

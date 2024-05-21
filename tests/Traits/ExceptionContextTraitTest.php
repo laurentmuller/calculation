@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Traits\ExceptionContextTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ExceptionContextTrait::class)]
+#[CoversClass(ExceptionContextTrait::class)]
 class ExceptionContextTraitTest extends TestCase
 {
     use ExceptionContextTrait;

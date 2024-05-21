@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Twig\NonceExtension;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(NonceExtension::class)]
+#[CoversClass(NonceExtension::class)]
 class NonceExtensionTest extends KernelTestCase
 {
     private ?NonceExtension $extension = null;

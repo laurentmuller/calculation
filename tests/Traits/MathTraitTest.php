@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Traits\MathTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(MathTrait::class)]
+#[CoversClass(MathTrait::class)]
 class MathTraitTest extends TestCase
 {
     use MathTrait;

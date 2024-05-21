@@ -17,9 +17,10 @@ use App\Entity\CalculationState;
 use App\Model\CalculationUpdateResult;
 use App\Tests\Entity\IdTrait;
 use App\Utils\DateUtils;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CalculationUpdateResult::class)]
+#[CoversClass(CalculationUpdateResult::class)]
 class CalculationUpdateResultTest extends TestCase
 {
     use IdTrait;

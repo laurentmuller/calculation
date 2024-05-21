@@ -15,9 +15,10 @@ namespace App\Tests\Service;
 use App\Enums\EntityPermission;
 use App\Interfaces\RoleInterface;
 use App\Service\RoleBuilderService;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(RoleBuilderService::class)]
+#[CoversClass(RoleBuilderService::class)]
 class RoleBuilderServiceTest extends TestCase
 {
     private RoleBuilderService $service;

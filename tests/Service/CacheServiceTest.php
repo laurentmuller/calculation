@@ -14,10 +14,11 @@ namespace App\Tests\Service;
 
 use App\Service\CacheService;
 use App\Tests\ServiceTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CacheService::class)]
+#[CoversClass(CacheService::class)]
 class CacheServiceTest extends KernelTestCase
 {
     use ServiceTrait;

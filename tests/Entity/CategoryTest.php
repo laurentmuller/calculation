@@ -16,8 +16,9 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
 use App\Entity\Task;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(Category::class)]
+#[CoversClass(Category::class)]
 class CategoryTest extends AbstractEntityValidatorTestCase
 {
     public function testClone(): void

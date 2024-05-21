@@ -14,9 +14,10 @@ namespace App\Tests\Utils;
 
 use App\Entity\Calculation;
 use App\Utils\StringUtils;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(StringUtils::class)]
+#[CoversClass(StringUtils::class)]
 class StringUtilsTest extends TestCase
 {
     public static function getAscii(): \Iterator

@@ -38,6 +38,9 @@ class CalculationArchiveQueryTest extends TestCase
         self::assertNull($query->getTargetCode());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testDate(): void
     {
         $date = DateUtils::sub(DateUtils::removeTime(), 'P6M');

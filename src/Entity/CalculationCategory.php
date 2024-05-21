@@ -69,7 +69,12 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
      * @var ArrayCollection<int, CalculationItem>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(targetEntity: CalculationItem::class, mappedBy: 'category', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: CalculationItem::class,
+        mappedBy: 'category',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
     private Collection $items;
 
@@ -81,7 +86,9 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
     public function __clone()
     {
         parent::__clone();
-        $this->items = $this->items->map(fn (CalculationItem $item): CalculationItem => (clone $item)->setCategory($this));
+        $this->items = $this->items->map(
+            fn (CalculationItem $item): CalculationItem => (clone $item)->setCategory($this)
+        );
     }
 
     /**
@@ -278,7 +285,10 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
 
         // sort
         $items = $this->items->toArray();
-        \uasort($items, static fn (CalculationItem $a, CalculationItem $b): int => \strcasecmp((string) $a->getDescription(), (string) $b->getDescription()));
+        \uasort(
+            $items,
+            static fn (CalculationItem $a, CalculationItem $b): int => \strcasecmp((string) $a->getDescription(), (string) $b->getDescription())
+        );
 
         $position = 0;
         $changed = false;

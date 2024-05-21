@@ -13,10 +13,11 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\ImageService;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Path;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ImageService::class)]
+#[CoversClass(ImageService::class)]
 class ImageServiceTest extends TestCase
 {
     public function testAllocate(): void

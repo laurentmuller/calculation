@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Utils\CSVReader;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CSVReader::class)]
+#[CoversClass(CSVReader::class)]
 class CSVReaderTest extends TestCase
 {
     private const VALUES_SEP = '|';

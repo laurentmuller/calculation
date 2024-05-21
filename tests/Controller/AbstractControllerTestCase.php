@@ -14,13 +14,14 @@ namespace App\Tests\Controller;
 
 use App\Controller\AbstractController;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Abstract unit test for controllers.
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(AbstractController::class)]
+#[CoversClass(AbstractController::class)]
 abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCase
 {
     /**

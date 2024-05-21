@@ -9,7 +9,7 @@
 <div class="row align-items-center mb-2 task-item-row{% if not visible %} d-none{% endif %}" data-id="{{ task.id }}" data-unit="{{ task.unit }}">
     <div class="col-sm-6">
         <div class="form-check form-switch">
-            <input type="checkbox" class="form-check-input item-input" id="item_{{ task_item_id }}" name="items[]" value="{{ task_item_id }}" checked="checked"{% if disabled %} disabled{% endif %}>
+            <input type="checkbox" class="form-check-input item-input" id="item_{{ task_item_id }}" name="items[]" value="{{ task_item_id }}" checked{% if disabled %} disabled{% endif %}>
             <label class="form-check-label" for="item_{{ task_item_id }}">{{ item.name }}</label>
         </div>
     </div>

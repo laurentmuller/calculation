@@ -15,8 +15,9 @@ namespace App\Tests\Entity;
 use App\Entity\Task;
 use App\Entity\TaskItem;
 use App\Entity\TaskItemMargin;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(TaskItemMargin::class)]
+#[CoversClass(TaskItemMargin::class)]
 class TaskItemMarginTest extends AbstractEntityValidatorTestCase
 {
     public function testAllLessZero(): void

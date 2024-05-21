@@ -13,11 +13,12 @@ declare(strict_types=1);
 namespace App\Tests\DataTransformer;
 
 use App\Form\DataTransformer\AddressTransformer;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Mime\Address;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(AddressTransformer::class)]
+#[CoversClass(AddressTransformer::class)]
 class AddressTransformerTest extends TestCase
 {
     private ?AddressTransformer $transformer = null;

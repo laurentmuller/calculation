@@ -16,8 +16,9 @@ use App\Controller\PivotController;
 use App\Entity\GroupMargin;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(PivotController::class)]
+#[CoversClass(PivotController::class)]
 class PivotControllerTest extends AbstractControllerTestCase
 {
     use CalculationTrait;

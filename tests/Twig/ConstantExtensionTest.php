@@ -13,9 +13,11 @@ declare(strict_types=1);
 namespace App\Tests\Twig;
 
 use App\Twig\ConstantExtension;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ConstantExtension::class)]
+#[CoversClass(ConstantExtension::class)]
 class ConstantExtensionTest extends KernelTestCase
 {
     private ?ConstantExtension $extension = null;
@@ -64,6 +66,9 @@ class ConstantExtensionTest extends KernelTestCase
         yield ['ENTITY_USER', 'EntityUser'];
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getCalculationServiceConstants')]
     public function testCalculationService(string $key, int $value): void
     {
@@ -74,6 +79,9 @@ class ConstantExtensionTest extends KernelTestCase
         self::assertSame($value, $globals[$key]);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     #[\PHPUnit\Framework\Attributes\DataProvider('getEntityVoterConstants')]
     public function testEntityVoter(string $key, string $value): void
     {

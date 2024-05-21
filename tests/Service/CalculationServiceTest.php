@@ -34,13 +34,14 @@ use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Exception\ORMException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @psalm-import-type ServiceParametersType from CalculationService
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(CalculationService::class)]
+#[CoversClass(CalculationService::class)]
 class CalculationServiceTest extends KernelTestCase
 {
     use DatabaseTrait;
@@ -232,6 +233,7 @@ class CalculationServiceTest extends KernelTestCase
 
     /**
      * @throws ORMException
+     * @throws Exception
      */
     public function testService(): void
     {

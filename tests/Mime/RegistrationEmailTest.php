@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Mime;
 
 use App\Mime\RegistrationEmail;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(RegistrationEmail::class)]
+#[CoversClass(RegistrationEmail::class)]
 class RegistrationEmailTest extends TestCase
 {
     public function testConstructor(): void

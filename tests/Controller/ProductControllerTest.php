@@ -14,9 +14,10 @@ namespace App\Tests\Controller;
 
 use App\Controller\ProductController;
 use App\Tests\EntityTrait\ProductTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ProductController::class)]
+#[CoversClass(ProductController::class)]
 class ProductControllerTest extends AbstractControllerTestCase
 {
     use ProductTrait;

@@ -15,9 +15,10 @@ namespace App\Tests\Controller;
 use App\Controller\CalculationEmptyController;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CalculationEmptyController::class)]
+#[CoversClass(CalculationEmptyController::class)]
 class CalculationEmptyControllerTest extends AbstractControllerTestCase
 {
     use CalculationTrait;

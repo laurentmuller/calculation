@@ -38,10 +38,10 @@ abstract class AbstractEntityValidatorTestCase extends KernelTestCase
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */
-    protected function deleteEntity(EntityInterface $object): void
+    protected function deleteEntity(EntityInterface $entity): void
     {
         $manager = $this->getManager();
-        $manager->remove($object);
+        $manager->remove($entity);
         $manager->flush();
     }
 

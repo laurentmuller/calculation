@@ -14,10 +14,11 @@ namespace App\Tests\Controller;
 
 use App\Controller\HelpController;
 use App\Service\HelpService;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(HelpController::class)]
+#[CoversClass(HelpController::class)]
 class HelpControllerTest extends AbstractControllerTestCase
 {
     private const IMAGES_PATH = 'public/help/images';

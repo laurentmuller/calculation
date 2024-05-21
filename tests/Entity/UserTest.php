@@ -14,12 +14,13 @@ namespace App\Tests\Entity;
 
 use App\Entity\User;
 use App\Entity\UserProperty;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Exception\MappingNotFoundException;
 use Vich\UploaderBundle\Storage\StorageInterface;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(User::class)]
+#[CoversClass(User::class)]
 class UserTest extends AbstractEntityValidatorTestCase
 {
     public function testAddProperty(): void

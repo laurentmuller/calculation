@@ -14,11 +14,12 @@ namespace App\Tests\Form;
 
 use App\Entity\CalculationState;
 use App\Form\CalculationState\CalculationStateType;
+use PHPUnit\Framework\Attributes\CoversClass;
 
 /**
  * @extends AbstractEntityTypeTestCase<CalculationState, CalculationStateType>
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(CalculationStateType::class)]
+#[CoversClass(CalculationStateType::class)]
 class CalculationStateTypeTest extends AbstractEntityTypeTestCase
 {
     protected function getData(): array

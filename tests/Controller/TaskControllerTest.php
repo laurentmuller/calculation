@@ -14,9 +14,10 @@ namespace App\Tests\Controller;
 
 use App\Controller\TaskController;
 use App\Tests\EntityTrait\TaskItemTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(TaskController::class)]
+#[CoversClass(TaskController::class)]
 class TaskControllerTest extends AbstractControllerTestCase
 {
     use TaskItemTrait;

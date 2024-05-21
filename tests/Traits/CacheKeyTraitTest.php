@@ -13,10 +13,11 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Traits\CacheKeyTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Cache\ItemInterface;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CacheKeyTrait::class)]
+#[CoversClass(CacheKeyTrait::class)]
 class CacheKeyTraitTest extends TestCase
 {
     use CacheKeyTrait;

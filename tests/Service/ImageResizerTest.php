@@ -16,9 +16,10 @@ use App\Enums\ImageSize;
 use App\Service\ImageResizer;
 use App\Tests\ServiceTrait;
 use App\Utils\FileUtils;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ImageResizer::class)]
+#[CoversClass(ImageResizer::class)]
 class ImageResizerTest extends KernelTestCase
 {
     use ServiceTrait;

@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace App\Tests\Command;
 
 use App\Command\UpdateAssetsCommand;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(UpdateAssetsCommand::class)]
+#[CoversClass(UpdateAssetsCommand::class)]
 class UpdateAssetsCommandTest extends KernelTestCase
 {
     public function testExecuteDryRun(): void

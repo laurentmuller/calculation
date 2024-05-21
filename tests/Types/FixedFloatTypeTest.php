@@ -15,9 +15,10 @@ namespace App\Tests\Types;
 use App\Types\FixedFloatType;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(FixedFloatType::class)]
+#[CoversClass(FixedFloatType::class)]
 class FixedFloatTypeTest extends TestCase
 {
     public static function getValues(): \Generator

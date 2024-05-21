@@ -15,8 +15,9 @@ namespace App\Tests\Controller;
 use App\Controller\CalculationController;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CalculationController::class)]
+#[CoversClass(CalculationController::class)]
 class CalculationControllerTest extends AbstractControllerTestCase
 {
     use CalculationTrait;

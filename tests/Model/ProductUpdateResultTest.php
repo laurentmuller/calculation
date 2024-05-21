@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace App\Tests\Model;
 
 use App\Model\ProductUpdateResult;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @psalm-import-type ProductType from ProductUpdateResult
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(ProductUpdateResult::class)]
+#[CoversClass(ProductUpdateResult::class)]
 class ProductUpdateResultTest extends TestCase
 {
     public function testAddProduct(): void

@@ -15,13 +15,14 @@ namespace App\Tests\Validator;
 use App\Service\CaptchaImageService;
 use App\Validator\Captcha;
 use App\Validator\CaptchaValidator;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
  * @extends ConstraintValidatorTestCase<CaptchaValidator>
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(CaptchaValidator::class)]
+#[CoversClass(CaptchaValidator::class)]
 class CaptchaValidatorTest extends ConstraintValidatorTestCase
 {
     /**

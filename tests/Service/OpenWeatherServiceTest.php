@@ -14,9 +14,10 @@ namespace App\Tests\Service;
 
 use App\Service\OpenWeatherService;
 use App\Tests\ServiceTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(OpenWeatherService::class)]
+#[CoversClass(OpenWeatherService::class)]
 class OpenWeatherServiceTest extends KernelTestCase
 {
     use ServiceTrait;

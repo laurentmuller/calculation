@@ -16,7 +16,7 @@
 <div class="form-group">
     <div class="input-group">
         <div class="input-group-text">
-            <input type="radio" id="form_type_percent" name="form_type" class="me-1"{% if options.is_percent %} checked="checked"{% endif %}>
+            <input type="radio" id="form_type_percent" name="form_type" class="me-1"{% if options.is_percent %} checked{% endif %}>
             <label class="form-check-label" for="form_type_percent">{{ 'product.update.percent'|trans }}</label>
         </div>
         {{ block('form_widget_simple') }}
@@ -30,7 +30,7 @@
 <div class="form-group">
     <div class="input-group">
         <div class="input-group-text">
-            <input type="radio" id="form_type_fixed" name="form_type" class="me-1"{% if not options.is_percent %} checked="checked"{% endif %}>
+            <input type="radio" id="form_type_fixed" name="form_type" class="me-1"{% if not options.is_percent %} checked{% endif %}>
             <label class="form-check-label" for="form_type_fixed">{{ 'product.update.fixed'|trans }}</label>
         </div>
         {{ block('form_widget_simple') }}

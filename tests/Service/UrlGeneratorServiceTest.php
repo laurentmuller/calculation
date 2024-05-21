@@ -17,10 +17,11 @@ use App\Interfaces\EntityInterface;
 use App\Service\UrlGeneratorService;
 use App\Tests\Entity\IdTrait;
 use App\Tests\ServiceTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(UrlGeneratorService::class)]
+#[CoversClass(UrlGeneratorService::class)]
 class UrlGeneratorServiceTest extends KernelTestCase
 {
     use IdTrait;

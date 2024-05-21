@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Traits\ArrayTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ArrayTrait::class)]
+#[CoversClass(ArrayTrait::class)]
 class ArrayTraitTest extends TestCase
 {
     use ArrayTrait;

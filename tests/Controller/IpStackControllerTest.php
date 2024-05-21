@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\IpStackController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(IpStackController::class)]
+#[CoversClass(IpStackController::class)]
 class IpStackControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

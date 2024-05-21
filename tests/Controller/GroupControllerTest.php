@@ -14,9 +14,10 @@ namespace App\Tests\Controller;
 
 use App\Controller\GroupController;
 use App\Tests\EntityTrait\GroupTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(GroupController::class)]
+#[CoversClass(GroupController::class)]
 class GroupControllerTest extends AbstractControllerTestCase
 {
     use GroupTrait;

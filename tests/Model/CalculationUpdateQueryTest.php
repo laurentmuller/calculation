@@ -17,12 +17,13 @@ use App\Model\CalculationUpdateQuery;
 use App\Tests\Entity\IdTrait;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CalculationUpdateQuery::class)]
+#[CoversClass(CalculationUpdateQuery::class)]
 class CalculationUpdateQueryTest extends TestCase
 {
     use IdTrait;
@@ -163,7 +164,6 @@ class CalculationUpdateQueryTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
      * @throws Exception
      * @throws \Exception
      */

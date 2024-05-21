@@ -17,9 +17,10 @@ use App\Entity\CalculationState;
 use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(GeneratorController::class)]
+#[CoversClass(GeneratorController::class)]
 class GeneratorControllerTest extends AbstractControllerTestCase
 {
     private static ?Category $category = null;

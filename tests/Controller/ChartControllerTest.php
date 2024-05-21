@@ -16,9 +16,10 @@ use App\Controller\ChartController;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\GlobalMarginTrait;
 use App\Tests\EntityTrait\ProductTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ChartController::class)]
+#[CoversClass(ChartController::class)]
 class ChartControllerTest extends AbstractControllerTestCase
 {
     use CalculationTrait;

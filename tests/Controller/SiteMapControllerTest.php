@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\SiteMapController;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(SiteMapController::class)]
+#[CoversClass(SiteMapController::class)]
 class SiteMapControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

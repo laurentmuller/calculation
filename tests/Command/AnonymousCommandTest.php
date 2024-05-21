@@ -18,11 +18,12 @@ use App\Entity\CalculationState;
 use App\Interfaces\EntityInterface;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use Doctrine\ORM\Exception\ORMException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(AnonymousCommand::class)]
+#[CoversClass(AnonymousCommand::class)]
 class AnonymousCommandTest extends AbstractAuthenticateWebTestCase
 {
     /**

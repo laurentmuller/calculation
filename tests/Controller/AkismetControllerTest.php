@@ -13,22 +13,22 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\AkismetController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(AkismetController::class)]
+#[CoversClass(AkismetController::class)]
 class AkismetControllerTest extends AbstractControllerTestCase
 {
-    private const ROUTES = [
-        'spam',
-        'verify',
-    ];
-
     public static function getRoutes(): \Generator
     {
-        foreach (self::ROUTES as $route) {
-            yield ["/akismet/$route", self::ROLE_USER, Response::HTTP_FORBIDDEN];
-            yield ["/akismet/$route", self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
-            yield ["/akismet/$route", self::ROLE_SUPER_ADMIN];
+        $routes = [
+            'spam',
+            'verify',
+        ];
+        foreach ($routes as $route) {
+            yield ['/akismet/' . $route, self::ROLE_USER, Response::HTTP_FORBIDDEN];
+            yield ['/akismet/' . $route, self::ROLE_ADMIN, Response::HTTP_FORBIDDEN];
+            yield ['/akismet/' . $route, self::ROLE_SUPER_ADMIN];
         }
     }
 }

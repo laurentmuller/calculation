@@ -15,9 +15,10 @@ namespace App\Tests\Entity;
 use App\Entity\AbstractCategoryItemEntity;
 use App\Entity\Category;
 use App\Entity\Group;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(AbstractCategoryItemEntity::class)]
+#[CoversClass(AbstractCategoryItemEntity::class)]
 class AbstractCategoryItemEntityTest extends TestCase
 {
     use IdTrait;

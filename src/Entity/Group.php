@@ -41,7 +41,13 @@ class Group extends AbstractEntity implements TimestampableInterface
      *
      * @var ArrayCollection<int, Category>
      */
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'group', cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: Category::class,
+        mappedBy: 'group',
+        cascade: ['persist', 'remove'],
+        fetch: self::EXTRA_LAZY,
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(['code' => SortModeInterface::SORT_ASC])]
     private Collection $categories;
 
@@ -66,7 +72,13 @@ class Group extends AbstractEntity implements TimestampableInterface
      * @var ArrayCollection<int, GroupMargin>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(targetEntity: GroupMargin::class, mappedBy: 'group', cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: GroupMargin::class,
+        mappedBy: 'group',
+        cascade: ['persist', 'remove'],
+        fetch: self::EXTRA_LAZY,
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(['minimum' => SortModeInterface::SORT_ASC])]
     private Collection $margins;
 
@@ -79,7 +91,9 @@ class Group extends AbstractEntity implements TimestampableInterface
     public function __clone()
     {
         parent::__clone();
-        $this->margins = $this->margins->map(fn (GroupMargin $margin): GroupMargin => (clone $margin)->setGroup($this));
+        $this->margins = $this->margins->map(
+            fn (GroupMargin $margin): GroupMargin => (clone $margin)->setGroup($this)
+        );
     }
 
     /**
@@ -138,11 +152,9 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     public function countItems(): int
     {
-        if (!$this->hasCategories()) {
-            return 0;
-        }
-
-        return $this->reduceCategories(fn (int $carry, Category $category): int => $carry + $category->countItems());
+        return $this->reduceCategories(
+            static fn (int $carry, Category $category): int => $carry + $category->countItems()
+        );
     }
 
     /**
@@ -158,11 +170,9 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     public function countProducts(): int
     {
-        if (!$this->hasCategories()) {
-            return 0;
-        }
-
-        return $this->reduceCategories(fn (int $carry, Category $category): int => $carry + $category->countProducts());
+        return $this->reduceCategories(
+            static fn (int $carry, Category $category): int => $carry + $category->countProducts()
+        );
     }
 
     /**
@@ -170,11 +180,9 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     public function countTasks(): int
     {
-        if (!$this->hasCategories()) {
-            return 0;
-        }
-
-        return $this->reduceCategories(fn (int $carry, Category $category): int => $carry + $category->countTasks());
+        return $this->reduceCategories(
+            static fn (int $carry, Category $category): int => $carry + $category->countTasks()
+        );
     }
 
     /**
@@ -257,7 +265,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     public function hasCategories(): bool
     {
-        return 0 !== $this->categories->count();
+        return !$this->categories->isEmpty();
     }
 
     /**
@@ -265,7 +273,7 @@ class Group extends AbstractEntity implements TimestampableInterface
      */
     public function hasMargins(): bool
     {
-        return 0 !== $this->margins->count();
+        return !$this->margins->isEmpty();
     }
 
     /**
@@ -355,12 +363,17 @@ class Group extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Iteratively reduce these categories to a single value using the callback function.
+     * @psalm-param \Closure(int, Category): int $func
      *
-     * @param callable(int, Category): int $callback
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
-    private function reduceCategories(callable $callback): int
+    private function reduceCategories(\Closure $func): int
     {
-        return \array_reduce($this->categories->toArray(), $callback, 0);
+        if ($this->categories->isEmpty()) {
+            return 0;
+        }
+
+        /** @psalm-var int */
+        return $this->categories->reduce($func, 0);
     }
 }

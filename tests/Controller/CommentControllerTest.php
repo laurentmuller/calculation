@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\CommentController;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CommentController::class)]
+#[CoversClass(CommentController::class)]
 class CommentControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

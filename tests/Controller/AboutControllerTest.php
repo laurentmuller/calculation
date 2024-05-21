@@ -18,14 +18,15 @@ use App\Controller\AboutMySqlController;
 use App\Controller\AboutPhpController;
 use App\Controller\AboutPolicyController;
 use App\Controller\AboutSymfonyController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(AboutController::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(AboutLicenceController::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(AboutMySqlController::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(AboutPhpController::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(AboutPolicyController::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(AboutSymfonyController::class)]
+#[CoversClass(AboutController::class)]
+#[CoversClass(AboutLicenceController::class)]
+#[CoversClass(AboutMySqlController::class)]
+#[CoversClass(AboutPhpController::class)]
+#[CoversClass(AboutPolicyController::class)]
+#[CoversClass(AboutSymfonyController::class)]
 class AboutControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

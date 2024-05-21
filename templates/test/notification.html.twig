@@ -25,7 +25,7 @@
 
 {% macro checkbox(id, text, checked = true) -%}
 <div class="form-check form-check-inline form-switch">
-  <input type="checkbox" class="form-check-input control-option" name="{{ id }}" id="{{ id }}" data-default="{{ checked|json_encode }}"{% if checked %} checked="checked"{% endif %}>
+  <input type="checkbox" class="form-check-input control-option" name="{{ id }}" id="{{ id }}" data-default="{{ checked|json_encode }}"{% if checked %} checked{% endif %}>
   <label class="form-check-label" for="{{ id }}">{{ text|trans }}</label>
 </div>
 {%- endmacro %}

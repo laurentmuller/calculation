@@ -14,9 +14,10 @@ namespace App\Tests\Utils;
 
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(DateUtils::class)]
+#[CoversClass(DateUtils::class)]
 class DateUtilsTest extends TestCase
 {
     protected function setUp(): void

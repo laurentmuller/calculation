@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Enums;
 
 use App\Enums\ImageSize;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ImageSize::class)]
+#[CoversClass(ImageSize::class)]
 class ImageSizeTest extends TestCase
 {
     public static function getValues(): \Iterator

@@ -15,6 +15,7 @@ namespace App\Tests\Service;
 use App\Service\CommandFormService;
 use App\Service\CommandService;
 use App\Tests\ServiceTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormInterface;
@@ -22,7 +23,7 @@ use Symfony\Component\Form\FormInterface;
 /**
  * @psalm-import-type CommandType from CommandService
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(CommandFormService::class)]
+#[CoversClass(CommandFormService::class)]
 class CommandFormServiceTest extends KernelTestCase
 {
     use ServiceTrait;

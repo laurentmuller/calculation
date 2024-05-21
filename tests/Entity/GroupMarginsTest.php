@@ -14,8 +14,9 @@ namespace App\Tests\Entity;
 
 use App\Entity\Group;
 use App\Entity\GroupMargin;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(GroupMargin::class)]
+#[CoversClass(GroupMargin::class)]
 class GroupMarginsTest extends AbstractEntityValidatorTestCase
 {
     public function testInvalidMargin(): void

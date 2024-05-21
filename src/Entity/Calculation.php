@@ -68,7 +68,13 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * @var ArrayCollection<int, CalculationGroup>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(targetEntity: CalculationGroup::class, mappedBy: 'calculation', cascade: ['persist', 'remove'], fetch: self::EXTRA_LAZY, orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: CalculationGroup::class,
+        mappedBy: 'calculation',
+        cascade: ['persist', 'remove'],
+        fetch: self::EXTRA_LAZY,
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(['position' => SortModeInterface::SORT_ASC])]
     private Collection $groups;
 
@@ -109,7 +115,9 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         parent::__clone();
         $this->date = new \DateTime();
         $this->createdAt = $this->updatedAt = new \DateTimeImmutable();
-        $this->groups = $this->groups->map(fn (CalculationGroup $group): CalculationGroup => (clone $group)->setCalculation($this));
+        $this->groups = $this->groups->map(
+            fn (CalculationGroup $group): CalculationGroup => (clone $group)->setCalculation($this)
+        );
     }
 
     /**
@@ -228,12 +236,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getCategoriesCount(): int
     {
-        $count = 0;
-        foreach ($this->groups as $group) {
-            $count += $group->count();
-        }
-
-        return $count;
+        return $this->reduceGroups(
+            static fn (int $carry, CalculationGroup $group): int => $carry + $group->count(),
+            0
+        );
     }
 
     /**
@@ -376,16 +382,14 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the total amounts of all groups.
+     * Gets the total amount for all groups.
      */
     public function getGroupsAmount(): float
     {
-        $total = 0.0;
-        foreach ($this->groups as $group) {
-            $total += $group->getAmount();
-        }
-
-        return $total;
+        return $this->reduceGroups(
+            static fn (float $carry, CalculationGroup $group): float => $carry + $group->getAmount(),
+            0.0
+        );
     }
 
     /**
@@ -397,7 +401,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the margin of all root groups.
+     * Gets the margin of all groups.
      */
     public function getGroupsMargin(): float
     {
@@ -408,16 +412,14 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
-     * Gets the total margin amounts of all root groups.
+     * Gets the total margin amounts for all groups.
      */
     public function getGroupsMarginAmount(): float
     {
-        $total = 0.0;
-        foreach ($this->groups as $group) {
-            $total += $group->getMarginAmount();
-        }
-
-        return $total;
+        return $this->reduceGroups(
+            static fn (float $carry, CalculationGroup $group): float => $carry + $group->getMarginAmount(),
+            0.0
+        );
     }
 
     /**
@@ -425,12 +427,10 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getGroupsTotal(): float
     {
-        $total = 0.0;
-        foreach ($this->groups as $group) {
-            $total += $group->getTotal();
-        }
-
-        return $total;
+        return $this->reduceGroups(
+            static fn (float $carry, CalculationGroup $group): float => $carry + $group->getTotal(),
+            0.0
+        );
     }
 
     /**
@@ -916,9 +916,31 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     }
 
     /**
+     * @psalm-template TReturn
+     * @psalm-template TInitial
+     *
+     * @psalm-param \Closure(TReturn|TInitial, CalculationGroup): TReturn $func
+     * @psalm-param TInitial $initial
+     *
+     * @psalm-return TReturn|TInitial
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
+     */
+    private function reduceGroups(\Closure $func, mixed $initial = null): mixed
+    {
+        if ($this->groups->isEmpty()) {
+            return $initial;
+        }
+
+        /** @psalm-var TReturn */
+        return $this->groups->reduce($func, $initial);
+    }
+
+    /**
      * Remove the given item.
      *
-     * If the category and the parent's group are empty after deletion of the item, the category and the group are also deleted.
+     * If the category and the parent's group are empty after deletion of the item, the category and the group
+     * are also deleted.
      *
      * @param CalculationItem $item the item to remove
      */

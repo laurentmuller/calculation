@@ -19,9 +19,10 @@ use App\Interfaces\PropertyServiceInterface;
 use App\Service\UserService;
 use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(UserService::class)]
+#[CoversClass(UserService::class)]
 class UserServiceTest extends KernelTestCase
 {
     use DatabaseTrait;

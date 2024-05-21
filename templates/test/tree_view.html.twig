@@ -87,7 +87,7 @@
                 <div class="form-group mb-3">
                     <label class="form-label" for="state">Status (multiple)</label>
                     <div class="input-group">
-                        <select id="state" class="form-select" multiple="multiple" data-delete="Supprimer le statut">
+                        <select id="state" class="form-select" multiple data-delete="Supprimer le statut">
                             {% for key, group in states -%}
                                 <optgroup label="{{ key|trans }}">
                                     {% for state in group -%}
@@ -114,7 +114,7 @@
                     <label class="form-label" for="category">Catégorie</label>
                     <div class="input-group">
                         <span class="input-group-text">@</span>
-                        <select id="category" class="form-select" multiple="multiple" data-delete="Supprimer la catégorie">
+                        <select id="category" class="form-select" multiple data-delete="Supprimer la catégorie">
                             {% for key, group in categories -%}
                                 <optgroup label="{{ key }}">
                                     {% for category in group -%}
@@ -168,7 +168,7 @@
                             <td>
                                 {% set id = 'btn-check-dropdown-' ~ position.value %}
                                 <div class="form-check ps-0">
-                                    <input type="radio" class="btn-check" name="btn-check" id="{{ id }}" value="{{ position.value }}" autocomplete="off"{% if current == position %} checked="checked"{% endif %}>
+                                    <input type="radio" class="btn-check" name="btn-check" id="{{ id }}" value="{{ position.value }}" autocomplete="off"{% if current == position %} checked{% endif %}>
                                     <label class="btn btn-outline-secondary" for="{{ id }}" style="width: 3rem;" title="{{- position|trans -}}">
                                         <i class="{{ position.icon }}" style="--fa-rotate-angle: {{ position.angle }}deg;"></i>
                                     </label>

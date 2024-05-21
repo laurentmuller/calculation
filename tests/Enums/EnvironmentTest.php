@@ -14,10 +14,11 @@ namespace App\Tests\Enums;
 
 use App\Enums\Environment;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(Environment::class)]
+#[CoversClass(Environment::class)]
 class EnvironmentTest extends TestCase
 {
     use TranslatorMockTrait;

@@ -17,9 +17,10 @@ use App\Entity\Group;
 use App\Entity\Product;
 use App\Model\ProductUpdateQuery;
 use App\Tests\Entity\IdTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ProductUpdateQuery::class)]
+#[CoversClass(ProductUpdateQuery::class)]
 class ProductUpdateQueryTest extends TestCase
 {
     use IdTrait;
@@ -110,7 +111,7 @@ class ProductUpdateQueryTest extends TestCase
         self::assertSame(2.0, $query->getPercent());
     }
 
-    public function testTypee(): void
+    public function testType(): void
     {
         $query = new ProductUpdateQuery();
         self::assertSame(ProductUpdateQuery::UPDATE_PERCENT, $query->getType());

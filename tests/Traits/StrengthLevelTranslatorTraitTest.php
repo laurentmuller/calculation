@@ -16,13 +16,14 @@ use App\Enums\StrengthLevel;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
 use App\Validator\Strength;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(StrengthLevelTranslatorTrait::class)]
+#[CoversClass(StrengthLevelTranslatorTrait::class)]
 class StrengthLevelTranslatorTraitTest extends TestCase
 {
     use StrengthLevelTranslatorTrait;

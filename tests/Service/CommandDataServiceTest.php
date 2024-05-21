@@ -15,13 +15,14 @@ namespace App\Tests\Service;
 use App\Service\CommandDataService;
 use App\Service\CommandService;
 use App\Tests\ServiceTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @psalm-import-type CommandType from CommandService
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(CommandDataService::class)]
+#[CoversClass(CommandDataService::class)]
 class CommandDataServiceTest extends KernelTestCase
 {
     use ServiceTrait;

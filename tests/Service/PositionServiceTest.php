@@ -14,10 +14,11 @@ namespace App\Tests\Service;
 
 use App\Service\PositionService;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(PositionService::class)]
+#[CoversClass(PositionService::class)]
 class PositionServiceTest extends TestCase
 {
     use TranslatorMockTrait;

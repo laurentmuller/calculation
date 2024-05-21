@@ -15,10 +15,11 @@ namespace App\Tests\Enums;
 use App\Enums\EntityPermission;
 use App\Tests\TranslatorMockTrait;
 use Elao\Enum\FlagBag;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(EntityPermission::class)]
+#[CoversClass(EntityPermission::class)]
 class EntityPermissionTest extends TestCase
 {
     use TranslatorMockTrait;

@@ -17,8 +17,9 @@ use App\Entity\Group;
 use App\Entity\GroupMargin;
 use App\Entity\Product;
 use App\Entity\Task;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(Group::class)]
+#[CoversClass(Group::class)]
 class GroupTest extends AbstractEntityValidatorTestCase
 {
     use IdTrait;

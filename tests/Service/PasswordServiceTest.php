@@ -18,12 +18,13 @@ use App\Service\PasswordService;
 use App\Tests\ServiceTrait;
 use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use ZxcvbnPhp\Zxcvbn;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(PasswordQuery::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(PasswordService::class)]
+#[CoversClass(PasswordQuery::class)]
+#[CoversClass(PasswordService::class)]
 class PasswordServiceTest extends KernelTestCase
 {
     use ServiceTrait;

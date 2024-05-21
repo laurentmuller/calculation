@@ -14,10 +14,11 @@ namespace App\Tests\Enums;
 
 use App\Enums\FlashType;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(FlashType::class)]
+#[CoversClass(FlashType::class)]
 class FlashTypeTest extends TestCase
 {
     use TranslatorMockTrait;

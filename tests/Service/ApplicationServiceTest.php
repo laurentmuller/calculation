@@ -28,9 +28,10 @@ use App\Tests\DatabaseTrait;
 use App\Tests\ServiceTrait;
 use App\Utils\StringUtils;
 use Doctrine\ORM\Exception\ORMException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ApplicationService::class)]
+#[CoversClass(ApplicationService::class)]
 class ApplicationServiceTest extends KernelTestCase
 {
     use DatabaseTrait;

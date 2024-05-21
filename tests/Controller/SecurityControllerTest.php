@@ -13,10 +13,11 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\SecurityController;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(SecurityController::class)]
+#[CoversClass(SecurityController::class)]
 class SecurityControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

@@ -16,11 +16,12 @@ use App\Controller\CategoryController;
 use App\Report\CategoriesReport;
 use App\Spreadsheet\CategoriesDocument;
 use App\Tests\EntityTrait\CategoryTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CategoryController::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(CategoriesReport::class)]
-#[\PHPUnit\Framework\Attributes\CoversClass(CategoriesDocument::class)]
+#[CoversClass(CategoryController::class)]
+#[CoversClass(CategoriesReport::class)]
+#[CoversClass(CategoriesDocument::class)]
 class CategoryControllerTest extends AbstractControllerTestCase
 {
     use CategoryTrait;

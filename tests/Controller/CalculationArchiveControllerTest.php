@@ -14,9 +14,10 @@ namespace App\Tests\Controller;
 
 use App\Controller\CalculationArchiveController;
 use App\Entity\CalculationState;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CalculationArchiveController::class)]
+#[CoversClass(CalculationArchiveController::class)]
 class CalculationArchiveControllerTest extends AbstractControllerTestCase
 {
     private ?CalculationState $editState = null;

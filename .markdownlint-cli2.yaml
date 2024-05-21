@@ -1,2 +1,6 @@
+config:
+    line-length:
+        code_blocks: false
+
 globs:
     - "*.md"

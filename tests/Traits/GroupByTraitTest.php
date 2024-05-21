@@ -13,12 +13,13 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Traits\GroupByTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @psalm-type UtilsType = array{id: int, value: string}
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(GroupByTrait::class)]
+#[CoversClass(GroupByTrait::class)]
 class GroupByTraitTest extends TestCase
 {
     use GroupByTrait;

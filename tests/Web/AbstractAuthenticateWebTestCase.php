@@ -25,7 +25,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 /**
- * Abstract class for authenticate user.
+ * Abstract class for authenticated user.
  */
 abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 {
@@ -134,7 +134,7 @@ abstract class AbstractAuthenticateWebTestCase extends WebTestCase
     }
 
     /**
-     * Returns if the given username is valid to be login.
+     * Returns if the given username is valid to be log in.
      */
     protected function mustLogin(string $username): bool
     {

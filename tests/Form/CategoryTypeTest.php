@@ -18,6 +18,7 @@ use App\Form\Category\CategoryType;
 use App\Repository\GroupRepository;
 use App\Tests\Entity\IdTrait;
 use Doctrine\Persistence\ManagerRegistry;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -26,7 +27,7 @@ use Symfony\Component\Form\PreloadedExtension;
 /**
  * @extends AbstractEntityTypeTestCase<Category, CategoryType>
  */
-#[\PHPUnit\Framework\Attributes\CoversClass(CategoryType::class)]
+#[CoversClass(CategoryType::class)]
 class CategoryTypeTest extends AbstractEntityTypeTestCase
 {
     use IdTrait;

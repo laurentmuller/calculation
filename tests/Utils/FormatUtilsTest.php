@@ -14,9 +14,10 @@ namespace App\Tests\Utils;
 
 use App\Model\LogFile;
 use App\Utils\FormatUtils;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(FormatUtils::class)]
+#[CoversClass(FormatUtils::class)]
 class FormatUtilsTest extends TestCase
 {
     private const DATE_TIME = '2022-02-20 12:59:59';

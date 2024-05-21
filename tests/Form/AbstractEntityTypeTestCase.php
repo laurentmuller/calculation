@@ -129,7 +129,7 @@ abstract class AbstractEntityTypeTestCase extends TypeTestCase
     /**
      * @template TRepository of AbstractRepository
      *
-     * @param class-string<TRepository> $repositoryClass
+     * @psalm-param class-string<TRepository> $repositoryClass
      *
      * @psalm-return MockObject&TRepository
      *

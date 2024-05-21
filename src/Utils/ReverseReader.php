@@ -17,12 +17,12 @@ namespace App\Utils;
  *
  * Example:
  *
- * <code>
+ * <pre>
  * $reader = new ReverseReader("path/to/file_name.txt");
  * foreach ($reader as $data) {
  *     echo $data . "\n";
  * }
- * </code>
+ * </pre>
  *
  * @extends AbstractReader<string>
  */

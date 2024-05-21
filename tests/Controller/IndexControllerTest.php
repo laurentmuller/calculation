@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\IndexController;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(IndexController::class)]
+#[CoversClass(IndexController::class)]
 class IndexControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

@@ -44,7 +44,12 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
      * @var ArrayCollection<int, TaskItemMargin>
      */
     #[Assert\Valid]
-    #[ORM\OneToMany(targetEntity: TaskItemMargin::class, mappedBy: 'taskItem', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: TaskItemMargin::class,
+        mappedBy: 'taskItem',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(['minimum' => SortModeInterface::SORT_ASC])]
     private Collection $margins;
 
@@ -66,7 +71,9 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
     public function __clone()
     {
         parent::__clone();
-        $this->margins = $this->margins->map(fn (TaskItemMargin $margin): TaskItemMargin => (clone $margin)->setTaskItem($this));
+        $this->margins = $this->margins->map(
+            fn (TaskItemMargin $margin): TaskItemMargin => (clone $margin)->setTaskItem($this)
+        );
     }
 
     /**

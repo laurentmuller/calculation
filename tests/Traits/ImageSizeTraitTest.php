@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Traits\ImageSizeTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(ImageSizeTrait::class)]
+#[CoversClass(ImageSizeTrait::class)]
 class ImageSizeTraitTest extends TestCase
 {
     use ImageSizeTrait;

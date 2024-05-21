@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * Value resolver for DataQuery.
+ * Value resolver for {@link DataQuery}.
  */
 final readonly class DataQueryValueResolver implements SortModeInterface, ValueResolverInterface
 {
@@ -35,17 +35,44 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
 
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-        $type = $argument->getType();
-        if (DataQuery::class !== $type) {
+        if (DataQuery::class !== $argument->getType()) {
             return [];
         }
 
-        /** @psalm-var DataQuery $query */
-        $query = $argument->getDefaultValue();
-        $this->updateFromQuery($query, $request);
-        $this->updateFromRequest($query, $request);
+        $query = $this->createQuery($request);
 
         return [$query];
+    }
+
+    private function createQuery(Request $request): DataQuery
+    {
+        $query = new DataQuery();
+
+        /** @psalm-var string|int $value */
+        foreach ($request->query as $key => $value) {
+            if (!$this->accessor->isWritable($query, $key)) {
+                continue;
+            }
+
+            // special case for view
+            if (TableInterface::PARAM_VIEW === $key) {
+                $value = TableView::tryFrom((string) $value) ?? $query->view;
+            }
+            $this->accessor->setValue($query, $key, $value);
+        }
+
+        $query->prefix = $this->getPrefix($request);
+        $query->callback = $this->isCallback($request);
+        $query->view = $this->getView($request, $query->view);
+        if (0 === $query->limit) {
+            $query->limit = $this->getLimit($request, $query->prefix, $query->view);
+        }
+        if ('' === $query->sort) {
+            $query->sort = $this->getSort($request, $query->prefix);
+            $query->order = $this->getOrder($request, $query->prefix);
+        }
+
+        return $query;
     }
 
     private function getLimit(Request $request, string $prefix, TableView $view): int
@@ -72,40 +99,13 @@ final readonly class DataQueryValueResolver implements SortModeInterface, ValueR
         return $this->getCookieString($request, TableInterface::PARAM_SORT, $prefix);
     }
 
-    private function getView(Request $request): TableView
+    private function getView(Request $request, TableView $default): TableView
     {
-        return $this->getCookieEnum($request, TableInterface::PARAM_VIEW, TableView::TABLE);
+        return $this->getCookieEnum($request, TableInterface::PARAM_VIEW, $default);
     }
 
     private function isCallback(Request $request): bool
     {
         return $request->isXmlHttpRequest();
-    }
-
-    private function updateFromQuery(DataQuery $query, Request $request): void
-    {
-        $data = $request->query;
-        /** @psalm-var string $key */
-        foreach ($data->keys() as $key) {
-            $value = match ($key) {
-                TableInterface::PARAM_VIEW => $data->getEnum($key, TableView::class, $query->view),
-                default => $data->get($key)
-            };
-            $this->accessor->setValue($query, $key, $value);
-        }
-    }
-
-    private function updateFromRequest(DataQuery $query, Request $request): void
-    {
-        $query->view = $this->getView($request);
-        $query->prefix = $this->getPrefix($request);
-        $query->callback = $this->isCallback($request);
-        if (0 === $query->limit) {
-            $query->limit = $this->getLimit($request, $query->prefix, $query->view);
-        }
-        if ('' === $query->sort) {
-            $query->sort = $this->getSort($request, $query->prefix);
-            $query->order = $this->getOrder($request, $query->prefix);
-        }
     }
 }

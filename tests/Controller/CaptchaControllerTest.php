@@ -15,13 +15,14 @@ namespace App\Tests\Controller;
 use App\Controller\CaptchaController;
 use App\Service\CaptchaImageService;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(CaptchaController::class)]
+#[CoversClass(CaptchaController::class)]
 class CaptchaControllerTest extends AbstractControllerTestCase
 {
     use TranslatorMockTrait;
@@ -40,6 +41,7 @@ class CaptchaControllerTest extends AbstractControllerTestCase
     }
 
     /**
+     * @throws \Exception
      * @throws Exception
      */
     public function testInvalidImage(): void
@@ -96,6 +98,9 @@ class CaptchaControllerTest extends AbstractControllerTestCase
         self::assertSame('true', $actual);
     }
 
+    /**
+     * @throws Exception
+     */
     private function createService(
         ?string $generateImage,
         bool $validateTimeout,

@@ -16,11 +16,12 @@ use App\Enums\Importance;
 use App\Mime\CspViolationEmail;
 use App\Mime\NotificationEmail;
 use App\Tests\TranslatorMockTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(NotificationEmail::class)]
+#[CoversClass(NotificationEmail::class)]
 class NotificationEmailTest extends TestCase
 {
     use TranslatorMockTrait;

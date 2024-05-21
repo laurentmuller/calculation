@@ -13,9 +13,10 @@ declare(strict_types=1);
 namespace App\Tests\Utils;
 
 use App\Utils\AbstractReader;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(AbstractReader::class)]
+#[CoversClass(AbstractReader::class)]
 class AbstractReaderTest extends TestCase
 {
     public function testResourceReader(): void

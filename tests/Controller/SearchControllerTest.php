@@ -13,8 +13,9 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\SearchController;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(SearchController::class)]
+#[CoversClass(SearchController::class)]
 class SearchControllerTest extends AbstractControllerTestCase
 {
     public static function getRoutes(): \Iterator

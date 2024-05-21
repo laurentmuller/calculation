@@ -14,9 +14,10 @@ namespace App\Tests\Controller;
 
 use App\Controller\GlobalMarginController;
 use App\Tests\EntityTrait\GlobalMarginTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\HttpFoundation\Response;
 
-#[\PHPUnit\Framework\Attributes\CoversClass(GlobalMarginController::class)]
+#[CoversClass(GlobalMarginController::class)]
 class GlobalMarginControllerTest extends AbstractControllerTestCase
 {
     use GlobalMarginTrait;

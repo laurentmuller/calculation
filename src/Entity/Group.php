@@ -379,9 +379,9 @@ class Group extends AbstractEntity implements ComparableInterface, Timestampable
     {
         if ($this->categories->isEmpty()) {
             return 0;
-            }
-
-            /** @psalm-var int */
-            return $this->categories->reduce($func, 0);
         }
+
+        /** @psalm-var int */
+        return $this->categories->reduce($func, 0);
+    }
 }

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ComparableInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\CategoryRepository;
 use App\Traits\TimestampableTrait;
@@ -24,12 +25,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a category of products and tasks.
+ *
+ * @implements ComparableInterface<Category>
  */
 #[ORM\Table(name: 'sy_Category')]
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_category_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'category.unique_code')]
-class Category extends AbstractEntity implements TimestampableInterface
+class Category extends AbstractEntity implements ComparableInterface, TimestampableInterface
 {
     use TimestampableTrait;
 
@@ -117,6 +120,11 @@ class Category extends AbstractEntity implements TimestampableInterface
         }
 
         return $copy;
+    }
+
+    public function compare(ComparableInterface $other): int
+    {
+        return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
     }
 
     /**

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ComparableInterface;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\GroupRepository;
@@ -26,12 +27,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a group of categories.
+ *
+ * @implements ComparableInterface<Group>
  */
 #[ORM\Table(name: 'sy_Group')]
 #[ORM\Entity(repositoryClass: GroupRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_group_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'group.unique_code')]
-class Group extends AbstractEntity implements TimestampableInterface
+class Group extends AbstractEntity implements ComparableInterface, TimestampableInterface
 {
     use TimestampableTrait;
     use ValidateMarginsTrait;
@@ -137,6 +140,11 @@ class Group extends AbstractEntity implements TimestampableInterface
         }
 
         return $copy;
+    }
+
+    public function compare(ComparableInterface $other): int
+    {
+        return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
     }
 
     /**
@@ -371,9 +379,9 @@ class Group extends AbstractEntity implements TimestampableInterface
     {
         if ($this->categories->isEmpty()) {
             return 0;
-        }
+            }
 
-        /** @psalm-var int */
-        return $this->categories->reduce($func, 0);
-    }
+            /** @psalm-var int */
+            return $this->categories->reduce($func, 0);
+        }
 }

@@ -71,6 +71,16 @@ class ProductTest extends AbstractEntityValidatorTestCase
         self::assertSame('new-product', $clone->getDescription());
     }
 
+    public function testCompare(): void
+    {
+        $item1 = new Product();
+        $item1->setDescription('Product1');
+        $item2 = new Product();
+        $item2->setDescription('Product2');
+        $actual = $item1->compare($item2);
+        self::assertSame(-1, $actual);
+    }
+
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */

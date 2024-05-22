@@ -48,6 +48,16 @@ class CalculationStateTest extends AbstractEntityValidatorTestCase
         self::assertSame('#010203', $state->getColor());
     }
 
+    public function testCompare(): void
+    {
+        $item1 = new CalculationState();
+        $item1->setCode('Code1');
+        $item2 = new CalculationState();
+        $item2->setCode('Code2');
+        $actual = $item1->compare($item2);
+        self::assertSame(-1, $actual);
+    }
+
     public function testDescription(): void
     {
         $state = new CalculationState();

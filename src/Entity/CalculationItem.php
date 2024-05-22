@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ComparableInterface;
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
 use App\Repository\CalculationItemRepository;
@@ -25,10 +26,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Represents a calculation item.
  *
  * @implements ParentTimestampableInterface<Calculation>
+ * @implements ComparableInterface<CalculationItem>
  */
 #[ORM\Table(name: 'sy_CalculationItem')]
 #[ORM\Entity(repositoryClass: CalculationItemRepository::class)]
-class CalculationItem extends AbstractEntity implements ParentTimestampableInterface, PositionInterface
+class CalculationItem extends AbstractEntity implements ComparableInterface, ParentTimestampableInterface, PositionInterface
 {
     use MathTrait;
     use PositionTrait;
@@ -67,6 +69,11 @@ class CalculationItem extends AbstractEntity implements ParentTimestampableInter
     #[Assert\Length(max: 15)]
     #[ORM\Column(length: 15, nullable: true)]
     private ?string $unit = null;
+
+    public function compare(ComparableInterface $other): int
+    {
+        return \strnatcasecmp((string) $this->getDescription(), (string) $other->getDescription());
+    }
 
     /**
      * Create a calculation item from the given product.

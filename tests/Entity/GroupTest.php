@@ -65,6 +65,16 @@ class GroupTest extends AbstractEntityValidatorTestCase
         self::assertSame('new-code', $clone->getCode());
     }
 
+    public function testCompare(): void
+    {
+        $item1 = new Group();
+        $item1->setCode('Code1');
+        $item2 = new Group();
+        $item2->setCode('Code2');
+        $actual = $item1->compare($item2);
+        self::assertSame(-1, $actual);
+    }
+
     public function testCount(): void
     {
         $group = new Group();

@@ -32,11 +32,11 @@ trait GroupByTrait
      */
     public function groupBy(array $array, string|int|callable $key, string|int|callable ...$others): array
     {
-        $result = [];
         if ([] === $array) {
-            return $result;
+            return [];
         }
 
+        $result = [];
         foreach ($array as $value) {
             $entry = $this->getGroupKey($value, $key);
             $result[$entry][] = $value;

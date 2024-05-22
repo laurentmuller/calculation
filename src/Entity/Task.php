@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ComparableInterface;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\TaskRepository;
@@ -25,12 +26,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a task.
+ *
+ * @implements ComparableInterface<Task>
  */
 #[ORM\Table(name: 'sy_Task')]
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_task_name', columns: ['name'])]
 #[UniqueEntity(fields: 'name', message: 'task.unique_name')]
-class Task extends AbstractCategoryItemEntity implements \Countable, TimestampableInterface
+class Task extends AbstractCategoryItemEntity implements \Countable, ComparableInterface, TimestampableInterface
 {
     use TimestampableTrait;
 
@@ -102,6 +105,11 @@ class Task extends AbstractCategoryItemEntity implements \Countable, Timestampab
         }
 
         return $copy;
+    }
+
+    public function compare(ComparableInterface $other): int
+    {
+        return \strnatcasecmp((string) $this->getName(), (string) $other->getName());
     }
 
     /**

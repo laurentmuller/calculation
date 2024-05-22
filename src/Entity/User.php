@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ComparableInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Interfaces\UserInterface;
 use App\Repository\UserRepository;
@@ -33,6 +34,8 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 
 /**
  * User.
+ *
+ * @implements ComparableInterface<User>
  */
 #[ORM\Table(name: 'sy_User')]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -41,7 +44,7 @@ use Vich\UploaderBundle\Storage\StorageInterface;
 #[UniqueEntity(fields: ['email'], message: 'email.already_used')]
 #[UniqueEntity(fields: ['username'], message: 'username.already_used')]
 #[Vich\Uploadable]
-class User extends AbstractEntity implements TimestampableInterface, UserInterface
+class User extends AbstractEntity implements ComparableInterface, TimestampableInterface, UserInterface
 {
     use RoleTrait;
     use TimestampableTrait;
@@ -145,6 +148,11 @@ class User extends AbstractEntity implements TimestampableInterface, UserInterfa
         }
 
         return $this;
+    }
+
+    public function compare(ComparableInterface $other): int
+    {
+        return \strnatcasecmp($this->getUserIdentifier(), $other->getUserIdentifier());
     }
 
     /**

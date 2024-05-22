@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ComparableInterface;
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
 use App\Interfaces\SortModeInterface;
 use App\Repository\CalculationGroupRepository;
+use App\Traits\CollectionTrait;
 use App\Traits\PositionTrait;
 use App\Types\FixedFloatType;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,11 +29,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Represents a calculation group.
  *
  * @implements ParentTimestampableInterface<Calculation>
+ * @implements ComparableInterface<CalculationGroup>
  */
 #[ORM\Table(name: 'sy_CalculationGroup')]
 #[ORM\Entity(repositoryClass: CalculationGroupRepository::class)]
-class CalculationGroup extends AbstractEntity implements \Countable, ParentTimestampableInterface, PositionInterface
+class CalculationGroup extends AbstractEntity implements \Countable, ComparableInterface, ParentTimestampableInterface, PositionInterface
 {
+    use CollectionTrait;
     use PositionTrait;
 
     /**
@@ -108,6 +112,11 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
         }
 
         return $this;
+    }
+
+    public function compare(ComparableInterface $other): int
+    {
+        return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
     }
 
     /**
@@ -318,21 +327,16 @@ class CalculationGroup extends AbstractEntity implements \Countable, ParentTimes
      */
     public function sort(): bool
     {
-        // items?
+        // categories?
         if (!$this->isSortable()) {
             return false;
         }
 
-        // sort
-        $categories = $this->categories->toArray();
-        \uasort(
-            $categories,
-            static fn (CalculationCategory $a, CalculationCategory $b): int => \strcasecmp((string) $a->getCode(), (string) $b->getCode())
-        );
+        /** @psalm-var CalculationCategory[] $categories */
+        $categories = $this->getSortedCollection($this->categories);
 
         $position = 0;
         $changed = false;
-
         foreach ($categories as $category) {
             if ($position !== $category->getPosition()) {
                 $category->setPosition($position);

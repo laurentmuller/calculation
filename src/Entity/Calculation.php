@@ -15,6 +15,7 @@ namespace App\Entity;
 use App\Interfaces\SortModeInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationRepository;
+use App\Traits\CollectionTrait;
 use App\Traits\TimestampableTrait;
 use App\Types\FixedFloatType;
 use App\Utils\FormatUtils;
@@ -31,6 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: CalculationRepository::class)]
 class Calculation extends AbstractEntity implements TimestampableInterface
 {
+    use CollectionTrait;
     use TimestampableTrait;
 
     /**
@@ -511,15 +513,7 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function getSortedGroups(): array
     {
-        $result = [];
-        if (!$this->isEmpty()) {
-            foreach ($this->groups as $group) {
-                $result[(string) $group->getCode()] = $group;
-            }
-            \ksort($result, \SORT_NATURAL);
-        }
-
-        return $result;
+        return $this->getSortedCollection($this->groups);
     }
 
     /**
@@ -854,7 +848,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
         }
 
         $changed = false;
-
         foreach ($this->groups as $group) {
             if ($group->sort()) {
                 $changed = true;

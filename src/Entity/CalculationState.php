@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ComparableInterface;
 use App\Interfaces\TimestampableInterface;
 use App\Repository\CalculationStateRepository;
 use App\Traits\TimestampableTrait;
@@ -24,12 +25,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents a calculation state.
+ *
+ * @implements ComparableInterface<CalculationState>
  */
 #[ORM\Table(name: 'sy_CalculationState')]
 #[ORM\Entity(repositoryClass: CalculationStateRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_calculation_state_code', columns: ['code'])]
 #[UniqueEntity(fields: 'code', message: 'state.unique_code')]
-class CalculationState extends AbstractEntity implements TimestampableInterface
+class CalculationState extends AbstractEntity implements ComparableInterface, TimestampableInterface
 {
     use TimestampableTrait;
 
@@ -94,6 +97,11 @@ class CalculationState extends AbstractEntity implements TimestampableInterface
         }
 
         return $copy;
+    }
+
+    public function compare(ComparableInterface $other): int
+    {
+        return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
     }
 
     /**

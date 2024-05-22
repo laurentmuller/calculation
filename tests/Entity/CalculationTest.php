@@ -159,6 +159,34 @@ class CalculationTest extends AbstractEntityValidatorTestCase
         self::assertSame('new-description', $clone->getDescription());
     }
 
+    public function testCompare(): void
+    {
+        $item1 = new CalculationGroup();
+        $item1->setCode('Code1');
+        self::assertFalse($item1->isSortable());
+        $item1->sort();
+        $item2 = new CalculationGroup();
+        $item2->setCode('Code2');
+        $actual = $item1->compare($item2);
+        self::assertSame(-1, $actual);
+
+        $item1 = new CalculationCategory();
+        $item1->setCode('Code1');
+        self::assertFalse($item1->isSortable());
+        $item1->sort();
+        $item2 = new CalculationCategory();
+        $item2->setCode('Code2');
+        $actual = $item1->compare($item2);
+        self::assertSame(-1, $actual);
+
+        $item1 = new CalculationItem();
+        $item1->setDescription('Description1');
+        $item2 = new CalculationItem();
+        $item2->setDescription('Description2');
+        $actual = $item1->compare($item2);
+        self::assertSame(-1, $actual);
+    }
+
     /**
      * @throws \ReflectionException
      */
@@ -235,6 +263,13 @@ class CalculationTest extends AbstractEntityValidatorTestCase
 
         $calculation->removeEmptyItems();
         self::assertFalse($calculation->hasEmptyItems());
+    }
+
+    public function testEmptySortedGroup(): void
+    {
+        $calculation = new Calculation();
+        $actual = $calculation->getSortedGroups();
+        self::assertSame([], $actual);
     }
 
     public function testFields(): void
@@ -452,6 +487,22 @@ class CalculationTest extends AbstractEntityValidatorTestCase
         self::assertCount(0, $calculation->getGroups());
         $group = new CalculationGroup();
         $calculation->removeGroup($group);
+        self::assertCount(0, $calculation->getGroups());
+    }
+
+    public function testRemoveItem(): void
+    {
+        $calculation = new Calculation();
+        $group = new CalculationGroup();
+        $category = new CalculationCategory();
+        $item = new CalculationItem();
+
+        $category->addItem($item);
+        $group->addCategory($category);
+        $calculation->addGroup($group);
+        self::assertCount(1, $calculation->getGroups());
+
+        $calculation->removeEmptyItems();
         self::assertCount(0, $calculation->getGroups());
     }
 

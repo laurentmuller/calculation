@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ComparableInterface;
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
 use App\Interfaces\SortModeInterface;
@@ -28,12 +29,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Represents an item of a task.
  *
  * @implements ParentTimestampableInterface<Task>
+ * @implements ComparableInterface<TaskItem>
  */
 #[ORM\Table(name: 'sy_TaskItem')]
 #[ORM\Entity(repositoryClass: TaskItemRepository::class)]
 #[ORM\UniqueConstraint(name: 'unique_task_item_task_name', columns: ['task_id', 'name'])]
 #[UniqueEntity(fields: ['task', 'name'], message: 'task_item.unique_name', errorPath: 'name')]
-class TaskItem extends AbstractEntity implements \Countable, ParentTimestampableInterface, PositionInterface
+class TaskItem extends AbstractEntity implements \Countable, ComparableInterface, ParentTimestampableInterface, PositionInterface
 {
     use PositionTrait;
     use ValidateMarginsTrait;
@@ -87,6 +89,11 @@ class TaskItem extends AbstractEntity implements \Countable, ParentTimestampable
         }
 
         return $this;
+    }
+
+    public function compare(ComparableInterface $other): int
+    {
+        return \strnatcasecmp((string) $this->getName(), (string) $other->getName());
     }
 
     /**

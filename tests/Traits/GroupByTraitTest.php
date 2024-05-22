@@ -57,6 +57,14 @@ class GroupByTraitTest extends TestCase
         self::assertCount(2, $result[2]);
     }
 
+    public function testGroupByEmpty(): void
+    {
+        /** @psalm-var array<array{key: string, ...}> $array */
+        $array = [];
+        $actual = $this->groupBy($array, 'key');
+        self::assertSame([], $actual);
+    }
+
     public function testGroupByMultiple(): void
     {
         /** @psalm-var array<array{id0: int, id1: string, value: string}> $array */

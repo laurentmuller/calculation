@@ -59,6 +59,16 @@ class UserTest extends AbstractEntityValidatorTestCase
         self::assertSame('https://robohash.org/user', $actual);
     }
 
+    public function testCompare(): void
+    {
+        $item1 = new User();
+        $item1->setUsername('User1');
+        $item2 = new User();
+        $item2->setUsername('User2');
+        $actual = $item1->compare($item2);
+        self::assertSame(-1, $actual);
+    }
+
     public function testContainsProperty(): void
     {
         $user = new User();

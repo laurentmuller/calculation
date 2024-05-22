@@ -33,6 +33,16 @@ class CategoryTest extends AbstractEntityValidatorTestCase
         self::assertNotSame($object->getCode(), $clone->getCode());
     }
 
+    public function testCompare(): void
+    {
+        $item1 = new Category();
+        $item1->setCode('Code1');
+        $item2 = new Category();
+        $item2->setCode('Code2');
+        $actual = $item1->compare($item2);
+        self::assertSame(-1, $actual);
+    }
+
     public function testCount(): void
     {
         $object = new Category();

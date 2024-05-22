@@ -17,22 +17,23 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait TranslatorMockTrait
 {
-    /**
-     * @throws Exception
-     */
     private function createTranslator(?string $message = null): TranslatorInterface
     {
-        $translator = $this->createMock(TranslatorInterface::class);
-        if (null !== $message) {
-            $translator->expects($this->any())
-                ->method('trans')
-                ->willReturn($message);
-        } else {
-            $translator->expects($this->any())
-                ->method('trans')
-                ->willReturnArgument(0);
-        }
+        try {
+            $translator = $this->createMock(TranslatorInterface::class);
+            if (null !== $message) {
+                $translator->expects($this->any())
+                    ->method('trans')
+                    ->willReturn($message);
+            } else {
+                $translator->expects($this->any())
+                    ->method('trans')
+                    ->willReturnArgument(0);
+            }
 
-        return $translator;
+            return $translator;
+        } catch (Exception $e) {
+            self::fail($e->getMessage());
+        }
     }
 }

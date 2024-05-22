@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ComparableInterface;
 use App\Utils\FormatUtils;
 use App\Utils\StringUtils;
 use Doctrine\DBAL\Types\Types;
@@ -22,8 +23,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Represents an application log entry.
+ *
+ * @implements ComparableInterface<Log>
  */
-class Log extends AbstractEntity
+class Log extends AbstractEntity implements ComparableInterface
 {
     /**
      * The user extra field name.
@@ -75,6 +78,11 @@ class Log extends AbstractEntity
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function compare(ComparableInterface $other): int
+    {
+        return $this->getCreatedAt() <=> $other->getCreatedAt();
     }
 
     public static function formatDate(\DateTimeInterface $date): string

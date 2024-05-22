@@ -23,14 +23,65 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class ProductProvider extends EntityProvider
 {
-    /** @var string[] */
-    private static array $adjective = ['Petit', 'Ergonomique', 'Rustique', 'Intelligent', 'Magnifique', 'Incroyable', 'Fantastique', 'Pratique', 'Elégant', 'Génial', 'Enorme', 'Médiocre', 'Synergique', 'Robuste', 'Léger', 'Aérodynamique', 'Durable'];
+    private const ADJECTIVE = [
+        'Petit',
+        'Ergonomique',
+        'Rustique',
+        'Intelligent',
+        'Magnifique',
+        'Incroyable',
+        'Fantastique',
+        'Pratique',
+        'Elégant',
+        'Génial',
+        'Enorme',
+        'Médiocre',
+        'Synergique',
+        'Robuste',
+        'Léger',
+        'Aérodynamique',
+        'Durable'];
 
-    /** @var string[] */
-    private static array $material = ['acier', 'bois', 'béton', 'plastique', 'coton', 'granit', 'caoutchouc', 'cuir', 'soie', 'laine', 'lin', 'marbre', 'fer', 'bronze', 'cuivre', 'aluminium', 'papier'];
+    private const MATERIAL = [
+        'acier',
+        'bois',
+        'béton',
+        'plastique',
+        'coton',
+        'granit',
+        'caoutchouc',
+        'cuir',
+        'soie',
+        'laine',
+        'lin',
+        'marbre',
+        'fer',
+        'bronze',
+        'cuivre',
+        'aluminium',
+        'papier'];
 
-    /** @var string[] */
-    private static array $product = ['tabouret', 'camion', 'ordinateur', 'gants', 'pantalon', 'chemisier', 'tabouret', 'chausse-pied', 'chapeau', 'vase', 'couteau', 'récipient', 'manteau', 'carnet', 'clavier', 'sac', 'banc', 'stylo', 'boîtier', 'portefeuille'];
+    private const PRODUCT = [
+        'tabouret',
+        'camion',
+        'ordinateur',
+        'gants',
+        'pantalon',
+        'chemisier',
+        'tabouret',
+        'chausse-pied',
+        'chapeau',
+        'vase',
+        'couteau',
+        'récipient',
+        'manteau',
+        'carnet',
+        'clavier',
+        'sac',
+        'banc',
+        'stylo',
+        'boîtier',
+        'portefeuille'];
 
     public function __construct(Generator $generator, EntityManagerInterface $manager)
     {
@@ -62,9 +113,9 @@ class ProductProvider extends EntityProvider
      */
     public function productName(): string
     {
-        $adjective = (string) static::randomElement(self::$adjective);
-        $product = (string) static::randomElement(self::$product);
-        $material = (string) static::randomElement(self::$material);
+        $adjective = (string) static::randomElement(self::ADJECTIVE);
+        $product = (string) static::randomElement(self::PRODUCT);
+        $material = (string) static::randomElement(self::MATERIAL);
 
         return "$adjective $product en $material";
     }
@@ -83,12 +134,12 @@ class ProductProvider extends EntityProvider
         }
 
         \usort($products, static function (Product $a, Product $b): int {
-            $result = \strcasecmp($a->getCategoryCode(), $b->getCategoryCode());
-            if (0 === $result) {
-                return \strcasecmp((string) $a->getDescription(), (string) $b->getDescription());
+            $result = \strnatcasecmp($a->getCategoryCode(), $b->getCategoryCode());
+            if (0 !== $result) {
+                return $result;
             }
 
-            return $result;
+            return $a->compare($b);
         });
 
         return $products;

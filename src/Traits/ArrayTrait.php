@@ -17,8 +17,10 @@ namespace App\Traits;
  */
 trait ArrayTrait
 {
+    use ComparableSortTrait;
+
     /**
-     * Gets the values from a single column in the input array.
+     * Gets values from a single column in the input array.
      */
     public function getColumn(array $values, string|int $key): array
     {
@@ -26,7 +28,7 @@ trait ArrayTrait
     }
 
     /**
-     * Gets the filtered values of the given column.
+     * Gets filtered values of a single column.
      *
      * @psalm-param int<0,2> $mode
      */
@@ -36,9 +38,13 @@ trait ArrayTrait
     }
 
     /**
-     * Gets the maximum of the given column.
+     * Gets the maximum value of a single column.
      *
-     * @psalm-return ($default is int ? int : float)
+     * @psalm-template TValue of int|float
+     *
+     * @psalm-param TValue $default
+     *
+     * @psalm-return TValue
      */
     public function getColumnMax(array $values, string|int $key, int|float $default = 0.0): int|float
     {
@@ -46,16 +52,21 @@ trait ArrayTrait
             return $default;
         }
 
-        /** @psalm-var non-empty-array $values */
+        /** @psalm-var non-empty-array<TValue> $values */
         $values = $this->getColumn($values, $key);
 
-        return \is_int($default) ? (int) \max($values) : (float) \max($values);
+        /** @psalm-var TValue */
+        return \max($values);
     }
 
     /**
-     * Gets the sum of the given column.
+     * Gets the sum of a single column.
      *
-     * @psalm-return ($default is int ? int : float)
+     * @psalm-template TValue of int|float
+     *
+     * @psalm-param TValue $default
+     *
+     * @psalm-return TValue
      */
     public function getColumnSum(array $values, string|int $key, int|float $default = 0.0): int|float
     {
@@ -64,7 +75,8 @@ trait ArrayTrait
         }
         $values = $this->getColumn($values, $key);
 
-        return \is_int($default) ? (int) \array_sum($values) : (float) \array_sum($values);
+        /** @psalm-var TValue */
+        return \array_sum($values);
     }
 
     /**
@@ -85,16 +97,11 @@ trait ArrayTrait
      *                                </ul>
      *
      * @return T[]
-     *
-     * @psalm-param 0|1|2 $mode
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function getFiltered(array $values, ?callable $callback = null, int $mode = 0): array
     {
-        /** @psalm-var T[] */
         // @phpstan-ignore-next-line
-        return null === $callback ? \array_filter($values) : \array_filter($values, $callback, $mode);
+        return \array_filter($values, $callback, $mode);
     }
 
     /**

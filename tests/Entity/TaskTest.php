@@ -21,6 +21,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(Task::class)]
 class TaskTest extends AbstractEntityValidatorTestCase
 {
+    use IdTrait;
+
     public function testClone(): void
     {
         $task = new Task();
@@ -32,6 +34,16 @@ class TaskTest extends AbstractEntityValidatorTestCase
         $clone = $task->clone('clone');
         self::assertNotSame($task->getName(), $clone->getName());
         self::assertSame('clone', $clone->getName());
+    }
+
+    public function testCompare(): void
+    {
+        $item1 = new Task();
+        $item1->setName('Task1');
+        $item2 = new Task();
+        $item2->setName('Task2');
+        $actual = $item1->compare($item2);
+        self::assertSame(-1, $actual);
     }
 
     /**
@@ -55,6 +67,25 @@ class TaskTest extends AbstractEntityValidatorTestCase
             $this->deleteEntity($category);
             $this->deleteEntity($group);
         }
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testGetIdentifiers(): void
+    {
+        $task = new Task();
+        $actual = $task->getIdentifiers();
+        self::assertSame([], $actual);
+
+        $item = new TaskItem();
+        self::setId($item);
+        $task->addItem($item);
+        $item = new TaskItem();
+        self::setId($item, 2);
+        $task->addItem($item);
+        $actual = $task->getIdentifiers();
+        self::assertSame([1, 2], $actual);
     }
 
     public function testInvalidCategory(): void

@@ -12,10 +12,12 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Interfaces\ComparableInterface;
 use App\Interfaces\ParentTimestampableInterface;
 use App\Interfaces\PositionInterface;
 use App\Interfaces\SortModeInterface;
 use App\Repository\CalculationCategoryRepository;
+use App\Traits\CollectionTrait;
 use App\Traits\PositionTrait;
 use App\Types\FixedFloatType;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,11 +29,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Represents a calculation category.
  *
  * @implements ParentTimestampableInterface<Calculation>
+ * @implements ComparableInterface<CalculationCategory>
  */
 #[ORM\Table(name: 'sy_CalculationCategory')]
 #[ORM\Entity(repositoryClass: CalculationCategoryRepository::class)]
-class CalculationCategory extends AbstractEntity implements \Countable, ParentTimestampableInterface, PositionInterface
+class CalculationCategory extends AbstractEntity implements \Countable, ComparableInterface, ParentTimestampableInterface, PositionInterface
 {
+    use CollectionTrait;
     use PositionTrait;
 
     /**
@@ -102,6 +106,11 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
         }
 
         return $this;
+    }
+
+    public function compare(ComparableInterface $other): int
+    {
+        return \strnatcasecmp((string) $this->getCode(), (string) $other->getCode());
     }
 
     /**
@@ -283,16 +292,11 @@ class CalculationCategory extends AbstractEntity implements \Countable, ParentTi
             return false;
         }
 
-        // sort
-        $items = $this->items->toArray();
-        \uasort(
-            $items,
-            static fn (CalculationItem $a, CalculationItem $b): int => \strcasecmp((string) $a->getDescription(), (string) $b->getDescription())
-        );
+        /** @psalm-var CalculationItem[] $items */
+        $items = $this->getSortedCollection($this->items);
 
         $position = 0;
         $changed = false;
-
         foreach ($items as $item) {
             if ($position !== $item->getPosition()) {
                 $item->setPosition($position);

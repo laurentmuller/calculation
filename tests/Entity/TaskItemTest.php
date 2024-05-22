@@ -40,6 +40,16 @@ class TaskItemTest extends AbstractEntityValidatorTestCase
         }
     }
 
+    public function testCompare(): void
+    {
+        $item1 = new TaskItem();
+        $item1->setName('TaskItem1');
+        $item2 = new TaskItem();
+        $item2->setName('TaskItem2');
+        $actual = $item1->compare($item2);
+        self::assertSame(-1, $actual);
+    }
+
     /**
      * @throws \Doctrine\ORM\Exception\ORMException
      */

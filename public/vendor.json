@@ -86,7 +86,7 @@
         },
         {
             "name": "highcharts",
-            "version": "11.4.1",
+            "version": "11.4.3",
             "source": "cdnjs",
             "files": [
                 "highcharts.js"

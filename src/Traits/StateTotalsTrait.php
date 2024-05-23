@@ -22,6 +22,7 @@ use App\Repository\CalculationStateRepository;
 trait StateTotalsTrait
 {
     use ArrayTrait;
+    use MathTrait;
 
     /**
      * @param QueryCalculationType[] $states

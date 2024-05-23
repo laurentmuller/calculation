@@ -42,7 +42,7 @@ class CookieTraitTest extends TestCase
         $request = $this->createRequest();
         self::assertSame(Theme::AUTO, $this->getCookieEnum($request, 'key', Theme::AUTO));
 
-        $request = $this->createRequest(['KEY' => Theme::DARK->value]);
+        $request = $this->createRequest(['KEY' => Theme::DARK]);
         self::assertSame(Theme::DARK, $this->getCookieEnum($request, 'key', Theme::AUTO));
     }
 
@@ -97,6 +97,13 @@ class CookieTraitTest extends TestCase
 
     private function createRequest(array $cookies = []): Request
     {
+        /** @psalm-var mixed $value */
+        foreach ($cookies as &$value) {
+            if ($value instanceof \BackedEnum) {
+                $value = $value->value;
+            }
+        }
+
         return new Request(cookies: $cookies);
     }
 

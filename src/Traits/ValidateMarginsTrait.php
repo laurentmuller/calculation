@@ -13,10 +13,7 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use App\Interfaces\MarginInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Order;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -28,25 +25,28 @@ trait ValidateMarginsTrait
     /**
      * Get margins.
      *
+     * @pslam-template TKey as array-key
      * @pslam-template T extends MarginInterface
      *
-     * @pslam-return Collection<int, T>
+     * @pslam-return Collection<TKey, T>
      */
     abstract public function getMargins(): Collection;
 
     #[Assert\Callback]
     public function validateMargins(ExecutionContextInterface $context): void
     {
-        /** @var ArrayCollection<int, MarginInterface> $margins */
         $margins = $this->getMargins();
-        if (\count($margins) < 2) {
+        if ($margins->isEmpty()) {
             return;
         }
-        $criteria = Criteria::create()
-            ->orderBy(['minimum' => Order::Ascending]);
-        $margins = $margins->matching($criteria);
+
+        $values = $margins->toArray();
+        if (\count($values) > 1) {
+            \uasort($values, fn (MarginInterface $a, MarginInterface $b): int => $a->getMinimum() <=> $b->getMinimum());
+        }
+
         $lastMax = null;
-        foreach ($margins as $key => $margin) {
+        foreach ($values as $key => $margin) {
             $min = $margin->getMinimum();
             $max = $margin->getMaximum();
             if ($max <= $min) {

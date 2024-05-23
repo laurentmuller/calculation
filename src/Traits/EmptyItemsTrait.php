@@ -16,20 +16,22 @@ use App\Utils\StringUtils;
 
 /**
  * Trait to format empty items for the table, the PDF report, and the Excel document.
+ *
+ * @psalm-import-type CalculationItemEntry from \App\Repository\CalculationRepository
  */
 trait EmptyItemsTrait
 {
     use MathTrait;
 
     /**
-     * @psalm-param array<array{
-     *          description: string,
-     *          quantity: float,
-     *          price: float,
-     *          count: int}> $items
+     * @psalm-param CalculationItemEntry[] $items
      */
     public function formatItems(array $items): string
     {
+        if ([] === $items) {
+            return '';
+        }
+
         $priceLabel = $this->getPriceLabel();
         $quantityLabel = $this->getQuantityLabel();
         $result = \array_map(function (array $item) use ($priceLabel, $quantityLabel): string {

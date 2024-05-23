@@ -44,7 +44,6 @@ class CaptchaValidatorTest extends ConstraintValidatorTestCase
         $contraint = $this->createConstraint();
         $validator = $this->initValidator();
         $validator->validate(null, $contraint);
-
         self::assertNoViolation();
     }
 

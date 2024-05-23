@@ -26,6 +26,10 @@ trait DuplicateItemsTrait
      */
     public function formatItems(array $items): string
     {
+        if ([] === $items) {
+            return '';
+        }
+
         $result = \array_map(
             fn (array $item): string => \sprintf('%s (%d)', $item['description'], $item['count']),
             $items

@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Tests\Controller;
 
 use App\Controller\CalculationDuplicateController;
+use App\Entity\Product;
 use App\Tests\EntityTrait\CalculationTrait;
 use App\Tests\EntityTrait\ProductTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -23,6 +24,8 @@ class CalculationDuplicateControllerTest extends AbstractControllerTestCase
 {
     use CalculationTrait;
     use ProductTrait;
+
+    private ?Product $duplicate = null;
 
     public static function getRoutes(): \Iterator
     {
@@ -43,8 +46,13 @@ class CalculationDuplicateControllerTest extends AbstractControllerTestCase
     protected function addEntities(): void
     {
         $product = $this->getProduct();
+        if (!$this->duplicate instanceof Product) {
+            $this->duplicate = clone $product;
+            $this->addEntity($this->duplicate);
+        }
+
         $calculation = $this->getCalculation();
-        $calculation->addProduct($product)
+        $calculation->addProduct($this->duplicate)
             ->addProduct($product);
         $this->addEntity($calculation);
     }
@@ -54,6 +62,7 @@ class CalculationDuplicateControllerTest extends AbstractControllerTestCase
      */
     protected function deleteEntities(): void
     {
+        $this->duplicate = $this->deleteEntity($this->duplicate);
         $this->deleteCalculation();
         $this->deleteProduct();
     }

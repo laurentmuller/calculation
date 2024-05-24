@@ -27,6 +27,7 @@ class CacheKeyTraitTest extends TestCase
         yield ['', ''];
         yield ['valid', 'valid'];
         yield ['space one', 'space one'];
+
         yield ['test{', 'test_'];
         yield ['test}', 'test_'];
         yield ['test(', 'test_'];
@@ -35,6 +36,10 @@ class CacheKeyTraitTest extends TestCase
         yield ['test\\', 'test_'];
         yield ['test@', 'test_'];
         yield ['test:', 'test_'];
+
+        yield ['@before', '_before'];
+        yield ['after@', 'after_'];
+        yield ['@before@after@', '_before_after_'];
 
         $chars = \str_split(ItemInterface::RESERVED_CHARACTERS);
         foreach ($chars as $char) {

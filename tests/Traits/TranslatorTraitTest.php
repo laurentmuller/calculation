@@ -13,29 +13,23 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use App\Tests\Data\Translatable;
+use App\Tests\TranslatorMockTrait;
 use App\Traits\TranslatorTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[CoversClass(TranslatorTrait::class)]
 class TranslatorTraitTest extends TestCase
 {
+    use TranslatorMockTrait;
     use TranslatorTrait;
 
     private TranslatorInterface $translator;
 
-    /**
-     * @throws Exception
-     */
     protected function setUp(): void
     {
-        $this->translator = $this->createMock(Translator::class);
-        $this->translator->expects(self::any())
-            ->method('trans')
-            ->willReturnArgument(0);
+        $this->translator = $this->createTranslator();
     }
 
     public function getTranslator(): TranslatorInterface

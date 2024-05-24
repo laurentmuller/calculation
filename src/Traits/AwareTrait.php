@@ -13,11 +13,12 @@ declare(strict_types=1);
 namespace App\Traits;
 
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Trait to get service from the container.
  *
- * @property \Psr\Container\ContainerInterface $container
+ * @property ContainerInterface $container
  */
 trait AwareTrait
 {

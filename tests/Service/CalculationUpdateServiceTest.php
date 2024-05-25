@@ -15,8 +15,8 @@ namespace App\Tests\Service;
 use App\Entity\Calculation;
 use App\Entity\CalculationState;
 use App\Service\CalculationUpdateService;
+use App\Tests\ContainerServiceTrait;
 use App\Tests\DatabaseTrait;
-use App\Tests\ServiceTrait;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
@@ -30,8 +30,8 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 #[CoversClass(CalculationUpdateService::class)]
 class CalculationUpdateServiceTest extends AbstractAuthenticateWebTestCase
 {
+    use ContainerServiceTrait;
     use DatabaseTrait;
-    use ServiceTrait;
 
     /**
      * @throws \Exception

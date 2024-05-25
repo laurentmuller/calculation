@@ -70,15 +70,9 @@ class HelpReport extends AbstractReport
     private function findEntity(array $dialog): ?array
     {
         $id = $dialog['entity'] ?? null;
-        if (null !== $id) {
-            /** @psalm-var HelpEntityType|null $entity */
-            $entity = $this->service->findEntity($id);
-            if (null !== $entity) {
-                return $entity;
-            }
-        }
 
-        return null;
+        /** @psalm-var HelpEntityType|null */
+        return $this->service->findEntity($id);
     }
 
     /**

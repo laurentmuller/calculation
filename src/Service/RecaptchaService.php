@@ -174,8 +174,7 @@ class RecaptchaService
             ->setScoreThreshold($this->scoreThreshold)
             ->setExpectedAction($this->expectedAction)
             ->setExpectedHostname($request->getHost());
-        $this->lastResponse = $recaptcha->verify($response, $request->getClientIp());
 
-        return $this->lastResponse;
+        return $this->lastResponse = $recaptcha->verify($response, $request->getClientIp());
     }
 }

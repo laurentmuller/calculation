@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
+use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\FlashMessageAwareTrait;
 use App\Traits\TranslatorFlashMessageAwareTrait;
@@ -23,7 +24,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 #[CoversClass(FlashMessageAwareTrait::class)]
 #[CoversClass(TranslatorFlashMessageAwareTrait::class)]
-class TranslatorFlashMessageAwareTraitTest extends AwareTraitTestCase
+class TranslatorFlashMessageKernelServiceTest extends KernelServiceTestCase
 {
     use TranslatorFlashMessageAwareTrait;
     use TranslatorMockTrait;

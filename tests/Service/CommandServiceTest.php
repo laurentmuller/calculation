@@ -13,23 +13,15 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\CommandService;
-use App\Tests\ServiceTrait;
+use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpKernel\Kernel;
 
 #[CoversClass(CommandService::class)]
-class CommandServiceTest extends KernelTestCase
+class CommandServiceTest extends KernelServiceTestCase
 {
-    use ServiceTrait;
-
-    protected function setUp(): void
-    {
-        self::bootKernel();
-    }
-
     /**
      * @throws InvalidArgumentException
      */

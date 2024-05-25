@@ -29,7 +29,12 @@ class StrengthLevelTranslatorTraitTest extends TestCase
     use StrengthLevelTranslatorTrait;
     use TranslatorMockTrait;
 
-    private ?TranslatorInterface $translator = null;
+    private TranslatorInterface $translator;
+
+    protected function setUp(): void
+    {
+        $this->translator = $this->createTranslator();
+    }
 
     public static function getTranslateLevels(): \Iterator
     {
@@ -43,15 +48,8 @@ class StrengthLevelTranslatorTraitTest extends TestCase
         yield [5, 'very_strong'];
     }
 
-    /**
-     * @throws Exception
-     */
     public function getTranslator(): TranslatorInterface
     {
-        if (!$this->translator instanceof TranslatorInterface) {
-            $this->translator = $this->createTranslator();
-        }
-
         return $this->translator;
     }
 

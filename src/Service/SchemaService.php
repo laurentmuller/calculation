@@ -95,10 +95,8 @@ class SchemaService implements ServiceSubscriberInterface
      */
     public function getTable(string $name): array
     {
-        /** @psalm-var SchemaTableType $result */
-        $result = $this->getCacheValue("schema_service.metadata.table.$name", fn (): array => $this->loadTable($name));
-
-        return $result;
+        /** @psalm-var SchemaTableType */
+        return $this->getCacheValue("schema_service.metadata.table.$name", fn (): array => $this->loadTable($name));
     }
 
     /**
@@ -311,14 +309,12 @@ class SchemaService implements ServiceSubscriberInterface
      */
     private function getMetaDatas(): array
     {
-        /** @psalm-var array<string, ClassMetadata<object>> $result */
-        $result = $this->getCacheValue(
+        /** @psalm-var array<string, ClassMetadata<object>> */
+        return $this->getCacheValue(
             'schema_service.metadata',
             fn (): array => $this->loadMetaDatas($this->manager),
             self::CACHE_TIMEOUT
         );
-
-        return $result;
     }
 
     /**

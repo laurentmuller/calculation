@@ -14,6 +14,7 @@ namespace App\Traits;
 
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Contracts\Service\Attribute\SubscribedService;
 
 /**
@@ -49,25 +50,29 @@ trait CacheAwareTrait
 
     /**
      * Removes the item from the cache pool.
+     *
+     * @throws \LogicException if an exception occur
      */
     public function deleteCacheItem(string $key): bool
     {
         try {
             return $this->getCacheItemPool()->deleteItem($this->cleanKey($key));
-        } catch (\Psr\Cache\InvalidArgumentException) {
-            return false;
+        } catch (InvalidArgumentException $e) {
+            throw new \LogicException('Unable to delete the cache item.', $e->getCode(), $e);
         }
     }
 
     /**
      * Gets the cache item for the given key.
+     *
+     * @throws \LogicException if an exception occur
      */
-    public function getCacheItem(string $key): ?CacheItemInterface
+    public function getCacheItem(string $key): CacheItemInterface
     {
         try {
             return $this->getCacheItemPool()->getItem($this->cleanKey($key));
-        } catch (\Psr\Cache\InvalidArgumentException) {
-            return null;
+        } catch (InvalidArgumentException $e) {
+            throw new \LogicException('Unable to get the cache item.', $e->getCode(), $e);
         }
     }
 
@@ -111,12 +116,13 @@ trait CacheAwareTrait
     {
         $key = $this->cleanKey($key);
         $item = $this->getCacheItem($key);
-        if (null !== $item && $item->isHit()) {
+        if ($item->isHit()) {
             return $item->get();
         }
         if (!\is_callable($default)) {
             return $default;
         }
+
         /** @psalm-var mixed $value */
         $value = \call_user_func($default);
         if (null !== $value) {
@@ -128,13 +134,15 @@ trait CacheAwareTrait
 
     /**
      * Confirms if the cache contains specified cache item.
+     *
+     * @throws \LogicException if an exception occur
      */
     public function hasCacheItem(string $key): bool
     {
         try {
             return $this->getCacheItemPool()->hasItem($this->cleanKey($key));
-        } catch (\Psr\Cache\InvalidArgumentException) {
-            return false;
+        } catch (InvalidArgumentException $e) {
+            throw new \LogicException('Unable to check cache item.', $e->getCode(), $e);
         }
     }
 
@@ -150,16 +158,12 @@ trait CacheAwareTrait
     public function saveDeferredCacheValue(string $key, mixed $value, int|\DateInterval|null $time = null): bool
     {
         $item = $this->getCacheItem($key);
-        if (null !== $item) {
-            $item->set($value);
-            if (null !== $time) {
-                $item->expiresAfter($time);
-            }
-
-            return $this->getCacheItemPool()->saveDeferred($item);
+        $item->set($value);
+        if (null !== $time) {
+            $item->expiresAfter($time);
         }
 
-        return false;
+        return $this->getCacheItemPool()->saveDeferred($item);
     }
 
     public function setCacheItemPool(CacheItemPoolInterface $cacheItemPool): static
@@ -188,14 +192,11 @@ trait CacheAwareTrait
         if (null === $value) {
             return $this->deleteCacheItem($key);
         }
+
         $item = $this->getCacheItem($key);
-        if (null !== $item) {
-            $item->expiresAfter($time ?? $this->getCacheTimeout())
-                ->set($value);
+        $item->expiresAfter($time ?? $this->getCacheTimeout())
+            ->set($value);
 
-            return $this->getCacheItemPool()->save($item);
-        }
-
-        return false;
+        return $this->getCacheItemPool()->save($item);
     }
 }

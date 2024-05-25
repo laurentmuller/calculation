@@ -13,11 +13,12 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 trait TranslatorMockTrait
 {
-    private function createTranslator(?string $message = null): TranslatorInterface
+    private function createTranslator(?string $message = null): MockObject&TranslatorInterface
     {
         try {
             $translator = $this->createMock(TranslatorInterface::class);

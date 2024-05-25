@@ -14,13 +14,14 @@ namespace App\Tests\Traits;
 
 use App\Enums\EntityName;
 use App\Enums\EntityPermission;
+use App\Tests\KernelServiceTestCase;
 use App\Traits\AuthorizationCheckerAwareTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Container\ContainerExceptionInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 #[CoversClass(AuthorizationCheckerAwareTrait::class)]
-class AuthorizationCheckerAwareTraitTest extends AwareTraitTestCase
+class AuthorizationCheckerKernelServiceTest extends KernelServiceTestCase
 {
     use AuthorizationCheckerAwareTrait;
 

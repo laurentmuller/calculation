@@ -237,10 +237,8 @@ class HelpService
     public function getHelp(): array
     {
         try {
-            /** @psalm-var HelpContentType $help */
-            $help = $this->cache->get('help', fn (): array => $this->loadHelp());
-
-            return $help;
+            /** @psalm-var HelpContentType */
+            return $this->cache->get('help', fn (): array => $this->loadHelp());
         } catch (InvalidArgumentException) {
             return [
                 'actions' => [],

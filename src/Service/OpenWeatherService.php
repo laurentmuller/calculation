@@ -310,10 +310,8 @@ class OpenWeatherService extends AbstractHttpClientService
             'units' => $units,
         ];
 
-        /** @psalm-var  OpenWeatherGroupType|false $result */
-        $result = $this->get(self::URI_GROUP, $query);
-
-        return $result;
+        /** @psalm-var  OpenWeatherGroupType|false */
+        return $this->get(self::URI_GROUP, $query);
     }
 
     /**

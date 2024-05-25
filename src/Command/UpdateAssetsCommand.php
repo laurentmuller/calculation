@@ -347,14 +347,12 @@ class UpdateAssetsCommand extends Command
                 if (!isset($content[$path])) {
                     return null;
                 }
-                /** @psalm-var array $content */
+                /** @psalm-var array|string $content */
                 $content = $content[$path];
             }
 
-            /** @var string $newVersion */
-            $newVersion = $content;
-
-            return $newVersion;
+            /** @psalm-var string */
+            return $content;
         } catch (\Exception) {
             return null;
         }

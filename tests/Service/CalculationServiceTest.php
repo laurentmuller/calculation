@@ -29,24 +29,22 @@ use App\Service\ApplicationService;
 use App\Service\CalculationService;
 use App\Tests\DatabaseTrait;
 use App\Tests\Entity\IdTrait;
-use App\Tests\ServiceTrait;
+use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Exception\ORMException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @psalm-import-type ServiceParametersType from CalculationService
  */
 #[CoversClass(CalculationService::class)]
-class CalculationServiceTest extends KernelTestCase
+class CalculationServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
     use IdTrait;
-    use ServiceTrait;
     use TranslatorMockTrait;
 
     private const MARGIN_PERCENT = 1.1;

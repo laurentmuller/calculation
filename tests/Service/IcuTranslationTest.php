@@ -12,18 +12,15 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
-use App\Tests\ServiceTrait;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Tests\KernelServiceTestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class to test ICU translations.
  */
 #[\PHPUnit\Framework\Attributes\CoversNothing]
-class IcuTranslationTest extends KernelTestCase
+class IcuTranslationTest extends KernelServiceTestCase
 {
-    use ServiceTrait;
-
     private TranslatorInterface $translator;
 
     /**
@@ -31,7 +28,7 @@ class IcuTranslationTest extends KernelTestCase
      */
     protected function setUp(): void
     {
-        self::bootKernel();
+        parent::setUp();
         $this->translator = $this->getService(TranslatorInterface::class);
     }
 

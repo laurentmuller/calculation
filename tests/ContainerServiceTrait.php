@@ -13,14 +13,13 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Trait to get service from the container.
  *
  * @psalm-require-extends KernelTestCase
  */
-trait ServiceTrait
+trait ContainerServiceTrait
 {
     /**
      * Gets the service for the given class name.
@@ -33,12 +32,7 @@ trait ServiceTrait
      */
     protected function getService(string $class)
     {
-        /** @var ContainerInterface $container */
-        $container = static::getContainer();
-
-        /** @var T $service */
-        $service = $container->get($class);
-
-        return $service;
+        /** @psalm-var T */
+        return static::getContainer()->get($class);
     }
 }

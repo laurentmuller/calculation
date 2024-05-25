@@ -14,18 +14,16 @@ namespace App\Tests\Entity;
 
 use App\Interfaces\EntityInterface;
 use App\Tests\DatabaseTrait;
-use App\Tests\ServiceTrait;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use App\Tests\KernelServiceTestCase;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Unit test for validate {@link EntityInterface} class.
  */
-abstract class AbstractEntityValidatorTestCase extends KernelTestCase
+abstract class AbstractEntityValidatorTestCase extends KernelServiceTestCase
 {
     use DatabaseTrait;
-    use ServiceTrait;
 
     protected ?ValidatorInterface $validator = null;
 

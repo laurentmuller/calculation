@@ -128,10 +128,8 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function getActiveSheet(): WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument $sheet */
-        $sheet = parent::getActiveSheet();
-
-        return $sheet;
+        /** @psalm-var WorksheetDocument */
+        return parent::getActiveSheet();
     }
 
     /**
@@ -210,10 +208,8 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setActiveSheetIndex(int $worksheetIndex): WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument $sheet */
-        $sheet = parent::setActiveSheetIndex($worksheetIndex);
-
-        return $sheet;
+        /** @psalm-var WorksheetDocument */
+        return parent::setActiveSheetIndex($worksheetIndex);
     }
 
     /**
@@ -225,10 +221,8 @@ class SpreadsheetDocument extends Spreadsheet
      */
     public function setActiveSheetIndexByName(string $worksheetName): WorksheetDocument
     {
-        /** @psalm-var WorksheetDocument $sheet */
-        $sheet = parent::setActiveSheetIndexByName($worksheetName);
-
-        return $sheet;
+        /** @psalm-var WorksheetDocument */
+        return parent::setActiveSheetIndexByName($worksheetName);
     }
 
     /**

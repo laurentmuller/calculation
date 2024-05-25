@@ -423,10 +423,8 @@ class ImageService
      */
     public function ttfBox(float $size, float $angle, string $fontFile, string $text): array|false
     {
-        /** @psalm-var int[]|false $result */
-        $result = \imagettfbbox($size, $angle, $fontFile, $text);
-
-        return $result;
+        /** @psalm-var int[]|false */
+        return \imagettfbbox($size, $angle, $fontFile, $text);
     }
 
     /**

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
+use App\Tests\KernelServiceTestCase;
 use App\Traits\SessionAwareTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Container\ContainerExceptionInterface;
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 #[CoversClass(SessionAwareTrait::class)]
-class SessionAwareTraitTest extends AwareTraitTestCase
+class SessionKernelServiceTest extends KernelServiceTestCase
 {
     use SessionAwareTrait;
 

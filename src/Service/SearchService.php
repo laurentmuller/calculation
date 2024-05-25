@@ -377,10 +377,9 @@ class SearchService implements ServiceSubscriberInterface
         $sql = \implode(' UNION ', $queries) . $extra;
         $query = $this->manager->createNativeQuery($sql, $this->getResultSetMapping());
         $query->setParameter(self::SEARCH_PARAM, "%$search%", Types::STRING);
-        /** @psalm-var SearchType[] $result */
-        $result = $query->getArrayResult();
 
-        return $result;
+        /** @psalm-var SearchType[] */
+        return $query->getArrayResult();
     }
 
     /**

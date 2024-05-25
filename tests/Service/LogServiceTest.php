@@ -13,21 +13,18 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\LogService;
-use App\Tests\ServiceTrait;
+use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 #[CoversClass(LogService::class)]
-class LogServiceTest extends KernelTestCase
+class LogServiceTest extends KernelServiceTestCase
 {
-    use ServiceTrait;
-
     private LogService $service;
 
     protected function setUp(): void
     {
-        self::bootKernel();
+        parent::setUp();
         $this->service = $this->getService(LogService::class);
     }
 

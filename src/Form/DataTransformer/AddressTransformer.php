@@ -39,13 +39,11 @@ class AddressTransformer implements DataTransformerInterface
         }
 
         try {
-            $address = Address::create($value);
+            return Address::create($value);
         } catch (ExceptionInterface $e) {
             $message = \sprintf('Unable to parse the address for the value "%s".', $value);
             throw new TransformationFailedException($message, $e->getCode(), $e);
         }
-
-        return $address;
     }
 
     /**

@@ -12,13 +12,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
+use App\Tests\KernelServiceTestCase;
 use App\Traits\CacheAwareTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerExceptionInterface;
 
 #[CoversClass(CacheAwareTrait::class)]
-class CacheAwareTraitTest extends AwareTraitTestCase
+class CacheKernelServiceTest extends KernelServiceTestCase
 {
     use CacheAwareTrait;
 
@@ -52,8 +53,10 @@ class CacheAwareTraitTest extends AwareTraitTestCase
 
     public function testGetCacheItem(): void
     {
-        $actual = $this->getCacheItem('key');
-        self::assertNotNull($actual);
+        $key = 'key';
+        $this->deleteCacheItem($key);
+        $actual = $this->getCacheItem($key);
+        self::assertFalse($actual->isHit());
     }
 
     public function testGetCacheTimeout(): void

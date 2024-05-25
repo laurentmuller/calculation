@@ -18,8 +18,8 @@ use App\Interfaces\RoleInterface;
 use App\Repository\UserRepository;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
+use App\Tests\ContainerServiceTrait;
 use App\Tests\DatabaseTrait;
-use App\Tests\ServiceTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
@@ -29,8 +29,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
  */
 abstract class AbstractAuthenticateWebTestCase extends WebTestCase
 {
+    use ContainerServiceTrait;
     use DatabaseTrait;
-    use ServiceTrait;
 
     final public const ID_ADMIN = 2;
     final public const ID_DISABLE = 4;

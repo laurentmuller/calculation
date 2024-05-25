@@ -101,10 +101,8 @@ final class StringUtils
     public static function decodeJson(string $value, bool $assoc = true, int $flags = 0): array|\stdClass
     {
         try {
-            /** @psalm-var array|\stdClass $content */
-            $content = \json_decode(json: $value, associative: $assoc, flags: $flags | \JSON_THROW_ON_ERROR);
-
-            return $content;
+            /** @psalm-var array|\stdClass */
+            return \json_decode(json: $value, associative: $assoc, flags: $flags | \JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }

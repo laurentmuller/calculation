@@ -28,7 +28,12 @@ class RoleTranslatorTraitTest extends TestCase
 
     use TranslatorMockTrait;
 
-    private ?TranslatorInterface $translator = null;
+    private TranslatorInterface $translator;
+
+    protected function setUp(): void
+    {
+        $this->translator = $this->createTranslator();
+    }
 
     public static function getRoleIcons(): \Iterator
     {
@@ -50,15 +55,8 @@ class RoleTranslatorTraitTest extends TestCase
         yield [new Role(RoleInterface::ROLE_SUPER_ADMIN), 'user.roles.super_admin'];
     }
 
-    /**
-     * @throws Exception
-     */
     public function getTranslator(): TranslatorInterface
     {
-        if (!$this->translator instanceof TranslatorInterface) {
-            $this->translator = $this->createTranslator();
-        }
-
         return $this->translator;
     }
 

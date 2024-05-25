@@ -15,26 +15,24 @@ namespace App\Tests\Service;
 use App\Enums\StrengthLevel;
 use App\Model\PasswordQuery;
 use App\Service\PasswordService;
-use App\Tests\ServiceTrait;
+use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use ZxcvbnPhp\Zxcvbn;
 
 #[CoversClass(PasswordQuery::class)]
 #[CoversClass(PasswordService::class)]
-class PasswordServiceTest extends KernelTestCase
+class PasswordServiceTest extends KernelServiceTestCase
 {
-    use ServiceTrait;
     use TranslatorMockTrait;
 
     private PasswordService $service;
 
     protected function setUp(): void
     {
-        self::bootKernel();
+        parent::setUp();
         $this->service = $this->getService(PasswordService::class);
     }
 

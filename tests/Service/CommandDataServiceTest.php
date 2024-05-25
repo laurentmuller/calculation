@@ -14,24 +14,16 @@ namespace App\Tests\Service;
 
 use App\Service\CommandDataService;
 use App\Service\CommandService;
-use App\Tests\ServiceTrait;
+use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * @psalm-import-type CommandType from CommandService
  */
 #[CoversClass(CommandDataService::class)]
-class CommandDataServiceTest extends KernelTestCase
+class CommandDataServiceTest extends KernelServiceTestCase
 {
-    use ServiceTrait;
-
-    protected function setUp(): void
-    {
-        self::bootKernel();
-    }
-
     /**
      * @throws InvalidArgumentException
      */

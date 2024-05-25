@@ -13,15 +13,12 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\OpenWeatherService;
-use App\Tests\ServiceTrait;
+use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 #[CoversClass(OpenWeatherService::class)]
-class OpenWeatherServiceTest extends KernelTestCase
+class OpenWeatherServiceTest extends KernelServiceTestCase
 {
-    use ServiceTrait;
-
     private const CITY_INVALID = 0;
 
     private const CITY_VALID = 2_660_718;
@@ -30,7 +27,7 @@ class OpenWeatherServiceTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        self::bootKernel();
+        parent::setUp();
         $this->service = $this->getService(OpenWeatherService::class);
     }
 

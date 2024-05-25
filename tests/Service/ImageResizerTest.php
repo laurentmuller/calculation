@@ -14,21 +14,20 @@ namespace App\Tests\Service;
 
 use App\Enums\ImageSize;
 use App\Service\ImageResizer;
-use App\Tests\ServiceTrait;
+use App\Tests\KernelServiceTestCase;
+use App\Traits\AwareTrait;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
+#[CoversClass(AwareTrait::class)]
 #[CoversClass(ImageResizer::class)]
-class ImageResizerTest extends KernelTestCase
+class ImageResizerTest extends KernelServiceTestCase
 {
-    use ServiceTrait;
-
     private ImageResizer $service;
 
     protected function setUp(): void
     {
-        self::bootKernel();
+        parent::setUp();
         $this->service = $this->getService(ImageResizer::class);
     }
 

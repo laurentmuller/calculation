@@ -18,20 +18,13 @@ use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Service\UserService;
 use App\Tests\DatabaseTrait;
-use App\Tests\ServiceTrait;
+use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 #[CoversClass(UserService::class)]
-class UserServiceTest extends KernelTestCase
+class UserServiceTest extends KernelServiceTestCase
 {
     use DatabaseTrait;
-    use ServiceTrait;
-
-    protected function setUp(): void
-    {
-        self::bootKernel();
-    }
 
     public function testActions(): void
     {

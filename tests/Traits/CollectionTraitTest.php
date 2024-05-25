@@ -41,4 +41,21 @@ class CollectionTraitTest extends TestCase
         $actual = $this->getSortedCollection($collection);
         self::assertSame([$item1, $item2], $actual);
     }
+
+    public function testFindFirst(): void
+    {
+        $collection = new ArrayCollection();
+        $closure = fn (int $key, int $value): bool => 2 === $value;
+        $actual = $this->findFirst($collection, $closure);
+        self::assertNull($actual);
+
+        $collection = new ArrayCollection([1, 2, 3]);
+        $closure = fn (int $key, int $value): bool => 2 === $value;
+        $actual = $this->findFirst($collection, $closure);
+        self::assertSame(2, $actual);
+
+        $closure = fn (int $key, int $value): bool => 4 === $value;
+        $actual = $this->findFirst($collection, $closure);
+        self::assertNull($actual);
+    }
 }

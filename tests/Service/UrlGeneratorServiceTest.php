@@ -16,22 +16,20 @@ use App\Entity\Group;
 use App\Interfaces\EntityInterface;
 use App\Service\UrlGeneratorService;
 use App\Tests\Entity\IdTrait;
-use App\Tests\ServiceTrait;
+use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 #[CoversClass(UrlGeneratorService::class)]
-class UrlGeneratorServiceTest extends KernelTestCase
+class UrlGeneratorServiceTest extends KernelServiceTestCase
 {
     use IdTrait;
-    use ServiceTrait;
 
     private UrlGeneratorService $service;
 
     protected function setUp(): void
     {
-        self::bootKernel();
+        parent::setUp();
         $this->service = $this->getService(UrlGeneratorService::class);
     }
 

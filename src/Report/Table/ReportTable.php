@@ -46,10 +46,8 @@ class ReportTable extends PdfTable
      * @param AbstractReport $parent    the parent report to print in
      * @param bool           $fullWidth a value indicating if the table takes all the printable width
      */
-    public static function fromReport(
-        AbstractReport $parent,
-        bool $fullWidth = true
-    ): self {
+    public static function fromReport(AbstractReport $parent, bool $fullWidth = true): self
+    {
         return new self($parent, $parent->getTranslator(), $fullWidth);
     }
 

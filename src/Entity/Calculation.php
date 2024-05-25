@@ -191,17 +191,19 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      */
     public function findCategory(Category $category): CalculationCategory
     {
-        // find the group
-        /** @var Group $categoryGroup */
+        // find or create the group
+        /** @psalm-var Group $categoryGroup */
         $categoryGroup = $category->getGroup();
         $group = $this->findGroup($categoryGroup);
 
         // find category
         $code = $category->getCode();
-        foreach ($group->getCategories() as $current) {
-            if ($code === $current->getCode()) {
-                return $current;
-            }
+        $first = $this->findFirst(
+            $group->getCategories(),
+            fn (int $key, CalculationCategory $category): bool => $code === $category->getCode()
+        );
+        if ($first instanceof CalculationCategory) {
+            return $first;
         }
 
         // create category
@@ -220,10 +222,12 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     {
         // find the group
         $code = $group->getCode();
-        foreach ($this->groups as $current) {
-            if ($code === $current->getCode()) {
-                return $current;
-            }
+        $first = $this->findFirst(
+            $this->groups,
+            fn (int $key, CalculationGroup $group): bool => $code === $group->getCode()
+        );
+        if ($first instanceof CalculationGroup) {
+            return $first;
         }
 
         // create the group
@@ -279,9 +283,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Items are duplicate when two or more item descriptions are equal, ignoring case considerations.
      *
      * @return CalculationItem[] an array, maybe empty of duplicate items
-     *
-     * @see Calculation::hasDuplicateItems()
-     * @see Calculation::removeDuplicateItems()
      */
     public function getDuplicateItems(): array
     {
@@ -321,9 +322,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Items are empty if the price or the quantity is equal to 0.
      *
      * @return CalculationItem[] an array, maybe empty of empty items
-     *
-     * @see Calculation::hasEmptyItems()
-     * @see Calculation::removeEmptyItems()
      */
     public function getEmptyItems(): array
     {
@@ -580,22 +578,20 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Items are duplicate when two or more item descriptions are equal.
      *
      * @return bool true if duplicates items
-     *
-     * @see Calculation::getDuplicateItems()
-     * @see Calculation::removeDuplicateItems()
      */
     public function hasDuplicateItems(): bool
     {
-        if (!$this->isEmpty()) {
-            $keys = [];
+        if ($this->isEmpty()) {
+            return false;
+        }
 
-            foreach ($this->getItems() as $item) {
-                $key = $this->getItemKey($item);
-                if (\in_array($key, $keys, true)) {
-                    return true;
-                }
-                $keys[] = $key;
+        $keys = [];
+        foreach ($this->getItems() as $item) {
+            $key = $this->getItemKey($item);
+            if (\in_array($key, $keys, true)) {
+                return true;
             }
+            $keys[] = $key;
         }
 
         return false;
@@ -607,17 +603,16 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * Items are empty if the price or the quantity is equal to zero.
      *
      * @return bool true if empty items
-     *
-     * @see Calculation::getEmptyItems()
-     * @see Calculation::removeEmptyItems()
      */
     public function hasEmptyItems(): bool
     {
-        if (!$this->isEmpty()) {
-            foreach ($this->getItems() as $item) {
-                if ($item->isEmpty()) {
-                    return true;
-                }
+        if ($this->isEmpty()) {
+            return false;
+        }
+
+        foreach ($this->getItems() as $item) {
+            if ($item->isEmpty()) {
+                return true;
             }
         }
 
@@ -692,9 +687,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * The total of this calculation must be updated after this return call.
      *
      * @return int the number of items removed
-     *
-     * @see Calculation::getDuplicateItems()
-     * @see Calculation::hasDuplicateItems()
      */
     public function removeDuplicateItems(): int
     {
@@ -722,9 +714,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
      * The total of this calculation must be updated after this return call.
      *
      * @return int the number of items removed
-     *
-     * @see Calculation::getEmptyItems()
-     * @see Calculation::hasEmptyItems()
      */
     public function removeEmptyItems(): int
     {
@@ -867,7 +856,6 @@ class Calculation extends AbstractEntity implements TimestampableInterface
     public function updateCodes(): int
     {
         $total = 0;
-
         foreach ($this->groups as $group) {
             if ($group->updateCode()) {
                 ++$total;

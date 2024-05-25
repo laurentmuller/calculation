@@ -27,22 +27,17 @@ use App\Repository\GroupRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserPropertyRepository;
 use App\Repository\UserRepository;
+use App\Tests\ContainerServiceTrait;
 use App\Tests\Data\Database;
 use App\Tests\DatabaseTrait;
-use App\Tests\ServiceTrait;
+use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 #[CoversClass(Database::class)]
-class DatabaseTest extends KernelTestCase
+class DatabaseTest extends KernelServiceTestCase
 {
+    use ContainerServiceTrait;
     use DatabaseTrait;
-    use ServiceTrait;
-
-    protected function setUp(): void
-    {
-        self::bootKernel();
-    }
 
     public static function getRepositories(): \Iterator
     {

@@ -10,38 +10,29 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Traits;
+namespace App\Tests;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-abstract class AwareTraitTestCase extends KernelTestCase implements ServiceSubscriberInterface
+/**
+ * Extends the kernel test case to get services from the container.
+ */
+abstract class KernelServiceTestCase extends KernelTestCase implements ServiceSubscriberInterface
 {
+    use ContainerServiceTrait;
+
     protected ContainerInterface $container;
 
     protected function setUp(): void
     {
-        $this->container = $this->getContainer();
+        parent::setUp();
+        $this->container = static::getContainer();
     }
 
     public static function getSubscribedServices(): array
     {
         return [];
-    }
-
-    /**
-     * @template T
-     *
-     * @psalm-param class-string<T> $id
-     *
-     * @psalm-return T
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    protected function getService(string $id): mixed
-    {
-        /** @psalm-var T */
-        return $this->container->get($id);
     }
 }

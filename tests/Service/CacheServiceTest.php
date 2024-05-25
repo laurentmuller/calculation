@@ -13,21 +13,18 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\CacheService;
-use App\Tests\ServiceTrait;
+use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Cache\InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 #[CoversClass(CacheService::class)]
-class CacheServiceTest extends KernelTestCase
+class CacheServiceTest extends KernelServiceTestCase
 {
-    use ServiceTrait;
-
     private CacheService $service;
 
     protected function setUp(): void
     {
-        self::bootKernel();
+        parent::setUp();
         $this->service = $this->getService(CacheService::class);
     }
 

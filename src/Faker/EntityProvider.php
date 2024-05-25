@@ -98,10 +98,8 @@ class EntityProvider extends Base
      */
     protected function entity()
     {
-        /** @psalm-var TEntity|null $entity */
-        $entity = static::randomElement($this->getEntities());
-
-        return $entity;
+        /** @psalm-var TEntity|null */
+        return static::randomElement($this->getEntities());
     }
 
     /**

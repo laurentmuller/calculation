@@ -16,7 +16,9 @@ use App\Tests\Data\Translatable;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\TranslatorTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Translation\Translator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[CoversClass(TranslatorTrait::class)]
@@ -25,20 +27,33 @@ class TranslatorTraitTest extends TestCase
     use TranslatorMockTrait;
     use TranslatorTrait;
 
-    private TranslatorInterface $translator;
-
-    protected function setUp(): void
-    {
-        $this->translator = $this->createTranslator();
-    }
+    private bool $useInterface = true;
 
     public function getTranslator(): TranslatorInterface
     {
-        return $this->translator;
+        if ($this->useInterface) {
+            return $this->createTranslator();
+        }
+
+        try {
+            $translator = $this->createMock(Translator::class);
+            $translator->expects(self::any())
+                ->method('trans')
+                ->willReturnArgument(0);
+
+            return $translator;
+        } catch (Exception $e) {
+            self::fail($e->getMessage());
+        }
     }
 
     public function testIsTransDefined(): void
     {
+        $this->useInterface = true;
+        $actual = $this->isTransDefined('id');
+        self::assertFalse($actual);
+
+        $this->useInterface = false;
         $actual = $this->isTransDefined('id');
         self::assertFalse($actual);
     }

@@ -162,7 +162,7 @@ class CommandService implements \Countable
      *
      * @throws InvalidArgumentException
      *
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore return.phpDocType
      */
     public function getCommand(string $name): ?array
     {

@@ -33,14 +33,17 @@ class CountryFlagService
     {
         $choices = [];
         $names = Countries::getNames($locale);
+
         if ($flagOnly) {
             foreach (\array_keys($names) as $code) {
                 $choices[$this->getFlag($code, false)] = $code;
             }
-        } else {
-            foreach ($names as $code => $name) {
-                $choices[\sprintf('%s %s', $this->getFlag($code, false), $name)] = $code;
-            }
+
+            return $choices;
+        }
+
+        foreach ($names as $code => $name) {
+            $choices[\sprintf('%s %s', $this->getFlag($code, false), $name)] = $code;
         }
 
         return $choices;

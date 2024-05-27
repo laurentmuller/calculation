@@ -45,7 +45,6 @@
                         {{ dropdownItem(path('test_tree'), 'test.tree_view', 'folder-tree') }}
                         {{ dropdownItemExternal(path('test_pdf'), 'common.button_export_pdf', ICON_PDF) }}
                         {{ dropdownItemExternal(path('test_word'), 'common.button_export_word', ICON_WORD) }}
-                        {{ dropdownItem(path('schema'), 'schema.index.title', 'table') }}
                     </ul>
                 </div>
             </li>
@@ -61,6 +60,7 @@
                 </button>
                 <div class="collapse{{ collapse_class }}" id="{{ id }}">
                     <ul class="dropdown-menu d-block border-0 pt-0">
+                        {{ dropdownItem(path('schema'), 'schema.index.title', 'table') }}
                         {{ dropdownItem(path('admin_dump_sql'), 'admin.dump_sql.title', 'database') }}
                         {{ dropdownItem(path('command_all'), 'command.list.title', 'code') }}
                         {{ dropdownItem(path('admin_import'), 'swisspost.title', 'download') }}

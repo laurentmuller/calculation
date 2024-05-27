@@ -117,7 +117,7 @@ class CommandDataServiceTest extends KernelServiceTestCase
      *
      * @throws InvalidArgumentException
      *
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore return.phpDocType
      */
     private function getCommand(string $name = 'about'): array
     {

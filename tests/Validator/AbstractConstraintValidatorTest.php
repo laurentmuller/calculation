@@ -66,7 +66,7 @@ class AbstractConstraintValidatorTest extends ConstraintValidatorTestCase
     /**
      * @psalm-suppress MissingTemplateParam
      *
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore missingType.generics
      */
     protected function createValidator(): AbstractConstraintValidator
     {

@@ -4,9 +4,6 @@ on:
     push:
         paths:
             - 'composer.lock'
-    pull_request:
-        paths:
-            - 'composer.lock'
 
 jobs:
     build:

@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
-use App\Enums\Environment;
 use App\Service\AssetVersionService;
+use App\Service\EnvironmentService;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -40,7 +40,7 @@ class AssetVersionServiceTest extends TestCase
         }
         $this->defaultVersion = (string) \filemtime($projectDir . '/composer.lock');
         $this->imagesVersion = (string) \filemtime($imagesDir);
-        $this->service = new AssetVersionService($projectDir, Environment::TEST->value, new ArrayAdapter());
+        $this->service = new AssetVersionService($projectDir, new EnvironmentService('test'), new ArrayAdapter());
     }
 
     public static function getPaths(): \Iterator

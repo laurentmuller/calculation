@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Enums\Environment;
+use App\Service\EnvironmentService;
 use App\Utils\FileUtils;
 use App\Utils\StringUtils;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -67,8 +67,7 @@ class UpdateAssetsCommand extends Command
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
-        #[Autowire('%kernel.environment%')]
-        private readonly string $env
+        private readonly EnvironmentService $service
     ) {
         parent::__construct();
     }
@@ -174,7 +173,7 @@ class UpdateAssetsCommand extends Command
                 return Command::FAILURE;
             }
 
-            // @phpstan-ignore-next-line
+            // @phpstan-ignore method.nonObject
             $duration = $this->io->formatDuration($startTime);
             $this->writeSuccess(
                 \sprintf(
@@ -229,7 +228,7 @@ class UpdateAssetsCommand extends Command
 
     private function copyToTarget(string $source, string $target): bool
     {
-        if ($this->isTestEnvironment()) {
+        if ($this->service->isTest()) {
             return true;
         }
 
@@ -416,11 +415,6 @@ class UpdateAssetsCommand extends Command
     private function isPluginDisabled(array $plugin): bool
     {
         return isset($plugin['disabled']) && $plugin['disabled'];
-    }
-
-    private function isTestEnvironment(): bool
-    {
-        return Environment::tryFrom($this->env)?->isTest() ?? false;
     }
 
     /**

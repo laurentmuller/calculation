@@ -224,7 +224,7 @@ final class StringUtils
      */
     public static function pregReplace(array $values, string|array $subject): string|array
     {
-        // @phpstan-ignore-next-line
+        // @phpstan-ignore return.type
         return \preg_replace(\array_keys($values), \array_values($values), $subject);
     }
 

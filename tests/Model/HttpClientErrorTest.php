@@ -57,7 +57,8 @@ class HttpClientErrorTest extends TestCase
             ],
         ];
         $actual = $error->jsonSerialize();
-        self::assertSame($expected, $actual); // @phpstan-ignore-line
+        // @phpstan-ignore staticMethod.impossibleType
+        self::assertSame($expected, $actual);
     }
 
     public function testSetMessage(): void

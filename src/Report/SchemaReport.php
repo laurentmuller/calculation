@@ -25,7 +25,6 @@ use fpdf\PdfMove;
 /**
  * Report to display database schema.
  *
- * @psalm-import-type SchemaSoftTableType from SchemaService
  * @psalm-import-type SchemaColumnType from SchemaService
  * @psalm-import-type SchemaIndexType from SchemaService
  * @psalm-import-type SchemaAssociationType from SchemaService
@@ -221,7 +220,7 @@ class SchemaReport extends AbstractReport
     }
 
     /**
-     * @psalm-param SchemaSoftTableType[] $tables
+     * @psalm-param SchemaTableType[] $tables
      */
     private function outputTables(array $tables): void
     {
@@ -231,6 +230,7 @@ class SchemaReport extends AbstractReport
                 $this->leftColumn('schema.fields.name', 100),
                 $this->rightColumn('schema.fields.columns', 19, true),
                 $this->rightColumn('schema.fields.records', 30, true),
+                $this->rightColumn('schema.fields.size', 20, true),
                 $this->rightColumn('schema.fields.indexes', 17, true),
                 $this->rightColumn('schema.fields.associations', 25, true)
             )->outputHeaders();
@@ -241,6 +241,7 @@ class SchemaReport extends AbstractReport
                 ->add($name, link: $link)
                 ->addCellInt($table['columns'])
                 ->addCellInt($table['records'])
+                ->addCellAmount($table['size'])
                 ->addCellInt($table['indexes'])
                 ->addCellInt($table['associations'])
                 ->completeRow();

@@ -34,7 +34,8 @@ class AbstractPropertyTest extends TestCase
         $expected = [1, 'string', true];
         $entity->setArray($expected);
         $actual = $entity->getArray();
-        self::assertIsArray($actual); // @phpstan-ignore-line
+        // @phpstan-ignore staticMethod.impossibleType
+        self::assertIsArray($actual);
         self::assertCount(3, $actual);
         self::assertSame($expected, $actual);
 
@@ -82,7 +83,8 @@ class AbstractPropertyTest extends TestCase
         self::assertNull($entity->getDate());
         $entity->setDate($date);
         $actual = $entity->getDate();
-        self::assertNotNull($actual); // @phpstan-ignore-line
+        // @phpstan-ignore staticMethod.impossibleType
+        self::assertNotNull($actual);
         self::assertSame($date->getTimestamp(), $actual->getTimestamp());
     }
 

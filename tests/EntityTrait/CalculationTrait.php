@@ -50,7 +50,7 @@ trait CalculationTrait
     {
         if ($this->calculation instanceof Calculation) {
             $service = self::getContainer()->get(CalculationService::class);
-            // @phpstan-ignore-next-line
+            self::assertInstanceOf(CalculationService::class, $service);
             $service->updateTotal($this->calculation);
             $this->addEntity($this->calculation);
         }

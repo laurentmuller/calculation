@@ -1069,6 +1069,7 @@ schema:
         relation: Relation
         primary: Clé primaire
         unique: Valeur unique
+        size: Taille (Kb)
 search:
     title: Rechercher
     clear: Effacer les critères de recherche

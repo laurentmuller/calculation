@@ -53,7 +53,7 @@ class GlobalMarginsTest extends TestCase
     public function testCount(): void
     {
         $margins = new GlobalMargins();
-        self::assertSame(0, $margins->count()); // @phpstan-ignore-line
+        self::assertCount(0, $margins);
     }
 
     /**

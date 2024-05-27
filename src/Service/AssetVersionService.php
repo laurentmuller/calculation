@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
-use App\Enums\Environment;
 use App\Interfaces\DisableListenerInterface;
 use App\Traits\DisableListenerTrait;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
@@ -53,12 +52,14 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         string $projectDir,
-        #[Autowire('%kernel.environment%')]
-        string $env,
+        EnvironmentService $service,
         #[Target('calculation.service.asset')]
         private readonly CacheInterface $cache,
     ) {
-        $version = $this->cache->get('key_asset_version', fn (): string => $this->getBaseVersion($projectDir, $env));
+        $version = $this->cache->get(
+            'key_asset_version',
+            fn (): string => $this->getBaseVersion($projectDir, $service)
+        );
         $this->imagesPath = $this->canonicalize($projectDir, 'public', self::IMAGES_PATH);
         $this->imagesVersion = $this->getFileTime($this->imagesPath, $version);
 
@@ -92,20 +93,15 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
         return Path::canonicalize(Path::join(...$paths));
     }
 
-    private function getBaseVersion(string $projectDir, string $env): string
+    private function getBaseVersion(string $projectDir, EnvironmentService $service): string
     {
-        $production = Environment::from($env)->isProduction();
-        $file = $production ? '.htdeployment' : 'composer.lock';
+        $file = $service->isProduction() ? '.htdeployment' : 'composer.lock';
 
         return $this->getFileTime($this->canonicalize($projectDir, $file), Kernel::VERSION);
     }
 
-    private function getFileTime(\SplFileInfo|string $path, string $default): string
+    private function getFileTime(string $path, string $default): string
     {
-        if ($path instanceof \SplFileInfo) {
-            $path = $path->getRealPath();
-        }
-
         return \file_exists($path) ? (string) \filemtime($path) : $default;
     }
 
@@ -122,7 +118,7 @@ class AssetVersionService extends StaticVersionStrategy implements DisableListen
                 ->in($this->imagesPath)
                 ->files();
             foreach ($finder as $file) {
-                $images[$file->getFilename()] = $this->getFileTime($file, $this->imagesVersion);
+                $images[$file->getFilename()] = $this->getFileTime($file->getRealPath(), $this->imagesVersion);
             }
 
             return $images;

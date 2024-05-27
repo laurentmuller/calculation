@@ -33,7 +33,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @psalm-suppress ExtensionRequirementViolation
  *
- * @phpstan-ignore-next-line
+ * @phpstan-ignore class.missingExtends
  */
 #[CoversClass(TableTrait::class)]
 class TableTraitTest extends TestCase

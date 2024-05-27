@@ -55,7 +55,7 @@ class AbstractReaderTest extends TestCase
     /**
      * @psalm-suppress MissingTemplateParam
      *
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore missingType.generics
      */
     private function getResourceReader(): AbstractReader
     {
@@ -77,7 +77,7 @@ class AbstractReaderTest extends TestCase
     /**
      * @psalm-suppress MissingTemplateParam
      *
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore missingType.generics
      */
     private function getSplFileInfoReader(): AbstractReader
     {
@@ -98,7 +98,7 @@ class AbstractReaderTest extends TestCase
     /**
      * @psalm-suppress MissingTemplateParam
      *
-     * @phpstan-ignore-next-line
+     * @phpstan-ignore missingType.generics
      */
     private function getStringReader(): AbstractReader
     {

@@ -56,10 +56,10 @@ class HelpServiceTest extends KernelServiceTestCase
     {
         $actual = $this->service->findEntity('product');
         self::assertNotEmpty($actual);
-        // @phpstan-ignore-next-line
+        // @phpstan-ignore argument.type
         $actual = $this->service->findEntity(['entity' => 'product']);
         self::assertNotEmpty($actual);
-        // @phpstan-ignore-next-line
+        // @phpstan-ignore argument.type
         $actual = $this->service->findEntity([]);
         self::assertNull($actual);
         $actual = $this->service->findEntity('fake_value_to_search');

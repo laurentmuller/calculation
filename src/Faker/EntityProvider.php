@@ -56,7 +56,7 @@ class EntityProvider extends Base
     public function __construct(Generator $generator, EntityManagerInterface $manager, string $className)
     {
         parent::__construct($generator);
-        // @phpstan-ignore-next-line
+        // @phpstan-ignore assign.propertyType
         $this->repository = $manager->getRepository($className);
     }
 

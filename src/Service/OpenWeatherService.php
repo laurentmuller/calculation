@@ -481,7 +481,7 @@ class OpenWeatherService extends AbstractHttpClientService
     {
         $key = $this->getCacheKey($uri, $query);
 
-        // @phpstan-ignore-next-line
+        // @phpstan-ignore return.type
         return $this->getUrlCacheValue($key, fn (): array|false => $this->doGet($uri, $query));
     }
 

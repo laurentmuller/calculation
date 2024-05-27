@@ -12,14 +12,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Traits;
 
+use App\Tests\KernelServiceTestCase;
 use App\Traits\TableCellTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Twig\Environment;
 use Twig\Error\Error;
 
 #[CoversClass(TableCellTrait::class)]
-class TableCellTraitTest extends KernelTestCase
+class TableCellTraitTest extends KernelServiceTestCase
 {
     use TableCellTrait;
 
@@ -27,8 +27,8 @@ class TableCellTraitTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        /* @phpstan-ignore-next-line */
-        $this->twig = self::getContainer()->get(Environment::class);
+        parent::setUp();
+        $this->twig = $this->getService(Environment::class);
     }
 
     /**

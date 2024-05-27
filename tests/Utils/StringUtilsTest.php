@@ -201,7 +201,8 @@ class StringUtilsTest extends TestCase
         } elseif ($exception) {
             $this->expectException(\RuntimeException::class);
         }
-        $result = StringUtils::getShortName($var); /* @phpstan-ignore-line */
+        // @phpstan-ignore argument.type
+        $result = StringUtils::getShortName($var);
         self::assertSame($expected, $result);
     }
 

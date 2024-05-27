@@ -68,7 +68,7 @@ trait GroupByTrait
             $entry = $value[$key];
         } else {
             /** @psalm-var array-key $entry */
-            $entry = $value->{$key}; // @phpstan-ignore-line
+            $entry = $value->{$key};
         }
 
         return $entry;

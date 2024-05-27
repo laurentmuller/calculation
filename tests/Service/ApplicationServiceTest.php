@@ -117,7 +117,8 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $service->setLastArchiveCalculations($expected);
 
         $actual = $service->getLastArchiveCalculations();
-        self::assertNotNull($actual); // @phpstan-ignore-line
+        // @phpstan-ignore staticMethod.impossibleType
+        self::assertNotNull($actual);
         self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
     }
 
@@ -128,7 +129,8 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $expected = new \DateTime();
         $service->setLastUpdateCalculations($expected);
         $actual = $service->getLastUpdateCalculations();
-        self::assertNotNull($actual); // @phpstan-ignore-line
+        // @phpstan-ignore staticMethod.impossibleType
+        self::assertNotNull($actual);
         self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
     }
 
@@ -139,7 +141,8 @@ class ApplicationServiceTest extends KernelServiceTestCase
         $expected = new \DateTime();
         $service->setLastUpdateProducts($expected);
         $actual = $service->getLastUpdateProducts();
-        self::assertNotNull($actual); // @phpstan-ignore-line
+        // @phpstan-ignore staticMethod.impossibleType
+        self::assertNotNull($actual);
         self::assertSame($expected->getTimestamp(), $actual->getTimestamp());
     }
 
@@ -267,7 +270,8 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertTrue($actual);
 
         $actual = $service->getDefaultCategory();
-        self::assertNotNull($actual); // @phpstan-ignore-line
+        // @phpstan-ignore staticMethod.impossibleType
+        self::assertNotNull($actual);
         self::assertSame($category->getId(), $actual->getId());
 
         $service->updateDeletedCategory($category);
@@ -305,7 +309,8 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertTrue($actual);
 
         $actual = $service->getDefaultProduct();
-        self::assertNotNull($actual); // @phpstan-ignore-line
+        // @phpstan-ignore staticMethod.impossibleType
+        self::assertNotNull($actual);
         self::assertSame($product->getId(), $actual->getId());
 
         $service->updateDeletedProduct($product);
@@ -335,7 +340,8 @@ class ApplicationServiceTest extends KernelServiceTestCase
         self::assertTrue($actual);
 
         $actual = $service->getDefaultState();
-        self::assertNotNull($actual); // @phpstan-ignore-line
+        // @phpstan-ignore staticMethod.impossibleType
+        self::assertNotNull($actual);
         self::assertSame($state->getId(), $actual->getId());
 
         $service->updateDeletedState($state);

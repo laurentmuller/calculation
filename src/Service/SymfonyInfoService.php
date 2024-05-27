@@ -349,7 +349,7 @@ final readonly class SymfonyInfoService
      */
     public function isLongTermSupport(): bool
     {
-        // @phpstan-ignore-next-line
+        // @phpstan-ignore identical.alwaysFalse
         return (4 <=> Kernel::MINOR_VERSION) === 0;
     }
 

@@ -83,7 +83,7 @@ class AbstractEntityTest extends TestCase
     public function testTrim(?string $value, ?string $expected): void
     {
         $entity = $this->getEntity();
-        // @phpstan-ignore-next-line
+        // @phpstan-ignore method.protected
         $actual = $entity->trim($value);
         self::assertSame($expected, $actual);
     }

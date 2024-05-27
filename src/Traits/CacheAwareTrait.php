@@ -135,7 +135,7 @@ trait CacheAwareTrait
     /**
      * Confirms if the cache contains specified cache item.
      *
-     * @throws \LogicException if an exception occur
+     * @throws \LogicException if an exception occurs
      */
     public function hasCacheItem(string $key): bool
     {

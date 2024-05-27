@@ -16,6 +16,7 @@ use App\Enums\StrengthLevel;
 use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -69,13 +70,13 @@ class StrengthLevelTest extends TestCase
         self::assertCount($expected, StrengthLevel::sorted());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
+    #[DataProvider('getDefault')]
     public function testDefault(StrengthLevel $value, StrengthLevel $expected): void
     {
         self::assertSame($expected, $value);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
+    #[DataProvider('getLabels')]
     public function testLabel(string $expected, StrengthLevel $level): void
     {
         $actual = $level->getReadable();
@@ -92,7 +93,7 @@ class StrengthLevelTest extends TestCase
         self::assertSame(100, StrengthLevel::VERY_STRONG->percent());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getSmallerValues')]
+    #[DataProvider('getSmallerValues')]
     public function testSmaller(StrengthLevel $level, int|StrengthLevel $other, bool $expected): void
     {
         $actual = $level->isSmaller($other);
@@ -116,7 +117,7 @@ class StrengthLevelTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
+    #[DataProvider('getLabels')]
     public function testTranslate(string $expected, StrengthLevel $level): void
     {
         $translator = $this->createTranslator();
@@ -124,7 +125,7 @@ class StrengthLevelTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    #[DataProvider('getValues')]
     public function testValue(StrengthLevel $level, int $expected): void
     {
         $actual = $level->value;

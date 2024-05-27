@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 use App\Controller\AbstractController;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -39,7 +40,7 @@ abstract class AbstractControllerTestCase extends AbstractAuthenticateWebTestCas
      * @param int    $expected the expected result
      * @param string $method   the request method
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRoutes')]
+    #[DataProvider('getRoutes')]
     public function testRoutes(
         string $url,
         string $username = '',

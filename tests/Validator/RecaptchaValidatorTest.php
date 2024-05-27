@@ -16,6 +16,7 @@ use App\Service\RecaptchaService;
 use App\Validator\Recaptcha;
 use App\Validator\RecaptchaValidator;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use ReCaptcha\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +49,7 @@ class RecaptchaValidatorTest extends ConstraintValidatorTestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getErrorCodes')]
+    #[DataProvider('getErrorCodes')]
     public function testErrorCodeIsInvalid(string $code): void
     {
         $contraint = $this->createConstraint();

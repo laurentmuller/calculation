@@ -17,6 +17,7 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\Html\HtmlBootstrapColor;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(HtmlBootstrapColor::class)]
@@ -116,7 +117,7 @@ class HtmlBootstrapColorTest extends TestCase
         $this->handleColors(static fn (HtmlBootstrapColor $color): PdfFillColor => $color->getFillColor());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getParseBorderColors')]
+    #[DataProvider('getParseBorderColors')]
     public function testParseBorderColor(string $class, ?HtmlBootstrapColor $color): void
     {
         $actual = HtmlBootstrapColor::parseBorderColor($class);
@@ -128,7 +129,7 @@ class HtmlBootstrapColorTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getParseFillColors')]
+    #[DataProvider('getParseFillColors')]
     public function testParseFillColor(string $class, ?HtmlBootstrapColor $color): void
     {
         $actual = HtmlBootstrapColor::parseFillColor($class);
@@ -140,7 +141,7 @@ class HtmlBootstrapColorTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getParseTextColors')]
+    #[DataProvider('getParseTextColors')]
     public function testParseTextColor(string $class, ?HtmlBootstrapColor $color): void
     {
         $actual = HtmlBootstrapColor::parseTextColor($class);
@@ -152,7 +153,7 @@ class HtmlBootstrapColorTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getPhpOfficeColors')]
+    #[DataProvider('getPhpOfficeColors')]
     public function testPhpOfficeColor(HtmlBootstrapColor $color, string $expected): void
     {
         $actual = $color->getPhpOfficeColor();
@@ -164,7 +165,7 @@ class HtmlBootstrapColorTest extends TestCase
         $this->handleColors(static fn (HtmlBootstrapColor $color): PdfTextColor => $color->getTextColor());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getColorValues')]
+    #[DataProvider('getColorValues')]
     public function testValue(HtmlBootstrapColor $color, string $expected): void
     {
         $actual = $color->value;

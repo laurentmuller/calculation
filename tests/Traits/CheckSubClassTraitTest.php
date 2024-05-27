@@ -17,6 +17,7 @@ use App\Entity\Calculation;
 use App\Interfaces\EntityInterface;
 use App\Traits\CheckSubClassTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(CheckSubClassTrait::class)]
@@ -41,7 +42,7 @@ class CheckSubClassTraitTest extends TestCase
     /**
      * @psalm-param class-string $target
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getSubClass')]
+    #[DataProvider('getSubClass')]
     public function testSubClass(string|object $source, string $target, bool $exception = false): void
     {
         if ($exception) {

@@ -16,6 +16,7 @@ use App\Enums\MessagePosition;
 use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -82,7 +83,7 @@ class MessagePositionTest extends TestCase
         yield [MessagePosition::BOTTOM_RIGHT, 'message_position.bottom-right'];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getAngle')]
+    #[DataProvider('getAngle')]
     public function testAngle(MessagePosition $position, int $expected): void
     {
         $actual = $position->getAngle();
@@ -96,20 +97,20 @@ class MessagePositionTest extends TestCase
         self::assertCount($expected, MessagePosition::sorted());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
+    #[DataProvider('getDefault')]
     public function testDefault(MessagePosition $value, MessagePosition $expected): void
     {
         self::assertSame($expected, $value);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getIcon')]
+    #[DataProvider('getIcon')]
     public function testIcon(MessagePosition $position, string $expected): void
     {
         $actual = $position->getIcon();
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[DataProvider('getLabel')]
     public function testLabel(MessagePosition $position, string $value): void
     {
         $expected = 'message_position.' . $value;
@@ -139,7 +140,7 @@ class MessagePositionTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTranslation')]
+    #[DataProvider('getTranslation')]
     public function testTranslate(MessagePosition $position, string $expected): void
     {
         $translator = $this->createTranslator();
@@ -147,7 +148,7 @@ class MessagePositionTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[DataProvider('getLabel')]
     public function testValue(MessagePosition $position, string $expected): void
     {
         $actual = $position->value;

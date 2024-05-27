@@ -32,6 +32,7 @@ use App\Tests\Data\Database;
 use App\Tests\DatabaseTrait;
 use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 #[CoversClass(Database::class)]
 class DatabaseTest extends KernelServiceTestCase
@@ -82,7 +83,7 @@ class DatabaseTest extends KernelServiceTestCase
      *
      * @param class-string<TEntity> $className
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRepositories')]
+    #[DataProvider('getRepositories')]
     public function testRepository(string $className, int $expected): void
     {
         /**
@@ -95,7 +96,7 @@ class DatabaseTest extends KernelServiceTestCase
         self::assertCount($expected, $result);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTables')]
+    #[DataProvider('getTables')]
     public function testTable(string $tableName, int $expected): void
     {
         $database = self::$database;
@@ -108,7 +109,7 @@ class DatabaseTest extends KernelServiceTestCase
     /**
      * @psalm-param RoleInterface::ROLE_* $role
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getUsers')]
+    #[DataProvider('getUsers')]
     public function testUser(string $username, string $role): void
     {
         $repository = $this->getService(UserRepository::class);

@@ -17,6 +17,7 @@ use App\Tests\TranslatorMockTrait;
 use App\Traits\StrengthLevelTranslatorTrait;
 use App\Validator\Strength;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Context\ExecutionContext;
@@ -89,7 +90,7 @@ class StrengthLevelTranslatorTraitTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTranslateLevels')]
+    #[DataProvider('getTranslateLevels')]
     public function testTranslateLevel(int $value, string $message): void
     {
         $expected = "strength_level.$message";

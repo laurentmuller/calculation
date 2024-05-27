@@ -15,6 +15,7 @@ namespace App\Tests\Utils;
 use App\Utils\DateUtils;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(DateUtils::class)]
@@ -210,49 +211,49 @@ class DateUtilsTest extends TestCase
         self::assertSame('2020-01-17', $add->format('Y-m-d'));
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getCompletYears')]
+    #[DataProvider('getCompletYears')]
     public function testCompletYear(int $value, int $expected, int $change = 1930): void
     {
         $year = DateUtils::completYear($value, $change);
         self::assertSame($expected, $year);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getFormatFormDate')]
+    #[DataProvider('getFormatFormDate')]
     public function testFormatFormDate(?\DateTimeInterface $date, ?string $expected): void
     {
         $actual = DateUtils::formatFormDate($date);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getDays')]
+    #[DataProvider('getDays')]
     public function testGetDay(\DateTimeInterface $date, int $expected): void
     {
         $actual = DateUtils::getDay($date);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getMonths')]
+    #[DataProvider('getMonths')]
     public function testGetMonth(\DateTimeInterface $date, int $expected): void
     {
         $actual = DateUtils::getMonth($date);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getWeeks')]
+    #[DataProvider('getWeeks')]
     public function testGetWeek(\DateTimeInterface $date, int $expected): void
     {
         $actual = DateUtils::getWeek($date);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getYears')]
+    #[DataProvider('getYears')]
     public function testGetYear(\DateTimeInterface $date, int $expected): void
     {
         $actual = DateUtils::getYear($date);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getMonthNames')]
+    #[DataProvider('getMonthNames')]
     public function testMonthNames(string $name, int $index): void
     {
         $values = DateUtils::getMonths();
@@ -266,14 +267,14 @@ class DateUtilsTest extends TestCase
         self::assertCount(12, $values);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRemoveTimes')]
+    #[DataProvider('getRemoveTimes')]
     public function testRemoveTime(\DateTime|\DateTimeImmutable $date, \DateTimeInterface $expected): void
     {
         $value = DateUtils::removeTime($date);
         self::assertSame($expected->getTimestamp(), $value->getTimestamp());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getShortMonthNames')]
+    #[DataProvider('getShortMonthNames')]
     public function testShortMonthNames(string $name, int $index): void
     {
         $values = DateUtils::getShortMonths();
@@ -287,7 +288,7 @@ class DateUtilsTest extends TestCase
         self::assertCount(12, $values);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getShortWeekdayNames')]
+    #[DataProvider('getShortWeekdayNames')]
     public function testShortWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
         $values = DateUtils::getShortWeekdays($firstDay);
@@ -322,7 +323,7 @@ class DateUtilsTest extends TestCase
         self::assertSame('2020-01-03', $add->format('Y-m-d'));
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getWeekdayNames')]
+    #[DataProvider('getWeekdayNames')]
     public function testWeekdayNames(string $name, int $index, string $firstDay = 'sunday'): void
     {
         $values = DateUtils::getWeekdays($firstDay);

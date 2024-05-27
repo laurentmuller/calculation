@@ -14,6 +14,7 @@ namespace App\Tests\Service;
 
 use App\Service\CountryFlagService;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Intl\Countries;
 
@@ -56,7 +57,7 @@ class CountryFlagServiceTest extends TestCase
         self::assertCount($expected, $choices);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getDefaultCodes')]
+    #[DataProvider('getDefaultCodes')]
     public function testDefaultCode(string $locale, string $expected): void
     {
         \Locale::setDefault($locale);
@@ -64,7 +65,7 @@ class CountryFlagServiceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getFlags')]
+    #[DataProvider('getFlags')]
     public function testGetFlag(string $alpha2Code, string $expected, bool $validate = true, bool $exception = false): void
     {
         if ($exception) {

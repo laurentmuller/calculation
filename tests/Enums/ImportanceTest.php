@@ -15,6 +15,7 @@ namespace App\Tests\Enums;
 use App\Enums\Importance;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -60,14 +61,14 @@ class ImportanceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
+    #[DataProvider('getLabels')]
     public function testLabel(string $expected, Importance $importance): void
     {
         $actual = $importance->getReadable();
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabelsFull')]
+    #[DataProvider('getLabelsFull')]
     public function testLabelFull(string $expected, Importance $importance): void
     {
         $actual = $importance->getReadableFull();
@@ -89,7 +90,7 @@ class ImportanceTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
+    #[DataProvider('getLabels')]
     public function testTranslate(string $expected, Importance $importance): void
     {
         $translator = $this->createTranslator();
@@ -97,7 +98,7 @@ class ImportanceTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    #[DataProvider('getValues')]
     public function testValue(Importance $importance, string $expected): void
     {
         $actual = $importance->value;

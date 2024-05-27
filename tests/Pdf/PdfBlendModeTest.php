@@ -14,6 +14,7 @@ namespace App\Tests\Pdf;
 
 use App\Pdf\Enums\PdfBlendMode;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(PdfBlendMode::class)]
@@ -27,7 +28,7 @@ class PdfBlendModeTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getModes')]
+    #[DataProvider('getModes')]
     public function testCamel(PdfBlendMode $mode): void
     {
         $actual = $mode->camel();

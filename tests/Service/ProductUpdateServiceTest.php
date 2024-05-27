@@ -23,6 +23,7 @@ use App\Service\SuspendEventListenerService;
 use App\Tests\Entity\IdTrait;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
@@ -131,7 +132,7 @@ class ProductUpdateServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getFixedRounded')]
+    #[DataProvider('getFixedRounded')]
     public function testFixedRounded(float $price, float $expected, float $fixed = 1.0): void
     {
         $this->product->setPrice($price);
@@ -188,7 +189,7 @@ class ProductUpdateServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getPercentRounded')]
+    #[DataProvider('getPercentRounded')]
     public function testPercentRounded(float $price, float $percent, float $expected): void
     {
         $this->product->setPrice($price);

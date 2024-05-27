@@ -16,6 +16,7 @@ use App\Enums\ImageExtension;
 use App\Service\ImageService;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ImageExtension::class)]
@@ -133,7 +134,7 @@ class ImageExtensionTest extends TestCase
         self::assertCount(9, ImageExtension::cases());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getCreateImages')]
+    #[DataProvider('getCreateImages')]
     public function testCreateImage(ImageExtension $extension, string $filename): void
     {
         if (!\file_exists($filename)) {
@@ -152,14 +153,14 @@ class ImageExtensionTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getFilters')]
+    #[DataProvider('getFilters')]
     public function testFilter(ImageExtension $imageExtension, string $expected): void
     {
         $actual = $imageExtension->getFilter();
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getImageTypes')]
+    #[DataProvider('getImageTypes')]
     public function testImageType(ImageExtension $extension, int $expected): void
     {
         $actual = $extension->getImageType();
@@ -173,7 +174,7 @@ class ImageExtensionTest extends TestCase
      *      filters?: int,
      *      foreground_color?: int|null} $options
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getInvalidOptions')]
+    #[DataProvider('getInvalidOptions')]
     public function testInvalidOptions(ImageExtension $extension, array $options): void
     {
         self::expectException(\RuntimeException::class);
@@ -204,14 +205,14 @@ class ImageExtensionTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFromTypes')]
+    #[DataProvider('getTryFromTypes')]
     public function testTryFromType(int $type, ?ImageExtension $expected = null): void
     {
         $actual = ImageExtension::tryFromType($type);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTypes')]
+    #[DataProvider('getTypes')]
     public function testType(ImageExtension $extension, int $expected): void
     {
         $actual = $extension->getImageType();
@@ -225,7 +226,7 @@ class ImageExtensionTest extends TestCase
      *       filters?: int,
      *       foreground_color?: int|null} $options
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValidOptions')]
+    #[DataProvider('getValidOptions')]
     public function testValidOptions(ImageExtension $extension, array $options, bool $expected = true): void
     {
         $image = \imagecreatetruecolor(100, 100);
@@ -243,7 +244,7 @@ class ImageExtensionTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    #[DataProvider('getValues')]
     public function testValues(ImageExtension $imageExtension, string $expected): void
     {
         $actual = $imageExtension->value;

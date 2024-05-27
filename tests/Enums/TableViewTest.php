@@ -16,6 +16,7 @@ use App\Enums\TableView;
 use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -43,7 +44,7 @@ class TableViewTest extends TestCase
         self::assertCount($expected, TableView::sorted());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
+    #[DataProvider('getDefault')]
     public function testDefault(TableView $value, TableView $expected): void
     {
         self::assertSame($expected, $value);
@@ -81,7 +82,7 @@ class TableViewTest extends TestCase
         self::assertSame('table_view.table', TableView::TABLE->trans($translator));
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    #[DataProvider('getValues')]
     public function testValue(TableView $view, string $expected): void
     {
         $actual = $view->value;

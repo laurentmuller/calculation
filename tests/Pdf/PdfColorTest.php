@@ -18,6 +18,7 @@ use App\Pdf\Colors\PdfFillColor;
 use App\Pdf\Colors\PdfTextColor;
 use App\Pdf\PdfDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AbstractPdfColor::class)]
@@ -132,7 +133,7 @@ class PdfColorTest extends TestCase
      * @psalm-param int<0, 255> $green
      * @psalm-param int<0, 255> $blue
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getHexColors')]
+    #[DataProvider('getHexColors')]
     public function testAsHex(int $red, int $green, int $blue, string $expected, string $prefix = ''): void
     {
         $color = new PdfDrawColor($red, $green, $blue);
@@ -145,7 +146,7 @@ class PdfColorTest extends TestCase
      * @psalm-param int<0, 255> $green
      * @psalm-param int<0, 255> $blue
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getIntColors')]
+    #[DataProvider('getIntColors')]
     public function testAsInt(int $red, int $green, int $blue, int $expected): void
     {
         $color = new PdfDrawColor($red, $green, $blue);
@@ -220,7 +221,7 @@ class PdfColorTest extends TestCase
         self::assertEqualColor(PdfTextColor::black(), PdfTextColor::default());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getNamedColors')]
+    #[DataProvider('getNamedColors')]
     public function testDrawColor(string $name, int $red, int $green, int $blue): void
     {
         /** @var PdfDrawColor $color */
@@ -228,7 +229,7 @@ class PdfColorTest extends TestCase
         self::assertEqualValues($color, $red, $green, $blue);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getNamedColors')]
+    #[DataProvider('getNamedColors')]
     public function testFillColor(string $name, int $red, int $green, int $blue): void
     {
         /** @var PdfFillColor $color */
@@ -239,7 +240,7 @@ class PdfColorTest extends TestCase
     /**
      * @psalm-param int<0, 255>[]|int|string|null $rgb
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getInvalidColors')]
+    #[DataProvider('getInvalidColors')]
     public function testInvalidColors(array|int|string|null $rgb): void
     {
         $color = PdfTextColor::create($rgb);
@@ -254,7 +255,7 @@ class PdfColorTest extends TestCase
         self::assertFalse($fill->isFillColor());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getNamedColors')]
+    #[DataProvider('getNamedColors')]
     public function testTextColor(string $name, int $red, int $green, int $blue): void
     {
         /** @var PdfTextColor $color */
@@ -265,7 +266,7 @@ class PdfColorTest extends TestCase
     /**
      * @psalm-param int<0, 255>[]|int|string|null $rgb
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValidColors')]
+    #[DataProvider('getValidColors')]
     public function testValidColors(array|int|string|null $rgb, int $red, int $green, int $blue): void
     {
         $color = PdfTextColor::create($rgb);

@@ -16,6 +16,7 @@ use App\Types\FixedFloatType;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(FixedFloatType::class)]
@@ -37,7 +38,7 @@ class FixedFloatTypeTest extends TestCase
      *
      * @psalm-suppress InternalMethod
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    #[DataProvider('getValues')]
     public function testConvertToPHPValue(mixed $value, float $expected): void
     {
         $platform = new MySQLPlatform();

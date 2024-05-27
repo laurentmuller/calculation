@@ -14,6 +14,7 @@ namespace App\Tests\Pdf;
 
 use App\Pdf\Html\HtmlListType;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(HtmlListType::class)]
@@ -78,35 +79,35 @@ class HtmlListTypeTest extends TestCase
         yield [3999, 'MMMCMXCIX'];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLetterValues')]
+    #[DataProvider('getLetterValues')]
     public function testLetterLower(int $value, string $expected, string $suffix = ''): void
     {
         $actual = HtmlListType::LETTER_LOWER->getBulletText($value, $suffix);
         self::assertSame(\strtolower($expected), $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLetterValues')]
+    #[DataProvider('getLetterValues')]
     public function testLetterUpper(int $value, string $expected, string $suffix = ''): void
     {
         $actual = HtmlListType::LETTER_UPPER->getBulletText($value, $suffix);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getNumberValues')]
+    #[DataProvider('getNumberValues')]
     public function testNumber(int $value, string $expected, string $suffix = ''): void
     {
         $actual = HtmlListType::NUMBER->getBulletText($value, $suffix);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRomanValues')]
+    #[DataProvider('getRomanValues')]
     public function testRomanLower(int $value, string $expected, string $suffix = ''): void
     {
         $actual = HtmlListType::ROMAN_LOWER->getBulletText($value, $suffix);
         self::assertSame(\strtolower($expected), $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRomanValues')]
+    #[DataProvider('getRomanValues')]
     public function testRomanUpper(int $value, string $expected, string $suffix = ''): void
     {
         $actual = HtmlListType::ROMAN_UPPER->getBulletText($value, $suffix);

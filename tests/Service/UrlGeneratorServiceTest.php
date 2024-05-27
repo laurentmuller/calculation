@@ -18,6 +18,7 @@ use App\Service\UrlGeneratorService;
 use App\Tests\Entity\IdTrait;
 use App\Tests\KernelServiceTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
 
 #[CoversClass(UrlGeneratorService::class)]
@@ -63,21 +64,21 @@ class UrlGeneratorServiceTest extends KernelServiceTestCase
         yield [new Request([]), ['id' => 1], $entity];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRequests')]
+    #[DataProvider('getRequests')]
     public function testCancelUrl(Request $request, string $expected, EntityInterface|int|null $id = 0): void
     {
         $actual = $this->service->cancelUrl($request, $id);
         self::assertStringContainsString($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getGenerates')]
+    #[DataProvider('getGenerates')]
     public function testGenerate(string $name, string $expected, array $parameters = []): void
     {
         $actual = $this->service->generate($name, $parameters);
         self::assertStringContainsString($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRequests')]
+    #[DataProvider('getRequests')]
     public function testRedirect(Request $request, string $expected, EntityInterface|int|null $id = 0): void
     {
         $actual = $this->service->redirect($request, $id);
@@ -85,7 +86,7 @@ class UrlGeneratorServiceTest extends KernelServiceTestCase
         self::assertStringContainsString($expected, $actual->getTargetUrl());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRouteParams')]
+    #[DataProvider('getRouteParams')]
     public function testRouteParams(Request $request, array $expected, EntityInterface|int|null $id = 0): void
     {
         $actual = $this->service->routeParams($request, $id);

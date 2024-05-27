@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Web;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,7 +28,7 @@ class RoutesTest extends AbstractAuthenticateWebTestCase
         yield ['/not_exist', self::ROLE_USER, Response::HTTP_NOT_FOUND];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRoutes')]
+    #[DataProvider('getRoutes')]
     public function testRoutes(string $url, string $username, int $expected = Response::HTTP_OK): void
     {
         $this->loginUsername($username);

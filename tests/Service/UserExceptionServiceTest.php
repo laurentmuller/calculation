@@ -14,6 +14,7 @@ namespace App\Tests\Service;
 
 use App\Service\UserExceptionService;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -59,7 +60,7 @@ class UserExceptionServiceTest extends TestCase
         yield [new \Exception(), 'error_unknown'];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getExceptions')]
+    #[DataProvider('getExceptions')]
     public function testException(\Throwable $e, string $message, int $messageData = 0): void
     {
         $result = $this->mapException($e);

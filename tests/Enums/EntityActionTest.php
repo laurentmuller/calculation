@@ -16,6 +16,7 @@ use App\Enums\EntityAction;
 use App\Interfaces\PropertyServiceInterface;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -51,13 +52,13 @@ class EntityActionTest extends TestCase
         self::assertCount($expected, EntityAction::sorted());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getDefault')]
+    #[DataProvider('getDefault')]
     public function testDefault(EntityAction $value, EntityAction $expected): void
     {
         self::assertSame($expected, $value);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[DataProvider('getLabel')]
     public function testLabel(string $expected, EntityAction $action): void
     {
         $actual = $action->getReadable();
@@ -78,7 +79,7 @@ class EntityActionTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[DataProvider('getLabel')]
     public function testTranslate(string $expected, EntityAction $action): void
     {
         $translator = $this->createTranslator();
@@ -86,7 +87,7 @@ class EntityActionTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    #[DataProvider('getValues')]
     public function testValue(EntityAction $action, string $expected): void
     {
         $actual = $action->value;

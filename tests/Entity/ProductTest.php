@@ -16,6 +16,7 @@ use App\Entity\Category;
 use App\Entity\Group;
 use App\Entity\Product;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 #[CoversClass(Product::class)]
 class ProductTest extends AbstractEntityValidatorTestCase
@@ -160,7 +161,7 @@ class ProductTest extends AbstractEntityValidatorTestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getPrices')]
+    #[DataProvider('getPrices')]
     public function testPrice(float $price, float $expected): void
     {
         $product = new Product();

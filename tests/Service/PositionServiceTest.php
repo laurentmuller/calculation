@@ -15,6 +15,7 @@ namespace App\Tests\Service;
 use App\Service\PositionService;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -85,7 +86,7 @@ class PositionServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getFormatDirections')]
+    #[DataProvider('getFormatDirections')]
     public function testFormatDirection(int $deg, string $expected): void
     {
         $service = $this->createService();
@@ -96,7 +97,7 @@ class PositionServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLatitudes')]
+    #[DataProvider('getLatitudes')]
     public function testFormatLatitude(float $lat, string $expected, bool $exception = false): void
     {
         if ($exception) {
@@ -110,7 +111,7 @@ class PositionServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLongitudes')]
+    #[DataProvider('getLongitudes')]
     public function testFormatLongitude(float $lng, string $expected, bool $exception = false): void
     {
         if ($exception) {
@@ -124,7 +125,7 @@ class PositionServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getPositions')]
+    #[DataProvider('getPositions')]
     public function testFormatPosition(float $lat, float $lng, string $expected, bool $exception = false): void
     {
         if ($exception) {
@@ -138,7 +139,7 @@ class PositionServiceTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getDirections')]
+    #[DataProvider('getDirections')]
     public function testGetDirection(float $deg, string $expected): void
     {
         $service = $this->createService();

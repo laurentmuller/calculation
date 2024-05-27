@@ -18,6 +18,7 @@ use App\Validator\Strength;
 use App\Validator\StrengthValidator;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
@@ -63,7 +64,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getStrengthLevels')]
+    #[DataProvider('getStrengthLevels')]
     public function testEmptyIsValid(StrengthLevel $level): void
     {
         $constraint = new Strength($level);
@@ -87,7 +88,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         self::fail('No such property exception must be raised.');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getStrengthLevels')]
+    #[DataProvider('getStrengthLevels')]
     public function testNullIsValid(StrengthLevel $level): void
     {
         $constraint = new Strength($level);
@@ -112,7 +113,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getStrengths')]
+    #[DataProvider('getStrengths')]
     public function testStrength(string $value, int $strength, bool $violation): void
     {
         $level = StrengthLevel::tryFrom($strength) ?? StrengthLevel::NONE;
@@ -133,7 +134,7 @@ class StrengthValidatorTest extends ConstraintValidatorTestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getStrengthInvalids')]
+    #[DataProvider('getStrengthInvalids')]
     public function testStrengthInvalid(int $strength): void
     {
         $this->expectException(ConstraintDefinitionException::class);

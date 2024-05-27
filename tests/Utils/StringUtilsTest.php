@@ -15,6 +15,7 @@ namespace App\Tests\Utils;
 use App\Entity\Calculation;
 use App\Utils\StringUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(StringUtils::class)]
@@ -97,21 +98,21 @@ class StringUtilsTest extends TestCase
         yield ['fake', 'FA', true, true];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getAscii')]
+    #[DataProvider('getAscii')]
     public function testAscii(string $value, string $expected): void
     {
         $result = StringUtils::ascii($value);
         self::assertSame($expected, $result);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getCapitalize')]
+    #[DataProvider('getCapitalize')]
     public function testCapitalize(string $value, string $expected): void
     {
         $result = StringUtils::capitalize($value);
         self::assertSame($expected, $result);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getContains')]
+    #[DataProvider('getContains')]
     public function testContains(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
         $result = StringUtils::contains($haystack, $needle, $ignore_case);
@@ -166,21 +167,21 @@ class StringUtilsTest extends TestCase
         self::fail("An \InvalidArgumentException must be throw.");
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getEndWith')]
+    #[DataProvider('getEndWith')]
     public function testEndWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
         $result = StringUtils::endWith($haystack, $needle, $ignore_case);
         self::assertSame($expected, $result);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getEqualIgnoreCase')]
+    #[DataProvider('getEqualIgnoreCase')]
     public function testEqualIgnoreCase(string $string1, string $string2, bool $expected = true): void
     {
         $result = StringUtils::equalIgnoreCase($string1, $string2);
         self::assertSame($result, $expected);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getExportVar')]
+    #[DataProvider('getExportVar')]
     public function testExportVar(mixed $var, mixed $expected): void
     {
         $result = StringUtils::exportVar($var);
@@ -192,7 +193,7 @@ class StringUtilsTest extends TestCase
      *
      * @psalm-suppress PossiblyNullArgument
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getShortName')]
+    #[DataProvider('getShortName')]
     public function testGetShortName(object|string|null $var, mixed $expected, bool $exception = false): void
     {
         if (null === $var) {
@@ -204,7 +205,7 @@ class StringUtilsTest extends TestCase
         self::assertSame($expected, $result);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getIsString')]
+    #[DataProvider('getIsString')]
     public function testIsString(?string $var, bool $expected): void
     {
         $result = StringUtils::isString($var);
@@ -222,7 +223,7 @@ class StringUtilsTest extends TestCase
         self::assertSame('Workspace-settings', $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getStartWith')]
+    #[DataProvider('getStartWith')]
     public function testStartWith(string $haystack, string $needle, bool $ignore_case, bool $expected): void
     {
         $result = StringUtils::startWith($haystack, $needle, $ignore_case);

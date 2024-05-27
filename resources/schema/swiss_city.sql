@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS city
     zip      INTEGER NOT NULL,
     name     TEXT    NOT NULL,
     state_id TEXT    NOT NULL
-)
+);
 
 CREATE TABLE IF NOT EXISTS state
 (

@@ -17,6 +17,7 @@ use App\Model\Role;
 use App\Tests\TranslatorMockTrait;
 use App\Traits\RoleTranslatorTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -59,7 +60,7 @@ class RoleTranslatorTraitTest extends TestCase
         return $this->translator;
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRoleIcons')]
+    #[DataProvider('getRoleIcons')]
     public function testRoleIcon(RoleInterface|string $role, string $expected): void
     {
         $actual = $this->getRoleIcon($role);
@@ -71,7 +72,7 @@ class RoleTranslatorTraitTest extends TestCase
      *
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTranslateRoles')]
+    #[DataProvider('getTranslateRoles')]
     public function testTranslateRole(RoleInterface|string $role, string $expected): void
     {
         $this->translator = $this->createTranslator($expected);

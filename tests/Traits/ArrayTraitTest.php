@@ -14,6 +14,7 @@ namespace App\Tests\Traits;
 
 use App\Traits\ArrayTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ArrayTrait::class)]
@@ -160,7 +161,7 @@ class ArrayTraitTest extends TestCase
         yield [['value', 'value1'], ['value2'], ['value', 'value1', 'value2']];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getColumnValues')]
+    #[DataProvider('getColumnValues')]
     public function testColumn(array $values, array $expected): void
     {
         $actual = $this->getColumn($values, self::KEY);
@@ -170,21 +171,21 @@ class ArrayTraitTest extends TestCase
     /**
      * @psalm-param int<0,2> $mode
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getColumnFilterValues')]
+    #[DataProvider('getColumnFilterValues')]
     public function testColumnFilter(array $values, array $expected, ?callable $callback = null, int $mode = 0): void
     {
         $actual = $this->getColumnFilter($values, self::KEY, $callback, $mode);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getColumnMaxValues')]
+    #[DataProvider('getColumnMaxValues')]
     public function testColumnMax(array $values, float $expected, float $default = 0.0): void
     {
         $actual = $this->getColumnMax($values, self::KEY, $default);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getColumnSumValues')]
+    #[DataProvider('getColumnSumValues')]
     public function testColumnSum(array $values, float $expected, float $default = 0.0): void
     {
         $actual = $this->getColumnSum($values, self::KEY, $default);
@@ -239,7 +240,7 @@ class ArrayTraitTest extends TestCase
     /**
      * @psalm-param 0|1|2 $mode
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getUniqueFilteredValues')]
+    #[DataProvider('getUniqueFilteredValues')]
     public function testUniqueFiltered(array $values, array $expected, ?callable $callback = null, int $mode = 0): void
     {
         $actual = $this->getUniqueFiltered($values, $callback, $mode);
@@ -248,7 +249,7 @@ class ArrayTraitTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getUniqueMergedValues')]
+    #[DataProvider('getUniqueMergedValues')]
     public function testUniqueMerged(array $first, array $second, array $expected): void
     {
         $actual = $this->getUniqueMerged($first, $second);

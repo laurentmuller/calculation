@@ -19,6 +19,7 @@ use App\Tests\KernelServiceTestCase;
 use App\Tests\TranslatorMockTrait;
 use Createnl\ZxcvbnBundle\ZxcvbnFactoryInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use ZxcvbnPhp\Zxcvbn;
 
@@ -79,7 +80,7 @@ class PasswordServiceTest extends KernelServiceTestCase
         self::assertFalse($actual['result']);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValidations')]
+    #[DataProvider('getValidations')]
     public function testValidate(string $password, StrengthLevel $level, bool $expected): void
     {
         $query = new PasswordQuery($password, $level);

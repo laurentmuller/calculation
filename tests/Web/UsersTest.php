@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Web;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Test class for user's roles.
  */
@@ -34,7 +36,7 @@ class UsersTest extends AbstractAuthenticateWebTestCase
         yield [self::ROLE_SUPER_ADMIN];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getUserExist')]
+    #[DataProvider('getUserExist')]
     public function testUserExist(string $username, bool $exist): void
     {
         $user = $this->loadUser($username, false);
@@ -45,7 +47,7 @@ class UsersTest extends AbstractAuthenticateWebTestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getUserRole')]
+    #[DataProvider('getUserRole')]
     public function testUserRole(string $username): void
     {
         /** @psalm-var \App\Interfaces\RoleInterface::ROLE_* $role */

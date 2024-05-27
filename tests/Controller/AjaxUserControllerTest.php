@@ -15,6 +15,7 @@ namespace App\Tests\Controller;
 use App\Controller\AjaxUserController;
 use App\Tests\Web\AbstractAuthenticateWebTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -53,7 +54,7 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
         yield ['username.not_found', 'USER_XXX_INVALID@INVALID.COM'];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getEmails')]
+    #[DataProvider('getEmails')]
     public function testCheckEmail(string|bool $expected, ?string $email = null, ?int $id = null): void
     {
         $this->loginUsername('ROLE_SUPER_ADMIN');
@@ -63,7 +64,7 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
         $this->validateResponse($response, $expected);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getNames')]
+    #[DataProvider('getNames')]
     public function testCheckName(string|bool $expected, ?string $username = null, ?int $id = null): void
     {
         $this->loginUsername('ROLE_SUPER_ADMIN');
@@ -73,7 +74,7 @@ class AjaxUserControllerTest extends AbstractAuthenticateWebTestCase
         $this->validateResponse($response, $expected);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getUsers')]
+    #[DataProvider('getUsers')]
     public function testCheckUser(string|bool $expected, ?string $user = null): void
     {
         $parameters = ['user' => $user];

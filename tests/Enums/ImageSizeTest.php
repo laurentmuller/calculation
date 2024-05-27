@@ -14,6 +14,7 @@ namespace App\Tests\Enums;
 
 use App\Enums\ImageSize;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ImageSize::class)]
@@ -38,7 +39,7 @@ class ImageSizeTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    #[DataProvider('getValues')]
     public function testValue(ImageSize $imageSize, int $expected): void
     {
         $actual = $imageSize->value;

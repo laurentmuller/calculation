@@ -17,6 +17,7 @@ use App\Enums\ImageExtension;
 use App\Enums\ImageSize;
 use App\Service\UserNamer;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Vich\UploaderBundle\Mapping\PropertyMapping;
 
@@ -36,7 +37,7 @@ class UserNamerTest extends TestCase
         yield ['USER_000001_032.png', 1, ImageSize::SMALL, ImageExtension::PNG];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getBaseNames')]
+    #[DataProvider('getBaseNames')]
     public function testBaseName(string $expected, int $value, ImageSize $size, ImageExtension|string|null $ext = null): void
     {
         $result = UserNamer::getBaseName($value, $size, $ext);

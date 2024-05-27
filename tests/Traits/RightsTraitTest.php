@@ -17,6 +17,7 @@ use App\Enums\EntityPermission;
 use App\Traits\RightsTrait;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(RightsTrait::class)]
@@ -37,25 +38,25 @@ class RightsTraitTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRightsFields')]
+    #[DataProvider('getRightsFields')]
     public function testGetAdd(string $field): void
     {
         $this->checkAttribute($field, 'ADD');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRightsFields')]
+    #[DataProvider('getRightsFields')]
     public function testGetDelete(string $field): void
     {
         $this->checkAttribute($field, 'DELETE');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRightsFields')]
+    #[DataProvider('getRightsFields')]
     public function testGetEdit(string $field): void
     {
         $this->checkAttribute($field, 'EDIT');
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRightsFields')]
+    #[DataProvider('getRightsFields')]
     public function testGetEmpty(string $field): void
     {
         $permission = $this->__get($field);

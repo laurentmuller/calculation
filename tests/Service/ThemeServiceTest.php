@@ -15,6 +15,7 @@ namespace App\Tests\Service;
 use App\Enums\Theme;
 use App\Service\ThemeService;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +47,7 @@ class ThemeServiceTest extends TestCase
         yield [self::createRequest('light'), 'light'];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getThemes')]
+    #[DataProvider('getThemes')]
     public function testGetTheme(Request $request, Theme $expected): void
     {
         $service = new ThemeService();
@@ -61,7 +62,7 @@ class ThemeServiceTest extends TestCase
         self::assertSame(Theme::sorted(), $themes);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getThemeValues')]
+    #[DataProvider('getThemeValues')]
     public function testGetThemeValue(Request $request, string $expected): void
     {
         $service = new ThemeService();
@@ -69,7 +70,7 @@ class ThemeServiceTest extends TestCase
         self::assertSame($expected, $value);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getIsDarkTheme')]
+    #[DataProvider('getIsDarkTheme')]
     public function testIsDarkTheme(Request $request, bool $expected): void
     {
         $service = new ThemeService();

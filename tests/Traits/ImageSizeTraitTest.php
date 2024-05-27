@@ -14,6 +14,7 @@ namespace App\Tests\Traits;
 
 use App\Traits\ImageSizeTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(ImageSizeTrait::class)]
@@ -28,7 +29,7 @@ class ImageSizeTraitTest extends TestCase
         yield [__DIR__ . '/../Data/images/example.jpg', [500, 477]];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getSizes')]
+    #[DataProvider('getSizes')]
     public function testSize(string $filename, array $expected): void
     {
         $actual = $this->getImageSize($filename);

@@ -15,6 +15,7 @@ namespace App\Tests\Utils;
 use App\Model\LogFile;
 use App\Utils\FormatUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(FormatUtils::class)]
@@ -234,7 +235,7 @@ class FormatUtilsTest extends TestCase
      * @psalm-param int<-1,3>|null $dateType
      * @psalm-param int<-1,3>|null $timeType
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getDateFormatterPatterns')]
+    #[DataProvider('getDateFormatterPatterns')]
     public function testDateFormatterPattern(
         string $pattern,
         string $expected,
@@ -260,7 +261,7 @@ class FormatUtilsTest extends TestCase
         self::assertSame('fr_CH', FormatUtils::DEFAULT_LOCALE);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getAmounts')]
+    #[DataProvider('getAmounts')]
     public function testFormatAmount(string|int|float|null $number, string $expected): void
     {
         $actual = FormatUtils::formatAmount($number);
@@ -270,7 +271,7 @@ class FormatUtilsTest extends TestCase
     /**
      * @psalm-param int<-1,3>|null $dateType
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getDates')]
+    #[DataProvider('getDates')]
     public function testFormatDate(
         \DateTimeInterface|int|null $date,
         ?string $expected,
@@ -285,7 +286,7 @@ class FormatUtilsTest extends TestCase
      * @psalm-param int<-1,3>|null $dateType
      * @psalm-param int<-1,3>|null $timeType
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getDateTimes')]
+    #[DataProvider('getDateTimes')]
     public function testFormatDateTime(
         \DateTimeInterface|int|null $date,
         ?string $expected,
@@ -297,14 +298,14 @@ class FormatUtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getIds')]
+    #[DataProvider('getIds')]
     public function testFormatId(int|float|string|null $number, string $expected): void
     {
         $actual = FormatUtils::formatId($number);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getIntegers')]
+    #[DataProvider('getIntegers')]
     public function testFormatInteger(\Countable|array|int|float|string|null $number, string $expected): void
     {
         $actual = FormatUtils::formatInt($number);
@@ -314,7 +315,7 @@ class FormatUtilsTest extends TestCase
     /**
      * @psalm-param \NumberFormatter::ROUND_* $roundingMode
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getPercents')]
+    #[DataProvider('getPercents')]
     public function testFormatPercent(
         int|float|string|null $number,
         string $expected,
@@ -335,7 +336,7 @@ class FormatUtilsTest extends TestCase
     /**
      * @psalm-param int<-1,3>|null $timeType
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTimes')]
+    #[DataProvider('getTimes')]
     public function testFormatTime(
         \DateTimeInterface|int|null $date,
         ?string $expected,

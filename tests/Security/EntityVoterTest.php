@@ -19,6 +19,7 @@ use App\Security\EntityVoter;
 use App\Service\ApplicationService;
 use App\Service\RoleBuilderService;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -95,7 +96,7 @@ class EntityVoterTest extends TestCase
         $this->assertVote($user, $subject, $attribute, $expected);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getSupportsAttribute')]
+    #[DataProvider('getSupportsAttribute')]
     public function testSupportsAttribute(string $value, bool $expected): void
     {
         $actual = $this->voter->supportsAttribute($value);

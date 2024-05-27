@@ -15,6 +15,7 @@ namespace App\Tests\Enums;
 use App\Enums\FlashType;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -60,21 +61,21 @@ class FlashTypeTest extends TestCase
         self::assertCount(4, FlashType::cases());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getIcons')]
+    #[DataProvider('getIcons')]
     public function testIcon(FlashType $type, string $expected): void
     {
         $actual = $type->getIcon();
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
+    #[DataProvider('getLabels')]
     public function testLabel(FlashType $type, string $expected): void
     {
         $actual = $type->getReadable();
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getStyles')]
+    #[DataProvider('getStyles')]
     public function testStyle(FlashType $type, string $expected): void
     {
         $actual = $type->getStyle();
@@ -84,7 +85,7 @@ class FlashTypeTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
+    #[DataProvider('getLabels')]
     public function testTranslate(FlashType $type, string $expected): void
     {
         $translator = $this->createTranslator();
@@ -92,7 +93,7 @@ class FlashTypeTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    #[DataProvider('getValues')]
     public function testValue(FlashType $type, string $expected): void
     {
         $actual = $type->value;

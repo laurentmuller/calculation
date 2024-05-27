@@ -15,6 +15,7 @@ namespace App\Tests\Utils;
 use App\Enums\ImageExtension;
 use App\Utils\FileUtils;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(FileUtils::class)]
@@ -83,7 +84,7 @@ class FileUtilsTest extends TestCase
         yield [new \SplFileInfo(__FILE__), __FILE__];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getBuildPaths')]
+    #[DataProvider('getBuildPaths')]
     public function testBuildPath(string $expected, string ...$segments): void
     {
         $actual = FileUtils::buildPath(...$segments);
@@ -124,14 +125,14 @@ class FileUtilsTest extends TestCase
         self::assertTrue(FileUtils::exists(__FILE__));
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getFormatSize')]
+    #[DataProvider('getFormatSize')]
     public function testFormatSize(string|\SplFileInfo|int $path, string $expected): void
     {
         $actual = FileUtils::formatSize($path);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getExtension')]
+    #[DataProvider('getExtension')]
     public function testGetExtension(string $file, string $expected, bool $forceLowerCase = false): void
     {
         $actual = FileUtils::getExtension($file, $forceLowerCase);
@@ -179,7 +180,7 @@ class FileUtilsTest extends TestCase
         self::assertSame('C:' . \DIRECTORY_SEPARATOR . 'Temp', $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRealPath')]
+    #[DataProvider('getRealPath')]
     public function testRealPath(string|\SplFileInfo $file, string $expected): void
     {
         $actual = FileUtils::realPath($file);

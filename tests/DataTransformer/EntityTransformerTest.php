@@ -18,6 +18,7 @@ use App\Interfaces\EntityInterface;
 use App\Repository\GroupRepository;
 use App\Tests\Entity\IdTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -49,7 +50,7 @@ class EntityTransformerTest extends TestCase
      *
      * @throws Exception|\ReflectionException
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getReverseTransformValues')]
+    #[DataProvider('getReverseTransformValues')]
     public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         $group = null;
@@ -83,7 +84,7 @@ class EntityTransformerTest extends TestCase
      *
      * @throws Exception|\ReflectionException
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]
+    #[DataProvider('getTransformValues')]
     public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         $group = null;

@@ -21,6 +21,14 @@ function createPopover() {
     });
 }
 
+function updateExecute() {
+    'use strict';
+    const $command = $('#command');
+    const $execute = $('.btn-execute');
+    const href = $execute.data('url').replace('query', $command.val());
+    $execute.attr('href', href);
+}
+
 /**
  * Load the given command.
  *
@@ -45,14 +53,6 @@ function loadContent(name) {
             Toaster.notify(Toaster.NotificationTypes.DANGER, response.message, title);
         }
     });
-}
-
-function updateExecute() {
-    'use strict';
-    const $command = $('#command');
-    const $execute = $('.btn-execute');
-    const href = $execute.data('url').replace('query', $command.val());
-    $execute.attr('href', href);
 }
 
 /**

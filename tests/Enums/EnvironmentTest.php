@@ -15,6 +15,7 @@ namespace App\Tests\Enums;
 use App\Enums\Environment;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -65,28 +66,28 @@ class EnvironmentTest extends TestCase
         self::assertCount($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getIsDevelopment')]
+    #[DataProvider('getIsDevelopment')]
     public function testIsDevelopment(Environment $environment, bool $expected): void
     {
         $actual = $environment->isDevelopment();
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getIsProduction')]
+    #[DataProvider('getIsProduction')]
     public function testIsProduction(Environment $environment, bool $expected): void
     {
         $actual = $environment->isProduction();
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getIsTest')]
+    #[DataProvider('getIsTest')]
     public function testIsTest(Environment $environment, bool $expected): void
     {
         $actual = $environment->isTest();
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
+    #[DataProvider('getLabels')]
     public function testLabel(Environment $environment, string $expected): void
     {
         $actual = $environment->getReadable();
@@ -96,7 +97,7 @@ class EnvironmentTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabels')]
+    #[DataProvider('getLabels')]
     public function testTranslate(Environment $environment, string $expected): void
     {
         $translator = $this->createTranslator();
@@ -104,7 +105,7 @@ class EnvironmentTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    #[DataProvider('getValues')]
     public function testValue(Environment $environment, string $expected): void
     {
         $actual = $environment->value;

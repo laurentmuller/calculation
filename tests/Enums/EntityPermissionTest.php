@@ -16,6 +16,7 @@ use App\Enums\EntityPermission;
 use App\Tests\TranslatorMockTrait;
 use Elao\Enum\FlagBag;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -121,7 +122,7 @@ class EntityPermissionTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[DataProvider('getLabel')]
     public function testLabel(EntityPermission $permission, string $expected): void
     {
         $actual = $permission->getReadable();
@@ -161,7 +162,7 @@ class EntityPermissionTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[DataProvider('getLabel')]
     public function testTranslate(EntityPermission $permission, string $expected): void
     {
         $translator = $this->createTranslator();
@@ -169,14 +170,14 @@ class EntityPermissionTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFromName')]
+    #[DataProvider('getTryFromName')]
     public function testTryFromName(mixed $expected, string $value): void
     {
         $actual = EntityPermission::tryFromName($value);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValue')]
+    #[DataProvider('getValue')]
     public function testValue(EntityPermission $permission, int $expected): void
     {
         $actual = $permission->value;

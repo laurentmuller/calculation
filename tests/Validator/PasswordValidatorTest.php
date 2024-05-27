@@ -15,6 +15,7 @@ namespace App\Tests\Validator;
 use App\Validator\Password;
 use App\Validator\PasswordValidator;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Validator\Test\ConstraintValidatorTestCase;
 
 /**
@@ -66,7 +67,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getPasswords')]
+    #[DataProvider('getPasswords')]
     public function testCompromised(string $value, bool $violation): void
     {
         $options = ['compromised' => true];
@@ -84,7 +85,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getConstraints')]
+    #[DataProvider('getConstraints')]
     public function testEmptyIsValid(string $constraint): void
     {
         $constraint = $this->createPassword([$constraint => true]);
@@ -92,7 +93,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getInvalidValues')]
+    #[DataProvider('getInvalidValues')]
     public function testInvalid(mixed $value, array $options, string $message, string $code, array $parameters = []): void
     {
         $constraint = $this->createPassword($options);
@@ -104,7 +105,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
             ->assertRaised();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getConstraints')]
+    #[DataProvider('getConstraints')]
     public function testNullIsValid(string $constraint): void
     {
         $constraint = $this->createPassword([$constraint => true]);
@@ -112,7 +113,7 @@ class PasswordValidatorTest extends ConstraintValidatorTestCase
         self::assertNoViolation();
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValidValues')]
+    #[DataProvider('getValidValues')]
     public function testValid(mixed $value, array $options): void
     {
         $constraint = $this->createPassword($options);

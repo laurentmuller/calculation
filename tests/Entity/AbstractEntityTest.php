@@ -14,6 +14,7 @@ namespace App\Tests\Entity;
 
 use App\Entity\AbstractEntity;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AbstractEntity::class)]
@@ -78,7 +79,7 @@ class AbstractEntityTest extends TestCase
      *
      * @psalm-suppress InaccessibleMethod
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTrims')]
+    #[DataProvider('getTrims')]
     public function testTrim(?string $value, ?string $expected): void
     {
         $entity = $this->getEntity();

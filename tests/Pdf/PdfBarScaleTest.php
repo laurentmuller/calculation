@@ -14,6 +14,7 @@ namespace App\Tests\Pdf;
 
 use App\Pdf\PdfBarScale;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(PdfBarScale::class)]
@@ -75,7 +76,7 @@ class PdfBarScaleTest extends TestCase
         self::assertSame(10.0, $actual->getTickSpacing());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValues')]
+    #[DataProvider('getValues')]
     public function testScale(PdfBarScale $scale, float $lowerBound, float $upperBound, float $tickSpacing): void
     {
         self::assertSame($lowerBound, $scale->getLowerBound());

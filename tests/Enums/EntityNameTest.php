@@ -26,6 +26,7 @@ use App\Enums\EntityName;
 use App\Model\Role;
 use App\Tests\TranslatorMockTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -167,21 +168,21 @@ class EntityNameTest extends TestCase
         self::assertCount($expected, EntityName::sorted());
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[DataProvider('getLabel')]
     public function testLabel(string $expected, EntityName $entity): void
     {
         $actual = $entity->getReadable();
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getOffset')]
+    #[DataProvider('getOffset')]
     public function testOffset(EntityName $entityName, int $expected): void
     {
         $actual = $entityName->offset();
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getRightsField')]
+    #[DataProvider('getRightsField')]
     public function testRightsField(EntityName $entityName, string $expected): void
     {
         $actual = $entityName->getRightsField();
@@ -209,7 +210,7 @@ class EntityNameTest extends TestCase
     /**
      * @throws Exception
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getLabel')]
+    #[DataProvider('getLabel')]
     public function testTranslate(string $expected, EntityName $entity): void
     {
         $translator = $this->createTranslator();
@@ -217,7 +218,7 @@ class EntityNameTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFromField')]
+    #[DataProvider('getTryFromField')]
     public function testTryFromField(string $field, ?EntityName $expected): void
     {
         $actual = EntityName::tryFromField($field);
@@ -228,14 +229,14 @@ class EntityNameTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTryFromMixed')]
+    #[DataProvider('getTryFromMixed')]
     public function testTryFromMixed(mixed $subject, mixed $expected): void
     {
         $actual = EntityName::tryFromMixed($subject);
         self::assertSame($expected, $actual);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getValue')]
+    #[DataProvider('getValue')]
     public function testValue(EntityName $entityName, string $expected): void
     {
         $actual = $entityName->value;

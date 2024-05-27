@@ -15,6 +15,7 @@ namespace App\Tests\Twig;
 use App\Tests\KernelServiceTestCase;
 use App\Twig\ConstantExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Cache\InvalidArgumentException;
 
 #[CoversClass(ConstantExtension::class)]
@@ -62,7 +63,7 @@ class ConstantExtensionTest extends KernelServiceTestCase
     /**
      * @throws InvalidArgumentException
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getCalculationServiceConstants')]
+    #[DataProvider('getCalculationServiceConstants')]
     public function testCalculationService(string $key, int $value): void
     {
         $globals = $this->extension->getGlobals();
@@ -74,7 +75,7 @@ class ConstantExtensionTest extends KernelServiceTestCase
     /**
      * @throws InvalidArgumentException
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getEntityVoterConstants')]
+    #[DataProvider('getEntityVoterConstants')]
     public function testEntityVoter(string $key, string $value): void
     {
         $globals = $this->extension->getGlobals();

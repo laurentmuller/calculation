@@ -14,6 +14,7 @@ namespace App\Tests\Traits;
 
 use App\Traits\CacheKeyTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -47,7 +48,7 @@ class CacheKeyTraitTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getCleanKeys')]
+    #[DataProvider('getCleanKeys')]
     public function testCleanKey(string $key, string $expected): void
     {
         $actual = $this->cleanKey($key);

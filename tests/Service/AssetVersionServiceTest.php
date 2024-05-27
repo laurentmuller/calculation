@@ -15,6 +15,7 @@ namespace App\Tests\Service;
 use App\Enums\Environment;
 use App\Service\AssetVersionService;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
@@ -53,7 +54,7 @@ class AssetVersionServiceTest extends TestCase
         yield ['images/users/fake.png', true];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getPaths')]
+    #[DataProvider('getPaths')]
     public function testApplyVersion(string $path, bool $isImage = false): void
     {
         $version = $this->getVersion($isImage);
@@ -65,7 +66,7 @@ class AssetVersionServiceTest extends TestCase
     /**
      * @throws InvalidArgumentException
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('getPaths')]
+    #[DataProvider('getPaths')]
     public function testPath(string $path, bool $isImage = false): void
     {
         $expected = $this->getVersion($isImage);

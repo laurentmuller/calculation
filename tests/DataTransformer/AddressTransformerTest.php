@@ -14,6 +14,7 @@ namespace App\Tests\DataTransformer;
 
 use App\Form\DataTransformer\AddressTransformer;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Symfony\Component\Mime\Address;
@@ -52,7 +53,7 @@ class AddressTransformerTest extends TestCase
         yield [new Address('user@root.com', 'username'), \htmlentities('username <user@root.com>')];
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getReverseTransformValues')]
+    #[DataProvider('getReverseTransformValues')]
     public function testReverseTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {
@@ -66,7 +67,7 @@ class AddressTransformerTest extends TestCase
         }
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('getTransformValues')]
+    #[DataProvider('getTransformValues')]
     public function testTransform(mixed $value, mixed $expected, bool $exception = false): void
     {
         if ($exception) {
